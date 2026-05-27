@@ -14,6 +14,10 @@
     <string name="Button_Next">التالي</string>
     <string name="Button_Enable">تمكين</string>
     <string name="Button_Disable">تعطيل</string>
+    <string name="button_enable">تفعيل</string>
+    <string name="button_disable">تعطيل</string>
+    <string name="button_do_not_enable">عدم التفعيل</string>
+    <string name="button_do_not_disable">عدم التعطيل</string>
     <string name="Button_Close">إغلاق</string>
     <string name="Button_Ok">حسنًا</string>
     <string name="Button_Done">تم</string>
@@ -1591,6 +1595,8 @@
     <string name="push_notification">إشعارات الدفع</string>
     <string name="premium_push_notifications_show">إظهار الإشعارات</string>
     <string name="premium_push_notifications_warning">لتلقي إشعارات المعاملات، قد يظل التطبيق نشطًا في الخلفية لسلاسل الكتل المحددة. قد يؤدي ذلك إلى زيادة استهلاك البطارية حتى عندما لا تستخدم التطبيق.</string>
+    <string name="push_notifications_calculator_mode_warning">وضع الآلة الحاسبة مفعّل. قد تكشف الإشعارات الفورية عن وجود تطبيق عملات مشفرة على هذا الجهاز. هل أنت متأكد من رغبتك في تفعيل الإشعارات؟</string>
+    <string name="calculator_mode_push_notifications_warning">الإشعارات الفورية مفعّلة. قد يعرض التطبيق إشعارات المحفظة حتى في وضع الآلة الحاسبة. هل تريد تعطيل الإشعارات الفورية لتحسين الخصوصية؟</string>
     <string name="push_notification_polling_interval">فاصل الفحص</string>
     <string name="push_notification_interval_realtime">فوري</string>
     <string name="push_notification_interval_5min">كل 5 دقائق</string>

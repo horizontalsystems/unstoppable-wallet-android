@@ -58,9 +58,10 @@ class PendingTransactionRepository(
         }
     }
 
-    suspend fun updateTxId(draftId: String, txId: String) = mutex.withLock {
+    suspend fun updateTxId(draftId: String, txId: String): PendingTransactionEntity? = mutex.withLock {
         withContext(dispatcherProvider.io) {
             storage.updateTxId(draftId, txId)
+            storage.getById(draftId)
         }
     }
 

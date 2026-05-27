@@ -20,7 +20,7 @@ plugins {
 
 // Git version information helpers (using modern providers.exec API)
 def gitHashProvider = providers.exec {
-    commandLine 'git', 'rev-parse', '--short', 'HEAD'
+    commandLine 'git', 'rev-parse', '--short=10', 'HEAD'
     ignoreExitValue = true
 }.standardOutput.asText.map { it.trim() }
 
@@ -140,6 +140,7 @@ android {
             debuggable true
             minifyEnabled false
             applicationIdSuffix ".dev"
+            buildConfigField "String", "PREMIUM_API_BASE_URL", "\"https://cash.p.cash/api/\""
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
@@ -166,6 +167,7 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "PREMIUM_API_BASE_URL", "\"https://p.cash/api/\""
             firebaseCrashlytics {
                 nativeSymbolUploadEnabled true
             }
@@ -187,6 +189,7 @@ android {
             initWith release
             defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
             applicationIdSuffix ".appcenter"
+            buildConfigField "String", "PREMIUM_API_BASE_URL", "\"https://cash.p.cash/api/\""
             signingConfig signingConfigs.appCenter
             matchingFallbacks = ['release']
         }

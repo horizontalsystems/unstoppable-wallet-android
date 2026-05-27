@@ -21,6 +21,7 @@ import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
+import cash.p.terminal.core.storage.LocallyCreatedTransactionStorage
 import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.core.storage.PendingTransactionStorage
 import cash.p.terminal.core.storage.RestoreSettingsStorage
@@ -101,10 +102,12 @@ val storageModule = module {
     single { get<AppDatabase>().poisonAddressDao() }
     single { get<AppDatabase>().pendingMultiSwapDao() }
     single { get<AppDatabase>().pendingTransactionDao() }
+    single { get<AppDatabase>().locallyCreatedTransactionDao() }
     single { get<AppDatabase>().swapProviderTransactionsDao() }
     single { get<AppDatabase>().pinDao() }
     singleOf(::PendingMultiSwapStorage)
     singleOf(::PendingTransactionStorage)
+    singleOf(::LocallyCreatedTransactionStorage)
     singleOf(::PinDbStorage)
     single {
         ZcashSingleUseAddressStorage(

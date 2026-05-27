@@ -77,6 +77,7 @@ class SendTransactionServiceStellar(account: Account, token: Token) :
         } else {
             throw IllegalStateException("Transaction data not set")
         }
+        markTransactionCreated(response.hash)
         return SendTransactionResult.Stellar(response)
     }
 

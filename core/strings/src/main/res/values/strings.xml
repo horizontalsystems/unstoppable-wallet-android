@@ -20,6 +20,10 @@
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
     <string name="Button_Disable">Disable</string>
+    <string name="button_enable">Enable</string>
+    <string name="button_disable">Disable</string>
+    <string name="button_do_not_enable">Do not enable</string>
+    <string name="button_do_not_disable">Do not disable</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Done</string>
@@ -2291,6 +2295,8 @@ Proceed only if you\'re sure.</string>
     <string name="push_notification">Push Notifications</string>
     <string name="premium_push_notifications_show">Show Notifications</string>
     <string name="premium_push_notifications_warning">To receive transaction notifications, the app may stay active in the background for selected blockchains. This can increase battery usage even when you\'re not using the app.</string>
+    <string name="push_notifications_calculator_mode_warning">Calculator mode is enabled. Push notifications may reveal that a crypto app is installed on this device. Are you sure you want to enable notifications?</string>
+    <string name="calculator_mode_push_notifications_warning">Push notifications are enabled. The app may show wallet notifications even in calculator mode. Do you want to disable push notifications to improve privacy?</string>
     <string name="push_notification_polling_interval">Check Interval</string>
     <string name="push_notification_interval_realtime">Real-time</string>
     <string name="push_notification_interval_5min">Every 5 minutes</string>

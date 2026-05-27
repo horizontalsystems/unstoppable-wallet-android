@@ -14,6 +14,10 @@
     <string name="Button_Next">Далее</string>
     <string name="Button_Enable">Активировать</string>
     <string name="Button_Disable">Выкл.</string>
+    <string name="button_enable">Включить</string>
+    <string name="button_disable">Отключить</string>
+    <string name="button_do_not_enable">Не включать</string>
+    <string name="button_do_not_disable">Не отключать</string>
     <string name="Button_Close">Закрыть</string>
     <string name="Button_Ok">ОК</string>
     <string name="Button_Done">Готово</string>
@@ -1999,6 +2003,8 @@
     <string name="push_notification">Push-уведомления</string>
     <string name="premium_push_notifications_show">Показывать уведомления</string>
     <string name="premium_push_notifications_warning">Чтобы получать уведомления о транзакциях, приложение может оставаться активным в фоне для выбранных блокчейнов. Это может увеличить расход батареи, даже когда вы не пользуетесь приложением.</string>
+    <string name="push_notifications_calculator_mode_warning">У вас включён режим калькулятора. Push-уведомления могут раскрывать наличие крипто-приложения на устройстве. Вы уверены, что хотите включить уведомления?</string>
+    <string name="calculator_mode_push_notifications_warning">У вас включены push-уведомления. Приложение может показывать уведомления от кошелька даже в режиме калькулятора. Вы хотите отключить push-уведомления для повышения приватности?</string>
     <string name="push_notification_polling_interval">Интервал проверки</string>
     <string name="push_notification_interval_realtime">В реальном времени</string>
     <string name="push_notification_interval_5min">Каждые 5 минут</string>

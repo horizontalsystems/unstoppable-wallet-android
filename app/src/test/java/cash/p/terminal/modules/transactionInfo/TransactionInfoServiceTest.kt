@@ -16,6 +16,7 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionStatus
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.wallet.Account
@@ -41,6 +42,7 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -77,6 +79,7 @@ class TransactionInfoServiceTest : KoinTest {
     private val balanceHiddenManager = mockk<IBalanceHiddenManager>(relaxUnitFun = true)
     private val pendingTransactionMatcher = spyk(PendingTransactionMatcher())
     private val amlStatusManager = mockk<AmlStatusManager>(relaxed = true)
+    private val poisonAddressManager = mockk<PoisonAddressManager>(relaxed = true)
     private lateinit var dispatcherProvider: DispatcherProvider
 
     private val lastBlockSubject = PublishSubject.create<Unit>()
@@ -88,7 +91,7 @@ class TransactionInfoServiceTest : KoinTest {
                 single<IBalanceHiddenManager> { balanceHiddenManager }
                 single { pendingTransactionMatcher }
                 single { amlStatusManager }
-                single { mockk<PoisonAddressManager>(relaxed = true) }
+                single { poisonAddressManager }
             }
         )
     }
@@ -123,6 +126,7 @@ class TransactionInfoServiceTest : KoinTest {
         every { balanceHiddenManager.isTransactionInfoHiddenForWallet(any(), any()) } returns false
         every { balanceHiddenManager.balanceHidden } returns false
         every { amlStatusManager.statusUpdates } returns MutableSharedFlow()
+        coEvery { poisonAddressManager.getPoisonStatus(any()) } returns PoisonStatus.BLOCKCHAIN
     }
 
     @After
@@ -190,6 +194,18 @@ class TransactionInfoServiceTest : KoinTest {
             explorerData.map { TransactionInfoModule.ExplorerData(it.title, it.url) },
             service.transactionInfoItem.explorerData
         )
+    }
+
+    @Test
+    fun start_createdTransaction_firstEmissionHasComputedPoisonStatus() = runTest(dispatcher) {
+        coEvery { poisonAddressManager.getPoisonStatus(transactionRecord) } returns PoisonStatus.CREATED
+        val service = createService(userSwapTransactionId = null)
+        val firstItem = async { service.transactionInfoItemFlow.first() }
+
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        assertEquals(PoisonStatus.CREATED, firstItem.await().poisonStatus)
     }
 
     @Test

@@ -14,6 +14,10 @@
     <string name="Button_Next">Próximo</string>
     <string name="Button_Enable">Habilitar</string>
     <string name="Button_Disable">Desativar</string>
+    <string name="button_enable">Ativar</string>
+    <string name="button_disable">Desativar</string>
+    <string name="button_do_not_enable">Não ativar</string>
+    <string name="button_do_not_disable">Não desativar</string>
     <string name="Button_Close">Fechar</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Concluído</string>
@@ -1584,6 +1588,8 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="push_notification">Notificações push</string>
     <string name="premium_push_notifications_show">Mostrar notificações</string>
     <string name="premium_push_notifications_warning">Para receber notificações de transações, o app pode permanecer ativo em segundo plano para as blockchains selecionadas. Isso pode aumentar o consumo de bateria, mesmo quando você não estiver usando o app.</string>
+    <string name="push_notifications_calculator_mode_warning">O modo calculadora está ativado. As notificações push podem revelar que há um app de cripto instalado neste dispositivo. Tem certeza de que deseja ativar as notificações?</string>
+    <string name="calculator_mode_push_notifications_warning">As notificações push estão ativadas. O app pode mostrar notificações da carteira mesmo no modo calculadora. Deseja desativar as notificações push para aumentar a privacidade?</string>
     <string name="push_notification_polling_interval">Intervalo de verificação</string>
     <string name="push_notification_interval_realtime">Tempo real</string>
     <string name="push_notification_interval_5min">A cada 5 minutos</string>

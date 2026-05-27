@@ -50,6 +50,7 @@ class AccountCleanerTest {
     private lateinit var moneroFileDao: MoneroFileDao
     private lateinit var smsNotificationSettings: ISmsNotificationSettings
     private lateinit var pinDbStorage: PinDbStorage
+    private lateinit var locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository
 
     @Before
     fun setUp() {
@@ -61,6 +62,7 @@ class AccountCleanerTest {
         moneroFileDao = mockk(relaxed = true)
         smsNotificationSettings = mockk(relaxed = true)
         pinDbStorage = mockk(relaxed = true)
+        locallyCreatedTransactionRepository = mockk(relaxed = true)
 
         coEvery { clearZCashWalletDataUseCase.invoke(any()) } returns Unit
         coEvery { removeMoneroWalletFilesUseCase.invoke(any<Account>()) } returns true
@@ -77,7 +79,8 @@ class AccountCleanerTest {
             walletManager,
             moneroFileDao,
             smsNotificationSettings,
-            pinDbStorage
+            pinDbStorage,
+            locallyCreatedTransactionRepository,
         )
     }
 

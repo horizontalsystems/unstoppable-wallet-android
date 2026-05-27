@@ -14,6 +14,10 @@
     <string name="Button_Next">بعدي</string>
     <string name="Button_Enable">فعال کردن</string>
     <string name="Button_Disable">غیرفعال</string>
+    <string name="button_enable">فعال کردن</string>
+    <string name="button_disable">غیرفعال کردن</string>
+    <string name="button_do_not_enable">فعال نکن</string>
+    <string name="button_do_not_disable">غیرفعال نکن</string>
     <string name="Button_Close">بستن</string>
     <string name="Button_Ok">تأیید</string>
     <string name="Button_Done">انجام شد</string>
@@ -1587,6 +1591,8 @@
     <string name="push_notification">اعلان‌های پوش</string>
     <string name="premium_push_notifications_show">نمایش اعلان‌ها</string>
     <string name="premium_push_notifications_warning">برای دریافت اعلان‌های تراکنش، برنامه ممکن است برای بلاک‌چین‌های انتخاب‌شده در پس‌زمینه فعال بماند. این کار می‌تواند مصرف باتری را افزایش دهد، حتی وقتی از برنامه استفاده نمی‌کنید.</string>
+    <string name="push_notifications_calculator_mode_warning">حالت ماشین‌حساب فعال است. اعلان‌های پوش می‌توانند نشان دهند که یک برنامه رمزارز روی این دستگاه نصب است. آیا مطمئن هستید که می‌خواهید اعلان‌ها را فعال کنید؟</string>
+    <string name="calculator_mode_push_notifications_warning">اعلان‌های پوش فعال هستند. برنامه حتی در حالت ماشین‌حساب هم ممکن است اعلان‌های کیف پول را نمایش دهد. آیا می‌خواهید برای افزایش حریم خصوصی اعلان‌های پوش را غیرفعال کنید؟</string>
     <string name="push_notification_polling_interval">فاصله بررسی</string>
     <string name="push_notification_interval_realtime">بلادرنگ</string>
     <string name="push_notification_interval_5min">هر ۵ دقیقه</string>

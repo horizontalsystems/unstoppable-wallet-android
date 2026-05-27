@@ -234,7 +234,7 @@ interface ISendTonAdapter : IBalanceAdapter {
 interface ISendStellarAdapter : IBalanceAdapter {
     fun validate(address: String)
     suspend fun getMinimumSendAmount(address: String) : BigDecimal?
-    suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    suspend fun send(amount: BigDecimal, address: String, memo: String?): String?
 }
 
 interface INativeBalanceProvider {

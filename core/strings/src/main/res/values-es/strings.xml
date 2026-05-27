@@ -14,6 +14,10 @@
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Enable">Habilitar</string>
     <string name="Button_Disable">Desactivar</string>
+    <string name="button_enable">Activar</string>
+    <string name="button_disable">Desactivar</string>
+    <string name="button_do_not_enable">No activar</string>
+    <string name="button_do_not_disable">No desactivar</string>
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">Aceptar</string>
     <string name="Button_Done">Listo</string>
@@ -1576,6 +1580,8 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="push_notification">Notificaciones push</string>
     <string name="premium_push_notifications_show">Mostrar notificaciones</string>
     <string name="premium_push_notifications_warning">Para recibir notificaciones de transacciones, la app puede permanecer activa en segundo plano para las blockchains seleccionadas. Esto puede aumentar el consumo de batería incluso cuando no estás usando la app.</string>
+    <string name="push_notifications_calculator_mode_warning">El modo calculadora está activado. Las notificaciones push pueden revelar que hay una aplicación de criptomonedas instalada en este dispositivo. ¿Seguro que quieres activar las notificaciones?</string>
+    <string name="calculator_mode_push_notifications_warning">Las notificaciones push están activadas. La aplicación puede mostrar notificaciones de la billetera incluso en modo calculadora. ¿Quieres desactivar las notificaciones push para mejorar la privacidad?</string>
     <string name="push_notification_polling_interval">Intervalo de verificación</string>
     <string name="push_notification_interval_realtime">Tiempo real</string>
     <string name="push_notification_interval_5min">Cada 5 minutos</string>

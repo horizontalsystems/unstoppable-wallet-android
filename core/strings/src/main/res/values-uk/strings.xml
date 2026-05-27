@@ -14,6 +14,10 @@
     <string name="Button_Next">Далі</string>
     <string name="Button_Enable">Активувати</string>
     <string name="Button_Disable">Вимк.</string>
+    <string name="button_enable">Увімкнути</string>
+    <string name="button_disable">Вимкнути</string>
+    <string name="button_do_not_enable">Не вмикати</string>
+    <string name="button_do_not_disable">Не вимикати</string>
     <string name="Button_Close">Закрити</string>
     <string name="Button_Ok">ОК</string>
     <string name="Button_Done">Готово</string>
@@ -1981,6 +1985,8 @@
     <string name="push_notification">Push-сповіщення</string>
     <string name="premium_push_notifications_show">Показувати сповіщення</string>
     <string name="premium_push_notifications_warning">Щоб отримувати сповіщення про транзакції, застосунок може залишатися активним у фоновому режимі для вибраних блокчейнів. Це може збільшити споживання заряду батареї, навіть коли ви не користуєтеся застосунком.</string>
+    <string name="push_notifications_calculator_mode_warning">У вас увімкнено режим калькулятора. Push-сповіщення можуть розкрити наявність криптозастосунку на пристрої. Ви впевнені, що хочете ввімкнути сповіщення?</string>
+    <string name="calculator_mode_push_notifications_warning">У вас увімкнено push-сповіщення. Застосунок може показувати сповіщення гаманця навіть у режимі калькулятора. Хочете вимкнути push-сповіщення для підвищення приватності?</string>
     <string name="push_notification_polling_interval">Інтервал перевірки</string>
     <string name="push_notification_interval_realtime">У реальному часі</string>
     <string name="push_notification_interval_5min">Кожні 5 хвилин</string>

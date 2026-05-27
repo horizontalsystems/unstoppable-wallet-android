@@ -235,6 +235,7 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
             var showRationaleDialog by rememberSaveable { mutableStateOf(false) }
             var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
             var showRevokedDialog by rememberSaveable { mutableStateOf(false) }
+            var showCalculatorModeDialog by rememberSaveable { mutableStateOf(false) }
             var wasPermissionRequested by rememberSaveable { mutableStateOf(false) }
 
             var hasPermission by remember { mutableStateOf(txNotificationManager.checkAllPermissions()) }
@@ -262,6 +263,26 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
                 }
             }
 
+            fun enableShowNotifications() {
+                if (hasPermission) {
+                    pushNotificationsViewModel.setShowNotifications(true)
+                    return
+                }
+                val hasRuntimePermission = txNotificationManager.hasNotificationPermission()
+                if (!hasRuntimePermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val shouldShowRationale = activity?.shouldShowRequestPermissionRationale(
+                        android.Manifest.permission.POST_NOTIFICATIONS
+                    ) ?: false
+                    when {
+                        shouldShowRationale -> showRationaleDialog = true
+                        wasPermissionRequested -> showSettingsDialog = true
+                        else -> permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                } else {
+                    showRevokedDialog = true
+                }
+            }
+
             PushNotificationsScreen(
                 uiState = pushNotificationsViewModel.uiState,
                 noNotificationPermission = !hasPermission,
@@ -270,22 +291,10 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
                         pushNotificationsViewModel.setShowNotifications(false)
                         return@PushNotificationsScreen
                     }
-                    if (hasPermission) {
-                        pushNotificationsViewModel.setShowNotifications(true)
-                        return@PushNotificationsScreen
-                    }
-                    val hasRuntimePermission = txNotificationManager.hasNotificationPermission()
-                    if (!hasRuntimePermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        val shouldShowRationale = activity?.shouldShowRequestPermissionRationale(
-                            android.Manifest.permission.POST_NOTIFICATIONS
-                        ) ?: false
-                        when {
-                            shouldShowRationale -> showRationaleDialog = true
-                            wasPermissionRequested -> showSettingsDialog = true
-                            else -> permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                        }
+                    if (pushNotificationsViewModel.uiState.isCalculatorModeEnabled) {
+                        showCalculatorModeDialog = true
                     } else {
-                        showRevokedDialog = true
+                        enableShowNotifications()
                     }
                 },
                 onPermissionWarningClick = { showRevokedDialog = true },
@@ -296,6 +305,23 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
                 onShowFiatAmountToggle = pushNotificationsViewModel::setShowFiatAmount,
                 onClose = navController::navigateUpSafely
             )
+
+            if (showCalculatorModeDialog) {
+                ConfirmationDialogBottomSheet(
+                    title = stringResource(R.string.calculator_pin_settings_title),
+                    icon = R.drawable.icon_24_warning_2,
+                    warningTitle = null,
+                    warningText = stringResource(R.string.push_notifications_calculator_mode_warning),
+                    actionButtonTitle = stringResource(R.string.button_enable),
+                    transparentButtonTitle = stringResource(R.string.button_do_not_enable),
+                    onCloseClick = { showCalculatorModeDialog = false },
+                    onActionButtonClick = {
+                        showCalculatorModeDialog = false
+                        enableShowNotifications()
+                    },
+                    onTransparentButtonClick = { showCalculatorModeDialog = false }
+                )
+            }
 
             if (showRationaleDialog) {
                 ConfirmationDialogBottomSheet(

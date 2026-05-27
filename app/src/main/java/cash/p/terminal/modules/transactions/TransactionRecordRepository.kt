@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.converters.PendingTransactionConverter
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -31,6 +32,7 @@ class TransactionRecordRepository(
     private val pendingRepository: PendingTransactionRepository,
     private val pendingConverter: PendingTransactionConverter,
     private val pendingTransactionMatcher: PendingTransactionMatcher,
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ITransactionRecordRepository {
 
@@ -50,8 +52,14 @@ class TransactionRecordRepository(
     private var allNormalLoaded = AtomicBoolean(false)
     private var allExtraLoaded = AtomicBoolean(false)
 
-    private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
-    private val extraSwapAdaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
+    // Copy-on-write: on every mutation a freshly built Map is published into this @Volatile ref
+    // and the local mutable reference is dropped, so the published instance is never mutated again.
+    // Readers take a single volatile read and iterate the snapshot — no CME possible.
+    @Volatile
+    private var adaptersMap: Map<TransactionWallet, TransactionAdapterWrapper> = emptyMap()
+
+    @Volatile
+    private var extraSwapAdaptersMap: Map<TransactionWallet, TransactionAdapterWrapper> = emptyMap()
 
     private val coroutineScope = CoroutineScope(dispatcherProvider.io)
     private var updatesJob: Job? = null
@@ -69,34 +77,28 @@ class TransactionRecordRepository(
 
     private val activeAdapters: List<TransactionAdapterWrapper>
         get() {
-            val tmpSelectedWallet = selectedWallet
-            val tmpSelectedBlockchain = selectedBlockchain
-            val activeWallets = when {
-                tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
-                tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
-                    it.source.blockchain == tmpSelectedBlockchain
-                }
-
-                else -> walletsGroupedBySource
-            }
-            return activeWallets.mapNotNull { adaptersMap[it] }
+            val snapshot = adaptersMap
+            return activeWallets().mapNotNull { snapshot[it] }
         }
 
     private val activeSwapExtraAdapters: List<TransactionAdapterWrapper>
         get() {
-            val tmpSelectedWallet = selectedWallet
-            val tmpSelectedBlockchain = selectedBlockchain
-
-            val activeWallets = when {
-                tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
-                tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
-                    it.source.blockchain == tmpSelectedBlockchain
-                }
-
-                else -> walletsGroupedBySource
-            }
-            return activeWallets.mapNotNull { extraSwapAdaptersMap[it] }
+            val snapshot = extraSwapAdaptersMap
+            return activeWallets().mapNotNull { snapshot[it] }
         }
+
+    private fun activeWallets(): List<TransactionWallet> {
+        val tmpSelectedWallet = selectedWallet
+        val tmpSelectedBlockchain = selectedBlockchain
+        return when {
+            tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
+            tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
+                it.source.blockchain == tmpSelectedBlockchain
+            }
+
+            else -> walletsGroupedBySource
+        }
+    }
 
     /**
      * Captures current filter context for snapshot comparison.
@@ -166,11 +168,10 @@ class TransactionRecordRepository(
             _itemsFlow.tryEmit(emptyList())
             walletsGroupedBySource = groupWalletsBySource(transactionWallets)
 
-            // update list of adapters based on wallets
-            val currentAdapters = adaptersMap.toMutableMap()
-            adaptersMap.clear()
+            val previousAdapters = adaptersMap.toMutableMap()
+            val newAdapters = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
             (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
-                var adapter = currentAdapters.remove(transactionWallet)
+                var adapter = previousAdapters.remove(transactionWallet)
                 if (adapter == null) {
                     adapterManager.getAdapter(transactionWallet.source)?.let {
                         adapter = TransactionAdapterWrapper(
@@ -181,17 +182,15 @@ class TransactionRecordRepository(
                             pendingRepository = pendingRepository,
                             pendingConverter = pendingConverter,
                             pendingTransactionMatcher = pendingTransactionMatcher,
+                            locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
                             dispatcherProvider = dispatcherProvider,
                         )
                     }
                 }
-
-                adapter?.let {
-                    adaptersMap[transactionWallet] = it
-                }
+                adapter?.let { newAdapters[transactionWallet] = it }
             }
-            currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
-            currentAdapters.clear()
+            adaptersMap = newAdapters
+            previousAdapters.values.forEach(TransactionAdapterWrapper::clear)
 
             buildExtraSwapAdapters()
         }
@@ -211,9 +210,7 @@ class TransactionRecordRepository(
         if (transactionType != selectedFilterTransactionType) {
             selectedFilterTransactionType = transactionType
 
-            adaptersMap.forEach { (_, transactionAdapterWrapper) ->
-                transactionAdapterWrapper.setTransactionType(transactionType)
-            }
+            adaptersMap.values.forEach { it.setTransactionType(transactionType) }
             reload = true
         }
 
@@ -237,11 +234,10 @@ class TransactionRecordRepository(
      * We need such adapters only fo changenow swaps because they are not typical swaps
      */
     private fun buildExtraSwapAdapters() {
-        // update list of adapters based on wallets
-        val currentAdapters = extraSwapAdaptersMap.toMutableMap()
-        extraSwapAdaptersMap.clear()
+        val previousAdapters = extraSwapAdaptersMap.toMutableMap()
+        val newAdapters = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
         (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
-            var adapter = currentAdapters.remove(transactionWallet)
+            var adapter = previousAdapters.remove(transactionWallet)
             if (adapter == null) {
                 adapterManager.getAdapter(transactionWallet.source)?.let {
                     adapter = TransactionAdapterWrapper(
@@ -252,26 +248,20 @@ class TransactionRecordRepository(
                         pendingRepository = pendingRepository,
                         pendingConverter = pendingConverter,
                         pendingTransactionMatcher = pendingTransactionMatcher,
+                        locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
                         dispatcherProvider = dispatcherProvider,
                     )
                 }
             }
-
-            adapter?.let {
-                extraSwapAdaptersMap[transactionWallet] = it
-            }
+            adapter?.let { newAdapters[transactionWallet] = it }
         }
-        currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
-        currentAdapters.clear()
+        extraSwapAdaptersMap = newAdapters
+        previousAdapters.values.forEach(TransactionAdapterWrapper::clear)
     }
 
     private fun updateContact(contact: Contact?) {
-        adaptersMap.values.forEach { transactionAdapterWrapper ->
-            transactionAdapterWrapper.setContact(contact)
-        }
-        extraSwapAdaptersMap.values.forEach { transactionAdapterWrapper ->
-            transactionAdapterWrapper.setContact(contact)
-        }
+        adaptersMap.values.forEach { it.setContact(contact) }
+        extraSwapAdaptersMap.values.forEach { it.setContact(contact) }
     }
 
     override fun loadNext() {
@@ -282,9 +272,7 @@ class TransactionRecordRepository(
     }
 
     override fun reload() {
-        adaptersMap.forEach { (_, transactionAdapterWrapper) ->
-            transactionAdapterWrapper.reload()
-        }
+        adaptersMap.values.forEach { it.reload() }
         unsubscribeFromUpdates()
         allNormalLoaded.set(false)
         allExtraLoaded.set(false)
@@ -398,11 +386,14 @@ class TransactionRecordRepository(
     }
 
     override fun clear() {
-        adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
-        adaptersMap.clear()
+        val previousAdapters = adaptersMap
+        adaptersMap = emptyMap()
+        previousAdapters.values.forEach(TransactionAdapterWrapper::clear)
 
-        extraSwapAdaptersMap.values.forEach(TransactionAdapterWrapper::clear)
-        extraSwapAdaptersMap.clear()
+        val previousExtraSwapAdapters = extraSwapAdaptersMap
+        extraSwapAdaptersMap = emptyMap()
+        previousExtraSwapAdapters.values.forEach(TransactionAdapterWrapper::clear)
+
         coroutineScope.cancel()
     }
 

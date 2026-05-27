@@ -4,6 +4,7 @@ import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.converters.PendingTransactionConverter
 import cash.p.terminal.core.managers.CoinManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.entities.PendingTransactionEntity
@@ -25,6 +26,7 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,32 +60,14 @@ class TransactionAdapterWrapperTest {
 
     @Test
     fun get_realBitcoinRecordMatchesPendingWithoutHash_pendingIsFilteredOut() = runTest {
-        val token = createToken()
-        val source = createSource(blockchain = token.blockchain)
-        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
-        val realRecord = createBitcoinOutgoingRecord(
-            token = token,
-            source = source,
-            uid = "real-tx",
-            transactionHash = "abc123",
-            timestamp = 1_715_000_005,
-            amount = BigDecimal("-0.00000563"),
-            toAddress = "bc1p050tvc3q...nry6...vuvsv5t5mx",
-        )
-        val pendingRecord = createPendingRecord(
-            token = token,
-            source = source,
-            uid = "pending-1",
-            transactionHash = "",
-            timestamp = 1_715_000_000,
-            amount = BigDecimal("0.00000563"),
-            toAddress = "bc1p050tvc3q...nry6...vuvsv5t5mx",
-        )
+        val scenario = createBitcoinPendingScenario()
+        val locallyCreatedTransactionRepository = mockk<LocallyCreatedTransactionRepository>(relaxed = true)
 
         val wrapper = createWrapper(
-            transactionWallet = transactionWallet,
-            realRecords = listOf(realRecord),
-            pendingRecords = listOf(pendingRecord),
+            transactionWallet = scenario.transactionWallet,
+            realRecords = listOf(scenario.realRecord),
+            pendingRecords = listOf(scenario.pendingRecord),
+            locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
         )
 
         val records = wrapper.get(
@@ -92,8 +76,33 @@ class TransactionAdapterWrapperTest {
             requestedContact = null,
         )
 
-        assertEquals(listOf(realRecord.uid), records.map { it.uid })
-        assertCoinAmount(BigDecimal("-0.00000563"), records.single())
+        assertEquals(listOf(scenario.realRecord.uid), records.map { it.uid })
+        coVerify { locallyCreatedTransactionRepository.markCreated(scenario.realRecord) }
+    }
+
+    @Test
+    fun get_realRecordMatchesPendingWithoutHashButDifferentAddress_doesNotMarkRealRecordCreated() = runTest {
+        val scenario = createBitcoinPendingScenario(
+            realToAddress = "bc1realaddress",
+            pendingToAddress = "bc1pendingaddress",
+        )
+        val locallyCreatedTransactionRepository = mockk<LocallyCreatedTransactionRepository>(relaxed = true)
+
+        val wrapper = createWrapper(
+            transactionWallet = scenario.transactionWallet,
+            realRecords = listOf(scenario.realRecord),
+            pendingRecords = listOf(scenario.pendingRecord),
+            locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(scenario.realRecord.uid), records.map { it.uid })
+        coVerify(exactly = 0) { locallyCreatedTransactionRepository.markCreated(any<TransactionRecord>()) }
     }
 
     @Test
@@ -131,6 +140,7 @@ class TransactionAdapterWrapperTest {
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            locallyCreatedTransactionRepository = mockk(relaxed = true),
             dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
         )
 
@@ -197,32 +207,17 @@ class TransactionAdapterWrapperTest {
 
     @Test
     fun get_realBitcoinRecordDoesNotMatchPending_pendingRemainsVisible() = runTest {
-        val token = createToken()
-        val source = createSource(blockchain = token.blockchain)
-        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
-        val realRecord = createBitcoinOutgoingRecord(
-            token = token,
-            source = source,
-            uid = "real-tx",
-            transactionHash = "abc123",
-            timestamp = 1_715_000_020,
-            amount = BigDecimal("-0.00000703"),
-            toAddress = "bc1p050tvc3q...nry6...vuvsv5t5mx",
+        val scenario = createBitcoinPendingScenario(
+            realTimestamp = 1_715_000_020,
+            realAmount = BigDecimal("-0.00000703"),
         )
-        val pendingRecord = createPendingRecord(
-            token = token,
-            source = source,
-            uid = "pending-1",
-            transactionHash = "",
-            timestamp = 1_715_000_000,
-            amount = BigDecimal("0.00000563"),
-            toAddress = "bc1p050tvc3q...nry6...vuvsv5t5mx",
-        )
+        val locallyCreatedTransactionRepository = mockk<LocallyCreatedTransactionRepository>(relaxed = true)
 
         val wrapper = createWrapper(
-            transactionWallet = transactionWallet,
-            realRecords = listOf(realRecord),
-            pendingRecords = listOf(pendingRecord),
+            transactionWallet = scenario.transactionWallet,
+            realRecords = listOf(scenario.realRecord),
+            pendingRecords = listOf(scenario.pendingRecord),
+            locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
         )
 
         val records = wrapper.get(
@@ -231,8 +226,8 @@ class TransactionAdapterWrapperTest {
             requestedContact = null,
         )
 
-        assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
-        assertCoinAmount(BigDecimal("-0.00000703"), records.first())
+        assertEquals(listOf(scenario.realRecord.uid, scenario.pendingRecord.uid), records.map { it.uid })
+        coVerify(exactly = 0) { locallyCreatedTransactionRepository.markCreated(any<TransactionRecord>()) }
     }
 
     @Test
@@ -898,6 +893,7 @@ class TransactionAdapterWrapperTest {
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            locallyCreatedTransactionRepository = mockk(relaxed = true),
             dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
         )
 
@@ -918,11 +914,53 @@ class TransactionAdapterWrapperTest {
         advanceUntilIdle()
     }
 
+    private data class BitcoinPendingScenario(
+        val transactionWallet: TransactionWallet,
+        val realRecord: TransactionRecord,
+        val pendingRecord: PendingTransactionRecord,
+    )
+
+    private fun createBitcoinPendingScenario(
+        realTimestamp: Long = 1_715_000_005,
+        pendingTimestamp: Long = 1_715_000_000,
+        realAmount: BigDecimal = BigDecimal("-0.00000563"),
+        pendingAmount: BigDecimal = BigDecimal("0.00000563"),
+        realToAddress: String = "bc1p050tvc3q...nry6...vuvsv5t5mx",
+        pendingToAddress: String = realToAddress,
+    ): BitcoinPendingScenario {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+
+        return BitcoinPendingScenario(
+            transactionWallet = transactionWallet,
+            realRecord = createBitcoinOutgoingRecord(
+                token = token,
+                source = source,
+                uid = "real-tx",
+                transactionHash = "abc123",
+                timestamp = realTimestamp,
+                amount = realAmount,
+                toAddress = realToAddress,
+            ),
+            pendingRecord = createPendingRecord(
+                token = token,
+                source = source,
+                uid = "pending-1",
+                transactionHash = "",
+                timestamp = pendingTimestamp,
+                amount = pendingAmount,
+                toAddress = pendingToAddress,
+            ),
+        )
+    }
+
     private fun TestScope.createWrapper(
         transactionWallet: TransactionWallet,
         realRecords: List<TransactionRecord>,
         pendingRecords: List<PendingTransactionRecord>,
         realRecordPages: List<List<TransactionRecord>> = listOf(realRecords),
+        locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository = mockk(relaxed = true),
     ): TransactionAdapterWrapper {
         val adapterPages = realRecordPages.ifEmpty { listOf(realRecords) }
         var requestIndex = 0
@@ -952,6 +990,7 @@ class TransactionAdapterWrapperTest {
             pendingRepository = pendingRepository,
             pendingConverter = pendingConverter,
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
             dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
         )
     }

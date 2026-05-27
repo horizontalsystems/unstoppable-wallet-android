@@ -203,7 +203,24 @@ class PendingTransactionMatcher {
             TransactionRecordType.STELLAR_OUTGOING -> true
 
             TransactionRecordType.TON -> to != null && from == null
-            else -> false
+
+            TransactionRecordType.UNKNOWN,
+            TransactionRecordType.SOLANA_INCOMING,
+            TransactionRecordType.SOLANA_UNKNOWN,
+            TransactionRecordType.BITCOIN_INCOMING,
+            TransactionRecordType.EVM,
+            TransactionRecordType.EVM_APPROVE,
+            TransactionRecordType.EVM_CONTRACT_CALL,
+            TransactionRecordType.EVM_CONTRACT_CREATION,
+            TransactionRecordType.EVM_INCOMING,
+            TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL,
+            TransactionRecordType.TRON,
+            TransactionRecordType.TRON_APPROVE,
+            TransactionRecordType.TRON_CONTRACT_CALL,
+            TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL,
+            TransactionRecordType.TRON_INCOMING,
+            TransactionRecordType.MONERO_INCOMING,
+            TransactionRecordType.STELLAR_INCOMING -> false
         }
     }
 

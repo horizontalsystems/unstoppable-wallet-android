@@ -3,24 +3,32 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.core.storage.PoisonAddressDao
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
+import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
-import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.withContext
 
 class PoisonAddressManager(
     private val poisonAddressDao: PoisonAddressDao,
     private val contactsRepository: ContactsRepository,
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository,
+    private val dispatcherProvider: DispatcherProvider,
 ) {
     private val _poisonDbChangedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    val poisonDbChangedFlow: SharedFlow<Unit> = _poisonDbChangedFlow.asSharedFlow()
+    val poisonDbChangedFlow: Flow<Unit> = merge(
+        _poisonDbChangedFlow.asSharedFlow(),
+        locallyCreatedTransactionRepository.changedFlow,
+    )
 
     companion object {
         private const val SIMILARITY_CHARS = 3
@@ -56,7 +64,7 @@ class PoisonAddressManager(
         return PoisonStatus.BLOCKCHAIN
     }
 
-    fun getPoisonStatus(record: TransactionRecord): PoisonStatus {
+    suspend fun getPoisonStatus(record: TransactionRecord): PoisonStatus = withContext(dispatcherProvider.io) {
         val blockchainType = record.source.blockchain.type
         val account = record.source.account
         val accountId = account.id
@@ -64,24 +72,12 @@ class PoisonAddressManager(
 
         val relevantAddress = getRelevantAddress(record, outgoing)
 
-        // Watch accounts have no signing key — they observe the chain, they cannot
-        // author transactions. Any tx visible at a watched address came from outside,
-        // even if `from` equals the watched address.
-        val isCreatedByWallet = !account.isWatchAccount && when (record) {
-            is EvmTransactionRecord -> outgoing && !record.foreignTransaction
-            is TronTransactionRecord -> outgoing && !record.foreignTransaction
-            // UTXO sends are signed by the wallet's own keys, so an outgoing
-            // Bitcoin/Litecoin record (including MWEB) is always wallet-created.
-            is BitcoinTransactionRecord -> outgoing
-            else -> false
-        }
-
-        return determinePoisonStatus(
+        determinePoisonStatus(
             relevantAddress = relevantAddress,
             blockchainType = blockchainType,
             accountId = accountId,
             isOutgoing = outgoing,
-            isCreatedByWallet = isCreatedByWallet,
+            isCreatedByWallet = isCreatedByWallet(record, outgoing, account.isWatchAccount),
         )
     }
 
@@ -154,19 +150,53 @@ class PoisonAddressManager(
         ).isNotEmpty()
     }
 
+    private suspend fun isCreatedByWallet(
+        record: TransactionRecord,
+        outgoing: Boolean,
+        isWatchAccount: Boolean,
+    ): Boolean {
+        if (isWatchAccount) return false
+        if (!outgoing) return false
+
+        if (record is PendingTransactionRecord) return true
+
+        return locallyCreatedTransactionRepository.isCreated(record)
+    }
+
     private fun isOutgoing(record: TransactionRecord): Boolean {
+        if (record is PendingTransactionRecord) return true
+
         return when (record.transactionRecordType) {
             TransactionRecordType.BITCOIN_OUTGOING,
-            TransactionRecordType.EVM_OUTGOING,
-            TransactionRecordType.EVM_SWAP,
-            TransactionRecordType.EVM_UNKNOWN_SWAP,
-            TransactionRecordType.TRON_OUTGOING,
             TransactionRecordType.SOLANA_OUTGOING,
             TransactionRecordType.MONERO_OUTGOING,
             TransactionRecordType.STELLAR_OUTGOING -> true
 
             TransactionRecordType.TON -> record.to != null && record.from == null
-            else -> false
+
+            TransactionRecordType.EVM_APPROVE,
+            TransactionRecordType.EVM_CONTRACT_CALL,
+            TransactionRecordType.EVM_CONTRACT_CREATION,
+            TransactionRecordType.EVM_OUTGOING,
+            TransactionRecordType.EVM_SWAP,
+            TransactionRecordType.EVM_UNKNOWN_SWAP -> true
+
+            TransactionRecordType.TRON_APPROVE,
+            TransactionRecordType.TRON_CONTRACT_CALL,
+            TransactionRecordType.TRON_OUTGOING -> true
+
+            TransactionRecordType.UNKNOWN,
+            TransactionRecordType.SOLANA_INCOMING,
+            TransactionRecordType.SOLANA_UNKNOWN,
+            TransactionRecordType.BITCOIN_INCOMING,
+            TransactionRecordType.EVM,
+            TransactionRecordType.EVM_INCOMING,
+            TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL,
+            TransactionRecordType.TRON,
+            TransactionRecordType.TRON_EXTERNAL_CONTRACT_CALL,
+            TransactionRecordType.TRON_INCOMING,
+            TransactionRecordType.MONERO_INCOMING,
+            TransactionRecordType.STELLAR_INCOMING -> false
         }
     }
 

@@ -26,7 +26,8 @@ import java.util.Locale
 
 internal class PlaceApi(
     private val httpClient: HttpClient,
-    private val appHeadersProvider: AppHeadersProvider
+    private val appHeadersProvider: AppHeadersProvider,
+    private val premiumApiBaseUrl: String,
 ) {
     private companion object {
         const val PIRATE_BASE_PLACE_URL = "https://p.cash/api/"
@@ -122,15 +123,18 @@ internal class PlaceApi(
     // Premium API methods
     suspend fun checkTrialPremiumStatus(address: String): HttpResponse {
         return httpClient.get {
-            url(PIRATE_BASE_PLACE_URL + "mobile/premium/$address")
+            url(premiumUrl(address))
             appHeaders()
         }
     }
 
     suspend fun activateTrialPremium(address: String): HttpResponse {
         return httpClient.post {
-            url(PIRATE_BASE_PLACE_URL + "mobile/premium/$address")
+            url(premiumUrl(address))
             appHeaders()
         }
     }
+
+    private fun premiumUrl(address: String): String =
+        premiumApiBaseUrl + "mobile/premium/$address"
 }

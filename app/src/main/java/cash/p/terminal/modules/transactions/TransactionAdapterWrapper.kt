@@ -3,6 +3,7 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.converters.PendingTransactionConverter
 import cash.p.terminal.core.managers.CoinManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionMatchKind
 import cash.p.terminal.core.managers.PendingTransactionRepository
@@ -45,8 +46,13 @@ class TransactionAdapterWrapper(
     private val pendingRepository: PendingTransactionRepository,
     private val pendingConverter: PendingTransactionConverter,
     private val pendingTransactionMatcher: PendingTransactionMatcher,
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository,
     dispatcherProvider: DispatcherProvider,
 ) : Clearable {
+    private companion object {
+        const val CREATED_MARK_MIN_CONFIDENCE = 0.9
+    }
+
     private data class PendingRealMatchCandidate(
         val realIndex: Int,
         val confidence: Double,
@@ -56,6 +62,7 @@ class TransactionAdapterWrapper(
 
     private data class PendingRealMatch(
         val pendingIndex: Int,
+        val confidence: Double,
         val kind: PendingTransactionMatchKind,
     )
 
@@ -239,6 +246,7 @@ class TransactionAdapterWrapper(
             val pendingRecords = getPending(pendingEntities)
             val matchedPendingByReal = matchedPendingByRealIndexes(pendingRecords, realRecords)
             val adjustedRealRecords = adjustMatchedRealRecords(realRecords, pendingRecords, matchedPendingByReal)
+            markMatchedRealRecordsCreated(matchedPendingByReal, realRecords)
             val matchedPendingIndexes = matchedPendingByReal.values.mapTo(HashSet()) { it.pendingIndex }
             val filteredPending = filterDuplicatedPending(
                 pendingRecords = pendingRecords,
@@ -292,6 +300,15 @@ class TransactionAdapterWrapper(
             pending !is PendingTransactionRecord ||
                 (pending.uid !in duplicatePendingUids && index !in matchedPendingIndexes)
         }
+    }
+
+    private suspend fun markMatchedRealRecordsCreated(
+        matchedPendingByReal: Map<Int, PendingRealMatch>,
+        realRecords: List<TransactionRecord>,
+    ) {
+        matchedPendingByReal
+            .filterValues { it.confidence >= CREATED_MARK_MIN_CONFIDENCE }
+            .forEach { (realIndex, _) -> locallyCreatedTransactionRepository.markCreated(realRecords[realIndex]) }
     }
 
     private fun matchedPendingByRealIndexes(
@@ -371,6 +388,7 @@ class TransactionAdapterWrapper(
             ) {
                 matchedPendingByReal[candidate.realIndex] = PendingRealMatch(
                     pendingIndex = pendingIndex,
+                    confidence = candidate.confidence,
                     kind = candidate.kind,
                 )
                 return true

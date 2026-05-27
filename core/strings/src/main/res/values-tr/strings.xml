@@ -14,6 +14,10 @@
     <string name="Button_Next">İleri</string>
     <string name="Button_Enable">Etkinleştir</string>
     <string name="Button_Disable">Etkisizleştir</string>
+    <string name="button_enable">Etkinleştir</string>
+    <string name="button_disable">Devre dışı bırak</string>
+    <string name="button_do_not_enable">Etkinleştirme</string>
+    <string name="button_do_not_disable">Devre dışı bırakma</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
     <string name="Button_Done">Bitti</string>
@@ -1584,6 +1588,8 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="push_notification">Push bildirimleri</string>
     <string name="premium_push_notifications_show">Bildirimleri göster</string>
     <string name="premium_push_notifications_warning">İşlem bildirimlerini alabilmek için uygulama seçilen blok zincirleri için arka planda aktif kalabilir. Bu durum, uygulamayı kullanmadığınız zamanlarda bile pil tüketimini artırabilir.</string>
+    <string name="push_notifications_calculator_mode_warning">Hesap makinesi modu etkin. Anlık bildirimler bu cihazda bir kripto uygulaması olduğunu açığa çıkarabilir. Bildirimleri etkinleştirmek istediğinizden emin misiniz?</string>
+    <string name="calculator_mode_push_notifications_warning">Anlık bildirimler etkin. Uygulama, hesap makinesi modunda bile cüzdan bildirimleri gösterebilir. Gizliliği artırmak için anlık bildirimleri devre dışı bırakmak ister misiniz?</string>
     <string name="push_notification_polling_interval">Kontrol aralığı</string>
     <string name="push_notification_interval_realtime">Gerçek zamanlı</string>
     <string name="push_notification_interval_5min">Her 5 dakika</string>

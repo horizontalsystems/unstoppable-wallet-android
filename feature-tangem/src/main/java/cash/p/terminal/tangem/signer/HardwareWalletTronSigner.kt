@@ -62,7 +62,7 @@ class HardwareWalletTronSigner(
                 }
 
                 is CompletionResult.Failure -> {
-                    throw Exception("Signing failed: ${signBytesResponse.error}")
+                    throw signBytesResponse.error
                 }
             }
         }

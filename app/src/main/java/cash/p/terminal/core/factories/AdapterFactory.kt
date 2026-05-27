@@ -282,7 +282,8 @@ class AdapterFactory(
                             addressSpecTyped = tokenType.type,
                             localStorage = localStorage,
                             backgroundManager = backgroundManager,
-                            singleUseAddressManager = zcashSingleUseAddressManager
+                            singleUseAddressManager = zcashSingleUseAddressManager,
+                            dispatcherProvider = getKoinInstance()
                         )
                     }
 
@@ -385,7 +386,8 @@ class AdapterFactory(
                         addressSpecTyped = null,
                         localStorage = localStorage,
                         backgroundManager = backgroundManager,
-                        singleUseAddressManager = zcashSingleUseAddressManager
+                        singleUseAddressManager = zcashSingleUseAddressManager,
+                        dispatcherProvider = getKoinInstance()
                     )
                 }
 
