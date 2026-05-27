@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
@@ -20,10 +24,11 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import kotlinx.coroutines.launch
 
-class LegacyFeeSettingsViewModel(
-    private val gasPriceService: LegacyGasPriceService,
-    private val feeService: IEvmFeeService,
-    private val coinService: EvmCoinService
+@HiltViewModel(assistedFactory = LegacyFeeSettingsViewModel.Factory::class)
+class LegacyFeeSettingsViewModel @AssistedInject constructor(
+    @Assisted private val gasPriceService: LegacyGasPriceService,
+    @Assisted private val feeService: IEvmFeeService,
+    @Assisted private val coinService: EvmCoinService,
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
@@ -91,4 +96,12 @@ class LegacyFeeSettingsViewModel(
         }
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            gasPriceService: LegacyGasPriceService,
+            feeService: IEvmFeeService,
+            coinService: EvmCoinService,
+        ): LegacyFeeSettingsViewModel
+    }
 }

@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.Eip1559FeeSettings
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeModule
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.LegacyFeeSettings
@@ -274,13 +273,15 @@ class SendTransactionServiceEvm(
 
     @Composable
     override fun GetSettingsContent(navController: HSNavigation) {
-        val feeSettingsViewModel = viewModel<ViewModel>(
-            factory = EvmFeeModule.Factory(
-                feeService,
-                gasPriceService,
-                baseCoinService
-            )
-        )
+        val feeSettingsViewModel: ViewModel = when (val service = gasPriceService) {
+            is LegacyGasPriceService -> hiltViewModel<LegacyFeeSettingsViewModel, LegacyFeeSettingsViewModel.Factory> { factory ->
+                factory.create(service, feeService, baseCoinService)
+            }
+            is Eip1559GasPriceService -> hiltViewModel<Eip1559FeeSettingsViewModel, Eip1559FeeSettingsViewModel.Factory> { factory ->
+                factory.create(service, feeService, baseCoinService)
+            }
+            else -> throw IllegalArgumentException("Unknown gasPriceService type: ${service::class}")
+        }
         val sendSettingsViewModel = hiltViewModel<SendEvmSettingsViewModel, SendEvmSettingsViewModel.Factory> { factory ->
             factory.create(settingsService, baseCoinService)
         }

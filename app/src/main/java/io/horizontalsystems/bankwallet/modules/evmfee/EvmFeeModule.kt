@@ -1,17 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.evmfee
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.FeePriceScale
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
-import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
@@ -27,32 +20,6 @@ object EvmFeeModule {
 
     fun surcharged(gasLimit: Long) : Long {
         return (gasLimit + gasLimit / 100.0 * surchargePercent).toLong()
-    }
-
-    class Factory(
-        private val feeService: IEvmFeeService,
-        private val gasPriceService: IEvmGasPriceService,
-        private val evmCoinService: EvmCoinService
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (gasPriceService) {
-                is LegacyGasPriceService ->
-                    LegacyFeeSettingsViewModel(
-                        gasPriceService,
-                        feeService,
-                        evmCoinService
-                    ) as T
-                is Eip1559GasPriceService ->
-                    Eip1559FeeSettingsViewModel(
-                        gasPriceService,
-                        feeService,
-                        evmCoinService
-                    ) as T
-                else -> throw IllegalArgumentException()
-            }
-        }
     }
 }
 

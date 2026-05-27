@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
@@ -22,10 +26,11 @@ import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import kotlinx.coroutines.launch
 
-class Eip1559FeeSettingsViewModel(
-    private val gasPriceService: Eip1559GasPriceService,
-    feeService: IEvmFeeService,
-    private val coinService: EvmCoinService
+@HiltViewModel(assistedFactory = Eip1559FeeSettingsViewModel.Factory::class)
+class Eip1559FeeSettingsViewModel @AssistedInject constructor(
+    @Assisted private val gasPriceService: Eip1559GasPriceService,
+    @Assisted feeService: IEvmFeeService,
+    @Assisted private val coinService: EvmCoinService,
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
@@ -133,5 +138,14 @@ class Eip1559FeeSettingsViewModel(
                 feeSummaryViewItem = FeeSummaryViewItem(feeItem, gasLimit, viewState)
             }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            gasPriceService: Eip1559GasPriceService,
+            feeService: IEvmFeeService,
+            coinService: EvmCoinService,
+        ): Eip1559FeeSettingsViewModel
     }
 }
