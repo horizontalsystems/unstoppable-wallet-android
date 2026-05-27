@@ -1,21 +1,33 @@
 package io.horizontalsystems.bankwallet.modules.market.platform
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MarketPlatformViewModel(
-    private val repository: MarketPlatformCoinsRepository,
+@HiltViewModel(assistedFactory = MarketPlatformViewModel.Factory::class)
+class MarketPlatformViewModel @AssistedInject constructor(
+    @Assisted private val platform: Platform,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModelUiState<MarketPlatformUiState>() {
+
+    private val repository = MarketPlatformCoinsRepository(platform, marketKit, currencyManager)
 
     val sortingFields = listOf(
         SortingField.HighestCap,
@@ -113,6 +125,11 @@ class MarketPlatformViewModel(
             isRefreshing = false
             emitState()
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(platform: Platform): MarketPlatformViewModel
     }
 }
 

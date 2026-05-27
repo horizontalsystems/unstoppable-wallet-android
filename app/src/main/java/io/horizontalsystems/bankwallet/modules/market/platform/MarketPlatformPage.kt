@@ -28,9 +28,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -73,10 +78,24 @@ data class MarketPlatformPage(val platform: Platform) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val factory = MarketPlatformModule.Factory(platform)
+        val viewModel = hiltViewModel<MarketPlatformViewModel, MarketPlatformViewModel.Factory> { factory ->
+            factory.create(platform)
+        }
+        val chartViewModel = viewModel<ChartViewModel>(
+            factory = remember {
+                object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        val chartService = PlatformChartService(platform, App.currencyManager, App.marketKit)
+                        return ChartModule.createViewModel(chartService, ChartCurrencyValueFormatterShortened()) as T
+                    }
+                }
+            }
+        )
 
         PlatformScreen(
-            factory = factory,
+            viewModel = viewModel,
+            chartViewModel = chartViewModel,
             platform = platform,
             onCloseButtonClick = { navController.removeLastOrNull() },
             onCoinClick = { coinUid ->
@@ -92,12 +111,11 @@ data class MarketPlatformPage(val platform: Platform) : HSPage() {
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun PlatformScreen(
-    factory: ViewModelProvider.Factory,
+    viewModel: MarketPlatformViewModel,
+    chartViewModel: ChartViewModel,
     platform: Platform,
     onCloseButtonClick: () -> Unit,
     onCoinClick: (String) -> Unit,
-    viewModel: MarketPlatformViewModel = viewModel(factory = factory),
-    chartViewModel: ChartViewModel = viewModel(factory = factory),
 ) {
 
     val uiState = viewModel.uiState

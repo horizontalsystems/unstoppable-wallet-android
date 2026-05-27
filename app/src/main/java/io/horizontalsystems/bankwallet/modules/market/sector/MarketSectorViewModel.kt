@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.sector
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
@@ -23,14 +27,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 
-class MarketSectorViewModel(
+@HiltViewModel(assistedFactory = MarketSectorViewModel.Factory::class)
+class MarketSectorViewModel @AssistedInject constructor(
+    @Assisted private val coinCategory: CoinCategory,
     private val marketCategoryRepository: MarketSectorRepository,
     private val currencyManager: CurrencyManager,
     private val languageManager: LanguageManager,
     private val favoritesManager: MarketFavoritesManager,
-    private val coinCategory: CoinCategory,
-    private val topMarket: TopMarket,
 ) : ViewModelUiState<MarketSectorUiState>() {
+
+    private val topMarket = TopMarket.Top100
 
     val sortingOptions = listOf(
         SortingField.HighestCap,
@@ -163,6 +169,11 @@ class MarketSectorViewModel(
     fun onTimePeriodSelect(timePeriod: TimeDuration) {
         this.timePeriod = timePeriod
         sync()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(coinCategory: CoinCategory): MarketSectorViewModel
     }
 }
 

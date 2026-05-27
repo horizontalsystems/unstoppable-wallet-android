@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -32,10 +36,11 @@ import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-class MetricsPageViewModel(
-    private val metricsType: MetricsType,
+@HiltViewModel(assistedFactory = MetricsPageViewModel.Factory::class)
+class MetricsPageViewModel @AssistedInject constructor(
+    @Assisted private val metricsType: MetricsType,
     private val currencyManager: CurrencyManager,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
 ) : ViewModelUiState<MetricsPageModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
@@ -199,6 +204,11 @@ class MetricsPageViewModel(
             syncMarketItems()
         }
         stat(page = statPage, event = StatEvent.ToggleSortDirection)
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(metricsType: MetricsType): MetricsPageViewModel
     }
 
 }

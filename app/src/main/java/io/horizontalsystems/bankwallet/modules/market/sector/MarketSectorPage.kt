@@ -15,8 +15,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -51,9 +57,20 @@ data class MarketSectorPage(val input: CoinCategory) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val factory = MarketSectorModule.Factory(input)
-        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
-        val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
+        val viewModel = hiltViewModel<MarketSectorViewModel, MarketSectorViewModel.Factory> { factory ->
+            factory.create(input)
+        }
+        val chartViewModel = viewModel<ChartViewModel>(
+            factory = remember {
+                object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        val chartService = CoinSectorMarketDataChartService(App.currencyManager, App.marketKit, input.uid)
+                        return ChartModule.createViewModel(chartService, ChartCurrencyValueFormatterShortened()) as T
+                    }
+                }
+            }
+        )
 
         SectorScreen(
             viewModel = viewModel,

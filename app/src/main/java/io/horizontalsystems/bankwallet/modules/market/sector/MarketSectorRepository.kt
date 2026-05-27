@@ -9,9 +9,10 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.period
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.reactivex.Single
+import javax.inject.Inject
 import kotlin.math.min
 
-class MarketSectorRepository(
+class MarketSectorRepository @Inject constructor(
     private val marketKit: MarketKitWrapper,
 ) {
     @Volatile
