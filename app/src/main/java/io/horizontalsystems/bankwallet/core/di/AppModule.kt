@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
@@ -315,6 +316,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideEnabledWalletsCacheDao(): EnabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
+
+    @Provides @Singleton
+    fun provideBaseTokenManager(): BaseTokenManager = App.baseTokenManager
 
     @Provides @Singleton
     fun provideRecentAddressManager(): RecentAddressManager = App.recentAddressManager

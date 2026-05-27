@@ -2,43 +2,15 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val totalService = TotalService(
-                App.currencyManager,
-                App.marketKit,
-                App.baseTokenManager,
-            )
-            return BalanceViewModel(
-                BalanceService.getInstance("wallet"),
-                BalanceViewItemFactory(),
-                App.balanceViewTypeManager,
-                App.localStorage,
-                App.wcManager,
-                AddressHandlerFactory(App.appConfigProvider.udnApiKey),
-                App.priceManager,
-                App.adapterManager,
-                App.instance.isSwapEnabled,
-                totalService,
-                App.balanceHiddenManager
-            ) as T
-        }
-    }
 
     data class BalanceItem(
         val wallet: Wallet,

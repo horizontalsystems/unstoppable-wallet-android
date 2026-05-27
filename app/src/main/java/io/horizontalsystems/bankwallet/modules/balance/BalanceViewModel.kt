@@ -4,19 +4,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
+import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statSortType
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Account
@@ -37,22 +47,33 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import androidx.core.net.toUri
+import javax.inject.Inject
 
-class BalanceViewModel(
-    private val service: BalanceService,
-    private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val localStorage: ILocalStorage,
-    private val wCManager: WCManager,
-    private val addressHandlerFactory: AddressHandlerFactory,
-    private val priceManager: PriceManager,
+@HiltViewModel
+class BalanceViewModel @Inject constructor(
+    private val walletManager: WalletManager,
+    private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val currencyManager: CurrencyManager,
+    private val marketKit: MarketKitWrapper,
     private val adapterManager: IAdapterManager,
-    val isSwapEnabled: Boolean,
-    private val totalService: TotalService,
-    private val balanceHiddenManager: BalanceHiddenManager
+    private val enabledWalletsCacheDao: EnabledWalletsCacheDao,
+    private val localStorage: ILocalStorage,
+    private val connectivityManager: ConnectivityManager,
+    private val accountManager: IAccountManager,
+    private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val wCManager: WCManager,
+    private val priceManager: PriceManager,
+    private val balanceHiddenManager: BalanceHiddenManager,
+    private val appConfigProvider: AppConfigProvider,
+    private val baseTokenManager: BaseTokenManager,
 ) : ViewModelUiState<BalanceUiState>() {
 
-    private var balanceItems = service.balanceItemsFlow.value
+    private lateinit var service: BalanceService
+    private lateinit var balanceViewItemFactory: BalanceViewItemFactory
+    private lateinit var totalService: TotalService
+    private lateinit var addressHandlerFactory: AddressHandlerFactory
+
+    private var balanceItems: List<BalanceModule.BalanceItem>? = null
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
@@ -63,11 +84,11 @@ class BalanceViewModel(
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
     private var amountRoundingEnabled = localStorage.amountRoundingEnabledFlow.value
-    private var totalUiState = createTotalUiState(totalService.stateFlow.value)
+    private var totalUiState = TotalUIState("---", "---", false)
 
     private val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
-    private var sortType = service.sortType
+    private var sortType = localStorage.sortType
 
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
         private set
@@ -75,9 +96,27 @@ class BalanceViewModel(
     var walletConnectRequest by mutableStateOf<String?>(null)
         private set
 
+    val isSwapEnabled = true
+
     private var refreshViewItemsJob: Job? = null
 
     init {
+        service = BalanceService(
+            BalanceActiveWalletRepository(walletManager, evmSyncSourceManager),
+            BalanceXRateRepository("wallet", currencyManager, marketKit),
+            BalanceAdapterRepository(adapterManager, BalanceCache(enabledWalletsCacheDao)),
+            localStorage,
+            connectivityManager,
+            BalanceSorter(),
+            accountManager
+        )
+        balanceViewItemFactory = BalanceViewItemFactory()
+        totalService = TotalService(currencyManager, marketKit, baseTokenManager)
+        addressHandlerFactory = AddressHandlerFactory(appConfigProvider.udnApiKey)
+
+        sortType = service.sortType
+        totalUiState = createTotalUiState(totalService.stateFlow.value)
+
         viewModelScope.launch(Dispatchers.Default) {
             service.balanceItemsFlow.collect { items ->
                 totalService.setItems(items?.map {
