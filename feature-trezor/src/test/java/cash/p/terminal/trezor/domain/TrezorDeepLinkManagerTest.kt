@@ -26,7 +26,7 @@ class TrezorDeepLinkManagerTest {
                 "path" to JsonPrimitive("m/84'/0'/0'/0/0")
             )
         )
-        val callback = "pcash://trezor-result?requestToken=test-token-123"
+        val callback = "pcash-trezor://trezor-result?requestToken=test-token-123"
 
         val url = TrezorDeepLinkManager.buildUrl(TrezorMethod.BtcGetAddress, params, callback)
 
@@ -39,7 +39,7 @@ class TrezorDeepLinkManagerTest {
     @Test
     fun buildUrl_ethSignTransaction_usesEthereumPrefix() {
         val params = JsonObject(emptyMap())
-        val callback = "pcash://trezor-result?requestToken=test-token"
+        val callback = "pcash-trezor://trezor-result?requestToken=test-token"
 
         val url = TrezorDeepLinkManager.buildUrl(TrezorMethod.EthSignTransaction, params, callback)
 
@@ -49,7 +49,7 @@ class TrezorDeepLinkManagerTest {
     @Test
     fun buildUrl_solGetPublicKey_usesSolanaPrefix() {
         val params = JsonObject(emptyMap())
-        val callback = "pcash://trezor-result?requestToken=test-token"
+        val callback = "pcash-trezor://trezor-result?requestToken=test-token"
 
         val url = TrezorDeepLinkManager.buildUrl(TrezorMethod.SolGetPublicKey, params, callback)
 
