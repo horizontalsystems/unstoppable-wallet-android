@@ -14,6 +14,7 @@ import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.isNative
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.PriceManager
@@ -69,6 +70,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.hoursUntil
 import io.horizontalsystems.core.logger.AppLogger
+import io.horizontalsystems.core.toHexReversed
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -117,6 +119,7 @@ class TokenBalanceViewModel(
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage = getKoinInstance()
     private val marketKit: MarketKitWrapper = getKoinInstance()
     private val poisonAddressManager: PoisonAddressManager = getKoinInstance()
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository = getKoinInstance()
 
     private val title = wallet.token.coin.name
 
@@ -354,7 +357,7 @@ class TokenBalanceViewModel(
 
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
-    private fun refreshTransactionsFromCache() {
+    private suspend fun refreshTransactionsFromCache() {
         val currentItems = transactionsService.transactionItemsFlow.value
         if (currentItems.isNotEmpty()) {
             updateTransactions(currentItems)
@@ -366,7 +369,9 @@ class TokenBalanceViewModel(
         if (current != lastAddressPoisoningViewMode) {
             lastAddressPoisoningViewMode = current
             transactionViewItem2Factory.updateCache()
-            refreshTransactionsFromCache()
+            viewModelScope.launch {
+                refreshTransactionsFromCache()
+            }
         }
     }
 
@@ -513,7 +518,7 @@ class TokenBalanceViewModel(
         return hasReachedSyncedState()
     }
 
-    private fun updateTransactions(items: List<TransactionItem>) {
+    private suspend fun updateTransactions(items: List<TransactionItem>) {
         // Skip the initial empty emission from transactionRecordRepository.set() while
         // still syncing. Once syncing finishes, allow empty items through so coins with
         // zero transactions show "no transactions" instead of "wait for sync" forever.
@@ -656,10 +661,12 @@ class TokenBalanceViewModel(
         viewModelScope.launch {
             try {
                 sendResult = SendResult.Sending
-                (adapterManager.getAdapterForWalletOld(wallet) as? ZcashAdapter?)?.let { adapter ->
-                    adapter.proposeShielding()
+                val zcashAdapter = adapterManager.getAdapterForWallet<ZcashAdapter>(wallet)
+                val txHash = zcashAdapter?.proposeShielding()?.byteArray?.toHexReversed()
+                txHash?.let {
+                    locallyCreatedTransactionRepository.markCreated(wallet, it)
                 }
-                sendResult = SendResult.Sent()
+                sendResult = SendResult.Sent(txHash)
             } catch (e: Throwable) {
                 logger.warning("failed", e)
                 sendResult = SendResult.Failed(SendZCashViewModel.createCaution(e))

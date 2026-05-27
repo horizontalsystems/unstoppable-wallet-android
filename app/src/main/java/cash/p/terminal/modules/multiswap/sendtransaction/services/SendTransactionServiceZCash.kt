@@ -152,7 +152,6 @@ class SendTransactionServiceZCash(
         try {
             val sdkBalance = adapterManager.getBalanceAdapterForWallet(wallet)
                 ?.balanceData?.available ?: amountState.availableBalance
-                ?: throw IllegalStateException("Balance unavailable")
             val draft = PendingTransactionDraft(
                 wallet = wallet,
                 token = wallet.token,

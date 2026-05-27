@@ -103,11 +103,12 @@ class StellarAdapter(
         else -> null
     }
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        if (stellarKit.doesAccountExist(address)) {
-            stellarKit.sendNative(address, amount, memo)
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String? {
+        return if (stellarKit.doesAccountExist(address)) {
+            stellarKit.sendNative(address, amount, memo).hash
         } else {
             stellarKit.createAccount(address, amount, memo)
+            null
         }
     }
 

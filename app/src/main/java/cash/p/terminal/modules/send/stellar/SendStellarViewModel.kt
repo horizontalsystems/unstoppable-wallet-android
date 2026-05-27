@@ -182,13 +182,16 @@ class SendStellarViewModel(
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+            val amount = checkNotNull(amountState.amount)
+            val address = checkNotNull(addressState.address)
+            val txHash = adapter.send(amount, address.hex, memo)
+            locallyCreatedTransactionRepository.markCreated(wallet, txHash)
 
-            onSendSuccess(addressState.address?.hex)
-            sendResult = SendResult.Sent()
+            onSendSuccess(address.hex)
+            sendResult = SendResult.Sent(txHash)
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Stellar)
+            recentAddressManager.setRecentAddress(address, BlockchainType.Stellar)
         } catch (e: Throwable) {
             if (e.isHardwareWalletUserCancelled()) {
                 sendResult = null
@@ -219,4 +222,3 @@ data class SendStellarUiState(
     val isPoisonAddress: Boolean = false,
     val riskAccepted: Boolean = false,
 )
-

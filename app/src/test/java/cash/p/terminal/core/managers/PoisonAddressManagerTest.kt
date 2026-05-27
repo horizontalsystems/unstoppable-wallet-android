@@ -1,34 +1,56 @@
 package cash.p.terminal.core.managers
 
+import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.storage.PoisonAddressDao
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
+import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
+import cash.p.terminal.entities.transactionrecords.monero.MoneroTransactionRecord
+import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
+import cash.p.terminal.entities.transactionrecords.stellar.StellarTransactionRecord
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
+import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.solanakit.models.Transaction as SolanaTransaction
+import io.horizontalsystems.stellarkit.room.Operation
+import io.horizontalsystems.tonkit.models.Event
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LargeClass")
 class PoisonAddressManagerTest {
 
     private val dao = mockk<PoisonAddressDao>(relaxed = true)
     private val contactsRepository = mockk<ContactsRepository>()
+    private val locallyCreatedTransactionRepository = mockk<LocallyCreatedTransactionRepository>()
     private val blockchainType = BlockchainType.Ethereum
     private val blockchainUid = blockchainType.uid
     private val accountId = "test-account-id"
@@ -41,8 +63,16 @@ class PoisonAddressManagerTest {
         every { contactsRepository.getContactsFiltered(any(), any(), any()) } returns emptyList()
         every { dao.get(any(), any(), any()) } returns null
         every { dao.getWhitelisted(any(), any(), any()) } returns emptyList()
+        every { locallyCreatedTransactionRepository.changedFlow } returns MutableSharedFlow()
+        coEvery { locallyCreatedTransactionRepository.isCreated(any<TransactionRecord>()) } returns false
 
-        manager = PoisonAddressManager(dao, contactsRepository)
+        val dispatcher = UnconfinedTestDispatcher()
+        manager = PoisonAddressManager(
+            dao,
+            contactsRepository,
+            locallyCreatedTransactionRepository,
+            TestDispatcherProvider(dispatcher, TestScope(dispatcher)),
+        )
     }
 
     // --- determinePoisonStatus ---
@@ -318,7 +348,7 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.BLOCKCHAIN, result)
     }
 
-    // --- Similarity against contact book (MOBILE-623) ---
+    // --- Similarity against contact book ---
     // Addresses saved in the contact book must participate in the similarity
     // check the same way whitelisted sent addresses do.
 
@@ -740,7 +770,7 @@ class PoisonAddressManagerTest {
     // --- getRelevantAddress: event-based address resolution respects direction ---
 
     @Test
-    fun getPoisonStatus_outgoingEvmNoTo_prefersOutgoingEvents() {
+    fun getPoisonStatus_outgoingEvmNoTo_prefersOutgoingEvents() = runTest {
         val poisonedRecipient = "0xpoisoned_recipient_addr"
         val senderAddr = "0xincoming_sender_address"
         every { dao.get(poisonedRecipient.lowercase(), blockchainUid, accountId) } returns
@@ -759,7 +789,7 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun getPoisonStatus_incomingEvmNoFrom_prefersIncomingEvents() {
+    fun getPoisonStatus_incomingEvmNoFrom_prefersIncomingEvents() = runTest {
         val senderAddr = "0xincoming_sender_address"
         val recipientAddr = "0xoutgoing_recipient_addr"
         every { dao.get(senderAddr.lowercase(), blockchainUid, accountId) } returns
@@ -777,7 +807,7 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun getPoisonStatus_outgoingEvmNoTo_fallsBackToIncomingWhenNoOutgoingEvents() {
+    fun getPoisonStatus_outgoingEvmNoTo_fallsBackToIncomingWhenNoOutgoingEvents() = runTest {
         val senderAddr = "0xfallback_sender_address"
         every { dao.get(senderAddr.lowercase(), blockchainUid, accountId) } returns
             PoisonAddress(senderAddr.lowercase(), blockchainUid, accountId, PoisonAddressType.SCAM)
@@ -795,7 +825,7 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun getPoisonStatus_outgoingTronNoTo_prefersOutgoingEvents() {
+    fun getPoisonStatus_outgoingTronNoTo_prefersOutgoingEvents() = runTest {
         val poisonedRecipient = "tpoisoned_recipient_addr"
         val senderAddr = "tincoming_sender_address_"
         val tronUid = BlockchainType.Tron.uid
@@ -816,7 +846,7 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun getPoisonStatus_evmWithStandardTo_usesStandardAddress() {
+    fun getPoisonStatus_evmWithStandardTo_usesStandardAddress() = runTest {
         val standardTo = "0xstandard_to_address_aaa"
         every { dao.get(standardTo.lowercase(), blockchainUid, accountId) } returns
             PoisonAddress(standardTo.lowercase(), blockchainUid, accountId, PoisonAddressType.SCAM)
@@ -835,47 +865,45 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun getPoisonStatus_userCreatedEvmSwap_usesExchangeAddressAndReturnsCreated() {
+    fun getPoisonStatus_evmSwapWithoutLocalMarker_returnsBlockchain() = runTest {
         val record = createEvmRecord(
             transactionRecordType = TransactionRecordType.EVM_SWAP,
             exchangeAddress = "0xpancakeswap_router",
             foreignTransaction = false,
-        )
-
-        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
-    }
-
-    @Test
-    fun getPoisonStatus_userCreatedEvmUnknownSwap_usesExchangeAddressAndReturnsCreated() {
-        val record = createEvmRecord(
-            transactionRecordType = TransactionRecordType.EVM_UNKNOWN_SWAP,
-            exchangeAddress = "0xpancakeswap_router",
-            foreignTransaction = false,
-        )
-
-        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
-    }
-
-    // --- Watch accounts: no signing key → cannot author transactions (MOBILE-664) ---
-
-    @Test
-    fun getPoisonStatus_watchAccountEvmSwap_returnsBlockchain() {
-        // Bug scenario: user adds their own address as a watch account.
-        // A PancakeSwap swap previously made from that address has `from == receiveAddress`,
-        // so `foreignTransaction` is false. With signing-key wallets this would correctly
-        // be CREATED, but a watch account has no key — it cannot have authored anything.
-        val record = createEvmRecord(
-            transactionRecordType = TransactionRecordType.EVM_SWAP,
-            exchangeAddress = "0xpancakeswap_router",
-            foreignTransaction = false,
-            isWatch = true,
         )
 
         assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
     }
 
     @Test
-    fun getPoisonStatus_watchAccountEvmOutgoing_returnsBlockchain() {
+    fun getPoisonStatus_evmSwapWithLocalMarker_returnsCreated() = runTest {
+        val record = createEvmRecord(
+            transactionRecordType = TransactionRecordType.EVM_SWAP,
+            exchangeAddress = "0xpancakeswap_router",
+            foreignTransaction = false,
+        )
+        coEvery { locallyCreatedTransactionRepository.isCreated(record) } returns true
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    // --- Watch accounts: no signing key → cannot author transactions ---
+
+    @Test
+    fun getPoisonStatus_watchAccountEvmSwap_returnsBlockchain() = runTest {
+        val record = createEvmRecord(
+            transactionRecordType = TransactionRecordType.EVM_SWAP,
+            exchangeAddress = "0xpancakeswap_router",
+            foreignTransaction = false,
+            isWatch = true,
+        )
+        coEvery { locallyCreatedTransactionRepository.isCreated(record) } returns true
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_watchAccountEvmOutgoing_returnsBlockchain() = runTest {
         val record = createEvmRecord(
             to = "0xrecipient_address_aaa",
             transactionRecordType = TransactionRecordType.EVM_OUTGOING,
@@ -887,7 +915,7 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun getPoisonStatus_watchAccountTronOutgoing_returnsBlockchain() {
+    fun getPoisonStatus_watchAccountTronOutgoing_returnsBlockchain() = runTest {
         every {
             contactsRepository.getContactsFiltered(BlockchainType.Tron, addressQuery = any())
         } returns emptyList()
@@ -901,7 +929,228 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
     }
 
+    @Test
+    fun getPoisonStatus_outgoingRecordsWithoutLocalMarker_returnBlockchain() = runTest {
+        locallyCreatedOutgoingRecords().forEach { record ->
+            assertEquals(record.uid, PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+        }
+    }
+
+    @Test
+    fun getPoisonStatus_outgoingRecordsWithLocalMarker_returnCreated() = runTest {
+        locallyCreatedOutgoingRecords().forEach { record ->
+            coEvery { locallyCreatedTransactionRepository.isCreated(record) } returns true
+            assertEquals(record.uid, PoisonStatus.CREATED, manager.getPoisonStatus(record))
+        }
+    }
+
+    @Test
+    fun getPoisonStatus_pendingRecord_returnsCreated() = runTest {
+        val token = createToken(BlockchainType.Litecoin)
+        val record = PendingTransactionRecord(
+            uid = "pending-id",
+            transactionHash = "",
+            timestamp = 1000L,
+            source = createSource(BlockchainType.Litecoin),
+            token = token,
+            amount = BigDecimal.ONE,
+            toAddress = "ltc1q_destination_address",
+            fromAddress = "ltc1q_own_address",
+            expiresAt = Long.MAX_VALUE,
+            memo = null,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_outgoingBitcoinLikeNoRelevantAddressWithoutMarker_returnsBlockchain() = runTest {
+        val record = createBitcoinRecord(
+            to = null,
+            recordBlockchainType = BlockchainType.Litecoin,
+        )
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_outgoingBitcoinLikeNoRelevantAddressWithMarker_returnsCreated() = runTest {
+        val record = createBitcoinRecord(
+            to = null,
+            recordBlockchainType = BlockchainType.Litecoin,
+        )
+        coEvery { locallyCreatedTransactionRepository.isCreated(record) } returns true
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_watchAccountOutgoingBitcoinLike_returnsBlockchain() = runTest {
+        val record = createBitcoinRecord(
+            to = listOf("ltc1q_destination_address"),
+            isWatch = true,
+        )
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
     // --- Helpers ---
+
+    private fun locallyCreatedOutgoingRecords(): List<TransactionRecord> =
+        listOf(
+            createBitcoinRecord(
+                to = listOf("ltc1q_destination_address"),
+                recordBlockchainType = BlockchainType.Litecoin,
+            ),
+            createBitcoinRecord(
+                to = listOf("t1_zcash_swap_deposit_address"),
+                recordBlockchainType = BlockchainType.Zcash,
+            ),
+            createSolanaRecord(),
+            createStellarRecord(),
+            createTonRecord(),
+            createMoneroRecord(to = "84js_recipient_address"),
+        )
+
+    private fun createBitcoinRecord(
+        transactionRecordType: TransactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        to: List<String>? = null,
+        from: String? = null,
+        isWatch: Boolean = false,
+        recordBlockchainType: BlockchainType = BlockchainType.Litecoin,
+    ): BitcoinTransactionRecord {
+        val token = createToken(recordBlockchainType)
+        return BitcoinTransactionRecord(
+            token = token,
+            amount = BigDecimal.ONE.negate(),
+            to = to,
+            from = from,
+            changeAddresses = null,
+            uid = "bitcoin-${recordBlockchainType.uid}-$transactionRecordType-${to.orEmpty().firstOrNull().orEmpty()}",
+            transactionHash = "bitcoin-hash",
+            transactionIndex = 0,
+            blockHeight = 100,
+            confirmationsThreshold = 6,
+            timestamp = 1000L,
+            failed = false,
+            memo = null,
+            source = createSource(recordBlockchainType, isWatch),
+            transactionRecordType = transactionRecordType,
+            fee = null,
+            lockInfo = null,
+            conflictingHash = null,
+            showRawTransaction = false,
+        )
+    }
+
+    private fun createSolanaRecord(
+        transactionRecordType: TransactionRecordType = TransactionRecordType.SOLANA_OUTGOING,
+        to: String? = "solana_destination_address",
+        from: String? = null,
+        isWatch: Boolean = false,
+    ): SolanaTransactionRecord {
+        return SolanaTransactionRecord(
+            to = to,
+            from = from,
+            token = createToken(BlockchainType.Solana),
+            source = createSource(BlockchainType.Solana, isWatch),
+            transactionRecordType = transactionRecordType,
+            transaction = SolanaTransaction(
+                hash = "solana-$transactionRecordType-${to.orEmpty()}",
+                timestamp = 1000L,
+                pending = false,
+            ),
+        )
+    }
+
+    private fun createStellarRecord(
+        isWatch: Boolean = false,
+    ): StellarTransactionRecord {
+        val token = createToken(BlockchainType.Stellar)
+        return StellarTransactionRecord(
+            baseToken = token,
+            source = createSource(BlockchainType.Stellar, isWatch),
+            operation = Operation(
+                id = 1L,
+                timestamp = 1000L,
+                pagingToken = "stellar-paging-token",
+                sourceAccount = "stellar_source_address",
+                transactionHash = "stellar-hash",
+                transactionSuccessful = true,
+                fee = null,
+                memo = null,
+                type = "payment",
+                payment = null,
+                accountCreated = null,
+                changeTrust = null,
+            ),
+            type = StellarTransactionRecord.Type.Send(
+                value = createCoinValue(token),
+                to = "stellar_destination_address",
+                sentToSelf = false,
+                comment = null,
+                accountCreated = false,
+            ),
+            spam = false,
+        )
+    }
+
+    private fun createTonRecord(
+        isWatch: Boolean = false,
+    ): TonTransactionRecord {
+        val token = createToken(BlockchainType.Ton)
+        return TonTransactionRecord(
+            source = createSource(BlockchainType.Ton, isWatch),
+            event = Event(
+                id = "ton-event-id",
+                lt = 1L,
+                timestamp = 1000L,
+                scam = false,
+                inProgress = false,
+                extra = 0L,
+                actions = emptyList(),
+            ),
+            token = token,
+            actions = listOf(
+                TonTransactionRecord.Action(
+                    type = TonTransactionRecord.Action.Type.Send(
+                        value = createCoinValue(token),
+                        to = "ton_destination_address",
+                        sentToSelf = false,
+                        comment = null,
+                    ),
+                    status = TransactionStatus.Completed,
+                )
+            ),
+        )
+    }
+
+    private fun createMoneroRecord(
+        transactionRecordType: TransactionRecordType = TransactionRecordType.MONERO_OUTGOING,
+        to: String? = null,
+        from: String? = null,
+        isWatch: Boolean = false,
+    ): MoneroTransactionRecord {
+        val token = createToken(BlockchainType.Monero, decimalCount = 12)
+        return MoneroTransactionRecord(
+            uid = "xmrhash123",
+            transactionHash = "xmrhash123",
+            blockHeight = 100,
+            confirmationsThreshold = 10,
+            timestamp = 1000L,
+            failed = false,
+            source = createSource(BlockchainType.Monero, isWatch),
+            transactionRecordType = transactionRecordType,
+            token = token,
+            to = to,
+            from = from,
+            amount = BigDecimal.ONE.negate(),
+            fee = createCoinValue(token, BigDecimal("0.0001")),
+            subaddressLabel = null,
+            isPending = false,
+            confirmations = 10,
+        )
+    }
 
     private fun createEvmRecord(
         from: String? = null,
@@ -920,24 +1169,12 @@ class PoisonAddressManagerTest {
             every { timestamp } returns 1000L
             every { isFailed } returns false
         }
-        val token = mockk<Token>(relaxed = true) {
-            every { blockchainType } returns BlockchainType.Ethereum
-        }
-        val source = mockk<TransactionSource>(relaxed = true) {
-            every { blockchain } returns mockk(relaxed = true) {
-                every { type } returns BlockchainType.Ethereum
-            }
-            every { account } returns mockk(relaxed = true) {
-                every { id } returns accountId
-                every { isWatchAccount } returns isWatch
-            }
-        }
         return EvmTransactionRecord(
             from = from,
             to = to,
             transaction = evmTransaction,
-            token = token,
-            source = source,
+            token = createToken(BlockchainType.Ethereum),
+            source = createSource(BlockchainType.Ethereum, isWatch),
             protected = false,
             transactionRecordType = transactionRecordType,
             incomingEvents = incomingEvents,
@@ -963,29 +1200,46 @@ class PoisonAddressManagerTest {
             every { isFailed } returns false
             every { fee } returns null
         }
-        val token = mockk<Token>(relaxed = true) {
-            every { blockchainType } returns BlockchainType.Tron
-            every { decimals } returns 6
-        }
-        val source = mockk<TransactionSource>(relaxed = true) {
-            every { blockchain } returns mockk(relaxed = true) {
-                every { type } returns BlockchainType.Tron
-            }
-            every { account } returns mockk(relaxed = true) {
-                every { id } returns accountId
-                every { isWatchAccount } returns isWatch
-            }
-        }
         return TronTransactionRecord(
             from = from,
             to = to,
-            token = token,
-            source = source,
+            token = createToken(BlockchainType.Tron, decimalCount = 6),
+            source = createSource(BlockchainType.Tron, isWatch),
             transactionRecordType = transactionRecordType,
             incomingEvents = incomingEvents,
             outgoingEvents = outgoingEvents,
             transaction = tronTransaction,
             foreignTransaction = foreignTransaction,
         )
+    }
+
+    private fun createToken(
+        type: BlockchainType,
+        decimalCount: Int = 8,
+    ): Token {
+        return mockk(relaxed = true) {
+            every { blockchainType } returns type
+            every { decimals } returns decimalCount
+        }
+    }
+
+    private fun createSource(
+        type: BlockchainType,
+        isWatch: Boolean = false,
+    ): TransactionSource {
+        return mockk(relaxed = true) {
+            every { blockchain } returns Blockchain(type, type.uid, null)
+            every { account } returns mockk(relaxed = true) {
+                every { id } returns accountId
+                every { isWatchAccount } returns isWatch
+            }
+        }
+    }
+
+    private fun createCoinValue(
+        token: Token,
+        value: BigDecimal = BigDecimal.ONE,
+    ): TransactionValue.CoinValue {
+        return TransactionValue.CoinValue(token, value)
     }
 }

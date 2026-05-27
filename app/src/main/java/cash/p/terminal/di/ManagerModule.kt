@@ -46,6 +46,7 @@ import cash.p.terminal.core.managers.GetTonAddressUseCaseImpl
 import cash.p.terminal.core.managers.KeyStoreCleaner
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.LocalStorageManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.PendingBalanceCalculator
@@ -328,6 +329,7 @@ val managerModule = module {
     factoryOf(::MarketFavoritesService)
 
     // Pending transactions
+    singleOf(::LocallyCreatedTransactionRepository)
     singleOf(::PendingTransactionRepository)
     singleOf(::PendingBalanceCalculator)
     singleOf(::PendingTransactionRegistrarImpl) bind PendingTransactionRegistrar::class

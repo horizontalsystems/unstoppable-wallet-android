@@ -96,8 +96,8 @@ class StellarAssetAdapter(
 
     override suspend fun getMinimumSendAmount(address: String) = null
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        stellarKit.sendAsset(stellarAsset.id, address, amount, memo)
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String? {
+        return stellarKit.sendAsset(stellarAsset.id, address, amount, memo).hash
     }
 
     override fun validate(address: String) {
