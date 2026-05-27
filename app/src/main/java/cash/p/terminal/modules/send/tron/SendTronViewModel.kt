@@ -20,6 +20,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.BaseSendViewModel
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.tangem.domain.isHardwareWalletUserCancelled
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Token
@@ -271,6 +272,11 @@ class SendTronViewModel(
 
             recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)
         } catch (e: Throwable) {
+            if (e.isHardwareWalletUserCancelled()) {
+                sendResult = null
+                logger.info("user cancelled")
+                return@withContext
+            }
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
         }

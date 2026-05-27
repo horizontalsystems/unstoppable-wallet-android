@@ -20,6 +20,7 @@ import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.tangem.domain.isHardwareWalletUserCancelled
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Token
@@ -33,6 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
+import timber.log.Timber
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -150,7 +152,12 @@ internal class SendEvmViewModel(
         } catch (e: TrezorCancelledException) {
             null
         } catch (e: Throwable) {
-            SendResult.Failed(createCaution(e))
+            if (e.isHardwareWalletUserCancelled()) {
+                Timber.i("user cancelled")
+                null
+            } else {
+                SendResult.Failed(createCaution(e))
+            }
         }
     }
 
