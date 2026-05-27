@@ -22,10 +22,12 @@ class CalculatorPinSettingsViewModel(
     override fun createState() = CalculatorPinSettingsUiState(
         isEnabled = localStorage.isCalculatorModeEnabled,
         autoLockOption = localStorage.calculatorAutoLockOption,
+        pushNotificationsEnabled = localStorage.pushNotificationsEnabled,
     )
 }
 
 data class CalculatorPinSettingsUiState(
     val isEnabled: Boolean,
     val autoLockOption: CalculatorAutoLockOption,
+    val pushNotificationsEnabled: Boolean,
 )
