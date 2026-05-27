@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.market.earn.vault
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
-import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 
-class VaultViewModel(
-    input: VaultPage.Input,
+@HiltViewModel(assistedFactory = VaultViewModel.Factory::class)
+class VaultViewModel @AssistedInject constructor(
+    @Assisted input: VaultPage.Input,
 ) : ViewModelUiState<VaultModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
@@ -34,29 +34,14 @@ class VaultViewModel(
             vaultViewItem = vaultViewItem
         )
     }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(input: VaultPage.Input): VaultViewModel
+    }
 }
 
 object VaultModule {
-
-    class Factory(private val input: VaultPage.Input) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
-                VaultViewModel::class.java -> {
-                    VaultViewModel(input) as T
-                }
-
-                ChartViewModel::class.java -> {
-                    val chartService =
-                        VaultChartService(input.address, App.currencyManager, App.marketKit)
-                    val chartNumberFormatter = VaultChartFormatter()
-                    ChartModule.createViewModel(chartService, chartNumberFormatter) as T
-                }
-
-                else -> throw IllegalArgumentException()
-            }
-        }
-    }
 
     data class VaultViewItem(
         val rank: String,
