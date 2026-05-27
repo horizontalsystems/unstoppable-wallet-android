@@ -75,7 +75,7 @@ class HardwareWalletEvmSigner(
             }
 
             is CompletionResult.Failure -> {
-                throw SignatureException("Signing failed: ${signBytesResponse.error}")
+                throw signBytesResponse.error
             }
         }
     }

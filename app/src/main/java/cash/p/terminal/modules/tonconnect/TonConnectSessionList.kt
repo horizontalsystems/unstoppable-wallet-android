@@ -37,13 +37,13 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import cash.p.terminal.ui_compose.components.DraggableCardSimple
-import cash.p.terminal.modules.walletconnect.list.ui.getShape
-import cash.p.terminal.modules.walletconnect.list.ui.showDivider
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsDivider
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.getShape
 import cash.p.terminal.ui_compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.showDivider
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import coil3.compose.AsyncImagePainter

@@ -3,7 +3,7 @@ package cash.p.terminal.tangem.signer
 import cash.p.terminal.tangem.domain.usecase.SignOneHashTransactionUseCase
 import cash.p.terminal.wallet.entities.HardwarePublicKey
 import com.tangem.common.CompletionResult
-import com.tangem.common.core.TangemError
+import com.tangem.common.core.TangemSdkError
 import com.tangem.operations.sign.SignHashResponse
 import io.horizontalsystems.ethereumkit.crypto.InternalBouncyCastleProvider
 import io.horizontalsystems.ethereumkit.models.Address
@@ -25,7 +25,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.math.BigInteger
 import java.security.Security
-import java.security.SignatureException
 
 class HardwareWalletEvmSignerTest {
 
@@ -113,12 +112,12 @@ class HardwareWalletEvmSignerTest {
     }
 
     @Test
-    fun signature_signingFailure_throwsSignatureException() {
+    fun signature_userCancelled_propagatesTangemError() {
         coEvery {
             signOneHashTransactionUseCase(any(), any(), any(), any())
-        } returns CompletionResult.Failure(mockk<TangemError>(relaxed = true))
+        } returns CompletionResult.Failure(TangemSdkError.UserCancelled())
 
-        assertThrows(SignatureException::class.java) {
+        assertThrows(TangemSdkError.UserCancelled::class.java) {
             runBlocking { createSigner(legacySender, legacyPubKey).signature(legacyTx) }
         }
     }

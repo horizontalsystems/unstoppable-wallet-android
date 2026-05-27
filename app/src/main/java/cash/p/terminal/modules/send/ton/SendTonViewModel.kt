@@ -20,6 +20,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.tangem.domain.isHardwareWalletUserCancelled
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
@@ -203,6 +204,11 @@ class SendTonViewModel(
             // Delete pending transaction on error
             pendingTxId?.let {
                 pendingRegistrar.deleteFailed(it)
+            }
+            if (e.isHardwareWalletUserCancelled()) {
+                sendResult = null
+                logger.info("user cancelled")
+                return@withContext
             }
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)

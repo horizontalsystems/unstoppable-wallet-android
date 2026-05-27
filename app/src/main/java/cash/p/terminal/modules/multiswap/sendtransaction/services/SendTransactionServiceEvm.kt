@@ -295,6 +295,7 @@ internal class SendTransactionServiceEvm(
             pendingTxId?.let {
                 pendingRegistrar.updateTxId(it, fullTransaction.transaction.hashString)
             }
+            markTransactionCreated(fullTransaction.transaction.hashString)
 
             return SendTransactionResult.Evm(fullTransaction)
         } catch (e: Throwable) {

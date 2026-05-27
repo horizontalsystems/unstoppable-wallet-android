@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.settings.advancedsecurity
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
@@ -130,16 +130,19 @@ private fun AdvancedSecurityNavHost(fragmentNavController: NavController) {
         }
         composablePage(AdvancedSecurityRoutes.CALCULATOR_PIN_PAGE) {
             val pinViewModel: CalculatorPinSettingsViewModel = koinViewModel()
-            val activity = LocalContext.current as? Activity
+            val activity = LocalActivity.current
             CalculatorPinSettingsScreen(
                 uiState = pinViewModel.uiState,
-                onToggleCalculator = { enabled ->
+                onToggleCalculator = { enabled, disablePushNotifications ->
                     val calculatorModeService = getKoinInstance<CalculatorModeService>()
                     if (enabled) {
                         val pinExistedBefore = getKoinInstance<IPinComponent>().isPinSet
                         fragmentNavController.premiumAction {
                             fragmentNavController.ensurePinSet(R.string.PinSet_Title) {
-                                calculatorModeService.enable(pinExistedBefore = pinExistedBefore)
+                                calculatorModeService.enable(
+                                    pinExistedBefore = pinExistedBefore,
+                                    disablePushNotifications = disablePushNotifications,
+                                )
                                 activity?.fullRestart()
                             }
                         }

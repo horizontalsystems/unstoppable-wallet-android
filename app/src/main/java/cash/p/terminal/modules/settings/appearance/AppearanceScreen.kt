@@ -276,7 +276,9 @@ private fun AppearanceScreenPreview() {
                 selectedLaunchScreen = LaunchPage.Auto,
                 selectedBalanceViewType = BalanceViewType.CoinThenFiat,
                 priceChangeInterval = PriceChangeInterval.LAST_24H,
-                priceChangeIntervalOptions = Select(PriceChangeInterval.LAST_24H, PriceChangeInterval.entries)
+                priceChangeIntervalOptions = Select(PriceChangeInterval.LAST_24H, PriceChangeInterval.entries),
+                pushNotificationsEnabled = false,
+                isCalculatorModeEnabled = false,
             ),
             onThemeSelect = {},
             onLaunchScreenSelect = {},

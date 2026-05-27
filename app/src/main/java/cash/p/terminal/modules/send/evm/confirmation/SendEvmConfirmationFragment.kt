@@ -24,6 +24,7 @@ import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.navigation.popBackStackSafely
 import cash.p.terminal.navigation.slideFromBottom
+import cash.p.terminal.tangem.domain.isHardwareWalletUserCancelled
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HudHelper
@@ -132,13 +133,18 @@ private fun SendEvmConfirmationScreen(
                             logger.info("trezor user cancelled")
                             currentSnackbar?.dismiss()
                         } catch (t: Throwable) {
-                            logger.warning("failed", t)
-                            val errorMsg = if (t is JsonRpc.ResponseError.RpcError) {
-                                t.error.message
+                            if (t.isHardwareWalletUserCancelled()) {
+                                logger.info("user cancelled")
+                                currentSnackbar?.dismiss()
                             } else {
-                                t.message ?: App.instance.getString(R.string.unknown_send_error)
+                                logger.warning("failed", t)
+                                val errorMsg = if (t is JsonRpc.ResponseError.RpcError) {
+                                    t.error.message
+                                } else {
+                                    t.message ?: App.instance.getString(R.string.unknown_send_error)
+                                }
+                                HudHelper.showErrorMessage(view, errorMsg)
                             }
-                            HudHelper.showErrorMessage(view, errorMsg)
                         }
 
                         buttonEnabled = true

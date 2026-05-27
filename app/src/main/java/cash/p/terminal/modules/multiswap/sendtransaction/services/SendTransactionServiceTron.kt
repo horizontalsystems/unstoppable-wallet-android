@@ -185,6 +185,7 @@ class SendTransactionServiceTron(
             throw e
         }
 
+        markTransactionCreated(transactionId)
         return SendTransactionResult.Tron(SendResult.Sent(transactionId))
     }
 

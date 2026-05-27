@@ -280,6 +280,7 @@ class SendTransactionServiceBitcoin(
                     utxoFilters = utxoFilters
                 )
                 val isQueued = adapter.isTransactionInSendQueue(transactionRecord)
+                markTransactionCreated(transactionRecord)
                 SendTransactionResult.Btc(transactionRecord, isQueued)
             } catch (e: Throwable) {
                 cautions = listOf(createCaution(e))

@@ -3,7 +3,6 @@ package cash.p.terminal.modules.pin.core
 import android.content.Context
 import androidx.core.content.edit
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.ui_compose.ScreenSecurityState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,18 +43,24 @@ class LockManager(
     fun willEnterForeground() {
         if (isLocked.value || !pinManager.isPinSet) return
 
-        val autoLockInterval = localStorage.autoLockInterval
+        val lockTimeoutMillis = activeLockTimeoutMillis()
         val elapsedMillis = System.currentTimeMillis() - appLastVisitTime
 
         if (keepUnlocked) {
             keepUnlocked = false
-            if (autoLockInterval == AutoLockInterval.IMMEDIATE && elapsedMillis < GRACE_PERIOD_MS) {
+            if (lockTimeoutMillis == 0L && elapsedMillis < GRACE_PERIOD_MS) {
                 return
             }
         }
-        if (elapsedMillis >= autoLockInterval.intervalInSeconds * 1000L) {
+        if (elapsedMillis >= lockTimeoutMillis) {
             setLocked(true)
         }
+    }
+
+    private fun activeLockTimeoutMillis(): Long = if (localStorage.isCalculatorModeEnabled) {
+        localStorage.calculatorAutoLockOption.refillIntervalMillis
+    } else {
+        localStorage.autoLockInterval.intervalInSeconds * 1000L
     }
 
     fun onUnlock() {

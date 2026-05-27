@@ -54,4 +54,11 @@
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.AppTheme.DayNight</item>
     </style>
+
+    <!-- Stealth splash for CalculatorEntryActivity. Uses the calculator launcher icon
+         instead of the wallet logo so the launcher screen does not reveal that a crypto
+         wallet is installed (visible mostly on slower devices where the splash lingers). -->
+    <style name="Theme.App.Starting.Calculator" parent="Theme.App.Starting">
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/launcher_calculator</item>
+    </style>
 </resources>

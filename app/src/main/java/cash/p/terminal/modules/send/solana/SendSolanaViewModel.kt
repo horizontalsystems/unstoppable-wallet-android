@@ -23,6 +23,7 @@ import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendErrorInsufficientBalance
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.tangem.domain.isHardwareWalletUserCancelled
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Token
@@ -35,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
+import timber.log.Timber
 import java.math.BigDecimal
 import java.net.UnknownHostException
 import kotlin.getValue
@@ -187,6 +189,11 @@ class SendSolanaViewModel(
             sendResult = null
         } catch (e: Throwable) {
             pendingTxId?.let { pendingRegistrar.deleteFailed(it) }
+            if (e.isHardwareWalletUserCancelled()) {
+                sendResult = null
+                Timber.i("user cancelled")
+                return@withContext
+            }
             sendResult = SendResult.Failed(createCaution(e))
         }
     }

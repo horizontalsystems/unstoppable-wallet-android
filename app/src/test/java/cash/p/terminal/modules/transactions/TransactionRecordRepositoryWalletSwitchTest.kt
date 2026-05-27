@@ -19,19 +19,30 @@ import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.DispatcherProvider
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.math.BigDecimal
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -126,6 +137,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            locallyCreatedTransactionRepository = mockk(relaxed = true),
             dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
         )
 
@@ -242,6 +254,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            locallyCreatedTransactionRepository = mockk(relaxed = true),
             dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
         )
 
@@ -279,6 +292,239 @@ class TransactionRecordRepositoryWalletSwitchTest {
         collectorJob.cancel()
         repository.clear()
     }
+
+    @Test
+    fun reload_invokesAdapterGetTransactionsAgainForEachAdapter() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        startKoinForTests()
+
+        val source1 = createSource("account-1", Blockchain(BlockchainType.Ethereum, "Ethereum", null))
+        val source2 = createSource("account-1", Blockchain(BlockchainType.Bitcoin, "Bitcoin", null))
+        val wallet1 = TransactionWallet(token = null, source = source1, badge = null)
+        val wallet2 = TransactionWallet(token = null, source = source2, badge = null)
+
+        val adapter1 = simpleAdapter(emptyList())
+        val adapter2 = simpleAdapter(emptyList())
+
+        val adapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
+            every { getAdapter(source1) } returns adapter1
+            every { getAdapter(source2) } returns adapter2
+        }
+
+        val repository = createRepository(adapterManager, testDispatcher, this)
+
+        repository.set(
+            transactionWallets = listOf(wallet1, wallet2),
+            wallet = null,
+            transactionType = FilterTransactionType.All,
+            blockchain = null,
+            contact = null
+        )
+        advanceUntilIdle()
+
+        repository.reload()
+        advanceUntilIdle()
+
+        coVerify(atLeast = 2) { adapter1.getTransactions(any(), any(), any(), any(), any()) }
+        coVerify(atLeast = 2) { adapter2.getTransactions(any(), any(), any(), any(), any()) }
+
+        repository.clear()
+    }
+
+    @Test
+    fun setWithAdditionalWallet_existingAdapterReused() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        startKoinForTests()
+
+        val source1 = createSource("account-1", Blockchain(BlockchainType.Ethereum, "Ethereum", null))
+        val source2 = createSource("account-1", Blockchain(BlockchainType.Bitcoin, "Bitcoin", null))
+        val wallet1 = TransactionWallet(token = null, source = source1, badge = null)
+        val wallet2 = TransactionWallet(token = null, source = source2, badge = null)
+
+        val adapter1 = simpleAdapter(emptyList())
+        val adapter2 = simpleAdapter(emptyList())
+
+        val adapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
+            every { getAdapter(source1) } returns adapter1
+            every { getAdapter(source2) } returns adapter2
+        }
+
+        val repository = createRepository(adapterManager, testDispatcher, this)
+
+        repository.set(
+            transactionWallets = listOf(wallet1),
+            wallet = null,
+            transactionType = FilterTransactionType.All,
+            blockchain = null,
+            contact = null
+        )
+        advanceUntilIdle()
+
+        repository.set(
+            transactionWallets = listOf(wallet1, wallet2),
+            wallet = null,
+            transactionType = FilterTransactionType.All,
+            blockchain = null,
+            contact = null
+        )
+        advanceUntilIdle()
+
+        // set() builds two adapter maps internally (adaptersMap + extraSwapAdaptersMap),
+        // so each newly created adapter triggers 2 getAdapter() calls on the first appearance.
+        // Without reuse, the second set() would invoke getAdapter(source1) twice more (= 4 total).
+        // With reuse the count stays at 2 — proof that previousAdapters.remove() reused the wrapper.
+        verify(exactly = 2) { adapterManager.getAdapter(source1) }
+        verify(exactly = 2) { adapterManager.getAdapter(source2) }
+
+        repository.clear()
+    }
+
+    @Test
+    fun setSameWalletsWithDifferentTransactionType_loadsTransactionsWithNewType() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        startKoinForTests()
+
+        val source = createSource("account-1", Blockchain(BlockchainType.Ethereum, "Ethereum", null))
+        val wallet = TransactionWallet(token = null, source = source, badge = null)
+        val adapter = simpleAdapter(emptyList())
+
+        val adapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
+            every { getAdapter(source) } returns adapter
+        }
+
+        val repository = createRepository(adapterManager, testDispatcher, this)
+
+        repository.set(
+            transactionWallets = listOf(wallet),
+            wallet = null,
+            transactionType = FilterTransactionType.All,
+            blockchain = null,
+            contact = null
+        )
+        advanceUntilIdle()
+
+        repository.set(
+            transactionWallets = listOf(wallet),
+            wallet = null,
+            transactionType = FilterTransactionType.Incoming,
+            blockchain = null,
+            contact = null
+        )
+        advanceUntilIdle()
+
+        // Iterating adaptersMap to propagate the new transactionType must not throw
+        // and must trigger a reload with the new filter applied.
+        coVerify(atLeast = 1) {
+            adapter.getTransactions(any(), any(), any(), FilterTransactionType.Incoming, any())
+        }
+
+        repository.clear()
+    }
+
+    @Test
+    fun concurrentSetAndReload_doesNotThrowConcurrentModificationException() {
+        startKoinForTests()
+
+        val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+        val sources = (0 until 20).map { createSource("account-$it", blockchain) }
+        val wallets = sources.map { TransactionWallet(token = null, source = it, badge = null) }
+        val adapters = sources.associateWith { simpleAdapter(emptyList()) }
+
+        val adapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
+            sources.forEach { source ->
+                every { getAdapter(source) } returns adapters.getValue(source)
+            }
+        }
+
+        val dispatcher = Dispatchers.Default
+        val dispatcherProvider = object : DispatcherProvider {
+            override val io = dispatcher
+            override val default = dispatcher
+            override val main = dispatcher
+            override val applicationScope = CoroutineScope(dispatcher)
+        }
+
+        val repository = TransactionRecordRepository(
+            adapterManager = adapterManager,
+            swapProviderTransactionsStorage = mockk(relaxed = true),
+            pendingRepository = emptyPendingRepository(),
+            pendingConverter = mockk(relaxed = true),
+            pendingTransactionMatcher = PendingTransactionMatcher(),
+            dispatcherProvider = dispatcherProvider
+        )
+
+        val failure = AtomicReference<Throwable?>(null)
+        val iterations = 500
+
+        runBlocking {
+            val writers = launch(Dispatchers.Default) {
+                repeat(iterations) { i ->
+                    try {
+                        val subset = wallets.shuffled().take((i % wallets.size) + 1)
+                        repository.set(
+                            transactionWallets = subset,
+                            wallet = null,
+                            transactionType = FilterTransactionType.All,
+                            blockchain = null,
+                            contact = null
+                        )
+                    } catch (e: ConcurrentModificationException) {
+                        failure.compareAndSet(null, e)
+                    }
+                }
+            }
+            val readers = launch(Dispatchers.Default) {
+                repeat(iterations) {
+                    try {
+                        repository.reload()
+                    } catch (e: ConcurrentModificationException) {
+                        failure.compareAndSet(null, e)
+                    }
+                }
+            }
+            joinAll(writers, readers)
+        }
+
+        assertNull(
+            "Expected no ConcurrentModificationException, but got: ${failure.get()}",
+            failure.get()
+        )
+
+        repository.clear()
+    }
+
+    private fun startKoinForTests() {
+        startKoin {
+            modules(module {
+                single { mockk<cash.p.terminal.core.managers.CoinManager>(relaxed = true) }
+            })
+        }
+    }
+
+    private fun simpleAdapter(records: List<TransactionRecord>) =
+        mockk<ITransactionsAdapter>(relaxed = true) {
+            coEvery { getTransactions(any(), any(), any(), any(), any()) } returns records
+            every { getTransactionRecordsFlow(any(), any(), any()) } returns emptyFlow()
+            every { getTransactionUrl(any()) } returns ""
+        }
+
+    private fun emptyPendingRepository() = mockk<PendingTransactionRepository>(relaxed = true) {
+        every { getActivePendingFlow(any()) } returns emptyFlow()
+        coEvery { getPendingForWallet(any()) } returns emptyList()
+    }
+
+    private fun createRepository(
+        adapterManager: TransactionAdapterManager,
+        dispatcher: TestDispatcher,
+        scope: TestScope
+    ) = TransactionRecordRepository(
+        adapterManager = adapterManager,
+        swapProviderTransactionsStorage = mockk(relaxed = true),
+        pendingRepository = emptyPendingRepository(),
+        pendingConverter = mockk(relaxed = true),
+        pendingTransactionMatcher = PendingTransactionMatcher(),
+        dispatcherProvider = TestDispatcherProvider(dispatcher, scope)
+    )
 
     private fun createToken(): Token {
         val coin = Coin(uid = "bitcoin", name = "Bitcoin", code = "BTC")
