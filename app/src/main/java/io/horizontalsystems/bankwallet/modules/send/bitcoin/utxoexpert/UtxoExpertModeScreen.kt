@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.shorten
@@ -50,13 +50,9 @@ fun UtxoExpertModeScreen(
     onBackClick: () -> Unit
 ) {
 
-    val viewModel: UtxoExpertModeViewModel = viewModel(
-        factory = UtxoExpertModeModule.Factory(
-            adapter,
-            token,
-            customUnspentOutputs
-        )
-    )
+    val viewModel: UtxoExpertModeViewModel = hiltViewModel<UtxoExpertModeViewModel, UtxoExpertModeViewModel.Factory> { factory ->
+        factory.create(adapter, token, customUnspentOutputs)
+    }
     val uiState = viewModel.uiState
 
     ComposeAppTheme {

@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
@@ -15,12 +19,16 @@ import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.Date
 
-class UtxoExpertModeViewModel(
-    private val adapter: ISendBitcoinAdapter,
-    private val token: Token,
-    initialCustomUnspentOutputs: List<UnspentOutputInfo>?,
-    xRateService: XRateService,
+@HiltViewModel(assistedFactory = UtxoExpertModeViewModel.Factory::class)
+class UtxoExpertModeViewModel @AssistedInject constructor(
+    @Assisted private val adapter: ISendBitcoinAdapter,
+    @Assisted private val token: Token,
+    @Assisted("initialCustomUnspentOutputs") initialCustomUnspentOutputs: List<UnspentOutputInfo>?,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
 ) : ViewModelUiState<UtxoExpertModeModule.UiState>() {
+
+    private val xRateService = XRateService(marketKit, currencyManager.baseCurrency)
 
     private var unspentOutputViewItems = listOf<UtxoExpertModeModule.UnspentOutputViewItem>()
     private var selectedUnspentOutputs = listOf<String>()
@@ -119,25 +127,17 @@ class UtxoExpertModeViewModel(
         emitState()
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            adapter: ISendBitcoinAdapter,
+            token: Token,
+            @Assisted("initialCustomUnspentOutputs") initialCustomUnspentOutputs: List<UnspentOutputInfo>?,
+        ): UtxoExpertModeViewModel
+    }
 }
 
 object UtxoExpertModeModule {
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val adapter: ISendBitcoinAdapter,
-        private val token: Token,
-        private val customUnspentOutputs: List<UnspentOutputInfo>?,
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return UtxoExpertModeViewModel(
-                adapter = adapter,
-                token = token,
-                initialCustomUnspentOutputs = customUnspentOutputs,
-                xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-            ) as T
-        }
-    }
 
     data class UiState(
         val availableBalanceInfo: InfoItem,

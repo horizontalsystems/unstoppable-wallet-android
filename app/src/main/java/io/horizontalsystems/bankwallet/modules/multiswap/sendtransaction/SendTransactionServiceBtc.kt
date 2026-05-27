@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -179,9 +179,9 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
     @Composable
     override fun GetSettingsContent(navController: HSNavigation) {
-        val sendSettingsViewModel = viewModel<SendBtcSettingsViewModel>(
-            factory = SendBtcSettingsViewModel.Factory(feeRateService, feeService, token)
-        )
+        val sendSettingsViewModel = hiltViewModel<SendBtcSettingsViewModel, SendBtcSettingsViewModel.Factory> { factory ->
+            factory.create(feeRateService, feeService, token)
+        }
 
         SendBtcFeeSettingsScreen(navController, sendSettingsViewModel)
     }
