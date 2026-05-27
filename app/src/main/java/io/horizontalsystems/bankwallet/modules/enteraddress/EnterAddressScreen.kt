@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
@@ -67,13 +66,9 @@ fun EnterAddressScreen(
     initialAddress: String?,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
-    val viewModel = viewModel<EnterAddressViewModel>(
-        factory = EnterAddressViewModel.Factory(
-            token = token,
-            address = initialAddress,
-            allowNull = allowNull,
-        )
-    )
+    val viewModel = hiltViewModel<EnterAddressViewModel, EnterAddressViewModel.Factory> { factory ->
+        factory.create(token, initialAddress, allowNull)
+    }
     val paymentAddressViewModel = hiltViewModel<AddressParserViewModel, AddressParserViewModel.Factory> { factory ->
         factory.create(token, null)
     }
@@ -297,7 +292,7 @@ private fun CheckCell(
     inProgress: Boolean,
     disabled: Boolean,
     showDivider: Boolean,
-    checkResult: AddressCheckResult,
+    checkResult: AddressCheckResult?,
     onClick: (type: AddressCheckType) -> Unit
 ) {
     BoxBordered(
@@ -331,7 +326,7 @@ fun CheckDisabled() {
 @Composable
 fun CheckValue(
     inProgress: Boolean,
-    checkResult: AddressCheckResult,
+    checkResult: AddressCheckResult?,
 ) {
     if (inProgress) {
         CircularProgressIndicator(
@@ -385,7 +380,3 @@ fun SectionHeaderText(title: String) {
     }
 }
 
-data class SContact(
-    val name: String,
-    val address: String
-)
