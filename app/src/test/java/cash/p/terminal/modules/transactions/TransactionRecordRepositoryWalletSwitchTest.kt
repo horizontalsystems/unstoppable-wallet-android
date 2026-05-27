@@ -450,6 +450,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             pendingRepository = emptyPendingRepository(),
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            locallyCreatedTransactionRepository = mockk(relaxed = true),
             dispatcherProvider = dispatcherProvider
         )
 
@@ -523,6 +524,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
         pendingRepository = emptyPendingRepository(),
         pendingConverter = mockk(relaxed = true),
         pendingTransactionMatcher = PendingTransactionMatcher(),
+        locallyCreatedTransactionRepository = mockk(relaxed = true),
         dispatcherProvider = TestDispatcherProvider(dispatcher, scope)
     )
 
