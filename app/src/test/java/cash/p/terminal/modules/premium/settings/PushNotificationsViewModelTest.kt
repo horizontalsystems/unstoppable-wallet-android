@@ -60,6 +60,7 @@ class PushNotificationsViewModelTest {
         every { localStorage.pushShowCoinAmount } returns true
         every { localStorage.pushShowFiatAmount } returns true
         every { localStorage.pushEnabledBlockchainUids } returns emptySet()
+        every { localStorage.isCalculatorModeEnabled } returns false
 
         every { btcBlockchainManager.allBlockchains } returns emptyList()
         every { evmBlockchainManager.allBlockchains } returns emptyList()

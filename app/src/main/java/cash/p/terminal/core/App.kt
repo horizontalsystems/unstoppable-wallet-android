@@ -21,6 +21,7 @@ import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.LanguageManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.NftAdapterManager
 import cash.p.terminal.core.managers.NftMetadataManager
@@ -231,6 +232,9 @@ class App : CoreApp(), WorkConfiguration.Provider, SingletonImageLoader.Factory 
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val accountCleaner: IAccountCleaner by inject(IAccountCleaner::class.java)
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository by inject(
+        LocallyCreatedTransactionRepository::class.java
+    )
 
     override fun onCreate() {
         super.onCreate()
@@ -507,6 +511,7 @@ class App : CoreApp(), WorkConfiguration.Provider, SingletonImageLoader.Factory 
             if (!pinComponent.isPinSet) {
                 pinComponent.initDefaultPinLevel()
             }
+            trimLocallyCreatedTransactions()
             clearDeletedAccounts()
             wcSessionManager.start()
 
@@ -529,6 +534,12 @@ class App : CoreApp(), WorkConfiguration.Provider, SingletonImageLoader.Factory 
             delay(3000)
             accountCleaner.clearAccounts(accountManager.getDeletedAccountIds())
             accountManager.clearDeleted()
+        }
+    }
+
+    private fun trimLocallyCreatedTransactions() {
+        coroutineScope.launch {
+            locallyCreatedTransactionRepository.trimAllAccounts()
         }
     }
 

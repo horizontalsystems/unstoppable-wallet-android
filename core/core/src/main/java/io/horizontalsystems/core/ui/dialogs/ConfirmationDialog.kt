@@ -1,6 +1,7 @@
 package io.horizontalsystems.core.ui.dialogs
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,8 @@ fun ConfirmationDialogBottomSheet(
         onDismissRequest = onCloseClick,
         dragHandle = null,
         sheetState = sheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        containerColor = ComposeAppTheme.colors.transparent,
+        contentWindowInsets = { WindowInsets(0) },
     ) {
         ConfirmationDialog(
             title = title,

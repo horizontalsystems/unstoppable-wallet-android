@@ -23,6 +23,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import cash.p.terminal.wallet.managers.TransactionHiddenState
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -158,7 +159,7 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
         every { premiumSettings.getAmlCheckShowAlert() } returns false
         every { swapProviderTransactionsStorage.observeAll() } returns flowOf(emptyList())
 
-        every { transactionViewItemFactory.convertToViewItemCached(any(), any(), any()) } answers {
+        coEvery { transactionViewItemFactory.convertToViewItemCached(any(), any(), any()) } answers {
             createMockViewItem(firstArg<TransactionItem>().record.uid)
         }
     }

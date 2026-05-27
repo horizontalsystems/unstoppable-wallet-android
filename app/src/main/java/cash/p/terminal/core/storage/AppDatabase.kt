@@ -75,6 +75,7 @@ import cash.p.terminal.core.storage.migrations.Migration_97_98
 import cash.p.terminal.core.storage.migrations.Migration_98_99
 import cash.p.terminal.core.storage.migrations.Migration_99_100
 import cash.p.terminal.core.storage.migrations.Migration_100_101
+import cash.p.terminal.core.storage.migrations.Migration_101_102
 import cash.p.terminal.core.storage.typeconverter.DatabaseConverters
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
@@ -83,6 +84,7 @@ import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.EvmSyncSourceRecord
+import cash.p.terminal.entities.LocallyCreatedTransactionRecord
 import cash.p.terminal.entities.MoneroFileRecord
 import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.entities.PendingTransactionEntity
@@ -112,7 +114,7 @@ import io.horizontalsystems.core.storage.LogEntry
 import io.horizontalsystems.core.storage.LogsDao
 
 @Database(
-    version = 101,
+    version = 102,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -145,7 +147,8 @@ import io.horizontalsystems.core.storage.LogsDao
         PendingTransactionEntity::class,
         ZcashSingleUseAddress::class,
         UserDeletedWallet::class,
-        PoisonAddress::class
+        PoisonAddress::class,
+        LocallyCreatedTransactionRecord::class
     ]
 )
 @TypeConverters(DatabaseConverters::class)
@@ -177,6 +180,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun zcashSingleUseAddressDao(): ZcashSingleUseAddressDao
     abstract fun userDeletedWalletDao(): UserDeletedWalletDao
     abstract fun poisonAddressDao(): PoisonAddressDao
+    abstract fun locallyCreatedTransactionDao(): LocallyCreatedTransactionDao
 
     companion object {
 
@@ -263,7 +267,8 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_97_98,
                     Migration_98_99,
                     Migration_99_100,
-                    Migration_100_101
+                    Migration_100_101,
+                    Migration_101_102
                 )
                 .build()
         }

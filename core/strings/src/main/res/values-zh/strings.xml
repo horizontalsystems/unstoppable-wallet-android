@@ -14,6 +14,10 @@
     <string name="Button_Next">继续</string>
     <string name="Button_Enable">启用</string>
     <string name="Button_Disable">禁用</string>
+    <string name="button_enable">启用</string>
+    <string name="button_disable">停用</string>
+    <string name="button_do_not_enable">不启用</string>
+    <string name="button_do_not_disable">不停用</string>
     <string name="Button_Close">关闭</string>
     <string name="Button_Ok">确定</string>
     <string name="Button_Done">完成</string>
@@ -1564,6 +1568,8 @@
     <string name="push_notification">推送通知</string>
     <string name="premium_push_notifications_show">显示通知</string>
     <string name="premium_push_notifications_warning">为了接收交易通知，应用可能会针对所选区块链在后台保持活跃。即使您不使用应用，这也可能增加电池消耗。</string>
+    <string name="push_notifications_calculator_mode_warning">计算器模式已启用。推送通知可能会暴露此设备上安装了加密货币应用。确定要启用通知吗？</string>
+    <string name="calculator_mode_push_notifications_warning">推送通知已启用。即使处于计算器模式，应用也可能显示钱包通知。是否要停用推送通知以提高隐私性？</string>
     <string name="push_notification_polling_interval">检查间隔</string>
     <string name="push_notification_interval_realtime">实时</string>
     <string name="push_notification_interval_5min">每5分钟</string>

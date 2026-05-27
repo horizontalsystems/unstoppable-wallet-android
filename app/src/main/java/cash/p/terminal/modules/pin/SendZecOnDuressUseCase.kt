@@ -7,6 +7,7 @@ import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashSingleUseAddressManager
 import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.domain.usecase.ClearZCashWalletDataUseCase
 import cash.p.terminal.wallet.AdapterState
@@ -22,6 +23,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.ISmsNotificationSettings
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.toHexReversed
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -67,7 +69,7 @@ class SendZecOnDuressUseCase(
     private val coinManager: ICoinManager,
     private val walletFactory: WalletFactory,
     private val clearZCashWalletDataUseCase: ClearZCashWalletDataUseCase,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
 ) {
 
     companion object {
@@ -181,7 +183,7 @@ class SendZecOnDuressUseCase(
             )
             return when (val result = raceAdaptersForSync(existingAdapters)) {
                 is SyncRaceResult.Winner -> {
-                    sendWithAdapter(result.adapterInfo.adapter, address, memo)
+                    sendWithAdapter(wallet, result.adapterInfo.adapter, address, memo)
                 }
                 is SyncRaceResult.AllSyncedInsufficientBalance -> {
                     Timber.w("All existing adapters synced but have insufficient balance")
@@ -189,9 +191,9 @@ class SendZecOnDuressUseCase(
                 }
             }
         } else if (existingShieldedAdapter != null) {
-            return sendWithAdapter(existingShieldedAdapter, address, memo)
+            return sendWithAdapter(wallet, existingShieldedAdapter, address, memo)
         } else if (existingUnifiedAdapter != null) {
-            return sendWithAdapter(existingUnifiedAdapter, address, memo)
+            return sendWithAdapter(wallet, existingUnifiedAdapter, address, memo)
         }
 
         // No existing adapters found - create both Shielded and Unified adapters in parallel
@@ -219,7 +221,7 @@ class SendZecOnDuressUseCase(
             // Race adapters for sync
             return when (val result = startAndRaceAdaptersForSync(createdAdapters)) {
                 is SyncRaceResult.Winner -> {
-                    sendWithAdapter(result.adapterInfo.adapter, address, memo)
+                    sendWithAdapter(wallet, result.adapterInfo.adapter, address, memo)
                 }
                 is SyncRaceResult.AllSyncedInsufficientBalance -> {
                     Timber.w("All adapters synced but have insufficient balance")
@@ -255,6 +257,7 @@ class SendZecOnDuressUseCase(
      * Sends transaction using the provided adapter.
      */
     private suspend fun sendWithAdapter(
+        wallet: Wallet,
         adapter: ISendZcashAdapter,
         address: String,
         memo: String
@@ -268,7 +271,9 @@ class SendZecOnDuressUseCase(
         }
 
         return try {
-            adapter.send(amountToSend, address, memo, null)
+            val txId = adapter.send(amountToSend, address, memo, null)
+            getKoinInstance<LocallyCreatedTransactionRepository>()
+                .markCreated(wallet, txId.byteArray.toHexReversed())
             SendZecResult.Success
         } catch (e: Exception) {
             Timber.e(e, "Failed to send ZEC transaction")
@@ -321,7 +326,8 @@ class SendZecOnDuressUseCase(
                     addressSpecTyped = addressType,
                     localStorage = localStorage,
                     backgroundManager = backgroundManager,
-                    singleUseAddressManager = singleUseAddressManager
+                    singleUseAddressManager = singleUseAddressManager,
+                    dispatcherProvider = getKoinInstance()
                 )
                 return AdapterInfo(adapter, addressType, alias)
             } catch (e: IllegalStateException) {

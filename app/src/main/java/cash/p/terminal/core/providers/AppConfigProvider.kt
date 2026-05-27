@@ -12,6 +12,7 @@ object AppConfigProvider {
 
     val appVersion by lazy { BuildConfig.VERSION_NAME }
     val appBuild by lazy { BuildConfig.VERSION_CODE }
+    val isDebug by lazy { BuildConfig.DEBUG }
     val appGitHash by lazy { BuildConfig.GIT_HASH }
     val appGitBranch by lazy { BuildConfig.GIT_BRANCH }
     val companyWebPageLink by lazy { Translator.getString(R.string.companyWebPageLink) }
@@ -121,6 +122,8 @@ object AppConfigProvider {
     val alphaAmlApiKey by lazy {
         EncodedSecrets.ALPHA_AML_API_KEY
     }
+
+    val premiumApiBaseUrl by lazy { BuildConfig.PREMIUM_API_BASE_URL }
 
     val merkleIoKey by lazy {
         EncodedSecrets.MERKLE_IO_KEY

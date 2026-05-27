@@ -11,7 +11,8 @@ import timber.log.Timber
 internal class CheckTrialPremiumUseCase(
     private val piratePlaceRepository: PiratePlaceRepository,
     private val demoPremiumUserDao: DemoPremiumUserDao,
-    private val getBnbAddressUseCase: GetBnbAddressUseCaseImpl
+    private val getBnbAddressUseCase: GetBnbAddressUseCaseImpl,
+    private val isDebug: Boolean
 ) {
 
     suspend fun checkTrialPremiumStatus(account: Account): TrialPremiumResult {
@@ -26,20 +27,11 @@ internal class CheckTrialPremiumUseCase(
 
             cachedUser = findCachedUser(walletAddress) ?: return TrialPremiumResult.NeedPremium
 
-            val currentTime = System.currentTimeMillis()
-            val daysPassed = (currentTime - cachedUser.lastCheckDate) / (24 * 60 * 60 * 1000)
-            val remainingDays = cachedUser.daysLeft - daysPassed.toInt()
-
-            when {
-                // If days haven't expired yet, return cached result
-                remainingDays > 0 -> {
-                    return TrialPremiumResult.DemoActive(daysLeft = remainingDays)
-                }
-                // If cached value is already 0 (expired), don't make network request
-                cachedUser.daysLeft == 0 -> {
-                    return TrialPremiumResult.DemoExpired
-                }
-                // If days expired but cached value wasn't 0, check network to get updated value
+            // Debug builds skip the local countdown and always ask the server, so testers
+            // see server-side status changes immediately. Release builds trust the local
+            // countdown and only hit the network once it has run out.
+            if (!isDebug) {
+                resolveFromCache(cachedUser)?.let { return it }
             }
 
             // Check network for updated status
@@ -72,5 +64,19 @@ internal class CheckTrialPremiumUseCase(
 
     private suspend fun findCachedUser(walletAddress: String): DemoPremiumUser? {
         return demoPremiumUserDao.getByAddress(walletAddress)
+    }
+
+    /**
+     * Resolves the trial status from the local countdown without hitting the network.
+     * Returns null when the cache can no longer be trusted and the server must be queried.
+     */
+    private fun resolveFromCache(cachedUser: DemoPremiumUser): TrialPremiumResult? {
+        val daysPassed = (System.currentTimeMillis() - cachedUser.lastCheckDate) / (24 * 60 * 60 * 1000)
+        val remainingDays = cachedUser.daysLeft - daysPassed.toInt()
+        return when {
+            remainingDays > 0 -> TrialPremiumResult.DemoActive(daysLeft = remainingDays)
+            cachedUser.daysLeft == 0 -> TrialPremiumResult.DemoExpired
+            else -> null
+        }
     }
 }

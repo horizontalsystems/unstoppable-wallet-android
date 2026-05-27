@@ -2,6 +2,7 @@ package cash.p.terminal.core.managers
 
 import android.util.Base64
 import io.horizontalsystems.hdwalletkit.Language
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -61,6 +62,7 @@ class SeedPhraseQrCryptoTest {
     // Traditional-Chinese-only chars: 這 (index 9 in TC, the SC equivalent is 这)
     private val wordsTraditionalChinese12 = List(11) { "的" } + "這"
     private val wordsFrench12 = List(11) { "abaisser" } + "abeille"
+    private val entropy128 = ByteArray(16)
 
     // ==================== BIP39 Encryption/Decryption Tests ====================
 
@@ -481,6 +483,21 @@ class SeedPhraseQrCryptoTest {
     }
 
     // ==================== Non-English BIP39 round-trip (#1, #9) ====================
+
+    @Test
+    fun encryptAndDecrypt_eachBip39Language_roundTripsWordsAndLanguage() {
+        val mnemonic = Mnemonic()
+
+        Language.entries.forEach { language ->
+            val words = mnemonic.toMnemonic(entropy128, language)
+            val encrypted = crypto.encrypt(words, "", language = language)
+
+            val decrypted = crypto.decrypt(encrypted).getOrNull()
+                ?: error("Decrypt must succeed for $language")
+            assertEquals("Words must round-trip for $language", words, decrypted.words)
+            assertEquals("Language must round-trip for $language", language, decrypted.language)
+        }
+    }
 
     @Test
     fun encryptAndDecrypt_japaneseSeed_roundTripsCorrectly() {

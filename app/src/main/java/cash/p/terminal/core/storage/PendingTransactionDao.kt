@@ -15,6 +15,9 @@ interface PendingTransactionDao {
     @Query("UPDATE PendingTransaction SET txHash = :txId WHERE id = :id")
     suspend fun updateTxId(id: String, txId: String)
 
+    @Query("SELECT * FROM PendingTransaction WHERE id = :id")
+    suspend fun getById(id: String): PendingTransactionEntity?
+
     @Query("SELECT * FROM PendingTransaction WHERE expiresAt > :now AND walletId = :walletId")
     fun getActivePendingFlow(now: Long, walletId: String): Flow<List<PendingTransactionEntity>>
 
