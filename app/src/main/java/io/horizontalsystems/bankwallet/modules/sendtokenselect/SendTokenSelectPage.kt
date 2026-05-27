@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.sendtokenselect
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -41,7 +41,9 @@ data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
                     ))
                 )
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
+            viewModel = hiltViewModel<TokenSelectViewModel, TokenSelectViewModel.Factory> { factory ->
+                factory.create(blockchainTypes, tokenTypes)
+            },
         )
     }
 

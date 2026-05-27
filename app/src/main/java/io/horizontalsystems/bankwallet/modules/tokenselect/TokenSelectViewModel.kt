@@ -1,38 +1,60 @@
 package io.horizontalsystems.bankwallet.modules.tokenselect
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
+import io.horizontalsystems.bankwallet.core.title
+import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceAdapterRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceCache
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceService
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TokenSelectViewModel(
-    private val service: BalanceService,
-    private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?,
-    private val balanceHiddenManager: BalanceHiddenManager,
-    private val blockchainTypes: List<BlockchainType>?,
-    private val tokenTypes: List<TokenType>?,
+@HiltViewModel(assistedFactory = TokenSelectViewModel.Factory::class)
+class TokenSelectViewModel @AssistedInject constructor(
+    @Assisted("blockchainTypes") private val blockchainTypes: List<BlockchainType>?,
+    @Assisted("tokenTypes") private val tokenTypes: List<TokenType>?,
+    private val walletManager: WalletManager,
+    private val evmSyncSourceManager: EvmSyncSourceManager,
+    private val currencyManager: CurrencyManager,
+    private val marketKit: MarketKitWrapper,
+    private val adapterManager: IAdapterManager,
+    private val enabledWalletsCacheDao: EnabledWalletsCacheDao,
     private val localStorage: ILocalStorage,
+    private val connectivityManager: ConnectivityManager,
+    private val accountManager: IAccountManager,
+    private val balanceViewTypeManager: BalanceViewTypeManager,
+    private val balanceHiddenManager: BalanceHiddenManager,
 ) : ViewModelUiState<TokenSelectUiState>() {
+
+    private lateinit var service: BalanceService
+    private lateinit var balanceViewItemFactory: BalanceViewItemFactory
 
     private var noItems = false
     private var hasAssets = false
@@ -56,6 +78,17 @@ class TokenSelectViewModel(
     }
 
     init {
+        service = BalanceService(
+            BalanceActiveWalletRepository(walletManager, evmSyncSourceManager),
+            BalanceXRateRepository("wallet", currencyManager, marketKit),
+            BalanceAdapterRepository(adapterManager, BalanceCache(enabledWalletsCacheDao)),
+            localStorage,
+            connectivityManager,
+            BalanceSorter(),
+            accountManager
+        )
+        balanceViewItemFactory = BalanceViewItemFactory()
+
         service.start()
 
         viewModelScope.launch {
@@ -117,7 +150,6 @@ class TokenSelectViewModel(
                         ?: true
                 }
                 .filter { item -> tokenTypes?.contains(item.wallet.token.type) ?: true }
-                .filter { item -> itemsFilter?.invoke(item) ?: true }
                 .filter { item ->
                     if (!currentQuery.isNullOrBlank()) {
                         val coin = item.wallet.coin
@@ -163,23 +195,12 @@ class TokenSelectViewModel(
         }
     }
 
-    class FactoryForSend(
-        private val blockchainTypes: List<BlockchainType>? = null,
-        private val tokenTypes: List<TokenType>? = null
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TokenSelectViewModel(
-                service = BalanceService.getInstance("wallet"),
-                balanceViewItemFactory = BalanceViewItemFactory(),
-                balanceViewTypeManager = App.balanceViewTypeManager,
-                itemsFilter = null,
-                balanceHiddenManager = App.balanceHiddenManager,
-                blockchainTypes = blockchainTypes,
-                tokenTypes = tokenTypes,
-                localStorage = App.localStorage
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("blockchainTypes") blockchainTypes: List<BlockchainType>?,
+            @Assisted("tokenTypes") tokenTypes: List<TokenType>?,
+        ): TokenSelectViewModel
     }
 }
 

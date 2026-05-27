@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.donate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -54,7 +54,9 @@ data object DonateTokenSelectPage : HSPage() {
                 }
 
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
+            viewModel = hiltViewModel<TokenSelectViewModel, TokenSelectViewModel.Factory> { factory ->
+                factory.create(null, null)
+            },
         ) {
             DonateHeader(
                 onClick = {
