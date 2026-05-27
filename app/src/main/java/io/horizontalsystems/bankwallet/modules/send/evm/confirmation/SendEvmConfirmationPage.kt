@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -81,13 +81,9 @@ private fun SendEvmConfirmationScreen(
 ) {
     val logger = remember { AppLogger("send-evm") }
 
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        factory = SendEvmConfirmationViewModel.Factory(
-            input.transactionData,
-            input.additionalInfo,
-            input.blockchainType,
-        )
-    )
+    val viewModel = hiltViewModel<SendEvmConfirmationViewModel, SendEvmConfirmationViewModel.Factory> { factory ->
+        factory.create(input.transactionData, input.additionalInfo, input.blockchainType)
+    }
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(

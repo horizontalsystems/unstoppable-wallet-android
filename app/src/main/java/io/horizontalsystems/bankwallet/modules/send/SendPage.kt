@@ -2,18 +2,13 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
@@ -100,11 +95,9 @@ data class SendPage(val input: Input) : HSPage() {
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
-                val adapter = App.adapterManager.getAdapterForWallet<ISendEthereumAdapter>(wallet) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
-
-                val sendEvmViewModel = viewModel<SendEvmViewModel>(
-                    factory = SendEvmModule.Factory(wallet, address, hideAddress, adapter)
-                )
+                val sendEvmViewModel = hiltViewModel<SendEvmViewModel, SendEvmViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
 
                 SendEvmScreen(
                     title = title,
