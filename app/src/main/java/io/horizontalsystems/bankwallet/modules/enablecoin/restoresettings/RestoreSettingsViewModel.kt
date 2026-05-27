@@ -6,15 +6,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.Clearable
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.parcelize.Parcelize
 
-class RestoreSettingsViewModel(
-    private val service: RestoreSettingsService,
-    private val clearables: List<Clearable>
+@HiltViewModel(assistedFactory = RestoreSettingsViewModel.Factory::class)
+class RestoreSettingsViewModel @AssistedInject constructor(
+    @Assisted private val service: RestoreSettingsService,
 ) : ViewModel() {
 
     var openBirthdayHeightConfig by mutableStateOf<Token?>(null)
@@ -57,11 +60,16 @@ class RestoreSettingsViewModel(
     }
 
     override fun onCleared() {
-        clearables.forEach(Clearable::clear)
+        service.clear()
     }
 
     fun birthdayHeightConfigOpened() {
         openBirthdayHeightConfig = null
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(service: RestoreSettingsService): RestoreSettingsViewModel
     }
 }
 

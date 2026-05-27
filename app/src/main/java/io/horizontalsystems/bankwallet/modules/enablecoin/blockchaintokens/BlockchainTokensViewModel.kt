@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
@@ -12,8 +16,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class BlockchainTokensViewModel(
-    private val service: BlockchainTokensService
+@HiltViewModel(assistedFactory = BlockchainTokensViewModel.Factory::class)
+class BlockchainTokensViewModel @AssistedInject constructor(
+    @Assisted private val service: BlockchainTokensService,
 ) : ViewModel() {
 
     var showBottomSheetDialog by mutableStateOf(false)
@@ -67,4 +72,8 @@ class BlockchainTokensViewModel(
         }
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(service: BlockchainTokensService): BlockchainTokensViewModel
+    }
 }

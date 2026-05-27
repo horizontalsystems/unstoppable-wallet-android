@@ -8,19 +8,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.BackpressureStrategy
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class RestoreBlockchainsViewModel(
-    private val service: RestoreBlockchainsService,
-    private val clearables: List<Clearable>
+@HiltViewModel(assistedFactory = RestoreBlockchainsViewModel.Factory::class)
+class RestoreBlockchainsViewModel @AssistedInject constructor(
+    @Assisted private val service: RestoreBlockchainsService,
 ) : ViewModel() {
 
     val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Blockchain>>>()
@@ -81,6 +84,11 @@ class RestoreBlockchainsViewModel(
     }
 
     override fun onCleared() {
-        clearables.forEach(Clearable::clear)
+        service.clear()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(service: RestoreBlockchainsService): RestoreBlockchainsViewModel
     }
 }

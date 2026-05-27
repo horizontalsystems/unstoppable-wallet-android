@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -41,9 +40,18 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewChartVi
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.HudMessageType
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceAdapterRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceCache
+import io.horizontalsystems.bankwallet.modules.balance.BalanceService
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsService
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigPage
@@ -105,9 +113,33 @@ fun CoinOverviewScreen(
         viewModel.onHudMessageShown()
     }
 
-    val vmFactory1 = remember { ManageWalletsModule.Factory() }
-    val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
-    val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
+    val restoreSettingsService = remember {
+        RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider, App.moneroBirthdayProvider)
+    }
+    val manageWalletsService = remember {
+        val activeAccount = App.accountManager.activeAccount
+        ManageWalletsService(
+            App.walletManager,
+            restoreSettingsService,
+            activeAccount?.let { account -> FullCoinsProvider(App.marketKit, account) },
+            activeAccount,
+            BalanceService(
+                BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
+                BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
+                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                App.localStorage,
+                App.connectivityManager,
+                BalanceSorter(),
+                App.accountManager
+            )
+        )
+    }
+    val manageWalletsViewModel = hiltViewModel<ManageWalletsViewModel, ManageWalletsViewModel.Factory> { factory ->
+        factory.create(manageWalletsService)
+    }
+    val restoreSettingsViewModel = hiltViewModel<RestoreSettingsViewModel, RestoreSettingsViewModel.Factory> { factory ->
+        factory.create(restoreSettingsService)
+    }
 
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()

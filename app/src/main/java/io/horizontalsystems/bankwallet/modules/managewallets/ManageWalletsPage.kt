@@ -18,16 +18,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenPage
+import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceAdapterRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceCache
+import io.horizontalsystems.bankwallet.modules.balance.BalanceService
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoSheet
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
@@ -56,9 +65,33 @@ data object ManageWalletsPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val vmFactory = remember { ManageWalletsModule.Factory() }
-        val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
-        val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory)
+        val restoreSettingsService = remember {
+            RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider, App.moneroBirthdayProvider)
+        }
+        val manageWalletsService = remember {
+            val activeAccount = App.accountManager.activeAccount
+            ManageWalletsService(
+                App.walletManager,
+                restoreSettingsService,
+                activeAccount?.let { account -> FullCoinsProvider(App.marketKit, account) },
+                activeAccount,
+                BalanceService(
+                    BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
+                    BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
+                    BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                    App.localStorage,
+                    App.connectivityManager,
+                    BalanceSorter(),
+                    App.accountManager
+                )
+            )
+        }
+        val viewModel = hiltViewModel<ManageWalletsViewModel, ManageWalletsViewModel.Factory> { factory ->
+            factory.create(manageWalletsService)
+        }
+        val restoreSettingsViewModel = hiltViewModel<RestoreSettingsViewModel, RestoreSettingsViewModel.Factory> { factory ->
+            factory.create(restoreSettingsService)
+        }
 
         ManageWalletsScreen(
             navController,

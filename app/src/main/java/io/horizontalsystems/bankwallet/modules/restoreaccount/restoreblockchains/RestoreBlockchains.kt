@@ -27,13 +27,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import io.horizontalsystems.bankwallet.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -78,16 +80,35 @@ fun ManageWalletsScreen(
     val manualBackup = mainViewModel.manualBackup
     val fileBackup = mainViewModel.fileBackup
 
-    val factory = RestoreBlockchainsModule.Factory(
-        mainViewModel.accountName,
-        accountType,
-        manualBackup,
-        fileBackup,
-        statPage
-    )
-    val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
-    val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
-    val blockchainTokensViewModel: BlockchainTokensViewModel = viewModel(factory = factory)
+    val restoreSettingsService = remember {
+        RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider, App.moneroBirthdayProvider)
+    }
+    val blockchainTokensService = remember { BlockchainTokensService() }
+    val restoreBlockchainsService = remember {
+        RestoreBlockchainsService(
+            mainViewModel.accountName,
+            accountType,
+            manualBackup,
+            fileBackup,
+            App.accountFactory,
+            App.accountManager,
+            App.walletManager,
+            App.marketKit,
+            App.tokenAutoEnableManager,
+            blockchainTokensService,
+            restoreSettingsService,
+            statPage
+        )
+    }
+    val viewModel: RestoreBlockchainsViewModel = hiltViewModel<RestoreBlockchainsViewModel, RestoreBlockchainsViewModel.Factory> { factory ->
+        factory.create(restoreBlockchainsService)
+    }
+    val restoreSettingsViewModel: RestoreSettingsViewModel = hiltViewModel<RestoreSettingsViewModel, RestoreSettingsViewModel.Factory> { factory ->
+        factory.create(restoreSettingsService)
+    }
+    val blockchainTokensViewModel: BlockchainTokensViewModel = hiltViewModel<BlockchainTokensViewModel, BlockchainTokensViewModel.Factory> { factory ->
+        factory.create(blockchainTokensService)
+    }
 
     val view = LocalView.current
 

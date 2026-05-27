@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
@@ -18,9 +21,9 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 
-class ManageWalletsViewModel(
-    private val service: ManageWalletsService,
-    private val clearables: List<Clearable>
+@HiltViewModel(assistedFactory = ManageWalletsViewModel.Factory::class)
+class ManageWalletsViewModel @AssistedInject constructor(
+    @Assisted private val service: ManageWalletsService,
 ) : ViewModelUiState<ManageWalletsViewModel.ManageWalletsUiState>() {
 
     private var coinItems: List<CoinViewItem<Token>> = listOf()
@@ -102,7 +105,7 @@ class ManageWalletsViewModel(
     }
 
     override fun onCleared() {
-        clearables.forEach(Clearable::clear)
+        service.clear()
     }
 
     data class ManageWalletsUiState(
@@ -111,4 +114,9 @@ class ManageWalletsViewModel(
         val selectedTab: SelectChainTab,
         val tabs: List<SelectChainTab>,
     )
+
+    @AssistedFactory
+    interface Factory {
+        fun create(service: ManageWalletsService): ManageWalletsViewModel
+    }
 }
