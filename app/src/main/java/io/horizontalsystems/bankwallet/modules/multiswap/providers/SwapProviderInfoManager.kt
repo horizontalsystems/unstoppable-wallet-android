@@ -26,7 +26,7 @@ class SwapProviderInfoManager(
         if (loaded) return@withLock
         runCatching {
             cache = unstoppableAPI.providers().associateBy { it.provider.uppercase() }
-            loaded = true
         }
+        loaded = true
     }
 }

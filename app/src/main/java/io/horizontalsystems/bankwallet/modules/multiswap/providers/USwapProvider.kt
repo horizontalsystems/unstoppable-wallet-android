@@ -635,7 +635,6 @@ interface UnstoppableAPI {
                 val telegram: String? = null,
                 val twitter: String? = null,
                 val website: String? = null,
-                val discord: String? = null,
             )
         }
 
