@@ -27,7 +27,9 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.GasPrice
+import io.horizontalsystems.ethereumkit.models.RawTransaction
 import io.horizontalsystems.ethereumkit.models.RpcSource
+import io.horizontalsystems.ethereumkit.models.Signature
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.merkleiokit.MerkleTransactionAdapter
 import io.horizontalsystems.nftkit.core.NftKit
@@ -156,7 +158,6 @@ class EvmKitManager(
                 signer = HardwareWalletEvmSigner(
                     address = address,
                     publicKey = publicKey,
-                    cardId = accountType.cardId,
                     chain = chain,
                     expectedPublicKeyBytes = addressWithPublicKey.publicKey
                 )
@@ -337,19 +338,33 @@ class EvmKitWrapper(
         nonce: Long?,
         mevProtectionEnabled: Boolean
     ): FullTransaction {
-        requireNotNull(signer) { "Signer is not initialized for this EVM kit" }
-
         if (mevProtectionEnabled && merkleTransactionAdapter == null) {
             throw IllegalStateException("MEV Protection is enabled, but MerkleTransactionAdapter is not initialized")
         }
 
         val rawTransaction =
             evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce).await()
-        val signature = signer.signature(rawTransaction)
+        val (signedRawTransaction, signature) = signReconciled(rawTransaction)
         return if (mevProtectionEnabled && merkleTransactionAdapter != null) {
-            merkleTransactionAdapter.send(rawTransaction, signature).await()
+            merkleTransactionAdapter.send(signedRawTransaction, signature).await()
         } else {
-            evmKit.send(rawTransaction, signature).await()
+            evmKit.send(signedRawTransaction, signature).await()
+        }
+    }
+
+    /**
+     * Signs [rawTransaction] and returns the transaction that was actually signed together with its
+     * signature. Hardware wallets may sign over different fields than requested (Trezor Suite
+     * re-estimates the gas limit), so the returned raw transaction can differ from the input. Always
+     * go through this instead of the base Signer.signedTransaction(), which signs hardware-wallet
+     * transactions with a mock key.
+     */
+    suspend fun signReconciled(rawTransaction: RawTransaction): Pair<RawTransaction, Signature> {
+        val signer = requireNotNull(signer) { "Signer is not initialized for this EVM kit" }
+        return when (signer) {
+            is TrezorEvmSigner -> signer.signTransaction(rawTransaction)
+                .let { it.rawTransaction to it.signature }
+            else -> rawTransaction to signer.signature(rawTransaction)
         }
     }
 

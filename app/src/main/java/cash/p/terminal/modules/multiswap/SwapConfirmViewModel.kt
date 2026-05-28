@@ -11,20 +11,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.trezor.domain.TrezorCancelledException
 import cash.p.terminal.core.App
-import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.ethereum.CautionViewItem
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.entities.SwapProviderTransaction
-import cash.p.terminal.modules.send.BaseSendViewModel
-import cash.p.terminal.navigation.popBackStackSafely
-import cash.p.terminal.wallet.IAdapterManager
-import cash.p.terminal.wallet.MarketKitWrapper
-import cash.p.terminal.wallet.Wallet
-import cash.p.terminal.core.HSCaution
-import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.modules.multiswap.providers.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.QuickexProvider
@@ -35,16 +29,22 @@ import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceS
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.sendtransaction.SwapTransactionServiceFactory
 import cash.p.terminal.modules.multiswap.ui.DataField
+import cash.p.terminal.modules.send.BaseSendViewModel
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.network.changenow.data.entity.BackendChangeNowResponseError
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.trezor.domain.TrezorCancelledException
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import com.tangem.common.core.TangemSdkError
 import io.horizontalsystems.bitcoincore.managers.SendValueErrors
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc.ResponseError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -363,6 +363,8 @@ class SwapConfirmViewModel(
             } catch (t: Throwable) {
                 val caution = if (t.cause is SendValueErrors.InsufficientUnspentOutputs) {
                     HSCaution(TranslatableString.ResString(R.string.EthereumTransaction_Error_InsufficientBalance_Title))
+                } else if (t is ResponseError.RpcError) {
+                    HSCaution(TranslatableString.PlainString(t.error.message))
                 } else {
                     HSCaution(TranslatableString.PlainString(t.javaClass.simpleName))
                 }
