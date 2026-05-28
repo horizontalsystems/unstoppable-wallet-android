@@ -28,6 +28,12 @@ class AppIconService(private val localStorage: ILocalStorage) {
      * Handles both legacy icon migration and cases where multiple aliases are enabled.
      */
     private fun normalizeAppIconState() {
+        if (localStorage.calculatorModeLauncherAliasUpdatePending) {
+            // Applying the pending alias while the app is launched from Calculator can close
+            // the current task on some launchers; MainActivity applies it after leaving foreground.
+            return
+        }
+
         // Disable any legacy aliases not in current AppIcon enum
         getLegacyAliases().forEach { disableComponentSafely(it) }
 
@@ -36,6 +42,13 @@ class AppIconService(private val localStorage: ILocalStorage) {
 
         // Always apply to ensure only one alias is enabled
         setAppIcon(appIcon)
+    }
+
+    fun applyPendingLauncherAliasUpdate() {
+        if (!localStorage.calculatorModeLauncherAliasUpdatePending) return
+
+        localStorage.calculatorModeLauncherAliasUpdatePending = false
+        setAppIcon(localStorage.appIcon ?: AppIcon.Main)
     }
 
     /**
@@ -74,13 +87,15 @@ class AppIconService(private val localStorage: ILocalStorage) {
         }
     }
 
-    fun setAppIcon(appIcon: AppIcon) {
-        // Keep the calculator-mode flag in lock-step with the launcher icon so
-        // any path that swaps the icon (settings UI, full-backup restore,
-        // normalizeAppIconState) cannot leave a Calculator launcher paired with
-        // a normal PIN screen, or vice versa. Flag is set BEFORE icon swap on
-        // enable (preserves lock behavior on partial writes) and AFTER icon
-        // swap on disable (same property in reverse).
+    fun setAppIcon(
+        appIcon: AppIcon,
+        updateLauncherAliases: Boolean = true,
+    ) {
+        // Keep the calculator-mode flag in lock-step with the persisted icon state so
+        // settings UI, full-backup restore, and startup normalization cannot leave a
+        // Calculator launcher paired with a normal PIN screen, or vice versa.
+        // Foreground premium-loss handling may defer launcher alias updates because
+        // disabling the alias that launched the current task can close it on some ROMs.
         val enableCalculatorMode = appIcon == AppIcon.Calculator
         if (enableCalculatorMode) {
             localStorage.isCalculatorModeEnabled = true
@@ -90,6 +105,14 @@ class AppIconService(private val localStorage: ILocalStorage) {
 
         _optionsFlow.update {
             Select(appIcon, appIcons)
+        }
+
+        if (!updateLauncherAliases) {
+            if (!enableCalculatorMode) {
+                localStorage.isCalculatorModeEnabled = false
+                localStorage.previousAppIconName = null
+            }
+            return
         }
 
         val enabled = PackageManager.COMPONENT_ENABLED_STATE_ENABLED

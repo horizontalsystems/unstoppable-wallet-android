@@ -81,6 +81,7 @@ interface ILocalStorage : ILoggingSettings, ISmsNotificationSettings {
     var isCalculatorModeEnabled: Boolean
     val isCalculatorModeEnabledFlow: StateFlow<Boolean>
     var calculatorModeCreatedPin: Boolean
+    var calculatorModeLauncherAliasUpdatePending: Boolean
     var previousAppIconName: String?
     var calculatorThrottleTokens: Int
     var calculatorThrottleLastUptime: Long
