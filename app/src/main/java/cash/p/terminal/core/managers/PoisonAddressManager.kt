@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import cash.p.terminal.core.isEvm
 import cash.p.terminal.core.storage.PoisonAddressDao
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
@@ -33,6 +34,7 @@ class PoisonAddressManager(
     companion object {
         private const val SIMILARITY_CHARS = 3
         private const val WHITELIST_MIN_SEND_COUNT = 3
+        private const val SIMILARITY_MIN_SEND_COUNT = 1
     }
 
     @Suppress("ReturnCount")
@@ -56,7 +58,7 @@ class PoisonAddressManager(
         if (isWhitelisted(existing)) return PoisonStatus.BLOCKCHAIN
         if (existing?.type == PoisonAddressType.SCAM) return PoisonStatus.SUSPICIOUS
 
-        if (isSimilarToKnown(normalized, getKnownAddresses(blockchainType, accountId))) {
+        if (isSimilarToKnown(normalized, getKnownAddresses(blockchainType, accountId), blockchainType)) {
             saveScamAddress(normalized, blockchainType, accountId)
             return PoisonStatus.SUSPICIOUS
         }
@@ -118,7 +120,7 @@ class PoisonAddressManager(
         if (isWhitelisted(existing)) return false
         if (isInAddressBook(normalized, blockchainType)) return false
 
-        return isSimilarToKnown(normalized, getKnownAddresses(blockchainType, accountId))
+        return isSimilarToKnown(normalized, getKnownAddresses(blockchainType, accountId), blockchainType)
     }
 
     fun saveKnownAddress(address: String, blockchainType: BlockchainType, accountId: String) {
@@ -202,24 +204,55 @@ class PoisonAddressManager(
 
     private fun isSimilarToKnown(
         normalizedAddress: String,
-        knownAddresses: List<String>
+        knownAddresses: List<String>,
+        blockchainType: BlockchainType,
     ): Boolean {
-        if (normalizedAddress.length < SIMILARITY_CHARS * 2) return false
-        val prefix = normalizedAddress.take(SIMILARITY_CHARS)
+        val prefixChars = prefixCharsToMatch(blockchainType)
+        if (normalizedAddress.length < prefixChars + SIMILARITY_CHARS) return false
+        val prefix = normalizedAddress.take(prefixChars)
         val suffix = normalizedAddress.takeLast(SIMILARITY_CHARS)
         return knownAddresses.any { known ->
             known != normalizedAddress &&
-                    known.take(SIMILARITY_CHARS) == prefix &&
+                    known.take(prefixChars) == prefix &&
                     known.takeLast(SIMILARITY_CHARS) == suffix
         }
+    }
+
+    /**
+     * Number of leading characters that must match for a prefix to be considered similar.
+     *
+     * Some chains begin every address with a constant, auto-generated service prefix
+     * (e.g. EVM `0x`, Tron `T`). Matching that prefix is effectively free for an attacker,
+     * so it must not count as meaningful entropy. Instead of stripping the prefix we extend
+     * the comparison window by its length, keeping [SIMILARITY_CHARS] significant characters
+     * after it.
+     */
+    private fun prefixCharsToMatch(blockchainType: BlockchainType): Int =
+        SIMILARITY_CHARS + constantPrefixLength(blockchainType)
+
+    /**
+     * Length of the constant service prefix for chains in scope (EVM and account-based chains).
+     *
+     * Only the prefix *length* is used, not the exact characters — the length is stable across
+     * a chain's address sub-formats (TON bounceable/non-bounceable `EQ`/`UQ`/`kQ`/`0Q` are all
+     * 2 chars, Monero standard/subaddress `4`/`8` are both 1). This is a per-chain
+     * approximation; UTXO chains are intentionally out of scope and keep the default window.
+     */
+    private fun constantPrefixLength(blockchainType: BlockchainType): Int = when {
+        blockchainType.isEvm -> 2                       // "0x"
+        blockchainType == BlockchainType.Tron -> 1      // "T"
+        blockchainType == BlockchainType.Stellar -> 1   // "G" (and muxed "M")
+        blockchainType == BlockchainType.Ton -> 2       // "EQ" / "UQ" and other 2-char forms
+        blockchainType == BlockchainType.Monero -> 1    // "4" / "8"
+        else -> 0
     }
 
     private fun getKnownAddresses(
         blockchainType: BlockchainType,
         accountId: String,
     ): List<String> {
-        val whitelisted = poisonAddressDao
-            .getWhitelisted(blockchainType.uid, accountId, WHITELIST_MIN_SEND_COUNT)
+        val knownAddresses = poisonAddressDao
+            .getWhitelisted(blockchainType.uid, accountId, SIMILARITY_MIN_SEND_COUNT)
             .map { it.address }
         val contactAddresses = contactsRepository
             .getContactsFiltered(blockchainType = blockchainType)
@@ -228,6 +261,6 @@ class PoisonAddressManager(
                     .filter { it.blockchain.type == blockchainType }
                     .map { it.address.lowercase() }
             }
-        return whitelisted + contactAddresses
+        return knownAddresses + contactAddresses
     }
 }
