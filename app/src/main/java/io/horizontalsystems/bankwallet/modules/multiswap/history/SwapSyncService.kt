@@ -78,7 +78,7 @@ class SwapSyncService(
             val currentStatus = runCatching { SwapStatus.valueOf(record.status) }.getOrNull()
             val newPauseReason = response.meta?.pauseReason?.takeIf { mappedStatus == SwapStatus.ActionRequired }
             val statusChanged = mappedStatus != null && mappedStatus != currentStatus
-            val pauseReasonChanged = newPauseReason != record.pauseReason
+            val pauseReasonChanged = mappedStatus != null && newPauseReason != record.pauseReason
 
             if (!statusChanged && !pauseReasonChanged) return
 

@@ -251,7 +251,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 sendingTxUrl = uiState.sendingTxUrl,
             )
 
-            if (uiState.status == SwapStatus.Failed || uiState.status == SwapStatus.ActionRequired) {
+            if (uiState.status == SwapStatus.ActionRequired) {
                 VSpacer(16.dp)
                 AlertCard(
                     modifier = Modifier.padding(horizontal = 16.dp),

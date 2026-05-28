@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -255,7 +256,13 @@ class RequestRefundViewModel(
     )
 
     init {
-        viewModelScope.launch(Dispatchers.IO) { load() }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                load()
+            } catch (e: Throwable) {
+                Log.e("RequestRefundViewModel", "Failed to load refund details", e)
+            }
+        }
     }
 
     private suspend fun load() {
