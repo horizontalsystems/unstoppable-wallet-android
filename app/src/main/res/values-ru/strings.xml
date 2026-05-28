@@ -1726,4 +1726,12 @@
     <string name="RiskLevel_Excellent_Description">Прямое исполнение в сети. Без проверок провайдера или замораживания. Автоматический возврат при неудаче свопа.</string>
     <string name="RiskLevel_Good_Description">Провайдер автоматически проверяет транзакции перед завершением. При обнаружении проблем своп отклоняется и средства возвращаются.</string>
     <string name="RiskLevel_Fair_Description">Для некоторых транзакций может потребоваться дополнительная проверка. При обнаружении проблем средства обычно возвращаются автоматически.</string>
+    <string name="SwapInfo_RequestRefund">Запросить возврат</string>
+    <string name="SwapInfo_RequestRefundDescription">Провайдеру нужны подробности вашего обмена для обработки возврата. Они будут включены при обращении к провайдеру.</string>
+    <string name="SwapInfo_SwapId">ID обмена</string>
+    <string name="SwapInfo_Amount">Сумма</string>
+    <string name="SwapInfo_RefundAddress">Адрес возврата</string>
+    <string name="SwapInfo_CopyDetails">Копировать детали</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Обмен остановлен провайдером</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Ваш депозит получен, но провайдер не смог завершить обмен. Запросите возврат ниже, чтобы вернуть свои средства.</string>
 </resources>

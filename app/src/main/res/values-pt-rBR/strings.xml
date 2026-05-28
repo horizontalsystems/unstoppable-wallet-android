@@ -1724,4 +1724,12 @@
     <string name="RiskLevel_Excellent_Description">Execução direta na cadeia. Sem verificações ou congelamentos do provedor. Reembolsos automáticos se o swap falhar.</string>
     <string name="RiskLevel_Good_Description">O provedor verifica automaticamente as transações antes da conclusão. Se problemas forem detectados, o swap é rejeitado e os fundos são reembolsados.</string>
     <string name="RiskLevel_Fair_Description">Verificação adicional pode ser necessária para algumas transações. Se problemas forem detectados, os fundos serão reembolsados automaticamente.</string>
+    <string name="SwapInfo_RequestRefund">Solicitar reembolso</string>
+    <string name="SwapInfo_RequestRefundDescription">O provedor precisa dos detalhes do seu swap para processar um reembolso. Eles serão incluídos quando você entrar em contato com o provedor.</string>
+    <string name="SwapInfo_SwapId">ID do Swap</string>
+    <string name="SwapInfo_Amount">Quantidade</string>
+    <string name="SwapInfo_RefundAddress">Endereço de reembolso</string>
+    <string name="SwapInfo_CopyDetails">Copiar detalhes</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Swap interrompido pelo provedor</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Seu depósito foi recebido, mas o provedor não conseguiu concluir o swap. Solicite um reembolso abaixo para recuperar seus fundos.</string>
 </resources>
