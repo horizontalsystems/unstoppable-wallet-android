@@ -37,13 +37,13 @@ class SwapRecordManager(
         return swapRecordDao.getById(id)
     }
 
-    fun updateStatus(id: Int, status: SwapStatus) {
-        swapRecordDao.updateStatus(id, status.name)
+    fun updateStatus(id: Int, status: SwapStatus, pauseReason: String?) {
+        swapRecordDao.updateStatus(id, status.name, pauseReason)
         _recordsUpdatedFlow.tryEmit(Unit)
     }
 
-    fun updateStatusAndAmountOut(id: Int, status: SwapStatus, amountOut: String) {
-        swapRecordDao.updateStatusAndAmountOut(id, status.name, amountOut)
+    fun updateStatusAndAmountOut(id: Int, status: SwapStatus, amountOut: String, pauseReason: String?) {
+        swapRecordDao.updateStatusAndAmountOut(id, status.name, amountOut, pauseReason)
         _recordsUpdatedFlow.tryEmit(Unit)
     }
 

@@ -623,8 +623,21 @@ interface UnstoppableAPI {
 
     object Response {
         data class Provider(
-            val provider: String
-        )
+            val provider: String,
+            val name: String? = null,
+            val supportedChainIds: List<String> = emptyList(),
+            val amlPolicy: String? = null,
+            val amlPolicyDescription: String? = null,
+            val contacts: Contacts? = null,
+        ) {
+            data class Contacts(
+                val email: String? = null,
+                val telegram: String? = null,
+                val twitter: String? = null,
+                val website: String? = null,
+                val discord: String? = null,
+            )
+        }
 
         data class Tokens(
             val tokens: List<Token>,
@@ -672,7 +685,7 @@ interface UnstoppableAPI {
         }
 
         data class Track(
-            val status: String, // not_started, pending, swapping, completed, refunded, unknown, failed
+            val status: String, // not_started, pending, swapping, completed, refunded, unknown, failed, action_required
             val type: String?,
             val hash: String?,
             val chainId: String?,
@@ -683,6 +696,7 @@ interface UnstoppableAPI {
             val toAmount: String?,
             val toAddress: String?,
             val legs: List<Leg>?,
+            val meta: Meta? = null,
         ) {
             data class Leg(
                 val type: String,   // "swap" | "native_send"
@@ -695,6 +709,11 @@ interface UnstoppableAPI {
                 val toAsset: String?,
                 val toAmount: String?,
                 val toAddress: String?,
+            )
+
+            data class Meta(
+                val provider: String?,
+                val pauseReason: String?, // "overdue_with_funds" | "aml" | "frozen"
             )
         }
     }

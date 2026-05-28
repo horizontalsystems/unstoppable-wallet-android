@@ -20,11 +20,11 @@ interface SwapRecordDao {
     @Query("SELECT * FROM SwapRecord WHERE id = :id")
     fun getById(id: Int): SwapRecord?
 
-    @Query("UPDATE SwapRecord SET status = :status WHERE id = :id")
-    fun updateStatus(id: Int, status: String)
+    @Query("UPDATE SwapRecord SET status = :status, pauseReason = :pauseReason WHERE id = :id")
+    fun updateStatus(id: Int, status: String, pauseReason: String?)
 
-    @Query("UPDATE SwapRecord SET status = :status, amountOut = :amountOut WHERE id = :id")
-    fun updateStatusAndAmountOut(id: Int, status: String, amountOut: String)
+    @Query("UPDATE SwapRecord SET status = :status, amountOut = :amountOut, pauseReason = :pauseReason WHERE id = :id")
+    fun updateStatusAndAmountOut(id: Int, status: String, amountOut: String, pauseReason: String?)
 
     @Query("UPDATE SwapRecord SET transactionHash = :hash WHERE id = :id")
     fun updateTransactionHash(id: Int, hash: String)
