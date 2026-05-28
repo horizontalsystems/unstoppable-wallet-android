@@ -73,6 +73,13 @@ class PendingTransactionRepository(
             storage.getPendingForWallet(walletId)
         }
 
+    suspend fun markBalanceConfirmed(ids: List<String>) = mutex.withLock {
+        withContext(dispatcherProvider.io) {
+            storage.markBalanceConfirmed(ids, System.currentTimeMillis())
+            startCleanupJob()
+        }
+    }
+
     suspend fun deleteById(id: String) = mutex.withLock {
         withContext(dispatcherProvider.io) {
             storage.deleteById(id)
@@ -106,7 +113,7 @@ class PendingTransactionRepository(
             nonce = draft.nonce,
             memo = draft.memo,
             createdAt = draft.timestamp,
-            expiresAt = draft.timestamp + TimeUnit.HOURS.toMillis(1)
+            expiresAt = draft.timestamp + TimeUnit.HOURS.toMillis(1),
         )
     }
 

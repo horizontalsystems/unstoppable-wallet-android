@@ -9,6 +9,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.isLitecoinMweb
 import cash.p.terminal.wallet.entities.BalanceData
 import io.horizontalsystems.core.DispatcherProvider
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -25,6 +26,10 @@ class PendingBalanceCalculator(
     private val pendingRepository: PendingTransactionRepository,
     dispatcherProvider: DispatcherProvider
 ) : Clearable {
+    private companion object {
+        val CONFIRMATION_BALANCE_TOLERANCE_RATE = BigDecimal("0.05")
+    }
+
     private val pendingCache = ConcurrentHashMap<String, List<PendingTransactionEntity>>()
     private val observingJobs = ConcurrentHashMap<String, Job>()
     private val scope = CoroutineScope(SupervisorJob() + dispatcherProvider.io)
@@ -81,29 +86,20 @@ class PendingBalanceCalculator(
         token: Token,
         currentSdkBalance: BigDecimal
     ): BigDecimal {
-        val relevantPending = pendingList.filter {
-            it.coinUid == token.coin.uid &&
-                it.tokenTypeId == token.type.id &&
-                it.blockchainTypeUid == token.blockchainType.uid
-        }
+        val relevantPending = pendingList.filter { it.matches(token) }
         if (relevantPending.isEmpty()) return currentSdkBalance
 
         // Fee is only deducted from native token balance (not ERC-20/TRC-20/Jetton)
         val isNativeToken = token.type.isNative
 
         // 1. Calculate total pending amount (amount + fee for native tokens only)
-        val totalPendingAmount = relevantPending.sumOf { entity ->
-            val amount = entity.amountAtomic.toBigDecimal().movePointLeft(token.decimals)
-            val fee = if (isNativeToken) {
-                entity.feeAtomic?.toBigDecimal()?.movePointLeft(token.decimals)
-                    ?: BigDecimal.ZERO
-            } else BigDecimal.ZERO
-            amount + fee
+        val totalPendingAmount = relevantPending.sumOf {
+            it.amountWithFee(token.decimals, isNativeToken)
         }
 
         // 2. Get baseline SDK balance (max from all pending - earliest "clean" balance)
         val baselineSdkBalance = relevantPending.maxOf { entity ->
-            entity.sdkBalanceAtCreationAtomic.toBigDecimal().movePointLeft(token.decimals)
+            entity.sdkBalanceAtCreation(token.decimals)
         }
 
         // 3. How much has SDK already deducted from baseline?
@@ -116,7 +112,8 @@ class PendingBalanceCalculator(
         val ourDeduction = (totalPendingAmount - sdkAlreadyDeducted)
             .coerceAtLeast(BigDecimal.ZERO)
         val adjustedAfterDeduction = currentSdkBalance - ourDeduction.coerceAtMost(currentSdkBalance)
-        val expectedMwebAvailable = if (token.isLitecoinMweb) {
+        val isLitecoinMweb = token.isLitecoinMweb
+        val expectedMwebAvailable = if (isLitecoinMweb) {
             (baselineSdkBalance - totalPendingAmount).coerceAtLeast(BigDecimal.ZERO)
         } else {
             null
@@ -125,37 +122,90 @@ class PendingBalanceCalculator(
             currentSdkBalance.signum() == 0 && it.signum() > 0
         }
 
-        // 5. Check for confirmed TXs to cleanup (per-TX confirmation detection)
-        // Collect IDs first to avoid race condition during async deletion
-        val idsToDelete = if (expectedMwebAvailable != null) {
-            // MWEB replaces spent confirmed inputs with unconfirmed change right after broadcast.
-            emptyList()
-        } else {
-            relevantPending.filter { entity ->
-                // Without a tx hash, this pending entry is the only link used to mark
-                // the later real transaction as locally created.
-                if (entity.txHash.isNullOrBlank()) {
-                    return@filter false
-                }
+        cleanupConfirmedPending(
+            relevantPending = relevantPending,
+            decimals = token.decimals,
+            isNativeToken = isNativeToken,
+            currentSdkBalance = currentSdkBalance,
+            skipCleanupForMweb = isLitecoinMweb,
+        )
 
-                val amount = entity.amountAtomic.toBigDecimal().movePointLeft(token.decimals)
-                val fee = if (isNativeToken) {
-                    entity.feeAtomic?.toBigDecimal()?.movePointLeft(token.decimals)
-                        ?: BigDecimal.ZERO
-                } else BigDecimal.ZERO
-                val sdkAtCreation = entity.sdkBalanceAtCreationAtomic.toBigDecimal()
-                    .movePointLeft(token.decimals)
-                val expectedAfterConfirm = sdkAtCreation - amount - fee
-                val tolerance = (amount + fee) * BigDecimal("0.05") // 5% tolerance
-                (currentSdkBalance - expectedAfterConfirm).abs() <= tolerance
-            }.map { it.id }
+        return mwebZeroSnapshotFallbackAvailable ?: adjustedAfterDeduction
+    }
+
+    private fun cleanupConfirmedPending(
+        relevantPending: List<PendingTransactionEntity>,
+        decimals: Int,
+        isNativeToken: Boolean,
+        currentSdkBalance: BigDecimal,
+        skipCleanupForMweb: Boolean,
+    ) {
+        if (skipCleanupForMweb) {
+            // MWEB replaces spent confirmed inputs with unconfirmed change right after broadcast.
+            return
         }
-        if (idsToDelete.isNotEmpty()) {
-            scope.launch {
-                tryOrNull { pendingRepository.deleteByIds(idsToDelete) }
+
+        val idsToDelete = mutableListOf<String>()
+        val idsToMarkBalanceConfirmed = mutableListOf<String>()
+
+        relevantPending.forEach { entity ->
+            if (!entity.isConfirmedByBalance(decimals, isNativeToken, currentSdkBalance)) {
+                return@forEach
+            }
+
+            if (entity.txHash.isNullOrBlank()) {
+                if (entity.blockchainTypeUid == BlockchainType.Ton.uid) {
+                    // TON does not return a hash at broadcast, so the row must remain matchable.
+                    idsToMarkBalanceConfirmed.add(entity.id)
+                }
+            } else {
+                idsToDelete.add(entity.id)
             }
         }
 
-        return mwebZeroSnapshotFallbackAvailable ?: adjustedAfterDeduction
+        if (idsToDelete.isEmpty() && idsToMarkBalanceConfirmed.isEmpty()) return
+
+        scope.launch {
+            if (idsToDelete.isNotEmpty()) {
+                tryOrNull { pendingRepository.deleteByIds(idsToDelete) }
+            }
+            if (idsToMarkBalanceConfirmed.isNotEmpty()) {
+                tryOrNull { pendingRepository.markBalanceConfirmed(idsToMarkBalanceConfirmed) }
+            }
+        }
+    }
+
+    private fun PendingTransactionEntity.matches(token: Token): Boolean {
+        return coinUid == token.coin.uid &&
+            tokenTypeId == token.type.id &&
+            blockchainTypeUid == token.blockchainType.uid
+    }
+
+    private fun PendingTransactionEntity.isConfirmedByBalance(
+        decimals: Int,
+        isNativeToken: Boolean,
+        currentSdkBalance: BigDecimal,
+    ): Boolean {
+        val amountWithFee = amountWithFee(decimals, isNativeToken)
+        val expectedAfterConfirm = sdkBalanceAtCreation(decimals) - amountWithFee
+        val tolerance = amountWithFee * CONFIRMATION_BALANCE_TOLERANCE_RATE
+        return (currentSdkBalance - expectedAfterConfirm).abs() <= tolerance
+    }
+
+    private fun PendingTransactionEntity.amountWithFee(
+        decimals: Int,
+        isNativeToken: Boolean,
+    ): BigDecimal {
+        val amount = amountAtomic.toBigDecimal().movePointLeft(decimals)
+        val fee = if (isNativeToken) {
+            feeAtomic?.toBigDecimal()?.movePointLeft(decimals) ?: BigDecimal.ZERO
+        } else {
+            BigDecimal.ZERO
+        }
+        return amount + fee
+    }
+
+    private fun PendingTransactionEntity.sdkBalanceAtCreation(decimals: Int): BigDecimal {
+        return sdkBalanceAtCreationAtomic.toBigDecimal().movePointLeft(decimals)
     }
 }

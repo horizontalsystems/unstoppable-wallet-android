@@ -163,6 +163,7 @@ class PendingBalanceCalculatorTest {
         advanceUntilIdle()
 
         coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+        coVerify(exactly = 0) { pendingRepository.markBalanceConfirmed(any()) }
     }
 
     @Test
@@ -188,6 +189,7 @@ class PendingBalanceCalculatorTest {
             adjusted.available.stripTrailingZeros()
         )
         coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+        coVerify(exactly = 0) { pendingRepository.markBalanceConfirmed(any()) }
     }
 
     @Test
@@ -206,11 +208,14 @@ class PendingBalanceCalculatorTest {
         val rawBalance = BalanceData(available = BigDecimal("0.014"))
 
         val adjusted = calculator.adjustBalance(wallet, rawBalance)
+        advanceUntilIdle()
 
         assertEquals(
             BigDecimal("0.014").stripTrailingZeros(),
             adjusted.available.stripTrailingZeros()
         )
+        coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+        coVerify(exactly = 0) { pendingRepository.markBalanceConfirmed(any()) }
     }
 
     @Test
@@ -231,25 +236,58 @@ class PendingBalanceCalculatorTest {
         val rawBalance = BalanceData(available = BigDecimal("0.015"))
 
         val adjusted = calculator.adjustBalance(wallet, rawBalance)
+        advanceUntilIdle()
 
         assertEquals(
             BigDecimal("0.015").stripTrailingZeros(),
             adjusted.available.stripTrailingZeros()
         )
+        coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+        coVerify(exactly = 0) { pendingRepository.markBalanceConfirmed(any()) }
     }
 
     @Test
-    fun adjustBalance_pendingWithoutTxHashSdkDeductedImmediately_doesNotDeletePending() = runTest(dispatcher) {
+    fun adjustBalance_hashlessTonSdkDeductedImmediately_marksBalanceConfirmed() = runTest(dispatcher) {
         val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
         calculator.onPendingInserted(createPendingEntity("ton-pending-without-hash"))
 
         val wallet = createMockWallet()
         val rawBalance = BalanceData(available = BigDecimal("7.2657"))
 
-        calculator.adjustBalance(wallet, rawBalance)
+        val adjusted = calculator.adjustBalance(wallet, rawBalance)
         advanceUntilIdle()
 
+        assertEquals(
+            rawBalance.available.stripTrailingZeros(),
+            adjusted.available.stripTrailingZeros()
+        )
         coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+        coVerify(exactly = 1) { pendingRepository.markBalanceConfirmed(listOf("ton-pending-without-hash")) }
+    }
+
+    @Test
+    fun adjustBalance_afterBalanceConfirmed_subsequentIncomingNotAbsorbed() = runTest(dispatcher) {
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        val wallet = createMockWallet()
+
+        calculator.startObserving("account-1")
+        pendingFlow.value = listOf(createPendingEntity("ton-pending-without-hash"))
+        advanceUntilIdle()
+
+        calculator.adjustBalance(wallet, BalanceData(available = BigDecimal("7.2657")))
+        advanceUntilIdle()
+
+        pendingFlow.value = emptyList()
+        advanceUntilIdle()
+
+        val afterIncoming = calculator.adjustBalance(wallet, BalanceData(available = BigDecimal("12.2657")))
+
+        assertEquals(
+            BigDecimal("12.2657").stripTrailingZeros(),
+            afterIncoming.available.stripTrailingZeros()
+        )
+        coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+        coVerify(exactly = 1) { pendingRepository.markBalanceConfirmed(listOf("ton-pending-without-hash")) }
     }
 
     @Test
@@ -269,6 +307,7 @@ class PendingBalanceCalculatorTest {
         advanceUntilIdle()
 
         coVerify(exactly = 1) { pendingRepository.deleteByIds(listOf("ton-pending-with-hash")) }
+        coVerify(exactly = 0) { pendingRepository.markBalanceConfirmed(any()) }
     }
 
     private fun createMockWallet(): Wallet {
