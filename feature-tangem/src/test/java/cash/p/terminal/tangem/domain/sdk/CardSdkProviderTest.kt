@@ -9,12 +9,13 @@ import com.tangem.common.authentication.AuthenticationManager
 import com.tangem.sdk.nfc.NfcManager
 import com.tangem.sdk.nfc.NfcReader
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.IPinComponent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -25,10 +26,14 @@ class CardSdkProviderTest {
 
     private val backgroundManager: BackgroundManager = mockk(relaxed = true)
     private val sdkInitializer: SdkInitializer = mockk()
+    private val isLockedFlow = MutableStateFlow(false)
+    private val pinComponent: IPinComponent = mockk(relaxed = true) {
+        every { isLockedFlow } returns this@CardSdkProviderTest.isLockedFlow
+    }
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
@@ -46,13 +51,45 @@ class CardSdkProviderTest {
         every { sdkInitializer.create(activity1) } returns components1
         every { sdkInitializer.create(activity2) } returns components2
 
-        val provider = CardSdkProvider(backgroundManager, sdkInitializer)
+        val provider = CardSdkProvider(backgroundManager, pinComponent, sdkInitializer)
 
         provider.register(activity1)
         provider.register(activity2)
 
         verify { components1.nfcManager.onStop(activity1) }
         verify { components1.nfcManager.onDestroy(activity1) }
+    }
+
+    @Test
+    fun isLockedFlow_emitsTrue_stopsActiveNfcSession() {
+        val activity = mockActivity()
+        val components = mockComponents()
+
+        every { sdkInitializer.create(activity) } returns components
+
+        val provider = CardSdkProvider(backgroundManager, pinComponent, sdkInitializer)
+        provider.register(activity)
+
+        val reader = components.nfcManager.reader
+        isLockedFlow.value = true
+
+        verify { reader.stopSession(cancelled = true) }
+    }
+
+    @Test
+    fun isLockedFlow_emitsFalse_doesNotStopNfcSession() {
+        val activity = mockActivity()
+        val components = mockComponents()
+
+        every { sdkInitializer.create(activity) } returns components
+
+        val provider = CardSdkProvider(backgroundManager, pinComponent, sdkInitializer)
+        provider.register(activity)
+
+        val reader = components.nfcManager.reader
+        isLockedFlow.value = false
+
+        verify(exactly = 0) { reader.stopSession(any()) }
     }
 
     @Test
@@ -65,7 +102,7 @@ class CardSdkProviderTest {
         every { lifecycle.addObserver(capture(observerSlot)) } returns Unit
         every { sdkInitializer.create(activity) } returns components
 
-        val provider = CardSdkProvider(backgroundManager, sdkInitializer)
+        val provider = CardSdkProvider(backgroundManager, pinComponent, sdkInitializer)
         provider.register(activity)
 
         val cardSdkObserver = observerSlot.captured as DefaultLifecycleObserver
