@@ -9,6 +9,7 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
+import cash.p.terminal.core.managers.isTonConnectDeeplink
 import cash.p.terminal.core.usecase.CheckGooglePlayUpdateUseCase
 import cash.p.terminal.core.usecase.UpdateResult
 import cash.p.terminal.core.utils.AddressUriParser
@@ -425,12 +426,7 @@ class MainViewModel(
     }
 
     fun handleDeepLink(uri: Uri) {
-        val deeplinkString = uri.toString()
-        if (
-            deeplinkString.startsWith("pcash.money:")
-            || deeplinkString.startsWith("tc:")
-            || (uri.scheme == "pcash" && uri.host == "ton-connect")
-        ) {
+        if (uri.isTonConnectDeeplink()) {
             val returnParam = uri.getQueryParameterSafe("ret")
             // when app is opened from camera app, it returns "none" as ret param
             // so we don't need closing app in this case
@@ -441,6 +437,7 @@ class MainViewModel(
             return
         }
 
+        val deeplinkString = uri.toString()
         if (
             deeplinkString.startsWith("bitcoin:")
             || deeplinkString.startsWith("ethereum:")
