@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -36,7 +35,6 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
@@ -104,20 +102,6 @@ fun BalanceForAccount(
 
                 WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                     navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
-                }
-
-                is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                    val text =
-                        Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                    navController.slideFromBottom(
-                        R.id.backupRequiredDialog,
-                        BackupRequiredDialog.Input(state.account, text)
-                    )
-
-                    stat(
-                        page = StatPage.Balance,
-                        event = StatEvent.Open(StatPage.BackupRequired)
-                    )
                 }
 
                 is WCManager.SupportState.NotSupported -> {
