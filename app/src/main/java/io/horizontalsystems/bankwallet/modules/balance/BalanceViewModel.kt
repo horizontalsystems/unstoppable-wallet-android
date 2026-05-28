@@ -277,14 +277,6 @@ class BalanceViewModel(
         else -> SyncError.NetworkNotAvailable()
     }
 
-    fun getReceiveAllowedState(): ReceiveAllowedState? {
-        val tmpAccount = service.account ?: return null
-        return when {
-            tmpAccount.hasAnyBackup -> ReceiveAllowedState.Allowed
-            else -> ReceiveAllowedState.BackupRequired(tmpAccount)
-        }
-    }
-
     fun getWalletConnectSupportState(): WCManager.SupportState {
         return wCManager.getWalletConnectSupportState()
     }
@@ -402,13 +394,6 @@ class BalanceViewModel(
         class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
     }
 }
-
-sealed class ReceiveAllowedState {
-    object Allowed : ReceiveAllowedState()
-    data class BackupRequired(val account: Account) : ReceiveAllowedState()
-}
-
-class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")
 
 data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem2>,
