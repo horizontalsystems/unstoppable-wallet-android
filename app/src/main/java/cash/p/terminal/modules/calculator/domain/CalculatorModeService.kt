@@ -29,20 +29,33 @@ class CalculatorModeService(
         appIconService.setAppIcon(AppIcon.Calculator)
     }
 
-    fun disable() {
+    fun disable(keepPin: Boolean = false) {
         if (!localStorage.isCalculatorModeEnabled) return
-        val previousIcon = localStorage.previousAppIconName
-            ?.let(AppIcon::fromString)
-            ?: AppIcon.Main
-        disableAndSwitchTo(previousIcon)
+        disableAndSwitchTo(previousAppIcon(), keepPin)
     }
 
-    fun disableAndSwitchTo(newIcon: AppIcon) {
-        val shouldClearPin = localStorage.calculatorModeCreatedPin
+    fun disableAfterPremiumLoss() {
+        if (!localStorage.isCalculatorModeEnabled) return
+
+        appIconService.setAppIcon(
+            appIcon = previousAppIcon(),
+            updateLauncherAliases = false,
+        )
+        localStorage.calculatorModeCreatedPin = false
+        localStorage.calculatorModeLauncherAliasUpdatePending = true
+    }
+
+    fun disableAndSwitchTo(newIcon: AppIcon, keepPin: Boolean = false) {
+        val shouldClearPin = !keepPin && localStorage.calculatorModeCreatedPin
         appIconService.setAppIcon(newIcon)
         if (shouldClearPin) {
             pinComponent.disablePin()
         }
         localStorage.calculatorModeCreatedPin = false
     }
+
+    private fun previousAppIcon(): AppIcon =
+        localStorage.previousAppIconName
+            ?.let(AppIcon::fromString)
+            ?: AppIcon.Main
 }

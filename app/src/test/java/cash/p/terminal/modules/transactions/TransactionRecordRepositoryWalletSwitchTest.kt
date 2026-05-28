@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.TestDispatcherProvider
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -137,7 +138,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
-            locallyCreatedTransactionRepository = mockk(relaxed = true),
+            locallyCreatedTransactionRepository = relaxedLocallyCreatedRepository(),
             dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
         )
 
@@ -254,7 +255,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
-            locallyCreatedTransactionRepository = mockk(relaxed = true),
+            locallyCreatedTransactionRepository = relaxedLocallyCreatedRepository(),
             dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
         )
 
@@ -450,7 +451,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             pendingRepository = emptyPendingRepository(),
             pendingConverter = mockk(relaxed = true),
             pendingTransactionMatcher = PendingTransactionMatcher(),
-            locallyCreatedTransactionRepository = mockk(relaxed = true),
+            locallyCreatedTransactionRepository = relaxedLocallyCreatedRepository(),
             dispatcherProvider = dispatcherProvider
         )
 
@@ -524,9 +525,12 @@ class TransactionRecordRepositoryWalletSwitchTest {
         pendingRepository = emptyPendingRepository(),
         pendingConverter = mockk(relaxed = true),
         pendingTransactionMatcher = PendingTransactionMatcher(),
-        locallyCreatedTransactionRepository = mockk(relaxed = true),
+        locallyCreatedTransactionRepository = relaxedLocallyCreatedRepository(),
         dispatcherProvider = TestDispatcherProvider(dispatcher, scope)
     )
+
+    private fun relaxedLocallyCreatedRepository() =
+        mockk<LocallyCreatedTransactionRepository>(relaxed = true)
 
     private fun createToken(): Token {
         val coin = Coin(uid = "bitcoin", name = "Bitcoin", code = "BTC")
