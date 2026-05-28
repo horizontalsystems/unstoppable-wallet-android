@@ -39,4 +39,5 @@ data class SwapRecord(
     val toAsset: String?,
     val depositAddress: String?,
     val status: String,
+    val pauseReason: String? = null,
 )
