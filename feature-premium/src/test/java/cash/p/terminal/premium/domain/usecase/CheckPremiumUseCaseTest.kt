@@ -695,6 +695,85 @@ class CheckPremiumUseCaseTest {
     }
 
     @Test
+    fun update_offlineWithStaleCachedPremium_returnsCachedPremiumNotNone() = runTest(dispatcher) {
+        val account = mnemonicAccount()
+
+        stubActiveAccount(account)
+
+        // Stale lastCheckDate forces the full balance-check path (skips checkCachedPremiumStatus).
+        val staleCachedUser = PremiumUser(
+            level = 1,
+            accountId = account.id,
+            address = "0xcached",
+            lastCheckDate = System.currentTimeMillis() - PremiumConfig.PREMIUM_CHECK_INTERVAL - 1000,
+            coinType = PremiumConfig.COIN_TYPE_PIRATE,
+            isPremium = PremiumType.PIRATE
+        )
+        coEvery { premiumUserRepository.getByLevel(1) } returns staleCachedUser
+        coEvery { premiumUserRepository.getByLevel(0) } returns null
+        coEvery { premiumUserRepository.insert(any()) } returns Unit
+        coEvery { premiumUserRepository.deleteByAccount(any()) } returns Unit
+
+        coEvery { checkTrialPremiumUseCase.checkTrialPremiumStatus(account) } returns TrialPremiumResult.NeedPremium
+        every { checkAdapterPremiumBalanceUseCase.invoke() } returns null
+
+        coEvery { getBnbAddressUseCase.deleteExcludeAccountIds(any()) } returns Unit
+        coEvery { getBnbAddressUseCase.getAddress(account, any()) } returns "0xcached"
+        coEvery { getBnbAddressUseCase.getAddress(account) } returns "0xcached"
+
+        // Simulate offline: both balance providers fail to deliver a value.
+        coEvery { binanceApi.getTokenBalance(any(), any()) } returns null
+        coEvery { piratePlaceRepository.getInvestmentData(any(), any()) } throws IllegalStateException("Offline")
+
+        coEvery { demoPremiumUserDao.hasActiveTrialPremium() } returns false
+
+        useCase = createUseCase()
+        advanceUntilIdle()
+
+        val result = useCase.update()
+
+        // Stale cache + unreachable balance providers must preserve the last confirmed
+        // premium rather than collapse to NONE. Otherwise downstream guards (calculator
+        // mode disable) would treat transient network failures as entitlement loss.
+        assertEquals(PremiumType.PIRATE, result)
+    }
+
+    @Test
+    fun update_offlineWithActiveTrialCache_returnsTrialNotNone() = runTest(dispatcher) {
+        val account = mnemonicAccount()
+
+        stubActiveAccount(account)
+
+        coEvery { premiumUserRepository.getByLevel(any()) } returns null
+        coEvery { premiumUserRepository.insert(any()) } returns Unit
+        coEvery { premiumUserRepository.deleteByAccount(any()) } returns Unit
+
+        // Trial use case keeps returning DemoActive offline thanks to its own Room cache.
+        coEvery {
+            checkTrialPremiumUseCase.checkTrialPremiumStatus(account)
+        } returns TrialPremiumResult.DemoActive(daysLeft = 3)
+        every { checkAdapterPremiumBalanceUseCase.invoke() } returns null
+
+        coEvery { getBnbAddressUseCase.deleteExcludeAccountIds(any()) } returns Unit
+        coEvery { getBnbAddressUseCase.getAddress(account, any()) } returns "0xaddress"
+        coEvery { getBnbAddressUseCase.getAddress(account) } returns "0xaddress"
+
+        coEvery { binanceApi.getTokenBalance(any(), any()) } returns null
+        coEvery { piratePlaceRepository.getInvestmentData(any(), any()) } throws IllegalStateException("Offline")
+
+        coEvery { demoPremiumUserDao.hasActiveTrialPremium() } returns true
+
+        useCase = createUseCase()
+        advanceUntilIdle()
+
+        val result = useCase.update()
+
+        // Trial users must remain TRIAL when balance providers are unreachable, not be
+        // demoted to NONE.
+        assertEquals(PremiumType.TRIAL, result)
+    }
+
+    @Test
     fun `update does not update parent level when at level 0`() = runTest(dispatcher) {
         val account = mnemonicAccount(id = "main-account", level = 0)
 
