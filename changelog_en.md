@@ -1,28 +1,14 @@
-## 🚀 Version 0.55.0 Update
-_Release date: May 14, 2026_
+## 🚀 Version 0.56.0 Update
+_Release date: May 28, 2026_
 
 ### ✨ Improvements
 
-- **Added support for the Trezor hardware wallet**
-  All models are supported for `BTC`, `LTC`, `BCH`, `DOGE`, `ETH`, `BSC`, `Polygon`, `Arbitrum`, `Optimism`, `Base`, and `Stellar`.
-  `Dash` is supported only on `Trezor One` and `Model T`.
-  `Solana` is supported only on `Model T`, `Safe 3`, `Safe 5`, and `Safe 7`.
+- **Added support for MimbleWimble (MWEB) technology for Litecoin**
 
-- **Added a new premium feature: Pseudo Calculator**
-  The app can look and behave like a regular calculator.
-  If the calculation result matches the PIN code, the wallet opens.
+- **Increased privacy in Calculator Mode**
 
-- **Improved the push notification filter for new transactions**
-  Spam transactions are no longer shown in push notifications.
-
-- **The app no longer adds unknown tokens automatically**
-  If a transaction arrives with an unknown token, that asset is no longer added to the wallet automatically.
-  This helps keep unwanted assets hidden.
-
-- **Reworked the display logic for unpaid balances in PirateCash and Cosanta**
-
-- **Reworked recovery behavior for non-English seed phrases**
+- **Improved Address Poisoning protection mode**
 
 ### 🐛 Fixes
 
-- **Fixed stability and performance issues across the app**
+- **Fixed known issues and improved overall app stability**
