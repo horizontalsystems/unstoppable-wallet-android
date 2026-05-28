@@ -29,7 +29,7 @@ import java.util.logging.Logger
         GlobalMarketInfo::class,
         SyncerState::class,
     ],
-    version = 15,
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)
@@ -69,7 +69,7 @@ abstract class MarketDatabase : RoomDatabase() {
                         logger.info("onDestructiveMigration Loaded coins count: $loadedCount")
                     }
                 })
-                .addMigrations(Migration_13_14, Migration_14_15)
+                .addMigrations(Migration_13_14, Migration_14_15, Migration_15_16)
 //                .setQueryCallback({ sqlQuery, bindArgs ->
 //                    println("SQL Query: $sqlQuery SQL Args: $bindArgs")
 //                }, Executors.newSingleThreadExecutor())

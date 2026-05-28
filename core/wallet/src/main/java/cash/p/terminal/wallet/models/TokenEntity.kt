@@ -28,7 +28,8 @@ import kotlinx.parcelize.Parcelize
     ],
     indices = [
         Index(value = arrayOf("coinUid")),
-        Index(value = arrayOf("blockchainUid"))
+        Index(value = arrayOf("blockchainUid")),
+        Index(value = arrayOf("blockchainUid", "type", "reference"))
     ]
 )
 data class TokenEntity(

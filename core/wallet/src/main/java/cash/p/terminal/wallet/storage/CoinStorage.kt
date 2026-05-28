@@ -50,8 +50,11 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
     fun fullCoins(uids: List<String>): List<FullCoin> =
         coinDao.getFullCoins(uids).map { it.fullCoin }
 
-    fun getToken(query: TokenQuery): Token? {
-        val (clause, args) = buildTokenQueryClause(query)
+    fun getToken(query: TokenQuery): Token? =
+        getToken(query, ReferenceMatch.Exact) ?: getToken(query, ReferenceMatch.LegacySuffix)
+
+    private fun getToken(query: TokenQuery, referenceMatch: ReferenceMatch): Token? {
+        val (clause, args) = buildTokenQueryClause(query, referenceMatch) ?: return null
         // Order by marketCapRank to prefer canonical coin when duplicates exist
         val sql = """
             SELECT * FROM TokenEntity
@@ -67,14 +70,33 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
         if (queries.isEmpty()) return listOf()
 
         val uniqueQueries = queries.toSet().toList()
+        val tokens = getTokens(uniqueQueries, ReferenceMatch.Exact)
+        val resolvedQueries = tokens.map { token -> token.tokenQuery }.toSet()
+        val unresolvedQueries = uniqueQueries
+            .filter { it !in resolvedQueries }
+            .filter { it.tokenType.values.reference.isNotBlank() }
+
+        if (unresolvedQueries.isEmpty()) return tokens
+
+        return (tokens + getTokens(unresolvedQueries, ReferenceMatch.LegacySuffix))
+            .distinctBy { it.tokenQuery }
+    }
+
+    private fun getTokens(
+        queries: List<TokenQuery>,
+        referenceMatch: ReferenceMatch
+    ): List<Token> {
         val whereClauses = mutableListOf<String>()
         val args = mutableListOf<Any>()
 
-        uniqueQueries.forEach { query ->
-            val (clause, queryArgs) = buildTokenQueryClause(query)
+        queries.forEach { query ->
+            val (clause, queryArgs) = buildTokenQueryClause(query, referenceMatch)
+                ?: return@forEach
             whereClauses.add(clause)
             args.addAll(queryArgs)
         }
+
+        if (whereClauses.isEmpty()) return listOf()
 
         // Order by marketCapRank to prefer canonical coin when duplicates exist
         val sql = """
@@ -121,15 +143,13 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
     fun getAllBlockchains(): List<Blockchain> =
         coinDao.getAllBlockchains().map { it.blockchain }
 
-    private fun buildTokenQuerySql(query: TokenQuery, limit: Int? = null): Pair<String, Array<Any>> {
-        val (clause, args) = buildTokenQueryClause(query)
-        val sql = "SELECT * FROM TokenEntity WHERE $clause" +
-                (if (limit != null) " LIMIT $limit" else "")
-        return Pair(sql, args.toTypedArray())
-    }
-
-    private fun buildTokenQueryClause(query: TokenQuery): Pair<String, List<Any>> {
+    private fun buildTokenQueryClause(
+        query: TokenQuery,
+        referenceMatch: ReferenceMatch
+    ): Pair<String, List<Any>>? {
         val (type, reference) = query.tokenType.values
+
+        if (referenceMatch == ReferenceMatch.LegacySuffix && reference.isBlank()) return null
 
         val conditions = mutableListOf<String>()
         val args = mutableListOf<Any>()
@@ -141,12 +161,26 @@ class CoinStorage(val marketDatabase: MarketDatabase) {
         args.add(type)
 
         if (reference.isNotBlank()) {
-            conditions.add("`TokenEntity`.`reference` LIKE ?")
-            args.add("%$reference")
+            val referenceCondition = when (referenceMatch) {
+                ReferenceMatch.Exact -> "`TokenEntity`.`reference` = ?"
+                ReferenceMatch.LegacySuffix -> "`TokenEntity`.`reference` LIKE ?"
+            }
+            conditions.add(referenceCondition)
+            args.add(referenceMatch.argument(reference))
         }
 
         val clause = conditions.joinToString(" AND ", "(", ")")
         return Pair(clause, args)
+    }
+
+    private fun ReferenceMatch.argument(reference: String) = when (this) {
+        ReferenceMatch.Exact -> reference
+        ReferenceMatch.LegacySuffix -> "%$reference"
+    }
+
+    private enum class ReferenceMatch {
+        Exact,
+        LegacySuffix
     }
 
     private fun filterWhereStatement() =
