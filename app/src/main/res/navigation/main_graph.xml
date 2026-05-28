@@ -448,6 +448,9 @@
     <dialog
         android:id="@+id/secureSendConfigDialog"
         android:name="io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigDialog" />
+    <dialog
+        android:id="@+id/requestRefundDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.history.RequestRefundDialog" />
 
     <!--Wallet Connect-->
     <fragment
