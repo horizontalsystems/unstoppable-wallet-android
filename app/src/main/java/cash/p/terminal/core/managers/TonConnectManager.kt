@@ -8,6 +8,7 @@ import io.horizontalsystems.tonkit.models.Network
 import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import timber.log.Timber
 
 class TonConnectManager(
     context: Context,
@@ -32,7 +33,7 @@ class TonConnectManager(
             val dAppRequest = kit.readData(scannedText)
             _dappRequestFlow.emit(DAppRequestEntityWrapper(dAppRequest, closeAppOnResult))
         } catch (e: Throwable) {
-
+            Timber.e(e, "Failed to handle TON Connect request")
         }
     }
 }

@@ -56,9 +56,15 @@ class MainActivityViewModel(
     init {
         viewModelScope.launch {
             userManager.currentUserLevelFlow.collect { level ->
-                navigateToMainLiveData.postValue(true)
                 updatePremiumStatus()
                 cleanupExpiredLoginRecords(level)
+            }
+        }
+        viewModelScope.launch {
+            // Only real user-initiated level changes (unlock, biometric, duress, lock) pop to main.
+            // Startup-time level establishment doesn't emit here, so it can't kill deeplink sheets.
+            userManager.userLevelChangedFlow.collect {
+                navigateToMainLiveData.postValue(true)
             }
         }
         viewModelScope.launch {

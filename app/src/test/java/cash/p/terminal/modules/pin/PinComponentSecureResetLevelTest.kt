@@ -61,6 +61,10 @@ class PinComponentSecureResetLevelTest {
             currentUserLevel = firstArg()
             Unit
         }
+        every { userManager.initUserLevel(any()) } answers {
+            currentUserLevel = firstArg()
+            Unit
+        }
         every { userManager.currentUserLevelFlow } returns MutableStateFlow(currentUserLevel)
 
         clearMocks(resetUseCase)
@@ -368,6 +372,20 @@ class PinComponentSecureResetLevelTest {
         // EXPECTATION: currentUserLevel = 0, not 10000
         assertEquals(0, currentUserLevel)
     }
+
+    // region — Contract: initDefaultPinLevel must use the silent init path
+
+    @Test
+    fun initDefaultPinLevel_callsInitUserLevelNotSetUserLevel() {
+        pinComponent.setPin("1234")
+
+        pinComponent.initDefaultPinLevel()
+
+        io.mockk.verify { userManager.initUserLevel(any()) }
+        io.mockk.verify(exactly = 0) { userManager.setUserLevel(any()) }
+    }
+
+    // endregion
 }
 
 private class InMemoryPinDao : PinDao {

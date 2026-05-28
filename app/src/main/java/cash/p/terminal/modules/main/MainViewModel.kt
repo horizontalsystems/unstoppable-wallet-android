@@ -426,7 +426,11 @@ class MainViewModel(
 
     fun handleDeepLink(uri: Uri) {
         val deeplinkString = uri.toString()
-        if (deeplinkString.startsWith("pcash.money:") || deeplinkString.startsWith("tc:")) {
+        if (
+            deeplinkString.startsWith("pcash.money:")
+            || deeplinkString.startsWith("tc:")
+            || (uri.scheme == "pcash" && uri.host == "ton-connect")
+        ) {
             val returnParam = uri.getQueryParameterSafe("ret")
             // when app is opened from camera app, it returns "none" as ret param
             // so we don't need closing app in this case
