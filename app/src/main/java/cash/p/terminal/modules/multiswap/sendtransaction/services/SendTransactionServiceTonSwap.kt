@@ -266,7 +266,7 @@ class SendTransactionServiceTonSwap(
                 fee = null,
                 sdkBalanceAtCreation = sdkBalance,
                 fromAddress = "",  // TON doesn't require from address
-                toAddress = addressState.address!!.hex,
+                toAddress = tonSwapData.routerAddress,
                 txHash = null
             )
             pendingTxId = pendingRegistrar.register(draft)

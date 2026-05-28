@@ -132,6 +132,12 @@ class PendingBalanceCalculator(
             emptyList()
         } else {
             relevantPending.filter { entity ->
+                // Without a tx hash, this pending entry is the only link used to mark
+                // the later real transaction as locally created.
+                if (entity.txHash.isNullOrBlank()) {
+                    return@filter false
+                }
+
                 val amount = entity.amountAtomic.toBigDecimal().movePointLeft(token.decimals)
                 val fee = if (isNativeToken) {
                     entity.feeAtomic?.toBigDecimal()?.movePointLeft(token.decimals)

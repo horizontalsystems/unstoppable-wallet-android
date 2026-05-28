@@ -246,7 +246,7 @@ class TransactionAdapterWrapper(
             val pendingRecords = getPending(pendingEntities)
             val matchedPendingByReal = matchedPendingByRealIndexes(pendingRecords, realRecords)
             val adjustedRealRecords = adjustMatchedRealRecords(realRecords, pendingRecords, matchedPendingByReal)
-            markMatchedRealRecordsCreated(matchedPendingByReal, realRecords)
+            markMatchedRealRecordsCreated(matchedPendingByReal, realRecords, pendingRecords)
             val matchedPendingIndexes = matchedPendingByReal.values.mapTo(HashSet()) { it.pendingIndex }
             val filteredPending = filterDuplicatedPending(
                 pendingRecords = pendingRecords,
@@ -305,10 +305,25 @@ class TransactionAdapterWrapper(
     private suspend fun markMatchedRealRecordsCreated(
         matchedPendingByReal: Map<Int, PendingRealMatch>,
         realRecords: List<TransactionRecord>,
+        pendingRecords: List<TransactionRecord>,
     ) {
-        matchedPendingByReal
-            .filterValues { it.confidence >= CREATED_MARK_MIN_CONFIDENCE }
-            .forEach { (realIndex, _) -> locallyCreatedTransactionRepository.markCreated(realRecords[realIndex]) }
+        val pendingIdsToDelete = mutableListOf<String>()
+
+        matchedPendingByReal.forEach { (realIndex, match) ->
+            if (match.confidence < CREATED_MARK_MIN_CONFIDENCE) {
+                return@forEach
+            }
+
+            val pendingId = pendingRecords.getOrNull(match.pendingIndex)?.uid ?: return@forEach
+            val realRecord = realRecords.getOrNull(realIndex) ?: return@forEach
+
+            locallyCreatedTransactionRepository.markCreated(realRecord)
+            pendingIdsToDelete.add(pendingId)
+        }
+
+        if (pendingIdsToDelete.isNotEmpty()) {
+            pendingRepository.deleteByIds(pendingIdsToDelete)
+        }
     }
 
     private fun matchedPendingByRealIndexes(

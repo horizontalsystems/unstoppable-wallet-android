@@ -238,6 +238,39 @@ class PendingBalanceCalculatorTest {
         )
     }
 
+    @Test
+    fun adjustBalance_pendingWithoutTxHashSdkDeductedImmediately_doesNotDeletePending() = runTest(dispatcher) {
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        calculator.onPendingInserted(createPendingEntity("ton-pending-without-hash"))
+
+        val wallet = createMockWallet()
+        val rawBalance = BalanceData(available = BigDecimal("7.2657"))
+
+        calculator.adjustBalance(wallet, rawBalance)
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+    }
+
+    @Test
+    fun adjustBalance_pendingWithTxHashSdkDeductedImmediately_deletesPending() = runTest(dispatcher) {
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        calculator.onPendingInserted(
+            createPendingEntity(
+                id = "ton-pending-with-hash",
+                txHash = "ton-transaction-hash",
+            )
+        )
+
+        val wallet = createMockWallet()
+        val rawBalance = BalanceData(available = BigDecimal("7.2657"))
+
+        calculator.adjustBalance(wallet, rawBalance)
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { pendingRepository.deleteByIds(listOf("ton-pending-with-hash")) }
+    }
+
     private fun createMockWallet(): Wallet {
         val account = mockk<Account> {
             every { id } returns "account-1"
@@ -314,7 +347,8 @@ class PendingBalanceCalculatorTest {
 
     private fun createPendingEntity(
         id: String,
-        blockchainTypeUid: String = "ton"
+        blockchainTypeUid: String = BlockchainType.Ton.uid,
+        txHash: String? = null,
     ) = PendingTransactionEntity(
         id = id,
         walletId = "account-1",
@@ -327,7 +361,7 @@ class PendingBalanceCalculatorTest {
         sdkBalanceAtCreationAtomic = "87365700000",
         fromAddress = "",
         toAddress = "EQC...",
-        txHash = null,
+        txHash = txHash,
         nonce = null,
         memo = null,
         createdAt = System.currentTimeMillis(),
