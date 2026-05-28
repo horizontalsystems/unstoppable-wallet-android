@@ -1718,4 +1718,12 @@
     <string name="RiskLevel_Excellent_Description">直接链上执行。无提供商检查或冻结。交换失败时自动退款。</string>
     <string name="RiskLevel_Good_Description">提供商在完成前自动检查交易。如果检测到问题，交换将被拒绝，资金将被退款。</string>
     <string name="RiskLevel_Fair_Description">某些交易可能需要额外验证。如果检测到问题，资金通常会自动退款。</string>
+    <string name="SwapInfo_RequestRefund">申请退款</string>
+    <string name="SwapInfo_RequestRefundDescription">提供商需要您的掉期详情来处理退款。当您联系提供商时，这些信息将包含在内。</string>
+    <string name="SwapInfo_SwapId">掉期ID</string>
+    <string name="SwapInfo_Amount">金额</string>
+    <string name="SwapInfo_RefundAddress">退款地址</string>
+    <string name="SwapInfo_CopyDetails">复制详情</string>
+    <string name="SwapInfo_SwapStoppedByProvider">掉期已被提供商停止</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">已收到您的存款，但提供商无法完成掉期交易。请在下方申请退款以取回您的资金。</string>
 </resources>

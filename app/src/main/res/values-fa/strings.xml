@@ -635,4 +635,12 @@
     <string name="RiskLevel_Excellent_Description">اجرای مستقیم در زنجیره. بدون بررسی‌ها یا انجماد ارائه‌دهنده. بازپرداخت خودکار در صورت شکست معامله.</string>
     <string name="RiskLevel_Good_Description">ارائه‌دهنده به‌طور خودکار تراکنش‌ها را قبل از تکمیل بررسی می‌کند. اگر مشکلی شناسایی شود، معامله رد می‌شود و وجوه بازپرداخت می‌شود.</string>
     <string name="RiskLevel_Fair_Description">تایید اضافی ممکن است برای برخی تراکنش‌ها لازم باشد. اگر مشکلی شناسایی شود، وجوه معمولاً به‌طور خودکار بازپرداخت می‌شود.</string>
+    <string name="SwapInfo_RequestRefund">درخواست بازپرداخت</string>
+    <string name="SwapInfo_RequestRefundDescription">ارائه‌دهنده برای پردازش بازپرداخت به جزئیات معامله تبدیل شما نیاز دارد. هنگام تماس با ارائه‌دهنده شامل خواهند شد.</string>
+    <string name="SwapInfo_SwapId">شناسه تبدیل</string>
+    <string name="SwapInfo_Amount">مقدار</string>
+    <string name="SwapInfo_RefundAddress">آدرس بازپرداخت</string>
+    <string name="SwapInfo_CopyDetails">کپی جزئیات</string>
+    <string name="SwapInfo_SwapStoppedByProvider">تبدیل توسط ارائه‌دهنده متوقف شد</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">سپرده شما دریافت شد، اما ارائه‌دهنده نتوانست تبدیل را تکمیل کند. برای بازگرداندن صندوق خود، در زیر درخواست بازپرداخت کنید.</string>
 </resources>
