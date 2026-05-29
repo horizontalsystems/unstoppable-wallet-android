@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
@@ -9,6 +12,8 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -36,19 +41,28 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import kotlin.coroutines.cancellation.CancellationException
 
-class SwapConfirmViewModel(
-    private val swapProvider: IMultiSwapProvider,
-    private val swapQuote: SwapQuote,
+@HiltViewModel(assistedFactory = SwapConfirmViewModel.Factory::class)
+class SwapConfirmViewModel @AssistedInject constructor(
+    @Assisted private val quote: SwapProviderQuote,
     private val currencyManager: CurrencyManager,
-    private val fiatServiceIn: FiatService,
-    private val fiatServiceOut: FiatService,
-    private val fiatServiceOutMin: FiatService,
-    val sendTransactionService: AbstractSendTransactionService,
-    private val timerService: TimerService,
-    private val priceImpactService: PriceImpactService,
-    private val swapDefenseSystemService: SwapDefenseSystemService,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    marketKit: MarketKitWrapper,
+    paidActionSettingsManager: PaidActionSettingsManager,
 ) : ViewModelUiState<SwapConfirmUiState>() {
+    private val swapProvider = quote.provider
+    private val swapQuote = quote.swapQuote
+    val sendTransactionService: AbstractSendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
+    private val fiatServiceIn = FiatService(marketKit)
+    private val fiatServiceOut = FiatService(marketKit)
+    private val fiatServiceOutMin = FiatService(marketKit)
+    private val timerService = TimerService()
+    private val priceImpactService = PriceImpactService(PriceImpactLevel.Normal)
+    private val swapDefenseSystemService = SwapDefenseSystemService(
+        sendTransactionService.supportsMevProtection &&
+                quote.provider.mevProtectionAllowed(quote.tokenIn, quote.tokenOut),
+        paidActionSettingsManager
+    )
+
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
     private val tokenIn = swapQuote.tokenIn
@@ -369,28 +383,9 @@ class SwapConfirmViewModel(
         swapDefenseSystemService.setSwapProtectionEnabled(enabled)
     }
 
-    companion object {
-        fun init(quote: SwapProviderQuote): CreationExtras.() -> SwapConfirmViewModel = {
-            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
-
-            SwapConfirmViewModel(
-                quote.provider,
-                quote.swapQuote,
-                App.currencyManager,
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                sendTransactionService,
-                TimerService(),
-                PriceImpactService(PriceImpactLevel.Normal),
-                SwapDefenseSystemService(
-                    sendTransactionService.supportsMevProtection &&
-                            quote.provider.mevProtectionAllowed(quote.tokenIn, quote.tokenOut),
-                    App.paidActionSettingsManager
-                ),
-                App.backgroundManager
-            )
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(quote: SwapProviderQuote): SwapConfirmViewModel
     }
 }
 

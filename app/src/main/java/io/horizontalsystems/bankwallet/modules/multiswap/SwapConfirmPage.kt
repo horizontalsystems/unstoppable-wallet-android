@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
@@ -111,9 +111,9 @@ fun SwapConfirmScreen(
     val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
-    val viewModel = viewModel<SwapConfirmViewModel>(
-        initializer = SwapConfirmViewModel.init(currentQuote)
-    )
+    val viewModel = hiltViewModel<SwapConfirmViewModel, SwapConfirmViewModel.Factory> { factory ->
+        factory.create(currentQuote)
+    }
 
     val uiState = viewModel.uiState
 
