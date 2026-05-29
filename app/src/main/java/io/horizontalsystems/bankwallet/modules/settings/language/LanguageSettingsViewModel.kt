@@ -5,19 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.helpers.LocaleType
 import javax.inject.Inject
 
 @HiltViewModel
 class LanguageSettingsViewModel @Inject constructor(
     private val languageManager: LanguageManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
+    private val pinComponent: IPinComponent,
 ) : ViewModel() {
 
     val languageItems = LocaleType.values().map {
@@ -46,7 +47,7 @@ class LanguageSettingsViewModel @Inject constructor(
         if (localeType.tag == currentLocaleTag) {
             closeScreen = true
         } else {
-            App.pinComponent.keepUnlocked()
+            pinComponent.keepUnlocked()
             localStorage.relaunchBySettingChange = true
             currentLocaleTag = localeType.tag
             reloadApp = true

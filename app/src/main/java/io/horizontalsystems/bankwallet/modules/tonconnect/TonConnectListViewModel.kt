@@ -7,9 +7,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -17,9 +17,10 @@ import kotlinx.coroutines.launch
 class TonConnectListViewModel @AssistedInject constructor(
     @Assisted deepLinkUri: String?,
     accountManager: IAccountManager,
+    tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<TonConnectListUiState>() {
 
-    private val tonConnectKit = App.tonConnectManager.kit
+    private val tonConnectKit = tonConnectManager.kit
 
     private var dapps = mapOf<String, List<DAppEntity>>()
     private var dAppRequestEntity: DAppRequestEntity? = null

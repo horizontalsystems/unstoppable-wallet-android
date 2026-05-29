@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.normalizeNFKD
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
-import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
@@ -46,7 +45,7 @@ class RestoreMnemonicViewModel @Inject constructor(
     val accountName: String get() = _accountName.ifBlank { defaultName }
 
     val isThirdPartyKeyboardAllowed: Boolean
-        get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
+        get() = thirdKeyboardStorage.isThirdPartyKeyboardAllowed
 
     override fun createState() = UiState(
         accountName = _accountName,

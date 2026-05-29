@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.core.IPinComponent
@@ -39,7 +38,7 @@ class SecurityTorSettingsViewModel @Inject constructor(
     fun setTorEnabled() {
         if (torCheckEnabled) {
             torManager.setTorAsEnabled()
-            App.pinComponent.keepUnlocked()
+            pinComponent.keepUnlocked()
             restartApp = true
         } else {
             torManager.setTorAsDisabled()
@@ -47,7 +46,7 @@ class SecurityTorSettingsViewModel @Inject constructor(
                 try {
                     torManager.stop().await()
                     pinComponent.updateLastExitDateBeforeRestart()
-                    App.pinComponent.keepUnlocked()
+                    pinComponent.keepUnlocked()
                     restartApp = true
                 } catch (e: Throwable) {
                     logger.warning("Tor exception", e)

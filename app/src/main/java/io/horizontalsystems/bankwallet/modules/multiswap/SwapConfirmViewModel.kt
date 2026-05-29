@@ -5,8 +5,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.SwapRecord
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchException
@@ -48,6 +49,8 @@ class SwapConfirmViewModel @AssistedInject constructor(
     private val backgroundManager: BackgroundManager,
     marketKit: MarketKitWrapper,
     paidActionSettingsManager: PaidActionSettingsManager,
+    private val accountManager: IAccountManager,
+    private val swapRecordManager: SwapRecordManager,
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private val swapProvider = quote.provider
     private val swapQuote = quote.swapQuote
@@ -335,7 +338,7 @@ class SwapConfirmViewModel @AssistedInject constructor(
         }
 
         val record = SwapRecord(
-            accountId = App.accountManager.activeAccount?.id ?: "",
+            accountId = accountManager.activeAccount?.id ?: "",
             timestamp = System.currentTimeMillis(),
             providerId = swapProvider.id,
             providerName = swapProvider.title,
@@ -362,7 +365,7 @@ class SwapConfirmViewModel @AssistedInject constructor(
             depositAddress = depositAddress,
             status = SwapStatus.Depositing.name,
         )
-        App.swapRecordManager.save(record)
+        swapRecordManager.save(record)
     }
 
     fun setRecipient(recipient: Address?) {
