@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
@@ -66,6 +67,8 @@ class BalanceViewModel @Inject constructor(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val appConfigProvider: AppConfigProvider,
     private val baseTokenManager: BaseTokenManager,
+    private val numberFormatter: IAppNumberFormatter,
+    private val tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<BalanceUiState>() {
 
     private lateinit var service: BalanceService
@@ -200,9 +203,9 @@ class BalanceViewModel @Inject constructor(
         fullFormat: Boolean
     ) = totalState.currencyValue?.let {
         if (fullFormat) {
-            App.numberFormatter.formatFiatFull(it.value, it.currency.symbol)
+            numberFormatter.formatFiatFull(it.value, it.currency.symbol)
         } else {
-            App.numberFormatter.formatFiatShort(it.value, it.currency.symbol, 8)
+            numberFormatter.formatFiatShort(it.value, it.currency.symbol, 8)
         }
     }
 
@@ -211,9 +214,9 @@ class BalanceViewModel @Inject constructor(
         fullFormat: Boolean
     ) = totalState.coinValue?.let {
         if (fullFormat) {
-            "≈" + App.numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
+            "≈" + numberFormatter.formatCoinFull(it.value, it.coin.code, it.decimal)
         } else {
-            "≈" + App.numberFormatter.formatCoinShort(it.value, it.coin.code, it.decimal)
+            "≈" + numberFormatter.formatCoinShort(it.value, it.coin.code, it.decimal)
         }
     }
 
@@ -344,7 +347,7 @@ class BalanceViewModel @Inject constructor(
                 scannedText.startsWith("tc:") ||
                 scannedText.startsWith("https://unstoppable.money/ton-connect")
             ) {
-                App.tonConnectManager.handle(scannedText)
+                tonConnectManager.handle(scannedText)
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {

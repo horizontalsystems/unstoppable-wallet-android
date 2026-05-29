@@ -8,8 +8,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -19,12 +20,14 @@ import kotlinx.coroutines.launch
 @HiltViewModel(assistedFactory = TonConnectNewViewModel.Factory::class)
 class TonConnectNewViewModel @AssistedInject constructor(
     @Assisted private val requestEntity: DAppRequestEntity,
+    private val accountManager: IAccountManager,
+    tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<TonConnectNewUiState>() {
-    private val tonConnectKit = App.tonConnectManager.kit
+    private val tonConnectKit = tonConnectManager.kit
 
     private var manifest: DAppManifestEntity? = null
     private var accounts: List<Account> = listOf()
-    private var account = App.accountManager.activeAccount
+    private var account = accountManager.activeAccount
     private var finish = false
     private var error: Throwable? = null
     private var toast: String? = null
@@ -49,7 +52,7 @@ class TonConnectNewViewModel @AssistedInject constructor(
             }
         }
 
-        accounts = App.accountManager.accounts.filter {
+        accounts = accountManager.accounts.filter {
             it.type is AccountType.Mnemonic
         }
 

@@ -9,11 +9,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
+import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.core.meta
@@ -33,12 +34,14 @@ class TonConnectSendRequestViewModel @AssistedInject constructor(
     @Assisted private val signTransaction: SignTransaction?,
     private val accountManager: IAccountManager,
     private val tonConnectManager: TonConnectManager,
+    private val tonKitManager: TonKitManager,
+    private val coinManager: ICoinManager,
 ) : ViewModelUiState<TonConnectSendRequestUiState>() {
 
     private val sendRequestEntity = signTransaction?.request
     private var error: TonConnectSendRequestError? = null
     private val transactionSigner = tonConnectManager.transactionSigner
-    private val tonConnectKit = App.tonConnectManager.kit
+    private val tonConnectKit = tonConnectManager.kit
     private var tonTransactionRecord: TonTransactionRecord? = null
 
     private var tonWallet: TonWallet.FullAccess? = null
@@ -136,7 +139,7 @@ class TonConnectSendRequestViewModel @AssistedInject constructor(
         val tonWallet = account.type.toTonWalletFullAccess().also {
             tonWallet = it
         }
-        val tonKitWrapper = App.tonKitManager.getNonActiveTonKitWrapper(account).also {
+        val tonKitWrapper = tonKitManager.getNonActiveTonKitWrapper(account).also {
             tonKitWrapper = it
         }
 
@@ -160,7 +163,7 @@ class TonConnectSendRequestViewModel @AssistedInject constructor(
             return
         }
 
-        val token = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native))
+        val token = coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native))
         if (token == null) {
             error = TonConnectSendRequestError.Other("Token Ton not found")
             return
