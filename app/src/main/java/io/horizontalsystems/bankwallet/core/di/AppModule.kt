@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.core.IThirdKeyboard
@@ -197,6 +198,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideSwapRecordManager(): SwapRecordManager = App.swapRecordManager
+
+    @Provides @Singleton
+    fun provideSwapProviderInfoManager(): SwapProviderInfoManager = App.swapProviderInfoManager
 
     @Provides @Singleton
     fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
