@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.SelectedItem
 import io.horizontalsystems.bankwallet.modules.market.Value
@@ -9,9 +10,9 @@ import java.math.BigDecimal
 object ChartModule {
 
     interface ChartNumberFormatter {
-        fun formatValue(currency: Currency, value: BigDecimal): String
-        fun formatMinMaxValue(currency: Currency, value: BigDecimal): String {
-            return formatValue(currency, value)
+        fun formatValue(currency: Currency, value: BigDecimal, numberFormatter: IAppNumberFormatter): String
+        fun formatMinMaxValue(currency: Currency, value: BigDecimal, numberFormatter: IAppNumberFormatter): String {
+            return formatValue(currency, value, numberFormatter)
         }
     }
 

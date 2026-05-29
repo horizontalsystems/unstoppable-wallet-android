@@ -118,7 +118,7 @@ open class ChartViewModel @AssistedInject constructor(
         val chartData = ChartData(chartPointsWrapper.items, chartPointsWrapper.isMovementChart, false, chartPointsWrapper.indicators)
 
         val headerView = if (!chartPointsWrapper.isMovementChart) {
-            val value = valueFormatter.formatValue(service.currency, chartData.sum())
+            val value = valueFormatter.formatValue(service.currency, chartData.sum(), numberFormatter)
             ChartModule.ChartHeaderView(
                 value = value,
                 valueHint = null,
@@ -131,7 +131,7 @@ open class ChartViewModel @AssistedInject constructor(
 
             val latestItem = chartItems.last()
             val lastItemValue = latestItem.value
-            val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal())
+            val currentValue = valueFormatter.formatValue(service.currency, lastItemValue.toBigDecimal(), numberFormatter)
 
             val dominanceData = latestItem.dominance?.let { dominance ->
                 val earliestItem = chartItems.first()
@@ -190,7 +190,7 @@ open class ChartViewModel @AssistedInject constructor(
     }
 
     private fun getFormattedValue(value: Float, currency: Currency): String {
-        return valueFormatter.formatMinMaxValue(currency,  value.toBigDecimal())
+        return valueFormatter.formatMinMaxValue(currency, value.toBigDecimal(), numberFormatter)
     }
 
     override fun onCleared() {
@@ -203,7 +203,7 @@ open class ChartViewModel @AssistedInject constructor(
     }
 
     fun getSelectedPoint(selectedItem: SelectedItem): ChartModule.ChartHeaderView {
-        val value = valueFormatter.formatValue(service.currency, selectedItem.mainValue.toBigDecimal())
+        val value = valueFormatter.formatValue(service.currency, selectedItem.mainValue.toBigDecimal(), numberFormatter)
         val dayAndTime = DateHelper.getFullDate(Date(selectedItem.timestamp * 1000))
 
         return ChartModule.ChartHeaderView(
