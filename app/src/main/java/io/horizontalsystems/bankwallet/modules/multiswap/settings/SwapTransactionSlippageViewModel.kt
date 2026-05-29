@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.settings
 
-import androidx.lifecycle.viewmodel.CreationExtras
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -8,8 +11,9 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import java.math.BigDecimal
 
-class SwapTransactionSlippageViewModel(
-    private val initialSlippage: BigDecimal
+@HiltViewModel(assistedFactory = SwapTransactionSlippageViewModel.Factory::class)
+class SwapTransactionSlippageViewModel @AssistedInject constructor(
+    @Assisted private val initialSlippage: BigDecimal
 ) : ViewModelUiState<SwapTransactionSlippageUiState>() {
 
     private var slippage: BigDecimal = initialSlippage
@@ -90,6 +94,11 @@ class SwapTransactionSlippageViewModel(
         }
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(initialSlippage: BigDecimal): SwapTransactionSlippageViewModel
+    }
+
     companion object {
         val DEFAULT_SLIPPAGE: BigDecimal = IMultiSwapProvider.DEFAULT_SLIPPAGE
         val MIN_SLIPPAGE: BigDecimal = BigDecimal("0.01")
@@ -97,10 +106,6 @@ class SwapTransactionSlippageViewModel(
         val WARNING_THRESHOLD: BigDecimal = BigDecimal("5")
         val STEP: BigDecimal = BigDecimal("0.5")
         const val DECIMALS = 2
-
-        fun init(initialSlippage: BigDecimal): CreationExtras.() -> SwapTransactionSlippageViewModel = {
-            SwapTransactionSlippageViewModel(initialSlippage)
-        }
     }
 }
 

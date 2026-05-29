@@ -1,17 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import androidx.lifecycle.viewmodel.CreationExtras
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class SelectContactViewModel(
+@HiltViewModel(assistedFactory = SelectContactViewModel.Factory::class)
+class SelectContactViewModel @AssistedInject constructor(
     private val contactsRepository: ContactsRepository,
-    private val selected: Contact?,
-    private val blockchainType: BlockchainType?,
+    @Assisted private val selected: Contact?,
+    @Assisted private val blockchainType: BlockchainType?,
 ) : ViewModelUiState<SelectContactUiState>() {
 
     private var items: List<Contact?>
@@ -43,6 +46,11 @@ class SelectContactViewModel(
         selected = selected
     )
 
+    @AssistedFactory
+    interface Factory {
+        fun create(selected: Contact?, blockchainType: BlockchainType?): SelectContactViewModel
+    }
+
     companion object {
         val supportedBlockchainTypes =
             EvmBlockchainManager.blockchainTypes +
@@ -50,10 +58,6 @@ class SelectContactViewModel(
                     BlockchainType.Tron +
                     BlockchainType.Ton +
                     BlockchainType.Stellar
-
-        fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
-            SelectContactViewModel(App.contactsRepository, selected, blockchainType)
-        }
     }
 }
 

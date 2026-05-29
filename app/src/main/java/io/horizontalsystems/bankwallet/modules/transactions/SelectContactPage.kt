@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -47,12 +47,9 @@ data class SelectContactPage(val input: Input) : HSPage() {
 @Composable
 fun SelectContactScreen(navController: HSNavigation, input: SelectContactPage.Input?) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<SelectContactViewModel>(
-        initializer = SelectContactViewModel.init(
-            input?.selected,
-            input?.blockchainType
-        )
-    )
+    val viewModel = hiltViewModel<SelectContactViewModel, SelectContactViewModel.Factory> { factory ->
+        factory.create(input?.selected, input?.blockchainType)
+    }
     val uiState = viewModel.uiState
 
     HSScaffold(

@@ -1,12 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.settings
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.Warning
 import kotlinx.coroutines.launch
 
-class SendEvmNonceViewModel(
-    private val service: SendEvmNonceService
+@HiltViewModel(assistedFactory = SendEvmNonceViewModel.Factory::class)
+class SendEvmNonceViewModel @AssistedInject constructor(
+    @Assisted private val service: SendEvmNonceService
 ) : ViewModelUiState<SendEvmNonceViewModel.UiState>() {
 
     private var nonce: Long? = null
@@ -48,6 +53,11 @@ class SendEvmNonceViewModel(
 
     fun onDecrementNonce() {
         service.decrement()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(service: SendEvmNonceService): SendEvmNonceViewModel
     }
 
     data class UiState(

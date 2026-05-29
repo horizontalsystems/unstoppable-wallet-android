@@ -8,9 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -258,9 +257,9 @@ class SendTransactionServiceEvm(
 
     @Composable
     override fun GetNonceSettingsContent(navController: HSNavigation) {
-        val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
-            SendEvmNonceViewModel(nonceService)
-        })
+        val nonceViewModel = hiltViewModel<SendEvmNonceViewModel, SendEvmNonceViewModel.Factory> { factory ->
+            factory.create(nonceService)
+        }
         val sendSettingsViewModel = hiltViewModel<SendEvmSettingsViewModel, SendEvmSettingsViewModel.Factory> { factory ->
             factory.create(settingsService, baseCoinService)
         }

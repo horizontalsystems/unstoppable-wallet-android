@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -52,9 +52,9 @@ fun SwapSlippageSettingsScreen(
     initialSlippage: BigDecimal
 ) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<SwapTransactionSlippageViewModel>(
-        initializer = SwapTransactionSlippageViewModel.init(initialSlippage)
-    )
+    val viewModel = hiltViewModel<SwapTransactionSlippageViewModel, SwapTransactionSlippageViewModel.Factory> { factory ->
+        factory.create(initialSlippage)
+    }
     val uiState = viewModel.uiState
 
     HSScaffold(
