@@ -6,7 +6,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -29,6 +29,7 @@ import java.util.Date
 open class ChartViewModel @AssistedInject constructor(
     @Assisted val service: AbstractChartService,
     @Assisted private val valueFormatter: ChartModule.ChartNumberFormatter,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<ChartUiState>() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
@@ -139,7 +140,7 @@ open class ChartViewModel @AssistedInject constructor(
                 }
 
                 ChartModule.ChartHeaderExtraData.Dominance(
-                    App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
+                    numberFormatter.format(dominance, 0, 2, suffix = "%"),
                     diff
                 )
             }
@@ -227,12 +228,12 @@ open class ChartViewModel @AssistedInject constructor(
             }
             dominance != null -> {
                 ChartModule.ChartHeaderExtraData.Dominance(
-                    App.numberFormatter.format(dominance, 0, 2, suffix = "%"),
+                    numberFormatter.format(dominance, 0, 2, suffix = "%"),
                     null
                 )
             }
             chartVolume != null -> ChartModule.ChartHeaderExtraData.Volume(
-                volume = App.numberFormatter.formatFiatShort(
+                volume = numberFormatter.formatFiatShort(
                     chartVolume.value.toBigDecimal(),
                     service.currency.symbol,
                     2

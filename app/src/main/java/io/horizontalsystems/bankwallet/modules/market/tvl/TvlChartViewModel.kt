@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
@@ -11,7 +12,8 @@ import javax.inject.Inject
 class TvlChartViewModel @Inject constructor(
     marketKit: MarketKitWrapper,
     currencyManager: CurrencyManager,
-) : ChartViewModel(TvlChartService(currencyManager, GlobalMarketRepository(marketKit)), ChartCurrencyValueFormatterShortened()) {
+    numberFormatter: IAppNumberFormatter,
+) : ChartViewModel(TvlChartService(currencyManager, GlobalMarketRepository(marketKit)), ChartCurrencyValueFormatterShortened(), numberFormatter) {
     private val tvlChartService get() = service as TvlChartService
 
     fun onSelectChain(chain: TvlModule.Chain) {

@@ -4,6 +4,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
@@ -16,6 +17,7 @@ class ProChartViewModel @AssistedInject constructor(
     @Assisted chartType: ProChartModule.ChartType,
     currencyManager: CurrencyManager,
     marketKit: MarketKitWrapper,
+    numberFormatter: IAppNumberFormatter,
 ) : ChartViewModel(
     service = ProChartService(currencyManager, marketKit, coinUid, chartType),
     valueFormatter = when (chartType) {
@@ -25,7 +27,8 @@ class ProChartViewModel @AssistedInject constructor(
         ProChartModule.ChartType.DexLiquidity -> ChartCurrencyValueFormatterShortened()
         ProChartModule.ChartType.TxCount,
         ProChartModule.ChartType.AddressesCount -> ChartNumberFormatterShortened()
-    }
+    },
+    numberFormatter = numberFormatter,
 ) {
     @AssistedFactory
     interface Factory {

@@ -4,6 +4,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
@@ -17,9 +18,11 @@ class CoinOverviewChartViewModel @AssistedInject constructor(
     marketKit: MarketKitWrapper,
     currencyManager: CurrencyManager,
     chartIndicatorManager: ChartIndicatorManager,
+    numberFormatter: IAppNumberFormatter,
 ) : ChartViewModel(
     service = CoinOverviewChartService(marketKit, currencyManager, fullCoin.coin.uid, chartIndicatorManager),
-    valueFormatter = ChartCurrencyValueFormatterSignificant()
+    valueFormatter = ChartCurrencyValueFormatterSignificant(),
+    numberFormatter = numberFormatter,
 ) {
     @AssistedFactory
     interface Factory {
