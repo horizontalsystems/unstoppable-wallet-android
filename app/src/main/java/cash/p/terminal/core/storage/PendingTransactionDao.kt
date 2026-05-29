@@ -18,11 +18,21 @@ interface PendingTransactionDao {
     @Query("SELECT * FROM PendingTransaction WHERE id = :id")
     suspend fun getById(id: String): PendingTransactionEntity?
 
-    @Query("SELECT * FROM PendingTransaction WHERE expiresAt > :now AND walletId = :walletId")
+    @Query(
+        """
+        SELECT * FROM PendingTransaction
+        WHERE expiresAt > :now
+          AND walletId = :walletId
+          AND balanceConfirmedAt IS NULL
+        """
+    )
     fun getActivePendingFlow(now: Long, walletId: String): Flow<List<PendingTransactionEntity>>
 
     @Query("SELECT * FROM PendingTransaction WHERE walletId = :walletId AND expiresAt > :now")
     suspend fun getPendingForWallet(walletId: String, now: Long): List<PendingTransactionEntity>
+
+    @Query("UPDATE PendingTransaction SET balanceConfirmedAt = :confirmedAt WHERE id IN (:ids)")
+    suspend fun markBalanceConfirmed(ids: List<String>, confirmedAt: Long)
 
     @Query("SELECT * FROM PendingTransaction")
     suspend fun getAllPending(): List<PendingTransactionEntity>

@@ -62,11 +62,13 @@ class TransactionAdapterWrapperTest {
     fun get_realBitcoinRecordMatchesPendingWithoutHash_pendingIsFilteredOut() = runTest {
         val scenario = createBitcoinPendingScenario()
         val locallyCreatedTransactionRepository = mockk<LocallyCreatedTransactionRepository>(relaxed = true)
+        val pendingRepository = createPendingRepository(listOf(scenario.pendingRecord))
 
         val wrapper = createWrapper(
             transactionWallet = scenario.transactionWallet,
             realRecords = listOf(scenario.realRecord),
             pendingRecords = listOf(scenario.pendingRecord),
+            pendingRepository = pendingRepository,
             locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
         )
 
@@ -78,6 +80,7 @@ class TransactionAdapterWrapperTest {
 
         assertEquals(listOf(scenario.realRecord.uid), records.map { it.uid })
         coVerify { locallyCreatedTransactionRepository.markCreated(scenario.realRecord) }
+        coVerify { pendingRepository.deleteByIds(listOf(scenario.pendingRecord.uid)) }
     }
 
     @Test
@@ -960,6 +963,7 @@ class TransactionAdapterWrapperTest {
         realRecords: List<TransactionRecord>,
         pendingRecords: List<PendingTransactionRecord>,
         realRecordPages: List<List<TransactionRecord>> = listOf(realRecords),
+        pendingRepository: PendingTransactionRepository = createPendingRepository(pendingRecords),
         locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository = mockk(relaxed = true),
     ): TransactionAdapterWrapper {
         val adapterPages = realRecordPages.ifEmpty { listOf(realRecords) }
@@ -971,10 +975,6 @@ class TransactionAdapterWrapperTest {
                 adapterPages[responseIndex]
             }
             every { getTransactionRecordsFlow(any(), any(), any()) } returns emptyFlow()
-        }
-        val pendingRepository = mockk<PendingTransactionRepository> {
-            every { getActivePendingFlow(any()) } returns emptyFlow()
-            coEvery { getPendingForWallet(any()) } returns pendingRecords.map(::createPendingEntity)
         }
         val pendingConverter = mockk<PendingTransactionConverter> {
             pendingRecords.forEach { pending ->
@@ -993,6 +993,16 @@ class TransactionAdapterWrapperTest {
             locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
             dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
         )
+    }
+
+    private fun createPendingRepository(
+        pendingRecords: List<PendingTransactionRecord>
+    ): PendingTransactionRepository {
+        return mockk {
+            every { getActivePendingFlow(any()) } returns emptyFlow()
+            coEvery { getPendingForWallet(any()) } returns pendingRecords.map(::createPendingEntity)
+            coEvery { deleteByIds(any()) } returns Unit
+        }
     }
 
     private fun createPendingEntity(record: PendingTransactionRecord): PendingTransactionEntity {

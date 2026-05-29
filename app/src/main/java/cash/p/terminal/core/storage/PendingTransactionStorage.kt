@@ -2,7 +2,6 @@ package cash.p.terminal.core.storage
 
 import cash.p.terminal.entities.PendingTransactionEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class PendingTransactionStorage(appDatabase: AppDatabase) {
     private val dao = appDatabase.pendingTransactionDao()
@@ -18,6 +17,11 @@ class PendingTransactionStorage(appDatabase: AppDatabase) {
 
     suspend fun getPendingForWallet(walletId: String): List<PendingTransactionEntity> =
         dao.getPendingForWallet(walletId, System.currentTimeMillis())
+
+    suspend fun markBalanceConfirmed(ids: List<String>, confirmedAt: Long) {
+        if (ids.isEmpty()) return
+        dao.markBalanceConfirmed(ids, confirmedAt)
+    }
 
     suspend fun deleteById(id: String) = dao.deleteById(id)
 

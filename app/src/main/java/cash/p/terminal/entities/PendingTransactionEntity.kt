@@ -31,5 +31,6 @@ data class PendingTransactionEntity(
 
     // Lifecycle
     val createdAt: Long,
-    val expiresAt: Long
+    val expiresAt: Long,
+    val balanceConfirmedAt: Long? = null
 )

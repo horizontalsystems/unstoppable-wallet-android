@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -12,6 +13,7 @@ import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.litecoinkit.LitecoinKit
 import io.horizontalsystems.litecoinkit.mweb.address.MwebAddressCodec
+import io.horizontalsystems.tonkit.Address
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -90,8 +92,7 @@ class PendingTransactionMatcher {
         val realTo = real.to?.firstOrNull()
 
         if (blockchainMatches && amountMatches && timestampMatches) {
-            val addressMatches = realTo != null && toAddress.isNotEmpty() &&
-                toAddress.equals(realTo, ignoreCase = true)
+            val addressMatches = compareAddresses(blockchainTypeUid, toAddress, realTo)
 
             return MatchScore(
                 isMatch = true,
@@ -142,13 +143,34 @@ class PendingTransactionMatcher {
             canonicalHash.equals(real.transactionHash, ignoreCase = true) &&
             real.uid.matchesMwebLocalIdentifier(pendingIdentifier) &&
             compareAmounts(pending.amount.abs(), real) &&
-            compareAddresses(pending.to?.firstOrNull(), real.to?.firstOrNull())
+            compareAddresses(
+                blockchainTypeUid = pending.blockchainType.uid,
+                pendingTo = pending.to?.firstOrNull(),
+                realTo = real.to?.firstOrNull()
+            )
     }
 
-    private fun compareAddresses(pendingTo: String?, realTo: String?): Boolean {
+    private fun compareAddresses(
+        blockchainTypeUid: String,
+        pendingTo: String?,
+        realTo: String?,
+    ): Boolean {
         val pendingAddress = pendingTo?.takeIf { it.isNotBlank() } ?: return false
         val realAddress = realTo?.takeIf { it.isNotBlank() } ?: return false
+
+        if (blockchainTypeUid == BlockchainType.Ton.uid) {
+            val normalizedPending = normalizeTonAddress(pendingAddress)
+            val normalizedReal = normalizeTonAddress(realAddress)
+            if (normalizedPending != null || normalizedReal != null) {
+                return normalizedPending == normalizedReal
+            }
+        }
+
         return pendingAddress.equals(realAddress, ignoreCase = true)
+    }
+
+    private fun normalizeTonAddress(address: String): String? {
+        return tryOrNull { Address.parse(address).toRaw() }
     }
 
     private fun litecoinMwebPegInMatchScore(
@@ -171,7 +193,7 @@ class PendingTransactionMatcher {
         val realAmount = getRealAmount(real)?.abs() ?: return null
         // Public peg-in spends selected public UTXOs into the extension output, including MWEB-side change.
         val maxPublicAmount = pendingAmount.multiply(LITECOIN_MWEB_PEG_IN_MAX_PUBLIC_AMOUNT_RATE)
-        if (realAmount < pendingAmount || realAmount > maxPublicAmount) {
+        if (realAmount !in pendingAmount..maxPublicAmount) {
             return null
         }
 
