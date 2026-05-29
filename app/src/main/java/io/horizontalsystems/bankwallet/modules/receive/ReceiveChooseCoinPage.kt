@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -26,7 +25,7 @@ import kotlinx.serialization.Serializable
 data object ReceiveChooseCoinPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<ReceiveSharedViewModel>()
+        val viewModel = hiltViewModel<ReceiveSharedViewModel>()
         val activeAccount = App.accountManager.activeAccount
         if (activeAccount == null) {
             CloseWithMessage(navController)

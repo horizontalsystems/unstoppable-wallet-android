@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.marketkit.models.FullCoin
+import javax.inject.Inject
 
-class ReceiveSharedViewModel : ViewModel() {
+@HiltViewModel
+class ReceiveSharedViewModel @Inject constructor() : ViewModel() {
 
     var coinUid: String? = null
 
