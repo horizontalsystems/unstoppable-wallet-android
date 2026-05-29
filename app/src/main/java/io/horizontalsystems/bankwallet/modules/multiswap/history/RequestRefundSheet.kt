@@ -4,22 +4,16 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,17 +21,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -54,40 +47,25 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class RequestRefundDialog : BaseComposableBottomSheetFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-                val recordId = navController.getInput<Input>()?.recordId
-
-                ComposeAppTheme {
-                    RequestRefundScreen(navController, recordId)
-                }
-            }
-        }
+@Serializable
+class RequestRefundSheet(val input: Input) : HSBottomSheet() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        RequestRefundScreen(navController, input.recordId)
     }
 
-    @Parcelize
-    data class Input(val recordId: Int) : Parcelable
+    @Serializable
+    data class Input(val recordId: Int)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
+private fun RequestRefundScreen(navController: HSNavigation, recordId: Int?) {
     val viewModel = viewModel<RequestRefundViewModel>(
         key = recordId?.toString() ?: "preview",
         factory = RequestRefundViewModel.Factory(recordId),
@@ -98,7 +76,7 @@ private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
