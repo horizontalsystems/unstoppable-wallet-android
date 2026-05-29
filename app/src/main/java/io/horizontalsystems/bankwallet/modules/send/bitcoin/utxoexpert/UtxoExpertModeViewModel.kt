@@ -6,7 +6,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -26,6 +26,7 @@ class UtxoExpertModeViewModel @AssistedInject constructor(
     @Assisted("initialCustomUnspentOutputs") initialCustomUnspentOutputs: List<UnspentOutputInfo>?,
     marketKit: MarketKitWrapper,
     currencyManager: CurrencyManager,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<UtxoExpertModeModule.UiState>() {
 
     private val xRateService = XRateService(marketKit, currencyManager.baseCurrency)
@@ -34,7 +35,7 @@ class UtxoExpertModeViewModel @AssistedInject constructor(
     private var selectedUnspentOutputs = listOf<String>()
     private var coinRate = xRateService.getRate(token.coin.uid)
     private var availableBalanceInfo = UtxoExpertModeModule.InfoItem(
-        value = App.numberFormatter.formatCoinFull(BigDecimal.ZERO, token.coin.code, token.decimals),
+        value = numberFormatter.formatCoinFull(BigDecimal.ZERO, token.coin.code, token.decimals),
         subValue = "",
     )
 
@@ -71,7 +72,7 @@ class UtxoExpertModeViewModel @AssistedInject constructor(
             }
         }
         availableBalanceInfo = availableBalanceInfo.copy(
-            value = App.numberFormatter.formatCoinFull(totalCoinValue, token.coin.code, token.decimals),
+            value = numberFormatter.formatCoinFull(totalCoinValue, token.coin.code, token.decimals),
             subValue = coinRate?.let { rate ->
                 rate.copy(value = totalCoinValue.times(rate.value)).getFormattedFull()
             } ?: "",
@@ -86,7 +87,7 @@ class UtxoExpertModeViewModel @AssistedInject constructor(
                 id = id,
                 outputIndex = utxo.outputIndex,
                 date = DateHelper.shortDate(Date(utxo.timestamp * 1000), "MMM d", "MM/dd/yyyy"),
-                amountToken = App.numberFormatter.formatCoinFull(coinValue, token.coin.code, token.decimals),
+                amountToken = numberFormatter.formatCoinFull(coinValue, token.coin.code, token.decimals),
                 amountFiat = coinRate?.let { rate ->
                     rate.copy(value = coinValue.times(rate.value)).getFormattedFull()
                 } ?: "",

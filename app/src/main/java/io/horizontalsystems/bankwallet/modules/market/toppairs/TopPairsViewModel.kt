@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.toppairs
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -28,6 +28,7 @@ import java.math.BigDecimal
 class TopPairsViewModel @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<TopPairsUiState>() {
     private var isRefreshing = false
     private var items = listOf<TopPairViewItem>()
@@ -63,7 +64,7 @@ class TopPairsViewModel @Inject constructor(
             val topPairs =
                 marketKit.topPairsSingle(currencyManager.baseCurrency.code, 1, 100).await()
             val pairs = topPairs.map {
-                TopPairViewItem.createFromTopPair(it, currencyManager.baseCurrency.symbol)
+                TopPairViewItem.createFromTopPair(it, currencyManager.baseCurrency.symbol, numberFormatter)
             }
             items = sortItems(pairs)
             viewState = ViewState.Success
@@ -139,11 +140,11 @@ data class TopPairViewItem(
     val price: String?
 ) {
     companion object {
-        fun createFromTopPair(topPair: TopPair, currencySymbol: String): TopPairViewItem {
-            val volumeStr = App.numberFormatter.formatFiatShort(topPair.volume, currencySymbol, 2)
+        fun createFromTopPair(topPair: TopPair, currencySymbol: String, numberFormatter: IAppNumberFormatter): TopPairViewItem {
+            val volumeStr = numberFormatter.formatFiatShort(topPair.volume, currencySymbol, 2)
 
             val priceStr = topPair.price?.let {
-                App.numberFormatter.formatCoinShort(
+                numberFormatter.formatCoinShort(
                     it,
                     topPair.target,
                     8

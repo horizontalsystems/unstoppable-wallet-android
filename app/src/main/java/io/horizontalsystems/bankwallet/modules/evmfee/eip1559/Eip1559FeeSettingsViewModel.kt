@@ -10,7 +10,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -31,6 +31,7 @@ class Eip1559FeeSettingsViewModel @AssistedInject constructor(
     @Assisted private val gasPriceService: Eip1559GasPriceService,
     @Assisted feeService: IEvmFeeService,
     @Assisted private val coinService: EvmCoinService,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
@@ -133,7 +134,7 @@ class Eip1559FeeSettingsViewModel @AssistedInject constructor(
                 val viewState = transaction.errors.firstOrNull()?.let { ViewState.Error(it) } ?: ViewState.Success
                 val feeAmountData = coinService.amountData(transactionStatus.data.gasData.estimatedFee, transactionStatus.data.gasData.isSurcharged)
                 val feeItem = FeeItem(feeAmountData.primary.getFormattedPlain(), feeAmountData.secondary?.getFormattedPlain())
-                val gasLimit = App.numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
+                val gasLimit = numberFormatter.format(transactionStatus.data.gasData.gasLimit.toBigDecimal(), 0, 0)
 
                 feeSummaryViewItem = FeeSummaryViewItem(feeItem, gasLimit, viewState)
             }

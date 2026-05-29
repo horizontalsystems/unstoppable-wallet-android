@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -33,6 +33,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class MarketEarnViewModel @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<EarnModule.UiState>() {
 
     val filterOptions = EarnModule.FilterBy.entries
@@ -278,7 +279,7 @@ class MarketEarnViewModel @Inject constructor(
             address = vault.address,
             name = vault.name,
             apy = vault.apy.getByPeriod(apyPeriod),
-            tvl = App.numberFormatter.formatFiatShort(
+            tvl = numberFormatter.formatFiatShort(
                 tvlRaw,
                 baseCurrency.symbol,
                 baseCurrency.decimal
