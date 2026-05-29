@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
@@ -52,15 +53,8 @@ data class restore_select_coins(
 ) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = viewModel<RestoreViewModel> {
-            RestoreViewModel(
-                accountType,
-                accountName,
-                manualBackup,
-                fileBackup,
-                statPage
-            )
-        }
+        val mainViewModel = hiltViewModel<RestoreViewModel>()
+        remember { mainViewModel.setAccountData(accountType, accountName, manualBackup, fileBackup, statPage) }
 
         val uuid = rememberSaveable { UUID.randomUUID().toString() }
         ResultEffect<RestoreBirthdayHeightPage.Result>(resultKeyUuid = uuid) {

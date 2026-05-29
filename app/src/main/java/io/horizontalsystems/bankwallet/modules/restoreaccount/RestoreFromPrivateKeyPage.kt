@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -32,7 +32,7 @@ private fun RestoreFromPrivateKeyNavHost(
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean,
 ) {
-    val mainViewModel: RestoreViewModel = viewModel()
+    val mainViewModel = hiltViewModel<RestoreViewModel>()
 
     val view = LocalView.current
 

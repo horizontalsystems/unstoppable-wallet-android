@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -104,7 +103,7 @@ private fun RestoreLocalNavHost(
     popUpToInclusiveId: KClass<out HSPage>,
     popUpInclusive: Boolean,
 ) {
-    val mainViewModel: RestoreViewModel = viewModel()
+    val mainViewModel = hiltViewModel<RestoreViewModel>()
     val viewModel = hiltViewModel<RestoreLocalViewModel, RestoreLocalViewModel.Factory> { factory ->
         factory.create(backupJsonString, statPage, fileName)
     }

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
@@ -18,8 +19,10 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.marketkit.models.BlockchainType
+import javax.inject.Inject
 
-class RestoreViewModel(): ViewModelUiState<RestoreViewModel.UiState>() {
+@HiltViewModel
+class RestoreViewModel @Inject constructor() : ViewModelUiState<RestoreViewModel.UiState>() {
     private val marketKit = App.marketKit
     private val accountFactory = App.accountFactory
     private val accountManager = App.accountManager
@@ -50,20 +53,6 @@ class RestoreViewModel(): ViewModelUiState<RestoreViewModel.UiState>() {
 
     private var openSelectCoinsScreen = false
     private var restored = false
-
-    constructor(
-        accountType: AccountType? = null,
-        accountName: String = "",
-        manualBackup: Boolean = false,
-        fileBackup: Boolean = false,
-        statPage: StatPage? = null
-    ) : this() {
-        this.accountType = accountType
-        this.accountName = accountName
-        this.manualBackup = manualBackup
-        this.fileBackup = fileBackup
-        this.statPage = statPage
-    }
 
     override fun createState() = UiState(
         openSelectCoinsScreen = openSelectCoinsScreen,
