@@ -230,7 +230,8 @@ private fun statusIconAndTint(status: SwapStatus): Pair<Int, Color> = when (stat
 
     SwapStatus.Completed -> Pair(R.drawable.ic_done_filled_20, ComposeAppTheme.colors.remus)
     SwapStatus.Refunded -> Pair(R.drawable.ic_arrow_return_20, ComposeAppTheme.colors.grey)
-    SwapStatus.Failed -> Pair(R.drawable.ic_warning_filled_20, ComposeAppTheme.colors.redL)
+    SwapStatus.Failed,
+    SwapStatus.ActionRequired -> Pair(R.drawable.ic_warning_filled_20, ComposeAppTheme.colors.redL)
 }
 
 @Preview

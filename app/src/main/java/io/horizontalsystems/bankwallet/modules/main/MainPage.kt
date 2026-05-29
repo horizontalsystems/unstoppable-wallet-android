@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectPa
 import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
@@ -205,15 +206,6 @@ private fun MainScreen(
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
                 fragmentNavController.slideFromBottom(WCErrorNoAccountSheet)
-            }
-
-            is SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
-                fragmentNavController.slideFromBottom(
-                    BackupRequiredSheet(BackupRequiredSheet.Input(wcSupportState.account, text))
-                )
-
-                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
             }
 
             is SupportState.NotSupported -> {

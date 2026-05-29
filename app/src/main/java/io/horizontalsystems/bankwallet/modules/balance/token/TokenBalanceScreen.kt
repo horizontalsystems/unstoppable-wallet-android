@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
-import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.balance.LockedValue
@@ -194,31 +193,18 @@ fun TokenBalanceScreen(
         }
     ) {
         val onClickReceive = {
-            try {
-                val wallet = viewModel.getWalletForReceive()
-                if (wallet.token.blockchainType == BlockchainType.Zcash) {
-                    navController.slideFromRight(
-                        ZcashAddressTypeSelectPage(ZcashAddressTypeSelectPage.Input(wallet))
-                    )
-                } else {
-                    navController.slideFromRight(
-                        ReceivePage(ReceivePage.Input(wallet))
-                    )
-                }
-
-                stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
-            } catch (e: BackupRequiredError) {
-                val text = Translator.getString(
-                    R.string.ManageAccount_BackupRequired_Description,
-                    e.account.name,
-                    e.coinTitle
+            val wallet = viewModel.wallet
+            if (wallet.token.blockchainType == BlockchainType.Zcash) {
+                navController.slideFromRight(
+                    ZcashAddressTypeSelectPage(ZcashAddressTypeSelectPage.Input(wallet))
                 )
-                navController.slideFromBottom(
-                    BackupRequiredSheet(BackupRequiredSheet.Input(e.account, text))
+            } else {
+                navController.slideFromRight(
+                    ReceivePage(ReceivePage.Input(wallet))
                 )
-
-                stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
             }
+
+            stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         }
 
         val transactionItems = uiState.transactions
@@ -368,17 +354,6 @@ fun TokenBalanceScreen(
                         navController.slideFromRight(
                             ReceivePage(ReceivePage.Input(wallet))
                         )
-                    } catch (e: BackupRequiredError) {
-                        val text = Translator.getString(
-                            R.string.ManageAccount_BackupRequired_Description,
-                            e.account.name,
-                            e.coinTitle
-                        )
-                        navController.slideFromBottom(
-                            BackupRequiredSheet(BackupRequiredSheet.Input(e.account, text))
-                        )
-
-                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
                     } catch (e: IllegalStateException) {
                         Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                     }

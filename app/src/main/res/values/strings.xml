@@ -832,6 +832,14 @@
     <string name="SwapInfo_StatusCompleted">Completed</string>
     <string name="SwapInfo_StatusRefunded">Refunded</string>
     <string name="SwapInfo_StatusFailed">Failed</string>
+    <string name="SwapInfo_RequestRefund">Request Refund</string>
+    <string name="SwapInfo_RequestRefundDescription">The provider needs your swap details to process a refund. They’ll be included when you contact the provider.</string>
+    <string name="SwapInfo_SwapId">Swap ID</string>
+    <string name="SwapInfo_Amount">Amount</string>
+    <string name="SwapInfo_RefundAddress">Refund Address</string>
+    <string name="SwapInfo_CopyDetails">Copy Details</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Swap stopped by provider</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Your deposit was received, but provider could not complete the swap. Request a refund below to get your funds back.</string>
     <string name="Button_View">View</string>
 
     <!--Approve-->

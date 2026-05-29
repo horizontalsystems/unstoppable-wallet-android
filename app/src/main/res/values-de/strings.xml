@@ -1728,4 +1728,12 @@
     <string name="RiskLevel_Excellent_Description">Direkte On-Chain-Ausführung. Keine Anbieterprüfungen oder Sperren. Automatische Rückerstattung bei fehlgeschlagenem Swap.</string>
     <string name="RiskLevel_Good_Description">Der Anbieter prüft Transaktionen automatisch vor Abschluss. Bei erkannten Problemen wird der Swap abgelehnt und Gelder werden erstattet.</string>
     <string name="RiskLevel_Fair_Description">Zusätzliche Überprüfung kann für einige Transaktionen erforderlich sein. Bei erkannten Problemen werden Gelder normalerweise automatisch erstattet.</string>
+    <string name="SwapInfo_RequestRefund">Rückerstattung anfordern</string>
+    <string name="SwapInfo_RequestRefundDescription">Der Anbieter benötigt Ihre Swap-Details, um eine Rückerstattung zu bearbeiten. Sie werden eingebunden, wenn Sie den Anbieter kontaktieren.</string>
+    <string name="SwapInfo_SwapId">Swap-ID</string>
+    <string name="SwapInfo_Amount">Betrag</string>
+    <string name="SwapInfo_RefundAddress">Rückerstattungsadresse</string>
+    <string name="SwapInfo_CopyDetails">Details kopieren</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Swap vom Anbieter gestoppt</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Ihre Einzahlung wurde empfangen, aber der Anbieter konnte den Swap nicht abschließen. Fordern Sie unten eine Rückerstattung an, um Ihre Gelder zurückzuerhalten.</string>
 </resources>

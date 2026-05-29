@@ -66,11 +66,11 @@ web3j = "5.0.2"
 unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
-moneroKit = "5f9ef09"
+moneroKit = "d5d3134"
 zanoKit = "e5887f3"
 stellarKit = "519533b"
 tonKit = "1bdebd4"
-bitcoinKit = "fccb8c2"
+bitcoinKit = "cdd7325"
 ethereumKit = "8c70f5e"
 feeRateKit = "393cc14"
 marketKit = "ed0f4c5"

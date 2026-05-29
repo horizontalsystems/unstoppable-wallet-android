@@ -51,6 +51,7 @@ class SwapInfoViewModel(
     private var swappingTxUrl: String? = null
     private var sendingTxUrl: String? = null
     private var isSingleChain: Boolean = false
+    private var pauseReason: PauseReason? = null
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -73,6 +74,7 @@ class SwapInfoViewModel(
         swappingTxUrl = swappingTxUrl,
         sendingTxUrl = sendingTxUrl,
         isSingleChain = isSingleChain,
+        pauseReason = pauseReason,
     )
 
     init {
@@ -115,6 +117,7 @@ class SwapInfoViewModel(
             record.tokenInBlockchainTypeUid,
             record.tokenOutBlockchainTypeUid,
         )
+        pauseReason = PauseReason.fromApi(record.pauseReason)
 
         emitState()
     }
@@ -210,4 +213,5 @@ data class SwapInfoUiState(
     val swappingTxUrl: String?,
     val sendingTxUrl: String?,
     val isSingleChain: Boolean,
+    val pauseReason: PauseReason?,
 )

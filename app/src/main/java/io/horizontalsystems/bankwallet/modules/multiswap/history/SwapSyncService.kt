@@ -74,14 +74,20 @@ class SwapSyncService(
                 swapRecordManager.updateOutboundTransactionHash(record.id, outboundHash)
             }
 
-            val newStatus = mapStatus(response)
-                ?.takeIf { it != SwapStatus.valueOf(record.status) }
-                ?: return
+            val mappedStatus = mapStatus(response)
+            val currentStatus = runCatching { SwapStatus.valueOf(record.status) }.getOrNull()
+            val newPauseReason = response.meta?.pauseReason?.takeIf { mappedStatus == SwapStatus.ActionRequired }
+            val statusChanged = mappedStatus != null && mappedStatus != currentStatus
+            val pauseReasonChanged = mappedStatus != null && newPauseReason != record.pauseReason
+
+            if (!statusChanged && !pauseReasonChanged) return
+
+            val newStatus = mappedStatus ?: currentStatus ?: return
             val newAmountOut = response.toAmount?.toBigDecimalOrNull()
             if (newAmountOut != null && newAmountOut > BigDecimal.ZERO) {
-                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, response.toAmount)
+                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, response.toAmount, newPauseReason)
             } else {
-                swapRecordManager.updateStatus(record.id, newStatus)
+                swapRecordManager.updateStatus(record.id, newStatus, newPauseReason)
             }
         } catch (e: IllegalArgumentException) {
             // Provider not supported for tracking — skip silently
@@ -107,9 +113,9 @@ class SwapSyncService(
                 ?: return
             val newAmountOut = response.receive?.amountFormatted?.takeIf { it > BigDecimal.ZERO }
             if (newAmountOut != null) {
-                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, newAmountOut.toPlainString())
+                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, newAmountOut.toPlainString(), null)
             } else {
-                swapRecordManager.updateStatus(record.id, newStatus)
+                swapRecordManager.updateStatus(record.id, newStatus, null)
             }
         } catch (e: Throwable) {
             Log.e("SwapSyncService", "Failed to sync AllBridge record ${record.id}: ${e.message}")
@@ -147,6 +153,7 @@ class SwapSyncService(
         "completed" -> SwapStatus.Completed
         "refunded" -> SwapStatus.Refunded
         "failed" -> SwapStatus.Failed
+        "action_required" -> SwapStatus.ActionRequired
         else -> null // "unknown" — leave status unchanged
     }
 

@@ -47,7 +47,6 @@ import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceContextMenuItem
@@ -55,7 +54,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceUiState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
-import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalancePage
 import io.horizontalsystems.bankwallet.modules.coin.CoinPage
@@ -294,26 +292,12 @@ fun BalanceItems(
                             title = stringResource(R.string.Balance_Receive),
                             enabled = true,
                             onClick = {
-                                when (val receiveAllowedState =
-                                    viewModel.getReceiveAllowedState()) {
-                                    ReceiveAllowedState.Allowed -> {
-                                        navController.slideFromRight(ReceiveChooseCoinPage)
+                                navController.slideFromRight(ReceiveChooseCoinPage)
 
-                                        stat(
-                                            page = StatPage.Balance,
-                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
-                                        )
-                                    }
-
-                                    is ReceiveAllowedState.BackupRequired -> {
-                                        showBackupRequiredDialog(
-                                            account = receiveAllowedState.account,
-                                            navController = navController
-                                        )
-                                    }
-
-                                    null -> Unit
-                                }
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.ReceiveTokenList)
+                                )
                             }
                         )
                         BalanceActionButton(
@@ -562,34 +546,15 @@ private fun handleContextMenuClick(
 
 private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: HSNavigation) {
     val address = viewModel.getReceiveAddress(wallet)
-    val receiveAllowedState = viewModel.getReceiveAllowedState()
 
     when {
         address == null -> showErrorAddressUnavailable(view)
-        receiveAllowedState is ReceiveAllowedState.BackupRequired -> showBackupRequiredDialog(wallet.account, navController)
         else -> copyAddressAndShowSuccess(view, address, wallet)
     }
 }
 
 private fun showErrorAddressUnavailable(view: View) {
     HudHelper.showErrorMessage(view, R.string.Error)
-}
-
-private fun showBackupRequiredDialog(
-    account: Account,
-    navController: HSNavigation
-) {
-    val text = Translator.getString(
-        R.string.Balance_Receive_BackupRequired_Description,
-        account.name
-    )
-    navController.slideFromBottom(
-        BackupRequiredSheet(BackupRequiredSheet.Input(account, text))
-    )
-    stat(
-        page = StatPage.Balance,
-        event = StatEvent.Open(StatPage.BackupRequired)
-    )
 }
 
 private fun copyAddressAndShowSuccess(

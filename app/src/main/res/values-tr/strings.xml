@@ -1320,4 +1320,12 @@
     <string name="RiskLevel_Excellent_Description">Doğrudan zincir üstü yürütme. Sağlayıcı kontrolleri veya donması yok. Swap başarısız olursa otomatik geri ödeme.</string>
     <string name="RiskLevel_Good_Description">Sağlayıcı tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorunlar tespit edilirse swap reddedilir ve fonlar geri ödenir.</string>
     <string name="RiskLevel_Fair_Description">Bazı işlemler için ek doğrulama gerekebilir. Sorunlar tespit edilirse fonlar genellikle otomatik olarak geri ödenir.</string>
+    <string name="SwapInfo_RequestRefund">Geri Ödeme Talep Et</string>
+    <string name="SwapInfo_RequestRefundDescription">Sağlayıcının geri ödemeyi işlemek için takas ayrıntılarınıza ihtiyacı vardır. Sağlayıcıyla iletişim kurduğunuzda dahil edileceklerdir.</string>
+    <string name="SwapInfo_SwapId">Takas Kimliği</string>
+    <string name="SwapInfo_Amount">Miktar</string>
+    <string name="SwapInfo_RefundAddress">Geri Ödeme Adresi</string>
+    <string name="SwapInfo_CopyDetails">Ayrıntıları Kopyala</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Takas sağlayıcı tarafından durduruldu</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Mevduatınız alındı, ancak sağlayıcı takası tamamlayamadı. Fonlarınızı geri almak için aşağıdan geri ödeme talep edin.</string>
 </resources>

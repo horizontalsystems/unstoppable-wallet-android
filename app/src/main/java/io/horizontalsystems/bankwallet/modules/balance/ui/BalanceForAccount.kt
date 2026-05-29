@@ -106,19 +106,6 @@ fun BalanceForAccount(
                     navController.slideFromBottom(WCErrorNoAccountSheet)
                 }
 
-                is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                    val text =
-                        Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                    navController.slideFromBottom(
-                        BackupRequiredSheet(BackupRequiredSheet.Input(state.account, text))
-                    )
-
-                    stat(
-                        page = StatPage.Balance,
-                        event = StatEvent.Open(StatPage.BackupRequired)
-                    )
-                }
-
                 is WCManager.SupportState.NotSupported -> {
                     navController.slideFromBottom(
                         WCAccountTypeNotSupportedSheet(WCAccountTypeNotSupportedSheet.Input(state.accountTypeDescription))

@@ -1721,4 +1721,12 @@
     <string name="RiskLevel_Excellent_Description">Exécution directe en chaîne. Aucune vérification ou gel du fournisseur. Remboursements automatiques en cas d\'échec du swap.</string>
     <string name="RiskLevel_Good_Description">Le fournisseur vérifie automatiquement les transactions avant leur finalisation. Si des problèmes sont détectés, le swap est rejeté et les fonds sont remboursés.</string>
     <string name="RiskLevel_Fair_Description">Une vérification supplémentaire peut être nécessaire pour certaines transactions. Si des problèmes sont détectés, les fonds sont généralement remboursés automatiquement.</string>
+    <string name="SwapInfo_RequestRefund">Demander un remboursement</string>
+    <string name="SwapInfo_RequestRefundDescription">Le fournisseur a besoin de vos détails d\'échange pour traiter un remboursement. Ils seront inclus lorsque vous contacterez le fournisseur.</string>
+    <string name="SwapInfo_SwapId">ID d\'échange</string>
+    <string name="SwapInfo_Amount">Montant</string>
+    <string name="SwapInfo_RefundAddress">Adresse de remboursement</string>
+    <string name="SwapInfo_CopyDetails">Copier les détails</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Échange arrêté par le fournisseur</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Votre dépôt a été reçu, mais le fournisseur n\'a pas pu terminer l\'échange. Demandez un remboursement ci-dessous pour récupérer vos fonds.</string>
 </resources>

@@ -41,7 +41,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
@@ -78,6 +84,25 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
     HSScaffold(
         title = stringResource(R.string.SwapInfo_Title),
         onBack = navController::removeLastOrNull,
+        bottomBar = {
+            if (uiState.status == SwapStatus.ActionRequired) {
+                ButtonsGroupWithShade {
+                    HSButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        title = stringResource(R.string.SwapInfo_RequestRefund),
+                        variant = ButtonVariant.Primary,
+                        onClick = {
+                            navController.slideFromBottom(
+                                R.id.requestRefundDialog,
+                                RequestRefundDialog.Input(recordId),
+                            )
+                        },
+                    )
+                }
+            }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -223,6 +248,17 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
                 sendingTxUrl = uiState.sendingTxUrl,
             )
 
+            if (uiState.status == SwapStatus.ActionRequired) {
+                VSpacer(16.dp)
+                AlertCard(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    format = AlertFormat.Structured,
+                    type = AlertType.Critical,
+                    titleCustom = stringResource(R.string.SwapInfo_SwapStoppedByProvider),
+                    text = stringResource(R.string.SwapInfo_SwapStoppedByProviderDescription),
+                )
+            }
+
             VSpacer(32.dp)
         }
     }
@@ -262,7 +298,8 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
                 failedIndex = null
             }
 
-            SwapStatus.Failed -> {
+            SwapStatus.Failed,
+            SwapStatus.ActionRequired -> {
                 steps = singleChainFailedSteps
                 activeIndex = -1
                 failedIndex = 0
@@ -282,10 +319,11 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
                 failedIndex = null
             }
 
-            SwapStatus.Failed -> {
-                steps = normalSteps
-                activeIndex = -1
-                failedIndex = 0
+            SwapStatus.Failed,
+            SwapStatus.ActionRequired -> {
+                steps = normalSteps.take(2)
+                activeIndex = 1
+                failedIndex = 1
             }
 
             SwapStatus.Depositing -> {
@@ -328,7 +366,7 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
         steps.forEachIndexed { index, label ->
             val isFailed = failedIndex == index
             val isDone = activeIndex > index
-            val isActive = activeIndex == index
+            val isActive = activeIndex == index && !isFailed
             val isFirst = index == 0
             val isLast = index == steps.lastIndex
             val stepUrl: String? = when (index) {
@@ -338,7 +376,9 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
                 else -> null
             }
             val showView = stepUrl != null && (isDone || isActive || isFailed)
-            val connectorColor = if (isDone) green else blade
+            val isPrevDone = index > 0 && activeIndex >= index
+            val topConnectorColor = if (isPrevDone) green else blade
+            val bottomConnectorColor = if (isDone) green else blade
 
             Row(
                 modifier = Modifier
@@ -365,14 +405,14 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
                         modifier = Modifier
                             .width(2.dp)
                             .weight(1f)
-                            .background(if (isFirst) Color.Transparent else connectorColor)
+                            .background(if (isFirst) Color.Transparent else topConnectorColor)
                     )
                     StepIndicator(isActive = isActive, isDone = isDone, isFailed = isFailed)
                     Box(
                         modifier = Modifier
                             .width(2.dp)
                             .weight(1f)
-                            .background(if (isLast) Color.Transparent else connectorColor)
+                            .background(if (isLast) Color.Transparent else bottomConnectorColor)
                     )
                 }
 
