@@ -1328,4 +1328,9 @@
     <string name="SwapInfo_CopyDetails">Ayrıntıları Kopyala</string>
     <string name="SwapInfo_SwapStoppedByProvider">Takas sağlayıcı tarafından durduruldu</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">Mevduatınız alındı, ancak sağlayıcı takası tamamlayamadı. Fonlarınızı geri almak için aşağıdan geri ödeme talep edin.</string>
+    <string name="BackupRequired_Title">Cüzdanınızı yedekleyin</string>
+    <string name="BackupRequired_Description">Yedekleme olmadan, telefonunuzu kaybetmek paranızı kalıcı olarak kaybetmek anlamına gelir. Onları kurtarmanın bir yolu yoktur.</string>
+    <string name="BackupRequired_ManualBackupDescription">Kurtarma ifadenizi yazın</string>
+    <string name="BackupRequired_LocalBackupDescription">Şifrelenmiş dosyayı cihazınıza kaydedin</string>
+    <string name="BackupRequired_RemindLater">Daha Sonra Hatırlat</string>
 </resources>

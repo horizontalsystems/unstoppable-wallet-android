@@ -1732,4 +1732,9 @@
     <string name="SwapInfo_CopyDetails">Copiar detalhes</string>
     <string name="SwapInfo_SwapStoppedByProvider">Swap interrompido pelo provedor</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">Seu depósito foi recebido, mas o provedor não conseguiu concluir o swap. Solicite um reembolso abaixo para recuperar seus fundos.</string>
+    <string name="BackupRequired_Title">Faça backup da sua carteira</string>
+    <string name="BackupRequired_Description">Sem um backup, perder seu telefone significa perder seus fundos permanentemente. Não há forma de recuperá-los.</string>
+    <string name="BackupRequired_ManualBackupDescription">Anote sua frase de recuperação</string>
+    <string name="BackupRequired_LocalBackupDescription">Salve arquivo criptografado em seu dispositivo</string>
+    <string name="BackupRequired_RemindLater">Lembrar mais tarde</string>
 </resources>

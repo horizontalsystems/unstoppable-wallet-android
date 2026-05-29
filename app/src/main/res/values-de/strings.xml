@@ -1736,4 +1736,9 @@
     <string name="SwapInfo_CopyDetails">Details kopieren</string>
     <string name="SwapInfo_SwapStoppedByProvider">Swap vom Anbieter gestoppt</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">Ihre Einzahlung wurde empfangen, aber der Anbieter konnte den Swap nicht abschließen. Fordern Sie unten eine Rückerstattung an, um Ihre Gelder zurückzuerhalten.</string>
+    <string name="BackupRequired_Title">Sichern Sie Ihre Wallet</string>
+    <string name="BackupRequired_Description">Ohne Sicherung bedeutet der Verlust Ihres Telefons den permanenten Verlust Ihrer Gelder. Es gibt keine Möglichkeit, diese wiederherzustellen.</string>
+    <string name="BackupRequired_ManualBackupDescription">Schreiben Sie Ihre Recovery-Phrase auf</string>
+    <string name="BackupRequired_LocalBackupDescription">Speichern Sie die verschlüsselte Datei auf Ihrem Gerät</string>
+    <string name="BackupRequired_RemindLater">Später erinnern</string>
 </resources>

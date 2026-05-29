@@ -1494,4 +1494,9 @@
     <string name="SwapInfo_CopyDetails">세부 정보 복사</string>
     <string name="SwapInfo_SwapStoppedByProvider">공급자에 의해 중단된 스왑</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">입금이 수신되었지만 공급자가 스왑을 완료할 수 없습니다. 아래에서 환불을 요청하여 자금을 돌려받으세요.</string>
+    <string name="BackupRequired_Title">지갑 백업</string>
+    <string name="BackupRequired_Description">백업 없이 휴대폰을 잃으면 자금을 영구적으로 잃게 됩니다. 복구할 방법이 없습니다.</string>
+    <string name="BackupRequired_ManualBackupDescription">복구 구문을 적어두세요</string>
+    <string name="BackupRequired_LocalBackupDescription">암호화된 파일을 기기에 저장하세요</string>
+    <string name="BackupRequired_RemindLater">나중에 알려주기</string>
 </resources>

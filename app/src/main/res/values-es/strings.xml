@@ -1727,4 +1727,9 @@
     <string name="SwapInfo_CopyDetails">Copiar detalles</string>
     <string name="SwapInfo_SwapStoppedByProvider">Swap detenido por el proveedor</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">Se recibió su depósito, pero el proveedor no pudo completar el swap. Solicite un reembolso a continuación para recuperar sus fondos.</string>
+    <string name="BackupRequired_Title">Respalda tu wallet</string>
+    <string name="BackupRequired_Description">Sin una copia de seguridad, perder tu teléfono significa perder tus fondos permanentemente. No hay forma de recuperarlos.</string>
+    <string name="BackupRequired_ManualBackupDescription">Anota tu frase de recuperación</string>
+    <string name="BackupRequired_LocalBackupDescription">Guarda un archivo encriptado en tu dispositivo</string>
+    <string name="BackupRequired_RemindLater">Recordarme después</string>
 </resources>

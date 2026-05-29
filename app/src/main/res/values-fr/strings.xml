@@ -1729,4 +1729,9 @@
     <string name="SwapInfo_CopyDetails">Copier les détails</string>
     <string name="SwapInfo_SwapStoppedByProvider">Échange arrêté par le fournisseur</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">Votre dépôt a été reçu, mais le fournisseur n\'a pas pu terminer l\'échange. Demandez un remboursement ci-dessous pour récupérer vos fonds.</string>
+    <string name="BackupRequired_Title">Sauvegardez votre portefeuille</string>
+    <string name="BackupRequired_Description">Sans sauvegarde, la perte de votre téléphone signifie la perte permanente de vos fonds. Il n\'y a aucun moyen de les récupérer.</string>
+    <string name="BackupRequired_ManualBackupDescription">Notez votre phrase de récupération</string>
+    <string name="BackupRequired_LocalBackupDescription">Enregistrez un fichier chiffré sur votre appareil</string>
+    <string name="BackupRequired_RemindLater">Me le rappeler plus tard</string>
 </resources>

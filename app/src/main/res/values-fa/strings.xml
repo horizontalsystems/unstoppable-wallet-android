@@ -643,4 +643,9 @@
     <string name="SwapInfo_CopyDetails">کپی جزئیات</string>
     <string name="SwapInfo_SwapStoppedByProvider">تبدیل توسط ارائه‌دهنده متوقف شد</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">سپرده شما دریافت شد، اما ارائه‌دهنده نتوانست تبدیل را تکمیل کند. برای بازگرداندن صندوق خود، در زیر درخواست بازپرداخت کنید.</string>
+    <string name="BackupRequired_Title">کیف پول خود را پشتیبان گیری کنید</string>
+    <string name="BackupRequired_Description">بدون پشتیبان گیری، از دست دادن گوشی شما به معنای از دست دادن دائمی وجوه شما است. هیچ راهی برای بازیابی آنها وجود ندارد.</string>
+    <string name="BackupRequired_ManualBackupDescription">عبارت بازیابی خود را یادداشت کنید</string>
+    <string name="BackupRequired_LocalBackupDescription">فایل رمزگذاری شده را در دستگاه خود ذخیره کنید</string>
+    <string name="BackupRequired_RemindLater">بعداً یادآوری کن</string>
 </resources>
