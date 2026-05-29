@@ -3,15 +3,12 @@ package io.horizontalsystems.bankwallet.modules.opencryptopay
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.withContext
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionResult
@@ -22,9 +19,11 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.math.BigDecimal
@@ -113,7 +112,9 @@ class OpenCryptoPayConfirmationViewModel(
                 val now = Instant.now().epochSecond
                 val expiry = try {
                     Instant.parse(expirationIso).epochSecond
-                } catch (_: Exception) { break }
+                } catch (_: Exception) {
+                    break
+                }
                 secondsUntilExpiry = maxOf(0, (expiry - now).toInt())
                 emitState()
                 if (secondsUntilExpiry == 0) break
@@ -137,14 +138,30 @@ class OpenCryptoPayConfirmationViewModel(
             val result = withContext(Dispatchers.IO) { sendTransactionService.sendTransaction() }
             val txHash = extractTxHash(result)
                 ?: throw Exception("Could not get transaction hash")
-            ocpProofScope.launch {
-                submitProofWithRetry(baseUrl, txHash)
-            }
+
+            App.appDatabase.ocpPaymentDao().insert(
+                OcpPaymentRecord(
+                    paymentId = paymentId,
+                    quoteId = quoteId,
+                    proofUrl = proofUrl,
+                    method = method,
+                    txHash = txHash,
+                    merchant = merchant,
+                    expirationIso = expirationIso,
+                    createdAt = System.currentTimeMillis(),
+                    proofSubmittedAt = null,
+                )
+            )
+            OcpProofSubmissionWorker.enqueue(App.instance, txHash)
         }
     }
 
     private suspend fun submitProofHexWithRetry(baseUrl: String, rawHex: String) {
         repeat(3) { attempt ->
+            Timber.d(
+                "OCP BTC GET /tx/ url=$proofUrl quote=$quoteId method=$method" +
+                        " hexPrefix=${rawHex.take(20)} attempt=${attempt + 1}/3"
+            )
             try {
                 OcpProofService.service(baseUrl).submitProofHex(
                     url = proofUrl,
@@ -152,39 +169,19 @@ class OpenCryptoPayConfirmationViewModel(
                     method = method,
                     hex = rawHex,
                 )
+                Timber.d("OCP BTC /tx/ success attempt=${attempt + 1}")
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
                 Timber.e("OCP BTC proof HTTP ${e.code()}: $body")
                 throw Exception("HTTP ${e.code()}: $body")
             } catch (e: Exception) {
+                Timber.d("OCP BTC /tx/ transient failure attempt=${attempt + 1} (${e.javaClass.simpleName}: ${e.message})")
                 if (attempt < 2) delay(2000L)
             }
         }
         Timber.e("OCP BTC proof failed after retries")
         throw Exception("Could not submit payment to merchant. Please try again.")
-    }
-
-    private suspend fun submitProofWithRetry(baseUrl: String, txHash: String) {
-        val delays = listOf(2_000L, 5_000L, 10_000L, 30_000L, 60_000L)
-        for ((attempt, delayMs) in delays.withIndex()) {
-            try {
-                OcpProofService.service(baseUrl).submitProofTx(
-                    url = proofUrl,
-                    quote = quoteId,
-                    method = method,
-                    tx = txHash,
-                )
-                return
-            } catch (e: HttpException) {
-                val body = e.response()?.errorBody()?.string()
-                Timber.e("OCP proof HTTP ${e.code()}: $body tx=$txHash")
-                return
-            } catch (e: Exception) {
-                delay(delayMs)
-            }
-        }
-        Timber.e("OCP proof gave up after ${delays.size} attempts, tx=$txHash")
     }
 
     private fun extractTxHash(result: SendTransactionResult): String? = when (result) {
@@ -213,6 +210,7 @@ class OpenCryptoPayConfirmationViewModel(
                     changeToFirstInput = false,
                     utxoFilters = UtxoFilters(),
                 )
+
             BlockchainType.Solana -> SendTransactionData.Solana.Simple(address, amount)
             BlockchainType.Tron -> SendTransactionData.Tron.Simple(address, amount)
             BlockchainType.Monero -> SendTransactionData.Monero(address, amount, null)
@@ -266,5 +264,3 @@ class OpenCryptoPayConfirmationViewModel(
         }
     }
 }
-
-private val ocpProofScope = CoroutineScope(Dispatchers.IO + SupervisorJob())

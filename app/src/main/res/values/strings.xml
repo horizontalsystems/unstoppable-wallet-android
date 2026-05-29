@@ -405,6 +405,13 @@
     <string name="OpenCryptoPay_NoSupportedMethods">No supported payment methods available for this wallet</string>
     <string name="OpenCryptoPay_URL">URL</string>
     <string name="OpenCryptoPay_ExpiresIn">Expires In</string>
+    <string name="OpenCryptoPay_PaymentId">Payment ID</string>
+    <string name="OpenCryptoPay_QuoteId">Quote ID</string>
+    <string name="OpenCryptoPay_ProofStatus">Proof Status</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Submitted</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Pending</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Reconciliation needed</string>
+    <string name="OpenCryptoPay_RetryNow">Retry now</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>

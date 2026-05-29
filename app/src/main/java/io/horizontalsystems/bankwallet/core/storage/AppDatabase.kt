@@ -50,9 +50,10 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_72_73
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_73_74
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_74_75
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_75_76
-import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_78_79
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_76_77
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_77_78
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_78_79
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_79_80
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -62,6 +63,7 @@ import io.horizontalsystems.bankwallet.entities.EvmMethodLabel
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.bankwallet.entities.LogEntry
 import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
+import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
 import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
 import io.horizontalsystems.bankwallet.entities.RecentAddress
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
@@ -86,40 +88,39 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(
-    version = 79, exportSchema = false, entities = [
-        EnabledWallet::class,
-        EnabledWalletCache::class,
-        AccountRecord::class,
-        BlockchainSettingRecord::class,
-        EvmSyncSourceRecord::class,
-        LogEntry::class,
-        FavoriteCoin::class,
-        WalletConnectV2Session::class,
-        RestoreSettingRecord::class,
-        ActiveAccount::class,
-        NftCollectionRecord::class,
-        NftAssetRecord::class,
-        NftMetadataSyncRecord::class,
-        NftAssetBriefMetadataRecord::class,
-        ProFeaturesSessionKey::class,
-        EvmAddressLabel::class,
-        EvmMethodLabel::class,
-        SyncerState::class,
-        TokenAutoEnabledBlockchain::class,
-        ChartIndicatorSetting::class,
-        Pin::class,
-        StatRecord::class,
-        ScannedTransaction::class,
-        SpamScanState::class,
-        RecentAddress::class,
-        MoneroNodeRecord::class,
-        ZanoNodeRecord::class,
-        SwapProviderAssetRecord::class,
-        SwapProviderChainRecord::class,
-        SwapRecord::class,
-    ]
-)
+@Database(version = 80, exportSchema = false, entities = [
+    EnabledWallet::class,
+    EnabledWalletCache::class,
+    AccountRecord::class,
+    BlockchainSettingRecord::class,
+    EvmSyncSourceRecord::class,
+    LogEntry::class,
+    FavoriteCoin::class,
+    WalletConnectV2Session::class,
+    RestoreSettingRecord::class,
+    ActiveAccount::class,
+    NftCollectionRecord::class,
+    NftAssetRecord::class,
+    NftMetadataSyncRecord::class,
+    NftAssetBriefMetadataRecord::class,
+    ProFeaturesSessionKey::class,
+    EvmAddressLabel::class,
+    EvmMethodLabel::class,
+    SyncerState::class,
+    TokenAutoEnabledBlockchain::class,
+    ChartIndicatorSetting::class,
+    Pin::class,
+    StatRecord::class,
+    ScannedTransaction::class,
+    SpamScanState::class,
+    RecentAddress::class,
+    MoneroNodeRecord::class,
+    ZanoNodeRecord::class,
+    SwapProviderAssetRecord::class,
+    SwapProviderChainRecord::class,
+    SwapRecord::class,
+    OcpPaymentRecord::class,
+])
 
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -149,6 +150,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun swapProviderAssetDao(): SwapProviderAssetDao
     abstract fun swapProviderChainDao(): SwapProviderChainDao
     abstract fun swapRecordDao(): SwapRecordDao
+    abstract fun ocpPaymentDao(): OcpPaymentDao
 
     companion object {
 
@@ -214,6 +216,7 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_76_77,
                     Migration_77_78,
                     Migration_78_79,
+                    Migration_79_80,
                 )
                 .build()
         }

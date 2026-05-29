@@ -120,6 +120,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.stellar.WCHandlerSt
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
+import io.horizontalsystems.bankwallet.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -638,6 +639,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 MarketWidgetWorker.enqueueWork(instance)
             } else {
                 MarketWidgetWorker.cancel(instance)
+            }
+
+            appDatabase.ocpPaymentDao().getPending().forEach { record ->
+                OcpProofSubmissionWorker.enqueue(instance, record.txHash)
             }
 
             evmLabelManager.sync()
