@@ -70,12 +70,12 @@ class TokenBalanceViewModel @AssistedInject constructor(
     private val localStorage: ILocalStorage,
     private val coinManager: ICoinManager,
     private val restoreSettingsManager: RestoreSettingsManager,
+    private val transactionViewItem2Factory: TransactionViewItemFactory,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val balanceService: TokenBalanceService
     private val balanceViewItemFactory: BalanceViewItemFactory
     private val transactionsService: TokenTransactionsService
-    private val transactionViewItem2Factory: TransactionViewItemFactory
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
 
@@ -108,10 +108,6 @@ class TokenBalanceViewModel @AssistedInject constructor(
             NftMetadataService(nftMetadataManager),
             spamManager,
             transactionAdapterManager
-        )
-
-        transactionViewItem2Factory = TransactionViewItemFactory(
-            evmLabelManager, contactsRepository, balanceHiddenManager, localStorage
         )
 
         viewModelScope.launch(Dispatchers.IO) {

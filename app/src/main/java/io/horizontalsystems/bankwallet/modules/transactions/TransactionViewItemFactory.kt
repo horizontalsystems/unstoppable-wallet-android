@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
@@ -54,6 +54,7 @@ class TransactionViewItemFactory @Inject constructor(
     private val contactsRepository: ContactsRepository,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val localStorage: ILocalStorage,
+    private val numberFormatter: IAppNumberFormatter,
 ) {
 
     private var showAmount = !balanceHiddenManager.balanceHidden
@@ -1432,7 +1433,7 @@ class TransactionViewItemFactory @Inject constructor(
     }
 
     private fun getCurrencyString(currencyValue: CurrencyValue): String {
-        return App.numberFormatter.formatFiatShort(currencyValue.value.abs(), currencyValue.currency.symbol, 2)
+        return numberFormatter.formatFiatShort(currencyValue.value.abs(), currencyValue.currency.symbol, 2)
     }
 
     private fun getCoinString(transactionValue: TransactionValue, hideSign: Boolean = false): String {
@@ -1444,13 +1445,13 @@ class TransactionViewItemFactory @Inject constructor(
                 else -> ""
             }
             val coinAmount = if (roundCoinAmount) {
-                App.numberFormatter.formatCoinShort(
+                numberFormatter.formatCoinShort(
                     decimalValue.abs(),
                     transactionValue.coinCode,
                     transactionValue.decimals ?: 8,
                 )
             } else {
-                App.numberFormatter.formatCoinFull(
+                numberFormatter.formatCoinFull(
                     decimalValue.abs(),
                     transactionValue.coinCode,
                     transactionValue.decimals ?: 8,

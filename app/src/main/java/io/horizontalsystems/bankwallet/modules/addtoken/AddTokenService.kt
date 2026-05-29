@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -21,6 +21,7 @@ class AddTokenService @Inject constructor(
     private val walletManager: WalletManager,
     private val accountManager: IAccountManager,
     marketKit: MarketKitWrapper,
+    private val appConfigProvider: AppConfigProvider,
 ) {
 
     private val blockchainTypes = listOf(
@@ -56,7 +57,7 @@ class AddTokenService @Inject constructor(
                 AddTonTokenBlockchainService(blockchain)
             }
             BlockchainType.Solana -> {
-                AddSolanaTokenBlockchainService.getInstance(blockchain, App.appConfigProvider.solanaJupiterApiKey)
+                AddSolanaTokenBlockchainService.getInstance(blockchain, appConfigProvider.solanaJupiterApiKey)
             }
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
