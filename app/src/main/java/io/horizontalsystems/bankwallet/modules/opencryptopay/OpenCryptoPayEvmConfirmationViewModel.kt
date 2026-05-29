@@ -131,6 +131,10 @@ class OpenCryptoPayEvmConfirmationViewModel(
 
     private suspend fun submitProofWithRetry(baseUrl: String, rawHex: String) {
         repeat(3) { attempt ->
+            Timber.d(
+                "OCP EVM GET /tx/ url=$proofUrl quote=$quoteId method=$method" +
+                " hexPrefix=${rawHex.take(20)} attempt=${attempt + 1}/3"
+            )
             try {
                 OcpProofService.service(baseUrl).submitProofHex(
                     url = proofUrl,
@@ -138,12 +142,14 @@ class OpenCryptoPayEvmConfirmationViewModel(
                     method = method,
                     hex = rawHex,
                 )
+                Timber.d("OCP EVM /tx/ success attempt=${attempt + 1}")
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
                 Timber.e("OCP EVM proof failed: HTTP ${e.code()} body=$body")
                 throw Exception("HTTP ${e.code()}: $body")
             } catch (e: Exception) {
+                Timber.d("OCP EVM /tx/ transient failure attempt=${attempt + 1} (${e.javaClass.simpleName}: ${e.message})")
                 if (attempt < 2) delay(2000L)
             }
         }

@@ -646,6 +646,21 @@ class TransactionInfoViewItemFactory(
                 }
             }
         }
+        transactionItem.ocpPayment?.let { ocp ->
+            val ocpSection = buildList<TransactionInfoViewItem> {
+                ocp.merchant?.let { add(Value(Translator.getString(R.string.OpenCryptoPay_Merchant), it)) }
+                add(Value(Translator.getString(R.string.OpenCryptoPay_PaymentId), ocp.paymentId))
+                add(Value(Translator.getString(R.string.OpenCryptoPay_QuoteId), ocp.quoteId))
+                val statusRes = when {
+                    ocp.proofSubmittedAt != null -> R.string.OpenCryptoPay_ProofStatus_Submitted
+                    ocp.proofFailedAt != null -> R.string.OpenCryptoPay_ProofStatus_Reconciliation
+                    else -> R.string.OpenCryptoPay_ProofStatus_Pending
+                }
+                add(Value(Translator.getString(R.string.OpenCryptoPay_ProofStatus), Translator.getString(statusRes)))
+            }
+            itemSections.add(ocpSection)
+        }
+
         itemSections.add(TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData))
 
         return itemSections
