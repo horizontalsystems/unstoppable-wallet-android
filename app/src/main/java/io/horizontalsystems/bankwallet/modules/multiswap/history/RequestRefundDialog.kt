@@ -256,7 +256,7 @@ class RequestRefundViewModel(
     )
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             try {
                 load()
             } catch (e: Throwable) {
