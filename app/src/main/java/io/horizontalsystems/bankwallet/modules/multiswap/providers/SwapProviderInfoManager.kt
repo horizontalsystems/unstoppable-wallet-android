@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import kotlinx.coroutines.sync.Mutex
@@ -16,6 +17,7 @@ class SwapProviderInfoManager(
     private val mutex = Mutex()
     private var cache: Map<String, UnstoppableAPI.Response.Provider> = emptyMap()
     private var loaded = false
+    private var lastFailureAt: Long = 0L
 
     suspend fun getInfo(providerName: String): UnstoppableAPI.Response.Provider? {
         ensureLoaded()
@@ -24,9 +26,20 @@ class SwapProviderInfoManager(
 
     private suspend fun ensureLoaded() = mutex.withLock {
         if (loaded) return@withLock
-        runCatching {
-            cache = unstoppableAPI.providers().associateBy { it.provider.uppercase() }
-        }
-        loaded = true
+        if (System.currentTimeMillis() - lastFailureAt < RETRY_BACKOFF_MS) return@withLock
+
+        runCatching { unstoppableAPI.providers().associateBy { it.provider.uppercase() } }
+            .onSuccess {
+                cache = it
+                loaded = true
+            }
+            .onFailure { e ->
+                lastFailureAt = System.currentTimeMillis()
+                Log.e("SwapProviderInfoManager", "Failed to load providers", e)
+            }
+    }
+
+    companion object {
+        private const val RETRY_BACKOFF_MS = 60_000L
     }
 }
