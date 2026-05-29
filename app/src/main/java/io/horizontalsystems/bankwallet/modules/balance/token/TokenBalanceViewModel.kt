@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIcon
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
-import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
@@ -221,26 +220,12 @@ class TokenBalanceViewModel(
         }
     }
 
-    @Throws(BackupRequiredError::class)
-    fun getWalletForReceive(): Wallet {
-        when {
-            wallet.account.hasAnyBackup -> return wallet
-            else -> throw BackupRequiredError(wallet.account, wallet.coin.name)
-        }
-    }
-
-    @Throws(BackupRequiredError::class, IllegalStateException::class)
+    @Throws(IllegalStateException::class)
     fun getWalletForTronReceive(): Wallet {
-        when {
-            wallet.account.hasAnyBackup -> {
-                val tronToken =
-                    coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalStateException("Tron token not found")
-                val tronWallet = wallet.copy(token = tronToken)
-                return tronWallet
-            }
-
-            else -> throw BackupRequiredError(wallet.account, wallet.coin.name)
-        }
+        val tronToken =
+            coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalStateException("Tron token not found")
+        val tronWallet = wallet.copy(token = tronToken)
+        return tronWallet
     }
 
     fun onBottomReached() {

@@ -40,9 +40,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
-import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.balance.LockedValue
@@ -50,7 +48,7 @@ import io.horizontalsystems.bankwallet.modules.balance.StellarLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
@@ -195,34 +193,20 @@ fun TokenBalanceScreen(
         }
     ) {
         val onClickReceive = {
-            try {
-                val wallet = viewModel.getWalletForReceive()
-                if (wallet.token.blockchainType == BlockchainType.Zcash) {
-                    navController.slideFromRight(
-                        R.id.receiveSelectZcashAddressTypeFragment,
-                        ZcashAddressTypeSelectFragment.Input(wallet)
-                    )
-                } else {
-                    navController.slideFromRight(
-                        R.id.receiveFragment,
-                        ReceiveFragment.Input(wallet)
-                    )
-                }
-
-                stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
-            } catch (e: BackupRequiredError) {
-                val text = Translator.getString(
-                    R.string.ManageAccount_BackupRequired_Description,
-                    e.account.name,
-                    e.coinTitle
+            val wallet = viewModel.wallet
+            if (wallet.token.blockchainType == BlockchainType.Zcash) {
+                navController.slideFromRight(
+                    R.id.receiveSelectZcashAddressTypeFragment,
+                    ZcashAddressTypeSelectFragment.Input(wallet)
                 )
-                navController.slideFromBottom(
-                    R.id.backupRequiredDialog,
-                    BackupRequiredDialog.Input(e.account, text)
+            } else {
+                navController.slideFromRight(
+                    R.id.receiveFragment,
+                    ReceiveFragment.Input(wallet)
                 )
-
-                stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
             }
+
+            stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         }
 
         val transactionItems = uiState.transactions
@@ -375,18 +359,6 @@ fun TokenBalanceScreen(
                             R.id.receiveFragment,
                             ReceiveFragment.Input(wallet)
                         )
-                    } catch (e: BackupRequiredError) {
-                        val text = Translator.getString(
-                            R.string.ManageAccount_BackupRequired_Description,
-                            e.account.name,
-                            e.coinTitle
-                        )
-                        navController.slideFromBottom(
-                            R.id.backupRequiredDialog,
-                            BackupRequiredDialog.Input(e.account, text)
-                        )
-
-                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
                     } catch (e: IllegalStateException) {
                         Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                     }

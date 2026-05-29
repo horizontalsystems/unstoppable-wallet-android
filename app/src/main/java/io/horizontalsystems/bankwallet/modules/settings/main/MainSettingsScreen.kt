@@ -46,7 +46,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
@@ -206,19 +205,6 @@ private fun SettingSections(
 
                             WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                                 navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
-                            }
-
-                            is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                                val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                                navController.slideFromBottom(
-                                    R.id.backupRequiredDialog,
-                                    BackupRequiredDialog.Input(state.account, text)
-                                )
-
-                                stat(
-                                    page = StatPage.Settings,
-                                    event = StatEvent.Open(StatPage.BackupRequired)
-                                )
                             }
 
                             is WCManager.SupportState.NotSupported -> {

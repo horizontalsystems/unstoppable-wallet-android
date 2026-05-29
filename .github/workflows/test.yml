@@ -1,0 +1,43 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "test" ]
+  pull_request:
+    branches: [ "test" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    # 1. Get the commit author and message
+    - name: Get Release Notes
+      id: notes
+      run: |
+        AUTHOR=$(git log -1 --pretty=format:'%an')
+        MESSAGE=$(git log -1 --pretty=format:'%s')
+        echo "val=Build - Author: $AUTHOR, changes: $MESSAGE" >> $GITHUB_OUTPUT
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew assembleFdroidCiDebug
+
+    - uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: ${{ secrets.FIREBASE_APP_ID }}
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        groups: testers
+        file: app/build/outputs/apk/release/app-release.apk
+        # 2. Use the output from the notes step
+        releaseNotes: ${{ steps.notes.outputs.val }}      
