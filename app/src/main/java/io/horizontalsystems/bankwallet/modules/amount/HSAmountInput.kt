@@ -66,9 +66,7 @@ fun HSAmountInput(
     rate: CurrencyValue?,
     amountUnique: AmountUnique? = null
 ) {
-    val viewModel = hiltViewModel<AmountInputViewModel2, AmountInputViewModel2.Factory>(
-        key = "$coinCode-$coinDecimal-$fiatDecimal"
-    ) { factory ->
+    val viewModel = hiltViewModel<AmountInputViewModel2, AmountInputViewModel2.Factory> { factory ->
         factory.create(coinCode, coinDecimal, fiatDecimal, inputType)
     }
     LaunchedEffect(availableBalance) {

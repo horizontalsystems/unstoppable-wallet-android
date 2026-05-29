@@ -25,9 +25,7 @@ fun AvailableBalance(
     amountInputType: AmountInputType,
     rate: CurrencyValue?
 ) {
-    val viewModel = hiltViewModel<AvailableBalanceViewModel, AvailableBalanceViewModel.Factory>(
-        key = "$coinCode-$coinDecimal-$fiatDecimal"
-    ) { factory ->
+    val viewModel = hiltViewModel<AvailableBalanceViewModel, AvailableBalanceViewModel.Factory> { factory ->
         factory.create(coinCode, coinDecimal, fiatDecimal)
     }
     val formatted = viewModel.formatted
