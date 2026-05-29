@@ -129,9 +129,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
 
         Crossfade(uiState.tonTransactionRecord) { record ->
             if (record != null) {
-                val transactionInfoHelper = remember {
-                    TransactionInfoHelper()
-                }
+                val transactionInfoHelper = viewModel.transactionInfoHelper
 
                 Column {
                     record.actions.forEachIndexed { index, action ->

@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.core.meta
@@ -36,6 +37,7 @@ class TonConnectSendRequestViewModel @AssistedInject constructor(
     private val tonConnectManager: TonConnectManager,
     private val tonKitManager: TonKitManager,
     private val coinManager: ICoinManager,
+    val transactionInfoHelper: TransactionInfoHelper,
 ) : ViewModelUiState<TonConnectSendRequestUiState>() {
 
     private val sendRequestEntity = signTransaction?.request
