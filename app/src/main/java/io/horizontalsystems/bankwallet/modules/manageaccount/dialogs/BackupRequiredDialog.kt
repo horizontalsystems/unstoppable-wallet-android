@@ -5,7 +5,10 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -14,7 +17,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
@@ -24,14 +27,19 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetTextBlock
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellGroup
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
@@ -49,58 +57,28 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
                 navController.getInput<Input>()?.let { input ->
-                    BackupRequiredScreen(navController, input.account, input.text)
+                    BackupRequiredScreen(navController, input.account)
                 }
             }
         }
     }
 
     @Parcelize
-    data class Input(val account: Account, val text: String) : Parcelable
+    data class Input(val account: Account) : Parcelable
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
+fun BackupRequiredScreen(navController: NavController, account: Account) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = navController::popBackStack,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
-                    title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup),
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        navController.slideFromBottom(
-                            R.id.backupKeyFragment,
-                            account
-                        )
-
-                        stat(
-                            page = StatPage.BackupRequired,
-                            event = StatEvent.Open(StatPage.ManualBackup)
-                        )
-                    }
-                )
-                HSButton(
-                    title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup),
+                    title = stringResource(R.string.BackupRequired_RemindLater),
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
-                    onClick = {
-                        navController.slideFromBottom(R.id.backupLocalFragment, account)
-
-                        stat(
-                            page = StatPage.BackupRequired,
-                            event = StatEvent.Open(StatPage.FileBackup)
-                        )
-                    }
-                )
-                HSButton(
-                    title = stringResource(R.string.BackupRecoveryPhrase_Later),
-                    modifier = Modifier.fillMaxWidth(),
-                    style = ButtonStyle.Transparent,
-                    variant = ButtonVariant.Secondary,
-                    size = ButtonSize.Medium,
                     onClick = navController::popBackStack
                 )
             },
@@ -108,9 +86,67 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                 BottomSheetHeaderV3(
                     image72 = painterResource(R.drawable.warning_filled_24),
                     imageTint = ComposeAppTheme.colors.jacob,
-                    title = stringResource(R.string.BackupManager_BackupRequired)
+                    title = stringResource(R.string.BackupRequired_Title)
                 )
-                TextBlock(text = text, textAlign = TextAlign.Center)
+                BottomSheetTextBlock(stringResource(R.string.BackupRequired_Description))
+                VSpacer(8.dp)
+                CellGroup(paddingValues = PaddingValues(horizontal = 16.dp)) {
+                    CellPrimary(
+                        left = {
+                            Icon(
+                                modifier = Modifier.size(24.dp),
+                                painter = painterResource(R.drawable.ic_edit_24px),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                        },
+                        middle = {
+                            CellMiddleInfo(
+                                title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup).hs,
+                                subtitle = stringResource(R.string.BackupRequired_ManualBackupDescription).hs
+                            )
+                        },
+                        right = { CellRightNavigation() },
+                        onClick = {
+                            navController.slideFromBottom(
+                                R.id.backupKeyFragment,
+                                account
+                            )
+
+                            stat(
+                                page = StatPage.BackupRequired,
+                                event = StatEvent.Open(StatPage.ManualBackup)
+                            )
+                        }
+                    )
+                    HsDivider()
+                    CellPrimary(
+                        left = {
+                            Icon(
+                                modifier = Modifier.size(24.dp),
+                                painter = painterResource(R.drawable.ic_file_24),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.jacob
+                            )
+                        },
+                        middle = {
+                            CellMiddleInfo(
+                                title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup).hs,
+                                subtitle = stringResource(R.string.BackupRequired_LocalBackupDescription).hs
+                            )
+                        },
+                        right = { CellRightNavigation() },
+                        onClick = {
+                            navController.slideFromBottom(R.id.backupLocalFragment, account)
+
+                            stat(
+                                page = StatPage.BackupRequired,
+                                event = StatEvent.Open(StatPage.FileBackup)
+                            )
+                        }
+                    )
+                }
+                VSpacer(16.dp)
             }
         )
     }

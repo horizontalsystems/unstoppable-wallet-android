@@ -1595,6 +1595,11 @@
     <string name="BackupRecoveryPhrase_ManualBackup">Manual Backup</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Local Backup</string>
     <string name="BackupRecoveryPhrase_Later">Later</string>
+    <string name="BackupRequired_Title">Backup your wallet</string>
+    <string name="BackupRequired_Description">Without a backup, losing your phone means losing your funds permanently. There is no way to recover them.</string>
+    <string name="BackupRequired_ManualBackupDescription">Write down your recovery phrase</string>
+    <string name="BackupRequired_LocalBackupDescription">Save encrypted file to your device</string>
+    <string name="BackupRequired_RemindLater">Remind Me Later</string>
     <string name="BackupRecoveryPhrase_BackupRequiredText">Complete one of the wallet backup options to start using the wallet.</string>
     <string name="BackupRecoveryPhrase_BackupRecomendedText">It\'s recommended to have a manual backup for each wallet.</string>
 

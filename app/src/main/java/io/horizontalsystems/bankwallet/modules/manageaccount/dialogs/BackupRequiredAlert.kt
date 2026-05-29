@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Account
 import kotlinx.coroutines.Job
@@ -33,16 +32,12 @@ fun BackupRequiredAlert(navController: NavController) {
 
     val account = viewModel.account
     if (account != null) {
-        val text = Translator.getString(
-            R.string.Balance_Receive_BackupRequired_Description,
-            account.name,
-        )
         LaunchedEffect(account) {
             delay(300)
             viewModel.onHandled()
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
-                BackupRequiredDialog.Input(account, text)
+                BackupRequiredDialog.Input(account)
             )
         }
     }
