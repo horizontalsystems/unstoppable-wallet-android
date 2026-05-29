@@ -79,6 +79,7 @@ import cash.p.terminal.ui.compose.components.BadgeText
 import cash.p.terminal.ui.compose.components.CoinIconWithSyncProgress
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.CoinFragmentInput
+import cash.p.terminal.ui_compose.ScreenSecurityState
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
@@ -124,8 +125,9 @@ fun TokenBalanceScreen(
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
     LaunchedEffect(failedIconVisible) {
-        if (failedIconVisible) {
-            onSyncErrorClicked(uiState.balanceViewItem, viewModel, navController)
+        val viewItem = uiState.balanceViewItem
+        if (viewItem != null && shouldAutoShowSyncError(failedIconVisible, ScreenSecurityState.isAppLocked)) {
+            onSyncErrorClicked(viewItem, viewModel, navController)
         }
     }
 
@@ -653,6 +655,11 @@ private fun LockedBalanceCell(
         )
     }
 }
+
+// Never auto-open the wallet sync-error sheet while the app is locked: it lives in its
+// own Window and would leak wallet UI above the calculator/PIN disguise (deanonymization).
+internal fun shouldAutoShowSyncError(failedIconVisible: Boolean, appLocked: Boolean): Boolean =
+    failedIconVisible && !appLocked
 
 private fun onSyncErrorClicked(
     viewItem: BalanceViewItem,
