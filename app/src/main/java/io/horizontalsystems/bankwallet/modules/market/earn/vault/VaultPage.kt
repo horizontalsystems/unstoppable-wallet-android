@@ -18,15 +18,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -57,17 +52,12 @@ data class VaultPage(val input: Input) : HSPage() {
         val viewModel = hiltViewModel<VaultViewModel, VaultViewModel.Factory> { factory ->
             factory.create(input)
         }
-        val chartViewModel = viewModel<ChartViewModel>(
-            factory = remember {
-                object : ViewModelProvider.Factory {
-                    @Suppress("UNCHECKED_CAST")
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val chartService = VaultChartService(input.address, App.currencyManager, App.marketKit)
-                        return ChartModule.createViewModel(chartService, ChartCurrencyValueFormatterShortened()) as T
-                    }
-                }
-            }
-        )
+        val chartViewModel = hiltViewModel<ChartViewModel, ChartViewModel.Factory> { factory ->
+            factory.create(
+                VaultChartService(input.address, App.currencyManager, App.marketKit),
+                ChartCurrencyValueFormatterShortened()
+            )
+        }
         VaultScreen(
             viewModel,
             chartViewModel,

@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -21,9 +25,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.Date
 
-open class ChartViewModel(
-    protected val service: AbstractChartService,
-    private val valueFormatter: ChartModule.ChartNumberFormatter,
+@HiltViewModel(assistedFactory = ChartViewModel.Factory::class)
+open class ChartViewModel @AssistedInject constructor(
+    @Assisted val service: AbstractChartService,
+    @Assisted private val valueFormatter: ChartModule.ChartNumberFormatter,
 ) : ViewModelUiState<ChartUiState>() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
@@ -189,6 +194,11 @@ open class ChartViewModel(
 
     override fun onCleared() {
         service.stop()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(service: AbstractChartService, valueFormatter: ChartModule.ChartNumberFormatter): ChartViewModel
     }
 
     fun getSelectedPoint(selectedItem: SelectedItem): ChartModule.ChartHeaderView {

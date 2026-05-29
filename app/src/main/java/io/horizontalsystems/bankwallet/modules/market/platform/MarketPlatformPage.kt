@@ -29,13 +29,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -81,17 +77,12 @@ data class MarketPlatformPage(val platform: Platform) : HSPage() {
         val viewModel = hiltViewModel<MarketPlatformViewModel, MarketPlatformViewModel.Factory> { factory ->
             factory.create(platform)
         }
-        val chartViewModel = viewModel<ChartViewModel>(
-            factory = remember {
-                object : ViewModelProvider.Factory {
-                    @Suppress("UNCHECKED_CAST")
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val chartService = PlatformChartService(platform, App.currencyManager, App.marketKit)
-                        return ChartModule.createViewModel(chartService, ChartCurrencyValueFormatterShortened()) as T
-                    }
-                }
-            }
-        )
+        val chartViewModel = hiltViewModel<ChartViewModel, ChartViewModel.Factory> { factory ->
+            factory.create(
+                PlatformChartService(platform, App.currencyManager, App.marketKit),
+                ChartCurrencyValueFormatterShortened()
+            )
+        }
 
         PlatformScreen(
             viewModel = viewModel,

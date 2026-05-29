@@ -10,19 +10,14 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -63,18 +58,12 @@ data class MetricsPage(val metricsType: MetricsType) : HSPage() {
         val viewModel = hiltViewModel<MetricsPageViewModel, MetricsPageViewModel.Factory> { factory ->
             factory.create(metricsType)
         }
-        val chartViewModel = viewModel<ChartViewModel>(
-            factory = remember {
-                object : ViewModelProvider.Factory {
-                    @Suppress("UNCHECKED_CAST")
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        val globalMarketRepository = GlobalMarketRepository(App.marketKit)
-                        val chartService = MetricsPageChartService(App.currencyManager, metricsType, globalMarketRepository)
-                        return ChartModule.createViewModel(chartService, ChartCurrencyValueFormatterShortened()) as T
-                    }
-                }
-            }
-        )
+        val chartViewModel = hiltViewModel<ChartViewModel, ChartViewModel.Factory> { factory ->
+            factory.create(
+                MetricsPageChartService(App.currencyManager, metricsType, GlobalMarketRepository(App.marketKit)),
+                ChartCurrencyValueFormatterShortened()
+            )
+        }
         MetricsPage(viewModel, chartViewModel, navController) {
             onCoinClick(it, navController)
 
