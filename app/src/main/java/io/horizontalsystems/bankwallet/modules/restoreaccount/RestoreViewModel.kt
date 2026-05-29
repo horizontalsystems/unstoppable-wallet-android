@@ -4,7 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.order
@@ -17,17 +18,21 @@ import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.marketkit.models.BlockchainType
 import javax.inject.Inject
 
 @HiltViewModel
-class RestoreViewModel @Inject constructor() : ViewModelUiState<RestoreViewModel.UiState>() {
-    private val marketKit = App.marketKit
-    private val accountFactory = App.accountFactory
-    private val accountManager = App.accountManager
-    private val tokenAutoEnableManager = App.tokenAutoEnableManager
-    private val walletManager = App.walletManager
+class RestoreViewModel @Inject constructor(
+    private val marketKit: MarketKitWrapper,
+    private val accountFactory: IAccountFactory,
+    private val accountManager: IAccountManager,
+    private val tokenAutoEnableManager: TokenAutoEnableManager,
+    private val walletManager: WalletManager,
+) : ViewModelUiState<RestoreViewModel.UiState>() {
 
     var accountTypes: List<AccountType> = listOf()
 

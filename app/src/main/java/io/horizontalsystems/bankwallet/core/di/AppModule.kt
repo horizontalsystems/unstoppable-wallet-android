@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
+import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
@@ -201,6 +202,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideSwapProviderInfoManager(): SwapProviderInfoManager = App.swapProviderInfoManager
+
+    @Provides @Singleton
+    fun provideTokenAutoEnableManager(): TokenAutoEnableManager = App.tokenAutoEnableManager
 
     @Provides @Singleton
     fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
