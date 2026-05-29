@@ -69,6 +69,11 @@ open class MainActivity : BaseActivity() {
             showPinLockScreen = false
             pinLockComposeView?.visibility = GONE
             applyLockWindowFlags(isLocked = false, calculatorMode = true)
+        } else if (pinComponent.isLockedFlow.value) {
+            // Locked on return: a dialog left open in the background lives in its own
+            // Window and would surface above the calculator/PIN disguise. The collect in
+            // observeLockState reacts asynchronously, so close synchronously here too.
+            closeWindowsAboveLockScreen()
         }
         validate()
     }
