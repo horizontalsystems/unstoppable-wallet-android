@@ -1734,4 +1734,9 @@
     <string name="SwapInfo_CopyDetails">Копировать детали</string>
     <string name="SwapInfo_SwapStoppedByProvider">Обмен остановлен провайдером</string>
     <string name="SwapInfo_SwapStoppedByProviderDescription">Ваш депозит получен, но провайдер не смог завершить обмен. Запросите возврат ниже, чтобы вернуть свои средства.</string>
+    <string name="BackupRequired_Title">Создайте резервную копию кошелька</string>
+    <string name="BackupRequired_Description">Без резервной копии потеря телефона означает постоянную потерю средств. Восстановить их невозможно.</string>
+    <string name="BackupRequired_ManualBackupDescription">Запишите вашу фразу восстановления</string>
+    <string name="BackupRequired_LocalBackupDescription">Сохраните зашифрованный файл на устройство</string>
+    <string name="BackupRequired_RemindLater">Напомнить позже</string>
 </resources>
