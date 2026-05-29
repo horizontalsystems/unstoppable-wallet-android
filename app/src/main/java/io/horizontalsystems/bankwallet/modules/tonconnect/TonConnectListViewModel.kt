@@ -3,14 +3,19 @@ package io.horizontalsystems.bankwallet.modules.tonconnect
 import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TonConnectListViewModel(
-    deepLinkUri: String?,
+@HiltViewModel(assistedFactory = TonConnectListViewModel.Factory::class)
+class TonConnectListViewModel @AssistedInject constructor(
+    @Assisted deepLinkUri: String?,
     accountManager: IAccountManager,
 ) : ViewModelUiState<TonConnectListUiState>() {
 
@@ -68,6 +73,10 @@ class TonConnectListViewModel(
         }
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(deepLinkUri: String?): TonConnectListViewModel
+    }
 }
 
 

@@ -4,6 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import com.tonapps.wallet.data.tonconnect.entities.reply.DAppConnectEventError
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
@@ -12,8 +16,9 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TonConnectNewViewModel(
-    private val requestEntity: DAppRequestEntity,
+@HiltViewModel(assistedFactory = TonConnectNewViewModel.Factory::class)
+class TonConnectNewViewModel @AssistedInject constructor(
+    @Assisted private val requestEntity: DAppRequestEntity,
 ) : ViewModelUiState<TonConnectNewUiState>() {
     private val tonConnectKit = App.tonConnectManager.kit
 
@@ -112,6 +117,11 @@ class TonConnectNewViewModel(
     fun onToastShow() {
         toast = null
         emitState()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(requestEntity: DAppRequestEntity): TonConnectNewViewModel
     }
 }
 

@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.R
@@ -49,9 +49,9 @@ fun TonConnectNewScreen(
     requestEntity: DAppRequestEntity,
     onResult: (Boolean) -> Unit,
 ) {
-    val viewModel = viewModel<TonConnectNewViewModel>(initializer = {
-        TonConnectNewViewModel(requestEntity)
-    })
+    val viewModel = hiltViewModel<TonConnectNewViewModel, TonConnectNewViewModel.Factory> { factory ->
+        factory.create(requestEntity)
+    }
 
     val context = LocalContext.current
     val uiState = viewModel.uiState

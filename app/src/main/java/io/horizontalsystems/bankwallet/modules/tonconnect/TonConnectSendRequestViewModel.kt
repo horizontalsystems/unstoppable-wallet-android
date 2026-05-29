@@ -5,6 +5,10 @@ import com.tonapps.blockchain.ton.TonNetwork
 import com.tonapps.extensions.equalsAddress
 import com.tonapps.wallet.data.core.entity.RawMessageEntity
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -24,8 +28,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TonConnectSendRequestViewModel(
-    private val signTransaction: SignTransaction?,
+@HiltViewModel(assistedFactory = TonConnectSendRequestViewModel.Factory::class)
+class TonConnectSendRequestViewModel @AssistedInject constructor(
+    @Assisted private val signTransaction: SignTransaction?,
     private val accountManager: IAccountManager,
     private val tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<TonConnectSendRequestUiState>() {
@@ -253,6 +258,11 @@ class TonConnectSendRequestViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             tonConnectKit.reject(sendRequestEntity)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(signTransaction: SignTransaction?): TonConnectSendRequestViewModel
     }
 }
 

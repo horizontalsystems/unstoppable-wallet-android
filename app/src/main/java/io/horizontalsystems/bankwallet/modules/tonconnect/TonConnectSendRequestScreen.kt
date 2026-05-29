@@ -17,9 +17,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -52,16 +50,11 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
     val logger = remember { AppLogger("ton-connect request") }
     val mainActivityViewModel =
         hiltViewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
-    val viewModel = viewModel<TonConnectSendRequestViewModel>(initializer = {
-        val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
+    val viewModel = hiltViewModel<TonConnectSendRequestViewModel, TonConnectSendRequestViewModel.Factory> { factory ->
+        val signTransaction = mainActivityViewModel.tcSendRequest.value
         mainActivityViewModel.onTcSendRequestHandled()
-
-        TonConnectSendRequestViewModel(
-            sendRequestEntity,
-            App.accountManager,
-            App.tonConnectManager
-        )
-    })
+        factory.create(signTransaction)
+    }
 
     val uiState = viewModel.uiState
 
