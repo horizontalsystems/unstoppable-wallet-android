@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restorelocal
 
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -170,6 +170,7 @@ private fun RestoreLocalScreen(
 ) {
     val uiState = viewModel.uiState
     var hidePassphrase by remember { mutableStateOf(true) }
+    val context = LocalContext.current
     val view = LocalView.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -189,7 +190,7 @@ private fun RestoreLocalScreen(
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
             Toast.makeText(
-                App.instance,
+                context,
                 error.message ?: error.javaClass.simpleName,
                 Toast.LENGTH_LONG
             ).show()
@@ -288,6 +289,7 @@ private fun BackupFileItems(
     val uiState = viewModel.uiState
     val walletBackupViewItems = viewModel.uiState.walletBackupViewItems
     val otherBackupViewItems = viewModel.uiState.otherBackupViewItems
+    val context = LocalContext.current
     val view = LocalView.current
 
     LaunchedEffect(uiState.restored) {
@@ -307,7 +309,7 @@ private fun BackupFileItems(
     LaunchedEffect(uiState.parseError) {
         uiState.parseError?.let { error ->
             Toast.makeText(
-                App.instance,
+                context,
                 error.message ?: error.javaClass.simpleName,
                 Toast.LENGTH_LONG
             ).show()
