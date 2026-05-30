@@ -51,10 +51,10 @@ class TokenSelectViewModel @AssistedInject constructor(
     private val accountManager: IAccountManager,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val balanceHiddenManager: BalanceHiddenManager,
+    private val balanceViewItemFactory: BalanceViewItemFactory,
 ) : ViewModelUiState<TokenSelectUiState>() {
 
     private lateinit var service: BalanceService
-    private lateinit var balanceViewItemFactory: BalanceViewItemFactory
 
     private var noItems = false
     private var hasAssets = false
@@ -87,8 +87,6 @@ class TokenSelectViewModel @AssistedInject constructor(
             BalanceSorter(),
             accountManager
         )
-        balanceViewItemFactory = BalanceViewItemFactory()
-
         service.start()
 
         viewModelScope.launch {

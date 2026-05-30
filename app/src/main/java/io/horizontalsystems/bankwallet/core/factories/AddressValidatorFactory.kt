@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.factories
 
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.modules.send.address.BitcoinAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.bankwallet.modules.send.address.EvmAddressValidator
@@ -13,8 +13,11 @@ import io.horizontalsystems.bankwallet.modules.send.address.MoneroAddressValidat
 import io.horizontalsystems.bankwallet.modules.send.address.ZanoAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import javax.inject.Inject
 
-object AddressValidatorFactory {
+class AddressValidatorFactory @Inject constructor(
+    private val adapterManager: IAdapterManager,
+) {
 
     fun get(token: Token): EnterAddressValidator {
         return when (token.blockchainType) {
@@ -23,11 +26,11 @@ object AddressValidatorFactory {
             BlockchainType.ECash,
             BlockchainType.Litecoin,
             BlockchainType.Dash -> {
-                BitcoinAddressValidator(token, App.adapterManager)
+                BitcoinAddressValidator(token, adapterManager)
             }
 
             BlockchainType.Zcash -> {
-                ZcashAddressValidator(token, App.adapterManager)
+                ZcashAddressValidator(token, adapterManager)
             }
 
             BlockchainType.Ethereum,
@@ -48,7 +51,7 @@ object AddressValidatorFactory {
             }
 
             BlockchainType.Tron -> {
-                TronAddressValidator(token, App.adapterManager)
+                TronAddressValidator(token, adapterManager)
             }
 
             BlockchainType.Ton -> {

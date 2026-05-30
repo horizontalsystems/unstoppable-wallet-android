@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Caution
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -15,6 +15,7 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import javax.inject.Inject
 
 @Immutable
 data class BalanceViewItem(
@@ -100,7 +101,10 @@ enum class SyncingProgressType {
 
 data class SyncingProgress(val type: SyncingProgressType?, val progress: Int?)
 
-class BalanceViewItemFactory {
+class BalanceViewItemFactory @Inject constructor(
+    private val balanceViewHelper: BalanceViewHelper,
+    private val numberFormatter: IAppNumberFormatter,
+) {
 
     private fun getSyncingProgress(state: AdapterState?, blockchainType: BlockchainType): SyncingProgress {
         return when (state) {
@@ -245,7 +249,7 @@ class BalanceViewItemFactory {
 
         val deemed = state !is AdapterState.Synced
 
-        val value = App.numberFormatter.formatCoinFull(balance, token.coin.code, coinDecimals)
+        val value = numberFormatter.formatCoinFull(balance, token.coin.code, coinDecimals)
 
         return DeemedValue(value, deemed)
     }
@@ -262,7 +266,7 @@ class BalanceViewItemFactory {
         val state = item.state
         val latestRate = item.coinPrice
 
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
+        val (primaryValue, secondaryValue) = balanceViewHelper.getPrimaryAndSecondaryValues(
             balance = item.balanceData.total,
             fullFormat = true,
             coinDecimals = wallet.decimal,
@@ -384,13 +388,13 @@ class BalanceViewItemFactory {
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             lockedValues = lockedValues,
-            exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
+            exchangeValue = latestRate?.let { balanceViewHelper.rateValue(it, currency) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state, syncedUntil, true),
             syncedUntilTextValue = syncedUntil,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
-            swapVisible = App.instance.isSwapEnabled,
+            swapVisible = true,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
             warning = item.warning?.warningText,
@@ -411,7 +415,7 @@ class BalanceViewItemFactory {
         val state = item.state
         val latestRate = item.coinPrice
 
-        val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
+        val (primaryValue, secondaryValue) = balanceViewHelper.getPrimaryAndSecondaryValues(
             balance = item.balanceData.total,
             fullFormat = !amountRoundingEnabled,
             coinDecimals = wallet.decimal,
@@ -433,7 +437,7 @@ class BalanceViewItemFactory {
             wallet = item.wallet,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
-            exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
+            exchangeValue = latestRate?.let { balanceViewHelper.rateValue(it, currency) },
             diff = latestRate?.diff?.let { DeemedValue(it, latestRate.expired) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state, syncedUntil),

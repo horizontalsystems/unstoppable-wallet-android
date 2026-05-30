@@ -51,6 +51,7 @@ class EnterAddressViewModel @AssistedInject constructor(
     spamManager: SpamManager,
     evmBlockchainManager: EvmBlockchainManager,
     evmSyncSourceManager: EvmSyncSourceManager,
+    private val addressValidatorFactory: AddressValidatorFactory,
 ) : ViewModelUiState<EnterAddressUiState>() {
 
     private lateinit var domainParser: AddressParserChain
@@ -104,7 +105,7 @@ class EnterAddressViewModel @AssistedInject constructor(
         val addressUriParser = AddressUriParser(blockchainType, token.type)
         addressExtractor = AddressExtractor(blockchainType, addressUriParser)
 
-        addressValidator = AddressValidatorFactory.get(token)
+        addressValidator = addressValidatorFactory.get(token)
         addressCheckManager = AddressCheckManager(spamManager, appConfigProvider, evmBlockchainManager, evmSyncSourceManager)
         availableCheckTypes = addressCheckManager.availableCheckTypes(token)
 

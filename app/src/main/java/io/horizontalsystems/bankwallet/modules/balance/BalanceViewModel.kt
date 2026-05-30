@@ -69,10 +69,10 @@ class BalanceViewModel @Inject constructor(
     private val baseTokenManager: BaseTokenManager,
     private val numberFormatter: IAppNumberFormatter,
     private val tonConnectManager: TonConnectManager,
+    private val balanceViewItemFactory: BalanceViewItemFactory,
 ) : ViewModelUiState<BalanceUiState>() {
 
     private lateinit var service: BalanceService
-    private lateinit var balanceViewItemFactory: BalanceViewItemFactory
     private lateinit var totalService: TotalService
     private lateinit var addressHandlerFactory: AddressHandlerFactory
 
@@ -113,7 +113,6 @@ class BalanceViewModel @Inject constructor(
             BalanceSorter(),
             accountManager
         )
-        balanceViewItemFactory = BalanceViewItemFactory()
         totalService = TotalService(currencyManager, marketKit, baseTokenManager)
         addressHandlerFactory = AddressHandlerFactory(appConfigProvider.udnApiKey)
 

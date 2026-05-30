@@ -71,10 +71,10 @@ class TokenBalanceViewModel @AssistedInject constructor(
     private val coinManager: ICoinManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val transactionViewItem2Factory: TransactionViewItemFactory,
+    private val balanceViewItemFactory: BalanceViewItemFactory,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val balanceService: TokenBalanceService
-    private val balanceViewItemFactory: BalanceViewItemFactory
     private val transactionsService: TokenTransactionsService
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -96,8 +96,6 @@ class TokenBalanceViewModel @AssistedInject constructor(
             BalanceXRateRepository("wallet", currencyManager, marketKit),
             BalanceAdapterRepository(adapterManager, BalanceCache(enabledWalletsCacheDao)),
         )
-
-        balanceViewItemFactory = BalanceViewItemFactory()
 
         transactionsService = TokenTransactionsService(
             wallet,
