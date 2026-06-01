@@ -50,7 +50,6 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.core.IPinComponent
@@ -133,9 +132,6 @@ object AppModule {
     fun provideThirdKeyboard(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): IThirdKeyboard = impl
 
     // --- Settings helpers ---
-
-    @Provides @Singleton
-    fun provideAppConfigProvider(): AppConfigProvider = App.appConfigProvider
 
     @Provides @Singleton
     fun provideTermsManager(impl: TermsManager): ITermsManager = impl

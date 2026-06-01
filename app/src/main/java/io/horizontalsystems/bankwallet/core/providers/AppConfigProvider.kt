@@ -8,7 +8,8 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
-class AppConfigProvider(localStorage: ILocalStorage) {
+@javax.inject.Singleton
+class AppConfigProvider @javax.inject.Inject constructor(localStorage: ILocalStorage) {
 
     val appId by lazy { localStorage.appId }
     val appVersion by lazy { BuildConfig.VERSION_NAME }

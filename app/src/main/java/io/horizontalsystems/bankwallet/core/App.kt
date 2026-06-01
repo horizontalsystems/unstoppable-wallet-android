@@ -193,7 +193,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         thirdKeyboardStorage = localStorageManager
         marketStorage = localStorageManager
 
-        val appConfig = AppConfigProvider(localStorage)
+        val appConfig = EntryPointAccessors
+            .fromApplication(this, AppConfigEntryPoint::class.java)
+            .appConfigProvider()
         appConfigProvider = appConfig
 
         torKitManager = TorManager(instance, localStorage)
