@@ -156,7 +156,7 @@ class OpenCryptoPayConfirmationViewModel(
             val txHash = extractTxHash(result)
                 ?: throw Exception("Could not get transaction hash")
 
-            App.appDatabase.ocpPaymentDao().insert(
+            ocpPaymentDao.insert(
                 OcpPaymentRecord(
                     paymentId = paymentId,
                     quoteId = quoteId,
