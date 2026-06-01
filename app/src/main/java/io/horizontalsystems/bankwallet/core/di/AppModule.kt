@@ -38,16 +38,11 @@ import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
-import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
-import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
-import io.horizontalsystems.bankwallet.core.managers.TronKitManager
-import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
@@ -64,7 +59,6 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
@@ -142,24 +136,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideBtcBlockchainManager(): BtcBlockchainManager = App.btcBlockchainManager
-
-    @Provides @Singleton
-    fun provideTronKitManager(): TronKitManager = App.tronKitManager
-
-    @Provides @Singleton
-    fun provideTonKitManager(): TonKitManager = App.tonKitManager
-
-    @Provides @Singleton
-    fun provideStellarKitManager(): StellarKitManager = App.stellarKitManager
-
-    @Provides @Singleton
-    fun provideSolanaKitManager(): SolanaKitManager = App.solanaKitManager
-
-    @Provides @Singleton
-    fun provideSolanaRpcSourceManager(): SolanaRpcSourceManager = App.solanaRpcSourceManager
-
-    @Provides @Singleton
-    fun provideZanoKitManager(): ZanoKitManager = App.zanoKitManager
 
     // --- Market data ---
 

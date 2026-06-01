@@ -22,7 +22,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class StellarKitManager(
+@javax.inject.Singleton
+class StellarKitManager @javax.inject.Inject constructor(
     private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)

@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ZanoKitManager(
+@javax.inject.Singleton
+class ZanoKitManager @javax.inject.Inject constructor(
     private val zanoNodeManager: ZanoNodeManager,
     private val backgroundManager: BackgroundManager,
 ) {

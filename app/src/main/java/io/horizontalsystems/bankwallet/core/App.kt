@@ -47,7 +47,6 @@ import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
-import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
@@ -255,18 +254,19 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             .fromApplication(this, NodeSettingsEntryPoint::class.java)
         moneroNodeManager = nodeSettingsEntryPoint.moneroNodeManager()
         zanoNodeManager = nodeSettingsEntryPoint.zanoNodeManager()
-        zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
+        val kitManagersEntryPoint = EntryPointAccessors
+            .fromApplication(this, KitManagersEntryPoint::class.java)
+        zanoKitManager = kitManagersEntryPoint.zanoKitManager()
         zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
         coinManager = walletCoreEntryPoint.coinManager()
 
-        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
-        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
-        solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
+        solanaRpcSourceManager = kitManagersEntryPoint.solanaRpcSourceManager()
+        solanaKitManager = kitManagersEntryPoint.solanaKitManager()
 
-        tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
-        tonKitManager = TonKitManager(backgroundManager)
-        stellarKitManager = StellarKitManager(backgroundManager)
+        tronKitManager = kitManagersEntryPoint.tronKitManager()
+        tonKitManager = kitManagersEntryPoint.tonKitManager()
+        stellarKitManager = kitManagersEntryPoint.stellarKitManager()
 
         accountFactory = accountWrappersEntryPoint.accountFactory()
 

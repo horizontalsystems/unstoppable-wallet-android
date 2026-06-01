@@ -8,7 +8,8 @@ import io.horizontalsystems.solanakit.models.RpcSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class SolanaRpcSourceManager(
+@javax.inject.Singleton
+class SolanaRpcSourceManager @javax.inject.Inject constructor(
         private val blockchainSettingsStorage: BlockchainSettingsStorage,
         private val marketKitWrapper: MarketKitWrapper
 ) {

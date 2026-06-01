@@ -18,7 +18,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class SolanaKitManager(
+@javax.inject.Singleton
+class SolanaKitManager @javax.inject.Inject constructor(
     private val appConfigProvider: AppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,

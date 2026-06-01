@@ -203,3 +203,14 @@ interface LocalizationEntryPoint {
     fun currencyManager(): io.horizontalsystems.bankwallet.core.managers.CurrencyManager
     fun numberFormatter(): io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface KitManagersEntryPoint {
+    fun zanoKitManager(): io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
+    fun solanaRpcSourceManager(): io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+    fun solanaKitManager(): io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+    fun tronKitManager(): io.horizontalsystems.bankwallet.core.managers.TronKitManager
+    fun tonKitManager(): io.horizontalsystems.bankwallet.core.managers.TonKitManager
+    fun stellarKitManager(): io.horizontalsystems.bankwallet.core.managers.StellarKitManager
+}

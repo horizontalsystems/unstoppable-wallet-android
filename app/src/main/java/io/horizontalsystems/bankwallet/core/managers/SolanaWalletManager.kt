@@ -7,7 +7,8 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.models.FullTokenAccount
 
-class SolanaWalletManager(
+@javax.inject.Singleton
+class SolanaWalletManager @javax.inject.Inject constructor(
         private val walletManager: WalletManager,
         private val accountManager: IAccountManager,
         private val marketKit: MarketKitWrapper

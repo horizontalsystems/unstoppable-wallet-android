@@ -26,7 +26,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.net.URL
 
-class TronKitManager(
+@javax.inject.Singleton
+class TronKitManager @javax.inject.Inject constructor(
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val backgroundManager: BackgroundManager
 ) {
