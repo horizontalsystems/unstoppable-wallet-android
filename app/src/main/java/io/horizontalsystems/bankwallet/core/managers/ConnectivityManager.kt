@@ -15,9 +15,12 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class ConnectivityManager(backgroundManager: BackgroundManager) {
+@Singleton
+class ConnectivityManager @Inject constructor(backgroundManager: BackgroundManager) {
 
     private val connectivityManager: ConnectivityManager by lazy {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

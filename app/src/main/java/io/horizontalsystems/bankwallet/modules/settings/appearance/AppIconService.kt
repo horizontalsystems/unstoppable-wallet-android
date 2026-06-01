@@ -9,8 +9,11 @@ import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AppIconService(private val localStorage: ILocalStorage) {
+@Singleton
+class AppIconService @Inject constructor(private val localStorage: ILocalStorage) {
     private val _optionsFlow = MutableStateFlow(
         Select(localStorage.appIcon ?: AppIcon.Main, getAvailableIcons())
     )

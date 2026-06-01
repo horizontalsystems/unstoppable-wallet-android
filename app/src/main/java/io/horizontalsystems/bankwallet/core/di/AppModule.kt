@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.managers.TermsManager
+import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
 import io.horizontalsystems.bankwallet.core.managers.WalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
@@ -53,9 +55,7 @@ import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
-import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
-import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.core.BackgroundManager
@@ -70,7 +70,6 @@ import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
-import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
@@ -116,9 +115,6 @@ object AppModule {
     fun provideTorManager(): ITorManager = App.torKitManager
 
     @Provides @Singleton
-    fun provideConnectivityManager(): ConnectivityManager = App.connectivityManager
-
-    @Provides @Singleton
     fun provideRateAppManager(): IRateAppManager = App.rateAppManager
 
     @Provides @Singleton
@@ -152,7 +148,7 @@ object AppModule {
     fun provideTransactionAdapterManager(): TransactionAdapterManager = App.transactionAdapterManager
 
     @Provides @Singleton
-    fun provideSystemInfoManager(): ISystemInfoManager = App.systemInfoManager
+    fun provideSystemInfoManager(impl: SystemInfoManager): ISystemInfoManager = impl
 
     // --- Blockchain kits ---
 
@@ -229,16 +225,13 @@ object AppModule {
     fun provideAppConfigProvider(): AppConfigProvider = App.appConfigProvider
 
     @Provides @Singleton
-    fun provideTermsManager(): ITermsManager = App.termsManager
+    fun provideTermsManager(impl: TermsManager): ITermsManager = impl
 
     @Provides @Singleton
     fun provideLanguageManager(): LanguageManager = App.languageManager
 
     @Provides @Singleton
     fun provideStatsManager(): StatsManager = App.statsManager
-
-    @Provides @Singleton
-    fun provideAppIconService(): AppIconService = App.appIconService
 
     @Provides @Singleton
     fun provideLaunchScreenService(): LaunchScreenService = LaunchScreenService(App.localStorage)
@@ -284,9 +277,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideMarketFavoritesManager(): MarketFavoritesManager = App.marketFavoritesManager
-
-    @Provides @Singleton
-    fun providePriceManager(): PriceManager = App.priceManager
 
     @Provides @Singleton
     fun provideMarketWidgetManager(): MarketWidgetManager = App.marketWidgetManager

@@ -7,7 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PriceManager(
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class PriceManager @Inject constructor(
     private val storage: ILocalStorage
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)

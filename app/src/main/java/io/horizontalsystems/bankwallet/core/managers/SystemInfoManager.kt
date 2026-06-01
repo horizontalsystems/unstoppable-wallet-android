@@ -9,8 +9,11 @@ import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SystemInfoManager(appConfigProvider: AppConfigProvider) : ISystemInfoManager {
+@Singleton
+class SystemInfoManager @Inject constructor(appConfigProvider: AppConfigProvider) : ISystemInfoManager {
 
     override val appVersion: String = appConfigProvider.appVersion
 

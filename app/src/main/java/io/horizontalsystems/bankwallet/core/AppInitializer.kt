@@ -166,3 +166,11 @@ interface WalletCoreEntryPoint {
     fun walletManager(): io.horizontalsystems.bankwallet.core.managers.WalletManager
     fun coinManager(): io.horizontalsystems.bankwallet.core.ICoinManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface ConfigLeavesEntryPoint {
+    fun priceManager(): io.horizontalsystems.bankwallet.core.managers.PriceManager
+    fun termsManager(): io.horizontalsystems.bankwallet.core.ITermsManager
+    fun connectivityManager(): io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+}

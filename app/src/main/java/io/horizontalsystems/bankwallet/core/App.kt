@@ -51,8 +51,6 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
-import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
-import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.managers.TonAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
@@ -89,7 +87,6 @@ import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
-import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
@@ -185,7 +182,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
-        lateinit var appIconService: AppIconService
         lateinit var swapRecordManager: SwapRecordManager
         lateinit var swapSyncService: SwapSyncService
         lateinit var swapProviderInfoManager: SwapProviderInfoManager
@@ -229,10 +225,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             newsApiKey = "",
         )
 
-        priceManager = PriceManager(localStorage)
-
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager()
+
+        // Resolved after backgroundManager is assigned — ConnectivityManager depends on it.
+        val configLeavesEntryPoint = EntryPointAccessors
+            .fromApplication(this, ConfigLeavesEntryPoint::class.java)
+        priceManager = configLeavesEntryPoint.priceManager()
+        termsManager = configLeavesEntryPoint.termsManager()
+        connectivityManager = configLeavesEntryPoint.connectivityManager()
 
         appDatabase = AppDatabase.getInstance(this)
 
@@ -335,13 +336,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val stellarAccountManager = StellarAccountManager(accountManager, walletManager, stellarKitManager, tokenAutoEnableManager)
         stellarAccountManager.start()
 
-        systemInfoManager = SystemInfoManager(appConfigProvider)
 
         languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
-        connectivityManager = ConnectivityManager(backgroundManager)
 
         evmLabelManager = EvmLabelManager(
             EvmLabelProvider(),
@@ -400,7 +399,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         wcManager.addWcHandler(WCHandlerStellar(stellarKitManager))
         wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
 
-        termsManager = TermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
         marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
@@ -436,7 +434,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
-        appIconService = AppIconService(localStorage)
 
         tonConnectManager = TonConnectManager(
             context = this,

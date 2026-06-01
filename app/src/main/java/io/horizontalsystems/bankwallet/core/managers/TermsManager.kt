@@ -10,8 +10,11 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
+@Singleton
+class TermsManager @Inject constructor(private val localStorage: ILocalStorage) : ITermsManager {
 
     private val _termsAcceptedFlow = MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val termsAcceptedSharedFlow = _termsAcceptedFlow.asSharedFlow()
