@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
@@ -55,7 +54,6 @@ import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
-import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
@@ -209,8 +207,6 @@ object AppModule {
     @Provides @Singleton
     fun provideMnemonic(): Mnemonic = Mnemonic()
 
-    @Provides @Singleton
-    fun provideRoiManager(): RoiManager = App.roiManager
 
     @Provides @Singleton
     fun provideThirdKeyboard(): IThirdKeyboard = App.thirdKeyboardStorage
@@ -286,8 +282,6 @@ object AppModule {
 
     // --- Account creation / restore ---
 
-    @Provides @Singleton
-    fun provideWalletActivator(): WalletActivator = App.walletActivator
 
     @Provides @Singleton
     fun provideRestoreSettingsManager(): RestoreSettingsManager = App.restoreSettingsManager

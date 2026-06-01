@@ -4,8 +4,11 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RoiManager(private val localStorage: ILocalStorage) {
+@Singleton
+class RoiManager @Inject constructor(private val localStorage: ILocalStorage) {
 
     private val gold = PerformanceCoin("tether-gold", "GOLD", "Commodity")
     private val sp500 = PerformanceCoin("snp", "SP500", "S&P 500")

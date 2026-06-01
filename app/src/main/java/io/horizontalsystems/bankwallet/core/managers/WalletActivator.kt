@@ -4,8 +4,11 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WalletActivator(
+@Singleton
+class WalletActivator @Inject constructor(
     private val walletManager: WalletManager,
     private val marketKit: MarketKitWrapper,
 ) {

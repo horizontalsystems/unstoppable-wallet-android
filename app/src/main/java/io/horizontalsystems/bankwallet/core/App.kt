@@ -70,7 +70,6 @@ import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
-import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.WalletStorage
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
@@ -106,7 +105,6 @@ import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
-import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
@@ -163,7 +161,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var adapterManager: IAdapterManager
         lateinit var transactionAdapterManager: TransactionAdapterManager
         lateinit var walletManager: WalletManager
-        lateinit var walletActivator: WalletActivator
         lateinit var passkeyManager: PasskeyManager
         lateinit var tokenAutoEnableManager: TokenAutoEnableManager
         lateinit var walletStorage: IWalletStorage
@@ -219,7 +216,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
-        lateinit var roiManager: RoiManager
         lateinit var appIconService: AppIconService
         lateinit var paidActionSettingsManager: PaidActionSettingsManager
         lateinit var swapRecordManager: SwapRecordManager
@@ -334,7 +330,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         encryptionManager = EncryptionManager(keyProvider)
 
-        walletActivator = WalletActivator(walletManager, marketKit)
         passkeyManager = PasskeyManager()
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
@@ -482,8 +477,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appVersion = appConfigProvider.appVersion
         )
         tonConnectManager.start()
-
-        roiManager = RoiManager(localStorage)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
