@@ -26,7 +26,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import timber.log.Timber
 import java.math.BigDecimal
 import java.time.Instant
 
@@ -175,10 +174,6 @@ class OpenCryptoPayConfirmationViewModel(
 
     private suspend fun submitProofHexWithRetry(baseUrl: String, rawHex: String) {
         repeat(3) { attempt ->
-            Timber.d(
-                "OCP BTC GET /tx/ url=$proofUrl quote=$quoteId method=$method" +
-                        " hexPrefix=${rawHex.take(20)} attempt=${attempt + 1}/3"
-            )
             try {
                 OcpProofService.service(baseUrl).submitProofHex(
                     url = proofUrl,
@@ -186,18 +181,14 @@ class OpenCryptoPayConfirmationViewModel(
                     method = method,
                     hex = rawHex,
                 )
-                Timber.d("OCP BTC /tx/ success attempt=${attempt + 1}")
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
-                Timber.e("OCP BTC proof HTTP ${e.code()}: $body")
                 throw Exception("HTTP ${e.code()}: $body")
             } catch (e: Exception) {
-                Timber.d("OCP BTC /tx/ transient failure attempt=${attempt + 1} (${e.javaClass.simpleName}: ${e.message})")
                 if (attempt < 2) delay(2000L)
             }
         }
-        Timber.e("OCP BTC proof failed after retries")
         throw Exception("Could not submit payment to merchant. Please try again.")
     }
 

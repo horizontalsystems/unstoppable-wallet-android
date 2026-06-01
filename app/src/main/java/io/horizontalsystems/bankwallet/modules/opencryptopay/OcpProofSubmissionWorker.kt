@@ -12,7 +12,6 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import io.horizontalsystems.bankwallet.core.App
 import retrofit2.HttpException
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class OcpProofSubmissionWorker(
@@ -27,11 +26,6 @@ class OcpProofSubmissionWorker(
         if (record.proofSubmittedAt != null) return Result.success()
 
         val baseUrl = record.proofUrl.substringBefore("/tx/").let { it.trimEnd('/') + "/" }
-        Timber.d(
-            "OCP worker GET /tx/ url=${record.proofUrl} quote=${record.quoteId}" +
-            " method=${record.method} tx=${record.txHash} attempt=$runAttemptCount" +
-            " expirationIso=${record.expirationIso}"
-        )
         return try {
             OcpProofService.service(baseUrl).submitProofTx(
                 url = record.proofUrl,
@@ -39,23 +33,19 @@ class OcpProofSubmissionWorker(
                 method = record.method,
                 tx = record.txHash,
             )
-            Timber.d("OCP worker /tx/ success tx=$txHash")
             dao.markSubmitted(txHash, System.currentTimeMillis())
             Result.success()
         } catch (e: HttpException) {
             val code = e.code()
-            val body = e.response()?.errorBody()?.string()
-            Timber.e("OCP worker /tx/ HTTP $code body=$body tx=$txHash")
             when {
-                code == 429 -> Result.retry()        // rate limited — back off and retry
+                code == 429 -> Result.retry()
                 code in 400..499 -> {
                     dao.markFailed(txHash, System.currentTimeMillis())
-                    Result.failure()                  // permanent client error (expired quote, etc.)
+                    Result.failure()
                 }
-                else -> Result.retry()               // 5xx or other transient
+                else -> Result.retry()
             }
         } catch (e: Exception) {
-            Timber.d("OCP worker /tx/ transient failure (${e.javaClass.simpleName}: ${e.message}) tx=$txHash")
             Result.retry()
         }
     }
