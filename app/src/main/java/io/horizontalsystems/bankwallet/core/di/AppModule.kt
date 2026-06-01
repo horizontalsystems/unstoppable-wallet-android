@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
@@ -47,7 +47,6 @@ import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
-import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.core.BackgroundManager
@@ -168,11 +167,7 @@ object AppModule {
     fun provideMarketKit(): MarketKitWrapper = App.marketKit
 
     @Provides @Singleton
-    fun provideCurrencyManager(): CurrencyManager = App.currencyManager
-
-
-    @Provides @Singleton
-    fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
+    fun provideNumberFormatter(impl: NumberFormatter): IAppNumberFormatter = impl
 
     @Provides @Singleton
     fun provideMnemonic(): Mnemonic = Mnemonic()
@@ -188,9 +183,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideTermsManager(impl: TermsManager): ITermsManager = impl
-
-    @Provides @Singleton
-    fun provideLanguageManager(): LanguageManager = App.languageManager
 
     @Provides @Singleton
     fun provideLaunchScreenService(): LaunchScreenService = LaunchScreenService(App.localStorage)

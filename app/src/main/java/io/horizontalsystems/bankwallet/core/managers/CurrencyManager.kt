@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CurrencyManager(private val localStorage: ILocalStorage, private val appConfigProvider: AppConfigProvider) {
+@Singleton
+class CurrencyManager @Inject constructor(private val localStorage: ILocalStorage, private val appConfigProvider: AppConfigProvider) {
 
     private val scope = CoroutineScope(Dispatchers.Default)
 

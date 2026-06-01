@@ -195,3 +195,11 @@ interface SpamStatsEntryPoint {
     fun spamManager(): io.horizontalsystems.bankwallet.core.managers.SpamManager
     fun statsManager(): io.horizontalsystems.bankwallet.core.stats.StatsManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface LocalizationEntryPoint {
+    fun languageManager(): io.horizontalsystems.bankwallet.core.managers.LanguageManager
+    fun currencyManager(): io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+    fun numberFormatter(): io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+}

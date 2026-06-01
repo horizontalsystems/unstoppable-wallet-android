@@ -3,8 +3,11 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.helpers.LocaleHelper
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LanguageManager {
+@Singleton
+class LanguageManager @Inject constructor() {
 
     val fallbackLocale by LocaleHelper::fallbackLocale
 

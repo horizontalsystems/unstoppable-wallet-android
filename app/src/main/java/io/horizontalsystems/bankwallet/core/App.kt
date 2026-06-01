@@ -321,9 +321,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         stellarAccountManager.start()
 
 
-        languageManager = LanguageManager()
-        currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        numberFormatter = NumberFormatter(languageManager)
+        val localizationEntryPoint = EntryPointAccessors
+            .fromApplication(this, LocalizationEntryPoint::class.java)
+        languageManager = localizationEntryPoint.languageManager()
+        currencyManager = localizationEntryPoint.currencyManager()
+        numberFormatter = localizationEntryPoint.numberFormatter()
 
 
         val adapterFactory = AdapterFactory(

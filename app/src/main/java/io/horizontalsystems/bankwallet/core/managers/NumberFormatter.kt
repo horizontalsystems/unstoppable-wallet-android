@@ -10,8 +10,11 @@ import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NumberFormatter(
+@Singleton
+class NumberFormatter @Inject constructor(
         private val languageManager: LanguageManager
         ) : IAppNumberFormatter {
 
