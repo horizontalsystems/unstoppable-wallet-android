@@ -8,13 +8,18 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
+import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
+import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ITorManager
-import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -25,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
-import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
@@ -37,7 +41,6 @@ import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
-import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
@@ -49,7 +52,6 @@ import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
-import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
@@ -63,7 +65,6 @@ import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
-import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
@@ -206,9 +207,6 @@ object AppModule {
     fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
 
     @Provides @Singleton
-    fun provideBackupProvider(): BackupProvider = App.backupProvider
-
-    @Provides @Singleton
     fun provideMnemonic(): Mnemonic = Mnemonic()
 
     @Provides @Singleton
@@ -238,9 +236,6 @@ object AppModule {
     fun provideAppIconService(): AppIconService = App.appIconService
 
     @Provides @Singleton
-    fun provideBalanceViewTypeManager(): BalanceViewTypeManager = App.balanceViewTypeManager
-
-    @Provides @Singleton
     fun provideLaunchScreenService(): LaunchScreenService = LaunchScreenService(App.localStorage)
 
     @Provides @Singleton
@@ -250,9 +245,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideLocalStorage(): ILocalStorage = App.localStorage
-
-    @Provides @Singleton
-    fun provideBalanceHiddenManager(): BalanceHiddenManager = App.balanceHiddenManager
 
     @Provides @Singleton
     fun provideEvmLabelManager(): EvmLabelManager = App.evmLabelManager
@@ -310,10 +302,22 @@ object AppModule {
     fun provideEnabledWalletsCacheDao(): EnabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
 
     @Provides @Singleton
-    fun provideBaseTokenManager(): BaseTokenManager = App.baseTokenManager
+    fun provideRecentAddressDao(): RecentAddressDao = App.appDatabase.recentAddressDao()
 
     @Provides @Singleton
-    fun provideRecentAddressDao(): RecentAddressDao = App.appDatabase.recentAddressDao()
+    fun provideBlockchainSettingsStorage(): BlockchainSettingsStorage = App.blockchainSettingsStorage
+
+    @Provides @Singleton
+    fun provideEnabledWalletStorage(): IEnabledWalletStorage = App.enabledWalletsStorage
+
+    @Provides @Singleton
+    fun provideChartIndicatorSettingsDao(): ChartIndicatorSettingsDao = App.appDatabase.chartIndicatorSettingsDao()
+
+    @Provides @Singleton
+    fun provideMoneroNodeStorage(): MoneroNodeStorage = App.moneroNodeStorage
+
+    @Provides @Singleton
+    fun provideZanoNodeStorage(): ZanoNodeStorage = App.zanoNodeStorage
 
     @Provides @Singleton
     fun providePredefinedBlockchainSettingsProvider(

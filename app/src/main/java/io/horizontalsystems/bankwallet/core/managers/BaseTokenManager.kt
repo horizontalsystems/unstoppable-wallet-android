@@ -9,8 +9,11 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BaseTokenManager(
+@Singleton
+class BaseTokenManager @Inject constructor(
     private val coinManager: ICoinManager,
     private val localStorage: ILocalStorage,
 ) {

@@ -62,6 +62,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import java.security.MessageDigest
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Serializable
 enum class BackupSection {
@@ -98,7 +100,8 @@ class BackupFileValidator {
 }
 
 
-class BackupProvider(
+@Singleton
+class BackupProvider @Inject constructor(
     private val localStorage: ILocalStorage,
     private val languageManager: LanguageManager,
     private val walletStorage: IEnabledWalletStorage,

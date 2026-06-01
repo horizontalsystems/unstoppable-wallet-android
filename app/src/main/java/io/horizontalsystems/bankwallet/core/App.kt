@@ -24,8 +24,6 @@ import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
 import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
 import io.horizontalsystems.bankwallet.core.managers.BackupManager
-import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
-import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -213,14 +211,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var nftAdapterManager: NftAdapterManager
         lateinit var nftMetadataSyncer: NftMetadataSyncer
         lateinit var evmLabelManager: EvmLabelManager
-        lateinit var baseTokenManager: BaseTokenManager
-        lateinit var balanceViewTypeManager: BalanceViewTypeManager
-        lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
         lateinit var contactsRepository: ContactsRepository
         lateinit var chartIndicatorManager: ChartIndicatorManager
-        lateinit var backupProvider: BackupProvider
         lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
@@ -477,46 +471,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
-        baseTokenManager = BaseTokenManager(coinManager, localStorage)
-        balanceViewTypeManager = BalanceViewTypeManager(localStorage)
-        balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
-
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
         appIconService = AppIconService(localStorage)
-
-        backupProvider = BackupProvider(
-            localStorage = localStorage,
-            languageManager = languageManager,
-            walletStorage = enabledWalletsStorage,
-            settingsManager = restoreSettingsManager,
-            accountManager = accountManager,
-            accountFactory = accountFactory,
-            walletManager = walletManager,
-            restoreSettingsManager = restoreSettingsManager,
-            blockchainSettingsStorage = blockchainSettingsStorage,
-            evmBlockchainManager = evmBlockchainManager,
-            marketFavoritesManager = marketFavoritesManager,
-            balanceViewTypeManager = balanceViewTypeManager,
-            appIconService = appIconService,
-            themeService = ThemeService(localStorage),
-            chartIndicatorManager = chartIndicatorManager,
-            chartIndicatorSettingsDao = appDatabase.chartIndicatorSettingsDao(),
-            balanceHiddenManager = balanceHiddenManager,
-            baseTokenManager = baseTokenManager,
-            launchScreenService = LaunchScreenService(localStorage),
-            currencyManager = currencyManager,
-            btcBlockchainManager = btcBlockchainManager,
-            evmSyncSourceManager = evmSyncSourceManager,
-            solanaRpcSourceManager = solanaRpcSourceManager,
-            moneroNodeManager = moneroNodeManager,
-            moneroNodeStorage = moneroNodeStorage,
-            zanoNodeManager = zanoNodeManager,
-            zanoNodeStorage = zanoNodeStorage,
-            zcashEndpointManager = zcashEndpointManager,
-            zcashEndpointStorage = zcashEndpointStorage,
-            contactsRepository = contactsRepository
-        )
 
         tonConnectManager = TonConnectManager(
             context = this,
