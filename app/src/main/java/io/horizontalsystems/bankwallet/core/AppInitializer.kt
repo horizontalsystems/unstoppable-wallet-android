@@ -133,3 +133,10 @@ interface RestoreSettingsEntryPoint {
     fun zcashBirthdayProvider(): io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
     fun moneroBirthdayProvider(): io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface NodeSettingsEntryPoint {
+    fun moneroNodeManager(): io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+    fun zanoNodeManager(): io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
+}

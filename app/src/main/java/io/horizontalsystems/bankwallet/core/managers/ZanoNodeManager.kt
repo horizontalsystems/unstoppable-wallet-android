@@ -8,8 +8,11 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ZanoNodeManager(
+@Singleton
+class ZanoNodeManager @Inject constructor(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val zanoNodeStorage: ZanoNodeStorage,
     private val marketKitWrapper: MarketKitWrapper,

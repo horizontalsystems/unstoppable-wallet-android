@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ZanoNodeStorage(appDatabase: AppDatabase) {
+@Singleton
+class ZanoNodeStorage @Inject constructor(appDatabase: AppDatabase) {
 
     private val dao by lazy { appDatabase.zanoNodeDao() }
 

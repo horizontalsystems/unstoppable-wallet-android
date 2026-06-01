@@ -15,8 +15,6 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
-import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
@@ -51,7 +49,6 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
-import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
@@ -61,7 +58,6 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
-import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
@@ -126,12 +122,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideRootUtil(): RootUtil = RootUtil
-
-    @Provides @Singleton
-    fun provideMoneroNodeManager(): MoneroNodeManager = App.moneroNodeManager
-
-    @Provides @Singleton
-    fun provideZanoNodeManager(): ZanoNodeManager = App.zanoNodeManager
 
     @Provides @Singleton
     fun provideAccountFactory(): IAccountFactory = App.accountFactory
@@ -316,12 +306,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideChartIndicatorSettingsDao(appDatabase: AppDatabase): ChartIndicatorSettingsDao = appDatabase.chartIndicatorSettingsDao()
-
-    @Provides @Singleton
-    fun provideMoneroNodeStorage(): MoneroNodeStorage = App.moneroNodeStorage
-
-    @Provides @Singleton
-    fun provideZanoNodeStorage(): ZanoNodeStorage = App.zanoNodeStorage
 
     @Provides @Singleton
     fun providePredefinedBlockchainSettingsProvider(

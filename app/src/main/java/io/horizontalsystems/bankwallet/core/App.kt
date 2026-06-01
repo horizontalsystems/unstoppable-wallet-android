@@ -86,7 +86,6 @@ import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
-import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -185,8 +184,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var evmBlockchainManager: EvmBlockchainManager
         lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
         lateinit var moneroNodeManager: MoneroNodeManager
-        lateinit var moneroNodeStorage: MoneroNodeStorage
-        lateinit var zanoNodeStorage: ZanoNodeStorage
         lateinit var zanoNodeManager: ZanoNodeManager
         lateinit var zanoKitManager: ZanoKitManager
         lateinit var zcashEndpointStorage: ZcashEndpointStorage
@@ -282,10 +279,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         walletManager = WalletManager(accountManager, walletStorage)
 
-        moneroNodeStorage = MoneroNodeStorage(appDatabase)
-        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
-        zanoNodeStorage = ZanoNodeStorage(appDatabase)
-        zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
+        val nodeSettingsEntryPoint = EntryPointAccessors
+            .fromApplication(this, NodeSettingsEntryPoint::class.java)
+        moneroNodeManager = nodeSettingsEntryPoint.moneroNodeManager()
+        zanoNodeManager = nodeSettingsEntryPoint.zanoNodeManager()
         zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
         zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)

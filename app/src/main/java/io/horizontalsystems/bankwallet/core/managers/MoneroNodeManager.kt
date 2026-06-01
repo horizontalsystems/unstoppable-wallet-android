@@ -11,8 +11,11 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.util.Objects
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MoneroNodeManager(
+@Singleton
+class MoneroNodeManager @Inject constructor(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val moneroNodeStorage: MoneroNodeStorage,
     private val marketKitWrapper: MarketKitWrapper

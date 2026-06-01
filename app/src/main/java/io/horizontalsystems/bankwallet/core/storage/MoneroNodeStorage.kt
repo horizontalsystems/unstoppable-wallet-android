@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MoneroNodeStorage(appDatabase: AppDatabase) {
+@Singleton
+class MoneroNodeStorage @Inject constructor(appDatabase: AppDatabase) {
 
     private val dao by lazy { appDatabase.moneroNodeDao() }
 
