@@ -39,8 +39,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LocalStorageManager(
+@Singleton
+class LocalStorageManager @Inject constructor(
     private val preferences: SharedPreferences
 ) : ILocalStorage, IPinSettingsStorage, ILockoutStorage, IThirdKeyboard, IMarketStorage {
 

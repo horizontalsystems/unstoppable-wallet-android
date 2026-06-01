@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.KeyStoreCleaner
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
-import io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
@@ -229,13 +228,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        LocalStorageManager(preferences).apply {
-            localStorage = this
-            pinSettingsStorage = this
-            lockoutStorage = this
-            thirdKeyboardStorage = this
-            marketStorage = this
-        }
+        val localStorageManager = EntryPointAccessors
+            .fromApplication(this, StorageEntryPoint::class.java)
+            .localStorageManager()
+        localStorage = localStorageManager
+        pinSettingsStorage = localStorageManager
+        lockoutStorage = localStorageManager
+        thirdKeyboardStorage = localStorageManager
+        marketStorage = localStorageManager
 
         val appConfig = AppConfigProvider(localStorage)
         appConfigProvider = appConfig

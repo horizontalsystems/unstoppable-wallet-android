@@ -119,3 +119,9 @@ class AppInitializer @Inject constructor(
 interface AppInitializerEntryPoint {
     fun appInitializer(): AppInitializer
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface StorageEntryPoint {
+    fun localStorageManager(): io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
+}

@@ -1,8 +1,12 @@
 package io.horizontalsystems.bankwallet.core.di
 
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
@@ -240,6 +244,10 @@ object AppModule {
     fun provideThemeService(): ThemeService = ThemeService(App.localStorage)
 
     // --- Storage / display state ---
+
+    @Provides @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
     @Provides @Singleton
     fun provideLocalStorage(): ILocalStorage = App.localStorage
