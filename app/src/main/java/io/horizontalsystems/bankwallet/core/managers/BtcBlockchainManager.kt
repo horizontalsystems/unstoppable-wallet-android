@@ -9,7 +9,8 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class BtcBlockchainManager(
+@javax.inject.Singleton
+class BtcBlockchainManager @javax.inject.Inject constructor(
     private val storage: BlockchainSettingsStorage,
     marketKit: MarketKitWrapper,
 ) {

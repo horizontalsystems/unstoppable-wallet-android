@@ -214,3 +214,10 @@ interface KitManagersEntryPoint {
     fun tonKitManager(): io.horizontalsystems.bankwallet.core.managers.TonKitManager
     fun stellarKitManager(): io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface BlockchainManagersEntryPoint {
+    fun blockchainSettingsStorage(): io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
+    fun btcBlockchainManager(): io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+}

@@ -220,12 +220,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         appDatabase = AppDatabase.getInstance(this)
 
-        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
+        val blockchainManagersEntryPoint = EntryPointAccessors
+            .fromApplication(this, BlockchainManagersEntryPoint::class.java)
+        blockchainSettingsStorage = blockchainManagersEntryPoint.blockchainSettingsStorage()
         evmSyncSourceManager = EntryPointAccessors
             .fromApplication(this, EvmSyncSourceEntryPoint::class.java)
             .evmSyncSourceManager()
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
+        btcBlockchainManager = blockchainManagersEntryPoint.btcBlockchainManager()
 
         val restoreSettingsEntryPoint = EntryPointAccessors
             .fromApplication(this, RestoreSettingsEntryPoint::class.java)

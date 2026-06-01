@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
-import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.core.IBackupManager
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ITorManager
-import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -133,9 +131,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideEvmBlockchainManager(): EvmBlockchainManager = App.evmBlockchainManager
-
-    @Provides @Singleton
-    fun provideBtcBlockchainManager(): BtcBlockchainManager = App.btcBlockchainManager
 
     // --- Market data ---
 
@@ -243,9 +238,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideRecentAddressDao(appDatabase: AppDatabase): RecentAddressDao = appDatabase.recentAddressDao()
-
-    @Provides @Singleton
-    fun provideBlockchainSettingsStorage(): BlockchainSettingsStorage = App.blockchainSettingsStorage
 
     @Provides @Singleton
     fun provideEnabledWalletStorage(impl: io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage): IEnabledWalletStorage = impl

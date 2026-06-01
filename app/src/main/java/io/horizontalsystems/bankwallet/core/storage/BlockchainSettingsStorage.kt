@@ -5,7 +5,8 @@ import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class BlockchainSettingsStorage(appDatabase: AppDatabase) {
+@javax.inject.Singleton
+class BlockchainSettingsStorage @javax.inject.Inject constructor(appDatabase: AppDatabase) {
 
     companion object {
         const val keyBtcRestore: String = "btc-restore"
