@@ -3,8 +3,10 @@ package io.horizontalsystems.bankwallet.modules.opencryptopay
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Job
@@ -61,7 +63,7 @@ class OpenCryptoPayViewModel(
                 val response = OcpApiService.service(baseUrl).getPaymentDetails(url, timeout = 0)
 
                 if (response.statusCode == 404 || response.quote == null) {
-                    error = response.message ?: "No active payment at this register"
+                    error = response.message ?: Translator.getString(R.string.OpenCryptoPay_Error_NoActivePayment)
                     loading = false
                     emitState()
                     return@launch
@@ -98,7 +100,7 @@ class OpenCryptoPayViewModel(
                 startCountdown(response.quote.expiration)
                 emitState()
             } catch (e: Exception) {
-                error = e.message ?: "Failed to fetch payment details"
+                error = e.message ?: Translator.getString(R.string.OpenCryptoPay_Error_FetchFailed)
                 loading = false
                 emitState()
             }

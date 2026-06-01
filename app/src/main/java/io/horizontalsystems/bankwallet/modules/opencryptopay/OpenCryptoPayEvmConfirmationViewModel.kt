@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.opencryptopay
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
 import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
@@ -74,8 +76,8 @@ class OpenCryptoPayEvmConfirmationViewModel(
                 sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
             } catch (e: Exception) {
                 fetchError = CautionViewItem(
-                    title = "Error",
-                    text = e.message ?: "Failed to load payment details",
+                    title = Translator.getString(R.string.Error),
+                    text = e.message ?: Translator.getString(R.string.OpenCryptoPay_Error_LoadFailed),
                     type = CautionViewItem.Type.Error,
                 )
             } finally {
@@ -149,7 +151,7 @@ class OpenCryptoPayEvmConfirmationViewModel(
     }
 
     private suspend fun submitProofWithRetry(baseUrl: String, rawHex: String) {
-        var lastError: Exception = Exception("Could not submit payment to merchant. Please try again.")
+        var lastError: Exception = Exception(Translator.getString(R.string.OpenCryptoPay_Error_SubmitFailed))
         repeat(3) { attempt ->
             try {
                 OcpProofService.service(baseUrl).submitProofHex(
