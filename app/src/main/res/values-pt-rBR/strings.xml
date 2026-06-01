@@ -1738,7 +1738,6 @@
     <string name="BackupRequired_LocalBackupDescription">Salve arquivo criptografado em seu dispositivo</string>
     <string name="BackupRequired_RemindLater">Lembrar mais tarde</string>
     <string name="OpenCryptoPay_Title">Pagamento</string>
-    <string name="OpenCryptoPay_Pay">Pagar</string>
     <string name="OpenCryptoPay_Expired">Expirado</string>
     <string name="OpenCryptoPay_Merchant">Comerciante</string>
     <string name="OpenCryptoPay_Amount">Valor</string>

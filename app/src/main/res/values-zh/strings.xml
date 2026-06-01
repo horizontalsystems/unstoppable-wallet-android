@@ -1732,7 +1732,6 @@
     <string name="BackupRequired_LocalBackupDescription">将加密文件保存到您的设备</string>
     <string name="BackupRequired_RemindLater">稍后提醒我</string>
     <string name="OpenCryptoPay_Title">支付</string>
-    <string name="OpenCryptoPay_Pay">支付</string>
     <string name="OpenCryptoPay_Expired">已过期</string>
     <string name="OpenCryptoPay_Merchant">商户</string>
     <string name="OpenCryptoPay_Amount">金额</string>
