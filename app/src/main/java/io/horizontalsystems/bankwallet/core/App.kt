@@ -298,7 +298,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
-        contactsRepository = ContactsRepository(marketKit)
+        val miscDataEntryPoint = EntryPointAccessors
+            .fromApplication(this, MiscDataEntryPoint::class.java)
+        contactsRepository = miscDataEntryPoint.contactsRepository()
+        chartIndicatorManager = miscDataEntryPoint.chartIndicatorManager()
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
@@ -423,7 +426,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
-        chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
 
         tonConnectManager = TonConnectManager(

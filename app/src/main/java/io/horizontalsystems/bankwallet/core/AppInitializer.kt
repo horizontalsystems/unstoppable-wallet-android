@@ -174,3 +174,10 @@ interface ConfigLeavesEntryPoint {
     fun termsManager(): io.horizontalsystems.bankwallet.core.ITermsManager
     fun connectivityManager(): io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface MiscDataEntryPoint {
+    fun chartIndicatorManager(): io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
+    fun contactsRepository(): io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+}

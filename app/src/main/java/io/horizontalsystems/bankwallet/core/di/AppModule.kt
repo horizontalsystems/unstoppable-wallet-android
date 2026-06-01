@@ -64,7 +64,6 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
-import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
@@ -73,7 +72,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
@@ -113,9 +111,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideRateAppManager(): IRateAppManager = App.rateAppManager
-
-    @Provides @Singleton
-    fun provideChartIndicatorManager(): ChartIndicatorManager = App.chartIndicatorManager
 
     @Provides @Singleton
     fun provideRootUtil(): RootUtil = RootUtil
@@ -203,9 +198,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideThirdKeyboard(): IThirdKeyboard = App.thirdKeyboardStorage
-
-    @Provides @Singleton
-    fun provideContactsRepository(): ContactsRepository = App.contactsRepository
 
     // --- Settings helpers ---
 

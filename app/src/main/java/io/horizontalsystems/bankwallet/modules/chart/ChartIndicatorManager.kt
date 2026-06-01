@@ -8,8 +8,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlin.math.abs
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ChartIndicatorManager(
+@Singleton
+class ChartIndicatorManager @Inject constructor(
     private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
     private val localStorage: ILocalStorage
 ) {

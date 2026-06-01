@@ -20,8 +20,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ContactsRepository(
+@Singleton
+class ContactsRepository @Inject constructor(
     private val marketKit: MarketKitWrapper
 ) {
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
