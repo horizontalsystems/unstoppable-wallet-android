@@ -1,0 +1,108 @@
+package io.horizontalsystems.bankwallet.core
+
+import android.content.Context
+import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.MigrationManager
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
+import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+/**
+ * Owns the eager startup sequence that must run at app launch, extracted from App.onCreate().
+ *
+ * The order of operations is significant: it is preserved exactly as it was in App.startTasks().
+ * Keep this an explicit, reviewable manifest of launch-time work — when the dependencies move to
+ * Hilt, only how this class is constructed should change, not what start() does.
+ */
+class AppInitializer(
+    private val context: Context,
+    private val walletManager: WalletManager,
+    private val restoreSettingsManager: RestoreSettingsManager,
+    private val moneroNodeManager: MoneroNodeManager,
+    private val zanoNodeManager: ZanoNodeManager,
+    private val btcBlockchainManager: BtcBlockchainManager,
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val solanaKitManager: SolanaKitManager,
+    private val tronKitManager: TronKitManager,
+    private val adapterManager: IAdapterManager,
+    private val marketKit: MarketKitWrapper,
+    private val rateAppManager: IRateAppManager,
+    private val nftMetadataSyncer: NftMetadataSyncer,
+    private val pinComponent: IPinComponent,
+    private val accountManager: IAccountManager,
+    private val wcSessionManager: WCSessionManager,
+    private val swapSyncService: SwapSyncService,
+    private val systemInfoManager: ISystemInfoManager,
+    private val localStorage: ILocalStorage,
+    private val evmLabelManager: EvmLabelManager,
+    private val contactsRepository: ContactsRepository,
+    private val appIconService: AppIconService,
+    private val backgroundManager: BackgroundManager,
+    private val termsManager: ITermsManager,
+) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
+    fun start() {
+        coroutineScope.launch {
+            EthereumKit.init()
+            walletManager.start(restoreSettingsManager, moneroNodeManager, zanoNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
+            adapterManager.startAdapterManager()
+            marketKit.sync()
+            rateAppManager.onAppLaunch()
+            nftMetadataSyncer.start()
+            pinComponent.initDefaultPinLevel()
+            accountManager.clearAccounts()
+            wcSessionManager.start()
+            swapSyncService.start()
+
+            AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
+
+            if (MarketWidgetWorker.hasEnabledWidgets(context)) {
+                MarketWidgetWorker.enqueueWork(context)
+            } else {
+                MarketWidgetWorker.cancel(context)
+            }
+
+            evmLabelManager.sync()
+            contactsRepository.initialize()
+            App.trialExpired = !UserSubscriptionManager.hasFreeTrial()
+            appIconService.validateAndFixCurrentIcon()
+        }
+
+        coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> UserSubscriptionManager.onResume()
+                    BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()
+                }
+            }
+        }
+
+        coroutineScope.launch(Dispatchers.IO) {
+            delay(3000)
+            val migrationManager = MigrationManager(localStorage, termsManager)
+            migrationManager.runMigrations()
+        }
+    }
+}

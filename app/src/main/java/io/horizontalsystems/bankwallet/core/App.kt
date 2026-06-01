@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
-import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
 import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
@@ -36,7 +35,6 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.MigrationManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.NetworkManager
@@ -124,13 +122,7 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.dapp.core.DAppInitParams
 import io.horizontalsystems.dapp.core.DAppManager
-import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.security.MessageDigest
 import java.util.logging.Level
@@ -220,7 +212,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         var trialExpired: Boolean = false
     }
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -474,7 +465,33 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        startTasks()
+
+        AppInitializer(
+            context = this,
+            walletManager = walletManager,
+            restoreSettingsManager = restoreSettingsManager,
+            moneroNodeManager = moneroNodeManager,
+            zanoNodeManager = zanoNodeManager,
+            btcBlockchainManager = btcBlockchainManager,
+            evmBlockchainManager = evmBlockchainManager,
+            solanaKitManager = solanaKitManager,
+            tronKitManager = tronKitManager,
+            adapterManager = adapterManager,
+            marketKit = marketKit,
+            rateAppManager = rateAppManager,
+            nftMetadataSyncer = nftMetadataSyncer,
+            pinComponent = pinComponent,
+            accountManager = accountManager,
+            wcSessionManager = wcSessionManager,
+            swapSyncService = swapSyncService,
+            systemInfoManager = systemInfoManager,
+            localStorage = localStorage,
+            evmLabelManager = evmLabelManager,
+            contactsRepository = contactsRepository,
+            appIconService = appIconService,
+            backgroundManager = backgroundManager,
+            termsManager = termsManager,
+        ).start()
     }
 
     override fun newImageLoader(): ImageLoader {
@@ -561,53 +578,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     } catch (e: Exception) {
         // Handle error
         emptyList()
-    }
-
-    private fun startTasks() {
-        coroutineScope.launch {
-            EthereumKit.init()
-            walletManager.start(restoreSettingsManager, moneroNodeManager, zanoNodeManager, zcashEndpointManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
-            adapterManager.startAdapterManager()
-            marketKit.sync()
-            rateAppManager.onAppLaunch()
-            nftMetadataSyncer.start()
-            pinComponent.initDefaultPinLevel()
-            accountManager.clearAccounts()
-            wcSessionManager.start()
-            swapSyncService.start()
-
-            AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
-
-            if (MarketWidgetWorker.hasEnabledWidgets(instance)) {
-                MarketWidgetWorker.enqueueWork(instance)
-            } else {
-                MarketWidgetWorker.cancel(instance)
-            }
-
-            appDatabase.ocpPaymentDao().getPending().forEach { record ->
-                OcpProofSubmissionWorker.enqueue(instance, record.txHash)
-            }
-
-            evmLabelManager.sync()
-            contactsRepository.initialize()
-            trialExpired = !UserSubscriptionManager.hasFreeTrial()
-            appIconService.validateAndFixCurrentIcon()
-        }
-
-        coroutineScope.launch {
-            backgroundManager.stateFlow.collect { state ->
-                when (state) {
-                    BackgroundManagerState.EnterForeground -> UserSubscriptionManager.onResume()
-                    BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()
-                }
-            }
-        }
-
-        coroutineScope.launch(Dispatchers.IO) {
-            delay(3000)
-            val migrationManager = MigrationManager(localStorage, termsManager)
-            migrationManager.runMigrations()
-        }
     }
 }
 
