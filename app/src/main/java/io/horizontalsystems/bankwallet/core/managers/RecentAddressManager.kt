@@ -5,11 +5,14 @@ import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.RecentAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RecentAddressManager(
+@Singleton
+class RecentAddressManager @Inject constructor(
     private val accountManager: IAccountManager,
     private val dao: RecentAddressDao,
-    private val actionCompletedDelegate: ActionCompletedDelegate
+    private val actionCompletedDelegate: ActionCompletedDelegate,
 ) {
 
     fun setRecentAddress(address: Address, blockchainType: BlockchainType) {

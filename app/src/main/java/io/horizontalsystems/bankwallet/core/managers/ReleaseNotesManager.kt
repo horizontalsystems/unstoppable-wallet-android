@@ -3,11 +3,14 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ReleaseNotesManager(
+@Singleton
+class ReleaseNotesManager @Inject constructor(
         private val systemInfoManager: ISystemInfoManager,
         private val localStorage: ILocalStorage,
-        appConfigProvider: AppConfigProvider
+        appConfigProvider: AppConfigProvider,
 ) {
 
     private val currentAppVersion: String by lazy {

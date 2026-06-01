@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.PasswordError
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PassphraseValidator {
+@Singleton
+class PassphraseValidator @Inject constructor() {
     private val allowedCharacters = "abcdefghijklmnopqrstuvwxyz0123456789 '\"`&/?!:;.,~*$=+-[](){}<>\\_#@|%"
 
     fun containsValidCharacters(text: String?): Boolean {

@@ -3,9 +3,12 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IWordsManager
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WordsManager(
-    private val mnemonic: Mnemonic
+@Singleton
+class WordsManager @Inject constructor(
+    private val mnemonic: Mnemonic,
 ) : IWordsManager {
 
     @Throws

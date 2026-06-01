@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class DonationShowManager(
+@Singleton
+class DonationShowManager @Inject constructor(
     private val localStorage: ILocalStorage,
 ) {
 

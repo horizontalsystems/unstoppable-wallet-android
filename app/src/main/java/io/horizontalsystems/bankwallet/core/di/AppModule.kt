@@ -26,11 +26,11 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
-import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
+import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
-import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
@@ -49,11 +49,8 @@ import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
-import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
-import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
-import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
@@ -74,7 +71,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
-import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.core.CoreApp
@@ -213,13 +209,10 @@ object AppModule {
     fun provideBackupProvider(): BackupProvider = App.backupProvider
 
     @Provides @Singleton
-    fun provideBackupViewItemFactory(): BackupViewItemFactory = BackupViewItemFactory()
+    fun provideMnemonic(): Mnemonic = Mnemonic()
 
     @Provides @Singleton
     fun provideRoiManager(): RoiManager = App.roiManager
-
-    @Provides @Singleton
-    fun provideWordsManager(): WordsManager = App.wordsManager
 
     @Provides @Singleton
     fun provideThirdKeyboard(): IThirdKeyboard = App.thirdKeyboardStorage
@@ -279,12 +272,6 @@ object AppModule {
     fun provideTonConnectManager(): TonConnectManager = App.tonConnectManager
 
     @Provides @Singleton
-    fun provideReleaseNotesManager(): ReleaseNotesManager = App.releaseNotesManager
-
-    @Provides @Singleton
-    fun provideDonationShowManager(): DonationShowManager = App.donationShowManager
-
-    @Provides @Singleton
     fun provideNetworkManager(): INetworkManager = App.networkManager
 
     @Provides @Singleton
@@ -311,9 +298,6 @@ object AppModule {
     fun provideWalletActivator(): WalletActivator = App.walletActivator
 
     @Provides @Singleton
-    fun providePassphraseValidator(): PassphraseValidator = PassphraseValidator()
-
-    @Provides @Singleton
     fun provideRestoreSettingsManager(): RestoreSettingsManager = App.restoreSettingsManager
 
     @Provides @Singleton
@@ -329,7 +313,7 @@ object AppModule {
     fun provideBaseTokenManager(): BaseTokenManager = App.baseTokenManager
 
     @Provides @Singleton
-    fun provideRecentAddressManager(): RecentAddressManager = App.recentAddressManager
+    fun provideRecentAddressDao(): RecentAddressDao = App.appDatabase.recentAddressDao()
 
     @Provides @Singleton
     fun providePredefinedBlockchainSettingsProvider(

@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BackupViewItemFactory {
+@Singleton
+class BackupViewItemFactory @Inject constructor() {
 
     fun backupViewItems(backupItems: BackupItems): Pair<List<SelectBackupItemsViewModel.WalletBackupViewItem>, List<SelectBackupItemsViewModel.OtherBackupViewItem>> {
 
