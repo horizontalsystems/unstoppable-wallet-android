@@ -1755,4 +1755,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">Ожидание</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">Требуется сверка</string>
     <string name="OpenCryptoPay_RetryNow">Повторить попытку</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">На этом терминале нет активного платежа</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Не удалось получить данные платежа</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Не удалось загрузить данные платежа</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Не удалось отправить платеж продавцу. Пожалуйста, попробуйте снова.</string>
 </resources>

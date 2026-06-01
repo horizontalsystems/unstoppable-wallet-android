@@ -664,4 +664,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">در انتظار</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">نیاز به تطبیق دارد</string>
     <string name="OpenCryptoPay_RetryNow">امروز مجدد تلاش کنید</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">هیچ پرداخت فعالی در این پایانه وجود ندارد</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">بازیابی جزئیات پرداخت ناموفق بود</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">بارگیری جزئیات پرداخت ناموفق بود</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">نتوانست پرداخت را به پذیرنده ارسال کند. لطفا دوباره تلاش کنید.</string>
 </resources>
