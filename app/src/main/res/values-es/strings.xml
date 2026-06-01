@@ -1748,4 +1748,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">Pendiente</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">Reconciliación requerida</string>
     <string name="OpenCryptoPay_RetryNow">Reintentar ahora</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">No hay pago activo en este terminal</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">No se pudieron obtener los detalles de pago</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">No se pudieron cargar los detalles de pago</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">No se pudo enviar el pago al comerciante. Por favor, inténtelo de nuevo.</string>
 </resources>

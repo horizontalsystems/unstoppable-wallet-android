@@ -1747,4 +1747,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">待处理</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">需要对账</string>
     <string name="OpenCryptoPay_RetryNow">立即重试</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">此终端没有活动支付</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">无法获取支付详情</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">无法加载支付详情</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">无法向商户提交支付。请重试。</string>
 </resources>

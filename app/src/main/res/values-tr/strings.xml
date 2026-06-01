@@ -1349,4 +1349,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">Bekleniyor</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">Uzlaştırma gerekli</string>
     <string name="OpenCryptoPay_RetryNow">Şimdi yeniden deneyin</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">Bu terminalda aktif ödeme yok</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Ödeme detayları alınamadı</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Ödeme detayları yüklenemedi</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Ödeme satıcıya gönderilemedi. Lütfen tekrar deneyin.</string>
 </resources>

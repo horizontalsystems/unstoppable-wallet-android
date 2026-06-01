@@ -1757,4 +1757,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">Ausstehend</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">Abstimmung erforderlich</string>
     <string name="OpenCryptoPay_RetryNow">Jetzt erneut versuchen</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">Keine aktive Zahlung an diesem Terminal</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Zahlungsdetails konnten nicht abgerufen werden</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Zahlungsdetails konnten nicht geladen werden</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Zahlung konnte nicht an den Händler übermittelt werden. Bitte versuchen Sie es erneut.</string>
 </resources>

@@ -1750,4 +1750,8 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">En attente</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">Rapprochement nécessaire</string>
     <string name="OpenCryptoPay_RetryNow">Réessayer maintenant</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">Aucun paiement actif à ce terminal</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Échec de la récupération des détails de paiement</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Échec du chargement des détails de paiement</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Impossible de soumettre le paiement au commerçant. Veuillez réessayer.</string>
 </resources>
