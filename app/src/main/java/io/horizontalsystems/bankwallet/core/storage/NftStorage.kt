@@ -5,8 +5,11 @@ import io.horizontalsystems.bankwallet.entities.nft.*
 import io.horizontalsystems.marketkit.models.NftPrice
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NftStorage(
+@Singleton
+class NftStorage @Inject constructor(
     private val nftDao: NftDao,
     private val marketKit: MarketKitWrapper
 ) {

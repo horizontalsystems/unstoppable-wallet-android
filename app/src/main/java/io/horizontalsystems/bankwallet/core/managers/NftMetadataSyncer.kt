@@ -8,8 +8,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NftMetadataSyncer(
+@Singleton
+class NftMetadataSyncer @Inject constructor(
     private val nftAdapterManager: NftAdapterManager,
     private val nftMetadataManager: NftMetadataManager,
     private val nftStorage: NftStorage

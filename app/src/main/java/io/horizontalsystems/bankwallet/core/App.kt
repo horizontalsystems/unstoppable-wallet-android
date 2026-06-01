@@ -72,7 +72,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
-import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
@@ -167,9 +166,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var zanoKitManager: ZanoKitManager
         lateinit var zcashEndpointStorage: ZcashEndpointStorage
         lateinit var zcashEndpointManager: ZcashLightWalletEndpointManager
-        lateinit var nftMetadataManager: NftMetadataManager
-        lateinit var nftAdapterManager: NftAdapterManager
-        lateinit var nftMetadataSyncer: NftMetadataSyncer
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
@@ -407,10 +403,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         setAppTheme()
 
-        val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
-        nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)
-        nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
-        nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 
         DAppManager.initialize(
             params = DAppInitParams(

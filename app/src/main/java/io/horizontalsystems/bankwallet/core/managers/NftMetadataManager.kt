@@ -13,8 +13,11 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NftMetadataManager(
+@Singleton
+class NftMetadataManager @Inject constructor(
     marketKit: MarketKitWrapper,
     appConfigProvider: AppConfigProvider,
     private val storage: NftStorage

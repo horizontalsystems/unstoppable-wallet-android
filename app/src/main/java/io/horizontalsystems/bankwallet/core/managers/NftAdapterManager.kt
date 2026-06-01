@@ -13,8 +13,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NftAdapterManager(
+@Singleton
+class NftAdapterManager @Inject constructor(
     private val walletManager: WalletManager,
     private val evmBlockchainManager: EvmBlockchainManager
 ) {
