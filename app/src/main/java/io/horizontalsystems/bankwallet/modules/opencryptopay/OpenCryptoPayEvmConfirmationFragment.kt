@@ -74,7 +74,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
     navController: NavController,
     input: OpenCryptoPayEvmConfirmationFragment.Input,
 ) {
-    val backStackEntry = remember(navController.currentBackStackEntry) {
+    val backStackEntry = remember {
         navController.getBackStackEntry(R.id.openCryptoPayEvmConfirmationFragment)
     }
     val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
