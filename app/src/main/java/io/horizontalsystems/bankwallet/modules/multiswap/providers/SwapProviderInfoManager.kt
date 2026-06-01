@@ -3,8 +3,11 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SwapProviderInfoManager(
+@Singleton
+class SwapProviderInfoManager @Inject constructor(
     appConfigProvider: AppConfigProvider,
 ) {
     private val unstoppableAPI = APIClient.build(

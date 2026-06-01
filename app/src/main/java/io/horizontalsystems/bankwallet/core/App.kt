@@ -80,9 +80,6 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
-import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
-import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
 import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
@@ -182,9 +179,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
-        lateinit var swapRecordManager: SwapRecordManager
-        lateinit var swapSyncService: SwapSyncService
-        lateinit var swapProviderInfoManager: SwapProviderInfoManager
         var trialExpired: Boolean = false
     }
 
@@ -305,9 +299,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         contactsRepository = ContactsRepository(marketKit)
-        swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
-        swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
-        swapProviderInfoManager = SwapProviderInfoManager(appConfigProvider)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,

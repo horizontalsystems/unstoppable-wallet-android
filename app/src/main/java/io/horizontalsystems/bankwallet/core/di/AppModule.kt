@@ -46,9 +46,6 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
-import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
-import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
@@ -191,17 +188,8 @@ object AppModule {
     fun provideNftMetadataSyncer(): NftMetadataSyncer = App.nftMetadataSyncer
 
     @Provides @Singleton
-    fun provideSwapSyncService(): SwapSyncService = App.swapSyncService
-
-    @Provides @Singleton
     fun provideSpamManager(): SpamManager = App.spamManager
 
-
-    @Provides @Singleton
-    fun provideSwapRecordManager(): SwapRecordManager = App.swapRecordManager
-
-    @Provides @Singleton
-    fun provideSwapProviderInfoManager(): SwapProviderInfoManager = App.swapProviderInfoManager
 
     @Provides @Singleton
     fun provideTokenAutoEnableManager(): TokenAutoEnableManager = App.tokenAutoEnableManager
@@ -289,6 +277,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideAppDatabase(): AppDatabase = App.appDatabase
+
+    @Provides @Singleton
+    fun provideSwapRecordDao(appDatabase: AppDatabase): io.horizontalsystems.bankwallet.core.storage.SwapRecordDao = appDatabase.swapRecordDao()
 
     @Provides @Singleton
     fun provideEnabledWalletsCacheDao(appDatabase: AppDatabase): EnabledWalletsCacheDao = appDatabase.enabledWalletsCacheDao()

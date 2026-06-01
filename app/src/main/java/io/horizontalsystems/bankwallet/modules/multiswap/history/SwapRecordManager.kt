@@ -5,8 +5,11 @@ import io.horizontalsystems.bankwallet.core.storage.SwapRecordDao
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SwapRecordManager(
+@Singleton
+class SwapRecordManager @Inject constructor(
     private val accountManager: IAccountManager,
     private val swapRecordDao: SwapRecordDao,
 ) {

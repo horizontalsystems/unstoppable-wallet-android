@@ -20,8 +20,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SwapSyncService(
+@Singleton
+class SwapSyncService @Inject constructor(
     private val swapRecordManager: SwapRecordManager,
     appConfigProvider: AppConfigProvider,
 ) : Clearable {
