@@ -12,8 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WalletManager(
+@Singleton
+class WalletManager @Inject constructor(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
 ) {

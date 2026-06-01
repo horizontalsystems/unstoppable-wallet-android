@@ -16,6 +16,9 @@ import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.managers.CoinManager
+import io.horizontalsystems.bankwallet.core.managers.WalletStorage
+import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
@@ -65,7 +68,6 @@ import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
@@ -96,9 +98,6 @@ import javax.inject.Singleton
 object AppModule {
 
     // --- Wallet / Account ---
-
-    @Provides @Singleton
-    fun provideWalletManager(): WalletManager = App.walletManager
 
     @Provides @Singleton
     fun provideBackupManager(impl: BackupManager): IBackupManager = impl
@@ -141,7 +140,10 @@ object AppModule {
     fun provideAccountCleaner(impl: AccountCleaner): IAccountCleaner = impl
 
     @Provides @Singleton
-    fun provideCoinManager(): ICoinManager = App.coinManager
+    fun provideCoinManager(impl: CoinManager): ICoinManager = impl
+
+    @Provides @Singleton
+    fun provideWalletStorage(impl: WalletStorage): IWalletStorage = impl
 
     @Provides @Singleton
     fun provideAdapterManager(): IAdapterManager = App.adapterManager

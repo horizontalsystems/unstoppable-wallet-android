@@ -9,8 +9,11 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WalletStorage(
+@Singleton
+class WalletStorage @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val storage: IEnabledWalletStorage,
 ) : IWalletStorage {

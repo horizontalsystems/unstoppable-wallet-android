@@ -3,8 +3,11 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CoinManager(
+@Singleton
+class CoinManager @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val walletManager: WalletManager
 ) : ICoinManager {

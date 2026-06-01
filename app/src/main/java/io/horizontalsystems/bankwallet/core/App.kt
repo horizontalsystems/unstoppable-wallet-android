@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.CoinManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -64,7 +63,6 @@ import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
-import io.horizontalsystems.bankwallet.core.managers.WalletStorage
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
@@ -141,7 +139,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var walletManager: WalletManager
         lateinit var passkeyManager: PasskeyManager
         lateinit var tokenAutoEnableManager: TokenAutoEnableManager
-        lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
@@ -265,9 +262,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
-        walletManager = WalletManager(accountManager, walletStorage)
+        val walletCoreEntryPoint = EntryPointAccessors
+            .fromApplication(this, WalletCoreEntryPoint::class.java)
+        walletManager = walletCoreEntryPoint.walletManager()
 
         val nodeSettingsEntryPoint = EntryPointAccessors
             .fromApplication(this, NodeSettingsEntryPoint::class.java)
@@ -276,7 +274,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
         zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
-        coinManager = CoinManager(marketKit, walletManager)
+        coinManager = walletCoreEntryPoint.coinManager()
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
         val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)

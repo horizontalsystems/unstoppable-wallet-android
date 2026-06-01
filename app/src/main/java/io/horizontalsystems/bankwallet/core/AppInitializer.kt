@@ -159,3 +159,10 @@ interface AccountWrappersEntryPoint {
     fun userManager(): io.horizontalsystems.bankwallet.core.managers.UserManager
     fun accountFactory(): io.horizontalsystems.bankwallet.core.IAccountFactory
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface WalletCoreEntryPoint {
+    fun walletManager(): io.horizontalsystems.bankwallet.core.managers.WalletManager
+    fun coinManager(): io.horizontalsystems.bankwallet.core.ICoinManager
+}
