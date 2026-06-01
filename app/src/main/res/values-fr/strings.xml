@@ -1734,4 +1734,21 @@
     <string name="BackupRequired_ManualBackupDescription">Notez votre phrase de récupération</string>
     <string name="BackupRequired_LocalBackupDescription">Enregistrez un fichier chiffré sur votre appareil</string>
     <string name="BackupRequired_RemindLater">Me le rappeler plus tard</string>
+    <string name="OpenCryptoPay_Title">Paiement</string>
+    <string name="OpenCryptoPay_Pay">Payer</string>
+    <string name="OpenCryptoPay_Expired">Expiré</string>
+    <string name="OpenCryptoPay_Merchant">Marchand</string>
+    <string name="OpenCryptoPay_Amount">Montant</string>
+    <string name="OpenCryptoPay_ChooseAsset">Choisir un actif</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Choisissez le token que vous souhaitez utiliser pour le paiement</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">Aucune méthode de paiement prise en charge disponible pour ce portefeuille</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Expire dans</string>
+    <string name="OpenCryptoPay_PaymentId">ID de paiement</string>
+    <string name="OpenCryptoPay_QuoteId">ID de devis</string>
+    <string name="OpenCryptoPay_ProofStatus">Statut de la preuve</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Soumis</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">En attente</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Rapprochement nécessaire</string>
+    <string name="OpenCryptoPay_RetryNow">Réessayer maintenant</string>
 </resources>

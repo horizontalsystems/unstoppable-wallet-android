@@ -1499,4 +1499,21 @@
     <string name="BackupRequired_ManualBackupDescription">복구 구문을 적어두세요</string>
     <string name="BackupRequired_LocalBackupDescription">암호화된 파일을 기기에 저장하세요</string>
     <string name="BackupRequired_RemindLater">나중에 알려주기</string>
+    <string name="OpenCryptoPay_Title">결제</string>
+    <string name="OpenCryptoPay_Pay">결제</string>
+    <string name="OpenCryptoPay_Expired">만료됨</string>
+    <string name="OpenCryptoPay_Merchant">판매자</string>
+    <string name="OpenCryptoPay_Amount">금액</string>
+    <string name="OpenCryptoPay_ChooseAsset">자산 선택</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">결제에 사용할 토큰을 선택하세요</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">이 지갑에 사용 가능한 지원되는 결제 방법이 없습니다</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">만료 예정</string>
+    <string name="OpenCryptoPay_PaymentId">결제 ID</string>
+    <string name="OpenCryptoPay_QuoteId">견적 ID</string>
+    <string name="OpenCryptoPay_ProofStatus">증명 상태</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">제출됨</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">대기 중</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">조정 필요</string>
+    <string name="OpenCryptoPay_RetryNow">지금 다시 시도</string>
 </resources>
