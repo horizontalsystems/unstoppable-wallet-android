@@ -189,7 +189,7 @@ object AppModule {
 
 
     @Provides @Singleton
-    fun provideThirdKeyboard(): IThirdKeyboard = App.thirdKeyboardStorage
+    fun provideThirdKeyboard(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): IThirdKeyboard = impl
 
     // --- Settings helpers ---
 
@@ -218,7 +218,7 @@ object AppModule {
         PreferenceManager.getDefaultSharedPreferences(context)
 
     @Provides @Singleton
-    fun provideLocalStorage(): ILocalStorage = App.localStorage
+    fun provideLocalStorage(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): ILocalStorage = impl
 
     @Provides @Singleton
     fun provideEvmLabelManager(): EvmLabelManager = App.evmLabelManager
@@ -245,7 +245,7 @@ object AppModule {
     fun provideBackgroundManager(): BackgroundManager = App.backgroundManager
 
     @Provides @Singleton
-    fun provideMarketStorage(): IMarketStorage = App.marketStorage
+    fun provideMarketStorage(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): IMarketStorage = impl
 
     @Provides @Singleton
     fun provideMarketFavoritesManager(): MarketFavoritesManager = App.marketFavoritesManager
