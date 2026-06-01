@@ -16,6 +16,8 @@ import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
+import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
@@ -59,7 +61,6 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
-import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
@@ -100,7 +101,7 @@ object AppModule {
     fun provideWalletManager(): WalletManager = App.walletManager
 
     @Provides @Singleton
-    fun provideBackupManager(): IBackupManager = App.backupManager
+    fun provideBackupManager(impl: BackupManager): IBackupManager = impl
 
     @Provides @Singleton
     fun providePinComponent(): IPinComponent = App.pinComponent
@@ -128,7 +129,7 @@ object AppModule {
     fun provideRootUtil(): RootUtil = RootUtil
 
     @Provides @Singleton
-    fun provideAccountFactory(): IAccountFactory = App.accountFactory
+    fun provideAccountFactory(impl: AccountFactory): IAccountFactory = impl
 
     @Provides @Singleton
     fun provideAccountManager(impl: AccountManager): IAccountManager = impl
@@ -257,8 +258,6 @@ object AppModule {
 
     // --- Main module ---
 
-    @Provides @Singleton
-    fun provideUserManager(): UserManager = App.userManager
 
     @Provides @Singleton
     fun provideKeyStoreManager(): IKeyStoreManager = CoreApp.keyStoreManager

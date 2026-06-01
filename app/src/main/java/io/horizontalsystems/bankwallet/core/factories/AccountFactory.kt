@@ -7,8 +7,11 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AccountFactory(
+@Singleton
+class AccountFactory @Inject constructor(
     private val accountManager: IAccountManager,
     private val userManager: UserManager
 ) : IAccountFactory {

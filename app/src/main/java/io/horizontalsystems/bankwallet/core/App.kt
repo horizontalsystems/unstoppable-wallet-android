@@ -16,13 +16,11 @@ import coil.decode.SvgDecoder
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
-import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -147,7 +145,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountManager: IAccountManager
         lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
-        lateinit var backupManager: IBackupManager
         lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
         lateinit var moneroBirthdayProvider: MoneroBirthdayProvider
@@ -260,7 +257,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         accountManager = EntryPointAccessors
             .fromApplication(this, AccountCoreEntryPoint::class.java)
             .accountManager()
-        userManager = UserManager(accountManager)
+        val accountWrappersEntryPoint = EntryPointAccessors
+            .fromApplication(this, AccountWrappersEntryPoint::class.java)
+        userManager = accountWrappersEntryPoint.userManager()
 
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
@@ -288,8 +287,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         stellarKitManager = StellarKitManager(backgroundManager)
 
         networkManager = NetworkManager()
-        accountFactory = AccountFactory(accountManager, userManager)
-        backupManager = BackupManager(accountManager)
+        accountFactory = accountWrappersEntryPoint.accountFactory()
 
 
         KeyStoreManager(

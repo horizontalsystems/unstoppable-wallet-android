@@ -152,3 +152,10 @@ interface EvmSyncSourceEntryPoint {
 interface AccountCoreEntryPoint {
     fun accountManager(): IAccountManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface AccountWrappersEntryPoint {
+    fun userManager(): io.horizontalsystems.bankwallet.core.managers.UserManager
+    fun accountFactory(): io.horizontalsystems.bankwallet.core.IAccountFactory
+}
