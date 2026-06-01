@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EvmSyncSourceStorage(appDatabase: AppDatabase) {
+@Singleton
+class EvmSyncSourceStorage @Inject constructor(appDatabase: AppDatabase) {
 
     private val dao by lazy { appDatabase.evmSyncSourceDao() }
 

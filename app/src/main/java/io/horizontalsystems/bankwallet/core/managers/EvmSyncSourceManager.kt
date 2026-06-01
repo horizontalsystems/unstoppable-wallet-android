@@ -15,8 +15,11 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.net.URI
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EvmSyncSourceManager(
+@Singleton
+class EvmSyncSourceManager @Inject constructor(
     private val appConfigProvider: AppConfigProvider,
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val evmSyncSourceStorage: EvmSyncSourceStorage,

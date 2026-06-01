@@ -80,10 +80,6 @@ import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
-import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
-import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
-import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
-import io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
@@ -141,7 +137,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var languageManager: LanguageManager
 
         lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
-        lateinit var evmSyncSourceStorage: EvmSyncSourceStorage
         lateinit var btcBlockchainManager: BtcBlockchainManager
         lateinit var networkManager: INetworkManager
         lateinit var appConfigProvider: AppConfigProvider
@@ -252,8 +247,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         appDatabase = AppDatabase.getInstance(this)
 
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
-        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
+        evmSyncSourceManager = EntryPointAccessors
+            .fromApplication(this, EvmSyncSourceEntryPoint::class.java)
+            .evmSyncSourceManager()
 
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 

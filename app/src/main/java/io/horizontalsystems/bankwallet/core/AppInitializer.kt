@@ -140,3 +140,9 @@ interface NodeSettingsEntryPoint {
     fun moneroNodeManager(): io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
     fun zanoNodeManager(): io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface EvmSyncSourceEntryPoint {
+    fun evmSyncSourceManager(): io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+}

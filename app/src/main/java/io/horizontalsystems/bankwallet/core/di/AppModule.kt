@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
@@ -160,9 +159,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideSolanaKitManager(): SolanaKitManager = App.solanaKitManager
-
-    @Provides @Singleton
-    fun provideEvmSyncSourceManager(): EvmSyncSourceManager = App.evmSyncSourceManager
 
     @Provides @Singleton
     fun provideSolanaRpcSourceManager(): SolanaRpcSourceManager = App.solanaRpcSourceManager
