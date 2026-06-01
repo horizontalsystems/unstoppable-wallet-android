@@ -173,6 +173,7 @@ class OpenCryptoPayConfirmationViewModel(
     }
 
     private suspend fun submitProofHexWithRetry(baseUrl: String, rawHex: String) {
+        var lastError: Exception = Exception("Could not submit payment to merchant. Please try again.")
         repeat(3) { attempt ->
             try {
                 OcpProofService.service(baseUrl).submitProofHex(
@@ -184,12 +185,14 @@ class OpenCryptoPayConfirmationViewModel(
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
-                throw Exception("HTTP ${e.code()}: $body")
+                lastError = Exception("HTTP ${e.code()}: $body")
+                if (attempt < 2) delay(2000L)
             } catch (e: Exception) {
+                lastError = e
                 if (attempt < 2) delay(2000L)
             }
         }
-        throw Exception("Could not submit payment to merchant. Please try again.")
+        throw lastError
     }
 
     private fun extractTxHash(result: SendTransactionResult): String? = when (result) {
