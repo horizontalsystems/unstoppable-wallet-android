@@ -75,28 +75,56 @@ fun OcpTransferAmount.supportedBlockchainTypes(): List<BlockchainType> = when (m
 
 object LnurlDecoder {
     private const val CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+    private const val EXPECTED_HRP = "lnurl"
+    private val GEN = intArrayOf(0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3)
+
+    private fun polymod(values: IntArray): Int {
+        var c = 1
+        for (v in values) {
+            val c0 = c ushr 25
+            c = ((c and 0x1ffffff) shl 5) xor v
+            for (i in 0..4) {
+                if (c0 and (1 shl i) != 0) c = c xor GEN[i]
+            }
+        }
+        return c
+    }
+
+    private fun verifyChecksum(hrp: String, data: IntArray): Boolean {
+        val expand = IntArray(hrp.length * 2 + 1)
+        for (i in hrp.indices) {
+            expand[i] = hrp[i].code shr 5
+            expand[i + hrp.length + 1] = hrp[i].code and 31
+        }
+        expand[hrp.length] = 0
+        return polymod(expand + data) == 1
+    }
 
     fun decode(lnurl: String): String {
         val lower = lnurl.lowercase().removePrefix("lightning:")
         val separatorIdx = lower.lastIndexOf('1')
         if (separatorIdx < 1) error("Invalid bech32: no separator")
 
-        val data = lower.substring(separatorIdx + 1)
-        // Drop last 6 chars (checksum)
-        val payload = data.dropLast(6)
+        val hrp = lower.substring(0, separatorIdx)
+        if (hrp != EXPECTED_HRP) error("Invalid LNURL: expected HRP '$EXPECTED_HRP', got '$hrp'")
 
-        val fiveBitValues = payload.map { ch ->
-            val idx = CHARSET.indexOf(ch)
-            if (idx < 0) error("Invalid bech32 character: $ch")
+        val data = lower.substring(separatorIdx + 1)
+        if (data.length < 6) error("Invalid bech32: data too short")
+
+        val fiveBitValues = IntArray(data.length) { i ->
+            val idx = CHARSET.indexOf(data[i])
+            if (idx < 0) error("Invalid bech32 character: ${data[i]}")
             idx
         }
 
-        // Convert 5-bit groups to 8-bit bytes
+        if (!verifyChecksum(hrp, fiveBitValues)) error("Invalid bech32 checksum")
+
+        // Convert 5-bit groups to 8-bit bytes, dropping the 6-char checksum
         val bytes = mutableListOf<Byte>()
         var buffer = 0
         var bitsInBuffer = 0
-        for (value in fiveBitValues) {
-            buffer = (buffer shl 5) or value
+        for (i in 0 until fiveBitValues.size - 6) {
+            buffer = (buffer shl 5) or fiveBitValues[i]
             bitsInBuffer += 5
             if (bitsInBuffer >= 8) {
                 bitsInBuffer -= 8
