@@ -126,6 +126,7 @@ class OpenCryptoPayEvmConfirmationViewModel(
 
     override fun onCleared() {
         countdownJob?.cancel()
+        super.onCleared()
     }
 
     suspend fun pay() {

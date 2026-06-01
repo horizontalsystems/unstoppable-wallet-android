@@ -181,6 +181,7 @@ class OpenCryptoPayViewModel(
 
     override fun onCleared() {
         countdownJob?.cancel()
+        super.onCleared()
     }
 
     private fun formatAmount(amount: Double): String {
