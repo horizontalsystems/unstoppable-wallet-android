@@ -75,6 +75,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IKeyStoreManager
@@ -303,10 +304,13 @@ object AppModule {
     fun provideMoneroBirthdayProvider(): MoneroBirthdayProvider = App.moneroBirthdayProvider
 
     @Provides @Singleton
-    fun provideEnabledWalletsCacheDao(): EnabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
+    fun provideAppDatabase(): AppDatabase = App.appDatabase
 
     @Provides @Singleton
-    fun provideRecentAddressDao(): RecentAddressDao = App.appDatabase.recentAddressDao()
+    fun provideEnabledWalletsCacheDao(appDatabase: AppDatabase): EnabledWalletsCacheDao = appDatabase.enabledWalletsCacheDao()
+
+    @Provides @Singleton
+    fun provideRecentAddressDao(appDatabase: AppDatabase): RecentAddressDao = appDatabase.recentAddressDao()
 
     @Provides @Singleton
     fun provideBlockchainSettingsStorage(): BlockchainSettingsStorage = App.blockchainSettingsStorage
@@ -315,7 +319,7 @@ object AppModule {
     fun provideEnabledWalletStorage(): IEnabledWalletStorage = App.enabledWalletsStorage
 
     @Provides @Singleton
-    fun provideChartIndicatorSettingsDao(): ChartIndicatorSettingsDao = App.appDatabase.chartIndicatorSettingsDao()
+    fun provideChartIndicatorSettingsDao(appDatabase: AppDatabase): ChartIndicatorSettingsDao = appDatabase.chartIndicatorSettingsDao()
 
     @Provides @Singleton
     fun provideMoneroNodeStorage(): MoneroNodeStorage = App.moneroNodeStorage
