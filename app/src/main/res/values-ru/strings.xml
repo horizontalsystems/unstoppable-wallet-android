@@ -1740,7 +1740,6 @@
     <string name="BackupRequired_LocalBackupDescription">Сохраните зашифрованный файл на устройство</string>
     <string name="BackupRequired_RemindLater">Напомнить позже</string>
     <string name="OpenCryptoPay_Title">Платеж</string>
-    <string name="OpenCryptoPay_Pay">Оплатить</string>
     <string name="OpenCryptoPay_Expired">Истекший</string>
     <string name="OpenCryptoPay_Merchant">Продавец</string>
     <string name="OpenCryptoPay_Amount">Сумма</string>

@@ -1334,7 +1334,6 @@
     <string name="BackupRequired_LocalBackupDescription">Şifrelenmiş dosyayı cihazınıza kaydedin</string>
     <string name="BackupRequired_RemindLater">Daha Sonra Hatırlat</string>
     <string name="OpenCryptoPay_Title">Ödeme</string>
-    <string name="OpenCryptoPay_Pay">Ödeme Yap</string>
     <string name="OpenCryptoPay_Expired">Süresi Doldu</string>
     <string name="OpenCryptoPay_Merchant">Satıcı</string>
     <string name="OpenCryptoPay_Amount">Miktar</string>

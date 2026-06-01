@@ -1733,7 +1733,6 @@
     <string name="BackupRequired_LocalBackupDescription">Guarda un archivo encriptado en tu dispositivo</string>
     <string name="BackupRequired_RemindLater">Recordarme después</string>
     <string name="OpenCryptoPay_Title">Pago</string>
-    <string name="OpenCryptoPay_Pay">Pagar</string>
     <string name="OpenCryptoPay_Expired">Expirado</string>
     <string name="OpenCryptoPay_Merchant">Comerciante</string>
     <string name="OpenCryptoPay_Amount">Cantidad</string>

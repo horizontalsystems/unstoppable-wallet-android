@@ -1500,7 +1500,6 @@
     <string name="BackupRequired_LocalBackupDescription">암호화된 파일을 기기에 저장하세요</string>
     <string name="BackupRequired_RemindLater">나중에 알려주기</string>
     <string name="OpenCryptoPay_Title">결제</string>
-    <string name="OpenCryptoPay_Pay">결제</string>
     <string name="OpenCryptoPay_Expired">만료됨</string>
     <string name="OpenCryptoPay_Merchant">판매자</string>
     <string name="OpenCryptoPay_Amount">금액</string>

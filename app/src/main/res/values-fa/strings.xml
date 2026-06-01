@@ -649,7 +649,6 @@
     <string name="BackupRequired_LocalBackupDescription">فایل رمزگذاری شده را در دستگاه خود ذخیره کنید</string>
     <string name="BackupRequired_RemindLater">بعداً یادآوری کن</string>
     <string name="OpenCryptoPay_Title">پرداخت</string>
-    <string name="OpenCryptoPay_Pay">پرداخت</string>
     <string name="OpenCryptoPay_Expired">منقضی شده</string>
     <string name="OpenCryptoPay_Merchant">پذیرنده</string>
     <string name="OpenCryptoPay_Amount">مقدار</string>

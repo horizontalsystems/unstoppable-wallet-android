@@ -852,7 +852,6 @@
     "OpenCryptoPay_ExpiresIn": "Expires In",
     "OpenCryptoPay_Merchant": "Merchant",
     "OpenCryptoPay_NoSupportedMethods": "No supported payment methods available for this wallet",
-    "OpenCryptoPay_Pay": "Pay",
     "OpenCryptoPay_PaymentId": "Payment ID",
     "OpenCryptoPay_ProofStatus": "Proof Status",
     "OpenCryptoPay_ProofStatus_Pending": "Pending",
