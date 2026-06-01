@@ -216,7 +216,7 @@ fun parseOcpUri(uri: String): Pair<String, String?> {
         val recipient = query.split("&")
             .firstOrNull { it.startsWith("address=") }
             ?.substringAfter("address=")
-            ?: contract
+            ?: error("EIP-681 transfer URI missing address= parameter")
         recipient to contract
     } else {
         val recipient = pathPart.substringBefore("@")
