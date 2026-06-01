@@ -1,5 +1,5 @@
 ## 🚀 Version 0.56.0 Update
-_Release date: May 28, 2026_
+_Release date: June 1, 2026_
 
 ### ✨ Improvements
 
