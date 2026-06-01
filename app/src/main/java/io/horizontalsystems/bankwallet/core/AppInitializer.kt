@@ -188,3 +188,10 @@ interface EvmLabelEntryPoint {
     fun evmLabelManager(): io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
     fun tokenAutoEnableManager(): io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface SpamStatsEntryPoint {
+    fun spamManager(): io.horizontalsystems.bankwallet.core.managers.SpamManager
+    fun statsManager(): io.horizontalsystems.bankwallet.core.stats.StatsManager
+}

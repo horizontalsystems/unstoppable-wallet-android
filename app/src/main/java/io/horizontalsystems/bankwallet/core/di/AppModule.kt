@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
@@ -61,7 +60,6 @@ import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
@@ -172,9 +170,6 @@ object AppModule {
     @Provides @Singleton
     fun provideCurrencyManager(): CurrencyManager = App.currencyManager
 
-    @Provides @Singleton
-    fun provideSpamManager(): SpamManager = App.spamManager
-
 
     @Provides @Singleton
     fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
@@ -196,9 +191,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideLanguageManager(): LanguageManager = App.languageManager
-
-    @Provides @Singleton
-    fun provideStatsManager(): StatsManager = App.statsManager
 
     @Provides @Singleton
     fun provideLaunchScreenService(): LaunchScreenService = LaunchScreenService(App.localStorage)
@@ -253,6 +245,12 @@ object AppModule {
 
     @Provides @Singleton
     fun provideAppDatabase(): AppDatabase = App.appDatabase
+
+    @Provides @Singleton
+    fun provideStatsDao(db: AppDatabase) = db.statsDao()
+
+    @Provides @Singleton
+    fun provideScannedTransactionDao(db: AppDatabase) = db.scannedTransactionDao()
 
     @Provides @Singleton
     fun provideEvmAddressLabelDao(db: AppDatabase) = db.evmAddressLabelDao()

@@ -3,8 +3,11 @@ package io.horizontalsystems.bankwallet.core.storage
 import io.horizontalsystems.bankwallet.entities.ScannedTransaction
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.marketkit.models.BlockchainType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ScannedTransactionStorage(
+@Singleton
+class ScannedTransactionStorage @Inject constructor(
     private val dao: ScannedTransactionDao
 ) {
     fun getScannedTransaction(hash: ByteArray): ScannedTransaction? =

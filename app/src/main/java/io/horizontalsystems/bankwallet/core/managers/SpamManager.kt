@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
@@ -20,13 +20,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class SpamManager(
+@Singleton
+class SpamManager @Inject constructor(
     private val localStorage: ILocalStorage,
     private val scannedTransactionStorage: ScannedTransactionStorage,
     private val contactsRepository: ContactsRepository,
-    private val transactionAdapterManager: TransactionAdapterManager
+    private val transactionAdapterManager: TransactionAdapterManager,
+    private val appConfigProvider: AppConfigProvider,
 ) {
     private val poisoningScorer = PoisoningScorer()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -123,7 +127,7 @@ class SpamManager(
             return false
         }
 
-        val spamCoinLimits = App.appConfigProvider.spamCoinValueLimits
+        val spamCoinLimits = appConfigProvider.spamCoinValueLimits
 
         // Phase 1: Value-only scoring (fast, no DB calls for outgoing context)
         val valueResult = poisoningScorer.calculateValueScore(events, spamCoinLimits)

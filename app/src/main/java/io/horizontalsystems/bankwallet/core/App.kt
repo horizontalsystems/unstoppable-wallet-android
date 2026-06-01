@@ -70,7 +70,6 @@ import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
-import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -167,7 +166,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var marketWidgetRepository: MarketWidgetRepository
         lateinit var contactsRepository: ContactsRepository
         lateinit var chartIndicatorManager: ChartIndicatorManager
-        lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
@@ -290,7 +288,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tokenAutoEnableManager = evmLabelEntryPoint.tokenAutoEnableManager()
         evmLabelManager = evmLabelEntryPoint.evmLabelManager()
 
-        scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         val miscDataEntryPoint = EntryPointAccessors
             .fromApplication(this, MiscDataEntryPoint::class.java)
         contactsRepository = miscDataEntryPoint.contactsRepository()
@@ -357,7 +354,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             stellarKitManager,
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
-        spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 
@@ -370,7 +366,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             localStorage = localStorage
         )
 
-        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider, backgroundManager)
+        val spamStatsEntryPoint = EntryPointAccessors
+            .fromApplication(this, SpamStatsEntryPoint::class.java)
+        spamManager = spamStatsEntryPoint.spamManager()
+        statsManager = spamStatsEntryPoint.statsManager()
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 

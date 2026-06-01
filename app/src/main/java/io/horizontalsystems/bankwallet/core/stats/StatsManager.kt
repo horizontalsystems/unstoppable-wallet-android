@@ -48,7 +48,8 @@ fun stat(page: StatPage, event: StatEvent, section: StatSection? = null) {
     App.statsManager.logStat(page, section, event)
 }
 
-class StatsManager(
+@javax.inject.Singleton
+class StatsManager @javax.inject.Inject constructor(
     private val statsDao: StatsDao,
     private val localStorage: ILocalStorage,
     private val marketKit: MarketKitWrapper,
