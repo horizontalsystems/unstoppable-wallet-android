@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
-import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
@@ -76,7 +75,6 @@ import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
-import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
@@ -156,7 +154,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
-        lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
@@ -164,7 +161,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var stellarKitManager: StellarKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var feeCoinProvider: FeeTokenProvider
-        lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
         lateinit var wcSessionManager: WCSessionManager
@@ -253,8 +249,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
-        accountsStorage = AccountsStorage(appDatabase)
-
         val restoreSettingsEntryPoint = EntryPointAccessors
             .fromApplication(this, RestoreSettingsEntryPoint::class.java)
         zcashBirthdayProvider = restoreSettingsEntryPoint.zcashBirthdayProvider()
@@ -263,8 +257,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        accountCleaner = AccountCleaner()
-        accountManager = AccountManager(accountsStorage, accountCleaner)
+        accountManager = EntryPointAccessors
+            .fromApplication(this, AccountCoreEntryPoint::class.java)
+            .accountManager()
         userManager = UserManager(accountManager)
 
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)

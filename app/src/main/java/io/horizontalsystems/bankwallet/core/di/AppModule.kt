@@ -11,7 +11,12 @@ import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAccountsStorage
+import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
+import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
@@ -126,7 +131,13 @@ object AppModule {
     fun provideAccountFactory(): IAccountFactory = App.accountFactory
 
     @Provides @Singleton
-    fun provideAccountManager(): IAccountManager = App.accountManager
+    fun provideAccountManager(impl: AccountManager): IAccountManager = impl
+
+    @Provides @Singleton
+    fun provideAccountsStorage(impl: AccountsStorage): IAccountsStorage = impl
+
+    @Provides @Singleton
+    fun provideAccountCleaner(impl: AccountCleaner): IAccountCleaner = impl
 
     @Provides @Singleton
     fun provideCoinManager(): ICoinManager = App.coinManager

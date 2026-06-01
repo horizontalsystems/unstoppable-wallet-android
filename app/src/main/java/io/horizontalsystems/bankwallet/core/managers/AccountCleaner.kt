@@ -11,8 +11,11 @@ import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AccountCleaner : IAccountCleaner {
+@Singleton
+class AccountCleaner @Inject constructor() : IAccountCleaner {
 
     override fun clearAccounts(accountIds: List<String>) {
         accountIds.forEach { clearAccount(it) }

@@ -6,8 +6,11 @@ import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.reactivex.Flowable
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
+@Singleton
+class AccountsStorage @Inject constructor(appDatabase: AppDatabase) : IAccountsStorage {
 
     private val dao: AccountsDao by lazy {
         appDatabase.accountsDao()

@@ -15,8 +15,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AccountManager(
+@Singleton
+class AccountManager @Inject constructor(
     private val storage: IAccountsStorage,
     private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
