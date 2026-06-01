@@ -13,6 +13,7 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
+import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
@@ -466,32 +467,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             Timber.plant(Timber.DebugTree())
         }
 
-        AppInitializer(
-            context = this,
-            walletManager = walletManager,
-            restoreSettingsManager = restoreSettingsManager,
-            moneroNodeManager = moneroNodeManager,
-            zanoNodeManager = zanoNodeManager,
-            btcBlockchainManager = btcBlockchainManager,
-            evmBlockchainManager = evmBlockchainManager,
-            solanaKitManager = solanaKitManager,
-            tronKitManager = tronKitManager,
-            adapterManager = adapterManager,
-            marketKit = marketKit,
-            rateAppManager = rateAppManager,
-            nftMetadataSyncer = nftMetadataSyncer,
-            pinComponent = pinComponent,
-            accountManager = accountManager,
-            wcSessionManager = wcSessionManager,
-            swapSyncService = swapSyncService,
-            systemInfoManager = systemInfoManager,
-            localStorage = localStorage,
-            evmLabelManager = evmLabelManager,
-            contactsRepository = contactsRepository,
-            appIconService = appIconService,
-            backgroundManager = backgroundManager,
-            termsManager = termsManager,
-        ).start()
+        EntryPointAccessors.fromApplication(this, AppInitializerEntryPoint::class.java)
+            .appInitializer()
+            .start()
     }
 
     override fun newImageLoader(): ImageLoader {

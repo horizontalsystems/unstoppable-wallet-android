@@ -19,6 +19,10 @@ import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -27,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Owns the eager startup sequence that must run at app launch, extracted from App.onCreate().
@@ -35,8 +41,9 @@ import kotlinx.coroutines.launch
  * Keep this an explicit, reviewable manifest of launch-time work — when the dependencies move to
  * Hilt, only how this class is constructed should change, not what start() does.
  */
-class AppInitializer(
-    private val context: Context,
+@Singleton
+class AppInitializer @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val walletManager: WalletManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val moneroNodeManager: MoneroNodeManager,
@@ -105,4 +112,10 @@ class AppInitializer(
             migrationManager.runMigrations()
         }
     }
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface AppInitializerEntryPoint {
+    fun appInitializer(): AppInitializer
 }

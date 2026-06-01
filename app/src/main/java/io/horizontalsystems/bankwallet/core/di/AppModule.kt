@@ -26,12 +26,14 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
+import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
@@ -181,6 +183,12 @@ object AppModule {
 
     @Provides @Singleton
     fun provideNftMetadataManager(): NftMetadataManager = App.nftMetadataManager
+
+    @Provides @Singleton
+    fun provideNftMetadataSyncer(): NftMetadataSyncer = App.nftMetadataSyncer
+
+    @Provides @Singleton
+    fun provideSwapSyncService(): SwapSyncService = App.swapSyncService
 
     @Provides @Singleton
     fun provideSpamManager(): SpamManager = App.spamManager
