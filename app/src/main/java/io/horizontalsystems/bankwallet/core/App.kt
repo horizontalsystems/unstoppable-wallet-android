@@ -71,7 +71,6 @@ import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
-import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
@@ -125,7 +124,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
         lateinit var btcBlockchainManager: BtcBlockchainManager
-        lateinit var networkManager: INetworkManager
         lateinit var appConfigProvider: AppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var transactionAdapterManager: TransactionAdapterManager
@@ -141,7 +139,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
-        lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var tonKitManager: TonKitManager
@@ -252,7 +249,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
         proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
 
         val walletCoreEntryPoint = EntryPointAccessors
             .fromApplication(this, WalletCoreEntryPoint::class.java)
@@ -275,7 +271,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tonKitManager = TonKitManager(backgroundManager)
         stellarKitManager = StellarKitManager(backgroundManager)
 
-        networkManager = NetworkManager()
         accountFactory = accountWrappersEntryPoint.accountFactory()
 
 

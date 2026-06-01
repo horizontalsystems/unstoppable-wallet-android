@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWalletStorage {
+@Singleton
+class EnabledWalletsStorage @Inject constructor(private val appDatabase: AppDatabase) : IEnabledWalletStorage {
 
     override val enabledWallets: List<EnabledWallet>
         get() = appDatabase.walletsDao().enabledCoins()

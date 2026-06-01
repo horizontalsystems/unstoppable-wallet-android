@@ -236,7 +236,7 @@ object AppModule {
     fun provideTonConnectManager(): TonConnectManager = App.tonConnectManager
 
     @Provides @Singleton
-    fun provideNetworkManager(): INetworkManager = App.networkManager
+    fun provideNetworkManager(impl: io.horizontalsystems.bankwallet.core.managers.NetworkManager): INetworkManager = impl
 
     @Provides @Singleton
     fun provideActionCompletedDelegate(): ActionCompletedDelegate = ActionCompletedDelegate
@@ -278,7 +278,7 @@ object AppModule {
     fun provideBlockchainSettingsStorage(): BlockchainSettingsStorage = App.blockchainSettingsStorage
 
     @Provides @Singleton
-    fun provideEnabledWalletStorage(): IEnabledWalletStorage = App.enabledWalletsStorage
+    fun provideEnabledWalletStorage(impl: io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage): IEnabledWalletStorage = impl
 
     @Provides @Singleton
     fun provideChartIndicatorSettingsDao(appDatabase: AppDatabase): ChartIndicatorSettingsDao = appDatabase.chartIndicatorSettingsDao()

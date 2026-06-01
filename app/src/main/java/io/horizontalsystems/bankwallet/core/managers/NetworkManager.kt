@@ -29,8 +29,11 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NetworkManager : INetworkManager {
+@Singleton
+class NetworkManager @Inject constructor() : INetworkManager {
 
     override suspend fun getMarkdown(host: String, path: String): String {
         return ServiceGuide.service(host).getGuide(path)
