@@ -152,7 +152,7 @@ class PinComponent(
     }
 
     override fun initDefaultPinLevel() {
-        userManager.setUserLevel(pinManager.getPinLevelLast())
+        userManager.initUserLevel(pinManager.getPinLevelLast())
     }
 
     override fun onBiometricUnlock() {

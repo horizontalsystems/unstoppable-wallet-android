@@ -1,6 +1,7 @@
 package cash.p.terminal.core.managers
 
 import android.content.Context
+import android.net.Uri
 import cash.p.terminal.core.factories.AdapterFactory
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.tonkit.core.TonKit
@@ -8,6 +9,7 @@ import io.horizontalsystems.tonkit.models.Network
 import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import timber.log.Timber
 
 class TonConnectManager(
     context: Context,
@@ -32,7 +34,7 @@ class TonConnectManager(
             val dAppRequest = kit.readData(scannedText)
             _dappRequestFlow.emit(DAppRequestEntityWrapper(dAppRequest, closeAppOnResult))
         } catch (e: Throwable) {
-
+            Timber.e(e, "Failed to handle TON Connect request")
         }
     }
 }
@@ -41,3 +43,16 @@ data class DAppRequestEntityWrapper(
     val dAppRequest: DAppRequestEntity,
     val closeAppOnResult: Boolean
 )
+
+/**
+ * Detects whether a URI is a TON Connect deeplink in one of the supported formats:
+ *  - `tc:...`              — Tonkeeper-compatible scheme
+ *  - `pcash.money:...`     — legacy P.cash scheme
+ *  - `pcash://ton-connect` — current P.cash scheme
+ */
+fun Uri.isTonConnectDeeplink(): Boolean {
+    val raw = toString()
+    return raw.startsWith("pcash.money:")
+        || raw.startsWith("tc:")
+        || (scheme == "pcash" && host == "ton-connect")
+}

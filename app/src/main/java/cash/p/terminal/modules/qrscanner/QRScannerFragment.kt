@@ -8,8 +8,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import cash.p.terminal.core.deeplink.DeeplinkParser
+import cash.p.terminal.core.managers.TonConnectManager
+import cash.p.terminal.core.managers.isTonConnectDeeplink
 import cash.p.terminal.navigation.QrScannerInput
 import cash.p.terminal.navigation.QrScannerResult
 import cash.p.terminal.navigation.popBackStackSafely
@@ -20,13 +23,16 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.getInput
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.core.net.toUri
 
 class QRScannerFragment : BaseComposeFragment() {
 
     private val viewModel: QRScannerViewModel by viewModel()
     private val deeplinkParser: DeeplinkParser by inject()
+    private val tonConnectManager: TonConnectManager by inject()
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -59,6 +65,18 @@ class QRScannerFragment : BaseComposeFragment() {
     }
 
     private fun handleScanResult(decoded: String, navController: NavController) {
+        if (decoded.toUri().isTonConnectDeeplink()) {
+            // TonConnectManager.handle emits to dappRequestFlow, which MainActivity
+            // observes and opens tcNewFragment on this nav controller.
+            // Launch on the activity scope so the suspending network call survives
+            // this fragment being popped.
+            requireActivity().lifecycleScope.launch {
+                tonConnectManager.handle(decoded, closeAppOnResult = false)
+            }
+            navController.popBackStack()
+            return
+        }
+
         val deeplinkPage = deeplinkParser.parse(decoded)
 
         if (deeplinkPage != null) {

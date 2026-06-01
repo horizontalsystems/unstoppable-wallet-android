@@ -63,11 +63,6 @@ class MainActivityViewModel(
 
     init {
         viewModelScope.launch {
-            userManager.currentUserLevelFlow.collect {
-                navigateToMainLiveData.postValue(true)
-            }
-        }
-        viewModelScope.launch {
             combine(userManager.currentUserLevelFlow, isLockedFlow) { level, isLocked ->
                 level.takeIf { it != UserManager.DEFAULT_USER_LEVEL && !isLocked }
             }.distinctUntilChanged()
@@ -75,6 +70,13 @@ class MainActivityViewModel(
                 .collect { level ->
                     refreshUserLevelScopedState(level)
                 }
+        }
+        viewModelScope.launch {
+            // Only real user-initiated level changes pop to main.
+            // Startup-time level initialization doesn't emit here, so it can't close deeplink sheets.
+            userManager.userLevelChangedFlow.collect {
+                navigateToMainLiveData.postValue(true)
+            }
         }
         viewModelScope.launch {
             WCDelegate.walletEvents.collect {
