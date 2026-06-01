@@ -108,7 +108,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
-            var buttonTitleRes by remember { mutableIntStateOf(R.string.OpenCryptoPay_Pay) }
+            var buttonTitleRes by remember { mutableIntStateOf(R.string.Send_Confirmation_Send_Button) }
             var buttonEnabled by remember { mutableStateOf(true) }
             val isExpired = uiState.secondsUntilExpiry == 0
 
@@ -132,7 +132,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
                                 ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
                             )
                         }
-                        buttonTitleRes = R.string.OpenCryptoPay_Pay
+                        buttonTitleRes = R.string.Send_Confirmation_Send_Button
                         buttonEnabled = true
                     }
                 },
