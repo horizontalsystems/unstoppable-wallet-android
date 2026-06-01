@@ -9,7 +9,8 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 
-class EvmBlockchainManager(
+@javax.inject.Singleton
+class EvmBlockchainManager @javax.inject.Inject constructor(
     private val backgroundManager: BackgroundManager,
     private val syncSourceManager: EvmSyncSourceManager,
     private val marketKit: MarketKitWrapper,

@@ -229,3 +229,9 @@ interface WcRateEntryPoint {
     fun wcManager(): io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
     fun wcSessionManager(): io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface EvmBlockchainEntryPoint {
+    fun evmBlockchainManager(): io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+}

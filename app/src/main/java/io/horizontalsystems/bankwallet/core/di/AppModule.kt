@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
@@ -117,11 +116,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideSystemInfoManager(impl: SystemInfoManager): ISystemInfoManager = impl
-
-    // --- Blockchain kits ---
-
-    @Provides @Singleton
-    fun provideEvmBlockchainManager(): EvmBlockchainManager = App.evmBlockchainManager
 
     // --- Market data ---
 

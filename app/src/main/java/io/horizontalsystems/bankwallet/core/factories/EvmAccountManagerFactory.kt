@@ -8,7 +8,8 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class EvmAccountManagerFactory(
+@javax.inject.Singleton
+class EvmAccountManagerFactory @javax.inject.Inject constructor(
     private val accountManager: IAccountManager,
     private val walletManager: WalletManager,
     private val marketKit: MarketKitWrapper,

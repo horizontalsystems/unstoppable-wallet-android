@@ -17,7 +17,6 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
@@ -292,18 +291,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             .fromApplication(this, MiscDataEntryPoint::class.java)
         contactsRepository = miscDataEntryPoint.contactsRepository()
         chartIndicatorManager = miscDataEntryPoint.chartIndicatorManager()
-        val evmAccountManagerFactory = EvmAccountManagerFactory(
-            accountManager,
-            walletManager,
-            marketKit,
-            tokenAutoEnableManager
-        )
-        evmBlockchainManager = EvmBlockchainManager(
-            backgroundManager,
-            evmSyncSourceManager,
-            marketKit,
-            evmAccountManagerFactory
-        )
+        evmBlockchainManager = EntryPointAccessors
+            .fromApplication(this, EvmBlockchainEntryPoint::class.java)
+            .evmBlockchainManager()
 
         val tronAccountManager = TronAccountManager(
             accountManager,
