@@ -76,7 +76,7 @@ class OpenCryptoPayConfirmationViewModel(
             } catch (e: Exception) {
                 fetchError = CautionViewItem(
                     title = Translator.getString(R.string.Error),
-                    text = e.message ?: "Failed to load payment details",
+                    text = e.message ?: Translator.getString(R.string.OpenCryptoPay_Error_LoadFailed),
                     type = CautionViewItem.Type.Error,
                 )
             } finally {
@@ -173,7 +173,7 @@ class OpenCryptoPayConfirmationViewModel(
     }
 
     private suspend fun submitProofHexWithRetry(baseUrl: String, rawHex: String) {
-        var lastError: Exception = Exception("Could not submit payment to merchant. Please try again.")
+        var lastError: Exception = Exception(Translator.getString(R.string.OpenCryptoPay_Error_SubmitFailed))
         repeat(3) { attempt ->
             try {
                 OcpProofService.service(baseUrl).submitProofHex(

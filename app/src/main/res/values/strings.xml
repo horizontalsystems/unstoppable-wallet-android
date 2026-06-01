@@ -411,6 +411,10 @@
     <string name="OpenCryptoPay_ProofStatus_Pending">Pending</string>
     <string name="OpenCryptoPay_ProofStatus_Reconciliation">Reconciliation needed</string>
     <string name="OpenCryptoPay_RetryNow">Retry now</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">No active payment at this register</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Failed to fetch payment details</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Failed to load payment details</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Could not submit payment to merchant. Please try again.</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>
