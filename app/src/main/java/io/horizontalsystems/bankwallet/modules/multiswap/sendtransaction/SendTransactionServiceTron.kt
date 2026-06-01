@@ -134,6 +134,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
                 nativeTokenAmount = extractTrxSun(data.transaction).toBigDecimal(nativeToken.decimals)
             }
             is SendTransactionData.Tron.Simple -> {
+                nativeTokenAmount = data.amount
                 feeService.setAmount(data.amount)
                 feeService.setTronAddress(TronAddress.fromBase58(data.address))
             }
