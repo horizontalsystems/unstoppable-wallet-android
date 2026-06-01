@@ -2,7 +2,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.storage
 
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 
-class WCSessionStorage(appDatabase: AppDatabase) {
+@javax.inject.Singleton
+class WCSessionStorage @javax.inject.Inject constructor(appDatabase: AppDatabase) {
 
     private val dao: WCSessionDao by lazy {
         appDatabase.wcSessionDao()

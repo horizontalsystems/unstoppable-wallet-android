@@ -17,7 +17,8 @@ import java.math.BigDecimal
 import java.time.Instant
 
 
-class RateAppManager(
+@javax.inject.Singleton
+class RateAppManager @javax.inject.Inject constructor(
         private val walletManager: WalletManager,
         private val adapterManager: IAdapterManager,
         private val localStorage: ILocalStorage) : IRateAppManager {

@@ -54,8 +54,6 @@ import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
@@ -85,17 +83,10 @@ object AppModule {
     fun providePinComponent(): IPinComponent = App.pinComponent
 
     @Provides @Singleton
-    fun provideWCSessionManager(): WCSessionManager = App.wcSessionManager
-
-    @Provides @Singleton
-    fun provideWCManager(): WCManager = App.wcManager
-
+    fun provideRateAppManager(impl: io.horizontalsystems.bankwallet.core.managers.RateAppManager): IRateAppManager = impl
 
     @Provides @Singleton
     fun provideTorManager(): ITorManager = App.torKitManager
-
-    @Provides @Singleton
-    fun provideRateAppManager(): IRateAppManager = App.rateAppManager
 
     @Provides @Singleton
     fun provideRootUtil(): RootUtil = RootUtil

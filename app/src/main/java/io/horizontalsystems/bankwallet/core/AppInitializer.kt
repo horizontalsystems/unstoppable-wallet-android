@@ -221,3 +221,11 @@ interface BlockchainManagersEntryPoint {
     fun blockchainSettingsStorage(): io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
     fun btcBlockchainManager(): io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface WcRateEntryPoint {
+    fun rateAppManager(): io.horizontalsystems.bankwallet.core.IRateAppManager
+    fun wcManager(): io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
+    fun wcSessionManager(): io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+}

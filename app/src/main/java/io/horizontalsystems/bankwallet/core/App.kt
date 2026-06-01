@@ -43,7 +43,6 @@ import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.PasskeyManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
-import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
@@ -88,7 +87,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCWalletRequestHandler
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.WCHandlerEvm
 import io.horizontalsystems.bankwallet.modules.walletconnect.stellar.WCHandlerStellar
-import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
 import io.horizontalsystems.bankwallet.modules.opencryptopay.OcpProofSubmissionWorker
@@ -375,9 +373,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         spamManager = spamStatsEntryPoint.spamManager()
         statsManager = spamStatsEntryPoint.statsManager()
 
-        rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
+        val wcRateEntryPoint = EntryPointAccessors
+            .fromApplication(this, WcRateEntryPoint::class.java)
+        rateAppManager = wcRateEntryPoint.rateAppManager()
+        wcSessionManager = wcRateEntryPoint.wcSessionManager()
 
-        wcManager = WCManager(accountManager)
+        wcManager = wcRateEntryPoint.wcManager()
         wcManager.addWcHandler(WCHandlerEvm(evmBlockchainManager))
         wcManager.addWcHandler(WCHandlerStellar(stellarKitManager))
         wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
@@ -409,7 +410,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             callback = WCDelegate,
         )
 
-        wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
 
 

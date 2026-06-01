@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
-class WCSessionManager(
+@javax.inject.Singleton
+class WCSessionManager @javax.inject.Inject constructor(
     private val accountManager: IAccountManager,
     private val storage: WCSessionStorage,
 ) {

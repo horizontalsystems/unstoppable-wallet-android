@@ -12,7 +12,8 @@ import io.horizontalsystems.dapp.core.HSDAppNamespaceSession
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class WCManager(
+@javax.inject.Singleton
+class WCManager @javax.inject.Inject constructor(
     private val accountManager: IAccountManager,
 ) {
     sealed class SupportState {
