@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RestoreSettingsStorage(appDatabase: AppDatabase) : IRestoreSettingsStorage {
+@Singleton
+class RestoreSettingsStorage @Inject constructor(appDatabase: AppDatabase) : IRestoreSettingsStorage {
     private val dao: RestoreSettingDao by lazy {
         appDatabase.restoreSettingDao()
     }

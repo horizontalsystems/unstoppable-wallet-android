@@ -85,7 +85,6 @@ import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
-import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
@@ -139,7 +138,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var localStorage: ILocalStorage
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
-        lateinit var restoreSettingsStorage: IRestoreSettingsStorage
         lateinit var currencyManager: CurrencyManager
         lateinit var languageManager: LanguageManager
 
@@ -263,11 +261,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
         accountsStorage = AccountsStorage(appDatabase)
-        restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        moneroBirthdayProvider = MoneroBirthdayProvider()
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider, moneroBirthdayProvider)
+        val restoreSettingsEntryPoint = EntryPointAccessors
+            .fromApplication(this, RestoreSettingsEntryPoint::class.java)
+        zcashBirthdayProvider = restoreSettingsEntryPoint.zcashBirthdayProvider()
+        moneroBirthdayProvider = restoreSettingsEntryPoint.moneroBirthdayProvider()
+        restoreSettingsManager = restoreSettingsEntryPoint.restoreSettingsManager()
 
         AppLog.logsDao = appDatabase.logsDao()
 

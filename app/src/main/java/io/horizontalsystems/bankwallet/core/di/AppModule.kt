@@ -75,7 +75,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IKeyStoreManager
@@ -295,13 +297,7 @@ object AppModule {
 
 
     @Provides @Singleton
-    fun provideRestoreSettingsManager(): RestoreSettingsManager = App.restoreSettingsManager
-
-    @Provides @Singleton
-    fun provideZcashBirthdayProvider(): ZcashBirthdayProvider = App.zcashBirthdayProvider
-
-    @Provides @Singleton
-    fun provideMoneroBirthdayProvider(): MoneroBirthdayProvider = App.moneroBirthdayProvider
+    fun provideRestoreSettingsStorage(impl: RestoreSettingsStorage): IRestoreSettingsStorage = impl
 
     @Provides @Singleton
     fun provideAppDatabase(): AppDatabase = App.appDatabase

@@ -12,8 +12,11 @@ import io.horizontalsystems.zanokit.ZanoKit
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RestoreSettingsManager(
+@Singleton
+class RestoreSettingsManager @Inject constructor(
     private val storage: IRestoreSettingsStorage,
     private val zcashBirthdayProvider: ZcashBirthdayProvider,
     private val moneroBirthdayProvider: MoneroBirthdayProvider

@@ -125,3 +125,11 @@ interface AppInitializerEntryPoint {
 interface StorageEntryPoint {
     fun localStorageManager(): io.horizontalsystems.bankwallet.core.managers.LocalStorageManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface RestoreSettingsEntryPoint {
+    fun restoreSettingsManager(): io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+    fun zcashBirthdayProvider(): io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
+    fun moneroBirthdayProvider(): io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
+}
