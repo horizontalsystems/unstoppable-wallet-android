@@ -72,7 +72,7 @@ private fun OpenCryptoPayConfirmationScreen(
     navController: NavController,
     input: OpenCryptoPayConfirmationFragment.Input,
 ) {
-    val backStackEntry = remember(navController.currentBackStackEntry) {
+    val backStackEntry = remember {
         navController.getBackStackEntry(R.id.openCryptoPayConfirmationFragment)
     }
     val viewModel = viewModel<OpenCryptoPayConfirmationViewModel>(
