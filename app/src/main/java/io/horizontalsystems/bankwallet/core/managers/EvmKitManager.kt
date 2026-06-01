@@ -271,7 +271,7 @@ class EvmKitWrapper(
         gasLimit: Long,
         nonce: Long?,
     ): Single<EvmKitManager.SignedTx> {
-        if (signer == null) return Single.error(Exception())
+        if (signer == null) return Single.error(IllegalStateException("Signer not available"))
         return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
             .map { rawTransaction ->
                 val signature = signer.signature(rawTransaction)
