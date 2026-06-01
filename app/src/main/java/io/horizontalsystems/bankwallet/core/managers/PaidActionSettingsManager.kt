@@ -7,8 +7,11 @@ import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PaidActionSettingsManager(
+@Singleton
+class PaidActionSettingsManager @Inject constructor(
     private val localStorage: ILocalStorage
 ) {
     val toggleableActions: List<IPaidAction> = listOf(

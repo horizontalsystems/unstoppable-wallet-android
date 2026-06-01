@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
-import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
@@ -62,7 +61,6 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
-import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
@@ -104,8 +102,6 @@ object AppModule {
     @Provides @Singleton
     fun provideWCManager(): WCManager = App.wcManager
 
-    @Provides @Singleton
-    fun providePaidActionSettingsManager(): PaidActionSettingsManager = App.paidActionSettingsManager
 
     @Provides @Singleton
     fun provideTorManager(): ITorManager = App.torKitManager
@@ -189,8 +185,6 @@ object AppModule {
     @Provides @Singleton
     fun provideSpamManager(): SpamManager = App.spamManager
 
-    @Provides @Singleton
-    fun provideSwapTermsManager(): SwapTermsManager = App.swapTermsManager
 
     @Provides @Singleton
     fun provideSwapRecordManager(): SwapRecordManager = App.swapRecordManager

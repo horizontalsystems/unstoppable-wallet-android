@@ -4,9 +4,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.update
 
-class SwapTermsManager(private val localStorage: ILocalStorage) {
+@Singleton
+class SwapTermsManager @Inject constructor(private val localStorage: ILocalStorage) {
 
     private val _termsAcceptedFlow = MutableStateFlow(localStorage.swapTermsAccepted)
     val swapTermsAcceptedStateFlow = _termsAcceptedFlow.asStateFlow()
