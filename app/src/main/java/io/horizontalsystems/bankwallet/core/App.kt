@@ -65,7 +65,6 @@ import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
@@ -286,7 +285,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         encryptionManager = EncryptionManager(keyProvider)
 
         passkeyManager = PasskeyManager()
-        tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
+        val evmLabelEntryPoint = EntryPointAccessors
+            .fromApplication(this, EvmLabelEntryPoint::class.java)
+        tokenAutoEnableManager = evmLabelEntryPoint.tokenAutoEnableManager()
+        evmLabelManager = evmLabelEntryPoint.evmLabelManager()
 
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         val miscDataEntryPoint = EntryPointAccessors
@@ -326,13 +328,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
         numberFormatter = NumberFormatter(languageManager)
 
-
-        evmLabelManager = EvmLabelManager(
-            EvmLabelProvider(),
-            appDatabase.evmAddressLabelDao(),
-            appDatabase.evmMethodLabelDao(),
-            appDatabase.syncerStateDao()
-        )
 
         val adapterFactory = AdapterFactory(
             context = instance,

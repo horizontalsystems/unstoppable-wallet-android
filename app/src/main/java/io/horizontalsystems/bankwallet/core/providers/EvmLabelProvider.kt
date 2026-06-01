@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import retrofit2.http.GET
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EvmLabelProvider {
-    private val apiURL = App.appConfigProvider.marketApiBaseUrl + "/v1/"
+@Singleton
+class EvmLabelProvider @Inject constructor(
+    appConfigProvider: AppConfigProvider,
+) {
+    private val apiURL = appConfigProvider.marketApiBaseUrl + "/v1/"
     private val apiService: HsLabelApi by lazy {
         APIClient.retrofit(apiURL, 60).create(HsLabelApi::class.java)
     }

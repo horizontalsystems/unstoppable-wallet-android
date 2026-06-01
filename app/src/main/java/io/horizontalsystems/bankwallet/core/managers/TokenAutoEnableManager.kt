@@ -4,8 +4,11 @@ import io.horizontalsystems.bankwallet.core.storage.TokenAutoEnabledBlockchainDa
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.TokenAutoEnabledBlockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TokenAutoEnableManager(
+@Singleton
+class TokenAutoEnableManager @Inject constructor(
     private val tokenAutoEnabledBlockchainDao: TokenAutoEnabledBlockchainDao
 ) {
     fun markAutoEnable(account: Account, blockchainType: BlockchainType) {

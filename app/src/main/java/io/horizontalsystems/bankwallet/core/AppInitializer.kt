@@ -181,3 +181,10 @@ interface MiscDataEntryPoint {
     fun chartIndicatorManager(): io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
     fun contactsRepository(): io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface EvmLabelEntryPoint {
+    fun evmLabelManager(): io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+    fun tokenAutoEnableManager(): io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
+}

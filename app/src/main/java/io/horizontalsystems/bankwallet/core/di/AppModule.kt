@@ -37,12 +37,10 @@ import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
-import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
@@ -179,9 +177,6 @@ object AppModule {
 
 
     @Provides @Singleton
-    fun provideTokenAutoEnableManager(): TokenAutoEnableManager = App.tokenAutoEnableManager
-
-    @Provides @Singleton
     fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
 
     @Provides @Singleton
@@ -219,9 +214,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideLocalStorage(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): ILocalStorage = impl
-
-    @Provides @Singleton
-    fun provideEvmLabelManager(): EvmLabelManager = App.evmLabelManager
 
     // --- Main module ---
 
@@ -261,6 +253,18 @@ object AppModule {
 
     @Provides @Singleton
     fun provideAppDatabase(): AppDatabase = App.appDatabase
+
+    @Provides @Singleton
+    fun provideEvmAddressLabelDao(db: AppDatabase) = db.evmAddressLabelDao()
+
+    @Provides @Singleton
+    fun provideEvmMethodLabelDao(db: AppDatabase) = db.evmMethodLabelDao()
+
+    @Provides @Singleton
+    fun provideSyncerStateDao(db: AppDatabase) = db.syncerStateDao()
+
+    @Provides @Singleton
+    fun provideTokenAutoEnabledBlockchainDao(db: AppDatabase) = db.tokenAutoEnabledBlockchainDao()
 
     @Provides @Singleton
     fun provideNftDao(appDatabase: AppDatabase): io.horizontalsystems.bankwallet.core.storage.NftDao = appDatabase.nftDao()

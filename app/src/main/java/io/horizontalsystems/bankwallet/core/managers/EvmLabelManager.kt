@@ -14,8 +14,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EvmLabelManager(
+@Singleton
+class EvmLabelManager @Inject constructor(
     private val provider: EvmLabelProvider,
     private val addressLabelDao: EvmAddressLabelDao,
     private val methodLabelDao: EvmMethodLabelDao,
