@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
+import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceEvm
@@ -29,6 +31,7 @@ import java.time.Instant
 class OpenCryptoPayEvmConfirmationViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     val sendTransactionService: SendTransactionServiceEvm,
+    private val ocpPaymentDao: OcpPaymentDao,
     private val wallet: Wallet,
     private val callbackUrl: String,
     private val quoteId: String,
@@ -110,7 +113,9 @@ class OpenCryptoPayEvmConfirmationViewModel(
                 val now = Instant.now().epochSecond
                 val expiry = try {
                     Instant.parse(expirationIso).epochSecond
-                } catch (_: Exception) { break }
+                } catch (_: Exception) {
+                    break
+                }
                 secondsUntilExpiry = maxOf(0, (expiry - now).toInt())
                 emitState()
                 if (secondsUntilExpiry == 0) break
@@ -124,16 +129,30 @@ class OpenCryptoPayEvmConfirmationViewModel(
     }
 
     suspend fun pay() {
-        val rawHex = sendTransactionService.signTransaction()
+        val signed = sendTransactionService.signTransaction()
         val baseUrl = proofUrl.substringBefore("/tx/").let { it.trimEnd('/') + "/" }
-        submitProofWithRetry(baseUrl, rawHex)
+        submitProofWithRetry(baseUrl, signed.hex)
+
+        ocpPaymentDao.insert(
+            OcpPaymentRecord(
+                txHash = signed.txHash,
+                paymentId = paymentId,
+                quoteId = quoteId,
+                proofUrl = proofUrl,
+                method = method,
+                merchant = merchant,
+                expirationIso = expirationIso,
+                createdAt = System.currentTimeMillis(),
+                proofSubmittedAt = System.currentTimeMillis(),
+            )
+        )
     }
 
     private suspend fun submitProofWithRetry(baseUrl: String, rawHex: String) {
         repeat(3) { attempt ->
             Timber.d(
                 "OCP EVM GET /tx/ url=$proofUrl quote=$quoteId method=$method" +
-                " hexPrefix=${rawHex.take(20)} attempt=${attempt + 1}/3"
+                        " hexPrefix=${rawHex.take(20)} attempt=${attempt + 1}/3"
             )
             try {
                 OcpProofService.service(baseUrl).submitProofHex(
@@ -191,6 +210,7 @@ class OpenCryptoPayEvmConfirmationViewModel(
             return OpenCryptoPayEvmConfirmationViewModel(
                 sendEvmTransactionViewItemFactory,
                 sendTransactionService,
+                App.appDatabase.ocpPaymentDao(),
                 wallet,
                 callbackUrl,
                 quoteId,

@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.Eip1559FeeSettings
@@ -222,7 +223,7 @@ class SendTransactionServiceEvm(
         feeService.setTransactionData(data.transactionData)
     }
 
-    suspend fun signTransaction(): String {
+    suspend fun signTransaction(): EvmKitManager.SignedTx {
         val tx = transaction ?: throw Exception("Transaction not ready")
         if (tx.errors.isNotEmpty()) throw Exception("Transaction has errors")
         return evmKitWrapper.signSingle(

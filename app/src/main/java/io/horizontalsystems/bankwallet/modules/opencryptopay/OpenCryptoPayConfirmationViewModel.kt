@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
 import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
@@ -40,6 +41,7 @@ class OpenCryptoPayConfirmationViewModel(
     private val merchant: String?,
     private val expirationIso: String,
     private val minFee: Double?,
+    private val ocpPaymentDao: OcpPaymentDao,
 ) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
 
     val sendTransactionService = SendTransactionServiceFactory.create(wallet.token)
@@ -130,10 +132,24 @@ class OpenCryptoPayConfirmationViewModel(
     suspend fun pay() {
         val baseUrl = proofUrl.substringBefore("/tx/").let { it.trimEnd('/') + "/" }
         if (wallet.token.blockchainType == BlockchainType.Bitcoin) {
-            val rawHex = withContext(Dispatchers.IO) {
+            val signed = withContext(Dispatchers.IO) {
                 (sendTransactionService as SendTransactionServiceBtc).signTransaction()
             }
-            submitProofHexWithRetry(baseUrl, rawHex)
+            submitProofHexWithRetry(baseUrl, signed.hex)
+
+            ocpPaymentDao.insert(
+                OcpPaymentRecord(
+                    txHash = signed.transactionHash,
+                    paymentId = paymentId,
+                    quoteId = quoteId,
+                    proofUrl = proofUrl,
+                    method = method,
+                    merchant = merchant,
+                    expirationIso = expirationIso,
+                    createdAt = System.currentTimeMillis(),
+                    proofSubmittedAt = System.currentTimeMillis(),
+                )
+            )
         } else {
             val result = withContext(Dispatchers.IO) { sendTransactionService.sendTransaction() }
             val txHash = extractTxHash(result)
@@ -259,7 +275,7 @@ class OpenCryptoPayConfirmationViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return OpenCryptoPayConfirmationViewModel(
-                wallet, callbackUrl, quoteId, paymentId, method, asset, assetAmount, merchant, expirationIso, minFee
+                wallet, callbackUrl, quoteId, paymentId, method, asset, assetAmount, merchant, expirationIso, minFee, App.appDatabase.ocpPaymentDao()
             ) as T
         }
     }

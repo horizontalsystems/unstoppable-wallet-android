@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.models.Address
@@ -445,7 +446,7 @@ interface ISendBitcoinAdapter {
         feeRate: Int,
         unspentOutputs: List<UnspentOutputInfo>?,
         utxoFilters: UtxoFilters,
-    ): String
+    ): SignedRawTransaction
 
     fun satoshiToBTC(value: Long): BigDecimal
 }
