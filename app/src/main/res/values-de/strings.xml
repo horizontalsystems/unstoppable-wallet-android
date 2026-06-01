@@ -1741,4 +1741,21 @@
     <string name="BackupRequired_ManualBackupDescription">Schreiben Sie Ihre Recovery-Phrase auf</string>
     <string name="BackupRequired_LocalBackupDescription">Speichern Sie die verschlüsselte Datei auf Ihrem Gerät</string>
     <string name="BackupRequired_RemindLater">Später erinnern</string>
+    <string name="OpenCryptoPay_Title">Zahlung</string>
+    <string name="OpenCryptoPay_Pay">Zahlung</string>
+    <string name="OpenCryptoPay_Expired">Abgelaufen</string>
+    <string name="OpenCryptoPay_Merchant">Verkäufer</string>
+    <string name="OpenCryptoPay_Amount">Betrag</string>
+    <string name="OpenCryptoPay_ChooseAsset">Asset auswählen</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Wählen Sie den Token, den Sie für die Zahlung verwenden möchten</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">Keine unterstützten Zahlungsmethoden für dieses Wallet verfügbar</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Verfällt in</string>
+    <string name="OpenCryptoPay_PaymentId">Zahlungs-ID</string>
+    <string name="OpenCryptoPay_QuoteId">Angebots-ID</string>
+    <string name="OpenCryptoPay_ProofStatus">Nachweistatus</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Eingereicht</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Ausstehend</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Abstimmung erforderlich</string>
+    <string name="OpenCryptoPay_RetryNow">Jetzt erneut versuchen</string>
 </resources>

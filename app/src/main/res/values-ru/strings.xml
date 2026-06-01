@@ -1739,4 +1739,21 @@
     <string name="BackupRequired_ManualBackupDescription">Запишите вашу фразу восстановления</string>
     <string name="BackupRequired_LocalBackupDescription">Сохраните зашифрованный файл на устройство</string>
     <string name="BackupRequired_RemindLater">Напомнить позже</string>
+    <string name="OpenCryptoPay_Title">Платеж</string>
+    <string name="OpenCryptoPay_Pay">Оплатить</string>
+    <string name="OpenCryptoPay_Expired">Истекший</string>
+    <string name="OpenCryptoPay_Merchant">Продавец</string>
+    <string name="OpenCryptoPay_Amount">Сумма</string>
+    <string name="OpenCryptoPay_ChooseAsset">Выбрать актив</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Выберите токен, который вы хотите использовать для оплаты</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">Нет доступных поддерживаемых методов платежа для этого кошелька</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Истекает через</string>
+    <string name="OpenCryptoPay_PaymentId">ID платежа</string>
+    <string name="OpenCryptoPay_QuoteId">ID котировки</string>
+    <string name="OpenCryptoPay_ProofStatus">Статус подтверждения</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Отправлено</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Ожидание</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Требуется сверка</string>
+    <string name="OpenCryptoPay_RetryNow">Повторить попытку</string>
 </resources>

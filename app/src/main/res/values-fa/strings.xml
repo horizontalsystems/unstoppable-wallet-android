@@ -648,4 +648,21 @@
     <string name="BackupRequired_ManualBackupDescription">عبارت بازیابی خود را یادداشت کنید</string>
     <string name="BackupRequired_LocalBackupDescription">فایل رمزگذاری شده را در دستگاه خود ذخیره کنید</string>
     <string name="BackupRequired_RemindLater">بعداً یادآوری کن</string>
+    <string name="OpenCryptoPay_Title">پرداخت</string>
+    <string name="OpenCryptoPay_Pay">پرداخت</string>
+    <string name="OpenCryptoPay_Expired">منقضی شده</string>
+    <string name="OpenCryptoPay_Merchant">پذیرنده</string>
+    <string name="OpenCryptoPay_Amount">مقدار</string>
+    <string name="OpenCryptoPay_ChooseAsset">انتخاب دارایی</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">توکنی را انتخاب کنید که می‌خواهید برای پرداخت استفاده کنید</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">هیچ روش پرداختی پشتیبانی‌شده برای این کیف پول در دسترس نیست</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">انقضا در</string>
+    <string name="OpenCryptoPay_PaymentId">شناسه پرداخت</string>
+    <string name="OpenCryptoPay_QuoteId">شناسه پیشنهاد</string>
+    <string name="OpenCryptoPay_ProofStatus">وضعیت اثبات</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">ارسال شده</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">در انتظار</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">نیاز به تطبیق دارد</string>
+    <string name="OpenCryptoPay_RetryNow">امروز مجدد تلاش کنید</string>
 </resources>

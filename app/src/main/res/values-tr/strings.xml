@@ -1333,4 +1333,21 @@
     <string name="BackupRequired_ManualBackupDescription">Kurtarma ifadenizi yazın</string>
     <string name="BackupRequired_LocalBackupDescription">Şifrelenmiş dosyayı cihazınıza kaydedin</string>
     <string name="BackupRequired_RemindLater">Daha Sonra Hatırlat</string>
+    <string name="OpenCryptoPay_Title">Ödeme</string>
+    <string name="OpenCryptoPay_Pay">Ödeme Yap</string>
+    <string name="OpenCryptoPay_Expired">Süresi Doldu</string>
+    <string name="OpenCryptoPay_Merchant">Satıcı</string>
+    <string name="OpenCryptoPay_Amount">Miktar</string>
+    <string name="OpenCryptoPay_ChooseAsset">Varlık Seçin</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Ödeme için kullanmak istediğiniz token seçin</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">Bu cüzdan için desteklenen ödeme yöntemi yok</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Şu sürede sona eriyor</string>
+    <string name="OpenCryptoPay_PaymentId">Ödeme Kimliği</string>
+    <string name="OpenCryptoPay_QuoteId">Fiyat Teklifi Kimliği</string>
+    <string name="OpenCryptoPay_ProofStatus">Kanıt Durumu</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Gönderildi</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Bekleniyor</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Uzlaştırma gerekli</string>
+    <string name="OpenCryptoPay_RetryNow">Şimdi yeniden deneyin</string>
 </resources>

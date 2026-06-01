@@ -1732,4 +1732,21 @@
     <string name="BackupRequired_ManualBackupDescription">Anota tu frase de recuperación</string>
     <string name="BackupRequired_LocalBackupDescription">Guarda un archivo encriptado en tu dispositivo</string>
     <string name="BackupRequired_RemindLater">Recordarme después</string>
+    <string name="OpenCryptoPay_Title">Pago</string>
+    <string name="OpenCryptoPay_Pay">Pagar</string>
+    <string name="OpenCryptoPay_Expired">Expirado</string>
+    <string name="OpenCryptoPay_Merchant">Comerciante</string>
+    <string name="OpenCryptoPay_Amount">Cantidad</string>
+    <string name="OpenCryptoPay_ChooseAsset">Elegir activo</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Elige el token que deseas usar para el pago</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">No hay métodos de pago compatibles disponibles para esta billetera</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Expira en</string>
+    <string name="OpenCryptoPay_PaymentId">ID de pago</string>
+    <string name="OpenCryptoPay_QuoteId">ID de cotización</string>
+    <string name="OpenCryptoPay_ProofStatus">Estado de la prueba</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Enviado</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Pendiente</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Reconciliación requerida</string>
+    <string name="OpenCryptoPay_RetryNow">Reintentar ahora</string>
 </resources>
