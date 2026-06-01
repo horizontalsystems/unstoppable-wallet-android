@@ -24,6 +24,7 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.bitcoincore.models.Address
+import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
 import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
 import io.horizontalsystems.bitcoincore.models.TransactionFilterType
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
@@ -321,7 +322,7 @@ abstract class BitcoinBaseAdapter(
         feeRate: Int,
         unspentOutputs: List<UnspentOutputInfo>?,
         utxoFilters: UtxoFilters,
-    ): String {
+    ): SignedRawTransaction {
         return kit.rawTransaction(
             address = address,
             memo = memo,

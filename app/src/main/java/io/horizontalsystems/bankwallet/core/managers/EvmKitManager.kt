@@ -12,6 +12,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.TransactionBuilder
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.core.toHexString
+import io.horizontalsystems.ethereumkit.crypto.CryptoUtils
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.FullTransaction
@@ -116,13 +117,16 @@ class EvmKitManager(
                 address = Signer.address(seed, chain)
                 signer = Signer.getInstance(seed, chain)
             }
+
             is AccountType.EvmPrivateKey -> {
                 address = Signer.address(accountType.key)
                 signer = Signer.getInstance(accountType.key, chain)
             }
+
             is AccountType.EvmAddress -> {
                 address = Address(accountType.address)
             }
+
             else -> throw UnsupportedAccountException()
         }
 
@@ -195,7 +199,7 @@ class EvmKitManager(
         }
     }
 
-    private fun subscribeToEvents(){
+    private fun subscribeToEvents() {
         job = coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 when (state) {
@@ -206,6 +210,7 @@ class EvmKitManager(
                             kit.refresh()
                         }
                     }
+
                     BackgroundManagerState.EnterBackground -> {
                         evmKitWrapper?.evmKit?.onEnterBackground()
                     }
@@ -220,6 +225,8 @@ class EvmKitManager(
         evmKitWrapper = null
         currentAccount = null
     }
+
+    data class SignedTx(val hex: String, val txHash: String)
 }
 
 val RpcSource.uris: List<URI>
@@ -263,12 +270,13 @@ class EvmKitWrapper(
         gasPrice: GasPrice,
         gasLimit: Long,
         nonce: Long?,
-    ): Single<String> {
+    ): Single<EvmKitManager.SignedTx> {
         if (signer == null) return Single.error(Exception())
         return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
             .map { rawTransaction ->
                 val signature = signer.signature(rawTransaction)
-                TransactionBuilder.encode(rawTransaction, signature, evmKit.chain.id).toHexString()
+                val encoded = TransactionBuilder.encode(rawTransaction, signature, evmKit.chain.id)
+                EvmKitManager.SignedTx(hex = encoded.toHexString(), txHash = CryptoUtils.sha3(encoded).toHexString())
             }
     }
 }
