@@ -68,6 +68,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class RestoreLocalPage(val input: Input) : HSPage() {

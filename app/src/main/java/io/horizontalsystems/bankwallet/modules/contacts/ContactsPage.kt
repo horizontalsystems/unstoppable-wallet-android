@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import kotlinx.serialization.Serializable
 import java.util.UUID
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 
 @Serializable

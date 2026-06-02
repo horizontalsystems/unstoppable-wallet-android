@@ -13,6 +13,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class RestoreFromPrivateKeyPage(val input: ManageAccountsModule.Input?) : HSPage(screenshotEnabled = false) {

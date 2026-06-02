@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object WCEvmTransactionSettingsPage : HSPage() {

@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.DerivationSele
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object ReceiveChooseCoinPage : HSPage() {

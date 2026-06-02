@@ -50,6 +50,7 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class ResendBitcoinPage(val input: Input) : HSPage() {

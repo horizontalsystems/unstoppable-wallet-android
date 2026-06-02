@@ -39,6 +39,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object AddTokenPage : HSPage() {

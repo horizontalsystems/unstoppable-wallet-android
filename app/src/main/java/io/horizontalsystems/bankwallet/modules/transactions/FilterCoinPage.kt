@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object FilterCoinPage : HSPage() {

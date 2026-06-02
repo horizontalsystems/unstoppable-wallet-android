@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object MarketFiltersResultsPage : HSPage() {

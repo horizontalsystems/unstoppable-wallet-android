@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class TokenBalancePage(val wallet: Wallet) : HSPage() {

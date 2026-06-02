@@ -36,7 +36,8 @@ import androidx.lifecycle.enableSavedStateHandles
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlin.reflect.KClass
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.NavEntry
@@ -217,9 +218,18 @@ fun rememberChildViewModelStoreOwner(contentKey: Any) : ViewModelStoreOwner {
     }
 }
 
+/**
+ * Returns a [ViewModel] scoped to a shared child [ViewModelStore] keyed by [contentKey], so the
+ * same instance can be retrieved from multiple screens. Routes through [hiltViewModel] so that
+ * `@HiltViewModel` classes are resolved via the Hilt factory (the child owner's default factory is
+ * [SavedStateViewModelFactory], which cannot build `@Inject`/`@AssistedInject` constructors).
+ */
 @Composable
-inline fun <reified VM : ViewModel> viewModelForContentKey(contentKey: Any) : VM {
-    return viewModel(
-        viewModelStoreOwner = rememberChildViewModelStoreOwner(contentKey),
-    )
+inline fun <reified VM : ViewModel> HSNavigation.viewModelForScreen(contentKey: String): VM {
+    val owner = rememberChildViewModelStoreOwner(contentKey)
+    return hiltViewModel(viewModelStoreOwner = owner)
 }
+
+@Composable
+inline fun <reified VM : ViewModel> HSNavigation.viewModelForScreen(klass: KClass<out HSPage>): VM =
+    viewModelForScreen(klass.simpleName ?: "HSScreen")

@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchain
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object BlockchainsSelectorPage : HSPage() {

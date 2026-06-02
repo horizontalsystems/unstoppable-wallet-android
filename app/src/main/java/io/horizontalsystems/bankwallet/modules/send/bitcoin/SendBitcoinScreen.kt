@@ -55,6 +55,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object SendBtcAdvancedSettingsPage : HSPage() {

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object Eip20ApproveTransactionSettingsPage : HSPage() {

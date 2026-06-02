@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmoun
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object TransactionInfoPage : HSPage() {

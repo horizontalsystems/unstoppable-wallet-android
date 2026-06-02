@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SwapTransactionNonceSettingsPage(val parentScreenContentKey: String) : HSPage() {

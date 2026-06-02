@@ -90,6 +90,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Locale
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {

@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object SectorsSelectorPage : HSPage() {

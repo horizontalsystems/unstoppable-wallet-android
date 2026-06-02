@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SendConfirmationPage(val input: Input) : HSPage() {

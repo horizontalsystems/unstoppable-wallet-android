@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsSectionButtons
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SwapSelectProviderPage(val parentScreenContentKey: String) : HSPage() {
