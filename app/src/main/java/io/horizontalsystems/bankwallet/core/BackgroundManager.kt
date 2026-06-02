@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-class BackgroundManager : DefaultLifecycleObserver {
+@javax.inject.Singleton
+class BackgroundManager @javax.inject.Inject constructor() : DefaultLifecycleObserver {
 
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 

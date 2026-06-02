@@ -41,7 +41,6 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
-import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
@@ -168,9 +167,6 @@ object AppModule {
 
     @Provides @Singleton
     fun provideActionCompletedDelegate(): ActionCompletedDelegate = ActionCompletedDelegate
-
-    @Provides @Singleton
-    fun provideBackgroundManager(): BackgroundManager = App.backgroundManager
 
     @Provides @Singleton
     fun provideMarketStorage(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): IMarketStorage = impl

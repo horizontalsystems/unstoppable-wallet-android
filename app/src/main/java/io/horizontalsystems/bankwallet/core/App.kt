@@ -208,9 +208,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
-        backgroundManager = BackgroundManager()
+        backgroundManager = EntryPointAccessors
+            .fromApplication(this, BackgroundManagerEntryPoint::class.java)
+            .backgroundManager()
 
-        // Resolved after backgroundManager is assigned — ConnectivityManager depends on it.
         val configLeavesEntryPoint = EntryPointAccessors
             .fromApplication(this, ConfigLeavesEntryPoint::class.java)
         priceManager = configLeavesEntryPoint.priceManager()

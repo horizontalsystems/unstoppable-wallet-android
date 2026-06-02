@@ -241,3 +241,9 @@ interface EvmBlockchainEntryPoint {
 interface AppConfigEntryPoint {
     fun appConfigProvider(): io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface BackgroundManagerEntryPoint {
+    fun backgroundManager(): io.horizontalsystems.bankwallet.core.BackgroundManager
+}
