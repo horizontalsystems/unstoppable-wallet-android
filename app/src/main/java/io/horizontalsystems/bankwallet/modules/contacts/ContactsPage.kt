@@ -17,9 +17,9 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import kotlinx.serialization.Serializable
 import java.util.UUID
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 
 @Serializable
@@ -162,7 +162,7 @@ data class AddressPage(
 data object BlockchainSelectorPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<AddressViewModel>(AddressPage::class)
+        val viewModel = viewModelForScreen<AddressViewModel>(AddressPage::class)
 
         BlockchainSelectorScreen(
             blockchains = viewModel.uiState.availableBlockchains,

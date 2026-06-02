@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -48,7 +49,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsSectionButtons
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SwapSelectProviderPage(val parentScreenContentKey: String) : HSPage() {
@@ -63,7 +63,7 @@ fun SwapSelectProviderScreen(
     navController: HSNavigation,
     parentScreenContentKey: String
 ) {
-    val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
+    val swapViewModel = viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val viewModel = hiltViewModel<SwapSelectProviderViewModel, SwapSelectProviderViewModel.Factory> { factory ->
         factory.create(swapViewModel.uiState.quotes, swapViewModel.uiState.quote)
     }

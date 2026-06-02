@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersPage
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
@@ -40,14 +41,15 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object MarketFiltersResultsPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val marketSearchFilterViewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersPage::class)
+        val marketSearchFilterViewModel = viewModelForScreen<MarketFiltersViewModel>(
+            MarketFiltersPage::class
+        )
         val viewModel = hiltViewModel<MarketFiltersResultViewModel, MarketFiltersResultViewModel.Factory> { factory ->
             factory.create(marketSearchFilterViewModel.service)
         }

@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.AddressFormatSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.NetworkSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveTokenSelectScreen
@@ -20,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.DerivationSele
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object ReceiveChooseCoinPage : HSPage() {
@@ -65,7 +65,7 @@ data object ReceiveChooseCoinPage : HSPage() {
 data object BchAddressFormatPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
+        val viewModel = viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
         val coinUid = viewModel.coinUid
         if (coinUid == null) {
             CloseWithMessage(navController)
@@ -89,7 +89,7 @@ data object BchAddressFormatPage : HSPage() {
 data object DerivationSelectPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
+        val viewModel = viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
         val coinUid = viewModel.coinUid
         if (coinUid == null) {
             CloseWithMessage(navController)
@@ -113,7 +113,7 @@ data object DerivationSelectPage : HSPage() {
 data object NetworkSelectPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
+        val viewModel = viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
         val activeAccount = viewModel.activeAccount
         val fullCoin = viewModel.fullCoin()
         if (activeAccount == null || fullCoin == null) {

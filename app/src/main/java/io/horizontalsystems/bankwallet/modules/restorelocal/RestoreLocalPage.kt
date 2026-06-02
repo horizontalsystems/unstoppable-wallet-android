@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.restorelocal
 
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restore_select_coins
 import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
@@ -68,7 +69,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class RestoreLocalPage(val input: Input) : HSPage() {
@@ -144,7 +144,7 @@ private fun RestoreLocalNavHost(
 data class backup_file(val input: ManageAccountsModule.Input) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<RestoreLocalViewModel>(
+        val viewModel = viewModelForScreen<RestoreLocalViewModel>(
             RestoreLocalPage::class
         )
 

@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class TokenBalancePage(val wallet: Wallet) : HSPage() {
@@ -18,7 +18,7 @@ data class TokenBalancePage(val wallet: Wallet) : HSPage() {
         val viewModel = hiltViewModel<TokenBalanceViewModel, TokenBalanceViewModel.Factory> { factory ->
             factory.create(wallet)
         }
-        val transactionsViewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        val transactionsViewModel = viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         TokenBalanceScreen(
             viewModel,

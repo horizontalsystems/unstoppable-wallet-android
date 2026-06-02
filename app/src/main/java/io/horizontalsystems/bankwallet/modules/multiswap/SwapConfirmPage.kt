@@ -53,6 +53,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
@@ -90,7 +91,6 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Locale
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {
@@ -109,7 +109,7 @@ fun SwapConfirmScreen(
     parentScreenContentKey: String,
     screenContentKey: String
 ) {
-    val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
+    val swapViewModel = viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
     val viewModel = hiltViewModel<SwapConfirmViewModel, SwapConfirmViewModel.Factory> { factory ->

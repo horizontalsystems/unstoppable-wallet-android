@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
@@ -50,7 +51,6 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class ResendBitcoinPage(val input: Input) : HSPage() {
@@ -60,7 +60,9 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val transactionInfoViewModel = navController.viewModelForScreen<TransactionInfoViewModel>(TransactionInfoPage::class)
+        val transactionInfoViewModel = viewModelForScreen<TransactionInfoViewModel>(
+            TransactionInfoPage::class
+        )
         val transactionRecord = transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord
         val source = transactionInfoViewModel.source
 

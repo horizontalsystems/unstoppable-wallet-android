@@ -8,12 +8,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKey
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class RestoreFromPrivateKeyPage(val input: ManageAccountsModule.Input?) : HSPage(screenshotEnabled = false) {
@@ -86,7 +86,7 @@ private fun RestoreFromPrivateKeyNavHost(
 data class restore_select_network(val input: ManageAccountsModule.Input) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreFromPrivateKeyPage::class)
+        val mainViewModel = viewModelForScreen<RestoreViewModel>(RestoreFromPrivateKeyPage::class)
 
         val uiState = mainViewModel.uiState
         val view = LocalView.current

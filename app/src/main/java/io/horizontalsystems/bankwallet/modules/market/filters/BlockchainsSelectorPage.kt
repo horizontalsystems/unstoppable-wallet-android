@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -29,7 +30,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchain
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object BlockchainsSelectorPage : HSPage() {
@@ -37,7 +37,7 @@ data object BlockchainsSelectorPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         FilterByBlockchainsScreen(
-            navController.viewModelForScreen(MarketFiltersPage::class),
+            viewModelForScreen(MarketFiltersPage::class),
             navController,
         )
     }

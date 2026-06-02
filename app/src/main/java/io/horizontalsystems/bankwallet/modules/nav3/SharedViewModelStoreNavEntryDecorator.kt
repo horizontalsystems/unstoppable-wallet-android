@@ -23,6 +23,7 @@ import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.HasDefaultViewModelProviderFactory
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.SAVED_STATE_REGISTRY_OWNER_KEY
@@ -36,14 +37,13 @@ import androidx.lifecycle.enableSavedStateHandles
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.hilt.navigation.compose.hiltViewModel
-import kotlin.reflect.KClass
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.compose.LocalSavedStateRegistryOwner
+import kotlin.reflect.KClass
 
 /**
  * Returns a [SharedViewModelStoreNavEntryDecorator] that is remembered across recompositions.
@@ -225,11 +225,11 @@ fun rememberChildViewModelStoreOwner(contentKey: Any) : ViewModelStoreOwner {
  * [SavedStateViewModelFactory], which cannot build `@Inject`/`@AssistedInject` constructors).
  */
 @Composable
-inline fun <reified VM : ViewModel> HSNavigation.viewModelForScreen(contentKey: String): VM {
+inline fun <reified VM : ViewModel> viewModelForScreen(contentKey: String): VM {
     val owner = rememberChildViewModelStoreOwner(contentKey)
     return hiltViewModel(viewModelStoreOwner = owner)
 }
 
 @Composable
-inline fun <reified VM : ViewModel> HSNavigation.viewModelForScreen(klass: KClass<out HSPage>): VM =
+inline fun <reified VM : ViewModel> viewModelForScreen(klass: KClass<out HSPage>): VM =
     viewModelForScreen(klass.simpleName ?: "HSScreen")

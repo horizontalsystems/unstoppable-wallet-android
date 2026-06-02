@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import kotlinx.serialization.Serializable
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class SwapTransactionSettingsPage(val parentScreenContentKey: String) : HSPage() {
@@ -17,7 +17,7 @@ data class SwapTransactionSettingsPage(val parentScreenContentKey: String) : HSP
 
 @Composable
 fun SwapTransactionSettingsScreen(navController: HSNavigation, parentScreenContentKey: String) {
-    val viewModel = navController.viewModelForScreen<SwapConfirmViewModel>(parentScreenContentKey)
+    val viewModel = viewModelForScreen<SwapConfirmViewModel>(parentScreenContentKey)
 
     val sendTransactionService = viewModel.sendTransactionService
 

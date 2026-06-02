@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.eip20approve
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import kotlinx.serialization.Serializable
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
+import kotlinx.serialization.Serializable
 
 @Serializable
 data object Eip20ApproveTransactionSettingsPage : HSPage() {
@@ -16,7 +16,7 @@ data object Eip20ApproveTransactionSettingsPage : HSPage() {
 
 @Composable
 fun Eip20ApproveTransactionSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForScreen<Eip20ApproveViewModel>(Eip20ApprovePage::class)
+    val viewModel = viewModelForScreen<Eip20ApproveViewModel>(Eip20ApprovePage::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 

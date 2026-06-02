@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -39,7 +40,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object AddTokenPage : HSPage() {
@@ -60,7 +60,7 @@ data object BlockchainSelectorPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<AddTokenViewModel>(AddTokenPage::class)
+        val viewModel = viewModelForScreen<AddTokenViewModel>(AddTokenPage::class)
         AddTokenBlockchainSelectorScreen(
             blockchains = viewModel.blockchains,
             selectedBlockchain = viewModel.selectedBlockchain,

@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskySheet
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationPage
 import io.horizontalsystems.bankwallet.modules.send.SendPage
@@ -55,14 +56,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object SendBtcAdvancedSettingsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
-        val amountInputModeViewModel = navController.viewModelForScreen<AmountInputModeViewModel>(SendPage::class)
+        val viewModel = viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+        val amountInputModeViewModel = viewModelForScreen<AmountInputModeViewModel>(SendPage::class)
         SendBtcAdvancedSettingsScreen(
             fragmentNavController = navController,
             sendBitcoinViewModel = viewModel,
@@ -81,7 +81,7 @@ data object TransactionInputsSortInfoPage : HSPage() {
 data object UtxoExpertModePage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+        val viewModel = viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
         UtxoExpertModeScreen(
             adapter = viewModel.adapter,
             token = viewModel.wallet.token,

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
@@ -22,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data class SendConfirmationPage(val input: Input) : HSPage() {
@@ -31,7 +31,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
     override fun GetContent(navController: HSNavigation) {
         when (input.type) {
             Type.Bitcoin -> {
-                val sendBitcoinViewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+                val sendBitcoinViewModel = viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
 
                 SendBitcoinConfirmationScreen(
                     navController,
@@ -41,7 +41,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.ZCash -> {
-                val sendZCashViewModel = navController.viewModelForScreen<SendZCashViewModel>(SendPage::class)
+                val sendZCashViewModel = viewModelForScreen<SendZCashViewModel>(SendPage::class)
 
                 SendZCashConfirmationScreen(
                     navController,
@@ -51,7 +51,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.Tron -> {
-                val sendTronViewModel = navController.viewModelForScreen<SendTronViewModel>(SendPage::class)
+                val sendTronViewModel = viewModelForScreen<SendTronViewModel>(SendPage::class)
 
                 SendTronConfirmationScreen(
                     navController,
@@ -61,7 +61,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.Solana -> {
-                val sendSolanaViewModel = navController.viewModelForScreen<SendSolanaViewModel>(SendPage::class)
+                val sendSolanaViewModel = viewModelForScreen<SendSolanaViewModel>(SendPage::class)
 
                 SendSolanaConfirmationScreen(
                     navController,
@@ -71,7 +71,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.Ton -> {
-                val sendTonViewModel = navController.viewModelForScreen<SendTonViewModel>(SendPage::class)
+                val sendTonViewModel = viewModelForScreen<SendTonViewModel>(SendPage::class)
 
                 SendTonConfirmationScreen(
                     navController,
@@ -81,7 +81,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.Stellar -> {
-                val sendStellarViewModel = navController.viewModelForScreen<SendStellarViewModel>(SendPage::class)
+                val sendStellarViewModel = viewModelForScreen<SendStellarViewModel>(SendPage::class)
 
                 SendStellarConfirmationScreen(
                     navController,
@@ -91,7 +91,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.Monero -> {
-                val sendMoneroViewModel = navController.viewModelForScreen<SendMoneroViewModel>(SendPage::class)
+                val sendMoneroViewModel = viewModelForScreen<SendMoneroViewModel>(SendPage::class)
 
                 SendMoneroConfirmationScreen(
                     navController,
@@ -101,7 +101,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             Type.Zano -> {
-                val sendZanoViewModel = navController.viewModelForScreen<SendZanoViewModel>(SendPage::class)
+                val sendZanoViewModel = viewModelForScreen<SendZanoViewModel>(SendPage::class)
 
                 SendZanoConfirmationScreen(
                     navController,

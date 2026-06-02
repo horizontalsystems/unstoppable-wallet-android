@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.eip20revoke
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import kotlinx.serialization.Serializable
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
+import kotlinx.serialization.Serializable
 
 @Serializable
 data object Eip20RevokeTransactionSettingsPage : HSPage() {
@@ -16,7 +16,7 @@ data object Eip20RevokeTransactionSettingsPage : HSPage() {
 
 @Composable
 fun Eip20RevokeTransactionSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForScreen<Eip20RevokeConfirmViewModel>(Eip20RevokeConfirmPage::class)
+    val viewModel = viewModelForScreen<Eip20RevokeConfirmViewModel>(Eip20RevokeConfirmPage::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 

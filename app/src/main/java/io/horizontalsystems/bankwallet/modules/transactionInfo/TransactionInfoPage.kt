@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -43,14 +44,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmoun
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object TransactionInfoPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModelTxs = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        val viewModelTxs = viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
         if (transactionRecord == null) {

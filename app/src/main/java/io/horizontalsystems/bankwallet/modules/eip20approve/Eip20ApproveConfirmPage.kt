@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -52,7 +53,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 @Serializable
 data object Eip20ApproveConfirmPage : HSPage() {
@@ -68,7 +68,7 @@ data object Eip20ApproveConfirmPage : HSPage() {
 @Composable
 fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = navController.viewModelForScreen<Eip20ApproveViewModel>(Eip20ApprovePage::class)
+    val viewModel = viewModelForScreen<Eip20ApproveViewModel>(Eip20ApprovePage::class)
 
     val view = LocalView.current
     val uiState = viewModel.uiState
