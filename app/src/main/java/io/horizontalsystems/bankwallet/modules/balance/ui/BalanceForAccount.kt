@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -33,16 +32,15 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayFragment
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -122,8 +120,7 @@ fun BalanceForAccount(
     LaunchedEffect(uiState.openOcpPayment) {
         uiState.openOcpPayment?.let { lnurl ->
             navController.slideFromRight(
-                R.id.openCryptoPayFragment,
-                OpenCryptoPayFragment.Input(lnurl)
+                OpenCryptoPayFragment(OpenCryptoPayFragment.Input(lnurl))
             )
             viewModel.onOcpPaymentOpened()
         }

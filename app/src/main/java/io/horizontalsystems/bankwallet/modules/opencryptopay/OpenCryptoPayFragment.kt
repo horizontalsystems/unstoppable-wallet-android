@@ -1,21 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.opencryptopay
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
-import kotlinx.parcelize.Parcelize
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import kotlinx.serialization.Serializable
 
-class OpenCryptoPayFragment : BaseComposeFragment() {
+@Serializable
+data class OpenCryptoPayFragment(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        val lnurl = input?.lnurl ?: return
-        OpenCryptoPayScreen(navController = navController, lnurl = lnurl)
+    override fun GetContent(navController: HSNavigation) {
+        OpenCryptoPayScreen(navController = navController, lnurl = input.lnurl)
     }
 
-    @Parcelize
-    data class Input(val lnurl: String) : Parcelable
+    @Serializable
+    data class Input(val lnurl: String)
 }

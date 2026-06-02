@@ -1,33 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.opencryptopay
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import kotlinx.serialization.Serializable
 
-class OpenCryptoPayEvmSettingsFragment : BaseComposeFragment() {
+@Serializable
+data object OpenCryptoPayEvmSettingsFragment : HSPage() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-            navController.getBackStackEntry(R.id.openCryptoPayEvmConfirmationFragment)
-        }
-        val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
-            viewModelStoreOwner = viewModelStoreOwner,
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
+            OpenCryptoPayEvmConfirmationFragment::class
         )
         viewModel.sendTransactionService.GetSettingsContent(navController)
     }
 }
 
-class OpenCryptoPayEvmNonceSettingsFragment : BaseComposeFragment() {
+@Serializable
+data object OpenCryptoPayEvmNonceSettingsFragment : HSPage() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-            navController.getBackStackEntry(R.id.openCryptoPayEvmConfirmationFragment)
-        }
-        val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
-            viewModelStoreOwner = viewModelStoreOwner,
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
+            OpenCryptoPayEvmConfirmationFragment::class
         )
         viewModel.sendTransactionService.GetNonceSettingsContent(navController)
     }

@@ -23,13 +23,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleType
-import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -43,7 +42,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OpenCryptoPayScreen(
-    navController: NavController,
+    navController: HSNavigation,
     lnurl: String,
 ) {
     val viewModel = viewModel<OpenCryptoPayViewModel>(factory = OpenCryptoPayViewModel.Factory(lnurl))
@@ -57,41 +56,43 @@ fun OpenCryptoPayScreen(
 
     uiState.navigateToEvmConfirm?.let { data ->
         navController.slideFromRight(
-            R.id.openCryptoPayEvmConfirmationFragment,
-            OpenCryptoPayEvmConfirmationFragment.Input(
-                wallet = data.wallet,
-                callbackUrl = data.callbackUrl,
-                quoteId = data.quoteId,
-                paymentId = data.paymentId,
-                method = data.method,
-                asset = data.asset,
-                assetAmount = data.assetAmount,
-                blockchainType = data.blockchainType,
-                merchant = data.merchant,
-                expirationIso = data.expirationIso,
-                minFee = data.minFee,
-                sendEntryPointDestId = R.id.openCryptoPayFragment,
-            )
+            OpenCryptoPayEvmConfirmationFragment(
+                OpenCryptoPayEvmConfirmationFragment.Input(
+                    wallet = data.wallet,
+                    callbackUrl = data.callbackUrl,
+                    quoteId = data.quoteId,
+                    paymentId = data.paymentId,
+                    method = data.method,
+                    asset = data.asset,
+                    assetAmount = data.assetAmount,
+                    blockchainType = data.blockchainType,
+                    merchant = data.merchant,
+                    expirationIso = data.expirationIso,
+                    minFee = data.minFee,
+                    sendEntryPointDestId = OpenCryptoPayFragment::class,
+                )
+            ),
         )
         viewModel.onNavigatedToEvmConfirm()
     }
 
     uiState.navigateToConfirm?.let { data ->
         navController.slideFromRight(
-            R.id.openCryptoPayConfirmationFragment,
-            OpenCryptoPayConfirmationFragment.Input(
-                wallet = data.wallet,
-                callbackUrl = data.callbackUrl,
-                quoteId = data.quoteId,
-                paymentId = data.paymentId,
-                method = data.method,
-                asset = data.asset,
-                assetAmount = data.assetAmount,
-                merchant = data.merchant,
-                expirationIso = data.expirationIso,
-                minFee = data.minFee,
-                sendEntryPointDestId = R.id.openCryptoPayFragment,
-            )
+            OpenCryptoPayConfirmationFragment(
+                OpenCryptoPayConfirmationFragment.Input(
+                    wallet = data.wallet,
+                    callbackUrl = data.callbackUrl,
+                    quoteId = data.quoteId,
+                    paymentId = data.paymentId,
+                    method = data.method,
+                    asset = data.asset,
+                    assetAmount = data.assetAmount,
+                    merchant = data.merchant,
+                    expirationIso = data.expirationIso,
+                    minFee = data.minFee,
+                    sendEntryPointDestId = OpenCryptoPayFragment::class,
+                )
+            ),
         )
         viewModel.onNavigatedToConfirm()
     }
@@ -124,7 +125,7 @@ fun OpenCryptoPayScreen(
 
     HSScaffold(
         title = stringResource(R.string.Balance_Send),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Crossfade(uiState.loading) { isLoading ->
             if (isLoading) {

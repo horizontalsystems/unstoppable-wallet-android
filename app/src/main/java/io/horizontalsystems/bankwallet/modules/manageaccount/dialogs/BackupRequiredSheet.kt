@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
 
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -15,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -27,7 +23,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetTextBlock
@@ -38,7 +34,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -47,7 +42,7 @@ data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        BackupRequiredScreen(navController, input.account, input.text)
+        BackupRequiredScreen(navController, input.account)
     }
 
     @Serializable
@@ -57,7 +52,7 @@ data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account) {
+fun BackupRequiredScreen(navController: HSNavigation, account: Account) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = navController::removeLastOrNull,
@@ -67,7 +62,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account) {
                     title = stringResource(R.string.BackupRequired_RemindLater),
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
-                    onClick = navController::popBackStack
+                    onClick = navController::removeLastOrNull
                 )
             },
             content = {
@@ -97,8 +92,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account) {
                         right = { CellRightNavigation() },
                         onClick = {
                             navController.slideFromBottom(
-                                R.id.backupKeyFragment,
-                                account
+                                BackupKeyPage(account)
                             )
 
                             stat(
@@ -125,7 +119,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account) {
                         },
                         right = { CellRightNavigation() },
                         onClick = {
-                            navController.slideFromBottom(R.id.backupLocalFragment, account)
+                            navController.slideFromBottom(BackupLocalPage(account))
 
                             stat(
                                 page = StatPage.BackupRequired,
