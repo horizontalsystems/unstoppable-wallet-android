@@ -166,7 +166,16 @@ object AppModule {
     fun provideLockoutStorage(): ILockoutStorage = CoreApp.lockoutStorage
 
     @Provides @Singleton
-    fun provideTonConnectManager(): TonConnectManager = App.tonConnectManager
+    fun provideTonConnectManager(
+        @ApplicationContext context: Context,
+        adapterFactory: io.horizontalsystems.bankwallet.core.factories.AdapterFactory,
+        appConfigProvider: AppConfigProvider
+    ): TonConnectManager = TonConnectManager(
+        context = context,
+        adapterFactory = adapterFactory,
+        appName = "unstoppable",
+        appVersion = appConfigProvider.appVersion
+    )
 
     @Provides @Singleton
     fun provideNetworkManager(impl: io.horizontalsystems.bankwallet.core.managers.NetworkManager): INetworkManager = impl

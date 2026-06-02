@@ -267,3 +267,9 @@ interface AdapterEntryPoint {
     fun adapterManager(): io.horizontalsystems.bankwallet.core.IAdapterManager
     fun transactionAdapterManager(): io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface TonConnectEntryPoint {
+    fun tonConnectManager(): io.horizontalsystems.bankwallet.core.managers.TonConnectManager
+}

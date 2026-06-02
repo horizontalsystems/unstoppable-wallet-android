@@ -379,12 +379,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
 
 
-        tonConnectManager = TonConnectManager(
-            context = this,
-            adapterFactory = adapterFactory,
-            appName = "unstoppable",
-            appVersion = appConfigProvider.appVersion
-        )
+        tonConnectManager = EntryPointAccessors
+            .fromApplication(this, TonConnectEntryPoint::class.java)
+            .tonConnectManager()
         tonConnectManager.start()
 
         if (BuildConfig.DEBUG) {
