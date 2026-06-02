@@ -78,7 +78,13 @@ object AppModule {
     fun provideBackupManager(impl: BackupManager): IBackupManager = impl
 
     @Provides @Singleton
-    fun providePinComponent(): IPinComponent = App.pinComponent
+    fun providePinComponent(impl: io.horizontalsystems.bankwallet.modules.pin.PinComponent): IPinComponent = impl
+
+    @Provides @Singleton
+    fun providePinSettingsStorage(impl: io.horizontalsystems.bankwallet.core.managers.LocalStorageManager): io.horizontalsystems.core.IPinSettingsStorage = impl
+
+    @Provides @Singleton
+    fun providePinDao(db: AppDatabase): io.horizontalsystems.bankwallet.modules.pin.core.PinDao = db.pinDao()
 
     @Provides @Singleton
     fun provideRateAppManager(impl: io.horizontalsystems.bankwallet.core.managers.RateAppManager): IRateAppManager = impl

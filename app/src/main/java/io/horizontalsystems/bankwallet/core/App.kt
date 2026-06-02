@@ -70,8 +70,6 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
-import io.horizontalsystems.bankwallet.modules.pin.PinComponent
-import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
@@ -325,14 +323,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 
-        pinComponent = PinComponent(
-            context = this,
-            pinSettingsStorage = pinSettingsStorage,
-            userManager = userManager,
-            pinDbStorage = PinDbStorage(appDatabase.pinDao()),
-            backgroundManager = backgroundManager,
-            localStorage = localStorage
-        )
+        pinComponent = EntryPointAccessors
+            .fromApplication(this, PinEntryPoint::class.java)
+            .pinComponent()
 
         val spamStatsEntryPoint = EntryPointAccessors
             .fromApplication(this, SpamStatsEntryPoint::class.java)

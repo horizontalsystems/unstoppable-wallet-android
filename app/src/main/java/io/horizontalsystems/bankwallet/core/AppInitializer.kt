@@ -273,3 +273,9 @@ interface AdapterEntryPoint {
 interface TonConnectEntryPoint {
     fun tonConnectManager(): io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface PinEntryPoint {
+    fun pinComponent(): io.horizontalsystems.core.IPinComponent
+}

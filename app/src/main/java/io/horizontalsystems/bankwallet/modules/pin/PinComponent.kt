@@ -20,8 +20,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PinComponent(
-    private val context: Context,
+@javax.inject.Singleton
+class PinComponent @javax.inject.Inject constructor(
+    @dagger.hilt.android.qualifiers.ApplicationContext private val context: Context,
     private val pinSettingsStorage: IPinSettingsStorage,
     private val userManager: UserManager,
     private val pinDbStorage: PinDbStorage,

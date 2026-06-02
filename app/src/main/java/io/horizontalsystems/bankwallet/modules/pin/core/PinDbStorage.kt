@@ -7,7 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.horizontalsystems.bankwallet.core.storage.SecretString
 
-class PinDbStorage(private val pinDao: PinDao) {
+@javax.inject.Singleton
+class PinDbStorage @javax.inject.Inject constructor(private val pinDao: PinDao) {
 
     fun isLastLevelPinSet(): Boolean {
         val lastLevelPin = pinDao.getLastLevelPin()
