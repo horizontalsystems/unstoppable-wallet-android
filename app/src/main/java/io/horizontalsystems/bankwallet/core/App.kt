@@ -16,10 +16,8 @@ import coil.decode.SvgDecoder
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
-import io.horizontalsystems.bankwallet.core.managers.AdapterManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -319,34 +317,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         numberFormatter = localizationEntryPoint.numberFormatter()
 
 
-        val adapterFactory = AdapterFactory(
-            context = instance,
-            btcBlockchainManager = btcBlockchainManager,
-            evmBlockchainManager = evmBlockchainManager,
-            evmSyncSourceManager = evmSyncSourceManager,
-            solanaKitManager = solanaKitManager,
-            tronKitManager = tronKitManager,
-            tonKitManager = tonKitManager,
-            stellarKitManager = stellarKitManager,
-            backgroundManager = backgroundManager,
-            restoreSettingsManager = restoreSettingsManager,
-            coinManager = coinManager,
-            evmLabelManager = evmLabelManager,
-            localStorage = localStorage,
-            moneroNodeManager = moneroNodeManager,
-            zanoKitManager = zanoKitManager,
-            zcashEndpointManager = zcashEndpointManager,
-        )
-        adapterManager = AdapterManager(
-            walletManager,
-            adapterFactory,
-            evmBlockchainManager,
-            solanaKitManager,
-            tronKitManager,
-            tonKitManager,
-            stellarKitManager,
-        )
-        transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
+        val adapterEntryPoint = EntryPointAccessors
+            .fromApplication(this, AdapterEntryPoint::class.java)
+        val adapterFactory = adapterEntryPoint.adapterFactory()
+        adapterManager = adapterEntryPoint.adapterManager()
+        transactionAdapterManager = adapterEntryPoint.transactionAdapterManager()
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 

@@ -259,3 +259,11 @@ interface TorEntryPoint {
 interface MarketKitEntryPoint {
     fun marketKit(): io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface AdapterEntryPoint {
+    fun adapterFactory(): io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+    fun adapterManager(): io.horizontalsystems.bankwallet.core.IAdapterManager
+    fun transactionAdapterManager(): io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+}

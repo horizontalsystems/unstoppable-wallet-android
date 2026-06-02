@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
+import io.horizontalsystems.bankwallet.core.managers.AdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
@@ -39,7 +40,6 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.core.IThirdKeyboard
-import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
@@ -108,10 +108,7 @@ object AppModule {
     fun provideWalletStorage(impl: WalletStorage): IWalletStorage = impl
 
     @Provides @Singleton
-    fun provideAdapterManager(): IAdapterManager = App.adapterManager
-
-    @Provides @Singleton
-    fun provideTransactionAdapterManager(): TransactionAdapterManager = App.transactionAdapterManager
+    fun provideAdapterManager(impl: AdapterManager): IAdapterManager = impl
 
     @Provides @Singleton
     fun provideSystemInfoManager(impl: SystemInfoManager): ISystemInfoManager = impl

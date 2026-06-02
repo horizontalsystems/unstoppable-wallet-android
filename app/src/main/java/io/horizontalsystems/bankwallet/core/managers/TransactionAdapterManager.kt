@@ -16,7 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
-class TransactionAdapterManager(
+@javax.inject.Singleton
+class TransactionAdapterManager @javax.inject.Inject constructor(
     private val adapterManager: IAdapterManager,
     private val adapterFactory: AdapterFactory
 ) {

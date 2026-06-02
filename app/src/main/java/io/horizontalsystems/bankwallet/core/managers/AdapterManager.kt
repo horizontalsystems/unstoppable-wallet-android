@@ -16,7 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
-class AdapterManager(
+@javax.inject.Singleton
+class AdapterManager @javax.inject.Inject constructor(
     private val walletManager: WalletManager,
     private val adapterFactory: AdapterFactory,
     private val evmBlockchainManager: EvmBlockchainManager,
