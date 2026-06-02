@@ -148,6 +148,20 @@ fun BalanceForAccount(
             }
             add(
                 MenuItem(
+                    title = TranslatableString.ResString(R.string.Transactions_Title),
+                    icon = R.drawable.ic_circle_clock_24,
+                    onClick = {
+                        navController.slideFromRight(R.id.transactionsFragment)
+
+                        stat(
+                            page = StatPage.Balance,
+                            event = StatEvent.Open(StatPage.Transactions)
+                        )
+                    }
+                )
+            )
+            add(
+                MenuItem(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
