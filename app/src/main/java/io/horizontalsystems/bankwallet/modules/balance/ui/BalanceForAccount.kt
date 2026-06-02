@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayPage
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
@@ -152,7 +152,7 @@ fun BalanceForAccount(
                     title = TranslatableString.ResString(R.string.Transactions_Title),
                     icon = R.drawable.ic_circle_clock_24,
                     onClick = {
-                        navController.slideFromRight(TransactionsFragment)
+                        navController.slideFromRight(TransactionsPage)
 
                         stat(
                             page = StatPage.Balance,

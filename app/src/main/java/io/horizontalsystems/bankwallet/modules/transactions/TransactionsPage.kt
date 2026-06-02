@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TransactionsFragment : HSPage() {
+data object TransactionsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
