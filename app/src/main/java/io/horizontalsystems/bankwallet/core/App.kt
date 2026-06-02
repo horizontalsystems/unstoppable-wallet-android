@@ -201,12 +201,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             .fromApplication(this, TorEntryPoint::class.java)
             .torManager()
 
-        marketKit = MarketKitWrapper(
-            context = this,
-            hsApiBaseUrl = appConfig.marketApiBaseUrl,
-            hsApiKey = appConfig.marketApiKey,
-            newsApiKey = "",
-        )
+        marketKit = EntryPointAccessors
+            .fromApplication(this, MarketKitEntryPoint::class.java)
+            .marketKit()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = EntryPointAccessors

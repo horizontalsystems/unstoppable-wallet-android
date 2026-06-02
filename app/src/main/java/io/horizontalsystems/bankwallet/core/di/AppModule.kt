@@ -47,6 +47,7 @@ import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
@@ -118,7 +119,15 @@ object AppModule {
     // --- Market data ---
 
     @Provides @Singleton
-    fun provideMarketKit(): MarketKitWrapper = App.marketKit
+    fun provideMarketKit(
+        @ApplicationContext context: Context,
+        appConfigProvider: AppConfigProvider
+    ): MarketKitWrapper = MarketKitWrapper(
+        context = context,
+        hsApiBaseUrl = appConfigProvider.marketApiBaseUrl,
+        hsApiKey = appConfigProvider.marketApiKey,
+        newsApiKey = "",
+    )
 
     @Provides @Singleton
     fun provideNumberFormatter(impl: NumberFormatter): IAppNumberFormatter = impl

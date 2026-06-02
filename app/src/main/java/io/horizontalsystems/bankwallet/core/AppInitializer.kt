@@ -253,3 +253,9 @@ interface BackgroundManagerEntryPoint {
 interface TorEntryPoint {
     fun torManager(): io.horizontalsystems.bankwallet.core.ITorManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface MarketKitEntryPoint {
+    fun marketKit(): io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+}
