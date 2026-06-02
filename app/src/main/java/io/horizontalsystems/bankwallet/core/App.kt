@@ -52,7 +52,6 @@ import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.managers.TonAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
-import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
@@ -198,7 +197,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             .appConfigProvider()
         appConfigProvider = appConfig
 
-        torKitManager = TorManager(instance, localStorage)
+        torKitManager = EntryPointAccessors
+            .fromApplication(this, TorEntryPoint::class.java)
+            .torManager()
 
         marketKit = MarketKitWrapper(
             context = this,

@@ -15,7 +15,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.Executors
 
-class TorManager(context: Context, val localStorage: ILocalStorage) : ITorManager, TorOperator.Listener {
+@javax.inject.Singleton
+class TorManager @javax.inject.Inject constructor(
+    @dagger.hilt.android.qualifiers.ApplicationContext context: Context,
+    val localStorage: ILocalStorage
+) : ITorManager, TorOperator.Listener {
 
     private val logger = AppLogger("tor status")
     private val _torStatusFlow = MutableStateFlow(TorStatus.Closed)

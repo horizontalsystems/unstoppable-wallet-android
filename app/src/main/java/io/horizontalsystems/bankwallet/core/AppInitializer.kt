@@ -247,3 +247,9 @@ interface AppConfigEntryPoint {
 interface BackgroundManagerEntryPoint {
     fun backgroundManager(): io.horizontalsystems.bankwallet.core.BackgroundManager
 }
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface TorEntryPoint {
+    fun torManager(): io.horizontalsystems.bankwallet.core.ITorManager
+}

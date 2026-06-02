@@ -83,7 +83,7 @@ object AppModule {
     fun provideRateAppManager(impl: io.horizontalsystems.bankwallet.core.managers.RateAppManager): IRateAppManager = impl
 
     @Provides @Singleton
-    fun provideTorManager(): ITorManager = App.torKitManager
+    fun provideTorManager(impl: io.horizontalsystems.bankwallet.core.managers.TorManager): ITorManager = impl
 
     @Provides @Singleton
     fun provideRootUtil(): RootUtil = RootUtil
