@@ -1,18 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import kotlinx.serialization.Serializable
 
-class TransactionsFragment : BaseComposeFragment() {
-    private val viewModel: TransactionsViewModel by navGraphViewModels(R.id.mainFragment) {
-        TransactionsModule.Factory()
-    }
-
+@Serializable
+data object TransactionsFragment : HSPage() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
         TransactionsScreen(navController, viewModel)
     }
 }
