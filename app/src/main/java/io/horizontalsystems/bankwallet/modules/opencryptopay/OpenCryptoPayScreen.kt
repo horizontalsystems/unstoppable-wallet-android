@@ -56,8 +56,8 @@ fun OpenCryptoPayScreen(
 
     uiState.navigateToEvmConfirm?.let { data ->
         navController.slideFromRight(
-            OpenCryptoPayEvmConfirmationFragment(
-                OpenCryptoPayEvmConfirmationFragment.Input(
+            OpenCryptoPayEvmConfirmationPage(
+                OpenCryptoPayEvmConfirmationPage.Input(
                     wallet = data.wallet,
                     callbackUrl = data.callbackUrl,
                     quoteId = data.quoteId,
@@ -69,7 +69,7 @@ fun OpenCryptoPayScreen(
                     merchant = data.merchant,
                     expirationIso = data.expirationIso,
                     minFee = data.minFee,
-                    sendEntryPointDestId = OpenCryptoPayFragment::class,
+                    sendEntryPointDestId = OpenCryptoPayPage::class,
                 )
             ),
         )
@@ -78,8 +78,8 @@ fun OpenCryptoPayScreen(
 
     uiState.navigateToConfirm?.let { data ->
         navController.slideFromRight(
-            OpenCryptoPayConfirmationFragment(
-                OpenCryptoPayConfirmationFragment.Input(
+            OpenCryptoPayConfirmationPage(
+                OpenCryptoPayConfirmationPage.Input(
                     wallet = data.wallet,
                     callbackUrl = data.callbackUrl,
                     quoteId = data.quoteId,
@@ -90,7 +90,7 @@ fun OpenCryptoPayScreen(
                     merchant = data.merchant,
                     expirationIso = data.expirationIso,
                     minFee = data.minFee,
-                    sendEntryPointDestId = OpenCryptoPayFragment::class,
+                    sendEntryPointDestId = OpenCryptoPayPage::class,
                 )
             ),
         )

@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class OpenCryptoPayFragment(val input: Input) : HSPage() {
+data class OpenCryptoPayPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

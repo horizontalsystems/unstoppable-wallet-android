@@ -43,7 +43,7 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 @Serializable
-data class OpenCryptoPayEvmConfirmationFragment(val input: Input) : HSPage() {
+data class OpenCryptoPayEvmConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -70,7 +70,7 @@ data class OpenCryptoPayEvmConfirmationFragment(val input: Input) : HSPage() {
 @Composable
 private fun OpenCryptoPayEvmConfirmationScreen(
     navController: HSNavigation,
-    input: OpenCryptoPayEvmConfirmationFragment.Input,
+    input: OpenCryptoPayEvmConfirmationPage.Input,
 ) {
     val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
         factory = OpenCryptoPayEvmConfirmationViewModel.Factory(
@@ -94,10 +94,10 @@ private fun OpenCryptoPayEvmConfirmationScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(OpenCryptoPayEvmSettingsFragment)
+            navController.slideFromBottom(OpenCryptoPayEvmSettingsPage)
         },
         onClickNonceSettings = {
-            navController.slideFromBottom(OpenCryptoPayEvmNonceSettingsFragment)
+            navController.slideFromBottom(OpenCryptoPayEvmNonceSettingsPage)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

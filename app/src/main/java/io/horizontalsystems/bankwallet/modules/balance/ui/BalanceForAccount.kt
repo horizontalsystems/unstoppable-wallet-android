@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayFragment
+import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayPage
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
@@ -120,7 +120,7 @@ fun BalanceForAccount(
     LaunchedEffect(uiState.openOcpPayment) {
         uiState.openOcpPayment?.let { lnurl ->
             navController.slideFromRight(
-                OpenCryptoPayFragment(OpenCryptoPayFragment.Input(lnurl))
+                OpenCryptoPayPage(OpenCryptoPayPage.Input(lnurl))
             )
             viewModel.onOcpPaymentOpened()
         }

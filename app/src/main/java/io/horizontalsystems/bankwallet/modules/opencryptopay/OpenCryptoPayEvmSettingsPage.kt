@@ -6,22 +6,22 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object OpenCryptoPayEvmSettingsFragment : HSPage() {
+data object OpenCryptoPayEvmSettingsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
-            OpenCryptoPayEvmConfirmationFragment::class
+            OpenCryptoPayEvmConfirmationPage::class
         )
         viewModel.sendTransactionService.GetSettingsContent(navController)
     }
 }
 
 @Serializable
-data object OpenCryptoPayEvmNonceSettingsFragment : HSPage() {
+data object OpenCryptoPayEvmNonceSettingsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
-            OpenCryptoPayEvmConfirmationFragment::class
+            OpenCryptoPayEvmConfirmationPage::class
         )
         viewModel.sendTransactionService.GetNonceSettingsContent(navController)
     }

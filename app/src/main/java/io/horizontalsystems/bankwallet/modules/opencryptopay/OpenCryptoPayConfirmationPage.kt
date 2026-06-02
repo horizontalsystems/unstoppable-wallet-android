@@ -42,7 +42,7 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 @Serializable
-data class OpenCryptoPayConfirmationFragment(val input: Input) : HSPage() {
+data class OpenCryptoPayConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -68,7 +68,7 @@ data class OpenCryptoPayConfirmationFragment(val input: Input) : HSPage() {
 @Composable
 private fun OpenCryptoPayConfirmationScreen(
     navController: HSNavigation,
-    input: OpenCryptoPayConfirmationFragment.Input,
+    input: OpenCryptoPayConfirmationPage.Input,
 ) {
     val viewModel = viewModel<OpenCryptoPayConfirmationViewModel>(
         factory = OpenCryptoPayConfirmationViewModel.Factory(
