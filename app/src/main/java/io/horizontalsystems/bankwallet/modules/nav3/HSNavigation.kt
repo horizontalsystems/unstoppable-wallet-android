@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.NavigationType
@@ -60,9 +60,8 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
 
     @Composable
     inline fun <reified VM : ViewModel> viewModelForScreen(contentKey: String) : VM {
-        return viewModel(
-            viewModelStoreOwner = rememberChildViewModelStoreOwner(contentKey),
-        )
+        val owner = rememberChildViewModelStoreOwner(contentKey)
+        return hiltViewModel(viewModelStoreOwner = owner)
     }
 
     fun add(element: HSPage): Boolean {
