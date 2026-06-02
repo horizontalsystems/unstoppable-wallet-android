@@ -43,6 +43,7 @@ import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
+import io.horizontalsystems.core.entities.BlockchainType
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -108,9 +109,14 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
                 }
 
                 is ConfiguredTokenInfoType.Bips -> {
+                    val descriptionRes = if (tokenInfoType.blockchainType == BlockchainType.Litecoin) {
+                        R.string.manage_coins_bips_description_litecoin
+                    } else {
+                        R.string.ManageCoins_BipsDescription
+                    }
                     body_leah(
                         text = stringResource(
-                            R.string.ManageCoins_BipsDescription,
+                            descriptionRes,
                             tokenInfoType.blockchainName,
                             tokenInfoType.blockchainName,
                             tokenInfoType.blockchainName

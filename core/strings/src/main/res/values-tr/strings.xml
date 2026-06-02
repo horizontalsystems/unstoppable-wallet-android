@@ -1063,6 +1063,15 @@
 \n- BIP-86 (en yeni)
 \n
 \nDurdurulamaz cüzdan 4 tanesini de desteklerken, BIP-84 formatında çalışan bir %2$s cüzdanı kullanmanızı önerir. Bu biçimde çalışan cüzdanlar, %3$s işlemi gönderirken en düşük ücreti öderler.</string>
+    <string name="manage_coins_bips_description_litecoin">%1$s cüzdanının gelen ödemeleri almak için kullanabileceği 5 yaygın adres biçimi vardır:
+\n
+\n- BIP-44 (eski)
+\n- BIP-49
+\n- BIP-84 (önerilen)
+\n- BIP-86 (en yeni)
+\n- MWEB (gizli)
+\n
+\nP.CASH cüzdanı bunların 5\'ini de desteklese de, BIP-84 formatında çalışan bir %2$s cüzdanı kullanmanız önerilir. Bu biçimde çalışan cüzdanlar, %3$s işlemi gönderirken en düşük ücreti öderler.</string>
     <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
 \n 
 \n- TYPE0 (eski) 

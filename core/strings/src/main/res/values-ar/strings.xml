@@ -1057,14 +1057,23 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
-    <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:
+    <string name="ManageCoins_BipsDescription">هناك 4 تنسيقات شائعة للعناوين يمكن لمحافظ %1$s استخدامها لاستلام المدفوعات الواردة:
 \n
-\n- BIP-44 (older)
+\n- BIP-44 (الأقدم)
 \n- BIP-49
-\n- BIP-84 (recommended)
-\n- BIP-86 (newest)
+\n- BIP-84 (موصى به)
+\n- BIP-86 (الأحدث)
 \n
-\nWhile P.CASH wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
+\nمع أن محفظة P.CASH تدعمها جميعها الأربعة، يُوصى باستخدام محفظة %2$s تعمل بتنسيق BIP-84. المحافظ التي تعمل بهذا التنسيق تدفع أقل الرسوم عند إرسال معاملات %3$s.</string>
+    <string name="manage_coins_bips_description_litecoin">هناك 5 تنسيقات شائعة للعناوين يمكن لمحافظ %1$s استخدامها لاستلام المدفوعات الواردة:
+\n
+\n- BIP-44 (الأقدم)
+\n- BIP-49
+\n- BIP-84 (موصى به)
+\n- BIP-86 (الأحدث)
+\n- MWEB (خاص)
+\n
+\nمع أن محفظة P.CASH تدعمها جميعها الخمسة، يُوصى باستخدام محفظة %2$s تعمل بتنسيق BIP-84. المحافظ التي تعمل بهذا التنسيق تدفع أقل الرسوم عند إرسال معاملات %3$s.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)

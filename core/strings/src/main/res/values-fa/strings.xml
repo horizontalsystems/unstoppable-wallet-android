@@ -1057,14 +1057,23 @@
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <string name="ManageCoins_NoResults">نتیجه ای پیدا نشد. اگر آدرس قرارداد هوشمند آن را می‌دانید، سعی کنید توکن را به صورت دستی اضافه کنید.</string>
-    <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:
+    <string name="ManageCoins_BipsDescription">4 قالب آدرس رایج وجود دارد که کیف‌پول‌های %1$s می‌توانند برای دریافت پرداخت‌های ورودی از آن‌ها استفاده کنند:
 \n
-\n- BIP-44 (older)
+\n- BIP-44 (قدیمی‌تر)
 \n- BIP-49
-\n- BIP-84 (recommended)
-\n- BIP-86 (newest)
+\n- BIP-84 (توصیه‌شده)
+\n- BIP-86 (جدیدترین)
 \n
-\nWhile P.CASH wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
+\nبا اینکه کیف‌پول P.CASH از هر 4 مورد پشتیبانی می‌کند، توصیه می‌شود از کیف‌پول %2$s با قالب BIP-84 استفاده کنید. کیف‌پول‌هایی که با این قالب کار می‌کنند هنگام ارسال تراکنش‌های %3$s کمترین کارمزد را پرداخت می‌کنند.</string>
+    <string name="manage_coins_bips_description_litecoin">5 قالب آدرس رایج وجود دارد که کیف‌پول‌های %1$s می‌توانند برای دریافت پرداخت‌های ورودی از آن‌ها استفاده کنند:
+\n
+\n- BIP-44 (قدیمی‌تر)
+\n- BIP-49
+\n- BIP-84 (توصیه‌شده)
+\n- BIP-86 (جدیدترین)
+\n- MWEB (خصوصی)
+\n
+\nبا اینکه کیف‌پول P.CASH از هر 5 مورد پشتیبانی می‌کند، توصیه می‌شود از کیف‌پول %2$s با قالب BIP-84 استفاده کنید. کیف‌پول‌هایی که با این قالب کار می‌کنند هنگام ارسال تراکنش‌های %3$s کمترین کارمزد را پرداخت می‌کنند.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)

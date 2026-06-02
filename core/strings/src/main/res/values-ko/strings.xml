@@ -1065,6 +1065,15 @@
 \n- BIP 86 (최신)
 \n
 \nP.CASH 지갑은 4가지 모두를 지원하지만 BIP-84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %3$s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
+    <string name="manage_coins_bips_description_litecoin">%1$s 지갑이 입금을 받는 데 사용할 수 있는 5가지 일반적인 주소 형식이 있습니다.
+\n
+\n- BIP-44 (이전)
+\n- BIP-49
+\n- BIP-84 (추천)
+\n- BIP-86 (최신)
+\n- MWEB (비공개)
+\n
+\nP.CASH 지갑은 5가지 모두를 지원하지만 BIP-84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %3$s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
     <string name="ManageCoins_BchTypeDescription">비트코인 캐시 지갑이 수신 지불을 받는 데 사용할 수 있는 2가지 주소 형식이 있습니다.\n\n- 유형 0(이전)\n- 유형 145(최신)\n\nP.CASH 지갑은 두 가지를 모두 지원하지만 비트코인 캐시를 사용하는 것이 좋습니다. TYPE 145 형식으로 작동하는 지갑.</string>
     <string name="ManageCoins_ContractAddress">계약 주소</string>
     <!-- Experimental Feature -->
