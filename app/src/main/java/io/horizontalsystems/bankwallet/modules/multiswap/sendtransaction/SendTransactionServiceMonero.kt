@@ -52,8 +52,8 @@ class SendTransactionServiceMonero(
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val data = sendData!!
-        adapter.send(data.amount, data.address, data.memo)
-        return SendTransactionResult.Monero
+        val txHash = adapter.send(data.amount, data.address, data.memo)
+        return SendTransactionResult.Monero(txHash = txHash)
     }
 
     override fun createState() = SendTransactionServiceState(

@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
@@ -183,6 +184,17 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         )
 
         SendBtcFeeSettingsScreen(navController, sendSettingsViewModel)
+    }
+
+    fun signTransaction(): SignedRawTransaction {
+        return adapter.rawTransaction(
+            amount = amountState.amount!!,
+            address = addressState.validAddress?.hex!!,
+            memo = memo,
+            feeRate = feeRateState.feeRate!!,
+            unspentOutputs = null,
+            utxoFilters = utxoFilters,
+        )
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Btc {

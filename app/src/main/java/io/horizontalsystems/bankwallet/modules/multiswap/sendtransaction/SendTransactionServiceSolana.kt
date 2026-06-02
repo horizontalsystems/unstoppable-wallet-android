@@ -44,6 +44,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
 
     private var fee = SolanaKit.fee
     private var rawTransaction: ByteArray? = null
+    private var simpleDataSet = false
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -78,29 +79,31 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
             is SendTransactionData.Solana.WithRawTransaction -> {
                 this.rawTransaction = data.rawTransaction
                 fee = adapter.estimateFee(data.rawTransaction)
-
+                emitState()
+            }
+            is SendTransactionData.Solana.Simple -> {
+                amountService.setAmount(data.amount)
+                addressService.setAddress(io.horizontalsystems.bankwallet.entities.Address(data.address))
+                simpleDataSet = true
                 emitState()
             }
         }
-//        amountService.setAmount(amount)
-//        addressService.setAddress(address)
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val tmpRawTransaction = rawTransaction
+        val fullTransaction: io.horizontalsystems.solanakit.models.FullTransaction
 
         if (tmpRawTransaction != null) {
-            adapter.send(tmpRawTransaction)
+            fullTransaction = adapter.send(tmpRawTransaction)
         } else {
-            // todo checking amount should be in service
             val totalSolAmount = (if (token.type == TokenType.Native) amountState.amount!! else BigDecimal.ZERO) + SolanaKit.fee
             if (totalSolAmount > solBalance)
                 throw EvmError.InsufficientBalanceWithFee
-
-            adapter.send(amountState.amount!!, addressState.solanaAddress!!)
+            fullTransaction = adapter.send(amountState.amount!!, addressState.solanaAddress!!)
         }
 
-        return SendTransactionResult.Solana
+        return SendTransactionResult.Solana(txHash = fullTransaction.transaction.hash)
     }
 
     override fun createState() = SendTransactionServiceState(
@@ -108,7 +111,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
         networkFee = getAmountData(CoinValue(solToken, fee)),
         cautions = listOf(),
         sendable = rawTransaction != null || (amountState.canBeSend && addressState.canBeSend),
-        loading = rawTransaction == null,
+        loading = rawTransaction == null && !simpleDataSet,
         fields = listOf(),
     )
 }

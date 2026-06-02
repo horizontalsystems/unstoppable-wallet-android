@@ -19,6 +19,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tronkit.models.Address as TronAddress
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.models.TransferContract
 import io.horizontalsystems.tronkit.models.TriggerSmartContract
@@ -123,31 +124,33 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
 
         sendTransactionData = data
 
-        if (data is SendTransactionData.Tron.WithContract) {
-            feeService.setContract(data.contract)
-            nativeTokenAmount = extractTrxSun(data.contract)?.toBigDecimal(nativeToken.decimals)
-        } else if (data is SendTransactionData.Tron.WithCreateTransaction) {
-            feeService.setCreatedTransaction(data.transaction)
-            nativeTokenAmount = extractTrxSun(data.transaction).toBigDecimal(nativeToken.decimals)
+        when (data) {
+            is SendTransactionData.Tron.WithContract -> {
+                feeService.setContract(data.contract)
+                nativeTokenAmount = extractTrxSun(data.contract)?.toBigDecimal(nativeToken.decimals)
+            }
+            is SendTransactionData.Tron.WithCreateTransaction -> {
+                feeService.setCreatedTransaction(data.transaction)
+                nativeTokenAmount = extractTrxSun(data.transaction).toBigDecimal(nativeToken.decimals)
+            }
+            is SendTransactionData.Tron.Simple -> {
+                nativeTokenAmount = data.amount
+                feeService.setAmount(data.amount)
+                feeService.setTronAddress(TronAddress.fromBase58(data.address))
+            }
         }
 
         emitState()
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
-        when (val tmpSendTransactionData = sendTransactionData) {
-            is SendTransactionData.Tron.WithContract -> {
-                adapter.send(tmpSendTransactionData.contract, feeState.feeLimit)
-            }
-            is SendTransactionData.Tron.WithCreateTransaction -> {
-                adapter.send(tmpSendTransactionData.transaction)
-            }
-            null -> {
-                throw IllegalStateException("Not supported")
-            }
+        val txHash = when (val d = sendTransactionData) {
+            is SendTransactionData.Tron.WithContract -> adapter.send(d.contract, feeState.feeLimit)
+            is SendTransactionData.Tron.WithCreateTransaction -> adapter.send(d.transaction)
+            is SendTransactionData.Tron.Simple -> adapter.send(d.amount, TronAddress.fromBase58(d.address), feeState.feeLimit)
+            null -> throw IllegalStateException("Not supported")
         }
-
-        return SendTransactionResult.Tron
+        return SendTransactionResult.Tron(txHash = txHash)
     }
 
     override fun createState() = SendTransactionServiceState(

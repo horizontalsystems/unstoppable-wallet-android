@@ -36,6 +36,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import androidx.core.net.toUri
 
 class BalanceViewModel(
     private val service: BalanceService,
@@ -57,6 +58,7 @@ class BalanceViewModel(
     private var balanceViewItems = listOf<BalanceViewItem2>()
     private var isRefreshing = false
     private var openSendTokenSelect: OpenSendTokenSelect? = null
+    private var openOcpPayment: String? = null
     private var errorMessage: String? = null
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
@@ -183,6 +185,7 @@ class BalanceViewModel(
         nonStandardAccount = service.account?.nonStandard == true,
         errorMessage = errorMessage,
         openSend = openSendTokenSelect,
+        openOcpPayment = openOcpPayment,
         balanceTabButtonsEnabled = balanceTabButtonsEnabled,
         sortType = sortType,
         sortTypes = sortTypes,
@@ -283,6 +286,21 @@ class BalanceViewModel(
 
     fun handleScannedData(scannedText: String) {
         viewModelScope.launch {
+            val lnurl: String? = when {
+                scannedText.uppercase().startsWith("LNURL") -> scannedText
+                scannedText.lowercase().startsWith("lightning:lnurl") ->
+                    scannedText.drop("lightning:".length)
+                else -> try {
+                    scannedText.toUri().getQueryParameter("lightning")
+                        ?.takeIf { it.uppercase().startsWith("LNURL") }
+                } catch (_: Exception) { null }
+            }
+            if (lnurl != null) {
+                openOcpPayment = lnurl
+                emitState()
+                return@launch
+            }
+
             if (
                 scannedText.startsWith("tc:") ||
                 scannedText.startsWith("https://unstoppable.money/ton-connect")
@@ -380,6 +398,11 @@ class BalanceViewModel(
         emitState()
     }
 
+    fun onOcpPaymentOpened() {
+        openOcpPayment = null
+        emitState()
+    }
+
     fun errorShown() {
         errorMessage = null
         emitState()
@@ -402,6 +425,7 @@ data class BalanceUiState(
     val nonStandardAccount: Boolean,
     val errorMessage: String?,
     val openSend: OpenSendTokenSelect? = null,
+    val openOcpPayment: String? = null,
     val balanceTabButtonsEnabled: Boolean,
     val sortType: BalanceSortType,
     val sortTypes: List<BalanceSortType>,

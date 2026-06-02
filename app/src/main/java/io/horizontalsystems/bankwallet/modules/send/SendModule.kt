@@ -61,7 +61,7 @@ object SendModule {
 
 sealed class SendResult {
     object Sending : SendResult()
-    class Sent(val transactionRecord: TransactionRecord? = null) : SendResult()
+    class Sent(val transactionRecord: TransactionRecord? = null, val txHash: String? = null) : SendResult()
     class Failed(val caution: HSCaution) : SendResult()
 }
 

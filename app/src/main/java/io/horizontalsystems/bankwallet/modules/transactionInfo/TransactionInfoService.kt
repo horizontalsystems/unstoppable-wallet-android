@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -53,6 +54,7 @@ class TransactionInfoService(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val nftMetadataService: NftMetadataService,
+    private val ocpPaymentDao: OcpPaymentDao,
     balanceHidden: Boolean,
 ) {
 
@@ -196,6 +198,9 @@ class TransactionInfoService(
         }
 
     suspend fun start() = withContext(Dispatchers.IO) {
+        ocpPaymentDao.getByTxHash(transactionHash)?.let { ocpPayment ->
+            transactionInfoItem = transactionInfoItem.copy(ocpPayment = ocpPayment)
+        }
         _transactionInfoItemFlow.update { transactionInfoItem }
 
         launch {

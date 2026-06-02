@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.Eip1559FeeSettings
@@ -62,7 +63,8 @@ import java.math.BigDecimal
 class SendTransactionServiceEvm(
     blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
-    initialNonce: Long? = null
+    initialNonce: Long? = null,
+    minGasPrice: GasPrice? = null,
 ) : AbstractSendTransactionService(true, true) {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy {
@@ -78,12 +80,14 @@ class SendTransactionServiceEvm(
             Eip1559GasPriceService(
                 gasProvider = gasPriceProvider,
                 refreshSignalFlowable = Flowable.empty(),
+                minGasPrice = minGasPrice as? GasPrice.Eip1559,
                 initialGasPrice = initialGasPrice as? GasPrice.Eip1559
             )
         } else {
             val gasPriceProvider = LegacyGasPriceProvider(evmKit)
             LegacyGasPriceService(
                 gasPriceProvider = gasPriceProvider,
+                minRecommendedGasPrice = (minGasPrice as? GasPrice.Legacy)?.legacyGasPrice,
                 initialGasPrice = (initialGasPrice as? GasPrice.Legacy)?.legacyGasPrice
             )
         }
@@ -217,6 +221,17 @@ class SendTransactionServiceEvm(
 
         feeService.setGasLimit(data.gasLimit)
         feeService.setTransactionData(data.transactionData)
+    }
+
+    suspend fun signTransaction(): EvmKitManager.SignedTx {
+        val tx = transaction ?: throw Exception("Transaction not ready")
+        if (tx.errors.isNotEmpty()) throw Exception("Transaction has errors")
+        return evmKitWrapper.signSingle(
+            tx.transactionData,
+            tx.gasData.gasPrice,
+            tx.gasData.gasLimit,
+            tx.nonce,
+        ).await()
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
