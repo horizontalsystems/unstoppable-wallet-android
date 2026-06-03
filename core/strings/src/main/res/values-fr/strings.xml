@@ -1051,14 +1051,23 @@
     <string name="ManageCoins_Search">Nom, code ou adresse du contrat</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
-    <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:
+    <string name="ManageCoins_BipsDescription">Il existe 4 formats d\'adresse courants que les portefeuilles %1$s peuvent utiliser pour recevoir des paiements entrants :
 \n
-\n- BIP-44 (older)
+\n- BIP-44 (plus ancien)
 \n- BIP-49
-\n- BIP-84 (recommended)
-\n- BIP-86 (newest)
+\n- BIP-84 (recommandé)
+\n- BIP-86 (le plus récent)
 \n
-\nWhile P.CASH wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
+\nBien que le portefeuille P.CASH les prenne tous les 4 en charge, il est recommandé d\'utiliser un portefeuille %2$s fonctionnant au format BIP-84. Les portefeuilles utilisant ce format paient les frais les plus bas lors de l\'envoi de transactions %3$s.</string>
+    <string name="manage_coins_bips_description_litecoin">Il existe 5 formats d\'adresse courants que les portefeuilles %1$s peuvent utiliser pour recevoir des paiements entrants :
+\n
+\n- BIP-44 (plus ancien)
+\n- BIP-49
+\n- BIP-84 (recommandé)
+\n- BIP-86 (le plus récent)
+\n- MWEB (privé)
+\n
+\nBien que le portefeuille P.CASH les prenne tous les 5 en charge, il est recommandé d\'utiliser un portefeuille %2$s fonctionnant au format BIP-84. Les portefeuilles utilisant ce format paient les frais les plus bas lors de l\'envoi de transactions %3$s.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)

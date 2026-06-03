@@ -1061,6 +1061,15 @@
 \n- BIP-86 (mais recente)
 \n
 \nEnquanto que a carteira 4 deles oferece suporte a todos os 4 deles é recomendado usar uma carteira %2$s operando no formato BIP-84. As carteiras que operam neste formato pagam taxas mais baixas ao enviar transações de %3$s.</string>
+    <string name="manage_coins_bips_description_litecoin">Existem 5 formatos de endereço comuns que as carteiras %1$s podem usar para receber pagamentos:
+\n
+\n- BIP-44 (mais antigo)
+\n- BIP-49
+\n- BIP-84 (recomendado)
+\n- BIP-86 (mais recente)
+\n- MWEB (privado)
+\n
+\nEmbora a carteira P.CASH suporte todos os 5, recomenda-se usar uma carteira %2$s que opere no formato BIP-84. As carteiras que operam neste formato pagam as taxas mais baixas ao enviar transações de %3$s.</string>
     <string name="ManageCoins_BchTypeDescription">Existem 2 formatos de endereço que as carteiras Bitcoin Cash podem usar para receber pagamentos:
 \n
 \n- TYPE0 (antigo)

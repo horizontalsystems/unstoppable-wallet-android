@@ -1059,6 +1059,15 @@
 \n- BIP-86 (新建)
 \n
 \n虽然无法阻挡的钱包支持他们中的所有4个，但它建议使用 BIP-84 格式操作的 %2$s 钱包。 以此格式操作的钱包在发送 %3$s 交易时可以支付最低费用。</string>
+    <string name="manage_coins_bips_description_litecoin">有 5 种常见的地址格式可供 %1$s 钱包用来接收付款：
+\n
+\n- BIP-44 (较旧)
+\n- BIP-49
+\n- BIP-84 (推荐)
+\n- BIP-86 (最新)
+\n- MWEB (隐私)
+\n
+\n虽然 P.CASH 钱包支持全部 5 种格式，但建议使用以 BIP-84 格式运行的 %2$s 钱包。以此格式运行的钱包在发送 %3$s 交易时支付的手续费最低。</string>
     <string name="ManageCoins_BchTypeDescription">有2种比特币现金钱包可用于接收应收款的常见地址格式：\n\n- TYPE 0（较旧）\n- TYPE 145（较新）\n\n虽然P.CASH钱包支持全部两种格式，但是我们建议使用以TYPE 145格式运作的比特币现金钱包。</string>
     <string name="ManageCoins_ContractAddress">联系地址</string>
 

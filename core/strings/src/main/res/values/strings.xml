@@ -1442,6 +1442,15 @@ Proceed only if you\'re sure.</string>
 \n- BIP-86 (newest)
 \n
 \nWhile P.CASH wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
+    <string name="manage_coins_bips_description_litecoin">There are 5 common address formats %1$s wallets can use to receive incoming payments:
+\n
+\n- BIP-44 (older)
+\n- BIP-49
+\n- BIP-84 (recommended)
+\n- BIP-86 (newest)
+\n- MWEB (private)
+\n
+\nWhile P.CASH wallet supports all 5 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)

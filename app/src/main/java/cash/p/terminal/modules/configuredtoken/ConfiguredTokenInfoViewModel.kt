@@ -61,7 +61,7 @@ class ConfiguredTokenInfoViewModel(
             }
 
             is TokenType.Derived -> {
-                Bips(token.blockchain.name)
+                Bips(token.blockchain.name, token.blockchainType)
             }
 
             is TokenType.AddressTyped -> {
@@ -118,7 +118,10 @@ sealed class ConfiguredTokenInfoType {
         val explorerUrl: String?
     ) : ConfiguredTokenInfoType()
 
-    data class Bips(val blockchainName: String) : ConfiguredTokenInfoType()
+    data class Bips(
+        val blockchainName: String,
+        val blockchainType: BlockchainType
+    ) : ConfiguredTokenInfoType()
     object Bch : ConfiguredTokenInfoType()
     data class BirthdayHeight(val height: Long?) : ConfiguredTokenInfoType()
 }

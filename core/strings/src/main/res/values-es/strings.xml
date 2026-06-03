@@ -1058,6 +1058,15 @@
 \n- BIP-86 (más reciente)
 \n
 \nMientras que el monedero imparable soporta todos los 4 de ellos recomienda usar un monedero %2$s que opere en formato BIP-84. Las billeteras que operan en este formato pueden pagar las comisiones más bajas al enviar transacciones %3$s.</string>
+    <string name="manage_coins_bips_description_litecoin">Existen 5 formatos de dirección comunes que los monederos %1$s pueden usar para recibir pagos entrantes:
+\n
+\n- BIP-44 (más antiguo)
+\n- BIP-49
+\n- BIP-84 (recomendado)
+\n- BIP-86 (más reciente)
+\n- MWEB (privado)
+\n
+\nAunque el monedero P.CASH admite los 5, se recomienda usar un monedero %2$s que opere en formato BIP-84. Los monederos que operan en este formato pagan las comisiones más bajas al enviar transacciones %3$s.</string>
     <string name="ManageCoins_BchTypeDescription">Hay 2 formatos de dirección de las carteras Bitcoin Cash pueden usar para recibir pagos entrantes:\n\n- TYPE 0 (más antiguo)\n- TYPE 145 (más reciente)\n\nMientras que el monedero imparable soporta ambos se recomienda usar un monedero Bitcoin Cash que funcione en formato TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">AÑADIR CONTRACTO</string>
 
