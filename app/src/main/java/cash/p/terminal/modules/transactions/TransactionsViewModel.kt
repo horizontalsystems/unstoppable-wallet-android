@@ -16,6 +16,7 @@ import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.storage.toRecordUidMap
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase
+import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
@@ -113,6 +114,8 @@ class TransactionsViewModel(
     private var swapObservationJob: Job? = null
     private var statusCheckerJob: Job? = null
     private val syncPendingMultiSwapUseCase: SyncPendingMultiSwapUseCase = getKoinInstance()
+    private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase =
+        getKoinInstance()
 
     val balanceHidden: Boolean
         get() = balanceHiddenManager.balanceHidden
@@ -483,6 +486,7 @@ class TransactionsViewModel(
     }
 
     private suspend fun updateAllUnfinishedSwapStatuses() {
+        updateSwapProviderTransactionsStatusUseCase()
         syncPendingMultiSwapUseCase()
     }
 

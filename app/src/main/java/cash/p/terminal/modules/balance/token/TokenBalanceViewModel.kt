@@ -49,7 +49,6 @@ import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
-import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
@@ -81,8 +80,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.Instant
-
-private const val ADAPTER_AWAIT_TIMEOUT_MS = 5000L
 
 @Suppress("LongParameterList")
 class TokenBalanceViewModel(
@@ -300,19 +297,11 @@ class TokenBalanceViewModel(
         }
 
         viewModelScope.launch {
-            val adapter = adapterManager.awaitAdapterForWallet<IReceiveAdapter>(
-                wallet,
-                ADAPTER_AWAIT_TIMEOUT_MS
-            )
-            if (adapter != null) {
-                swapProviderTransactionsStorage.observeByToken(
-                    token = wallet.token,
-                    address = adapter.receiveAddress
-                ).collect { swaps ->
+            swapProviderTransactionsStorage.observeAllByAccount(wallet.account.id)
+                .collect { swaps ->
                     swapStatusMap = swaps.toRecordUidMap()
                     refreshTransactionsFromCache()
                 }
-            }
         }
 
         totalBalance.start(viewModelScope)
@@ -379,12 +368,7 @@ class TokenBalanceViewModel(
         statusCheckerJob?.cancel()
         statusCheckerJob = viewModelScope.launch {
             while (isActive) {
-                adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
-                    updateSwapProviderTransactionsStatusUseCase(
-                        wallet.token,
-                        adapter.receiveAddress
-                    )
-                }
+                updateSwapProviderTransactionsStatusUseCase()
                 delay(30_000)
             }
         }

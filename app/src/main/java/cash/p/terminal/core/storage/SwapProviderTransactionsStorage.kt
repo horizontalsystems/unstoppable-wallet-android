@@ -39,6 +39,16 @@ class SwapProviderTransactionsStorage(
         limit = limit
     )
 
+    fun getAllUnfinishedByAccount(
+        accountId: String,
+        statusesExcluded: List<String>,
+        limit: Int
+    ) = dao.getAllUnfinishedByAccount(
+        accountId = accountId,
+        statusesExcluded = statusesExcluded,
+        limit = limit
+    )
+
     fun observeByToken(
         token: Token,
         address: String,
@@ -51,6 +61,11 @@ class SwapProviderTransactionsStorage(
     )
 
     fun observeAll(): Flow<List<SwapProviderTransaction>> = dao.observeAll()
+
+    fun observeAllByAccount(
+        accountId: String,
+        limit: Int = 100
+    ): Flow<List<SwapProviderTransaction>> = dao.observeAllByAccount(accountId, limit)
 
     suspend fun getTransaction(transactionId: String) =
         withContext(dispatcherProvider.io) {

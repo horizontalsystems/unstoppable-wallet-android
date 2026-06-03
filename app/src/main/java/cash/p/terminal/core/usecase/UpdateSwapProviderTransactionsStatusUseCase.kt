@@ -8,29 +8,51 @@ import cash.p.terminal.network.data.EncodedSecrets.getKoin
 import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.network.swaprepository.SwapProviderTransactionStatusRepository
 import cash.p.terminal.network.swaprepository.SwapProviderTransactionStatusResult
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.koin.core.qualifier.named
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 class UpdateSwapProviderTransactionsStatusUseCase(
-    private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage
+    private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
+    private val accountManager: IAccountManager
 ) {
     suspend operator fun invoke(
         token: Token,
         address: String
     ): Boolean = withContext(Dispatchers.IO) {
+        pollAndUpdate(
+            swapProviderTransactionsStorage.getAll(
+                token = token,
+                address = address,
+                statusesExcluded = SwapProviderTransaction.FINISHED_STATUSES,
+                limit = STATUS_CHECK_LIMIT
+            )
+        )
+    }
+
+    suspend operator fun invoke(): Boolean = withContext(Dispatchers.IO) {
+        val accountId = accountManager.activeAccount?.id ?: return@withContext false
+        pollAndUpdate(
+            swapProviderTransactionsStorage.getAllUnfinishedByAccount(
+                accountId = accountId,
+                statusesExcluded = SwapProviderTransaction.FINISHED_STATUSES,
+                limit = STATUS_CHECK_LIMIT
+            )
+        )
+    }
+
+    private suspend fun pollAndUpdate(
+        transactions: List<SwapProviderTransaction>
+    ): Boolean = coroutineScope {
         val changed = AtomicBoolean(false)
-        swapProviderTransactionsStorage.getAll(
-            token = token,
-            address = address,
-            statusesExcluded = SwapProviderTransaction.FINISHED_STATUSES,
-            limit = 10
-        ).map { transaction ->
+        transactions.map { transaction ->
             async {
                 getTransactionStatus(transaction)?.let { result ->
                     if (updateIfChanged(transaction, result)) {
@@ -106,5 +128,9 @@ class UpdateSwapProviderTransactionsStatusUseCase(
         } catch (e: Exception) {
             null
         }
+    }
+
+    private companion object {
+        const val STATUS_CHECK_LIMIT = 10
     }
 }

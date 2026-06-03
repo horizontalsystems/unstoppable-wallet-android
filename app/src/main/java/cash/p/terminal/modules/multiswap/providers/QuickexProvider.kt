@@ -54,7 +54,7 @@ class QuickexProvider(
     override val walletUseCase: WalletUseCase,
     private val quickexRepository: QuickexRepository,
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
-    accountManager: IAccountManager,
+    private val accountManager: IAccountManager,
 ) : IMultiSwapProvider {
     override val id = "quickex"
     override val title = "Quickex"
@@ -447,7 +447,8 @@ class QuickexProvider(
                 coinUidOut = tokenOut.coin.uid,
                 blockchainTypeOut = tokenOut.blockchainType.uid,
                 amountOut = transaction.amountToGet,
-                addressOut = walletUseCase.getReceiveAddress(tokenOut)
+                addressOut = walletUseCase.getReceiveAddress(tokenOut),
+                accountId = accountManager.activeAccount?.id.orEmpty()
             )
 
             SwapFinalQuoteEvm(
