@@ -100,10 +100,12 @@ class SwapProviderTransactionsStorage(
     fun getByTokenOut(
         coinUid: String,
         blockchainType: String,
-        timestamp: Long
+        timestamp: Long,
+        accountId: String
     ) = dao.getByTokenOut(
         coinUid = coinUid,
         blockchainType = blockchainType,
+        accountId = accountId,
         dateFrom = timestamp - THRESHOLD_MSEC,
         dateTo = timestamp + THRESHOLD_MSEC
     )
@@ -164,10 +166,12 @@ class SwapProviderTransactionsStorage(
         toTimestamp: Long,
         amount: BigDecimal,
         tolerance: Double,
+        accountId: String,
         limit: Int = 100
     ): List<SwapProviderTransaction> = dao.getUnmatchedSwapsByTokenOut(
         coinUid = coinUid,
         blockchainType = blockchainType,
+        accountId = accountId,
         dateFrom = fromTimestamp,
         dateTo = toTimestamp,
         amount = amount.toDouble(),

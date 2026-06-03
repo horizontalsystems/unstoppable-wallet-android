@@ -368,7 +368,7 @@ class TokenBalanceViewModel(
         statusCheckerJob?.cancel()
         statusCheckerJob = viewModelScope.launch {
             while (isActive) {
-                updateSwapProviderTransactionsStatusUseCase()
+                updateSwapProviderTransactionsStatusUseCase(wallet.account.id)
                 delay(30_000)
             }
         }

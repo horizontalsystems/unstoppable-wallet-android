@@ -486,7 +486,9 @@ class TransactionsViewModel(
     }
 
     private suspend fun updateAllUnfinishedSwapStatuses() {
-        updateSwapProviderTransactionsStatusUseCase()
+        walletManager.activeWallets.firstOrNull()?.account?.id?.let { accountId ->
+            updateSwapProviderTransactionsStatusUseCase(accountId)
+        }
         syncPendingMultiSwapUseCase()
     }
 

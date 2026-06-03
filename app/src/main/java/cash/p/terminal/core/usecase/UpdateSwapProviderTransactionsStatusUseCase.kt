@@ -8,7 +8,6 @@ import cash.p.terminal.network.data.EncodedSecrets.getKoin
 import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.network.swaprepository.SwapProviderTransactionStatusRepository
 import cash.p.terminal.network.swaprepository.SwapProviderTransactionStatusResult
-import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,8 +19,7 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 class UpdateSwapProviderTransactionsStatusUseCase(
-    private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
-    private val accountManager: IAccountManager
+    private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage
 ) {
     suspend operator fun invoke(
         token: Token,
@@ -37,8 +35,7 @@ class UpdateSwapProviderTransactionsStatusUseCase(
         )
     }
 
-    suspend operator fun invoke(): Boolean = withContext(Dispatchers.IO) {
-        val accountId = accountManager.activeAccount?.id ?: return@withContext false
+    suspend operator fun invoke(accountId: String): Boolean = withContext(Dispatchers.IO) {
         pollAndUpdate(
             swapProviderTransactionsStorage.getAllUnfinishedByAccount(
                 accountId = accountId,

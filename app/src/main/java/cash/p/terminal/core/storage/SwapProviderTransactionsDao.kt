@@ -59,7 +59,8 @@ interface SwapProviderTransactionsDao {
     @Query("SELECT * FROM SwapProviderTransaction ORDER BY date DESC LIMIT 100")
     fun observeAll(): Flow<List<SwapProviderTransaction>>
 
-    @Query("SELECT * FROM SwapProviderTransaction WHERE accountId = :accountId ORDER BY date DESC LIMIT :limit")
+    // accountId IN ('', :accountId): '' covers legacy rows created before accountId existed
+    @Query("SELECT * FROM SwapProviderTransaction WHERE accountId IN ('', :accountId) ORDER BY date DESC LIMIT :limit")
     fun observeAllByAccount(
         accountId: String,
         limit: Int
@@ -90,11 +91,12 @@ interface SwapProviderTransactionsDao {
 
     @Query(
         "SELECT * FROM SwapProviderTransaction WHERE " +
-                "(coinUidOut = :coinUid AND blockchainTypeOut = :blockchainType AND date >= :dateFrom AND date <= :dateTo) ORDER BY date DESC LIMIT 1"
+                "(coinUidOut = :coinUid AND blockchainTypeOut = :blockchainType AND accountId IN ('', :accountId) AND date >= :dateFrom AND date <= :dateTo) ORDER BY date DESC LIMIT 1"
     )
     fun getByTokenOut(
         coinUid: String,
         blockchainType: String,
+        accountId: String,
         dateFrom: Long,
         dateTo: Long
     ): SwapProviderTransaction?
@@ -146,6 +148,7 @@ interface SwapProviderTransactionsDao {
         SELECT * FROM SwapProviderTransaction
         WHERE coinUidOut = :coinUid
         AND blockchainTypeOut = :blockchainType
+        AND accountId IN ('', :accountId)
         AND incomingRecordUid IS NULL
         AND date >= :dateFrom
         AND date <= :dateTo
@@ -158,6 +161,7 @@ interface SwapProviderTransactionsDao {
     fun getUnmatchedSwapsByTokenOut(
         coinUid: String,
         blockchainType: String,
+        accountId: String,
         dateFrom: Long,
         dateTo: Long,
         amount: Double,

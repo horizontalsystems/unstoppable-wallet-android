@@ -46,6 +46,7 @@ class SwapTransactionMatcherTest {
         coinUid = "litecoin",
         blockchainType = "litecoin",
         addresses = addresses,
+        accountId = "acc-1",
     )
 
     @Test
@@ -84,7 +85,7 @@ class SwapTransactionMatcherTest {
         val swap = swap()
         every { storage.getByIncomingRecordUid(any()) } returns null
         every {
-            storage.getUnmatchedSwapsByTokenOut(any(), any(), any(), any(), any(), any(), any())
+            storage.getUnmatchedSwapsByTokenOut(any(), any(), any(), any(), any(), any(), "acc-1", any())
         } returns listOf(swap)
 
         val result = matcher.findMatchingSwap(incoming(addresses = null))
@@ -98,7 +99,7 @@ class SwapTransactionMatcherTest {
         val swap = swap()
         every { storage.getByIncomingRecordUid(any()) } returns null
         every { storage.getByAddressAndAmount(any(), any(), any(), any(), any()) } returns null
-        every { storage.getByTokenOut("litecoin", "litecoin", 1_000L) } returns swap
+        every { storage.getByTokenOut("litecoin", "litecoin", 1_000L, "acc-1") } returns swap
 
         val result = matcher.findMatchingSwap(incoming())
 
@@ -109,7 +110,7 @@ class SwapTransactionMatcherTest {
     fun findMatchingSwap_nothingFound_returnsNull() {
         every { storage.getByIncomingRecordUid(any()) } returns null
         every { storage.getByAddressAndAmount(any(), any(), any(), any(), any()) } returns null
-        every { storage.getByTokenOut(any(), any(), any()) } returns null
+        every { storage.getByTokenOut(any(), any(), any(), any()) } returns null
 
         val result = matcher.findMatchingSwap(incoming())
 

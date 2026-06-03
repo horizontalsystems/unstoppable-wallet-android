@@ -18,6 +18,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.Coin
@@ -62,6 +63,7 @@ class TransactionViewItemFactoryCacheTest {
     private val marketKit = mockk<MarketKitWrapper>(relaxed = true)
     private val localStorage = mockk<ILocalStorage>()
     private val poisonAddressManager = mockk<PoisonAddressManager>()
+    private val accountManager = mockk<IAccountManager>(relaxed = true)
     private val appNumberFormatter = mockk<IAppNumberFormatter>()
 
     private lateinit var factory: TransactionViewItemFactory
@@ -99,6 +101,7 @@ class TransactionViewItemFactoryCacheTest {
             marketKit = marketKit,
             localStorage = localStorage,
             poisonAddressManager = poisonAddressManager,
+            accountManager = accountManager,
         )
     }
 
