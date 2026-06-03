@@ -61,7 +61,7 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.receive.ReceiveFragment
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.send.SendResult
-import cash.p.terminal.modules.syncerror.SyncErrorDialog
+import cash.p.terminal.modules.syncerror.showSyncErrorDialog
 import cash.p.terminal.modules.transactions.AmlCheckInfoBottomSheet
 import cash.p.terminal.modules.transactions.AmlCheckPromoBanner
 import cash.p.terminal.modules.transactions.TransactionViewItem
@@ -671,10 +671,7 @@ private fun onSyncErrorClicked(
             val wallet = syncErrorDetails.wallet
             val errorMessage = syncErrorDetails.errorMessage
 
-            navController.slideFromBottom(
-                R.id.syncErrorDialog,
-                SyncErrorDialog.Input(wallet, errorMessage)
-            )
+            navController.showSyncErrorDialog(wallet, errorMessage)
         }
         is BalanceViewModel.SyncError.NetworkNotAvailable -> Unit // We already show this at bottom panel
     }

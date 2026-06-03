@@ -37,9 +37,8 @@ import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.balance.SyncingProgress
 import cash.p.terminal.modules.balance.SyncingProgressType
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
-import cash.p.terminal.modules.syncerror.SyncErrorDialog
+import cash.p.terminal.modules.syncerror.showSyncErrorDialog
 import cash.p.terminal.ui_compose.components.DraggableCardSimple
-import cash.p.terminal.navigation.slideFromBottom
 import cash.p.terminal.ui.compose.components.Badge
 import cash.p.terminal.ui.compose.components.CoinIconWithSyncProgress
 import cash.p.terminal.ui_compose.components.CellMultilineClear
@@ -331,10 +330,7 @@ fun onSyncErrorClicked(
             val wallet = syncErrorDetails.wallet
             val errorMessage = syncErrorDetails.errorMessage
 
-            navController.slideFromBottom(
-                R.id.syncErrorDialog,
-                SyncErrorDialog.Input(wallet, errorMessage)
-            )
+            navController.showSyncErrorDialog(wallet, errorMessage)
         }
 
         is BalanceViewModel.SyncError.NetworkNotAvailable -> {
@@ -374,4 +370,3 @@ private fun BalanceCardSwipablePreview() {
         )
     }
 }
-
