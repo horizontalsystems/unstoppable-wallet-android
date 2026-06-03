@@ -114,12 +114,14 @@ class SwapProviderTransactionsStorage(
         address: String,
         blockchainType: String,
         coinUid: String,
+        accountId: String,
         amount: BigDecimal,
         timestamp: Long
     ): SwapProviderTransaction? = dao.getByAddressAndAmount(
         address = address,
         blockchainType = blockchainType,
         coinUid = coinUid,
+        accountId = accountId,
         amount = amount.toDouble(),
         tolerance = AMOUNT_TOLERANCE,
         timestamp = timestamp,

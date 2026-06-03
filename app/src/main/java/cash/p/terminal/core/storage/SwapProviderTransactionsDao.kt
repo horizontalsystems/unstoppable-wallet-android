@@ -110,6 +110,7 @@ interface SwapProviderTransactionsDao {
         addressOut = :address
         AND blockchainTypeOut = :blockchainType
         AND coinUidOut = :coinUid
+        AND accountId IN ('', :accountId)
         AND incomingRecordUid IS NULL
         AND CAST(COALESCE(amountOutReal, amountOut) AS REAL) != 0
         AND ABS(CAST(COALESCE(amountOutReal, amountOut) AS REAL) - :amount) / CAST(COALESCE(amountOutReal, amountOut) AS REAL) < :tolerance
@@ -126,6 +127,7 @@ interface SwapProviderTransactionsDao {
         address: String,
         blockchainType: String,
         coinUid: String,
+        accountId: String,
         amount: Double,
         tolerance: Double,
         timestamp: Long,

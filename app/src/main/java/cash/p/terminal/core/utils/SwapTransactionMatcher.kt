@@ -56,6 +56,7 @@ class SwapTransactionMatcher(
                     address = address,
                     blockchainType = transaction.blockchainType,
                     coinUid = transaction.coinUid,
+                    accountId = transaction.accountId,
                     amount = amount,
                     timestamp = transaction.timestamp
                 )
