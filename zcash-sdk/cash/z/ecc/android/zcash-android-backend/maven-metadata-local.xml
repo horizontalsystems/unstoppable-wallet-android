@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>cash.z.ecc.android</groupId>
+  <artifactId>zcash-android-backend</artifactId>
+  <versioning>
+    <latest>2.5.2-SNAPSHOT</latest>
+    <versions>
+      <version>2.5.2-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20260602230642</lastUpdated>
+  </versioning>
+</metadata>

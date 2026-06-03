@@ -1,0 +1,170 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "cash.z.ecc.android",
+    "module": "lightwallet-client",
+    "version": "2.5.2-SNAPSHOT",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "lightwallet-client-2.5.2-SNAPSHOT.aar",
+          "url": "lightwallet-client-2.5.2-SNAPSHOT.aar",
+          "size": 595259,
+          "sha512": "5098679e4bf59878fa3bf96acd601c9413a914b86973e9addabda678909fe6a4ad101c02cf5206f40b7814ed85df410058d927219a74f6c11a348f2ab8d3826a",
+          "sha256": "688b912da840fbcbbf33fff6b679828e2d3ce3a20c43667332ea79644d5dd3ae",
+          "sha1": "9ab43da8faa39b51c96896dd5b74e038b084b716",
+          "md5": "c6bde949ac826d85258b33f4f79685fa"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.9.1"
+          }
+        },
+        {
+          "group": "io.grpc",
+          "module": "grpc-android",
+          "version": {
+            "requires": "1.78.0"
+          }
+        },
+        {
+          "group": "com.google.protobuf",
+          "module": "protobuf-kotlin-lite",
+          "version": {
+            "requires": "4.34.0"
+          }
+        },
+        {
+          "group": "io.grpc",
+          "module": "grpc-kotlin-stub",
+          "version": {
+            "requires": "1.5.0"
+          }
+        },
+        {
+          "group": "io.grpc",
+          "module": "grpc-okhttp",
+          "version": {
+            "requires": "1.78.0"
+          }
+        },
+        {
+          "group": "io.grpc",
+          "module": "grpc-protobuf-lite",
+          "version": {
+            "requires": "1.78.0"
+          }
+        },
+        {
+          "group": "io.grpc",
+          "module": "grpc-stub",
+          "version": {
+            "requires": "1.78.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.3.20"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-core",
+          "version": {
+            "requires": "1.10.2"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-coroutines-android",
+          "version": {
+            "requires": "1.10.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lightwallet-client-2.5.2-SNAPSHOT.aar",
+          "url": "lightwallet-client-2.5.2-SNAPSHOT.aar",
+          "size": 595259,
+          "sha512": "5098679e4bf59878fa3bf96acd601c9413a914b86973e9addabda678909fe6a4ad101c02cf5206f40b7814ed85df410058d927219a74f6c11a348f2ab8d3826a",
+          "sha256": "688b912da840fbcbbf33fff6b679828e2d3ce3a20c43667332ea79644d5dd3ae",
+          "sha1": "9ab43da8faa39b51c96896dd5b74e038b084b716",
+          "md5": "c6bde949ac826d85258b33f4f79685fa"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseSourcePublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "lightwallet-client-2.5.2-SNAPSHOT-sources.jar",
+          "url": "lightwallet-client-2.5.2-SNAPSHOT-sources.jar",
+          "size": 126351,
+          "sha512": "e51fc45705e26632da418b62a5117a56d711c7eb00e3c455cc09fcf8bc62df68a93283d2f600805b8d6f32fcba2d9061e0b0925320250cbfa6d3c784e0216627",
+          "sha256": "bb8d2d289c0fdc529498c80d862221e0845486e01842e937edd2c26af82eb4af",
+          "sha1": "3feda34041635f8bfda7bdd6213d0618c2bae1a1",
+          "md5": "1a3db34de5e10e3bac31e54e0c202ba9"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseJavaDocPublication",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "lightwallet-client-2.5.2-SNAPSHOT-javadoc.jar",
+          "url": "lightwallet-client-2.5.2-SNAPSHOT-javadoc.jar",
+          "size": 1489009,
+          "sha512": "68919d0f315e2ee00d53797fe43a07e1d7a7ecac20095675edccc118f54e374b7b4a52af719a41abc29030a262277002162cf801906f093bff566cd9d8fc6353",
+          "sha256": "78d1ceb913a34f50a8fb76c5e65b76acb3b8047609fe585dc1846ba6ef04b3da",
+          "sha1": "443bc4383fe36c05de3cb526d1d4b27695e42228",
+          "md5": "519e330c07666b773c8028b4f298511b"
+        }
+      ]
+    }
+  ]
+}
