@@ -16,6 +16,7 @@ import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
+import cash.z.ecc.android.sdk.exception.CompactBlockProcessorException
 import cash.z.ecc.android.sdk.model.AccountBalance
 import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.BlockHeight
@@ -45,6 +46,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -206,6 +208,27 @@ class ZcashAdapterCorruptionRecoveryTest {
         )
 
         assertFalse("Should return false to signal abort", result ?: true)
+        coVerify(timeout = VERIFY_TIMEOUT) { Synchronizer.erase(any(), ZcashNetwork.Mainnet, "zcash_test") }
+        verifyRecoveryResubscribed()
+    }
+
+    @Test
+    fun onProcessorError_rustDatabaseMalformed_triggersRecovery() = runTest(dispatcher) {
+        adapter = createAdapter()
+
+        val rustError = RuntimeException(
+            "Rust error while scanning blocks (limit 10): " +
+                    "The underlying datasource produced the following error: " +
+                    "database disk image is malformed"
+        )
+        val result = capturedProcessorErrorHandler?.invoke(
+            CompactBlockProcessorException.FailedSynchronizationException(
+                "unable to resolve the error after 5 correction attempts",
+                CompactBlockProcessorException.FailedScanException(rustError),
+            )
+        )
+
+        assertFalse("Should detect Rust database malformed error", result ?: true)
         coVerify(timeout = VERIFY_TIMEOUT) { Synchronizer.erase(any(), ZcashNetwork.Mainnet, "zcash_test") }
         verifyRecoveryResubscribed()
     }
@@ -813,6 +836,58 @@ class ZcashAdapterCorruptionRecoveryTest {
     }
 
     @Test
+    fun onProcessorInfo_afterSynced_doesNotRestoreStaleBlocksRemaining() = runTest(dispatcher) {
+        adapter = createAdapter()
+        adapter.start()
+
+        awaitState { it is AdapterState.Syncing }
+
+        processorInfoFlow.value = CompactBlockProcessor.ProcessorInfo(
+            networkBlockHeight = BlockHeight.new(3_500_000L),
+            overallSyncRange = null,
+            firstUnenhancedHeight = null
+        )
+        awaitState { it is AdapterState.Syncing && it.blocksRemained == 1_000_000L }
+
+        statusFlow.value = Synchronizer.Status.SYNCED
+        awaitState { it is AdapterState.Synced }
+
+        processorInfoFlow.value = CompactBlockProcessor.ProcessorInfo(
+            networkBlockHeight = BlockHeight.new(3_500_001L),
+            overallSyncRange = null,
+            firstUnenhancedHeight = null
+        )
+        advanceUntilIdle()
+
+        assertEquals(AdapterState.Synced, adapter.balanceState)
+    }
+
+    @Test
+    fun onStatus_syncingAfterSynced_allowsFreshProgressUpdates() = runTest(dispatcher) {
+        adapter = createAdapter()
+        adapter.start()
+
+        awaitState { it is AdapterState.Syncing }
+
+        statusFlow.value = Synchronizer.Status.SYNCED
+        awaitState { it is AdapterState.Synced }
+
+        statusFlow.value = Synchronizer.Status.SYNCING
+        awaitState { it is AdapterState.Syncing }
+
+        processorInfoFlow.value = CompactBlockProcessor.ProcessorInfo(
+            networkBlockHeight = BlockHeight.new(3_500_000L),
+            overallSyncRange = null,
+            firstUnenhancedHeight = null
+        )
+        progressFlow.value = PercentDecimal(0.5f)
+
+        awaitState {
+            it is AdapterState.Syncing && it.progress == 50.0 && it.blocksRemained == 500_000L
+        }
+    }
+
+    @Test
     fun onStatus_syncingFromNonSyncingState_createsFreshSyncing() = runTest(dispatcher) {
         adapter = createAdapter()
         adapter.start()
@@ -820,8 +895,8 @@ class ZcashAdapterCorruptionRecoveryTest {
         // Wait for subscribe() to process initial SYNCING status
         awaitState { it is AdapterState.Syncing }
 
-        // Move to STOPPED
-        statusFlow.value = Synchronizer.Status.STOPPED
+        // Move to a non-syncing state without triggering synchronizer recreation.
+        statusFlow.value = Synchronizer.Status.DISCONNECTED
         awaitState { it is AdapterState.NotSynced }
 
         // Transition to SYNCING — should create fresh Syncing (no progress)
