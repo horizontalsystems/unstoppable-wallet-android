@@ -39,6 +39,16 @@ class SwapProviderTransactionsStorage(
         limit = limit
     )
 
+    fun getAllUnfinishedByAccount(
+        accountId: String,
+        statusesExcluded: List<String>,
+        limit: Int
+    ) = dao.getAllUnfinishedByAccount(
+        accountId = accountId,
+        statusesExcluded = statusesExcluded,
+        limit = limit
+    )
+
     fun observeByToken(
         token: Token,
         address: String,
@@ -51,6 +61,11 @@ class SwapProviderTransactionsStorage(
     )
 
     fun observeAll(): Flow<List<SwapProviderTransaction>> = dao.observeAll()
+
+    fun observeAllByAccount(
+        accountId: String,
+        limit: Int = 100
+    ): Flow<List<SwapProviderTransaction>> = dao.observeAllByAccount(accountId, limit)
 
     suspend fun getTransaction(transactionId: String) =
         withContext(dispatcherProvider.io) {
@@ -85,10 +100,12 @@ class SwapProviderTransactionsStorage(
     fun getByTokenOut(
         coinUid: String,
         blockchainType: String,
-        timestamp: Long
+        timestamp: Long,
+        accountId: String
     ) = dao.getByTokenOut(
         coinUid = coinUid,
         blockchainType = blockchainType,
+        accountId = accountId,
         dateFrom = timestamp - THRESHOLD_MSEC,
         dateTo = timestamp + THRESHOLD_MSEC
     )
@@ -97,12 +114,14 @@ class SwapProviderTransactionsStorage(
         address: String,
         blockchainType: String,
         coinUid: String,
+        accountId: String,
         amount: BigDecimal,
         timestamp: Long
     ): SwapProviderTransaction? = dao.getByAddressAndAmount(
         address = address,
         blockchainType = blockchainType,
         coinUid = coinUid,
+        accountId = accountId,
         amount = amount.toDouble(),
         tolerance = AMOUNT_TOLERANCE,
         timestamp = timestamp,
@@ -149,10 +168,12 @@ class SwapProviderTransactionsStorage(
         toTimestamp: Long,
         amount: BigDecimal,
         tolerance: Double,
+        accountId: String,
         limit: Int = 100
     ): List<SwapProviderTransaction> = dao.getUnmatchedSwapsByTokenOut(
         coinUid = coinUid,
         blockchainType = blockchainType,
+        accountId = accountId,
         dateFrom = fromTimestamp,
         dateTo = toTimestamp,
         amount = amount.toDouble(),

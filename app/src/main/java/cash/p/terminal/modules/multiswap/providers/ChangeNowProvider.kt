@@ -56,7 +56,7 @@ class ChangeNowProvider(
     private val changeNowRepository: ChangeNowRepository,
     private val getChangeNowAssociatedCoinTickerUseCase: GetChangeNowAssociatedCoinTickerUseCase,
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
-    accountManager: IAccountManager,
+    private val accountManager: IAccountManager,
 ) : IMultiSwapProvider {
     override val id = "changenow"
     override val title = "ChangeNow"
@@ -371,7 +371,8 @@ class ChangeNowProvider(
                 coinUidOut = tokenOut.coin.uid,
                 blockchainTypeOut = tokenOut.blockchainType.uid,
                 amountOut = transaction.amount,
-                addressOut = walletUseCase.getReceiveAddress(tokenOut)
+                addressOut = walletUseCase.getReceiveAddress(tokenOut),
+                accountId = accountManager.activeAccount?.id.orEmpty()
             )
 
             SwapFinalQuoteEvm(

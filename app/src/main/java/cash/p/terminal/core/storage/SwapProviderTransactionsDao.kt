@@ -28,6 +28,18 @@ interface SwapProviderTransactionsDao {
         limit: Int
     ): List<SwapProviderTransaction>
 
+    // accountId IN ('', :accountId): '' covers legacy rows created before accountId existed
+    @Query(
+        "SELECT * FROM SwapProviderTransaction WHERE " +
+                "accountId IN ('', :accountId) AND " +
+                "status not in (:statusesExcluded) ORDER BY date DESC LIMIT :limit"
+    )
+    fun getAllUnfinishedByAccount(
+        accountId: String,
+        statusesExcluded: List<String>,
+        limit: Int
+    ): List<SwapProviderTransaction>
+
     @Query(
         "SELECT * FROM SwapProviderTransaction WHERE " +
                 "((coinUidIn = :coinUid AND blockchainTypeIn = :blockchainType AND addressIn = :address) OR " +
@@ -46,6 +58,13 @@ interface SwapProviderTransactionsDao {
 
     @Query("SELECT * FROM SwapProviderTransaction ORDER BY date DESC LIMIT 100")
     fun observeAll(): Flow<List<SwapProviderTransaction>>
+
+    // accountId IN ('', :accountId): '' covers legacy rows created before accountId existed
+    @Query("SELECT * FROM SwapProviderTransaction WHERE accountId IN ('', :accountId) ORDER BY date DESC LIMIT :limit")
+    fun observeAllByAccount(
+        accountId: String,
+        limit: Int
+    ): Flow<List<SwapProviderTransaction>>
 
     @Query(
         "SELECT * FROM SwapProviderTransaction WHERE " +
@@ -72,31 +91,35 @@ interface SwapProviderTransactionsDao {
 
     @Query(
         "SELECT * FROM SwapProviderTransaction WHERE " +
-                "(coinUidOut = :coinUid AND blockchainTypeOut = :blockchainType AND date >= :dateFrom AND date <= :dateTo) ORDER BY date DESC LIMIT 1"
+                "(coinUidOut = :coinUid AND blockchainTypeOut = :blockchainType AND accountId IN ('', :accountId) AND date >= :dateFrom AND date <= :dateTo) ORDER BY date DESC LIMIT 1"
     )
     fun getByTokenOut(
         coinUid: String,
         blockchainType: String,
+        accountId: String,
         dateFrom: Long,
         dateTo: Long
     ): SwapProviderTransaction?
 
+    // COALESCE(amountOutReal, amountOut): match on the real out amount once known,
+    // otherwise fall back to the quoted amount so the swap is recognized before its
+    // status is polled (addressOut is the discriminating key, amount guards mismatches).
     @Query(
         """
         SELECT * FROM SwapProviderTransaction WHERE
         addressOut = :address
         AND blockchainTypeOut = :blockchainType
         AND coinUidOut = :coinUid
+        AND accountId IN ('', :accountId)
         AND incomingRecordUid IS NULL
-        AND amountOutReal IS NOT NULL
-        AND CAST(amountOutReal AS REAL) != 0
-        AND ABS(CAST(amountOutReal AS REAL) - :amount) / CAST(amountOutReal AS REAL) < :tolerance
+        AND CAST(COALESCE(amountOutReal, amountOut) AS REAL) != 0
+        AND ABS(CAST(COALESCE(amountOutReal, amountOut) AS REAL) - :amount) / CAST(COALESCE(amountOutReal, amountOut) AS REAL) < :tolerance
         AND (
             (finishedAt IS NOT NULL AND :timestamp >= finishedAt - :timeWindowMs AND :timestamp <= finishedAt + :timeWindowMs)
             OR
             (finishedAt IS NULL AND date >= :dateFrom AND date <= :dateTo)
         )
-        ORDER BY ABS(CAST(amountOutReal AS REAL) - :amount) ASC, date ASC
+        ORDER BY ABS(CAST(COALESCE(amountOutReal, amountOut) AS REAL) - :amount) ASC, date ASC
         LIMIT 1
         """
     )
@@ -104,6 +127,7 @@ interface SwapProviderTransactionsDao {
         address: String,
         blockchainType: String,
         coinUid: String,
+        accountId: String,
         amount: Double,
         tolerance: Double,
         timestamp: Long,
@@ -126,6 +150,7 @@ interface SwapProviderTransactionsDao {
         SELECT * FROM SwapProviderTransaction
         WHERE coinUidOut = :coinUid
         AND blockchainTypeOut = :blockchainType
+        AND accountId IN ('', :accountId)
         AND incomingRecordUid IS NULL
         AND date >= :dateFrom
         AND date <= :dateTo
@@ -138,6 +163,7 @@ interface SwapProviderTransactionsDao {
     fun getUnmatchedSwapsByTokenOut(
         coinUid: String,
         blockchainType: String,
+        accountId: String,
         dateFrom: Long,
         dateTo: Long,
         amount: Double,

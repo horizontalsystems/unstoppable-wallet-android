@@ -13,7 +13,8 @@ data class IncomingTransaction(
     val timestamp: Long,  // in milliseconds
     val coinUid: String,
     val blockchainType: String,
-    val addresses: List<String>?
+    val addresses: List<String>?,
+    val accountId: String
 )
 
 /**
@@ -55,6 +56,7 @@ class SwapTransactionMatcher(
                     address = address,
                     blockchainType = transaction.blockchainType,
                     coinUid = transaction.coinUid,
+                    accountId = transaction.accountId,
                     amount = amount,
                     timestamp = transaction.timestamp
                 )
@@ -74,7 +76,8 @@ class SwapTransactionMatcher(
                 fromTimestamp = transaction.timestamp - TIME_WINDOW_MS,
                 toTimestamp = transaction.timestamp,
                 amount = amount,
-                tolerance = AMOUNT_TOLERANCE
+                tolerance = AMOUNT_TOLERANCE,
+                accountId = transaction.accountId
             ).firstOrNull()?.also { swap ->
                 storage.setIncomingRecordUid(
                     date = swap.date,
@@ -90,7 +93,8 @@ class SwapTransactionMatcher(
         return matchedSwap ?: storage.getByTokenOut(
             coinUid = transaction.coinUid,
             blockchainType = transaction.blockchainType,
-            timestamp = transaction.timestamp
+            timestamp = transaction.timestamp,
+            accountId = transaction.accountId
         )
     }
 
