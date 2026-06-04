@@ -1,9 +1,9 @@
 ## 🚀 Version 0.56.1 Update
-_Release date: June 3, 2026_
+_Release date: June 4, 2026_
 
 ### ✨ Improvements
 
-- **Updated the Zcash SDK library to version `2.5.1`**
+- **Updated the Zcash SDK library to version `2.5.2`**
 
 - **Added support for TON WalletConnect**
 
