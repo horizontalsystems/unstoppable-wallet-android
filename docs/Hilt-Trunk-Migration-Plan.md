@@ -154,11 +154,32 @@ This is the current frontier. Tackle in risk order:
   `AdapterFactory` pass deps into the adapters it builds, or accept a permanent thin accessor for a
   handful. Realistically a few of these stay companion-backed.
 
-### Phase G — Demolition (gated on F)
-Remove each `lateinit var` + its `@EntryPoint` inversion in `onCreate()` only once **all** its
-consumers are migrated. `MarketFavorites/MarketWidget` (cycle), `KeyStore/Lockout` (CoreApp), and
-`AppDatabase` bridges are expected to remain. End state: `App` is `@HiltAndroidApp` + the
-`AppInitializer` eager-startup call, with a minimal companion (or none).
+### Phase F — in progress
+- **F2 composables:** `market` module + `settings` donate/links migrated via `CompositionLocal`
+  (`LocalNumberFormatter`/`LocalCurrencyManager`/`LocalMarketKit`/`LocalAppConfigProvider`, provided
+  once at the `MainActivity` Compose root). Pattern established; remaining numberFormatter composables
+  can adopt it. Composables that read **stateful managers** (adapterManager, walletManager,
+  accountManager, …) should get them via their screen `hiltViewModel`, not a Local.
+- **F3 not started** and largely **not cleanly doable** (see verdict).
+
+### Phase G — Demolition: VERDICT — full demolition is NOT achievable
+Reaching zero companions would require rewriting global utilities that are intentionally static.
+The hard blockers (measured 2026-06):
+- **`Translator`** — `object` calling `App.instance.localizedContext()`, used at **105 call sites** as
+  `Translator.getString(...)`. Removing `App.instance` means converting `Translator` to an injected/
+  context-passing API across all 105 sites. `App.instance` is read by **47** files total.
+- **15 adapters** in `core/adapters/` read `App.*` (instance, marketKit, …); they're built deep in
+  `AdapterFactory` with fixed signatures and used from non-Hilt code.
+- **`AppDatabase`**, **`MarketFavoritesManager`/`MarketWidgetManager`** (cycle), **`KeyStoreManager`/
+  `LockoutStorage`** (CoreApp-owned) — permanent by design.
+- Glance **widgets** render outside `MainActivity`, so they can't use the root `CompositionLocal`s.
+
+Realistic end state: the `companion object` + the 5 `AppModule` bridges **stay**. The achievable goal
+is to keep shrinking direct `App.*` reads in Hilt-reachable code (done: all such classes; F1) and in
+composables (in progress; F2), which improves testability and isolates the irreducible global core —
+but `App.onCreate()` construction-inversion and the companion remain. Forcing the rest (CompositionLocals
+for every stateful manager, threading `Context` through `Translator`/adapters) would be a large,
+high-risk, low-value rewrite and is **not recommended**.
 
 ## Special-case fixes
 - `LocalStorageManager` (backs `ILocalStorage`, `IPinSettingsStorage`, `ILockoutStorage`,
