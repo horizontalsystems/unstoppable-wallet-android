@@ -5,7 +5,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -23,18 +22,20 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.ui.compose.LocalAppConfigProvider
 
 @Serializable
 data object DonateTokenSelectPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
+        val appConfigProvider = LocalAppConfigProvider.current
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_Donate),
             onClickItem = { viewItem ->
                 val donateAddress: String? =
-                    App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
+                    appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
                 donateAddress?.let {
                     val sendTitle = Translator.getString(
                         R.string.Settings_DonateToken,

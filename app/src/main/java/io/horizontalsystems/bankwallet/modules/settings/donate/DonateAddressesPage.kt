@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -37,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.ui.compose.LocalAppConfigProvider
 
 @Serializable
 data object DonateAddressesPage : HSPage() {
@@ -54,6 +54,7 @@ data object DonateAddressesPage : HSPage() {
 fun DonateScreen(
     onBackPress: () -> Unit
 ) {
+    val appConfigProvider = LocalAppConfigProvider.current
     HSScaffold(
         title = stringResource(R.string.Settings_Donate_Addresses),
         onBack = onBackPress,
@@ -65,7 +66,7 @@ fun DonateScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             VSpacer(12.dp)
-            App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
+            appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
                 DonateAddress(
                     coinImageUrl = blockchainType.imageUrl,
                     coinName = blockchainType.title,

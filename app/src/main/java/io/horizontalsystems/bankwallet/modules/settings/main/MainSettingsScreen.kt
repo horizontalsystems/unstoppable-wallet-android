@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -87,6 +86,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.SecureSend
+import io.horizontalsystems.bankwallet.ui.compose.LocalAppConfigProvider
 
 @Composable
 fun SettingsScreen(
@@ -126,6 +126,7 @@ private fun SettingSections(
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
+    val appConfigProvider = LocalAppConfigProvider.current
     val isFDroidBuild = BuildConfig.FDROID_BUILD
 
     val banners = buildList<@Composable () -> Unit> {
@@ -428,7 +429,7 @@ private fun SettingSections(
                 R.string.Settings_Telegram,
                 R.drawable.ic_telegram_24,
                 onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
+                    LinkHelper.openLinkInAppBrowser(context, appConfigProvider.appTelegramLink)
 
                     stat(
                         page = StatPage.Settings,
@@ -441,7 +442,7 @@ private fun SettingSections(
                 R.string.Settings_Twitter,
                 R.drawable.x_logo_24,
                 onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
+                    LinkHelper.openLinkInAppBrowser(context, appConfigProvider.appTwitterLink)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTwitter))
                 }

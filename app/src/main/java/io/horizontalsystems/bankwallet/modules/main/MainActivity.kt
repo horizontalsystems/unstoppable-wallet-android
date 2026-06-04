@@ -9,8 +9,10 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.modules.nav3.Nav3
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.LocalAppConfigProvider
 import io.horizontalsystems.bankwallet.ui.compose.LocalCurrencyManager
 import io.horizontalsystems.bankwallet.ui.compose.LocalMarketKit
 import io.horizontalsystems.bankwallet.ui.compose.LocalNumberFormatter
@@ -22,6 +24,7 @@ class MainActivity : BaseActivity() {
     @Inject lateinit var numberFormatter: IAppNumberFormatter
     @Inject lateinit var currencyManager: CurrencyManager
     @Inject lateinit var marketKit: MarketKitWrapper
+    @Inject lateinit var appConfigProvider: AppConfigProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -33,6 +36,7 @@ class MainActivity : BaseActivity() {
                     LocalNumberFormatter provides numberFormatter,
                     LocalCurrencyManager provides currencyManager,
                     LocalMarketKit provides marketKit,
+                    LocalAppConfigProvider provides appConfigProvider,
                 ) {
                     Nav3()
                 }

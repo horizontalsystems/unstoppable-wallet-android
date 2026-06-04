@@ -4,6 +4,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 
 /**
  * App-wide singletons exposed to composables so screens don't read `App.*` directly.
@@ -20,4 +21,8 @@ val LocalCurrencyManager = staticCompositionLocalOf<CurrencyManager> {
 
 val LocalMarketKit = staticCompositionLocalOf<MarketKitWrapper> {
     error("LocalMarketKit not provided")
+}
+
+val LocalAppConfigProvider = staticCompositionLocalOf<AppConfigProvider> {
+    error("LocalAppConfigProvider not provided")
 }
