@@ -549,7 +549,7 @@ class ZcashAdapter(
 
     companion object {
         val minimalShieldThreshold = BigDecimal("0.0004") // minimal transparent balance to shielding
-        private val lightWalletEndpoint = LightWalletEndpoint(host = "us.zec.stardust.rest", port = 443, isSecure = true)
+        private val lightWalletEndpoint = LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
 
         private const val ALIAS_PREFIX = "zcash_"
 

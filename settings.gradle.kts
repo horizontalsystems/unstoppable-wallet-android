@@ -9,7 +9,6 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
-        maven { url = uri("${rootDir}/zcash-sdk") }
         google()
         mavenCentral()
         mavenLocal()
