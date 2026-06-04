@@ -60,8 +60,6 @@ data class ManageAccountsPage(val input: ManageAccountsModule.Mode) : HSPage() {
 
 @Composable
 fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule.Mode) {
-    BackupRequiredAlert(navController)
-
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
     var searchQuery by remember { mutableStateOf(viewModel.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }
