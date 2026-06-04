@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -18,6 +17,7 @@ import kotlinx.coroutines.launch
 
 @javax.inject.Singleton
 class ZanoKitManager @javax.inject.Inject constructor(
+    private val application: android.app.Application,
     private val zanoNodeManager: ZanoNodeManager,
     private val backgroundManager: BackgroundManager,
 ) {
@@ -86,7 +86,7 @@ class ZanoKitManager @javax.inject.Inject constructor(
             creationTimestamp = creationTimestamp,
         )
         val kit = ZanoKit.getInstance(
-            context = App.instance,
+            context = application,
             wallet = wallet,
             walletId = account.id,
             daemonAddress = node.host,

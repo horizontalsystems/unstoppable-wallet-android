@@ -7,16 +7,34 @@ dependency-injection "trunk") to Hilt. Tracked on branch `hilt-di`.
 
 **Done:**
 - All `@HiltViewModel` / `@AssistedInject` ViewModels and their helpers are clean of `App.*`.
-- 14 leaf singletons migrated to `@Inject @Singleton` and removed from `App.onCreate()`:
-  `PassphraseValidator`, `BackupViewItemFactory`, `DonationShowManager`, `ReleaseNotesManager`,
-  `WordsManager`, `RecentAddressManager`, `BalanceViewTypeManager`, `BalanceHiddenManager`,
-  `BaseTokenManager`, `BackupProvider`, `RoiManager`, `WalletActivator`, `SwapTermsManager`,
-  `PaidActionSettingsManager`.
+- 14 leaf singletons migrated to `@Inject @Singleton` and removed from `App.onCreate()` (see git history).
+- **Phases A–E COMPLETE (2026-06):** every foundational singleton constructed in `App.onCreate()` is
+  now Hilt-owned. Construction in `onCreate()` is inverted through per-cluster `@EntryPoint`s (declared
+  in `AppInitializer.kt`) that resolve the Hilt instance and assign the `companion` `lateinit var` for
+  back-compat. Migrated: LocalStorageManager + storages/DAOs, RestoreSettings, node settings,
+  EVM sync sources, account core (AccountManager/UserManager/AccountFactory/WalletManager/CoinManager/
+  BackupManager), config leaves (Price/Terms/Connectivity/SystemInfo/AppIcon), Currency/NumberFormatter/
+  LanguageManager, AppConfigProvider, BackgroundManager, MarketKitWrapper (factory `@Provides`),
+  TorManager, all kit managers (Solana/Tron/Ton/Stellar/Zano + RpcSource/WalletManager),
+  Btc/EvmBlockchainManager (+EvmAccountManagerFactory), AdapterFactory/AdapterManager/
+  TransactionAdapterManager, Spam/StatsManager, TonConnectManager (factory), PinComponent/PinDbStorage,
+  RateAppManager, WCManager/WCSessionManager. Each cluster was cold-start runtime-verified on device.
 
-**Remaining (the trunk):** ~66 `@Provides` `App.*` bridges in `AppModule.kt`, and 129 non-Hilt
-files still reading `App.*` directly. Top consumers: `numberFormatter` (40), `marketKit` (27),
-`adapterManager` (22), `appConfigProvider` (20), `accountManager` (14), `coinManager` (11),
-`localStorage` (10), `currencyManager` (10).
+**Only 5 `App.*`/`CoreApp.*` bridges remain in `AppModule.kt` — all intentionally permanent:**
+- `provideKeyStoreManager`, `provideLockoutStorage` → `CoreApp.*` (owned by `core` module).
+- `provideMarketFavoritesManager`, `provideMarketWidgetManager` → cycle (see §2).
+- `provideAppDatabase` → infra root the DAO providers depend on.
+
+**Remaining work = Phase F + G.** 134 non-Hilt files still read `App.*` directly. These keep the
+`companion object` `lateinit var`s (and the `onCreate()` inversion) alive, blocking demolition. Current
+hotspots: `numberFormatter` (41), `marketKit` (28), `adapterManager` (22), `appConfigProvider` (17),
+`accountManager` (14), `currencyManager` (12), `coinManager` (11), `evmBlockchainManager` (10).
+
+Breakdown of the 134 consumer files: 40 composables, 8 services, 5 `Module.kt` factories, 3 ViewModels,
+15 `adapters/*`, 63 objects/util/extensions/managers. Note many of the 63 are the **already-Hilt
+managers themselves** still doing *internal* `App.*` reads (e.g. `App.instance` as Context,
+`App.appConfigProvider`) that were deliberately left to limit churn — they have an `@Inject` constructor
+already, so cleaning them is mechanical.
 
 ## Why the trunk is not a mechanical leaf migration
 
@@ -111,13 +129,33 @@ logical batch.
 `AdapterFactory`, `AdapterManager`, `TransactionAdapterManager`, `SpamManager`. Highest coupling
 (`adapterManager` = 22 consumers). `startAdapterManager()` → `AppInitializer`.
 
-### Phase F — Migrate the 129 direct consumers
-Adapters / helpers / entity-extensions: convert to `@Inject` where Hilt-reachable, or thread
-dependencies through. Only after this can the companion props and bridges be deleted wholesale.
+### Phases A–E — ✅ DONE
+All trunk singletons are Hilt-owned (see Status). Construction-inversion via per-cluster `@EntryPoint`
+keeps the companions populated for the not-yet-migrated consumers below.
 
-### Phase G — Demolition
-Remove the `lateinit var`s, `AppModule` bridges, and `App.onCreate()` construction. `App` becomes
-just `@HiltAndroidApp` plus the `AppInitializer` call.
+### Phase F — Migrate the 134 direct `App.*` consumers
+This is the current frontier. Tackle in risk order:
+
+- **F1 — already-Hilt classes still reading `App.*` internally (do first; mechanical, low-risk).**
+  The 3 ViewModels, 8 services, and the migrated managers among the 63 objects already have an
+  `@Inject`/`@AssistedInject` constructor — replace their `App.x` reads with constructor params
+  (`@ApplicationContext` for `App.instance`, inject `AppConfigProvider`/`MarketKitWrapper`/etc.).
+  No new injection seam needed. Directly shrinks the `numberFormatter`/`marketKit`/`appConfigProvider`
+  hotspots. Does **not** yet allow deleting companions.
+- **F2 — composables (40) reading `App.*`.** Source the value from the screen's `hiltViewModel()`
+  VM (or `LocalContext`) instead of the companion. A few (e.g. `App.pinComponent` lock checks) may
+  legitimately move into a small VM.
+- **F3 — true globals with no injection seam (hardest, may be partial).** `object` singletons
+  (`Translator`, `*Helper`), top-level extension functions, entity extensions, and adapter classes
+  built by `AdapterFactory`. Options: thread the dependency through call params, have the now-`@Inject`
+  `AdapterFactory` pass deps into the adapters it builds, or accept a permanent thin accessor for a
+  handful. Realistically a few of these stay companion-backed.
+
+### Phase G — Demolition (gated on F)
+Remove each `lateinit var` + its `@EntryPoint` inversion in `onCreate()` only once **all** its
+consumers are migrated. `MarketFavorites/MarketWidget` (cycle), `KeyStore/Lockout` (CoreApp), and
+`AppDatabase` bridges are expected to remain. End state: `App` is `@HiltAndroidApp` + the
+`AppInitializer` eager-startup call, with a minimal companion (or none).
 
 ## Special-case fixes
 - `LocalStorageManager` (backs `ILocalStorage`, `IPinSettingsStorage`, `ILockoutStorage`,

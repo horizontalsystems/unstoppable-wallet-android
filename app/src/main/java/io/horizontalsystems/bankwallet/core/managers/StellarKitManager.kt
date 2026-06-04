@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -24,6 +23,7 @@ import kotlinx.coroutines.launch
 
 @javax.inject.Singleton
 class StellarKitManager @javax.inject.Inject constructor(
+    private val application: android.app.Application,
     private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
@@ -74,7 +74,7 @@ class StellarKitManager @javax.inject.Inject constructor(
     }
 
     private fun createKitInstance(accountType: AccountType, account: Account): StellarKitWrapper {
-        val kit = StellarKit.getInstance(accountType.toStellarWallet(), Network.MainNet, App.instance, account.id)
+        val kit = StellarKit.getInstance(accountType.toStellarWallet(), Network.MainNet, application, account.id)
 
         return StellarKitWrapper(kit)
     }

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -38,6 +37,7 @@ import kotlinx.coroutines.launch
 
 @javax.inject.Singleton
 class TonKitManager @javax.inject.Inject constructor(
+    private val application: android.app.Application,
     private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
@@ -106,7 +106,7 @@ class TonKitManager @javax.inject.Inject constructor(
         accountType: AccountType.Mnemonic,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, application, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -115,7 +115,7 @@ class TonKitManager @javax.inject.Inject constructor(
         accountType: AccountType.TonAddress,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, application, account.id)
 
         return TonKitWrapper(kit)
     }

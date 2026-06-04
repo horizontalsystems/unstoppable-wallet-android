@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -20,6 +19,7 @@ import kotlinx.coroutines.rx2.asFlow
 
 @javax.inject.Singleton
 class SolanaKitManager @javax.inject.Inject constructor(
+    private val application: android.app.Application,
     private val appConfigProvider: AppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
@@ -88,7 +88,7 @@ class SolanaKitManager @javax.inject.Inject constructor(
         val signer = Signer.getInstance(seed)
 
         val kit = SolanaKit.getInstance(
-            application = App.instance,
+            application = application,
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
@@ -104,7 +104,7 @@ class SolanaKitManager @javax.inject.Inject constructor(
         val address = accountType.address
 
         val kit = SolanaKit.getInstance(
-            application = App.instance,
+            application = application,
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,

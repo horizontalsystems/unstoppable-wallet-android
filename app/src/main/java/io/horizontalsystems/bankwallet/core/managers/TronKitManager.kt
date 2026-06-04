@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -28,8 +27,10 @@ import java.net.URL
 
 @javax.inject.Singleton
 class TronKitManager @javax.inject.Inject constructor(
+    private val application: android.app.Application,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    private val appConfigProvider: io.horizontalsystems.bankwallet.core.providers.AppConfigProvider,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -73,14 +74,14 @@ class TronKitManager @javax.inject.Inject constructor(
         val syncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
         val tronGridUrl = URL("https://api.trongrid.io/")
         return if (syncSource.uri.toString() == tronGridUrl.toString()) {
-            RpcSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)
+            RpcSource.tronGrid(network = network, apiKeys = appConfigProvider.trongridApiKeys)
         } else {
             RpcSource(urls = listOf(URL(syncSource.uri.toString())), auth = syncSource.auth)
         }
     }
 
     private fun tronTransactionSource(): TransactionSource {
-        return TransactionSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)
+        return TransactionSource.tronGrid(network = network, apiKeys = appConfigProvider.trongridApiKeys)
     }
 
     @Synchronized
@@ -114,7 +115,7 @@ class TronKitManager @javax.inject.Inject constructor(
         val signer = Signer.getInstance(seed, network)
 
         val kit = TronKit.getInstance(
-            application = App.instance,
+            application = application,
             seed = seed,
             network = network,
             rpcSource = tronRpcSource(),
@@ -130,7 +131,7 @@ class TronKitManager @javax.inject.Inject constructor(
         account: Account
     ): TronKitWrapper {
         val kit = TronKit.getInstance(
-            application = App.instance,
+            application = application,
             address = Address.fromBase58(accountType.address),
             network = network,
             rpcSource = tronRpcSource(),
@@ -149,7 +150,7 @@ class TronKitManager @javax.inject.Inject constructor(
         val address = Signer.address(accountType.key, network)
 
         val kit = TronKit.getInstance(
-            application = App.instance,
+            application = application,
             address = address,
             network = network,
             rpcSource = tronRpcSource(),
