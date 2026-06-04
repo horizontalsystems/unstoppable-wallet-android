@@ -2,67 +2,85 @@ package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.EnabledWalletCache
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 @Composable
 fun BackupRequiredAlert(navController: NavController) {
     val viewModel = viewModel<BackupRequiredAlertViewModel>()
 
-    LifecycleResumeEffect(Unit) {
-        viewModel.resume()
-
-        onPauseOrDispose {
-            viewModel.pause()
-        }
-    }
-
-    val account = viewModel.account
-    if (account != null) {
-        LaunchedEffect(account) {
-            delay(300)
-            viewModel.onHandled()
+    val uiState = viewModel.uiState
+    val alertAccount = uiState.alertAccount
+    LaunchedEffect(alertAccount) {
+        if (alertAccount != null) {
+            delay(1000)
+            viewModel.onAlertShown()
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
-                BackupRequiredDialog.Input(account)
+                BackupRequiredDialog.Input(alertAccount)
             )
         }
     }
 }
 
-class BackupRequiredAlertViewModel : ViewModel() {
-    var account by mutableStateOf<Account?>(null)
-        private set
+class BackupRequiredAlertViewModel : ViewModelUiState<BackupRequiredAlertViewModel.UiState>() {
+    private var currentAccount: Account? = null
+    private var alertAccount: Account? = null
+    private val enabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
+    private var observeBalanceCacheUpdatesJob: Job? = null
 
-    private var job: Job? = null
-
-    fun resume() {
-        job = viewModelScope.launch {
-            App.accountManager.newAccountBackupRequiredFlow.collect {
-                account = it
+    init {
+        viewModelScope.launch {
+            App.accountManager.activeAccountStateFlow.collect {
+                handleAccountUpdate((it as? ActiveAccountState.ActiveAccount)?.account)
             }
         }
     }
 
-    fun pause() {
-        job?.cancel()
+    fun onAlertShown() {
+        observeBalanceCacheUpdatesJob?.cancel()
+
+        alertAccount = null
+        emitState()
     }
 
-    fun onHandled() {
-        App.accountManager.onHandledBackupRequiredNewAccount()
+    private fun handleAccountUpdate(account: Account?) {
+        observeBalanceCacheUpdatesJob?.cancel()
+        this.currentAccount = account
+        if (account == null || account.hasAnyBackup) return
+
+        observeBalanceCacheUpdatesJob = viewModelScope.launch {
+            enabledWalletsCacheDao.flowByAccountId(account.id).collect {
+                handleBalanceUpdates(it)
+            }
+        }
     }
 
+    private fun handleBalanceUpdates(walletCaches: List<EnabledWalletCache>) {
+        val hasNonZeroBalance = walletCaches.any {
+            it.balanceData != null && it.balanceData.total > BigDecimal.ZERO
+        }
+
+        alertAccount = if (hasNonZeroBalance) currentAccount else null
+
+        emitState()
+    }
+
+    override fun createState() = UiState(
+        alertAccount = alertAccount
+    )
+
+    data class UiState(val alertAccount: Account?)
 }

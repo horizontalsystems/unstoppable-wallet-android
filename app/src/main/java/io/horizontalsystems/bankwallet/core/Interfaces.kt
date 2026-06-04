@@ -179,7 +179,6 @@ interface IAccountManager {
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
     val accountsDeletedFlowable: Flowable<Unit>
-    val newAccountBackupRequiredFlow: StateFlow<Account?>
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
@@ -189,7 +188,6 @@ interface IAccountManager {
     fun delete(id: String)
     fun clear()
     fun clearAccounts()
-    fun onHandledBackupRequiredNewAccount()
     fun setLevel(level: Int)
     fun updateAccountLevels(accountIds: List<String>, level: Int)
     fun updateMaxLevel(level: Int)

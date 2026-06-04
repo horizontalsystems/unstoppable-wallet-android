@@ -27,7 +27,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -57,8 +56,6 @@ class ManageAccountsFragment : BaseComposeFragment() {
 
 @Composable
 fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
-    BackupRequiredAlert(navController)
-
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
     var searchQuery by remember { mutableStateOf(viewModel.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }

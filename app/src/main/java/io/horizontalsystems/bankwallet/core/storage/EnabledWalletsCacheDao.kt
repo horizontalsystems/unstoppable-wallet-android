@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.horizontalsystems.bankwallet.entities.EnabledWalletCache
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EnabledWalletsCacheDao {
@@ -14,5 +15,8 @@ interface EnabledWalletsCacheDao {
 
     @Query("SELECT * FROM `EnabledWalletCache`")
     fun getAll() : List<EnabledWalletCache>
+
+    @Query("SELECT * FROM `EnabledWalletCache` WHERE accountId = :accountId")
+    fun flowByAccountId(accountId: String): Flow<List<EnabledWalletCache>>
 
 }
