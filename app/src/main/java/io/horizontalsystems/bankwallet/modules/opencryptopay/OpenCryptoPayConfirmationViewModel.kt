@@ -6,7 +6,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -34,6 +33,10 @@ import java.time.Instant
 class OpenCryptoPayConfirmationViewModel @AssistedInject constructor(
     @Assisted private val input: OpenCryptoPayConfirmationPage.Input,
     private val ocpPaymentDao: OcpPaymentDao,
+    private val application: android.app.Application,
+    private val marketKit: io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper,
+    private val currencyManager: io.horizontalsystems.bankwallet.core.managers.CurrencyManager,
+    private val numberFormatter: io.horizontalsystems.bankwallet.core.IAppNumberFormatter,
 ) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
 
     val wallet = input.wallet
@@ -172,7 +175,7 @@ class OpenCryptoPayConfirmationViewModel @AssistedInject constructor(
                     proofSubmittedAt = null,
                 )
             )
-            OcpProofSubmissionWorker.enqueue(App.instance, txHash)
+            OcpProofSubmissionWorker.enqueue(application, txHash)
         }
     }
 
@@ -236,10 +239,10 @@ class OpenCryptoPayConfirmationViewModel @AssistedInject constructor(
 
     private fun buildSectionViewItems(): List<SectionViewItem> {
         val coin = wallet.token.coin
-        val coinAmount = App.numberFormatter.formatCoinFull(amount, coin.code, wallet.token.decimals)
-        val rate = App.marketKit.coinPrice(coin.uid, App.currencyManager.baseCurrency.code)
+        val coinAmount = numberFormatter.formatCoinFull(amount, coin.code, wallet.token.decimals)
+        val rate = marketKit.coinPrice(coin.uid, currencyManager.baseCurrency.code)
         val fiatAmount = rate?.let {
-            App.numberFormatter.formatFiatFull(it.value * amount, App.currencyManager.baseCurrency.symbol)
+            numberFormatter.formatFiatFull(it.value * amount, currencyManager.baseCurrency.symbol)
         }
         return listOf(
             SectionViewItem(

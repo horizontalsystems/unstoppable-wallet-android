@@ -6,7 +6,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -19,6 +18,7 @@ import java.time.Instant
 @HiltViewModel(assistedFactory = OpenCryptoPayViewModel.Factory::class)
 class OpenCryptoPayViewModel @AssistedInject constructor(
     @Assisted private val lnurl: String,
+    private val walletManager: io.horizontalsystems.bankwallet.core.managers.WalletManager,
 ) : ViewModelUiState<OpenCryptoPayUiState>() {
 
     private var loading = true
@@ -77,7 +77,7 @@ class OpenCryptoPayViewModel @AssistedInject constructor(
                 currency = response.requestedAmount?.asset
                 fiatAmount = response.requestedAmount?.amount?.let { formatAmount(it) }
 
-                val activeWallets = App.walletManager.activeWallets
+                val activeWallets = walletManager.activeWallets
 
                 methods = response.transferAmounts
                     .filter { it.available && it.assets.isNotEmpty() }

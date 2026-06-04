@@ -6,7 +6,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -33,6 +32,13 @@ import java.time.Instant
 class OpenCryptoPayEvmConfirmationViewModel @AssistedInject constructor(
     @Assisted private val input: OpenCryptoPayEvmConfirmationPage.Input,
     private val ocpPaymentDao: OcpPaymentDao,
+    private val adapterManager: io.horizontalsystems.bankwallet.core.IAdapterManager,
+    private val evmBlockchainManager: io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager,
+    private val marketKit: io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper,
+    private val currencyManager: io.horizontalsystems.bankwallet.core.managers.CurrencyManager,
+    private val coinManager: io.horizontalsystems.bankwallet.core.ICoinManager,
+    private val evmLabelManager: io.horizontalsystems.bankwallet.core.managers.EvmLabelManager,
+    private val contactsRepository: io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository,
 ) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
 
     private val wallet = input.wallet
@@ -50,7 +56,7 @@ class OpenCryptoPayEvmConfirmationViewModel @AssistedInject constructor(
         blockchainType,
         minGasPrice = input.minFee?.let { fee ->
             val feeLong = kotlin.math.ceil(fee).toLong()
-            if (App.evmBlockchainManager.getChain(blockchainType).isEIP1559Supported) {
+            if (evmBlockchainManager.getChain(blockchainType).isEIP1559Supported) {
                 GasPrice.Eip1559(maxFeePerGas = feeLong, maxPriorityFeePerGas = 0)
             } else {
                 GasPrice.Legacy(feeLong)
@@ -59,14 +65,14 @@ class OpenCryptoPayEvmConfirmationViewModel @AssistedInject constructor(
     )
 
     private val sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
-        App.evmLabelManager,
+        evmLabelManager,
         EvmCoinServiceFactory(
-            App.evmBlockchainManager.getBaseToken(blockchainType)!!,
-            App.marketKit,
-            App.currencyManager,
-            App.coinManager,
+            evmBlockchainManager.getBaseToken(blockchainType)!!,
+            marketKit,
+            currencyManager,
+            coinManager,
         ),
-        App.contactsRepository,
+        contactsRepository,
         blockchainType,
     )
 
@@ -93,7 +99,7 @@ class OpenCryptoPayEvmConfirmationViewModel @AssistedInject constructor(
                 val (address, resolvedProofUrl) = fetchOcpTransactionDetails(callbackUrl, quoteId, paymentId, method, asset)
                 proofUrl = resolvedProofUrl
                 val amount = assetAmount.toBigDecimalOrNull() ?: BigDecimal.ZERO
-                val adapter = App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter
+                val adapter = adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter
                     ?: throw Exception("Ethereum adapter not found for ${wallet.token.coin.code}")
                 val transactionData = adapter.getTransactionData(amount, Address(address))
                 val decoration = sendTransactionService.decorate(transactionData)

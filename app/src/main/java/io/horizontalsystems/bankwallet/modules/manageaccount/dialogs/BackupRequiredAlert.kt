@@ -5,12 +5,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EnabledWalletCache
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.core.IPinComponent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,21 +36,24 @@ fun BackupRequiredAlert(navController: HSNavigation) {
 }
 
 @HiltViewModel
-class BackupRequiredAlertViewModel @javax.inject.Inject constructor() : ViewModelUiState<BackupRequiredAlertViewModel.UiState>() {
+class BackupRequiredAlertViewModel @javax.inject.Inject constructor(
+    private val accountManager: IAccountManager,
+    private val pinComponent: IPinComponent,
+    private val enabledWalletsCacheDao: EnabledWalletsCacheDao,
+) : ViewModelUiState<BackupRequiredAlertViewModel.UiState>() {
     private var currentAccount: Account? = null
     private var alertAccount: Account? = null
-    private val enabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
     private var observeBalanceCacheUpdatesJob: Job? = null
-    private var isLocked = App.pinComponent.isLockedFlow.value
+    private var isLocked = pinComponent.isLockedFlow.value
 
     init {
         viewModelScope.launch {
-            App.accountManager.activeAccountStateFlow.collect {
+            accountManager.activeAccountStateFlow.collect {
                 handleAccountUpdate((it as? ActiveAccountState.ActiveAccount)?.account)
             }
         }
         viewModelScope.launch {
-            App.pinComponent.isLockedFlow.collect {
+            pinComponent.isLockedFlow.collect {
                 isLocked = it
                 emitState()
             }
