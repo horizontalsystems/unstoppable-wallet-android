@@ -26,7 +26,7 @@ fun BackupRequiredAlert(navController: HSNavigation) {
             delay(1000)
             viewModel.onAlertShown()
             navController.slideFromBottom(
-                BackupRequiredSheet(BackupRequiredSheet.Input(account))
+                BackupRequiredSheet(BackupRequiredSheet.Input(alertAccount))
             )
         }
     }
