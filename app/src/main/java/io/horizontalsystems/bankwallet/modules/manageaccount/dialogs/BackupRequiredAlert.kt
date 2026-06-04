@@ -23,8 +23,8 @@ fun BackupRequiredAlert(navController: NavController) {
 
     val uiState = viewModel.uiState
     val alertAccount = uiState.alertAccount
-    LaunchedEffect(alertAccount) {
-        if (alertAccount != null) {
+    LaunchedEffect(alertAccount, uiState.isLocked) {
+        if (alertAccount != null && !uiState.isLocked) {
             delay(1000)
             viewModel.onAlertShown()
             navController.slideFromBottom(
@@ -40,11 +40,18 @@ class BackupRequiredAlertViewModel : ViewModelUiState<BackupRequiredAlertViewMod
     private var alertAccount: Account? = null
     private val enabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
     private var observeBalanceCacheUpdatesJob: Job? = null
+    private var isLocked = App.pinComponent.isLockedFlow.value
 
     init {
         viewModelScope.launch {
             App.accountManager.activeAccountStateFlow.collect {
                 handleAccountUpdate((it as? ActiveAccountState.ActiveAccount)?.account)
+            }
+        }
+        viewModelScope.launch {
+            App.pinComponent.isLockedFlow.collect {
+                isLocked = it
+                emitState()
             }
         }
     }
@@ -79,8 +86,9 @@ class BackupRequiredAlertViewModel : ViewModelUiState<BackupRequiredAlertViewMod
     }
 
     override fun createState() = UiState(
-        alertAccount = alertAccount
+        alertAccount = alertAccount,
+        isLocked = isLocked
     )
 
-    data class UiState(val alertAccount: Account?)
+    data class UiState(val alertAccount: Account?, val isLocked: Boolean)
 }
