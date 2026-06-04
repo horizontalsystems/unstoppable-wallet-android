@@ -154,11 +154,6 @@ class ZcashAdapter(
     private val balanceCheckMutex = Mutex()
     private var importUfvkError : Throwable? = null
 
-    init {
-        Timber.i("ZcashAdapter type $addressSpecTyped")
-    }
-
-
     companion object {
         private const val DECIMAL_COUNT = 8
         private val DATABASE_CORRUPTION_MESSAGES = listOf(
@@ -322,7 +317,6 @@ class ZcashAdapter(
     private var syncState: AdapterState = AdapterState.Connecting
         set(value) {
             if (value != field) {
-                traceSync("state ${field.toLogString()} -> ${value.toLogString()}")
                 field = value
                 adapterStateUpdatedSubject.onNext(Unit)
             }
@@ -831,10 +825,6 @@ class ZcashAdapter(
     private fun onChainError(errorHeight: BlockHeight, rewindHeight: BlockHeight) = Unit
 
     private fun onStatus(status: Synchronizer.Status) {
-        traceSync(
-            "status=$status current=${syncState.toLogString()} " +
-                    "progressDecimal=$lastDownloadProgressDecimal networkHeight=$lastNetworkHeight"
-        )
         syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
@@ -860,18 +850,10 @@ class ZcashAdapter(
 
     private fun onDownloadProgress(progress: PercentDecimal) {
         lastDownloadProgressDecimal = progress.decimal
-        traceSync("progress decimal=${progress.decimal} state=${syncState.toLogString()}")
         updateSyncingState()
     }
 
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
-        val syncRange = processorInfo.overallSyncRange
-        traceSync(
-            "processorInfo networkHeight=${processorInfo.networkBlockHeight?.value} " +
-                    "range=${syncRange?.start?.value}..${syncRange?.endInclusive?.value} " +
-                    "firstUnenhanced=${processorInfo.firstUnenhancedHeight?.value} " +
-                    "progressDecimal=$lastDownloadProgressDecimal state=${syncState.toLogString()}"
-        )
         processorInfo.networkBlockHeight?.value?.let { lastNetworkHeight = it }
         updateSyncingState()
         lastBlockUpdatedSubject.onNext(Unit)
@@ -883,12 +865,10 @@ class ZcashAdapter(
     // block-equivalent of the SDK's decimal so the UI reads consistently.
     private fun updateSyncingState() {
         if (syncState is AdapterState.Synced) {
-            traceSync("updateSyncingState skipped: already synced")
             return
         }
 
         if (lastDownloadProgressDecimal >= 1f) {
-            traceSync("updateSyncingState completeProgress -> processing")
             syncState = AdapterState.Syncing(progress = 100.0, blocksRemained = null)
             return
         }
@@ -900,37 +880,14 @@ class ZcashAdapter(
         }
         val rawPercent = lastDownloadProgressDecimal.toDouble() * 100.0
         val progressPercent = (Math.round(rawPercent * 10000.0) / 10000.0).coerceIn(0.0, 100.0)
-        traceSync(
-            "updateSyncingState progress=$progressPercent blocksRemained=$blocksRemained " +
-                    "totalBlocks=$totalBlocks effectiveBirthday=$effectiveBirthday"
-        )
         syncState = AdapterState.Syncing(progress = progressPercent, blocksRemained = blocksRemained)
     }
 
     private fun onBalance(balance: Map<AccountUuid, AccountBalance>?) {
-        traceSync("balance hasAccount=${zcashAccount?.accountUuid?.let { balance?.containsKey(it) }}")
         balance?.get(zcashAccount?.accountUuid)?.sapling?.let {
             balanceUpdatedSubject.onNext(Unit)
         }
         startOneTimeAddressBalanceCheck()
-    }
-
-    private fun traceSync(message: String) {
-        Timber.tag("ZcashSync").d("${syncTraceType()} $message")
-    }
-
-    private fun syncTraceType(): String {
-        return addressSpecTyped?.toString() ?: "Unified"
-    }
-
-    private fun AdapterState.toLogString(): String {
-        return when (this) {
-            AdapterState.Synced -> "Synced"
-            AdapterState.Connecting -> "Connecting"
-            is AdapterState.Syncing -> "Syncing(progress=$progress, blocksRemained=$blocksRemained, substatus=$substatus)"
-            is AdapterState.SearchingTxs -> "SearchingTxs(count=$count)"
-            is AdapterState.NotSynced -> "NotSynced(${error.message})"
-        }
     }
 
     private suspend fun checkTransparentAddressesBalance() = withContext(dispatcherProvider.io) {
