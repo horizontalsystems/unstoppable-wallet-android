@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -47,9 +46,6 @@ class AccountManager(
     override val accountsDeletedFlowable: Flowable<Unit>
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val _newAccountBackupRequiredFlow = MutableStateFlow<Account?>(null)
-    override val newAccountBackupRequiredFlow = _newAccountBackupRequiredFlow.asStateFlow()
-
     private fun updateCache(account: Account) {
         accountsCache[account.id] = account
     }
@@ -68,10 +64,6 @@ class AccountManager(
         return accounts.find { account -> account.id == id }
     }
 
-    override fun onHandledBackupRequiredNewAccount() {
-        _newAccountBackupRequiredFlow.update { null }
-    }
-
     override fun save(account: Account) {
         storage.save(account)
 
@@ -79,11 +71,6 @@ class AccountManager(
         accountsSubject.onNext(accounts)
 
         setActiveAccountId(account.id)
-        if (!account.isBackedUp && !account.isFileBackedUp) {
-            _newAccountBackupRequiredFlow.update {
-                account
-            }
-        }
     }
 
     override fun import(accounts: List<Account>) {
@@ -97,11 +84,6 @@ class AccountManager(
         if (activeAccount == null) {
             accounts.minByOrNull { it.name.lowercase() }?.let { account ->
                 setActiveAccountId(account.id)
-                if (!account.isBackedUp && !account.isFileBackedUp) {
-                    _newAccountBackupRequiredFlow.update {
-                        account
-                    }
-                }
             }
         }
     }
