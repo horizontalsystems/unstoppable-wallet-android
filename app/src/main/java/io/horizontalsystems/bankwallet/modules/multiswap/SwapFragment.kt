@@ -552,12 +552,12 @@ private fun ProviderCellInfo(
                     text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
                     icon = painterResource(R.drawable.ic_info_24),
                     iconTint = ComposeAppTheme.colors.grey,
-                    onIconClick = onClickProviderScoreInfo,
                 )
             },
             right = {
                 RiskScore(riskLevel = quote.provider.riskLevel)
-            }
+            },
+            onClick = onClickProviderScoreInfo
         )
     }
 }
@@ -757,7 +757,7 @@ private fun SwapCoinInputIn(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinSelector(token, onClickCoin)
-        HSpacer(width = 16.dp)
+        HSpacer(width = 8.dp)
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
             AmountInput(
                 value = coinAmount,
@@ -790,6 +790,7 @@ private fun SwapCoinInputTo(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinSelector(token, onClickCoin)
+        HSpacer(8.dp)
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.End
@@ -934,7 +935,7 @@ private fun Selector(
         Icon(
             painter = painterResource(R.drawable.arrow_s_down_20),
             contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.leah
         )
     }
 }

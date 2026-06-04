@@ -161,7 +161,7 @@ private fun SwapSelectProviderScreenInner(
                                 CellLeftImage(
                                     painter = painterResource(provider.icon),
                                     type = ImageType.Rectangle,
-                                    size = 32
+                                    size = 24
                                 )
                             },
                             middle = {
