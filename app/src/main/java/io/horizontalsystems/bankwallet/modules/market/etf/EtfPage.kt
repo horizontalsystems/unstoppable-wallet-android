@@ -40,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -89,6 +88,7 @@ import io.horizontalsystems.marketkit.models.EtfPoint
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.math.abs
+import io.horizontalsystems.bankwallet.ui.compose.LocalNumberFormatter
 
 @Serializable
 data object EtfPage : HSPage() {
@@ -296,6 +296,7 @@ fun EtfByChain(
 
 @Composable
 fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
+    val numberFormatter = LocalNumberFormatter.current
     val keys = mutableListOf<Long>()
     val dataDailyInflow = linkedMapOf<Long, Float>()
     val dataTotalInflow = linkedMapOf<Long, Float>()
@@ -345,16 +346,16 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
             it < BigDecimal.ZERO -> "-"
             else -> "+"
         }
-        sign + App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
+        sign + numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
     }
     val dailyInflowPositive = dailyInflow != null && dailyInflow > BigDecimal.ZERO
 
     val totalAssetsStr = totalAssets?.let {
-        App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
+        numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
     }
 
     val labelTop = etfPoints.maxOfOrNull { it.dailyInflow }?.let {
-        App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
+        numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
     } ?: ""
 
     val labelBottom = etfPoints.minOfOrNull { it.dailyInflow }?.let {
@@ -363,7 +364,7 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
             else -> ""
         }
 
-        sign + App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
+        sign + numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
     } ?: ""
 
     Column {

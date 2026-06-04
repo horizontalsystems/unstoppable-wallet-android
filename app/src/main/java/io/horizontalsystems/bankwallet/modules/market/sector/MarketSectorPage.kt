@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -47,6 +46,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.ui.compose.LocalMarketKit
+import io.horizontalsystems.bankwallet.ui.compose.LocalCurrencyManager
 
 @Serializable
 data class MarketSectorPage(val input: CoinCategory) : HSPage() {
@@ -56,9 +57,11 @@ data class MarketSectorPage(val input: CoinCategory) : HSPage() {
         val viewModel = hiltViewModel<MarketSectorViewModel, MarketSectorViewModel.Factory> { factory ->
             factory.create(input)
         }
+        val currencyManager = LocalCurrencyManager.current
+        val marketKit = LocalMarketKit.current
         val chartViewModel = hiltViewModel<ChartViewModel, ChartViewModel.Factory> { factory ->
             factory.create(
-                CoinSectorMarketDataChartService(App.currencyManager, App.marketKit, input.uid),
+                CoinSectorMarketDataChartService(currencyManager, marketKit, input.uid),
                 ChartCurrencyValueFormatterShortened()
             )
         }

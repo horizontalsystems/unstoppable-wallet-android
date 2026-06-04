@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -68,6 +67,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.ui.compose.LocalMarketKit
+import io.horizontalsystems.bankwallet.ui.compose.LocalCurrencyManager
 
 @Serializable
 data class MarketPlatformPage(val platform: Platform) : HSPage() {
@@ -77,9 +78,11 @@ data class MarketPlatformPage(val platform: Platform) : HSPage() {
         val viewModel = hiltViewModel<MarketPlatformViewModel, MarketPlatformViewModel.Factory> { factory ->
             factory.create(platform)
         }
+        val currencyManager = LocalCurrencyManager.current
+        val marketKit = LocalMarketKit.current
         val chartViewModel = hiltViewModel<ChartViewModel, ChartViewModel.Factory> { factory ->
             factory.create(
-                PlatformChartService(platform, App.currencyManager, App.marketKit),
+                PlatformChartService(platform, currencyManager, marketKit),
                 ChartCurrencyValueFormatterShortened()
             )
         }

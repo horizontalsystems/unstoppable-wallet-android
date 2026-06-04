@@ -26,7 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -64,6 +63,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.ui.compose.LocalNumberFormatter
 
 @Composable
 fun MarketScreen(
@@ -150,12 +151,12 @@ fun TabsSection(
     }
 }
 
-private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-    return App.numberFormatter.formatFiatShort(value, symbol, 2)
+private fun formatFiatShortened(value: BigDecimal, symbol: String, numberFormatter: IAppNumberFormatter): String {
+    return numberFormatter.formatFiatShort(value, symbol, 2)
 }
 
-private fun getDiff(it: BigDecimal): String {
-    return App.numberFormatter.format(it.abs(), 0, 2, "", "%")
+private fun getDiff(it: BigDecimal, numberFormatter: IAppNumberFormatter): String {
+    return numberFormatter.format(it.abs(), 0, 2, "", "%")
 }
 
 @Composable
@@ -239,14 +240,15 @@ private fun RowScope.MarketTotalCard(
     currency: Currency,
     onClick: () -> Unit,
 ) {
+    val numberFormatter = LocalNumberFormatter.current
     val changeStr: String?
     val changePositive: Boolean?
 
     if (changePercentage != null) {
-        changeStr = getDiff(changePercentage)
+        changeStr = getDiff(changePercentage, numberFormatter)
         changePositive = changePercentage > BigDecimal.ZERO
     } else if (changeFiat != null) {
-        changeStr = formatFiatShortened(changeFiat.abs(), currency.symbol)
+        changeStr = formatFiatShortened(changeFiat.abs(), currency.symbol, numberFormatter)
         changePositive = changeFiat > BigDecimal.ZERO
     } else {
         changeStr = null
@@ -266,7 +268,7 @@ private fun RowScope.MarketTotalCard(
         )
         VSpacer(4.dp)
         caption_bran(
-            text = value?.let { formatFiatShortened(it, currency.symbol) } ?: "---",
+            text = value?.let { formatFiatShortened(it, currency.symbol, numberFormatter) } ?: "---",
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )

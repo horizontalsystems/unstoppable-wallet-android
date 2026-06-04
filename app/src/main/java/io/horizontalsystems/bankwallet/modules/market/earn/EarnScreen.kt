@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -61,6 +60,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.ui.compose.LocalNumberFormatter
 
 @Composable
 fun MarketEarnScreen(
@@ -313,6 +314,7 @@ private fun VaultItem(
     label: String? = null,
     onClick: (() -> Unit)? = null,
 ) {
+    val numberFormatter = LocalNumberFormatter.current
     CellPrimary(
         left = {
             CellLeftImage(
@@ -338,7 +340,7 @@ private fun VaultItem(
         },
         right = {
             CellRightInfo(
-                title = "APY ${vaultDiffText(value)}".hs(diffColor(value)),
+                title = "APY ${vaultDiffText(value, numberFormatter)}".hs(diffColor(value)),
                 subtitle = subvalue.hs
             )
         },
@@ -406,6 +408,6 @@ private fun PremiumContentMessage(
     }
 }
 
-private fun vaultDiffText(diff: BigDecimal): String {
-    return App.numberFormatter.format(diff.abs(), 0, 2, "", "%")
+private fun vaultDiffText(diff: BigDecimal, numberFormatter: IAppNumberFormatter): String {
+    return numberFormatter.format(diff.abs(), 0, 2, "", "%")
 }

@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
@@ -49,6 +48,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.bankwallet.ui.compose.LocalMarketKit
+import io.horizontalsystems.bankwallet.ui.compose.LocalCurrencyManager
 
 @Serializable
 data class MetricsPage(val metricsType: MetricsType) : HSPage() {
@@ -58,9 +59,11 @@ data class MetricsPage(val metricsType: MetricsType) : HSPage() {
         val viewModel = hiltViewModel<MetricsPageViewModel, MetricsPageViewModel.Factory> { factory ->
             factory.create(metricsType)
         }
+        val currencyManager = LocalCurrencyManager.current
+        val marketKit = LocalMarketKit.current
         val chartViewModel = hiltViewModel<ChartViewModel, ChartViewModel.Factory> { factory ->
             factory.create(
-                MetricsPageChartService(App.currencyManager, metricsType, GlobalMarketRepository(App.marketKit)),
+                MetricsPageChartService(currencyManager, metricsType, GlobalMarketRepository(marketKit)),
                 ChartCurrencyValueFormatterShortened()
             )
         }
