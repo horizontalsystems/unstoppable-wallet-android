@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
@@ -104,10 +105,9 @@ fun OpenCryptoPayScreen(
         uiState.methods.map { it.wallet.token.type }.distinct()
     }
     val vmKey = remember(tokenTypes) { tokenTypes.joinToString { it.id } }
-    val tokenSelectViewModel = viewModel<TokenSelectViewModel>(
-        key = vmKey,
-        factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes),
-    )
+    val tokenSelectViewModel = hiltViewModel<TokenSelectViewModel, TokenSelectViewModel.Factory>(key = vmKey) { factory ->
+        factory.create(blockchainTypes, tokenTypes)
+    }
     val tokenUiState = tokenSelectViewModel.uiState
 
     var searchQuery by remember { mutableStateOf("") }

@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
@@ -28,6 +29,7 @@ class TransactionInfoViewModel @AssistedInject constructor(
     currencyManager: CurrencyManager,
     nftMetadataManager: NftMetadataManager,
     balanceHiddenManager: BalanceHiddenManager,
+    ocpPaymentDao: OcpPaymentDao,
     private val contactsRepository: ContactsRepository,
 ) : ViewModel() {
 
@@ -44,6 +46,7 @@ class TransactionInfoViewModel @AssistedInject constructor(
         marketKit,
         currencyManager,
         NftMetadataService(nftMetadataManager),
+        ocpPaymentDao,
         balanceHiddenManager.balanceHidden,
     )
     private val factory = TransactionInfoViewItemFactory(

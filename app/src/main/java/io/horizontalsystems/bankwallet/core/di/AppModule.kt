@@ -9,59 +9,60 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
-import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
-import io.horizontalsystems.bankwallet.core.managers.AccountManager
-import io.horizontalsystems.bankwallet.core.managers.AdapterManager
-import io.horizontalsystems.bankwallet.core.managers.TermsManager
-import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
-import io.horizontalsystems.bankwallet.core.managers.CoinManager
-import io.horizontalsystems.bankwallet.core.managers.WalletStorage
-import io.horizontalsystems.bankwallet.core.IWalletStorage
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
-import io.horizontalsystems.bankwallet.core.managers.BackupManager
-import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
-import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
-import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IRateAppManager
-import io.horizontalsystems.bankwallet.core.ITermsManager
-import io.horizontalsystems.bankwallet.core.ITorManager
-import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
-import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
-import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.core.IThirdKeyboard
-import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.IRateAppManager
+import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
+import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.ITorManager
+import io.horizontalsystems.bankwallet.core.IWalletStorage
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
+import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
+import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
+import io.horizontalsystems.bankwallet.core.managers.AdapterManager
+import io.horizontalsystems.bankwallet.core.managers.BackupManager
+import io.horizontalsystems.bankwallet.core.managers.CoinManager
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
+import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
+import io.horizontalsystems.bankwallet.core.managers.TermsManager
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
+import io.horizontalsystems.bankwallet.core.managers.WalletStorage
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
+import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
+import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
+import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
+import io.horizontalsystems.bankwallet.core.storage.RecentAddressDao
+import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
+import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
-import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
-import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
-import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.ILockoutStorage
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
+import io.horizontalsystems.core.IThirdKeyboard
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import javax.inject.Singleton
 
 /**
@@ -206,6 +207,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideAppDatabase(): AppDatabase = App.appDatabase
+
+    @Provides @Singleton
+    fun provideOcpPaymentDao(db: AppDatabase): OcpPaymentDao = db.ocpPaymentDao()
 
     @Provides @Singleton
     fun provideStatsDao(db: AppDatabase) = db.statsDao()
