@@ -6,22 +6,26 @@ import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
-import io.horizontalsystems.bankwallet.core.App
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SystemInfoManager @Inject constructor(appConfigProvider: AppConfigProvider) : ISystemInfoManager {
+class SystemInfoManager @Inject constructor(
+    @ApplicationContext private val context: Context,
+    appConfigProvider: AppConfigProvider,
+) : ISystemInfoManager {
 
     override val appVersion: String = appConfigProvider.appVersion
 
-    private val biometricManager by lazy { BiometricManager.from(App.instance) }
+    private val biometricManager by lazy { BiometricManager.from(context) }
 
     override val isSystemLockOff: Boolean
         get() {
-            val keyguardManager = App.instance.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
+            val keyguardManager = context.getSystemService(Activity.KEYGUARD_SERVICE) as KeyguardManager
             return !keyguardManager.isDeviceSecure
         }
 

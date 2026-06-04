@@ -1,21 +1,24 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.horizontalsystems.core.helpers.LocaleHelper
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LanguageManager @Inject constructor() {
+class LanguageManager @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
 
     val fallbackLocale by LocaleHelper::fallbackLocale
 
-    var currentLocale: Locale = App.instance.getLocale()
+    var currentLocale: Locale = LocaleHelper.getLocale(context)
         set(value) {
             field = value
 
-            App.instance.setLocale(currentLocale)
+            LocaleHelper.setLocale(context, currentLocale)
         }
 
     var currentLocaleTag: String

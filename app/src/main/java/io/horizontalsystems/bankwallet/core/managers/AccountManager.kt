@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.app.Application
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
@@ -20,6 +20,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AccountManager @Inject constructor(
+    private val application: Application,
     private val storage: IAccountsStorage,
     private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
@@ -159,7 +160,7 @@ class AccountManager @Inject constructor(
 
     override fun getRandomWalletName(): String {
         val existingNames = accounts.map { it.name }.toSet()
-        val all = App.instance.localizedContext().resources.getStringArray(R.array.wallet_names)
+        val all = (application as io.horizontalsystems.core.CoreApp).localizedContext().resources.getStringArray(R.array.wallet_names)
         return all.filter { it !in existingNames }.randomOrNull() ?: all.random()
     }
 

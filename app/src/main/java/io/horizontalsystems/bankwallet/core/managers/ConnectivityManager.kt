@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.reactivex.subjects.PublishSubject
@@ -20,10 +20,13 @@ import javax.inject.Singleton
 
 
 @Singleton
-class ConnectivityManager @Inject constructor(backgroundManager: BackgroundManager) {
+class ConnectivityManager @Inject constructor(
+    @ApplicationContext context: Context,
+    backgroundManager: BackgroundManager,
+) {
 
     private val connectivityManager: ConnectivityManager by lazy {
-        App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
     private val scope = CoroutineScope(Dispatchers.Default)
     private val _networkAvailabilityFlow =

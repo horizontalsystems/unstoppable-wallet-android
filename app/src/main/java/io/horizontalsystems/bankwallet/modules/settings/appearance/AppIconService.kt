@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AppIconService @Inject constructor(private val localStorage: ILocalStorage) {
+class AppIconService @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val localStorage: ILocalStorage,
+) {
     private val _optionsFlow = MutableStateFlow(
         Select(localStorage.appIcon ?: AppIcon.Main, getAvailableIcons())
     )
@@ -41,10 +45,10 @@ class AppIconService @Inject constructor(private val localStorage: ILocalStorage
 
         AppIcon.entries.forEach { icon ->
             try {
-                val componentName = ComponentName(App.instance, icon.launcherName)
+                val componentName = ComponentName(context, icon.launcherName)
                 val newState = if (selectedIcon == icon) enabled else disabled
 
-                App.instance.packageManager.setComponentEnabledSetting(
+                context.packageManager.setComponentEnabledSetting(
                     componentName,
                     newState,
                     PackageManager.DONT_KILL_APP

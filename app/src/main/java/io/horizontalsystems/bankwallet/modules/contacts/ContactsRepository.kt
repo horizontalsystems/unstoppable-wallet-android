@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.contacts
 
+import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule.ContactValidationException
@@ -25,7 +26,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ContactsRepository @Inject constructor(
-    private val marketKit: MarketKitWrapper
+    @ApplicationContext private val context: Context,
+    private val marketKit: MarketKitWrapper,
 ) {
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val coroutineScope = CoroutineScope(singleDispatcher)
@@ -36,7 +38,7 @@ class ContactsRepository @Inject constructor(
     private val logger = AppLogger("contacts")
 
     private val file: File
-        get() = File(App.instance.filesDir, "UW_Contacts.json")
+        get() = File(context.filesDir, "UW_Contacts.json")
 
     val contacts: List<Contact>
         get() = contactsMap.map { it.value }.sortedBy { it.name }.toList()
