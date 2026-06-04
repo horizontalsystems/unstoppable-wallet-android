@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.opencryptopay
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -14,8 +16,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 
-class OpenCryptoPayViewModel(
-    private val lnurl: String,
+@HiltViewModel(assistedFactory = OpenCryptoPayViewModel.Factory::class)
+class OpenCryptoPayViewModel @AssistedInject constructor(
+    @Assisted private val lnurl: String,
 ) : ViewModelUiState<OpenCryptoPayUiState>() {
 
     private var loading = true
@@ -184,11 +187,9 @@ class OpenCryptoPayViewModel(
         }
     }
 
-    class Factory(private val lnurl: String) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return OpenCryptoPayViewModel(lnurl) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(lnurl: String): OpenCryptoPayViewModel
     }
 }
 

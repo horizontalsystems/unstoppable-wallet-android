@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -72,21 +72,9 @@ private fun OpenCryptoPayEvmConfirmationScreen(
     navController: HSNavigation,
     input: OpenCryptoPayEvmConfirmationPage.Input,
 ) {
-    val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
-        factory = OpenCryptoPayEvmConfirmationViewModel.Factory(
-            wallet = input.wallet,
-            callbackUrl = input.callbackUrl,
-            quoteId = input.quoteId,
-            paymentId = input.paymentId,
-            method = input.method,
-            asset = input.asset,
-            assetAmount = input.assetAmount,
-            blockchainType = input.blockchainType,
-            merchant = input.merchant,
-            expirationIso = input.expirationIso,
-            minFee = input.minFee,
-        )
-    )
+    val viewModel = hiltViewModel<OpenCryptoPayEvmConfirmationViewModel, OpenCryptoPayEvmConfirmationViewModel.Factory> { factory ->
+        factory.create(input)
+    }
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(

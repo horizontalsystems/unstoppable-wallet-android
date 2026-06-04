@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.opencryptopay
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -10,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
 import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceBtc
@@ -29,19 +30,22 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 import java.time.Instant
 
-class OpenCryptoPayConfirmationViewModel(
-    val wallet: Wallet,
-    private val callbackUrl: String,
-    private val quoteId: String,
-    private val paymentId: String,
-    private val method: String,
-    private val asset: String,
-    private val assetAmount: String,
-    private val merchant: String?,
-    private val expirationIso: String,
-    private val minFee: Double?,
+@HiltViewModel(assistedFactory = OpenCryptoPayConfirmationViewModel.Factory::class)
+class OpenCryptoPayConfirmationViewModel @AssistedInject constructor(
+    @Assisted private val input: OpenCryptoPayConfirmationPage.Input,
     private val ocpPaymentDao: OcpPaymentDao,
 ) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
+
+    val wallet = input.wallet
+    private val callbackUrl = input.callbackUrl
+    private val quoteId = input.quoteId
+    private val paymentId = input.paymentId
+    private val method = input.method
+    private val asset = input.asset
+    private val assetAmount = input.assetAmount
+    private val merchant = input.merchant
+    private val expirationIso = input.expirationIso
+    private val minFee = input.minFee
 
     val sendTransactionService = SendTransactionServiceFactory.create(wallet.token)
 
@@ -255,23 +259,8 @@ class OpenCryptoPayConfirmationViewModel(
         )
     }
 
-    class Factory(
-        private val wallet: Wallet,
-        private val callbackUrl: String,
-        private val quoteId: String,
-        private val paymentId: String,
-        private val method: String,
-        private val asset: String,
-        private val assetAmount: String,
-        private val merchant: String?,
-        private val expirationIso: String,
-        private val minFee: Double?,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return OpenCryptoPayConfirmationViewModel(
-                wallet, callbackUrl, quoteId, paymentId, method, asset, assetAmount, merchant, expirationIso, minFee, App.appDatabase.ocpPaymentDao()
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(input: OpenCryptoPayConfirmationPage.Input): OpenCryptoPayConfirmationViewModel
     }
 }

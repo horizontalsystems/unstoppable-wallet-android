@@ -1,18 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.opencryptopay
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.OcpPaymentDao
 import io.horizontalsystems.bankwallet.entities.OcpPaymentRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -21,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewIte
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,21 +29,46 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 import java.time.Instant
 
-class OpenCryptoPayEvmConfirmationViewModel(
-    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
-    val sendTransactionService: SendTransactionServiceEvm,
+@HiltViewModel(assistedFactory = OpenCryptoPayEvmConfirmationViewModel.Factory::class)
+class OpenCryptoPayEvmConfirmationViewModel @AssistedInject constructor(
+    @Assisted private val input: OpenCryptoPayEvmConfirmationPage.Input,
     private val ocpPaymentDao: OcpPaymentDao,
-    private val wallet: Wallet,
-    private val callbackUrl: String,
-    private val quoteId: String,
-    private val paymentId: String,
-    private val method: String,
-    private val asset: String,
-    private val assetAmount: String,
-    val blockchainType: BlockchainType,
-    private val merchant: String?,
-    private val expirationIso: String,
 ) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
+
+    private val wallet = input.wallet
+    private val callbackUrl = input.callbackUrl
+    private val quoteId = input.quoteId
+    private val paymentId = input.paymentId
+    private val method = input.method
+    private val asset = input.asset
+    private val assetAmount = input.assetAmount
+    val blockchainType = input.blockchainType
+    private val merchant = input.merchant
+    private val expirationIso = input.expirationIso
+
+    val sendTransactionService = SendTransactionServiceEvm(
+        blockchainType,
+        minGasPrice = input.minFee?.let { fee ->
+            val feeLong = kotlin.math.ceil(fee).toLong()
+            if (App.evmBlockchainManager.getChain(blockchainType).isEIP1559Supported) {
+                GasPrice.Eip1559(maxFeePerGas = feeLong, maxPriorityFeePerGas = 0)
+            } else {
+                GasPrice.Legacy(feeLong)
+            }
+        }
+    )
+
+    private val sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
+        App.evmLabelManager,
+        EvmCoinServiceFactory(
+            App.evmBlockchainManager.getBaseToken(blockchainType)!!,
+            App.marketKit,
+            App.currencyManager,
+            App.coinManager,
+        ),
+        App.contactsRepository,
+        blockchainType,
+    )
 
     private var initialLoading = true
     private var apiLoading = true
@@ -173,53 +198,9 @@ class OpenCryptoPayEvmConfirmationViewModel(
         throw lastError
     }
 
-    class Factory(
-        private val wallet: Wallet,
-        private val callbackUrl: String,
-        private val quoteId: String,
-        private val paymentId: String,
-        private val method: String,
-        private val asset: String,
-        private val assetAmount: String,
-        private val blockchainType: BlockchainType,
-        private val merchant: String?,
-        private val expirationIso: String,
-        private val minFee: Double?,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val minGasPrice: GasPrice? = minFee?.let { fee ->
-                val feeLong = kotlin.math.ceil(fee).toLong()
-                if (App.evmBlockchainManager.getChain(blockchainType).isEIP1559Supported) {
-                    GasPrice.Eip1559(maxFeePerGas = feeLong, maxPriorityFeePerGas = 0)
-                } else {
-                    GasPrice.Legacy(feeLong)
-                }
-            }
-            val sendTransactionService = SendTransactionServiceEvm(blockchainType, minGasPrice = minGasPrice)
-            val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
-            val coinServiceFactory = EvmCoinServiceFactory(
-                feeToken, App.marketKit, App.currencyManager, App.coinManager
-            )
-            val sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
-                App.evmLabelManager, coinServiceFactory, App.contactsRepository, blockchainType
-            )
-            return OpenCryptoPayEvmConfirmationViewModel(
-                sendEvmTransactionViewItemFactory,
-                sendTransactionService,
-                App.appDatabase.ocpPaymentDao(),
-                wallet,
-                callbackUrl,
-                quoteId,
-                paymentId,
-                method,
-                asset,
-                assetAmount,
-                blockchainType,
-                merchant,
-                expirationIso,
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(input: OpenCryptoPayEvmConfirmationPage.Input): OpenCryptoPayEvmConfirmationViewModel
     }
 }
 

@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardSubtitleType
@@ -46,7 +45,9 @@ fun OpenCryptoPayScreen(
     navController: HSNavigation,
     lnurl: String,
 ) {
-    val viewModel = viewModel<OpenCryptoPayViewModel>(factory = OpenCryptoPayViewModel.Factory(lnurl))
+    val viewModel = hiltViewModel<OpenCryptoPayViewModel, OpenCryptoPayViewModel.Factory> { factory ->
+        factory.create(lnurl)
+    }
     val uiState = viewModel.uiState
     val view = LocalView.current
 

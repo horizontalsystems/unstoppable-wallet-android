@@ -2,8 +2,9 @@ package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
@@ -17,7 +18,7 @@ import java.math.BigDecimal
 
 @Composable
 fun BackupRequiredAlert(navController: HSNavigation) {
-    val viewModel = viewModel<BackupRequiredAlertViewModel>()
+    val viewModel = hiltViewModel<BackupRequiredAlertViewModel>()
 
     val uiState = viewModel.uiState
     val alertAccount = uiState.alertAccount
@@ -32,7 +33,8 @@ fun BackupRequiredAlert(navController: HSNavigation) {
     }
 }
 
-class BackupRequiredAlertViewModel : ViewModelUiState<BackupRequiredAlertViewModel.UiState>() {
+@HiltViewModel
+class BackupRequiredAlertViewModel @javax.inject.Inject constructor() : ViewModelUiState<BackupRequiredAlertViewModel.UiState>() {
     private var currentAccount: Account? = null
     private var alertAccount: Account? = null
     private val enabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
