@@ -315,6 +315,11 @@ private fun SwapScreenInner(
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
         var amountInputHasFocus by remember { mutableStateOf(false) }
+        val amountInputFocusRequester = remember { FocusRequester() }
+
+        LaunchedEffect(Unit) {
+            amountInputFocusRequester.requestFocus()
+        }
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -337,6 +342,7 @@ private fun SwapScreenInner(
                     onFocusChanged = {
                         amountInputHasFocus = it.hasFocus
                     },
+                    focusRequester = amountInputFocusRequester,
                 )
                 VSpacer(height = 8.dp)
                 Column(
@@ -699,6 +705,7 @@ private fun SwapInput(
     tokenOut: Token?,
     currency: Currency,
     onFocusChanged: (FocusState) -> Unit,
+    focusRequester: FocusRequester,
 ) {
     Box {
         Column(
@@ -713,7 +720,8 @@ private fun SwapInput(
                 fiatAmountInputEnabled = fiatAmountInputEnabled,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom,
-                onFocusChanged = onFocusChanged
+                onFocusChanged = onFocusChanged,
+                focusRequester = focusRequester
             )
             SwapCoinInputTo(
                 coinAmount = amountOut,
@@ -749,6 +757,7 @@ private fun SwapCoinInputIn(
     token: Token?,
     onClickCoin: () -> Unit,
     onFocusChanged: (FocusState) -> Unit,
+    focusRequester: FocusRequester,
 ) {
     Row(
         modifier = Modifier
@@ -761,7 +770,8 @@ private fun SwapCoinInputIn(
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
             AmountInput(
                 value = coinAmount,
-                onValueChange = onValueChange
+                onValueChange = onValueChange,
+                focusRequester = focusRequester
             )
             VSpacer(height = 3.dp)
             FiatAmountInput(
