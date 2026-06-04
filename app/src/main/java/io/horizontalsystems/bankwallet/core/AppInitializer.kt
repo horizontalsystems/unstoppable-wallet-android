@@ -1,6 +1,11 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import io.horizontalsystems.bankwallet.core.App.Companion.appDatabase
 import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -16,13 +21,10 @@ import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
+import io.horizontalsystems.bankwallet.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -91,6 +93,9 @@ class AppInitializer @Inject constructor(
                 MarketWidgetWorker.cancel(context)
             }
 
+            appDatabase.ocpPaymentDao().getPending().forEach { record ->
+                OcpProofSubmissionWorker.enqueue(context, record.txHash)
+            }
             evmLabelManager.sync()
             contactsRepository.initialize()
             App.trialExpired = !UserSubscriptionManager.hasFreeTrial()
