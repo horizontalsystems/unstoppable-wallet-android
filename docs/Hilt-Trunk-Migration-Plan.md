@@ -181,6 +181,67 @@ but `App.onCreate()` construction-inversion and the companion remain. Forcing th
 for every stateful manager, threading `Context` through `Translator`/adapters) would be a large,
 high-risk, low-value rewrite and is **not recommended**.
 
+## What's left for migration (inventory — 2026-06)
+
+**108 files** still read `App.*` directly. Breakdown with the recommended approach per group.
+
+### A. Composables — F2 (30 files)
+
+**A1. Stateless display via `LocalNumberFormatter` (clean, infra already exists) — ~12 files**
+`ui/compose/components/ComposeUtils.kt`, `modules/xtransaction/helpers/AmountString.kt`,
+`modules/fee/HSFeeInput.kt`, `modules/multiswap/SelectSwapCoinDialogScreen.kt`,
+`modules/multiswap/SwapSelectProviderPage.kt`, `modules/multiswap/ui/DataFieldSlippage.kt`,
+`modules/info/OverallScoreInfoPage.kt`, `modules/coin/overview/ui/{Title,Roi,Chart}.kt`,
+`modules/transactionInfo/resendbitcoin/ResendBitcoinPage.kt`, `modules/send/SendConfirmationScreen.kt`.
+→ `LocalNumberFormatter.current` (thread as a param into any non-`@Composable` helper). Lowest risk.
+
+**A2. Single-singleton reads — small Local or via screen VM — ~8 files**
+`coin/indicators/IndicatorSettingsPage.kt` (chartIndicatorManager), `contacts/ContactsPage.kt`
+(marketKit→`LocalMarketKit`), `contacts/screen/ContactsScreen.kt` (pinComponent),
+`createaccount/CreateAccountPage.kt` (localStorage), `createaccount/CreateAccountPasskeyPage.kt`
++ `importwallet/ImportWalletPage.kt` (passkeyManager), `receive/ReceiveChooseCoinPage.kt`
+(accountManager), `nav3/EntryPage.kt` (localStorage). → prefer the screen's `hiltViewModel`; a Local
+only for genuinely-ambient/stateless values.
+
+**A3. nav3 / lock-gate composables — 3 files**
+`nav3/Nav3.kt` (instance→`LocalContext`, pinComponent), `nav3/HSNavigation.kt`
+(pinComponent, termsManager), `backuplocal/password/BackupLocalPassword.kt` (instance, pinComponent).
+→ pinComponent reads are lock checks; move into a small VM or a `LocalPinComponent`.
+
+**A4. Heavy service-constructing composables — 3 files (real work)**
+`coin/overview/ui/CoinOverviewScreen.kt`, `managewallets/ManageWalletsPage.kt`,
+`restoreaccount/restoreblockchains/RestoreBlockchains.kt` each build a `*Service` from ~12 managers
+and hand it to a `viewModel`/`hiltViewModel` factory. → migrate that VM/service to `@AssistedInject`
+with the managers injected (per-screen; medium effort).
+
+### B. Objects / utils / extensions / services — F3 (57 files) — mostly no injection seam
+`object`s and top-level/extension functions called from non-Hilt code: `core/providers/Translator.kt`
+(blocker, see Phase G), `ui/helpers/{LinkHelper,TextHelper}.kt`, `core/MarketKitExtensions.kt`,
+`entities/{Account,CoinValue,CurrencyValue}.kt`, `core/storage/DatabaseConverters.kt` +
+`migrations/Migration_56_57.kt`, `core/managers/{BirthdayHeightHelper,EvmKitManager,Faq,Guides,*EventExtractor}.kt`,
+the multiswap `providers/*` and `sendtransaction/SendTransactionService*` (built by
+`SendTransactionServiceFactory`, not Hilt), `balance/BalanceService.kt`, `walletconnect/*` handlers,
+`settings/appearance/AppearanceModule.kt`, `theme/ThemeService.kt`, etc.
+→ Each needs the dependency threaded through its constructor/call params, or its factory made
+`@Inject`. High effort, broad ripple, low payoff. Do opportunistically when a file is touched anyway.
+
+### C. Blockchain adapters (15 files) — built by `AdapterFactory`
+`core/adapters/*` read `App.instance` (Context) and `App.spamManager`. `AdapterFactory` is already
+`@Inject` with `@ApplicationContext` + can be given `SpamManager` — so it could pass these into each
+adapter it constructs. Mechanical but touches 15 adapter signatures + their `.clear()` static paths.
+
+### D. Glance widgets (4 files) — separate Compose tree
+`widgets/MarketWidget*.kt` render outside `MainActivity`, so the root `CompositionLocal`s don't reach
+them. Need their own provision (resolve from a Hilt `@EntryPoint` in the widget/worker entrypoint).
+
+### E. Permanent — keep (2 files)
+`core/di/AppModule.kt` (the 5 bridges) and `core/AppInitializer.kt` (startup orchestration).
+
+### Bottom line
+A1/A2/A3 (composables) and the eventual A4 are the safe, worthwhile remainder. B/C/D do not unlock
+companion deletion on their own (Translator/App.instance dominates), so **Phase G stays blocked** and
+the `companion object` + 5 bridges remain regardless of how much of B/C/D is migrated.
+
 ## Special-case fixes
 - `LocalStorageManager` (backs `ILocalStorage`, `IPinSettingsStorage`, `ILockoutStorage`,
   `IThirdKeyboard`, `IMarketStorage`) → `@Inject @Singleton`; provide `SharedPreferences` via
