@@ -565,6 +565,43 @@ private fun ProviderCellInfo(
             },
             onClick = onClickProviderScoreInfo
         )
+        quote.estimationTime?.let { estimationTime ->
+            CellSecondary(
+                middle = {
+                    CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
+                },
+                right = {
+                    SwapTime(estimationTime = estimationTime)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SwapTime(
+    modifier: Modifier = Modifier,
+    estimationTime: Long,
+) {
+    val color = ComposeAppTheme.colors.jacob
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = formatDurationShort(estimationTime),
+            style = ComposeAppTheme.typography.subheadSB,
+            color = color,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
+        HSpacer(4.dp)
+        Icon(
+            painter = painterResource(R.drawable.clock_filled_24),
+            modifier = Modifier.size(20.dp),
+            tint = color,
+            contentDescription = null
+        )
     }
 }
 
