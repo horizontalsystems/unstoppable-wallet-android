@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -148,17 +149,17 @@ private fun RiskLevelCell(level: RiskLevel, description: String) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Icon(
                 painter = painterResource(level.icon),
                 contentDescription = null,
                 tint = color,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(20.dp)
             )
+            HSpacer(8.dp)
             Text(
                 text = stringResource(level.title),
-                style = ComposeAppTheme.typography.captionSB,
+                style = ComposeAppTheme.typography.subheadSB,
                 color = color,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
