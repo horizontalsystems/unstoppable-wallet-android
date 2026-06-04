@@ -136,12 +136,15 @@ keeps the companions populated for the not-yet-migrated consumers below.
 ### Phase F — Migrate the 134 direct `App.*` consumers
 This is the current frontier. Tackle in risk order:
 
-- **F1 — already-Hilt classes still reading `App.*` internally (do first; mechanical, low-risk).**
-  The 3 ViewModels, 8 services, and the migrated managers among the 63 objects already have an
-  `@Inject`/`@AssistedInject` constructor — replace their `App.x` reads with constructor params
-  (`@ApplicationContext` for `App.instance`, inject `AppConfigProvider`/`MarketKitWrapper`/etc.).
-  No new injection seam needed. Directly shrinks the `numberFormatter`/`marketKit`/`appConfigProvider`
-  hotspots. Does **not** yet allow deleting companions.
+- **F1 — ✅ DONE (2026-06).** Every already-`@Inject`/`@HiltViewModel`/`@AssistedInject` class that
+  read `App.*` internally now takes those deps via the constructor (`@ApplicationContext Context` or
+  `Application` for `App.instance`; injected `AppConfigProvider`/`MarketKitWrapper`/`CurrencyManager`/
+  `IAppNumberFormatter`/`WalletManager`/`EvmBlockchainManager`/etc.). Cleaned: the 6 kit managers,
+  SystemInfoManager, ConnectivityManager, LanguageManager (`LocaleHelper.get/setLocale(context)`),
+  AccountManager (`application as CoreApp`), AppIconService, ContactsRepository, the 3 OpenCryptoPay
+  VMs, BackupRequiredAlertViewModel. Consumer files: 134 → 118. The only already-Hilt classes still
+  referencing `App.*` are `AppModule.kt` (permanent bridges) and `AppInitializer.kt` (startup) — both
+  intentional. Does **not** yet allow deleting companions (the F2/F3 globals still read them).
 - **F2 — composables (40) reading `App.*`.** Source the value from the screen's `hiltViewModel()`
   VM (or `LocalContext`) instead of the companion. A few (e.g. `App.pinComponent` lock checks) may
   legitimately move into a small VM.
