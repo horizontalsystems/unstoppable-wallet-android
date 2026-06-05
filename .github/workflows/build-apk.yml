@@ -31,21 +31,24 @@ jobs:
         run: ./gradlew :app:assembleFdroidRelease
 
       - name: Sign Base APK
+        env:
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+          apksigner sign --ks keystore.jks --ks-pass env:KS_PASS \
             app/build/outputs/apk/base/release/app-base-release-unsigned.apk
 
       - name: Sign F-Droid APK
+        env:
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+          apksigner sign --ks keystore.jks --ks-pass env:KS_PASS \
             app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
 
       - name: Rename APKs
         shell: bash
         run: |
-          SHORT_SHA=${GITHUB_SHA::6}
-          cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk unstoppable_wallet_google_play_${SHORT_SHA}.apk
-          cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${SHORT_SHA}.apk
+          cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk unstoppable_wallet_google_play_${{ github.ref_name }}.apk
+          cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${{ github.ref_name }}.apk
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
