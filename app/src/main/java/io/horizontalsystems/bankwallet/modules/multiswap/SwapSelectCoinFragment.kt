@@ -38,7 +38,8 @@ private fun SwapSelectCoinScreen(
         title = title ?: "",
         uiState = uiState,
         onSearchTextChanged = viewModel::setQuery,
-        onClose = navController::popBackStack
+        onClose = navController::popBackStack,
+        onRecordRecent = { viewModel.onRecentTokenSelected(it.token) }
     ) {
         navController.setNavigationResultX(it.token)
         navController.popBackStack()

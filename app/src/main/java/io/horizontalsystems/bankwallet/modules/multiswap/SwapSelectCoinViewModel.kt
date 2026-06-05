@@ -14,10 +14,12 @@ import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
 import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,12 +31,14 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private val adapterManager = App.adapterManager
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
+    private val localStorage = App.localStorage
     private var query = ""
 
     private var popular = listOf<CoinBalanceItem>()
     private var yourTokens = listOf<CoinBalanceItem>()
     private var topTokens = listOf<CoinBalanceItem>()
     private var searchResults = listOf<CoinBalanceItem>()
+    private var recent = listOf<CoinBalanceItem>()
 
     var uiState by mutableStateOf(
         SwapSelectCoinUiState(
@@ -43,6 +47,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             yourTokens = yourTokens,
             topTokens = topTokens,
             searchResults = searchResults,
+            recent = recent,
         )
     )
         private set
@@ -64,14 +69,46 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         }
     }
 
+    /**
+     * Records a token that the user picked while the search field was active, so it can be shown
+     * in the Recent section. Most recent first, deduplicated, capped at [RECENT_LIMIT].
+     */
+    fun onRecentTokenSelected(token: Token) {
+        val id = token.tokenQuery.id
+        val ids = (listOf(id) + localStorage.swapRecentTokenQueryIds.filter { it != id })
+            .take(RECENT_LIMIT)
+        localStorage.swapRecentTokenQueryIds = ids
+
+        viewModelScope.launch {
+            recent = loadRecent(ids)
+            emitState()
+        }
+    }
+
+    private suspend fun loadRecent(ids: List<String>): List<CoinBalanceItem> =
+        withContext(Dispatchers.Default) {
+            val activeWallets = App.walletManager.activeWallets
+            ids.mapNotNull { id -> TokenQuery.fromId(id)?.let { marketKit.token(it) } }
+                .map { coinBalanceItem(it, activeWallets) }
+        }
+
+    private fun coinBalanceItem(token: Token, activeWallets: List<Wallet>): CoinBalanceItem {
+        val balance = activeWallets.firstOrNull { it.token == token }?.let {
+            adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
+        }
+        return CoinBalanceItem(token, balance, getFiatValue(token, balance))
+    }
+
     private suspend fun loadSections() = withContext(Dispatchers.Default) {
         val activeWallets = App.walletManager.activeWallets
 
+        // Recent — tokens the user picked previously while searching
+        recent = loadRecent(localStorage.swapRecentTokenQueryIds)
+
         // Your Tokens — all enabled tokens, sorted as on the main Wallet screen
-        yourTokens = activeWallets.map { wallet ->
-            val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-            CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
-        }.sortedByCriteria(BalanceSorter.VALUE_CRITERIA)
+        yourTokens = activeWallets
+            .map { coinBalanceItem(it.token, activeWallets) }
+            .sortedByCriteria(BalanceSorter.VALUE_CRITERIA)
 
         // Popular Tokens — context-aware hardcoded list (built from the opposite token)
         popular = buildPopularTokens(otherSelectedToken).map { CoinBalanceItem(it, null, null) }
@@ -211,6 +248,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 yourTokens = yourTokens,
                 topTokens = topTokens,
                 searchResults = searchResults,
+                recent = recent,
             )
         }
     }
@@ -240,6 +278,10 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             return SwapSelectCoinViewModel(otherSelectedToken) as T
         }
     }
+
+    companion object {
+        private const val RECENT_LIMIT = 10
+    }
 }
 
 data class SwapSelectCoinUiState(
@@ -248,4 +290,5 @@ data class SwapSelectCoinUiState(
     val yourTokens: List<CoinBalanceItem>,
     val topTokens: List<CoinBalanceItem>,
     val searchResults: List<CoinBalanceItem>,
+    val recent: List<CoinBalanceItem>,
 )

@@ -85,6 +85,7 @@ interface ILocalStorage {
     var selectedPeriods: List<HsTimePeriod>
     var roiPerformanceCoins: List<PerformanceCoin>
     var marketSearchRecentCoinUids: List<String>
+    var swapRecentTokenQueryIds: List<String>
     var zcashAccountIds: Set<String>
     var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean

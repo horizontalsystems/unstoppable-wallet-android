@@ -760,6 +760,7 @@
     <string name="Swap_PopularTokens">Popular Tokens</string>
     <string name="Swap_YourTokens">Your Tokens</string>
     <string name="Swap_TopTokens">Top Tokens</string>
+    <string name="Swap_RecentSearch">Recent Search</string>
     <string name="Swap_EnterAmount">Enter Amount</string>
     <string name="Swap_Revoke">Revoke</string>
     <string name="Swap_Revoking">Revoking...</string>
