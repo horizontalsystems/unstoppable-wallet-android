@@ -149,6 +149,13 @@ class LocalStorageManager(
             preferences.edit().putString("marketSearchRecentCoinUids", value.joinToString(",")).apply()
         }
 
+    override var swapRecentTokenQueryIds: List<String>
+        get() = preferences.getString("swapRecentTokenQueryIds", null)
+            ?.split(",")?.filter { it.isNotBlank() } ?: listOf()
+        set(value) {
+            preferences.edit { putString("swapRecentTokenQueryIds", value.joinToString(",")) }
+        }
+
     override var zcashAccountIds: Set<String>
         get() = preferences.getStringSet("zcashAccountIds", setOf()) ?: setOf()
         set(value) {

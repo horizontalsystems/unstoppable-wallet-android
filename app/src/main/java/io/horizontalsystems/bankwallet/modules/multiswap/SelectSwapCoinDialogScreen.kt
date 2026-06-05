@@ -56,6 +56,7 @@ fun SelectSwapCoinDialogScreen(
     uiState: SwapSelectCoinUiState,
     onSearchTextChanged: (String) -> Unit,
     onClose: () -> Unit,
+    onRecordRecent: (CoinBalanceItem) -> Unit,
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
@@ -67,8 +68,17 @@ fun SelectSwapCoinDialogScreen(
     ) {
         val isSearching = searchQuery.isNotBlank()
 
+        // Tokens picked while the search field is active are remembered as recent.
+        val onClick: (CoinBalanceItem) -> Unit = { coinItem ->
+            if (isSearchActive) onRecordRecent(coinItem)
+            onClickItem(coinItem)
+        }
+
         if (isSearching && uiState.searchResults.isEmpty()) {
             ListEmptyView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ComposeAppTheme.colors.lawrence),
                 text = stringResource(R.string.EmptyResults),
                 icon = R.drawable.ic_not_available
             )
@@ -77,10 +87,21 @@ fun SelectSwapCoinDialogScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .imePadding()
+                    .background(ComposeAppTheme.colors.lawrence)
             ) {
                 if (isSearching) {
                     itemsIndexed(uiState.searchResults) { index, coinItem ->
-                        CoinCell(coinItem, onClickItem, top = index == 0)
+                        CoinCell(coinItem, onClick, top = index == 0)
+                    }
+                } else if (isSearchActive) {
+                    // Search active with empty input — show recently picked tokens.
+                    if (uiState.recent.isNotEmpty()) {
+                        item {
+                            SectionHeaderColored(title = stringResource(R.string.Swap_RecentSearch))
+                        }
+                        itemsIndexed(uiState.recent) { index, coinItem ->
+                            CoinCell(coinItem, onClick, top = index == 0)
+                        }
                     }
                 } else {
                     if (uiState.popular.isNotEmpty()) {
@@ -90,7 +111,7 @@ fun SelectSwapCoinDialogScreen(
                             )
                         }
                         item {
-                            PopularTokensRow(uiState.popular, onClickItem)
+                            PopularTokensRow(uiState.popular, onClick)
                         }
                     }
                     if (uiState.yourTokens.isNotEmpty()) {
@@ -98,7 +119,7 @@ fun SelectSwapCoinDialogScreen(
                             SectionHeaderColored(title = stringResource(R.string.Swap_YourTokens))
                         }
                         itemsIndexed(uiState.yourTokens) { index, coinItem ->
-                            CoinCell(coinItem, onClickItem, top = index == 0)
+                            CoinCell(coinItem, onClick, top = index == 0)
                         }
                     }
                     if (uiState.topTokens.isNotEmpty()) {
@@ -106,7 +127,7 @@ fun SelectSwapCoinDialogScreen(
                             SectionHeaderColored(title = stringResource(R.string.Swap_TopTokens))
                         }
                         itemsIndexed(uiState.topTokens) { index, coinItem ->
-                            CoinCell(coinItem, onClickItem, top = index == 0)
+                            CoinCell(coinItem, onClick, top = index == 0)
                         }
                     }
                 }
