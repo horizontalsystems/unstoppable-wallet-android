@@ -668,4 +668,13 @@
     <string name="OpenCryptoPay_Error_FetchFailed">بازیابی جزئیات پرداخت ناموفق بود</string>
     <string name="OpenCryptoPay_Error_LoadFailed">بارگیری جزئیات پرداخت ناموفق بود</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">نتوانست پرداخت را به پذیرنده ارسال کند. لطفا دوباره تلاش کنید.</string>
+    <string name="Swap_SwapTime">زمان تبدیل</string>
+    <string name="Swap_PopularTokens">توکن های محبوب</string>
+    <string name="Swap_YourTokens">توکن های شما</string>
+    <string name="Swap_TopTokens">بهترین توکن ها</string>
+    <string name="Swap_RecentSearch">جستجوی اخیر</string>
+    <string name="SwapTerms_TopText">برای ادامه، لطفاً موافقت خود را با هر مورد تأیید کنید.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">برخی از ارائه دهندگان ممکن است تبدیل ها را رد کنند یا دسترسی به وجوه را محدود کنند. هنگام انتخاب یک ارائه دهنده، به امتیازات ارائه دهنده توجه کنید.</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">امتیازات ارائه دهنده</string>
+    <string name="SwapTerms_UserResponsibility_Info">من خطرات احتمالی را بررسی کردم و مسئولیت انتخاب ارائه دهنده خود را می پذیرم.</string>
 </resources>

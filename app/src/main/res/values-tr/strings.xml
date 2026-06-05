@@ -1353,4 +1353,13 @@
     <string name="OpenCryptoPay_Error_FetchFailed">Ödeme detayları alınamadı</string>
     <string name="OpenCryptoPay_Error_LoadFailed">Ödeme detayları yüklenemedi</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">Ödeme satıcıya gönderilemedi. Lütfen tekrar deneyin.</string>
+    <string name="Swap_SwapTime">Takas Süresi</string>
+    <string name="Swap_PopularTokens">Popüler Tokenler</string>
+    <string name="Swap_YourTokens">Sizin Tokenleriniz</string>
+    <string name="Swap_TopTokens">En İyi Tokenler</string>
+    <string name="Swap_RecentSearch">Son Arama</string>
+    <string name="SwapTerms_TopText">Devam etmek için lütfen her öğeye olan anlaşmanızı onaylayın.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Bazı sağlayıcılar takasları reddedebilir veya fon erişimini kısıtlayabilir. Bir sağlayıcı seçerken sağlayıcı puanlarına dikkat edin.</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">sağlayıcı puanları</string>
+    <string name="SwapTerms_UserResponsibility_Info">Olası riskleri gözden geçirdim ve sağlayıcı seçimim için sorumluluk kabul ediyorum.</string>
 </resources>
