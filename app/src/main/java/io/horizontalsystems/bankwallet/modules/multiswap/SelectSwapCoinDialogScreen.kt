@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -198,6 +199,8 @@ private fun TokenIconWithBadge(token: Token) {
                 coin = token.coin,
                 modifier = Modifier
                     .align(Alignment.Center)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.white)
                     .size(20.dp)
             )
         } else {
@@ -205,6 +208,8 @@ private fun TokenIconWithBadge(token: Token) {
                 coin = token.coin,
                 modifier = Modifier
                     .align(Alignment.TopStart)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.white)
                     .size(20.dp)
             )
             val badgeShape = RoundedCornerShape(2.dp)
