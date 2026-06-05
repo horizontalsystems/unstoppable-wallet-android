@@ -37,9 +37,9 @@ dependencies {
     implementation(libs.androidx.startup)
     implementation(libs.androidx.core.ktx)
 
-    implementation(platform(libs.reown.bom))
-    implementation(libs.reown.walletkit)
-    implementation(libs.reown.android.core)
+    implementation(platform(libs.walletconnect.bom))
+    implementation(libs.walletconnect.web3wallet)
+    implementation(libs.walletconnect.android.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
