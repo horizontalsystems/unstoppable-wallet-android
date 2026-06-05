@@ -79,7 +79,7 @@ feeRateKit = "393cc14"
 marketKit = "b32beb1"
 solanaKit = "82c5ef4"
 tronKit = "2f07e86"
-zcashSdk = "2.5.1"
+zcashSdk = "2.5.2"
 
 # Binance
 binanceConnector = "3.4.1"
