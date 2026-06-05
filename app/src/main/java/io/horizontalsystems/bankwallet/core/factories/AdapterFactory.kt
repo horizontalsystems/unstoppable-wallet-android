@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
@@ -62,6 +63,7 @@ class AdapterFactory(
     private val stellarKitManager: StellarKitManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val zanoKitManager: ZanoKitManager,
+    private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -150,7 +152,7 @@ class AdapterFactory(
                 DashAdapter(wallet, syncMode, backgroundManager)
             }
             BlockchainType.Zcash -> {
-                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), localStorage)
+                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), localStorage, zcashEndpointManager.currentLightWalletEndpoint)
             }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,

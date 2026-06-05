@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
@@ -24,6 +25,7 @@ class BlockchainSettingsService(
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val zanoNodeManager: ZanoNodeManager,
+    private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val marketKit: MarketKitWrapper
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -70,6 +72,11 @@ class BlockchainSettingsService(
                 syncBlockchainItems()
             }
         }
+        coroutineScope.launch {
+            zcashEndpointManager.currentEndpointUpdatedFlow.collect {
+                syncBlockchainItems()
+            }
+        }
 
         coroutineScope.launch {
             syncBlockchainItems()
@@ -112,7 +119,12 @@ class BlockchainSettingsService(
             zanoBlockchainItems.add(BlockchainItem.Zano(it, zanoNodeManager.currentNode))
         }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + moneroBlockchainItems + zanoBlockchainItems).sortedBy { it.order }
+        val zcashBlockchainItems = mutableListOf<BlockchainItem>()
+        zcashEndpointManager.blockchain?.let {
+            zcashBlockchainItems.add(BlockchainItem.Zcash(it, zcashEndpointManager.currentEndpoint))
+        }
+
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + moneroBlockchainItems + zanoBlockchainItems + zcashBlockchainItems).sortedBy { it.order }
     }
 
 }

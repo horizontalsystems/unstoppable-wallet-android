@@ -140,6 +140,15 @@ private fun onClick(
                 event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
             )
         }
+
+        is BlockchainSettingsModule.BlockchainItem.Zcash -> {
+            navController.slideFromBottom(R.id.zcashNetworkFragment)
+
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
+            )
+        }
     }
 }
 

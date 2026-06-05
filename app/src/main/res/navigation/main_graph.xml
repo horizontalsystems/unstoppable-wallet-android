@@ -311,6 +311,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkFragment"
         android:label="ZanoNetworkFragment" />
     <fragment
+        android:id="@+id/zcashNetworkFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.zcashnetwork.ZcashNetworkFragment"
+        android:label="ZcashNetworkFragment" />
+    <fragment
         android:id="@+id/btcBlockchainSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment" />
     <fragment

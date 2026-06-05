@@ -13,6 +13,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
         const val keyMoneroNode: String = "monero-node"
         const val keyZanoNode: String = "zano-node"
+        const val keyZcashEndpoint: String = "zcash-endpoint"
     }
 
     private val dao by lazy { appDatabase.blockchainSettingDao() }
@@ -87,6 +88,19 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 blockchainUid = BlockchainType.Zano.uid,
                 key = keyZanoNode,
                 value = host
+            )
+        )
+    }
+
+    fun zcashEndpointUrl(): String? =
+        dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashEndpoint)?.value
+
+    fun saveZcashEndpoint(url: String) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = BlockchainType.Zcash.uid,
+                key = keyZcashEndpoint,
+                value = url
             )
         )
     }

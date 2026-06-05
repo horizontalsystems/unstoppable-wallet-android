@@ -117,6 +117,10 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
                                     navController.slideFromBottom(R.id.zanoNetworkFragment)
                                 }
 
+                                SyncErrorModule.BlockchainWrapper.Zcash -> {
+                                    navController.slideFromBottom(R.id.zcashNetworkFragment)
+                                }
+
                                 else -> {}
                             }
                         }
