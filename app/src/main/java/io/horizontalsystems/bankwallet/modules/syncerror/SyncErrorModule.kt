@@ -27,5 +27,6 @@ object SyncErrorModule {
         data class Evm(val blockchain: Blockchain) : BlockchainWrapper()
         object Monero : BlockchainWrapper()
         object Zano : BlockchainWrapper()
+        object Zcash : BlockchainWrapper()
     }
 }

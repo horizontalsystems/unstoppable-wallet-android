@@ -164,7 +164,7 @@ object SwapHelper {
                 BlockchainType.Zcash -> {
                     zcashAddressCache[account.id] ?: zcashAddressMutex.withLock {
                         zcashAddressCache[account.id] ?: withContext(Dispatchers.IO) {
-                            ZcashAdapter.getTransparentAddress(account)
+                            ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
                         }.also { zcashAddressCache[account.id] = it }
                     }
                 }
