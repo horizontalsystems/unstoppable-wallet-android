@@ -642,12 +642,12 @@
     <string name="SwapConfirm_MevDescription">开启保护，保护您的交换，避免丢失机器人的价值。</string>
     <string name="SwapError_FailedToFetchQuote">获取报价失败。</string>
     <string name="SwapTerms_Title">交换条款</string>
-    <string name="SwapTerms_TopText">不可阻挡的聚合物是多个分散化(DEX)和集中化的交换提供商，以提供有竞争力的利率和广泛的资产支持。</string>
+    <string name="SwapTerms_TopText">要继续，请确认您同意每一项。</string>
     <string name="SwapTerms_BottomText">总是选择一个与您的要求匹配的交换源。</string>
     <string name="SwapTerms_RiskRestrictions">限制的风险</string>
-    <string name="SwapTerms_RiskRestrictions_Info">我知道一些非DEX交换供应商采用了交易筛选方法。 这类提供者可拒绝（和退还）交换资金，或者，在极少数情况下（化学武器组织和恐怖主义），冻结资金并要求获得了解青年组织的数据。</string>
+    <string name="SwapTerms_RiskRestrictions_Info">某些提供商可能会拒绝交换或限制对资金的访问。选择提供商时请注意提供商评分。</string>
     <string name="SwapTerms_UserResponsibility">用户责任</string>
-    <string name="SwapTerms_UserResponsibility_Info">我理解使用非DEX提供商会带来额外的风险，这些风险是我的责任。无法阻挡不能保证提供商的行为。</string>
+    <string name="SwapTerms_UserResponsibility_Info">我已审查了可能的风险，并接受对我的提供商选择的责任。</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">无效滑点</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
@@ -1751,4 +1751,10 @@
     <string name="OpenCryptoPay_Error_FetchFailed">无法获取支付详情</string>
     <string name="OpenCryptoPay_Error_LoadFailed">无法加载支付详情</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">无法向商户提交支付。请重试。</string>
+    <string name="Swap_SwapTime">交换时间</string>
+    <string name="Swap_PopularTokens">热门代币</string>
+    <string name="Swap_YourTokens">您的代币</string>
+    <string name="Swap_TopTokens">顶级代币</string>
+    <string name="Swap_RecentSearch">最近搜索</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">提供商评分</string>
 </resources>

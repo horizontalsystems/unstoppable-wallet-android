@@ -643,12 +643,12 @@
     <string name="SwapConfirm_MevDescription">Ative a proteção para proteger sua troca e evitar perder valor para bots.</string>
     <string name="SwapError_FailedToFetchQuote">Falha ao obter citação.</string>
     <string name="SwapTerms_Title">Trocar Termos</string>
-    <string name="SwapTerms_TopText">Unstoppable aggregates multiple descentralizado (DEX) e provedores de swap centralizados para oferecer taxas competitivas e suporte amplo a ativos.</string>
+    <string name="SwapTerms_TopText">Para continuar, confirme seu acordo com cada item.</string>
     <string name="SwapTerms_BottomText">Escolha sempre um provedor de swap que se alinhe com suas exigências.</string>
     <string name="SwapTerms_RiskRestrictions">Risco de restrições</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Entendo que alguns provedores de swap não-DEX aplicam o screening de transações (AML). Esses fornecedores podem rejeitar (e reembolso) swaps ou, em raros casos, (CSAM e terrorismo), congelar fundos e solicitar dados da KYC.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Alguns provedores podem rejeitar swaps ou restringir o acesso a fundos. Preste atenção às classificações do provedor ao escolher um.</string>
     <string name="SwapTerms_UserResponsibility">Responsabilidade do usuário</string>
-    <string name="SwapTerms_UserResponsibility_Info">Entendo que o uso de provedores não-DEX introduz riscos adicionais e que esses riscos são da minha responsabilidade. Não parável pode garantir o comportamento do fornecedor.</string>
+    <string name="SwapTerms_UserResponsibility_Info">Revisei os possíveis riscos e aceito a responsabilidade pela minha escolha de provedor.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolerância de Slippage</string>
     <string name="SwapSettings_RecipientAddressTitle">Endereço do Destinatário</string>
@@ -1757,4 +1757,10 @@
     <string name="OpenCryptoPay_Error_FetchFailed">Falha ao buscar detalhes de pagamento</string>
     <string name="OpenCryptoPay_Error_LoadFailed">Falha ao carregar detalhes de pagamento</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">Não foi possível enviar o pagamento ao comerciante. Por favor, tente novamente.</string>
+    <string name="Swap_SwapTime">Tempo de Swap</string>
+    <string name="Swap_PopularTokens">Tokens Populares</string>
+    <string name="Swap_YourTokens">Seus Tokens</string>
+    <string name="Swap_TopTokens">Tokens Principais</string>
+    <string name="Swap_RecentSearch">Pesquisa Recente</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">classificações do provedor</string>
 </resources>
