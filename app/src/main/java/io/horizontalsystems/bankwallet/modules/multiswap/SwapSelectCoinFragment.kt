@@ -36,7 +36,7 @@ private fun SwapSelectCoinScreen(
 
     SelectSwapCoinDialogScreen(
         title = title ?: "",
-        coinBalanceItems = uiState.coinBalanceItems,
+        uiState = uiState,
         onSearchTextChanged = viewModel::setQuery,
         onClose = navController::popBackStack
     ) {

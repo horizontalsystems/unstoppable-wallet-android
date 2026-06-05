@@ -9,18 +9,15 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.defaultTokenQuery
 import io.horizontalsystems.bankwallet.core.eligibleTokens
-import io.horizontalsystems.bankwallet.core.nativeTokenQueries
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
 import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
-import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.bankwallet.core.supported
-import io.horizontalsystems.bankwallet.core.supports
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,18 +31,26 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private val marketKit = App.marketKit
     private var query = ""
 
-    private var coinBalanceItems = listOf<CoinBalanceItem>()
+    private var popular = listOf<CoinBalanceItem>()
+    private var yourTokens = listOf<CoinBalanceItem>()
+    private var topTokens = listOf<CoinBalanceItem>()
+    private var searchResults = listOf<CoinBalanceItem>()
 
     var uiState by mutableStateOf(
         SwapSelectCoinUiState(
-            coinBalanceItems = coinBalanceItems
+            query = query,
+            popular = popular,
+            yourTokens = yourTokens,
+            topTokens = topTokens,
+            searchResults = searchResults,
         )
     )
+        private set
 
     init {
         coinsProvider?.setActiveWallets(App.walletManager.activeWallets)
         viewModelScope.launch {
-            reloadItems()
+            loadSections()
             emitState()
         }
     }
@@ -54,86 +59,122 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         query = q
         coinsProvider?.setQuery(q)
         viewModelScope.launch {
-            reloadItems()
+            searchResults = if (q.isBlank()) emptyList() else search(q)
             emitState()
         }
     }
 
-    private suspend fun reloadItems() = withContext(Dispatchers.Default) {
+    private suspend fun loadSections() = withContext(Dispatchers.Default) {
         val activeWallets = App.walletManager.activeWallets
-        val resultTokens = mutableListOf<CoinBalanceItem>()
 
-        if (query.isEmpty()) {
-            //Enabled Tokens
-            activeWallets.map { wallet ->
-                val balance =
-                    adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-                CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
-            }.sortedByCriteria(
-                buildList {
-                    otherSelectedToken?.let { add(SortCriterion.SameBlockchainFirst(it.blockchainType)) }
-                    add(SortCriterion.FiatBalanceDescending)
-                    add(SortCriterion.CodeAscending)
-                    add(SortCriterion.CodeNativeFirst)
-                    add(SortCriterion.BlockchainOrder)
-                    add(SortCriterion.Badge)
-                }
-            ).let {
-                resultTokens.addAll(it)
+        // Your Tokens — all enabled tokens, sorted as on the main Wallet screen
+        yourTokens = activeWallets.map { wallet ->
+            val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+            CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
+        }.sortedByCriteria(BalanceSorter.VALUE_CRITERIA)
+
+        // Popular Tokens — context-aware hardcoded list (built from the opposite token)
+        popular = buildPopularTokens(otherSelectedToken).map { CoinBalanceItem(it, null, null) }
+
+        // Top Tokens — top 25 by market cap, excluding everything in Popular and Your Tokens
+        val excludedIds = (popular + yourTokens).map { it.token.tokenQuery.id }.toMutableSet()
+        val top = mutableListOf<CoinBalanceItem>()
+        val topCoins = marketKit.fullCoins("", 100)
+            .sortedBy { it.coin.marketCapRank ?: Int.MAX_VALUE }
+        for (fullCoin in topCoins) {
+            if (top.size >= 25) break
+
+            val eligible = if (activeAccount != null) {
+                fullCoin.eligibleTokens(activeAccount.type)
+            } else {
+                fullCoin.tokens.filter { it.blockchainType in BlockchainType.supported }
             }
-
-            // Suggested Tokens
-            otherSelectedToken?.let { otherToken ->
-                val topFullCoins = marketKit.fullCoins("", limit = 100)
-                val tokens =
-                    topFullCoins.map { fullCoin ->
-                        fullCoin.tokens.filter { it.blockchainType == otherToken.blockchainType }
-                    }
-                        .flatten()
-                val suggestedTokens = tokens.filter { tokenToFilter ->
-                    (activeAccount == null || tokenToFilter.blockchainType.supports(activeAccount.type)) && resultTokens.none { tokenToFilter == it.token }
-                }
-
-                suggestedTokens
-                    .sortedByCriteria(
-                        listOf(SortCriterion.MarketCapRank, SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
-                        TokenSortContext()
-                    )
-                    .map { CoinBalanceItem(it, null, null) }
-                    .let {
-                        resultTokens.addAll(it)
-                    }
-            }
-
-            // Featured Tokens
-            val tokenQueries: List<TokenQuery> = when (activeAccount?.type) {
-                is AccountType.HdExtendedKey -> {
-                    BlockchainType.supported.map { it.nativeTokenQueries }.flatten()
-                }
-
-                else -> {
-                    BlockchainType.supported.map { it.defaultTokenQuery }
-                }
-            }
-
-            val supportedNativeTokens = marketKit.tokens(tokenQueries)
-            supportedNativeTokens.filter { token ->
-                (activeAccount == null || token.blockchainType.supports(activeAccount.type)) && resultTokens.none { it.token == token }
-            }
+            val representative = eligible
+                .map { CoinBalanceItem(it, null, null) }
                 .sortedByCriteria(
-                    listOf(SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
-                    TokenSortContext()
-                ).map {
-                    CoinBalanceItem(it, null, null)
-                }.let {
-                    resultTokens.addAll(it)
-                }
+                    listOf(SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge)
+                )
+                .firstOrNull { it.token.tokenQuery.id !in excludedIds }
+                ?: continue
 
-            coinBalanceItems = resultTokens
-            return@withContext
+            top.add(representative)
+            excludedIds.add(representative.token.tokenQuery.id)
+        }
+        topTokens = top
+    }
+
+    /**
+     * Popular tokens depend on the opposite (context) token. The list is assembled from a fixed
+     * formula, then cleaned up: nulls and the context token are dropped and duplicates removed
+     * (first occurrence kept). See token_picker spec for the exact rules.
+     */
+    private fun buildPopularTokens(context: Token?): List<Token> {
+        val baseNativeTypes = listOf(
+            BlockchainType.Bitcoin,
+            BlockchainType.Ethereum,
+            BlockchainType.Monero,
+            BlockchainType.Zcash,
+            BlockchainType.Tron,
+        )
+        val natives = marketKit.tokens(baseNativeTypes.map { it.defaultTokenQuery })
+            .associateBy { it.blockchainType }
+
+        val stableCoins = marketKit.fullCoins(listOf("tether", "usd-coin"))
+        val usdt = stableCoins.firstOrNull { it.coin.uid == "tether" }?.tokens
+            ?.groupBy { it.blockchainType }?.mapValues { it.value.first() } ?: emptyMap()
+        val usdc = stableCoins.firstOrNull { it.coin.uid == "usd-coin" }?.tokens
+            ?.groupBy { it.blockchainType }?.mapValues { it.value.first() } ?: emptyMap()
+
+        val usdtEth = usdt[BlockchainType.Ethereum]
+        val usdcEth = usdc[BlockchainType.Ethereum]
+
+        val baseNatives = baseNativeTypes.map { natives[it] }
+        val tailStables = listOf(
+            usdtEth,
+            usdt[BlockchainType.Tron],
+            usdt[BlockchainType.BinanceSmartChain],
+            usdt[BlockchainType.Base],
+        )
+
+        val ordered: List<Token?> = when {
+            context == null ->
+                baseNatives + listOf(usdtEth, usdcEth) + tailStables
+
+            context.type.isNative -> {
+                // Case B — context is a native coin
+                val usdtSame = usdt[context.blockchainType] ?: usdtEth
+                val usdcSame = usdc[context.blockchainType] ?: usdcEth
+                listOf(usdtSame, usdcSame) + tailStables + baseNatives
+            }
+
+            else -> {
+                // Case A — context is a stablecoin or any other non-native token
+                val nativeSame = marketKit.token(context.blockchainType.defaultTokenQuery)
+                val usdtSame = usdt[context.blockchainType] ?: usdtEth
+                val usdcSame = usdc[context.blockchainType] ?: usdcEth
+                listOf(nativeSame) + baseNatives + listOf(usdtSame, usdcSame) + tailStables
+            }
         }
 
-        coinBalanceItems = if (coinsProvider != null && activeAccount != null) {
+        val seenIds = mutableSetOf<String>()
+        val result = mutableListOf<Token>()
+        for (token in ordered) {
+            if (token == null) continue
+            // can't swap into the context token itself
+            if (context != null &&
+                token.coin.uid == context.coin.uid &&
+                token.blockchainType == context.blockchainType
+            ) continue
+            if (!seenIds.add(token.tokenQuery.id)) continue
+            result.add(token)
+        }
+        return result
+    }
+
+    private suspend fun search(q: String): List<CoinBalanceItem> = withContext(Dispatchers.Default) {
+        val activeWallets = App.walletManager.activeWallets
+
+        if (coinsProvider != null && activeAccount != null) {
             coinsProvider.getItems()
                 .map { it.eligibleTokens(activeAccount.type) }
                 .flatten()
@@ -142,15 +183,20 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                     val balance = wallet?.let {
                         adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
                     }
-
                     CoinBalanceItem(token, balance, getFiatValue(token, balance))
                 }
                 .sortedByCriteria(
-                    listOf(SortCriterion.Enabled, SortCriterion.FilterRelevance, SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
-                    TokenSortContext(filter = query, enabledTokens = activeWallets.map { it.token }.toSet())
+                    listOf(
+                        SortCriterion.Enabled,
+                        SortCriterion.FilterRelevance,
+                        SortCriterion.CodeNativeFirst,
+                        SortCriterion.BlockchainOrder,
+                        SortCriterion.Badge
+                    ),
+                    TokenSortContext(filter = q, enabledTokens = activeWallets.map { it.token }.toSet())
                 )
         } else {
-            marketKit.fullCoins(query, 100)
+            marketKit.fullCoins(q, 100)
                 .flatMap { fullCoin -> fullCoin.tokens }
                 .filter { it.blockchainType in BlockchainType.supported }
                 .map { token -> CoinBalanceItem(token, null, null) }
@@ -160,7 +206,11 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private fun emitState() {
         viewModelScope.launch {
             uiState = SwapSelectCoinUiState(
-                coinBalanceItems = coinBalanceItems
+                query = query,
+                popular = popular,
+                yourTokens = yourTokens,
+                topTokens = topTokens,
+                searchResults = searchResults,
             )
         }
     }
@@ -192,4 +242,10 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     }
 }
 
-data class SwapSelectCoinUiState(val coinBalanceItems: List<CoinBalanceItem>)
+data class SwapSelectCoinUiState(
+    val query: String,
+    val popular: List<CoinBalanceItem>,
+    val yourTokens: List<CoinBalanceItem>,
+    val topTokens: List<CoinBalanceItem>,
+    val searchResults: List<CoinBalanceItem>,
+)
