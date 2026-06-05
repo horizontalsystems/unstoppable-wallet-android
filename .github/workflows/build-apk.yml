@@ -31,13 +31,17 @@ jobs:
         run: ./gradlew :app:assembleFdroidRelease
 
       - name: Sign Base APK
+        env:
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+          apksigner sign --ks keystore.jks --ks-pass env:KS_PASS \
             app/build/outputs/apk/base/release/app-base-release-unsigned.apk
 
       - name: Sign F-Droid APK
+        env:
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+          apksigner sign --ks keystore.jks --ks-pass env:KS_PASS \
             app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
 
       - name: Rename APKs
