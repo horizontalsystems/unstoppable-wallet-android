@@ -38,12 +38,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -55,6 +57,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
+import cash.p.terminal.core.launchAfterClearingFocus
 import cash.p.terminal.modules.enablecoin.restoresettings.IRestoreSettingsUi
 import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
 import cash.p.terminal.modules.enablecoin.restoresettings.openRestoreSettingsDialog
@@ -98,6 +101,8 @@ internal fun ManageWalletsScreen(
 ) {
     val groupsList by manageWalletsCallback.groupsList.collectAsStateWithLifecycle()
     val context = LocalView.current
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
     var initialLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(groupsList) {
@@ -186,10 +191,12 @@ internal fun ManageWalletsScreen(
                                 }
                             },
                             onInfoClick = { token ->
-                                navController.slideFromBottom(
-                                    R.id.configuredTokenInfo,
-                                    token
-                                )
+                                coroutineScope.launchAfterClearingFocus(focusManager) {
+                                    navController.slideFromBottom(
+                                        R.id.configuredTokenInfo,
+                                        token
+                                    )
+                                }
                             }
                         )
                         HorizontalDivider(
