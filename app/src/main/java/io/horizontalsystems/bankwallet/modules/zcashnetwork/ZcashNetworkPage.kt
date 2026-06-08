@@ -33,22 +33,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager.ZcashEndpoint
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
-import io.horizontalsystems.bankwallet.modules.zcashnetwork.addendpoint.AddZcashEndpointScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -64,38 +59,24 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.serialization.Serializable
 
-class ZcashNetworkFragment : BaseComposeFragment() {
+@Serializable
+data object ZcashNetworkPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
-        ZcashNetworkNavHost(navController)
+    override fun GetContent(navController: HSNavigation) {
+        ZcashNetworkScreen(
+            navController = navController,
+            onBackPress = { navController.removeLastOrNull() }
+        )
     }
 
-}
-
-private const val ZcashNetworkPage = "zcash_network"
-private const val AddEndpointPage = "add_endpoint"
-
-@Composable
-private fun ZcashNetworkNavHost(fragmentNavController: NavController) {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = ZcashNetworkPage) {
-        composable(ZcashNetworkPage) {
-            ZcashNetworkScreen(
-                navController = navController,
-                onBackPress = { fragmentNavController.popBackStack() }
-            )
-        }
-        composablePopup(AddEndpointPage) {
-            AddZcashEndpointScreen(navController = navController)
-        }
-    }
 }
 
 @Composable
 private fun ZcashNetworkScreen(
-    navController: NavController,
+    navController: HSNavigation,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<ZcashNetworkViewModel>(factory = ZcashNetworkModule.Factory())
@@ -161,7 +142,7 @@ private fun ZcashNetworkScreen(
 
                 item {
                     Spacer(Modifier.height(32.dp))
-                    AddButton { navController.navigate(AddEndpointPage) }
+                    AddButton { navController.add(ZcashAddEndpointPage) }
                     Spacer(Modifier.height(60.dp))
                 }
             }

@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkPage
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkPage
+import io.horizontalsystems.bankwallet.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -101,7 +102,7 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Zcash -> {
-                                    navController.slideFromBottom(R.id.zcashNetworkFragment)
+                                    navController.slideFromBottom(ZcashNetworkPage)
                                 }
 
                                 else -> {}

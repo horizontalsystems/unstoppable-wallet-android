@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkPage
 import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkPage
+import io.horizontalsystems.bankwallet.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -147,7 +148,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Zcash -> {
-            navController.slideFromBottom(R.id.zcashNetworkFragment)
+            navController.slideFromBottom(ZcashNetworkPage)
 
             stat(
                 page = StatPage.BlockchainSettings,
