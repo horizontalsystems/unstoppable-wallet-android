@@ -57,6 +57,13 @@ class SecuritySettingsViewModel(
                 refreshDefenseSystemActions()
             }
         }
+
+        viewModelScope.launch {
+            spamManager.hideSuspiciousTxStateFlow.collect {
+                hideSuspiciousTxs = it
+                emitState()
+            }
+        }
     }
 
     private fun refreshDefenseSystemActions() {
