@@ -34,9 +34,10 @@ private fun SwapSelectCoinScreen(
 
     SelectSwapCoinDialogScreen(
         title = title ?: "",
-        coinBalanceItems = uiState.coinBalanceItems,
+        uiState = uiState,
         onSearchTextChanged = viewModel::setQuery,
-        onClose = navController::removeLastOrNull
+        onClose = navController::removeLastOrNull,
+        onRecordRecent = { viewModel.onRecentTokenSelected(it.token) }
     ) {
         resultEventBus.sendResult(it.token)
         navController.removeLastOrNull()
