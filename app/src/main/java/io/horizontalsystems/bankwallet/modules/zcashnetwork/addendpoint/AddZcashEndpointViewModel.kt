@@ -38,7 +38,7 @@ class AddZcashEndpointViewModel(
         try {
             sourceUri = URI(url)
             val scheme = sourceUri.scheme?.lowercase()
-            val hasRequiredProtocol = scheme == "https" || scheme == "http"
+            val hasRequiredProtocol = scheme == "https"
             val hasHost = !sourceUri.host.isNullOrBlank()
             if (!hasRequiredProtocol || !hasHost) throw MalformedURLException()
         } catch (_: Exception) {
@@ -47,7 +47,7 @@ class AddZcashEndpointViewModel(
             return
         }
 
-        if (endpointManager.allEndpoints.any { it.url == url }) {
+        if (endpointManager.allEndpoints.any { normalizeUrl(it.url) == normalizeUrl(url) }) {
             urlCaution = Caution(Translator.getString(R.string.AddZcashEndpoint_Warning_UrlExists), Caution.Type.Warning)
             emitState()
             return
@@ -56,6 +56,18 @@ class AddZcashEndpointViewModel(
         endpointManager.addCustomEndpoint(url)
         closeScreen = true
         emitState()
+    }
+
+    private fun normalizeUrl(value: String): String {
+        return try {
+            val uri = URI(value.trim())
+            val scheme = uri.scheme?.lowercase() ?: return value.trim()
+            val host = uri.host?.lowercase() ?: return value.trim()
+            val port = if (uri.port == 443 && scheme == "https") -1 else uri.port
+            URI(scheme, null, host, port, null, null, null).toString()
+        } catch (_: Exception) {
+            value.trim()
+        }
     }
 }
 

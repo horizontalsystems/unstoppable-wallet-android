@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,9 +30,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 @Composable
 fun AddZcashEndpointScreen(navController: NavController) {
     val viewModel = viewModel<AddZcashEndpointViewModel>(factory = AddZcashEndpointModule.Factory())
-    if (viewModel.uiState.closeScreen) {
-        navController.popBackStack()
-        viewModel.onScreenClose()
+    LaunchedEffect(viewModel.uiState.closeScreen) {
+        if (viewModel.uiState.closeScreen) {
+            navController.popBackStack()
+            viewModel.onScreenClose()
+        }
     }
 
     HSScaffold(
