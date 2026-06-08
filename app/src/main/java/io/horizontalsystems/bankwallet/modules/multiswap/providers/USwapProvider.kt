@@ -79,6 +79,16 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     private var assetsMap = mapOf<Token, String>()
     private var supportedBlockchainTypes = setOf<BlockchainType>()
 
+    // Some provider+tokenOut pairs fan a dry quote into multiple routes (currently: Exolix
+    // returns both transparent and shielded ZEC). The dry call picks one and remembers it here
+    // so the confirmation (non-dry) call re-quotes exactly that same route.
+    private var selectedAlternateRoute: SelectedAlternateRoute? = null
+
+    private data class SelectedAlternateRoute(
+        val buyAsset: String,
+        val destinationAddress: String,
+    )
+
     private sealed class ProviderData {
         data class TokenMap(val map: Map<Token, String>) : ProviderData()
         data class ChainIds(val ids: List<String>) : ProviderData()
@@ -117,6 +127,11 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
         val assetsMap = mutableMapOf<Token, String>()
         for (token in tokens) {
+            // ZEC.ZECSHIELDED is an internal Exolix routing variant. The app always quotes
+            // ZEC.ZEC and lets the server expand it into the shielded route, so skip it here
+            // to keep the Zcash native token mapping deterministic.
+            if (token.identifier == ZCASH_SHIELDED_ASSET) continue
+
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 
             when (blockchainType) {
@@ -253,11 +268,22 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
     ): SwapQuote {
+        // For providers that fan a dry quote into multiple routes (Exolix ZEC-out), resolve both
+        // the transparent and shielded destinations so the server can return both routes;
+        // pickRoute then remembers the better one for the confirmation quote.
+        val (destinationAddress, destinationAddressUnified) = if (supportsAlternateRouteSelection(tokenOut)) {
+            resolveDestinations(recipient = null, tokenOut = tokenOut)
+        } else {
+            null to null
+        }
+
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
             amountIn,
             BigDecimal("1"),
+            destinationAddress,
+            destinationAddressUnified,
             null,
             null,
             null,
@@ -293,8 +319,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         amountIn: BigDecimal,
         slippage: BigDecimal,
         destinationAddress: String?,
+        destinationAddressUnified: String?,
         sourceAddress: String?,
         refundAddress: String?,
+        buyAssetOverride: String?,
         dry: Boolean,
     ): UnstoppableAPI.Response.Quote.Route {
         val usingDerivedIdentifiers = assetsMap.isEmpty()
@@ -305,11 +333,12 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
                 sellAsset = assetIn,
-                buyAsset = assetOut,
+                buyAsset = buyAssetOverride ?: assetOut,
                 sellAmount = amountIn.toPlainString(),
                 providers = setOf(provider.id),
                 slippage = slippage,
                 destinationAddress = destinationAddress,
+                destinationAddressUnified = destinationAddressUnified,
                 sourceAddress = sourceAddress,
                 refundAddress = refundAddress,
                 dry = dry,
@@ -317,7 +346,69 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             )
         )
 
-        return quote.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+        return pickRoute(
+            routes = quote.routes,
+            dry = dry,
+            tokenOut = tokenOut,
+            fallbackBuyAsset = assetOut,
+            destinationAddress = destinationAddress,
+            destinationAddressUnified = destinationAddressUnified,
+        )
+    }
+
+    // True for provider+tokenOut pairs whose dry quote fans into multiple routes. Today only
+    // Exolix's ZEC pair does (transparent + shielded); extend here if another provider splits.
+    private fun supportsAlternateRouteSelection(tokenOut: Token): Boolean {
+        return provider == UProvider.Exolix && tokenOut.blockchainType == BlockchainType.Zcash
+    }
+
+    // Resolves the destination(s) sent to the server. `primary` is always returned (transparent
+    // for ZEC, native otherwise); `unified` is filled only for ZEC out with no explicit recipient
+    // so providers that can deliver into the shielded pool get to route there.
+    private suspend fun resolveDestinations(recipient: String?, tokenOut: Token): Pair<String, String?> {
+        val primary = recipient ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+
+        if (recipient != null || tokenOut.blockchainType != BlockchainType.Zcash) {
+            return primary to null
+        }
+
+        return primary to SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
+    }
+
+    private fun pickRoute(
+        routes: List<UnstoppableAPI.Response.Quote.Route>,
+        dry: Boolean,
+        tokenOut: Token,
+        fallbackBuyAsset: String,
+        destinationAddress: String?,
+        destinationAddressUnified: String?,
+    ): UnstoppableAPI.Response.Quote.Route {
+        if (!dry || !supportsAlternateRouteSelection(tokenOut)) {
+            return routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+        }
+
+        // Exolix's ZEC dry quote can carry both the transparent and shielded routes. Pick the
+        // better-priced one — preferring shielded on a tie, for privacy — and remember it so
+        // the confirmation quote replays the same route.
+        val best = routes.maxWithOrNull(
+            compareBy<UnstoppableAPI.Response.Quote.Route> { it.expectedBuyAmount ?: BigDecimal.ZERO }
+                .thenBy { if (it.buyAsset == ZCASH_SHIELDED_ASSET) 1 else 0 }
+        ) ?: throw IllegalStateException("No routes")
+
+        val selectedDestination = if (best.buyAsset == ZCASH_SHIELDED_ASSET) {
+            destinationAddressUnified ?: destinationAddress
+        } else {
+            destinationAddress
+        }
+
+        selectedDestination?.let {
+            selectedAlternateRoute = SelectedAlternateRoute(
+                buyAsset = best.buyAsset ?: fallbackBuyAsset,
+                destinationAddress = it,
+            )
+        }
+
+        return best
     }
 
     override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
@@ -333,9 +424,18 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
-        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
         val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
         val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+
+        // When a dry quote previously fanned out into multiple routes, the confirmation quote must
+        // re-request the exact (buyAsset, destination) the dry call settled on. An explicit
+        // recipient overrides any selection.
+        val selection = selectedAlternateRoute?.takeIf {
+            recipient == null && supportsAlternateRouteSelection(tokenOut)
+        }
+        val destination = selection?.destinationAddress
+            ?: recipient?.hex
+            ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
@@ -343,8 +443,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             amountIn,
             slippage,
             destination,
+            null,
             sourceAddress,
             refundAddress,
+            selection?.buyAsset,
             false,
         )
 
@@ -561,6 +663,12 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
         throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
+
+    companion object {
+        // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
+        // and lets the server expand it into this shielded variant.
+        private const val ZCASH_SHIELDED_ASSET = "ZEC.ZECSHIELDED"
+    }
 }
 
 interface UnstoppableAPI {
@@ -600,6 +708,7 @@ interface UnstoppableAPI {
             val providers: Set<String>,
             val slippage: BigDecimal,
             val destinationAddress: String?,
+            val destinationAddressUnified: String? = null,
             val sourceAddress: String?,
             val refundAddress: String?,
             val dry: Boolean,
@@ -655,6 +764,7 @@ interface UnstoppableAPI {
         ) {
             data class Route(
                 val expectedBuyAmount: BigDecimal?,
+                val buyAsset: String?,
                 val tx: JsonElement?,
                 val inboundAddress: String,
                 val memo: String?,

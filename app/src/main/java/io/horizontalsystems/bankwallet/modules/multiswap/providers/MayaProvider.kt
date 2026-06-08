@@ -18,6 +18,16 @@ object MayaProvider : BaseThorChainProvider(
     override val icon = R.drawable.swap_provider_maya
     override val riskLevel = RiskLevel.EXCELLENT
 
+    override suspend fun resolveDestinationAddress(tokenOut: Token): String {
+        // Maya delivers ZEC directly to unified/sapling/orchard receivers via its transparent
+        // vault, so for ZEC out we resolve the wallet's unified address. Every other tokenOut
+        // goes through the generic destination resolver.
+        if (tokenOut.blockchainType == BlockchainType.Zcash) {
+            return SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
+        }
+        return super.resolveDestinationAddress(tokenOut)
+    }
+
     override fun getRefundAddress(tokenIn: Token): String? {
         return if (tokenIn.blockchainType == BlockchainType.Zcash) {
             App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddressTransparent
