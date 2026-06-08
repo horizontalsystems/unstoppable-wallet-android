@@ -245,7 +245,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
 
             SwapStatusSteps(
                 status = uiState.status,
-                isSingleChain = uiState.isSingleChain,
+                isSingleTransactionSwap = uiState.isSingleTransactionSwap,
                 depositingTxUrl = uiState.depositingTxUrl,
                 swappingTxUrl = uiState.swappingTxUrl,
                 sendingTxUrl = uiState.sendingTxUrl,
@@ -268,7 +268,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
 }
 
 @Composable
-private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
+private fun SwapStatusSteps(status: SwapStatus, isSingleTransactionSwap: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
     val context = LocalContext.current
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
@@ -280,10 +280,10 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
         stringResource(R.string.SwapInfo_StatusSwapping),
         stringResource(R.string.SwapInfo_StatusRefunded),
     )
-    val singleChainNormalSteps = listOf(
+    val singleTransactionNormalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusSwapping),
     )
-    val singleChainFailedSteps = listOf(
+    val singleTransactionFailedSteps = listOf(
         stringResource(R.string.SwapInfo_StatusSwapping),
         stringResource(R.string.SwapInfo_StatusFailed),
     )
@@ -293,23 +293,23 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
     val activeIndex: Int
     val failedIndex: Int?
 
-    if (isSingleChain) {
+    if (isSingleTransactionSwap) {
         when (status) {
             SwapStatus.Completed -> {
-                steps = singleChainNormalSteps
+                steps = singleTransactionNormalSteps
                 activeIndex = steps.size
                 failedIndex = null
             }
 
             SwapStatus.Failed,
             SwapStatus.ActionRequired -> {
-                steps = singleChainFailedSteps
+                steps = singleTransactionFailedSteps
                 activeIndex = -1
-                failedIndex = 0
+                failedIndex = 1
             }
 
             else -> {
-                steps = singleChainNormalSteps
+                steps = singleTransactionNormalSteps
                 activeIndex = 0
                 failedIndex = null
             }

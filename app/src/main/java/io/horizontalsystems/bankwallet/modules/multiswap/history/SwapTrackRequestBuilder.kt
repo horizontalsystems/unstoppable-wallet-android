@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
@@ -24,7 +23,7 @@ object SwapTrackRequestBuilder {
         "gnosis" to "100",
     )
 
-    fun build(record: SwapRecord): UnstoppableAPI.Request.Track {
+    fun build(record: SwapRecord, isSingleTransactionSwapEvm: Boolean): UnstoppableAPI.Request.Track {
         val providerApiName = apiProviderName(record.providerId)
 
         return when {
@@ -38,7 +37,7 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            MultiSwapProviderRegistry.isEvm(record.providerId) -> UnstoppableAPI.Request.Track(
+            isSingleTransactionSwapEvm -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 hash = record.transactionHash,
                 chainId = evmChainIds[record.tokenInBlockchainTypeUid],
@@ -51,6 +50,18 @@ object SwapTrackRequestBuilder {
                 provider = providerApiName,
                 depositAddress = record.depositAddress,
                 fromAddress = record.sourceAddress,
+            )
+
+            record.providerId == "u_${UProvider.Circle.id}" -> UnstoppableAPI.Request.Track(
+                provider = providerApiName,
+                chainId = evmChainIds[record.tokenInBlockchainTypeUid],
+                hash = record.transactionHash,
+                fromAsset = record.fromAsset,
+                toAsset = record.toAsset,
+                toAddress = record.recipientAddress,
+                fromAddress = record.sourceAddress,
+                fromAmount = record.amountIn,
+                providerSwapId = record.providerSwapId,
             )
 
             record.providerId == "u_${UProvider.QuickEx.id}" ||

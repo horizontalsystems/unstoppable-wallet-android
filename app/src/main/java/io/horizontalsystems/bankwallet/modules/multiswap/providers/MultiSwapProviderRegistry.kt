@@ -21,16 +21,20 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.Cce),
         USwapProvider(UProvider.Swapuz),
         USwapProvider(UProvider.Barter),
+        USwapProvider(UProvider.Circle),
     )
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
         allProviders.associateBy { it.id }
     }
 
-    fun isSingleChainSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean =
-        providersById[providerId]?.isSingleChainSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid) ?: false
+    fun isSingleTransactionSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean {
+        val provider = providersById[providerId] ?: return false
+        return provider.isSingleTransactionSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid)
+    }
 
-    fun isEvm(providerId: String): Boolean {
-        return providersById[providerId]?.isEvm ?: false
+    fun isSingleTransactionEvmSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean {
+        val provider = providersById[providerId] ?: return false
+        return provider.isSingleTransactionSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid) && provider.isEvm
     }
 }

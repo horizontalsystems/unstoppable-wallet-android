@@ -52,12 +52,17 @@ class SwapSyncService(
             return
         }
         try {
-            val request = SwapTrackRequestBuilder.build(record)
-            val response = if (MultiSwapProviderRegistry.isEvm(record.providerId)) {
+            val isSingleTransactionEvmSwap = MultiSwapProviderRegistry.isSingleTransactionEvmSwap(
+                record.providerId, record.tokenInBlockchainTypeUid,
+                record.tokenOutBlockchainTypeUid
+            )
+            val request = SwapTrackRequestBuilder.build(record, isSingleTransactionEvmSwap)
+            val response = if (isSingleTransactionEvmSwap) {
                 unstoppableAPI.trackEvm(request)
             } else {
                 unstoppableAPI.track(request)
             }
+
             if (record.transactionHash == null && response.hash != null) {
                 swapRecordManager.updateTransactionHash(record.id, response.hash)
             }
@@ -74,26 +79,25 @@ class SwapSyncService(
                 swapRecordManager.updateOutboundTransactionHash(record.id, outboundHash)
             }
 
-            val mappedStatus = mapStatus(response)
+            val mappedStatus = mapStatus(response) ?: return
             val currentStatus = runCatching { SwapStatus.valueOf(record.status) }.getOrNull()
             val newPauseReason = response.meta?.pauseReason?.takeIf { mappedStatus == SwapStatus.ActionRequired }
-            val statusChanged = mappedStatus != null && mappedStatus != currentStatus
-            val pauseReasonChanged = mappedStatus != null && newPauseReason != record.pauseReason
+            val statusChanged = mappedStatus != currentStatus
+            val pauseReasonChanged = newPauseReason != record.pauseReason
 
             if (!statusChanged && !pauseReasonChanged) return
 
-            val newStatus = mappedStatus ?: currentStatus ?: return
             val newAmountOut = response.toAmount?.toBigDecimalOrNull()
             if (newAmountOut != null && newAmountOut > BigDecimal.ZERO) {
-                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, response.toAmount, newPauseReason)
+                swapRecordManager.updateStatusAndAmountOut(record.id, mappedStatus, response.toAmount, newPauseReason)
             } else {
-                swapRecordManager.updateStatus(record.id, newStatus, newPauseReason)
+                swapRecordManager.updateStatus(record.id, mappedStatus, newPauseReason)
             }
         } catch (e: IllegalArgumentException) {
             // Provider not supported for tracking — skip silently
             Log.e("SwapSyncService", "Provider not supported for tracking: ${record.providerId}", e)
         } catch (e: Throwable) {
-            Log.e("SwapSyncService", "Failed to sync record ${record.id}: ${e.message}")
+            Log.e("SwapSyncService", "Failed to sync record ${record.id}: ${e.message}", e)
         }
     }
 
