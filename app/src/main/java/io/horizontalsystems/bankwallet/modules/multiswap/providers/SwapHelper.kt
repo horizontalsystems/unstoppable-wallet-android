@@ -10,13 +10,11 @@ import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.zanokit.ZanoKit
-import io.horizontalsystems.zanokit.ZanoWallet
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionRevoke
@@ -25,6 +23,8 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.zanokit.ZanoKit
+import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
@@ -37,6 +37,9 @@ object SwapHelper {
 
     private val zcashAddressCache = ConcurrentHashMap<String, String>()
     private val zcashAddressMutex = Mutex()
+
+    private val zcashUnifiedAddressCache = ConcurrentHashMap<String, String>()
+    private val zcashUnifiedAddressMutex = Mutex()
 
     suspend fun getAllowanceTrc20(token: Token, spenderAddress: String): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
@@ -172,6 +175,24 @@ object SwapHelper {
 
                 else -> throw SwapError.NoDestinationAddress()
             }
+        }
+    }
+
+    // Resolves the wallet's unified (shielded) Zcash address. Used for other->ZEC swaps where
+    // the provider can deliver directly into the shielded pool. Falls back to deriving the
+    // unified address from the active account when no Zcash adapter is enabled, caching the
+    // result to avoid re-running the expensive derivation (each call spins up a synchronizer).
+    suspend fun getReceiveAddressUnifiedForZcash(token: Token): String {
+        App.adapterManager.getAdapterForToken<ZcashAdapter>(token)?.let {
+            return it.receiveAddress
+        }
+
+        val account = App.accountManager.activeAccount ?: throw NoActiveAccount()
+
+        return zcashUnifiedAddressCache[account.id] ?: zcashUnifiedAddressMutex.withLock {
+            zcashUnifiedAddressCache[account.id] ?: withContext(Dispatchers.IO) {
+                ZcashAdapter.getUnifiedAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
+            }.also { zcashUnifiedAddressCache[account.id] = it }
         }
     }
 
