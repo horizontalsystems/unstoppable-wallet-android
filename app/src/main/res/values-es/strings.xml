@@ -1758,4 +1758,9 @@
     <string name="Swap_TopTokens">Tokens Principales</string>
     <string name="Swap_RecentSearch">Búsqueda Reciente</string>
     <string name="SwapTerms_RiskRestrictions_Highlight">puntuaciones de proveedores</string>
+    <string name="ZcashEndpointSettings_Description">Elija el servidor lightwallet que la aplicación Unstoppable debe usar para sincronizar su(s) billetera(s) Zcash.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">Agregar punto final</string>
+    <string name="AddZcashEndpoint_EndpointUrl">URL del punto final</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">Ya existe un punto final con esta URL</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">La URL ingresada no es válida. Una URL válida debe usar el esquema https</string>
 </resources>

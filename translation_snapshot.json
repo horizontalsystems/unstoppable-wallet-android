@@ -35,6 +35,10 @@
     "AddZanoNode_Error_InvalidUrl": "Entered url is invalid. Valid url must have one of the following schemes: http, https",
     "AddZanoNode_NodeUrl": "Node URL",
     "AddZanoNode_Warning_UrlExists": "Node with this url already exists",
+    "AddZcashEndpoint_AddEndpoint": "Add Endpoint",
+    "AddZcashEndpoint_EndpointUrl": "Endpoint URL",
+    "AddZcashEndpoint_Error_InvalidUrl": "Entered URL is invalid. A valid URL must use the https scheme",
+    "AddZcashEndpoint_Warning_UrlExists": "Endpoint with this URL already exists",
     "AddressEnter_NeedSubscription_Content": "Secure Send is off. Your transfer may go to a risky address and funds can be lost.",
     "AddressEnter_NeedSubscription_Title": "Attention!",
     "AddressEnter_Safe_Content": "Address checked. No phishing, blacklist, or sanctions found. It’s safe to use.",
@@ -1563,7 +1567,8 @@
     "Watch_ViewKey": "Private View Key",
     "WidgetList_Config_Title": "Choose Type",
     "Widget_EnableAutostartWarning": "To make sure that this widget works properly, you should enable Autostart.",
-    "ZanoNodeSettings_Description": "Choose the node Unstoppable app should use for synchronizing wallet(s)."
+    "ZanoNodeSettings_Description": "Choose the node Unstoppable app should use for synchronizing wallet(s).",
+    "ZcashEndpointSettings_Description": "Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s)."
   },
   "components/chartview/src/main/res/values/strings.xml": {},
   "components/icons/src/main/res/values/strings.xml": {},

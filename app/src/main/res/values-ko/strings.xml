@@ -1528,4 +1528,9 @@
     <string name="SwapTerms_RiskRestrictions_Info">일부 제공자는 스왑을 거부하거나 자금 접근을 제한할 수 있습니다. 제공자를 선택할 때 제공자 평점에 주의하십시오.</string>
     <string name="SwapTerms_RiskRestrictions_Highlight">제공자 평점</string>
     <string name="SwapTerms_UserResponsibility_Info">가능한 위험을 검토했으며 제공자 선택에 대한 책임을 수락합니다.</string>
+    <string name="ZcashEndpointSettings_Description">Unstoppable 앱이 Zcash 지갑을 동기화하는 데 사용해야 할 라이트월렛 서버를 선택하세요.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">엔드포인트 추가</string>
+    <string name="AddZcashEndpoint_EndpointUrl">엔드포인트 URL</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">이 URL을 가진 엔드포인트가 이미 존재합니다</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 https 스키마를 사용해야 합니다</string>
 </resources>
