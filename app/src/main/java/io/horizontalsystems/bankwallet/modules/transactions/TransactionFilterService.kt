@@ -6,9 +6,11 @@ import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class TransactionFilterService(
@@ -163,6 +165,17 @@ class TransactionFilterService(
         hideSuspiciousTx = checked
         spamManager.updateFilterHideSuspiciousTx(checked)
         emitState()
+    }
+
+   fun observeSpamSetting(scope: CoroutineScope) {
+        scope.launch {
+            spamManager.hideSuspiciousTxStateFlow.collect { hide ->
+                if (hideSuspiciousTx != hide) {
+                    hideSuspiciousTx = hide
+                    emitState()
+                }
+            }
+        }
     }
 
     data class State(
