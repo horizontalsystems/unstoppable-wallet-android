@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -28,8 +30,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -39,6 +43,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -102,8 +107,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import java.math.BigDecimal
 import java.net.UnknownHostException
+import kotlin.time.Duration.Companion.milliseconds
 
 @Serializable
 data class SwapPage(val input: Input? = null) : HSPage() {
@@ -306,6 +315,21 @@ private fun SwapScreenInner(
 
     val quote = uiState.quote
 
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val imeInsets = WindowInsets.ime
+
+    val navigateAfterKeyboardClosed: (() -> Unit) -> Unit = { action ->
+        focusManager.clearFocus()
+        coroutineScope.launch {
+            withTimeoutOrNull(500.milliseconds) {
+                snapshotFlow { imeInsets.getBottom(density) }.first { it == 0 }
+            }
+            action()
+        }
+    }
+
     HSScaffold(
         title = stringResource(R.string.Swap),
         menuItems = listOf(
@@ -313,14 +337,20 @@ private fun SwapScreenInner(
                 title = TranslatableString.ResString(R.string.SwapHistory_Title),
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
-                    navController.slideFromRight(SwapHistoryPage)
+                    navigateAfterKeyboardClosed {
+                        navController.slideFromRight(SwapHistoryPage)
+                    }
                 }
             )),
         onBack = onClickClose,
     ) {
-        val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
         var amountInputHasFocus by remember { mutableStateOf(false) }
+        val amountInputFocusRequester = remember { FocusRequester() }
+
+        LaunchedEffect(Unit) {
+            amountInputFocusRequester.requestFocus()
+        }
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -335,14 +365,19 @@ private fun SwapScreenInner(
                     fiatPriceImpactLevel = uiState.fiatPriceImpactLevel,
                     onValueChange = onEnterAmount,
                     onFiatValueChange = onEnterFiatAmount,
-                    onClickCoinFrom = onClickCoinFrom,
-                    onClickCoinTo = onClickCoinTo,
+                    onClickCoinFrom = {
+                        navigateAfterKeyboardClosed(onClickCoinFrom)
+                    },
+                    onClickCoinTo = {
+                        navigateAfterKeyboardClosed(onClickCoinTo)
+                    },
                     tokenIn = uiState.tokenIn,
                     tokenOut = uiState.tokenOut,
                     currency = uiState.currency,
                     onFocusChanged = {
                         amountInputHasFocus = it.hasFocus
                     },
+                    focusRequester = amountInputFocusRequester,
                 )
                 VSpacer(height = 8.dp)
                 Column(
@@ -373,7 +408,9 @@ private fun SwapScreenInner(
                                 onClickPrice = {
                                     showRegularPrice = !showRegularPrice
                                 },
-                                onClickProvider = onClickProvider,
+                                onClickProvider = {
+                                    navigateAfterKeyboardClosed(onClickProvider)
+                                },
                                 onClickProviderScoreInfo = {
                                     navController.slideFromBottom(RiskLevelInfoSheet)
                                 }
@@ -560,12 +597,49 @@ private fun ProviderCellInfo(
                     text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
                     icon = painterResource(R.drawable.ic_info_24),
                     iconTint = ComposeAppTheme.colors.grey,
-                    onIconClick = onClickProviderScoreInfo,
                 )
             },
             right = {
                 RiskScore(riskLevel = quote.provider.riskLevel)
-            }
+            },
+            onClick = onClickProviderScoreInfo
+        )
+        quote.estimationTime?.let { estimationTime ->
+            CellSecondary(
+                middle = {
+                    CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
+                },
+                right = {
+                    SwapTime(estimationTime = estimationTime)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun SwapTime(
+    modifier: Modifier = Modifier,
+    estimationTime: Long,
+) {
+    val color = ComposeAppTheme.colors.jacob
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = formatDurationShort(estimationTime),
+            style = ComposeAppTheme.typography.subheadSB,
+            color = color,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+        )
+        HSpacer(4.dp)
+        Icon(
+            painter = painterResource(R.drawable.clock_filled_24),
+            modifier = Modifier.size(20.dp),
+            tint = color,
+            contentDescription = null
         )
     }
 }
@@ -706,6 +780,7 @@ private fun SwapInput(
     tokenOut: Token?,
     currency: Currency,
     onFocusChanged: (FocusState) -> Unit,
+    focusRequester: FocusRequester,
 ) {
     Box {
         Column(
@@ -720,7 +795,8 @@ private fun SwapInput(
                 fiatAmountInputEnabled = fiatAmountInputEnabled,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom,
-                onFocusChanged = onFocusChanged
+                onFocusChanged = onFocusChanged,
+                focusRequester = focusRequester
             )
             SwapCoinInputTo(
                 coinAmount = amountOut,
@@ -756,6 +832,7 @@ private fun SwapCoinInputIn(
     token: Token?,
     onClickCoin: () -> Unit,
     onFocusChanged: (FocusState) -> Unit,
+    focusRequester: FocusRequester,
 ) {
     Row(
         modifier = Modifier
@@ -764,11 +841,12 @@ private fun SwapCoinInputIn(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinSelector(token, onClickCoin)
-        HSpacer(width = 16.dp)
+        HSpacer(width = 8.dp)
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
             AmountInput(
                 value = coinAmount,
-                onValueChange = onValueChange
+                onValueChange = onValueChange,
+                focusRequester = focusRequester
             )
             VSpacer(height = 3.dp)
             FiatAmountInput(
@@ -797,6 +875,7 @@ private fun SwapCoinInputTo(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinSelector(token, onClickCoin)
+        HSpacer(8.dp)
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.End
@@ -941,7 +1020,7 @@ private fun Selector(
         Icon(
             painter = painterResource(R.drawable.arrow_s_down_20),
             contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.leah
         )
     }
 }

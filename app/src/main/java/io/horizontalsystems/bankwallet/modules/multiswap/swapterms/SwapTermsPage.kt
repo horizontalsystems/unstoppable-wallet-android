@@ -99,17 +99,17 @@ fun SwapTermsScreen(navController: HSNavigation) {
                             val highlightText = highlightText(
                                 text = stringResource(terms[0].description),
                                 textColor = ComposeAppTheme.colors.grey,
-                                highlightPart = "(AML)",
+                                highlightPart = stringResource(R.string.SwapTerms_RiskRestrictions_Highlight),
                                 highlightColor = ComposeAppTheme.colors.jacob
                             )
                             Text(
                                 text = stringResource(terms[0].title),
-                                style = ComposeAppTheme.typography.subhead,
+                                style = ComposeAppTheme.typography.subheadSB,
                                 color = ComposeAppTheme.colors.leah,
                             )
                             Text(
                                 text = highlightText,
-                                style = ComposeAppTheme.typography.captionSB,
+                                style = ComposeAppTheme.typography.subhead,
                                 color = ComposeAppTheme.colors.grey,
                             )
                         }
@@ -124,18 +124,21 @@ fun SwapTermsScreen(navController: HSNavigation) {
                         CellLeftSelectors(uiState.checkboxStates[1])
                     },
                     middle = {
-                        CellMiddleInfo(
-                            subtitle = stringResource(terms[1].title).hs(
-                                color = ComposeAppTheme.colors.leah
-                            ),
-                            description = stringResource(terms[1].description).hs
-                        )
+                        Column {
+                            Text(
+                                text = stringResource(terms[1].title),
+                                style = ComposeAppTheme.typography.subheadSB,
+                                color = ComposeAppTheme.colors.leah,
+                            )
+                            Text(
+                                text = stringResource(terms[1].description),
+                                style = ComposeAppTheme.typography.subhead,
+                                color = ComposeAppTheme.colors.grey,
+                            )
+                        }
                     },
                 )
             }
-            TextBlock(
-                text = stringResource(R.string.SwapTerms_BottomText)
-            )
             VSpacer(24.dp)
         }
     }

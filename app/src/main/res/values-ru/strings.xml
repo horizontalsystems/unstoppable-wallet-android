@@ -645,12 +645,12 @@
     <string name="SwapConfirm_MevDescription">Включите защиту, чтобы защитить подкачку и избежать потери значения для ботов.</string>
     <string name="SwapError_FailedToFetchQuote">Не удалось получить данные.</string>
     <string name="SwapTerms_Title">Условия обмена</string>
-    <string name="SwapTerms_TopText">Unstoppable агрегирует несколько децентрализованных (DEX) и централизованных swap-провайдеров, чтобы предлагать конкурентные курсы и широкий выбор поддерживаемых активов.</string>
+    <string name="SwapTerms_TopText">Чтобы продолжить, подтвердите ваше согласие с каждым пунктом.</string>
     <string name="SwapTerms_BottomText">Всегда выбирайте поставщика подкачки, который соответствует вашим требованиям.</string>
     <string name="SwapTerms_RiskRestrictions">Риск ограничений</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Я понимаю, что некоторые провайдеры не-DEX используют прокси-транзакции (AML). Такие провайдеры могут отказаться от обменов (рефератов) или, в редких случаях, (CSAM и терроризм), замораживать средства и запрашивать данные KYC.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Некоторые поставщики могут отклонять свопы или ограничивать доступ к средствам. Обратите внимание на рейтинги поставщиков при выборе поставщика.</string>
     <string name="SwapTerms_UserResponsibility">Ответственность пользователя</string>
-    <string name="SwapTerms_UserResponsibility_Info">Я понимаю, что использование не DEX провайдеров влечет за собой дополнительные риски и что эти риски являются моей ответственностью. Неспособность не может гарантировать поведение провайдера.</string>
+    <string name="SwapTerms_UserResponsibility_Info">Я ознакомился с возможными рисками и принимаю ответственность за выбор поставщика.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Допустимое отклонение</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес получателя</string>
@@ -1759,4 +1759,10 @@
     <string name="OpenCryptoPay_Error_FetchFailed">Не удалось получить данные платежа</string>
     <string name="OpenCryptoPay_Error_LoadFailed">Не удалось загрузить данные платежа</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">Не удалось отправить платеж продавцу. Пожалуйста, попробуйте снова.</string>
+    <string name="Swap_SwapTime">Время свопа</string>
+    <string name="Swap_PopularTokens">Популярные токены</string>
+    <string name="Swap_YourTokens">Ваши токены</string>
+    <string name="Swap_TopTokens">Топ токены</string>
+    <string name="Swap_RecentSearch">Недавний поиск</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">рейтинги поставщиков</string>
 </resources>

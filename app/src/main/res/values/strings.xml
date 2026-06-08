@@ -742,6 +742,7 @@
     <string name="Swap_AmlError_Description">Unable to get a response right now. Please try again.</string>
     <string name="Swap_AmlError_Button">Retry</string>
     <string name="Swap_EstimatedTime">Est. Time</string>
+    <string name="Swap_SwapTime">Swap Time</string>
     <string name="Swap_EstimatedTimeDescription">Approximate time to receive funds. Swap processing and transaction confirmations may take some time depending on the network and provider.</string>
     <string name="Swap_MinimumReceived">Guaranteed</string>
     <string name="Swap_MinimumReceivedDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going </string>
@@ -756,6 +757,10 @@
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
+    <string name="Swap_PopularTokens">Popular Tokens</string>
+    <string name="Swap_YourTokens">Your Tokens</string>
+    <string name="Swap_TopTokens">Top Tokens</string>
+    <string name="Swap_RecentSearch">Recent Search</string>
     <string name="Swap_EnterAmount">Enter Amount</string>
     <string name="Swap_Revoke">Revoke</string>
     <string name="Swap_Revoking">Revoking...</string>
@@ -786,12 +791,13 @@
     <string name="SwapError_FailedToFetchQuote">Failed to fetch quote.</string>
 
     <string name="SwapTerms_Title">Swap Terms</string>
-    <string name="SwapTerms_TopText">Unstoppable aggregates multiple decentralized (DEX) and centralized swap providers to offer competitive rates and broad asset support.</string>
+    <string name="SwapTerms_TopText">To continue, please confirm your agreement with each item.</string>
     <string name="SwapTerms_BottomText">Always choose a swap provider that aligns with your requirements.</string>
     <string name="SwapTerms_RiskRestrictions">Risk of restrictions</string>
-    <string name="SwapTerms_RiskRestrictions_Info">I understand that some non-DEX swap providers apply transaction screening (AML). Such providers may reject (and refund) swaps, or, in rare cases (CSAM and terrorism), freeze funds and request KYC data.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Some providers may reject swaps or restrict access to funds. Pay attention to provider scores when choosing a provider.</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">provider scores</string>
     <string name="SwapTerms_UserResponsibility">User responsibility</string>
-    <string name="SwapTerms_UserResponsibility_Info">I understand that using non-DEX providers introduces additional risks and that these risks are my responsibility. Unstoppable can not guarantee provider behavior.</string>
+    <string name="SwapTerms_UserResponsibility_Info">I have reviewed the possible risks and accept responsibility for my choice of provider.</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>

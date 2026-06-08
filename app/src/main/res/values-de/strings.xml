@@ -643,12 +643,12 @@
     <string name="SwapConfirm_MevDescription">Schalten Sie den Schutz ein, um Ihren Swap-Wert zu sichern und vermeiden Sie den Verlust von Wert an Bots.</string>
     <string name="SwapError_FailedToFetchQuote">Zitat konnte nicht abgerufen werden.</string>
     <string name="SwapTerms_Title">Begriffe tauschen</string>
-    <string name="SwapTerms_TopText">Unaufhaltsam aggregiert mehrere dezentralisierte (DEX) und zentralisierte Swap-Anbieter, um konkurrenzfähige Kurse und eine breite Unterstützung von Vermögenswerten anzubieten.</string>
+    <string name="SwapTerms_TopText">Um fortzufahren, bestätigen Sie bitte Ihre Zustimmung zu jedem Punkt.</string>
     <string name="SwapTerms_BottomText">Wählen Sie immer einen Swap-Anbieter, der Ihren Anforderungen entspricht.</string>
     <string name="SwapTerms_RiskRestrictions">Risiko von Einschränkungen</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Ich verstehe, dass einige nicht DEX Swap-Anbieter Transaktions-Screening (AML) anwenden. Solche Anbieter können Swaps ablehnen (und erstatten) oder in seltenen Fällen (CSAM und Terrorismus) einfrieren und KYC-Daten anfordern.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Einige Anbieter können Swaps ablehnen oder den Zugriff auf Gelder einschränken. Achten Sie bei der Wahl eines Anbieters auf die Anbieter-Bewertungen.</string>
     <string name="SwapTerms_UserResponsibility">Benutzerverantwortung</string>
-    <string name="SwapTerms_UserResponsibility_Info">Ich verstehe, dass die Verwendung von nicht-DEX-Anbietern zusätzliche Risiken mit sich bringt und dass diese Risiken in meiner Verantwortung liegen.</string>
+    <string name="SwapTerms_UserResponsibility_Info">Ich habe die möglichen Risiken überprüft und akzeptiere die Verantwortung für meine Wahl des Anbieters.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Slippage Toleranz</string>
     <string name="SwapSettings_RecipientAddressTitle">Empfängeradresse</string>
@@ -1761,4 +1761,10 @@
     <string name="OpenCryptoPay_Error_FetchFailed">Zahlungsdetails konnten nicht abgerufen werden</string>
     <string name="OpenCryptoPay_Error_LoadFailed">Zahlungsdetails konnten nicht geladen werden</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">Zahlung konnte nicht an den Händler übermittelt werden. Bitte versuchen Sie es erneut.</string>
+    <string name="Swap_SwapTime">Swap-Zeit</string>
+    <string name="Swap_PopularTokens">Beliebte Token</string>
+    <string name="Swap_YourTokens">Ihre Token</string>
+    <string name="Swap_TopTokens">Top-Token</string>
+    <string name="Swap_RecentSearch">Letzte Suche</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">Anbieter-Bewertungen</string>
 </resources>

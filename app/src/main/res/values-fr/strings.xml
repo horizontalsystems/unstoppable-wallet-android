@@ -643,12 +643,12 @@
     <string name="SwapConfirm_MevDescription">Activez la protection pour sécuriser votre swap et évitez de perdre de la valeur aux bots.</string>
     <string name="SwapError_FailedToFetchQuote">Impossible de récupérer le devis.</string>
     <string name="SwapTerms_Title">Échanger les conditions</string>
-    <string name="SwapTerms_TopText">Les agrégats non stoppables regroupent de multiples fournisseurs de swap décentralisés (DEX) et centralisés pour offrir des taux compétitifs et un large soutien aux actifs.</string>
+    <string name="SwapTerms_TopText">Pour continuer, veuillez confirmer votre accord avec chaque élément.</string>
     <string name="SwapTerms_BottomText">Choisissez toujours un fournisseur de swap qui correspond à vos exigences.</string>
     <string name="SwapTerms_RiskRestrictions">Risque de restrictions</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Je comprends que certains fournisseurs de swap non-DEX appliquent une vérification des transactions (AML). Ces fournisseurs peuvent rejeter (et rembourser) les swaps, ou, dans de rares cas, (CSAM et terrorisme), geler les fonds et demander les données du KYC.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Certains fournisseurs peuvent rejeter les échanges ou restreindre l\'accès aux fonds. Faites attention aux évaluations des fournisseurs lors du choix d\'un fournisseur.</string>
     <string name="SwapTerms_UserResponsibility">Responsabilité de l\'utilisateur</string>
-    <string name="SwapTerms_UserResponsibility_Info">Je comprends que l\'utilisation de fournisseurs non-DEX comporte des risques supplémentaires et que ces risques sont de ma responsabilité.</string>
+    <string name="SwapTerms_UserResponsibility_Info">J\'ai examiné les risques possibles et j\'accepte la responsabilité de mon choix de fournisseur.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolérance de Slippage</string>
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
@@ -1754,4 +1754,10 @@
     <string name="OpenCryptoPay_Error_FetchFailed">Échec de la récupération des détails de paiement</string>
     <string name="OpenCryptoPay_Error_LoadFailed">Échec du chargement des détails de paiement</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">Impossible de soumettre le paiement au commerçant. Veuillez réessayer.</string>
+    <string name="Swap_SwapTime">Temps d\'échange</string>
+    <string name="Swap_PopularTokens">Tokens populaires</string>
+    <string name="Swap_YourTokens">Vos tokens</string>
+    <string name="Swap_TopTokens">Meilleurs tokens</string>
+    <string name="Swap_RecentSearch">Recherche récente</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">évaluations des fournisseurs</string>
 </resources>

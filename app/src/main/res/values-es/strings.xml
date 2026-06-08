@@ -643,12 +643,12 @@
     <string name="SwapConfirm_MevDescription">Activa la protección para asegurar tu intercambio y evitar perder valor a los bots.</string>
     <string name="SwapError_FailedToFetchQuote">No se pudo obtener la cita.</string>
     <string name="SwapTerms_Title">Términos de intercambio</string>
-    <string name="SwapTerms_TopText">Unstoppable aggregates múltiples proveedores descentralizados (DEX) y centralizados de swap para ofrecer tasas competitivas y un amplio apoyo a los activos.</string>
+    <string name="SwapTerms_TopText">Para continuar, confirme su acuerdo con cada elemento.</string>
     <string name="SwapTerms_BottomText">Elija siempre un proveedor de intercambio que se ajuste a sus necesidades.</string>
     <string name="SwapTerms_RiskRestrictions">Riesgo de restricciones</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Entiendo que algunos proveedores de swap no DEX aplican la detección de transacciones (AML). Tales proveedores pueden rechazar (y reembolsar) los swaps, o, en raras ocasiones, la AM y el terrorismo), congelar fondos y solicitar datos de KYC.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Algunos proveedores pueden rechazar swaps o restringir el acceso a fondos. Preste atención a las puntuaciones de proveedores al elegir uno.</string>
     <string name="SwapTerms_UserResponsibility">Responsabilidad del usuario</string>
-    <string name="SwapTerms_UserResponsibility_Info">Entiendo que el uso de proveedores no DEX introduce riesgos adicionales y que estos riesgos son mi responsabilidad. Imparable no puede garantizar el comportamiento de los proveedores.</string>
+    <string name="SwapTerms_UserResponsibility_Info">He revisado los posibles riesgos y acepto la responsabilidad de mi elección de proveedor.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
     <string name="SwapSettings_RecipientAddressTitle">Dirección del destinatario</string>
@@ -1752,4 +1752,10 @@
     <string name="OpenCryptoPay_Error_FetchFailed">No se pudieron obtener los detalles de pago</string>
     <string name="OpenCryptoPay_Error_LoadFailed">No se pudieron cargar los detalles de pago</string>
     <string name="OpenCryptoPay_Error_SubmitFailed">No se pudo enviar el pago al comerciante. Por favor, inténtelo de nuevo.</string>
+    <string name="Swap_SwapTime">Tiempo de Swap</string>
+    <string name="Swap_PopularTokens">Tokens Populares</string>
+    <string name="Swap_YourTokens">Tus Tokens</string>
+    <string name="Swap_TopTokens">Tokens Principales</string>
+    <string name="Swap_RecentSearch">Búsqueda Reciente</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">puntuaciones de proveedores</string>
 </resources>

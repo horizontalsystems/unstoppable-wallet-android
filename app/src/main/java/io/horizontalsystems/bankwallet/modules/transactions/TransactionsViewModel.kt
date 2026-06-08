@@ -58,6 +58,8 @@ class TransactionsViewModel(
     private var refreshViewItemsJob: Job? = null
 
     init {
+        transactionFilterService.observeSpamSetting(viewModelScope)
+
         viewModelScope.launch(Dispatchers.Default) {
             service.start()
         }

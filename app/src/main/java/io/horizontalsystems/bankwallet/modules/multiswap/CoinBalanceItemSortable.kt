@@ -23,6 +23,10 @@ private fun SortCriterion.toCoinBalanceItemComparator(ctx: TokenSortContext): Co
     when (this) {
         is SortCriterion.SameBlockchainFirst ->
             SortComparators.booleanFirst { it.token.blockchainType == blockchainType }
+        is SortCriterion.NonZeroBalanceFirst ->
+            SortComparators.booleanFirst { (it.balance ?: java.math.BigDecimal.ZERO) > java.math.BigDecimal.ZERO }
+        is SortCriterion.HasPriceFirst ->
+            SortComparators.booleanFirst { it.fiatBalanceValue != null }
         is SortCriterion.FiatBalanceDescending ->
             SortComparators.nullableDecimalDescending { it.fiatBalanceValue?.value }
         is SortCriterion.BalanceDescending ->
