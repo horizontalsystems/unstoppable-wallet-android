@@ -3,15 +3,18 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -81,11 +84,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButtonTinted
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -386,14 +386,17 @@ private fun AttentionIconButton(caution: Caution, onClick: () -> Unit) {
     } else {
         ComposeAppTheme.colors.jacob
     }
-    HSIconButtonTinted(
-        variant = ButtonVariant.Secondary,
-        style = ButtonStyle.Transparent,
-        size = ButtonSize.Small,
-        icon = painterResource(R.drawable.ic_warning_filled_24),
-        iconTint = tint,
+    Icon(
+        modifier = Modifier
+            .size(20.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
+        painter = painterResource(R.drawable.ic_warning_filled_24),
         contentDescription = caution.text,
-        onClick = onClick
+        tint = tint,
     )
 }
 
