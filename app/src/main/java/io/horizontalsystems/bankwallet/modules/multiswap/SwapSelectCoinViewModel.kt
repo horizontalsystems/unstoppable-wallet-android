@@ -15,17 +15,17 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.defaultTokenQuery
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.eligibleTokens
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
-import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
 import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectCoinViewModel.Companion.RECENT_LIMIT
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -108,7 +108,7 @@ class SwapSelectCoinViewModel @AssistedInject constructor(
 
     private suspend fun loadRecent(ids: List<String>): List<CoinBalanceItem> =
         withContext(Dispatchers.Default) {
-            val activeWallets = App.walletManager.activeWallets
+            val activeWallets = walletManager.activeWallets
             ids.mapNotNull { id -> TokenQuery.fromId(id)?.let { marketKit.token(it) } }
                 .map { coinBalanceItem(it, activeWallets) }
         }
@@ -121,7 +121,7 @@ class SwapSelectCoinViewModel @AssistedInject constructor(
     }
 
     private suspend fun loadSections() = withContext(Dispatchers.Default) {
-        val activeWallets = App.walletManager.activeWallets
+        val activeWallets = walletManager.activeWallets
 
         // Recent — tokens the user picked previously while searching
         recent = loadRecent(localStorage.swapRecentTokenQueryIds)
@@ -162,7 +162,7 @@ class SwapSelectCoinViewModel @AssistedInject constructor(
     }
 
     private suspend fun search(q: String): List<CoinBalanceItem> = withContext(Dispatchers.Default) {
-        val activeWallets = App.walletManager.activeWallets
+        val activeWallets = walletManager.activeWallets
 
         if (coinsProvider != null && activeAccount != null) {
             coinsProvider.getItems()
