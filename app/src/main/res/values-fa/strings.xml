@@ -677,4 +677,9 @@
     <string name="SwapTerms_RiskRestrictions_Info">برخی از ارائه دهندگان ممکن است تبدیل ها را رد کنند یا دسترسی به وجوه را محدود کنند. هنگام انتخاب یک ارائه دهنده، به امتیازات ارائه دهنده توجه کنید.</string>
     <string name="SwapTerms_RiskRestrictions_Highlight">امتیازات ارائه دهنده</string>
     <string name="SwapTerms_UserResponsibility_Info">من خطرات احتمالی را بررسی کردم و مسئولیت انتخاب ارائه دهنده خود را می پذیرم.</string>
+    <string name="ZcashEndpointSettings_Description">سرور lightwallet را انتخاب کنید که برنامه Unstoppable باید برای همگام‌سازی کیف پول Zcash استفاده کند.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">افزودن نقطه پایانی</string>
+    <string name="AddZcashEndpoint_EndpointUrl">URL نقطه پایانی</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">نقطه پایانی با این URL از قبل وجود دارد</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">URL وارد شده نامعتبر است. یک URL معتبر باید از طرح https استفاده کند</string>
 </resources>

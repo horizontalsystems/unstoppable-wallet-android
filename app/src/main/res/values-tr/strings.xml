@@ -1362,4 +1362,9 @@
     <string name="SwapTerms_RiskRestrictions_Info">Bazı sağlayıcılar takasları reddedebilir veya fon erişimini kısıtlayabilir. Bir sağlayıcı seçerken sağlayıcı puanlarına dikkat edin.</string>
     <string name="SwapTerms_RiskRestrictions_Highlight">sağlayıcı puanları</string>
     <string name="SwapTerms_UserResponsibility_Info">Olası riskleri gözden geçirdim ve sağlayıcı seçimim için sorumluluk kabul ediyorum.</string>
+    <string name="ZcashEndpointSettings_Description">Unstoppable uygulamasının Zcash cüzdan(larını) senkronize etmek için kullanması gereken lightwallet sunucusunu seçin.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">Uç nokta ekle</string>
+    <string name="AddZcashEndpoint_EndpointUrl">Uç nokta URL&apos;si</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">Bu URL&apos;ye sahip bir uç nokta zaten var</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">Girilen URL geçersizdir. Geçerli bir URL https şeması kullanmalıdır</string>
 </resources>

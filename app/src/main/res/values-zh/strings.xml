@@ -1757,4 +1757,9 @@
     <string name="Swap_TopTokens">顶级代币</string>
     <string name="Swap_RecentSearch">最近搜索</string>
     <string name="SwapTerms_RiskRestrictions_Highlight">提供商评分</string>
+    <string name="ZcashEndpointSettings_Description">选择 Unstoppable 应用用于同步 Zcash 钱包的轻钱包服务器。</string>
+    <string name="AddZcashEndpoint_AddEndpoint">添加端点</string>
+    <string name="AddZcashEndpoint_EndpointUrl">端点 URL</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">已存在使用此 URL 的端点</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">输入的 URL 无效。有效的 URL 必须使用 https 协议</string>
 </resources>
