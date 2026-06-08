@@ -25,10 +25,13 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
+import io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
+import io.horizontalsystems.bankwallet.entities.ZcashEndpointRecord
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -121,6 +124,8 @@ class BackupProvider(
     private val moneroNodeStorage: MoneroNodeStorage,
     private val zanoNodeManager: ZanoNodeManager,
     private val zanoNodeStorage: ZanoNodeStorage,
+    private val zcashEndpointManager: ZcashLightWalletEndpointManager,
+    private val zcashEndpointStorage: ZcashEndpointStorage,
     private val contactsRepository: ContactsRepository
 ) {
     private val encryptDecryptManager by lazy { EncryptDecryptManager() }
@@ -305,6 +310,14 @@ class BackupProvider(
             settings.zanoNodes?.selected?.forEach { node ->
                 blockchainSettingsStorage.saveZanoNode(node.url)
             }
+
+            settings.zcashEndpoints?.custom?.forEach { endpoint ->
+                zcashEndpointStorage.save(ZcashEndpointRecord(endpoint.url))
+            }
+
+            settings.zcashEndpoints?.selected?.forEach { endpoint ->
+                blockchainSettingsStorage.saveZcashEndpoint(endpoint.url)
+            }
         }
     }
 
@@ -449,7 +462,8 @@ class BackupProvider(
         } + evmSyncSourceManager.customSyncSources(BlockchainType.Tron).size
         val customRpcsTotal = evmAndTronCustomRpcsCount +
             moneroNodeManager.customNodes.size +
-            zanoNodeManager.customNodes.size
+            zanoNodeManager.customNodes.size +
+            zcashEndpointManager.customEndpoints.size
         return fullBackupItems(
             accounts = accountManager.accounts,
             watchlist = marketFavoritesManager.getAll().map { it.coinUid },
@@ -463,7 +477,8 @@ class BackupProvider(
             val evmCount = decryptedFullBackup.settings.evmSyncSources.custom.size
             val moneroCount = decryptedFullBackup.settings.moneroNodes?.custom?.size ?: 0
             val zanoCount = decryptedFullBackup.settings.zanoNodes?.custom?.size ?: 0
-            (evmCount + moneroCount + zanoCount).takeIf { it > 0 }
+            val zcashCount = decryptedFullBackup.settings.zcashEndpoints?.custom?.size ?: 0
+            (evmCount + moneroCount + zanoCount + zcashCount).takeIf { it > 0 }
         } else {
             null
         }
@@ -559,6 +574,14 @@ class BackupProvider(
         }
         val zanoNodes = ZanoNodes(listOf(selectedZanoNode), customZanoNodes)
 
+        val selectedZcashEndpoint = ZcashEndpointBackup(BlockchainType.Zcash.uid, zcashEndpointManager.currentEndpoint.url)
+        val customZcashEndpoints = if (BackupSection.CustomRpc in sections) {
+            zcashEndpointManager.customEndpoints.map { ZcashEndpointBackup(BlockchainType.Zcash.uid, it.url) }
+        } else {
+            listOf()
+        }
+        val zcashEndpoints = ZcashEndpoints(listOf(selectedZcashEndpoint), customZcashEndpoints)
+
         val chartIndicators = chartIndicators()
 
         val settings = Settings(
@@ -580,6 +603,7 @@ class BackupProvider(
             solanaSyncSource = solanaSyncSource,
             moneroNodes = moneroNodes,
             zanoNodes = zanoNodes,
+            zcashEndpoints = zcashEndpoints,
         )
 
         val contacts = if (BackupSection.Contacts in sections && contactsRepository.contacts.isNotEmpty())
@@ -803,6 +827,17 @@ data class ZanoNodes(
     val custom: List<ZanoNodeBackup>,
 )
 
+data class ZcashEndpointBackup(
+    @SerializedName("blockchain_type_id")
+    val blockchainTypeId: String,
+    val url: String,
+)
+
+data class ZcashEndpoints(
+    val selected: List<ZcashEndpointBackup>,
+    val custom: List<ZcashEndpointBackup>,
+)
+
 data class RsiBackup(
     val period: Int,
     val enabled: Boolean
@@ -863,7 +898,9 @@ data class Settings(
     @SerializedName("monero_nodes")
     val moneroNodes: MoneroNodes?,
     @SerializedName("zano_nodes")
-    val zanoNodes: ZanoNodes?
+    val zanoNodes: ZanoNodes?,
+    @SerializedName("zcash_endpoints")
+    val zcashEndpoints: ZcashEndpoints?
 )
 
 sealed class RestoreException(message: String) : Exception(message) {

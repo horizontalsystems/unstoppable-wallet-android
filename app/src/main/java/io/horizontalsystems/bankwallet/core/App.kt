@@ -522,6 +522,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             moneroNodeStorage = moneroNodeStorage,
             zanoNodeManager = zanoNodeManager,
             zanoNodeStorage = zanoNodeStorage,
+            zcashEndpointManager = zcashEndpointManager,
+            zcashEndpointStorage = zcashEndpointStorage,
             contactsRepository = contactsRepository
         )
 
