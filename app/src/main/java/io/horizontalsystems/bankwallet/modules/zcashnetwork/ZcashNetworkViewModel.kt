@@ -51,6 +51,7 @@ class ZcashNetworkViewModel(
 
     fun onRemoveCustomEndpoint(endpoint: ZcashEndpoint) {
         endpointManager.delete(endpoint)
+        emitState()
     }
 
     data class ViewItem(
