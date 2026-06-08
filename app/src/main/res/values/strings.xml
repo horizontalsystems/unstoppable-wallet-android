@@ -1289,6 +1289,12 @@
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
     <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
     <string name="ZanoNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
+    <!--Zcash Endpoint Settings-->
+    <string name="ZcashEndpointSettings_Description">Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s).</string>
+    <string name="AddZcashEndpoint_AddEndpoint">Add Endpoint</string>
+    <string name="AddZcashEndpoint_EndpointUrl">Endpoint URL</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">Endpoint with this URL already exists</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">Entered URL is invalid. A valid URL must use the https scheme</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>

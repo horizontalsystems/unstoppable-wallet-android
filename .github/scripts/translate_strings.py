@@ -52,8 +52,11 @@ def has_cdata(value: str) -> bool:
 
 def escape_xml_value(value: str) -> str:
     """Escape characters that must be escaped in Android strings.xml values."""
-    # & first — only when not already part of a named XML entity
-    value = re.sub(r'&(?!(amp|lt|gt|apos|quot);)', '&amp;', value)
+    # & first — convert XML quote entities to Android escapes, then
+    # escape any bare & that isn't part of a remaining named entity
+    value = value.replace('&apos;', "\\'")
+    value = value.replace('&quot;', '\\"')
+    value = re.sub(r'&(?!(amp|lt|gt);)', '&amp;', value)
     value = value.replace('<', '&lt;').replace('>', '&gt;')
     value = re.sub(r'(?<!\\)"', r'\\"', value)
     value = re.sub(r"(?<!\\)'", r"\\'", value)
@@ -112,7 +115,7 @@ Rules:
 - Keep name attributes exactly as-is (never translate the keys)
 - Preserve all Android format placeholders: %s, %d, %1$s, %2$s, %3$s, etc.
 - Preserve literal \\n newline sequences as \\n
-- Preserve XML entities: &amp; &lt; &gt; &apos; &quot;
+- Preserve XML entities &amp; &lt; &gt; — do NOT use &apos; or &quot;, use \' and \" instead (Android requirement)
 - Return ONLY valid JSON with this exact structure:
 {{
   "de": {{"KeyName": "translated value", ...}},

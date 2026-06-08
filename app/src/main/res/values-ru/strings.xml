@@ -1765,4 +1765,9 @@
     <string name="Swap_TopTokens">Топ токены</string>
     <string name="Swap_RecentSearch">Недавний поиск</string>
     <string name="SwapTerms_RiskRestrictions_Highlight">рейтинги поставщиков</string>
+    <string name="ZcashEndpointSettings_Description">Выберите сервер lightwallet, который приложение Unstoppable должно использовать для синхронизации кошелька(ков) Zcash.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">Добавить конечную точку</string>
+    <string name="AddZcashEndpoint_EndpointUrl">URL конечной точки</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">Конечная точка с этим URL уже существует</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">Введенный URL недействителен. Допустимый URL должен использовать схему https</string>
 </resources>
