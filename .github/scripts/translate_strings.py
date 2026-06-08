@@ -52,10 +52,11 @@ def has_cdata(value: str) -> bool:
 
 def escape_xml_value(value: str) -> str:
     """Escape characters that must be escaped in Android strings.xml values."""
-    # & first — convert &apos; to \' (Android rejects the XML entity), then
+    # & first — convert XML quote entities to Android escapes, then
     # escape any bare & that isn't part of a remaining named entity
     value = value.replace('&apos;', "\\'")
-    value = re.sub(r'&(?!(amp|lt|gt|quot);)', '&amp;', value)
+    value = value.replace('&quot;', '\\"')
+    value = re.sub(r'&(?!(amp|lt|gt);)', '&amp;', value)
     value = value.replace('<', '&lt;').replace('>', '&gt;')
     value = re.sub(r'(?<!\\)"', r'\\"', value)
     value = re.sub(r"(?<!\\)'", r"\\'", value)
