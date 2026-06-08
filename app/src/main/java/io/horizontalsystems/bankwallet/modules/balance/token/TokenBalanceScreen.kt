@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,7 +62,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.TextAttention
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BalanceButtonsGroup
@@ -80,8 +81,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButtonTinted
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -143,34 +147,6 @@ fun TokenBalanceScreen(
         title = uiState.title,
         onBack = navController::popBackStack,
         menuItems = buildList {
-            when {
-                loading -> {
-                    add(MenuItemLoading)
-                }
-
-                uiState.attentionIcon != null -> {
-                    val color = if (uiState.attentionIcon.caution.type == Caution.Type.Error) {
-                        ComposeAppTheme.colors.lucian
-                    } else {
-                        ComposeAppTheme.colors.jacob
-                    }
-                    add(
-                        MenuItem(
-                            icon = R.drawable.ic_warning_filled_24,
-                            title = TranslatableString.PlainString(uiState.attentionIcon.caution.text),
-                            tint = color,
-                            onClick = {
-                                if (uiState.attentionIcon.type == AttentionIconType.SyncError) {
-                                    openSyncErrorDialog(uiState, navController)
-                                } else if (uiState.attentionIcon.type == AttentionIconType.TronNotActive) {
-                                    isTronAlertVisible = true
-                                }
-                            }
-                        )
-                    )
-                }
-            }
-
             if (uiState.balanceViewItem?.isWatchAccount == true) {
                 add(
                     MenuItem(
@@ -217,6 +193,28 @@ fun TokenBalanceScreen(
         ) {
             item {
                 uiState.balanceViewItem?.let { balanceViewItem ->
+                    val attentionIcon = uiState.attentionIcon
+                    val trailingContent: (@Composable () -> Unit)? = if (loading) {
+                        { SyncingSpinner() }
+                    } else if (attentionIcon != null) {
+                        {
+                            AttentionIconButton(
+                                caution = attentionIcon.caution,
+                                onClick = {
+                                    when (attentionIcon.type) {
+                                        AttentionIconType.SyncError ->
+                                            openSyncErrorDialog(uiState, navController)
+
+                                        AttentionIconType.TronNotActive ->
+                                            isTronAlertVisible = true
+                                    }
+                                }
+                            )
+                        }
+                    } else {
+                        null
+                    }
+
                     TokenBalanceHeader(
                         balanceViewItem = balanceViewItem,
                         navController = navController,
@@ -224,7 +222,8 @@ fun TokenBalanceScreen(
                         receiveAddress = uiState.receiveAddress,
                         warning = uiState.warningMessage,
                         onClickReceive = onClickReceive,
-                        loading = loading
+                        loading = loading,
+                        trailingContent = trailingContent,
                     )
 
                     balanceViewItem.birthdayHeight?.let { birthdayHeight ->
@@ -370,6 +369,34 @@ fun TokenBalanceScreen(
 
 }
 
+@Composable
+private fun SyncingSpinner() {
+    CircularProgressIndicator(
+        modifier = Modifier.size(20.dp),
+        color = ComposeAppTheme.colors.leah,
+        backgroundColor = ComposeAppTheme.colors.andy,
+        strokeWidth = 2.dp
+    )
+}
+
+@Composable
+private fun AttentionIconButton(caution: Caution, onClick: () -> Unit) {
+    val tint = if (caution.type == Caution.Type.Error) {
+        ComposeAppTheme.colors.lucian
+    } else {
+        ComposeAppTheme.colors.jacob
+    }
+    HSIconButtonTinted(
+        variant = ButtonVariant.Secondary,
+        style = ButtonStyle.Transparent,
+        size = ButtonSize.Small,
+        icon = painterResource(R.drawable.ic_warning_filled_24),
+        iconTint = tint,
+        contentDescription = caution.text,
+        onClick = onClick
+    )
+}
+
 private fun openSyncErrorDialog(
     uiState: TokenBalanceModule.TokenBalanceUiState,
     navController: NavController
@@ -408,7 +435,8 @@ private fun TokenBalanceHeader(
     receiveAddress: String?,
     warning: String?,
     onClickReceive: () -> Unit,
-    loading: Boolean
+    loading: Boolean,
+    trailingContent: (@Composable () -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
@@ -470,6 +498,7 @@ private fun TokenBalanceHeader(
 
                 stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
             },
+            trailingContent = trailingContent,
         )
         if (balanceViewItem.isWatchAccount) {
             receiveAddress?.let { receiveAddress ->
