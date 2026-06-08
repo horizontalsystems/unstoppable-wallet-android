@@ -17,9 +17,9 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.stellarkit.StellarKit
-import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
+import io.horizontalsystems.zanokit.ZanoKit
 import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
@@ -65,6 +65,7 @@ class AddressHandlerUdn(
     override val blockchainType = tokenQuery.blockchainType
 
     override fun isSupported(value: String): Boolean {
+        if (!value.contains(".")) return false
         return try {
             cache[value] = Address(resolveAddress(value), value, blockchainType)
             true
