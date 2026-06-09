@@ -227,7 +227,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
                 ),
             painter = painterResource(menuItemDropdown.icon),
             contentDescription = null,
-            tint = Color.Unspecified
+            tint = menuItemDropdown.iconTint ?: Color.Unspecified
         )
     }
 

@@ -48,6 +48,7 @@ data class MenuItemDropdown(
     @DrawableRes val icon: Int,
     val enabled: Boolean = true,
     val items: List<MenuItem>,
+    val iconTint: Color? = null
 ) : IMenuItem()
 
 @Composable
