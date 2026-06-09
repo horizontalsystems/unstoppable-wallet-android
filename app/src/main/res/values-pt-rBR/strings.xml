@@ -1768,4 +1768,5 @@
     <string name="AddZcashEndpoint_EndpointUrl">URL do ponto de extremidade</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">Já existe um ponto de extremidade com esta URL</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">A URL inserida é inválida. Uma URL válida deve usar o esquema https</string>
+    <string name="Restore_BlockchainsDescription">Selecione os blockchains que deseja restaurar.</string>
 </resources>
