@@ -634,12 +634,10 @@ class ZcashAdapter(
                 isExchangeRateEnabled = false
             )
 
-            val account = synchronizer.getAccounts().first()
-            val transparentAddress = synchronizer.getTransparentAddress(account)
-
-            synchronizer.close()
-
-            return transparentAddress
+            return synchronizer.use { synchronizer ->
+                val account = synchronizer.getAccounts().first()
+                synchronizer.getTransparentAddress(account)
+            }
         }
 
         suspend fun estimateBirthdayHeight(context: Context, date: Date): Long {
