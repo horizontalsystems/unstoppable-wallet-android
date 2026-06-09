@@ -86,6 +86,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
             MenuItemDropdown(
                 title = TranslatableString.ResString(R.string.Button_Add),
                 icon = R.drawable.wallet_add_sharp_24,
+                iconTint = ComposeAppTheme.colors.jacob,
                 items = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),

@@ -35,7 +35,7 @@
     <string name="Button_Disconnect">Disconnect</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Advanced">Advanced</string>
-    <string name="Button_Restore">Import</string>
+    <string name="Button_Restore">Restore</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Understand">I Understand</string>
     <string name="Button_Switch">Switch</string>
@@ -147,6 +147,7 @@
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">If you used a passphrase, enter it here. Using a different one will create a new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
+    <string name="Restore_BlockchainsDescription">Select the blockchains you want to restore.</string>
     <string name="Restore_By">Import By</string>
     <string name="Restore_RestoreBy">Import By</string>
     <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
