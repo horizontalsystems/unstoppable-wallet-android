@@ -28,7 +28,7 @@
     <string name="Button_Disconnect">Déconnecter</string>
     <string name="Button_Create">Créer</string>
     <string name="Button_Advanced">Avancé</string>
-    <string name="Button_Restore">Importation</string>
+    <string name="Button_Restore">Restaurer</string>
     <string name="Button_Reset">Reset</string>
     <string name="Button_Understand">Je comprends</string>
     <string name="Button_Switch">Commuter</string>
@@ -1765,4 +1765,5 @@
     <string name="AddZcashEndpoint_EndpointUrl">URL du point de terminaison</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">Un point de terminaison avec cette URL existe déjà</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">L\'URL saisie est invalide. Une URL valide doit utiliser le schéma https</string>
+    <string name="Restore_BlockchainsDescription">Sélectionnez les blockchains que vous souhaitez restaurer.</string>
 </resources>
