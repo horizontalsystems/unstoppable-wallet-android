@@ -165,12 +165,8 @@ object SwapHelper {
                     }
                 }
 
-                BlockchainType.Zcash -> {
-                    zcashAddressCache[account.id] ?: zcashAddressMutex.withLock {
-                        zcashAddressCache[account.id] ?: withContext(NonCancellable + Dispatchers.IO) {
-                            ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
-                        }.also { zcashAddressCache[account.id] = it }
-                    }
+                BlockchainType.Zcash -> cachedZcashAddress(account.id, zcashAddressCache, zcashAddressMutex) {
+                    ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
                 }
 
                 else -> throw SwapError.NoDestinationAddress()
@@ -189,10 +185,22 @@ object SwapHelper {
 
         val account = App.accountManager.activeAccount ?: throw NoActiveAccount()
 
-        return zcashUnifiedAddressCache[account.id] ?: zcashUnifiedAddressMutex.withLock {
-            zcashUnifiedAddressCache[account.id] ?: withContext(Dispatchers.IO) {
-                ZcashAdapter.getUnifiedAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
-            }.also { zcashUnifiedAddressCache[account.id] = it }
+        return cachedZcashAddress(account.id, zcashUnifiedAddressCache, zcashUnifiedAddressMutex) {
+            ZcashAdapter.getUnifiedAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
+        }
+    }
+
+    // Double-checked cache for a derived Zcash address. The derivation spins up a fresh
+    // synchronizer, so results are memoized per account under a mutex to serialize concurrent
+    // callers and run the work off the main thread.
+    private suspend fun cachedZcashAddress(
+        accountId: String,
+        cache: ConcurrentHashMap<String, String>,
+        mutex: Mutex,
+        derive: suspend () -> String,
+    ): String {
+        return cache[accountId] ?: mutex.withLock {
+            cache[accountId] ?: withContext(NonCancellable + Dispatchers.IO) { derive() }.also { cache[accountId] = it }
         }
     }
 
