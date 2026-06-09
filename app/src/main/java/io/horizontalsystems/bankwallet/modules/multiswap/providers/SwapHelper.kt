@@ -26,6 +26,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -163,7 +164,7 @@ object SwapHelper {
 
                 BlockchainType.Zcash -> {
                     zcashAddressCache[account.id] ?: zcashAddressMutex.withLock {
-                        zcashAddressCache[account.id] ?: withContext(Dispatchers.IO) {
+                        zcashAddressCache[account.id] ?: withContext(NonCancellable + Dispatchers.IO) {
                             ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
                         }.also { zcashAddressCache[account.id] = it }
                     }
