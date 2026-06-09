@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -57,16 +59,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.launchAfterClearingFocus
 import cash.p.terminal.modules.enablecoin.restoresettings.IRestoreSettingsUi
 import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
 import cash.p.terminal.modules.enablecoin.restoresettings.openRestoreSettingsDialog
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.addtoken.AddTokenFragment
 import cash.p.terminal.navigation.slideFromRightForResult
-import cash.p.terminal.navigation.slideFromBottom
+import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoBottomSheet
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui_compose.awaitImeHidden
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaults
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -89,6 +91,7 @@ import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -103,7 +106,10 @@ internal fun ManageWalletsScreen(
     val context = LocalView.current
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
+    val imeInsets = WindowInsets.ime
+    val density = LocalDensity.current
     var initialLoading by remember { mutableStateOf(true) }
+    var infoToken by remember { mutableStateOf<Token?>(null) }
 
     LaunchedEffect(groupsList) {
         if (groupsList.isNotEmpty()) {
@@ -191,11 +197,10 @@ internal fun ManageWalletsScreen(
                                 }
                             },
                             onInfoClick = { token ->
-                                coroutineScope.launchAfterClearingFocus(focusManager) {
-                                    navController.slideFromBottom(
-                                        R.id.configuredTokenInfo,
-                                        token
-                                    )
+                                coroutineScope.launch {
+                                    focusManager.clearFocus()
+                                    imeInsets.awaitImeHidden(density)
+                                    infoToken = token
                                 }
                             }
                         )
@@ -240,6 +245,13 @@ internal fun ManageWalletsScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .imePadding()
+        )
+    }
+
+    infoToken?.let { token ->
+        ConfiguredTokenInfoBottomSheet(
+            token = token,
+            onDismiss = { infoToken = null }
         )
     }
 }
