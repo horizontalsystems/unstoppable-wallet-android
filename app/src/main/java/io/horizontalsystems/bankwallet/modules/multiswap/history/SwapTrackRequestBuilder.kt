@@ -69,7 +69,8 @@ object SwapTrackRequestBuilder {
             record.providerId == "u_${UProvider.StealthEx.id}" ||
             record.providerId == "u_${UProvider.Exolix.id}" ||
             record.providerId == "u_${UProvider.Cce.id}" ||
-            record.providerId == "u_${UProvider.Swapuz.id}" -> UnstoppableAPI.Request.Track(
+            record.providerId == "u_${UProvider.Swapuz.id}" ||
+            record.providerId == "u_${UProvider.Pegasus.id}" -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 providerSwapId = record.providerSwapId,
                 fromAddress = record.sourceAddress,

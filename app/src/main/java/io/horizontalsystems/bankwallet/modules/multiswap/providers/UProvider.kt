@@ -121,5 +121,17 @@ enum class UProvider(
         RiskLevel.EXCELLENT,
         isEvm = true,
         isSingleTransactionSwap = false
+    ),
+    Pegasus(
+        id = "PEGASUS",
+        title = "PegasusSwap",
+        icon = R.drawable.swap_provider_pegasus,
+        type = SwapProviderType.CEX,
+        aml = true,
+        amlPrecheck = false,
+        requireTerms = true,
+        riskLevel = RiskLevel.GOOD,
+        isEvm = false,
+        isSingleTransactionSwap = false
     );
 }
