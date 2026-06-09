@@ -3,7 +3,7 @@ package cash.p.terminal.modules.multiswap.providers
 import cash.p.terminal.ui_compose.R
 
 object ThorChainProvider : BaseThorChainProvider(
-    baseUrl = "https://thornode.ninerealms.com/thorchain/",
+    baseUrl = "https://gateway.liquify.com/chain/thorchain_api/thorchain/",
     affiliate = "hrz",
     affiliateBps = 100,
 ) {
