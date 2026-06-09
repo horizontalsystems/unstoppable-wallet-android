@@ -587,7 +587,21 @@ class ZcashAdapter(
             }
         }
 
-        suspend fun getTransparentAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String {
+        suspend fun getTransparentAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String =
+            withTemporarySynchronizer(account, lightWalletEndpoint) { synchronizer ->
+                synchronizer.getTransparentAddress(synchronizer.getAccounts().first())
+            }
+
+        suspend fun getUnifiedAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String =
+            withTemporarySynchronizer(account, lightWalletEndpoint) { synchronizer ->
+                synchronizer.getUnifiedAddress(synchronizer.getAccounts().first())
+            }
+
+        private suspend fun <T> withTemporarySynchronizer(
+            account: WalletAccount,
+            lightWalletEndpoint: LightWalletEndpoint,
+            block: suspend (Synchronizer) -> T,
+        ): T {
             val seed = (account.type as? AccountType.Mnemonic)?.seed
                 ?: throw IllegalArgumentException("Unsupported account type for Zcash")
 
@@ -635,64 +649,8 @@ class ZcashAdapter(
             )
 
             return synchronizer.use { synchronizer ->
-                val account = synchronizer.getAccounts().first()
-                synchronizer.getTransparentAddress(account)
+                block(synchronizer)
             }
-        }
-
-        suspend fun getUnifiedAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String {
-            val seed = (account.type as? AccountType.Mnemonic)?.seed
-                ?: throw IllegalArgumentException("Unsupported account type for Zcash")
-
-            val alias = getValidAliasFromAccountId(account.id)
-            val network = ZcashNetwork.Mainnet
-            val context = App.instance
-            val existingWallet = App.localStorage.zcashAccountIds.contains(account.id)
-            val restoreSettings = App.restoreSettingsManager.settings(account, BlockchainType.Zcash)
-
-            val walletInitMode = if (existingWallet) {
-                WalletInitMode.ExistingWallet
-            } else when (account.origin) {
-                AccountOrigin.Created -> WalletInitMode.NewWallet
-                AccountOrigin.Restored -> WalletInitMode.RestoreWallet
-            }
-
-            val birthday = when (account.origin) {
-                AccountOrigin.Created -> {
-                    BlockHeight.ofLatestCheckpoint(context, network)
-                }
-
-                AccountOrigin.Restored -> restoreSettings.birthdayHeight
-                    ?.let { height ->
-                        max(network.saplingActivationHeight.value, height)
-                    }
-                    ?.let {
-                        BlockHeight.new(it)
-                    }
-            }
-
-            val synchronizer = Synchronizer.newBlocking(
-                context = context,
-                zcashNetwork = network,
-                alias = alias,
-                lightWalletEndpoint = lightWalletEndpoint,
-                setup = AccountCreateSetup(
-                    accountName = account.name,
-                    keySource = null,
-                    seed = FirstClassByteArray(seed)
-                ),
-                birthday = birthday,
-                walletInitMode = walletInitMode,
-                isTorEnabled = false,
-                isExchangeRateEnabled = false
-            )
-
-            val account = synchronizer.getAccounts().first()
-            val unifiedAddress = synchronizer.getUnifiedAddress(account)
-
-            synchronizer.close()
-
-            return unifiedAddress
         }
 
         suspend fun estimateBirthdayHeight(context: Context, date: Date): Long {
