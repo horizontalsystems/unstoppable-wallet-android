@@ -272,7 +272,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         // the transparent and shielded destinations so the server can return both routes;
         // pickRoute then remembers the better one for the confirmation quote.
         val (destinationAddress, destinationAddressUnified) = if (supportsAlternateRouteSelection(tokenOut)) {
-            resolveDestinations(recipient = null, tokenOut = tokenOut)
+            resolveDestinations(tokenOut)
         } else {
             null to null
         }
@@ -365,10 +365,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     // Resolves the destination(s) sent to the server. `primary` is always returned (transparent
     // for ZEC, native otherwise); `unified` is filled only for ZEC out with no explicit recipient
     // so providers that can deliver into the shielded pool get to route there.
-    private suspend fun resolveDestinations(recipient: String?, tokenOut: Token): Pair<String, String?> {
-        val primary = recipient ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+    private suspend fun resolveDestinations(tokenOut: Token): Pair<String, String?> {
+        val primary = SwapHelper.getReceiveAddressForToken(tokenOut)
 
-        if (recipient != null || tokenOut.blockchainType != BlockchainType.Zcash) {
+        if (tokenOut.blockchainType != BlockchainType.Zcash) {
             return primary to null
         }
 
