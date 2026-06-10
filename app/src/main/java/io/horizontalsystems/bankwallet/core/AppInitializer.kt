@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
 import io.horizontalsystems.bankwallet.modules.opencryptopay.OcpProofSubmissionWorker
@@ -50,6 +51,7 @@ class AppInitializer @Inject constructor(
     private val restoreSettingsManager: RestoreSettingsManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val zanoNodeManager: ZanoNodeManager,
+    private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val solanaKitManager: SolanaKitManager,
@@ -75,7 +77,7 @@ class AppInitializer @Inject constructor(
     fun start() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(restoreSettingsManager, moneroNodeManager, zanoNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
+            walletManager.start(restoreSettingsManager, moneroNodeManager, zanoNodeManager, zcashEndpointManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()

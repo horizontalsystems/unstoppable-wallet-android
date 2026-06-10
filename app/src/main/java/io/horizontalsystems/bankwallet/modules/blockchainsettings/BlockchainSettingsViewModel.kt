@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
+import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import kotlinx.coroutines.launch
@@ -28,11 +29,12 @@ class BlockchainSettingsViewModel @Inject constructor(
     solanaRpcSourceManager: SolanaRpcSourceManager,
     moneroNodeManager: MoneroNodeManager,
     zanoNodeManager: ZanoNodeManager,
+    zcashEndpointManager: ZcashLightWalletEndpointManager,
     marketKit: MarketKitWrapper,
 ) : ViewModel() {
     private val service = BlockchainSettingsService(
         btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager,
-        solanaRpcSourceManager, moneroNodeManager, zanoNodeManager, marketKit
+        solanaRpcSourceManager, moneroNodeManager, zanoNodeManager, zcashEndpointManager, marketKit
     )
 
     var btcLikeChains by mutableStateOf<List<BlockchainSettingsModule.BlockchainViewItem>>(listOf())
