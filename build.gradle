@@ -66,10 +66,6 @@ allprojects {
     }
 }
 
-if (!project.hasProperty('fdroid')) {
-    apply from: 'config/piratecash-repos.gradle'
-}
-
 gradle.projectsEvaluated {
     subprojects.each { project ->
         project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
