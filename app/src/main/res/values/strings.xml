@@ -749,7 +749,7 @@
     <string name="Swap_MinimumReceivedDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going </string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
-    <string name="Swap_ErrorNoProviders">No Providers</string>
+    <string name="Swap_ErrorNoProviders">No Routes</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <string name="Swap_ErrorTokenNotEnabled">Token Not Enabled</string>
@@ -769,7 +769,7 @@
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Quoting</string>
-    <string name="Swap_Providers">Providers</string>
+    <string name="Swap_Providers">Routes</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_YouPay">You Pay</string>
@@ -815,7 +815,7 @@
     <string name="SwapSort_BestRate">Best Rate</string>
     <string name="SwapSort_BestTime">Fastest</string>
 
-    <string name="RiskLevel_ProviderRiskLevel">Provider Score</string>
+    <string name="RiskLevel_ProviderRiskLevel">Route Score</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">These levels show how providers handle swaps and transaction checks.</string>
     <string name="RiskLevel_Excellent_Description">Direct on-chain execution. No provider checks or freezes. Automatic refunds if swap fails.</string>
     <string name="RiskLevel_Good_Description">Provider checks transactions automatically before completion. If issues are detected, the swap is rejected and funds are refunded.</string>

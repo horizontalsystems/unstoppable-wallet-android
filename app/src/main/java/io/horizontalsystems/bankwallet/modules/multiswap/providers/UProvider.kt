@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
-import io.horizontalsystems.bankwallet.R
-
 enum class UProvider(
     val id: String,
     val title: String,
-    val icon: Int,
     val type: SwapProviderType,
     val aml: Boolean,
     val amlPrecheck: Boolean,
@@ -17,7 +14,6 @@ enum class UProvider(
     Near(
         "NEAR",
         "Near",
-        R.drawable.swap_provider_near,
         SwapProviderType.DEX,
         false,
         false,
@@ -29,7 +25,6 @@ enum class UProvider(
     QuickEx(
         "QUICKEX",
         "QuickEx",
-        R.drawable.swap_provider_quickex,
         SwapProviderType.CEX,
         true,
         true,
@@ -41,7 +36,6 @@ enum class UProvider(
     LetsExchange(
         "LETSEXCHANGE",
         "LetsExchange",
-        R.drawable.swap_provider_letsexchange,
         SwapProviderType.CEX,
         true,
         false,
@@ -53,7 +47,6 @@ enum class UProvider(
     StealthEx(
         "STEALTHEX",
         "StealthEX",
-        R.drawable.swap_provider_stealthex,
         SwapProviderType.CEX,
         true,
         false,
@@ -65,7 +58,6 @@ enum class UProvider(
     Exolix(
         "EXOLIX",
         "Exolix",
-        R.drawable.swap_provider_exolix,
         SwapProviderType.CEX,
         true,
         false,
@@ -77,7 +69,6 @@ enum class UProvider(
     Cce(
         "CCE",
         "CCE Cash",
-        R.drawable.swap_provider_cce,
         SwapProviderType.CEX,
         true,
         false,
@@ -89,7 +80,6 @@ enum class UProvider(
     Swapuz(
         "SWAPUZ",
         "Swapuz",
-        R.drawable.swap_provider_swapuz,
         SwapProviderType.CEX,
         false,
         false,
@@ -101,7 +91,6 @@ enum class UProvider(
     Barter(
         "BARTER",
         "Barter",
-        R.drawable.swap_provider_barter,
         SwapProviderType.DEX,
         true,
         false,
@@ -113,7 +102,6 @@ enum class UProvider(
     Circle(
         "CIRCLE",
         "Circle CCTP",
-        R.drawable.swap_provider_circle,
         SwapProviderType.DEX,
         false,
         false,
@@ -125,7 +113,6 @@ enum class UProvider(
     Pegasus(
         id = "PEGASUS",
         title = "PegasusSwap",
-        icon = R.drawable.swap_provider_pegasus,
         type = SwapProviderType.CEX,
         aml = true,
         amlPrecheck = false,

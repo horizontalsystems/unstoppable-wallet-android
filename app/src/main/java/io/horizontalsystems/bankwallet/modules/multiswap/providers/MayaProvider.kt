@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
@@ -15,7 +14,6 @@ object MayaProvider : BaseThorChainProvider(
 ) {
     override val id = "mayachain"
     override val title = "Maya Protocol"
-    override val icon = R.drawable.swap_provider_maya
     override val riskLevel = RiskLevel.EXCELLENT
 
     override suspend fun resolveDestinationAddress(tokenOut: Token): String {
