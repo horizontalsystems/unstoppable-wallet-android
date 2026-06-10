@@ -156,9 +156,20 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         val natives = marketKit.tokens(baseNativeTypes.map { it.defaultTokenQuery })
             .associateBy { it.blockchainType }
 
-        val stableCoins = marketKit.fullCoins(listOf("tether", "usd-coin"))
-        val usdt = stableCoins.firstOrNull { it.coin.uid == "tether" }?.tokens
-            ?.groupBy { it.blockchainType }?.mapValues { it.value.first() } ?: emptyMap()
+        val usdtUids = listOf(
+            "tether",
+            "polygon-bridged-usdt-polygon",
+            "binance-bridged-usdt-bnb-smart-chain",
+            "l2-standard-bridged-usdt-base",
+            "arbitrum-bridged-usdt-arbitrum",
+        )
+        val stableCoins = marketKit.fullCoins(usdtUids + "usd-coin")
+        val usdt = stableCoins
+            .filter { it.coin.uid in usdtUids }
+            .sortedBy { usdtUids.indexOf(it.coin.uid) }
+            .flatMap { it.tokens }
+            .groupBy { it.blockchainType }
+            .mapValues { it.value.first() }
         val usdc = stableCoins.firstOrNull { it.coin.uid == "usd-coin" }?.tokens
             ?.groupBy { it.blockchainType }?.mapValues { it.value.first() } ?: emptyMap()
 
@@ -186,7 +197,12 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
             else -> {
                 // Case A — context is a stablecoin or any other non-native token
-                val nativeSame = marketKit.token(context.blockchainType.defaultTokenQuery)
+                val nativeRaw = marketKit.token(context.blockchainType.defaultTokenQuery)
+                // If the context chain's native coin is already a base native (e.g. ETH on an L2),
+                // reuse that base-native token so it collapses into a single entry moved to the
+                // front, instead of a chain-specific duplicate (ETH on Arbitrum + ETH on Ethereum).
+                val nativeSame = baseNatives.firstOrNull { it?.coin?.uid == nativeRaw?.coin?.uid }
+                    ?: nativeRaw
                 val usdtSame = usdt[context.blockchainType] ?: usdtEth
                 val usdcSame = usdc[context.blockchainType] ?: usdcEth
                 listOf(nativeSame) + baseNatives + listOf(usdtSame, usdcSame) + tailStables
