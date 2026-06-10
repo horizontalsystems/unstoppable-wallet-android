@@ -284,7 +284,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         }
 
         return SwapQuote(
-            amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO,
+            amountOut = bestRoute.expectedBuyAmountOrZero,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
@@ -325,7 +325,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         )
         val quote = unstoppableAPI.quote(requestQuote)
 
-        var bestRoute = quote.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+        var bestRoute = quote.routes.maxBy { it.expectedBuyAmountOrZero }
 
         if (provider == UProvider.Exolix && dry) {
             val requestQuoteAlternate = when {
@@ -342,11 +342,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
             if (requestQuoteAlternate != null) {
                 val quoteAlternate = unstoppableAPI.quote(requestQuoteAlternate)
-                val bestRouteAlternate = quoteAlternate.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
-                if (
-                    (bestRouteAlternate.expectedBuyAmount ?: BigDecimal.ZERO) >=
-                    (bestRoute.expectedBuyAmount ?: BigDecimal.ZERO)
-                ) {
+                val bestRouteAlternate = quoteAlternate.routes.maxBy { it.expectedBuyAmountOrZero }
+                if (bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero) {
                     bestRoute = bestRouteAlternate
                 }
             }
@@ -395,7 +392,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             selectedRoute?.buyAsset
         )
 
-        val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
+        val amountOut = bestRoute.expectedBuyAmountOrZero
 
         val amountOutMin = amountOut.subtract(amountOut.multiply(slippage.movePointLeft(2)))
 
@@ -720,6 +717,10 @@ interface UnstoppableAPI {
                 val providerSwapId: String?,
                 val meta: Meta?
             ) {
+                // should be getter, otherwise it will be null when restored from json
+                val expectedBuyAmountOrZero: BigDecimal
+                    get() = expectedBuyAmount ?: BigDecimal.ZERO
+
                 data class EstimatedTime(
                     val total: Long
                 )
