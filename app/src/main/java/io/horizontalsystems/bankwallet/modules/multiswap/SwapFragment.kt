@@ -398,6 +398,7 @@ private fun SwapScreenInner(
                         if (quote != null) {
                             ProviderCellInfo(
                                 quote = quote,
+                                swapTimeStatus = uiState.swapTimeStatus,
                                 showRegularPrice = showRegularPrice,
                                 onClickPrice = {
                                     showRegularPrice = !showRegularPrice
@@ -549,6 +550,7 @@ private fun SwapScreenInner(
 @Composable
 private fun ProviderCellInfo(
     quote: SwapProviderQuote,
+    swapTimeStatus: SwapTimeStatus,
     showRegularPrice: Boolean,
     onClickPrice: () -> Unit,
     onClickProvider: () -> Unit,
@@ -596,15 +598,17 @@ private fun ProviderCellInfo(
             },
             onClick = onClickProviderScoreInfo
         )
-        quote.estimationTime?.let { estimationTime ->
-            CellSecondary(
-                middle = {
-                    CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
-                },
-                right = {
-                    SwapTime(estimationTime = estimationTime)
-                }
-            )
+        if (swapTimeStatus == SwapTimeStatus.Attention) {
+            quote.estimationTime?.let { estimationTime ->
+                CellSecondary(
+                    middle = {
+                        CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
+                    },
+                    right = {
+                        SwapTime(estimationTime = estimationTime)
+                    }
+                )
+            }
         }
     }
 }
