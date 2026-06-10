@@ -271,10 +271,11 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         // For providers that fan a dry quote into multiple routes (Exolix ZEC-out), resolve both
         // the transparent and shielded destinations so the server can return both routes;
         // pickRoute then remembers the better one for the confirmation quote.
-        val (destinationAddress, destinationAddressUnified) = if (supportsAlternateRouteSelection(tokenOut)) {
-            resolveDestinations(tokenOut)
-        } else {
-            null to null
+        var destinationAddress: String? = null
+        var destinationAddressUnified: String? = null
+        if (supportsAlternateRouteSelection(tokenOut)) {
+            destinationAddress = SwapHelper.getReceiveAddressForToken(tokenOut)
+            destinationAddressUnified = SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
         }
 
         val bestRoute = quoteSwapBestRoute(
@@ -360,19 +361,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     // Exolix's ZEC pair does (transparent + shielded); extend here if another provider splits.
     private fun supportsAlternateRouteSelection(tokenOut: Token): Boolean {
         return provider == UProvider.Exolix && tokenOut.blockchainType == BlockchainType.Zcash
-    }
-
-    // Resolves the destination(s) sent to the server. `primary` is always returned (transparent
-    // for ZEC, native otherwise); `unified` is filled only for ZEC out with no explicit recipient
-    // so providers that can deliver into the shielded pool get to route there.
-    private suspend fun resolveDestinations(tokenOut: Token): Pair<String, String?> {
-        val primary = SwapHelper.getReceiveAddressForToken(tokenOut)
-
-        if (tokenOut.blockchainType != BlockchainType.Zcash) {
-            return primary to null
-        }
-
-        return primary to SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
     }
 
     private fun pickRoute(
