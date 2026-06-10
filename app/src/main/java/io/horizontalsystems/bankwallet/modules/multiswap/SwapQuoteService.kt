@@ -177,11 +177,12 @@ class SwapQuoteService {
     fun setTokenIn(token: Token) {
         if (tokenIn == token) return
 
-        tokenIn = token
         preferredProvider = null
         if (tokenOut == token) {
-            tokenOut = null
+            // selected token is already on the other side, swap places instead of clearing it
+            tokenOut = tokenIn
         }
+        tokenIn = token
 
         runQuotation()
     }
@@ -189,11 +190,12 @@ class SwapQuoteService {
     fun setTokenOut(token: Token) {
         if (tokenOut == token) return
 
-        tokenOut = token
         preferredProvider = null
         if (tokenIn == token) {
-            tokenIn = null
+            // selected token is already on the other side, swap places instead of clearing it
+            tokenIn = tokenOut
         }
+        tokenOut = token
 
         runQuotation()
     }
