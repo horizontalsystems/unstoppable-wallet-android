@@ -116,6 +116,11 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
         val assetsMap = mutableMapOf<Token, String>()
         for (token in tokens) {
+            // ZEC.ZECSHIELDED is an internal Exolix routing variant. The app always quotes
+            // ZEC.ZEC and lets the server expand it into the shielded route, so skip it here
+            // to keep the Zcash native token mapping deterministic.
+            if (token.identifier == ZCASH_SHIELDED_ASSET) continue
+
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 
             when (blockchainType) {
@@ -260,7 +265,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             null,
             null,
             null,
-            true
+            true,
+            null,
+            null
         )
 
         val approvalAddress = bestRoute.meta?.approvalAddress?.let { router ->
@@ -283,6 +290,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             amountIn = amountIn,
             actionRequired = actionApprove,
             estimationTime = bestRoute.estimatedTime?.total,
+            extraData = SwapQuoteExtraData(bestRoute)
         )
     }
 
@@ -295,28 +303,56 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         sourceAddress: String?,
         refundAddress: String?,
         dry: Boolean,
+        sellAsset: String?,
+        buyAsset: String?,
     ): UnstoppableAPI.Response.Quote.Route {
         val usingDerivedIdentifiers = assetsMap.isEmpty()
-        val assetIn = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val assetOut = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val assetIn = sellAsset ?: assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val assetOut = buyAsset ?: assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
         val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
-        val quote = unstoppableAPI.quote(
-            UnstoppableAPI.Request.Quote(
-                sellAsset = assetIn,
-                buyAsset = assetOut,
-                sellAmount = amountIn.toPlainString(),
-                providers = setOf(provider.id),
-                slippage = slippage,
-                destinationAddress = destinationAddress,
-                sourceAddress = sourceAddress,
-                refundAddress = refundAddress,
-                dry = dry,
-                chainId = chainId,
-            )
+        val requestQuote = UnstoppableAPI.Request.Quote(
+            sellAsset = assetIn,
+            buyAsset = assetOut,
+            sellAmount = amountIn.toPlainString(),
+            providers = setOf(provider.id),
+            slippage = slippage,
+            destinationAddress = destinationAddress,
+            sourceAddress = sourceAddress,
+            refundAddress = refundAddress,
+            dry = dry,
+            chainId = chainId,
         )
+        val quote = unstoppableAPI.quote(requestQuote)
 
-        return quote.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+        var bestRoute = quote.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+
+        if (provider == UProvider.Exolix && dry) {
+            val requestQuoteAlternate = when {
+                tokenIn.blockchainType == BlockchainType.Zcash -> {
+                    requestQuote.copy(sellAsset = ZCASH_SHIELDED_ASSET)
+                }
+
+                tokenOut.blockchainType == BlockchainType.Zcash -> {
+                    requestQuote.copy(buyAsset = ZCASH_SHIELDED_ASSET)
+                }
+
+                else -> null
+            }
+
+            if (requestQuoteAlternate != null) {
+                val quoteAlternate = unstoppableAPI.quote(requestQuoteAlternate)
+                val bestRouteAlternate = quoteAlternate.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+                if (
+                    (bestRouteAlternate.expectedBuyAmount ?: BigDecimal.ZERO) >=
+                    (bestRoute.expectedBuyAmount ?: BigDecimal.ZERO)
+                ) {
+                    bestRoute = bestRouteAlternate
+                }
+            }
+        }
+
+        return bestRoute
     }
 
     override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
@@ -332,7 +368,17 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
-        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+        val selectedRoute = (swapQuote.extraData as? SwapQuoteExtraData)?.route
+        val destination = when {
+            recipient != null -> recipient.hex
+
+            selectedRoute?.buyAsset == ZCASH_SHIELDED_ASSET -> {
+                SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
+            }
+
+            else -> SwapHelper.getReceiveAddressForToken(tokenOut)
+        }
+
         val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
         val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
 
@@ -345,6 +391,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             sourceAddress,
             refundAddress,
             false,
+            selectedRoute?.sellAsset,
+            selectedRoute?.buyAsset
         )
 
         val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
@@ -560,6 +608,14 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
         throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
+
+    companion object {
+        // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
+        // and lets the server expand it into this shielded variant.
+        private const val ZCASH_SHIELDED_ASSET = "ZEC.ZECSHIELDED"
+    }
+
+    data class SwapQuoteExtraData(val route: UnstoppableAPI.Response.Quote.Route) : SwapQuote.ExtraData
 }
 
 interface UnstoppableAPI {
@@ -653,6 +709,8 @@ interface UnstoppableAPI {
             val routes: List<Route>
         ) {
             data class Route(
+                val sellAsset: String?,
+                val buyAsset: String?,
                 val expectedBuyAmount: BigDecimal?,
                 val tx: JsonElement?,
                 val inboundAddress: String,
