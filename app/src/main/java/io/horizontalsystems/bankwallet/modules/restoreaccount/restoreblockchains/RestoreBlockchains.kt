@@ -2,13 +2,11 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchain
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,12 +35,10 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -52,6 +48,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
@@ -148,11 +145,21 @@ fun ManageWalletsScreen(
         onBack = onBackClick,
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ComposeAppTheme.colors.lawrence)
         ) {
             item {
-                Spacer(modifier = Modifier.height(12.dp))
-                HsDivider()
+                Column(
+                    modifier = Modifier
+                        .background(ComposeAppTheme.colors.tyler)
+                        .fillMaxWidth()
+                ) {
+                    TextBlock(
+                        stringResource(R.string.Restore_BlockchainsDescription)
+                    )
+                    VSpacer(20.dp)
+                }
             }
             coinItems?.let {
                 items(it) { viewItem ->
@@ -209,21 +216,20 @@ fun ManageWalletsScreen(
                 VSpacer(height = 100.dp)
             }
         }
-
-        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-            ButtonsGroupWithShade {
-                HSButton(
-                    title = stringResource(R.string.Button_Restore),
-                    variant = ButtonVariant.Primary,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    enabled = doneButtonEnabled,
-                    onClick = { viewModel.onRestore() },
-                )
-            }
+        Column (
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            HSButton(
+                title = stringResource(R.string.Button_Restore),
+                variant = ButtonVariant.Primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                enabled = doneButtonEnabled,
+                onClick = { viewModel.onRestore() },
+            )
+            VSpacer(16.dp)
         }
-
         if (showBottomSheet) {
             blockchainTokensViewModel.config?.let { config ->
                 BottomSheetSelectorMultiple(

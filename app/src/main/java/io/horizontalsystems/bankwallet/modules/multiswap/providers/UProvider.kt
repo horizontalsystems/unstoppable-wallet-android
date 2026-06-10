@@ -12,6 +12,7 @@ enum class UProvider(
     val requireTerms: Boolean,
     val riskLevel: RiskLevel,
     val isEvm: Boolean,
+    val isSingleTransactionSwap: Boolean,
 ) {
     Near(
         "NEAR",
@@ -22,7 +23,8 @@ enum class UProvider(
         false,
         true,
         RiskLevel.FAIR,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     QuickEx(
         "QUICKEX",
@@ -33,7 +35,8 @@ enum class UProvider(
         true,
         true,
         RiskLevel.GOOD,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     LetsExchange(
         "LETSEXCHANGE",
@@ -44,7 +47,8 @@ enum class UProvider(
         false,
         true,
         RiskLevel.GOOD,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     StealthEx(
         "STEALTHEX",
@@ -55,7 +59,8 @@ enum class UProvider(
         false,
         true,
         RiskLevel.FAIR,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     Exolix(
         "EXOLIX",
@@ -66,7 +71,8 @@ enum class UProvider(
         false,
         true,
         RiskLevel.GOOD,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     Cce(
         "CCE",
@@ -77,7 +83,8 @@ enum class UProvider(
         false,
         true,
         RiskLevel.GOOD,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     Swapuz(
         "SWAPUZ",
@@ -88,7 +95,8 @@ enum class UProvider(
         false,
         true,
         RiskLevel.GOOD,
-        false
+        isEvm = false,
+        isSingleTransactionSwap = false
     ),
     Barter(
         "BARTER",
@@ -99,6 +107,31 @@ enum class UProvider(
         false,
         true,
         RiskLevel.FAIR,
-        true
+        isEvm = true,
+        isSingleTransactionSwap = true
+    ),
+    Circle(
+        "CIRCLE",
+        "Circle CCTP",
+        R.drawable.swap_provider_circle,
+        SwapProviderType.DEX,
+        false,
+        false,
+        true,
+        RiskLevel.EXCELLENT,
+        isEvm = true,
+        isSingleTransactionSwap = false
+    ),
+    Pegasus(
+        id = "PEGASUS",
+        title = "PegasusSwap",
+        icon = R.drawable.swap_provider_pegasus,
+        type = SwapProviderType.CEX,
+        aml = true,
+        amlPrecheck = false,
+        requireTerms = true,
+        riskLevel = RiskLevel.GOOD,
+        isEvm = false,
+        isSingleTransactionSwap = false
     );
 }

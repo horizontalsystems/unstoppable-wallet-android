@@ -28,7 +28,7 @@
     <string name="Button_Disconnect">Отсоединить</string>
     <string name="Button_Create">Создать</string>
     <string name="Button_Advanced">Доп. настройки</string>
-    <string name="Button_Restore">Импорт</string>
+    <string name="Button_Restore">Восстановить</string>
     <string name="Button_Reset">Сбросить</string>
     <string name="Button_Understand">Я понимаю</string>
     <string name="Button_Switch">Перекл.</string>
@@ -1770,4 +1770,5 @@
     <string name="AddZcashEndpoint_EndpointUrl">URL конечной точки</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">Конечная точка с этим URL уже существует</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">Введенный URL недействителен. Допустимый URL должен использовать схему https</string>
+    <string name="Restore_BlockchainsDescription">Выберите блокчейны, которые вы хотите восстановить.</string>
 </resources>

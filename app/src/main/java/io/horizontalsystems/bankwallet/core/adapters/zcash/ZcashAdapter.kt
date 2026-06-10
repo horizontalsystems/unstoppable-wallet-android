@@ -587,7 +587,21 @@ class ZcashAdapter(
             }
         }
 
-        suspend fun getTransparentAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String {
+        suspend fun getTransparentAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String =
+            withTemporarySynchronizer(account, lightWalletEndpoint) { synchronizer ->
+                synchronizer.getTransparentAddress(synchronizer.getAccounts().first())
+            }
+
+        suspend fun getUnifiedAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String =
+            withTemporarySynchronizer(account, lightWalletEndpoint) { synchronizer ->
+                synchronizer.getUnifiedAddress(synchronizer.getAccounts().first())
+            }
+
+        private suspend fun <T> withTemporarySynchronizer(
+            account: WalletAccount,
+            lightWalletEndpoint: LightWalletEndpoint,
+            block: suspend (Synchronizer) -> T,
+        ): T {
             val seed = (account.type as? AccountType.Mnemonic)?.seed
                 ?: throw IllegalArgumentException("Unsupported account type for Zcash")
 
@@ -634,12 +648,9 @@ class ZcashAdapter(
                 isExchangeRateEnabled = false
             )
 
-            val account = synchronizer.getAccounts().first()
-            val transparentAddress = synchronizer.getTransparentAddress(account)
-
-            synchronizer.close()
-
-            return transparentAddress
+            return synchronizer.use { synchronizer ->
+                block(synchronizer)
+            }
         }
 
         suspend fun estimateBirthdayHeight(context: Context, date: Date): Long {

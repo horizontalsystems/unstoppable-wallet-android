@@ -4,11 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,6 +26,7 @@ fun CardsElementAmountText(
     body: HSString,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
+    trailingContent: (@Composable () -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -42,18 +47,29 @@ fun CardsElementAmountText(
             color = title.color ?: ComposeAppTheme.colors.leah,
             maxLines = 1
         )
-        Text(
+        Row(
             modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClickSubtitle
-                ),
-            text = body.text,
-            style = ComposeAppTheme.typography.body,
-            color = body.color ?: ComposeAppTheme.colors.grey,
-            maxLines = 1
-        )
+                .fillMaxWidth()
+                .height(22.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClickSubtitle
+                    ),
+                text = body.text,
+                style = ComposeAppTheme.typography.body,
+                color = body.color ?: ComposeAppTheme.colors.grey,
+                maxLines = 1
+            )
+            if (trailingContent != null) {
+                Spacer(modifier = Modifier.weight(1f))
+                trailingContent()
+            }
+        }
     }
 }
 

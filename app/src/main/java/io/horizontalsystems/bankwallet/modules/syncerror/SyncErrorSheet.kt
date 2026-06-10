@@ -63,7 +63,7 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
                 HSButton(
                     title = stringResource(R.string.BalanceSyncError_ButtonRetry),
                     modifier = Modifier.fillMaxWidth(),
-                    variant = ButtonVariant.Secondary,
+                    variant = ButtonVariant.Primary,
                     onClick = {
                         viewModel.retry()
                         navController.removeLastOrNull()
@@ -73,7 +73,6 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
                     HSButton(
                         title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
                         modifier = Modifier.fillMaxWidth(),
-                        style = ButtonStyle.Transparent,
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Medium,
                         onClick = {

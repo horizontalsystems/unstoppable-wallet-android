@@ -20,7 +20,7 @@
     <string name="Button_Reject">رد کردن</string>
     <string name="Button_Disconnect">قطع ارتباط</string>
     <string name="Button_Create">به وجود آوردن</string>
-    <string name="Button_Restore">بازگرداني</string>
+    <string name="Button_Restore">بازیابی</string>
     <string name="Button_Reset">تنظیم مجدد</string>
     <string name="Button_Understand">می فهمم</string>
     <string name="Button_Switch">تغییر</string>
@@ -682,4 +682,5 @@
     <string name="AddZcashEndpoint_EndpointUrl">URL نقطه پایانی</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">نقطه پایانی با این URL از قبل وجود دارد</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">URL وارد شده نامعتبر است. یک URL معتبر باید از طرح https استفاده کند</string>
+    <string name="Restore_BlockchainsDescription">بلاک چین های مورد نظر خود را برای بازیابی انتخاب کنید.</string>
 </resources>

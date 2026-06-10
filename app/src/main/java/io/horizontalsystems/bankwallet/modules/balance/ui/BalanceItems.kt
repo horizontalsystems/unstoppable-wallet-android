@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -414,6 +415,14 @@ fun BalanceItems(
                     right = {
                         if (!uiState.networkAvailable) {
                             subheadSB_lucian(stringResource(R.string.Hud_Text_NoInternet))
+                        }
+                        if (uiState.loading) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = ComposeAppTheme.colors.leah,
+                                backgroundColor = ComposeAppTheme.colors.andy,
+                                strokeWidth = 2.dp
+                            )
                         }
                     }
                 )

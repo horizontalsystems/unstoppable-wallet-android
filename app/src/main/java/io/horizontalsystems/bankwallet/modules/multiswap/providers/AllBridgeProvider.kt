@@ -150,7 +150,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         return tokensMap
     }
 
-    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
+    override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
         tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
 
     override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =

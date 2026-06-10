@@ -50,7 +50,7 @@ class SwapInfoViewModel(
     private var depositingTxUrl: String? = null
     private var swappingTxUrl: String? = null
     private var sendingTxUrl: String? = null
-    private var isSingleChain: Boolean = false
+    private var isSingleTransactionSwap: Boolean = false
     private var pauseReason: PauseReason? = null
 
     override fun createState() = SwapInfoUiState(
@@ -73,7 +73,7 @@ class SwapInfoViewModel(
         depositingTxUrl = depositingTxUrl,
         swappingTxUrl = swappingTxUrl,
         sendingTxUrl = sendingTxUrl,
-        isSingleChain = isSingleChain,
+        isSingleTransactionSwap = isSingleTransactionSwap,
         pauseReason = pauseReason,
     )
 
@@ -112,7 +112,7 @@ class SwapInfoViewModel(
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         swappingTxUrl = buildProviderTxUrl(record.providerId, record.transactionHash, record.depositAddress)
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
-        isSingleChain = MultiSwapProviderRegistry.isSingleChainSwap(
+        isSingleTransactionSwap = MultiSwapProviderRegistry.isSingleTransactionSwap(
             record.providerId,
             record.tokenInBlockchainTypeUid,
             record.tokenOutBlockchainTypeUid,
@@ -212,6 +212,6 @@ data class SwapInfoUiState(
     val depositingTxUrl: String?,
     val swappingTxUrl: String?,
     val sendingTxUrl: String?,
-    val isSingleChain: Boolean,
+    val isSingleTransactionSwap: Boolean,
     val pauseReason: PauseReason?,
 )

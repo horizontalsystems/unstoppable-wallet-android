@@ -1762,4 +1762,5 @@
     <string name="AddZcashEndpoint_EndpointUrl">端点 URL</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">已存在使用此 URL 的端点</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">输入的 URL 无效。有效的 URL 必须使用 https 协议</string>
+    <string name="Restore_BlockchainsDescription">选择您想要恢复的区块链。</string>
 </resources>
