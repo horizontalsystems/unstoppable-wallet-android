@@ -605,7 +605,7 @@
     <string name="Swap_MinimumReceivedDescription">Ce montant est en cours de validation. Dès que le statut de la transaction est validé, vous serez en mesure d\'utiliser ces pièces. Le montant minimum d\'un utilisateur va </string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Destinataire</string>
-    <string name="Swap_ErrorNoProviders">Aucun fournisseur</string>
+    <string name="Swap_ErrorNoProviders">Aucune Route</string>
     <string name="Swap_ErrorNoQuote">Aucun devis</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorTokenNotEnabled">Jeton non activé</string>
@@ -621,7 +621,7 @@
     <string name="Swap_Approving">Approbation</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Citation</string>
-    <string name="Swap_Providers">Fournisseurs</string>
+    <string name="Swap_Providers">Routes</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_YouPay">Vous payez</string>
@@ -661,7 +661,7 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <string name="SwapSort_BestRate">Meilleur tarif</string>
     <string name="SwapSort_BestTime">Le plus rapide</string>
-    <string name="RiskLevel_ProviderRiskLevel">Score du Fournisseur</string>
+    <string name="RiskLevel_ProviderRiskLevel">Score de Route</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Ces niveaux montrent comment les fournisseurs gèrent les swaps et les vérifications de transactions.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Activer le jeton</string>

@@ -537,7 +537,7 @@
     <string name="Swap_MinimumReceived">보증 금액</string>
     <string name="Swap_Slippage">미끄러짐</string>
     <string name="Swap_Recipient">수령인</string>
-    <string name="Swap_ErrorNoProviders">제공자 없음</string>
+    <string name="Swap_ErrorNoProviders">경로 없음</string>
     <string name="Swap_ErrorNoQuote">제안이 없습니다</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
     <string name="Swap_ErrorTokenNotEnabled">토큰 활성화되지 않음</string>
@@ -553,7 +553,7 @@
     <string name="Swap_Approving">승인 중</string>
     <string name="Swap_Swapping">스와핑</string>
     <string name="Swap_Quoting">견적</string>
-    <string name="Swap_Providers">제공자</string>
+    <string name="Swap_Providers">경로</string>
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
     <string name="Swap_YouPay">지불하기</string>
@@ -1481,7 +1481,7 @@
     <string name="AddZanoNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 중 하나의 스키마를 가져야 합니다: http, https</string>
     <string name="Balance_Zcash_Shielded">보호됨</string>
     <string name="Balance_Zcash_ShieldedDescription">지갑 간 개인 및 비공개 송금에 사용합니다.</string>
-    <string name="RiskLevel_ProviderRiskLevel">공급자 점수</string>
+    <string name="RiskLevel_ProviderRiskLevel">경로 점수</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">이러한 수준은 공급자가 스왑 및 거래 확인을 어떻게 처리하는지 보여줍니다.</string>
     <string name="RiskLevel_Excellent_Description">직접 온체인 실행. 공급자 확인 또는 동결 없음. 스왑 실패 시 자동 환불.</string>
     <string name="RiskLevel_Good_Description">공급자가 완료 전에 거래를 자동으로 확인합니다. 문제가 감지되면 스왑이 거부되고 자금이 환불됩니다.</string>

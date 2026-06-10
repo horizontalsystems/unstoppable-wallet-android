@@ -605,7 +605,7 @@
     <string name="Swap_MinimumReceivedDescription">Este valor está em processo de validação. Assim que o status da transação for validado, você poderá usar essas moedas. A quantia mínima que um usuário perde </string>
     <string name="Swap_Slippage">Corrente</string>
     <string name="Swap_Recipient">Destinatário</string>
-    <string name="Swap_ErrorNoProviders">Sem provedores</string>
+    <string name="Swap_ErrorNoProviders">Nenhuma Rota</string>
     <string name="Swap_ErrorNoQuote">Sem ofertas</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorTokenNotEnabled">Token não ativado</string>
@@ -621,7 +621,7 @@
     <string name="Swap_Approving">Aprovando</string>
     <string name="Swap_Swapping">Trocando</string>
     <string name="Swap_Quoting">Cotação</string>
-    <string name="Swap_Providers">Provedores</string>
+    <string name="Swap_Providers">Rotas</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_YouPay">Você Paga</string>
@@ -661,7 +661,7 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Sua operação pode ser de front-running</string>
     <string name="SwapSort_BestRate">Melhor tarifa</string>
     <string name="SwapSort_BestTime">Super-rápida</string>
-    <string name="RiskLevel_ProviderRiskLevel">Pontuação do Provedor</string>
+    <string name="RiskLevel_ProviderRiskLevel">Pontuação da Rota</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Estes níveis mostram como os provedores lidam com swaps e verificações de transações.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Ativar Token</string>

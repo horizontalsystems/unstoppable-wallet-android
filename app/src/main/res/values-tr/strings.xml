@@ -429,7 +429,7 @@
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_Slippage">Kayma</string>
     <string name="Swap_Recipient">Alıcı</string>
-    <string name="Swap_ErrorNoProviders">Sağlayıcı Yok</string>
+    <string name="Swap_ErrorNoProviders">Rota Yok</string>
     <string name="Swap_ErrorNoQuote">Teklif Yok</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorTokenNotEnabled">Jeton Etkin Değil</string>
@@ -444,7 +444,7 @@
     <string name="Swap_Approving">Onaylanıyor</string>
     <string name="Swap_Swapping">Takas</string>
     <string name="Swap_Quoting">Alıntı</string>
-    <string name="Swap_Providers">Sağlayıcılar</string>
+    <string name="Swap_Providers">Rotalar</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
     <string name="Swap_YouPay">Ödediğiniz</string>
@@ -1315,7 +1315,7 @@
     <string name="Balance_Zcash_Shielded">Korumalı</string>
     <string name="Balance_Zcash_ShieldedDescription">Cüzdanlar arasında kişisel ve özel transferler için kullanın.</string>
     <string name="Balance_Zcash_TransparentDescription">Korumalı adresleri desteklemeyen borsalar veya hizmetlerden almak için kullanın.</string>
-    <string name="RiskLevel_ProviderRiskLevel">Sağlayıcı Puanı</string>
+    <string name="RiskLevel_ProviderRiskLevel">Rota Puanı</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Bu seviyeler, sağlayıcıların swapları ve işlem kontrollerini nasıl işlediklerini gösterir.</string>
     <string name="RiskLevel_Excellent_Description">Doğrudan zincir üstü yürütme. Sağlayıcı kontrolleri veya donması yok. Swap başarısız olursa otomatik geri ödeme.</string>
     <string name="RiskLevel_Good_Description">Sağlayıcı tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorunlar tespit edilirse swap reddedilir ve fonlar geri ödenir.</string>
