@@ -584,15 +584,15 @@
     <string name="Swap_Price">Preis</string>
     <string name="Swap_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
-    <string name="Swap_ProviderRisk">Provider-Risiko</string>
+    <string name="Swap_ProviderRisk">Routen-Risiko</string>
     <string name="Swap_ProviderRisk_NoRisk">Kein Risiko</string>
     <string name="Swap_ProviderRisk_Risky">Riskant</string>
     <string name="Swap_ProviderRisk_Unknown">Unbekannt</string>
     <string name="Swap_ProviderRisk_AlertTitle">Hohes Einfrierrisiko!</string>
     <string name="Swap_ProviderRisk_AlertBody">Der Anbieter für diesen Swap (%s) hat gewarnt, dass dieser Swap höchstwahrscheinlich abgelehnt oder sogar eingefroren wird. Gehen Sie zurück und wählen Sie einen anderen Swap-Anbieter.</string>
     <string name="Swap_AmlRisk_Title">Risiko erkannt</string>
-    <string name="Swap_AmlRisk_Description">Potenzielle Risiken wurden für diese Transaktion erkannt. Während der Bearbeitung können Ihre Guthaben zurückgewiesen oder eingeschränkt werden. Bitte wählen Sie einen anderen Anbieter.</string>
-    <string name="Swap_AmlRisk_Button">Einen anderen Anbieter auswählen</string>
+    <string name="Swap_AmlRisk_Description">Mögliche Risiken wurden für diese Transaktion identifiziert. Bei der Verarbeitung können Ihre Gelder abgelehnt oder eingeschränkt werden. Bitte wählen Sie eine andere Route.</string>
+    <string name="Swap_AmlRisk_Button">Andere Route wählen</string>
     <string name="Swap_AmlUnknown_Title">Achtung!</string>
     <string name="Swap_AmlUnknown_Description">Wir konnten die Risikoprüfung für diese Transaktion nicht abschließen. Wenn Sie fortfahren, kann es zu Verzögerungen, Ablehnung oder Einschränkungen bei der Verarbeitung kommen.</string>
     <string name="Swap_AmlUnknown_Button">Mit Risiko fortfahren</string>
@@ -600,7 +600,7 @@
     <string name="Swap_AmlError_Description">Kann momentan keine Antwort erhalten. Bitte versuchen Sie es erneut.</string>
     <string name="Swap_AmlError_Button">Wiederholen</string>
     <string name="Swap_EstimatedTime">Geschätzte Zeit</string>
-    <string name="Swap_EstimatedTimeDescription">Ungefähre Zeit, um Guthaben zu erhalten. Auslagerungs- und Transaktionsbestätigungen können je nach Netzwerk und Anbieter einige Zeit in Anspruch nehmen.</string>
+    <string name="Swap_EstimatedTimeDescription">Ungefähre Zeit zum Empfang der Gelder. Die Swap-Verarbeitung und Transaktionsbestätigungen können je nach Netzwerk und Route einige Zeit dauern.</string>
     <string name="Swap_MinimumReceived">Garantiebetrag</string>
     <string name="Swap_MinimumReceivedDescription">Dieser Betrag ist im Prozess der Validierung. Sobald der Transaktionsstatus bestätigt ist, können Sie diese Münzen verwenden. Der Mindestbetrag für den ein Benutzer geht </string>
     <string name="Swap_Slippage">Slippage</string>
@@ -644,11 +644,11 @@
     <string name="SwapError_FailedToFetchQuote">Zitat konnte nicht abgerufen werden.</string>
     <string name="SwapTerms_Title">Begriffe tauschen</string>
     <string name="SwapTerms_TopText">Um fortzufahren, bestätigen Sie bitte Ihre Zustimmung zu jedem Punkt.</string>
-    <string name="SwapTerms_BottomText">Wählen Sie immer einen Swap-Anbieter, der Ihren Anforderungen entspricht.</string>
+    <string name="SwapTerms_BottomText">Wählen Sie immer eine Swap-Route, die Ihren Anforderungen entspricht.</string>
     <string name="SwapTerms_RiskRestrictions">Risiko von Einschränkungen</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Einige Anbieter können Swaps ablehnen oder den Zugriff auf Gelder einschränken. Achten Sie bei der Wahl eines Anbieters auf die Anbieter-Bewertungen.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Einige Routen können Swaps ablehnen oder den Zugriff auf Gelder einschränken. Achten Sie auf Routen-Bewertungen bei der Auswahl einer Route.</string>
     <string name="SwapTerms_UserResponsibility">Benutzerverantwortung</string>
-    <string name="SwapTerms_UserResponsibility_Info">Ich habe die möglichen Risiken überprüft und akzeptiere die Verantwortung für meine Wahl des Anbieters.</string>
+    <string name="SwapTerms_UserResponsibility_Info">Ich habe die möglichen Risiken überprüft und akzeptiere die Verantwortung für meine Routenwahl.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Slippage Toleranz</string>
     <string name="SwapSettings_RecipientAddressTitle">Empfängeradresse</string>
@@ -662,7 +662,7 @@
     <string name="SwapSort_BestRate">Bester Kurs</string>
     <string name="SwapSort_BestTime">Schnellste</string>
     <string name="RiskLevel_ProviderRiskLevel">Routen-Bewertung</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Diese Stufen zeigen, wie Anbieter Swaps und Transaktionsprüfungen handhaben.</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Diese Stufen zeigen, wie Routen Swaps und Transaktionsprüfungen handhaben.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Token aktivieren</string>
     <string name="ActivationRequired_DialogDescription">Um %szu erhalten, müssen Sie das Token aktivieren. Das Stellar-Netzwerk benötigt eine Vertrauenszeile für jeden Token einzurichten. Ohne sie kann Ihre Brieftasche nicht %s erhalten – die Transaktion wird zurückgewiesen und das Guthaben wird nicht ausgeliefert.</string>
@@ -677,7 +677,7 @@
     <string name="SwapHistory_EmptyList">Noch keine Swaps</string>
     <string name="SwapInfo_Title">Swap-Info</string>
     <!-- Swap Info -->
-    <string name="SwapInfo_Provider">Anbieter</string>
+    <string name="SwapInfo_Provider">Route</string>
     <string name="SwapInfo_SourceAddress">Quelladresse</string>
     <string name="SwapInfo_StatusTitle">Transaktionsstatus</string>
     <string name="SwapInfo_StatusDepositing">Anzahlung</string>
@@ -1725,8 +1725,8 @@
     <string name="AddZanoNode_Error_InvalidUrl">Eingegebene URL ist ungültig. Gültige URLs müssen eines der folgenden Schemas haben: http, https</string>
     <string name="Balance_Zcash_Shielded">Geschützt</string>
     <string name="Balance_Zcash_ShieldedDescription">Verwenden Sie für private und vertrauliche Transfers zwischen Wallets.</string>
-    <string name="RiskLevel_Excellent_Description">Direkte On-Chain-Ausführung. Keine Anbieterprüfungen oder Sperren. Automatische Rückerstattung bei fehlgeschlagenem Swap.</string>
-    <string name="RiskLevel_Good_Description">Der Anbieter prüft Transaktionen automatisch vor Abschluss. Bei erkannten Problemen wird der Swap abgelehnt und Gelder werden erstattet.</string>
+    <string name="RiskLevel_Excellent_Description">Direkte On-Chain-Ausführung. Keine Routen-Prüfungen oder Sperren. Automatische Rückerstattung bei Swap-Fehler.</string>
+    <string name="RiskLevel_Good_Description">Route prüft Transaktionen automatisch vor Abschluss. Wenn Probleme erkannt werden, wird der Swap abgelehnt und Gelder werden erstattet.</string>
     <string name="RiskLevel_Fair_Description">Zusätzliche Überprüfung kann für einige Transaktionen erforderlich sein. Bei erkannten Problemen werden Gelder normalerweise automatisch erstattet.</string>
     <string name="SwapInfo_RequestRefund">Rückerstattung anfordern</string>
     <string name="SwapInfo_RequestRefundDescription">Der Anbieter benötigt Ihre Swap-Details, um eine Rückerstattung zu bearbeiten. Sie werden eingebunden, wenn Sie den Anbieter kontaktieren.</string>
@@ -1766,7 +1766,7 @@
     <string name="Swap_YourTokens">Ihre Token</string>
     <string name="Swap_TopTokens">Top-Token</string>
     <string name="Swap_RecentSearch">Letzte Suche</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">Anbieter-Bewertungen</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">Routen-Bewertungen</string>
     <string name="ZcashEndpointSettings_Description">Wählen Sie den Lightwallet-Server, den die Unstoppable-App zur Synchronisierung der Zcash-Wallet(s) verwenden soll.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Endpoint hinzufügen</string>
     <string name="AddZcashEndpoint_EndpointUrl">Endpoint-URL</string>
