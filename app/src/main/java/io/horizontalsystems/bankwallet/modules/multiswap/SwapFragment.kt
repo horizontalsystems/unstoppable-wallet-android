@@ -74,8 +74,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -572,7 +572,7 @@ private fun ProviderCellInfo(
         CellSecondary(
             middle = {
                 LeftSelector(
-                    title = quote.provider.titleShort,
+                    title = stringResource(R.string.Swap_Providers),
                     onClick = onClickProvider
                 )
             },
@@ -592,7 +592,7 @@ private fun ProviderCellInfo(
                 )
             },
             right = {
-                RiskScore(riskLevel = quote.provider.riskLevel)
+                RiskScore(quote.provider.riskLevel)
             },
             onClick = onClickProviderScoreInfo
         )
@@ -653,38 +653,6 @@ private fun LeftSelector(
             painter = painterResource(R.drawable.arrow_s_down_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.leah
-        )
-    }
-}
-
-@Composable
-private fun RiskScore(
-    modifier: Modifier = Modifier,
-    riskLevel: RiskLevel,
-) {
-    val color = when (riskLevel) {
-        RiskLevel.EXCELLENT -> ComposeAppTheme.colors.remus
-        RiskLevel.GOOD -> ComposeAppTheme.colors.ocean
-        RiskLevel.FAIR -> ComposeAppTheme.colors.jacob
-    }
-    val icon = riskLevel.icon
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(riskLevel.title),
-            style = ComposeAppTheme.typography.subheadSB,
-            color = color,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-        )
-        HSpacer(4.dp)
-        Icon(
-            painter = painterResource(icon),
-            modifier = Modifier.size(20.dp),
-            tint = color,
-            contentDescription = null
         )
     }
 }

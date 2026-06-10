@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.riskLevelColor
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -140,11 +140,7 @@ fun RiskLevelList() {
 
 @Composable
 private fun RiskLevelCell(level: RiskLevel, description: String) {
-    val color = when (level) {
-        RiskLevel.EXCELLENT -> ComposeAppTheme.colors.remus
-        RiskLevel.GOOD -> ComposeAppTheme.colors.ocean
-        RiskLevel.FAIR -> ComposeAppTheme.colors.jacob
-    }
+    val color = riskLevelColor(level)
 
     Column {
         Row(

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.core.convertedError
@@ -26,7 +25,6 @@ import java.math.BigDecimal
 object OneInchProvider : IMultiSwapProvider {
     override val id = "oneinch"
     override val title = "1inch"
-    override val icon = R.drawable.swap_provider_1inch
     override val type = SwapProviderType.DEX
     override val isEvm = true
     override val requireTerms = false

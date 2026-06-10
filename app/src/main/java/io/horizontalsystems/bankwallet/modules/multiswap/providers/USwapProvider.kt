@@ -36,7 +36,6 @@ import java.math.BigInteger
 class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
-    override val icon = provider.icon
     override val type = provider.type
     override val amlPrecheck = provider.amlPrecheck
     override val isEvm = provider.isEvm
