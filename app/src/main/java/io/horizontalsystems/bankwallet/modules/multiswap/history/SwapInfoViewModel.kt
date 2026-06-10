@@ -43,7 +43,6 @@ class SwapInfoViewModel(
     private var amountOut: String? = null
     private var fiatAmountIn: String? = null
     private var fiatAmountOut: String? = null
-    private var providerName: String = ""
     private var formattedDate: String = ""
     private var status: SwapStatus = SwapStatus.Depositing
     private var recipientAddress: String? = null
@@ -66,7 +65,6 @@ class SwapInfoViewModel(
         amountOut = amountOut,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
-        providerName = providerName,
         formattedDate = formattedDate,
         status = status,
         recipientAddress = recipientAddress,
@@ -105,7 +103,6 @@ class SwapInfoViewModel(
         amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) }
         fiatAmountIn = formatFiat(record.amountIn, priceIn, currency.symbol, currency.decimal)
         fiatAmountOut = record.amountOut?.let { formatFiat(it, priceOut, currency.symbol, currency.decimal) }
-        providerName = record.providerName
         formattedDate = DateHelper.formatDate(Date(record.timestamp), "MMM d, yyyy, HH:mm")
         status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing)
         recipientAddress = record.recipientAddress.takeIf { record.customRecipientAddress }
@@ -205,7 +202,6 @@ data class SwapInfoUiState(
     val amountOut: String?,
     val fiatAmountIn: String?,
     val fiatAmountOut: String?,
-    val providerName: String,
     val formattedDate: String,
     val status: SwapStatus,
     val recipientAddress: String?,
