@@ -607,7 +607,7 @@
     <string name="Swap_MinimumReceivedDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
     <string name="Swap_Slippage">Отклонение от курса</string>
     <string name="Swap_Recipient">Получатель</string>
-    <string name="Swap_ErrorNoProviders">Нет провайдеров</string>
+    <string name="Swap_ErrorNoProviders">Нет маршрутов</string>
     <string name="Swap_ErrorNoQuote">Нет предложений</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorTokenNotEnabled">Токен не включен</string>
@@ -623,7 +623,7 @@
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_Quoting">Котировка</string>
-    <string name="Swap_Providers">Провайдеры</string>
+    <string name="Swap_Providers">Маршруты</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_YouPay">Вы платите</string>
@@ -663,7 +663,7 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
     <string name="SwapSort_BestRate">Лучший курс</string>
     <string name="SwapSort_BestTime">Самый быстрый</string>
-    <string name="RiskLevel_ProviderRiskLevel">Рейтинг провайдера</string>
+    <string name="RiskLevel_ProviderRiskLevel">Оценка маршрута</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Эти уровни показывают, как провайдеры обрабатывают свопы и проверки транзакций.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Активировать токен</string>

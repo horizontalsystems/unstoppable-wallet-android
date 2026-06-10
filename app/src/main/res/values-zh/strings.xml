@@ -604,7 +604,7 @@
     <string name="Swap_MinimumReceivedDescription">这一数额正在审定过程中。 一旦交易状态得到验证，您将能够使用这些硬币。用户正在使用的最低金额 </string>
     <string name="Swap_Slippage">滑点</string>
     <string name="Swap_Recipient">收款人</string>
-    <string name="Swap_ErrorNoProviders">没有提供者</string>
+    <string name="Swap_ErrorNoProviders">无路由</string>
     <string name="Swap_ErrorNoQuote">没有报价</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorTokenNotEnabled">代币未启用</string>
@@ -620,7 +620,7 @@
     <string name="Swap_Approving">审批中</string>
     <string name="Swap_Swapping">交易中...</string>
     <string name="Swap_Quoting">引述</string>
-    <string name="Swap_Providers">服务提供商</string>
+    <string name="Swap_Providers">路由</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
     <string name="Swap_YouPay">您支付</string>
@@ -660,7 +660,7 @@
     <string name="SwapSettings_Warning_UnusualSlippage">您的交易可能提前完成</string>
     <string name="SwapSort_BestRate">最佳率</string>
     <string name="SwapSort_BestTime">最快的</string>
-    <string name="RiskLevel_ProviderRiskLevel">提供商评分</string>
+    <string name="RiskLevel_ProviderRiskLevel">路由评分</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">这些级别显示提供商如何处理交换和交易检查。</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">激活令牌</string>
