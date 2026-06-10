@@ -201,7 +201,7 @@ private fun SwapSelectProviderScreenInner(
                                                 formatDurationShort(it)
                                             } ?: stringResource(R.string.NotAvailable),
                                             style = ComposeAppTheme.typography.subheadSB,
-                                            color = if (viewItem.quote == currentQuote) {
+                                            color = if (viewItem.timeStatus == SwapTimeStatus.Attention) {
                                                 ComposeAppTheme.colors.jacob
                                             } else {
                                                 ComposeAppTheme.colors.grey

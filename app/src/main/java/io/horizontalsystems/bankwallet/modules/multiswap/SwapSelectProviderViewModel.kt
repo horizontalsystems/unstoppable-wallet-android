@@ -57,6 +57,7 @@ class SwapSelectProviderViewModel(
 
     private fun getViewItems(quotes: List<SwapProviderQuote>): List<QuoteViewItem> {
         val fiatAmountIn = getFiatValue(amountIn, rateTokenIn)
+        val allEstimationTimes = quotes.map { it.estimationTime }
 
         return quotes.map { quote ->
             val fiatAmountOut = getFiatValue(quote.amountOut, rateTokenOut)
@@ -75,7 +76,8 @@ class SwapSelectProviderViewModel(
                 fiatAmount = fiatAmountOut?.getFormattedFull(),
                 tokenAmount = tokenAmount,
                 priceImpactData = priceImpactData,
-                estimationTime = quote.estimationTime
+                estimationTime = quote.estimationTime,
+                timeStatus = swapTimeStatus(quote.estimationTime, allEstimationTimes),
             )
         }
     }
@@ -118,6 +120,7 @@ data class QuoteViewItem(
     val tokenAmount: String,
     val priceImpactData: PriceImpactData?,
     val estimationTime: Long?,
+    val timeStatus: SwapTimeStatus,
 )
 
 enum class ProviderSortType(val title: Int) {
