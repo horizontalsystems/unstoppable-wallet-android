@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAct
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
-data class SwapQuote(
+open class SwapQuote(
     val amountOut: BigDecimal,
     val tokenIn: Token,
     val tokenOut: Token,

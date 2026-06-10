@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
@@ -80,13 +81,28 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     private var supportedBlockchainTypes = setOf<BlockchainType>()
 
     // Some provider+tokenOut pairs fan a dry quote into multiple routes (currently: Exolix
-    // returns both transparent and shielded ZEC). The dry call picks one and remembers it here
-    // so the confirmation (non-dry) call re-quotes exactly that same route.
-    private var selectedAlternateRoute: SelectedAlternateRoute? = null
-
+    // returns both transparent and shielded ZEC). The dry call picks one and carries it on the
+    // returned quote so the confirmation (non-dry) call re-quotes exactly that same route.
     private data class SelectedAlternateRoute(
         val buyAsset: String,
         val destinationAddress: String,
+    )
+
+    // SwapQuote variant that remembers the route the dry quote settled on, so fetchFinalQuote can
+    // replay it. Kept local to USwapProvider since no other provider needs alternate routes.
+    private class USwapQuote(
+        amountOut: BigDecimal,
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        actionRequired: ISwapProviderAction?,
+        estimationTime: Long?,
+        val selectedAlternateRoute: SelectedAlternateRoute?,
+    ) : SwapQuote(amountOut, tokenIn, tokenOut, amountIn, actionRequired, estimationTime)
+
+    private data class RouteSelection(
+        val route: UnstoppableAPI.Response.Quote.Route,
+        val selectedAlternateRoute: SelectedAlternateRoute?,
     )
 
     private sealed class ProviderData {
@@ -278,7 +294,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             destinationAddressUnified = SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
         }
 
-        val bestRoute = quoteSwapBestRoute(
+        val routeSelection = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
             amountIn,
@@ -290,6 +306,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             null,
             true
         )
+        val bestRoute = routeSelection.route
 
         val approvalAddress = bestRoute.meta?.approvalAddress?.let { router ->
             try {
@@ -304,13 +321,14 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
         }
 
-        return SwapQuote(
+        return USwapQuote(
             amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionApprove,
             estimationTime = bestRoute.estimatedTime?.total,
+            selectedAlternateRoute = routeSelection.selectedAlternateRoute,
         )
     }
 
@@ -325,7 +343,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         refundAddress: String?,
         buyAssetOverride: String?,
         dry: Boolean,
-    ): UnstoppableAPI.Response.Quote.Route {
+    ): RouteSelection {
         val usingDerivedIdentifiers = assetsMap.isEmpty()
         val assetIn = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
         val assetOut = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
@@ -370,9 +388,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         fallbackBuyAsset: String,
         destinationAddress: String?,
         destinationAddressUnified: String?,
-    ): UnstoppableAPI.Response.Quote.Route {
+    ): RouteSelection {
         if (!dry || !supportsAlternateRouteSelection(tokenOut)) {
-            return routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+            return RouteSelection(routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }, null)
         }
 
         // Exolix's ZEC dry quote can carry both the transparent and shielded routes. Pick the
@@ -389,14 +407,14 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             destinationAddress
         }
 
-        selectedDestination?.let {
-            selectedAlternateRoute = SelectedAlternateRoute(
+        val selectedAlternateRoute = selectedDestination?.let {
+            SelectedAlternateRoute(
                 buyAsset = best.buyAsset ?: fallbackBuyAsset,
                 destinationAddress = it,
             )
         }
 
-        return best
+        return RouteSelection(best, selectedAlternateRoute)
     }
 
     override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
@@ -418,7 +436,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         // When a dry quote previously fanned out into multiple routes, the confirmation quote must
         // re-request the exact (buyAsset, destination) the dry call settled on. An explicit
         // recipient overrides any selection.
-        val selection = selectedAlternateRoute?.takeIf {
+        val selection = (swapQuote as? USwapQuote)?.selectedAlternateRoute?.takeIf {
             recipient == null && supportsAlternateRouteSelection(tokenOut)
         }
         val destination = selection?.destinationAddress
@@ -436,7 +454,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             refundAddress,
             selection?.buyAsset,
             false,
-        )
+        ).route
 
         val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
 
