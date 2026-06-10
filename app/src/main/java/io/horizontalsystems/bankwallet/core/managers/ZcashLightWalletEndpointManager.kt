@@ -10,8 +10,11 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.net.URI
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ZcashLightWalletEndpointManager(
+@Singleton
+class ZcashLightWalletEndpointManager @Inject constructor(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val endpointStorage: ZcashEndpointStorage,
     private val marketKitWrapper: MarketKitWrapper,

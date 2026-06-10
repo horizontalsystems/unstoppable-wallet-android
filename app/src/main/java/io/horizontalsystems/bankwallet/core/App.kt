@@ -239,8 +239,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val kitManagersEntryPoint = EntryPointAccessors
             .fromApplication(this, KitManagersEntryPoint::class.java)
         zanoKitManager = kitManagersEntryPoint.zanoKitManager()
-        zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
-        zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
+        zcashEndpointStorage = kitManagersEntryPoint.zcashEndpointStorage()
+        zcashEndpointManager = kitManagersEntryPoint.zcashEndpointManager()
         coinManager = walletCoreEntryPoint.coinManager()
 
         solanaRpcSourceManager = kitManagersEntryPoint.solanaRpcSourceManager()

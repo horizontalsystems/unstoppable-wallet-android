@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.entities.ZcashEndpointRecord
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ZcashEndpointStorage(appDatabase: AppDatabase) {
+@Singleton
+class ZcashEndpointStorage @Inject constructor(appDatabase: AppDatabase) {
 
     private val dao by lazy { appDatabase.zcashEndpointDao() }
 

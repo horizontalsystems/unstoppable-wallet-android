@@ -214,6 +214,8 @@ interface LocalizationEntryPoint {
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface KitManagersEntryPoint {
+    fun zcashEndpointStorage(): io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
+    fun zcashEndpointManager(): io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
     fun zanoKitManager(): io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
     fun solanaRpcSourceManager(): io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
     fun solanaKitManager(): io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
