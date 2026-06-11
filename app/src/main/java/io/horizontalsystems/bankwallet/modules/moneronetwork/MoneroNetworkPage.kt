@@ -34,9 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
@@ -184,8 +182,6 @@ private fun MoneroNetworkScreen(
             }
         }
 
-    }
-        }
     }
 }
 

@@ -68,12 +68,10 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryPage
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsPage
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -108,10 +106,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.serialization.Serializable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.net.UnknownHostException
 import kotlin.time.Duration.Companion.milliseconds
