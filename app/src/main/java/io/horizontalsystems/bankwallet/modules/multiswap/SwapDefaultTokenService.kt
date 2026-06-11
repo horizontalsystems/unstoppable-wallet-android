@@ -28,23 +28,14 @@ class SwapDefaultTokenService(
         val blockchainType = token.blockchainType
 
         if (token.type == TokenType.Native) {
-            val coinUid = when (blockchainType) {
-                BlockchainType.BinanceSmartChain -> "binance-bridged-usdt-bnb-smart-chain"
-                else -> "tether"
-            }
-
-            tokenOut = marketKit.fullCoins(listOf(coinUid))
-                .firstOrNull()
-                ?.let { fullCoin ->
-                    fullCoin.tokens.firstOrNull { it.blockchainType == blockchainType }
-                }
-
-            if (tokenOut == null) {
-                tokenOut = walletManager.activeWallets
+            // Use the same context-aware Popular Tokens list as the token selector, so the
+            // auto-picked counterpart matches the top of that list (e.g. USDT on Polygon)
+            // instead of a hardcoded "tether" lookup that misses chain-specific stablecoins.
+            tokenOut = SwapPopularTokens.build(marketKit, token).firstOrNull()
+                ?: walletManager.activeWallets
                     .firstOrNull { it.token.blockchainType == BlockchainType.Bitcoin }
                     ?.token
-                    ?: marketKit.token(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)))
-            }
+                ?: marketKit.token(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)))
         } else if (token.type is TokenType.Derived) {
             val targetBlockchainType = if (blockchainType == BlockchainType.Bitcoin) BlockchainType.Monero else BlockchainType.Bitcoin
             tokenOut = walletManager.activeWallets
