@@ -24,6 +24,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.hexStringToByteArray
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -341,10 +342,16 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             }
 
             if (requestQuoteAlternate != null) {
-                val quoteAlternate = unstoppableAPI.quote(requestQuoteAlternate)
-                val bestRouteAlternate = quoteAlternate.routes.maxBy { it.expectedBuyAmountOrZero }
-                if (bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero) {
-                    bestRoute = bestRouteAlternate
+                try {
+                    val quoteAlternate = unstoppableAPI.quote(requestQuoteAlternate)
+                    val bestRouteAlternate = quoteAlternate.routes.maxBy { it.expectedBuyAmountOrZero }
+                    if (bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero) {
+                        bestRoute = bestRouteAlternate
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (_: Throwable) {
+
                 }
             }
         }
