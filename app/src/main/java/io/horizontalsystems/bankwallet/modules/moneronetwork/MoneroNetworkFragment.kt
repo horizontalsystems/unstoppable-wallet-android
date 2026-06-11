@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.moneronetwork
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,10 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +38,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
@@ -54,20 +49,18 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCa
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 
 class MoneroNetworkFragment : BaseComposeFragment() {
@@ -105,6 +98,7 @@ private fun MoneroNetworkNavHost(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MoneroNetworkScreen(
     navController: NavController,
@@ -113,116 +107,97 @@ private fun MoneroNetworkScreen(
     val viewModel = viewModel<MoneroNetworkViewModel>(factory = MoneroNetworkModule.Factory())
     var revealedCardId by remember { mutableStateOf<String?>(null) }
     val view = LocalView.current
-    val skipHalfExpanded by remember { mutableStateOf(true) }
-    val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        skipHalfExpanded = skipHalfExpanded
-    )
     val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by remember { mutableStateOf(false) }
     var selectedNode by remember { mutableStateOf<MoneroNode?>(null) }
 
     fun showTrustedSettings(node: MoneroNode) {
         selectedNode = node
-        coroutineScope.launch { modalBottomSheetState.show() }
+        showBottomSheet = true
     }
 
-    ModalBottomSheetLayout(
-        sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
-            selectedNode?.let { node ->
-                MoneroNodeTrustBottomSheet(
-                    node,
-                    onDone = { checked ->
-                        viewModel.onSelectNode(node.copy(trusted = checked))
-                        coroutineScope.launch { modalBottomSheetState.hide() }
-                    },
-                    onCloseClick = {
-                        viewModel.onSelectNode(node)
-                        coroutineScope.launch { modalBottomSheetState.hide() }
-                    }
+    HSScaffold(
+        title = viewModel.title,
+        onBack = onBackPress,
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+
+            item {
+                VSpacer(12.dp)
+                subhead2_grey(
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    text = stringResource(R.string.MoneroNodeSettings_Description)
                 )
+                VSpacer(32.dp)
+            }
+
+            item {
+                CellUniversalLawrenceSection(viewModel.uiState.defaultItems) { item ->
+                    BlockchainSettingCell(item.name, item.url, item.selected, null) {
+                        showTrustedSettings(item.node)
+                    }
+                }
+            }
+
+            if (viewModel.uiState.customItems.isNotEmpty()) {
+                customNodeListSection(
+                    viewModel.uiState.customItems,
+                    revealedCardId,
+                    onClick = { node ->
+                        showTrustedSettings(node)
+                    },
+                    onReveal = { id ->
+                        if (revealedCardId != id) {
+                            revealedCardId = id
+                        }
+                    },
+                    onConceal = {
+                        revealedCardId = null
+                    }
+                ) {
+                    viewModel.onRemoveCustomNode(it)
+                    HudHelper.showErrorMessage(view, R.string.Hud_Removed)
+
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(32.dp))
+                AddButton {
+                    navController.navigate(AddNodePage)
+                }
+                Spacer(Modifier.height(60.dp))
             }
         }
 
-    ) {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            Column {
-                AppBar(
-                    title = viewModel.title,
-                    navigationIcon = {
-                        Image(
-                            painter = rememberAsyncImagePainter(
-                                model = BlockchainType.Monero.imageUrl,
-                                error = painterResource(R.drawable.ic_platform_placeholder_32)
-                            ),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(start = 14.dp)
-                                .size(24.dp)
-                        )
+        if (showBottomSheet) {
+            selectedNode?.let { node ->
+                BottomSheetContent(
+                    onDismissRequest = {
+                        showBottomSheet = false
                     },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                onBackPress.invoke()
-                            }
-                        )
-                    )
-                )
-
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
+                    sheetState = sheetState
                 ) {
-
-                    item {
-                        VSpacer(12.dp)
-                        subhead2_grey(
-                            modifier = Modifier.padding(horizontal = 32.dp),
-                            text = stringResource(R.string.MoneroNodeSettings_Description)
-                        )
-                        VSpacer(32.dp)
-                    }
-
-                    item {
-                        CellUniversalLawrenceSection(viewModel.uiState.defaultItems) { item ->
-                            BlockchainSettingCell(item.name, item.url, item.selected, null) {
-                                showTrustedSettings(item.node)
+                    MoneroNodeTrustBottomSheet(
+                        node = node,
+                        onDone = { checked ->
+                            viewModel.onSelectNode(node.copy(trusted = checked))
+                            coroutineScope.launch {
+                                sheetState.hide()
+                                showBottomSheet = false
+                            }
+                        },
+                        onCloseClick = {
+                            viewModel.onSelectNode(node)
+                            coroutineScope.launch {
+                                sheetState.hide()
+                                showBottomSheet = false
                             }
                         }
-                    }
-
-                    if (viewModel.uiState.customItems.isNotEmpty()) {
-                        customNodeListSection(
-                            viewModel.uiState.customItems,
-                            revealedCardId,
-                            onClick = { node ->
-                                showTrustedSettings(node)
-                            },
-                            onReveal = { id ->
-                                if (revealedCardId != id) {
-                                    revealedCardId = id
-                                }
-                            },
-                            onConceal = {
-                                revealedCardId = null
-                            }
-                        ) {
-                            viewModel.onRemoveCustomNode(it)
-                            HudHelper.showErrorMessage(view, R.string.Hud_Removed)
-
-                        }
-                    }
-
-                    item {
-                        Spacer(Modifier.height(32.dp))
-                        AddButton {
-                            navController.navigate(AddNodePage)
-                        }
-                        Spacer(Modifier.height(60.dp))
-                    }
+                    )
                 }
             }
         }
