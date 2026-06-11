@@ -583,15 +583,15 @@
     <string name="Swap_Price">价格</string>
     <string name="Swap_AvailableBalance">可用余额</string>
     <string name="Swap_PriceImpact">价格影响</string>
-    <string name="Swap_ProviderRisk">提供商风险</string>
+    <string name="Swap_ProviderRisk">路由风险</string>
     <string name="Swap_ProviderRisk_NoRisk">无风险</string>
     <string name="Swap_ProviderRisk_Risky">有风险</string>
     <string name="Swap_ProviderRisk_Unknown">未知的</string>
     <string name="Swap_ProviderRisk_AlertTitle">高冻结风险！</string>
     <string name="Swap_ProviderRisk_AlertBody">此特定交换机 (%s) 的提供者已经提醒，这个交换机很可能被拒绝，甚至可能被冻结。 返回并选择不同的交换源。</string>
     <string name="Swap_AmlRisk_Title">检测到风险</string>
-    <string name="Swap_AmlRisk_Description">此交易的潜在风险已被识别。在处理过程中，您的资金可能被拒绝或限制。请选择其他提供者。</string>
-    <string name="Swap_AmlRisk_Button">选择另一个提供商</string>
+    <string name="Swap_AmlRisk_Description">已为此交易识别潜在风险。处理期间，您的资金可能被拒绝或限制。请选择另一条路由。</string>
+    <string name="Swap_AmlRisk_Button">选择另一条路由</string>
     <string name="Swap_AmlUnknown_Title">警告！</string>
     <string name="Swap_AmlUnknown_Description">我们无法完成此交易的风险检查。如果您继续，此交换可能会在处理过程中遇到延迟、拒绝或限制。</string>
     <string name="Swap_AmlUnknown_Button">继续存在风险</string>
@@ -599,12 +599,12 @@
     <string name="Swap_AmlError_Description">现在无法获得响应。请再试一次。</string>
     <string name="Swap_AmlError_Button">重试</string>
     <string name="Swap_EstimatedTime">估计时间</string>
-    <string name="Swap_EstimatedTimeDescription">接收资金的大约时间，交换处理和交易确认可能需要一些时间，这取决于网络和提供者。</string>
+    <string name="Swap_EstimatedTimeDescription">接收资金的大约时间。交换处理和交易确认可能需要一些时间，具体取决于网络和路由。</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_MinimumReceivedDescription">这一数额正在审定过程中。 一旦交易状态得到验证，您将能够使用这些硬币。用户正在使用的最低金额 </string>
     <string name="Swap_Slippage">滑点</string>
     <string name="Swap_Recipient">收款人</string>
-    <string name="Swap_ErrorNoProviders">没有提供者</string>
+    <string name="Swap_ErrorNoProviders">无路由</string>
     <string name="Swap_ErrorNoQuote">没有报价</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorTokenNotEnabled">代币未启用</string>
@@ -620,7 +620,7 @@
     <string name="Swap_Approving">审批中</string>
     <string name="Swap_Swapping">交易中...</string>
     <string name="Swap_Quoting">引述</string>
-    <string name="Swap_Providers">服务提供商</string>
+    <string name="Swap_Providers">路由</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
     <string name="Swap_YouPay">您支付</string>
@@ -643,11 +643,11 @@
     <string name="SwapError_FailedToFetchQuote">获取报价失败。</string>
     <string name="SwapTerms_Title">交换条款</string>
     <string name="SwapTerms_TopText">要继续，请确认您同意每一项。</string>
-    <string name="SwapTerms_BottomText">总是选择一个与您的要求匹配的交换源。</string>
+    <string name="SwapTerms_BottomText">始终选择符合您要求的交换路由。</string>
     <string name="SwapTerms_RiskRestrictions">限制的风险</string>
-    <string name="SwapTerms_RiskRestrictions_Info">某些提供商可能会拒绝交换或限制对资金的访问。选择提供商时请注意提供商评分。</string>
+    <string name="SwapTerms_RiskRestrictions_Info">某些路由可能拒绝交换或限制对资金的访问。选择路由时要注意路由评分。</string>
     <string name="SwapTerms_UserResponsibility">用户责任</string>
-    <string name="SwapTerms_UserResponsibility_Info">我已审查了可能的风险，并接受对我的提供商选择的责任。</string>
+    <string name="SwapTerms_UserResponsibility_Info">我已审查可能的风险，并对我的路由选择承担责任。</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">无效滑点</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
@@ -660,8 +660,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">您的交易可能提前完成</string>
     <string name="SwapSort_BestRate">最佳率</string>
     <string name="SwapSort_BestTime">最快的</string>
-    <string name="RiskLevel_ProviderRiskLevel">提供商评分</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">这些级别显示提供商如何处理交换和交易检查。</string>
+    <string name="RiskLevel_ProviderRiskLevel">路由评分</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">这些级别显示路由如何处理交换和交易检查。</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">激活令牌</string>
     <string name="ActivationRequired_DialogDescription">若要接收 %s，您需要激活令牌。Stellar 网络需要为每个令牌建立信任线。 没有它，你的钱包就不能收到 %s ——交易将被拒绝，资金将不会交付。</string>
@@ -676,7 +676,7 @@
     <string name="SwapHistory_EmptyList">尚未交换任何信息</string>
     <string name="SwapInfo_Title">交换信息</string>
     <!-- Swap Info -->
-    <string name="SwapInfo_Provider">提供商</string>
+    <string name="SwapInfo_Provider">路由</string>
     <string name="SwapInfo_SourceAddress">源地址</string>
     <string name="SwapInfo_StatusTitle">交易状态</string>
     <string name="SwapInfo_StatusDepositing">存款</string>
@@ -1715,8 +1715,8 @@
     <string name="AddZanoNode_Error_InvalidUrl">输入的URL无效。有效的URL必须具有以下方案之一：http, https</string>
     <string name="Balance_Zcash_Shielded">受保护</string>
     <string name="Balance_Zcash_ShieldedDescription">用于钱包之间的个人和私密转账。</string>
-    <string name="RiskLevel_Excellent_Description">直接链上执行。无提供商检查或冻结。交换失败时自动退款。</string>
-    <string name="RiskLevel_Good_Description">提供商在完成前自动检查交易。如果检测到问题，交换将被拒绝，资金将被退款。</string>
+    <string name="RiskLevel_Excellent_Description">直接链上执行。无路由检查或冻结。如果交换失败自动退款。</string>
+    <string name="RiskLevel_Good_Description">路由在完成前自动检查交易。如果检测到问题，交换被拒绝并退款。</string>
     <string name="RiskLevel_Fair_Description">某些交易可能需要额外验证。如果检测到问题，资金通常会自动退款。</string>
     <string name="SwapInfo_RequestRefund">申请退款</string>
     <string name="SwapInfo_RequestRefundDescription">提供商需要您的掉期详情来处理退款。当您联系提供商时，这些信息将包含在内。</string>
@@ -1756,7 +1756,7 @@
     <string name="Swap_YourTokens">您的代币</string>
     <string name="Swap_TopTokens">顶级代币</string>
     <string name="Swap_RecentSearch">最近搜索</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">提供商评分</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">路由评分</string>
     <string name="ZcashEndpointSettings_Description">选择 Unstoppable 应用用于同步 Zcash 钱包的轻钱包服务器。</string>
     <string name="AddZcashEndpoint_AddEndpoint">添加端点</string>
     <string name="AddZcashEndpoint_EndpointUrl">端点 URL</string>

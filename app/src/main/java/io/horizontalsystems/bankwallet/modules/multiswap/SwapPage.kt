@@ -72,6 +72,8 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -404,6 +406,7 @@ private fun SwapScreenInner(
                         if (quote != null) {
                             ProviderCellInfo(
                                 quote = quote,
+                                swapTimeStatus = uiState.swapTimeStatus,
                                 showRegularPrice = showRegularPrice,
                                 onClickPrice = {
                                     showRegularPrice = !showRegularPrice
@@ -557,6 +560,7 @@ private fun SwapScreenInner(
 @Composable
 private fun ProviderCellInfo(
     quote: SwapProviderQuote,
+    swapTimeStatus: SwapTimeStatus,
     showRegularPrice: Boolean,
     onClickPrice: () -> Unit,
     onClickProvider: () -> Unit,
@@ -580,7 +584,7 @@ private fun ProviderCellInfo(
         CellSecondary(
             middle = {
                 LeftSelector(
-                    title = quote.provider.titleShort,
+                    title = stringResource(R.string.Swap_Providers),
                     onClick = onClickProvider
                 )
             },
@@ -600,19 +604,21 @@ private fun ProviderCellInfo(
                 )
             },
             right = {
-                RiskScore(riskLevel = quote.provider.riskLevel)
+                RiskScore(quote.provider.riskLevel)
             },
             onClick = onClickProviderScoreInfo
         )
-        quote.estimationTime?.let { estimationTime ->
-            CellSecondary(
-                middle = {
-                    CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
-                },
-                right = {
-                    SwapTime(estimationTime = estimationTime)
-                }
-            )
+        if (swapTimeStatus == SwapTimeStatus.Attention) {
+            quote.estimationTime?.let { estimationTime ->
+                CellSecondary(
+                    middle = {
+                        CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
+                    },
+                    right = {
+                        SwapTime(estimationTime = estimationTime)
+                    }
+                )
+            }
         }
     }
 }
@@ -661,38 +667,6 @@ private fun LeftSelector(
             painter = painterResource(R.drawable.arrow_s_down_24),
             contentDescription = null,
             tint = ComposeAppTheme.colors.leah
-        )
-    }
-}
-
-@Composable
-private fun RiskScore(
-    modifier: Modifier = Modifier,
-    riskLevel: RiskLevel,
-) {
-    val color = when (riskLevel) {
-        RiskLevel.EXCELLENT -> ComposeAppTheme.colors.remus
-        RiskLevel.GOOD -> ComposeAppTheme.colors.ocean
-        RiskLevel.FAIR -> ComposeAppTheme.colors.jacob
-    }
-    val icon = riskLevel.icon
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(riskLevel.title),
-            style = ComposeAppTheme.typography.subheadSB,
-            color = color,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-        )
-        HSpacer(4.dp)
-        Icon(
-            painter = painterResource(icon),
-            modifier = Modifier.size(20.dp),
-            tint = color,
-            contentDescription = null
         )
     }
 }

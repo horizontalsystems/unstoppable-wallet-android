@@ -221,7 +221,11 @@ class SwapViewModel(
         fiatAmountInputEnabled = fiatAmountInputEnabled,
         needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true,
         amlChecking = amlChecking,
-        initialShowRegularPrice = initialShowRegularPrice
+        initialShowRegularPrice = initialShowRegularPrice,
+        swapTimeStatus = swapTimeStatus(
+            quoteState.quote?.estimationTime,
+            quoteState.quotes.map { it.estimationTime }
+        ),
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -408,6 +412,7 @@ data class SwapUiState(
     val needToAcceptTerms: Boolean,
     val amlChecking: Boolean,
     val initialShowRegularPrice: Boolean,
+    val swapTimeStatus: SwapTimeStatus,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting

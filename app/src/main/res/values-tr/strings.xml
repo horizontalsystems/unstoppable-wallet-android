@@ -429,7 +429,7 @@
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_Slippage">Kayma</string>
     <string name="Swap_Recipient">Alıcı</string>
-    <string name="Swap_ErrorNoProviders">Sağlayıcı Yok</string>
+    <string name="Swap_ErrorNoProviders">Rota Yok</string>
     <string name="Swap_ErrorNoQuote">Teklif Yok</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorTokenNotEnabled">Jeton Etkin Değil</string>
@@ -444,7 +444,7 @@
     <string name="Swap_Approving">Onaylanıyor</string>
     <string name="Swap_Swapping">Takas</string>
     <string name="Swap_Quoting">Alıntı</string>
-    <string name="Swap_Providers">Sağlayıcılar</string>
+    <string name="Swap_Providers">Rotalar</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
     <string name="Swap_YouPay">Ödediğiniz</string>
@@ -1315,10 +1315,10 @@
     <string name="Balance_Zcash_Shielded">Korumalı</string>
     <string name="Balance_Zcash_ShieldedDescription">Cüzdanlar arasında kişisel ve özel transferler için kullanın.</string>
     <string name="Balance_Zcash_TransparentDescription">Korumalı adresleri desteklemeyen borsalar veya hizmetlerden almak için kullanın.</string>
-    <string name="RiskLevel_ProviderRiskLevel">Sağlayıcı Puanı</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Bu seviyeler, sağlayıcıların swapları ve işlem kontrollerini nasıl işlediklerini gösterir.</string>
-    <string name="RiskLevel_Excellent_Description">Doğrudan zincir üstü yürütme. Sağlayıcı kontrolleri veya donması yok. Swap başarısız olursa otomatik geri ödeme.</string>
-    <string name="RiskLevel_Good_Description">Sağlayıcı tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorunlar tespit edilirse swap reddedilir ve fonlar geri ödenir.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Rota Puanı</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Bu seviyeler, rotaların swapları ve işlem kontrollerini nasıl yönettiğini gösterir.</string>
+    <string name="RiskLevel_Excellent_Description">Doğrudan zincir üstü yürütme. Rota kontrolleri veya dondurmaları yok. Swap başarısız olursa otomatik geri ödeme.</string>
+    <string name="RiskLevel_Good_Description">Rota, tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorunlar tespit edilirse, swap reddedilir ve fonlar geri ödenir.</string>
     <string name="RiskLevel_Fair_Description">Bazı işlemler için ek doğrulama gerekebilir. Sorunlar tespit edilirse fonlar genellikle otomatik olarak geri ödenir.</string>
     <string name="SwapInfo_RequestRefund">Geri Ödeme Talep Et</string>
     <string name="SwapInfo_RequestRefundDescription">Sağlayıcının geri ödemeyi işlemek için takas ayrıntılarınıza ihtiyacı vardır. Sağlayıcıyla iletişim kurduğunuzda dahil edileceklerdir.</string>
@@ -1359,13 +1359,19 @@
     <string name="Swap_TopTokens">En İyi Tokenler</string>
     <string name="Swap_RecentSearch">Son Arama</string>
     <string name="SwapTerms_TopText">Devam etmek için lütfen her öğeye olan anlaşmanızı onaylayın.</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Bazı sağlayıcılar takasları reddedebilir veya fon erişimini kısıtlayabilir. Bir sağlayıcı seçerken sağlayıcı puanlarına dikkat edin.</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">sağlayıcı puanları</string>
-    <string name="SwapTerms_UserResponsibility_Info">Olası riskleri gözden geçirdim ve sağlayıcı seçimim için sorumluluk kabul ediyorum.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Bazı rotalar swapları reddedebilir veya fonlara erişimi kısıtlayabilir. Bir rota seçerken rota puanlarına dikkat edin.</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">rota puanları</string>
+    <string name="SwapTerms_UserResponsibility_Info">Olası riskleri gözden geçirdim ve rota seçimim için sorumluluğu kabul ediyorum.</string>
     <string name="ZcashEndpointSettings_Description">Unstoppable uygulamasının Zcash cüzdan(larını) senkronize etmek için kullanması gereken lightwallet sunucusunu seçin.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Uç nokta ekle</string>
     <string name="AddZcashEndpoint_EndpointUrl">Uç nokta URL\'si</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">Bu URL\'ye sahip bir uç nokta zaten var</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">Girilen URL geçersizdir. Geçerli bir URL https şeması kullanmalıdır</string>
     <string name="Restore_BlockchainsDescription">Geri yüklemek istediğiniz blokzincirleri seçin.</string>
+    <string name="Swap_ProviderRisk">Rota Riski</string>
+    <string name="Swap_AmlRisk_Description">Bu işlem için olası riskler tespit edildi. İşlem sırasında fonlarınız reddedilebilir veya kısıtlanabilir. Lütfen başka bir rota seçin.</string>
+    <string name="Swap_AmlRisk_Button">Başka Rota Seç</string>
+    <string name="Swap_EstimatedTimeDescription">Fonları alma için tahmini zaman. Swap işleme ve işlem onayları ağ ve rotaya bağlı olarak biraz zaman alabilir.</string>
+    <string name="SwapTerms_BottomText">Her zaman gereksinimlerinize uygun bir swap rotası seçin.</string>
+    <string name="SwapInfo_Provider">Rota</string>
 </resources>

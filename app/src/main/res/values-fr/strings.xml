@@ -584,15 +584,15 @@
     <string name="Swap_Price">Prix</string>
     <string name="Swap_AvailableBalance">Solde disponible</string>
     <string name="Swap_PriceImpact">Impact du prix</string>
-    <string name="Swap_ProviderRisk">Risque du fournisseur</string>
+    <string name="Swap_ProviderRisk">Risque d\'Itinéraire</string>
     <string name="Swap_ProviderRisk_NoRisk">Pas de risque</string>
     <string name="Swap_ProviderRisk_Risky">Risque</string>
     <string name="Swap_ProviderRisk_Unknown">Inconnu</string>
     <string name="Swap_ProviderRisk_AlertTitle">Risque de gel élevé !</string>
     <string name="Swap_ProviderRisk_AlertBody">Le fournisseur de ce swap spécifique (%s) a averti que ce swap serait probablement rejeté ou pourrait même être gelé. Revenez en arrière et sélectionnez un autre fournisseur de swap.</string>
     <string name="Swap_AmlRisk_Title">Risque Détecté</string>
-    <string name="Swap_AmlRisk_Description">Des risques potentiels ont été identifiés pour cette transaction. Lors du traitement, vos fonds peuvent être rejetés ou restreints. Veuillez choisir un autre fournisseur.</string>
-    <string name="Swap_AmlRisk_Button">Choisir un autre fournisseur</string>
+    <string name="Swap_AmlRisk_Description">Des risques potentiels ont été identifiés pour cette transaction. Lors du traitement, vos fonds peuvent être rejetés ou limités. Veuillez choisir un autre itinéraire.</string>
+    <string name="Swap_AmlRisk_Button">Choisir un Autre Itinéraire</string>
     <string name="Swap_AmlUnknown_Title">Alerte !</string>
     <string name="Swap_AmlUnknown_Description">Nous n\'avons pas pu compléter la vérification des risques pour cette transaction. Si vous continuez, cet échange peut rencontrer des retards, des rejets ou des restrictions pendant le traitement.</string>
     <string name="Swap_AmlUnknown_Button">Continuer avec le risque</string>
@@ -600,12 +600,12 @@
     <string name="Swap_AmlError_Description">Impossible d\'obtenir une réponse pour le moment. Veuillez réessayer.</string>
     <string name="Swap_AmlError_Button">Réessayer</string>
     <string name="Swap_EstimatedTime">Est. Time</string>
-    <string name="Swap_EstimatedTimeDescription">Temps approximatif pour recevoir des fonds. Échanger le traitement et les confirmations de transaction peut prendre un certain temps selon le réseau et le fournisseur.</string>
+    <string name="Swap_EstimatedTimeDescription">Temps approximatif pour recevoir les fonds. Le traitement du swap et les confirmations de transaction peuvent prendre du temps selon le réseau et l\'itinéraire.</string>
     <string name="Swap_MinimumReceived">Garantie</string>
     <string name="Swap_MinimumReceivedDescription">Ce montant est en cours de validation. Dès que le statut de la transaction est validé, vous serez en mesure d\'utiliser ces pièces. Le montant minimum d\'un utilisateur va </string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Destinataire</string>
-    <string name="Swap_ErrorNoProviders">Aucun fournisseur</string>
+    <string name="Swap_ErrorNoProviders">Aucune Route</string>
     <string name="Swap_ErrorNoQuote">Aucun devis</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorTokenNotEnabled">Jeton non activé</string>
@@ -621,7 +621,7 @@
     <string name="Swap_Approving">Approbation</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Citation</string>
-    <string name="Swap_Providers">Fournisseurs</string>
+    <string name="Swap_Providers">Routes</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_YouPay">Vous payez</string>
@@ -644,11 +644,11 @@
     <string name="SwapError_FailedToFetchQuote">Impossible de récupérer le devis.</string>
     <string name="SwapTerms_Title">Échanger les conditions</string>
     <string name="SwapTerms_TopText">Pour continuer, veuillez confirmer votre accord avec chaque élément.</string>
-    <string name="SwapTerms_BottomText">Choisissez toujours un fournisseur de swap qui correspond à vos exigences.</string>
+    <string name="SwapTerms_BottomText">Choisissez toujours un itinéraire de swap qui correspond à vos besoins.</string>
     <string name="SwapTerms_RiskRestrictions">Risque de restrictions</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Certains fournisseurs peuvent rejeter les échanges ou restreindre l\'accès aux fonds. Faites attention aux évaluations des fournisseurs lors du choix d\'un fournisseur.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Certains itinéraires peuvent rejeter les swaps ou restreindre l\'accès aux fonds. Prêtez attention aux scores d\'itinéraire lors du choix d\'un itinéraire.</string>
     <string name="SwapTerms_UserResponsibility">Responsabilité de l\'utilisateur</string>
-    <string name="SwapTerms_UserResponsibility_Info">J\'ai examiné les risques possibles et j\'accepte la responsabilité de mon choix de fournisseur.</string>
+    <string name="SwapTerms_UserResponsibility_Info">J\'ai examiné les risques possibles et j\'accepte la responsabilité de mon choix d\'itinéraire.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolérance de Slippage</string>
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
@@ -661,8 +661,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <string name="SwapSort_BestRate">Meilleur tarif</string>
     <string name="SwapSort_BestTime">Le plus rapide</string>
-    <string name="RiskLevel_ProviderRiskLevel">Score du Fournisseur</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Ces niveaux montrent comment les fournisseurs gèrent les swaps et les vérifications de transactions.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Score de Route</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Ces niveaux montrent comment les itinéraires gèrent les swaps et les vérifications de transaction.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Activer le jeton</string>
     <string name="ActivationRequired_DialogDescription">Pour recevoir %1$s, vous devez activer le jeton. Le réseau Stellar nécessite une ligne de confiance pour chaque jeton. Sans elle, votre portefeuille ne peut pas recevoir %2$s — la transaction sera rejetée et les fonds ne seront pas livrés.</string>
@@ -677,7 +677,7 @@
     <string name="SwapHistory_EmptyList">Pas encore de swaps</string>
     <string name="SwapInfo_Title">Permuter les informations</string>
     <!-- Swap Info -->
-    <string name="SwapInfo_Provider">Fournisseur</string>
+    <string name="SwapInfo_Provider">Itinéraire</string>
     <string name="SwapInfo_SourceAddress">Adresse source</string>
     <string name="SwapInfo_StatusTitle">Statut de la transaction</string>
     <string name="SwapInfo_StatusDepositing">Dépôt</string>
@@ -1718,8 +1718,8 @@
     <string name="AddZanoNode_Error_InvalidUrl">L\'URL saisie est invalide. Les URL valides doivent avoir l\'un des schémas suivants : http, https</string>
     <string name="Balance_Zcash_Shielded">Blindé</string>
     <string name="Balance_Zcash_ShieldedDescription">À utiliser pour les transferts personnels et privés entre portefeuilles.</string>
-    <string name="RiskLevel_Excellent_Description">Exécution directe en chaîne. Aucune vérification ou gel du fournisseur. Remboursements automatiques en cas d\'échec du swap.</string>
-    <string name="RiskLevel_Good_Description">Le fournisseur vérifie automatiquement les transactions avant leur finalisation. Si des problèmes sont détectés, le swap est rejeté et les fonds sont remboursés.</string>
+    <string name="RiskLevel_Excellent_Description">Exécution directe on-chain. Aucune vérification ou gel d\'itinéraire. Remboursements automatiques en cas d\'échec du swap.</string>
+    <string name="RiskLevel_Good_Description">L\'itinéraire vérifie automatiquement les transactions avant la fin. Si des problèmes sont détectés, le swap est rejeté et les fonds sont remboursés.</string>
     <string name="RiskLevel_Fair_Description">Une vérification supplémentaire peut être nécessaire pour certaines transactions. Si des problèmes sont détectés, les fonds sont généralement remboursés automatiquement.</string>
     <string name="SwapInfo_RequestRefund">Demander un remboursement</string>
     <string name="SwapInfo_RequestRefundDescription">Le fournisseur a besoin de vos détails d\'échange pour traiter un remboursement. Ils seront inclus lorsque vous contacterez le fournisseur.</string>
@@ -1759,7 +1759,7 @@
     <string name="Swap_YourTokens">Vos tokens</string>
     <string name="Swap_TopTokens">Meilleurs tokens</string>
     <string name="Swap_RecentSearch">Recherche récente</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">évaluations des fournisseurs</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">scores d\'itinéraire</string>
     <string name="ZcashEndpointSettings_Description">Choisissez le serveur lightwallet que l\'application Unstoppable doit utiliser pour synchroniser le(s) portefeuille(s) Zcash.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Ajouter un point de terminaison</string>
     <string name="AddZcashEndpoint_EndpointUrl">URL du point de terminaison</string>

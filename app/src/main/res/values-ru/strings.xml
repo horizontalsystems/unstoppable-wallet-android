@@ -586,15 +586,15 @@
     <string name="Swap_Price">Цена</string>
     <string name="Swap_AvailableBalance">Доступный баланс</string>
     <string name="Swap_PriceImpact">Отклонение от рын. цены</string>
-    <string name="Swap_ProviderRisk">Риск поставщика</string>
+    <string name="Swap_ProviderRisk">Риск маршрута</string>
     <string name="Swap_ProviderRisk_NoRisk">Без риска</string>
     <string name="Swap_ProviderRisk_Risky">Риски</string>
     <string name="Swap_ProviderRisk_Unknown">Неизвестен</string>
     <string name="Swap_ProviderRisk_AlertTitle">Высокий риск заморозки!</string>
     <string name="Swap_ProviderRisk_AlertBody">Провайдер для этого конкретного обмена (%s) предупредил, что этот обмен скорее всего будет отклонен или даже может заморожен. Вернитесь назад и выберите другого поставщика подкачки.</string>
     <string name="Swap_AmlRisk_Title">Обнаружен риск</string>
-    <string name="Swap_AmlRisk_Description">Для этой транзакции были выявлены потенциальные риски. Во время обработки ваши средства могут быть отклонены или ограничены. Пожалуйста, выберите другого провайдера.</string>
-    <string name="Swap_AmlRisk_Button">Выбрать другого провайдера</string>
+    <string name="Swap_AmlRisk_Description">Для данной транзакции выявлены потенциальные риски. Во время обработки ваши средства могут быть отклонены или ограничены. Пожалуйста, выберите другой маршрут.</string>
+    <string name="Swap_AmlRisk_Button">Выбрать другой маршрут</string>
     <string name="Swap_AmlUnknown_Title">Внимание!</string>
     <string name="Swap_AmlUnknown_Description">Мы не смогли проверить риск для этой транзакции. Если вы продолжите, это может повлечь за собой задержки, отклонение или ограничения во время обработки.</string>
     <string name="Swap_AmlUnknown_Button">Продолжить с рисками</string>
@@ -602,12 +602,12 @@
     <string name="Swap_AmlError_Description">Не удалось получить ответ прямо сейчас. Пожалуйста, попробуйте еще раз.</string>
     <string name="Swap_AmlError_Button">Повторить</string>
     <string name="Swap_EstimatedTime">Время</string>
-    <string name="Swap_EstimatedTimeDescription">Приблизительное время для получения средств. Обработка замены и подтверждения транзакций может занять некоторое время в зависимости от сети и провайдера.</string>
+    <string name="Swap_EstimatedTimeDescription">Приблизительное время получения средств. Обработка обмена и подтверждение транзакций могут занять некоторое время в зависимости от сети и маршрута.</string>
     <string name="Swap_MinimumReceived">Гарантированно</string>
     <string name="Swap_MinimumReceivedDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
     <string name="Swap_Slippage">Отклонение от курса</string>
     <string name="Swap_Recipient">Получатель</string>
-    <string name="Swap_ErrorNoProviders">Нет провайдеров</string>
+    <string name="Swap_ErrorNoProviders">Нет маршрутов</string>
     <string name="Swap_ErrorNoQuote">Нет предложений</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorTokenNotEnabled">Токен не включен</string>
@@ -623,7 +623,7 @@
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_Quoting">Котировка</string>
-    <string name="Swap_Providers">Провайдеры</string>
+    <string name="Swap_Providers">Маршруты</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_YouPay">Вы платите</string>
@@ -646,11 +646,11 @@
     <string name="SwapError_FailedToFetchQuote">Не удалось получить данные.</string>
     <string name="SwapTerms_Title">Условия обмена</string>
     <string name="SwapTerms_TopText">Чтобы продолжить, подтвердите ваше согласие с каждым пунктом.</string>
-    <string name="SwapTerms_BottomText">Всегда выбирайте поставщика подкачки, который соответствует вашим требованиям.</string>
+    <string name="SwapTerms_BottomText">Всегда выбирайте маршрут обмена, соответствующий вашим требованиям.</string>
     <string name="SwapTerms_RiskRestrictions">Риск ограничений</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Некоторые поставщики могут отклонять свопы или ограничивать доступ к средствам. Обратите внимание на рейтинги поставщиков при выборе поставщика.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Некоторые маршруты могут отклонить обмены или ограничить доступ к средствам. Обратите внимание на оценки маршрута при выборе маршрута.</string>
     <string name="SwapTerms_UserResponsibility">Ответственность пользователя</string>
-    <string name="SwapTerms_UserResponsibility_Info">Я ознакомился с возможными рисками и принимаю ответственность за выбор поставщика.</string>
+    <string name="SwapTerms_UserResponsibility_Info">Я ознакомился с возможными рисками и принимаю ответственность за выбор маршрута.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Допустимое отклонение</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес получателя</string>
@@ -663,8 +663,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
     <string name="SwapSort_BestRate">Лучший курс</string>
     <string name="SwapSort_BestTime">Самый быстрый</string>
-    <string name="RiskLevel_ProviderRiskLevel">Рейтинг провайдера</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Эти уровни показывают, как провайдеры обрабатывают свопы и проверки транзакций.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Оценка маршрута</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Эти уровни показывают, как маршруты обрабатывают обмены и проверки транзакций.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Активировать токен</string>
     <string name="ActivationRequired_DialogDescription">Чтобы получить %s, вам нужно активировать токен. Для каждого токена Stellar сети требуется установить линию доверия. Без него ваш кошелек не может получить %s — транзакция будет отклонена, а средства не будут доставлены.</string>
@@ -679,7 +679,7 @@
     <string name="SwapHistory_EmptyList">Ещё нет заходов</string>
     <string name="SwapInfo_Title">Детали обмена</string>
     <!-- Swap Info -->
-    <string name="SwapInfo_Provider">Провайдер</string>
+    <string name="SwapInfo_Provider">Маршрут</string>
     <string name="SwapInfo_SourceAddress">Адрес источника</string>
     <string name="SwapInfo_StatusTitle">Статус транзакции</string>
     <string name="SwapInfo_StatusDepositing">Депозит</string>
@@ -1723,8 +1723,8 @@
     <string name="AddZanoNode_Error_InvalidUrl">Введённый URL невалиден. Валидный URL должен иметь одну из следующих схем: http, https</string>
     <string name="Balance_Zcash_Shielded">Защищённый</string>
     <string name="Balance_Zcash_ShieldedDescription">Используется для личных и конфиденциальных переводов между кошельками.</string>
-    <string name="RiskLevel_Excellent_Description">Прямое исполнение в сети. Без проверок провайдера или замораживания. Автоматический возврат при неудаче свопа.</string>
-    <string name="RiskLevel_Good_Description">Провайдер автоматически проверяет транзакции перед завершением. При обнаружении проблем своп отклоняется и средства возвращаются.</string>
+    <string name="RiskLevel_Excellent_Description">Прямое выполнение в блокчейне. Без проверок или блокировок маршрута. Автоматический возврат средств при ошибке обмена.</string>
+    <string name="RiskLevel_Good_Description">Маршрут автоматически проверяет транзакции перед завершением. При обнаружении проблем обмен отклоняется и средства возвращаются.</string>
     <string name="RiskLevel_Fair_Description">Для некоторых транзакций может потребоваться дополнительная проверка. При обнаружении проблем средства обычно возвращаются автоматически.</string>
     <string name="SwapInfo_RequestRefund">Запросить возврат</string>
     <string name="SwapInfo_RequestRefundDescription">Провайдеру нужны подробности вашего обмена для обработки возврата. Они будут включены при обращении к провайдеру.</string>
@@ -1764,7 +1764,7 @@
     <string name="Swap_YourTokens">Ваши токены</string>
     <string name="Swap_TopTokens">Топ токены</string>
     <string name="Swap_RecentSearch">Недавний поиск</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">рейтинги поставщиков</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">оценки маршрута</string>
     <string name="ZcashEndpointSettings_Description">Выберите сервер lightwallet, который приложение Unstoppable должно использовать для синхронизации кошелька(ков) Zcash.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Добавить конечную точку</string>
     <string name="AddZcashEndpoint_EndpointUrl">URL конечной точки</string>

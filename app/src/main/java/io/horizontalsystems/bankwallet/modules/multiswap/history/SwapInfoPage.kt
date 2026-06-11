@@ -190,15 +190,6 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
                     .background(ComposeAppTheme.colors.lawrence)
                     .padding(vertical = 8.dp),
             ) {
-                // Provider
-                CellSecondary(
-                    middle = {
-                        CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
-                    },
-                    right = {
-                        CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
-                    },
-                )
                 // Date
                 CellSecondary(
                     middle = {
@@ -357,7 +348,6 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleTransactionSwap: Boolean
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
             .padding(vertical = 8.dp)

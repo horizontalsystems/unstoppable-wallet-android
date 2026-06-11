@@ -12,7 +12,6 @@ import java.math.BigDecimal
 interface IMultiSwapProvider {
     val id: String
     val title: String
-    val icon: Int
     val type: SwapProviderType
     val amlPrecheck: Boolean
         get() = false
