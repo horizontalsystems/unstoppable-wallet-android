@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -421,6 +422,12 @@ class LocalStorageManager(
         get() = preferences.getBoolean(SWAP_TERMS_AGREED, false)
         set(value) {
             preferences.edit().putBoolean(SWAP_TERMS_AGREED, value).commit()
+        }
+
+    override var simulateFailSwap: SimulateFailSwapMode
+        get() = SimulateFailSwapMode.fromString(preferences.getString("simulate-failed-swap", null))
+        set(value) {
+            preferences.edit().putString("simulate-failed-swap", value.name).apply()
         }
 
     override var passkeyTermsAccepted: Boolean

@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -113,6 +114,7 @@ interface ILocalStorage {
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var swapTermsAccepted: Boolean
+    var simulateFailSwap: SimulateFailSwapMode
     var passkeyTermsAccepted: Boolean
     var checkedTerms: List<String>
     var mainShowedOnce: Boolean
