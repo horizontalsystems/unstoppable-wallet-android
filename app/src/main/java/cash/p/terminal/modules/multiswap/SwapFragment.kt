@@ -56,9 +56,8 @@ import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.multiswap.action.ActionCreate
 import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.fee.QuoteInfoRow
-import cash.p.terminal.modules.multiswap.providers.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
-import cash.p.terminal.modules.multiswap.providers.QuickexProvider
+import cash.p.terminal.modules.multiswap.providers.isOffChain
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.modules.multiswap.settings.SwapTransactionSettingsScreen
 import cash.p.terminal.navigation.navigateUpSafely
@@ -336,7 +335,7 @@ private fun buildMultiSwapLeg1Info(viewModel: SwapViewModel): MultiSwapLegInfo? 
         blockchainTypeOut = tokenOut.blockchainType.uid,
         leg1ProviderId = route.selectedLeg1Quote.provider.id,
         leg2ProviderId = leg2Provider.id,
-        leg2IsOffChain = leg2Provider is ChangeNowProvider || leg2Provider is QuickexProvider,
+        leg2IsOffChain = leg2Provider.isOffChain,
         expectedAmountOut = route.selectedLeg2Quote.amountOut,
     )
 }

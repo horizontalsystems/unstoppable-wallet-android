@@ -3,6 +3,7 @@ package cash.p.terminal.modules.multiswap.providers
 class SwapProvidersRegistry(
     changeNowProvider: ChangeNowProvider,
     quickexProvider: QuickexProvider,
+    exolixProvider: ExolixProvider,
     stonFiProvider: StonFiProvider,
 ) {
     val providers: List<IMultiSwapProvider> = listOf(
@@ -14,6 +15,7 @@ class SwapProvidersRegistry(
         UniswapV3Provider,
         changeNowProvider,
         quickexProvider,
+        exolixProvider,
         ThorChainProvider,
         MayaProvider,
         AllBridgeProvider,

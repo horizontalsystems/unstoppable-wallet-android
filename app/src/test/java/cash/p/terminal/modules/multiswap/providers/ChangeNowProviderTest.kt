@@ -119,7 +119,12 @@ class ChangeNowProviderTest {
         walletUseCase = walletUseCase,
         changeNowRepository = changeNowRepository,
         getChangeNowAssociatedCoinTickerUseCase = getTickerUseCase,
-        swapProviderTransactionsStorage = storage,
         accountManager = accountManager,
+        providerSupport = buildOffChainSwapProviderSupport(
+            walletUseCase = walletUseCase,
+            accountManager = accountManager,
+            storage = storage,
+            marketKit = marketKit,
+        ),
     )
 }

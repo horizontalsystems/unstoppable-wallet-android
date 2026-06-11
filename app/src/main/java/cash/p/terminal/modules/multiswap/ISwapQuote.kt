@@ -61,7 +61,7 @@ class SwapQuoteOneInch(
     override val cautions: List<HSCaution> = listOf()
 ) : ISwapQuote
 
-class SwapQuoteChangeNow(
+class SwapQuoteOffChain(
     override val amountOut: BigDecimal,
     override val priceImpact: BigDecimal?,
     override val fields: List<DataField>,

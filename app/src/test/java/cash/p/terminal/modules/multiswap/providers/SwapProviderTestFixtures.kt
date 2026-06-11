@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.multiswap.providers
 
+import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.swaprepository.SwapProvider
@@ -7,9 +8,11 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.every
 import io.mockk.mockk
@@ -57,6 +60,19 @@ internal fun mockNonZcashNativeToken(blockchainType: BlockchainType = Blockchain
         every { this@mockk.blockchainType } returns blockchainType
         every { type } returns TokenType.Native
     }
+
+internal fun buildOffChainSwapProviderSupport(
+    walletUseCase: WalletUseCase,
+    accountManager: IAccountManager,
+    storage: SwapProviderTransactionsStorage,
+    marketKit: MarketKitWrapper,
+) = OffChainSwapProviderSupport(
+    walletUseCase = walletUseCase,
+    accountManager = accountManager,
+    swapProviderTransactionsStorage = storage,
+    marketKit = marketKit,
+    adapterManager = mockk(relaxed = true),
+)
 
 internal fun MarketKitWrapper.stubZcashTransparentToken(token: Token) {
     every {

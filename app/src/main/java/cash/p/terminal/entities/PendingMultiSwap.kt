@@ -50,6 +50,7 @@ data class PendingMultiSwap(
         fun mapProviderIdToSwapProvider(providerId: String): SwapProvider? = when (providerId) {
             "changenow" -> SwapProvider.CHANGENOW
             "quickex" -> SwapProvider.QUICKEX
+            "exolix" -> SwapProvider.EXOLIX
             else -> null
         }
     }

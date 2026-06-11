@@ -13,6 +13,8 @@ import cash.p.terminal.network.binance.api.TronRpcApiImpl
 import cash.p.terminal.network.changenow.data.repository.ChangeNowRepositoryImpl
 import cash.p.terminal.network.changenow.di.networkChangeNowModule
 import cash.p.terminal.network.data.buildNetworkClient
+import cash.p.terminal.network.exolix.data.repository.ExolixRepositoryImpl
+import cash.p.terminal.network.exolix.di.networkExolixModule
 import cash.p.terminal.network.pirate.di.networkPirateModule
 import cash.p.terminal.network.piratenews.di.networkPirateNewsModule
 import cash.p.terminal.network.quickex.data.repository.QuickexRepositoryImpl
@@ -37,22 +39,20 @@ val networkModule = module {
     factoryOf(::TonRpcApiImpl) bind TonRpcApi::class
 
     single<SwapProviderTransactionStatusRepository>(named(SwapProvider.CHANGENOW)) {
-        ChangeNowRepositoryImpl(
-            get(),
-            get()
-        )
+        get<ChangeNowRepositoryImpl>()
     }
     single<SwapProviderTransactionStatusRepository>(named(SwapProvider.QUICKEX)) {
-        QuickexRepositoryImpl(
-            get(),
-            get()
-        )
+        get<QuickexRepositoryImpl>()
+    }
+    single<SwapProviderTransactionStatusRepository>(named(SwapProvider.EXOLIX)) {
+        get<ExolixRepositoryImpl>()
     }
 
     includes(
         networkPirateModule,
         networkChangeNowModule,
         networkQuickexModule,
+        networkExolixModule,
         networkPirateNewsModule,
         networkStonFiModule,
         networkZcashModule,

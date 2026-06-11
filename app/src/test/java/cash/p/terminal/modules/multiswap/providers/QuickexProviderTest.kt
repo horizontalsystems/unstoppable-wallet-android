@@ -116,7 +116,12 @@ class QuickexProviderTest {
     private fun createProvider() = QuickexProvider(
         walletUseCase = walletUseCase,
         quickexRepository = quickexRepository,
-        swapProviderTransactionsStorage = storage,
         accountManager = accountManager,
+        providerSupport = buildOffChainSwapProviderSupport(
+            walletUseCase = walletUseCase,
+            accountManager = accountManager,
+            storage = storage,
+            marketKit = marketKit,
+        ),
     )
 }

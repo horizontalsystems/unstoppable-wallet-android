@@ -19,9 +19,9 @@ import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.entities.SwapProviderTransaction
-import cash.p.terminal.modules.multiswap.providers.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
-import cash.p.terminal.modules.multiswap.providers.QuickexProvider
+import cash.p.terminal.modules.multiswap.providers.OffChainSwapProvider
+import cash.p.terminal.modules.multiswap.providers.isOffChain
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionResult
@@ -33,6 +33,7 @@ import cash.p.terminal.modules.send.BaseSendViewModel
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.network.changenow.data.entity.BackendChangeNowResponseError
+import cash.p.terminal.network.exolix.data.entity.BackendExolixResponseError
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.trezor.domain.TrezorCancelledException
@@ -253,14 +254,11 @@ class SwapConfirmViewModel(
     }
 
     private fun isSendable(): Boolean {
-        return swapProvider is ChangeNowProvider ||
-                swapProvider is QuickexProvider ||
-                sendTransactionState.sendable
+        return swapProvider.isOffChain || sendTransactionState.sendable
     }
 
     private fun needUseTimer() =
-        swapProvider !is ChangeNowProvider &&
-        swapProvider !is QuickexProvider
+        !swapProvider.isOffChain
 
     override fun onCleared() {
         timerService.stop()
@@ -300,31 +298,45 @@ class SwapConfirmViewModel(
 
                 emitState()
             } catch (e: BackendChangeNowResponseError) {
-                e.printStackTrace()
-                loading = false
-                criticalError = when (e.error) {
-                    BackendChangeNowResponseError.NOT_VALID_REFUND_ADDRESS -> {
-                        Translator.getString(R.string.unsupported_refund_address)
-                    }
-
-                    BackendChangeNowResponseError.NOT_VALID_ADDRESS -> {
-                        Translator.getString(R.string.unsupported_address)
-                    }
-
-                    else -> {
-                        Translator.getString(R.string.unexpected_error)
-                    }
-                }
-                emitState()
+                setCriticalError(e.changeNowCriticalError)
+            } catch (e: BackendExolixResponseError) {
+                setCriticalError(e.exolixCriticalError)
             } catch (_: CancellationException) {
                 Timber.w("fetchFinalQuote was cancelled")
             } catch (t: Throwable) {
                 Timber.e(t, "fetchFinalQuote error")
-                loading = false
-                criticalError = Translator.getString(R.string.unexpected_error)
-                emitState()
+                setCriticalError(Translator.getString(R.string.unexpected_error))
             }
         }
+    }
+
+    private val BackendChangeNowResponseError.changeNowCriticalError: String
+        get() = when (error) {
+            BackendChangeNowResponseError.NOT_VALID_REFUND_ADDRESS -> {
+                Translator.getString(R.string.unsupported_refund_address)
+            }
+
+            BackendChangeNowResponseError.NOT_VALID_ADDRESS -> {
+                Translator.getString(R.string.unsupported_address)
+            }
+
+            else -> {
+                Translator.getString(R.string.unexpected_error)
+            }
+        }
+
+    private val BackendExolixResponseError.exolixCriticalError: String
+        get() = message.notBlank()
+            ?: error.notBlank()
+            ?: Translator.getString(R.string.unexpected_error)
+
+    private fun String?.notBlank(): String? =
+        takeIf { !it.isNullOrBlank() }
+
+    private fun setCriticalError(error: String) {
+        loading = false
+        criticalError = error
+        emitState()
     }
 
     suspend fun swap() = withContext(Dispatchers.Default) {
@@ -398,7 +410,7 @@ class SwapConfirmViewModel(
             coinUidOut = legInfo.coinUidOut,
             blockchainTypeOut = legInfo.blockchainTypeOut,
             leg1ProviderId = legInfo.leg1ProviderId,
-            leg1IsOffChain = swapProvider is ChangeNowProvider || swapProvider is QuickexProvider,
+            leg1IsOffChain = swapProvider.isOffChain,
             leg1TransactionId = result.getRecordUid(),
             leg1AmountOut = amountOut,
             leg1Status = PendingMultiSwap.STATUS_EXECUTING,
@@ -425,10 +437,7 @@ class SwapConfirmViewModel(
 
     fun onTransactionCompleted(result: SendTransactionResult) {
         val transaction = swapProviderTransaction ?: return
-        when (swapProvider) {
-            is ChangeNowProvider -> swapProvider.onTransactionCompleted(transaction, result)
-            is QuickexProvider -> swapProvider.onTransactionCompleted(transaction, result)
-        }
+        (swapProvider as? OffChainSwapProvider)?.onTransactionCompleted(transaction, result)
     }
 
     companion object {
