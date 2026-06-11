@@ -194,6 +194,17 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                     .background(ComposeAppTheme.colors.lawrence)
                     .padding(vertical = 8.dp),
             ) {
+                // Provider
+                if (uiState.showProvider) {
+                    CellSecondary(
+                        middle = {
+                            CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
+                        },
+                        right = {
+                            CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
+                        },
+                    )
+                }
                 // Date
                 CellSecondary(
                     middle = {
