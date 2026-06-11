@@ -21,6 +21,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -85,6 +86,10 @@ class SwapInfoViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             swapRecordManager.recordsUpdatedFlow.collect { loadData() }
         }
+    }
+
+    suspend fun prepareRefundData(): RequestRefundData? = withContext(Dispatchers.IO) {
+        RequestRefundDataLoader.load(recordId, swapRecordManager)
     }
 
     private suspend fun loadData() {

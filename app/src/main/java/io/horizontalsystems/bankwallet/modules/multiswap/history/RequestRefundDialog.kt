@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,14 +22,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
@@ -56,8 +50,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class RequestRefundDialog : BaseComposableBottomSheetFragment() {
@@ -72,27 +64,24 @@ class RequestRefundDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                val recordId = navController.getInput<Input>()?.recordId
+                val data = navController.getInput<Input>()?.data
 
                 ComposeAppTheme {
-                    RequestRefundScreen(navController, recordId)
+                    if (data != null) {
+                        RequestRefundScreen(navController, data)
+                    }
                 }
             }
         }
     }
 
     @Parcelize
-    data class Input(val recordId: Int) : Parcelable
+    data class Input(val data: RequestRefundData) : Parcelable
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
-    val viewModel = viewModel<RequestRefundViewModel>(
-        key = recordId?.toString() ?: "preview",
-        factory = RequestRefundViewModel.Factory(recordId),
-    )
-    val uiState = viewModel.uiState
+private fun RequestRefundScreen(navController: NavController, data: RequestRefundData) {
     val context = LocalContext.current
     val view = LocalView.current
 
@@ -106,9 +95,9 @@ private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.SwapInfo_CopyDetails),
                 variant = ButtonVariant.Primary,
-                enabled = uiState.emailBody.isNotEmpty(),
+                enabled = data.emailBody.isNotEmpty(),
                 onClick = {
-                    TextHelper.copyText(uiState.emailBody)
+                    TextHelper.copyText(data.emailBody)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                 },
             )
@@ -125,7 +114,7 @@ private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
                         CellMiddleInfo(subtitle = stringResource(R.string.SwapInfo_SwapId).hs)
                     },
                     right = {
-                        CellRightInfo(titleSubheadSb = uiState.swapIdShort.hs)
+                        CellRightInfo(titleSubheadSb = data.swapIdShort.hs)
                     },
                 )
                 CellSecondary(
@@ -133,7 +122,7 @@ private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
                         CellMiddleInfo(subtitle = stringResource(R.string.SwapInfo_Amount).hs)
                     },
                     right = {
-                        CellRightInfo(titleSubheadSb = uiState.amount.hs)
+                        CellRightInfo(titleSubheadSb = data.amount.hs)
                     },
                 )
                 CellSecondary(
@@ -141,14 +130,14 @@ private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
                         CellMiddleInfo(subtitle = stringResource(R.string.SwapInfo_RefundAddress).hs)
                     },
                     right = {
-                        CellRightInfo(titleSubheadSb = uiState.refundAddressShort.hs)
+                        CellRightInfo(titleSubheadSb = data.refundAddressShort.hs)
                     },
                 )
             }
-            if (uiState.contactLinks.isNotEmpty()) {
+            if (data.contactLinks.isNotEmpty()) {
                 VSpacer(8.dp)
                 CellGroup(paddingValues = PaddingValues(horizontal = 16.dp)) {
-                    uiState.contactLinks.forEachIndexed { index, link ->
+                    data.contactLinks.forEachIndexed { index, link ->
                         if (index > 0) HsDivider()
                         CellPrimary(
                             left = {
@@ -168,7 +157,7 @@ private fun RequestRefundScreen(navController: NavController, recordId: Int?) {
                                 CellRightNavigation()
                             },
                             onClick = {
-                                handleContactClick(context, view, link, uiState.emailSubject, uiState.emailBody)
+                                handleContactClick(context, view, link, data.emailSubject, data.emailBody)
                             },
                         )
                     }
@@ -207,90 +196,58 @@ private fun openEmail(context: Context, email: String, subject: String, body: St
     }
 }
 
-private fun openTelegram(context: Context, telegramUrl: String, body: String, view: View) {
-    // Pre-copy the body so the user can paste it into the provider's chat,
-    // then open the provider's Telegram link.
+private fun openTelegram(context: Context, telegramValue: String, body: String, view: View) {
+    // Pre-copy the body so the user can paste it into the provider's chat.
     TextHelper.copyText(body)
-    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-    LinkHelper.openLinkInAppBrowser(context, telegramUrl)
+    LinkHelper.openTelegram(context, telegramValue)
 }
 
 enum class ContactType { Email, Telegram, Twitter, Website }
 
+@Parcelize
 data class ContactLink(
     val type: ContactType,
     val label: String,
     val value: String,
     val rawValue: String,
     val iconRes: Int,
-)
+) : Parcelable
 
-data class RequestRefundUiState(
+@Parcelize
+data class RequestRefundData(
     val swapIdShort: String,
     val amount: String,
     val refundAddressShort: String,
     val emailSubject: String,
     val emailBody: String,
     val contactLinks: List<ContactLink>,
-)
+) : Parcelable
 
-class RequestRefundViewModel(
-    private val recordId: Int?,
-    private val swapRecordManager: SwapRecordManager,
-    private val swapProviderInfoManager: SwapProviderInfoManager,
-) : ViewModelUiState<RequestRefundUiState>() {
-    private var swapIdShort: String = ""
-    private var amount: String = ""
-    private var refundAddressShort: String = ""
-    private var emailSubject: String = ""
-    private var emailBody: String = ""
-    private var contactLinks: List<ContactLink> = emptyList()
-
-    override fun createState() = RequestRefundUiState(
-        swapIdShort = swapIdShort,
-        amount = amount,
-        refundAddressShort = refundAddressShort,
-        emailSubject = emailSubject,
-        emailBody = emailBody,
-        contactLinks = contactLinks,
-    )
-
-    init {
-        viewModelScope.launch(Dispatchers.Default) {
-            try {
-                load()
-            } catch (e: Throwable) {
-                Log.e("RequestRefundViewModel", "Failed to load refund details", e)
-            }
-        }
-    }
-
-    private suspend fun load() {
-        val id = recordId ?: return
-        val record = swapRecordManager.getById(id) ?: return
+object RequestRefundDataLoader {
+    // Loads everything the refund bottom sheet needs (including the provider contacts network
+    // call) BEFORE the sheet is shown, so it opens at its final height with no flicker.
+    suspend fun load(
+        recordId: Int,
+        swapRecordManager: SwapRecordManager = App.swapRecordManager,
+        swapProviderInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
+    ): RequestRefundData? {
+        val record = swapRecordManager.getById(recordId) ?: return null
 
         val swapId = record.providerSwapId ?: record.transactionHash.orEmpty()
-        val fromAsset = record.tokenInCoinCode
-        val toAsset = record.tokenOutCoinCode
         val amountValue = "${record.amountIn} ${record.tokenInCoinCode}"
-        val txHash = record.transactionHash.orEmpty()
         val refundAddress = record.sourceAddress.orEmpty()
 
-        swapIdShort = swapId.shorten()
-        amount = amountValue
-        refundAddressShort = refundAddress.shorten()
-        emailSubject = "Refund Request - $swapId"
-        emailBody = buildEmailBody(
+        val emailBody = buildEmailBody(
             swapId = swapId,
-            fromAsset = fromAsset,
-            toAsset = toAsset,
+            fromAsset = record.tokenInCoinCode,
+            toAsset = record.tokenOutCoinCode,
             amount = amountValue,
-            txHash = txHash,
+            txHash = record.transactionHash.orEmpty(),
         )
 
         val providerName = record.providerId.removePrefix("u_")
         val contacts = swapProviderInfoManager.getInfo(providerName)?.contacts
-        contactLinks = buildList {
+        val contactLinks = buildList {
             contacts?.telegram?.takeIf { it.isNotBlank() }?.let {
                 add(ContactLink(ContactType.Telegram, "Telegram", it, it, R.drawable.ic_telegram_24))
             }
@@ -305,18 +262,14 @@ class RequestRefundViewModel(
             }
         }
 
-        emitState()
-    }
-
-    class Factory(private val recordId: Int?) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RequestRefundViewModel(
-                recordId = recordId,
-                swapRecordManager = App.swapRecordManager,
-                swapProviderInfoManager = App.swapProviderInfoManager,
-            ) as T
-        }
+        return RequestRefundData(
+            swapIdShort = swapId.shorten(),
+            amount = amountValue,
+            refundAddressShort = refundAddress.shorten(),
+            emailSubject = "Refund Request - $swapId",
+            emailBody = emailBody,
+            contactLinks = contactLinks,
+        )
     }
 }
 
