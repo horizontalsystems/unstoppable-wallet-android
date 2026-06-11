@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import android.util.Log
+import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.APIClient
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI
@@ -56,7 +59,10 @@ class SwapSyncService(
                 record.providerId, record.tokenInBlockchainTypeUid,
                 record.tokenOutBlockchainTypeUid
             )
-            val request = SwapTrackRequestBuilder.build(record, isSingleTransactionEvmSwap)
+            var request = SwapTrackRequestBuilder.build(record, isSingleTransactionEvmSwap)
+            if (BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server) {
+                request = request.copy(testActionRequired = true)
+            }
             val response = if (isSingleTransactionEvmSwap) {
                 unstoppableAPI.trackEvm(request)
             } else {
