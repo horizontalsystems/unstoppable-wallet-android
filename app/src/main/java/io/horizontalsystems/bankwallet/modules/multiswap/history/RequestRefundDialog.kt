@@ -69,6 +69,9 @@ class RequestRefundDialog : BaseComposableBottomSheetFragment() {
                 ComposeAppTheme {
                     if (data != null) {
                         RequestRefundScreen(navController, data)
+                    } else {
+                        // Missing/unrestored input — dismiss instead of showing a blank sheet.
+                        navController.popBackStack()
                     }
                 }
             }
