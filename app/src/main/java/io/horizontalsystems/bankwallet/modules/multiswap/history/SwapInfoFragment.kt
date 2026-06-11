@@ -22,6 +22,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,6 +65,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class SwapInfoFragment : BaseComposeFragment() {
@@ -89,6 +95,8 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
         onBack = navController::popBackStack,
         bottomBar = {
             if (uiState.status == SwapStatus.ActionRequired) {
+                val coroutineScope = rememberCoroutineScope()
+                var refundLoading by remember { mutableStateOf(false) }
                 ButtonsGroupWithShade {
                     HSButton(
                         modifier = Modifier
@@ -96,11 +104,22 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                             .padding(horizontal = 24.dp),
                         title = stringResource(R.string.SwapInfo_RequestRefund),
                         variant = ButtonVariant.Primary,
+                        loadingIndicator = refundLoading,
+                        enabled = !refundLoading,
                         onClick = {
-                            navController.slideFromBottom(
-                                R.id.requestRefundDialog,
-                                RequestRefundDialog.Input(recordId),
-                            )
+                            refundLoading = true
+                            coroutineScope.launch {
+                                try {
+                                    viewModel.prepareRefundData()?.let { data ->
+                                        navController.slideFromBottom(
+                                            R.id.requestRefundDialog,
+                                            RequestRefundDialog.Input(data),
+                                        )
+                                    }
+                                } finally {
+                                    refundLoading = false
+                                }
+                            }
                         },
                     )
                 }
