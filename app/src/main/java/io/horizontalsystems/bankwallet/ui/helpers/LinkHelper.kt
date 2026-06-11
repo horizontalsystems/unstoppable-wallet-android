@@ -22,13 +22,26 @@ object LinkHelper {
             return
         }
 
+        // Build URIs via Uri.Builder so the domain is properly percent-encoded — this prevents
+        // malformed links or query-param injection if it contains characters like &, #, or spaces.
+        val appUri = Uri.Builder()
+            .scheme("tg")
+            .authority("resolve")
+            .appendQueryParameter("domain", domain)
+            .build()
+
         try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=$domain")).apply {
+            val intent = Intent(Intent.ACTION_VIEW, appUri).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
         } catch (_: ActivityNotFoundException) {
-            openLinkInAppBrowser(context, "https://t.me/$domain")
+            val webUri = Uri.Builder()
+                .scheme("https")
+                .authority("t.me")
+                .appendPath(domain)
+                .build()
+            openLinkInAppBrowser(context, webUri.toString())
         }
     }
 
