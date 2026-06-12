@@ -185,17 +185,25 @@ class SwapViewModel(
             val lastOut = TokenQuery.fromId(lastRecord.tokenOutUid)?.let { marketKit.token(it) }
             Pair(lastIn, lastOut)
         } else {
-            val btcToken = walletManager.activeWallets
-                .firstOrNull { it.token.blockchainType == BlockchainType.Bitcoin }
-                ?.token
+            // Default tokenIn — first token of the Swap "Popular Tokens" list (Bitcoin), so the
+            // default stays in sync with whatever the token selector promotes to the top.
+            val tokenIn = SwapPopularTokens.build(marketKit, null).firstOrNull()
+                ?.let { activeWalletTokenFor(it) }
                 ?: marketKit.token(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)))
             val xmrToken = walletManager.activeWallets
                 .firstOrNull { it.token.blockchainType == BlockchainType.Monero }
                 ?.token
                 ?: marketKit.token(TokenQuery(BlockchainType.Monero, TokenType.Native))
-            Pair(btcToken, xmrToken)
+            Pair(tokenIn, xmrToken)
         }
     }
+
+    // Prefer the user's active wallet for the same coin (keeps their chosen derivation),
+    // falling back to the canonical token from the popular list.
+    private fun activeWalletTokenFor(token: Token): Token =
+        walletManager.activeWallets.firstOrNull {
+            it.token.coin.uid == token.coin.uid && it.token.blockchainType == token.blockchainType
+        }?.token ?: token
 
     private fun requoteIfTimeout() {
         if (requoteOnTimeout && timerState.timeout) {

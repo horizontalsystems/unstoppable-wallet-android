@@ -2,11 +2,13 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import android.util.Base64
 import com.google.gson.JsonElement
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
@@ -323,6 +325,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             refundAddress = refundAddress,
             dry = dry,
             chainId = chainId,
+            testActionRequired = if (!dry && BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server) true else null,
         )
         val quote = unstoppableAPI.quote(requestQuote)
 
@@ -663,6 +666,8 @@ interface UnstoppableAPI {
             val refundAddress: String?,
             val dry: Boolean,
             val chainId: String? = null,
+            // Debug-only: forces the server to return an action_required swap. Null in release builds.
+            val testActionRequired: Boolean? = null,
         )
 
         data class Track(
@@ -677,6 +682,8 @@ interface UnstoppableAPI {
             val toAmount: String? = null,
             val depositAddress: String? = null,
             val providerSwapId: String? = null,
+            // Debug-only: forces the server to return an action_required swap. Null in release builds.
+            val testActionRequired: Boolean? = null,
         )
     }
 

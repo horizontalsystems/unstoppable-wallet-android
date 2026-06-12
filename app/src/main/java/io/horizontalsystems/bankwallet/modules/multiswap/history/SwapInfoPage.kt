@@ -21,6 +21,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,7 +63,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.serialization.Serializable
+import kotlinx.coroutines.launch
 
 @Serializable
 data class SwapInfoPage(val input: Input) : HSPage() {
@@ -86,6 +91,8 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
         onBack = navController::removeLastOrNull,
         bottomBar = {
             if (uiState.status == SwapStatus.ActionRequired) {
+                val coroutineScope = rememberCoroutineScope()
+                var refundLoading by remember { mutableStateOf(false) }
                 ButtonsGroupWithShade {
                     HSButton(
                         modifier = Modifier
@@ -93,10 +100,22 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
                             .padding(horizontal = 24.dp),
                         title = stringResource(R.string.SwapInfo_RequestRefund),
                         variant = ButtonVariant.Primary,
+                        loadingIndicator = refundLoading,
+                        enabled = !refundLoading,
                         onClick = {
-                            navController.slideFromBottom(
-                                RequestRefundSheet(RequestRefundSheet.Input(recordId))
-                            )
+                            refundLoading = true
+                            coroutineScope.launch {
+                                try {
+                                    viewModel.prepareRefundData()?.let { data ->
+                                        navController.slideFromBottom(
+                                            RequestRefundSheet(RequestRefundSheet.Input(data))
+                                        )
+
+                                    }
+                                } finally {
+                                    refundLoading = false
+                                }
+                            }
                         },
                     )
                 }
@@ -190,6 +209,17 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
                     .background(ComposeAppTheme.colors.lawrence)
                     .padding(vertical = 8.dp),
             ) {
+                // Provider
+                if (uiState.showProvider) {
+                    CellSecondary(
+                        middle = {
+                            CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
+                        },
+                        right = {
+                            CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
+                        },
+                    )
+                }
                 // Date
                 CellSecondary(
                     middle = {

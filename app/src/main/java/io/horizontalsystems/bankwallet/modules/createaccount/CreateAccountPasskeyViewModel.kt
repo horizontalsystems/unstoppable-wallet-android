@@ -102,6 +102,7 @@ class CreateAccountPasskeyViewModel(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
             TokenQuery(BlockchainType.Monero, TokenType.Native),
+            TokenQuery(BlockchainType.Zcash, TokenType.Native),
             TokenQuery(BlockchainType.Tron, TokenType.Native),
             TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
             TokenQuery(BlockchainType.Tron, TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t")),

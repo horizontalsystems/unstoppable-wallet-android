@@ -22,6 +22,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +47,8 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupManagerPage
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsPage
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRouterPage
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -461,7 +467,44 @@ private fun SettingSections(
         }
     )
 
+    if (BuildConfig.DEBUG) {
+        VSpacer(24.dp)
+
+        DebugSettingsSection()
+    }
+
     VSpacer(32.dp)
+}
+
+@Composable
+private fun DebugSettingsSection() {
+    var simulateFailSwap by remember { mutableStateOf(App.localStorage.simulateFailSwap) }
+
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = {
+                    // Cycle None -> Server -> Local -> None
+                    val modes = SimulateFailSwapMode.entries
+                    val next = modes[(simulateFailSwap.ordinal + 1) % modes.size]
+                    simulateFailSwap = next
+                    App.localStorage.simulateFailSwap = next
+                }
+            ) {
+                body_leah(
+                    text = "Simulate Fail Swap",
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f)
+                )
+                subhead1_grey(
+                    text = simulateFailSwap.name.lowercase(),
+                    maxLines = 1,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    )
 }
 
 @Composable

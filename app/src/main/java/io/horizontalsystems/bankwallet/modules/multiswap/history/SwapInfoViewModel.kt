@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -10,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
@@ -19,6 +21,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -43,6 +46,7 @@ class SwapInfoViewModel(
     private var amountOut: String? = null
     private var fiatAmountIn: String? = null
     private var fiatAmountOut: String? = null
+    private var providerName: String = ""
     private var formattedDate: String = ""
     private var status: SwapStatus = SwapStatus.Depositing
     private var recipientAddress: String? = null
@@ -65,6 +69,8 @@ class SwapInfoViewModel(
         amountOut = amountOut,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
+        providerName = providerName,
+        showProvider = status in listOf(SwapStatus.Refunded, SwapStatus.Failed, SwapStatus.ActionRequired),
         formattedDate = formattedDate,
         status = status,
         recipientAddress = recipientAddress,
@@ -80,6 +86,10 @@ class SwapInfoViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             swapRecordManager.recordsUpdatedFlow.collect { loadData() }
         }
+    }
+
+    suspend fun prepareRefundData(): RequestRefundData? = withContext(Dispatchers.IO) {
+        RequestRefundDataLoader.load(recordId, swapRecordManager)
     }
 
     private suspend fun loadData() {
@@ -103,8 +113,13 @@ class SwapInfoViewModel(
         amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) }
         fiatAmountIn = formatFiat(record.amountIn, priceIn, currency.symbol, currency.decimal)
         fiatAmountOut = record.amountOut?.let { formatFiat(it, priceOut, currency.symbol, currency.decimal) }
+        providerName = record.providerName
         formattedDate = DateHelper.formatDate(Date(record.timestamp), "MMM d, yyyy, HH:mm")
         status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing)
+        // Debug-only: locally fake an action_required swap to exercise the failed-swap UI.
+        if (BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Local) {
+            status = SwapStatus.ActionRequired
+        }
         recipientAddress = record.recipientAddress.takeIf { record.customRecipientAddress }
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         swappingTxUrl = buildProviderTxUrl(record.providerId, record.transactionHash, record.depositAddress)
@@ -202,6 +217,8 @@ data class SwapInfoUiState(
     val amountOut: String?,
     val fiatAmountIn: String?,
     val fiatAmountOut: String?,
+    val providerName: String,
+    val showProvider: Boolean,
     val formattedDate: String,
     val status: SwapStatus,
     val recipientAddress: String?,
