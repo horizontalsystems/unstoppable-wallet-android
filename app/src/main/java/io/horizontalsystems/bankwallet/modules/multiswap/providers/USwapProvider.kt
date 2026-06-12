@@ -481,7 +481,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.StealthEx,
                     UProvider.Exolix,
                     UProvider.Cce,
-                    UProvider.Swapuz
+                    UProvider.Swapuz,
+                    UProvider.Pegasus
                 )
 
                 if (!simpleBtcTransactionProviders.contains(provider)) {
@@ -574,7 +575,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.StealthEx,
                     UProvider.Exolix,
                     UProvider.Cce,
-                    UProvider.Swapuz
+                    UProvider.Swapuz,
+                    UProvider.Pegasus,
                 )
 
                 if (!simpleMoneroTransactionProviders.contains(provider)) {
