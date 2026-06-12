@@ -84,6 +84,15 @@ class MainActivity : BaseActivity() {
 
         viewModel.wcEvent.observe(this) { wcEvent ->
             if (wcEvent != null) {
+                // Don't open WC bottom sheets while the app is locked. The event is
+                // retained in WCDelegate and re-emitted in observeLockState() once the
+                // user unlocks, so the request/proposal isn't lost behind the pin screen.
+                val deferWhileLocked = App.pinComponent.isLocked &&
+                        (wcEvent is HSDAppEvent.SessionRequest || wcEvent is HSDAppEvent.SessionProposal)
+                if (deferWhileLocked) {
+                    viewModel.onWcEventHandled()
+                    return@observe
+                }
                 when (wcEvent) {
                     is HSDAppEvent.SessionRequest -> {
                         navController.slideFromBottom(R.id.wcRequestFragment)
@@ -158,6 +167,11 @@ class MainActivity : BaseActivity() {
             App.pinComponent.isLockedFlow.collect { isLocked ->
                 showPinLockScreen = isLocked
                 pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
+
+                if (!isLocked) {
+                    // Re-show any WC request/proposal that arrived while locked
+                    viewModel.reEmitPendingWcEventIfNeeded()
+                }
             }
         }
     }

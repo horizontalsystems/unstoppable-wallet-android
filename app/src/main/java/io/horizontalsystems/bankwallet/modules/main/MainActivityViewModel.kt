@@ -61,9 +61,15 @@ class MainActivityViewModel(
         wcEvent.postValue(null)
     }
 
-    fun reEmitPendingWcProposalIfNeeded() {
-        if (wcEvent.value == null && WCDelegate.sessionProposalEvent != null) {
-            wcEvent.postValue(HSDAppEvent.SessionProposal(WCDelegate.sessionProposalEvent!!))
+    fun reEmitPendingWcEventIfNeeded() {
+        if (wcEvent.value != null) return
+
+        WCDelegate.sessionRequestEvent?.let {
+            wcEvent.postValue(HSDAppEvent.SessionRequest(it))
+            return
+        }
+        WCDelegate.sessionProposalEvent?.let {
+            wcEvent.postValue(HSDAppEvent.SessionProposal(it))
         }
     }
 
