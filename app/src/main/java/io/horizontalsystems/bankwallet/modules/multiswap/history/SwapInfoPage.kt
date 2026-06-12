@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,6 +63,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class SwapInfoPage(val input: Input) : HSPage() {

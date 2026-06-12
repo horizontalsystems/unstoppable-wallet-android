@@ -44,13 +44,11 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupManagerPage
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsPage
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRouterPage
-import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation

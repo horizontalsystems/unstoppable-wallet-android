@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,13 +16,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -48,8 +42,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -188,16 +180,16 @@ private fun openTelegram(context: Context, telegramValue: String, body: String, 
 
 enum class ContactType { Email, Telegram, Twitter, Website }
 
-@Parcelize
+@Serializable
 data class ContactLink(
     val type: ContactType,
     val label: String,
     val value: String,
     val rawValue: String,
     val iconRes: Int,
-) : Parcelable
+)
 
-@Parcelize
+@Serializable
 data class RequestRefundData(
     val swapIdShort: String,
     val amount: String,
@@ -205,7 +197,7 @@ data class RequestRefundData(
     val emailSubject: String,
     val emailBody: String,
     val contactLinks: List<ContactLink>,
-) : Parcelable
+)
 
 object RequestRefundDataLoader {
     // Loads everything the refund bottom sheet needs (including the provider contacts network
