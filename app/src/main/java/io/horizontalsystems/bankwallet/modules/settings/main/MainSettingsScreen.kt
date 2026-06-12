@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -70,6 +71,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountShe
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.LocalAppConfigProvider
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
@@ -86,7 +88,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.bankwallet.ui.compose.LocalAppConfigProvider
 
 @Composable
 fun SettingsScreen(

@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
 import io.horizontalsystems.core.helpers.DateHelper
@@ -32,6 +33,7 @@ import java.util.Date
 class SwapInfoViewModel @AssistedInject constructor(
     @Assisted private val recordId: Int,
     private val swapRecordManager: SwapRecordManager,
+    private val swapProviderInfoManager: SwapProviderInfoManager,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val numberFormatter: IAppNumberFormatter,
@@ -97,7 +99,7 @@ class SwapInfoViewModel @AssistedInject constructor(
     }
 
     suspend fun prepareRefundData(): RequestRefundData? = withContext(Dispatchers.IO) {
-        RequestRefundDataLoader.load(recordId, swapRecordManager)
+        RequestRefundDataLoader.load(recordId, swapRecordManager, swapProviderInfoManager)
     }
 
     private suspend fun loadData() {
