@@ -10,6 +10,10 @@ enum class UProvider(
     val riskLevel: RiskLevel,
     val isEvm: Boolean,
     val isSingleTransactionSwap: Boolean,
+    // Provider accepts plain sends to its deposit address (any output type) on UTXO
+    // chains (Bitcoin-family, Zcash, Monero, Zano). Providers with special tx
+    // requirements (e.g. thorchain memos) must be false and handled separately if ever needed.
+    val supportsSimpleUtxoTransactions: Boolean,
 ) {
     Near(
         "NEAR",
@@ -20,7 +24,8 @@ enum class UProvider(
         true,
         RiskLevel.FAIR,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     QuickEx(
         "QUICKEX",
@@ -31,7 +36,8 @@ enum class UProvider(
         true,
         RiskLevel.GOOD,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     LetsExchange(
         "LETSEXCHANGE",
@@ -42,7 +48,8 @@ enum class UProvider(
         true,
         RiskLevel.GOOD,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     StealthEx(
         "STEALTHEX",
@@ -53,7 +60,8 @@ enum class UProvider(
         true,
         RiskLevel.FAIR,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     Exolix(
         "EXOLIX",
@@ -64,7 +72,8 @@ enum class UProvider(
         true,
         RiskLevel.GOOD,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     Cce(
         "CCE",
@@ -75,7 +84,8 @@ enum class UProvider(
         true,
         RiskLevel.GOOD,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     Swapuz(
         "SWAPUZ",
@@ -86,7 +96,8 @@ enum class UProvider(
         true,
         RiskLevel.GOOD,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     ),
     Barter(
         "BARTER",
@@ -97,7 +108,8 @@ enum class UProvider(
         true,
         RiskLevel.FAIR,
         isEvm = true,
-        isSingleTransactionSwap = true
+        isSingleTransactionSwap = true,
+        supportsSimpleUtxoTransactions = false
     ),
     Circle(
         "CIRCLE",
@@ -108,7 +120,8 @@ enum class UProvider(
         true,
         RiskLevel.EXCELLENT,
         isEvm = true,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = false
     ),
     Pegasus(
         id = "PEGASUS",
@@ -119,6 +132,7 @@ enum class UProvider(
         requireTerms = true,
         riskLevel = RiskLevel.GOOD,
         isEvm = false,
-        isSingleTransactionSwap = false
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
     );
 }
