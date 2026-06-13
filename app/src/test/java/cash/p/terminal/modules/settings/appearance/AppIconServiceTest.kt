@@ -53,7 +53,9 @@ class AppIconServiceTest {
         service.applyPendingLauncherAliasUpdate()
 
         verify { localStorage.calculatorModeLauncherAliasUpdatePending = false }
-        verify(exactly = 1) {
+        // Two enabled components in non-calculator mode: the selected launcher alias
+        // and the market widget receiver (kept visible in the widget picker).
+        verify(exactly = 2) {
             packageManager.setComponentEnabledSetting(
                 any(),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
