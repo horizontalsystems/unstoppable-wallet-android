@@ -7,6 +7,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.ui_compose.Select
+import cash.p.terminal.widgets.MarketWidgetReceiver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -125,6 +126,14 @@ class AppIconService(private val localStorage: ILocalStorage) {
                 PackageManager.DONT_KILL_APP
             )
         }
+
+        // In calculator mode the market widget must disappear from the launcher's widget
+        // picker; its crypto content would otherwise expose the disguise.
+        App.instance.packageManager.setComponentEnabledSetting(
+            ComponentName(App.instance, MarketWidgetReceiver::class.java),
+            if (enableCalculatorMode) disabled else enabled,
+            PackageManager.DONT_KILL_APP
+        )
 
         if (!enableCalculatorMode) {
             localStorage.isCalculatorModeEnabled = false
