@@ -41,6 +41,7 @@ object AppConfigProvider {
         "BSC-USD" to BigDecimal("0.01"),
         "TRX" to BigDecimal("0.1"),
         "XLM" to BigDecimal("0.01"),
+        "SOL" to BigDecimal("0.000001"),
     )
 
     val blocksDecodedEthereumRpc by lazy {

@@ -491,7 +491,6 @@ class AdapterFactory(
                 coinManager = coinManager,
                 source = source,
                 baseToken = baseToken,
-                spamManager = getKoinInstance(),
                 solanaKitWrapper = solanaKitWrapper
             )
 

@@ -6,6 +6,7 @@ import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -19,7 +20,6 @@ class SolanaTransactionConverter(
     private val coinManager: ICoinManager,
     private val source: TransactionSource,
     private val baseToken: Token,
-    private val spamManager: SpamManager,
     solanaKitWrapper: SolanaKitWrapper
 ) {
     private val userAddress = solanaKitWrapper.solanaKit.receiveAddress
@@ -97,6 +97,8 @@ class SolanaTransactionConverter(
             }
         }
 
+        val spam = isSpam(incomingSolanaTransfers)
+
         return when {
             (incomingSolanaTransfers.size == 1 && outgoingSolanaTransfers.isEmpty()) -> {
                 val transfer = incomingSolanaTransfers.first()
@@ -107,6 +109,7 @@ class SolanaTransactionConverter(
                     from = transfer.address,
                     to = transfer.addressForIncomingAddress,
                     mainValue = transfer.value,
+                    spam = spam,
                     transactionRecordType = TransactionRecordType.SOLANA_INCOMING
                 )
             }
@@ -130,9 +133,18 @@ class SolanaTransactionConverter(
                 source = source,
                 incomingSolanaTransfers = incomingSolanaTransfers,
                 outgoingSolanaTransfers = outgoingSolanaTransfers,
+                spam = spam,
                 transactionRecordType = TransactionRecordType.SOLANA_UNKNOWN
             )
         }
+    }
+
+    private fun isSpam(incomingTransfers: List<SolanaTransactionRecord.SolanaTransfer>): Boolean {
+        if (incomingTransfers.isEmpty()) return false
+        val events = incomingTransfers.map {
+            TransferEvent(it.address, it.addressForIncomingAddress, it.value)
+        }
+        return SpamManager.isSpam(events)
     }
 
 }
