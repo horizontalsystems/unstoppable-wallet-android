@@ -525,13 +525,22 @@ class MoneroKitWrapper(
             return@withLock
         }
         try {
-            logger.info("refresh: restarting wallet")
-            stopInternal(saveWallet = false)
-            startInternal()
+            if (isStarted && requestWalletRefresh()) {
+                logger.info("refresh: requesting wallet refresh")
+            } else {
+                logger.info("refresh: starting wallet")
+                startInternal()
+            }
         } catch (e: Exception) {
-            logger.warning("refresh: failed to restart wallet", e)
+            logger.warning("refresh: failed to refresh wallet", e)
             Timber.e(e, "Failed to refresh Monero wallet")
         }
+    }
+
+    private fun requestWalletRefresh(): Boolean {
+        val wallet = moneroWalletService.wallet ?: return false
+        wallet.refreshAsync()
+        return true
     }
 
     suspend fun send(
