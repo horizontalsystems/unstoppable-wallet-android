@@ -9,6 +9,7 @@ internal data class QuickexInstrumentDto(
     val currencyFriendlyTitle: String,
     val slug: String,
     val precisionDecimals: Int,
+    val requiresMemo: Boolean,
     val instrumentType: String,
     val bestChangeName: String,
     val contractAddress: String,

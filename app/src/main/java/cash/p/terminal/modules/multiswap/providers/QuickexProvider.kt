@@ -113,15 +113,18 @@ class QuickexProvider(
     }
 
     private fun isSameContract(quickexInstrument: QuickexInstrument, token: Token): Boolean {
-        val contractAddress = when (token.type) {
-            is TokenType.Eip20 -> (token.type as? TokenType.Eip20)?.address
-            is TokenType.Spl -> (token.type as? TokenType.Spl)?.address
-            is TokenType.Jetton -> (token.type as? TokenType.Jetton)?.address
+        val contractAddress = when (val type = token.type) {
+            is TokenType.Eip20 -> type.address
+            is TokenType.Spl -> type.address
+            is TokenType.Jetton -> type.address
             else -> null
         }.orEmpty()
         if (contractAddress.isEmpty()) return false
 
-        return quickexInstrument.contractAddress == contractAddress
+        return quickexInstrument.contractAddress.equals(
+            contractAddress,
+            ignoreCase = token.blockchainType.isEvm
+        )
     }
 
     private fun getQuickexTicker(token: Token): String? =
@@ -437,7 +440,7 @@ class QuickexProvider(
             val swapProviderTransaction = SwapProviderTransaction(
                 date = System.currentTimeMillis(),
                 outgoingRecordUid = null, //set later
-                transactionId = transaction.orderId.toString(),
+                transactionId = transaction.orderId,
                 status = TransactionStatusEnum.NEW.name.lowercase(),
                 provider = SwapProvider.QUICKEX,
                 coinUidIn = tokenIn.coin.uid,

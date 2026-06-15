@@ -4,7 +4,7 @@ import java.math.BigDecimal
 
 data class NewTransactionQuickexResponse(
     val depositAddress: DepositAddress,
-    val orderId: Long,
+    val orderId: String,
     val pair: Pair,
     val claimedDepositAmount: BigDecimal,
     val amountToGet: BigDecimal,
