@@ -271,7 +271,6 @@ fun BalanceItems(
                             stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
                     },
-                    loading = uiState.loading,
                     balanceHidden = uiState.balanceHidden
                 )
             }
@@ -674,7 +673,6 @@ fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
-    loading: Boolean,
     balanceHidden: Boolean
 ) {
     if (balanceHidden) {
@@ -685,17 +683,9 @@ fun TotalBalanceRow(
             onClickSubtitle = onClickSubtitle
         )
     } else {
-        val color = if (loading) {
-            ComposeAppTheme.colors.andy
-        } else if (totalState.dimmed) {
-            ComposeAppTheme.colors.grey
-        } else {
-            null
-        }
-
         CardsElementAmountText(
-            title = totalState.primaryAmountStr.hs(color = color),
-            body = totalState.secondaryAmountStr.hs(color = color),
+            title = totalState.primaryAmountStr.hs,
+            body = totalState.secondaryAmountStr.hs,
             onClickTitle = onClickTitle,
             onClickSubtitle = onClickSubtitle,
         )
