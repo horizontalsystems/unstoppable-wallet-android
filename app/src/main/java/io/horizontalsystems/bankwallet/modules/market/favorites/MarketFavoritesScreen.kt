@@ -154,7 +154,7 @@ fun MarketFavoritesScreen(
                                         )
                                         HSpacer(width = 12.dp)
                                         HSButton(
-                                            variant = ButtonVariant.Secondary,
+                                            variant = if (uiState.showSignal) ButtonVariant.Primary else ButtonVariant.Secondary,
                                             style = ButtonStyle.Solid,
                                             size = ButtonSize.Small,
                                             title = stringResource(id = R.string.Market_Signals),
