@@ -329,7 +329,7 @@
     <string name="Balance_Sort_PopupTitle">Сортировка</string>
     <string name="Balance_Sort_Az">по названию</string>
     <string name="Balance_Sort_24hPriceChange">по изменению цены(%)</string>
-    <string name="Balance_NoCoinsAlert">Вы еще не добавили токены в этот кошелек.</string>
+    <string name="Balance_NoCoinsAlert">Здесь нет токенов. Добавьте один, чтобы начать.</string>
     <string name="Balance_NoAssetsToSend">У вас нет активов для отправки.</string>
     <string name="Balance_Network">Сеть</string>
     <string name="Balance_Format">Формат</string>

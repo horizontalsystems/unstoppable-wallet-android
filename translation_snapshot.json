@@ -129,7 +129,7 @@
     "Balance_Network": "Network",
     "Balance_NetworkSelectDescription": "Choose network to get an address to receive.",
     "Balance_NoAssetsToSend": "You have no assets to send.",
-    "Balance_NoCoinsAlert": "You haven\\'t added any coins to this wallet.",
+    "Balance_NoCoinsAlert": "No tokens here. Add one to begin.",
     "Balance_RatePerCoin": "%1$s per %2$s",
     "Balance_Receive": "Receive",
     "Balance_ReceiveAddress": "Receive Address",
