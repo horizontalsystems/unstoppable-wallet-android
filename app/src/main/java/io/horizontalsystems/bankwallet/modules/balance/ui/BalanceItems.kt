@@ -14,12 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -58,7 +58,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalancePage
 import io.horizontalsystems.bankwallet.modules.coin.CoinPage
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsPage
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -435,7 +434,7 @@ fun BalanceItems(
                 item {
                     NoCoinsBlock(
                         onAddClick = {
-                            navController.slideFromRight(R.id.manageWalletsFragment)
+                            navController.slideFromRight(ManageWalletsPage)
 
                             stat(
                                 page = StatPage.Balance,
@@ -502,7 +501,7 @@ fun BalanceItems(
                             title = stringResource(R.string.Button_Add),
                             icon = painterResource(R.drawable.ic_plus_20),
                             onClick = {
-                                navController.slideFromRight(R.id.manageWalletsFragment)
+                                navController.slideFromRight(ManageWalletsPage)
 
                                 stat(
                                     page = StatPage.Balance,
