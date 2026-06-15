@@ -84,14 +84,14 @@ fun BalanceCardInner2(
             } else if (balanceHidden || viewItem.primaryValue == null) {
                 "* * *".hs
             } else {
-                viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
+                viewItem.primaryValue.value.hs
             }
 
             val subtitle = when {
                 viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue.hs
                 viewItem.notActivated -> stringResource(R.string.Tron_TokenPage_AddressNotActivated).hs(color = ComposeAppTheme.colors.jacob)
                 balanceHidden || viewItem.secondaryValue == null -> null
-                else -> viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
+                else -> viewItem.secondaryValue.value.hs
             }
 
             CellRightInfo(
