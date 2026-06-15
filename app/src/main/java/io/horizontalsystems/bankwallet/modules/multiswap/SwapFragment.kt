@@ -62,6 +62,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
@@ -342,8 +343,16 @@ private fun SwapScreenInner(
         var amountInputHasFocus by remember { mutableStateOf(false) }
         val amountInputFocusRequester = remember { FocusRequester() }
 
+        // Show the keyboard only when the user navigates to this screen — not when it is
+        // restored on cold start / after process death (rememberSaveable comes back as `true`
+        // then) and not while the pin-unlock screen covers it (would pop the keyboard behind
+        // the lock screen).
+        var keyboardRequested by rememberSaveable { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            amountInputFocusRequester.requestFocus()
+            if (!keyboardRequested && !App.pinComponent.isLocked) {
+                keyboardRequested = true
+                amountInputFocusRequester.requestFocus()
+            }
         }
 
         Box(modifier = Modifier.fillMaxSize()) {

@@ -158,6 +158,12 @@ class MainActivity : BaseActivity() {
             App.pinComponent.isLockedFlow.collect { isLocked ->
                 showPinLockScreen = isLocked
                 pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
+
+                if (isLocked) {
+                    // Hide the keyboard so it doesn't end up on top of / behind the pin-unlock
+                    // screen when a screen underneath requests focus while the app is locked.
+                    currentFocus?.hideKeyboard(this@MainActivity)
+                }
             }
         }
     }
