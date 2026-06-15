@@ -75,12 +75,11 @@ class SendZCashViewModel(
         memoService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedMemoState(it)
         }
-        adapterManager.getBalanceAdapterForWallet(wallet)?.let { balanceAdapter ->
-            balanceAdapter.balanceUpdatedFlow.collectWith(viewModelScope) {
-                val newBalance = adapterManager.getAdjustedBalanceData(wallet)?.available
-                    ?: balanceAdapter.maxSpendableBalance
-                amountService.updateAvailableBalance(newBalance)
-            }
+        adapter.balanceUpdatedFlow.collectWith(viewModelScope) {
+            updateAvailableBalance()
+        }
+        fee.collectWith(viewModelScope) {
+            updateAvailableBalance()
         }
         viewModelScope.launch {
             addressService.setAddress(address)
@@ -109,6 +108,10 @@ class SendZCashViewModel(
             isPoisonAddress = poison,
             riskAccepted = riskAccepted,
         )
+    }
+
+    private fun updateAvailableBalance() {
+        amountService.updateAvailableBalance(adapterManager.getZcashAvailableToSend(wallet, adapter))
     }
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -178,9 +181,7 @@ class SendZCashViewModel(
         try {
             sendResult = SendResult.Sending
             // 1. Create pending transaction draft BEFORE sending
-            val sdkBalance = adapterManager.getBalanceAdapterForWallet(wallet)
-                ?.balanceData?.available ?: amountState.availableBalance
-                ?: throw IllegalStateException("Balance unavailable")
+            val sdkBalance = adapterManager.getZcashSdkBalance(wallet, amountState.availableBalance)
             val draft = PendingTransactionDraft(
                 wallet = wallet,
                 token = wallet.token,

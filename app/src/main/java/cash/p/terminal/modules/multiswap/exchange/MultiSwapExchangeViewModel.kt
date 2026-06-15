@@ -100,6 +100,8 @@ class MultiSwapExchangeViewModel(
         private set
 
     init {
+        tokenBalanceService.start(viewModelScope)
+
         observeSwap()
         viewModelScope.launch {
             timerService.stateFlow.collect {
