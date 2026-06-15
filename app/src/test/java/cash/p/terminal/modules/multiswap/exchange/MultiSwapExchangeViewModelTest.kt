@@ -4,8 +4,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.core.usecase.FetchSwapQuotesUseCase
 import cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase
-import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.core.ServiceStateFlow
+import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.modules.multiswap.ISwapQuote
 import cash.p.terminal.modules.multiswap.MultiSwapOnChainMonitor
 import cash.p.terminal.modules.multiswap.SwapProviderQuote
@@ -18,20 +18,23 @@ import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.QuickexProvider
 import cash.p.terminal.modules.multiswap.providers.SwapProvidersRepository
 import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.wallet.IWalletManager
-import cash.p.terminal.wallet.Wallet
-import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.FullCoin
-import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.CurrencyManager
-import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.IAppNumberFormatter
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -88,20 +91,33 @@ class MultiSwapExchangeViewModelTest {
     private val walletUseCase = mockk<WalletUseCase>(relaxed = true)
     private val accountManager = mockk<IAccountManager>(relaxed = true)
     private val activeWalletsFlow = MutableStateFlow<List<Wallet>>(emptyList())
+    private val balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    private val feeFlow = MutableStateFlow(BigDecimal.ZERO)
+    private val balanceAdapter = mockk<IBalanceAdapter>(relaxed = true)
     private val currencyManager = mockk<CurrencyManager> {
         every { baseCurrency } returns Currency("USD", "$", 2, 0)
     }
 
-    private val testToken = mockk<Token>(relaxed = true) {
-        every { blockchainType } returns BlockchainType.Ethereum
-        every { coin } returns mockk(relaxed = true)
-    }
+    private val testToken = Token(
+        coin = Coin(uid = "ethereum", name = "Ethereum", code = "ETH"),
+        blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
+        type = TokenType.Native,
+        decimals = 18
+    )
 
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         coEvery { pendingMultiSwapStorage.getById(any()) } returns null
         every { walletManager.activeWalletsFlow } returns activeWalletsFlow
+        every { marketKit.token(any()) } returns testToken
+        every { adapterManager.getAdapterForToken<IBalanceAdapter>(any()) } returns balanceAdapter
+        every { adapterManager.getAdjustedBalanceDataForToken(any()) } returns BalanceData(BigDecimal("10.0"))
+        every { balanceAdapter.balanceState } returns AdapterState.Synced
+        every { balanceAdapter.balanceUpdatedFlow } returns balanceUpdatedFlow
+        every { balanceAdapter.balanceData } returns BalanceData(BigDecimal("10.0"))
+        every { balanceAdapter.maxSpendableBalance } returns BigDecimal("10.0")
+        every { balanceAdapter.fee } returns feeFlow
     }
 
     private val viewModelStore = androidx.lifecycle.ViewModelStore()

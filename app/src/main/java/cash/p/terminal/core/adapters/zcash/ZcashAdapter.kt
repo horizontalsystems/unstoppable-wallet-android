@@ -496,7 +496,7 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
 
     override val balanceData: BalanceData
-        get() = BalanceData(balance, pending = balancePending)
+        get() = walletBalance.toBalanceData(DECIMAL_COUNT)
 
     override val statusInfo: Map<String, Any>
         get() {
@@ -505,14 +505,6 @@ class ZcashAdapter(
             statusInfo["Sync State"] = syncState
             statusInfo["Birthday Height"] = accountBirthday
             return statusInfo
-        }
-
-    private val balance: BigDecimal
-        get() {
-            return with(walletBalance) {
-                available.convertZatoshiToZec(DECIMAL_COUNT) +
-                        pending.convertZatoshiToZec(DECIMAL_COUNT)
-            }
         }
 
     private val walletBalance: WalletBalance
@@ -532,15 +524,6 @@ class ZcashAdapter(
                 AddressSpecType.Unified -> synchronizer.walletBalances.value?.get(zcashAccount?.accountUuid)?.orchard
                     ?: WalletBalance(Zatoshi(0), Zatoshi(0), Zatoshi(0))
             }
-        }
-
-    private val balancePending: BigDecimal
-        get() {
-            // TODO: Waiting when adjust option MIN_CONFIRMATIONS will appear in
-            //  zcash-android-wallet-sdk
-            // val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
-            // return walletBalance.pending.convertZatoshiToZec(decimalCount)
-            return BigDecimal.ZERO
         }
 
     override val balanceUpdatedFlow: Flow<Unit>
@@ -600,8 +583,6 @@ class ZcashAdapter(
     override val maxSpendableBalance: BigDecimal
         get() {
             return with(walletBalance) {
-                val available = available + pending
-
                 val defaultFee = fee.value.convertZecToZatoshi()
                 if (available <= defaultFee) {
                     BigDecimal.ZERO
@@ -616,7 +597,7 @@ class ZcashAdapter(
     override val fee: StateFlow<BigDecimal> = _fee.asStateFlow()
 
     private suspend fun calculateFee(
-        balance: Zatoshi = walletBalance.available + walletBalance.pending,
+        balance: Zatoshi = walletBalance.available,
         tryCounter: Int = 4
     ): Unit = withContext(dispatcherProvider.io) {
         try {
@@ -969,6 +950,11 @@ class ZcashAdapter(
         object SendToSelfNotAllowed : ZcashError()
     }
 }
+
+internal fun WalletBalance.toBalanceData(decimalCount: Int) = BalanceData(
+    available = available.convertZatoshiToZec(decimalCount),
+    pending = pending.convertZatoshiToZec(decimalCount)
+)
 
 object ZcashAddressValidator {
     fun validate(address: String): Boolean {

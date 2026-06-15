@@ -497,7 +497,7 @@ class TokenBalanceViewModel(
         val item = balanceService.balanceItem ?: return hasReachedSynced
         val isTransparent =
             (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent
-        if (!isTransparent || item.balanceData.total <= ZcashAdapter.MINERS_FEE) return false
+        if (!isTransparent || item.balanceData.available <= ZcashAdapter.MINERS_FEE) return false
 
         return hasReachedSyncedState()
     }

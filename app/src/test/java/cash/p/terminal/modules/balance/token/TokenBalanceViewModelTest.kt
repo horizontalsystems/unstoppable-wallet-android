@@ -47,6 +47,7 @@ import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.tokenQueryId
+import cash.p.terminal.wallet.zcashTransparentWallet
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.entities.Blockchain
@@ -433,6 +434,46 @@ class TokenBalanceViewModelTest : KoinTest {
         advanceUntilIdle()
 
         assertEquals(true, viewModel.uiState.balanceViewItem?.swapVisible)
+    }
+
+    @Test
+    fun isShowShieldFunds_transparentZcashPendingOnly_hidesShieldFunds() = runTest(dispatcher) {
+        testWallet = zcashTransparentWallet()
+        val balanceItem = createBalanceItem(
+            wallet = testWallet,
+            balanceData = BalanceData(
+                available = BigDecimal.ZERO,
+                pending = ZcashAdapter.MINERS_FEE + BigDecimal.ONE
+            )
+        )
+        balanceItemFlow.value = balanceItem
+        every { balanceService.balanceItem } answers { balanceItemFlow.value }
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.isShowShieldFunds)
+    }
+
+    @Test
+    fun isShowShieldFunds_transparentZcashAvailableAboveFee_showsShieldFunds() = runTest(dispatcher) {
+        testWallet = zcashTransparentWallet()
+        val balanceItem = createBalanceItem(
+            wallet = testWallet,
+            balanceData = BalanceData(
+                available = ZcashAdapter.MINERS_FEE + BigDecimal.ONE,
+                pending = BigDecimal.ZERO
+            )
+        )
+        balanceItemFlow.value = balanceItem
+        every { balanceService.balanceItem } answers { balanceItemFlow.value }
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.isShowShieldFunds)
     }
 
     // endregion
@@ -1003,7 +1044,7 @@ class TokenBalanceViewModelTest : KoinTest {
             decimals = 8
         )
         return mockk<Wallet>(relaxed = true) {
-            every { token } returns testToken
+            every { this@mockk.token } returns testToken
             every { this@mockk.coin } returns coin
             every { this@mockk.account } returns account
             every { tokenQueryId } returns testToken.tokenQuery.id
@@ -1078,7 +1119,7 @@ class TokenBalanceViewModelTest : KoinTest {
         )
         val account = mockk<Account>(relaxed = true)
         val walletFactory = WalletFactory(mockk(relaxed = true))
-        return walletFactory.create(pirateToken, account, null)!!
+        return checkNotNull(walletFactory.create(pirateToken, account, null))
     }
 
     private fun createBep20Wallet(): Wallet {
@@ -1095,7 +1136,7 @@ class TokenBalanceViewModelTest : KoinTest {
         )
         val account = mockk<Account>(relaxed = true)
         val walletFactory = WalletFactory(mockk(relaxed = true))
-        return walletFactory.create(token, account, null)!!
+        return checkNotNull(walletFactory.create(token, account, null))
     }
 
     private fun createTrc20Wallet(): Wallet {
@@ -1112,16 +1153,17 @@ class TokenBalanceViewModelTest : KoinTest {
         )
         val account = mockk<Account>(relaxed = true)
         val walletFactory = WalletFactory(mockk(relaxed = true))
-        return walletFactory.create(usdtToken, account, null)!!
+        return checkNotNull(walletFactory.create(usdtToken, account, null))
     }
 
     private fun createBalanceItem(
         balance: BigDecimal = BigDecimal("1.5"),
         wallet: Wallet = testWallet,
-        state: AdapterState = AdapterState.Synced
+        state: AdapterState = AdapterState.Synced,
+        balanceData: BalanceData = BalanceData(available = balance)
     ) = BalanceItem(
         wallet = wallet,
-        balanceData = BalanceData(available = balance),
+        balanceData = balanceData,
         state = state,
         sendAllowed = true,
         coinPrice = null
