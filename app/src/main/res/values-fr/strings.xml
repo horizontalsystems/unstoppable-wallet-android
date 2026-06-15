@@ -328,7 +328,7 @@
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
     <string name="Balance_Sort_24hPriceChange">Changement de prix</string>
-    <string name="Balance_NoCoinsAlert">Vous n\'avez ajouté aucune pièce à ce portefeuille.</string>
+    <string name="Balance_NoCoinsAlert">Aucun token ici. Ajoutez-en un pour commencer.</string>
     <string name="Balance_NoAssetsToSend">Vous n\'avez pas d\'actifs à envoyer.</string>
     <string name="Balance_Network">Réseau</string>
     <string name="Balance_Format">Formater</string>

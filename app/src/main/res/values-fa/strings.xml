@@ -691,4 +691,5 @@
     <string name="Swap_EstimatedTimeDescription">زمان تقریبی برای دریافت وجوه. پردازش swap و تأیید معاملات بسته به شبکه و مسیر می‌تواند مدتی طول بکشد.</string>
     <string name="SwapTerms_BottomText">همیشه مسیر swap را انتخاب کنید که با نیازهای شما مطابقت داشته باشد.</string>
     <string name="SwapInfo_Provider">مسیر</string>
+    <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
 </resources>

@@ -309,7 +309,7 @@
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
     <string name="Balance_Sort_24hPriceChange">가격 변경</string>
-    <string name="Balance_NoCoinsAlert">이 지갑에 코인을 넣지 않았습니다.</string>
+    <string name="Balance_NoCoinsAlert">여기에 토큰이 없습니다. 시작하려면 하나를 추가하세요.</string>
     <string name="Balance_NoAssetsToSend">자산을 보낼 수 없습니다.</string>
     <string name="Balance_Network">회로망</string>
     <string name="Balance_Format">형식</string>

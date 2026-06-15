@@ -328,7 +328,7 @@
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">Preisänderung</string>
-    <string name="Balance_NoCoinsAlert">Sie haben dieser Wallet keine Münzen hinzugefügt.</string>
+    <string name="Balance_NoCoinsAlert">Keine Tokens vorhanden. Fügen Sie einen hinzu, um zu beginnen.</string>
     <string name="Balance_NoAssetsToSend">Sie haben keine Assets zu senden.</string>
     <string name="Balance_Network">Netzwerk</string>
     <string name="Balance_Format">Format</string>

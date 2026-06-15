@@ -328,7 +328,7 @@
     <string name="Balance_Sort_PopupTitle">Organizar por</string>
     <string name="Balance_Sort_Az">Nome</string>
     <string name="Balance_Sort_24hPriceChange">Mudança de Preço</string>
-    <string name="Balance_NoCoinsAlert">Você não adicionou nenhuma moeda nesta carteira.</string>
+    <string name="Balance_NoCoinsAlert">Nenhum token aqui. Adicione um para começar.</string>
     <string name="Balance_NoAssetsToSend">Você não tem ativos para enviar.</string>
     <string name="Balance_Network">Rede</string>
     <string name="Balance_Format">Formato</string>
