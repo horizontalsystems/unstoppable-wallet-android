@@ -96,7 +96,7 @@ fun TokenSelectScreen(
                         header?.invoke()
                         ListEmptyView(
                             text = stringResource(if (uiState.hasAssets) R.string.Search_NotFounded else R.string.Balance_NoAssetsToSend),
-                            icon = R.drawable.warning_filled_24
+                            icon = R.drawable.wallet_in_24
                         )
                     }
                 } else {

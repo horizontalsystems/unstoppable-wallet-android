@@ -27,7 +27,6 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
         val blockchainTypes = input?.blockchainTypes
         val tokenTypes = input?.tokenTypes
-        val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Balance_Send),
