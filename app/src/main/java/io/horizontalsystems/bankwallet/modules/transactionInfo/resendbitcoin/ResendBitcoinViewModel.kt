@@ -26,6 +26,7 @@ import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -91,7 +92,9 @@ class ResendBitcoinViewModel(
                     val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
 
                     updateReplacementTransaction(minFee)
-                } catch (e: Throwable) {
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
                     feeCaution = createCaution(e)
                     emitState()
                 }
