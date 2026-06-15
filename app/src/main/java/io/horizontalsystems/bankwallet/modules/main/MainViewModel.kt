@@ -318,7 +318,39 @@ class MainViewModel(
         var deeplinkPage: DeeplinkPage? = null
         val deeplinkString = deepLink.toString()
         val deeplinkScheme: String = Translator.getString(R.string.DeeplinkScheme)
+
+        // WalletConnect can arrive either as a raw `wc:` URI (QR scan / clipboard) or
+        // wrapped in the app's own scheme by the dApp / Web3Modal, e.g.
+        // `unstoppable://wc?uri=<URL-encoded wc: uri>`. The wrapped form starts with the
+        // deeplink scheme, so it must be detected (by host == "wc") before the generic
+        // scheme branch below, otherwise the embedded pairing URI is lost.
+        val wcUri: String? = when {
+            deeplinkString.startsWith("wc:") -> deeplinkString
+            deepLink.host == "wc" -> {
+                val encodedQuery = deepLink.encodedQuery
+                val marker = "uri="
+                val start = encodedQuery?.indexOf(marker) ?: -1
+                if (start >= 0) {
+                    Uri.decode(encodedQuery!!.substring(start + marker.length))
+                        .trim()
+                        .removePrefix("@")
+                } else {
+                    null
+                }
+            }
+
+            else -> null
+        }
+
         when {
+            wcUri != null -> {
+                wcSupportState = wcManager.getWalletConnectSupportState()
+                if (wcSupportState == WCManager.SupportState.Supported) {
+                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(wcUri))
+                    tab = MainNavigation.Settings
+                }
+            }
+
             deeplinkString.startsWith("$deeplinkScheme:") -> {
                 val uid = deepLink.getQueryParameter("uid")
                 when {
@@ -345,14 +377,6 @@ class MainViewModel(
                 }
 
                 tab = MainNavigation.Market
-            }
-
-            deeplinkString.startsWith("wc:") -> {
-                wcSupportState = wcManager.getWalletConnectSupportState()
-                if (wcSupportState == WCManager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
-                    tab = MainNavigation.Settings
-                }
             }
 
             deeplinkString.startsWith("https://unstoppable.money/referral") -> {
@@ -437,7 +461,16 @@ class MainViewModel(
 
     fun handleDeepLink(uri: Uri) {
         val deeplinkString = uri.toString()
-        if (deeplinkString.startsWith("unstoppable.money:") || deeplinkString.startsWith("tc:")) {
+
+        // A wrapped WalletConnect link (e.g. `unstoppable.money://wc?uri=wc:...`) shares the
+        // app's `unstoppable.money` scheme with TonConnect, so it would be swallowed by the
+        // TonConnect branch below and the WC pairing would never start. Exclude it here and
+        // let getNavigationDataForDeeplink() detect it (by `wc:` prefix or host == "wc").
+        val isWalletConnectDeeplink = deeplinkString.startsWith("wc:") || uri.host == "wc"
+
+        if (!isWalletConnectDeeplink &&
+            (deeplinkString.startsWith("unstoppable.money:") || deeplinkString.startsWith("tc:"))
+        ) {
             val returnParam = uri.getQueryParameter("ret")
             // when app is opened from camera app, it returns "none" as ret param
             // so we don't need closing app in this case

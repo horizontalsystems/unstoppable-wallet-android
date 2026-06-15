@@ -112,8 +112,6 @@ class WCRequestFragment : BaseComposableBottomSheetFragment() {
 fun WcRequestEvm(navController: NavController) {
     val wcRequestEvmViewModel =
         viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
-    val composableScope = rememberCoroutineScope()
-    val view = LocalView.current
 
     when (val sessionRequestUI = wcRequestEvmViewModel.sessionRequestUi) {
         is SessionRequestUI.Content -> {
@@ -161,28 +159,8 @@ fun WcRequestEvm(navController: NavController) {
                 WCNewSignRequestScreen(
                     sessionRequestUI,
                     navController,
-                    onAllow = {
-                        composableScope.launch {
-                            try {
-                                wcRequestEvmViewModel.allow()
-                                navController.popBackStack()
-                            } catch (e: Throwable) {
-                                showError(view, e)
-                            }
-                        }
-                        logger.info("allow request")
-                    },
-                    onDecline = {
-                        composableScope.launch {
-                            try {
-                                wcRequestEvmViewModel.reject()
-                                navController.popBackStack()
-                            } catch (e: Throwable) {
-                                showError(view, e)
-                            }
-                        }
-                        logger.info("decline request")
-                    }
+                    onAllow = { wcRequestEvmViewModel.allow() },
+                    onDecline = { wcRequestEvmViewModel.reject() }
                 )
             }
         }
@@ -257,13 +235,25 @@ fun WcRequestError(
 fun WCNewSignRequestScreen(
     sessionRequestUI: SessionRequestUI.Content,
     navController: NavController,
-    onAllow: () -> Unit,
+    onAllow: suspend () -> Unit,
     onDecline: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val view = LocalView.current
     val messageBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var messageBottomSheet by remember { mutableStateOf<String?>(null) }
+
+    // Animate the bottom sheet out before popping. Popping the fragment directly disposes the
+    // ModalBottomSheet's window abruptly, which intermittently leaves the sheet content on screen
+    // (the fragment dim is removed but the sheet card stays).
+    val hideAndPop = {
+        scope.launch {
+            sheetState.hide()
+            navController.popBackStack()
+        }
+        Unit
+    }
 
     BottomSheetContent(
         onDismissRequest = navController::popBackStack,
@@ -339,13 +329,28 @@ fun WCNewSignRequestScreen(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
-                    onClick = onDecline
+                    onClick = {
+                        logger.info("decline request")
+                        onDecline()
+                        hideAndPop()
+                    }
                 )
                 HSButton(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    onClick = onAllow
+                    onClick = {
+                        logger.info("allow request")
+                        scope.launch {
+                            try {
+                                onAllow()
+                                sheetState.hide()
+                                navController.popBackStack()
+                            } catch (e: Throwable) {
+                                showError(view, e)
+                            }
+                        }
+                    }
                 )
             }
         }

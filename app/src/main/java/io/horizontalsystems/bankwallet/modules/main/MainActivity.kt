@@ -95,11 +95,18 @@ class MainActivity : BaseActivity() {
                 }
                 when (wcEvent) {
                     is HSDAppEvent.SessionRequest -> {
-                        navController.slideFromBottom(R.id.wcRequestFragment)
+                        // reEmitPendingWcEventIfNeeded() can fire more than once per foreground
+                        // transition (from both observeLockState and MainFragment's ON_RESUME),
+                        // so skip if the request dialog is already shown to avoid stacking duplicates.
+                        if (navController.currentDestination?.id != R.id.wcRequestFragment) {
+                            navController.slideFromBottom(R.id.wcRequestFragment)
+                        }
                     }
 
                     is HSDAppEvent.SessionProposal -> {
-                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
+                        if (navController.currentDestination?.id != R.id.wcSessionBottomSheetDialog) {
+                            navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
+                        }
                     }
 
                     is HSDAppEvent.Error -> {
