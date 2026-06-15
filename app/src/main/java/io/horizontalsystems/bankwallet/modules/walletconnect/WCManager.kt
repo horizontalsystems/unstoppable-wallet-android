@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
+import android.net.Uri
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -50,6 +51,30 @@ class WCManager(
         val handler = handlersMap[chainNamespace] ?: return null
 
         return handler.getAction(request, chainInternalId)
+    }
+
+    // WalletConnect can arrive either as a raw `wc:` URI (QR scan / clipboard) or wrapped in the
+    // app's own scheme by the dApp / Web3Modal, e.g. `unstoppable.money://wc?uri=<URL-encoded wc:>`.
+    // Returns the embedded `wc:` pairing URI, or null if the deeplink isn't a WalletConnect one.
+    fun getWalletConnectUri(deepLink: Uri): String? {
+        val deeplinkString = deepLink.toString()
+        return when {
+            deeplinkString.startsWith("wc:") -> deeplinkString
+            deepLink.host == "wc" -> {
+                val encodedQuery = deepLink.encodedQuery
+                val marker = "uri="
+                val start = encodedQuery?.indexOf(marker) ?: -1
+                if (start >= 0) {
+                    Uri.decode(encodedQuery!!.substring(start + marker.length))
+                        .trim()
+                        .removePrefix("@")
+                } else {
+                    null
+                }
+            }
+
+            else -> null
+        }
     }
 
     fun getWalletConnectSupportState(): SupportState {

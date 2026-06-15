@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -21,9 +22,12 @@ import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.dapp.core.HSDAppEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +38,7 @@ import kotlinx.coroutines.launch
 class MainActivity : BaseActivity() {
 
     private lateinit var pinLockComposeView: ComposeView
+    private lateinit var navController: NavController
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val viewModel by viewModels<MainActivityViewModel> {
@@ -55,7 +60,42 @@ class MainActivity : BaseActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        viewModel.setIntent(intent)
+        if (!handleWalletConnectDeepLink(intent)) {
+            viewModel.setIntent(intent)
+        }
+    }
+
+    // WalletConnect deeplinks are handled here, at the activity level, so they work no matter which
+    // inner screen is shown (the deeplink -> handleDeepLink flow in MainFragment only runs while
+    // MainFragment is active, so a `wc:` link received on e.g. the WC list page would otherwise be
+    // ignored until that page is closed). Pairing here is enough — the connect proposal dialog is
+    // opened by the activity-level wcEvent observer regardless of the current destination.
+    //
+    // Returns true if the intent was a WalletConnect deeplink and was handled here. When DAppManager
+    // isn't available yet (e.g. cold start before the relay connects) it returns false so the intent
+    // falls back to MainFragment's deeplink flow, which waits and routes through the WC list.
+    private fun handleWalletConnectDeepLink(intent: Intent): Boolean {
+        val uri = intent.data ?: return false
+        val wcUri = App.wcManager.getWalletConnectUri(uri) ?: return false
+        if (!DAppManager.isAvailable) return false
+
+        when (val supportState = App.wcManager.getWalletConnectSupportState()) {
+            WCManager.SupportState.Supported -> {
+                DAppManager.pair(wcUri.trim())
+            }
+
+            WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+            }
+
+            is WCManager.SupportState.NotSupported -> {
+                navController.slideFromBottom(
+                    R.id.wcAccountTypeNotSupportedDialog,
+                    WCAccountTypeNotSupportedDialog.Input(supportState.accountTypeDescription)
+                )
+            }
+        }
+        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +108,7 @@ class MainActivity : BaseActivity() {
 
         val navHost =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        val navController = navHost.navController
+        navController = navHost.navController
 
         navController.setGraph(R.navigation.main_graph, intent.extras)
         navController.addOnDestinationChangedListener { _, _, _ ->
@@ -153,7 +193,9 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        viewModel.setIntent(intent)
+        if (!handleWalletConnectDeepLink(intent)) {
+            viewModel.setIntent(intent)
+        }
 
         pinLockComposeView.setContent {
             ComposeAppTheme {
