@@ -239,7 +239,7 @@
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
     <string name="Balance_Sort_24hPriceChange">Fiyat Değişimi</string>
-    <string name="Balance_NoCoinsAlert">Bu cüzdana hiç jeton eklemediniz.</string>
+    <string name="Balance_NoCoinsAlert">Burada token yok. Başlamak için bir tane ekleyin.</string>
     <string name="Balance_NoAssetsToSend">Gönderilecek öğeniz yok.</string>
     <string name="Balance_Network">Ağ</string>
     <string name="Balance_Format">Biçim</string>

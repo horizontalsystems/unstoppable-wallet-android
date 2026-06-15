@@ -471,20 +471,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             BlockchainType.Dash,
             BlockchainType.ECash,
                 -> {
-                // supported only providers that accepts any type of outputs
-                // providers with specific requirements like thorchain is not supported
-                // if thorchain support needed then it should be handled separately
-                val simpleBtcTransactionProviders = listOf(
-                    UProvider.Near,
-                    UProvider.QuickEx,
-                    UProvider.LetsExchange,
-                    UProvider.StealthEx,
-                    UProvider.Exolix,
-                    UProvider.Cce,
-                    UProvider.Swapuz
-                )
-
-                if (!simpleBtcTransactionProviders.contains(provider)) {
+                if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple BTC tx providers are supported")
                 }
 
@@ -545,17 +532,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             }
 
             BlockchainType.Zcash -> {
-                val simpleZcashTransactionProviders = listOf(
-                    UProvider.Near,
-                    UProvider.QuickEx,
-                    UProvider.LetsExchange,
-                    UProvider.StealthEx,
-                    UProvider.Exolix,
-                    UProvider.Cce,
-                    UProvider.Swapuz
-                )
-
-                if (!simpleZcashTransactionProviders.contains(provider)) {
+                if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple ZEC tx providers are supported")
                 }
 
@@ -567,17 +544,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             }
 
             BlockchainType.Monero -> {
-                val simpleMoneroTransactionProviders = listOf(
-                    UProvider.Near,
-                    UProvider.QuickEx,
-                    UProvider.LetsExchange,
-                    UProvider.StealthEx,
-                    UProvider.Exolix,
-                    UProvider.Cce,
-                    UProvider.Swapuz
-                )
-
-                if (!simpleMoneroTransactionProviders.contains(provider)) {
+                if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple XMR tx providers are supported")
                 }
 
@@ -589,17 +556,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             }
 
             BlockchainType.Zano -> {
-                val simpleZanoTransactionProviders = listOf(
-                    UProvider.Near,
-                    UProvider.QuickEx,
-                    UProvider.LetsExchange,
-                    UProvider.StealthEx,
-                    UProvider.Exolix,
-                    UProvider.Cce,
-                    UProvider.Swapuz
-                )
-
-                if (!simpleZanoTransactionProviders.contains(provider)) {
+                if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple ZANO tx providers are supported")
                 }
 

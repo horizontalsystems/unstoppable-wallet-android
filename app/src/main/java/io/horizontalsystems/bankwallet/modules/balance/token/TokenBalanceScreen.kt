@@ -220,7 +220,6 @@ fun TokenBalanceScreen(
                         receiveAddress = uiState.receiveAddress,
                         warning = uiState.warningMessage,
                         onClickReceive = onClickReceive,
-                        loading = loading,
                         trailingContent = trailingContent,
                     )
 
@@ -432,7 +431,6 @@ private fun TokenBalanceHeader(
     receiveAddress: String?,
     warning: String?,
     onClickReceive: () -> Unit,
-    loading: Boolean,
     trailingContent: (@Composable () -> Unit)? = null,
 ) {
     val context = LocalContext.current
@@ -449,22 +447,14 @@ private fun TokenBalanceHeader(
             title = "* * *".hs
             body = "".hs
         } else {
-            val color = if (loading) {
+            val color = if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
                 ComposeAppTheme.colors.andy
-            } else if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
-                ComposeAppTheme.colors.andy
-            } else if (balanceViewItem.primaryValue.dimmed) {
-                ComposeAppTheme.colors.grey
             } else {
                 null
             }
 
-            val bodyColor = if (loading) {
-                ComposeAppTheme.colors.andy
-            } else if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
+            val bodyColor = if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
                 ComposeAppTheme.colors.jacob
-            } else if (balanceViewItem.primaryValue.dimmed) {
-                ComposeAppTheme.colors.grey
             } else {
                 null
             }
@@ -757,7 +747,7 @@ private fun LockedBalanceCell(
             },
             right = {
                 CellRightInfoTextIcon(
-                    text = if (!balanceHidden) lockedAmount.value.hs(dimmed = lockedAmount.dimmed) else "*****".hs,
+                    text = if (!balanceHidden) lockedAmount.value.hs else "*****".hs,
                 )
             },
             backgroundColor = ComposeAppTheme.colors.lawrence
@@ -782,8 +772,7 @@ private fun LockedBalanceZcashCell(
             right = {
                 CellRightInfoTextIcon(
                     text = if (!balanceHidden) lockedAmount.value.hs(
-                        color = ComposeAppTheme.colors.jacob,
-                        dimmed = lockedAmount.dimmed
+                        color = ComposeAppTheme.colors.jacob
                     ) else "*****".hs,
                     icon = painterResource(R.drawable.warning_filled_24),
                     iconTint = ComposeAppTheme.colors.jacob,

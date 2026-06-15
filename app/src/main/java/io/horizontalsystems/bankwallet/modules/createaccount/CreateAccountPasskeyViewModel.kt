@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
-import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -26,7 +25,6 @@ class CreateAccountPasskeyViewModel(
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletActivator: WalletActivator,
-    private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : ViewModelUiState<CreateAccountPasskeyUiState>() {
 
     private val defaultAccountName = accountFactory.getNextAccountName()
@@ -60,9 +58,6 @@ class CreateAccountPasskeyViewModel(
                 )
                 accountManager.save(account)
                 activateDefaultWallets(account)
-                predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
-                predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Monero)
-                predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zano)
                 success = accountType
                 error = null
             } catch (e: CancellationException) {
@@ -101,12 +96,6 @@ class CreateAccountPasskeyViewModel(
         val tokenQueries = listOf(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-            TokenQuery(BlockchainType.Monero, TokenType.Native),
-            TokenQuery(BlockchainType.Zcash, TokenType.Native),
-            TokenQuery(BlockchainType.Tron, TokenType.Native),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
-            TokenQuery(BlockchainType.Tron, TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t")),
-            TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),
         )
         walletActivator.activateWallets(account, tokenQueries)
     }
@@ -118,11 +107,6 @@ class CreateAccountPasskeyViewModel(
                 App.accountFactory,
                 App.accountManager,
                 App.walletActivator,
-                PredefinedBlockchainSettingsProvider(
-                    App.restoreSettingsManager,
-                    App.zcashBirthdayProvider,
-                    App.moneroBirthdayProvider
-                )
             ) as T
         }
     }

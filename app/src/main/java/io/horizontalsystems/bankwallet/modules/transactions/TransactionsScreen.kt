@@ -57,7 +57,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -95,9 +94,6 @@ fun TransactionsScreen(
         title = stringResource(R.string.Transactions_Title),
         onBack = navController::removeLastOrNull,
         menuItems = buildList {
-            if (syncing) {
-                add(MenuItemLoading)
-            }
             add(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Transactions_Filter),

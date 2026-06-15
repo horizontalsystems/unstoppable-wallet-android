@@ -327,7 +327,7 @@
     <string name="Balance_Sort_PopupTitle">排序</string>
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">价格变化</string>
-    <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
+    <string name="Balance_NoCoinsAlert">这里没有代币。添加一个以开始。</string>
     <string name="Balance_NoAssetsToSend">您没有要发送的资产。</string>
     <string name="Balance_Network">網絡</string>
     <string name="Balance_Format">格式</string>

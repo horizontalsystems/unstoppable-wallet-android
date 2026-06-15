@@ -89,7 +89,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsBut
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
@@ -273,7 +275,6 @@ fun BalanceItems(
                             stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
                     },
-                    loading = uiState.loading,
                     balanceHidden = uiState.balanceHidden
                 )
             }
@@ -388,49 +389,60 @@ fun BalanceItems(
                 }
             }
 
-            stickyHeader {
-                TabsSectionButtons(
-                    left = {
-                        BalanceSortingSelector(
-                            sortType = uiState.sortType,
-                            sortTypes = uiState.sortTypes
-                        ) {
-                            viewModel.setSortType(it)
-                        }
-                        HSIconButton(
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_manage_20),
-                            contentDescription = stringResource(R.string.ManageCoins_title),
-                            onClick = {
-                                navController.slideFromRight(ManageWalletsPage)
+            if (balanceViewItems.isNotEmpty()) {
+                stickyHeader {
+                    TabsSectionButtons(
+                        left = {
+                            BalanceSortingSelector(
+                                sortType = uiState.sortType,
+                                sortTypes = uiState.sortTypes
+                            ) {
+                                viewModel.setSortType(it)
+                            }
+                            HSIconButton(
+                                variant = ButtonVariant.Secondary,
+                                size = ButtonSize.Small,
+                                icon = painterResource(R.drawable.ic_manage_20),
+                                contentDescription = stringResource(R.string.ManageCoins_title),
+                                onClick = {
+                                    navController.slideFromRight(ManageWalletsPage)
 
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.CoinManager)
+                                    stat(
+                                        page = StatPage.Balance,
+                                        event = StatEvent.Open(StatPage.CoinManager)
+                                    )
+                                }
+                            )
+                        },
+                        right = {
+                            if (!uiState.networkAvailable) {
+                                subheadSB_lucian(stringResource(R.string.Hud_Text_NoInternet))
+                            }
+                            if (uiState.loading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = ComposeAppTheme.colors.leah,
+                                    backgroundColor = ComposeAppTheme.colors.andy,
+                                    strokeWidth = 2.dp
                                 )
                             }
-                        )
-                    },
-                    right = {
-                        if (!uiState.networkAvailable) {
-                            subheadSB_lucian(stringResource(R.string.Hud_Text_NoInternet))
                         }
-                        if (uiState.loading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                color = ComposeAppTheme.colors.leah,
-                                backgroundColor = ComposeAppTheme.colors.andy,
-                                strokeWidth = 2.dp
-                            )
-                        }
-                    }
-                )
+                    )
+                }
             }
 
             if (balanceViewItems.isEmpty()) {
                 item {
-                    NoCoinsBlock()
+                    NoCoinsBlock(
+                        onAddClick = {
+                            navController.slideFromRight(R.id.manageWalletsFragment)
+
+                            stat(
+                                page = StatPage.Balance,
+                                event = StatEvent.Open(StatPage.CoinManager)
+                            )
+                        }
+                    )
                 }
             } else {
                 itemsIndexed(
@@ -475,6 +487,30 @@ fun BalanceItems(
                         )
                     }
 
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        HSButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            title = stringResource(R.string.Button_Add),
+                            icon = painterResource(R.drawable.ic_plus_20),
+                            onClick = {
+                                navController.slideFromRight(R.id.manageWalletsFragment)
+
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.CoinManager)
+                                )
+                            }
+                        )
+                    }
                 }
             }
             item{
@@ -605,7 +641,7 @@ fun BalanceActionButton(
 }
 
 @Composable
-private fun NoCoinsBlock() {
+private fun NoCoinsBlock(onAddClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -621,8 +657,8 @@ private fun NoCoinsBlock() {
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                modifier = Modifier.size(48.dp),
-                painter = painterResource(R.drawable.ic_empty_wallet),
+                modifier = Modifier.size(72.dp),
+                painter = painterResource(R.drawable.wallet_in_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey
             )
@@ -633,6 +669,14 @@ private fun NoCoinsBlock() {
             text = stringResource(R.string.Balance_NoCoinsAlert),
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
+        )
+        VSpacer(height = 16.dp)
+        HSButton(
+            variant = ButtonVariant.Primary,
+            style = ButtonStyle.Transparent,
+            size = ButtonSize.Small,
+            title = stringResource(R.string.ManageCoins_AddToken),
+            onClick = onAddClick
         )
         VSpacer(height = 32.dp)
     }
@@ -673,7 +717,6 @@ fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
-    loading: Boolean,
     balanceHidden: Boolean
 ) {
     if (balanceHidden) {
@@ -684,17 +727,9 @@ fun TotalBalanceRow(
             onClickSubtitle = onClickSubtitle
         )
     } else {
-        val color = if (loading) {
-            ComposeAppTheme.colors.andy
-        } else if (totalState.dimmed) {
-            ComposeAppTheme.colors.grey
-        } else {
-            null
-        }
-
         CardsElementAmountText(
-            title = totalState.primaryAmountStr.hs(color = color),
-            body = totalState.secondaryAmountStr.hs(color = color),
+            title = totalState.primaryAmountStr.hs,
+            body = totalState.secondaryAmountStr.hs,
             onClickTitle = onClickTitle,
             onClickSubtitle = onClickSubtitle,
         )
