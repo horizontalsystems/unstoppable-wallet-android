@@ -1760,4 +1760,5 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Ya existe un punto final con esta URL</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">La URL ingresada no es válida. Una URL válida debe usar el esquema https</string>
     <string name="Restore_BlockchainsDescription">Selecciona los blockchains que deseas restaurar.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">Billetera de solo lectura</string>
 </resources>

@@ -692,4 +692,5 @@
     <string name="SwapInfo_Provider">مسیر</string>
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
     <string name="SwapHistory_EmptyList">شما هنوز هیچ تبدیل معلق یا قبلی ندارید.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">کیف پول فقط مشاهده</string>
 </resources>
