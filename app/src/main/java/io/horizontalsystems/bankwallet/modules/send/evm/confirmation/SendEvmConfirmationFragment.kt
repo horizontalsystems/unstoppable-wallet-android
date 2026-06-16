@@ -114,8 +114,9 @@ private fun SendEvmConfirmationScreen(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 title = stringResource(sendButtonTitle),
-                onClick = {
+                onClick = onClick@{
                     logger.info("click send button")
+                    if (!buttonEnabled) return@onClick
                     sendButtonTitle = R.string.Send_Sending
                     buttonEnabled = false
 

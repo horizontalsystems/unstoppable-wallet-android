@@ -85,11 +85,12 @@ fun ActivateTokenScreen(
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(buttonTitle),
-                onClick = {
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        buttonTitle = R.string.Activate_Activating
+                onClick = onClick@{
+                    if (!buttonEnabled) return@onClick
+                    buttonEnabled = false
+                    buttonTitle = R.string.Activate_Activating
 
+                    coroutineScope.launch {
                         try {
                             viewModel.activate()
 
@@ -99,10 +100,10 @@ fun ActivateTokenScreen(
                             navController.popBackStack()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                        } finally {
+                            buttonTitle = R.string.Button_Activate
+                            buttonEnabled = true
                         }
-
-                        buttonTitle = R.string.Button_Activate
-                        buttonEnabled = true
                     }
                 },
                 enabled = uiState.activateEnabled && buttonEnabled

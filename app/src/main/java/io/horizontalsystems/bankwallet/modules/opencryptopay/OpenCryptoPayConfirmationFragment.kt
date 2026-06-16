@@ -110,7 +110,8 @@ private fun OpenCryptoPayConfirmationScreen(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 title = if (isExpired) stringResource(R.string.OpenCryptoPay_Expired) else stringResource(buttonTitleRes),
-                onClick = {
+                onClick = onClick@{
+                    if (!buttonEnabled) return@onClick
                     buttonTitleRes = R.string.Send_Sending
                     buttonEnabled = false
                     coroutineScope.launch {

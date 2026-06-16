@@ -97,13 +97,14 @@ private fun TransactionSpeedUpCancelScreen(
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = if (isSending) stringResource(R.string.Send_Sending) else viewModel.buttonTitle,
-                onClick = {
+                onClick = onClick@{
                     logger.info("click ${viewModel.buttonTitle} button")
 
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        isSending = true
+                    if (!buttonEnabled) return@onClick
+                    buttonEnabled = false
+                    isSending = true
 
+                    coroutineScope.launch {
                         try {
                             logger.info("sending tx")
                             viewModel.send()
@@ -116,10 +117,10 @@ private fun TransactionSpeedUpCancelScreen(
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                        } finally {
+                            isSending = false
+                            buttonEnabled = true
                         }
-
-                        isSending = false
-                        buttonEnabled = true
                     }
 
                 },
