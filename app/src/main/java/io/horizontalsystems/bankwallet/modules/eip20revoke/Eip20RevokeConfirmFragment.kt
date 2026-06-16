@@ -93,11 +93,12 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(buttonTitle),
-                onClick = {
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        buttonTitle = R.string.Swap_Revoking
+                onClick = onClick@{
+                    if (!buttonEnabled) return@onClick
+                    buttonEnabled = false
+                    buttonTitle = R.string.Swap_Revoking
 
+                    coroutineScope.launch {
                         try {
                             viewModel.revoke()
 
@@ -107,10 +108,10 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                             navController.popBackStack()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                        } finally {
+                            buttonTitle = R.string.Swap_Revoke
+                            buttonEnabled = true
                         }
-
-                        buttonTitle = R.string.Swap_Revoke
-                        buttonEnabled = true
                     }
                 },
                 enabled = uiState.revokeEnabled && buttonEnabled

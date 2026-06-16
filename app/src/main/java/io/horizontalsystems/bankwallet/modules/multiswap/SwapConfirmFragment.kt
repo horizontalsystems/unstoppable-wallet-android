@@ -245,11 +245,12 @@ private fun SwapConfirmInternal(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(swapButtonTitle),
                     enabled = buttonEnabled && !uiState.loading,
-                    onClick = {
-                        coroutineScope.launch {
-                            buttonEnabled = false
-                            swapButtonTitle = R.string.Swap_Swapping
+                    onClick = onClick@{
+                        if (!buttonEnabled) return@onClick
+                        buttonEnabled = false
+                        swapButtonTitle = R.string.Swap_Swapping
 
+                        coroutineScope.launch {
                             try {
                                 viewModel.swap()
 
@@ -259,10 +260,10 @@ private fun SwapConfirmInternal(
                                 navController.popBackStack()
                             } catch (t: Throwable) {
                                 navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            } finally {
+                                swapButtonTitle = R.string.Swap
+                                buttonEnabled = true
                             }
-
-                            swapButtonTitle = R.string.Swap
-                            buttonEnabled = true
                         }
                     },
                 )

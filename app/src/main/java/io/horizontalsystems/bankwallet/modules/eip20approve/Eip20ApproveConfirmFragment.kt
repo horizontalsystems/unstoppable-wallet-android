@@ -92,11 +92,12 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(buttonTitle),
-                onClick = {
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        buttonTitle = R.string.Swap_Approving
+                onClick = onClick@{
+                    if (!buttonEnabled) return@onClick
+                    buttonEnabled = false
+                    buttonTitle = R.string.Swap_Approving
 
+                    coroutineScope.launch {
                         try {
                             viewModel.approve()
 
@@ -106,10 +107,10 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                             navController.popBackStack()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                        } finally {
+                            buttonTitle = R.string.Swap_Approve
+                            buttonEnabled = true
                         }
-
-                        buttonTitle = R.string.Swap_Approve
-                        buttonEnabled = true
                     }
                 },
                 enabled = uiState.approveEnabled && buttonEnabled

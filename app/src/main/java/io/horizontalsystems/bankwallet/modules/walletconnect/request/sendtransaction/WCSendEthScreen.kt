@@ -189,9 +189,11 @@ fun WCSendEthRequestScreen(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
                     enabled = buttonEnabled && uiState.sendEnabled,
-                    onClick = {
+                    onClick = onClick@{
+                        if (!buttonEnabled) return@onClick
+                        buttonEnabled = false
+
                         coroutineScope.launch {
-                            buttonEnabled = false
                             Toast.makeText(view.context, sendingMessage, Toast.LENGTH_SHORT).show()
                             try {
                                 logger.info("click confirm button")
