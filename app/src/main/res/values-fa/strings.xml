@@ -627,7 +627,6 @@
     <string name="LocalBackup_ConfirmPassword">تأیید رمز عبور</string>
     <string name="AddZanoNode_Warning_UrlExists">گره با این URL قبلاً وجود دارد</string>
     <string name="AddZanoNode_Error_InvalidUrl">URL وارد شده نامعتبر است. URL های معتبر باید یکی از طرح های زیر را داشته باشند: http, https</string>
-    <string name="Balance_Zcash_Shielded">محافظت شده</string>
     <string name="Balance_Zcash_ShieldedDescription">برای انتقالات شخصی و خصوصی بین کیف پولها استفاده کنید.</string>
     <string name="Balance_Zcash_TransparentDescription">برای دریافت از صرافی‌ها یا سرویس‌هایی که آدرس‌های محافظت شده را پشتیبانی نمی‌کنند استفاده کنید.</string>
     <string name="RiskLevel_ProviderRiskLevel">امتیاز مسیر</string>
@@ -692,4 +691,5 @@
     <string name="SwapTerms_BottomText">همیشه مسیر swap را انتخاب کنید که با نیازهای شما مطابقت داشته باشد.</string>
     <string name="SwapInfo_Provider">مسیر</string>
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
+    <string name="SwapHistory_EmptyList">شما هنوز هیچ تبدیل معلق یا قبلی ندارید.</string>
 </resources>

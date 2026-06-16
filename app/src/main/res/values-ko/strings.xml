@@ -339,7 +339,6 @@
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">투명 ZEC 감지됨</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Shield">차폐(Shield)</string>
     <string name="Balance_Zcash_Transparent">透明</string>
     <string name="Balance_Zcash_TransparentDescription">보호된 주소를 지원하지 않는 거래소 또는 서비스로부터 수신할 때 사용합니다.</string>
     <!--Send NFT-->
@@ -601,7 +600,6 @@
     <string name="Transactions_Approve">승인됨</string>
     <string name="Transactions_Swap">스왑됨</string>
     <string name="Transactions_Transfer">전송</string>
-    <string name="Transactions_Shield">차폐(Shield)</string>
     <string name="Transactions_ContractCall">계약 콜</string>
     <string name="Transactions_ExternalContractCall">외부 콜</string>
     <string name="Transactions_ContractCreation">계약 생성</string>
@@ -1479,7 +1477,6 @@
     <string name="LocalBackup_ConfirmPassword">비밀번호 확인</string>
     <string name="AddZanoNode_Warning_UrlExists">이 URL의 노드가 이미 존재합니다</string>
     <string name="AddZanoNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 중 하나의 스키마를 가져야 합니다: http, https</string>
-    <string name="Balance_Zcash_Shielded">보호됨</string>
     <string name="Balance_Zcash_ShieldedDescription">지갑 간 개인 및 비공개 송금에 사용합니다.</string>
     <string name="RiskLevel_ProviderRiskLevel">경로 점수</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">이 수준들은 경로가 스왑 및 거래 확인을 어떻게 처리하는지 보여줍니다.</string>
@@ -1540,4 +1537,5 @@
     <string name="Swap_EstimatedTimeDescription">자금 수령 예상 시간입니다. 스왑 처리 및 거래 확인은 네트워크 및 경로에 따라 시간이 소요될 수 있습니다.</string>
     <string name="SwapTerms_BottomText">항상 귀하의 요구 사항과 일치하는 스왑 경로를 선택하세요.</string>
     <string name="SwapInfo_Provider">경로</string>
+    <string name="SwapHistory_EmptyList">아직 대기 중이거나 이전의 스왑이 없습니다.</string>
 </resources>

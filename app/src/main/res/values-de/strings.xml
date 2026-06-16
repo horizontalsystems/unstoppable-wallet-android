@@ -358,7 +358,6 @@
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Transparente ZEC erkannt</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Shield">Schild</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Verwenden Sie für den Empfang von Börsen oder Diensten, die keine geschützten Adressen unterstützen.</string>
     <!--Send NFT-->
@@ -674,7 +673,7 @@
     <string name="Activate_InsufficientBalance_Description">Sie haben nicht genug XLM-Guthaben, um dieses Token zu aktivieren.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap-Verlauf</string>
-    <string name="SwapHistory_EmptyList">Noch keine Swaps</string>
+    <string name="SwapHistory_EmptyList">Sie haben noch keine ausstehenden oder bisherigen Swaps.</string>
     <string name="SwapInfo_Title">Swap-Info</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Route</string>
@@ -717,8 +716,6 @@
     <string name="Transactions_Swap">Tauschte</string>
     <string name="Transactions_Failed">Fehler</string>
     <string name="Transactions_Transfer">Überweisung</string>
-    <string name="Transactions_Shield">Schild</string>
-    <string name="Transactions_Unshield">Entsperren</string>
     <string name="Transactions_ContractCall">Vertragsanruf</string>
     <string name="Transactions_ExternalContractCall">Externer Anruf</string>
     <string name="Transactions_ContractCreation">Vertragserstellung</string>
@@ -1723,7 +1720,6 @@
     <string name="LocalBackup_ConfirmPassword">Passwort bestätigen</string>
     <string name="AddZanoNode_Warning_UrlExists">Node mit dieser URL existiert bereits</string>
     <string name="AddZanoNode_Error_InvalidUrl">Eingegebene URL ist ungültig. Gültige URLs müssen eines der folgenden Schemas haben: http, https</string>
-    <string name="Balance_Zcash_Shielded">Geschützt</string>
     <string name="Balance_Zcash_ShieldedDescription">Verwenden Sie für private und vertrauliche Transfers zwischen Wallets.</string>
     <string name="RiskLevel_Excellent_Description">Direkte On-Chain-Ausführung. Keine Routen-Prüfungen oder Sperren. Automatische Rückerstattung bei Swap-Fehler.</string>
     <string name="RiskLevel_Good_Description">Route prüft Transaktionen automatisch vor Abschluss. Wenn Probleme erkannt werden, wird der Swap abgelehnt und Gelder werden erstattet.</string>
