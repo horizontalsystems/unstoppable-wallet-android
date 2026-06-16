@@ -24,7 +24,6 @@ data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
     override fun GetContent(navController: HSNavigation) {
         val blockchainTypes = input?.blockchainTypes
         val tokenTypes = input?.tokenTypes
-        val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Balance_Send),

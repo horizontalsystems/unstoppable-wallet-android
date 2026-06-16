@@ -26,9 +26,11 @@ import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class ResendBitcoinViewModel(
@@ -83,12 +85,19 @@ class ResendBitcoinViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             if (replacementInfo != null) {
-                val feeRates = feeRateProvider.getFeeRates()
-                val feeRange = replacementInfo.feeRange
-                recommendedFee = replacementInfo.replacementTxMinSize * feeRates.recommended
-                val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
+                try {
+                    val feeRates = feeRateProvider.getFeeRates()
+                    val feeRange = replacementInfo.feeRange
+                    recommendedFee = replacementInfo.replacementTxMinSize * feeRates.recommended
+                    val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
 
-                updateReplacementTransaction(minFee)
+                    updateReplacementTransaction(minFee)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    feeCaution = createCaution(e)
+                    emitState()
+                }
             } else {
                 feeCaution = createCaution(BuildError.UnableToReplace)
                 emitState()
@@ -129,7 +138,8 @@ class ResendBitcoinViewModel(
         BuildError.UnableToReplace,
         BuildError.NoPreviousOutput -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_UnableToReplace))
 
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+        is UnknownHostException,
+        is SocketTimeoutException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
