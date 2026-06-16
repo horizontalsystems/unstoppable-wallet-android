@@ -1769,4 +1769,5 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Endpoint mit dieser URL existiert bereits</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">Eingegebene URL ist ungültig. Eine gültige URL muss das https-Schema verwenden</string>
     <string name="Restore_BlockchainsDescription">Wählen Sie die Blockchains aus, die Sie wiederherstellen möchten.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">Ansicht-only Wallet</string>
 </resources>

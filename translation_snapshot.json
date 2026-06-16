@@ -652,7 +652,7 @@
     "ManageAccounts_ImportWallet": "Import Wallet",
     "ManageAccounts_NoActiveWallets": "No Active Wallets",
     "ManageAccounts_Title": "Manage Wallets",
-    "ManageAccounts_ViewOnlyWallet": "View Only Wallet",
+    "ManageAccounts_ViewOnlyWallet": "View-Only Wallet",
     "ManageAccounts_ViewOnlyWalletDescription": "View a wallet by address without access to funds.",
     "ManageAccounts_WatchAddress": "Watch Wallet",
     "ManageCoins_AddToken": "Add Token",

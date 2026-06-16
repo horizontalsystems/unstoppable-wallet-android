@@ -1767,4 +1767,5 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Конечная точка с этим URL уже существует</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">Введенный URL недействителен. Допустимый URL должен использовать схему https</string>
     <string name="Restore_BlockchainsDescription">Выберите блокчейны, которые вы хотите восстановить.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">Кошелек только для просмотра</string>
 </resources>

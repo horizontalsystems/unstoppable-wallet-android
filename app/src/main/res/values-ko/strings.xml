@@ -1538,4 +1538,5 @@
     <string name="SwapTerms_BottomText">항상 귀하의 요구 사항과 일치하는 스왑 경로를 선택하세요.</string>
     <string name="SwapInfo_Provider">경로</string>
     <string name="SwapHistory_EmptyList">아직 대기 중이거나 이전의 스왑이 없습니다.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">보기 전용 지갑</string>
 </resources>

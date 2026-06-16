@@ -1762,4 +1762,5 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Un point de terminaison avec cette URL existe déjà</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">L\'URL saisie est invalide. Une URL valide doit utiliser le schéma https</string>
     <string name="Restore_BlockchainsDescription">Sélectionnez les blockchains que vous souhaitez restaurer.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">Portefeuille en lecture seule</string>
 </resources>
