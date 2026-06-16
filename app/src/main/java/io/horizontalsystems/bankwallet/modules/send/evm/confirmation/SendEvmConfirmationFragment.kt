@@ -4,12 +4,7 @@ import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -29,12 +24,12 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class SendEvmConfirmationFragment : BaseComposeFragment() {
@@ -104,23 +99,17 @@ private fun SendEvmConfirmationScreen(
             navController.slideFromBottom(R.id.sendEvmNonceSettingsFragment)
         },
         buttonsSlot = {
-            val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
-            var sendButtonTitle by remember { mutableIntStateOf(R.string.Send_Confirmation_Send_Button) }
-            var buttonEnabled by remember { mutableStateOf(true) }
+            val sendAction = rememberAsyncAction()
 
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
-                title = stringResource(sendButtonTitle),
-                onClick = onClick@{
+                title = stringResource(if (sendAction.inProgress) R.string.Send_Sending else R.string.Send_Confirmation_Send_Button),
+                onClick = {
                     logger.info("click send button")
-                    if (!buttonEnabled) return@onClick
-                    sendButtonTitle = R.string.Send_Sending
-                    buttonEnabled = false
-
-                    coroutineScope.launch {
+                    sendAction.run {
                         try {
                             logger.info("sending tx")
                             viewModel.send()
@@ -135,12 +124,9 @@ private fun SendEvmConfirmationScreen(
                             logger.warning("failed", t)
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
-
-                        sendButtonTitle = R.string.Send_Confirmation_Send_Button
-                        buttonEnabled = true
                     }
                 },
-                enabled = uiState.sendEnabled && buttonEnabled
+                enabled = !sendAction.inProgress && uiState.sendEnabled
             )
         }
     ) {
