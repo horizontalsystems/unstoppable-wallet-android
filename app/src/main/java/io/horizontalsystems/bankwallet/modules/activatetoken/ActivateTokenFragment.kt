@@ -6,12 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -40,13 +34,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class ActivateTokenFragment : BaseComposeFragment() {
@@ -77,20 +71,14 @@ fun ActivateTokenScreen(
         onClickBack = null,
         onClickFeeSettings = null,
         buttonsSlot = {
-            val coroutineScope = rememberCoroutineScope()
-            var buttonEnabled by remember { mutableStateOf(true) }
-            var buttonTitle by remember { mutableIntStateOf(R.string.Button_Activate) }
+            val activateAction = rememberAsyncAction()
             val view = LocalView.current
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(buttonTitle),
-                onClick = onClick@{
-                    if (!buttonEnabled) return@onClick
-                    buttonEnabled = false
-                    buttonTitle = R.string.Activate_Activating
-
-                    coroutineScope.launch {
+                title = stringResource(if (activateAction.inProgress) R.string.Activate_Activating else R.string.Button_Activate),
+                onClick = {
+                    activateAction.run {
                         try {
                             viewModel.activate()
 
@@ -100,13 +88,10 @@ fun ActivateTokenScreen(
                             navController.popBackStack()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
-                        } finally {
-                            buttonTitle = R.string.Button_Activate
-                            buttonEnabled = true
                         }
                     }
                 },
-                enabled = uiState.activateEnabled && buttonEnabled
+                enabled = !activateAction.inProgress && uiState.activateEnabled
             )
         }
     ) {

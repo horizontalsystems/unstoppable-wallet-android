@@ -14,11 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +39,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueC
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
@@ -58,7 +55,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,8 +79,7 @@ fun WCSendEthRequestScreen(
     )
     val uiState = viewModel.uiState
     val view = LocalView.current
-    val coroutineScope = rememberCoroutineScope()
-    var buttonEnabled by remember { mutableStateOf(true) }
+    val confirmAction = rememberAsyncAction()
     val doneMessage = stringResource(R.string.Hud_Text_Done)
     val sendingMessage = stringResource(R.string.Send_Sending)
     val feeText = stringResource(id = R.string.Send_Fee)
@@ -188,12 +183,9 @@ fun WCSendEthRequestScreen(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    enabled = buttonEnabled && uiState.sendEnabled,
-                    onClick = onClick@{
-                        if (!buttonEnabled) return@onClick
-                        buttonEnabled = false
-
-                        coroutineScope.launch {
+                    enabled = !confirmAction.inProgress && uiState.sendEnabled,
+                    onClick = {
+                        confirmAction.run {
                             Toast.makeText(view.context, sendingMessage, Toast.LENGTH_SHORT).show()
                             try {
                                 logger.info("click confirm button")
@@ -208,7 +200,6 @@ fun WCSendEthRequestScreen(
                                 snackbarActions.showErrorMessage(t.message ?: "Error")
                             }
 
-                            buttonEnabled = true
                             navController.popBackStack()
                         }
                     }
