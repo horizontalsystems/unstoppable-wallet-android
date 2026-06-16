@@ -459,8 +459,8 @@
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Detected Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
-    <string name="Balance_Zcash_Shielded">Shielded</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Shield" translatable="false">Shield</string>
+    <string name="Balance_Zcash_Shielded" translatable="false">Shielded</string>
     <string name="Balance_Zcash_ShieldedDescription">Use for personal and private transfers between wallets.</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Use for receiving from exchanges or services that don’t support shielded addresses.</string>
@@ -846,7 +846,7 @@
 
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap History</string>
-    <string name="SwapHistory_EmptyList">No swaps yet</string>
+    <string name="SwapHistory_EmptyList">You don\'t have any pending or past swaps yet.</string>
     <string name="SwapInfo_Title">Swap Info</string>
 
     <!-- Swap Info -->
@@ -909,8 +909,8 @@
     <string name="Transactions_Swap">Swapped</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_Transfer">Transfer</string>
-    <string name="Transactions_Shield">Shield</string>
-    <string name="Transactions_Unshield">Unshield</string>
+    <string name="Transactions_Shield" translatable="false">Shield</string>
+    <string name="Transactions_Unshield" translatable="false">Unshield</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ExternalContractCall">External Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>

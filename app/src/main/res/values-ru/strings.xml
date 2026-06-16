@@ -359,7 +359,6 @@
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Обнаружен Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent сумма</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">У вас есть ZEC, находящийся на transparent адресе. Чтобы использовать его в Unstoppable, необходимо выполнить shielding для полной приватности.</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
     <string name="Balance_Zcash_Transparent">Прозрачный</string>
     <string name="Balance_Zcash_TransparentDescription">Используется для получения средств от бирж или сервисов, которые не поддерживают защищённые адреса.</string>
     <!--Send NFT-->
@@ -676,7 +675,7 @@
     <string name="Activate_InsufficientBalance_Description">У вас недостаточно средств XLM для активации этого токена.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">История обмена</string>
-    <string name="SwapHistory_EmptyList">Ещё нет заходов</string>
+    <string name="SwapHistory_EmptyList">У вас еще нет ожидающих или прошлых свопов.</string>
     <string name="SwapInfo_Title">Детали обмена</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Маршрут</string>
@@ -719,8 +718,6 @@
     <string name="Transactions_Swap">Обмен выполнен</string>
     <string name="Transactions_Failed">Неудачный</string>
     <string name="Transactions_Transfer">Перевод</string>
-    <string name="Transactions_Shield">Щит</string>
-    <string name="Transactions_Unshield">Не щит</string>
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
     <string name="Transactions_ContractCreation">Создание контракта</string>
@@ -1721,7 +1718,6 @@
     <string name="LocalBackup_ConfirmPassword">Подтвердить пароль</string>
     <string name="AddZanoNode_Warning_UrlExists">Узел с этим URL уже существует</string>
     <string name="AddZanoNode_Error_InvalidUrl">Введённый URL невалиден. Валидный URL должен иметь одну из следующих схем: http, https</string>
-    <string name="Balance_Zcash_Shielded">Защищённый</string>
     <string name="Balance_Zcash_ShieldedDescription">Используется для личных и конфиденциальных переводов между кошельками.</string>
     <string name="RiskLevel_Excellent_Description">Прямое выполнение в блокчейне. Без проверок или блокировок маршрута. Автоматический возврат средств при ошибке обмена.</string>
     <string name="RiskLevel_Good_Description">Маршрут автоматически проверяет транзакции перед завершением. При обнаружении проблем обмен отклоняется и средства возвращаются.</string>

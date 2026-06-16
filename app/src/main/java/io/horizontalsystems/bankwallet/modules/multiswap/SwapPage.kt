@@ -142,7 +142,8 @@ fun SwapScreen(
     tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,
     bottomPadding: Dp = 0.dp,
-    closeAfterSwap: Boolean = true
+    closeAfterSwap: Boolean = true,
+    autofocus: Boolean = true
 ) {
     val viewModel = viewModel<SwapViewModel>(
         factory = SwapViewModel.Factory(tokenIn, tokenOut)
@@ -285,6 +286,7 @@ fun SwapScreen(
         onResume = viewModel::onResume,
         onPause = viewModel::onPause,
         bottomPadding = bottomPadding,
+        autofocus = autofocus
     )
 }
 
@@ -306,6 +308,7 @@ private fun SwapScreenInner(
     onResume: () -> Unit,
     onPause: () -> Unit,
     bottomPadding: Dp = 0.dp,
+    autofocus: Boolean,
 ) {
     LifecycleResumeEffect(Unit) {
         onResume.invoke()
@@ -355,7 +358,7 @@ private fun SwapScreenInner(
         // the lock screen).
         var keyboardRequested by rememberSaveable { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            if (!keyboardRequested && !App.pinComponent.isLocked) {
+            if (autofocus && !keyboardRequested && !App.pinComponent.isLocked) {
                 keyboardRequested = true
                 amountInputFocusRequester.requestFocus()
             }

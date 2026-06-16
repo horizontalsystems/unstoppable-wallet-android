@@ -161,7 +161,8 @@ private fun MainScreen(
                         parentScreenContentKey = parentScreenContentKey,
                         onClickClose = null,
                         bottomPadding = navigationBarHeight,
-                        closeAfterSwap = false
+                        closeAfterSwap = false,
+                        autofocus = false
                     )
 
 //                    MainNavigation.Transactions -> TransactionsScreen(

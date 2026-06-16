@@ -358,7 +358,6 @@
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">ZEC transparente detectado</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudos</string>
     <string name="Balance_Zcash_Transparent">Transparente</string>
     <string name="Balance_Zcash_TransparentDescription">Use para receber de exchanges ou serviços que não suportam endereços blindados.</string>
     <!--Send NFT-->
@@ -674,7 +673,7 @@
     <string name="Activate_InsufficientBalance_Description">Você não tem saldo XLM suficiente para ativar este token.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">Histórico de trocas</string>
-    <string name="SwapHistory_EmptyList">Sem trocas ainda</string>
+    <string name="SwapHistory_EmptyList">Você ainda não possui nenhum swap pendente ou anterior.</string>
     <string name="SwapInfo_Title">Trocar informações</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Rota</string>
@@ -717,8 +716,6 @@
     <string name="Transactions_Swap">Trocado</string>
     <string name="Transactions_Failed">Falhou</string>
     <string name="Transactions_Transfer">Transferir</string>
-    <string name="Transactions_Shield">Escudos</string>
-    <string name="Transactions_Unshield">Liberar</string>
     <string name="Transactions_ContractCall">Chamada de Contrato</string>
     <string name="Transactions_ExternalContractCall">Ligação Externa</string>
     <string name="Transactions_ContractCreation">Criação de contrato</string>
@@ -1719,7 +1716,6 @@
     <string name="LocalBackup_ConfirmPassword">Confirmar senha</string>
     <string name="AddZanoNode_Warning_UrlExists">Já existe um nó com esta URL</string>
     <string name="AddZanoNode_Error_InvalidUrl">A URL inserida é inválida. URLs válidas devem ter um dos seguintes esquemas: http, https</string>
-    <string name="Balance_Zcash_Shielded">Blindado</string>
     <string name="Balance_Zcash_ShieldedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
     <string name="RiskLevel_Excellent_Description">Execução direta on-chain. Sem verificações de rota ou congelamentos. Reembolsos automáticos se o swap falhar.</string>
     <string name="RiskLevel_Good_Description">A rota verifica automaticamente as transações antes da conclusão. Se problemas forem detectados, o swap será rejeitado e os fundos serão reembolsados.</string>
