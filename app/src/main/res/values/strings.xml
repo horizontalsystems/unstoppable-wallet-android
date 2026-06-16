@@ -1446,7 +1446,7 @@
     <string name="ManageAccounts_ExistingWallet">Existing Wallet</string>
     <string name="ManageAccounts_ExistingWalletDescription">Import your wallet if you already have one to continue using it.</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
-    <string name="ManageAccounts_ViewOnlyWallet">View Only Wallet</string>
+    <string name="ManageAccounts_ViewOnlyWallet">View-Only Wallet</string>
     <string name="ManageAccounts_NoActiveWallets">No Active Wallets</string>
     <string name="ManageAccounts_ViewOnlyWalletDescription">View a wallet by address without access to funds.</string>
 
