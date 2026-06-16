@@ -200,7 +200,8 @@ private fun MainScreen(
                         fragmentNavController,
                         onClickClose = null,
                         bottomPadding = navigationBarHeight,
-                        closeAfterSwap = false
+                        closeAfterSwap = false,
+                        autofocus = false
                     )
 
 //                    MainNavigation.Transactions -> TransactionsScreen(
