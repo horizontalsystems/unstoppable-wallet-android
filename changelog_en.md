@@ -1,23 +1,21 @@
-## 🚀 Version 0.56.1 Update
-_Release date: June 4, 2026_
+## 🚀 Version 0.57.0 Update
+_Release date: June 16, 2026_
 
 ### ✨ Improvements
 
-- **Updated the Zcash SDK library to version `2.5.2`**
+- **Added a new swap provider: Exolix**
 
-- **Added support for TON WalletConnect**
+- **Improved pending balance display for Zcash**
 
-## 🚀 Version 0.56.0 Update
-_Release date: June 1, 2026_
+- **Optimized Monero synchronization performance**
 
-### ✨ Improvements
+- **Updated the APIs for Thorchain and Quickex**
+  Fixed an issue where new swaps could not be created.
 
-- **Added support for MimbleWimble (MWEB) technology for Litecoin**
-
-- **Increased privacy in Calculator Mode**
-
-- **Improved Address Poisoning protection mode**
+- **P.CASH widgets no longer compromise Calculator Mode privacy**
 
 ### 🐛 Fixes
+
+- **Fixed a memory leak in Stellar Kit**
 
 - **Fixed known issues and improved overall app stability**
