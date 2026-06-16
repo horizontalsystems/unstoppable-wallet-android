@@ -171,7 +171,7 @@ class StellarKitManager(
     }
 
     private fun stop() {
-        stellarKitWrapper?.stellarKit?.stop()
+        stellarKitWrapper?.stellarKit?.destroy()
         job?.cancel()
         stellarKitWrapper = null
         currentAccount = null

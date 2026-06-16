@@ -6,10 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.isNative
 import cash.p.terminal.core.managers.PendingTransactionRegistrar
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.entities.Address
@@ -26,10 +24,13 @@ import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.zcash.SendZCashAddressService
+import cash.p.terminal.modules.send.zcash.getZcashAvailableToSend
+import cash.p.terminal.modules.send.zcash.getZcashSdkBalance
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.Token
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.core.toHexReversed
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,17 +39,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
+import java.math.BigDecimal
 
 class SendTransactionServiceZCash(
     token: Token
 ) : ISendTransactionService<ISendZcashAdapter>(token) {
 
     private val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
+    private val availableToSend: BigDecimal
+        get() = adapterManager.getZcashAvailableToSend(wallet, adapter)
+
     private val amountService = SendAmountService(
         amountValidator = AmountValidator(),
         coinCode = wallet.token.coin.code,
-        availableBalance = adapter.maxSpendableBalance,
-        leaveSomeBalanceForFee = wallet.token.type.isNative
+        availableBalance = availableToSend
     )
     private val addressService = SendZCashAddressService(adapter)
 
@@ -78,6 +82,13 @@ class SendTransactionServiceZCash(
         addressService.stateFlow.collectWith(coroutineScope) {
             handleUpdatedAddressState(it)
         }
+        adapter.balanceUpdatedFlow.collectWith(coroutineScope) {
+            updateAvailableBalance()
+        }
+        adapter.fee.collectWith(coroutineScope) {
+            updateAvailableBalance()
+            emitState()
+        }
     }
 
     private val _sendTransactionSettingsFlow = MutableStateFlow(
@@ -86,20 +97,22 @@ class SendTransactionServiceZCash(
     override val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings> =
         _sendTransactionSettingsFlow.asStateFlow()
 
-    private val feeAmountData: SendModule.AmountData by lazy {
-        val coinValue = CoinValue(token, adapter.fee.value)
-        val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
-        val secondaryAmountInfo = rate?.let {
-            SendModule.AmountInfo.CurrencyValueInfo(
-                CurrencyValue(
-                    it.currency,
-                    it.value * adapter.fee.value
+    private val feeAmountData: SendModule.AmountData
+        get() {
+            val fee = adapter.fee.value
+            val coinValue = CoinValue(token, fee)
+            val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
+            val secondaryAmountInfo = rate?.let {
+                SendModule.AmountInfo.CurrencyValueInfo(
+                    CurrencyValue(
+                        it.currency,
+                        it.value * fee
+                    )
                 )
-            )
-        }
+            }
 
-        SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
-    }
+            return SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
+        }
 
     private var cautions: List<CautionViewItem> = listOf()
     private var sendable = false
@@ -107,7 +120,7 @@ class SendTransactionServiceZCash(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
-        availableBalance = adapter.maxSpendableBalance,
+        availableBalance = availableToSend,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,
@@ -148,10 +161,13 @@ class SendTransactionServiceZCash(
         emitState()
     }
 
+    private fun updateAvailableBalance() {
+        amountService.updateAvailableBalance(availableToSend)
+    }
+
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         try {
-            val sdkBalance = adapterManager.getBalanceAdapterForWallet(wallet)
-                ?.balanceData?.available ?: amountState.availableBalance
+            val sdkBalance = adapterManager.getZcashSdkBalance(wallet, amountState.availableBalance)
             val draft = PendingTransactionDraft(
                 wallet = wallet,
                 token = wallet.token,

@@ -514,9 +514,6 @@
         android:id="@+id/confirmDeleteAllPairingsDialog"
         android:name="cash.p.terminal.modules.walletconnect.pairing.ConfirmDeleteAllPairingsDialog" />
     <dialog
-        android:id="@+id/configuredTokenInfo"
-        android:name="cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoDialog" />
-    <dialog
         android:id="@+id/addressRiskyBottomSheetAlert"
         android:name="cash.p.terminal.modules.send.AddressRiskyBottomSheetAlert" />
     <!--Wallet Connect-->

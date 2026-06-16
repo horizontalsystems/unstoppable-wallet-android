@@ -38,7 +38,7 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
             EnabledWalletCache(
                 tokenQueryId = wallet.token.tokenQuery.id,
                 accountId = wallet.account.id,
-                balance = balanceData.available,
+                balance = balanceData.available + balanceData.pending,
                 balanceLocked = balanceData.timeLocked,
                 stackingUnpaid = balanceData.stackingUnpaid
             )

@@ -3,6 +3,7 @@ package cash.p.terminal.modules.multiswap.providers
 import androidx.collection.LruCache
 import cash.p.terminal.R
 import cash.p.terminal.core.cache.accountScoped
+import cash.p.terminal.core.isEvm
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.modules.multiswap.ISwapFinalQuote
@@ -82,7 +83,6 @@ class QuickexProvider(
         return supports(tokenFrom) && supports(tokenTo)
     }
 
-
     override suspend fun supports(token: Token): Boolean {
         if (token.isZcashShielded) return false
 
@@ -105,7 +105,10 @@ class QuickexProvider(
         val contractAddress = token.contractAddress()
         if (contractAddress.isEmpty()) return false
 
-        return quickexInstrument.contractAddress == contractAddress
+        return quickexInstrument.contractAddress.equals(
+            contractAddress,
+            ignoreCase = token.blockchainType.isEvm
+        )
     }
 
     private fun getQuickexTicker(token: Token): String? =
@@ -344,7 +347,7 @@ class QuickexProvider(
 
             val swapProviderTransaction = providerSupport.buildSwapProviderTransaction(
                 provider = SwapProvider.QUICKEX,
-                transactionId = transaction.orderId.toString(),
+                transactionId = transaction.orderId,
                 tokenIn = tokenIn,
                 tokenOut = tokenOut,
                 amountIn = amountIn,

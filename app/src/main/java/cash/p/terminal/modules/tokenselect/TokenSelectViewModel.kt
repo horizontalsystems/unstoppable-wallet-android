@@ -78,7 +78,7 @@ class TokenSelectViewModel(
     private suspend fun refreshViewItems(balanceItems: List<BalanceItem>?) {
         withContext(Dispatchers.IO) {
             if (balanceItems != null) {
-                var itemsFiltered: List<BalanceItem> = balanceItems.filter { it.balanceData.available > BigDecimal.ZERO }
+                var itemsFiltered: List<BalanceItem> = balanceItems.filter { it.hasSelectableBalance() }
                 blockchainTypes?.let { types ->
                     itemsFiltered = itemsFiltered.filter { item ->
                         types.contains(item.wallet.token.blockchainType)
@@ -179,3 +179,6 @@ data class TokenSelectUiState(
     val items: List<BalanceViewItem2>,
     val noItems: Boolean,
 )
+
+internal fun BalanceItem.hasSelectableBalance(): Boolean =
+    balanceData.total > BigDecimal.ZERO

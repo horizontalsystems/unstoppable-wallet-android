@@ -59,6 +59,8 @@ class SwapViewModel(
     private var warningMessage: TranslatableString? = null
 
     init {
+        balanceService.start(viewModelScope)
+
         viewModelScope.launch {
             quoteService.start()
         }

@@ -44,9 +44,9 @@ internal class QuickexRepositoryImpl(
             .let(quickexMapper::mapNewTransactionQuickexResponseDto)
     }
 
-    private suspend fun getTransactionStatus(
+    private suspend fun getTransactionStatusFromApi(
         destinationAddress: String,
-        orderId: Long
+        orderId: String
     ) = withContext(Dispatchers.IO) {
         quickexApi.getTransactionStatus(destinationAddress, orderId)
             .let(quickexMapper::mapTransactionQuickexStatusDto)
@@ -56,9 +56,9 @@ internal class QuickexRepositoryImpl(
         transactionId: String,
         destinationAddress: String
     ): SwapProviderTransactionStatusResult {
-        val transactionStatus = getTransactionStatus(
-            destinationAddress,
-            transactionId.toLong()
+        val transactionStatus = getTransactionStatusFromApi(
+            destinationAddress = destinationAddress,
+            orderId = transactionId,
         )
         val status = if (transactionStatus.completed) {
             TransactionStatusEnum.FINISHED

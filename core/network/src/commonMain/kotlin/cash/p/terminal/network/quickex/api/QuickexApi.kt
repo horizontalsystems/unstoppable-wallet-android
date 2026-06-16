@@ -62,7 +62,7 @@ internal class QuickexApi(
 
     suspend fun getTransactionStatus(
         destinationAddress: String,
-        orderId: Long
+        orderId: String
     ): TransactionQuickexStatusDto {
         return httpClient.get {
             url(BASE_URL + "v1/orders/public-info")

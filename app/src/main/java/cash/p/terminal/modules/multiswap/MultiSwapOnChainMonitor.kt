@@ -98,7 +98,7 @@ class MultiSwapOnChainMonitor(
         }
 
     private fun currentBalance(wallet: Wallet): BigDecimal? =
-        adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+        adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.total
 
     companion object {
         private const val POLL_INTERVAL_MS = 5000L

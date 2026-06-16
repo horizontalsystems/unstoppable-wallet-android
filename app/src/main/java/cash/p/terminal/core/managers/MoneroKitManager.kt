@@ -502,6 +502,10 @@ class MoneroKitWrapper(
     }
 
     suspend fun resume(): Boolean = lifecycleMutex.withLock {
+        resumeInternal()
+    }
+
+    private fun resumeInternal(): Boolean {
         if (isStarted && isPaused) {
             logger.info("resume: resuming wallet refresh")
             val resumed = moneroWalletService.resume(this)
@@ -511,10 +515,10 @@ class MoneroKitWrapper(
             } else {
                 logger.info("resume: service resume returned false")
             }
-            return@withLock resumed
+            return resumed
         } else {
             logger.info("resume: skip, isStarted=$isStarted isPaused=$isPaused")
-            return@withLock false
+            return false
         }
     }
 
@@ -525,13 +529,42 @@ class MoneroKitWrapper(
             return@withLock
         }
         try {
-            logger.info("refresh: restarting wallet")
-            stopInternal(saveWallet = false)
-            startInternal()
+            if (isStarted) {
+                refreshStartedWallet()
+            } else {
+                logger.info("refresh: starting wallet")
+                startInternal()
+            }
         } catch (e: Exception) {
-            logger.warning("refresh: failed to restart wallet", e)
+            logger.warning("refresh: failed to refresh wallet", e)
             Timber.e(e, "Failed to refresh Monero wallet")
         }
+    }
+
+    private suspend fun refreshStartedWallet() {
+        if (isPaused && !resumeInternal()) {
+            logger.info("refresh: restarting wallet after failed resume")
+            restartInternal()
+            return
+        }
+
+        if (requestWalletRefresh()) {
+            logger.info("refresh: requesting wallet refresh")
+        } else {
+            logger.info("refresh: restarting wallet")
+            restartInternal()
+        }
+    }
+
+    private suspend fun restartInternal() {
+        stopInternal(saveWallet = false)
+        startInternal()
+    }
+
+    private fun requestWalletRefresh(): Boolean {
+        val wallet = moneroWalletService.wallet ?: return false
+        wallet.refreshAsync()
+        return true
     }
 
     suspend fun send(

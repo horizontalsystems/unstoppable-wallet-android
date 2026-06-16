@@ -3,7 +3,7 @@ package cash.p.terminal.network.quickex.domain.entity
 import java.math.BigDecimal
 
 data class TransactionQuickexStatus(
-    val orderId: Long,
+    val orderId: String,
     val createdAt: String,
     val orderEvents: List<OrderEvent>,
     val completed: Boolean,

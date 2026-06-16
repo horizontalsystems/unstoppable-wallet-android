@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal class TransactionQuickexStatusDto(
-    val orderId: Long,
+    val orderId: String,
     val createdAt: String,
     val orderEvents: List<OrderEventDto>,
     val completed: Boolean,

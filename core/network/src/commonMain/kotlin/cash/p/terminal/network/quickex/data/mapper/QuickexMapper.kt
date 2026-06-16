@@ -27,6 +27,7 @@ internal class QuickexMapper {
                 currencyFriendlyTitle = it.currencyFriendlyTitle,
                 slug = it.slug,
                 precisionDecimals = it.precisionDecimals,
+                requiresMemo = it.requiresMemo,
                 bestChangeName = it.bestChangeName,
                 contractAddress = it.contractAddress
             )

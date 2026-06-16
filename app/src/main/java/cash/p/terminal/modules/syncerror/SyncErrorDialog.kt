@@ -69,6 +69,15 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
     data class Input(val wallet: Wallet, val errorMessage: String?) : Parcelable
 }
 
+internal fun NavController.showSyncErrorDialog(wallet: Wallet, errorMessage: String?) {
+    if (currentDestination?.id == R.id.syncErrorDialog) return
+
+    slideFromBottom(
+        R.id.syncErrorDialog,
+        SyncErrorDialog.Input(wallet, errorMessage)
+    )
+}
+
 @Composable
 private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error: String) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))

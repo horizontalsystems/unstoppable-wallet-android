@@ -11,7 +11,6 @@ import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Wallet
-import cash.p.terminal.wallet.getMaxSendableBalance
 import org.koin.java.KoinJavaComponent.inject
 
 object SendZCashModule {
@@ -28,7 +27,7 @@ object SendZCashModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-            val availableBalance = adapterManager.getMaxSendableBalance(wallet, adapter.maxSpendableBalance)
+            val availableBalance = adapterManager.getZcashAvailableToSend(wallet, adapter)
             val amountService = SendAmountService(
                 amountValidator = AmountValidator(),
                 coinCode = wallet.coin.code,

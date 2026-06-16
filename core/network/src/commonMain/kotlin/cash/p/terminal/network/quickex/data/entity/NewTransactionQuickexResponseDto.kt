@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal class NewTransactionQuickexResponseDto(
-    val orderId: Long,
+    val orderId: String,
     val pair: PairDto,
     val depositAddress: DepositAddressDto,
     val claimedDepositAmount: String,

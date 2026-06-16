@@ -6,6 +6,7 @@ data class QuickexInstrument(
     val currencyFriendlyTitle: String,
     val slug: String,
     val precisionDecimals: Int,
+    val requiresMemo: Boolean,
     val bestChangeName: String,
     val contractAddress: String
 )
