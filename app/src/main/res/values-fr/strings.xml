@@ -1787,4 +1787,15 @@
     <string name="PasskeyTerms_Responsibility">Responsabilité</string>
     <string name="Passphrase_Placeholder">Phrase secrète (optionnel)</string>
     <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Créer un portefeuille standard</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Cet appareil ne prend pas en charge les portefeuilles Passkey. Vous pouvez créer un portefeuille standard à la place.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Impossible de créer le Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">Un portefeuille avec une phrase de récupération enregistrée en toute sécurité par votre appareil.</string>
+    <string name="ImportWallet_Passkey_Description">Restaurez votre portefeuille à l\'aide de votre appareil.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">Cet appareil ne prend pas en charge la restauration par Passkey. Utilisez une autre méthode de restauration.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">La restauration par Passkey n\'est pas prise en charge</string>
+    <string name="PasskeyTerms_DeviceDependency">Dépendance à l\'appareil</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">L\'accès nécessite votre appareil. La perte d\'accès peut entraîner la perte de vos fonds.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">Peut ne pas fonctionner sur tous les appareils ou plateformes.</string>
+    <string name="PasskeyTerms_Responsibility_Description">Vous êtes responsable de l\'accès à votre appareil. Unstoppable ne peut pas récupérer ce portefeuille si l\'accès est perdu.</string>
 </resources>

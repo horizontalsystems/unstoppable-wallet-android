@@ -1687,4 +1687,15 @@
     <string name="WalletConnect_DAppCheck_Secure">보안됨</string>
     <string name="WalletConnect_ScamProtection">스캠 보호</string>
     <string name="WatchWallet">조회 전용 지갑</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">표준 지갑 만들기</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">이 기기는 패스키 지갑을 지원하지 않습니다. 대신 표준 지갑을 만들 수 있습니다.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">패스키를 만들 수 없습니다</string>
+    <string name="CreateNewWallet_Passkey_Description">복구 문구가 기기에 안전하게 저장되는 지갑입니다.</string>
+    <string name="ImportWallet_Passkey_Description">기기를 사용하여 지갑을 복구하세요.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">이 기기는 패스키 복구를 지원하지 않습니다. 다른 복구 방법을 사용하세요.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">패스키 복구가 지원되지 않습니다</string>
+    <string name="PasskeyTerms_DeviceDependency">기기 종속성</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">접근하려면 기기가 필요합니다. 접근 권한을 잃으면 자금을 잃을 수 있습니다.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">모든 기기나 플랫폼에서 작동하지 않을 수 있습니다.</string>
+    <string name="PasskeyTerms_Responsibility_Description">기기에 대한 접근은 사용자의 책임입니다. 접근 권한을 잃으면 Unstoppable은 이 지갑을 복구할 수 없습니다.</string>
 </resources>

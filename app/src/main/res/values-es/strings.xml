@@ -1785,4 +1785,15 @@
     <string name="PasskeyTerms_Responsibility">Responsabilidad</string>
     <string name="Passphrase_Placeholder">Frase de contraseña (opcional)</string>
     <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Crear wallet estándar</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Este dispositivo no admite wallets con Passkey. En su lugar, puedes crear una wallet estándar.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">No se pudo crear el Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">Una wallet con una frase de recuperación guardada de forma segura por tu dispositivo.</string>
+    <string name="ImportWallet_Passkey_Description">Restaura tu wallet usando tu dispositivo.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">Este dispositivo no admite la restauración con Passkey. Usa otro método de restauración.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">La restauración con Passkey no es compatible</string>
+    <string name="PasskeyTerms_DeviceDependency">Dependencia del dispositivo</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">El acceso requiere tu dispositivo. Perder el acceso puede provocar la pérdida de fondos.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">Puede que no funcione en todos los dispositivos o plataformas.</string>
+    <string name="PasskeyTerms_Responsibility_Description">Eres responsable del acceso a tu dispositivo. Unstoppable no puede recuperar esta wallet si se pierde el acceso.</string>
 </resources>

@@ -1784,4 +1784,15 @@
     <string name="PasskeyTerms_Responsibility">责任</string>
     <string name="Passphrase_Placeholder">密码短语（可选）</string>
     <string name="SettingsLaunchScreen_Auto">自动</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">创建标准钱包</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">此设备不支持 Passkey 钱包。您可以改为创建标准钱包。</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">无法创建 Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">带有恢复短语的钱包，由您的设备安全保存。</string>
+    <string name="ImportWallet_Passkey_Description">使用您的设备恢复钱包。</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">此设备不支持 Passkey 恢复。请使用其他恢复方式。</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">不支持 Passkey 恢复</string>
+    <string name="PasskeyTerms_DeviceDependency">设备依赖</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">访问需要您的设备。失去访问权限可能导致资金损失。</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">可能无法在所有设备或平台上运行。</string>
+    <string name="PasskeyTerms_Responsibility_Description">您需要对设备的访问权限负责。如果访问权限丢失，Unstoppable 无法恢复此钱包。</string>
 </resources>

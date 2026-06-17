@@ -1790,4 +1790,15 @@
     <string name="PasskeyTerms_Responsibility">Responsabilidade</string>
     <string name="Passphrase_Placeholder">Frase secreta (opcional)</string>
     <string name="SettingsLaunchScreen_Auto">Automático</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Criar carteira padrão</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Este dispositivo não oferece suporte a carteiras com Passkey. Em vez disso, você pode criar uma carteira padrão.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Não foi possível criar o Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">Uma carteira com uma frase de recuperação salva com segurança pelo seu dispositivo.</string>
+    <string name="ImportWallet_Passkey_Description">Restaure sua carteira usando seu dispositivo.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">Este dispositivo não oferece suporte à restauração com Passkey. Use outro método de restauração.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">A restauração com Passkey não é compatível</string>
+    <string name="PasskeyTerms_DeviceDependency">Dependência do dispositivo</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">O acesso requer seu dispositivo. Perder o acesso pode resultar na perda de fundos.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">Pode não funcionar em todos os dispositivos ou plataformas.</string>
+    <string name="PasskeyTerms_Responsibility_Description">Você é responsável pelo acesso ao seu dispositivo. A Unstoppable não pode recuperar esta carteira se o acesso for perdido.</string>
 </resources>
