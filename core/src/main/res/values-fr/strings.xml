@@ -4,4 +4,6 @@
     <string name="Timestamp_Yesterday">Hier</string>
     <string name="Duration_instant">Instantané</string>
     <string name="Duration_Within">Dans la limite de %s</string>
+    <string name="Duration_Hours">%d h.</string>
+    <string name="Duration_Minutes">%d min.</string>
 </resources>
