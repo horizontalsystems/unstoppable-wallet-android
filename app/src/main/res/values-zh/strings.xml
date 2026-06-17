@@ -1795,4 +1795,5 @@
     <string name="PasskeyTerms_DeviceDependency_Description">访问需要您的设备。失去访问权限可能导致资金损失。</string>
     <string name="PasskeyTerms_LimitedAccess_Description">可能无法在所有设备或平台上运行。</string>
     <string name="PasskeyTerms_Responsibility_Description">您需要对设备的访问权限负责。如果访问权限丢失，Unstoppable 无法恢复此钱包。</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum、Arbitrum、Optimism…</string>
 </resources>
