@@ -13,13 +13,13 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.rx2.await
 
 internal class EvmTransactionsAdapter(
@@ -55,10 +55,13 @@ internal class EvmTransactionsAdapter(
         get() = evmTransactionRepository.lastBlockHeightFlowable.map { }
 
     override val transactionsState: AdapterState
-        get() = convertToAdapterState(evmTransactionRepository.transactionsSyncState)
+        get() = evmTransactionRepository.transactionHistoryAdapterState
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = evmTransactionRepository.transactionsSyncStateFlowable.map {}
+        get() = Flowable.merge(
+            evmTransactionRepository.transactionsSyncStateFlowable.map {},
+            evmTransactionRepository.forwardSyncState.asFlowable().map {}
+        )
 
     override val additionalTokenQueries: List<TokenQuery>
         get() = evmTransactionRepository.getTagTokenContractAddresses().map { address ->
@@ -103,13 +106,6 @@ internal class EvmTransactionsAdapter(
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
-
-    private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
-        when (syncState) {
-            is EthereumKit.SyncState.Synced -> AdapterState.Synced
-            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing()
-        }
 
     private fun coinTagName(token: Token) = when (val type = token.type) {
         TokenType.Native -> TransactionTag.EVM_COIN

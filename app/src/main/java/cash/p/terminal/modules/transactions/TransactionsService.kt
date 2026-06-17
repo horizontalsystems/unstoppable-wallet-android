@@ -91,7 +91,9 @@ class TransactionsService(
             contact
         )
 
-        transactionSyncStateRepository.setTransactionWallets(transactionWallets)
+        transactionSyncStateRepository.setTransactionWallets(
+            transactionWallets.filterBySelection(transactionWallet, blockchain)
+        )
     }
 
     private fun handle(assetBriefMetadataMap: Map<NftUid, NftAssetBriefMetadata>) {

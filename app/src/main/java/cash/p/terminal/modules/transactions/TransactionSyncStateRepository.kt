@@ -37,14 +37,12 @@ class TransactionSyncStateRepository(
     val lastBlockInfoFlow: SharedFlow<Pair<TransactionSource, LastBlockInfo>> = _lastBlockInfoFlow.asSharedFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private var monitoringJob: Job? = null
     private var setupJob: Job? = null
 
     suspend fun getLastBlockInfo(source: TransactionSource): LastBlockInfo? =
         adaptersMutex.withLock { adapters[source]?.lastBlockInfo }
 
     fun setTransactionWallets(transactionWallets: List<TransactionWallet>) {
-        monitoringJob?.cancel()
         val distinctWallets = transactionWallets.distinctBy { it.source }
         requestedSourceCount = distinctWallets.size
         _syncingFlow.value = true
@@ -65,26 +63,30 @@ class TransactionSyncStateRepository(
             }
 
             emitSyncing()
-            startMonitoring(newAdapters)
+            monitor(newAdapters)
         }
     }
 
-    private fun startMonitoring(adapterMap: Map<TransactionSource, ITransactionsAdapter>) {
-        monitoringJob = coroutineScope.launch {
-            supervisorScope {
-                adapterMap.forEach { (source, adapter) ->
-                    launch {
-                        adapter.lastBlockUpdatedFlowable.asFlow().collect {
-                            adapter.lastBlockInfo?.let { lastBlockInfo ->
-                                _lastBlockInfoFlow.emit(Pair(source, lastBlockInfo))
-                            }
+    private suspend fun monitor(adapterMap: Map<TransactionSource, ITransactionsAdapter>) {
+        supervisorScope {
+            launch {
+                adapterManager.initializationFlow.collect {
+                    emitSyncing()
+                }
+            }
+
+            adapterMap.forEach { (source, adapter) ->
+                launch {
+                    adapter.lastBlockUpdatedFlowable.asFlow().collect {
+                        adapter.lastBlockInfo?.let { lastBlockInfo ->
+                            _lastBlockInfoFlow.emit(Pair(source, lastBlockInfo))
                         }
                     }
+                }
 
-                    launch {
-                        adapter.transactionsStateUpdatedFlowable.asFlow().collect {
-                            emitSyncing()
-                        }
+                launch {
+                    adapter.transactionsStateUpdatedFlowable.asFlow().collect {
+                        emitSyncing()
                     }
                 }
             }
@@ -95,7 +97,7 @@ class TransactionSyncStateRepository(
         val syncing = adaptersMutex.withLock {
             when {
                 requestedSourceCount == 0 -> false
-                adapters.size < requestedSourceCount -> true
+                adapters.size < requestedSourceCount && !adapterManager.initializationFlow.value -> true
                 else -> adapters.any {
                     val state = it.value.transactionsState
                     state is AdapterState.Syncing ||
@@ -109,7 +111,6 @@ class TransactionSyncStateRepository(
 
     override fun clear() {
         setupJob?.cancel()
-        monitoringJob?.cancel()
         requestedSourceCount = 0
         _syncingFlow.value = false
     }

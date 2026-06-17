@@ -12,6 +12,7 @@ import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import io.horizontalsystems.core.DispatcherProvider
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -90,14 +92,7 @@ class TransactionRecordRepository(
     private fun activeWallets(): List<TransactionWallet> {
         val tmpSelectedWallet = selectedWallet
         val tmpSelectedBlockchain = selectedBlockchain
-        return when {
-            tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
-            tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
-                it.source.blockchain == tmpSelectedBlockchain
-            }
-
-            else -> walletsGroupedBySource
-        }
+        return walletsGroupedBySource.filterBySelection(tmpSelectedWallet, tmpSelectedBlockchain)
     }
 
     /**
@@ -231,7 +226,7 @@ class TransactionRecordRepository(
     }
 
     /***
-     * We need such adapters only fo changenow swaps because they are not typical swaps
+     * Off-chain provider swaps are matched through regular outgoing transactions.
      */
     private fun buildExtraSwapAdapters() {
         val previousAdapters = extraSwapAdaptersMap.toMutableMap()
@@ -290,13 +285,24 @@ class TransactionRecordRepository(
     }
 
     private fun subscribeForUpdates() {
+        val updateFlows = activeUpdateFlows()
+        if (updateFlows.isEmpty()) return
+
         updatesJob = coroutineScope.launch {
-            activeAdapters
-                .map { it.updatedFlow }
+            updateFlows
                 .merge()
                 .collect {
                     handleUpdates()
                 }
+        }
+    }
+
+    private fun activeUpdateFlows(): List<Flow<Unit>> = buildList {
+        addAll(activeAdapters.map { it.updatedFlow })
+
+        if (selectedFilterTransactionType == FilterTransactionType.Swap) {
+            addAll(activeSwapExtraAdapters.map { it.updatedFlow })
+            add(swapProviderTransactionsStorage.observeAll().map { Unit })
         }
     }
 

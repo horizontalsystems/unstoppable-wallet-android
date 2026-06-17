@@ -7,6 +7,7 @@ import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
+import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
@@ -32,6 +33,9 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -247,6 +251,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
         val swapProviderTransactionsStorage = mockk<SwapProviderTransactionsStorage>(relaxed = true) {
             every { getByOutgoingRecordUid("record-A") } returns mockk(relaxed = true)
             every { getByOutgoingRecordUid("record-B") } returns mockk(relaxed = true)
+            every { observeAll() } returns emptyFlow()
         }
 
         val repository = TransactionRecordRepository(
@@ -289,6 +294,87 @@ class TransactionRecordRepositoryWalletSwitchTest {
             emissions.any { it == listOf("record-A") }
         )
         assertEquals(listOf("record-B"), emissions.last())
+
+        collectorJob.cancel()
+        repository.clear()
+    }
+
+    @Test
+    fun swapFilter_extraSwapAdapterUpdate_reloadsSwapProviderRecords() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        startKoinForTests()
+
+        val fixture = createSwapFilterFixture("swap-outgoing-record")
+        val outgoingUpdates = MutableSharedFlow<List<TransactionRecord>>(extraBufferCapacity = 1)
+        var outgoingRecords = emptyList<TransactionRecord>()
+        val adapter = swapFilterAdapter(fixture.token, { outgoingRecords }, outgoingUpdates)
+        val swapProviderTransactionsStorage = mockk<SwapProviderTransactionsStorage>(relaxed = true) {
+            every { getByOutgoingRecordUid(fixture.record.uid) } returns mockk(relaxed = true)
+            every { observeAll() } returns emptyFlow()
+        }
+        val repository = createRepository(
+            adapterManager = adapterManager(fixture.source, adapter),
+            dispatcher = testDispatcher,
+            scope = this,
+            swapProviderTransactionsStorage = swapProviderTransactionsStorage,
+        )
+
+        val (emissions, collectorJob) = collectRecordUids(repository, testDispatcher)
+
+        repository.setSwapWallet(fixture.wallet)
+        advanceUntilIdle()
+
+        outgoingRecords = listOf(fixture.record)
+        outgoingUpdates.emit(listOf(fixture.record))
+        advanceUntilIdle()
+
+        assertTrue(
+            "extra outgoing adapter update should reload swap provider records, but got: $emissions",
+            emissions.any { it == listOf(fixture.record.uid) }
+        )
+
+        collectorJob.cancel()
+        repository.clear()
+    }
+
+    @Test
+    fun swapFilter_swapProviderStorageUpdate_reloadsPreviouslyUnmatchedOutgoingRecord() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+        startKoinForTests()
+
+        val fixture = createSwapFilterFixture("late-matched-record")
+        val swapProviderUpdates = MutableSharedFlow<List<SwapProviderTransaction>>(extraBufferCapacity = 1)
+        var matchedSwap: SwapProviderTransaction? = null
+
+        val adapter = swapFilterAdapter(fixture.token, { listOf(fixture.record) })
+        val swapProviderTransactionsStorage = mockk<SwapProviderTransactionsStorage>(relaxed = true) {
+            every { getByOutgoingRecordUid(fixture.record.uid) } answers { matchedSwap }
+            every { getByCoinUidIn(any(), any(), any(), any()) } returns null
+            every { observeAll() } returns swapProviderUpdates
+        }
+        val repository = createRepository(
+            adapterManager = adapterManager(fixture.source, adapter),
+            dispatcher = testDispatcher,
+            scope = this,
+            swapProviderTransactionsStorage = swapProviderTransactionsStorage,
+        )
+
+        val (emissions, collectorJob) = collectRecordUids(repository, testDispatcher)
+
+        repository.setSwapWallet(fixture.wallet)
+        advanceUntilIdle()
+
+        assertTrue(
+            "record should not be visible before swap provider row is matched, but got: $emissions",
+            emissions.none { it.contains(fixture.record.uid) }
+        )
+
+        val swap = mockk<SwapProviderTransaction>(relaxed = true)
+        matchedSwap = swap
+        swapProviderUpdates.emit(listOf(swap))
+        advanceUntilIdle()
+
+        assertEquals(listOf(fixture.record.uid), emissions.last())
 
         collectorJob.cancel()
         repository.clear()
@@ -510,6 +596,31 @@ class TransactionRecordRepositoryWalletSwitchTest {
             every { getTransactionUrl(any()) } returns ""
         }
 
+    private fun swapFilterAdapter(
+        token: Token,
+        outgoingRecords: () -> List<TransactionRecord>,
+        outgoingUpdates: Flow<List<TransactionRecord>> = emptyFlow(),
+    ) = mockk<ITransactionsAdapter>(relaxed = true) {
+        coEvery {
+            getTransactions(any(), token, any(), FilterTransactionType.Swap, any())
+        } returns emptyList()
+        coEvery {
+            getTransactions(any(), token, any(), FilterTransactionType.Outgoing, any())
+        } answers { outgoingRecords() }
+        every {
+            getTransactionRecordsFlow(any(), FilterTransactionType.Swap, any())
+        } returns emptyFlow()
+        every {
+            getTransactionRecordsFlow(any(), FilterTransactionType.Outgoing, any())
+        } returns outgoingUpdates
+        every { getTransactionUrl(any()) } returns ""
+    }
+
+    private fun adapterManager(source: TransactionSource, adapter: ITransactionsAdapter) =
+        mockk<TransactionAdapterManager>(relaxed = true) {
+            every { getAdapter(source) } returns adapter
+        }
+
     private fun emptyPendingRepository() = mockk<PendingTransactionRepository>(relaxed = true) {
         every { getActivePendingFlow(any()) } returns emptyFlow()
         coEvery { getPendingForWallet(any()) } returns emptyList()
@@ -518,10 +629,11 @@ class TransactionRecordRepositoryWalletSwitchTest {
     private fun createRepository(
         adapterManager: TransactionAdapterManager,
         dispatcher: TestDispatcher,
-        scope: TestScope
+        scope: TestScope,
+        swapProviderTransactionsStorage: SwapProviderTransactionsStorage = mockk(relaxed = true),
     ) = TransactionRecordRepository(
         adapterManager = adapterManager,
-        swapProviderTransactionsStorage = mockk(relaxed = true),
+        swapProviderTransactionsStorage = swapProviderTransactionsStorage,
         pendingRepository = emptyPendingRepository(),
         pendingConverter = mockk(relaxed = true),
         pendingTransactionMatcher = PendingTransactionMatcher(),
@@ -540,6 +652,52 @@ class TransactionRecordRepositoryWalletSwitchTest {
             blockchain = blockchain,
             type = TokenType.Derived(TokenType.Derivation.Bip86),
             decimals = 8
+        )
+    }
+
+    private data class SwapFilterFixture(
+        val token: Token,
+        val source: TransactionSource,
+        val wallet: TransactionWallet,
+        val record: TransactionRecord,
+    )
+
+    private fun createSwapFilterFixture(recordUid: String): SwapFilterFixture {
+        val token = createToken()
+        val source = createSource(accountId = "account-1", blockchain = token.blockchain)
+        val wallet = TransactionWallet(token = token, source = source, badge = null)
+        val record = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = recordUid,
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("-0.00000563"),
+            toAddress = "provider-deposit-address",
+        )
+
+        return SwapFilterFixture(token, source, wallet, record)
+    }
+
+    private fun TestScope.collectRecordUids(
+        repository: TransactionRecordRepository,
+        dispatcher: TestDispatcher,
+    ): Pair<MutableList<List<String>>, Job> {
+        val emissions = mutableListOf<List<String>>()
+        val collectorJob = launch(dispatcher) {
+            repository.itemsFlow.collect { records ->
+                emissions.add(records.map { it.uid })
+            }
+        }
+        return emissions to collectorJob
+    }
+
+    private fun TransactionRecordRepository.setSwapWallet(wallet: TransactionWallet) {
+        set(
+            transactionWallets = listOf(wallet),
+            wallet = null,
+            transactionType = FilterTransactionType.Swap,
+            blockchain = null,
+            contact = null,
         )
     }
 
