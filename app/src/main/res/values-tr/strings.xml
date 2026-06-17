@@ -1627,4 +1627,15 @@
     <string name="WatchWallet">Cüzdan İzle</string>
     <string name="Watch_Address_Hint">Genel adresinizi veya XPUB anahtarınızı yapıştırın</string>
     <string name="Watch_ViewKey">Özel Görüntüleme Anahtarı</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Standart Cüzdan Oluştur</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Bu cihaz Passkey cüzdanlarını desteklemiyor. Bunun yerine standart bir cüzdan oluşturabilirsiniz.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Passkey oluşturulamadı</string>
+    <string name="CreateNewWallet_Passkey_Description">Cihazınız tarafından güvenli bir şekilde saklanan bir kurtarma ifadesine sahip cüzdan.</string>
+    <string name="ImportWallet_Passkey_Description">Cüzdanınızı cihazınızı kullanarak geri yükleyin.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">Bu cihaz Passkey ile geri yüklemeyi desteklemiyor. Başka bir geri yükleme yöntemi kullanın.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">Passkey ile geri yükleme desteklenmiyor</string>
+    <string name="PasskeyTerms_DeviceDependency">Cihaz Bağımlılığı</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">Erişim için cihazınız gereklidir. Erişimi kaybetmek fonların kaybına yol açabilir.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">Tüm cihazlarda veya platformlarda çalışmayabilir.</string>
+    <string name="PasskeyTerms_Responsibility_Description">Cihazınıza erişimden siz sorumlusunuz. Erişim kaybedilirse Unstoppable bu cüzdanı geri yükleyemez.</string>
 </resources>

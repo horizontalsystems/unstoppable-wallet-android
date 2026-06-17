@@ -693,4 +693,15 @@
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
     <string name="SwapHistory_EmptyList">شما هنوز هیچ تبدیل معلق یا قبلی ندارید.</string>
     <string name="ManageAccounts_ViewOnlyWallet">کیف پول فقط مشاهده</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">ساخت کیف‌پول استاندارد</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">این دستگاه از کیف‌پول‌های Passkey پشتیبانی نمی‌کند. در عوض می‌توانید یک کیف‌پول استاندارد بسازید.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">ساخت Passkey ممکن نشد</string>
+    <string name="CreateNewWallet_Passkey_Description">کیف‌پولی با عبارت بازیابی که توسط دستگاه شما به‌صورت امن ذخیره می‌شود.</string>
+    <string name="ImportWallet_Passkey_Description">کیف‌پول خود را با استفاده از دستگاهتان بازیابی کنید.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">این دستگاه از بازیابی با Passkey پشتیبانی نمی‌کند. از روش بازیابی دیگری استفاده کنید.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">بازیابی با Passkey پشتیبانی نمی‌شود</string>
+    <string name="PasskeyTerms_DeviceDependency">وابستگی به دستگاه</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">دسترسی به دستگاه شما نیاز دارد. از دست دادن دسترسی ممکن است به از دست رفتن دارایی‌ها منجر شود.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">ممکن است روی همه دستگاه‌ها یا پلتفرم‌ها کار نکند.</string>
+    <string name="PasskeyTerms_Responsibility_Description">مسئولیت دسترسی به دستگاهتان بر عهده شماست. در صورت از دست رفتن دسترسی، Unstoppable نمی‌تواند این کیف‌پول را بازیابی کند.</string>
 </resources>
