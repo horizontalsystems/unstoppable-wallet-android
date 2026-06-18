@@ -1,4 +1,4 @@
-name: Android CI (release)
+name: Deploy Release to Firebase
 
 on:
   workflow_dispatch:
