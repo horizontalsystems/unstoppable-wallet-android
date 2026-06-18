@@ -1,8 +1,8 @@
-name: Android CI (Dev)
+name: Deploy Release to Firebase
 
 on:
   push:
-    branches: [ version/* ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
 
       - name: Set Build Number
         env:
-          APPCENTER_NUMBER: 1210
+          APPCENTER_NUMBER: 147
         run: |
           echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
 
@@ -34,30 +34,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build CI Debug
-        run: ./gradlew clean assembleCiDebug --stacktrace --no-daemon
+      - name: Build CI Release
+        run: ./gradlew clean assembleCiRelease --stacktrace --no-daemon
         env:
           BUILD_NUMBER: ${{ env.BUILD_NUMBER_NEW }}
 
-      - name: Upload CI Debug to Firebase
+      - name: Upload CI Release to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: 1:308085819273:android:1b039e927925b879a00358
+          appId: 1:308085819273:android:d1451c165f07056ea00358
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
           groups: horsysteam
-          file: app/build/outputs/apk/ci/debug/app-ci-debug.apk
+          file: app/build/outputs/apk/ci/release/app-ci-release.apk
           releaseNotes: ${{ steps.notes.outputs.val }}
-
-      - name: Build F-Droid CI Debug
-        run: ./gradlew clean assembleFdroidCiDebug --stacktrace --no-daemon
-        env:
-          BUILD_NUMBER: ${{ env.BUILD_NUMBER_NEW }}
-
-      - name: Upload F-Droid CI Debug to Firebase
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: 1:308085819273:android:3c060bb15aa35d79a00358
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-          groups: horsysteam
-          file: app/build/outputs/apk/fdroidCi/debug/app-fdroidCi-debug.apk
-          releaseNotes: "F-Droid Build - ${{ steps.notes.outputs.val }}"
