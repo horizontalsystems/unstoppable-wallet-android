@@ -1,4 +1,4 @@
-name: Android CI (Dev)
+name: Deploy Dev to Firebase
 
 on:
   push:
