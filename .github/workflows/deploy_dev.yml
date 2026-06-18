@@ -1,8 +1,7 @@
 name: Deploy Dev to Firebase
 
 on:
-  push:
-    branches: [ version/* ]
+  workflow_dispatch:
 
 jobs:
   build:
