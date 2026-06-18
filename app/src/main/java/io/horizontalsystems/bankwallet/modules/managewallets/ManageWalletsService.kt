@@ -190,7 +190,10 @@ class ManageWalletsService(
         val account = this.account ?: return
 
         if (restoreSettings.isNotEmpty()) {
-            restoreSettingsService.save(restoreSettings, account, token.blockchainType)
+            // reload = false: the wallet is saved right below, which creates the
+            // adapter with these settings. Triggering a reload here would churn
+            // the just-created Monero adapter (two MoneroKit instances racing).
+            restoreSettingsService.save(restoreSettings, account, token.blockchainType, reload = false)
         }
 
         walletManager.save(listOf(Wallet(token, account)))
