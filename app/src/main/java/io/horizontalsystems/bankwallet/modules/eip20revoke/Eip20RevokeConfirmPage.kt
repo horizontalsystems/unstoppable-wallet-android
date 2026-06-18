@@ -7,12 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
@@ -33,11 +28,11 @@ import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
@@ -82,18 +77,13 @@ fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage
             navController.slideFromRight(Eip20RevokeTransactionSettingsPage)
         },
         buttonsSlot = {
-            val coroutineScope = rememberCoroutineScope()
-            var buttonEnabled by remember { mutableStateOf(true) }
-            var buttonTitle by remember { mutableIntStateOf(R.string.Swap_Revoke) }
+            val revokeAction = rememberAsyncAction()
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(buttonTitle),
+                title = stringResource(if (revokeAction.inProgress) R.string.Swap_Revoking else R.string.Swap_Revoke),
                 onClick = {
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        buttonTitle = R.string.Swap_Revoking
-
+                    revokeAction.run {
                         try {
                             viewModel.revoke()
 
@@ -106,12 +96,9 @@ fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
-
-                        buttonTitle = R.string.Swap_Revoke
-                        buttonEnabled = true
                     }
                 },
-                enabled = uiState.revokeEnabled && buttonEnabled
+                enabled = !revokeAction.inProgress && uiState.revokeEnabled
             )
         }
     ) {

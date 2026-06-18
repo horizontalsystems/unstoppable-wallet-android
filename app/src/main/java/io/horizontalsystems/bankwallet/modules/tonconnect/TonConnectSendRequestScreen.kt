@@ -88,8 +88,10 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                     title = stringResource(R.string.Button_Confirm),
                     enabled = uiState.confirmEnabled && buttonEnabled,
                     onClick = navController.authorizedAction {
+                        if (!buttonEnabled) return@authorizedAction
+                        buttonEnabled = false
+
                         coroutineScope.launch {
-                            buttonEnabled = false
                             HudHelper.showInProcessMessage(
                                 view,
                                 R.string.Send_Sending,

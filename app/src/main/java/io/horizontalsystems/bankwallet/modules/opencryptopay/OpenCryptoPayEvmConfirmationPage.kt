@@ -4,12 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -31,6 +26,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_lucian
@@ -100,21 +96,21 @@ private fun OpenCryptoPayEvmConfirmationScreen(
             navController.slideFromBottom(OpenCryptoPayEvmNonceSettingsPage)
         },
         buttonsSlot = {
-            val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
-            var buttonTitleRes by remember { mutableIntStateOf(R.string.Send_Confirmation_Send_Button) }
-            var buttonEnabled by remember { mutableStateOf(true) }
+            val payAction = rememberAsyncAction()
             val isExpired = uiState.secondsUntilExpiry == 0
 
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
-                title = if (isExpired) stringResource(R.string.OpenCryptoPay_Expired) else stringResource(buttonTitleRes),
+                title = when {
+                    isExpired -> stringResource(R.string.OpenCryptoPay_Expired)
+                    payAction.inProgress -> stringResource(R.string.Send_Sending)
+                    else -> stringResource(R.string.Send_Confirmation_Send_Button)
+                },
                 onClick = {
-                    buttonTitleRes = R.string.Send_Sending
-                    buttonEnabled = false
-                    coroutineScope.launch {
+                    payAction.run {
                         try {
                             viewModel.pay()
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
@@ -125,11 +121,9 @@ private fun OpenCryptoPayEvmConfirmationScreen(
                                 ErrorSheet(ErrorSheet.Input(t.message ?: t.javaClass.simpleName))
                             )
                         }
-                        buttonTitleRes = R.string.Send_Confirmation_Send_Button
-                        buttonEnabled = true
                     }
                 },
-                enabled = !isExpired && uiState.payEnabled && buttonEnabled,
+                enabled = !isExpired && !payAction.inProgress && uiState.payEnabled,
             )
         }
     ) {

@@ -8,12 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
@@ -38,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
@@ -48,7 +44,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
@@ -80,18 +75,13 @@ fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
             navController.slideFromRight(Eip20ApproveTransactionSettingsPage)
         },
         buttonsSlot = {
-            val coroutineScope = rememberCoroutineScope()
-            var buttonEnabled by remember { mutableStateOf(true) }
-            var buttonTitle by remember { mutableIntStateOf(R.string.Swap_Approve) }
+            val approveAction = rememberAsyncAction()
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(buttonTitle),
+                title = stringResource(if (approveAction.inProgress) R.string.Swap_Approving else R.string.Swap_Approve),
                 onClick = {
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        buttonTitle = R.string.Swap_Approving
-
+                    approveAction.run {
                         try {
                             viewModel.approve()
 
@@ -104,12 +94,9 @@ fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
-
-                        buttonTitle = R.string.Swap_Approve
-                        buttonEnabled = true
                     }
                 },
-                enabled = uiState.approveEnabled && buttonEnabled
+                enabled = !approveAction.inProgress && uiState.approveEnabled
             )
         }
     ) {
