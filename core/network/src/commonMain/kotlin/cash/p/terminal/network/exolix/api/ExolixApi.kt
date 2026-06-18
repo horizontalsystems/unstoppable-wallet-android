@@ -80,7 +80,7 @@ internal class ExolixApi(
     }
 
     private fun HttpRequestBuilder.authorize() {
-        header(HttpHeaders.Authorization, EncodedSecrets.EXOLIX_API_KEY)
+        header("api-key", EncodedSecrets.EXOLIX_API_KEY)
     }
 }
 
