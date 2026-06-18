@@ -49,8 +49,8 @@ class RestoreSettingsService(
         approveSettingsObservable.onNext(TokenWithSettings(token, RestoreSettings()))
     }
 
-    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
-        restoreSettingsManager.save(settings, account, blockchainType)
+    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType, reload: Boolean = true) {
+        restoreSettingsManager.save(settings, account, blockchainType, reload)
     }
 
     fun enter(config: BirthdayHeightConfig, token: Token) {
