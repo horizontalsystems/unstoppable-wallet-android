@@ -67,7 +67,7 @@
 \n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Полный контроль над активами</string>
+    <string name="Intro_Wallet_Screen2Title">Полный контроль</string>
     <string name="Intro_Wallet_Screen2Description">Контроль только у вас. Без ограничений со стороны третьих лиц.</string>
     <string name="Intro_Wallet_Screen3Title">Без границ</string>
     <string name="Intro_Wallet_Screen3Description">Свободный доступ к глобальным рынкам.</string>
