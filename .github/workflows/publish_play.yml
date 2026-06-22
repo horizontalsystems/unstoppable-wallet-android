@@ -1,0 +1,72 @@
+name: Publish to Google Play
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    container:
+      image: hsdao/android-release-build:java-17-update
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fix git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Base App Bundle
+        run: ./gradlew :app:bundleBaseRelease
+
+      - name: Decode upload keystore
+        run: echo "${{ secrets.UPLOAD_KEYSTORE_BASE64 }}" | base64 -d > upload.jks
+
+      - name: Sign Base AAB
+        env:
+          KS_PASS: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+        run: |
+          ALIAS=$(keytool -list -keystore upload.jks -storepass "$KS_PASS" \
+            | grep 'PrivateKeyEntry' | head -n 1 | cut -d',' -f1)
+          jarsigner -keystore upload.jks -storepass "$KS_PASS" -keypass "$KS_PASS" \
+            -sigalg SHA256withRSA -digestalg SHA-256 \
+            app/build/outputs/bundle/baseRelease/app-base-release.aab "$ALIAS"
+
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: io.horizontalsystems.bankwallet
+          releaseFiles: app/build/outputs/bundle/baseRelease/app-base-release.aab
+          track: internal
+          status: draft
+
+      - name: Notify Telegram on success
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ✅ Google Play upload succeeded
+            Tag: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+
+      - name: Notify Telegram on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ❌ Google Play upload failed
+            Tag: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
