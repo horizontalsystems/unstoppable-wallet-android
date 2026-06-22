@@ -61,16 +61,11 @@ class WCManager(
         return when {
             deeplinkString.startsWith("wc:") -> deeplinkString
             deepLink.host == "wc" -> {
-                val encodedQuery = deepLink.encodedQuery
-                val marker = "uri="
-                val start = encodedQuery?.indexOf(marker) ?: -1
-                if (start >= 0) {
-                    Uri.decode(encodedQuery!!.substring(start + marker.length))
-                        .trim()
-                        .removePrefix("@")
-                } else {
-                    null
-                }
+                // getQueryParameter isolates and percent-decodes just the `uri` value, so any
+                // additional params (e.g. ?uri=<...>&foo=bar) don't leak into the pairing URI.
+                deepLink.getQueryParameter("uri")
+                    ?.trim()
+                    ?.removePrefix("@")
             }
 
             else -> null
