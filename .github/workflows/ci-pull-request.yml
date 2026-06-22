@@ -23,6 +23,9 @@ jobs:
         run: ./gradlew assembleDebug
         env:
           BUILD_NUMBER: ${{ github.run_number }}
+      - name: Upload Crashlytics native symbols
+        if: github.ref == 'refs/heads/master'
+        run: ./gradlew :app:uploadCrashlyticsSymbolFileRelease --stacktrace --no-daemon
       - name: Upload to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
