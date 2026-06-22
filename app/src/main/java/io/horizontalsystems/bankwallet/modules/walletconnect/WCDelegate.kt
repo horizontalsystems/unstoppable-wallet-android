@@ -142,6 +142,14 @@ object WCDelegate : DAppServiceCallback {
         )
     }
 
+    // The user dismissed the request UI (tapped outside / back) without responding. The request
+    // stays in DAppManager's pending list (still reachable from the WC list), but clear the
+    // "active request" pointer so reEmitPendingWcEventIfNeeded() doesn't auto-reopen it on the
+    // next resume (removing the bottom sheet overlay re-resumes the screen underneath).
+    fun discardActiveSessionRequest() {
+        sessionRequestEvent = null
+    }
+
     fun rejectRequest(
         topic: String,
         requestId: Long,

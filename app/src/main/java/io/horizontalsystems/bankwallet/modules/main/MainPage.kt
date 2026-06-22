@@ -243,7 +243,7 @@ private fun MainScreen(
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         viewModel.onResume()
-        mainActivityViewModel.reEmitPendingWcProposalIfNeeded()
+        mainActivityViewModel.reEmitPendingWcEventIfNeeded()
     }
 }
 

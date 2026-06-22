@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signtransaction.WCSignEthereumTransactionRequestScreen
@@ -93,8 +94,6 @@ data object WCRequestSheet : HSBottomSheet() {
 fun WcRequestEvm(navController: HSNavigation) {
     val wcRequestEvmViewModel =
         viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
-    val composableScope = rememberCoroutineScope()
-    val view = LocalView.current
 
     when (val sessionRequestUI = wcRequestEvmViewModel.sessionRequestUi) {
         is SessionRequestUI.Content -> {
@@ -142,28 +141,8 @@ fun WcRequestEvm(navController: HSNavigation) {
                 WCNewSignRequestScreen(
                     sessionRequestUI,
                     navController,
-                    onAllow = {
-                        composableScope.launch {
-                            try {
-                                wcRequestEvmViewModel.allow()
-                                navController.removeLastOrNull()
-                            } catch (e: Throwable) {
-                                showError(view, e)
-                            }
-                        }
-                        logger.info("allow request")
-                    },
-                    onDecline = {
-                        composableScope.launch {
-                            try {
-                                wcRequestEvmViewModel.reject()
-                                navController.removeLastOrNull()
-                            } catch (e: Throwable) {
-                                showError(view, e)
-                            }
-                        }
-                        logger.info("decline request")
-                    }
+                    onAllow = { wcRequestEvmViewModel.allow() },
+                    onDecline = { wcRequestEvmViewModel.reject() }
                 )
             }
         }
@@ -184,8 +163,12 @@ fun WcRequestError(
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val dismiss = {
+        WCDelegate.discardActiveSessionRequest()
+        onDismiss()
+    }
     BottomSheetContent(
-        onDismissRequest = onDismiss,
+        onDismissRequest = dismiss,
         sheetState = sheetState,
         buttons = {
             HSButton(
@@ -193,7 +176,7 @@ fun WcRequestError(
                 variant = ButtonVariant.Secondary,
                 size = ButtonSize.Medium,
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onDismiss
+                onClick = dismiss
             )
         },
     ) {
@@ -238,16 +221,31 @@ fun WcRequestError(
 fun WCNewSignRequestScreen(
     sessionRequestUI: SessionRequestUI.Content,
     navController: HSNavigation,
-    onAllow: () -> Unit,
+    onAllow: suspend () -> Unit,
     onDecline: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val view = LocalView.current
     val messageBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var messageBottomSheet by remember { mutableStateOf<String?>(null) }
 
+    // Animate the bottom sheet out before popping. Removing the entry directly disposes the
+    // ModalBottomSheet's window abruptly, which intermittently leaves the sheet content on screen
+    // (the dim is removed but the sheet card stays).
+    val hideAndPop = {
+        scope.launch {
+            sheetState.hide()
+            navController.removeLastOrNull()
+        }
+        Unit
+    }
+
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = {
+            WCDelegate.discardActiveSessionRequest()
+            navController.removeLastOrNull()
+        },
         sheetState = sheetState
     ) { snackbarActions ->
         Column(
@@ -320,13 +318,28 @@ fun WCNewSignRequestScreen(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
-                    onClick = onDecline
+                    onClick = {
+                        logger.info("decline request")
+                        onDecline()
+                        hideAndPop()
+                    }
                 )
                 HSButton(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    onClick = onAllow
+                    onClick = {
+                        logger.info("allow request")
+                        scope.launch {
+                            try {
+                                onAllow()
+                                sheetState.hide()
+                                navController.removeLastOrNull()
+                            } catch (e: Throwable) {
+                                showError(view, e)
+                            }
+                        }
+                    }
                 )
             }
         }

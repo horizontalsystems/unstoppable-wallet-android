@@ -57,7 +57,7 @@ class MainActivityViewModel(
         }
         viewModelScope.launch {
             WCDelegate.walletEvents.collect {
-                wcEvent.postValue(it)
+                wcEvent.value = it
             }
         }
         viewModelScope.launch {
@@ -73,12 +73,18 @@ class MainActivityViewModel(
     }
 
     fun onWcEventHandled() {
-        wcEvent.postValue(null)
+        wcEvent.value = null
     }
 
-    fun reEmitPendingWcProposalIfNeeded() {
-        if (wcEvent.value == null && WCDelegate.sessionProposalEvent != null) {
-            wcEvent.postValue(HSDAppEvent.SessionProposal(WCDelegate.sessionProposalEvent!!))
+    fun reEmitPendingWcEventIfNeeded() {
+        if (wcEvent.value != null) return
+
+        WCDelegate.sessionRequestEvent?.let {
+            wcEvent.value = HSDAppEvent.SessionRequest(it)
+            return
+        }
+        WCDelegate.sessionProposalEvent?.let {
+            wcEvent.value = HSDAppEvent.SessionProposal(it)
         }
     }
 

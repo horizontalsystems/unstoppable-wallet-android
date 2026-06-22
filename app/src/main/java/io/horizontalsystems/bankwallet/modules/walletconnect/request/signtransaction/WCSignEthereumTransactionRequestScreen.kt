@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.SessionRequestUI
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.DataBlock
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.FeeCell
@@ -82,7 +83,10 @@ fun WCSignEthereumTransactionRequestScreen(
     val doneMessage = stringResource(R.string.Hud_Text_Done)
 
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = {
+            WCDelegate.discardActiveSessionRequest()
+            navController.removeLastOrNull()
+        },
         sheetState = sheetState,
     ) { snackbarActions ->
         Column(
