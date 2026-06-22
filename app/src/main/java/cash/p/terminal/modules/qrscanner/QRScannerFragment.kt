@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withResumed
 import androidx.navigation.NavController
 import cash.p.terminal.core.deeplink.DeeplinkParser
 import cash.p.terminal.core.managers.TonConnectManager
@@ -65,6 +66,18 @@ class QRScannerFragment : BaseComposeFragment() {
     }
 
     private fun handleScanResult(decoded: String, navController: NavController) {
+        // A scan result can arrive while the fragment is leaving the foreground (e.g. the user
+        // backgrounds the app the moment a code is detected, or a decoded image is delivered late).
+        // Running pop/navigate then enqueues a fragment transaction that commits during onPause,
+        // crashing the FragmentNavigator. Defer navigation until RESUMED instead of dropping it.
+        lifecycleScope.launch {
+            lifecycle.withResumed {
+                navigateForScanResult(decoded, navController)
+            }
+        }
+    }
+
+    private fun navigateForScanResult(decoded: String, navController: NavController) {
         if (decoded.toUri().isTonConnectDeeplink()) {
             // TonConnectManager.handle emits to dappRequestFlow, which MainActivity
             // observes and opens tcNewFragment on this nav controller.
