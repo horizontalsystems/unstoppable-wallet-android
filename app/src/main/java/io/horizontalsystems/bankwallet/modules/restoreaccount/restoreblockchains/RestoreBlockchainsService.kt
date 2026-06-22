@@ -199,7 +199,9 @@ class RestoreBlockchainsService(
         accountManager.save(account)
 
         restoreSettingsMap.forEach { (token, settings) ->
-            restoreSettingsService.save(settings, account, token.blockchainType)
+            // reload = false: wallets for this restored account are enabled right
+            // after; a reload here would spuriously churn their fresh adapters.
+            restoreSettingsService.save(settings, account, token.blockchainType, reload = false)
         }
 
         items.filter { it.enabled }.forEach { item ->

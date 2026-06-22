@@ -43,13 +43,20 @@ class RestoreSettingsManager(
         }
     }
 
-    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
+    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType, reload: Boolean = true) {
         val records = settings.values.map { (type, value) ->
             RestoreSettingRecord(account.id, blockchainType.uid, type.name, value)
         }
 
         storage.save(records)
-        _settingsUpdatedFlow.tryEmit(blockchainType)
+        // reload = false when ENABLING/CREATING a wallet: the wallet is created
+        // right after with these settings, so emitting here makes WalletManager
+        // spuriously reloadWallets() and churn the just-created adapter (two
+        // MoneroKit instances racing -> stuck Connecting / false-synced). Only a
+        // settings CHANGE on an already-running wallet needs the reload.
+        if (reload) {
+            _settingsUpdatedFlow.tryEmit(blockchainType)
+        }
     }
 
     fun getSettingValueForCreatedAccount(settingType: RestoreSettingType, blockchainType: BlockchainType): String? {
