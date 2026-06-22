@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,6 +65,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -85,8 +87,18 @@ fun WCSessionScreen(
     viewModel: WCSessionViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
     val uiState = viewModel.uiState
     val buttonsStates = uiState.buttonStates
+
+    // Animate the sheet out before popping; removing the entry outright can leave the card on screen.
+    val hideAndPop = {
+        scope.launch {
+            sheetState.hide()
+            navController.removeLastOrNull()
+        }
+        Unit
+    }
 
     val connectionTitleRes =
         if (uiState.connected) R.string.WalletConnect_ConnectedTo else R.string.WalletConnect_ConnectTo
@@ -99,7 +111,11 @@ fun WCSessionScreen(
     }
 
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = {
+            // Reject the proposal on dismiss so the dApp isn't left waiting, then animate out.
+            viewModel.rejectProposal()
+            hideAndPop()
+        },
         sheetState = sheetState,
     ) { snackbarActions ->
         uiState.showError?.let {

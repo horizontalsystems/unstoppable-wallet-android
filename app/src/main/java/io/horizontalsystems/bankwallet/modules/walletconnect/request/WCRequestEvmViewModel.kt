@@ -149,6 +149,7 @@ class WCRequestEvmViewModel(
                     else -> throw Exception("Unsupported Chain")
                 }
 
+                WCDelegate.discardActiveSessionRequest()
                 WCDelegate.respondPendingRequest(
                     sessionRequest.requestId,
                     sessionRequest.topic,
@@ -168,6 +169,7 @@ class WCRequestEvmViewModel(
 
     fun reject() {
         val sessionRequest = sessionRequestUi as? SessionRequestUI.Content ?: return
+        WCDelegate.discardActiveSessionRequest()
         WCDelegate.rejectRequest(sessionRequest.topic, sessionRequest.requestId)
         clearSessionRequest()
     }

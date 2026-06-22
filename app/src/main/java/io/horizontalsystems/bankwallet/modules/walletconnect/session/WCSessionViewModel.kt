@@ -331,6 +331,13 @@ class WCSessionViewModel(
     fun rejectProposal() {
         val proposal = proposal ?: return
 
+        // Clear the pending proposal pointer synchronously so reEmitPendingWcEventIfNeeded() can't
+        // re-open this proposal when the sheet's removal re-resumes the screen underneath. reject()
+        // below only nulls it inside its async network callback, which races the sheet closing.
+        // Done after the guard above so session-only screens (no local proposal) don't clobber an
+        // unrelated pending proposal event.
+        WCDelegate.sessionProposalEvent = null
+
         if (!connectivityManager.isConnected) {
             showError = Translator.getString(R.string.Hud_Text_NoInternet)
             emitState()

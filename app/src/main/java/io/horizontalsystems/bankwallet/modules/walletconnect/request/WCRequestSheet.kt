@@ -62,7 +62,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 private val logger = AppLogger("wallet-connect request")
@@ -163,9 +165,15 @@ fun WcRequestError(
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
     val dismiss = {
+        // Discard synchronously, then animate the sheet out before popping (see WCNewSignRequestScreen).
         WCDelegate.discardActiveSessionRequest()
-        onDismiss()
+        scope.launch {
+            sheetState.hide()
+            onDismiss()
+        }
+        Unit
     }
     BottomSheetContent(
         onDismissRequest = dismiss,
@@ -243,8 +251,10 @@ fun WCNewSignRequestScreen(
 
     BottomSheetContent(
         onDismissRequest = {
+            // Discard synchronously (avoids the reEmit race), then animate out before popping —
+            // same reason as hideAndPop above; popping outright can leave the sheet card on screen.
             WCDelegate.discardActiveSessionRequest()
-            navController.removeLastOrNull()
+            hideAndPop()
         },
         sheetState = sheetState
     ) { snackbarActions ->
@@ -332,7 +342,9 @@ fun WCNewSignRequestScreen(
                         logger.info("allow request")
                         scope.launch {
                             try {
-                                onAllow()
+                                // Offload the signing (CPU-bound crypto) off the Main thread, but
+                                // keep hide()/removeLastOrNull() on Main — they mutate UI state.
+                                withContext(Dispatchers.Default) { onAllow() }
                                 sheetState.hide()
                                 navController.removeLastOrNull()
                             } catch (e: Throwable) {
