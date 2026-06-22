@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.SessionRequestUI
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -81,7 +82,10 @@ fun WCSendEthRequestScreen(
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
 
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = {
+            WCDelegate.discardActiveSessionRequest()
+            navController.removeLastOrNull()
+        },
         sheetState = sheetState,
     ) { snackbarActions ->
         Column(

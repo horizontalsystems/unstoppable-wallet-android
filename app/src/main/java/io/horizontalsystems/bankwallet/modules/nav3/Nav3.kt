@@ -38,10 +38,14 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel.Factory
 import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSheet
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.dapp.core.HSDAppEvent
 
 @Composable
@@ -58,10 +62,17 @@ fun Nav3() {
     val hsNavigation = remember { HSNavigation(backStack) }
 
     HandleNavigateToMain(mainActivityViewModel, hsNavigation)
-    IntentEffect(mainActivityViewModel)
+    IntentEffect(mainActivityViewModel, hsNavigation)
     Validate(mainActivityViewModel)
     HandleWcEvent(mainActivityViewModel, hsNavigation)
     ToggleScreenshot(hsNavigation)
+
+    LaunchedEffect(isLocked) {
+        if (!isLocked) {
+            // Re-show any WC request/proposal that arrived while locked
+            mainActivityViewModel.reEmitPendingWcEventIfNeeded()
+        }
+    }
 
     val activity = LocalActivity.current
 
@@ -118,18 +129,60 @@ private fun HandleNavigateToMain(
 }
 
 @Composable
-private fun IntentEffect(viewModel: MainActivityViewModel) {
+private fun IntentEffect(viewModel: MainActivityViewModel, navController: HSNavigation) {
     val activity = LocalActivity.current
     LaunchedEffect(Unit) {
-        activity?.intent?.let { viewModel.setIntent(it) }
+        activity?.intent?.let {
+            if (!handleWalletConnectDeepLink(it, navController)) {
+                viewModel.setIntent(it)
+            }
+        }
     }
     DisposableEffect(activity) {
-        val consumer = Consumer<Intent> { viewModel.setIntent(it) }
+        val consumer = Consumer<Intent> {
+            if (!handleWalletConnectDeepLink(it, navController)) {
+                viewModel.setIntent(it)
+            }
+        }
         (activity as? ComponentActivity)?.addOnNewIntentListener(consumer)
         onDispose {
             (activity as? ComponentActivity)?.removeOnNewIntentListener(consumer)
         }
     }
+}
+
+// WalletConnect deeplinks are handled here, at the navigation root, so they work no matter which
+// inner screen is shown (the deeplink -> handleDeepLink flow in MainScreen only runs while
+// MainScreen is composed, so a `wc:` link received on e.g. the WC list page would otherwise be
+// ignored). Pairing here is enough — the connect proposal dialog is opened by HandleWcEvent
+// regardless of the current destination.
+//
+// Returns true if the intent was a WalletConnect deeplink and was handled here. When DAppManager
+// isn't available yet (e.g. cold start before the relay connects) it returns false so the intent
+// falls back to MainScreen's deeplink flow, which waits and routes through the WC list.
+private fun handleWalletConnectDeepLink(intent: Intent, navController: HSNavigation): Boolean {
+    val uri = intent.data ?: return false
+    val wcUri = App.wcManager.getWalletConnectUri(uri) ?: return false
+    if (!DAppManager.isAvailable) return false
+
+    when (val supportState = App.wcManager.getWalletConnectSupportState()) {
+        WCManager.SupportState.Supported -> {
+            DAppManager.pair(wcUri.trim())
+        }
+
+        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+            navController.slideFromBottom(WCErrorNoAccountSheet)
+        }
+
+        is WCManager.SupportState.NotSupported -> {
+            navController.slideFromBottom(
+                WCAccountTypeNotSupportedSheet(
+                    WCAccountTypeNotSupportedSheet.Input(supportState.accountTypeDescription)
+                )
+            )
+        }
+    }
+    return true
 }
 
 @Composable
@@ -162,9 +215,33 @@ private fun HandleWcEvent(
     val wcEvent by viewModel.wcEvent.observeAsState()
     LaunchedEffect(wcEvent) {
         val event = wcEvent ?: return@LaunchedEffect
+
+        // Don't open WC bottom sheets while the app is locked. The event is retained in
+        // WCDelegate and re-emitted via reEmitPendingWcEventIfNeeded() once the user unlocks,
+        // so the request/proposal isn't lost behind the pin screen.
+        val deferWhileLocked = App.pinComponent.isLocked &&
+                (event is HSDAppEvent.SessionRequest || event is HSDAppEvent.SessionProposal)
+        if (deferWhileLocked) {
+            viewModel.onWcEventHandled()
+            return@LaunchedEffect
+        }
+
         when (event) {
-            is HSDAppEvent.SessionRequest -> navController.slideFromBottom(WCRequestSheet)
-            is HSDAppEvent.SessionProposal -> navController.slideFromBottom(WCSessionSheet(null))
+            is HSDAppEvent.SessionRequest -> {
+                // reEmitPendingWcEventIfNeeded() can fire more than once per foreground
+                // transition (from both the unlock effect and MainScreen's ON_RESUME), so skip
+                // if the request sheet is already shown to avoid stacking duplicates.
+                if (navController.lastOrNull() !is WCRequestSheet) {
+                    navController.slideFromBottom(WCRequestSheet)
+                }
+            }
+
+            is HSDAppEvent.SessionProposal -> {
+                if (navController.lastOrNull() !is WCSessionSheet) {
+                    navController.slideFromBottom(WCSessionSheet(null))
+                }
+            }
+
             is HSDAppEvent.Error -> HudHelper.showErrorMessage(view, event.throwable.message ?: "Error")
             is HSDAppEvent.SessionSettled -> HudHelper.showSuccessMessage(view, hudTextConnected)
             else -> {}

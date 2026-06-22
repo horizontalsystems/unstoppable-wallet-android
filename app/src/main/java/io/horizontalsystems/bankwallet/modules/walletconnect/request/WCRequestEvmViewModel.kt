@@ -166,24 +166,10 @@ class WCRequestEvmViewModel(
         }
     }
 
-    suspend fun reject() {
-        return suspendCoroutine { continuation ->
-            val sessionRequest = sessionRequestUi as? SessionRequestUI.Content
-            if (sessionRequest != null) {
-                WCDelegate.rejectRequest(
-                    sessionRequest.topic,
-                    sessionRequest.requestId,
-                    onSuccessResult = {
-                        clearSessionRequest()
-                        continuation.resume(Unit)
-                    },
-                    onErrorResult = {
-                        clearSessionRequest()
-                        continuation.resumeWithException(it)
-                    }
-                )
-            }
-        }
+    fun reject() {
+        val sessionRequest = sessionRequestUi as? SessionRequestUI.Content ?: return
+        WCDelegate.rejectRequest(sessionRequest.topic, sessionRequest.requestId)
+        clearSessionRequest()
     }
 
     class Factory : ViewModelProvider.Factory {

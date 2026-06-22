@@ -27,6 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.DataBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -64,7 +65,10 @@ fun WcRequestScreen(
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
 
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = {
+            WCDelegate.discardActiveSessionRequest()
+            navController.removeLastOrNull()
+        },
         sheetState = sheetState
     ) { snackbarActions ->
         Column(

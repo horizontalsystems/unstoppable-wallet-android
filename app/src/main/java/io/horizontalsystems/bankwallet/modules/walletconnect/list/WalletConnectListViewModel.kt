@@ -39,7 +39,11 @@ class WalletConnectListViewModel(
     private var _refreshFlow: MutableSharedFlow<Unit> =
         MutableSharedFlow(replay = 0, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
     private var refreshFlow: SharedFlow<Unit> = _refreshFlow.asSharedFlow()
-    private val uiStateFlow = merge(WCDelegate.walletEvents, refreshFlow).map {
+    private val uiStateFlow = merge(
+        WCDelegate.walletEvents,
+        refreshFlow,
+        wcSessionManager.sessionsFlow
+    ).map {
         getUiState()
     }
 
@@ -122,7 +126,7 @@ class WalletConnectListViewModel(
 
     private fun getUiState(): WalletConnectListUiState {
         return WalletConnectListUiState(
-            sessionViewItems = getSessions(wcSessionManager.sessions),
+            sessionViewItems = getSessions(wcSessionManager.sessionsFlow.value),
             pairingsNumber = pairingsNumber,
         )
     }
@@ -150,7 +154,7 @@ class WalletConnectListViewModel(
 
     private fun syncPendingRequestsCountMap() {
         viewModelScope.launch {
-            wcSessionManager.sessions.forEach { session ->
+            wcSessionManager.sessionsFlow.value.forEach { session ->
                 val requests = DAppManager.getPendingRequests(session.topic)
                 pendingRequestCountMap[session.topic] = requests.size
                 pendingRequests = getPendingRequestViewItems(session.topic)
