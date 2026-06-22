@@ -1,3 +1,10 @@
+## 🚀 Version 0.57.1 Update
+_Release date: June 22, 2026_
+
+### 🐛 Fixes
+
+- **Fixed minor issues and improved app stability**
+
 ## 🚀 Version 0.57.0 Update
 _Release date: June 16, 2026_
 
