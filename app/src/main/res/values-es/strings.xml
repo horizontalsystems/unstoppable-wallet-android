@@ -1796,4 +1796,6 @@
     <string name="PasskeyTerms_DeviceDependency_Description">El acceso requiere tu dispositivo. Perder el acceso puede provocar la pérdida de fondos.</string>
     <string name="PasskeyTerms_LimitedAccess_Description">Puede que no funcione en todos los dispositivos o plataformas.</string>
     <string name="PasskeyTerms_Responsibility_Description">Eres responsable del acceso a tu dispositivo. Unstoppable no puede recuperar esta wallet si se pierde el acceso.</string>
+    <string name="CoinPage_Buy">Comprar</string>
+    <string name="CoinPage_Sell">Vender</string>
 </resources>

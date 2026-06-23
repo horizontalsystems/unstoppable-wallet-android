@@ -1797,4 +1797,6 @@
     <string name="WalletConnect_DisconnectWarning">이 연결을 삭제하시겠습니까?</string>
     <string name="WalletConnect_RequestFailedDescription">문제가 발생하여 요청을 완료할 수 없습니다</string>
     <string name="Watch_Monero_Warning">Monero 워치 지갑은 입금 거래만 표시합니다. 표시된 잔액이 정확하지 않을 수 있습니다.</string>
+    <string name="CoinPage_Buy">구매</string>
+    <string name="CoinPage_Sell">판매</string>
 </resources>

@@ -1801,4 +1801,6 @@
     <string name="PasskeyTerms_DeviceDependency_Description">O acesso requer seu dispositivo. Perder o acesso pode resultar na perda de fundos.</string>
     <string name="PasskeyTerms_LimitedAccess_Description">Pode não funcionar em todos os dispositivos ou plataformas.</string>
     <string name="PasskeyTerms_Responsibility_Description">Você é responsável pelo acesso ao seu dispositivo. A Unstoppable não pode recuperar esta carteira se o acesso for perdido.</string>
+    <string name="CoinPage_Buy">Comprar</string>
+    <string name="CoinPage_Sell">Vender</string>
 </resources>
