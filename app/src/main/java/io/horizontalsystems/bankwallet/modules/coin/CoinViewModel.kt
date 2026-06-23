@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.withContext
 
 class CoinViewModel(
     private val service: CoinService,
@@ -35,9 +36,7 @@ class CoinViewModel(
     var successMessage by mutableStateOf<Int?>(null)
         private set
 
-    // The coin's own token used as one side of the Buy/Sell swap. Picks the most
-    // relevant supported token variant (same ordering as the coin's token list).
-    val coinToken: Token? = fullCoin.tokens
+     val coinToken: Token? = fullCoin.tokens
         .filter { it.isSupported }
         .sortedWith(
             compareBy<Token> { it.type.order }
@@ -45,8 +44,6 @@ class CoinViewModel(
         )
         .firstOrNull()
 
-    // The first token from the context-aware Popular Tokens list, used as the
-    // opposite side of the Buy/Sell swap.
     var popularToken by mutableStateOf<Token?>(null)
         private set
 
@@ -54,7 +51,10 @@ class CoinViewModel(
         coinToken?.let { context ->
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    popularToken = SwapPopularTokens.build(marketKit, context).firstOrNull()
+                    val token = SwapPopularTokens.build(marketKit, context).firstOrNull()
+                    withContext(Dispatchers.Main) {
+                        popularToken = token
+                    }
                 } catch (e: Throwable) {
                     Log.e("CoinViewModel", "Failed to build popular tokens", e)
                 }
