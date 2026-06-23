@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -39,10 +38,6 @@ class CreateAccountPasskeyViewModel(
         error = error,
     )
 
-    /**
-     * Called by the Fragment after PasskeyManager.register() succeeds.
-     * Derives mnemonic from [entropy], creates and persists the account.
-     */
     fun createAccount(entropy: ByteArray) {
         viewModelScope.launch {
             try {
@@ -80,7 +75,6 @@ class CreateAccountPasskeyViewModel(
         emitState()
     }
 
-    /** Called by the Fragment when PasskeyManager.register() throws. */
     fun onError(e: Throwable) {
         error = e.message ?: e.javaClass.simpleName
         success = null

@@ -67,34 +67,6 @@ fun WCSessionList(
                 VSpacer(32.dp)
             }
         }
-
-        //todo remove it from viewmodel too
-//        val pairingsNumber = uiState.pairingsNumber
-//        if (pairingsNumber > 0) {
-//            item {
-//                CellSingleLineLawrenceSection {
-//                    Row(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .clickable {
-//                                navigation.slideFromRight(R.id.wcPairingsFragment)
-//                            }
-//                            .padding(horizontal = 16.dp),
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        body_leah(text = stringResource(R.string.WalletConnect_Pairings))
-//                        Spacer(modifier = Modifier.weight(1f))
-//                        subhead1_grey(text = pairingsNumber.toString())
-//                        Spacer(modifier = Modifier.width(8.dp))
-//                        Image(
-//                            painter = painterResource(id = R.drawable.ic_arrow_right),
-//                            contentDescription = null
-//                        )
-//                    }
-//                }
-//                Spacer(modifier = Modifier.height(32.dp))
-//            }
-//        }
     }
 }
 
