@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -55,14 +53,14 @@ fun CoinScreen(
     navController: HSNavigation
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, navController)
+        CoinContent(coinViewModel, navController)
     } else {
         CoinNotFound(coinUid, navController)
     }
 }
 
 @Composable
-fun CoinTabs(
+fun CoinContent(
     viewModel: CoinViewModel,
     navController: HSNavigation
 ) {
