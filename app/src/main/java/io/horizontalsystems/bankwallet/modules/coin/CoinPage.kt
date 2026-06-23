@@ -1,35 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statTab
-import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
-import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
-import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -66,14 +66,14 @@ fun CoinTabs(
     viewModel: CoinViewModel,
     navController: HSNavigation
 ) {
-    val tabs = viewModel.tabs
-    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
-    val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
 
     HSScaffold(
         title = viewModel.fullCoin.coin.code,
         onBack = navController::removeLastOrNull,
+        bottomBar = {
+            CoinBottomButtons(viewModel, navController)
+        },
         menuItems = buildList {
             if (viewModel.isWatchlistEnabled) {
                 if (viewModel.isFavorite) {
@@ -112,51 +112,65 @@ fun CoinTabs(
             }
         }
     ) {
-        Column(
-            modifier = Modifier.navigationBarsPadding()
-        ) {
-            val selectedTab = tabs[pagerState.currentPage]
-            val tabItems = tabs.map {
-                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
-            }
-            TabsTop(TabsTopType.Fitted, tabItems) { tab ->
-                coroutineScope.launch {
-                    pagerState.scrollToPage(tab.ordinal)
-
-                    stat(page = StatPage.CoinPage, event = StatEvent.SwitchTab(tab.statTab))
-                }
-            }
-
-            HorizontalPager(
-                state = pagerState,
-                userScrollEnabled = false
-            ) { page ->
-                when (tabs[page]) {
-                    CoinModule.Tab.Overview -> {
-                        CoinOverviewScreen(
-                            fullCoin = viewModel.fullCoin,
-                            navController = navController
-                        )
-                    }
-
-                    CoinModule.Tab.Market -> {
-                        CoinMarketsScreen(fullCoin = viewModel.fullCoin)
-                    }
-
-                    CoinModule.Tab.Details -> {
-                        CoinAnalyticsScreen(
-                            fullCoin = viewModel.fullCoin,
-                            navController = navController
-                        )
-                    }
-                }
-            }
+        Column {
+            CoinOverviewScreen(
+                fullCoin = viewModel.fullCoin,
+                navController = navController
+            )
 
             viewModel.successMessage?.let {
                 HudHelper.showSuccessMessage(view, it)
 
                 viewModel.onSuccessMessageShown()
             }
+        }
+    }
+}
+
+@Composable
+private fun CoinBottomButtons(
+    viewModel: CoinViewModel,
+    navController: HSNavigation
+) {
+    val coinToken = viewModel.coinToken ?: return
+    val popularToken = viewModel.popularToken
+
+    ButtonsGroupWithShade {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 16.dp)
+        ) {
+            ButtonPrimaryYellow(
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.CoinPage_Buy),
+                onClick = {
+                    navController.slideFromRight(
+                        SwapPage(
+                            SwapPage.Input(
+                                tokenIn = popularToken,
+                                tokenOut = coinToken
+                            )
+                        )
+                    )
+                }
+            )
+
+            HSpacer(8.dp)
+
+            ButtonPrimaryDefault(
+                modifier = Modifier.weight(1f),
+                title = stringResource(R.string.CoinPage_Sell),
+                onClick = {
+                    navController.slideFromRight(
+                        SwapPage(
+                            SwapPage.Input(
+                                tokenIn = coinToken,
+                                tokenOut = popularToken
+                            )
+                        )
+                    )
+                }
+            )
         }
     }
 }
