@@ -64,6 +64,13 @@ class WalletManager(
         activeWalletsUpdatedObservable.onNext(walletsSet.toList())
     }
 
+    // Re-emit the current active wallets to (re)initialize adapters without tearing existing ones
+    // down. Used after Monero startup Auto-Select resolves the fastest node so the Monero adapter
+    // is created once (existing adapters are reused, none are deleted).
+    fun refreshActiveWallets() {
+        notifyActiveWallets()
+    }
+
     @Synchronized
     private fun handleUpdated(activeAccount: Account?) {
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()

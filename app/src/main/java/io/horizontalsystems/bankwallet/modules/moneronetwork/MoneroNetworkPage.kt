@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -36,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
-import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -45,13 +45,21 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCa
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -105,10 +113,19 @@ private fun MoneroNetworkScreen(
     HSScaffold(
         title = viewModel.title,
         onBack = onBackPress,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Refresh),
+                icon = R.drawable.ic_refresh,
+                onClick = { viewModel.refresh() }
+            )
+        ),
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
         ) {
+
+            val autoSelect = viewModel.uiState.autoSelectEnabled
 
             item {
                 VSpacer(12.dp)
@@ -116,12 +133,17 @@ private fun MoneroNetworkScreen(
                     modifier = Modifier.padding(horizontal = 32.dp),
                     text = stringResource(R.string.MoneroNodeSettings_Description)
                 )
-                VSpacer(32.dp)
+                VSpacer(24.dp)
+                AutoSelectCell(
+                    enabled = autoSelect,
+                    onCheckedChange = { viewModel.onToggleAutoSelect(it) }
+                )
+                VSpacer(24.dp)
             }
 
             item {
                 CellUniversalLawrenceSection(viewModel.uiState.defaultItems) { item ->
-                    BlockchainSettingCell(item.name, item.url, item.selected, null) {
+                    MoneroNodeRow(item, enabled = !autoSelect) {
                         showTrustedSettings(item.node)
                     }
                 }
@@ -132,7 +154,7 @@ private fun MoneroNetworkScreen(
                     viewModel.uiState.customItems,
                     revealedCardId,
                     onClick = { node ->
-                        showTrustedSettings(node)
+                        if (!autoSelect) showTrustedSettings(node)
                     },
                     onReveal = { id ->
                         if (revealedCardId != id) {
@@ -305,12 +327,99 @@ fun RpcCell(
                 )
                 subhead2_grey(text = item.url)
             }
+            PingBadge(item.ping)
             if (item.selected) {
+                Spacer(Modifier.width(16.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_checkmark_20),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AutoSelectCell(
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    body_leah(text = stringResource(id = R.string.MoneroNodeSettings_AutoSelect))
+                    Spacer(Modifier.height(1.dp))
+                    subhead2_grey(text = stringResource(id = R.string.MoneroNodeSettings_AutoSelectDescription))
+                }
+                Spacer(Modifier.width(12.dp))
+                HsSwitch(
+                    checked = enabled,
+                    onCheckedChange = onCheckedChange,
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun MoneroNodeRow(
+    item: MoneroNetworkViewModel.ViewItem,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) {
+    RowUniversal(
+        onClick = if (enabled) onClick else null,
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            val title = item.name.ifBlank { stringResource(id = R.string.WalletConnect_Unnamed) }
+            body_leah(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(1.dp))
+            subhead2_grey(
+                text = item.url,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        PingBadge(item.ping)
+        if (item.selected) {
+            Spacer(Modifier.width(16.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                tint = ComposeAppTheme.colors.jacob,
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@Composable
+private fun PingBadge(ping: MoneroNetworkViewModel.PingState) {
+    when (ping) {
+        MoneroNetworkViewModel.PingState.Loading -> {
+            CircularProgressIndicator(
+                modifier = Modifier.size(16.dp),
+                color = ComposeAppTheme.colors.grey,
+                strokeWidth = 2.dp
+            )
+        }
+
+        MoneroNetworkViewModel.PingState.Unreachable -> {
+            caption_lucian(text = stringResource(id = R.string.MoneroNodeSettings_Unreachable))
+        }
+
+        is MoneroNetworkViewModel.PingState.Reachable -> {
+            val text = stringResource(id = R.string.MoneroNodeSettings_Latency, ping.responseTimeMs)
+            when (ping.level) {
+                MoneroNetworkViewModel.PingState.Level.Good -> caption_remus(text = text)
+                MoneroNetworkViewModel.PingState.Level.Medium -> caption_jacob(text = text)
+                MoneroNetworkViewModel.PingState.Level.Slow -> caption_grey(text = text)
             }
         }
     }

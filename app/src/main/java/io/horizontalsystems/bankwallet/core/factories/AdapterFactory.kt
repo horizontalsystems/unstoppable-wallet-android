@@ -181,12 +181,19 @@ class AdapterFactory(
                 StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
             }
             BlockchainType.Monero -> {
-                MoneroAdapter.create(
-                    context = context,
-                    wallet = wallet,
-                    restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
-                    node = moneroNodeManager.currentNode
-                )
+                if (moneroNodeManager.isResolvingFastestNode) {
+                    // Defer creation until startup Auto-Select picks the fastest node, so the
+                    // adapter connects once to it instead of reconnecting. reloadWallets(Monero)
+                    // recreates the adapter when resolution finishes.
+                    null
+                } else {
+                    MoneroAdapter.create(
+                        context = context,
+                        wallet = wallet,
+                        restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
+                        node = moneroNodeManager.currentNode
+                    )
+                }
             }
             BlockchainType.Zano -> {
                 ZanoAdapter.create(

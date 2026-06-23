@@ -42,9 +42,6 @@ import io.horizontalsystems.bankwallet.core.managers.MigrationManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.NetworkManager
-import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
-import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
-import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
@@ -78,7 +75,10 @@ import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.WalletStorage
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
+import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
@@ -90,11 +90,11 @@ import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
-import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
-import io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
+import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
+import io.horizontalsystems.bankwallet.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -102,8 +102,9 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapProviderInfoManager
+import io.horizontalsystems.bankwallet.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
@@ -122,7 +123,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.stellar.WCHandlerSt
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
-import io.horizontalsystems.bankwallet.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -312,7 +312,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletManager = WalletManager(accountManager, walletStorage)
 
         moneroNodeStorage = MoneroNodeStorage(appDatabase)
-        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
+        moneroNodeManager = MoneroNodeManager(this, blockchainSettingsStorage, moneroNodeStorage, marketKit)
         zanoNodeStorage = ZanoNodeStorage(appDatabase)
         zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
         zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
@@ -658,6 +658,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             contactsRepository.initialize()
             trialExpired = !UserSubscriptionManager.hasFreeTrial()
             appIconService.validateAndFixCurrentIcon()
+        }
+
+        coroutineScope.launch {
+            // If Monero Auto-Select is enabled, pick the fastest reachable node at startup so the
+            // wallet syncs through it without opening the node screen. The Monero adapter creation
+            // is deferred (MoneroNodeManager.isResolvingFastestNode) until this completes; then a
+            // single non-churning re-init creates it once with the fastest node already selected.
+            moneroNodeManager.autoSelectFastestNodeOnStartup()
+            walletManager.refreshActiveWallets()
         }
 
         coroutineScope.launch {

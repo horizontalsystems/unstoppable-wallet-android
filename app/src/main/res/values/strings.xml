@@ -1265,6 +1265,10 @@
         \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
     <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
+    <string name="MoneroNodeSettings_AutoSelect">Auto-Select</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">Automatically use the fastest node</string>
+    <string name="MoneroNodeSettings_Unreachable">Unreachable</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="ZanoNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
     <!--Zcash Endpoint Settings-->
     <string name="ZcashEndpointSettings_Description">Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s).</string>

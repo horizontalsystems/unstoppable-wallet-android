@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
@@ -7,12 +8,14 @@ import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
 import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.util.Objects
 
 class MoneroNodeManager(
+    private val context: Context,
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val moneroNodeStorage: MoneroNodeStorage,
     private val marketKitWrapper: MarketKitWrapper
@@ -30,11 +33,9 @@ class MoneroNodeManager(
         MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),
         MoneroNode("opennode.xmr-tw.org:18089", "xmr-tw.org", "opennode.xmr-tw.org:18089/mainnet/xmr-tw.org"),
         MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
-        MoneroNode("node.monerodevs.org:18089", "monerodevs.org", "node.monerodevs.org:18089/mainnet/monerodevs.org"),
         MoneroNode("nodex.monerujo.io:18081", "monerujo.io", "nodex.monerujo.io:18081/mainnet/monerujo.io"),
         MoneroNode("xmr-node.cakewallet.com:18081", "cakewallet.com", "xmr-node.cakewallet.com:18081/mainnet/cakewallet.com"),
         MoneroNode("monero.stackwallet.com:18081", "stackwallet.com", "monero.stackwallet.com:18081/mainnet/stackwallet.com"),
-        MoneroNode("xmr-de.boldsuck.org:18081", "boldsuck.org", "xmr-de.boldsuck.org:18081/mainnet/boldsuck.org"),
     )
 
     val defaultNodes: List<MoneroNode>
@@ -78,10 +79,62 @@ class MoneroNodeManager(
             return rpcSource ?: defaultNodes.first()
         }
 
+    var autoSelectEnabled: Boolean
+        get() = blockchainSettingsStorage.moneroAutoSelect()
+        set(value) {
+            blockchainSettingsStorage.saveMoneroAutoSelect(value)
+        }
+
+    // True while the startup ping is choosing the fastest node. The Monero adapter creation is
+    // deferred while this is set, so the wallet connects once to the fastest node instead of
+    // connecting to the stored node and then reconnecting. Set at construction (before adapters
+    // are initialized) to avoid a race.
+    @Volatile
+    var isResolvingFastestNode: Boolean = autoSelectEnabled
+        private set
+
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(blockchainType.uid)
 
+    suspend fun pingNodes(serialized: List<String>) =
+        MoneroKit.pingNodes(context, serialized)
+
+    suspend fun autoSelectFastestNodeOnStartup() {
+        if (!autoSelectEnabled) return
+
+        var target = currentNode
+        try {
+            val nodes = allNodes
+            val results = pingNodes(nodes.map { it.serialized }).associateBy { it.serialized }
+
+            val fastest = nodes
+                .mapNotNull { node ->
+                    results[node.serialized]
+                        ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
+                        ?.let { node to it.responseTime }
+                }
+                .minByOrNull { it.second }
+                ?.first
+
+            if (fastest != null) target = fastest
+        } catch (e: Exception) {
+            // keep the stored node on any ping failure
+        } finally {
+            // Persist WITHOUT emitting currentNodeUpdatedFlow: emitting would replay (replay=1)
+            // into WalletManager's late collector and trigger reloadWallets(Monero) → adapter
+            // teardown/reconnect churn. The adapter is (re)created once by the normal wallet
+            // activation / WalletManager.refreshActiveWallets() with this node already current.
+            persist(target)
+            isResolvingFastestNode = false
+        }
+    }
+
     fun save(node: MoneroNode) {
+        persist(node)
+        _currentNodeUpdatedFlow.tryEmit(node.host)
+    }
+
+    private fun persist(node: MoneroNode) {
         val record = MoneroNodeRecord(
             url = node.host,
             username = node.username,
@@ -91,7 +144,6 @@ class MoneroNodeManager(
         moneroNodeStorage.save(record)
 
         blockchainSettingsStorage.saveMoneroNode(node.host)
-        _currentNodeUpdatedFlow.tryEmit(node.host)
     }
 
     private fun serializeNode(uri: Uri, username: String?, password: String?): String {

@@ -12,6 +12,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyBtcTransactionSort: String = "btc-transaction-sort"
         const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
         const val keyMoneroNode: String = "monero-node"
+        const val keyMoneroAutoSelect: String = "monero-auto-select"
         const val keyZanoNode: String = "zano-node"
         const val keyZcashEndpoint: String = "zcash-endpoint"
     }
@@ -75,6 +76,20 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 blockchainUid = BlockchainType.Monero.uid,
                 key = keyMoneroNode,
                 value = host
+            )
+        )
+    }
+
+    fun moneroAutoSelect(): Boolean {
+        return dao.getBlockchainSetting(BlockchainType.Monero.uid, keyMoneroAutoSelect)?.value?.toBoolean() ?: false
+    }
+
+    fun saveMoneroAutoSelect(enabled: Boolean) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = BlockchainType.Monero.uid,
+                key = keyMoneroAutoSelect,
+                value = enabled.toString()
             )
         )
     }
