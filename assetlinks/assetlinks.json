@@ -8,7 +8,8 @@
       "namespace": "android_app",
       "package_name": "io.horizontalsystems.bankwallet",
       "sha256_cert_fingerprints": [
-        "C1:89:94:93:E4:40:48:91:78:B8:74:88:51:B7:2C:BE:D5:0C:28:2A:AA:8C:03:AE:23:6A:46:52:F8:C4:F2:7B"
+        "C1:89:94:93:E4:40:48:91:78:B8:74:88:51:B7:2C:BE:D5:0C:28:2A:AA:8C:03:AE:23:6A:46:52:F8:C4:F2:7B",
+        "B0:0B:7B:E2:27:90:1E:1A:67:3C:36:5F:EE:4F:8D:A5:9D:45:D0:7B:A4:59:FC:14:36:7B:8C:51:81:84:04:D9"
       ]
     }
   }
