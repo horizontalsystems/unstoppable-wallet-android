@@ -48,7 +48,6 @@ import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -101,11 +100,6 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
         R.drawable.prem_prioritysupport
     ),
-    TokenInsightsFeature(
-        R.string.Premium_UpgradeFeature_TokenInsights,
-        R.string.Premium_UpgradeFeature_TokenInsights_BigDescription,
-        R.drawable.prem_tokeninsight
-    ),
     AdvancedSearchFeature(
         R.string.Premium_UpgradeFeature_AdvancedSearch,
         R.string.Premium_UpgradeFeature_AdvancedSearch_BigDescription,
@@ -119,7 +113,6 @@ enum class PremiumFeature(
 
     companion object {
         fun getFeature(paidAction: IPaidAction) = when (paidAction) {
-            TokenInsights -> TokenInsightsFeature
             AdvancedSearch -> AdvancedSearchFeature
             TradeSignals -> TradeSignalsFeature
             RobberyProtection -> RobberyProtectionFeature

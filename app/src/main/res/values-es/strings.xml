@@ -293,8 +293,6 @@
     <string name="Market_Sorting_LowestCap">Capitalización Menor</string>
     <string name="Market_Filters_Select">Seleccionar %d</string>
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">Explore los mejores rendimientos de apuesta DeFi en un solo lugar.</string>
-    <string name="Market_Vaults_UnlockPremium">Desbloquear Premium</string>
     <string name="Market_Vaults_Sorting_APY">Mayor APY</string>
     <string name="Market_Vaults_Sorting_TVL">TVL más alto</string>
     <string name="Market_Vaults_Filter_AllAssets">Todos los activos</string>
@@ -912,7 +910,6 @@
     <string name="Premium_EnjoyFullPowerOfTheApp">Disfruta de todo el poder de la aplicación.</string>
     <string name="Premium_SelectSubscription">Seleccionar Suscripción</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Una compra desbloquea todas las características Premium.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Analítica de Tokens</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Búsqueda Avanzada</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Señales y Tendencias</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Modo Coacción</string>
@@ -920,7 +917,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Protección de Escam</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Soporte prioritario</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Protección de intercambio</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Acceso a listas top-100 según criterios clave</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrado multinivel con múltiples parámetros</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoreo automático de tendencias del mercado para tus tokens</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Seguridad inteligente de fondos durante amenazas físicas</string>
@@ -928,7 +924,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantía de legalidad para tus operaciones con criptomonedas</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acceso al equipo de la cartera para soporte técnico rápido.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Evita que los bots roben durante los intercambios (swaps).</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Muestra datos detallados: volumen, liquidez y tendencias - para tomar decisiones de inversión más inteligentes.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Te permite crear una wallet señuelo con un PIN distinto, manteniendo tus activos reales ocultos en situaciones de riesgo.</string>

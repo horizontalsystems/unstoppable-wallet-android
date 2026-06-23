@@ -47,7 +47,6 @@ object CoinAnalyticsModule {
     data class BlockViewItem(
         val title: Int?,
         val info: AnalyticInfo?,
-        val showAsPreview: Boolean,
         val value: String? = null,
         val valuePeriod: String? = null,
         val analyticChart: ChartViewItem?,

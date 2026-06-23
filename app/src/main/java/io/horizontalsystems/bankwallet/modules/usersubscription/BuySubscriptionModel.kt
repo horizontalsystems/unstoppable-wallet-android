@@ -11,7 +11,6 @@ import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import java.time.Period
 import java.util.Locale
@@ -21,7 +20,6 @@ object BuySubscriptionModel {
 
     val IPaidAction.titleStringRes: Int
         get() = when (this) {
-            TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals
             RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection
@@ -34,7 +32,6 @@ object BuySubscriptionModel {
 
     val IPaidAction.descriptionStringRes: Int
         get() = when (this) {
-            TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_Description
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_Description
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_Description
             RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection_Description
@@ -47,7 +44,6 @@ object BuySubscriptionModel {
 
     val IPaidAction.iconRes: Int
         get() = when (this) {
-            TokenInsights -> R.drawable.prem_binocular_24
             AdvancedSearch -> R.drawable.prem_search_24
             TradeSignals -> R.drawable.prem_bell_24
             RobberyProtection -> R.drawable.prem_fraud_24

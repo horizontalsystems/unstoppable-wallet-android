@@ -1,28 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.earn
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
@@ -40,7 +30,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -48,8 +37,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
@@ -58,7 +45,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -107,9 +93,7 @@ fun MarketEarnScreen(
                         )
                     } else {
                         VaultList(
-                            noPremium = uiState.noPremium,
                             items = uiState.items,
-                            blurredItems = uiState.blurredItems,
                             scrollToTop = scrollToTopAfterUpdate,
                             onCoinClick = { viewItem ->
                                 val input = VaultPage.Input(
@@ -124,14 +108,7 @@ fun MarketEarnScreen(
                                     protocolName = viewItem.protocolName,
                                     assetLogo = viewItem.assetLogo
                                 )
-                                navigation.paidAction(TokenInsights) {
-                                    navigation.slideFromRight(VaultPage(input))
-                                }
-                            },
-                            onGetPremiumClick = {
-                                navigation.paidAction(TokenInsights) {
-                                    //refresh page
-                                }
+                                navigation.slideFromRight(VaultPage(input))
                             },
                             preItems = {
                                 stickyHeader {
@@ -202,10 +179,8 @@ fun MarketEarnScreen(
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
                 openFilterSelector = false
-                navigation.paidAction(TokenInsights) {
-                    scrollToTopAfterUpdate = true
-                    viewModel.onFilterBySelected(selected)
-                }
+                scrollToTopAfterUpdate = true
+                viewModel.onFilterBySelected(selected)
             },
             onDismiss = {
                 openFilterSelector = false
@@ -218,10 +193,8 @@ fun MarketEarnScreen(
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
                 openPeriodSelector = false
-                navigation.paidAction(TokenInsights) {
-                    scrollToTopAfterUpdate = true
-                    viewModel.onApyPeriodSelected(selected)
-                }
+                scrollToTopAfterUpdate = true
+                viewModel.onApyPeriodSelected(selected)
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -234,10 +207,8 @@ fun MarketEarnScreen(
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->
                 openSortingSelector = false
-                navigation.paidAction(TokenInsights) {
-                    scrollToTopAfterUpdate = true
-                    viewModel.onSortingSelected(selected)
-                }
+                scrollToTopAfterUpdate = true
+                viewModel.onSortingSelected(selected)
             },
             onDismiss = {
                 openSortingSelector = false
@@ -248,12 +219,9 @@ fun MarketEarnScreen(
 
 @Composable
 fun VaultList(
-    noPremium: Boolean,
     items: List<EarnModule.VaultViewItem>,
-    blurredItems: List<EarnModule.VaultViewItem>,
     scrollToTop: Boolean,
     onCoinClick: (EarnModule.VaultViewItem) -> Unit,
-    onGetPremiumClick: () -> Unit = {},
     preItems: LazyListScope.() -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -279,19 +247,7 @@ fun VaultList(
             HsDivider()
         }
         item {
-            if (noPremium) {
-                PremiumContentMessage(blurredItems) {
-                    onGetPremiumClick.invoke()
-                }
-                VSpacer(70.dp)
-            }
-        }
-        item {
-            //Add bottom space only when all items are visible
-            //and don't show bottom space when Premium banner is shown
-            if (!noPremium) {
-                VSpacer(140.dp)
-            }
+            VSpacer(140.dp)
         }
         if (scrollToTop) {
             coroutineScope.launch {
@@ -344,66 +300,6 @@ private fun VaultItem(
         },
         onClick = onClick
     )
-}
-
-@Composable
-private fun PremiumContentMessage(
-    blurredItems: List<EarnModule.VaultViewItem>,
-    onClick: () -> Unit
-) {
-    Box(
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.blur(
-                radiusX = 16.dp,
-                radiusY = 16.dp
-            )
-        ) {
-            blurredItems.forEach { item ->
-                BoxBordered(bottom = true) {
-                    VaultItem(
-                        title = item.assetSymbol,
-                        subtitle = item.name,
-                        coinIconUrl = item.assetLogo,
-                        alternativeCoinIconUrl = null,
-                        coinIconPlaceholder = R.drawable.coin_placeholder,
-                        value = item.apy,
-                        subvalue = item.tvl,
-                        label = item.blockchainName,
-                    )
-                }
-                HsDivider()
-            }
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                modifier = Modifier.size(48.dp),
-                painter = painterResource(R.drawable.icon_lock_48),
-                contentDescription = "lock icon",
-                tint = ComposeAppTheme.colors.grey
-            )
-
-            VSpacer(24.dp)
-            headline2_leah(
-                modifier = Modifier.padding(horizontal = 48.dp),
-                text = stringResource(R.string.Market_Vaults_WantToUnlockPremium),
-                textAlign = TextAlign.Center,
-            )
-            VSpacer(24.dp)
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .padding(horizontal = 48.dp)
-                    .fillMaxWidth(),
-                title = stringResource(R.string.Market_Vaults_UnlockPremium),
-                onClick = onClick
-            )
-        }
-    }
 }
 
 private fun vaultDiffText(diff: BigDecimal): String {

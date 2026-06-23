@@ -367,8 +367,6 @@
     <string name="Market_Filters_Select">Select %d</string>
 
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">Explore the best DeFi staking returns, all in one place.</string>
-    <string name="Market_Vaults_UnlockPremium">Unlock Premium</string>
     <string name="Market_Vaults_Sorting_APY">Highest APY</string>
     <string name="Market_Vaults_Sorting_TVL">Highest TVL</string>
 
@@ -1147,7 +1145,6 @@
     <string name="Premium_SelectSubscription">Select Subscription</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">One purchase unlocks all Premium features.</string>
 
-    <string name="Premium_UpgradeFeature_TokenInsights">Token Insights</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Trade Signals</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Robbery Protection</string>
@@ -1156,7 +1153,6 @@
     <string name="Premium_UpgradeFeature_PrioritySupport">Priority Support</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Swap Protection</string>
 
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">In-depth analytics and token data</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Powerful filters for smarter token discovery.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Actionable signals for more confident trading.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Safeguards your funds if you’re forced to unlock the app.</string>
@@ -1165,7 +1161,6 @@
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Direct access to our support team.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Prevents bots and MEV attacks during swaps.</string>
 
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Shows detailed token data — volume, liquidity, and trends. Helps you make smarter investment decisions.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Find tokens with filters by volume, chain, or sector. Includes metrics for CEX/DEX activity and listings.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Sends real-time alerts on trading opportunities. Highlights profit chances or market risks instantly.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Lets you create a decoy wallet with a separate PIN. Keeps real assets hidden in high-risk situations.</string>

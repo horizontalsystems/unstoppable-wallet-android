@@ -294,8 +294,6 @@
     <string name="Market_Sorting_LowestCap">Наименьший кап.</string>
     <string name="Market_Filters_Select">Выбрать %d</string>
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">Исследуйте лучшие доходности от DeFi-стейкинга - всё в одном месте.</string>
-    <string name="Market_Vaults_UnlockPremium">Разблокировать премиум</string>
     <string name="Market_Vaults_Sorting_APY">Наибольшее APY</string>
     <string name="Market_Vaults_Sorting_TVL">Наивысший ТВЛ</string>
     <string name="Market_Vaults_Filter_AllAssets">Все активы</string>
@@ -914,7 +912,6 @@
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Одна покупка открывает все премиум-функции.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Аналитика</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Сигналы и тренды</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Защита от грабежа</string>
@@ -922,7 +919,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Защита от мошенничества</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Поддержка Premium</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Защита обмена</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Расширенная аналитика и данные по токенам</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Расширенные фильтры для удобного поиска токенов.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Практические сигналы для более уверенной торговли.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Защищает ваши средства, если вас вынуждают разблокировать приложение.</string>
@@ -930,7 +926,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Обнаруживает поддельные и вредоносные dApps перед подключением.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Прямой доступ к нашей службе поддержки.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Защищает обмен от автоматических атак и опережающих сделок.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Показывает подробные данные о токене - объем, ликвидность и тенденции. Помогает вам принимать более эффективные инвестиционные решения.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Поиск токенов с фильтрами по объему, цепочке или сектору. Включает метрики деятельности CEX/DEX и списков.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Уведомления в реальном времени о торговых возможностях и рисках.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Позволяет создать ложный кошелёк с отдельным PIN. Скрывает реальные активы в рискованных ситуациях.</string>

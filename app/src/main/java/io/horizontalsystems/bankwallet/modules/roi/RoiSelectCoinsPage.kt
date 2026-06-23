@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -109,9 +108,7 @@ fun RoiSelectCoinsScreen(navigation: HSNavigation) {
                                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 title = period.title.getString(),
                                 onClick = {
-                                    navigation.paidAction(TokenInsights) {
-                                        dialog = PeriodSelectorDialog(text, period, i)
-                                    }
+                                    dialog = PeriodSelectorDialog(text, period, i)
                                 }
                             )
                         }
@@ -131,15 +128,13 @@ fun RoiSelectCoinsScreen(navigation: HSNavigation) {
                     val checked = uiState.selectedCoins.contains(item.performanceCoin)
                     val view = LocalView.current
                     val onClick = {
-                        navigation.paidAction(TokenInsights) {
-                            try {
-                                viewModel.onToggle(item, !checked)
-                            } catch (e: Throwable) {
-                                HudHelper.showWarningMessage(
-                                    view,
-                                    text = e.message ?: e.javaClass.simpleName
-                                )
-                            }
+                        try {
+                            viewModel.onToggle(item, !checked)
+                        } catch (e: Throwable) {
+                            HudHelper.showWarningMessage(
+                                view,
+                                text = e.message ?: e.javaClass.simpleName
+                            )
                         }
                     }
                     CellUniversal(

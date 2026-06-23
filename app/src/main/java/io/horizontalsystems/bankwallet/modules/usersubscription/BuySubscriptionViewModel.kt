@@ -10,7 +10,6 @@ import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.SwapProtection
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     private val advancedControlsFeatures = listOf(PrioritySupport)
 
     private val marketInsightsFeatures = listOf(
-        TokenInsights, AdvancedSearch, TradeSignals
+        AdvancedSearch, TradeSignals
     )
 
 

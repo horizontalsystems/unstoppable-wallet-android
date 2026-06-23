@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -108,12 +107,10 @@ private fun FilterByBlockchainsScreen(
                             blockchain = item,
                             checked = item in selectedBlockchains,
                         ) {
-                            navigation.paidAction(TokenInsights) {
-                                if (item in selectedBlockchains) {
-                                    selectedBlockchains.remove(item)
-                                } else {
-                                    selectedBlockchains.add(item)
-                                }
+                            if (item in selectedBlockchains) {
+                                selectedBlockchains.remove(item)
+                            } else {
+                                selectedBlockchains.add(item)
                             }
                         }
                     }

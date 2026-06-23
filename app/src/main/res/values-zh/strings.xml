@@ -292,8 +292,6 @@
     <string name="Market_Sorting_LowestCap">市值由低到高</string>
     <string name="Market_Filters_Select">選擇 %d</string>
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">探索最好的 DeFi 标记返回，全部在一个地方。</string>
-    <string name="Market_Vaults_UnlockPremium">解锁高级版</string>
     <string name="Market_Vaults_Sorting_APY">最大APY</string>
     <string name="Market_Vaults_Sorting_TVL">最高TVL</string>
     <string name="Market_Vaults_Filter_AllAssets">所有资产</string>
@@ -911,7 +909,6 @@
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">一次购买将解锁所有高级功能。</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">代幣分析</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">進階搜尋</string>
     <string name="Premium_UpgradeFeature_TradeSignals">信號與趨勢</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">脅迫模式</string>
@@ -919,7 +916,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Scam 保护</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP 支持</string>
     <string name="Premium_UpgradeFeature_SwapProtection">交换保护</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">按關鍵標準獲取前100名列表</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">自動監控您代幣的市場趨勢</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">面對實體威脅時的智能資金安全保障</string>
@@ -927,7 +923,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">確保您的加密貨幣操作合法性</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">直接聯繫錢包團隊獲取快速技術支援。</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">阻止机器人在兑换过程中窃取资产。</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">显示代币的详细数据—包括交易量、流动性和趋势，帮助您做出更明智的投资决策。</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">通过交易量、区块链或行业等筛选条件查找代币，并包含 CEX/DEX 活跃度及上架相关指标。</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">实时发送交易机会提醒，立即突出潜在盈利机会或市场风险。</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">允许您创建-个带独立 PIN 的诱饵钱包，在高风险情况下隐藏真实资产。</string>

@@ -6,9 +6,6 @@ import kotlinx.parcelize.Parcelize
 interface IPaidAction : Parcelable
 
 @Parcelize
-object TokenInsights : IPaidAction
-
-@Parcelize
 object AdvancedSearch : IPaidAction
 
 @Parcelize

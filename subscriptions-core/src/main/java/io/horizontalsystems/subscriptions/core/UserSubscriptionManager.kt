@@ -12,7 +12,6 @@ object UserSubscriptionManager {
             name = "Premium",
             description = "",
             actions = listOf(
-                TokenInsights,
                 AdvancedSearch,
                 TradeSignals,
                 RobberyProtection,

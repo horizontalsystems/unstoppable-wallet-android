@@ -629,12 +629,10 @@
     <string name="Premium_Banner_BlackFridayText">Premium özelliklerle deneyiminizi yükseltin!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
     <string name="Premium_SelectSubscription">Abonelik Seçin</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Token Analitiği</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Gelişmiş Arama</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Sinyaller ve Trendler</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Tehdit Modu</string>
     <string name="Premium_UpgradeFeature_SecureSend">Dolandırıcılık Koruması</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Önemli kriterlere göre ilk 100 listelerine erişim</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Çoklu parametreler üzerinden çok seviyeli filtreleme</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Tokenleriniz için piyasa trendlerinin otomatik takibi</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Fiziksel tehditler sırasında akıllı fon güvenliği</string>
@@ -642,7 +640,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Kripto işlemlerinizin yasallığı için garanti</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Botların takas işlemlerinde sizi zarara uğratmasını engeller.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Token için ayrıntılı veriler gösterir - hacim, likidite ve trendler. Daha akıllı yatırım kararları almanıza yardımcı olur.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Size öncelikli desteğe doğrudan erişim sağlar. Unstoppable ekibinden hızlı ve kişisel yardım alın.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Size öncelikli desteğe doğrudan erişim sağlar. Unstoppable ekibinden hızlı ve kişisel yardım alın.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Alıcı cüzdanları oltalama veya dolandırıcılık açısından kontrol eder. Riskli adreslere göndermeden önce sizi uyarır.</string>
@@ -1493,11 +1490,9 @@
     <string name="Market_Vaults_OpenDapp">DApp Aç</string>
     <string name="Market_Vaults_Sorting_APY">En Yüksek APY</string>
     <string name="Market_Vaults_Sorting_TVL">En Yüksek TVL</string>
-    <string name="Market_Vaults_UnlockPremium">Premium’un kilidini aç</string>
     <string name="Market_Vaults_Vault_Protocol">Protokol</string>
     <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Temel Token</string>
-    <string name="Market_Vaults_WantToUnlockPremium">Tüm en iyi DeFi staking getirilerini tek bir yerde keşfedin.</string>
     <string name="MoneroKeyType">Tür</string>
     <string name="MoneroKeyType_Private">Monero Özel Anahtarları</string>
     <string name="MoneroKeyType_Public">Monero Genel Anahtarları</string>
