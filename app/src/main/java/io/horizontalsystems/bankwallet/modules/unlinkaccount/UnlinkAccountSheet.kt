@@ -41,14 +41,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UnlinkAccountSheet(val account: Account) : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        UnlinkAccountScreen(navController, account)
+    override fun GetContent(navigation: HSNavigation) {
+        UnlinkAccountScreen(navigation, account)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun UnlinkAccountScreen(navController: HSNavigation, account: Account) {
+private fun UnlinkAccountScreen(navigation: HSNavigation, account: Account) {
     val viewModel =
         viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 
@@ -61,7 +61,7 @@ private fun UnlinkAccountScreen(navController: HSNavigation, account: Account) {
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
@@ -73,7 +73,7 @@ private fun UnlinkAccountScreen(navController: HSNavigation, account: Account) {
                 onClick = {
                     viewModel.onUnlink()
                     HudHelper.showSuccessMessage(view, doneConfirmationMessage)
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
 
                     stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
                 }

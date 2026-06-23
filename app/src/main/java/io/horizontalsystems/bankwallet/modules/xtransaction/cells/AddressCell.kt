@@ -39,7 +39,7 @@ fun AddressCell(
     blockchainType: BlockchainType?,
     statPage: StatPage,
     statSection: StatSection,
-    navController: HSNavigation? = null,
+    navigation: HSNavigation? = null,
     borderTop: Boolean = true
 ) {
     val view = LocalView.current
@@ -118,7 +118,7 @@ fun AddressCell(
                             )
                         }
                     }
-                    navController?.slideFromRight(ContactsRouterPage(args))
+                    navigation?.slideFromRight(ContactsRouterPage(args))
                 }
             })
     }

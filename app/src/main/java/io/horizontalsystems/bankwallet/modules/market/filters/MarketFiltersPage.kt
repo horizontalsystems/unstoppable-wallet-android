@@ -70,10 +70,10 @@ import kotlinx.serialization.Serializable
 data object MarketFiltersPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         AdvancedSearchScreen(
             viewModel(factory = MarketFiltersModule.Factory()),
-            navController,
+            navigation,
         )
     }
 
@@ -83,7 +83,7 @@ data object MarketFiltersPage : HSPage() {
 @Composable
 private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val uiState = viewModel.uiState
     val errorMessage = uiState.errorMessage
@@ -95,7 +95,7 @@ private fun AdvancedSearchScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_Filters),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -112,10 +112,10 @@ private fun AdvancedSearchScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 AdvancedSearchContent(
-                    navController = navController,
+                    navigation = navigation,
                     viewModel = viewModel,
                     onFilterByBlockchainsClick = {
-                        navController.slideFromBottom(BlockchainsSelectorPage)
+                        navigation.slideFromBottom(BlockchainsSelectorPage)
                     },
                     showBottomSheet = { type ->
                         bottomSheetType = type
@@ -131,7 +131,7 @@ private fun AdvancedSearchScreen(
                         .padding(horizontal = 16.dp),
                     title = uiState.buttonTitle,
                     onClick = {
-                        navController.slideFromRight(MarketFiltersResultsPage)
+                        navigation.slideFromRight(MarketFiltersResultsPage)
                     },
                     showSpinner = uiState.showSpinner,
                     enabled = uiState.buttonEnabled,
@@ -264,7 +264,7 @@ private fun BSContent(
 
 @Composable
 fun AdvancedSearchContent(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: MarketFiltersViewModel,
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
@@ -301,8 +301,8 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_Sectors,
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
-                    navController.slideFromBottom(SectorsSelectorPage)
+                navigation.paidAction(AdvancedSearch) {
+                    navigation.slideFromBottom(SectorsSelectorPage)
                 }
                 stat(
                     page = StatPage.AdvancedSearch,
@@ -320,7 +320,7 @@ fun AdvancedSearchContent(
             value = uiState.priceChange.title,
             valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceChange)
                 }
                 stat(
@@ -333,7 +333,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_PricePeriod,
             value = uiState.period.title,
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(PricePeriod)
                 }
                 stat(
@@ -347,7 +347,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_TradingSignals,
             value = uiState.filterTradingSignal.title,
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(TradingSignals)
                 }
                 stat(
@@ -360,7 +360,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_PriceCloseTo,
             value = uiState.priceCloseTo?.titleResId?.let { stringResource(it) },
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceCloseTo)
                 }
                 stat(
@@ -378,7 +378,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedBtc,
             enabled = uiState.outperformedBtcOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBtcOn(it)
                 }
                 stat(
@@ -391,7 +391,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedEth,
             enabled = uiState.outperformedEthOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedEthOn(it)
                 }
                 stat(
@@ -404,7 +404,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedBnb,
             enabled = uiState.outperformedBnbOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBnbOn(it)
                 }
                 stat(
@@ -417,7 +417,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedSnp,
             enabled = uiState.outperformedSnpOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedSnpOn(it)
                 }
                 stat(
@@ -430,7 +430,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedGold,
             enabled = uiState.outperformedGoldOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedGoldOn(it)
                 }
                 stat(
@@ -449,7 +449,7 @@ fun AdvancedSearchContent(
             subtitle = R.string.Market_Filter_SolidCex_Description,
             enabled = uiState.solidCexOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateSolidCexOn(it)
                 }
                 stat(
@@ -463,7 +463,7 @@ fun AdvancedSearchContent(
             subtitle = R.string.Market_Filter_SolidDex_Description,
             enabled = uiState.solidDexOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateSolidDexOn(it)
                 }
                 stat(
@@ -477,7 +477,7 @@ fun AdvancedSearchContent(
             subtitle = R.string.Market_Filter_GoodDistribution_Description,
             enabled = uiState.goodDistributionOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateGoodDistributionOn(it)
                 }
                 stat(
@@ -490,7 +490,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_ListedOnTopExchanges,
             enabled = uiState.listedOnTopExchangesOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                navigation.paidAction(AdvancedSearch) {
                     viewModel.updateListedOnTopExchangesOn(it)
                 }
                 stat(

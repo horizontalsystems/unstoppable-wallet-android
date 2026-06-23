@@ -27,15 +27,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WCAccountTypeNotSupportedSheet(val input: Input) : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         WCAccountTypeNotSupportedScreen(
             accountTypeDescription = input.accountTypeDescription,
             onCloseClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onSwitchClick = {
-                navController.removeLastOrNull()
-                navController.slideFromRight(
+                navigation.removeLastOrNull()
+                navigation.slideFromRight(
                     ManageAccountsPage(ManageAccountsModule.Mode.Manage)
                 )
             }

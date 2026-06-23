@@ -10,8 +10,8 @@ import kotlinx.serialization.Serializable
 data object ZcashAddEndpointPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        AddZcashEndpointScreen(navController = navController)
+    override fun GetContent(navigation: HSNavigation) {
+        AddZcashEndpointScreen(navigation = navigation)
     }
 
 }

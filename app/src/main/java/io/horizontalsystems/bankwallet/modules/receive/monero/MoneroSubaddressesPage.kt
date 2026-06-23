@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MoneroSubaddressesPage(val input: SubaddressesParams) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        MoneroSubaddressesScreen(input) { navController.removeLastOrNull() }
+    override fun GetContent(navigation: HSNavigation) {
+        MoneroSubaddressesScreen(input) { navigation.removeLastOrNull() }
     }
 }

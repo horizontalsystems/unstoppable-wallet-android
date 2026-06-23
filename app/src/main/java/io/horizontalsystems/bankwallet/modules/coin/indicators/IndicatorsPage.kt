@@ -32,16 +32,16 @@ import kotlinx.serialization.Serializable
 data object IndicatorsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         IndicatorsScreen(
-            navController = navController,
+            navigation = navigation,
         )
     }
 
 }
 
 @Composable
-fun IndicatorsScreen(navController: HSNavigation) {
+fun IndicatorsScreen(navigation: HSNavigation) {
     val chartIndicatorsViewModel =
         viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
 
@@ -56,7 +56,7 @@ fun IndicatorsScreen(navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.CoinPage_Indicators),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column {
             HeaderText(
@@ -78,7 +78,7 @@ fun IndicatorsScreen(navController: HSNavigation) {
                         toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(
+                        navigation.slideFromRight(
                             IndicatorSettingsPage(IndicatorSettingsPage.Input(indicator.id))
                         )
                     }
@@ -96,7 +96,7 @@ fun IndicatorsScreen(navController: HSNavigation) {
                         toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(
+                        navigation.slideFromRight(
                             IndicatorSettingsPage(IndicatorSettingsPage.Input(indicator.id))
                         )
                     }

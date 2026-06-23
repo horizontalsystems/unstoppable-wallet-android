@@ -24,38 +24,38 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ReceiveChooseCoinPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<ReceiveSharedViewModel>()
         val activeAccount = App.accountManager.activeAccount
         if (activeAccount == null) {
-            CloseWithMessage(navController)
+            CloseWithMessage(navigation)
             return
         }
         ReceiveTokenSelectScreen(
             activeAccount = activeAccount,
             onMultipleAddressesClick = { coinUid ->
                 viewModel.coinUid = coinUid
-                navController.add(BchAddressFormatPage)
+                navigation.add(BchAddressFormatPage)
             },
             onMultipleDerivationsClick = { coinUid ->
                 viewModel.coinUid = coinUid
-                navController.add(DerivationSelectPage)
+                navigation.add(DerivationSelectPage)
             },
             onMultipleBlockchainsClick = { coinUid ->
                 viewModel.coinUid = coinUid
-                navController.add(NetworkSelectPage)
+                navigation.add(NetworkSelectPage)
             },
             onMultipleZcashAddressTypeClick = { wallet ->
-                navController.add(
+                navigation.add(
                     ZcashAddressTypeSelectPage(
                         ZcashAddressTypeSelectPage.Input(wallet, ReceiveChooseCoinPage::class)
                     )
                 )
             },
             onCoinClick = { wallet ->
-                onSelectWallet(wallet, navController)
+                onSelectWallet(wallet, navigation)
             },
-            onBackPress = { navController.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() },
         )
     }
 }
@@ -63,11 +63,11 @@ data object ReceiveChooseCoinPage : HSPage() {
 @Serializable
 data object BchAddressFormatPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
         val coinUid = viewModel.coinUid
         if (coinUid == null) {
-            CloseWithMessage(navController)
+            CloseWithMessage(navigation)
             return
         }
         val bchAddressViewModel = viewModel<BchAddressTypeSelectViewModel>(
@@ -77,21 +77,21 @@ data object BchAddressFormatPage : HSPage() {
             addressFormatItems = bchAddressViewModel.items,
             description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
             onSelect = { wallet ->
-                onSelectWallet(wallet, navController)
+                onSelectWallet(wallet, navigation)
             },
-            closeModule = { navController.removeLastOrNull() },
-            onBackPress = { navController.removeLastOrNull() }
+            closeModule = { navigation.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() }
         )
     }
 }
 
 data object DerivationSelectPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
         val coinUid = viewModel.coinUid
         if (coinUid == null) {
-            CloseWithMessage(navController)
+            CloseWithMessage(navigation)
             return
         }
         val derivationViewModel = viewModel<DerivationSelectViewModel>(
@@ -101,31 +101,31 @@ data object DerivationSelectPage : HSPage() {
             addressFormatItems = derivationViewModel.items,
             description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),
             onSelect = { wallet ->
-                onSelectWallet(wallet, navController)
+                onSelectWallet(wallet, navigation)
             },
-            closeModule = { navController.removeLastOrNull() },
-            onBackPress = { navController.removeLastOrNull() }
+            closeModule = { navigation.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() }
         )
     }
 }
 
 data object NetworkSelectPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
         val activeAccount = viewModel.activeAccount
         val fullCoin = viewModel.fullCoin()
         if (activeAccount == null || fullCoin == null) {
-            CloseWithMessage(navController)
+            CloseWithMessage(navigation)
             return
         }
         NetworkSelectScreen(
-            navController = navController,
+            navigation = navigation,
             activeAccount = activeAccount,
             fullCoin = fullCoin,
-            closeModule = { navController.removeLastOrNull() },
+            closeModule = { navigation.removeLastOrNull() },
             onSelect = { wallet ->
-                onSelectWallet(wallet, navController)
+                onSelectWallet(wallet, navigation)
             }
         )
     }
@@ -133,10 +133,10 @@ data object NetworkSelectPage : HSPage() {
 
 private fun onSelectWallet(
     wallet: Wallet,
-    fragmentNavController: HSNavigation,
+    navigation: HSNavigation,
     isTransparentAddress: Boolean = false,
 ) {
-    fragmentNavController.slideFromRight(
+    navigation.slideFromRight(
         ReceivePage(ReceivePage.Input(
             wallet,
             ReceiveChooseCoinPage::class,
@@ -148,8 +148,8 @@ private fun onSelectWallet(
 }
 
 @Composable
-fun CloseWithMessage(navController: HSNavigation) {
+fun CloseWithMessage(navigation: HSNavigation) {
     val view = LocalView.current
     HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
-    navController.removeLastOrNull()
+    navigation.removeLastOrNull()
 }

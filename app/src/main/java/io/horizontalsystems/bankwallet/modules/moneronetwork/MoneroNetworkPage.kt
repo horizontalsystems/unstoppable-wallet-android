@@ -64,10 +64,10 @@ import kotlinx.serialization.Serializable
 data object MoneroNetworkPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         MoneroNetworkScreen(
-            navController = navController,
-            onBackPress = { navController.removeLastOrNull() },
+            navigation = navigation,
+            onBackPress = { navigation.removeLastOrNull() },
         )
     }
 
@@ -76,9 +76,9 @@ data object MoneroNetworkPage : HSPage() {
 @Serializable
 data object AddNodePage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         AddMoneroNodeScreen(
-            navController = navController
+            navigation = navigation
         )
     }
 }
@@ -86,7 +86,7 @@ data object AddNodePage : HSPage() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MoneroNetworkScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<MoneroNetworkViewModel>(factory = MoneroNetworkModule.Factory())
@@ -152,7 +152,7 @@ private fun MoneroNetworkScreen(
             item {
                 Spacer(Modifier.height(32.dp))
                 AddButton {
-                    navController.add(AddNodePage)
+                    navigation.add(AddNodePage)
                 }
                 Spacer(Modifier.height(60.dp))
             }

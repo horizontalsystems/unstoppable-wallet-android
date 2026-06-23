@@ -73,15 +73,15 @@ import kotlinx.serialization.Serializable
 data object AppearancePage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        AppearanceScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        AppearanceScreen(navigation)
     }
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppearanceScreen(navController: HSNavigation) {
+fun AppearanceScreen(navigation: HSNavigation) {
     val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
     val uiState = viewModel.uiState
 
@@ -98,7 +98,7 @@ fun AppearanceScreen(navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.Settings_AppSettings),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
@@ -126,7 +126,7 @@ fun AppearanceScreen(navController: HSNavigation) {
                             R.string.Settings_Language,
                             value = uiState.currentLanguage,
                             onClick = {
-                                navController.slideFromRight(LanguageSettingsPage)
+                                navigation.slideFromRight(LanguageSettingsPage)
 
                                 stat(
                                     page = StatPage.Settings,
@@ -140,7 +140,7 @@ fun AppearanceScreen(navController: HSNavigation) {
                             R.string.Settings_BaseCurrency,
                             value = uiState.baseCurrencyCode,
                             onClick = {
-                                navController.slideFromRight(BaseCurrencySettingsPage)
+                                navigation.slideFromRight(BaseCurrencySettingsPage)
 
                                 stat(
                                     page = StatPage.Settings,

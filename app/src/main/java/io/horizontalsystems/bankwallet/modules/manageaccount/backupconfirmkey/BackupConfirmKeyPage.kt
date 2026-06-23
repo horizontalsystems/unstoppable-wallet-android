@@ -40,15 +40,15 @@ import kotlinx.serialization.Serializable
 data class BackupConfirmKeyPage(val input: Account) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RecoveryPhraseVerifyScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        RecoveryPhraseVerifyScreen(navigation, input)
     }
 
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RecoveryPhraseVerifyScreen(navController: HSNavigation, account: Account) {
+fun RecoveryPhraseVerifyScreen(navigation: HSNavigation, account: Account) {
     val viewModel =
         viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
     val uiState = viewModel.uiState
@@ -63,7 +63,7 @@ fun RecoveryPhraseVerifyScreen(navController: HSNavigation, account: Account) {
                 iconTint = R.color.white
             )
             delay(300)
-            navController.removeLastUntil(BackupKeyPage::class, true)
+            navigation.removeLastUntil(BackupKeyPage::class, true)
         }
     }
 
@@ -74,7 +74,7 @@ fun RecoveryPhraseVerifyScreen(navController: HSNavigation, account: Account) {
 
     HSScaffold(
         title = stringResource(R.string.RecoveryPhraseVerify_Title),
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
     ) {
         Column {
             InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))

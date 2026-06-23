@@ -50,8 +50,8 @@ import kotlinx.serialization.Serializable
 data class ChooseContactPage(val blockchainType: BlockchainType) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ChooseContactScreen(blockchainType, navController)
+    override fun GetContent(navigation: HSNavigation) {
+        ChooseContactScreen(blockchainType, navigation)
     }
 
     @Parcelize
@@ -61,7 +61,7 @@ data class ChooseContactPage(val blockchainType: BlockchainType) : HSPage() {
 @Composable
 fun ChooseContactScreen(
     blockchainType: BlockchainType,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
@@ -113,7 +113,7 @@ fun ChooseContactScreen(
                             viewModel.onEnterQuery(null)
                             searchMode = false
                         } else {
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         }
                     })
                 },
@@ -149,7 +149,7 @@ fun ChooseContactScreen(
                                     .fillMaxWidth()
                                     .clickable {
                                         resultEventBus.sendResult(ChooseContactPage.Result(contact.address))
-                                        navController.removeLastOrNull()
+                                        navigation.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
                             ) {

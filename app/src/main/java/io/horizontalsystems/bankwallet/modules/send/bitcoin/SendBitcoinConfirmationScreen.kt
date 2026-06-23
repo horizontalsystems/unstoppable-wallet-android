@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun SendBitcoinConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendViewModel: SendBitcoinViewModel,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
@@ -37,7 +37,7 @@ fun SendBitcoinConfirmationScreen(
     }
 
     SendConfirmationScreen(
-        navController = navController,
+        navigation = navigation,
         coinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         feeCoinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         rate = sendViewModel.coinRate,

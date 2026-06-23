@@ -30,7 +30,7 @@ fun HSFee(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     Column(
         modifier = Modifier
@@ -45,7 +45,7 @@ fun HSFee(
             fee = fee,
             amountInputType = amountInputType,
             rate = rate,
-            navController = navController,
+            navigation = navigation,
         )
     }
 }
@@ -59,7 +59,7 @@ fun HSFeeRaw(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
 
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
@@ -69,7 +69,7 @@ fun HSFeeRaw(
     }
 
     DataFieldFeeTemplate(
-        navController = navController,
+        navigation = navigation,
         primary = formatted?.primary ?: "---",
         secondary = formatted?.secondary ?: "---",
         title = title,

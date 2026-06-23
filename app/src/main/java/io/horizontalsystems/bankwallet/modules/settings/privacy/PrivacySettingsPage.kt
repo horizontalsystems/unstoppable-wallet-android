@@ -45,14 +45,14 @@ import kotlin.system.exitProcess
 data object PrivacySettingsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val torViewModel = viewModel<SecurityTorSettingsViewModel>(
             factory = SecurityTorSettingsModule.Factory()
         )
 
         val activity = LocalActivity.current
         PrivacyScreen(
-            navController = navController,
+            navigation = navigation,
             torViewModel = torViewModel,
             restartApp = { restartApp(activity) },
         )
@@ -68,7 +68,7 @@ data object PrivacySettingsPage : HSPage() {
 
 @Composable
 fun PrivacyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     torViewModel: SecurityTorSettingsViewModel,
     restartApp: () -> Unit = {},
 ) {
@@ -83,7 +83,7 @@ fun PrivacyScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_Privacy),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

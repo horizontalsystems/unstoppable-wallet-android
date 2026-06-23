@@ -117,30 +117,30 @@ fun Nav3() {
 @Composable
 private fun HandleNavigateToMain(
     viewModel: MainActivityViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val navigateToMain by viewModel.navigateToMainLiveData.observeAsState()
     LaunchedEffect(navigateToMain) {
         if (navigateToMain != null) {
-            navController.removeLastUntil(EntryPage::class, false)
+            navigation.removeLastUntil(EntryPage::class, false)
             viewModel.onNavigatedToMain()
         }
     }
 }
 
 @Composable
-private fun IntentEffect(viewModel: MainActivityViewModel, navController: HSNavigation) {
+private fun IntentEffect(viewModel: MainActivityViewModel, navigation: HSNavigation) {
     val activity = LocalActivity.current
     LaunchedEffect(Unit) {
         activity?.intent?.let {
-            if (!handleWalletConnectDeepLink(it, navController)) {
+            if (!handleWalletConnectDeepLink(it, navigation)) {
                 viewModel.setIntent(it)
             }
         }
     }
     DisposableEffect(activity) {
         val consumer = Consumer<Intent> {
-            if (!handleWalletConnectDeepLink(it, navController)) {
+            if (!handleWalletConnectDeepLink(it, navigation)) {
                 viewModel.setIntent(it)
             }
         }
@@ -160,7 +160,7 @@ private fun IntentEffect(viewModel: MainActivityViewModel, navController: HSNavi
 // Returns true if the intent was a WalletConnect deeplink and was handled here. When DAppManager
 // isn't available yet (e.g. cold start before the relay connects) it returns false so the intent
 // falls back to MainScreen's deeplink flow, which waits and routes through the WC list.
-private fun handleWalletConnectDeepLink(intent: Intent, navController: HSNavigation): Boolean {
+private fun handleWalletConnectDeepLink(intent: Intent, navigation: HSNavigation): Boolean {
     val uri = intent.data ?: return false
     val wcUri = App.wcManager.getWalletConnectUri(uri) ?: return false
     if (!DAppManager.isAvailable) return false
@@ -171,11 +171,11 @@ private fun handleWalletConnectDeepLink(intent: Intent, navController: HSNavigat
         }
 
         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-            navController.slideFromBottom(WCErrorNoAccountSheet)
+            navigation.slideFromBottom(WCErrorNoAccountSheet)
         }
 
         is WCManager.SupportState.NotSupported -> {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 WCAccountTypeNotSupportedSheet(
                     WCAccountTypeNotSupportedSheet.Input(supportState.accountTypeDescription)
                 )
@@ -208,7 +208,7 @@ private fun Validate(viewModel: MainActivityViewModel) {
 @Composable
 private fun HandleWcEvent(
     viewModel: MainActivityViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val view = LocalView.current
     val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
@@ -231,14 +231,14 @@ private fun HandleWcEvent(
                 // reEmitPendingWcEventIfNeeded() can fire more than once per foreground
                 // transition (from both the unlock effect and MainScreen's ON_RESUME), so skip
                 // if the request sheet is already shown to avoid stacking duplicates.
-                if (navController.lastOrNull() !is WCRequestSheet) {
-                    navController.slideFromBottom(WCRequestSheet)
+                if (navigation.lastOrNull() !is WCRequestSheet) {
+                    navigation.slideFromBottom(WCRequestSheet)
                 }
             }
 
             is HSDAppEvent.SessionProposal -> {
-                if (navController.lastOrNull() !is WCSessionSheet) {
-                    navController.slideFromBottom(WCSessionSheet(null))
+                if (navigation.lastOrNull() !is WCSessionSheet) {
+                    navigation.slideFromBottom(WCSessionSheet(null))
                 }
             }
 
@@ -251,9 +251,9 @@ private fun HandleWcEvent(
 }
 
 @Composable
-private fun ToggleScreenshot(navController: HSNavigation) {
+private fun ToggleScreenshot(navigation: HSNavigation) {
     val activity = LocalActivity.current
-    val currentScreen = navController.lastOrNull()
+    val currentScreen = navigation.lastOrNull()
     LaunchedEffect(currentScreen) {
         if (activity != null) {
             activity.currentFocus?.hideKeyboard(activity)

@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,7 +58,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSendEthRequestScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     logger: AppLogger,
     blockchainType: BlockchainType,
     transaction: WalletConnectTransaction,
@@ -84,7 +83,7 @@ fun WCSendEthRequestScreen(
     BottomSheetContent(
         onDismissRequest = {
             WCDelegate.discardActiveSessionRequest()
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = sheetState,
     ) { snackbarActions ->
@@ -143,7 +142,7 @@ fun WCSendEthRequestScreen(
                 DataBlock(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
-                        navController.slideFromBottom(
+                        navigation.slideFromBottom(
                             FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     },
@@ -159,7 +158,7 @@ fun WCSendEthRequestScreen(
                     primaryValue = uiState.networkFee?.primary?.getFormatted(),
                     secondaryValue = uiState.networkFee?.secondary?.getFormatted(),
                     onInfoClick = {
-                        navController.slideFromBottom(
+                        navigation.slideFromBottom(
                             FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     }
@@ -173,7 +172,7 @@ fun WCSendEthRequestScreen(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.reject()
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
                 HSButton(
@@ -197,7 +196,7 @@ fun WCSendEthRequestScreen(
                                 snackbarActions.showErrorMessage(t.message ?: "Error")
                             }
 
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         }
                     }
                 )

@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OpenCryptoPayScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     lnurl: String,
 ) {
     val viewModel = viewModel<OpenCryptoPayViewModel>(factory = OpenCryptoPayViewModel.Factory(lnurl))
@@ -55,7 +55,7 @@ fun OpenCryptoPayScreen(
     }
 
     uiState.navigateToEvmConfirm?.let { data ->
-        navController.slideFromRight(
+        navigation.slideFromRight(
             OpenCryptoPayEvmConfirmationPage(
                 OpenCryptoPayEvmConfirmationPage.Input(
                     wallet = data.wallet,
@@ -77,7 +77,7 @@ fun OpenCryptoPayScreen(
     }
 
     uiState.navigateToConfirm?.let { data ->
-        navController.slideFromRight(
+        navigation.slideFromRight(
             OpenCryptoPayConfirmationPage(
                 OpenCryptoPayConfirmationPage.Input(
                     wallet = data.wallet,
@@ -125,7 +125,7 @@ fun OpenCryptoPayScreen(
 
     HSScaffold(
         title = stringResource(R.string.Balance_Send),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Crossfade(uiState.loading) { isLoading ->
             if (isLoading) {

@@ -60,11 +60,11 @@ import kotlinx.serialization.Serializable
 data object PremiumFeaturesSheet : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         PremiumFeaturesScreen(
-            navController = navController,
+            navigation = navigation,
             usedInHavHost = false,
-            onClose = { navController.removeLastOrNull() }
+            onClose = { navigation.removeLastOrNull() }
         )
     }
 }
@@ -72,7 +72,7 @@ data object PremiumFeaturesSheet : HSBottomSheet() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PremiumFeaturesScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     usedInHavHost: Boolean,
     onClose: () -> Unit
 ) {
@@ -125,21 +125,21 @@ fun PremiumFeaturesScreen(
                 VSpacer(24.dp)
                 uiState.defenseSystemFeatures
                 FeaturesSection(
-                    navController = navController,
+                    navigation = navigation,
                     icon = R.drawable.defense_gradient_filled_24,
                     title = stringResource(R.string.Premium_DefenseSystem),
                     features = uiState.defenseSystemFeatures,
                 )
 
                 FeaturesSection(
-                    navController = navController,
+                    navigation = navigation,
                     icon = R.drawable.plus_gradient_filled_24,
                     title = stringResource(R.string.Premium_AdvancedControls),
                     features = uiState.advancedControlsFeatures,
                 )
 
                 FeaturesSection(
-                    navController = navController,
+                    navigation = navigation,
                     icon = R.drawable.market_gradient_filled_24,
                     title = stringResource(R.string.Premium_MarketInsights),
                     features = uiState.marketInsightsFeatures,
@@ -229,7 +229,7 @@ fun PremiumFeaturesScreen(
                                 isPlanSelectBottomSheetVisible = true
                             } else {
                                 onClose.invoke()
-                                navController.slideFromBottom(SelectPlanSheet)
+                                navigation.slideFromBottom(SelectPlanSheet)
                             }
                         }
                     )
@@ -249,7 +249,7 @@ fun PremiumFeaturesScreen(
                             plansModalBottomSheetState.hide()
                             isPlanSelectBottomSheetVisible = false
                         }
-                        navController.add(PremiumSubscribedPage)
+                        navigation.add(PremiumSubscribedPage)
                     }
                 )
             }
@@ -259,7 +259,7 @@ fun PremiumFeaturesScreen(
 
 @Composable
 fun FeaturesSection(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     icon: Int,
     title: String,
     features: List<IPaidAction>
@@ -272,7 +272,7 @@ fun FeaturesSection(
             items = features,
             onItemClick = { action ->
                 val feature = PremiumFeature.getFeature(action)
-                navController.slideFromBottom(
+                navigation.slideFromBottom(
                     DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(feature))
                 )
             }
@@ -305,7 +305,7 @@ private fun PremiumFeaturesScreenPreview() {
     ComposeAppTheme {
         val ctx = LocalContext.current
 //        PremiumFeaturesScreen(
-//            navController = NavController(ctx),
+//            navigation = NavController(ctx),
 //            navHostController = null
 //        ) {}
     }

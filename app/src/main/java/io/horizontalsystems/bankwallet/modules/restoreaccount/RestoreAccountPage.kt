@@ -22,10 +22,10 @@ import java.util.UUID
 data class RestoreAccountPage(val input: ManageAccountsModule.Input) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         RestorePhrase(
             openSelectCoins = { accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean, statPage: StatPage ->
-                navController.add(
+                navigation.add(
                     restore_select_coins(
                         input,
                         accountType,
@@ -36,7 +36,7 @@ data class RestoreAccountPage(val input: ManageAccountsModule.Input) : HSPage(sc
                     )
                 )
             },
-            onBackClick = { navController.removeLastOrNull() },
+            onBackClick = { navigation.removeLastOrNull() },
         )
     }
 }
@@ -51,7 +51,7 @@ data class restore_select_coins(
     val statPage: StatPage
 ) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val mainViewModel = viewModel<RestoreViewModel> {
             RestoreViewModel(
                 accountType,
@@ -77,11 +77,11 @@ data class restore_select_coins(
             openBirthdayHeightConfigure = { token ->
                 val screen = RestoreBirthdayHeightPage(token.blockchainType)
                 screen.resultKey = uuid
-                navController.add(screen)
+                navigation.add(screen)
             },
-            onBackClick = { navController.removeLastOrNull() },
+            onBackClick = { navigation.removeLastOrNull() },
             onFinish = {
-                navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
+                navigation.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
             }
         )
     }
@@ -90,17 +90,17 @@ data class restore_select_coins(
 @Serializable
 data class RestoreBirthdayHeightPage(val blockchainType: BlockchainType) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         RestoreBirthdayHeightScreen(
             blockchainType = blockchainType,
             onCloseWithResult = { config ->
                 resultEventBus.sendResult(Result(config))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onCloseClick = {
                 resultEventBus.sendResult(Result(null))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }

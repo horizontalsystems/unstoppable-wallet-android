@@ -67,7 +67,7 @@ import java.math.BigDecimal
 
 @Composable
 fun MarketScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
@@ -81,7 +81,7 @@ fun MarketScreen(
                 icon = R.drawable.ic_search,
                 tint = ComposeAppTheme.colors.grey,
                 onClick = {
-                    navController.slideFromBottom(MarketSearchPage)
+                    navigation.slideFromBottom(MarketSearchPage)
                     stat(
                         page = StatPage.Markets,
                         event = StatEvent.Open(StatPage.MarketSearch)
@@ -93,9 +93,9 @@ fun MarketScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             Column {
 //                Crossfade(uiState.marketGlobal, label = "") {
-//                    MetricsBoard(navController, it, uiState.currency)
+//                    MetricsBoard(navigation, it, uiState.currency)
 //                }
-                TabsSection(navController, tabs, uiState.selectedTab) { tab ->
+                TabsSection(navigation, tabs, uiState.selectedTab) { tab ->
                     viewModel.onSelect(tab)
                 }
             }
@@ -106,7 +106,7 @@ fun MarketScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabsSection(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     tabs: Array<Tab>,
     selectedTab: Tab,
     onTabClick: (Tab) -> Unit
@@ -139,13 +139,13 @@ fun TabsSection(
             .background(ComposeAppTheme.colors.lawrence)
     ) { page ->
         when (tabs[page]) {
-            Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navController) })
-            Tab.Watchlist -> MarketFavoritesScreen(navController)
-            Tab.Earn -> MarketEarnScreen(navController)
+            Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navigation) })
+            Tab.Watchlist -> MarketFavoritesScreen(navigation)
+            Tab.Earn -> MarketEarnScreen(navigation)
             Tab.Posts -> MarketPostsScreen()
-            Tab.Platform -> TopPlatforms(navController)
+            Tab.Platform -> TopPlatforms(navigation)
             Tab.Pairs -> TopPairsScreen()
-            Tab.Sectors -> TopSectorsScreen(navController)
+            Tab.Sectors -> TopSectorsScreen(navigation)
         }
     }
 }
@@ -160,7 +160,7 @@ private fun getDiff(it: BigDecimal): String {
 
 @Composable
 fun MetricsBoard(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     marketGlobal: MarketGlobal?,
     currency: Currency
 ) {
@@ -178,7 +178,7 @@ fun MetricsBoard(
             changePercentage = marketGlobal?.marketCapChange,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.TotalMarketCap, navController)
+                openMetricsPage(MetricsType.TotalMarketCap, navigation)
             }
         )
 
@@ -190,7 +190,7 @@ fun MetricsBoard(
             changePercentage = marketGlobal?.volumeChange,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.Volume24h, navController)
+                openMetricsPage(MetricsType.Volume24h, navigation)
             }
         )
 
@@ -202,7 +202,7 @@ fun MetricsBoard(
             changePercentage = marketGlobal?.tvlChange,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.TvlInDefi, navController)
+                openMetricsPage(MetricsType.TvlInDefi, navigation)
             }
         )
 
@@ -214,7 +214,7 @@ fun MetricsBoard(
             changeFiat = marketGlobal?.etfDailyInflow,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.Etf, navController)
+                openMetricsPage(MetricsType.Etf, navigation)
             }
         )
     }
@@ -294,28 +294,28 @@ private fun RowScope.MarketTotalCard(
     }
 }
 
-private fun openMetricsPage(metricsType: MetricsType, navController: HSNavigation) {
+private fun openMetricsPage(metricsType: MetricsType, navigation: HSNavigation) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
-            navController.slideFromBottom(TvlPage)
+            navigation.slideFromBottom(TvlPage)
         }
 
         MetricsType.Etf -> {
-            navController.slideFromBottom(EtfPage)
+            navigation.slideFromBottom(EtfPage)
         }
 
         else -> {
-            navController.slideFromBottom(MetricsPage(metricsType))
+            navigation.slideFromBottom(MetricsPage(metricsType))
         }
     }
 
     stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
 }
 
-private fun onCoinClick(coinUid: String, navController: HSNavigation) {
+private fun onCoinClick(coinUid: String, navigation: HSNavigation) {
     val arguments = CoinPage.Input(coinUid)
 
-    navController.slideFromRight(CoinPage(arguments))
+    navigation.slideFromRight(CoinPage(arguments))
 
     stat(page = StatPage.Markets, event = StatEvent.OpenCoin(coinUid), section = StatSection.Coins)
 }

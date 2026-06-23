@@ -32,8 +32,8 @@ import kotlinx.serialization.Serializable
 data class SelectContactPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SelectContactScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        SelectContactScreen(navigation, input)
     }
 
     @Serializable
@@ -45,7 +45,7 @@ data class SelectContactPage(val input: Input) : HSPage() {
 }
 
 @Composable
-fun SelectContactScreen(navController: HSNavigation, input: SelectContactPage.Input?) {
+fun SelectContactScreen(navigation: HSNavigation, input: SelectContactPage.Input?) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SelectContactViewModel>(
         initializer = SelectContactViewModel.init(
@@ -57,7 +57,7 @@ fun SelectContactScreen(navController: HSNavigation, input: SelectContactPage.In
 
     HSScaffold(
         title = stringResource(R.string.Contacts),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         if (uiState.items.isEmpty()) {
             Column {
@@ -75,7 +75,7 @@ fun SelectContactScreen(navController: HSNavigation, input: SelectContactPage.In
                 items(uiState.items) { contact ->
                     CellContact(contact, uiState.selected) {
                         resultEventBus.sendResult(SelectContactPage.Result(contact))
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 }
                 item {

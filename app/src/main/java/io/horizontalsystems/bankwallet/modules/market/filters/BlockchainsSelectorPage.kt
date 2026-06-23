@@ -34,10 +34,10 @@ import kotlinx.serialization.Serializable
 data object BlockchainsSelectorPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         FilterByBlockchainsScreen(
-            navController.viewModelForScreen(MarketFiltersPage::class),
-            navController,
+            navigation.viewModelForScreen(MarketFiltersPage::class),
+            navigation,
         )
     }
 
@@ -46,7 +46,7 @@ data object BlockchainsSelectorPage : HSPage() {
 @Composable
 private fun FilterByBlockchainsScreen(
     viewModel: MarketFiltersViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val uiState = viewModel.uiState
 
@@ -66,7 +66,7 @@ private fun FilterByBlockchainsScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = navController::removeLastOrNull
+                        onClick = navigation::removeLastOrNull
                     )
                 ),
             )
@@ -118,7 +118,7 @@ private fun FilterByBlockchainsScreen(
                         )
                     },
                     onClick = {
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     },
                 )
             }

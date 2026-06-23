@@ -10,9 +10,9 @@ import kotlinx.serialization.Serializable
 data object AddressCheckPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         UnifiedAddressCheckScreen(
-            onClose = { navController.removeLastOrNull() }
+            onClose = { navigation.removeLastOrNull() }
         )
     }
 }

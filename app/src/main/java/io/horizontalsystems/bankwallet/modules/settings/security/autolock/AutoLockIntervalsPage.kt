@@ -30,9 +30,9 @@ import kotlinx.serialization.Serializable
 data object AutoLockIntervalsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         AutoLockIntervalsScreen(
-            close = { navController.removeLastOrNull() },
+            close = { navigation.removeLastOrNull() },
         )
     }
 

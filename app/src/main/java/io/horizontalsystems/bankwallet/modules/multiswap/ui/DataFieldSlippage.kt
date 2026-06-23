@@ -14,7 +14,7 @@ import java.math.BigDecimal
 
 data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val color = if (slippage > BigDecimal(50)) {
             ComposeAppTheme.colors.lucian
         } else if (slippage > BigDecimal(5)) {
@@ -30,7 +30,7 @@ data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
             title = stringResource(R.string.Swap_Slippage),
             value = App.numberFormatter.format(slippage, 0, 2, suffix = "%").hs(color = color),
             onInfoClick = {
-                navController.slideFromBottom(
+                navigation.slideFromBottom(
                     SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
                 )
             }

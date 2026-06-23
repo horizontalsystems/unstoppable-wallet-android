@@ -32,9 +32,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object PremiumSubscribedSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         PremiumSubscribedScreen(
-            onCloseClick = navController::removeLastOrNull,
+            onCloseClick = navigation::removeLastOrNull,
         )
     }
 }

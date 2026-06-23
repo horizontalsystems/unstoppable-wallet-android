@@ -55,12 +55,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SelectPlanSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         SelectPlanBottomSheet(
-            onDismiss = { navController.removeLastOrNull() },
+            onDismiss = { navigation.removeLastOrNull() },
             onPurchase = {
-                navController.removeLastOrNull()
-                navController.slideFromBottom(PremiumSubscribedSheet)
+                navigation.removeLastOrNull()
+                navigation.slideFromBottom(PremiumSubscribedSheet)
             },
         )
     }

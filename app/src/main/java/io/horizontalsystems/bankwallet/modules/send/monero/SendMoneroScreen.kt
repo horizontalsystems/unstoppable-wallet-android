@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
 @Composable
 fun SendMoneroScreen(
     title: String,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SendMoneroViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
@@ -69,7 +69,7 @@ fun SendMoneroScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.removeLastOrNull() }
+            onBack = { navigation.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -78,7 +78,7 @@ fun SendMoneroScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -124,10 +124,10 @@ fun SendMoneroScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
-                navController = navController,
+                navigation = navigation,
             )
 
-            val forResult = navController.slideFromBottomForResult<AddressRiskySheet.Result>(
+            val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
                 {
                     AddressRiskySheet(
                         AddressRiskySheet.Input(
@@ -136,7 +136,7 @@ fun SendMoneroScreen(
                     )
                 }
             ) {
-                openConfirm(navController, sendEntryPointDestId)
+                openConfirm(navigation, sendEntryPointDestId)
             }
 
             ButtonPrimaryYellow(
@@ -149,7 +149,7 @@ fun SendMoneroScreen(
                         keyboardController?.hide()
                         forResult()
                     } else {
-                        openConfirm(navController, sendEntryPointDestId)
+                        openConfirm(navigation, sendEntryPointDestId)
                     }
                 },
                 enabled = proceedEnabled
@@ -159,10 +159,10 @@ fun SendMoneroScreen(
 }
 
 private fun openConfirm(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    navController.slideFromRight(
+    navigation.slideFromRight(
         SendConfirmationPage(SendConfirmationPage.Input(
             SendConfirmationPage.Type.Monero,
             sendEntryPointDestId

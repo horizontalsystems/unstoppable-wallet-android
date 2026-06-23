@@ -15,27 +15,27 @@ import kotlinx.serialization.Serializable
 data class BirthdayHeightConfigPage(val blockchainType: BlockchainType) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         RestoreBirthdayHeightScreen(
             blockchainType = blockchainType,
-            onCloseWithResult = { config -> closeWithConfig(config, navController, resultEventBus) },
-            onCloseClick = { close(navController, resultEventBus) }
+            onCloseWithResult = { config -> closeWithConfig(config, navigation, resultEventBus) },
+            onCloseClick = { close(navigation, resultEventBus) }
         )
     }
 
     private fun closeWithConfig(
         config: BirthdayHeightConfig,
-        navController: HSNavigation,
+        navigation: HSNavigation,
         resultEventBus: ResultEventBus
     ) {
         resultEventBus.sendResult(Result(config))
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
     }
 
-    private fun close(navController: HSNavigation, resultEventBus: ResultEventBus) {
+    private fun close(navigation: HSNavigation, resultEventBus: ResultEventBus) {
         resultEventBus.sendResult(Result(null))
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
     }
 
     @Parcelize

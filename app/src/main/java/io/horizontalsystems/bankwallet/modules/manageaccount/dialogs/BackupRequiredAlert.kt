@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 @Composable
-fun BackupRequiredAlert(navController: HSNavigation) {
+fun BackupRequiredAlert(navigation: HSNavigation) {
     val viewModel = viewModel<BackupRequiredAlertViewModel>()
 
     val uiState = viewModel.uiState
@@ -25,7 +25,7 @@ fun BackupRequiredAlert(navController: HSNavigation) {
         if (alertAccount != null && !uiState.isLocked) {
             delay(1000)
             viewModel.onAlertShown()
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 BackupRequiredSheet(BackupRequiredSheet.Input(alertAccount))
             )
         }

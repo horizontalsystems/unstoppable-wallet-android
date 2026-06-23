@@ -69,11 +69,11 @@ import java.util.Optional
 @Serializable
 data object MarketSearchPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<MarketSearchViewModel>(
             factory = MarketSearchModule.Factory()
         )
-        MarketSearchScreen(viewModel, navController)
+        MarketSearchScreen(viewModel, navigation)
     }
 }
 
@@ -81,7 +81,7 @@ data object MarketSearchPage : HSPage() {
 @Composable
 fun MarketSearchScreen(
     viewModel: MarketSearchViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val uiState = viewModel.uiState
 
@@ -131,7 +131,7 @@ fun MarketSearchScreen(
                             isSearchActive = false
                             delay(500)
                         }
-                        navController.slideFromRight(MarketFiltersPage)
+                        navigation.slideFromRight(MarketFiltersPage)
 
                         stat(
                             page = StatPage.Markets,
@@ -192,7 +192,7 @@ fun MarketSearchScreen(
                                                         delay(200)
 
                                                         viewModel.onCoinOpened(coin)
-                                                        navController.slideFromRight(
+                                                        navigation.slideFromRight(
                                                             CoinPage(CoinPage.Input(coin.uid))
                                                         )
                                                     }
@@ -230,7 +230,7 @@ fun MarketSearchScreen(
                         viewModel.searchByQuery(query)
                     }
                 ) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             }
         }

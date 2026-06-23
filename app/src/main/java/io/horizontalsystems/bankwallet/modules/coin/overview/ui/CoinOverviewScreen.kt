@@ -68,7 +68,7 @@ import io.horizontalsystems.marketkit.models.LinkType
 @Composable
 fun CoinOverviewScreen(
     fullCoin: FullCoin,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
     val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
@@ -109,7 +109,7 @@ fun CoinOverviewScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        val forResult = navController.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+        val forResult = navigation.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
             { BirthdayHeightConfigPage(token.blockchainType) }
         ) {
             if (it.config != null) {
@@ -191,7 +191,7 @@ fun CoinOverviewScreen(
                                                 modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-                                                navController.slideFromRight(IndicatorsPage)
+                                                navigation.slideFromRight(IndicatorsPage)
 
                                                 stat(
                                                     page = StatPage.CoinOverview,
@@ -213,7 +213,7 @@ fun CoinOverviewScreen(
                                         body_leah(text = stringResource(R.string.CoinPage_ROI_Title, viewModel.fullCoin.coin.code))
                                     }
                                     Spacer(modifier = Modifier.height(12.dp))
-                                    Roi(overview.roi, navController)
+                                    Roi(overview.roi, navigation)
                                 }
 
                                 viewModel.tokenVariants?.let { tokenVariants ->
@@ -263,7 +263,7 @@ fun CoinOverviewScreen(
 
                                 if (overview.links.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(24.dp))
-                                    Links(overview.links) { onClick(it, context, navController) }
+                                    Links(overview.links) { onClick(it, context, navigation) }
                                 }
 
                                 Spacer(modifier = Modifier.height(32.dp))
@@ -287,12 +287,12 @@ fun CoinOverviewScreen(
     )
 }
 
-private fun onClick(coinLink: CoinLink, context: Context, navController: HSNavigation) {
+private fun onClick(coinLink: CoinLink, context: Context, navigation: HSNavigation) {
     val absoluteUrl = getAbsoluteUrl(coinLink)
 
     when (coinLink.linkType) {
         LinkType.Guide -> {
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 MarkdownPage(MarkdownPage.Input(absoluteUrl, true))
             )
         }

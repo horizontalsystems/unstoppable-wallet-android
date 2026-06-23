@@ -51,13 +51,13 @@ import kotlinx.serialization.Serializable
 data object BackupManagerPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         BackupManagerScreen(
             onBackClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onRestoreBackup = { jsonString, fileName ->
-                navController.navigateWithTermsAccepted(
+                navigation.navigateWithTermsAccepted(
                     screen = RestoreLocalPage(
                         RestoreLocalPage.Input(
                             BackupManagerPage::class,
@@ -72,8 +72,8 @@ data object BackupManagerPage : HSPage() {
                     statPageTo = StatPage.ImportFullFromFiles
                 )
             },
-            onCreateBackup = navController.authorizedAction {
-                navController.slideFromRight(BackupLocalPage())
+            onCreateBackup = navigation.authorizedAction {
+                navigation.slideFromRight(BackupLocalPage())
 
                 stat(
                     page = StatPage.BackupManager,

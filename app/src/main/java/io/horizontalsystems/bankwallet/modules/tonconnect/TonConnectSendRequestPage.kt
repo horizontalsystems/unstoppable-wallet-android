@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object TonConnectSendRequestPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        TonConnectSendRequestScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        TonConnectSendRequestScreen(navigation)
     }
 }

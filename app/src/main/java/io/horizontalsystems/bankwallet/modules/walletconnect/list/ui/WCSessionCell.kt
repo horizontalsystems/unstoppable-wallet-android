@@ -38,7 +38,7 @@ fun WCSessionCell(
     shape: Shape,
     showDivider: Boolean = false,
     session: WalletConnectListModule.SessionViewItem,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     Box(
         modifier = Modifier
@@ -47,7 +47,7 @@ fun WCSessionCell(
             .clip(shape)
             .background(ComposeAppTheme.colors.lawrence)
             .clickable {
-                navController.slideFromBottom(
+                navigation.slideFromBottom(
                     WCSessionSheet(WCSessionModule.Input(session.sessionTopic))
                 )
             },

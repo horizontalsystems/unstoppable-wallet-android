@@ -17,14 +17,14 @@ import kotlinx.serialization.Serializable
 data class MarkdownPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         MarkdownScreen(
             handleRelativeUrl = input.handleRelativeUrl,
             showAsPopup = input.showAsPopup,
             markdownUrl = input.markdownUrl,
-            onCloseClick = { navController.removeLastOrNull() },
+            onCloseClick = { navigation.removeLastOrNull() },
             onUrlClick = { url ->
-                navController.slideFromRight(
+                navigation.slideFromRight(
                     MarkdownPage(Input(url))
                 )
             }

@@ -84,7 +84,7 @@ fun AmountCellTV(
     coinAmountColor: AmountColor,
     coinAmountSign: AmountSign,
     transactionInfoHelper: TransactionInfoHelper,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     statPage: StatPage,
     borderTop: Boolean = true
 ) {
@@ -113,7 +113,7 @@ fun AmountCellTV(
             fiatSymbol = transactionInfoHelper.getCurrencySymbol()
         ),
         onClick = {
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 CoinPage(CoinPage.Input(transactionValue.coinUid))
             )
 

@@ -67,10 +67,10 @@ import kotlinx.serialization.Serializable
 data object SecuritySettingsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         SecurityCenterScreen(
             securitySettingsViewModel = viewModel(factory = SecurityPasscodeSettingsModule.Factory()),
-            navController = navController,
+            navigation = navigation,
         )
     }
 
@@ -79,7 +79,7 @@ data object SecuritySettingsPage : HSPage() {
 @Composable
 private fun SecurityCenterScreen(
     securitySettingsViewModel: SecuritySettingsViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
@@ -89,14 +89,14 @@ private fun SecurityCenterScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_SecurityCenter),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             Modifier.verticalScroll(rememberScrollState())
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,
-                navController
+                navigation
             )
 
             VSpacer(24.dp)
@@ -117,7 +117,7 @@ private fun SecurityCenterScreen(
                         right = {
                             CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
                         },
-                        onClick = { navController.slideFromRight(AutoLockIntervalsPage) }
+                        onClick = { navigation.slideFromRight(AutoLockIntervalsPage) }
                     )
                     HsDivider()
                 }
@@ -181,13 +181,13 @@ private fun SecurityCenterScreen(
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             if (action == SecureSend) {
-                                                navController.slideFromBottom(SecureSendConfigSheet)
+                                                navigation.slideFromBottom(SecureSendConfigSheet)
                                                 false
                                             } else {
                                                 true
                                             }
                                         } else {
-                                            navController.slideFromBottom(
+                                            navigation.slideFromBottom(
                                                 DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.getFeature(action))),
                                             )
                                             false
@@ -199,7 +199,7 @@ private fun SecurityCenterScreen(
                             },
                             onClick = if (action == SecureSend) {
                                 {
-                                    navController.slideFromBottom(SecureSendConfigSheet)
+                                    navigation.slideFromBottom(SecureSendConfigSheet)
                                 }
                             } else {
                                 null
@@ -209,16 +209,16 @@ private fun SecurityCenterScreen(
                 }
 
                 BoxBordered(top = true) {
-                    val authorizedActionDuressPin = navController.authorizedAction {
+                    val authorizedActionDuressPin = navigation.authorizedAction {
                         if (uiState.duressPinEnabled) {
-                            navController.slideFromRight(EditDuressPinPage)
+                            navigation.slideFromRight(EditDuressPinPage)
                         } else {
-                            navController.slideFromRight(SetDuressPinIntroPage)
+                            navigation.slideFromRight(SetDuressPinIntroPage)
                         }
                     }
 
-                    val setDuressPinFlow = navController.ensurePinSet(R.string.PinSet_ForDuress) {
-                        navController.slideFromRight(SetDuressPinIntroPage)
+                    val setDuressPinFlow = navigation.ensurePinSet(R.string.PinSet_ForDuress) {
+                        navigation.slideFromRight(SetDuressPinIntroPage)
                     }
 
                     CellPrimary(
@@ -230,7 +230,7 @@ private fun SecurityCenterScreen(
                         },
                         right = {
                             val onClick = {
-                                navController.paidAction(RobberyProtection) {
+                                navigation.paidAction(RobberyProtection) {
                                     if (uiState.pinEnabled) {
                                         authorizedActionDuressPin()
                                     } else {
@@ -258,7 +258,7 @@ private fun SecurityCenterScreen(
                                         style = ButtonStyle.Solid,
                                         size = ButtonSize.Small,
                                         icon = painterResource(R.drawable.trash_24),
-                                        onClick = navController.authorizedAction {
+                                        onClick = navigation.authorizedAction {
                                             securitySettingsViewModel.disableDuressPin()
                                         }
                                     )

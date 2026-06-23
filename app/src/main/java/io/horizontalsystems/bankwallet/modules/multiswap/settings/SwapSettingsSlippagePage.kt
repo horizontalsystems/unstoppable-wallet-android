@@ -35,8 +35,8 @@ import java.math.BigDecimal
 @Serializable
 data class SwapSettingsSlippagePage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapSlippageSettingsScreen(navController, input.slippage)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapSlippageSettingsScreen(navigation, input.slippage)
     }
 
     @Serializable
@@ -48,7 +48,7 @@ data class SwapSettingsSlippagePage(val input: Input) : HSPage() {
 
 @Composable
 fun SwapSlippageSettingsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     initialSlippage: BigDecimal
 ) {
     val resultEventBus = LocalResultEventBus.current
@@ -59,7 +59,7 @@ fun SwapSlippageSettingsScreen(
 
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_SlippageTolerance),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -82,7 +82,7 @@ fun SwapSlippageSettingsScreen(
                         resultEventBus.sendResult(
                             SwapSettingsSlippagePage.Result(uiState.slippage)
                         )
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             }

@@ -53,14 +53,14 @@ import kotlinx.serialization.Serializable
 data class DetectorsPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<DetectorsViewModel>(
             factory = DetectorsModule.Factory(input.title, input.issues)
         )
         DetectorsScreen(
             viewModel = viewModel,
             onBackClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
         )
     }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
@@ -51,8 +50,8 @@ import java.math.BigDecimal
 @Serializable
 data object Eip20ApproveConfirmPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        Eip20ApproveConfirmScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        Eip20ApproveConfirmScreen(navigation)
     }
 
     @Parcelize
@@ -60,9 +59,9 @@ data object Eip20ApproveConfirmPage : HSPage() {
 }
 
 @Composable
-fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
+fun Eip20ApproveConfirmScreen(navigation: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = navController.viewModelForScreen<Eip20ApproveViewModel>(Eip20ApprovePage::class)
+    val viewModel = navigation.viewModelForScreen<Eip20ApproveViewModel>(Eip20ApprovePage::class)
 
     val view = LocalView.current
     val uiState = viewModel.uiState
@@ -70,9 +69,9 @@ fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmApprove_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::removeLastOrNull,
+        onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = {
-            navController.slideFromRight(Eip20ApproveTransactionSettingsPage)
+            navigation.slideFromRight(Eip20ApproveTransactionSettingsPage)
         },
         buttonsSlot = {
             val approveAction = rememberAsyncAction()
@@ -88,9 +87,9 @@ fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             resultEventBus.sendResult(Eip20ApproveConfirmPage.Result(true))
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(ErrorSheet(
+                            navigation.slideFromBottom(ErrorSheet(
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
@@ -134,7 +133,7 @@ fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
             )
 
             DataFieldFeeTemplate(
-                navController = navController,
+                navigation = navigation,
                 primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
                 title = stringResource(id = R.string.FeeSettings_NetworkFee),

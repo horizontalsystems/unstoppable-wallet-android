@@ -77,5 +77,5 @@ abstract class HSPage(
     }
 
     @Composable
-    abstract fun GetContent(navController: HSNavigation)
+    abstract fun GetContent(navigation: HSNavigation)
 }

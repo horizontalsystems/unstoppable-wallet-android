@@ -8,21 +8,21 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object OpenCryptoPayEvmSettingsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
             OpenCryptoPayEvmConfirmationPage::class
         )
-        viewModel.sendTransactionService.GetSettingsContent(navController)
+        viewModel.sendTransactionService.GetSettingsContent(navigation)
     }
 }
 
 @Serializable
 data object OpenCryptoPayEvmNonceSettingsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<OpenCryptoPayEvmConfirmationViewModel>(
             OpenCryptoPayEvmConfirmationPage::class
         )
-        viewModel.sendTransactionService.GetNonceSettingsContent(navController)
+        viewModel.sendTransactionService.GetNonceSettingsContent(navigation)
     }
 }

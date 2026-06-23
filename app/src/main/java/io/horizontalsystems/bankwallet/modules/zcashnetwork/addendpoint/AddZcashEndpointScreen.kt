@@ -28,11 +28,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
-fun AddZcashEndpointScreen(navController: HSNavigation) {
+fun AddZcashEndpointScreen(navigation: HSNavigation) {
     val viewModel = viewModel<AddZcashEndpointViewModel>(factory = AddZcashEndpointModule.Factory())
     LaunchedEffect(viewModel.uiState.closeScreen) {
         if (viewModel.uiState.closeScreen) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
             viewModel.onScreenClose()
         }
     }
@@ -43,7 +43,7 @@ fun AddZcashEndpointScreen(navController: HSNavigation) {
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {

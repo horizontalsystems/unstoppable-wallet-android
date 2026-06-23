@@ -178,12 +178,12 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     }
 
     @Composable
-    override fun GetSettingsContent(navController: HSNavigation) {
+    override fun GetSettingsContent(navigation: HSNavigation) {
         val sendSettingsViewModel = viewModel<SendBtcSettingsViewModel>(
             factory = SendBtcSettingsViewModel.Factory(feeRateService, feeService, token)
         )
 
-        SendBtcFeeSettingsScreen(navController, sendSettingsViewModel)
+        SendBtcFeeSettingsScreen(navigation, sendSettingsViewModel)
     }
 
     fun signTransaction(): SignedRawTransaction {
@@ -217,14 +217,14 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
 @Composable
 fun SendBtcFeeSettingsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SendBtcSettingsViewModel
 ) {
     val uiState = viewModel.uiState
 
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -248,7 +248,7 @@ fun SendBtcFeeSettingsScreen(
                 fee = uiState.fee,
                 amountInputType = AmountInputType.COIN,
                 rate = uiState.rate,
-                navController = navController
+                navigation = navigation
             )
 
             if (viewModel.feeRateChangeable) {
@@ -259,7 +259,7 @@ fun SendBtcFeeSettingsScreen(
                     value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
                     decimals = 0,
                     caution = uiState.feeRateCaution,
-                    navController = navController,
+                    navigation = navigation,
                     onValueChange = {
                         viewModel.updateFeeRate(it.toInt())
                     },

@@ -31,7 +31,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -39,8 +38,8 @@ import kotlin.reflect.KClass
 data class SendEvmConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SendEvmConfirmationScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        SendEvmConfirmationScreen(navigation, input)
     }
 
     @Serializable
@@ -72,7 +71,7 @@ data class SendEvmConfirmationPage(val input: Input) : HSPage() {
 
 @Composable
 private fun SendEvmConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     input: SendEvmConfirmationPage.Input
 ) {
     val logger = remember { AppLogger("send-evm") }
@@ -89,12 +88,12 @@ private fun SendEvmConfirmationScreen(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Send_Confirmation_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.removeLastOrNull() },
+        onClickBack = { navigation.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(SendEvmSettingsPage)
+            navigation.slideFromBottom(SendEvmSettingsPage)
         },
         onClickNonceSettings = {
-            navController.slideFromBottom(SendEvmNonceSettingsPage)
+            navigation.slideFromBottom(SendEvmNonceSettingsPage)
         },
         buttonsSlot = {
             val view = LocalView.current
@@ -117,10 +116,10 @@ private fun SendEvmConfirmationScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
 
-                            navController.removeLastUntil(input.sendEntryPointDestId, true)
+                            navigation.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(ErrorSheet(
+                            navigation.slideFromBottom(ErrorSheet(
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
@@ -131,7 +130,7 @@ private fun SendEvmConfirmationScreen(
         }
     ) {
         SendEvmTransactionView(
-            navController,
+            navigation,
             uiState.sectionViewItems,
             uiState.cautions,
             uiState.transactionFields,

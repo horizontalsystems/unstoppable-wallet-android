@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 fun MintSection(
     transactionValue: TransactionValue,
     transactionInfoHelper: TransactionInfoHelper,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     SectionUniversalLawrence {
         AmountCellTV(
@@ -25,7 +25,7 @@ fun MintSection(
             coinAmountColor = AmountColor.Positive,
             coinAmountSign = AmountSign.Plus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            navigation = navigation,
             statPage = StatPage.TonConnect,
             borderTop = false,
         )

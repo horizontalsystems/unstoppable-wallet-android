@@ -40,26 +40,26 @@ import kotlinx.serialization.Serializable
 data object WCPairingsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        WCPairingsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        WCPairingsScreen(navigation)
     }
 
 }
 
 @Composable
-fun WCPairingsScreen(navController: HSNavigation) {
+fun WCPairingsScreen(navigation: HSNavigation) {
     val viewModel = viewModel<WCPairingsViewModel>(factory = WCPairingsViewModel.Factory())
     val uiState = viewModel.uiState
 
     LaunchedEffect(uiState.closeScreen) {
         if (uiState.closeScreen) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.WalletConnect_PairedDApps),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
@@ -80,7 +80,7 @@ fun WCPairingsScreen(navController: HSNavigation) {
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
-                        onClick = navController.slideFromBottomForResult<ConfirmDeleteAllPairingsSheet.Result>(
+                        onClick = navigation.slideFromBottomForResult<ConfirmDeleteAllPairingsSheet.Result>(
                             { ConfirmDeleteAllPairingsSheet }
                         ) { result ->
                             if (result.confirmed) {

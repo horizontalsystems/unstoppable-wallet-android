@@ -23,14 +23,14 @@ const val BlockchainSelectorResult = "blockchain_selector_result_key"
 fun AddTokenBlockchainSelectorScreen(
     blockchains: List<Blockchain>,
     selectedBlockchain: Blockchain,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val resultEventBus = LocalResultEventBus.current
     var selectedItem = selectedBlockchain
 
     HSScaffold(
         title = stringResource(R.string.Market_Filter_Blockchains),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -45,7 +45,7 @@ fun AddTokenBlockchainSelectorScreen(
                     ) {
                         selectedItem = item
                         resultEventBus.sendResult(item)
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 }
             }

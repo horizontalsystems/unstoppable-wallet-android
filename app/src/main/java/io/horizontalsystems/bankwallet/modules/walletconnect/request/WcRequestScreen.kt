@@ -44,7 +44,7 @@ import io.horizontalsystems.dapp.core.HSDAppRequest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WcRequestScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sessionRequest: HSDAppRequest,
     wcAction: AbstractWCAction
 ) {
@@ -56,7 +56,7 @@ fun WcRequestScreen(
 
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -67,7 +67,7 @@ fun WcRequestScreen(
     BottomSheetContent(
         onDismissRequest = {
             WCDelegate.discardActiveSessionRequest()
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = sheetState
     ) { snackbarActions ->
@@ -125,7 +125,7 @@ fun WcRequestScreen(
                 DataBlock(
                     sections = uiState.contentItems,
                     onInfoClick = {
-                        navController.slideFromBottom(
+                        navigation.slideFromBottom(
                             FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     },

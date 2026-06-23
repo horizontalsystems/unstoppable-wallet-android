@@ -28,9 +28,9 @@ import kotlinx.serialization.Serializable
 data object DonateTokenSelectPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         TokenSelectScreen(
-            navController = navController,
+            navigation = navigation,
             title = stringResource(R.string.Settings_Donate),
             onClickItem = { viewItem ->
                 val donateAddress: String? =
@@ -40,7 +40,7 @@ data object DonateTokenSelectPage : HSPage() {
                         R.string.Settings_DonateToken,
                         viewItem.wallet.token.fullCoin.coin.code
                     )
-                    navController.slideFromRight(
+                    navigation.slideFromRight(
                         SendPage(SendPage.Input(
                             wallet = viewItem.wallet,
                             title = sendTitle,
@@ -58,7 +58,7 @@ data object DonateTokenSelectPage : HSPage() {
         ) {
             DonateHeader(
                 onClick = {
-                    navController.slideFromRight(DonateAddressesPage)
+                    navigation.slideFromRight(DonateAddressesPage)
 
                     stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
                 }

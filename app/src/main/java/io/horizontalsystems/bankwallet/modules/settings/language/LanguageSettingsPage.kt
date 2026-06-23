@@ -38,10 +38,10 @@ import kotlinx.serialization.Serializable
 data object LanguageSettingsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val activity = LocalActivity.current
         LanguageScreen(
-            navController,
+            navigation,
             { activity?.let { MainModule.startAsNewTask(it) } }
         )
     }
@@ -50,14 +50,14 @@ data object LanguageSettingsPage : HSPage() {
 
 @Composable
 private fun LanguageScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     reloadApp: () -> Unit,
     viewModel: LanguageSettingsViewModel = viewModel(
         factory = LanguageSettingsModule.Factory()
     )
 ) {
     if (viewModel.closeScreen) {
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
     }
 
     if (viewModel.reloadApp) {
@@ -66,7 +66,7 @@ private fun LanguageScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_Language),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

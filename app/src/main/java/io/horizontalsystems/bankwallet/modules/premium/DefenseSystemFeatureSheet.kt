@@ -56,9 +56,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DefenseSystemFeatureSheet(val input: Input) : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         DefenseSystemFeatureScreen(
-            navController,
+            navigation,
             input.feature,
         )
     }
@@ -136,7 +136,7 @@ enum class PremiumFeature(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun DefenseSystemFeatureScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     feature: PremiumFeature,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -145,7 +145,7 @@ private fun DefenseSystemFeatureScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = sheetState
     ) {
@@ -213,7 +213,7 @@ private fun DefenseSystemFeatureScreen(
                         icon = painterResource(id = R.drawable.ic_close),
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Small,
-                        onClick = { navController.removeLastOrNull() }
+                        onClick = { navigation.removeLastOrNull() }
                     )
                 }
             }
@@ -234,8 +234,8 @@ private fun DefenseSystemFeatureScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.removeLastOrNull()
-                        navController.slideFromBottom(PremiumFeaturesSheet)
+                        navigation.removeLastOrNull()
+                        navigation.slideFromBottom(PremiumFeaturesSheet)
                     }
                     .padding(horizontal = 32.dp, vertical = 12.dp),
                 text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
@@ -248,8 +248,8 @@ private fun DefenseSystemFeatureScreen(
                 variant = ButtonVariant.Primary,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    navController.removeLastOrNull()
-                    navController.slideFromBottom(SelectPlanSheet)
+                    navigation.removeLastOrNull()
+                    navigation.slideFromBottom(SelectPlanSheet)
                 }
             )
         }

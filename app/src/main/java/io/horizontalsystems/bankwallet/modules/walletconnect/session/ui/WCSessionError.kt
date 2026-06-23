@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 @Composable
 fun WCSessionError(
     error: String,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     Box(Modifier.fillMaxSize()) {
         ListEmptyView(text = error, icon = R.drawable.ic_stop)
@@ -30,7 +30,7 @@ fun WCSessionError(
                 .padding(start = 16.dp, end = 16.dp, bottom = 32.dp)
                 .align(Alignment.BottomCenter),
             title = stringResource(R.string.Button_Close),
-            onClick = { navController.removeLastOrNull() }
+            onClick = { navigation.removeLastOrNull() }
         )
     }
 }

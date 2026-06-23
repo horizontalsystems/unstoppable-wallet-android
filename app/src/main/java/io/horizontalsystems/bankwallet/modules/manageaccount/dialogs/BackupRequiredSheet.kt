@@ -41,8 +41,8 @@ import kotlinx.serialization.Serializable
 data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        BackupRequiredScreen(navController, input.account)
+    override fun GetContent(navigation: HSNavigation) {
+        BackupRequiredScreen(navigation, input.account)
     }
 
     @Serializable
@@ -52,17 +52,17 @@ data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackupRequiredScreen(navController: HSNavigation, account: Account) {
+fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::removeLastOrNull,
+            onDismissRequest = navigation::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
                     title = stringResource(R.string.BackupRequired_RemindLater),
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
-                    onClick = navController::removeLastOrNull
+                    onClick = navigation::removeLastOrNull
                 )
             },
             content = {
@@ -91,7 +91,7 @@ fun BackupRequiredScreen(navController: HSNavigation, account: Account) {
                         },
                         right = { CellRightNavigation() },
                         onClick = {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 BackupKeyPage(account)
                             )
 
@@ -119,7 +119,7 @@ fun BackupRequiredScreen(navController: HSNavigation, account: Account) {
                         },
                         right = { CellRightNavigation() },
                         onClick = {
-                            navController.slideFromBottom(BackupLocalPage(account))
+                            navigation.slideFromBottom(BackupLocalPage(account))
 
                             stat(
                                 page = StatPage.BackupRequired,

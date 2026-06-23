@@ -71,7 +71,7 @@ private const val SlideDurationMillis = 300L
 
 @Composable
 fun TransactionsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: TransactionsViewModel,
 ) {
     val accountsViewModel =
@@ -92,7 +92,7 @@ fun TransactionsScreen(
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = buildList {
             add(
                 MenuItem(
@@ -100,7 +100,7 @@ fun TransactionsScreen(
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
                     onClick = {
-                        navController.slideFromRight(TransactionsFilterPage)
+                        navigation.slideFromRight(TransactionsFilterPage)
 
                         stat(
                             page = StatPage.Transactions,
@@ -163,7 +163,7 @@ fun TransactionsScreen(
                                     onTransactionClick(
                                         it,
                                         viewModel,
-                                        navController
+                                        navigation
                                     )
                                 }
                             }
@@ -192,13 +192,13 @@ fun TransactionsScreen(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     viewModel: TransactionsViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
 
     viewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.slideFromBottom(TransactionInfoPage)
+    navigation.slideFromBottom(TransactionInfoPage)
 
     stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }

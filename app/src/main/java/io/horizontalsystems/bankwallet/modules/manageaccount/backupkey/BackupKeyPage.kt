@@ -34,14 +34,14 @@ import kotlinx.serialization.Serializable
 data class BackupKeyPage(val account: Account) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RecoveryPhraseScreen(navController, account)
+    override fun GetContent(navigation: HSNavigation) {
+        RecoveryPhraseScreen(navigation, account)
     }
 }
 
 @Composable
 fun RecoveryPhraseScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     account: Account
 ) {
     val viewModel = viewModel<BackupKeyViewModel>(factory = BackupKeyModule.Factory(account))
@@ -53,14 +53,14 @@ fun RecoveryPhraseScreen(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
                 }
             ),
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         )
@@ -86,7 +86,7 @@ fun RecoveryPhraseScreen(
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.RecoveryPhrase_Verify),
                     onClick = {
-                        navController.slideFromRight(
+                        navigation.slideFromRight(
                             BackupConfirmKeyPage(viewModel.account)
                         )
                     },

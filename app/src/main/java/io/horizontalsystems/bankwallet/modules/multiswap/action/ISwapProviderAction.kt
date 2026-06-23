@@ -16,5 +16,5 @@ interface ISwapProviderAction {
     fun getDescription() : String? = null
 
     @Composable
-    fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit
+    fun executor(navigation: HSNavigation, onActionCompleted: () -> Unit): () -> Unit
 }

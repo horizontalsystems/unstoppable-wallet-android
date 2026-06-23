@@ -36,8 +36,8 @@ import java.math.BigDecimal
 data class Eip20ApprovePage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        Eip20ApproveScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        Eip20ApproveScreen(navigation, input)
     }
 
     @Serializable
@@ -49,7 +49,7 @@ data class Eip20ApprovePage(val input: Input) : HSPage() {
 }
 
 @Composable
-fun Eip20ApproveScreen(navController: HSNavigation, input: Eip20ApprovePage.Input) {
+fun Eip20ApproveScreen(navigation: HSNavigation, input: Eip20ApprovePage.Input) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20ApproveViewModel>(
         factory = Eip20ApproveViewModel.Factory(
@@ -67,14 +67,14 @@ fun Eip20ApproveScreen(navController: HSNavigation, input: Eip20ApprovePage.Inpu
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::removeLastOrNull
+                onClick = navigation::removeLastOrNull
             )
         ),
         bottomBar = {
             ButtonsGroupWithShade {
-                val forResult = navController.slideFromRightForResult<Eip20ApproveConfirmPage.Result>({ Eip20ApproveConfirmPage }) {
+                val forResult = navigation.slideFromRightForResult<Eip20ApproveConfirmPage.Result>({ Eip20ApproveConfirmPage }) {
                     resultEventBus.sendResult(it)
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
 
                 ButtonPrimaryYellow(

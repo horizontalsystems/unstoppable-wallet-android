@@ -23,20 +23,20 @@ import kotlinx.serialization.Serializable
 data object KeyAccountInfoPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        InfoScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        InfoScreen(navigation)
     }
 }
 
 @Composable
-private fun InfoScreen(navController: HSNavigation) {
+private fun InfoScreen(navigation: HSNavigation) {
     HSScaffold(
         title = stringResource(R.string.ExtendedKey_Account),
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {

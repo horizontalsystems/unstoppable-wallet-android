@@ -27,7 +27,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountPage
 import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletPage
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountPage
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -53,13 +52,13 @@ import kotlinx.serialization.Serializable
 data class ManageAccountsPage(val input: ManageAccountsModule.Mode) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ManageAccountsScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        ManageAccountsScreen(navigation, input)
     }
 }
 
 @Composable
-fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule.Mode) {
+fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mode) {
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
     var searchQuery by remember { mutableStateOf(viewModel.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }
@@ -69,7 +68,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
 
     LaunchedEffect(finish) {
         if (finish) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -87,7 +86,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItemDropdown(
                 title = TranslatableString.ResString(R.string.Button_Add),
@@ -97,7 +96,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
                         onClick = {
-                            navController.navigateWithTermsAccepted(
+                            navigation.navigateWithTermsAccepted(
                                 screen = CreateAccountPage(args),
                                 navigationType = NavigationType.SlideFromRight,
                                 statPageFrom = StatPage.ManageWallets,
@@ -108,7 +107,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_ExistingWallet),
                         onClick = {
-                            navController.navigateWithTermsAccepted(
+                            navigation.navigateWithTermsAccepted(
                                 screen = ImportWalletPage(args),
                                 navigationType = NavigationType.SlideFromRight,
                                 statPageFrom = StatPage.ManageWallets,
@@ -119,7 +118,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_ViewOnlyWallet),
                         onClick = {
-                            navController.slideFromRight(WatchAddressPage(args))
+                            navigation.slideFromRight(WatchAddressPage(args))
                             stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
                         }
                     ),
@@ -165,7 +164,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
                         }
                         regularAccounts.forEach { account ->
                             item {
-                                AccountCellWrapper(account, viewModel, navController)
+                                AccountCellWrapper(account, viewModel, navigation)
                             }
                         }
                     }
@@ -177,7 +176,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
                         }
                         watchAccounts.forEach { account ->
                             item {
-                                AccountCellWrapper(account, viewModel, navController)
+                                AccountCellWrapper(account, viewModel, navigation)
                             }
                         }
                     }
@@ -204,7 +203,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
 fun AccountCellWrapper(
     account: AccountViewItem,
     viewModel: ManageAccountsViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     AccountCell(
         accountViewItem = account,
@@ -217,7 +216,7 @@ fun AccountCellWrapper(
             )
         },
         onOptionIconClick = {
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 ManageAccountPage(ManageAccountPage.Input(account.accountId))
             )
 

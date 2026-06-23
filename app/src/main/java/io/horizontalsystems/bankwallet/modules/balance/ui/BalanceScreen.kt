@@ -9,14 +9,14 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
 @Composable
 fun BalanceScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val viewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
     when (val tmpAccount = viewModel.balanceScreenState) {
-        BalanceScreenState.NoAccount -> BalanceNoAccount(navController)
+        BalanceScreenState.NoAccount -> BalanceNoAccount(navigation)
         is BalanceScreenState.HasAccount -> {
-            BalanceForAccount(navController, tmpAccount.accountViewItem)
+            BalanceForAccount(navigation, tmpAccount.accountViewItem)
         }
 
         else -> {}

@@ -13,9 +13,9 @@ import kotlin.reflect.KClass
 data class ShieldZcashPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<ShieldZcashViewModel>(factory = ShieldZcashModule.Factory(input.wallet))
-        ShieldZcashScreen(navController, viewModel, input.entryPointDestId)
+        ShieldZcashScreen(navigation, viewModel, input.entryPointDestId)
     }
 
     @Serializable

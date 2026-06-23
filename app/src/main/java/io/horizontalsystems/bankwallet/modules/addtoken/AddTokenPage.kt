@@ -44,11 +44,11 @@ import kotlinx.serialization.Serializable
 data object AddTokenPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<AddTokenViewModel>(factory = AddTokenModule.Factory())
         AddTokenScreen(
-            navController = navController,
-            closeScreen = { navController.removeLastOrNull() },
+            navigation = navigation,
+            closeScreen = { navigation.removeLastOrNull() },
             viewModel = viewModel
         )
     }
@@ -58,19 +58,19 @@ data object AddTokenPage : HSPage() {
 data object BlockchainSelectorPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<AddTokenViewModel>(AddTokenPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<AddTokenViewModel>(AddTokenPage::class)
         AddTokenBlockchainSelectorScreen(
             blockchains = viewModel.blockchains,
             selectedBlockchain = viewModel.selectedBlockchain,
-            navController = navController
+            navigation = navigation
         )
     }
 }
 
 @Composable
 private fun AddTokenScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     closeScreen: () -> Unit,
     viewModel: AddTokenViewModel,
 ) {
@@ -108,7 +108,7 @@ private fun AddTokenScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClick = navController.slideFromRightForResult<Blockchain>({ BlockchainSelectorPage }) {
+                        onClick = navigation.slideFromRightForResult<Blockchain>({ BlockchainSelectorPage }) {
                             viewModel.onBlockchainSelect(it)
                         }
                     ) {

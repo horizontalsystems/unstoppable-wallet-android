@@ -42,14 +42,14 @@ import kotlinx.serialization.Serializable
 data object WhyDonatePage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         WhyDonateView(
             onClick = {
-                navController.slideFromRight(DonateTokenSelectPage)
+                navigation.slideFromRight(DonateTokenSelectPage)
                 stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
             },
             onClose = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }

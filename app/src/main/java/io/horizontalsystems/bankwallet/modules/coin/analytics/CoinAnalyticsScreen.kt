@@ -63,7 +63,7 @@ import io.horizontalsystems.marketkit.models.FullCoin
 @Composable
 fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val viewModel =
         viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
@@ -91,7 +91,7 @@ fun CoinAnalyticsScreen(
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(
                                 item.blocks,
-                                navController,
+                                navigation,
                             )
                         }
 
@@ -112,16 +112,16 @@ fun CoinAnalyticsScreen(
 @Composable
 private fun AnalyticsData(
     blocks: List<CoinAnalyticsModule.BlockViewItem>,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
             if (block.showAsPreview) {
-                AnalyticsPreviewBlock(block, navController)
+                AnalyticsPreviewBlock(block, navigation)
             } else {
                 AnalyticsBlock(
                     block,
-                    navController,
+                    navigation,
                 )
             }
         }
@@ -134,7 +134,7 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -153,7 +153,7 @@ private fun AnalyticsBlock(
                     isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(CoinAnalyticsInfoPage(info))
+                            navigation.slideFromRight(CoinAnalyticsInfoPage(info))
                         }
                     }
                 )
@@ -166,7 +166,7 @@ private fun AnalyticsBlock(
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                FooterCell(item, index, navController)
+                FooterCell(item, index, navigation)
             }
         }
     ) {
@@ -177,7 +177,7 @@ private fun AnalyticsBlock(
                     val coinUid = block.analyticChart?.coinUid
                     val chartType = block.analyticChart?.chartType
                     if (coinUid != null && chartType != null) {
-                        navController.add(
+                        navigation.add(
                             ProChartSheet(
                                 Input(
                                     coinUid,
@@ -205,7 +205,7 @@ private fun AnalyticsBlock(
 private fun FooterCell(
     item: CoinAnalyticsModule.FooterType,
     index: Int,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     when (item) {
         is CoinAnalyticsModule.FooterType.FooterItem -> {
@@ -216,7 +216,7 @@ private fun FooterCell(
                 showRightArrow = item.action != null,
                 cellAction = item.action,
                 onActionClick = { action ->
-                    handleActionClick(action, navController)
+                    handleActionClick(action, navigation)
                 }
             )
         }
@@ -224,7 +224,7 @@ private fun FooterCell(
         is CoinAnalyticsModule.FooterType.DetectorFooterItem -> {
             Column(
                 modifier = Modifier.clickable {
-                    item.action?.let { handleActionClick(it, navController) }
+                    item.action?.let { handleActionClick(it, navigation) }
                 }
             ) {
                 AnalyticsFooterCell(
@@ -270,7 +270,7 @@ private fun FooterCell(
 @Composable
 private fun AnalyticsPreviewBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -289,7 +289,7 @@ private fun AnalyticsPreviewBlock(
                     isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(CoinAnalyticsInfoPage(info))
+                            navigation.slideFromRight(CoinAnalyticsInfoPage(info))
                         }
                     }
                 )
@@ -305,7 +305,7 @@ private fun AnalyticsPreviewBlock(
             }
         },
         onClick = {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.TokenInsightsFeature))
             )
             stat(
@@ -373,49 +373,49 @@ private fun PreviewFooterCell(
 
 private fun handleActionClick(
     action: CoinAnalyticsModule.ActionType,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 CoinMajorHoldersPage(CoinMajorHoldersPage.Input(action.coin.uid, action.blockchain))
             )
         }
 
         is CoinAnalyticsModule.ActionType.OpenAudits -> {
             val arguments = CoinAuditsPage.Input(action.audits)
-            navController.slideFromRight(CoinAuditsPage(arguments))
+            navigation.slideFromRight(CoinAuditsPage(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
-            navController.slideFromRight(CoinTreasuriesPage(action.coin))
+            navigation.slideFromRight(CoinTreasuriesPage(action.coin))
         }
 
         is CoinAnalyticsModule.ActionType.OpenReports -> {
             val arguments = CoinReportsPage.Input(action.coinUid)
-            navController.slideFromRight(CoinReportsPage(arguments))
+            navigation.slideFromRight(CoinReportsPage(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenInvestors -> {
             val arguments = CoinInvestmentsPage.Input(action.coinUid)
-            navController.slideFromRight(CoinInvestmentsPage(arguments))
+            navigation.slideFromRight(CoinInvestmentsPage(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
-            navController.slideFromBottom(CoinRankPage(action.type))
+            navigation.slideFromBottom(CoinRankPage(action.type))
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
-            navController.slideFromRight(OverallScoreInfoPage(action.scoreCategory))
+            navigation.slideFromRight(OverallScoreInfoPage(action.scoreCategory))
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-            navController.slideFromBottom(TvlPage)
+            navigation.slideFromBottom(TvlPage)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
             val params = DetectorsPage.Input(action.title, action.issues)
-            navController.slideFromRight(DetectorsPage(params))
+            navigation.slideFromRight(DetectorsPage(params))
         }
     }
 }

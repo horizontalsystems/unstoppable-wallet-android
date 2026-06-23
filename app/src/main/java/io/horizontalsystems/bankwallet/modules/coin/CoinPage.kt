@@ -34,11 +34,11 @@ import kotlinx.serialization.Serializable
 data class CoinPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         CoinScreen(
             input.coinUid,
             viewModel(factory = CoinModule.Factory(input.coinUid)),
-            navController
+            navigation
         )
     }
 
@@ -50,27 +50,27 @@ data class CoinPage(val input: Input) : HSPage() {
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     if (coinViewModel != null) {
-        CoinContent(coinViewModel, navController)
+        CoinContent(coinViewModel, navigation)
     } else {
-        CoinNotFound(coinUid, navController)
+        CoinNotFound(coinUid, navigation)
     }
 }
 
 @Composable
 fun CoinContent(
     viewModel: CoinViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val view = LocalView.current
 
     HSScaffold(
         title = viewModel.fullCoin.coin.code,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         bottomBar = {
-            CoinBottomButtons(viewModel, navController)
+            CoinBottomButtons(viewModel, navigation)
         },
         menuItems = buildList {
             if (viewModel.isWatchlistEnabled) {
@@ -113,7 +113,7 @@ fun CoinContent(
         Column {
             CoinOverviewScreen(
                 fullCoin = viewModel.fullCoin,
-                navController = navController
+                navigation = navigation
             )
 
             viewModel.successMessage?.let {
@@ -128,7 +128,7 @@ fun CoinContent(
 @Composable
 private fun CoinBottomButtons(
     viewModel: CoinViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val coinToken = viewModel.coinToken ?: return
     val popularToken = viewModel.popularToken
@@ -142,7 +142,7 @@ private fun CoinBottomButtons(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.CoinPage_Buy),
                 onClick = {
-                    navController.slideFromRight(
+                    navigation.slideFromRight(
                         SwapPage(
                             SwapPage.Input(
                                 tokenIn = popularToken,
@@ -159,7 +159,7 @@ private fun CoinBottomButtons(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.CoinPage_Sell),
                 onClick = {
-                    navController.slideFromRight(
+                    navigation.slideFromRight(
                         SwapPage(
                             SwapPage.Input(
                                 tokenIn = coinToken,
@@ -174,10 +174,10 @@ private fun CoinBottomButtons(
 }
 
 @Composable
-fun CoinNotFound(coinUid: String, navController: HSNavigation) {
+fun CoinNotFound(coinUid: String, navigation: HSNavigation) {
     HSScaffold(
         title = coinUid,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         ListEmptyView(
             text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),

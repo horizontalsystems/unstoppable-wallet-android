@@ -24,9 +24,9 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     abstract fun start(coroutineScope: CoroutineScope)
     abstract suspend fun setSendTransactionData(data: SendTransactionData)
     @Composable
-    open fun GetSettingsContent(navController: HSNavigation) = Unit
+    open fun GetSettingsContent(navigation: HSNavigation) = Unit
     @Composable
-    open fun GetNonceSettingsContent(navController: HSNavigation) = Unit
+    open fun GetNonceSettingsContent(navigation: HSNavigation) = Unit
     abstract suspend fun sendTransaction(mevProtectionEnabled: Boolean = false): SendTransactionResult
 
     fun refreshUuid() {

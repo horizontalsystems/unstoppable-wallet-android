@@ -26,8 +26,8 @@ import kotlinx.serialization.Serializable
 data class ErrorSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ErrorBottomSheetScreen(navController, input.error)
+    override fun GetContent(navigation: HSNavigation) {
+        ErrorBottomSheetScreen(navigation, input.error)
     }
 
     @Serializable
@@ -38,12 +38,12 @@ data class ErrorSheet(val input: Input) : HSBottomSheet() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ErrorBottomSheetScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     error: String
 ) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::removeLastOrNull,
+            onDismissRequest = navigation::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -52,7 +52,7 @@ fun ErrorBottomSheetScreen(
                     variant = ButtonVariant.Secondary,
                     onClick = {
                         TextHelper.copyText(error)
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             },

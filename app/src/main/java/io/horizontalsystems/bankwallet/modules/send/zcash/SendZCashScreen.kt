@@ -34,7 +34,7 @@ import kotlin.reflect.KClass
 @Composable
 fun SendZCashScreen(
     title: String,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SendZCashViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
@@ -65,7 +65,7 @@ fun SendZCashScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.removeLastOrNull() }
+            onBack = { navigation.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -74,7 +74,7 @@ fun SendZCashScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -117,7 +117,7 @@ fun SendZCashScreen(
                 }
             }
 
-            val forResult = navController.slideFromBottomForResult<AddressRiskySheet.Result>(
+            val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
                 {
                     AddressRiskySheet(
                         AddressRiskySheet.Input(
@@ -126,7 +126,7 @@ fun SendZCashScreen(
                     )
                 }
             ) {
-                openConfirm(navController, sendEntryPointDestId)
+                openConfirm(navigation, sendEntryPointDestId)
             }
 
             ButtonPrimaryYellow(
@@ -139,7 +139,7 @@ fun SendZCashScreen(
                         keyboardController?.hide()
                         forResult()
                     } else {
-                        openConfirm(navController, sendEntryPointDestId)
+                        openConfirm(navigation, sendEntryPointDestId)
                     }
                 },
                 enabled = proceedEnabled
@@ -149,10 +149,10 @@ fun SendZCashScreen(
 }
 
 private fun openConfirm(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    navController.slideFromRight(
+    navigation.slideFromRight(
         SendConfirmationPage(SendConfirmationPage.Input(
             SendConfirmationPage.Type.ZCash,
             sendEntryPointDestId

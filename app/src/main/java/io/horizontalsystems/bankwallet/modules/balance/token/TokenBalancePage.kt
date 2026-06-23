@@ -13,14 +13,14 @@ import kotlinx.serialization.Serializable
 data class TokenBalancePage(val wallet: Wallet) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<TokenBalanceViewModel>(factory = TokenBalanceModule.Factory(wallet))
-        val transactionsViewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        val transactionsViewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         TokenBalanceScreen(
             viewModel,
             transactionsViewModel,
-            navController
+            navigation
         )
     }
 }

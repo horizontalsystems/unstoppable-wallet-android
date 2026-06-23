@@ -39,15 +39,15 @@ import kotlinx.serialization.Serializable
 data class VaultBlockchainsSelectorPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         FilterByBlockchainsScreen(
             input.allBlockchains,
             input.selected,
-            navController = navController,
+            navigation = navigation,
             onDone = { selected ->
                 resultEventBus.sendResult(Result(selected))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
         )
     }
@@ -63,7 +63,7 @@ data class VaultBlockchainsSelectorPage(val input: Input) : HSPage() {
 private fun FilterByBlockchainsScreen(
     blockchains: List<Blockchain>,
     selected: List<Blockchain>,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onDone: (List<Blockchain>) -> Unit,
 ) {
     var selectedBlockchains = remember { mutableStateListOf<Blockchain>() }
@@ -108,7 +108,7 @@ private fun FilterByBlockchainsScreen(
                             blockchain = item,
                             checked = item in selectedBlockchains,
                         ) {
-                            navController.paidAction(TokenInsights) {
+                            navigation.paidAction(TokenInsights) {
                                 if (item in selectedBlockchains) {
                                     selectedBlockchains.remove(item)
                                 } else {

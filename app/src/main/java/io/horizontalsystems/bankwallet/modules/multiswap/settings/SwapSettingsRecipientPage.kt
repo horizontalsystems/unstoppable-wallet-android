@@ -17,10 +17,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         EnterAddressScreen(
-            navController = navController,
+            navigation = navigation,
             token = input.token,
             title = stringResource(SendEvmSettings_SetRecipient),
             buttonTitle = stringResource(Button_Apply),
@@ -28,7 +28,7 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
             initialAddress = input.recipient?.hex
         ) { address, _ ->
             resultEventBus.sendResult<Result>(Result(address))
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 

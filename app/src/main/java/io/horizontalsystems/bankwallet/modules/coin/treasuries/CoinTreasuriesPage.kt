@@ -45,10 +45,10 @@ import kotlinx.serialization.Serializable
 data class CoinTreasuriesPage(val input: Coin) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         CoinTreasuriesScreen(
             viewModel = viewModel(factory = CoinTreasuriesModule.Factory(input)),
-            onBackClick = { navController.removeLastOrNull() }
+            onBackClick = { navigation.removeLastOrNull() }
         )
     }
 }

@@ -12,12 +12,12 @@ import kotlinx.serialization.Serializable
 data object EditDuressPinPage : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         PinSet(
             title = stringResource(id = R.string.EditDuressPin_Title),
             description = stringResource(id = R.string.EditDuressPin_Description),
-            dismissWithSuccess = { navController.removeLastOrNull() },
-            onBackPress = { navController.removeLastOrNull() },
+            dismissWithSuccess = { navigation.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() },
             forDuress = true
         )
     }

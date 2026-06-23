@@ -68,16 +68,16 @@ import kotlinx.serialization.Serializable
 data object TvlPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val vmFactory = remember { TvlModule.Factory() }
         val tvlChartViewModel = viewModel<TvlChartViewModel>(factory = vmFactory)
         val viewModel = viewModel<TvlViewModel>(factory = vmFactory)
 
         val view = LocalView.current
-        TvlScreen(viewModel, tvlChartViewModel, navController) {
+        TvlScreen(viewModel, tvlChartViewModel, navigation) {
             onCoinClick(
                 it,
-                navController,
+                navigation,
                 view
             )
         }
@@ -85,12 +85,12 @@ data object TvlPage : HSPage() {
 
     private fun onCoinClick(
         coinUid: String?,
-        navController: HSNavigation,
+        navigation: HSNavigation,
         view: View
     ) {
         if (coinUid != null) {
             val arguments = CoinPage.Input(coinUid)
-            navController.slideFromRight(CoinPage(arguments))
+            navigation.slideFromRight(CoinPage(arguments))
 
             stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
         } else {
@@ -104,7 +104,7 @@ data object TvlPage : HSPage() {
 private fun TvlScreen(
     tvlViewModel: TvlViewModel,
     chartViewModel: TvlChartViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onCoinClick: (String?) -> Unit
 ) {
     val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
@@ -123,7 +123,7 @@ private fun TvlScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         )

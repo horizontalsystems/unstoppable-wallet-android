@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 data class SetDuressPinPage(val input: Input? = null) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<SetDuressPinViewModel>(
             factory = SetDuressPinViewModel.Factory(input)
         )
@@ -26,9 +26,9 @@ data class SetDuressPinPage(val input: Input? = null) : HSPage(screenshotEnabled
             dismissWithSuccess = {
                 viewModel.onDuressPinSet()
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Created)
-                navController.removeLastUntil(SetDuressPinIntroPage::class, true)
+                navigation.removeLastUntil(SetDuressPinIntroPage::class, true)
             },
-            onBackPress = { navController.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() },
             forDuress = true
         )
     }

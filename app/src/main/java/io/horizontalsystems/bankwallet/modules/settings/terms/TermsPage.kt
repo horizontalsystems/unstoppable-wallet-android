@@ -37,20 +37,20 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TermsPage(val input: Input? = null) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         TermsScreen(
             onAccepted = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
                 input?.let {
                     when (input.navigationType) {
-                        NavigationType.SlideFromBottom -> navController.slideFromBottom(input.screen)
-                        NavigationType.SlideFromRight -> navController.slideFromRight(input.screen)
+                        NavigationType.SlideFromBottom -> navigation.slideFromBottom(input.screen)
+                        NavigationType.SlideFromRight -> navigation.slideFromRight(input.screen)
                     }
                     stat(page = input.statPageFrom, event = StatEvent.Open(input.statPageTo))
                 }
             },
             onDeclined = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }

@@ -16,8 +16,8 @@ import kotlinx.serialization.Serializable
 data class PrivateKeyPage(val input: Input) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        PrivateKeyScreen(navController, input.privateKey, input.type)
+    override fun GetContent(navigation: HSNavigation) {
+        PrivateKeyScreen(navigation, input.privateKey, input.type)
     }
 
     @Serializable
@@ -31,7 +31,7 @@ data class PrivateKeyPage(val input: Input) : HSPage(screenshotEnabled = false) 
 
 @Composable
 fun PrivateKeyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     evmPrivateKey: String,
     type: PrivateKeyPage.Type,
 ) {
@@ -51,7 +51,7 @@ fun PrivateKeyScreen(
     }
 
     SecretKeyScreen(
-        navController = navController,
+        navigation = navigation,
         secretKey = evmPrivateKey,
         title = title,
         hideScreenText = stringResource(R.string.EvmPrivateKey_ShowPrivateKey),

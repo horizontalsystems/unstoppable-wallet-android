@@ -45,16 +45,16 @@ import kotlin.reflect.KClass
 data class WatchAddressPage(val input: ManageAccountsModule.Input? = null) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: WatchAddressPage::class
         val inclusive = input?.popOffInclusive ?: true
-        WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
+        WatchAddressScreen(navigation, popUpToInclusiveId, inclusive)
     }
 
 }
 
 @Composable
-fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<out HSPage>, inclusive: Boolean) {
+fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out HSPage>, inclusive: Boolean) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
@@ -73,14 +73,14 @@ fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<o
                 iconTint = R.color.white
             )
             delay(300)
-            navController.removeLastUntil(popUpToInclusiveId, inclusive)
+            navigation.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 
     if (accountType != null) {
         viewModel.blockchainSelectionOpened()
 
-        navController.slideFromRight(
+        navigation.slideFromRight(
             SelectBlockchainsPage(SelectBlockchainsPage.Input(
                 popUpToInclusiveId,
                 inclusive,
@@ -93,7 +93,7 @@ fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<o
     if (uiState.openBirthdayHeightScreen) {
         viewModel.onBirthdayHeightScreenOpened()
 
-        val forResult = navController.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+        val forResult = navigation.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
             { BirthdayHeightConfigPage(BlockchainType.Monero) }
         ) { result ->
             if (result.config != null) {
@@ -107,7 +107,7 @@ fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<o
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_WatchAddress),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

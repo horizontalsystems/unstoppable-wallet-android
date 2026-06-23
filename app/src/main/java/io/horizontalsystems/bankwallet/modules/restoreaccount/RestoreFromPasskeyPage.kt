@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 @Serializable
 data class RestoreFromPasskeyPage(val input: Input) : HSPage(screenshotEnabled = false) {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<RestoreFromPasskeyViewModel>(
             factory = RestoreFromPasskeyViewModel.Factory()
         )
@@ -29,7 +29,7 @@ data class RestoreFromPasskeyPage(val input: Input) : HSPage(screenshotEnabled =
             manualBackup = true,
             fileBackup = false,
             statPage = StatPage.ImportWalletFromPasskey
-        ).GetContent(navController)
+        ).GetContent(navigation)
     }
 
     @Serializable

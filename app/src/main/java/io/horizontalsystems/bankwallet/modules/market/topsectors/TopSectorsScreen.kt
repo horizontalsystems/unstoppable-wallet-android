@@ -56,7 +56,7 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopSectorsScreen(
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val viewModel = viewModel<TopSectorsViewModel>(factory = TopSectorsViewModel.Factory())
     val uiState = viewModel.uiState
@@ -119,7 +119,7 @@ fun TopSectorsScreen(
                             itemsIndexed(uiState.items) { _, item ->
                                 BoxBordered(bottom = true) {
                                     TopSectorItem(item) { coinCategory ->
-                                        navController.slideFromRight(
+                                        navigation.slideFromRight(
                                             MarketSectorPage(coinCategory)
                                         )
                                     }

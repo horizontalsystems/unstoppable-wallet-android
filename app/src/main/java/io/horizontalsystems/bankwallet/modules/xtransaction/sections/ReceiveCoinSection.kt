@@ -18,7 +18,7 @@ fun ReceiveCoinSection(
     address: String,
     comment: String?,
     statPage: StatPage,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     transactionInfoHelper: TransactionInfoHelper,
     blockchainType: BlockchainType,
 ) {
@@ -32,7 +32,7 @@ fun ReceiveCoinSection(
         comment = comment,
         statPage = statPage,
         addressStatSection = StatSection.AddressFrom,
-        navController = navController,
+        navigation = navigation,
         transactionInfoHelper = transactionInfoHelper,
         blockchainType = blockchainType,
     )

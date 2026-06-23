@@ -32,20 +32,20 @@ import kotlin.reflect.KClass
 data class ReceivePage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val wallet = input.wallet
         val token = wallet.token
         when (token.blockchainType) {
             BlockchainType.Stellar -> {
                 if (token.type is TokenType.Asset) {
-                    ReceiveStellarAssetScreen(navController, wallet, input.receiveEntryPointDestId)
+                    ReceiveStellarAssetScreen(navigation, wallet, input.receiveEntryPointDestId)
                 } else if (token.type == TokenType.Native) {
-                    ReceiveScreen(navController, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
+                    ReceiveScreen(navigation, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
                 }
             }
 
             BlockchainType.Monero -> {
-                ReceiveMoneroScreen(navController, wallet, input.receiveEntryPointDestId)
+                ReceiveMoneroScreen(navigation, wallet, input.receiveEntryPointDestId)
             }
 //        BlockchainType.ArbitrumOne -> TODO()
 //        BlockchainType.Avalanche -> TODO()
@@ -68,7 +68,7 @@ data class ReceivePage(val input: Input) : HSPage() {
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
                 else -> {
-                    ReceiveScreen(navController, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
+                    ReceiveScreen(navigation, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
                 }
             }
     }
@@ -83,7 +83,7 @@ data class ReceivePage(val input: Input) : HSPage() {
 
 @Composable
 fun ReceiveScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     wallet: Wallet,
     receiveEntryPointDestId: KClass<out HSPage>?,
     isTransparentAddress: Boolean,
@@ -103,7 +103,7 @@ fun ReceiveScreen(
                 RowUniversal(
                     modifier = Modifier.height(52.dp),
                     onClick = {
-                        navController.slideFromRight(
+                        navigation.slideFromRight(
                             BtcUsedAddressesPage(UsedAddressesParams(
                                 wallet.coin.name,
                                 uiState.usedAddresses,
@@ -128,11 +128,11 @@ fun ReceiveScreen(
                 }
             }
         },
-        onBackPress = { navController.removeLastOrNull() },
+        onBackPress = { navigation.removeLastOrNull() },
         closeModule = if (receiveEntryPointDestId == null) {
             null
         } else {
-            { navController.removeLastUntil(receiveEntryPointDestId, true) }
+            { navigation.removeLastUntil(receiveEntryPointDestId, true) }
         }
     )
 }

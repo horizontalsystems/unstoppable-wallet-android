@@ -20,20 +20,20 @@ import kotlinx.serialization.Serializable
 data class AddWalletPage(val input: ManageAccountsModule.Input?) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        AddWalletScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        AddWalletScreen(navigation, input)
     }
 }
 
 @Composable
-fun AddWalletScreen(navController: HSNavigation, input: ManageAccountsModule.Input?) {
+fun AddWalletScreen(navigation: HSNavigation, input: ManageAccountsModule.Input?) {
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_AddWallet),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         AddWalletView(
             onNewWalletClick = {
-                navController.navigateWithTermsAccepted(
+                navigation.navigateWithTermsAccepted(
                     screen = CreateAccountPage(input),
                     navigationType = NavigationType.SlideFromRight,
                     statPageFrom = StatPage.Balance,
@@ -41,7 +41,7 @@ fun AddWalletScreen(navController: HSNavigation, input: ManageAccountsModule.Inp
                 )
             },
             onWalletRestoreClick = {
-                navController.navigateWithTermsAccepted(
+                navigation.navigateWithTermsAccepted(
                     screen = ImportWalletPage(input),
                     navigationType = NavigationType.SlideFromRight,
                     statPageFrom = StatPage.Balance,
@@ -49,7 +49,7 @@ fun AddWalletScreen(navController: HSNavigation, input: ManageAccountsModule.Inp
                 )
             },
             onWatchWalletClick = {
-                navController.slideFromRight(WatchAddressPage(input))
+                navigation.slideFromRight(WatchAddressPage(input))
 
                 stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
             }

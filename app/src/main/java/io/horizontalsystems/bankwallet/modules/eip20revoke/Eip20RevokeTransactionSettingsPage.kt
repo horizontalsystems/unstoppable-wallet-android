@@ -8,16 +8,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object Eip20RevokeTransactionSettingsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        Eip20RevokeTransactionSettingsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        Eip20RevokeTransactionSettingsScreen(navigation)
     }
 }
 
 @Composable
-fun Eip20RevokeTransactionSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForScreen<Eip20RevokeConfirmViewModel>(Eip20RevokeConfirmPage::class)
+fun Eip20RevokeTransactionSettingsScreen(navigation: HSNavigation) {
+    val viewModel = navigation.viewModelForScreen<Eip20RevokeConfirmViewModel>(Eip20RevokeConfirmPage::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetSettingsContent(navController)
+    sendTransactionService.GetSettingsContent(navigation)
 }

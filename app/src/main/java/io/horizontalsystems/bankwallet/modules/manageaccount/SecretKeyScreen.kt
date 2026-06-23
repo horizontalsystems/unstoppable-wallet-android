@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecretKeyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     secretKey: String,
     title: String,
     hideScreenText: String,
@@ -50,13 +50,13 @@ fun SecretKeyScreen(
 
     HSScaffold(
         title = title,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
 
                     onOpenFaq()
                 }

@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import java.util.UUID
 
 @Composable
-fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
+fun MainScreen(navigation: HSNavigation, parentScreenContentKey: String) {
     val mainActivityViewModel =
         viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
 
@@ -27,7 +27,7 @@ fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
     val tcSendRequest by mainActivityViewModel.tcSendRequest.observeAsState()
     LaunchedEffect(tcSendRequest) {
         if (tcSendRequest != null) {
-            navController.slideFromBottom(TonConnectSendRequestPage)
+            navigation.slideFromBottom(TonConnectSendRequestPage)
         }
     }
 
@@ -48,14 +48,14 @@ fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
         if (tmpTcDappRequest != null) {
             val screen = TonConnectNewPage(tmpTcDappRequest.dAppRequest)
             screen.resultKey = uuid
-            navController.slideFromBottom(screen)
+            navigation.slideFromBottom(screen)
             mainActivityViewModel.onTcDappRequestHandled()
         }
     }
 
     MainScreenWithRootedDeviceCheck(
         transactionsViewModel = viewModel<TransactionsViewModel>(factory = TransactionsModule.Factory()),
-        navController = navController,
+        navigation = navigation,
         mainActivityViewModel = mainActivityViewModel,
         parentScreenContentKey = parentScreenContentKey
     )

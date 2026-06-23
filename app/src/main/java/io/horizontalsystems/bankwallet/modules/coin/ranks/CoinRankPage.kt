@@ -64,8 +64,8 @@ import kotlinx.serialization.Serializable
 data class CoinRankPage(val type: RankType) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        CoinRankScreen(type, navController)
+    override fun GetContent(navigation: HSNavigation) {
+        CoinRankScreen(type, navigation)
     }
 }
 
@@ -73,7 +73,7 @@ data class CoinRankPage(val type: RankType) : HSPage() {
 @Composable
 private fun CoinRankScreen(
     type: RankType,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: CoinRankViewModel = viewModel(
         factory = CoinRankModule.Factory(type)
     )
@@ -87,7 +87,7 @@ private fun CoinRankScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {
@@ -144,7 +144,7 @@ private fun CoinRankScreen(
                                 }
                             }
                         }
-                        coinRankList(viewItems, type, navController)
+                        coinRankList(viewItems, type, navigation)
                     }
                 }
             }
@@ -155,7 +155,7 @@ private fun CoinRankScreen(
 private fun LazyListScope.coinRankList(
     items: List<CoinRankModule.RankViewItem>,
     type: RankType,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     item {
         HsDivider()
@@ -169,7 +169,7 @@ private fun LazyListScope.coinRankList(
             value = item.value,
             onClick = {
                 val arguments = CoinPage.Input(item.coinUid)
-                navController.slideFromRight(CoinPage(arguments))
+                navigation.slideFromRight(CoinPage(arguments))
 
                 stat(page = type.statPage, event = StatEvent.OpenCoin(item.coinUid))
             }

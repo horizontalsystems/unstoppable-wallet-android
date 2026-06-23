@@ -23,9 +23,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WCErrorNoAccountSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         WalletConnectErrorNoAccount() {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 }

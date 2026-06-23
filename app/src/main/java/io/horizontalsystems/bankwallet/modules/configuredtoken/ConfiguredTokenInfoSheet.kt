@@ -38,13 +38,13 @@ import kotlinx.serialization.Serializable
 data class ConfiguredTokenInfoSheet(val token: Token) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ConfiguredTokenInfo(navController, token)
+    override fun GetContent(navigation: HSNavigation) {
+        ConfiguredTokenInfo(navigation, token)
     }
 }
 
 @Composable
-private fun ConfiguredTokenInfo(navController: HSNavigation, token: Token) {
+private fun ConfiguredTokenInfo(navigation: HSNavigation, token: Token) {
     val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 
@@ -53,7 +53,7 @@ private fun ConfiguredTokenInfo(navController: HSNavigation, token: Token) {
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
             subtitle = uiState.subtitle,
-            onCloseClick = { navController.removeLastOrNull() }
+            onCloseClick = { navigation.removeLastOrNull() }
         ) {
             when (val tokenInfoType = uiState.tokenInfoType) {
                 is ConfiguredTokenInfoType.Contract -> {

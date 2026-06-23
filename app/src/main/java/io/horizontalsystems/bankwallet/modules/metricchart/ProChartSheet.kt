@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
 data class ProChartSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val chartViewModel = viewModel<ChartViewModel>(
             factory = ProChartModule.Factory(
                 input.coinUid,
@@ -33,7 +33,7 @@ data class ProChartSheet(val input: Input) : HSBottomSheet() {
             iconPainter = painterResource(R.drawable.ic_chart_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = input.title,
-            onCloseClick = { navController.removeLastOrNull() }
+            onCloseClick = { navigation.removeLastOrNull() }
         ) {
             Chart(chartViewModel = chartViewModel)
             VSpacer(32.dp)

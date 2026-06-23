@@ -23,14 +23,14 @@ class ActionApprove(
     override fun getTitleInProgress() = stringResource(R.string.Swap_Approving)
 
     @Composable
-    override fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
+    override fun executor(navigation: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
         val approveData = Eip20ApprovePage.Input(
             tokenIn,
             requiredAllowance,
             spenderAddress
         )
 
-        return navController.slideFromBottomForResult<Eip20ApproveConfirmPage.Result>(
+        return navigation.slideFromBottomForResult<Eip20ApproveConfirmPage.Result>(
             { Eip20ApprovePage(approveData) }
         ) {
             onActionCompleted.invoke()

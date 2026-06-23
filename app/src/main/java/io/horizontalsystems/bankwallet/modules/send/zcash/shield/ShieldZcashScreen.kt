@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun ShieldZcashScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: ShieldZcashViewModel,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
@@ -33,7 +33,7 @@ fun ShieldZcashScreen(
     }
 
     SendConfirmationScreen(
-        navController = navController,
+        navigation = navigation,
         coinMaxAllowedDecimals = viewModel.coinMaxAllowedDecimals,
         feeCoinMaxAllowedDecimals = viewModel.coinMaxAllowedDecimals,
         rate = viewModel.coinRate,

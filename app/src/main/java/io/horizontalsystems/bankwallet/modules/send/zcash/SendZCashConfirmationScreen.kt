@@ -13,7 +13,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun SendZCashConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendViewModel: SendZCashViewModel,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
@@ -31,7 +31,7 @@ fun SendZCashConfirmationScreen(
     }
 
     SendConfirmationScreen(
-        navController = navController,
+        navigation = navigation,
         coinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         feeCoinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         rate = sendViewModel.coinRate,

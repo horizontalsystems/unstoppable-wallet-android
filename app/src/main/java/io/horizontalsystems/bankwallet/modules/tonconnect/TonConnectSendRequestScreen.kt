@@ -47,7 +47,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun TonConnectSendRequestScreen(navController: HSNavigation) {
+fun TonConnectSendRequestScreen(navigation: HSNavigation) {
     val logger = remember { AppLogger("ton-connect request") }
     val mainActivityViewModel =
         viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
@@ -65,7 +65,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
-        onClickBack = navController::removeLastOrNull,
+        onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -77,7 +77,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                     title = stringResource(R.string.Button_Close),
                     enabled = true,
                     onClick = {
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             } else {
@@ -87,7 +87,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Confirm),
                     enabled = uiState.confirmEnabled && buttonEnabled,
-                    onClick = navController.authorizedAction {
+                    onClick = navigation.authorizedAction {
                         if (!buttonEnabled) return@authorizedAction
                         buttonEnabled = false
 
@@ -111,7 +111,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                             }
 
                             buttonEnabled = true
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         }
                     }
                 )
@@ -122,7 +122,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                     enabled = uiState.rejectEnabled,
                     onClick = {
                         viewModel.reject()
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             }
@@ -149,7 +149,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                         TonConnectRequestActionSection(
                             action = action,
                             transactionInfoHelper = transactionInfoHelper,
-                            navController = navController
+                            navigation = navigation
                         )
                     }
                     VSpacer(12.dp)
@@ -157,7 +157,7 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
                     FeeSection(
                         transactionInfoHelper = transactionInfoHelper,
                         fee = record.fee,
-                        navController = navController
+                        navigation = navigation
                     )
                 }
             }
@@ -169,20 +169,20 @@ fun TonConnectSendRequestScreen(navController: HSNavigation) {
 fun TonConnectRequestActionSection(
     action: TonTransactionRecord.Action,
     transactionInfoHelper: TransactionInfoHelper,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     when (val actionType = action.type) {
         is TonTransactionRecord.Action.Type.Burn -> {
             BurnSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController
+                navigation = navigation
             )
         }
 
         is TonTransactionRecord.Action.Type.ContractCall -> {
             ContractCallSection(
-                navController = navController,
+                navigation = navigation,
                 operation = actionType.operation,
                 address = actionType.address,
                 transactionValue = actionType.value,
@@ -201,7 +201,7 @@ fun TonConnectRequestActionSection(
             MintSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController
+                navigation = navigation
             )
         }
 
@@ -211,7 +211,7 @@ fun TonConnectRequestActionSection(
                 address = actionType.from,
                 comment = actionType.comment,
                 statPage = StatPage.TonConnect,
-                navController = navController,
+                navigation = navigation,
                 transactionInfoHelper = transactionInfoHelper,
                 blockchainType = BlockchainType.Ton
             )
@@ -224,7 +224,7 @@ fun TonConnectRequestActionSection(
                 comment = actionType.comment,
                 sentToSelf = actionType.sentToSelf,
                 statPage = StatPage.TonConnect,
-                navController = navController,
+                navigation = navigation,
                 transactionInfoHelper = transactionInfoHelper,
                 blockchainType = BlockchainType.Ton
             )
@@ -233,7 +233,7 @@ fun TonConnectRequestActionSection(
         is TonTransactionRecord.Action.Type.Swap -> {
             SwapSection(
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController,
+                navigation = navigation,
                 transactionValueIn = actionType.valueIn,
                 transactionValueOut = actionType.valueOut
             )

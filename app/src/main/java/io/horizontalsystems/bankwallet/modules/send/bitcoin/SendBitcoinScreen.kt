@@ -60,11 +60,11 @@ import kotlin.reflect.KClass
 @Serializable
 data object SendBtcAdvancedSettingsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
-        val amountInputModeViewModel = navController.viewModelForScreen<AmountInputModeViewModel>(SendPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+        val amountInputModeViewModel = navigation.viewModelForScreen<AmountInputModeViewModel>(SendPage::class)
         SendBtcAdvancedSettingsScreen(
-            fragmentNavController = navController,
+            navigation = navigation,
             sendBitcoinViewModel = viewModel,
             amountInputType = amountInputModeViewModel.inputType,
         )
@@ -73,15 +73,15 @@ data object SendBtcAdvancedSettingsPage : HSPage() {
 
 data object TransactionInputsSortInfoPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        BtcTransactionInputSortInfoScreen { navController.removeLastOrNull() }
+    override fun GetContent(navigation: HSNavigation) {
+        BtcTransactionInputSortInfoScreen { navigation.removeLastOrNull() }
     }
 }
 
 data object UtxoExpertModePage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
         UtxoExpertModeScreen(
             adapter = viewModel.adapter,
             token = viewModel.wallet.token,
@@ -90,7 +90,7 @@ data object UtxoExpertModePage : HSPage() {
                 viewModel.updateCustomUnspentOutputs(it)
             },
             onBackClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }
@@ -99,7 +99,7 @@ data object UtxoExpertModePage : HSPage() {
 @Composable
 fun SendBitcoinScreen(
     title: String,
-    fragmentNavController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
@@ -133,12 +133,12 @@ fun SendBitcoinScreen(
 
         HSScaffold(
             title = title,
-            onBack = { fragmentNavController.removeLastOrNull() },
+            onBack = { navigation.removeLastOrNull() },
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
                     icon = R.drawable.manage_24,
-                    onClick = { fragmentNavController.add(SendBtcAdvancedSettingsPage) }
+                    onClick = { navigation.add(SendBtcAdvancedSettingsPage) }
                 ),
             ),
         ) {
@@ -155,7 +155,7 @@ fun SendBitcoinScreen(
                         value = uiState.address.hex,
                         riskyAddress = riskyAddress
                     ) {
-                        fragmentNavController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                     VSpacer(16.dp)
                 }
@@ -206,7 +206,7 @@ fun SendBitcoinScreen(
                         UtxoCell(
                             utxoData = utxoData,
                             onClick = {
-                                fragmentNavController.add(UtxoExpertModePage)
+                                navigation.add(UtxoExpertModePage)
                             }
                         )
                     }
@@ -216,7 +216,7 @@ fun SendBitcoinScreen(
                         fee = fee,
                         amountInputType = amountInputType,
                         rate = rate,
-                        navController = fragmentNavController
+                        navigation = navigation
                     )
                 }
 
@@ -229,7 +229,7 @@ fun SendBitcoinScreen(
 
                 VSpacer(16.dp)
 
-                val forResult = fragmentNavController.slideFromBottomForResult<AddressRiskySheet.Result>(
+                val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
                     {
                         AddressRiskySheet(
                             AddressRiskySheet.Input(
@@ -238,7 +238,7 @@ fun SendBitcoinScreen(
                         )
                     }
                 ) {
-                    openConfirm(fragmentNavController, sendEntryPointDestId)
+                    openConfirm(navigation, sendEntryPointDestId)
                 }
 
                 ButtonPrimaryYellow(
@@ -251,7 +251,7 @@ fun SendBitcoinScreen(
                             keyboardController?.hide()
                             forResult()
                         } else {
-                            openConfirm(fragmentNavController, sendEntryPointDestId)
+                            openConfirm(navigation, sendEntryPointDestId)
                         }
                     },
                     enabled = proceedEnabled
@@ -263,10 +263,10 @@ fun SendBitcoinScreen(
 }
 
 private fun openConfirm(
-    fragmentNavController: HSNavigation,
+    navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    fragmentNavController.slideFromRight(
+    navigation.slideFromRight(
         SendConfirmationPage(SendConfirmationPage.Input(
             SendConfirmationPage.Type.Bitcoin,
             sendEntryPointDestId

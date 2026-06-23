@@ -22,21 +22,21 @@ import kotlinx.serialization.Serializable
 data object IndicatorsAlertSheet : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        IndicatorsAlertScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        IndicatorsAlertScreen(navigation)
     }
 
 }
 
 @Composable
-private fun IndicatorsAlertScreen(navController: HSNavigation) {
+private fun IndicatorsAlertScreen(navigation: HSNavigation) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.icon_24_lock),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
             title = stringResource(R.string.CoinPage_Indicators),
             onCloseClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         ) {
             InfoText(

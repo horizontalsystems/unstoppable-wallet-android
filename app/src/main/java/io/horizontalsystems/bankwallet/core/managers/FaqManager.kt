@@ -35,8 +35,8 @@ object FaqManager {
         .registerTypeAdapter(Faq::class.java, FaqDeserializer(faqListUrl))
         .create()
 
-    fun showFaqPage(navController: HSNavigation, path: String, language: String = "en") {
-        navController.slideFromBottom(
+    fun showFaqPage(navigation: HSNavigation, path: String, language: String = "en") {
+        navigation.slideFromBottom(
             MarkdownPage(MarkdownPage.Input(getFaqUrl(path, language), true, true))
         )
     }

@@ -52,21 +52,21 @@ import kotlinx.serialization.Serializable
 data class MetricsPage(val metricsType: MetricsType) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val factory = remember { MetricsPageModule.Factory(metricsType) }
         val chartViewModel = viewModel<ChartViewModel>(factory = factory)
         val viewModel = viewModel<MetricsPageViewModel>(factory = factory)
-        MetricsPage(viewModel, chartViewModel, navController) {
-            onCoinClick(it, navController)
+        MetricsPage(viewModel, chartViewModel, navigation) {
+            onCoinClick(it, navigation)
 
             stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
         }
     }
 
-    private fun onCoinClick(coinUid: String, navController: HSNavigation) {
+    private fun onCoinClick(coinUid: String, navigation: HSNavigation) {
         val arguments = CoinPage.Input(coinUid)
 
-        navController.slideFromRight(CoinPage(arguments))
+        navigation.slideFromRight(CoinPage(arguments))
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -74,7 +74,7 @@ data class MetricsPage(val metricsType: MetricsType) : HSPage() {
     fun MetricsPage(
         viewModel: MetricsPageViewModel,
         chartViewModel: ChartViewModel,
-        navController: HSNavigation,
+        navigation: HSNavigation,
         onCoinClick: (String) -> Unit,
     ) {
         val uiState = viewModel.uiState
@@ -86,7 +86,7 @@ data class MetricsPage(val metricsType: MetricsType) : HSPage() {
                     title = TranslatableString.ResString(R.string.Button_Close),
                     icon = R.drawable.ic_close,
                     onClick = {
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             )

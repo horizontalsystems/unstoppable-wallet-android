@@ -68,8 +68,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapInfoPage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapInfoScreen(recordId = input.recordId, navController = navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapInfoScreen(recordId = input.recordId, navigation = navigation)
     }
 
     @Serializable
@@ -77,7 +77,7 @@ data class SwapInfoPage(val input: Input) : HSPage() {
 }
 
 @Composable
-fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
+fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
     val viewModel = viewModel<SwapInfoViewModel>(
         key = recordId.toString(),
         factory = SwapInfoViewModel.Factory(recordId),
@@ -88,7 +88,7 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.SwapInfo_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         bottomBar = {
             if (uiState.status == SwapStatus.ActionRequired) {
                 val coroutineScope = rememberCoroutineScope()
@@ -107,7 +107,7 @@ fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
                             coroutineScope.launch {
                                 try {
                                     viewModel.prepareRefundData()?.let { data ->
-                                        navController.slideFromBottom(
+                                        navigation.slideFromBottom(
                                             RequestRefundSheet(RequestRefundSheet.Input(data))
                                         )
 

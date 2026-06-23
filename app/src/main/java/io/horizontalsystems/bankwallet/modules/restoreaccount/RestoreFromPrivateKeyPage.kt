@@ -18,17 +18,17 @@ import kotlin.reflect.KClass
 data class RestoreFromPrivateKeyPage(val input: ManageAccountsModule.Input?) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: RestoreFromPrivateKeyPage::class
         val inclusive = input?.popOffInclusive ?: false
 
-        RestoreFromPrivateKeyNavHost(navController, popUpToInclusiveId, inclusive)
+        RestoreFromPrivateKeyNavHost(navigation, popUpToInclusiveId, inclusive)
     }
 }
 
 @Composable
 private fun RestoreFromPrivateKeyNavHost(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean,
 ) {
@@ -43,7 +43,7 @@ private fun RestoreFromPrivateKeyNavHost(
             val accountType = mainViewModel.accountType
             val statPage = mainViewModel.statPage
             if (accountType != null && statPage != null) {
-                navController.add(
+                navigation.add(
                     restore_select_coins(
                         input = ManageAccountsModule.Input(popUpToInclusiveId, inclusive),
                         accountType = accountType,
@@ -67,25 +67,25 @@ private fun RestoreFromPrivateKeyNavHost(
                 iconTint = R.color.white
             )
             delay(300)
-            navController.removeLastUntil(popUpToInclusiveId, inclusive)
+            navigation.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 
     RestorePrivateKey(
         mainViewModel = mainViewModel,
         openSelectNetworkScreen = {
-            navController.add(restore_select_network(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
+            navigation.add(restore_select_network(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
         },
         openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-        onBackClick = { navController.removeLastOrNull() },
+        onBackClick = { navigation.removeLastOrNull() },
     )
 }
 
 @Serializable
 data class restore_select_network(val input: ManageAccountsModule.Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreFromPrivateKeyPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val mainViewModel = navigation.viewModelForScreen<RestoreViewModel>(RestoreFromPrivateKeyPage::class)
 
         val uiState = mainViewModel.uiState
         val view = LocalView.current
@@ -95,7 +95,7 @@ data class restore_select_network(val input: ManageAccountsModule.Input) : HSPag
                 val accountType = mainViewModel.accountType
                 val statPage = mainViewModel.statPage
                 if (accountType != null && statPage != null) {
-                    navController.add(
+                    navigation.add(
                         restore_select_coins(
                             input = input,
                             accountType = accountType,
@@ -119,12 +119,12 @@ data class restore_select_network(val input: ManageAccountsModule.Input) : HSPag
                     iconTint = R.color.white
                 )
                 delay(300)
-                navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
+                navigation.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
             }
         }
 
         SelectNetworkScreen(
-            onBackClick = { navController.removeLastOrNull() },
+            onBackClick = { navigation.removeLastOrNull() },
             accountTypes = mainViewModel.accountTypes,
             mainViewModel = mainViewModel
         )

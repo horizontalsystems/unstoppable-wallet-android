@@ -48,7 +48,7 @@ import kotlin.reflect.KClass
 data class SendPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val wallet = input.wallet
         val title = input.title
         val sendEntryPointDestId = input.sendEntryPointDestId
@@ -72,7 +72,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>(factory = factory)
                 SendBitcoinScreen(
                     title = title,
-                    fragmentNavController = navController,
+                    navigation = navigation,
                     viewModel = sendBitcoinViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
@@ -86,7 +86,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendZCashViewModel = viewModel<SendZCashViewModel>(factory = factory)
                 SendZCashScreen(
                     title = title,
-                    navController = navController,
+                    navigation = navigation,
                     viewModel = sendZCashViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
@@ -113,7 +113,7 @@ data class SendPage(val input: Input) : HSPage() {
 
                 SendEvmScreen(
                     title = title,
-                    navController = navController,
+                    navigation = navigation,
                     amountInputModeViewModel = amountInputModeViewModel,
                     viewModel = sendEvmViewModel,
                     address = address,
@@ -130,7 +130,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendSolanaViewModel = viewModel<SendSolanaViewModel>(factory = factory)
                 SendSolanaScreen(
                     title = title,
-                    navController = navController,
+                    navigation = navigation,
                     viewModel = sendSolanaViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
@@ -144,7 +144,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendTonViewModel = viewModel<SendTonViewModel>(factory = factory)
                 SendTonScreen(
                     title,
-                    navController,
+                    navigation,
                     sendTonViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId,
@@ -158,7 +158,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendTronViewModel = viewModel<SendTronViewModel>(factory = factory)
                 SendTronScreen(
                     title = title,
-                    navController = navController,
+                    navigation = navigation,
                     viewModel = sendTronViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
@@ -172,7 +172,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendStellarViewModel = viewModel<SendStellarViewModel>(factory = factory)
                 SendStellarScreen(
                     title,
-                    navController,
+                    navigation,
                     sendStellarViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId,
@@ -186,7 +186,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendMoneroViewModel = viewModel<SendMoneroViewModel>(factory = factory)
                 SendMoneroScreen(
                     title,
-                    navController,
+                    navigation,
                     sendMoneroViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId,
@@ -201,7 +201,7 @@ data class SendPage(val input: Input) : HSPage() {
                 val sendZanoViewModel = viewModel<SendZanoViewModel>(factory = factory)
                 SendZanoScreen(
                     title,
-                    navController,
+                    navigation,
                     sendZanoViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId,

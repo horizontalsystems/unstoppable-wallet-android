@@ -254,13 +254,13 @@ fun IconCell(
     }
 }
 
-fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navController: HSNavigation, view: View) {
+fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navigation: HSNavigation, view: View) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
             val wallet = syncErrorDetails.wallet
             val errorMessage = syncErrorDetails.errorMessage
 
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 SyncErrorSheet(SyncErrorSheet.Input(wallet, errorMessage))
             )
         }

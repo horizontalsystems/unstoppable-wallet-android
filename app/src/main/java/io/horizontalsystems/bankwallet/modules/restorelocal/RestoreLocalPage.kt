@@ -73,12 +73,12 @@ import kotlin.reflect.KClass
 data class RestoreLocalPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         RestoreLocalNavHost(
             input.jsonFile,
             input.fileName,
             input.statPage,
-            navController,
+            navigation,
             input.popOffOnSuccess,
             input.popOffInclusive
         )
@@ -99,7 +99,7 @@ private fun RestoreLocalNavHost(
     backupJsonString: String?,
     fileName: String?,
     statPage: StatPage,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     popUpToInclusiveId: KClass<out HSPage>,
     popUpInclusive: Boolean,
 ) {
@@ -116,12 +116,12 @@ private fun RestoreLocalNavHost(
         viewModel = viewModel,
         mainViewModel = mainViewModel,
         statPage = statPage,
-        onBackClick = { navController.removeLastOrNull() },
-        close = { navController.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
+        onBackClick = { navigation.removeLastOrNull() },
+        close = { navigation.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
         openSelectCoins = {
             val accountType = mainViewModel.accountType
             if (accountType != null) {
-                navController.add(
+                navigation.add(
                     restore_select_coins(
                         input = ManageAccountsModule.Input(popUpToInclusiveId, popUpInclusive),
                         accountType = accountType,
@@ -134,7 +134,7 @@ private fun RestoreLocalNavHost(
             }
         },
         openBackupItems = {
-            navController.add(
+            navigation.add(
                 backup_file(
                     input = ManageAccountsModule.Input(popUpToInclusiveId, popUpInclusive)
                 )
@@ -146,16 +146,16 @@ private fun RestoreLocalNavHost(
 @Serializable
 data class backup_file(val input: ManageAccountsModule.Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<RestoreLocalViewModel>(
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<RestoreLocalViewModel>(
             RestoreLocalPage::class
         )
 
         val activity = LocalActivity.current
         BackupFileItems(
             viewModel = viewModel,
-            onBackClick = { navController.removeLastOrNull() },
-            close = { navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive) },
+            onBackClick = { navigation.removeLastOrNull() },
+            close = { navigation.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive) },
             reloadApp = { activity?.let { MainModule.startAsNewTask(it) } }
         )
     }

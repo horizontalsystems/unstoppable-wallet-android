@@ -29,20 +29,20 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SecureSendConfigSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SecureSendConfigScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SecureSendConfigScreen(navigation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SecureSendConfigScreen(navController: HSNavigation) {
+private fun SecureSendConfigScreen(navigation: HSNavigation) {
     val viewModel = viewModel<SecureSendConfigViewModel>(factory = SecureSendConfigModule.Factory())
     val uiState = viewModel.uiState
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
@@ -51,7 +51,7 @@ private fun SecureSendConfigScreen(navController: HSNavigation) {
                 modifier = Modifier.fillMaxWidth(),
                 variant = ButtonVariant.Primary,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         },

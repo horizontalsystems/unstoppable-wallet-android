@@ -43,11 +43,11 @@ import kotlinx.serialization.Serializable
 data object TransactionsFilterPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         FilterScreen(
-            navController,
+            navigation,
             viewModel
         )
     }
@@ -57,7 +57,7 @@ data object TransactionsFilterPage : HSPage() {
 
 @Composable
 fun FilterScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: TransactionsViewModel,
 ) {
     val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)
@@ -78,7 +78,7 @@ fun FilterScreen(
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -105,7 +105,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllBlockchains),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.slideFromRight(FilterBlockchainPage)
+                                navigation.slideFromRight(FilterBlockchainPage)
                             }
                         )
                     }
@@ -119,13 +119,13 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllCoins),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.slideFromRight(FilterCoinPage)
+                                navigation.slideFromRight(FilterCoinPage)
                             }
                         )
                     }
                 )
                 VSpacer(32.dp)
-                val forResult = navController.slideFromRightForResult<SelectContactPage.Result>(
+                val forResult = navigation.slideFromRightForResult<SelectContactPage.Result>(
                     {
                         SelectContactPage(
                             SelectContactPage.Input(
@@ -173,7 +173,7 @@ fun FilterScreen(
                         .padding(horizontal = 16.dp),
                     title = stringResource(R.string.Button_Apply),
                     onClick = {
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     },
                 )
             }

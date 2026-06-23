@@ -31,10 +31,10 @@ import kotlinx.serialization.Serializable
 data object AboutPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         AboutScreen(
-            navController,
-            { navController.removeLastOrNull() }
+            navigation,
+            { navigation.removeLastOrNull() }
         )
     }
 }
@@ -42,22 +42,22 @@ data object AboutPage : HSPage() {
 @Serializable
 data object ReleaseNotesPage: HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ReleaseNotesScreen(false, { navController.removeLastOrNull() })
+    override fun GetContent(navigation: HSNavigation) {
+        ReleaseNotesScreen(false, { navigation.removeLastOrNull() })
     }
 }
 
 @Serializable
 data object AppStatusPage: HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        AppStatusScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        AppStatusScreen(navigation)
     }
 }
 
 @Composable
 private fun AboutScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onBackPress: () -> Unit,
     aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
 ) {
@@ -67,7 +67,7 @@ private fun AboutScreen(
     ) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             VSpacer(12.dp)
-            SettingSections(aboutViewModel, navController)
+            SettingSections(aboutViewModel, navigation)
             VSpacer(36.dp)
         }
     }
@@ -76,7 +76,7 @@ private fun AboutScreen(
 @Composable
 private fun SettingSections(
     viewModel: AboutViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
 
     val context = LocalContext.current
@@ -88,7 +88,7 @@ private fun SettingSections(
                 icon = R.drawable.ic_info_20,
                 value = viewModel.appVersion,
                 onClick = {
-                    navController.add(ReleaseNotesPage)
+                    navigation.add(ReleaseNotesPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.WhatsNew))
                 }
@@ -104,7 +104,7 @@ private fun SettingSections(
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.add(AppStatusPage)
+                    navigation.add(AppStatusPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.AppStatus))
                 }
@@ -115,7 +115,7 @@ private fun SettingSections(
                 R.drawable.ic_terms_20,
                 showAlert = viewModel.termsShowAlert,
                 onClick = {
-                    navController.add(TermsPage())
+                    navigation.add(TermsPage())
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
                 }

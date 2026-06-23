@@ -61,7 +61,7 @@ import java.math.BigDecimal
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendBtcAdvancedSettingsScreen(
-    fragmentNavController: HSNavigation,
+    navigation: HSNavigation,
     sendBitcoinViewModel: SendBitcoinViewModel,
     amountInputType: AmountInputType,
 ) {
@@ -88,7 +88,7 @@ fun SendBtcAdvancedSettingsScreen(
     ComposeAppTheme {
         HSScaffold(
             title = stringResource(R.string.Send_Advanced),
-            onBack = fragmentNavController::removeLastOrNull,
+            onBack = navigation::removeLastOrNull,
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Reset),
@@ -111,7 +111,7 @@ fun SendBtcAdvancedSettingsScreen(
                     fee = sendUiState.fee,
                     amountInputType = amountInputType,
                     rate = rate,
-                    navController = fragmentNavController
+                    navigation = navigation
                 )
 
                 if (feeRateVisible) {
@@ -122,7 +122,7 @@ fun SendBtcAdvancedSettingsScreen(
                         value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
                         decimals = 0,
                         caution = feeRateCaution,
-                        navController = fragmentNavController,
+                        navigation = navigation,
                         onValueChange = {
                             sendBitcoinViewModel.updateFeeRate(it.toInt())
                         },
@@ -141,7 +141,7 @@ fun SendBtcAdvancedSettingsScreen(
                 if (uiState.transactionSortingSupported) {
                     VSpacer(24.dp)
                     TransactionDataSortSettings(
-                        fragmentNavController,
+                        navigation,
                         wallet.coin.code,
                         viewModel.uiState.transactionSortTitle,
                     ) {
@@ -330,7 +330,7 @@ private fun BottomSheetTransactionOrderSelector(
 
 @Composable
 private fun TransactionDataSortSettings(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     coinCode: String,
     valueTitle: String,
     onClick: () -> Unit
@@ -338,7 +338,7 @@ private fun TransactionDataSortSettings(
     HeaderText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionSettings),
         onInfoClick = {
-            navController.add(TransactionInputsSortInfoPage)
+            navigation.add(TransactionInputsSortInfoPage)
         })
     CellUniversalLawrenceSection(
         listOf {

@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BtcUsedAddressesPage(val input: UsedAddressesParams) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        UsedAddressScreen(input) { navController.removeLastOrNull() }
+    override fun GetContent(navigation: HSNavigation) {
+        UsedAddressScreen(input) { navigation.removeLastOrNull() }
     }
 }

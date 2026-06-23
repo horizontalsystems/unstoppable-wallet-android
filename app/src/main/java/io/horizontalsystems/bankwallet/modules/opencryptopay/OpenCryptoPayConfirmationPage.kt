@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -33,7 +32,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -41,8 +39,8 @@ import kotlin.reflect.KClass
 data class OpenCryptoPayConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        OpenCryptoPayConfirmationScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        OpenCryptoPayConfirmationScreen(navigation, input)
     }
 
     @Serializable
@@ -63,7 +61,7 @@ data class OpenCryptoPayConfirmationPage(val input: Input) : HSPage() {
 
 @Composable
 private fun OpenCryptoPayConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     input: OpenCryptoPayConfirmationPage.Input,
 ) {
     val viewModel = viewModel<OpenCryptoPayConfirmationViewModel>(
@@ -85,7 +83,7 @@ private fun OpenCryptoPayConfirmationScreen(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Send_Confirmation_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.removeLastOrNull() },
+        onClickBack = { navigation.removeLastOrNull() },
         onClickFeeSettings = null,
         onClickNonceSettings = null,
         buttonsSlot = {
@@ -108,9 +106,9 @@ private fun OpenCryptoPayConfirmationScreen(
                             viewModel.pay()
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.removeLastUntil(input.sendEntryPointDestId, true)
+                            navigation.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 ErrorSheet(ErrorSheet.Input(t.message ?: t.javaClass.simpleName))
                             )
                         }
@@ -121,7 +119,7 @@ private fun OpenCryptoPayConfirmationScreen(
         }
     ) {
         uiState.sectionViewItems.forEach { section ->
-            SectionView(section.viewItems, navController, StatPage.SendConfirmation)
+            SectionView(section.viewItems, navigation, StatPage.SendConfirmation)
             VSpacer(16.dp)
         }
 
@@ -173,7 +171,7 @@ private fun OpenCryptoPayConfirmationScreen(
                 }
                 add {
                     DataFieldFee(
-                        navController,
+                        navigation,
                         uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                         uiState.networkFee?.secondary?.getFormattedPlain(),
                     )

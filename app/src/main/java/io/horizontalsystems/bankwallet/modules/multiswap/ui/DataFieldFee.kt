@@ -9,12 +9,12 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
 @Composable
 fun DataFieldFee(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     primary: String,
     secondary: String?,
 ) {
     DataFieldFeeTemplate(
-        navController = navController,
+        navigation = navigation,
         primary = primary,
         secondary = secondary,
         title = stringResource(id = R.string.FeeSettings_NetworkFee),
@@ -24,7 +24,7 @@ fun DataFieldFee(
 
 @Composable
 fun DataFieldFeeTemplate(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     primary: String,
     secondary: String?,
     title: String,
@@ -36,7 +36,7 @@ fun DataFieldFeeTemplate(
         valueToken = primary,
         onInfoClick = infoText?.let {
             {
-                navController.slideFromBottom(
+                navigation.slideFromBottom(
                     SwapInfoSheet(SwapInfoSheet.Input(title, infoText))
                 )
             }

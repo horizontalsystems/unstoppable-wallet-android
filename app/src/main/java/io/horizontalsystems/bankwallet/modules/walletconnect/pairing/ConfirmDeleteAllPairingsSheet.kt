@@ -26,8 +26,8 @@ import kotlinx.serialization.Serializable
 data object ConfirmDeleteAllPairingsSheet : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ConfirmDeleteAllScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        ConfirmDeleteAllScreen(navigation)
     }
 
     @Parcelize
@@ -35,7 +35,7 @@ data object ConfirmDeleteAllPairingsSheet : HSBottomSheet() {
 }
 
 @Composable
-fun ConfirmDeleteAllScreen(navController: HSNavigation) {
+fun ConfirmDeleteAllScreen(navigation: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     ComposeAppTheme {
         BottomSheetHeader(
@@ -43,7 +43,7 @@ fun ConfirmDeleteAllScreen(navController: HSNavigation) {
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = stringResource(R.string.WalletConnect_DeleteAllPairs),
             onCloseClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         ) {
             TextImportantWarning(
@@ -58,7 +58,7 @@ fun ConfirmDeleteAllScreen(navController: HSNavigation) {
                 title = stringResource(R.string.WalletConnect_Pairings_Delete),
                 onClick = {
                     resultEventBus.sendResult(ConfirmDeleteAllPairingsSheet.Result(true))
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
             Spacer(Modifier.height(32.dp))

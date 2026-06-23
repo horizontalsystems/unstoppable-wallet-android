@@ -71,7 +71,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun SendConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     coinMaxAllowedDecimals: Int,
     feeCoinMaxAllowedDecimals: Int,
     rate: CurrencyValue?,
@@ -102,7 +102,7 @@ fun SendConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 ErrorSheet(
                     ErrorSheet.Input(
                         sendResult.caution.getDescription() ?: sendResult.caution.getString()
@@ -117,19 +117,19 @@ fun SendConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.removeLastUntil(closeUntilDestId, true)
+            navigation.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         if (sendResult is SendResult.Sent) {
-            navController.removeLastUntil(closeUntilDestId, true)
+            navigation.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     HSScaffold(
         title = title ?: stringResource(R.string.Send_Confirmation_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 SendButton(
@@ -167,7 +167,7 @@ fun SendConfirmationScreen(
                 feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
                 fee = fee,
                 feeCoinRate = feeCoinRate,
-                navController = navController,
+                navigation = navigation,
                 memo = memo,
                 additionalFields = additionalFields
             )
@@ -185,7 +185,7 @@ fun ConfirmationBottomSection(
     feeCoinMaxAllowedDecimals: Int,
     fee: BigDecimal?,
     feeCoinRate: CurrencyValue?,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     memo: String?,
     customFeeInfo: String? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
@@ -215,7 +215,7 @@ fun ConfirmationBottomSection(
 
         formattedFee?.let { formattedFee ->
             DataFieldFeeTemplate(
-                navController = navController,
+                navigation = navigation,
                 primary = formattedFee.primary,
                 secondary = formattedFee.secondary,
                 title = stringResource(id = R.string.FeeSettings_NetworkFee),

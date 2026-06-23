@@ -41,13 +41,13 @@ import kotlinx.serialization.Serializable
 data class ShowMoneroKeyPage(val input: Input) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val keys = input?.keys
 
         if (keys == null) {
             NoKeysScreen()
         } else {
-            ShowMoneroKeyScreen(navController, keys)
+            ShowMoneroKeyScreen(navigation, keys)
         }
     }
 
@@ -58,7 +58,7 @@ data class ShowMoneroKeyPage(val input: Input) : HSPage(screenshotEnabled = fals
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowMoneroKeyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     keys: MoneroKeys
 ) {
     val view = LocalView.current
@@ -69,7 +69,7 @@ private fun ShowMoneroKeyScreen(
 
     HSScaffold(
         title = stringResource(keys.title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column {
             Column(

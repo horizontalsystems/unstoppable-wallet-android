@@ -257,7 +257,7 @@ class SendTransactionServiceEvm(
     }
 
     @Composable
-    override fun GetNonceSettingsContent(navController: HSNavigation) {
+    override fun GetNonceSettingsContent(navigation: HSNavigation) {
         val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
             SendEvmNonceViewModel(nonceService)
         })
@@ -267,12 +267,12 @@ class SendTransactionServiceEvm(
         SendEvmNonceSettingsScreen(
             viewModel = sendSettingsViewModel,
             nonceViewModel = nonceViewModel,
-            navController = navController
+            navigation = navigation
         )
     }
 
     @Composable
-    override fun GetSettingsContent(navController: HSNavigation) {
+    override fun GetSettingsContent(navigation: HSNavigation) {
         val feeSettingsViewModel = viewModel<ViewModel>(
             factory = EvmFeeModule.Factory(
                 feeService,
@@ -286,7 +286,7 @@ class SendTransactionServiceEvm(
         SendEvmFeeSettingsScreen(
             viewModel = sendSettingsViewModel,
             feeSettingsViewModel = feeSettingsViewModel,
-            navController = navController
+            navigation = navigation
         )
     }
 }
@@ -295,11 +295,11 @@ class SendTransactionServiceEvm(
 fun SendEvmFeeSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     feeSettingsViewModel: ViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -316,11 +316,11 @@ fun SendEvmFeeSettingsScreen(
         ) {
             when (feeSettingsViewModel) {
                 is LegacyFeeSettingsViewModel -> {
-                    LegacyFeeSettings(feeSettingsViewModel, navController)
+                    LegacyFeeSettings(feeSettingsViewModel, navigation)
                 }
 
                 is Eip1559FeeSettingsViewModel -> {
-                    Eip1559FeeSettings(feeSettingsViewModel, navController)
+                    Eip1559FeeSettings(feeSettingsViewModel, navigation)
                 }
             }
 
@@ -335,11 +335,11 @@ fun SendEvmFeeSettingsScreen(
 fun SendEvmNonceSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     nonceViewModel: SendEvmNonceViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Nonce),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

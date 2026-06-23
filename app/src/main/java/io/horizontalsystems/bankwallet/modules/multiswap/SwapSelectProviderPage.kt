@@ -29,10 +29,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -52,17 +51,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapSelectProviderPage(val parentScreenContentKey: String) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapSelectProviderScreen(navController, parentScreenContentKey)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapSelectProviderScreen(navigation, parentScreenContentKey)
     }
 }
 
 @Composable
 fun SwapSelectProviderScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     parentScreenContentKey: String
 ) {
-    val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
+    val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(
             swapViewModel.uiState.quotes,
@@ -73,7 +72,7 @@ fun SwapSelectProviderScreen(
     val uiState = viewModel.uiState
 
     SwapSelectProviderScreenInner(
-        onClickClose = navController::removeLastOrNull,
+        onClickClose = navigation::removeLastOrNull,
         quotes = uiState.quoteViewItems,
         currentQuote = uiState.selectedQuote,
         sortType = uiState.sortType,
@@ -81,11 +80,11 @@ fun SwapSelectProviderScreen(
             viewModel.setSortType(it)
         },
         onBadgeClick = {
-            navController.slideFromBottom(RiskLevelInfoSheet)
+            navigation.slideFromBottom(RiskLevelInfoSheet)
         }
     ) {
         swapViewModel.onSelectQuote(it)
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
 
         stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
     }

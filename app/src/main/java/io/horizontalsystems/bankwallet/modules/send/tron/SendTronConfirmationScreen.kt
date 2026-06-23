@@ -57,7 +57,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun SendTronConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendViewModel: SendTronViewModel,
     sendEntryPointDestId: KClass<out HSPage>?
 ) {
@@ -94,7 +94,7 @@ fun SendTronConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 ErrorSheet(
                     ErrorSheet.Input(sendResult.caution.getDescription() ?: sendResult.caution.getString())
                 )
@@ -107,20 +107,20 @@ fun SendTronConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.removeLastUntil(closeUntilDestId, true)
+            navigation.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         //additional close for cases when user closes app immediately after sending
         if (sendResult is SendResult.Sent) {
-            navController.removeLastUntil(closeUntilDestId, true)
+            navigation.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.Send_Confirmation_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -145,13 +145,13 @@ fun SendTronConfirmationScreen(
                     feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
                     fee = fee,
                     feeCoinRate = feeCoinRate,
-                    navController = navController,
+                    navigation = navigation,
                     memo = memo,
                     customFeeInfo = stringResource(R.string.FeeInfo_TronFee_Description)
                 ) {
                     resourcesConsumed?.let {
                         DataFieldFeeTemplate(
-                            navController = navController,
+                            navigation = navigation,
                             primary = it,
                             secondary = null,
                             title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
@@ -166,7 +166,7 @@ fun SendTronConfirmationScreen(
                         }
                         formattedActivationFee?.let {
                             DataFieldFeeTemplate(
-                                navController = navController,
+                                navigation = navigation,
                                 primary = it.primary,
                                 secondary = it.secondary,
                                 title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
@@ -241,7 +241,7 @@ private fun ResourcesConsumed(
     title: String,
     value: String,
     info: String,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -251,7 +251,7 @@ private fun ResourcesConsumed(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.slideFromBottom(
+                navigation.slideFromBottom(
                     FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(title, info))
                 )
             }

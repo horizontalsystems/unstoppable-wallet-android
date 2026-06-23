@@ -57,7 +57,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopPlatforms(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: TopPlatformsViewModel = viewModel(
         factory = TopPlatformsModule.Factory(null)
     ),
@@ -100,7 +100,7 @@ fun TopPlatforms(
                                 sortingField = uiState.sortingField,
                                 timeDuration = uiState.timePeriod,
                                 onItemClick = {
-                                    navController.slideFromRight(
+                                    navigation.slideFromRight(
                                         MarketPlatformPage(it)
                                     )
 
