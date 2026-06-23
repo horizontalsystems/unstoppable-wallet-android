@@ -173,18 +173,22 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                when {
-                    state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
-                    state.progress != null && state.progress > 0 -> {
-                        val text = Translator.getString(R.string.Balance_Syncing)
-                        if (syncedUntil != null) {
-                            "$text - $syncedUntil"
-                        } else {
-                            text
+                if (withDetails) {
+                    when {
+                        state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
+                        state.progress != null && state.progress > 0 -> {
+                            val text = Translator.getString(R.string.Balance_Syncing)
+                            if (syncedUntil != null) {
+                                "$text - $syncedUntil"
+                            } else {
+                                text
+                            }
                         }
-                    }
 
-                    else -> Translator.getString(R.string.Balance_Syncing)
+                        else -> Translator.getString(R.string.Balance_Syncing)
+                    }
+                } else {
+                    Translator.getString(R.string.Balance_Syncing)
                 }
             }
 
@@ -437,7 +441,7 @@ class BalanceViewItemFactory {
             diff = latestRate?.diff?.let { DeemedValue(it, latestRate.expired) },
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state, syncedUntil),
-            syncedUntilTextValue = syncedUntil,
+            syncedUntilTextValue = null,
             failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             badge = wallet.badge,
             errorMessage = errorMessage,
