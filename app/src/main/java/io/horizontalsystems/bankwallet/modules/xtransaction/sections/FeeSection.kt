@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionI
 fun FeeSection(
     transactionInfoHelper: TransactionInfoHelper,
     fee: TransactionValue.CoinValue,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val rateCurrencyValue = transactionInfoHelper.getXRate(fee.coinUid)?.let {
         CurrencyValue(
@@ -26,6 +26,6 @@ fun FeeSection(
         fee = fee.value,
         amountInputType = AmountInputType.COIN,
         rate = rateCurrencyValue,
-        navController = navController
+        navigation = navigation
     )
 }

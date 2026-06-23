@@ -5,5 +5,5 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
 interface DataField {
     @Composable
-    fun GetContent(navController: HSNavigation)
+    fun GetContent(navigation: HSNavigation)
 }

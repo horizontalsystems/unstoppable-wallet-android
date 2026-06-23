@@ -9,16 +9,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WCEvmTransactionSettingsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        WCEvmTransactionSettingsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        WCEvmTransactionSettingsScreen(navigation)
     }
 }
 
 @Composable
-fun WCEvmTransactionSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForScreen<WCSendEthereumTransactionRequestViewModel>(WCRequestSheet::class)
+fun WCEvmTransactionSettingsScreen(navigation: HSNavigation) {
+    val viewModel = navigation.viewModelForScreen<WCSendEthereumTransactionRequestViewModel>(WCRequestSheet::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetSettingsContent(navController)
+    sendTransactionService.GetSettingsContent(navigation)
 }

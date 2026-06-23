@@ -49,7 +49,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 @Composable
 fun TonConnectSessionList(
     dapps: Map<String, List<DAppEntity>>,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onDelete: (DAppEntity) -> Unit
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }

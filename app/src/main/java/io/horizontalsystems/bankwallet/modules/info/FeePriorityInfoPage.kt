@@ -23,9 +23,9 @@ import kotlinx.serialization.Serializable
 data object FeePriorityInfoPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         InfoScreen(
-            navController
+            navigation
         )
     }
 
@@ -33,7 +33,7 @@ data object FeePriorityInfoPage : HSPage() {
 
 @Composable
 private fun InfoScreen(
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     HSScaffold(
         title = "",
@@ -41,7 +41,7 @@ private fun InfoScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {

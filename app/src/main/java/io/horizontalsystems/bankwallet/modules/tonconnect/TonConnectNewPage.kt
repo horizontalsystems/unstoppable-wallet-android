@@ -13,14 +13,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TonConnectNewPage(@Serializable(with = DAppRequestEntitySerializer::class) val input: DAppRequestEntity) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         TonConnectNewScreen(
-            navController = navController,
+            navigation = navigation,
             requestEntity = input,
             onResult = { approved ->
                 resultEventBus.sendResult(Result(approved))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
         )
     }

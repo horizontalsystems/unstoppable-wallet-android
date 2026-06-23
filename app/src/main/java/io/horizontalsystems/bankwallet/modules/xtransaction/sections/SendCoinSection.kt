@@ -19,7 +19,7 @@ fun SendCoinSection(
     comment: String?,
     sentToSelf: Boolean,
     statPage: StatPage,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     transactionInfoHelper: TransactionInfoHelper,
     blockchainType: BlockchainType
 ) {
@@ -33,7 +33,7 @@ fun SendCoinSection(
         comment = comment,
         statPage = statPage,
         addressStatSection = StatSection.AddressTo,
-        navController = navController,
+        navigation = navigation,
         transactionInfoHelper = transactionInfoHelper,
         blockchainType = blockchainType,
     )

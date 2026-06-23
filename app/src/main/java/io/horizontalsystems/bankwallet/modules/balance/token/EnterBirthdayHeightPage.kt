@@ -67,12 +67,12 @@ import java.time.LocalDate
 data class EnterBirthdayHeightPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         EnterBirthdayHeightScreen(
             blockchainType = input.blockchainType,
             account = input.account,
             currentBirthdayHeight = input.currentBirthdayHeight,
-            onCloseClick = { navController.removeLastOrNull() }
+            onCloseClick = { navigation.removeLastOrNull() }
         )
     }
 

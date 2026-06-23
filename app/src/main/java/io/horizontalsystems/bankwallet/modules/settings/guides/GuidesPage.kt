@@ -43,14 +43,14 @@ import java.net.UnknownHostException
 data object GuidesPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        GuidesScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        GuidesScreen(navigation)
     }
 
 }
 
 @Composable
-fun GuidesScreen(navController: HSNavigation) {
+fun GuidesScreen(navigation: HSNavigation) {
     val viewModel = viewModel<GuidesViewModel>(factory = GuidesModule.Factory())
 
     val uiState = viewModel.uiState
@@ -62,7 +62,7 @@ fun GuidesScreen(navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.Guides_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(modifier = Modifier.navigationBarsPadding()) {
             Crossfade(viewState) { viewState ->
@@ -138,7 +138,7 @@ fun GuidesScreen(navController: HSNavigation) {
                                                 CellUniversal(
                                                     borderTop = j != 0,
                                                     onClick = {
-                                                        navController.slideFromRight(
+                                                        navigation.slideFromRight(
                                                             MarkdownPage(MarkdownPage.Input(
                                                                 guide.markdown,
                                                                 true

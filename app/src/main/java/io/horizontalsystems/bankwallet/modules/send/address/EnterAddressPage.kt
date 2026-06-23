@@ -19,9 +19,9 @@ import kotlin.reflect.KClass
 @Serializable
 data class EnterAddressPage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         EnterAddressScreen(
-            navController = navController,
+            navigation = navigation,
             token = input.wallet.token,
             title = stringResource(Send_EnterAddress),
             buttonTitle = stringResource(Button_Next),
@@ -29,7 +29,7 @@ data class EnterAddressPage(val input: Input) : HSPage() {
             initialAddress = input.address
         ) { address, risky ->
             address?.let {
-                navController.slideFromRight(
+                navigation.slideFromRight(
                     SendPage(Input(
                         wallet = input.wallet,
                         sendEntryPointDestId = input.sendEntryPointDestId ?: EnterAddressPage::class,

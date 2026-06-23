@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
 @Composable
-fun WcRequestPreScreen(navController: HSNavigation) {
+fun WcRequestPreScreen(navigation: HSNavigation) {
     val viewModelPre = viewModel<WCRequestPreViewModel>(
         factory = WCRequestPreViewModel.Factory()
     )
@@ -14,8 +14,8 @@ fun WcRequestPreScreen(navController: HSNavigation) {
     val uiState = viewModelPre.uiState
 
     if (uiState is DataState.Success) {
-        WcRequestScreen(navController, uiState.data.sessionRequest, uiState.data.wcAction)
+        WcRequestScreen(navigation, uiState.data.sessionRequest, uiState.data.wcAction)
     } else if (uiState is DataState.Error) {
-        WcRequestError { navController.removeLastOrNull() }
+        WcRequestError { navigation.removeLastOrNull() }
     }
 }

@@ -27,10 +27,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
-fun AddZanoNodeScreen(navController: HSNavigation) {
+fun AddZanoNodeScreen(navigation: HSNavigation) {
     val viewModel = viewModel<AddZanoNodeViewModel>(factory = AddZanoNodeModule.Factory())
     if (viewModel.uiState.closeScreen) {
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
         viewModel.onScreenClose()
     }
 
@@ -40,7 +40,7 @@ fun AddZanoNodeScreen(navController: HSNavigation) {
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {

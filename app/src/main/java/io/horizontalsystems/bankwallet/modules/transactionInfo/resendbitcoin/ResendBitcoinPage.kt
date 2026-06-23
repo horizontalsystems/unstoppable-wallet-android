@@ -59,8 +59,8 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
     data class Input(val optionType: SpeedUpCancelType)
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val transactionInfoViewModel = navController.viewModelForScreen<TransactionInfoViewModel>(TransactionInfoPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val transactionInfoViewModel = navigation.viewModelForScreen<TransactionInfoViewModel>(TransactionInfoPage::class)
 
         val vmFactory = remember {
             ResendBitcoinModule.Factory(
@@ -73,14 +73,14 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
         val resendViewModel = viewModel<ResendBitcoinViewModel>(factory = vmFactory)
 
         ResendBitcoinScreen(
-            navController = navController,
+            navigation = navigation,
             resendViewModel = resendViewModel
         )
     }
 
     @Composable
     private fun ResendBitcoinScreen(
-        navController: HSNavigation,
+        navigation: HSNavigation,
         resendViewModel: ResendBitcoinViewModel
     ) {
         val closeUntilDestId = TransactionInfoPage::class
@@ -97,7 +97,7 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
             }
 
             is SendResult.Failed -> {
-                navController.slideFromBottom(ErrorSheet(
+                navigation.slideFromBottom(ErrorSheet(
                     ErrorSheet.Input(uiState.sendResult.caution.getString())
                 ))
             }
@@ -108,20 +108,20 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
         LaunchedEffect(uiState.sendResult) {
             if (uiState.sendResult is SendResult.Sent) {
                 delay(1200)
-                navController.removeLastUntil(closeUntilDestId, true)
+                navigation.removeLastUntil(closeUntilDestId, true)
             }
         }
 
         LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
             //additional close for cases when user closes app immediately after sending
             if (uiState.sendResult is SendResult.Sent) {
-                navController.removeLastUntil(closeUntilDestId, true)
+                navigation.removeLastUntil(closeUntilDestId, true)
             }
         }
 
         HSScaffold(
             title = stringResource(uiState.titleResId),
-            onBack = navController::removeLastOrNull,
+            onBack = navigation::removeLastOrNull,
         ) {
             Column {
                 Column(
@@ -159,7 +159,7 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
                                 value = uiState.address.hex,
                                 showAdd = uiState.contact == null,
                                 blockchainType = uiState.blockchainType,
-                                navController = navController,
+                                navigation = navigation,
                                 onCopy = {
                                     stat(
                                         page = StatPage.Resend,
@@ -212,7 +212,7 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
                         fee = uiState.fee,
                         amountInputType = AmountInputType.COIN,
                         rate = uiState.coinRate,
-                        navController = navController
+                        navigation = navigation
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -222,7 +222,7 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
                         value = uiState.minFee.toBigDecimal(),
                         decimals = 0,
                         caution = uiState.feeCaution,
-                        navController = navController,
+                        navigation = navigation,
                         onValueChange = {
                             resendViewModel.setMinFee(it.toLong())
                         },

@@ -41,8 +41,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object MarketSignalsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        MarketSignalsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        MarketSignalsScreen(navigation)
     }
 
     @Parcelize
@@ -50,16 +50,16 @@ data object MarketSignalsPage : HSPage() {
 }
 
 @Composable
-fun MarketSignalsScreen(navController: HSNavigation) {
+fun MarketSignalsScreen(navigation: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     HSScaffold(
         title = stringResource(R.string.Market_Signals),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::removeLastOrNull
+                onClick = navigation::removeLastOrNull
             )
         ),
     ) {
@@ -126,7 +126,7 @@ fun MarketSignalsScreen(navController: HSNavigation) {
                     title = stringResource(R.string.Market_Signal_TurnOn),
                     onClick = {
                         resultEventBus.sendResult(MarketSignalsPage.Result(true))
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             }

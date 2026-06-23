@@ -39,12 +39,12 @@ import kotlinx.serialization.Serializable
 data object SectorsSelectorPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersPage::class)
 
         SectorsSelectorScreen(
             viewModel,
-            navController,
+            navigation,
         )
     }
 
@@ -53,7 +53,7 @@ data object SectorsSelectorPage : HSPage() {
 @Composable
 fun SectorsSelectorScreen(
     viewModel: MarketFiltersViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val uiState = viewModel.uiState
     var selectedItems by remember { mutableStateOf(uiState.sectors) }
@@ -75,7 +75,7 @@ fun SectorsSelectorScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = navController::removeLastOrNull
+                        onClick = navigation::removeLastOrNull
                     )
                 ),
             )
@@ -155,7 +155,7 @@ fun SectorsSelectorScreen(
                         stringResource(R.string.Market_Filters_Select, selectedItems.size)
                     },
                     onClick = {
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     },
                 )
             }

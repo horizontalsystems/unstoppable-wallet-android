@@ -50,15 +50,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object RoiSelectCoinsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RoiSelectCoinsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        RoiSelectCoinsScreen(navigation)
     }
 
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun RoiSelectCoinsScreen(navController: HSNavigation) {
+fun RoiSelectCoinsScreen(navigation: HSNavigation) {
     val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
 
     val uiState = viewModel.uiState
@@ -69,7 +69,7 @@ fun RoiSelectCoinsScreen(navController: HSNavigation) {
                 title = stringResource(R.string.ROI_SelectCoin_Title),
                 searchHintText = stringResource(R.string.Market_Search),
                 menuItems = listOf(),
-                onClose = { navController.removeLastOrNull() },
+                onClose = { navigation.removeLastOrNull() },
                 onSearchTextChanged = { text ->
                     viewModel.onFilter(text)
                 }
@@ -85,7 +85,7 @@ fun RoiSelectCoinsScreen(navController: HSNavigation) {
                     enabled = uiState.isSaveable,
                     onClick = {
                         viewModel.onApply()
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             }
@@ -109,7 +109,7 @@ fun RoiSelectCoinsScreen(navController: HSNavigation) {
                                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 title = period.title.getString(),
                                 onClick = {
-                                    navController.paidAction(TokenInsights) {
+                                    navigation.paidAction(TokenInsights) {
                                         dialog = PeriodSelectorDialog(text, period, i)
                                     }
                                 }
@@ -131,7 +131,7 @@ fun RoiSelectCoinsScreen(navController: HSNavigation) {
                     val checked = uiState.selectedCoins.contains(item.performanceCoin)
                     val view = LocalView.current
                     val onClick = {
-                        navController.paidAction(TokenInsights) {
+                        navigation.paidAction(TokenInsights) {
                             try {
                                 viewModel.onToggle(item, !checked)
                             } catch (e: Throwable) {

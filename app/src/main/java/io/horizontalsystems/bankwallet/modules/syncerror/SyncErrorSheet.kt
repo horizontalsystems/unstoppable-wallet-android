@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
@@ -34,8 +33,8 @@ import kotlinx.serialization.Serializable
 data class SyncErrorSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SyncErrorScreen(navController, input.wallet)
+    override fun GetContent(navigation: HSNavigation) {
+        SyncErrorScreen(navigation, input.wallet)
     }
 
     @Serializable
@@ -45,7 +44,7 @@ data class SyncErrorSheet(val input: Input) : HSBottomSheet() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
+private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
     val text = if (viewModel.sourceChangeable) {
         stringResource(R.string.BalanceSyncError_ChangableSourceErrorText)
@@ -56,7 +55,7 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
@@ -66,7 +65,7 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
                     variant = ButtonVariant.Primary,
                     onClick = {
                         viewModel.retry()
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
                 if (viewModel.sourceChangeable) {
@@ -76,32 +75,32 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Medium,
                         onClick = {
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
 
                             val blockchainWrapper = viewModel.blockchainWrapper
                             when (blockchainWrapper) {
                                 is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
-                                    navController.slideFromBottom(
+                                    navigation.slideFromBottom(
                                         BtcBlockchainSettingsPage(blockchainWrapper.blockchain),
                                     )
                                 }
 
                                 is SyncErrorModule.BlockchainWrapper.Evm -> {
-                                    navController.slideFromBottom(
+                                    navigation.slideFromBottom(
                                         EvmNetworkPage(blockchainWrapper.blockchain)
                                     )
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navController.slideFromBottom(MoneroNetworkPage)
+                                    navigation.slideFromBottom(MoneroNetworkPage)
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Zano -> {
-                                    navController.slideFromBottom(ZanoNetworkPage)
+                                    navigation.slideFromBottom(ZanoNetworkPage)
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Zcash -> {
-                                    navController.slideFromBottom(ZcashNetworkPage)
+                                    navigation.slideFromBottom(ZcashNetworkPage)
                                 }
 
                                 else -> {}

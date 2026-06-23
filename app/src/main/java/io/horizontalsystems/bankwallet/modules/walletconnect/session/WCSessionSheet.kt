@@ -72,18 +72,18 @@ import kotlinx.serialization.Serializable
 data class WCSessionSheet(val input: WCSessionModule.Input?) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<WCSessionViewModel>(
             factory = WCSessionModule.Factory(input?.sessionTopic)
         )
-        WCSessionScreen(navController, viewModel)
+        WCSessionScreen(navigation, viewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSessionScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: WCSessionViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -95,7 +95,7 @@ fun WCSessionScreen(
     val hideAndPop = {
         scope.launch {
             sheetState.hide()
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
         Unit
     }
@@ -106,7 +106,7 @@ fun WCSessionScreen(
 
     LaunchedEffect(uiState.closeDialog) {
         if (uiState.closeDialog) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -180,7 +180,7 @@ fun WCSessionScreen(
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
                     .padding(16.dp)
                     .clickable(enabled = !uiState.scamProtectionActionAllowed) {
-                        navController.slideFromBottom(
+                        navigation.slideFromBottom(
                             DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.ScamProtectionFeature))
                         )
                     },
@@ -253,7 +253,7 @@ fun WCSessionScreen(
             onDisconnectClick = { viewModel.disconnect() },
             onCancelClick = {
                 viewModel.rejectProposal()
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
 

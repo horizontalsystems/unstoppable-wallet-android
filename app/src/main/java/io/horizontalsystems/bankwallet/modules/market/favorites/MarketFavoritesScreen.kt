@@ -43,7 +43,7 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketFavoritesScreen(
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val viewModel = viewModel<MarketFavoritesViewModel>(factory = MarketFavoritesModule.Factory())
     val uiState = viewModel.uiState
@@ -100,7 +100,7 @@ fun MarketFavoritesScreen(
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinPage.Input(coinUid)
-                                navController.slideFromRight(CoinPage(arguments))
+                                navigation.slideFromRight(CoinPage(arguments))
 
                                 stat(
                                     page = StatPage.Markets,
@@ -150,7 +150,7 @@ fun MarketFavoritesScreen(
                                             }
                                         )
                                         HSpacer(width = 12.dp)
-                                        val forResult = navController.slideFromBottomForResult<MarketSignalsPage.Result>(
+                                        val forResult = navigation.slideFromBottomForResult<MarketSignalsPage.Result>(
                                             { MarketSignalsPage }
                                         ) {
                                             if (it.enabled) {
@@ -165,7 +165,7 @@ fun MarketFavoritesScreen(
                                             title = stringResource(id = R.string.Market_Signals),
                                             onClick = {
                                                 if (!uiState.showSignal) {
-                                                    navController.paidAction(TradeSignals, forResult)
+                                                    navigation.paidAction(TradeSignals, forResult)
                                                     stat(
                                                         page = StatPage.MarketOverview,
                                                         event = StatEvent.OpenPremium(

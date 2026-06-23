@@ -38,21 +38,21 @@ import kotlinx.serialization.Serializable
 data object FilterBlockchainPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
-        FilterBlockchainScreen(navController, viewModel)
+        FilterBlockchainScreen(navigation, viewModel)
     }
 }
 
 
 @Composable
-fun FilterBlockchainScreen(navController: HSNavigation, viewModel: TransactionsViewModel) {
+fun FilterBlockchainScreen(navigation: HSNavigation, viewModel: TransactionsViewModel) {
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column {
             filterBlockchains?.let { blockchains ->
@@ -60,7 +60,7 @@ fun FilterBlockchainScreen(navController: HSNavigation, viewModel: TransactionsV
                     contentPadding = PaddingValues(bottom = 32.dp)
                 ) {
                     items(blockchains) { filterItem ->
-                        BlockchainCell(viewModel, filterItem, navController)
+                        BlockchainCell(viewModel, filterItem, navigation)
                     }
                 }
             }
@@ -72,7 +72,7 @@ fun FilterBlockchainScreen(navController: HSNavigation, viewModel: TransactionsV
 private fun BlockchainCell(
     viewModel: TransactionsViewModel,
     filterItem: Filter<Blockchain?>,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     CellMultilineClear(borderTop = true) {
         Row(
@@ -80,7 +80,7 @@ private fun BlockchainCell(
                 .fillMaxSize()
                 .clickable {
                     viewModel.onEnterFilterBlockchain(filterItem)
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically

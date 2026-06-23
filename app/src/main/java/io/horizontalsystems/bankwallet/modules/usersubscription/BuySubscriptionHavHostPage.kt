@@ -13,11 +13,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object BuySubscriptionHavHostPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         PremiumFeaturesScreen(
-            navController,
+            navigation,
             true,
-            onClose = { navController.removeLastOrNull() }
+            onClose = { navigation.removeLastOrNull() }
         )
     }
 
@@ -29,12 +29,12 @@ data object BuySubscriptionHavHostPage : HSPage() {
 @Serializable
 data object PremiumSubscribedPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         PremiumSubscribedScreen(
             onCloseClick = {
                 resultEventBus.sendResult(Result())
-                navController.removeLastUntil(BuySubscriptionHavHostPage::class, true)
+                navigation.removeLastUntil(BuySubscriptionHavHostPage::class, true)
             }
         )
     }

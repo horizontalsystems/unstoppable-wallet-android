@@ -41,10 +41,10 @@ import kotlinx.serialization.Serializable
 data object SolanaNetworkPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         SolanaNetworkScreen(
             viewModel(factory = SolanaNetworkModule.Factory()),
-            navController
+            navigation
         )
     }
 
@@ -53,11 +53,11 @@ data object SolanaNetworkPage : HSPage() {
 @Composable
 private fun SolanaNetworkScreen(
     viewModel: SolanaNetworkViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
 
     if (viewModel.closeScreen) {
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
     }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -81,7 +81,7 @@ private fun SolanaNetworkScreen(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = {
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         }
                     )
                 )

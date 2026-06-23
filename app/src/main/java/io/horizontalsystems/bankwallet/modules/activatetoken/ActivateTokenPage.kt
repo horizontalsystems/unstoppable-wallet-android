@@ -33,9 +33,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
@@ -46,8 +46,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActivateTokenPage(val wallet: Wallet) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ActivateTokenScreen(navController, wallet)
+    override fun GetContent(navigation: HSNavigation) {
+        ActivateTokenScreen(navigation, wallet)
     }
 
     @Parcelize
@@ -57,7 +57,7 @@ data class ActivateTokenPage(val wallet: Wallet) : HSPage() {
 
 @Composable
 fun ActivateTokenScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     wallet: Wallet,
 ) {
     val resultEventBus = LocalResultEventBus.current
@@ -85,9 +85,9 @@ fun ActivateTokenScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             resultEventBus.sendResult(ActivateTokenPage.Result(true))
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(ErrorSheet(
+                            navigation.slideFromBottom(ErrorSheet(
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
@@ -123,7 +123,7 @@ fun ActivateTokenScreen(
         VSpacer(height = 16.dp)
         SectionUniversalLawrence {
             DataFieldFee(
-                navController,
+                navigation,
                 uiState.feeCoinValue?.getFormattedFull() ?: "---",
                 uiState.feeFiatValue?.getFormattedFull() ?: "---"
             )

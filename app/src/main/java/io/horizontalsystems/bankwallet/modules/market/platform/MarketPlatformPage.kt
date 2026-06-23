@@ -72,16 +72,16 @@ import kotlinx.serialization.Serializable
 data class MarketPlatformPage(val platform: Platform) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val factory = MarketPlatformModule.Factory(platform)
 
         PlatformScreen(
             factory = factory,
             platform = platform,
-            onCloseButtonClick = { navController.removeLastOrNull() },
+            onCloseButtonClick = { navigation.removeLastOrNull() },
             onCoinClick = { coinUid ->
                 val arguments = CoinPage.Input(coinUid)
-                navController.slideFromRight(CoinPage(arguments))
+                navigation.slideFromRight(CoinPage(arguments))
 
                 stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
             }

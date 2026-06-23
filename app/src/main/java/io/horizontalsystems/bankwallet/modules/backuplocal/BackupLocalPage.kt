@@ -14,24 +14,24 @@ import kotlinx.serialization.Serializable
 data class BackupLocalPage(val account: Account? = null) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         if (account != null) {
             LocalBackupPasswordScreen(
                 backupType = BackupType.SingleWalletBackup(account.id),
                 onBackClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 },
                 onFinish = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         } else {
             SelectBackupItemsScreen(
                 onNextClick = { accountIdsList, sections ->
-                    navController.add(LocalBackupPasswordPage(accountIdsList, sections))
+                    navigation.add(LocalBackupPasswordPage(accountIdsList, sections))
                 },
                 onBackClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         }
@@ -44,14 +44,14 @@ data class LocalBackupPasswordPage(
     val sections: Set<BackupSection>
 ) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         LocalBackupPasswordScreen(
             backupType = BackupType.FullBackup(accountIds, sections),
             onBackClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onFinish = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }

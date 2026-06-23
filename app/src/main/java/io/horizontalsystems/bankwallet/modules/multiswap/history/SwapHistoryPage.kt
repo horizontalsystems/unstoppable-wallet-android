@@ -53,19 +53,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SwapHistoryPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapHistoryScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapHistoryScreen(navigation)
     }
 }
 
 @Composable
-fun SwapHistoryScreen(navController: HSNavigation) {
+fun SwapHistoryScreen(navigation: HSNavigation) {
     val viewModel = viewModel<SwapHistoryViewModel>(factory = SwapHistoryViewModel.Factory())
     val uiState = viewModel.uiState
 
     HSScaffold(
         title = stringResource(R.string.SwapHistory_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         if (uiState.items.isEmpty()) {
             Box(
@@ -95,7 +95,7 @@ fun SwapHistoryScreen(navController: HSNavigation) {
                         SwapHistoryCell(
                             item = item,
                             onClick = {
-                                navController.slideFromRight(
+                                navigation.slideFromRight(
                                     SwapInfoPage(SwapInfoPage.Input(item.id)),
                                 )
                             },

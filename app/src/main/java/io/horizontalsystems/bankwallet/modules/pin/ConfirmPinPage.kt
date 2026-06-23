@@ -13,15 +13,15 @@ import kotlinx.serialization.Serializable
 data object ConfirmPinPage : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         PinConfirm(
             onSuccess = {
                 resultEventBus.sendResult(Result(true))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onCancel = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }

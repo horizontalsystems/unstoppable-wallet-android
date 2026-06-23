@@ -46,7 +46,7 @@ import kotlinx.serialization.Serializable
 data class VaultPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val factory = VaultModule.Factory(input)
         val viewModel = viewModel<VaultViewModel>(factory = factory)
         val chartViewModel = viewModel<ChartViewModel>(
@@ -55,7 +55,7 @@ data class VaultPage(val input: Input) : HSPage() {
         VaultScreen(
             viewModel,
             chartViewModel,
-            navController
+            navigation
         )
     }
 
@@ -79,14 +79,14 @@ data class VaultPage(val input: Input) : HSPage() {
 private fun VaultScreen(
     viewModel: VaultViewModel,
     chartViewModel: ChartViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
     HSScaffold(
         title = uiState.vaultViewItem.assetSymbol,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(Modifier.navigationBarsPadding()) {
             HSSwipeRefresh(

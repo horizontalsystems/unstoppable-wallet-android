@@ -32,11 +32,11 @@ import kotlin.reflect.KClass
 @Serializable
 data class ZcashAddressTypeSelectPage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val wallet = input.wallet
         ZcashAddressTypeSelectScreen(
             onZcashAddressTypeClick = { isTransparent ->
-                navController.slideFromRight(
+                navigation.slideFromRight(
                     ReceivePage(ReceivePage.Input(
                         wallet = wallet,
                         receiveEntryPointDestId = input.receiveEntryPointDestId,
@@ -45,7 +45,7 @@ data class ZcashAddressTypeSelectPage(val input: Input) : HSPage() {
                 )
             },
             onBackPress = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             })
     }
 

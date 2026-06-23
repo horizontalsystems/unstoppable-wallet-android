@@ -94,17 +94,17 @@ import kotlin.math.abs
 data object EtfPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val factory = remember { EtfModule.Factory() }
         val viewModel = viewModel<EtfViewModel>(factory = factory)
-        EtfPage(viewModel, navController)
+        EtfPage(viewModel, navigation)
     }
 }
 
 @Composable
 fun EtfPage(
     viewModel: EtfViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val tabs = EtfModule.EtfTab.entries
     var selectedTab by remember { mutableStateOf(EtfModule.EtfTab.BtcTab) }
@@ -124,7 +124,7 @@ fun EtfPage(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         ),

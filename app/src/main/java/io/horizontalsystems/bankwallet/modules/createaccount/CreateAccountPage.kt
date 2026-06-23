@@ -33,17 +33,17 @@ import kotlinx.serialization.Serializable
 data class CreateAccountPage(val input: ManageAccountsModule.Input? = null) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        CreateAccountScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        CreateAccountScreen(navigation, input)
     }
 }
 
 
 @Composable
-fun CreateAccountScreen(navController: HSNavigation, input: ManageAccountsModule.Input?) {
+fun CreateAccountScreen(navigation: HSNavigation, input: ManageAccountsModule.Input?) {
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-        onBack = navController::removeLastOrNull
+        onBack = navigation::removeLastOrNull
     ) {
         Column {
             VSpacer(16.dp)
@@ -55,7 +55,7 @@ fun CreateAccountScreen(navController: HSNavigation, input: ManageAccountsModule
                     subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
                     borderTop = false
                 ) {
-                    navController.slideFromRight(CreateAccountStandardPage(input))
+                    navigation.slideFromRight(CreateAccountStandardPage(input))
                 }
 
                 WalletType(
@@ -65,9 +65,9 @@ fun CreateAccountScreen(navController: HSNavigation, input: ManageAccountsModule
                     borderTop = true
                 ) {
                     if (!App.localStorage.passkeyTermsAccepted) {
-                        navController.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
+                        navigation.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
                     } else {
-                        navController.slideFromRight(CreateAccountPasskeyPage(input))
+                        navigation.slideFromRight(CreateAccountPasskeyPage(input))
                     }
                 }
             }

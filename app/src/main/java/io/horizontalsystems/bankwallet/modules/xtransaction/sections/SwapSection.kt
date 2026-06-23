@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 @Composable
 fun SwapSection(
     transactionInfoHelper: TransactionInfoHelper,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     transactionValueIn: TransactionValue,
     transactionValueOut: TransactionValue,
 ) {
@@ -26,7 +26,7 @@ fun SwapSection(
             coinAmountColor = AmountColor.Negative,
             coinAmountSign = AmountSign.Minus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            navigation = navigation,
             statPage = StatPage.TonConnect,
             borderTop = false,
         )
@@ -37,7 +37,7 @@ fun SwapSection(
             coinAmountColor = AmountColor.Positive,
             coinAmountSign = AmountSign.Plus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            navigation = navigation,
             statPage = StatPage.TonConnect,
             borderTop = true,
         )

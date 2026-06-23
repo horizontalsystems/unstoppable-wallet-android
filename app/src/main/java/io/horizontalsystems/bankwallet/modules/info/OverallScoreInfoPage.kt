@@ -36,13 +36,13 @@ import java.math.BigDecimal
 data class OverallScoreInfoPage(val scoreCategory: ScoreCategory) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val categoryScores = getScores(scoreCategory)
         InfoScreen(
             scoreCategory.title,
             scoreCategory.description,
             categoryScores,
-            navController
+            navigation
         )
     }
 }
@@ -52,11 +52,11 @@ private fun InfoScreen(
     categoryTitle: Int,
     description: Int,
     categoryScores: Map<OverallScore, String>,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     HSScaffold(
         title = "",
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

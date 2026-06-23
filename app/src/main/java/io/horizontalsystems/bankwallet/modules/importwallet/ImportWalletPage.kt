@@ -64,11 +64,11 @@ import kotlin.reflect.KClass
 data class ImportWalletPage(val input: ManageAccountsModule.Input? = null) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: ImportWalletPage::class
         val inclusive = input?.popOffInclusive ?: true
 
-        ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
+        ImportWalletScreen(navigation, popUpToInclusiveId, inclusive)
     }
 
 }
@@ -76,7 +76,7 @@ data class ImportWalletPage(val input: ManageAccountsModule.Input? = null) : HSP
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImportWalletScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean
 ) {
@@ -96,7 +96,7 @@ private fun ImportWalletScreen(
                         BackupFileValidator().validate(jsonString)
 
                         val fileName = context.getFileName(uriNonNull)
-                        navController.navigateWithTermsAccepted(
+                        navigation.navigateWithTermsAccepted(
                             screen = RestoreLocalPage(
                                 RestoreLocalPage.Input(
                                     popUpToInclusiveId,
@@ -133,7 +133,7 @@ private fun ImportWalletScreen(
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_ImportWallet),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -147,7 +147,7 @@ private fun ImportWalletScreen(
                     subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
                     borderTop = false
                 ) {
-                    navController.navigateWithTermsAccepted(
+                    navigation.navigateWithTermsAccepted(
                         screen = RestoreAccountPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
                         navigationType = NavigationType.SlideFromRight,
                         statPageFrom = StatPage.ImportWallet,
@@ -160,7 +160,7 @@ private fun ImportWalletScreen(
                     subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
                     borderTop = true
                 ) {
-                    navController.navigateWithTermsAccepted(
+                    navigation.navigateWithTermsAccepted(
                         screen = RestoreFromPrivateKeyPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
                         navigationType = NavigationType.SlideFromRight,
                         statPageFrom = StatPage.ImportWallet,
@@ -179,7 +179,7 @@ private fun ImportWalletScreen(
                     scope.launch {
                         try {
                             val (entropy, accountName) = App.passkeyManager.authenticate(context)
-                            navController.slideFromRight(
+                            navigation.slideFromRight(
                                 RestoreFromPasskeyPage(
                                     RestoreFromPasskeyPage.Input(
                                         popUpToInclusiveId,
@@ -195,7 +195,7 @@ private fun ImportWalletScreen(
                             )
                         } catch (e: GetCredentialCancellationException) {
                         } catch (e: NoCredentialException) {
-                            navController.slideFromBottom(RestorePasskeyNotSupportedSheet)
+                            navigation.slideFromBottom(RestorePasskeyNotSupportedSheet)
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {

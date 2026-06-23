@@ -23,10 +23,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ProUsersActivateSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val authorizationViewModel  = navController.viewModelForScreen<YakAuthorizationViewModel>(CoinPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val authorizationViewModel  = navigation.viewModelForScreen<YakAuthorizationViewModel>(CoinPage::class)
         ProUsersActivateScreen(
-            { navController.removeLastOrNull() },
+            { navigation.removeLastOrNull() },
             { authorizationViewModel.onActivateClick() }
         )
     }

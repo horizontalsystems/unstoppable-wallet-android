@@ -44,8 +44,8 @@ import kotlinx.serialization.Serializable
 data class RecoveryPhrasePage(val input: Account) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RecoveryPhraseScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        RecoveryPhraseScreen(navigation, input)
     }
 
 }
@@ -53,7 +53,7 @@ data class RecoveryPhrasePage(val input: Account) : HSPage(screenshotEnabled = f
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecoveryPhraseScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     account: Account,
 ) {
     val viewModel =
@@ -66,13 +66,13 @@ private fun RecoveryPhraseScreen(
 
     HSScaffold(
         title = stringResource(R.string.RecoveryPhrase_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
                     stat(
                         page = StatPage.RecoveryPhrase,
                         event = StatEvent.Open(StatPage.Info)

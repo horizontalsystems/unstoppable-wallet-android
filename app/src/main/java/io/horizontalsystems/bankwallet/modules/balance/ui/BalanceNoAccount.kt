@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
-fun BalanceNoAccount(navController: HSNavigation) {
+fun BalanceNoAccount(navigation: HSNavigation) {
     HSScaffold(
         title = stringResource(R.string.Wallet_Title)
     ) {
@@ -37,7 +37,7 @@ fun BalanceNoAccount(navController: HSNavigation) {
                 icon = painterResource(R.drawable.wallet_add_24),
                 iconTint = ComposeAppTheme.colors.grey,
                 onNewWalletClick = {
-                    navController.navigateWithTermsAccepted(
+                    navigation.navigateWithTermsAccepted(
                         screen = CreateAccountPage(),
                         navigationType = NavigationType.SlideFromRight,
                         statPageFrom = StatPage.Balance,
@@ -45,7 +45,7 @@ fun BalanceNoAccount(navController: HSNavigation) {
                     )
                 },
                 onWalletRestoreClick = {
-                    navController.navigateWithTermsAccepted(
+                    navigation.navigateWithTermsAccepted(
                         screen = ImportWalletPage(),
                         navigationType = NavigationType.SlideFromRight,
                         statPageFrom = StatPage.Balance,
@@ -53,7 +53,7 @@ fun BalanceNoAccount(navController: HSNavigation) {
                     )
                 },
                 onWatchWalletClick = {
-                    navController.slideFromRight(WatchAddressPage())
+                    navigation.slideFromRight(WatchAddressPage())
 
                     stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
                 }

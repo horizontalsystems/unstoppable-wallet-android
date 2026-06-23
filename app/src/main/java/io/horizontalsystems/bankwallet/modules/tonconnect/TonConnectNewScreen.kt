@@ -45,7 +45,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
 fun TonConnectNewScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     requestEntity: DAppRequestEntity,
     onResult: (Boolean) -> Unit,
 ) {
@@ -58,7 +58,7 @@ fun TonConnectNewScreen(
 
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -75,7 +75,7 @@ fun TonConnectNewScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         ),
         bottomBar = {
@@ -84,7 +84,7 @@ fun TonConnectNewScreen(
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
-                        onClick = navController.authorizedAction {
+                        onClick = navigation.authorizedAction {
                             viewModel.connect()
                             onResult.invoke(true)
                         },

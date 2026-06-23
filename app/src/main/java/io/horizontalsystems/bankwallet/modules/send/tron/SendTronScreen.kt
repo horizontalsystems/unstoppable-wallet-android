@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
 @Composable
 fun SendTronScreen(
     title: String,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SendTronViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
@@ -67,7 +67,7 @@ fun SendTronScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.removeLastOrNull() }
+            onBack = { navigation.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -76,7 +76,7 @@ fun SendTronScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -110,7 +110,7 @@ fun SendTronScreen(
                 rate = viewModel.coinRate
             )
 
-            val forResult = navController.slideFromBottomForResult<AddressRiskySheet.Result>(
+            val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
                 {
                     AddressRiskySheet(
                         AddressRiskySheet.Input(
@@ -119,7 +119,7 @@ fun SendTronScreen(
                     )
                 }
             ) {
-                openConfirm(viewModel, navController, sendEntryPointDestId)
+                openConfirm(viewModel, navigation, sendEntryPointDestId)
             }
 
             ButtonPrimaryYellow(
@@ -134,7 +134,7 @@ fun SendTronScreen(
                         keyboardController?.hide()
                         forResult()
                     } else {
-                        openConfirm(viewModel, navController, sendEntryPointDestId)
+                        openConfirm(viewModel, navigation, sendEntryPointDestId)
                     }
                 },
                 enabled = proceedEnabled
@@ -146,12 +146,12 @@ fun SendTronScreen(
 
 private fun openConfirm(
     viewModel: SendTronViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
     viewModel.onNavigateToConfirmation()
 
-    navController.slideFromRight(
+    navigation.slideFromRight(
         SendConfirmationPage(SendConfirmationPage.Input(
             SendConfirmationPage.Type.Tron,
             sendEntryPointDestId

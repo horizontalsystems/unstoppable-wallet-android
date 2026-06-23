@@ -37,7 +37,7 @@ import kotlin.reflect.KClass
 @Composable
 fun SendEvmScreen(
     title: String,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     amountInputModeViewModel: AmountInputModeViewModel,
     viewModel: SendEvmViewModel,
     address: Address,
@@ -70,7 +70,7 @@ fun SendEvmScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.removeLastOrNull() }
+            onBack = { navigation.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -79,7 +79,7 @@ fun SendEvmScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress,
                 ) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -113,7 +113,7 @@ fun SendEvmScreen(
                 rate = viewModel.coinRate
             )
 
-            val forResult = navController.slideFromBottomForResult<AddressRiskySheet.Result>(
+            val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
                 {
                     AddressRiskySheet(
                         AddressRiskySheet.Input(
@@ -124,7 +124,7 @@ fun SendEvmScreen(
             ) {
                 openSendConfirm(
                     viewModel,
-                    navController,
+                    navigation,
                     sendEntryPointDestId
                 )
             }
@@ -144,7 +144,7 @@ fun SendEvmScreen(
                     } else {
                         openSendConfirm(
                             viewModel,
-                            navController,
+                            navigation,
                             sendEntryPointDestId
                         )
                     }
@@ -157,12 +157,12 @@ fun SendEvmScreen(
 
 private fun openSendConfirm(
     viewModel: SendEvmViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
     val blockchainType = viewModel.wallet.token.blockchainType
     viewModel.getSendData()?.let {
-        navController.slideFromRight(
+        navigation.slideFromRight(
             SendEvmConfirmationPage(SendEvmConfirmationPage.Input(
                 sendData = it,
                 blockchainType = blockchainType,

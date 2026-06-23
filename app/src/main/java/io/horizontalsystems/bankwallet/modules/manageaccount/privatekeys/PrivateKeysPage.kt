@@ -29,19 +29,19 @@ import kotlinx.serialization.Serializable
 data class PrivateKeysPage(val input: Account) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ManageAccountScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        ManageAccountScreen(navigation, input)
     }
 
 }
 
 @Composable
-fun ManageAccountScreen(navController: HSNavigation, account: Account) {
+fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
     val viewModel = viewModel<PrivateKeysViewModel>(factory = PrivateKeysModule.Factory(account))
 
     HSScaffold(
         title = stringResource(R.string.PrivateKeys_Title),
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
     ) {
         Column(
             modifier = Modifier
@@ -52,8 +52,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_EvmPrivateKey),
                     description = stringResource(R.string.PrivateKeys_EvmPrivateKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             PrivateKeyPage(PrivateKeyPage.Input(key, PrivateKeyPage.Type.Evm))
                         )
 
@@ -68,8 +68,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_TronPrivateKey),
                     description = stringResource(R.string.PrivateKeys_TronPrivateKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             PrivateKeyPage(PrivateKeyPage.Input(key, PrivateKeyPage.Type.Tron))
                         )
 
@@ -84,8 +84,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
                     description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             StellarSecretKeyPage(StellarSecretKeyPage.Input(key))
                         )
 
@@ -100,8 +100,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_Bip32RootKey),
                     description = stringResource(id = R.string.PrivateKeys_Bip32RootKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             ShowExtendedKeyPage(ShowExtendedKeyPage.Input(
                                 key.hdKey,
                                 key.displayKeyType
@@ -119,8 +119,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKey),
                     description = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             ShowExtendedKeyPage(ShowExtendedKeyPage.Input(key.hdKey, key.displayKeyType))
                         )
 
@@ -135,8 +135,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_MoneroPrivateKey),
                     description = stringResource(id = R.string.PrivateKeys_MoneroPrivateKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             ShowMoneroKeyPage(ShowMoneroKeyPage.Input(moneroKeys))
                         )
 

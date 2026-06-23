@@ -37,10 +37,10 @@ import kotlinx.serialization.Serializable
 data class ReleaseNotesPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         ReleaseNotesScreen(
             closeablePopup = input.showAsClosablePopup,
-            onCloseClick = { navController.removeLastOrNull() },
+            onCloseClick = { navigation.removeLastOrNull() },
         )
     }
 

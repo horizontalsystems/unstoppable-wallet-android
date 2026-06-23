@@ -23,8 +23,8 @@ import kotlinx.serialization.Serializable
 data class TransactionLockTimeInfoPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        InfoScreen(input.lockTime, navController)
+    override fun GetContent(navigation: HSNavigation) {
+        InfoScreen(input.lockTime, navigation)
     }
 
     @Serializable
@@ -34,7 +34,7 @@ data class TransactionLockTimeInfoPage(val input: Input) : HSPage() {
 @Composable
 private fun InfoScreen(
     lockDate: String,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
 
     val description = stringResource(R.string.Info_LockTime_Description, lockDate)
@@ -45,7 +45,7 @@ private fun InfoScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {

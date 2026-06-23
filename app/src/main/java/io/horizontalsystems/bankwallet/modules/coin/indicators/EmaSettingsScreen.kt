@@ -41,7 +41,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
-fun EmaSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
+fun EmaSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
     val viewModel = viewModel<MovingAverageSettingViewModel>(
         factory = MovingAverageSettingViewModel.Factory(indicatorSetting)
     )
@@ -49,7 +49,7 @@ fun EmaSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndica
 
     if (uiState.finish) {
         LaunchedEffect(uiState.finish) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -74,7 +74,7 @@ fun EmaSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndica
 
     HSScaffold(
         title = viewModel.name,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

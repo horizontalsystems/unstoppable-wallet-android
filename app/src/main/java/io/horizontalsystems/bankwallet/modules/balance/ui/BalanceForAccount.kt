@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BalanceForAccount(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     accountViewItem: AccountViewItem,
 ) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
@@ -102,11 +102,11 @@ fun BalanceForAccount(
                 }
 
                 WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                    navController.slideFromBottom(WCErrorNoAccountSheet)
+                    navigation.slideFromBottom(WCErrorNoAccountSheet)
                 }
 
                 is WCManager.SupportState.NotSupported -> {
-                    navController.slideFromBottom(
+                    navigation.slideFromBottom(
                         WCAccountTypeNotSupportedSheet(WCAccountTypeNotSupportedSheet.Input(state.accountTypeDescription))
                     )
                 }
@@ -119,14 +119,14 @@ fun BalanceForAccount(
 
     LaunchedEffect(uiState.openOcpPayment) {
         uiState.openOcpPayment?.let { lnurl ->
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 OpenCryptoPayPage(OpenCryptoPayPage.Input(lnurl))
             )
             viewModel.onOcpPaymentOpened()
         }
     }
 
-    BackupRequiredAlert(navController)
+    BackupRequiredAlert(navigation)
 
     HSScaffold(
         title = accountViewItem.name,
@@ -147,7 +147,7 @@ fun BalanceForAccount(
                     title = TranslatableString.ResString(R.string.Transactions_Title),
                     icon = R.drawable.ic_circle_clock_24,
                     onClick = {
-                        navController.slideFromRight(TransactionsPage)
+                        navigation.slideFromRight(TransactionsPage)
 
                         stat(
                             page = StatPage.Balance,
@@ -161,7 +161,7 @@ fun BalanceForAccount(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
-                        navController.slideFromRight(
+                        navigation.slideFromRight(
                             ManageAccountsPage(ManageAccountsModule.Mode.Switcher)
                         )
 
@@ -186,7 +186,7 @@ fun BalanceForAccount(
                         balanceViewItems,
                         viewModel,
                         accountViewItem,
-                        navController,
+                        navigation,
                         uiState,
                     ) {
                         onScanClick(qrScannerLauncher, context)

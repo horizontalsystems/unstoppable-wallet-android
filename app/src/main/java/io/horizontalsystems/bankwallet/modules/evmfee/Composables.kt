@@ -64,7 +64,7 @@ import java.math.BigDecimal
 @Composable
 fun Eip1559FeeSettings(
     viewModel: Eip1559FeeSettingsViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val currentBaseFee = viewModel.currentBaseFee
@@ -80,7 +80,7 @@ fun Eip1559FeeSettings(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             FeeField(
-                navController = navController,
+                navigation = navigation,
                 title = stringResource(R.string.FeeSettings_NetworkFee),
                 info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                 primary = summaryViewItem?.fee?.primary ?: "---",
@@ -88,14 +88,14 @@ fun Eip1559FeeSettings(
             )
             HsDivider()
             FeeField(
-                navController = navController,
+                navigation = navigation,
                 title = stringResource(R.string.FeeSettings_GasLimit),
                 info = stringResource(R.string.FeeSettings_GasLimit_Info),
                 primary = summaryViewItem?.gasLimit ?: "",
             )
             HsDivider()
             FeeField(
-                navController = navController,
+                navigation = navigation,
                 title = stringResource(R.string.FeeSettings_BaseFee),
                 info = stringResource(R.string.FeeSettings_BaseFee_Info),
                 primary = currentBaseFee ?: "",
@@ -112,7 +112,7 @@ fun Eip1559FeeSettings(
                     decimals = maxFee.scale.decimals,
                     warnings = maxFee.warnings,
                     errors = maxFee.errors,
-                    navController = navController,
+                    navigation = navigation,
                     onValueChange = {
                         viewModel.onSelectGasPrice(maxFee.wei(it), priorityFee.weiValue)
                     },
@@ -131,7 +131,7 @@ fun Eip1559FeeSettings(
                     decimals = priorityFee.scale.decimals,
                     warnings = priorityFee.warnings,
                     errors = priorityFee.errors,
-                    navController = navController,
+                    navigation = navigation,
                     onValueChange = {
                         viewModel.onSelectGasPrice(maxFee.weiValue, priorityFee.wei(it))
                     },
@@ -155,7 +155,7 @@ fun EvmSettingsInput(
     decimals: Int,
     warnings: List<Warning>,
     errors: List<Throwable>,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
@@ -172,7 +172,7 @@ fun EvmSettingsInput(
         value = value,
         decimals = decimals,
         textColor = textColor,
-        navController = navController,
+        navigation = navigation,
         onValueChange = onValueChange,
         onClickIncrement = onClickIncrement,
         onClickDecrement = onClickDecrement
@@ -186,7 +186,7 @@ fun EvmSettingsInput(
     value: BigDecimal,
     decimals: Int,
     caution: HSCaution?,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
@@ -203,7 +203,7 @@ fun EvmSettingsInput(
         value = value,
         decimals = decimals,
         textColor = textColor,
-        navController = navController,
+        navigation = navigation,
         onValueChange = onValueChange,
         onClickIncrement = onClickIncrement,
         onClickDecrement = onClickDecrement
@@ -217,13 +217,13 @@ private fun EvmSettingsInput(
     value: BigDecimal,
     decimals: Int,
     textColor: Color,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit,
 ) {
     HeaderText(text = title) {
-        navController.slideFromBottom(
+        navigation.slideFromBottom(
             SwapInfoSheet(SwapInfoSheet.Input(title, info))
         )
     }
@@ -345,7 +345,7 @@ fun ButtonsGroupWithShade(
 @Composable
 fun LegacyFeeSettings(
     viewModel: LegacyFeeSettingsViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val viewItem = viewModel.feeViewItem
@@ -359,7 +359,7 @@ fun LegacyFeeSettings(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             FeeField(
-                navController = navController,
+                navigation = navigation,
                 title = stringResource(R.string.FeeSettings_NetworkFee),
                 info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                 primary = summaryViewItem?.fee?.primary ?: "---",
@@ -367,7 +367,7 @@ fun LegacyFeeSettings(
             )
             HsDivider()
             FeeField(
-                navController = navController,
+                navigation = navigation,
                 title = stringResource(R.string.FeeSettings_GasLimit),
                 info = stringResource(R.string.FeeSettings_GasLimit_Info),
                 primary = summaryViewItem?.gasLimit ?: "---",
@@ -382,7 +382,7 @@ fun LegacyFeeSettings(
                 decimals = fee.scale.decimals,
                 warnings = fee.warnings,
                 errors = fee.errors,
-                navController = navController,
+                navigation = navigation,
                 onValueChange = {
                     viewModel.onSelectGasPrice(fee.wei(it))
                 },
@@ -424,7 +424,7 @@ fun Cautions(cautions: List<CautionViewItem>) {
 
 @Composable
 private fun FeeField(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     primary: String,
     secondary: String? = null,
     title: String,
@@ -437,7 +437,7 @@ private fun FeeField(
                 icon = painterResource(R.drawable.ic_info_filled_20),
                 iconTint = ComposeAppTheme.colors.grey,
                 onIconClick = {
-                    navController.slideFromBottom(
+                    navigation.slideFromBottom(
                         SwapInfoSheet(SwapInfoSheet.Input(title, info))
                     )
                 }

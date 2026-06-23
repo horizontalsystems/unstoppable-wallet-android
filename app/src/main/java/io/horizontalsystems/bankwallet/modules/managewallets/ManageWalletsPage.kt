@@ -55,13 +55,13 @@ import kotlinx.serialization.Serializable
 data object ManageWalletsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val vmFactory = remember { ManageWalletsModule.Factory() }
         val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
         val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory)
 
         ManageWalletsScreen(
-            navController,
+            navigation,
             viewModel,
             restoreSettingsViewModel
         )
@@ -72,7 +72,7 @@ data object ManageWalletsPage : HSPage() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ManageWalletsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: ManageWalletsViewModel,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {
@@ -98,7 +98,7 @@ private fun ManageWalletsScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        val forResult = navController.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+        val forResult = navigation.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
             { BirthdayHeightConfigPage(token.blockchainType) }
         ) {
             if (it.config != null) {
@@ -114,14 +114,14 @@ private fun ManageWalletsScreen(
 
     HSScaffold(
         title = stringResource(id = R.string.ManageCoins_title),
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
         menuItems = if (viewModel.addTokenEnabled) {
             listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_24,
                     onClick = {
-                        navController.slideFromRight(AddTokenPage)
+                        navigation.slideFromRight(AddTokenPage)
 
                         stat(
                             page = StatPage.CoinManager,
@@ -181,7 +181,7 @@ private fun ManageWalletsScreen(
                                     }
                                 },
                                 onInfoClick = {
-                                    navController.slideFromBottom(
+                                    navigation.slideFromBottom(
                                         ConfiguredTokenInfoSheet(viewItem.item)
                                     )
 

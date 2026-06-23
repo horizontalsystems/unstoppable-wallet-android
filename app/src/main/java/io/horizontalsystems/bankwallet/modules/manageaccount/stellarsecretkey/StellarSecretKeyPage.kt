@@ -16,8 +16,8 @@ import kotlinx.serialization.Serializable
 data class StellarSecretKeyPage(val input: Input) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        StellarSecretKeyScreen(navController, input.stellarSecretKey)
+    override fun GetContent(navigation: HSNavigation) {
+        StellarSecretKeyScreen(navigation, input.stellarSecretKey)
     }
 
     @Serializable
@@ -26,11 +26,11 @@ data class StellarSecretKeyPage(val input: Input) : HSPage(screenshotEnabled = f
 
 @Composable
 fun StellarSecretKeyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     stellarSecretKey: String,
 ) {
     SecretKeyScreen(
-        navController = navController,
+        navigation = navigation,
         secretKey = stellarSecretKey,
         title = stringResource(R.string.StellarSecretKey_Title),
         hideScreenText = stringResource(R.string.StellarSecretKey_ShowSecretKey),

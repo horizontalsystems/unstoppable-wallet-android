@@ -37,13 +37,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SetDuressPinSelectAccountsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SetDuressPinSelectAccountsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SetDuressPinSelectAccountsScreen(navigation)
     }
 }
 
 @Composable
-fun SetDuressPinSelectAccountsScreen(navController: HSNavigation) {
+fun SetDuressPinSelectAccountsScreen(navigation: HSNavigation) {
     val viewModel =
         viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
     val regularAccounts = viewModel.regularAccounts
@@ -52,7 +52,7 @@ fun SetDuressPinSelectAccountsScreen(navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.DuressPinSelectAccounts_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -61,7 +61,7 @@ fun SetDuressPinSelectAccountsScreen(navController: HSNavigation) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRight(
+                        navigation.slideFromRight(
                             SetDuressPinPage(SetDuressPinPage.Input(selected))
                         )
                     },

@@ -32,8 +32,8 @@ import kotlinx.serialization.Serializable
 data class AddressPage(val input: Input) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        AddressScreen(navController, input.address, input.type)
+    override fun GetContent(navigation: HSNavigation) {
+        AddressScreen(navigation, input.address, input.type)
     }
 
     @Serializable
@@ -47,7 +47,7 @@ data class AddressPage(val input: Input) : HSPage(screenshotEnabled = false) {
 
 @Composable
 private fun AddressScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     address: String,
     type: AddressPage.Type
 ) {
@@ -70,13 +70,13 @@ private fun AddressScreen(
 
     HSScaffold(
         title = title,
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
 
                     stat(page = statPage, event = StatEvent.Open(StatPage.Info))
                 }

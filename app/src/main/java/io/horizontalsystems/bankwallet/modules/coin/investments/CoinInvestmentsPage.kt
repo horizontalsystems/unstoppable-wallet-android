@@ -45,12 +45,12 @@ import kotlinx.serialization.Serializable
 data class CoinInvestmentsPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val context = LocalContext.current
         CoinInvestmentsScreen(
             viewModel = viewModel(factory = CoinInvestmentsModule.Factory(input.coinUid)),
             onClickNavigation = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onClickFundUrl = {
                 LinkHelper.openLinkInAppBrowser(context, it)

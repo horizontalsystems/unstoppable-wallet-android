@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -42,8 +40,8 @@ import kotlin.reflect.KClass
 data class OpenCryptoPayEvmConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        OpenCryptoPayEvmConfirmationScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        OpenCryptoPayEvmConfirmationScreen(navigation, input)
     }
 
     @Serializable
@@ -65,7 +63,7 @@ data class OpenCryptoPayEvmConfirmationPage(val input: Input) : HSPage() {
 
 @Composable
 private fun OpenCryptoPayEvmConfirmationScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     input: OpenCryptoPayEvmConfirmationPage.Input,
 ) {
     val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
@@ -88,12 +86,12 @@ private fun OpenCryptoPayEvmConfirmationScreen(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Send_Confirmation_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.removeLastOrNull() },
+        onClickBack = { navigation.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(OpenCryptoPayEvmSettingsPage)
+            navigation.slideFromBottom(OpenCryptoPayEvmSettingsPage)
         },
         onClickNonceSettings = {
-            navController.slideFromBottom(OpenCryptoPayEvmNonceSettingsPage)
+            navigation.slideFromBottom(OpenCryptoPayEvmNonceSettingsPage)
         },
         buttonsSlot = {
             val view = LocalView.current
@@ -115,9 +113,9 @@ private fun OpenCryptoPayEvmConfirmationScreen(
                             viewModel.pay()
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.removeLastUntil(input.sendEntryPointDestId, true)
+                            navigation.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 ErrorSheet(ErrorSheet.Input(t.message ?: t.javaClass.simpleName))
                             )
                         }
@@ -129,7 +127,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
     ) {
         // Section 1: Token + address
         uiState.sectionViewItems.forEach { section ->
-            SectionView(section.viewItems, navController, StatPage.SendConfirmation)
+            SectionView(section.viewItems, navigation, StatPage.SendConfirmation)
             VSpacer(16.dp)
         }
 
@@ -186,7 +184,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
                 }
                 add {
                     DataFieldFee(
-                        navController,
+                        navigation,
                         uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                         uiState.networkFee?.secondary?.getFormattedPlain(),
                     )

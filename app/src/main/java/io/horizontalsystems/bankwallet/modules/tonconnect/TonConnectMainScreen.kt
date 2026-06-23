@@ -35,7 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun TonConnectMainScreen(navController: HSNavigation, deepLinkUri: String?) {
+fun TonConnectMainScreen(navigation: HSNavigation, deepLinkUri: String?) {
     val context = LocalContext.current
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -57,7 +57,7 @@ fun TonConnectMainScreen(navController: HSNavigation, deepLinkUri: String?) {
     val dAppRequestEntity = uiState.dAppRequestEntity
     LaunchedEffect(dAppRequestEntity) {
         if (dAppRequestEntity != null) {
-            navController.slideFromBottom(TonConnectNewPage(dAppRequestEntity))
+            navigation.slideFromBottom(TonConnectNewPage(dAppRequestEntity))
             viewModel.onDappRequestHandled()
         }
     }
@@ -96,7 +96,7 @@ fun TonConnectMainScreen(navController: HSNavigation, deepLinkUri: String?) {
     ) {
         HSScaffold(
             title = stringResource(R.string.TonConnect_Title),
-            onBack = navController::removeLastOrNull,
+            onBack = navigation::removeLastOrNull,
         ) {
             Column {
                 val dapps = uiState.dapps
@@ -108,7 +108,7 @@ fun TonConnectMainScreen(navController: HSNavigation, deepLinkUri: String?) {
                 } else {
                     TonConnectSessionList(
                         dapps = dapps,
-                        navController = navController,
+                        navigation = navigation,
                         onDelete = viewModel::disconnect
                     )
                 }

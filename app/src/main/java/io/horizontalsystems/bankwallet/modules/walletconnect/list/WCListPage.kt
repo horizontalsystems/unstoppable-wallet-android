@@ -10,9 +10,9 @@ import kotlinx.serialization.Serializable
 data class WCListPage(val input: Input? = null) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         WCSessionsScreen(
-            navController,
+            navigation,
             input?.deepLinkUri
         )
     }

@@ -27,9 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftSelectors
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -38,8 +36,8 @@ import kotlinx.serialization.Serializable
 data object SwapTermsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapTermsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapTermsScreen(navigation)
     }
 
     @Parcelize
@@ -47,7 +45,7 @@ data object SwapTermsPage : HSPage() {
 }
 
 @Composable
-fun SwapTermsScreen(navController: HSNavigation) {
+fun SwapTermsScreen(navigation: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapTermsViewModel>(factory = SwapTermsModule.Factory())
     val uiState = viewModel.uiState
@@ -55,7 +53,7 @@ fun SwapTermsScreen(navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.SwapTerms_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -68,7 +66,7 @@ fun SwapTermsScreen(navController: HSNavigation) {
                         viewModel.onConfirm()
 
                         resultEventBus.sendResult(SwapTermsPage.Result(true))
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             }

@@ -59,7 +59,7 @@ import io.horizontalsystems.marketkit.models.Token
 
 @Composable
 fun EnterAddressScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     token: Token,
     title: String,
     buttonTitle: String,
@@ -82,7 +82,7 @@ fun EnterAddressScreen(
 
     HSScaffold(
         title = title,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
@@ -119,9 +119,9 @@ fun EnterAddressScreen(
                         uiState.checkResults,
                     ) {
                         if (uiState.hasPremium){
-                            navController.slideFromBottom(SecureSendConfigSheet)
+                            navigation.slideFromBottom(SecureSendConfigSheet)
                         } else {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.SecureSendFeature))
                             )
                         }

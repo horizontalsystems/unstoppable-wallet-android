@@ -11,13 +11,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object EntryPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val mainShowedOnce by
             App.localStorage.mainShowedOnceFlow.collectAsStateWithLifecycle()
 
         Crossfade(mainShowedOnce) {
             if (it) {
-                MainScreen(navController, contentKey())
+                MainScreen(navigation, contentKey())
             } else {
                 IntroScreen()
             }

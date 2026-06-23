@@ -77,7 +77,7 @@ fun WCSessionList(
 //                        modifier = Modifier
 //                            .fillMaxSize()
 //                            .clickable {
-//                                navController.slideFromRight(R.id.wcPairingsFragment)
+//                                navigation.slideFromRight(R.id.wcPairingsFragment)
 //                            }
 //                            .padding(horizontal = 16.dp),
 //                        verticalAlignment = Alignment.CenterVertically
@@ -143,7 +143,7 @@ private fun LazyListScope.WCSection(
 //                        shape = shape,
 //                        showDivider = showDivider,
 //                        session = item,
-//                        navController = navController
+//                        navigation = navigation
 //                    )
 //                }
 //            )

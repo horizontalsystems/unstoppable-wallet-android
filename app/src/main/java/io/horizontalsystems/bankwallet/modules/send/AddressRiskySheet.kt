@@ -26,12 +26,12 @@ import kotlinx.serialization.Serializable
 data class AddressRiskySheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         RiskyAddressAlertView(
             alertText = input.alertText,
             onCloseClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onContinueClick = {
                 resultEventBus.sendResult(Result(true))

@@ -28,11 +28,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
 fun AddMoneroNodeScreen(
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val viewModel = viewModel<AddMoneroNodeViewModel>(factory = AddMoneroNodeModule.Factory())
     if (viewModel.uiState.closeScreen) {
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
         viewModel.onScreenClose()
     }
 
@@ -43,7 +43,7 @@ fun AddMoneroNodeScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         )

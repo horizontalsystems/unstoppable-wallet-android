@@ -38,11 +38,11 @@ import kotlinx.serialization.Serializable
 data class TransactionDoubleSpendInfoPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         InfoScreen(
             txHash = input.transactionHash,
             conflictingTxHash = input.conflictingTransactionHash,
-            onBackClick = { navController.removeLastOrNull() }
+            onBackClick = { navigation.removeLastOrNull() }
         )
     }
 

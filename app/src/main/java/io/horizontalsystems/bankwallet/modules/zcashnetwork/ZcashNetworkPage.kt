@@ -65,10 +65,10 @@ import kotlinx.serialization.Serializable
 data object ZcashNetworkPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         ZcashNetworkScreen(
-            navController = navController,
-            onBackPress = { navController.removeLastOrNull() }
+            navigation = navigation,
+            onBackPress = { navigation.removeLastOrNull() }
         )
     }
 
@@ -76,7 +76,7 @@ data object ZcashNetworkPage : HSPage() {
 
 @Composable
 private fun ZcashNetworkScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<ZcashNetworkViewModel>(factory = ZcashNetworkModule.Factory())
@@ -142,7 +142,7 @@ private fun ZcashNetworkScreen(
 
                 item {
                     Spacer(Modifier.height(32.dp))
-                    AddButton { navController.add(ZcashAddEndpointPage) }
+                    AddButton { navigation.add(ZcashAddEndpointPage) }
                     Spacer(Modifier.height(60.dp))
                 }
             }

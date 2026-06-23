@@ -48,11 +48,11 @@ import kotlinx.serialization.Serializable
 data class BtcBlockchainSettingsPage(val blockchain: Blockchain) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
             factory = BtcBlockchainSettingsModule.Factory(blockchain)
         )
-        BtcBlockchainSettingsScreen(viewModel, navController)
+        BtcBlockchainSettingsScreen(viewModel, navigation)
     }
 
 }
@@ -60,12 +60,12 @@ data class BtcBlockchainSettingsPage(val blockchain: Blockchain) : HSPage() {
 @Composable
 private fun BtcBlockchainSettingsScreen(
     viewModel: BtcBlockchainSettingsViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
 
     LaunchedEffect(viewModel.closeScreen) {
         if (viewModel.closeScreen) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -90,7 +90,7 @@ private fun BtcBlockchainSettingsScreen(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = {
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         }
                     )
                 )

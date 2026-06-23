@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendtokenselect
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
@@ -21,15 +20,15 @@ import java.math.BigDecimal
 data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val blockchainTypes = input?.blockchainTypes
         val tokenTypes = input?.tokenTypes
         TokenSelectScreen(
-            navController = navController,
+            navigation = navigation,
             title = stringResource(R.string.Balance_Send),
             onClickItem = {
                 val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
-                navController.slideFromRight(
+                navigation.slideFromRight(
                     EnterAddressPage(EnterAddressPage.Input(
                         wallet = it.wallet,
                         title = sendTitle,

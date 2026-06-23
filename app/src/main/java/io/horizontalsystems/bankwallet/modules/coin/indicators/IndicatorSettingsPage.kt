@@ -14,32 +14,32 @@ import kotlinx.serialization.Serializable
 data class IndicatorSettingsPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val indicatorSetting =
             App.chartIndicatorManager.getChartIndicatorSetting(input.indicatorId)
 
         if (indicatorSetting == null) {
             HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         } else {
             when (indicatorSetting.type) {
                 ChartIndicatorSetting.IndicatorType.MA -> {
                     EmaSettingsScreen(
-                        navController = navController,
+                        navigation = navigation,
                         indicatorSetting = indicatorSetting
                     )
                 }
 
                 ChartIndicatorSetting.IndicatorType.RSI -> {
                     RsiSettingsScreen(
-                        navController = navController,
+                        navigation = navigation,
                         indicatorSetting = indicatorSetting
                     )
                 }
 
                 ChartIndicatorSetting.IndicatorType.MACD -> {
                     MacdSettingsScreen(
-                        navController = navController,
+                        navigation = navigation,
                         indicatorSetting = indicatorSetting
                     )
                 }

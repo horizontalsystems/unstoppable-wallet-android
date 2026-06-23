@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSessionsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     deepLinkUri: String?
 ) {
     val context = LocalContext.current
@@ -122,14 +122,14 @@ fun WCSessionsScreen(
 
     HSScaffold(
         title = stringResource(R.string.DAppConnection_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 tint = ComposeAppTheme.colors.grey,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
+                    FaqManager.showFaqPage(navigation, FaqManager.faqPathDefiRisks)
                 }
             )
         )
@@ -149,7 +149,7 @@ fun WCSessionsScreen(
                         },
                         onRequestClick = { requestViewItem ->
                             viewModel.setRequestToOpen(requestViewItem.request)
-                            navController.slideFromBottom(WCRequestSheet)
+                            navigation.slideFromBottom(WCRequestSheet)
                         }
                     )
                 }

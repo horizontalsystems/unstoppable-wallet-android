@@ -34,7 +34,7 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.math.BigDecimal
 
 @Composable
-fun Roi(roi: List<RoiViewItem>, navController: HSNavigation) {
+fun Roi(roi: List<RoiViewItem>, navigation: HSNavigation) {
     SectionUniversalLawrence {
         roi.forEachIndexed { index, item ->
             Box {
@@ -107,7 +107,7 @@ fun Roi(roi: List<RoiViewItem>, navController: HSNavigation) {
         }
 
         CellUniversal(
-            onClick = { navController.slideFromRight(RoiSelectCoinsPage) }
+            onClick = { navigation.slideFromRight(RoiSelectCoinsPage) }
         ) {
             subhead2_leah(text = stringResource(R.string.CoinPage_ROI_SelectCoins))
             HFillSpacer(16.dp)

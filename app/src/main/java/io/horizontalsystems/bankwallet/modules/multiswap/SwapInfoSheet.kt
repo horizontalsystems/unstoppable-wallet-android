@@ -24,8 +24,8 @@ import kotlinx.serialization.Serializable
 data class SwapInfoSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapInfoView(input.title, input.text) { navController.removeLastOrNull() }
+    override fun GetContent(navigation: HSNavigation) {
+        SwapInfoView(input.title, input.text) { navigation.removeLastOrNull() }
     }
 
     @Serializable

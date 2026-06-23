@@ -27,83 +27,83 @@ import kotlin.reflect.KClass
 data class SendConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         when (input.type) {
             Type.Bitcoin -> {
-                val sendBitcoinViewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+                val sendBitcoinViewModel = navigation.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
 
                 SendBitcoinConfirmationScreen(
-                    navController,
+                    navigation,
                     sendBitcoinViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.ZCash -> {
-                val sendZCashViewModel = navController.viewModelForScreen<SendZCashViewModel>(SendPage::class)
+                val sendZCashViewModel = navigation.viewModelForScreen<SendZCashViewModel>(SendPage::class)
 
                 SendZCashConfirmationScreen(
-                    navController,
+                    navigation,
                     sendZCashViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.Tron -> {
-                val sendTronViewModel = navController.viewModelForScreen<SendTronViewModel>(SendPage::class)
+                val sendTronViewModel = navigation.viewModelForScreen<SendTronViewModel>(SendPage::class)
 
                 SendTronConfirmationScreen(
-                    navController,
+                    navigation,
                     sendTronViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.Solana -> {
-                val sendSolanaViewModel = navController.viewModelForScreen<SendSolanaViewModel>(SendPage::class)
+                val sendSolanaViewModel = navigation.viewModelForScreen<SendSolanaViewModel>(SendPage::class)
 
                 SendSolanaConfirmationScreen(
-                    navController,
+                    navigation,
                     sendSolanaViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.Ton -> {
-                val sendTonViewModel = navController.viewModelForScreen<SendTonViewModel>(SendPage::class)
+                val sendTonViewModel = navigation.viewModelForScreen<SendTonViewModel>(SendPage::class)
 
                 SendTonConfirmationScreen(
-                    navController,
+                    navigation,
                     sendTonViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.Stellar -> {
-                val sendStellarViewModel = navController.viewModelForScreen<SendStellarViewModel>(SendPage::class)
+                val sendStellarViewModel = navigation.viewModelForScreen<SendStellarViewModel>(SendPage::class)
 
                 SendStellarConfirmationScreen(
-                    navController,
+                    navigation,
                     sendStellarViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.Monero -> {
-                val sendMoneroViewModel = navController.viewModelForScreen<SendMoneroViewModel>(SendPage::class)
+                val sendMoneroViewModel = navigation.viewModelForScreen<SendMoneroViewModel>(SendPage::class)
 
                 SendMoneroConfirmationScreen(
-                    navController,
+                    navigation,
                     sendMoneroViewModel,
                     input.sendEntryPointDestId
                 )
             }
 
             Type.Zano -> {
-                val sendZanoViewModel = navController.viewModelForScreen<SendZanoViewModel>(SendPage::class)
+                val sendZanoViewModel = navigation.viewModelForScreen<SendZanoViewModel>(SendPage::class)
 
                 SendZanoConfirmationScreen(
-                    navController,
+                    navigation,
                     sendZanoViewModel,
                     input.sendEntryPointDestId
                 )

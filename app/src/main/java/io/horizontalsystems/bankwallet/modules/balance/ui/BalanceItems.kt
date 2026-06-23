@@ -195,7 +195,7 @@ fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     uiState: BalanceUiState,
     onScanClick: () -> Unit,
 ) {
@@ -213,7 +213,7 @@ fun BalanceItems(
 
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 TokenBalancePage(it.wallet)
             )
 
@@ -226,7 +226,7 @@ fun BalanceItems(
             onSyncErrorClicked(
                 it,
                 viewModel,
-                navController,
+                navigation,
                 view
             )
         }
@@ -293,7 +293,7 @@ fun BalanceItems(
                             title = stringResource(R.string.Balance_Receive),
                             enabled = true,
                             onClick = {
-                                navController.slideFromRight(ReceiveChooseCoinPage)
+                                navigation.slideFromRight(ReceiveChooseCoinPage)
 
                                 stat(
                                     page = StatPage.Balance,
@@ -306,7 +306,7 @@ fun BalanceItems(
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
-                                navController.slideFromRight(SendTokenSelectPage())
+                                navigation.slideFromRight(SendTokenSelectPage())
 
                                 stat(
                                     page = StatPage.Balance,
@@ -320,7 +320,7 @@ fun BalanceItems(
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
-                                    navController.slideFromRight(SwapPage())
+                                    navigation.slideFromRight(SwapPage())
 
                                     stat(
                                         page = StatPage.Balance,
@@ -345,7 +345,7 @@ fun BalanceItems(
                         text = stringResource(R.string.AccountRecovery_MigrationRequired),
                         onClick = {
                             FaqManager.showFaqPage(
-                                navController,
+                                navigation,
                                 FaqManager.faqPathMigrationRequired
                             )
                         }
@@ -404,7 +404,7 @@ fun BalanceItems(
                                 icon = painterResource(R.drawable.ic_manage_20),
                                 contentDescription = stringResource(R.string.ManageCoins_title),
                                 onClick = {
-                                    navController.slideFromRight(ManageWalletsPage)
+                                    navigation.slideFromRight(ManageWalletsPage)
 
                                     stat(
                                         page = StatPage.Balance,
@@ -434,7 +434,7 @@ fun BalanceItems(
                 item {
                     NoCoinsBlock(
                         onAddClick = {
-                            navController.slideFromRight(ManageWalletsPage)
+                            navigation.slideFromRight(ManageWalletsPage)
 
                             stat(
                                 page = StatPage.Balance,
@@ -473,9 +473,9 @@ fun BalanceItems(
                                 handleContextMenuClick(
                                     menuItem = it,
                                     balanceViewItem = item,
-                                    navController = navController,
+                                    navigation = navigation,
                                     onAddressCopyClick = { wallet ->
-                                        handleReceiveAddress(viewModel, wallet, view, navController)
+                                        handleReceiveAddress(viewModel, wallet, view, navigation)
                                     },
                                     onDisable = onDisable
                                 )
@@ -501,7 +501,7 @@ fun BalanceItems(
                             title = stringResource(R.string.Button_Add),
                             icon = painterResource(R.drawable.ic_plus_20),
                             onClick = {
-                                navController.slideFromRight(ManageWalletsPage)
+                                navigation.slideFromRight(ManageWalletsPage)
 
                                 stat(
                                     page = StatPage.Balance,
@@ -518,7 +518,7 @@ fun BalanceItems(
         }
     }
     uiState.openSend?.let { openSend ->
-        navController.slideFromRight(
+        navigation.slideFromRight(
             SendTokenSelectPage(SendTokenSelectPage.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
@@ -534,7 +534,7 @@ fun BalanceItems(
 private fun handleContextMenuClick(
     menuItem: BalanceContextMenuItem,
     balanceViewItem: BalanceViewItem2,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onAddressCopyClick: (Wallet) -> Unit,
     onDisable: (BalanceViewItem2) -> Unit
 ) {
@@ -544,7 +544,7 @@ private fun handleContextMenuClick(
                 R.string.Send_Title,
                 balanceViewItem.wallet.token.fullCoin.coin.code
             )
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 EnterAddressPage(EnterAddressPage.Input(
                     wallet = balanceViewItem.wallet,
                     title = sendTitle
@@ -560,7 +560,7 @@ private fun handleContextMenuClick(
         BalanceContextMenuItem.CopyAddress -> { onAddressCopyClick.invoke(balanceViewItem.wallet) }
 
         BalanceContextMenuItem.Swap -> {
-            navController.slideFromRight(
+            navigation.slideFromRight(
                 SwapPage(SwapPage.Input(tokenIn = balanceViewItem.wallet.token))
             )
 
@@ -574,7 +574,7 @@ private fun handleContextMenuClick(
             val coinUid = balanceViewItem.wallet.coin.uid
             val arguments = CoinPage.Input(coinUid)
 
-            navController.slideFromRight(CoinPage(arguments))
+            navigation.slideFromRight(CoinPage(arguments))
 
             stat(
                 page = StatPage.Balance,
@@ -588,7 +588,7 @@ private fun handleContextMenuClick(
     }
 }
 
-private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: HSNavigation) {
+private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navigation: HSNavigation) {
     val address = viewModel.getReceiveAddress(wallet)
 
     when {

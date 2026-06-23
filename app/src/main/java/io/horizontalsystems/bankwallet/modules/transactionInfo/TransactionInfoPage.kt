@@ -48,23 +48,23 @@ import kotlinx.serialization.Serializable
 data object TransactionInfoPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModelTxs = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModelTxs = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
         if (transactionRecord == null) {
-            navController.removeLastUntil(TransactionInfoPage::class, true)
+            navigation.removeLastUntil(TransactionInfoPage::class, true)
             return
         }
 
-        TransactionInfoScreen(navController, transactionRecord)
+        TransactionInfoScreen(navigation, transactionRecord)
     }
 
 }
 
 @Composable
 fun TransactionInfoScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     transactionRecord: TransactionRecord
 ) {
     val viewModel = viewModel<TransactionInfoViewModel>(factory = TransactionInfoModule.Factory(transactionRecord))
@@ -76,26 +76,26 @@ fun TransactionInfoScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         )
     ) {
-        TransactionInfo(viewModel, navController)
+        TransactionInfo(viewModel, navigation)
     }
 }
 
 @Composable
 fun TransactionInfo(
     viewModel: TransactionInfoViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)
     ) {
         items(viewModel.viewItems) { section ->
-            TransactionInfoSection(section, navController, viewModel::getRawTransaction)
+            TransactionInfoSection(section, navigation, viewModel::getRawTransaction)
         }
     }
 }
@@ -103,7 +103,7 @@ fun TransactionInfo(
 @Composable
 fun TransactionInfoSection(
     section: List<TransactionInfoViewItem>,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     getRawTransaction: () -> String?
 ) {
     //items without background
@@ -151,7 +151,7 @@ fun TransactionInfoSection(
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {
                                     {
-                                        navController.slideFromRight(
+                                        navigation.slideFromRight(
                                             CoinPage(CoinPage.Input(it))
                                         )
 
@@ -204,7 +204,7 @@ fun TransactionInfoSection(
                                 value = viewItem.value,
                                 showAdd = viewItem.showAdd,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController,
+                                navigation = navigation,
                                 onCopy = {
                                     stat(
                                         page = StatPage.TransactionInfo,
@@ -240,7 +240,7 @@ fun TransactionInfoSection(
                         add {
                             TransactionInfoStatusCell(
                                 status = viewItem.status,
-                                navController = navController
+                                navigation = navigation
                             )
                         }
                     }
@@ -250,14 +250,14 @@ fun TransactionInfoSection(
                             TransactionInfoSpeedUpCell(
                                 transactionHash = viewItem.transactionHash,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                navigation = navigation
                             )
                         }
                         add {
                             TransactionInfoCancelCell(
                                 transactionHash = viewItem.transactionHash,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                navigation = navigation
                             )
                         }
                     }
@@ -289,7 +289,7 @@ fun TransactionInfoSection(
                         add {
                             TransactionInfoBtcLockCell(
                                 lockState = viewItem,
-                                navController = navController
+                                navigation = navigation
                             )
                         }
                     }
@@ -299,7 +299,7 @@ fun TransactionInfoSection(
                             TransactionInfoDoubleSpendCell(
                                 transactionHash = viewItem.transactionHash,
                                 conflictingHash = viewItem.conflictingHash,
-                                navController = navController
+                                navigation = navigation
                             )
                         }
                     }

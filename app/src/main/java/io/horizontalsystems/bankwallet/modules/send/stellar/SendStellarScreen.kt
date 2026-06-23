@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
 @Composable
 fun SendStellarScreen(
     title: String,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SendStellarViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
@@ -67,7 +67,7 @@ fun SendStellarScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.removeLastOrNull() }
+            onBack = { navigation.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -76,7 +76,7 @@ fun SendStellarScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -122,10 +122,10 @@ fun SendStellarScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
-                navController = navController,
+                navigation = navigation,
             )
 
-            val forResult = navController.slideFromBottomForResult<AddressRiskySheet.Result>(
+            val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
                 {
                     AddressRiskySheet(
                         AddressRiskySheet.Input(
@@ -134,7 +134,7 @@ fun SendStellarScreen(
                     )
                 }
             ) {
-                openConfirm(navController, sendEntryPointDestId)
+                openConfirm(navigation, sendEntryPointDestId)
             }
 
             ButtonPrimaryYellow(
@@ -147,7 +147,7 @@ fun SendStellarScreen(
                         keyboardController?.hide()
                         forResult()
                     } else {
-                        openConfirm(navController, sendEntryPointDestId)
+                        openConfirm(navigation, sendEntryPointDestId)
                     }
                 },
                 enabled = proceedEnabled
@@ -157,10 +157,10 @@ fun SendStellarScreen(
 }
 
 private fun openConfirm(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    navController.slideFromRight(
+    navigation.slideFromRight(
         SendConfirmationPage(SendConfirmationPage.Input(
             SendConfirmationPage.Type.Stellar,
             sendEntryPointDestId

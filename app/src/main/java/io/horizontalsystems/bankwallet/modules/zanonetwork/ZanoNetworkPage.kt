@@ -66,10 +66,10 @@ import kotlinx.serialization.Serializable
 data object ZanoNetworkPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         ZanoNetworkScreen(
-            navController = navController,
-            onBackPress = { navController.removeLastOrNull() }
+            navigation = navigation,
+            onBackPress = { navigation.removeLastOrNull() }
         )
     }
 
@@ -79,14 +79,14 @@ data object ZanoNetworkPage : HSPage() {
 data object AddNodePage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        AddZanoNodeScreen(navController = navController)
+    override fun GetContent(navigation: HSNavigation) {
+        AddZanoNodeScreen(navigation = navigation)
     }
 }
 
 @Composable
 private fun ZanoNetworkScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<ZanoNetworkViewModel>(factory = ZanoNetworkModule.Factory())
@@ -152,7 +152,7 @@ private fun ZanoNetworkScreen(
 
                 item {
                     Spacer(Modifier.height(32.dp))
-                    AddButton { navController.add(AddNodePage) }
+                    AddButton { navigation.add(AddNodePage) }
                     Spacer(Modifier.height(60.dp))
                 }
             }

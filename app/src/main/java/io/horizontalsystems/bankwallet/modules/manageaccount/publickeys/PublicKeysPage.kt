@@ -28,19 +28,19 @@ import kotlinx.serialization.Serializable
 data class PublicKeysPage(val input: Account) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        ManageAccountScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        ManageAccountScreen(navigation, input)
     }
 
 }
 
 @Composable
-fun ManageAccountScreen(navController: HSNavigation, account: Account) {
+fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
     val viewModel = viewModel<PublicKeysViewModel>(factory = PublicKeysModule.Factory(account))
 
     HSScaffold(
         title = stringResource(R.string.PublicKeys_Title),
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
     ) {
         Column(
             modifier = Modifier
@@ -52,7 +52,7 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                     title = stringResource(id = R.string.PublicKeys_EvmAddress),
                     description = stringResource(R.string.PublicKeys_EvmAddress_Description)
                 ) {
-                    navController.slideFromRight(
+                    navigation.slideFromRight(
                         AddressPage(AddressPage.Input(evmAddress, AddressPage.Type.Evm))
                     )
 
@@ -64,7 +64,7 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                     title = stringResource(id = R.string.PublicKeys_TronAddress),
                     description = stringResource(R.string.PublicKeys_TronAddress_Description)
                 ) {
-                    navController.slideFromRight(
+                    navigation.slideFromRight(
                         AddressPage(AddressPage.Input(tronAddress, AddressPage.Type.Tron))
                     )
 
@@ -76,7 +76,7 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                     title = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKey),
                     description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
                 ) {
-                    navController.slideFromRight(
+                    navigation.slideFromRight(
                         ShowExtendedKeyPage(ShowExtendedKeyPage.Input(
                             publicKey.hdKey,
                             publicKey.accountPublicKey
@@ -94,8 +94,8 @@ fun ManageAccountScreen(navController: HSNavigation, account: Account) {
                 KeyActionItem(
                     title = stringResource(id = R.string.PublicKeys_MoneroPublicKey),
                     description = stringResource(id = R.string.PublicKeys_MoneroPublicKeyDescription),
-                    onClick = navController.authorizedAction {
-                        navController.slideFromRight(
+                    onClick = navigation.authorizedAction {
+                        navigation.slideFromRight(
                             ShowMoneroKeyPage(ShowMoneroKeyPage.Input(moneroKeys))
                         )
                         stat(

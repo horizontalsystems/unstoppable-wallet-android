@@ -20,7 +20,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun ContractCallSection(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     operation: String,
     address: String,
     transactionValue: TransactionValue,
@@ -43,7 +43,7 @@ fun ContractCallSection(
             blockchainType = blockchainType,
             statPage = StatPage.TonConnect,
             statSection = StatSection.AddressTo,
-            navController = navController
+            navigation = navigation
         )
 
         AmountCellTV(
@@ -52,7 +52,7 @@ fun ContractCallSection(
             coinAmountColor = AmountColor.Negative,
             coinAmountSign = AmountSign.Minus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            navigation = navigation,
             statPage = StatPage.TonConnect
         )
     }

@@ -46,11 +46,11 @@ import kotlin.reflect.KClass
 data class SelectBlockchainsPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         SelectBlockchainsScreen(
             input.accountType,
             input.accountName,
-            navController,
+            navigation,
             input.popOffOnSuccess,
             input.popOffInclusive
         )
@@ -70,7 +70,7 @@ data class SelectBlockchainsPage(val input: Input) : HSPage() {
 private fun SelectBlockchainsScreen(
     accountType: AccountType,
     accountName: String?,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean
 ) {
@@ -97,13 +97,13 @@ private fun SelectBlockchainsScreen(
                 iconTint = R.color.white
             )
             delay(300)
-            navController.removeLastUntil(popUpToInclusiveId, inclusive)
+            navigation.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 
     HSScaffold(
         title = stringResource(title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth()

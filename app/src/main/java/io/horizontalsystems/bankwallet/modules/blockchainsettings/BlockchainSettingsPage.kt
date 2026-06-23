@@ -42,9 +42,9 @@ import kotlinx.serialization.Serializable
 data object BlockchainSettingsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         BlockchainSettingsScreen(
-            navController = navController,
+            navigation = navigation,
         )
     }
 
@@ -52,13 +52,13 @@ data object BlockchainSettingsPage : HSPage() {
 
 @Composable
 private fun BlockchainSettingsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: BlockchainSettingsViewModel = viewModel(factory = BlockchainSettingsModule.Factory()),
 ) {
 
     HSScaffold(
         title = stringResource(R.string.BlockchainSettings_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
@@ -69,7 +69,7 @@ private fun BlockchainSettingsScreen(
             BlockchainSettingsBlock(
                 btcLikeChains = viewModel.btcLikeChains,
                 otherChains = viewModel.otherChains,
-                navController = navController
+                navigation = navigation
             )
             VSpacer(44.dp)
         }
@@ -80,28 +80,28 @@ private fun BlockchainSettingsScreen(
 fun BlockchainSettingsBlock(
     btcLikeChains: List<BlockchainSettingsModule.BlockchainViewItem>,
     otherChains: List<BlockchainSettingsModule.BlockchainViewItem>,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     CellUniversalLawrenceSection(btcLikeChains) { item ->
         BlockchainSettingCell(item) {
-            onClick(item, navController)
+            onClick(item, navigation)
         }
     }
     Spacer(Modifier.height(32.dp))
     CellUniversalLawrenceSection(otherChains) { item ->
         BlockchainSettingCell(item) {
-            onClick(item, navController)
+            onClick(item, navigation)
         }
     }
 }
 
 private fun onClick(
     item: BlockchainSettingsModule.BlockchainViewItem,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 BtcBlockchainSettingsPage(item.blockchainItem.blockchain)
             )
 
@@ -112,7 +112,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
-            navController.slideFromBottom(EvmNetworkPage(item.blockchainItem.blockchain))
+            navigation.slideFromBottom(EvmNetworkPage(item.blockchainItem.blockchain))
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -121,7 +121,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
-            navController.slideFromBottom(SolanaNetworkPage)
+            navigation.slideFromBottom(SolanaNetworkPage)
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -130,7 +130,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Monero -> {
-            navController.slideFromBottom(MoneroNetworkPage)
+            navigation.slideFromBottom(MoneroNetworkPage)
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -139,7 +139,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Zano -> {
-            navController.slideFromBottom(ZanoNetworkPage)
+            navigation.slideFromBottom(ZanoNetworkPage)
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -148,7 +148,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Zcash -> {
-            navController.slideFromBottom(ZcashNetworkPage)
+            navigation.slideFromBottom(ZcashNetworkPage)
 
             stat(
                 page = StatPage.BlockchainSettings,

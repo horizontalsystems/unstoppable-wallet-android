@@ -36,7 +36,7 @@ import kotlinx.serialization.Serializable
 data class CoinAuditsPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<CoinAuditsViewModel>(
             factory = CoinAuditsModule.Factory(input.audits)
         )
@@ -44,7 +44,7 @@ data class CoinAuditsPage(val input: Input) : HSPage() {
         CoinAuditsScreen(
             viewModel = viewModel,
             onPressBack = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onClickReportUrl = {
                 LinkHelper.openLinkInAppBrowser(context, it)

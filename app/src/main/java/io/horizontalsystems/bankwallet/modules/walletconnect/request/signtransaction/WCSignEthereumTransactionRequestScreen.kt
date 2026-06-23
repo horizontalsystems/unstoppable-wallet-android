@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSignEthereumTransactionRequestScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     logger: AppLogger,
     blockchainType: BlockchainType,
     transaction: WalletConnectTransaction,
@@ -85,7 +85,7 @@ fun WCSignEthereumTransactionRequestScreen(
     BottomSheetContent(
         onDismissRequest = {
             WCDelegate.discardActiveSessionRequest()
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = sheetState,
     ) { snackbarActions ->
@@ -146,7 +146,7 @@ fun WCSignEthereumTransactionRequestScreen(
                 DataBlock(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
-                        navController.slideFromBottom(
+                        navigation.slideFromBottom(
                             FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     },
@@ -164,7 +164,7 @@ fun WCSignEthereumTransactionRequestScreen(
                         primaryValue = fee.primary.getFormatted(),
                         secondaryValue = fee.secondary?.getFormatted(),
                         onInfoClick = {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                             )
                         }
@@ -179,7 +179,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.reject()
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
                 HSButton(
@@ -200,7 +200,7 @@ fun WCSignEthereumTransactionRequestScreen(
                                 Toast.makeText(view.context, t.javaClass.simpleName, Toast.LENGTH_SHORT).show()
                             }
 
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         }
                     }
                 )
@@ -210,7 +210,7 @@ fun WCSignEthereumTransactionRequestScreen(
 
     ConfirmTransactionScreen(
         title = stringResource(id = R.string.WalletConnect_SignMessageRequest_Title),
-        onClickBack = navController::removeLastOrNull,
+        onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
             ButtonPrimaryYellow(
@@ -230,7 +230,7 @@ fun WCSignEthereumTransactionRequestScreen(
                             HudHelper.showErrorMessage(view, t.javaClass.simpleName)
                         }
 
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 }
             )
@@ -240,13 +240,13 @@ fun WCSignEthereumTransactionRequestScreen(
                 title = stringResource(R.string.Button_Reject),
                 onClick = {
                     viewModel.reject()
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         }
     ) {
         SendEvmTransactionView(
-            navController,
+            navigation,
             uiState.sectionViewItems,
             uiState.cautions,
             uiState.transactionFields,

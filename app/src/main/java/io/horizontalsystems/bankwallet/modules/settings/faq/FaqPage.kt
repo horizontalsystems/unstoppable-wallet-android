@@ -39,11 +39,11 @@ import java.net.UnknownHostException
 data object FaqListPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         FaqScreen(
-            onCloseClick = { navController.removeLastOrNull() },
+            onCloseClick = { navigation.removeLastOrNull() },
             onItemClick = { faqItem ->
-                navController.slideFromRight(
+                navigation.slideFromRight(
                     MarkdownPage(MarkdownPage.Input(faqItem.markdown))
                 )
 

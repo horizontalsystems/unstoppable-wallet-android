@@ -10,16 +10,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SendEvmSettingsPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SendEvmSettingsScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SendEvmSettingsScreen(navigation)
     }
 }
 
 @Composable
-fun SendEvmSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForScreen<SendEvmConfirmationViewModel>(SendEvmConfirmationPage::class)
+fun SendEvmSettingsScreen(navigation: HSNavigation) {
+    val viewModel = navigation.viewModelForScreen<SendEvmConfirmationViewModel>(SendEvmConfirmationPage::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetSettingsContent(navController)
+    sendTransactionService.GetSettingsContent(navigation)
 }

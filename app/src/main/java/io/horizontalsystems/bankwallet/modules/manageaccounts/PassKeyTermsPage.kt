@@ -32,14 +32,14 @@ import kotlinx.serialization.Serializable
 data class PassKeyTermsPage(val nextScreen: HSPage) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        PasskeyTermsScreen(navController = navController, nextScreen = nextScreen)
+    override fun GetContent(navigation: HSNavigation) {
+        PasskeyTermsScreen(navigation = navigation, nextScreen = nextScreen)
     }
 }
 
 @Composable
 fun PasskeyTermsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     nextScreen: HSPage,
     viewModel: PasskeyTermsViewModel = viewModel(factory = PasskeyTermsModule.Factory())
 ) {
@@ -47,14 +47,14 @@ fun PasskeyTermsScreen(
 
     LaunchedEffect(uiState.closeScreen) {
         if (uiState.closeScreen) {
-            navController.removeLastOrNull()
-            navController.slideFromRight(nextScreen)
+            navigation.removeLastOrNull()
+            navigation.slideFromRight(nextScreen)
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.CreateNewWallet_PasskeyTerms),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.fillMaxSize()

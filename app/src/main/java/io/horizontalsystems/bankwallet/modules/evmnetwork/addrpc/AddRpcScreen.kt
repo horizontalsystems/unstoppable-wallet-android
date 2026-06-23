@@ -28,12 +28,12 @@ import io.horizontalsystems.marketkit.models.Blockchain
 
 @Composable
 fun AddRpcScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     blockchain: Blockchain,
 ) {
     val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))
     if (viewModel.viewState.closeScreen) {
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
         viewModel.onScreenClose()
     }
 
@@ -44,7 +44,7 @@ fun AddRpcScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         )

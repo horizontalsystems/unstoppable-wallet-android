@@ -72,7 +72,7 @@ private val logger = AppLogger("wallet-connect request")
 @Serializable
 data object WCRequestSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val wcRequestRouterViewModel =
             viewModel<WCRequestRouterViewModel>(factory = WCRequestRouterViewModel.Factory())
 
@@ -81,19 +81,19 @@ data object WCRequestSheet : HSBottomSheet() {
         val blockchainType = uiState.blockchainType
 
         if (blockchainType == null) {
-            WcRequestError { navController.removeLastOrNull() }
+            WcRequestError { navigation.removeLastOrNull() }
         } else if (blockchainType.isEvm) {
-            WcRequestEvm(navController)
+            WcRequestEvm(navigation)
         } else if (blockchainType is BlockchainType.Stellar) {
-            WcRequestPreScreen(navController)
+            WcRequestPreScreen(navigation)
         } else {
-            WcRequestError { navController.removeLastOrNull() }
+            WcRequestError { navigation.removeLastOrNull() }
         }
     }
 }
 
 @Composable
-fun WcRequestEvm(navController: HSNavigation) {
+fun WcRequestEvm(navigation: HSNavigation) {
     val wcRequestEvmViewModel =
         viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
 
@@ -113,7 +113,7 @@ fun WcRequestEvm(navController: HSNavigation) {
                     }
 
                 WCSendEthRequestScreen(
-                    navController,
+                    navigation,
                     logger,
                     blockchainType,
                     transaction,
@@ -133,7 +133,7 @@ fun WcRequestEvm(navController: HSNavigation) {
                 }
 
                 WCSignEthereumTransactionRequestScreen(
-                    navController,
+                    navigation,
                     logger,
                     blockchainType,
                     transaction,
@@ -142,7 +142,7 @@ fun WcRequestEvm(navController: HSNavigation) {
             } else {
                 WCNewSignRequestScreen(
                     sessionRequestUI,
-                    navController,
+                    navigation,
                     onAllow = { wcRequestEvmViewModel.allow() },
                     onDecline = { wcRequestEvmViewModel.reject() }
                 )
@@ -150,7 +150,7 @@ fun WcRequestEvm(navController: HSNavigation) {
         }
 
         is SessionRequestUI.Initial -> {
-            WcRequestError { navController.removeLastOrNull() }
+            WcRequestError { navigation.removeLastOrNull() }
         }
     }
 }
@@ -228,7 +228,7 @@ fun WcRequestError(
 @Composable
 fun WCNewSignRequestScreen(
     sessionRequestUI: SessionRequestUI.Content,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onAllow: suspend () -> Unit,
     onDecline: () -> Unit
 ) {
@@ -244,7 +244,7 @@ fun WCNewSignRequestScreen(
     val hideAndPop = {
         scope.launch {
             sheetState.hide()
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
         Unit
     }
@@ -346,7 +346,7 @@ fun WCNewSignRequestScreen(
                                 // keep hide()/removeLastOrNull() on Main — they mutate UI state.
                                 withContext(Dispatchers.Default) { onAllow() }
                                 sheetState.hide()
-                                navController.removeLastOrNull()
+                                navigation.removeLastOrNull()
                             } catch (e: Throwable) {
                                 showError(view, e)
                             }

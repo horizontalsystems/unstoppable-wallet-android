@@ -41,14 +41,14 @@ import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 @Composable
-fun ReceiveStellarAssetScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
+fun ReceiveStellarAssetScreen(navigation: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
     val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
     val uiState = viewModel.uiState
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
-    val runActivation = navController.slideFromBottomForResult<ActivateTokenPage.Result>(
+    val runActivation = navigation.slideFromBottomForResult<ActivateTokenPage.Result>(
         { ActivateTokenPage(wallet) }
     ) {
         scope.launch {
@@ -145,12 +145,12 @@ fun ReceiveStellarAssetScreen(navController: HSNavigation, wallet: Wallet, recei
                     }
                 }
             },
-            onBackPress = { navController.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() },
             closeModule = {
                 if (receiveEntryPointDestId == null) {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 } else {
-                    navController.removeLastUntil(receiveEntryPointDestId, true)
+                    navigation.removeLastUntil(receiveEntryPointDestId, true)
                 }
             }
         )

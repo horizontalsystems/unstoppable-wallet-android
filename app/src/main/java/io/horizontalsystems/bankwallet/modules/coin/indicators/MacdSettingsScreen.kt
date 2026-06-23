@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
-fun MacdSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
+fun MacdSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
     val viewModel = viewModel<MacdSettingViewModel>(
         factory = MacdSettingViewModel.Factory(indicatorSetting)
     )
@@ -37,13 +37,13 @@ fun MacdSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndic
 
     if (uiState.finish) {
         LaunchedEffect(uiState.finish) {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
     HSScaffold(
         title = viewModel.name,
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

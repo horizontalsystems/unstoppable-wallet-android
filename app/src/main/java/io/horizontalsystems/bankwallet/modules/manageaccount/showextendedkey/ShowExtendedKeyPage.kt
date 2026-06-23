@@ -61,7 +61,7 @@ import kotlinx.serialization.Serializable
 data class ShowExtendedKeyPage(val input: Input?) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val hdExtendedKey = input?.extendedRootKey
         val displayKeyType = input?.displayKeyType
 
@@ -69,7 +69,7 @@ data class ShowExtendedKeyPage(val input: Input?) : HSPage(screenshotEnabled = f
             NoExtendKeyScreen()
         } else {
             ShowExtendedKeyScreen(
-                navController,
+                navigation,
                 hdExtendedKey,
                 displayKeyType
             )
@@ -95,7 +95,7 @@ data class ShowExtendedKeyPage(val input: Input?) : HSPage(screenshotEnabled = f
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowExtendedKeyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     extendedKey: HDExtendedKey,
     displayKeyType: DisplayKeyType
 ) {
@@ -113,13 +113,13 @@ private fun ShowExtendedKeyScreen(
 
     HSScaffold(
         title = viewModel.title.getString(),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(navigation, FaqManager.faqPathPrivateKeys)
                     viewModel.logEvent(StatEvent.Open(StatPage.Info))
                 }
             )
@@ -171,7 +171,7 @@ private fun ShowExtendedKeyScreen(
                                 title = stringResource(R.string.ExtendedKey_Account),
                                 value = viewModel.account.toString(),
                                 infoButtonClick = {
-                                    navController.slideFromBottom(KeyAccountInfoPage)
+                                    navigation.slideFromBottom(KeyAccountInfoPage)
                                 },
                                 onClick = { showAccountSelectorDialog = true }
                             )

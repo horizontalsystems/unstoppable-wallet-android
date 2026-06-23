@@ -43,7 +43,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun AppStatusScreen(
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
     val uiState = viewModel.uiState
@@ -52,7 +52,7 @@ fun AppStatusScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_AppStatus),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

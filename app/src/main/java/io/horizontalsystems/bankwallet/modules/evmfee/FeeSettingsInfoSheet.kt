@@ -21,8 +21,8 @@ import kotlinx.serialization.Serializable
 data class FeeSettingsInfoSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        FeeSettingsInfoScreen(input.title, input.text) { navController.removeLastOrNull() }
+    override fun GetContent(navigation: HSNavigation) {
+        FeeSettingsInfoScreen(input.title, input.text) { navigation.removeLastOrNull() }
     }
 
     @Serializable

@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TokenSelectScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     title: String,
     onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
@@ -66,7 +66,7 @@ fun TokenSelectScreen(
 
     HSScaffold(
         title = title,
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
     ) {
 
         Column {

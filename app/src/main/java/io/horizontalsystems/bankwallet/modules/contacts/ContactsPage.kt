@@ -25,7 +25,7 @@ import java.util.UUID
 data class ContactsRouterPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val mode = input.mode
 
         val startDestination: HSPage
@@ -50,7 +50,7 @@ data class ContactsRouterPage(val input: Input) : HSPage() {
             }
         }
 
-        startDestination.GetContent(navController)
+        startDestination.GetContent(navigation)
     }
 
     @Serializable
@@ -60,14 +60,14 @@ data class ContactsRouterPage(val input: Input) : HSPage() {
 @Serializable
 data class ContactsPage(val mode: Mode, val addAddress: ContactAddress?) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
         ContactsScreen(
             viewModel = viewModel,
-            onNavigateToBack = { navController.removeLastOrNull() },
-            onNavigateToCreateContact = { navController.add(ContactPage(null, null)) },
+            onNavigateToBack = { navigation.removeLastOrNull() },
+            onNavigateToCreateContact = { navigation.add(ContactPage(null, null)) },
             onNavigateToContact = { contact ->
-                navController.add(ContactPage(contact, addAddress))
+                navigation.add(ContactPage(contact, addAddress))
             }
         )
     }
@@ -79,7 +79,7 @@ data class ContactPage(
     val newAddress: ContactAddress?
 ) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(contact, newAddress))
 
         // todo: find better solution
@@ -96,7 +96,7 @@ data class ContactPage(
         ContactScreen(
             viewModel = viewModel,
             onNavigateToBack = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onNavigateToAddress = { address ->
                 val screen = AddressPage(
@@ -106,7 +106,7 @@ data class ContactPage(
                 )
 
                 screen.resultKey = uuid
-                navController.add(screen)
+                navigation.add(screen)
             }
         )
     }
@@ -119,7 +119,7 @@ data class AddressPage(
     val definedAddresses: List<ContactAddress>
 ) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<AddressViewModel>(
             factory = ContactsModule.AddressViewModelFactory(
                 contactUid = contactUid,
@@ -133,18 +133,18 @@ data class AddressPage(
         AddressScreen(
             viewModel = viewModel,
             onNavigateToBlockchainSelector = {
-                navController.add(BlockchainSelectorPage)
+                navigation.add(BlockchainSelectorPage)
             },
             onDone = { contactAddress ->
                 resultEventBus.sendResult<Result>(Result(added_address = contactAddress))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onDelete = { contactAddress ->
                 resultEventBus.sendResult<Result>(Result(deleted_address = contactAddress))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onNavigateToBack = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }
@@ -156,8 +156,8 @@ data class AddressPage(
 @Serializable
 data object BlockchainSelectorPage : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<AddressViewModel>(AddressPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<AddressViewModel>(AddressPage::class)
 
         BlockchainSelectorScreen(
             blockchains = viewModel.uiState.availableBlockchains,
@@ -165,10 +165,10 @@ data object BlockchainSelectorPage : HSPage() {
             onSelectBlockchain = { blockchain ->
                 viewModel.onEnterBlockchain(blockchain)
 
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             onNavigateToBack = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         )
     }

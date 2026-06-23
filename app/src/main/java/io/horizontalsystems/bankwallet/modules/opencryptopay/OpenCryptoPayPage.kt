@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 data class OpenCryptoPayPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        OpenCryptoPayScreen(navController = navController, lnurl = input.lnurl)
+    override fun GetContent(navigation: HSNavigation) {
+        OpenCryptoPayScreen(navigation = navigation, lnurl = input.lnurl)
     }
 
     @Serializable

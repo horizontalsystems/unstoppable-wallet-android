@@ -42,9 +42,9 @@ import kotlinx.serialization.Serializable
 data object DonateAddressesPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         DonateScreen(
-            onBackPress = { navController.removeLastOrNull() }
+            onBackPress = { navigation.removeLastOrNull() }
         )
     }
 

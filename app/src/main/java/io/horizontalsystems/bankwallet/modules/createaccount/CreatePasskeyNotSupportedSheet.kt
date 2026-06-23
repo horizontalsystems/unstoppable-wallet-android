@@ -24,16 +24,16 @@ import kotlinx.serialization.Serializable
 data object CreatePasskeyNotSupportedSheet : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        CreatePasskeyNotSupportedScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        CreatePasskeyNotSupportedScreen(navigation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreatePasskeyNotSupportedScreen(navController: HSNavigation) {
+fun CreatePasskeyNotSupportedScreen(navigation: HSNavigation) {
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = navigation::removeLastOrNull,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
         BottomSheetHeaderV3(
@@ -52,8 +52,8 @@ fun CreatePasskeyNotSupportedScreen(navController: HSNavigation) {
                 variant = ButtonVariant.Secondary,
                 title = stringResource(R.string.CreateNewWallet_Button_CreateStandardWallet)
             ) {
-                navController.removeLastUntil(CreateAccountPage::class, false)
-                navController.slideFromRight(CreateAccountStandardPage(null))
+                navigation.removeLastUntil(CreateAccountPage::class, false)
+                navigation.slideFromRight(CreateAccountStandardPage(null))
             }
         }
     }

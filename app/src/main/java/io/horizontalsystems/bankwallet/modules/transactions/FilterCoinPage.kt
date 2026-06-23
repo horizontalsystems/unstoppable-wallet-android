@@ -42,21 +42,21 @@ import kotlinx.serialization.Serializable
 data object FilterCoinPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
-        FilterCoinScreen(navController, viewModel)
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        FilterCoinScreen(navigation, viewModel)
     }
 
 }
 
 
 @Composable
-fun FilterCoinScreen(navController: HSNavigation, viewModel: TransactionsViewModel) {
+fun FilterCoinScreen(navigation: HSNavigation, viewModel: TransactionsViewModel) {
     val filterCoins by viewModel.filterTokensLiveData.observeAsState()
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter_ChooseCoin),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column {
             filterCoins?.let { filterCoins ->
@@ -70,7 +70,7 @@ fun FilterCoinScreen(navController: HSNavigation, viewModel: TransactionsViewMod
                                     .fillMaxSize()
                                     .clickable {
                                         viewModel.setFilterToken(it.item)
-                                        navController.removeLastOrNull()
+                                        navigation.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically

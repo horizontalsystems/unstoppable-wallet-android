@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 @Composable
 fun PasscodeBlock(
     viewModel: SecuritySettingsViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
 ) {
     val uiState = viewModel.uiState
 
@@ -40,8 +40,8 @@ fun PasscodeBlock(
             .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
     ) {
-        val authorizedActionEditPin = navController.authorizedAction {
-            navController.slideFromRight(EditPinPage)
+        val authorizedActionEditPin = navigation.authorizedAction {
+            navigation.slideFromRight(EditPinPage)
         }
         CellPrimary(
             middle = {
@@ -59,7 +59,7 @@ fun PasscodeBlock(
                 )
             },
             onClick = {
-                if (!uiState.pinEnabled) navController.slideFromRight(SetPinPage())
+                if (!uiState.pinEnabled) navigation.slideFromRight(SetPinPage())
                 else authorizedActionEditPin()
             }
         )
@@ -73,7 +73,7 @@ fun PasscodeBlock(
                         )
                     )
                 },
-                onClick = navController.authorizedAction { viewModel.disablePin() }
+                onClick = navigation.authorizedAction { viewModel.disablePin() }
             )
         }
     }
@@ -91,7 +91,7 @@ fun PasscodeBlock(
                     CellMiddleInfo(title = stringResource(R.string.SettingsSecurity_Biometric_Authentication).hs)
                 },
                 right = {
-                    val enableBiometricsFlow = navController.ensurePinSet(R.string.PinSet_ForBiometrics) {
+                    val enableBiometricsFlow = navigation.ensurePinSet(R.string.PinSet_ForBiometrics) {
                         viewModel.enableBiometrics()
                     }
 

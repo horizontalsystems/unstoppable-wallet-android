@@ -27,9 +27,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ProUsersInfoSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         ProUsersInfoScreen(
-            navController,
+            navigation,
             listOf(
                 stringResource(R.string.ProUsersInfo_Features_DexVolume),
                 stringResource(R.string.ProUsersInfo_Features_DesLiquidity),
@@ -42,13 +42,13 @@ data object ProUsersInfoSheet : HSBottomSheet() {
 }
 
 @Composable
-private fun ProUsersInfoScreen(navController: HSNavigation, features: List<String>) {
+private fun ProUsersInfoScreen(navigation: HSNavigation, features: List<String>) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_24_lock),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     ) {
 
@@ -85,7 +85,7 @@ private fun ProUsersInfoScreen(navController: HSNavigation, features: List<Strin
                 .fillMaxWidth(),
             title = stringResource(R.string.Hud_Text_LearnMore),
             onClick = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             enabled = false
         )

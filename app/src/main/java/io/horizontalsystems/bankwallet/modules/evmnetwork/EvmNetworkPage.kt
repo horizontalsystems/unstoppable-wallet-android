@@ -69,11 +69,11 @@ import kotlinx.serialization.Serializable
 data class EvmNetworkPage(val blockchain: Blockchain) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         EvmNetworkScreen(
-            navController = navController,
+            navigation = navigation,
             blockchain = blockchain,
-            onBackPress = { navController.removeLastOrNull() },
+            onBackPress = { navigation.removeLastOrNull() },
         )
     }
 
@@ -83,9 +83,9 @@ data class EvmNetworkPage(val blockchain: Blockchain) : HSPage() {
 data class AddRpcPage(val blockchain: Blockchain) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         AddRpcScreen(
-            navController = navController,
+            navigation = navigation,
             blockchain = blockchain
         )
     }
@@ -94,7 +94,7 @@ data class AddRpcPage(val blockchain: Blockchain) : HSPage() {
 
 @Composable
 private fun EvmNetworkScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     blockchain: Blockchain,
     onBackPress: () -> Unit,
 ) {
@@ -191,7 +191,7 @@ private fun EvmNetworkScreen(
                 item {
                     Spacer(Modifier.height(32.dp))
                     AddButton {
-                        navController.add(AddRpcPage(blockchain))
+                        navigation.add(AddRpcPage(blockchain))
 
                         stat(
                             page = StatPage.BlockchainSettingsEvm,

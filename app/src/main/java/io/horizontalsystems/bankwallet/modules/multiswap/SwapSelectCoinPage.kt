@@ -11,8 +11,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapSelectCoinPage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapSelectCoinScreen(navController, input.token, input.title)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapSelectCoinScreen(navigation, input.token, input.title)
     }
 
     @Serializable
@@ -22,7 +22,7 @@ data class SwapSelectCoinPage(val input: Input) : HSPage() {
 
 @Composable
 private fun SwapSelectCoinScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     token: Token?,
     title: String?
 ) {
@@ -36,10 +36,10 @@ private fun SwapSelectCoinScreen(
         title = title ?: "",
         uiState = uiState,
         onSearchTextChanged = viewModel::setQuery,
-        onClose = navController::removeLastOrNull,
+        onClose = navigation::removeLastOrNull,
         onRecordRecent = { viewModel.onRecentTokenSelected(it.token) }
     ) {
         resultEventBus.sendResult(it.token)
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
     }
 }

@@ -64,7 +64,7 @@ import java.math.BigDecimal
 
 @Composable
 fun MarketEarnScreen(
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     val viewModel = viewModel<MarketEarnViewModel>(factory = EarnModule.Factory())
     val uiState = viewModel.uiState
@@ -124,12 +124,12 @@ fun MarketEarnScreen(
                                     protocolName = viewItem.protocolName,
                                     assetLogo = viewItem.assetLogo
                                 )
-                                navController.paidAction(TokenInsights) {
-                                    navController.slideFromRight(VaultPage(input))
+                                navigation.paidAction(TokenInsights) {
+                                    navigation.slideFromRight(VaultPage(input))
                                 }
                             },
                             onGetPremiumClick = {
-                                navController.paidAction(TokenInsights) {
+                                navigation.paidAction(TokenInsights) {
                                     //refresh page
                                 }
                             },
@@ -164,7 +164,7 @@ fun MarketEarnScreen(
                                             },
                                         )
                                         HSpacer(width = 12.dp)
-                                        val forResult = navController.slideFromRightForResult<VaultBlockchainsSelectorPage.Result>(
+                                        val forResult = navigation.slideFromRightForResult<VaultBlockchainsSelectorPage.Result>(
                                             {
                                                 VaultBlockchainsSelectorPage(
                                                     VaultBlockchainsSelectorPage.Input(
@@ -202,7 +202,7 @@ fun MarketEarnScreen(
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
                 openFilterSelector = false
-                navController.paidAction(TokenInsights) {
+                navigation.paidAction(TokenInsights) {
                     scrollToTopAfterUpdate = true
                     viewModel.onFilterBySelected(selected)
                 }
@@ -218,7 +218,7 @@ fun MarketEarnScreen(
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
                 openPeriodSelector = false
-                navController.paidAction(TokenInsights) {
+                navigation.paidAction(TokenInsights) {
                     scrollToTopAfterUpdate = true
                     viewModel.onApyPeriodSelected(selected)
                 }
@@ -234,7 +234,7 @@ fun MarketEarnScreen(
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->
                 openSortingSelector = false
-                navController.paidAction(TokenInsights) {
+                navigation.paidAction(TokenInsights) {
                     scrollToTopAfterUpdate = true
                     viewModel.onSortingSelected(selected)
                 }

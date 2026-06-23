@@ -18,21 +18,21 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WalletSwitchSheet : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        WalletSwitchScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        WalletSwitchScreen(navigation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WalletSwitchScreen(navController: HSNavigation) {
+private fun WalletSwitchScreen(navigation: HSNavigation) {
     val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
     val uiState = viewModel.uiState
 
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ) {
@@ -42,7 +42,7 @@ private fun WalletSwitchScreen(navController: HSNavigation) {
                 selectedAccount = uiState.activeWallet,
                 onSelectListener = { account ->
                     viewModel.onSelect(account)
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
 
                     stat(
                         page = StatPage.SwitchWallet,
@@ -50,7 +50,7 @@ private fun WalletSwitchScreen(navController: HSNavigation) {
                     )
                 },
                 onCancelClick = {
-                    navController.removeLastOrNull()
+                    navigation.removeLastOrNull()
                 }
             )
         }

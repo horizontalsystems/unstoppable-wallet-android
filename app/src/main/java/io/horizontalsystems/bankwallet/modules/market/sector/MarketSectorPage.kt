@@ -50,7 +50,7 @@ import kotlinx.serialization.Serializable
 data class MarketSectorPage(val input: CoinCategory) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val factory = MarketSectorModule.Factory(input)
         val chartViewModel = viewModel<ChartViewModel>(factory = factory)
         val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
@@ -58,15 +58,15 @@ data class MarketSectorPage(val input: CoinCategory) : HSPage() {
         SectorScreen(
             viewModel = viewModel,
             chartViewModel = chartViewModel,
-            onCloseButtonClick = { navController.removeLastOrNull() },
-            onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
+            onCloseButtonClick = { navigation.removeLastOrNull() },
+            onCoinClick = { coinUid -> onCoinClick(coinUid, navigation) }
         )
     }
 
-    private fun onCoinClick(coinUid: String, navController: HSNavigation) {
+    private fun onCoinClick(coinUid: String, navigation: HSNavigation) {
         val arguments = CoinPage.Input(coinUid)
 
-        navController.slideFromRight(CoinPage(arguments))
+        navigation.slideFromRight(CoinPage(arguments))
 
         stat(page = StatPage.CoinCategory, event = StatEvent.OpenCoin(coinUid))
     }

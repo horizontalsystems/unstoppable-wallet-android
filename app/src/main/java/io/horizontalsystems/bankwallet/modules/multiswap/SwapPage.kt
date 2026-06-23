@@ -118,13 +118,13 @@ import kotlin.time.Duration.Companion.milliseconds
 @Serializable
 data class SwapPage(val input: Input? = null) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         SwapScreen(
-            navController = navController,
+            navigation = navigation,
             parentScreenContentKey = contentKey(),
             tokenIn = input?.tokenIn,
             tokenOut = input?.tokenOut,
-            onClickClose = navController::removeLastOrNull
+            onClickClose = navigation::removeLastOrNull
         )
     }
 
@@ -136,7 +136,7 @@ data class SwapPage(val input: Input? = null) : HSPage() {
 @SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun SwapScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     parentScreenContentKey: String,
     tokenIn: Token? = null,
     tokenOut: Token? = null,
@@ -163,10 +163,10 @@ fun SwapScreen(
     var showAmlErrorSheet by remember { mutableStateOf(false) }
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val forResult = navController.slideFromRightForResult<SwapConfirmPage.Result>({ SwapConfirmPage(parentScreenContentKey) }) {
+    val forResult = navigation.slideFromRightForResult<SwapConfirmPage.Result>({ SwapConfirmPage(parentScreenContentKey) }) {
         if (it.success) {
             if (closeAfterSwap) {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             } else {
                 viewModel.onEnterAmount(null)
             }
@@ -178,7 +178,7 @@ fun SwapScreen(
         stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
     }
 
-    val forResultSwapTerms = navController.slideFromRightForResult<SwapTermsPage.Result>(
+    val forResultSwapTerms = navigation.slideFromRightForResult<SwapTermsPage.Result>(
         { SwapTermsPage }
     ) {
         if (it.accepted) navigateToSwapConfirm()
@@ -212,7 +212,7 @@ fun SwapScreen(
             onDismiss = { showAmlRiskSheet = false },
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
-                navController.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey))
+                navigation.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey))
             },
         )
     }
@@ -249,7 +249,7 @@ fun SwapScreen(
     SwapScreenInner(
         uiState = uiState,
         onClickClose = onClickClose,
-        onClickCoinFrom = navController.slideFromBottomForResult<Token>(
+        onClickCoinFrom = navigation.slideFromBottomForResult<Token>(
             {
                 SwapSelectCoinPage(
                     SwapSelectCoinPage.Input(
@@ -261,7 +261,7 @@ fun SwapScreen(
         ) {
             viewModel.onSelectTokenIn(it)
         },
-        onClickCoinTo = navController.slideFromBottomForResult<Token>(
+        onClickCoinTo = navigation.slideFromBottomForResult<Token>(
             { SwapSelectCoinPage(SwapSelectCoinPage.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))) },
         ) {
             viewModel.onSelectTokenOut(it)
@@ -271,7 +271,7 @@ fun SwapScreen(
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navController.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey))
+            navigation.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey))
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
@@ -282,7 +282,7 @@ fun SwapScreen(
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
-        navController = navController,
+        navigation = navigation,
         onResume = viewModel::onResume,
         onPause = viewModel::onPause,
         bottomPadding = bottomPadding,
@@ -304,7 +304,7 @@ private fun SwapScreenInner(
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     onResume: () -> Unit,
     onPause: () -> Unit,
     bottomPadding: Dp = 0.dp,
@@ -342,7 +342,7 @@ private fun SwapScreenInner(
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
                     navigateAfterKeyboardClosed {
-                        navController.slideFromRight(SwapHistoryPage)
+                        navigation.slideFromRight(SwapHistoryPage)
                     }
                 }
             )),
@@ -425,7 +425,7 @@ private fun SwapScreenInner(
                                     navigateAfterKeyboardClosed(onClickProvider)
                                 },
                                 onClickProviderScoreInfo = {
-                                    navController.slideFromBottom(RiskLevelInfoSheet)
+                                    navigation.slideFromBottom(RiskLevelInfoSheet)
                                 }
                             )
                         }
@@ -517,7 +517,7 @@ private fun SwapScreenInner(
                                 action.getTitle()
                             }
 
-                            val executor = action.executor(navController, onActionCompleted)
+                            val executor = action.executor(navigation, onActionCompleted)
 
                             ButtonPrimaryDefault(
                                 modifier = Modifier
@@ -699,7 +699,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: PriceImpactLevel?,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 
@@ -711,7 +711,7 @@ fun PriceImpactField(
         value = stringResource(R.string.Swap_Percent, priceImpact.toPlainString())
             .hs(color = getPriceImpactColor(priceImpactLevel)),
         onInfoClick = {
-            navController.slideFromBottom(
+            navigation.slideFromBottom(
                 SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
             )
         }

@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
-import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.riskLevelColor
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -44,17 +44,17 @@ import kotlinx.serialization.Serializable
 data object RiskLevelInfoSheet : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RiskLevelInfoScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        RiskLevelInfoScreen(navigation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RiskLevelInfoScreen(navController: HSNavigation) {
+fun RiskLevelInfoScreen(navigation: HSNavigation) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::removeLastOrNull,
+            onDismissRequest = navigation::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -62,7 +62,7 @@ fun RiskLevelInfoScreen(navController: HSNavigation) {
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-                        navController.removeLastOrNull()
+                        navigation.removeLastOrNull()
                     }
                 )
             },

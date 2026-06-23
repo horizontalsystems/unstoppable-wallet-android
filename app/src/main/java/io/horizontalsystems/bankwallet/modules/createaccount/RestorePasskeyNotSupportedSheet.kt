@@ -24,16 +24,16 @@ import kotlinx.serialization.Serializable
 data object RestorePasskeyNotSupportedSheet : HSBottomSheet() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RestorePasskeyNotSupportedScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        RestorePasskeyNotSupportedScreen(navigation)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RestorePasskeyNotSupportedScreen(navController: HSNavigation) {
+fun RestorePasskeyNotSupportedScreen(navigation: HSNavigation) {
     BottomSheetContent(
-        onDismissRequest = navController::removeLastOrNull,
+        onDismissRequest = navigation::removeLastOrNull,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
         BottomSheetHeaderV3(
@@ -52,7 +52,7 @@ fun RestorePasskeyNotSupportedScreen(navController: HSNavigation) {
                 variant = ButtonVariant.Secondary,
                 title = stringResource(R.string.ImportWallet_Button_Understood)
             ) {
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             }
         }
     }

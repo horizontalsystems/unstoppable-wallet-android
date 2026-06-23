@@ -58,8 +58,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
@@ -81,7 +81,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
@@ -90,8 +89,8 @@ import java.util.Locale
 @Serializable
 data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapConfirmScreen(navController, parentScreenContentKey, contentKey())
+    override fun GetContent(navigation: HSNavigation) {
+        SwapConfirmScreen(navigation, parentScreenContentKey, contentKey())
     }
 
     @Parcelize
@@ -100,11 +99,11 @@ data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {
 
 @Composable
 fun SwapConfirmScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     parentScreenContentKey: String,
     screenContentKey: String
 ) {
-    val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
+    val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
     val viewModel = viewModel<SwapConfirmViewModel>(
@@ -114,22 +113,22 @@ fun SwapConfirmScreen(
     val uiState = viewModel.uiState
 
     if (uiState.error != null) {
-        SwapConfirmError(navController, viewModel, uiState, uiState.error)
+        SwapConfirmError(navigation, viewModel, uiState, uiState.error)
     } else {
-        SwapConfirmInternal(navController, viewModel, uiState, screenContentKey)
+        SwapConfirmInternal(navigation, viewModel, uiState, screenContentKey)
     }
 }
 
 @Composable
 private fun SwapConfirmError(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
     error: Throwable
 ) {
     HSScaffold(
         title = stringResource(R.string.Swap_Confirm_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Settings_Title),
@@ -173,7 +172,7 @@ private fun SwapConfirmError(
 
 @Composable
 private fun SwapConfirmInternal(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
     screenContentKey: String,
@@ -183,7 +182,7 @@ private fun SwapConfirmInternal(
 
     val onClickSettings = if (uiState.hasSettings) {
         {
-            navController.slideFromRight(SwapTransactionSettingsPage(screenContentKey))
+            navigation.slideFromRight(SwapTransactionSettingsPage(screenContentKey))
         }
     } else {
         null
@@ -191,7 +190,7 @@ private fun SwapConfirmInternal(
 
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
-            navController.slideFromRight(SwapTransactionNonceSettingsPage(screenContentKey))
+            navigation.slideFromRight(SwapTransactionNonceSettingsPage(screenContentKey))
         }
     } else {
         null
@@ -200,17 +199,17 @@ private fun SwapConfirmInternal(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_Confirm_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::removeLastOrNull,
+        onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickSlippageSettings = uiState.slippage?.let { slippage ->
-            navController.slideFromRightForResult<SwapSettingsSlippagePage.Result>(
+            navigation.slideFromRightForResult<SwapSettingsSlippagePage.Result>(
                 { SwapSettingsSlippagePage(SwapSettingsSlippagePage.Input(slippage)) }
             ) {
                 viewModel.setSlippage(it.slippage)
             }
         },
-        onClickRecipientSettings = navController.slideFromRightForResult<SwapSettingsRecipientPage.Result>(
+        onClickRecipientSettings = navigation.slideFromRightForResult<SwapSettingsRecipientPage.Result>(
             { SwapSettingsRecipientPage(SwapSettingsRecipientPage.Input(uiState.tokenIn, uiState.recipient)) }
         ) {
             viewModel.setRecipient(it.address)
@@ -238,9 +237,9 @@ private fun SwapConfirmInternal(
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
                                 resultEventBus.sendResult(SwapConfirmPage.Result(true))
-                                navController.removeLastOrNull()
+                                navigation.removeLastOrNull()
                             } catch (t: Throwable) {
-                                navController.slideFromBottom(ErrorSheet(
+                                navigation.slideFromBottom(ErrorSheet(
                                     ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                                 ))
                             }
@@ -297,7 +296,7 @@ private fun SwapConfirmInternal(
                     amountOut = amountOut,
                     statPage = StatPage.SwapConfirmation,
                 )
-                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
+                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navigation)
                 uiState.amountOutMin?.let { amountOutMin ->
                     val infoTitle = stringResource(id = R.string.Swap_MinimumReceived)
                     val infoText = stringResource(id = R.string.Swap_MinimumReceivedDescription)
@@ -306,7 +305,7 @@ private fun SwapConfirmInternal(
                         value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull()
                             .hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
                             )
                         }
@@ -319,21 +318,21 @@ private fun SwapConfirmInternal(
                         title = stringResource(id = R.string.Swap_EstimatedTime),
                         value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
-                            navController.slideFromBottom(
+                            navigation.slideFromBottom(
                                 SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
                             )
                         }
                     )
                 }
                 uiState.quoteFields.forEach {
-                    it.GetContent(navController)
+                    it.GetContent(navigation)
                 }
             }
             uiState.transactionFields.forEachIndexed { index, field ->
-                field.GetContent(navController)
+                field.GetContent(navigation)
             }
             DataFieldFee(
-                navController,
+                navigation,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
             )
@@ -383,7 +382,7 @@ private fun SwapConfirmInternal(
                         checked = uiState.mevProtectionEnabled,
                         confirmChange = {
                             if (!uiState.mevProtectionActionAllowed) {
-                                navController.slideFromBottom(
+                                navigation.slideFromBottom(
                                     DefenseSystemFeatureSheet(Input(PremiumFeature.getFeature(paidAction = SwapProtection)))
                                 )
                                 false

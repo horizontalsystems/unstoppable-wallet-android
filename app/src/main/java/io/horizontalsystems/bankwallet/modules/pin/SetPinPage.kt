@@ -15,16 +15,16 @@ import kotlinx.serialization.Serializable
 data class SetPinPage(val input: Input? = null) : HSPage(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         PinSet(
             title = stringResource(R.string.PinSet_Title),
             description = stringResource(input?.descriptionResId ?: R.string.PinSet_Info),
             dismissWithSuccess = {
                 resultEventBus.sendResult(Result(true))
-                navController.removeLastOrNull()
+                navigation.removeLastOrNull()
             },
-            onBackPress = { navController.removeLastOrNull() }
+            onBackPress = { navigation.removeLastOrNull() }
         )
     }
 

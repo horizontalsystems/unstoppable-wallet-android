@@ -55,7 +55,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
 fun SendEvmTransactionView(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     items: List<SectionViewItem>,
     cautions: List<CautionViewItem>,
     transactionFields: List<DataField>,
@@ -64,7 +64,7 @@ fun SendEvmTransactionView(
 ) {
     Column {
         items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController, statPage)
+            SectionView(sectionViewItem.viewItems, navigation, statPage)
             VSpacer(16.dp)
         }
 
@@ -77,11 +77,11 @@ fun SendEvmTransactionView(
         ) {
             if (transactionFields.isNotEmpty()) {
                 transactionFields.forEachIndexed { index, field ->
-                    field.GetContent(navController)
+                    field.GetContent(navigation)
                 }
             }
             DataFieldFee(
-                navController,
+                navigation,
                 networkFee?.primary?.getFormattedPlain() ?: "---",
                 networkFee?.secondary?.getFormattedPlain()
             )
@@ -94,7 +94,7 @@ fun SendEvmTransactionView(
 }
 
 @Composable
-fun SectionView(viewItems: List<ViewItem>, navController: HSNavigation, statPage: StatPage) {
+fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: StatPage) {
     Box {
         CellUniversalLawrenceSection(viewItems) { item ->
             when (item) {
@@ -107,7 +107,7 @@ fun SectionView(viewItems: List<ViewItem>, navController: HSNavigation, statPage
                 is ViewItem.Input -> TitleValueHex(item.title, item.value.shorten(), item.value)
                 is ViewItem.TokenItem -> Token(item)
                 is ViewItem.Fee -> DataFieldFee(
-                    navController,
+                    navigation,
                     item.networkFee.primary.getFormattedPlain() ?: "---",
                     item.networkFee.secondary?.getFormattedPlain() ?: "---"
                 )

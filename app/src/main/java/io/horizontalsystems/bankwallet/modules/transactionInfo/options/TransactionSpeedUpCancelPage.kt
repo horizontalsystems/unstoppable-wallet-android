@@ -30,8 +30,8 @@ import kotlinx.serialization.Serializable
 data class TransactionSpeedUpCancelPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        TransactionSpeedUpCancelScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        TransactionSpeedUpCancelScreen(navigation, input)
     }
 
     @Serializable
@@ -47,7 +47,7 @@ data class TransactionSpeedUpCancelPage(val input: Input) : HSPage() {
 
 @Composable
 private fun TransactionSpeedUpCancelScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     input: TransactionSpeedUpCancelPage.Input
 ) {
     val resultEventBus = LocalResultEventBus.current
@@ -67,7 +67,7 @@ private fun TransactionSpeedUpCancelScreen(
     LaunchedEffect(uiState.error) {
         if (uiState.error is TransactionAlreadyInBlock) {
             HudHelper.showErrorMessage(view, R.string.TransactionInfoOptions_Warning_TransactionInBlock)
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         }
     }
 
@@ -76,9 +76,9 @@ private fun TransactionSpeedUpCancelScreen(
     ConfirmTransactionScreen(
         title = viewModel.title,
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.removeLastOrNull() },
+        onClickBack = { navigation.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(TransactionSpeedUpCancelTransactionSettingsPage)
+            navigation.slideFromBottom(TransactionSpeedUpCancelTransactionSettingsPage)
         },
         buttonsSlot = {
             val sendAction = rememberAsyncAction()
@@ -98,10 +98,10 @@ private fun TransactionSpeedUpCancelScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             resultEventBus.sendResult(TransactionSpeedUpCancelPage.Result(true))
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(ErrorSheet(
+                            navigation.slideFromBottom(ErrorSheet(
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
@@ -112,7 +112,7 @@ private fun TransactionSpeedUpCancelScreen(
         }
     ) {
         SendEvmTransactionView(
-            navController,
+            navigation,
             uiState.sectionViewItems,
             sendTransactionState.cautions,
             sendTransactionState.fields,

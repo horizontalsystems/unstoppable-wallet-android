@@ -57,11 +57,11 @@ import kotlinx.serialization.Serializable
 data class CoinMajorHoldersPage(val input: Input) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         CoinMajorHoldersScreen(
             input.coinUid,
             input.blockchain,
-            navController,
+            navigation,
         )
     }
 
@@ -73,7 +73,7 @@ data class CoinMajorHoldersPage(val input: Input) : HSPage() {
 private fun CoinMajorHoldersScreen(
     coinUid: String,
     blockchain: Blockchain,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: CoinMajorHoldersViewModel = viewModel(
         factory = CoinMajorHoldersModule.Factory(coinUid, blockchain)
     )
@@ -85,7 +85,7 @@ private fun CoinMajorHoldersScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.removeLastOrNull() }
+                onClick = { navigation.removeLastOrNull() }
             )
         )
     ) {

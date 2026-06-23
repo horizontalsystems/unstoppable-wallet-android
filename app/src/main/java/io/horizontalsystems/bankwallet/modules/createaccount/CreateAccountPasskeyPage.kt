@@ -58,17 +58,17 @@ import kotlin.reflect.KClass
 @Serializable
 data class CreateAccountPasskeyPage(val input: ManageAccountsModule.Input?) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: CreateAccountPage::class
         val inclusive = input?.popOffInclusive ?: true
-        CreateAccountPasskeyScreen(navController, popUpToInclusiveId, inclusive)
+        CreateAccountPasskeyScreen(navigation, popUpToInclusiveId, inclusive)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateAccountPasskeyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean
 ) {
@@ -90,7 +90,7 @@ fun CreateAccountPasskeyScreen(
                 resId = R.string.Hud_Text_Created,
             )
             delay(300)
-            navController.removeLastUntil(popUpToInclusiveId, inclusive)
+            navigation.removeLastUntil(popUpToInclusiveId, inclusive)
             stat(
                 page = StatPage.NewWalletPasskey,
                 event = StatEvent.CreateWallet(uiState.success.statAccountType)
@@ -106,7 +106,7 @@ fun CreateAccountPasskeyScreen(
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
@@ -162,7 +162,7 @@ fun CreateAccountPasskeyScreen(
                                 viewModel.createAccount(entropy)
                             } catch (e: CreateCredentialCancellationException) {
                             } catch (e: CreateCredentialNoCreateOptionException) {
-                                navController.slideFromBottom(CreatePasskeyNotSupportedSheet)
+                                navigation.slideFromBottom(CreatePasskeyNotSupportedSheet)
                             } catch (e: Exception) {
                                 viewModel.onError(e)
                             } finally {

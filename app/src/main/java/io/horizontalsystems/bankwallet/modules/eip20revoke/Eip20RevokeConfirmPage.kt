@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
@@ -40,8 +39,8 @@ import java.math.BigDecimal
 @Serializable
 data class Eip20RevokeConfirmPage(val input: Input) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        Eip20RevokeScreen(navController, input)
+    override fun GetContent(navigation: HSNavigation) {
+        Eip20RevokeScreen(navigation, input)
     }
 
     @Serializable
@@ -56,7 +55,7 @@ data class Eip20RevokeConfirmPage(val input: Input) : HSPage() {
 }
 
 @Composable
-fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage.Input) {
+fun Eip20RevokeScreen(navigation: HSNavigation, input: Eip20RevokeConfirmPage.Input) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
         factory = Eip20RevokeConfirmViewModel.Factory(
@@ -72,9 +71,9 @@ fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmRevoke_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::removeLastOrNull,
+        onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = {
-            navController.slideFromRight(Eip20RevokeTransactionSettingsPage)
+            navigation.slideFromRight(Eip20RevokeTransactionSettingsPage)
         },
         buttonsSlot = {
             val revokeAction = rememberAsyncAction()
@@ -90,9 +89,9 @@ fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             resultEventBus.sendResult(Eip20RevokeConfirmPage.Result(true))
-                            navController.removeLastOrNull()
+                            navigation.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(ErrorSheet(
+                            navigation.slideFromBottom(ErrorSheet(
                                 ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
@@ -126,7 +125,7 @@ fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage
             )
 
             DataFieldFeeTemplate(
-                navController = navController,
+                navigation = navigation,
                 primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
                 title = stringResource(id = R.string.FeeSettings_NetworkFee),

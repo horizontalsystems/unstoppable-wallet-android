@@ -24,8 +24,8 @@ import kotlinx.serialization.Serializable
 data class CoinAnalyticsInfoPage(val input: AnalyticInfo) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        CoinAnalyticsInfoScreen(input) { navController.removeLastOrNull() }
+    override fun GetContent(navigation: HSNavigation) {
+        CoinAnalyticsInfoScreen(input) { navigation.removeLastOrNull() }
     }
 }
 

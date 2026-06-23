@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -36,7 +35,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -49,7 +47,6 @@ import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectPa
 import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
@@ -63,7 +60,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
     mainActivityViewModel: MainActivityViewModel,
     parentScreenContentKey: String
@@ -71,7 +68,7 @@ fun MainScreenWithRootedDeviceCheck(
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(mainActivityViewModel, transactionsViewModel, navController, parentScreenContentKey)
+        MainScreen(mainActivityViewModel, transactionsViewModel, navigation, parentScreenContentKey)
     }
 }
 
@@ -79,7 +76,7 @@ fun MainScreenWithRootedDeviceCheck(
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
     transactionsViewModel: TransactionsViewModel,
-    fragmentNavController: HSNavigation,
+    navigation: HSNavigation,
     parentScreenContentKey: String,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
@@ -122,7 +119,7 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    fragmentNavController.slideFromBottom(WalletSwitchSheet)
+                                    navigation.slideFromBottom(WalletSwitchSheet)
                                     stat(
                                         page = StatPage.Main,
                                         event = StatEvent.Open(StatPage.SwitchWallet)
@@ -154,10 +151,10 @@ private fun MainScreen(
         Column {
             Crossfade(uiState.selectedTabItem) { navItem ->
                 when (navItem) {
-                    MainNavigation.Market -> MarketScreen(fragmentNavController)
-                    MainNavigation.Balance -> BalanceScreen(fragmentNavController)
+                    MainNavigation.Market -> MarketScreen(navigation)
+                    MainNavigation.Balance -> BalanceScreen(navigation)
                     MainNavigation.Swap -> SwapScreen(
-                        navController = fragmentNavController,
+                        navigation = navigation,
                         parentScreenContentKey = parentScreenContentKey,
                         onClickClose = null,
                         bottomPadding = navigationBarHeight,
@@ -170,7 +167,7 @@ private fun MainScreen(
 //                        transactionsViewModel
 //                    )
 
-                    MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                    MainNavigation.Settings -> SettingsScreen(navigation)
                 }
             }
         }
@@ -178,7 +175,7 @@ private fun MainScreen(
 
     if (uiState.showWhatsNew) {
         LaunchedEffect(Unit) {
-            fragmentNavController.slideFromBottom(
+            navigation.slideFromBottom(
                 ReleaseNotesPage(ReleaseNotesPage.Input(true))
             )
             viewModel.whatsNewShown()
@@ -187,7 +184,7 @@ private fun MainScreen(
 
     if (uiState.showDonationPage) {
         LaunchedEffect(Unit) {
-            fragmentNavController.slideFromBottom(WhyDonatePage)
+            navigation.slideFromBottom(WhyDonatePage)
             viewModel.donationShown()
         }
     }
@@ -206,11 +203,11 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.slideFromBottom(WCErrorNoAccountSheet)
+                navigation.slideFromBottom(WCErrorNoAccountSheet)
             }
 
             is SupportState.NotSupported -> {
-                fragmentNavController.slideFromBottom(
+                navigation.slideFromBottom(
                     WCAccountTypeNotSupportedSheet(WCAccountTypeNotSupportedSheet.Input(wcSupportState.accountTypeDescription))
                 )
             }
@@ -223,13 +220,13 @@ private fun MainScreen(
     uiState.deeplinkPage?.let { deepLinkPage ->
         LaunchedEffect(Unit) {
             delay(500)
-            fragmentNavController.slideFromRight(deepLinkPage.screen)
+            navigation.slideFromRight(deepLinkPage.screen)
             viewModel.deeplinkPageHandled()
         }
     }
 
     uiState.openSend?.let { openSend ->
-        fragmentNavController.slideFromRight(
+        navigation.slideFromRight(
             SendTokenSelectPage(SendTokenSelectPage.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,

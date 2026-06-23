@@ -60,12 +60,12 @@ import kotlinx.serialization.Serializable
 data class CreateAccountStandardPage(val input: ManageAccountsModule.Input?) : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
+    override fun GetContent(navigation: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: CreateAccountPage::class
         val inclusive = input?.popOffInclusive ?: true
         CreateAccountIntroScreen(
-            onBackClick = { navController.removeLastOrNull() },
-            onFinish = { navController.removeLastUntil(popUpToInclusiveId, inclusive) },
+            onBackClick = { navigation.removeLastOrNull() },
+            onFinish = { navigation.removeLastUntil(popUpToInclusiveId, inclusive) },
         )
     }
 

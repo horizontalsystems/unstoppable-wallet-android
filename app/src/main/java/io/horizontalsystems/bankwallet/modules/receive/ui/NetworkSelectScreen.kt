@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NetworkSelectScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     activeAccount: Account,
     fullCoin: FullCoin,
     closeModule: () -> Unit,
@@ -53,7 +53,7 @@ fun NetworkSelectScreen(
 
     HSScaffold(
         title = stringResource(R.string.Balance_Network),
-        onBack = { navController.removeLastOrNull() },
+        onBack = { navigation.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),

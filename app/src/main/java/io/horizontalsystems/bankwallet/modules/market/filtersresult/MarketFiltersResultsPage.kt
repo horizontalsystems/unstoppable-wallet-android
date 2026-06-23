@@ -45,13 +45,13 @@ import kotlinx.serialization.Serializable
 data object MarketFiltersResultsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val marketSearchFilterViewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersPage::class)
+    override fun GetContent(navigation: HSNavigation) {
+        val marketSearchFilterViewModel = navigation.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersPage::class)
         val viewModel = viewModel<MarketFiltersResultViewModel>(
             factory = MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
         )
 
-        SearchResultsScreen(viewModel, navController)
+        SearchResultsScreen(viewModel, navigation)
     }
 }
 
@@ -59,7 +59,7 @@ data object MarketFiltersResultsPage : HSPage() {
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
-    navController: HSNavigation
+    navigation: HSNavigation
 ) {
 
     val uiState = viewModel.uiState
@@ -68,7 +68,7 @@ private fun SearchResultsScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_AdvancedSearch_Results),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(Modifier.navigationBarsPadding()) {
             Crossfade(uiState.viewState, label = "") { state ->
@@ -103,7 +103,7 @@ private fun SearchResultsScreen(
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinPage.Input(coinUid)
-                                navController.slideFromRight(CoinPage(arguments))
+                                navigation.slideFromRight(CoinPage(arguments))
 
                                 stat(
                                     page = StatPage.AdvancedSearchResults,
@@ -122,7 +122,7 @@ private fun SearchResultsScreen(
                                             }
                                         )
                                         HSpacer(width = 12.dp)
-                                        val forResult = navController.slideFromBottomForResult<MarketSignalsPage.Result>(
+                                        val forResult = navigation.slideFromBottomForResult<MarketSignalsPage.Result>(
                                             { MarketSignalsPage }
                                         ) {
                                             if (it.enabled) {
@@ -136,7 +136,7 @@ private fun SearchResultsScreen(
                                             title = stringResource(id = R.string.Market_Signals),
                                             onClick = {
                                                 if (!uiState.showSignal) {
-                                                    navController.paidAction(TradeSignals, forResult)
+                                                    navigation.paidAction(TradeSignals, forResult)
                                                     stat(
                                                         page = StatPage.AdvancedSearchResults,
                                                         event = StatEvent.OpenPremium(

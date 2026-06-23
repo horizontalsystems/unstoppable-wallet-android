@@ -30,14 +30,14 @@ import kotlinx.serialization.Serializable
 data object SubscriptionPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SubscriptionScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        SubscriptionScreen(navigation)
     }
 
 }
 
 @Composable
-fun SubscriptionScreen(navController: HSNavigation) {
+fun SubscriptionScreen(navigation: HSNavigation) {
     val viewModel = viewModel<SubscriptionViewModel>()
 
     val uiState = viewModel.uiState
@@ -45,7 +45,7 @@ fun SubscriptionScreen(navController: HSNavigation) {
 
     HSScaffold(
         title = stringResource(R.string.Settings_Subscription),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column {
             VSpacer(12.dp)
@@ -73,7 +73,7 @@ fun SubscriptionScreen(navController: HSNavigation) {
                     CellUniversal(
                         borderTop = false,
                         onClick = {
-                            navController.slideFromBottom(BuySubscriptionHavHostPage)
+                            navigation.slideFromBottom(BuySubscriptionHavHostPage)
                             stat(
                                 page = StatPage.PurchaseList,
                                 event = StatEvent.OpenPremium(StatPremiumTrigger.GetPremium)

@@ -27,8 +27,8 @@ class ActionRevoke(
         stringResource(R.string.Approve_RevokeAndApproveInfo, CoinValue(token, allowance).getFormattedFull())
 
     @Composable
-    override fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
-        return navController.slideFromBottomForResult<Eip20RevokeConfirmPage.Result>(
+    override fun executor(navigation: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
+        return navigation.slideFromBottomForResult<Eip20RevokeConfirmPage.Result>(
             {
                 Eip20RevokeConfirmPage(
                     Eip20RevokeConfirmPage.Input(token, spenderAddress, allowance)

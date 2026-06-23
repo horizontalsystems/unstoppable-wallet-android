@@ -47,8 +47,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 class RequestRefundSheet(val input: Input) : HSBottomSheet() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        RequestRefundScreen(navController, input.data)
+    override fun GetContent(navigation: HSNavigation) {
+        RequestRefundScreen(navigation, input.data)
     }
 
     @Serializable
@@ -57,13 +57,13 @@ class RequestRefundSheet(val input: Input) : HSBottomSheet() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RequestRefundScreen(navController: HSNavigation, data: RequestRefundData) {
+private fun RequestRefundScreen(navigation: HSNavigation, data: RequestRefundData) {
     val context = LocalContext.current
     val view = LocalView.current
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.removeLastOrNull()
+            navigation.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {

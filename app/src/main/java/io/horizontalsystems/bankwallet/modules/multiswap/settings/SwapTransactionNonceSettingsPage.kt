@@ -9,19 +9,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapTransactionNonceSettingsPage(val parentScreenContentKey: String) : HSPage() {
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        SwapTransactionNonceSettingsScreen(navController, parentScreenContentKey)
+    override fun GetContent(navigation: HSNavigation) {
+        SwapTransactionNonceSettingsScreen(navigation, parentScreenContentKey)
     }
 }
 
 @Composable
 fun SwapTransactionNonceSettingsScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     parentScreenContentKey: String
 ) {
-    val viewModel = navController.viewModelForScreen<SwapConfirmViewModel>(parentScreenContentKey)
+    val viewModel = navigation.viewModelForScreen<SwapConfirmViewModel>(parentScreenContentKey)
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetNonceSettingsContent(navController)
+    sendTransactionService.GetNonceSettingsContent(navigation)
 }

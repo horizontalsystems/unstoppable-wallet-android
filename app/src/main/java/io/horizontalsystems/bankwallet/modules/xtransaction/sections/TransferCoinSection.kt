@@ -27,7 +27,7 @@ fun TransferCoinSection(
     comment: String?,
     statPage: StatPage,
     addressStatSection: StatSection,
-    navController: HSNavigation,
+    navigation: HSNavigation,
     transactionInfoHelper: TransactionInfoHelper,
     blockchainType: BlockchainType,
 ) {
@@ -38,7 +38,7 @@ fun TransferCoinSection(
             coinAmountColor = coinAmountColor,
             coinAmountSign = coinAmountSign,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            navigation = navigation,
             statPage = statPage,
             borderTop = false
         )
@@ -52,7 +52,7 @@ fun TransferCoinSection(
             blockchainType = blockchainType,
             statPage = statPage,
             statSection = addressStatSection,
-            navController = navController
+            navigation = navigation
         )
         contact?.let {
             TitleAndValueCell(

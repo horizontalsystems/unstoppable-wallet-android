@@ -54,8 +54,8 @@ import kotlinx.serialization.Serializable
 data object BaseCurrencySettingsPage : HSPage() {
 
     @Composable
-    override fun GetContent(navController: HSNavigation) {
-        BaseCurrencyScreen(navController)
+    override fun GetContent(navigation: HSNavigation) {
+        BaseCurrencyScreen(navigation)
     }
 
 }
@@ -63,7 +63,7 @@ data object BaseCurrencySettingsPage : HSPage() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BaseCurrencyScreen(
-    navController: HSNavigation,
+    navigation: HSNavigation,
     viewModel: BaseCurrencySettingsViewModel = viewModel(
         factory = BaseCurrencySettingsModule.Factory()
     )
@@ -81,7 +81,7 @@ private fun BaseCurrencyScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if (viewModel.closeScreen) {
-        navController.removeLastOrNull()
+        navigation.removeLastOrNull()
     }
 
     if (viewModel.showDisclaimer) {
@@ -92,7 +92,7 @@ private fun BaseCurrencyScreen(
 
     HSScaffold(
         title = stringResource(R.string.SettingsCurrency_Title),
-        onBack = navController::removeLastOrNull,
+        onBack = navigation::removeLastOrNull,
     ) {
         Column(
             Modifier
