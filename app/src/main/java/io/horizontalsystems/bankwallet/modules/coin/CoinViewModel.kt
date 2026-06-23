@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -52,7 +53,11 @@ class CoinViewModel(
     init {
         coinToken?.let { context ->
             viewModelScope.launch(Dispatchers.IO) {
-                popularToken = SwapPopularTokens.build(marketKit, context).firstOrNull()
+                try {
+                    popularToken = SwapPopularTokens.build(marketKit, context).firstOrNull()
+                } catch (e: Throwable) {
+                    Log.e("CoinViewModel", "Failed to build popular tokens", e)
+                }
             }
         }
 
