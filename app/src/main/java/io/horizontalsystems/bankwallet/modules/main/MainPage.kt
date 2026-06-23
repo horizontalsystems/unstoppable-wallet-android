@@ -162,11 +162,6 @@ private fun MainScreen(
                         autofocus = false
                     )
 
-//                    MainNavigation.Transactions -> TransactionsScreen(
-//                        fragmentNavController,
-//                        transactionsViewModel
-//                    )
-
                     MainNavigation.Settings -> SettingsScreen(navigation)
                 }
             }

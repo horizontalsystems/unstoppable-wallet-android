@@ -28,11 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
@@ -297,16 +295,4 @@ private fun ActionText() {
             .fillMaxWidth()
             .padding(horizontal = 32.dp)
     )
-}
-
-@Preview
-@Composable
-private fun PremiumFeaturesScreenPreview() {
-    ComposeAppTheme {
-        val ctx = LocalContext.current
-//        PremiumFeaturesScreen(
-//            navigation = NavController(ctx),
-//            navHostController = null
-//        ) {}
-    }
 }
