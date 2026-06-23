@@ -1797,4 +1797,6 @@
     <string name="WalletConnect_Safe">Güvenli</string>
     <string name="WalletConnect_TokenAllowance">Token İzni</string>
     <string name="Watch_Monero_Warning">Monero izleme cüzdanı yalnızca gelen işlemleri gösterir. Görüntülenen bakiye yanlış olabilir.</string>
+    <string name="CoinPage_Buy">Satın Al</string>
+    <string name="CoinPage_Sell">Sat</string>
 </resources>

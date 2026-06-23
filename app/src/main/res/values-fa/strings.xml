@@ -704,4 +704,6 @@
     <string name="PasskeyTerms_DeviceDependency_Description">دسترسی به دستگاه شما نیاز دارد. از دست دادن دسترسی ممکن است به از دست رفتن دارایی‌ها منجر شود.</string>
     <string name="PasskeyTerms_LimitedAccess_Description">ممکن است روی همه دستگاه‌ها یا پلتفرم‌ها کار نکند.</string>
     <string name="PasskeyTerms_Responsibility_Description">مسئولیت دسترسی به دستگاهتان بر عهده شماست. در صورت از دست رفتن دسترسی، Unstoppable نمی‌تواند این کیف‌پول را بازیابی کند.</string>
+    <string name="CoinPage_Buy">خریدن</string>
+    <string name="CoinPage_Sell">فروختن</string>
 </resources>

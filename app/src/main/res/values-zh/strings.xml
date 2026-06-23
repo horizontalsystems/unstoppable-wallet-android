@@ -1796,4 +1796,6 @@
     <string name="PasskeyTerms_LimitedAccess_Description">可能无法在所有设备或平台上运行。</string>
     <string name="PasskeyTerms_Responsibility_Description">您需要对设备的访问权限负责。如果访问权限丢失，Unstoppable 无法恢复此钱包。</string>
     <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum、Arbitrum、Optimism…</string>
+    <string name="CoinPage_Buy">购买</string>
+    <string name="CoinPage_Sell">出售</string>
 </resources>

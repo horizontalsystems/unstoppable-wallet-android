@@ -1798,4 +1798,6 @@
     <string name="PasskeyTerms_DeviceDependency_Description">L\'accès nécessite votre appareil. La perte d\'accès peut entraîner la perte de vos fonds.</string>
     <string name="PasskeyTerms_LimitedAccess_Description">Peut ne pas fonctionner sur tous les appareils ou plateformes.</string>
     <string name="PasskeyTerms_Responsibility_Description">Vous êtes responsable de l\'accès à votre appareil. Unstoppable ne peut pas récupérer ce portefeuille si l\'accès est perdu.</string>
+    <string name="CoinPage_Buy">Acheter</string>
+    <string name="CoinPage_Sell">Vendre</string>
 </resources>
