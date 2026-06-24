@@ -926,13 +926,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Обнаруживает поддельные и вредоносные dApps перед подключением.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Прямой доступ к нашей службе поддержки.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Защищает обмен от автоматических атак и опережающих сделок.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Поиск токенов с фильтрами по объему, цепочке или сектору. Включает метрики деятельности CEX/DEX и списков.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Уведомления в реальном времени о торговых возможностях и рисках.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Позволяет создать ложный кошелёк с отдельным PIN. Скрывает реальные активы в рискованных ситуациях.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адрес получателя и предупреждает о риске перед отправкой средств.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Обнаруживает поддельные dApp до подключения. Предотвращает фишинг и защищает активы.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Прямой доступ к приоритетной поддержке от команды Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Защищает от ботов и front-running атак при обмене.</string>
     <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Аналитика рынка</string>
     <string name="Premium_AdvancedControls">Расширенные настройки</string>

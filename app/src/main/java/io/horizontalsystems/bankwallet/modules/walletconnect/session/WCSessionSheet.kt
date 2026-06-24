@@ -39,8 +39,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -178,12 +177,10 @@ fun WCSessionScreen(
                     .clip(RoundedCornerShape(16.dp))
                     .background(ComposeAppTheme.colors.lawrence)
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-                    .padding(16.dp)
                     .clickable(enabled = !uiState.scamProtectionActionAllowed) {
-                        navigation.slideFromBottom(
-                            DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.ScamProtectionFeature))
-                        )
-                    },
+                        navigation.slideFromBottom(BuySubscriptionHavHostPage)
+                    }
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {

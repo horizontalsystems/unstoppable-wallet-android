@@ -923,13 +923,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">確保您的加密貨幣操作合法性</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">直接聯繫錢包團隊獲取快速技術支援。</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">阻止机器人在兑换过程中窃取资产。</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">通过交易量、区块链或行业等筛选条件查找代币，并包含 CEX/DEX 活跃度及上架相关指标。</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">实时发送交易机会提醒，立即突出潜在盈利机会或市场风险。</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">允许您创建-个带独立 PIN 的诱饵钱包，在高风险情况下隐藏真实资产。</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">检查收款钱包是否存在钓鱼或欺诈风险，并在您向高风险地址转账前发出提醒。</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">在连接前检测伪造或恶意 dApp，防止钓鱼攻击，保护您的资产安全。</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">为您提供直接访问的优先支持服务，可快速获得 Unstoppable 团队的个性化协助。</string>
-    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">在兑换过程中阻止机器人和抢跑攻击，确保您的交易公平且安全。</string>
     <string name="Premium_DefenseSystem">防御系统</string>
     <string name="Premium_MarketInsights">市场洞察力</string>
     <string name="Premium_AdvancedControls">VIP</string>

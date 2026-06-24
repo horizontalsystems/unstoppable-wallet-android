@@ -48,9 +48,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet.Input
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -79,7 +77,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.subscriptions.core.SwapProtection
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -382,9 +379,7 @@ private fun SwapConfirmInternal(
                         checked = uiState.mevProtectionEnabled,
                         confirmChange = {
                             if (!uiState.mevProtectionActionAllowed) {
-                                navigation.slideFromBottom(
-                                    DefenseSystemFeatureSheet(Input(PremiumFeature.getFeature(paidAction = SwapProtection)))
-                                )
+                                navigation.slideFromBottom(BuySubscriptionHavHostPage)
                                 false
                             } else {
                                 true

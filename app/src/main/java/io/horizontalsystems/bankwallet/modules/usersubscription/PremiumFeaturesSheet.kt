@@ -35,8 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
@@ -45,27 +43,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object PremiumFeaturesSheet : HSBottomSheet() {
-
-    @Composable
-    override fun GetContent(navigation: HSNavigation) {
-        PremiumFeaturesScreen(
-            navigation = navigation,
-            usedInHavHost = false,
-            onClose = { navigation.removeLastOrNull() }
-        )
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,6 +67,16 @@ fun PremiumFeaturesScreen(
     val plansModalBottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isPlanSelectBottomSheetVisible by remember { mutableStateOf(false) }
+
+    val onTryForFreeClick = {
+        //when used in NavHost
+        if (usedInHavHost) {
+            isPlanSelectBottomSheetVisible = true
+        } else {
+            onClose.invoke()
+            navigation.slideFromBottom(SelectPlanSheet)
+        }
+    }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -121,26 +113,10 @@ fun PremiumFeaturesScreen(
                 VSpacer(24.dp)
                 ActionText()
                 VSpacer(24.dp)
-                uiState.defenseSystemFeatures
                 FeaturesSection(
-                    navigation = navigation,
-                    icon = R.drawable.defense_gradient_filled_24,
-                    title = stringResource(R.string.Premium_DefenseSystem),
-                    features = uiState.defenseSystemFeatures,
-                )
-
-                FeaturesSection(
-                    navigation = navigation,
-                    icon = R.drawable.plus_gradient_filled_24,
-                    title = stringResource(R.string.Premium_AdvancedControls),
-                    features = uiState.advancedControlsFeatures,
-                )
-
-                FeaturesSection(
-                    navigation = navigation,
-                    icon = R.drawable.market_gradient_filled_24,
-                    title = stringResource(R.string.Premium_MarketInsights),
-                    features = uiState.marketInsightsFeatures,
+                    features = uiState.defenseSystemFeatures +
+                        uiState.advancedControlsFeatures +
+                        uiState.marketInsightsFeatures,
                 )
 
                 VSpacer(32.dp)
@@ -221,15 +197,7 @@ fun PremiumFeaturesScreen(
                         variant = ButtonVariant.Primary,
                         size = ButtonSize.Medium,
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            //when used in NavHost
-                            if (usedInHavHost) {
-                                isPlanSelectBottomSheetVisible = true
-                            } else {
-                                onClose.invoke()
-                                navigation.slideFromBottom(SelectPlanSheet)
-                            }
-                        }
+                        onClick = onTryForFreeClick
                     )
                 }
                 VSpacer(16.dp)
@@ -257,23 +225,13 @@ fun PremiumFeaturesScreen(
 
 @Composable
 fun FeaturesSection(
-    navigation: HSNavigation,
-    icon: Int,
-    title: String,
     features: List<IPaidAction>
 ) {
-    SectionHeader(title = title, icon = icon)
     Column(
         modifier = Modifier.clip(RoundedCornerShape(16.dp))
     ) {
         PlanItems(
-            items = features,
-            onItemClick = { action ->
-                val feature = PremiumFeature.getFeature(action)
-                navigation.slideFromBottom(
-                    DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(feature))
-                )
-            }
+            items = features
         )
     }
 }

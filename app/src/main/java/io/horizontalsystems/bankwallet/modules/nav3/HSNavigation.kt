@@ -12,9 +12,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinPage
 import io.horizontalsystems.bankwallet.modules.pin.SetPinPage
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsPage
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
@@ -92,10 +91,7 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
         if (UserSubscriptionManager.isActionAllowed(paidAction)) {
             block.invoke()
         } else {
-            val premiumFeature = PremiumFeature.getFeature(paidAction)
-            slideFromBottom(
-                DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(premiumFeature))
-            )
+            slideFromBottom(BuySubscriptionHavHostPage)
         }
     }
 

@@ -924,13 +924,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie de légalité pour vos opérations crypto</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Accès à l\'équipe du portefeuille pour un support technique rapide.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Bloque les bots lors des échanges.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Envoie des alertes en temps réel sur les opportunités et les risques de marché.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Envoie des alertes en temps réel sur les opportunités et les risques de marché.</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Permet de créer un portefeuille de leurre avec un PIN séparé pour cacher vos vrais actifs en situation à risque.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Vérifie le risque de phishing du destinataire et vous alerte.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Détecte les faux dApps ou dApps malveillants avant la connexion. Empêche l\'hameçonnage et protège vos ressources.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Vous donne un accès direct au support prioritaire. Obtenez une aide personnelle et rapide de l\'équipe Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Arrête les bots et les attaques frontales pendant les swaps. Garde vos transactions équitables et sécurisées.</string>
     <string name="Premium_DefenseSystem">Système de défense</string>
     <string name="Premium_MarketInsights">Aperçus du marché</string>
     <string name="Premium_AdvancedControls">Contrôles avancés</string>

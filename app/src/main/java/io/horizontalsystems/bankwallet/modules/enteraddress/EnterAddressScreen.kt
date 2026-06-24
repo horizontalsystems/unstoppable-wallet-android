@@ -33,9 +33,8 @@ import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigSheet
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
@@ -121,9 +120,7 @@ fun EnterAddressScreen(
                         if (uiState.hasPremium){
                             navigation.slideFromBottom(SecureSendConfigSheet)
                         } else {
-                            navigation.slideFromBottom(
-                                DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.SecureSendFeature))
-                            )
+                            navigation.slideFromBottom(BuySubscriptionHavHostPage)
                         }
                     }
                 }

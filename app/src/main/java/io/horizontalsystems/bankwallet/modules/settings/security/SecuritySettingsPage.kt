@@ -31,13 +31,12 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.pin.EditDuressPinPage
 import io.horizontalsystems.bankwallet.modules.pin.SetDuressPinIntroPage
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockIntervalsPage
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigSheet
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -187,9 +186,7 @@ private fun SecurityCenterScreen(
                                                 true
                                             }
                                         } else {
-                                            navigation.slideFromBottom(
-                                                DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.getFeature(action))),
-                                            )
+                                            navigation.slideFromBottom(BuySubscriptionHavHostPage)
                                             false
                                         }
                                     }

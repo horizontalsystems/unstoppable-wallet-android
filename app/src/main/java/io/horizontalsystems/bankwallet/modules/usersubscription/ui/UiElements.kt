@@ -78,8 +78,7 @@ val steelBrush = Brush.horizontalGradient(
 
 @Composable
 fun PlanItems(
-    items: List<IPaidAction>,
-    onItemClick: (IPaidAction) -> Unit
+    items: List<IPaidAction>
 ) {
     items.forEachIndexed { index, item ->
         PremiumFeatureItem(
@@ -88,7 +87,6 @@ fun PlanItems(
             subtitle = item.descriptionStringRes,
             first = index == 0,
             last = index == items.size - 1,
-            click = { onItemClick(item) }
         )
         if (index < items.size - 1) {
             HsDivider()
@@ -103,7 +101,6 @@ fun PremiumFeatureItem(
     subtitle: Int,
     first: Boolean,
     last: Boolean,
-    click: () -> Unit = {}
 ) {
     val topPadding = if (first) 16.dp else 12.dp
     val bottomPadding = if (last) 16.dp else 12.dp
@@ -111,7 +108,6 @@ fun PremiumFeatureItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { click() }
             .background(ComposeAppTheme.colors.lawrence)
             .padding(horizontal = 16.dp)
             .padding(top = topPadding, bottom = bottomPadding)
