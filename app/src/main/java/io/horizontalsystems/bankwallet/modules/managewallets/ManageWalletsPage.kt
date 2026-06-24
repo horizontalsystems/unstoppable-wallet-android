@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenIn
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.nav3.observeResult
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
@@ -95,19 +96,18 @@ private fun ManageWalletsScreen(
         }
     }
 
+    val resultKey = observeResult<BirthdayHeightConfigPage.Result> {
+        if (it.config != null) {
+            restoreSettingsViewModel.onEnter(it.config)
+        } else {
+            restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+        }
+    }
+
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        val forResult = navigation.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
-            { BirthdayHeightConfigPage(token.blockchainType) }
-        ) {
-            if (it.config != null) {
-                restoreSettingsViewModel.onEnter(it.config)
-            } else {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-        }
-        forResult()
+        navigation.slideFromRightForResult(BirthdayHeightConfigPage(token.blockchainType), resultKey)
 
         stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }

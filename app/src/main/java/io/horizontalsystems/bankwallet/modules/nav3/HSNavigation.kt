@@ -27,6 +27,12 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
         backStack.add(screen)
     }
 
+    fun slideFromRightForResult(screen: HSPage, resultKey: String) {
+        screen.resultKey = resultKey
+        screen.navType = NavigationType.SlideFromRight
+        backStack.add(screen)
+    }
+
     fun slideFromBottom(screen: HSPage) {
         screen.navType = NavigationType.SlideFromBottom
         backStack.add(screen)

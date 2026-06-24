@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
+import java.util.UUID
 
 /**
  * An Effect to provide a result even between different screens
@@ -23,4 +25,15 @@ inline fun <reified T> ResultEffect(
             resultEventBus.channelMap.remove(resultKey)
         }
     }
+}
+
+@Composable
+inline fun <reified T> observeResult(
+    crossinline onResult: (T) -> Unit
+): String {
+    val uuid = rememberSaveable { UUID.randomUUID().toString() }
+    ResultEffect<T>(resultKeyUuid = uuid) {
+        onResult.invoke(it)
+    }
+    return uuid
 }
