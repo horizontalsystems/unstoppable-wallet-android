@@ -854,18 +854,6 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 минут</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <!--Address Checker-->
-    <string name="SettingsAddressChecker_Title">Проверка адреса</string>
-    <string name="SettingsAddressChecker_OnSubject">на %s</string>
-    <string name="SettingsAddressChecker_SanctionsCheck">Sanction Check</string>
-    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
-    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
-    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis - это платформа для анализа блокчейн, которая предоставляет инструменты для отслеживания, исследования и оценки риска криптовалютных адресов. Он помогает выявлять адреса, связанные с санкциями, мошенничеством и другими незаконными видами деятельности.</string>
-    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
-    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit - платформа безопасности, позволяющая пользователям проверять адреса кошельков на риски, такие как санкции и статус черного списка. Это помогает пользователям избежать взаимодействия с потенциально вредоносными или заблокированными адресами.</string>
-    <string name="SettingsAddressChecker_TetherBlacklistDescription">Позволяет убедиться, что адрес кошелька заблокирован Tether (USDT). Если адрес в черном списке, все токены USDT связанные с ними могут быть заморожены, что делает их недоступными и непередаваемыми. Эта проверка помогает пользователям избежать взаимодействия с адресами повышенного риска или ограниченного доступа.</string>
-    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Позволяет проверять правильность адреса кошелька в черном списке издателя USDC (Circle). Адреса из черного списка могут заморозить их запасы USDC по причинам соответствия, мошенничества или нормативного регулирования. Использование этой проверки снижает риск отправки средств на заблокированные или подозрительные кошельки.</string>
-    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Предоставляет возможность проверить правильность адреса кошелька в черном списке PYUSD, выданного PayPal. Средства, хранящиеся в черном списке, могут быть заморожены и неиспользованы, как правило, по юридическим соображениям или соображениям безопасности. Этот инструмент помогает обеспечить безопасные и соответствующие транзакции с PYUSD.</string>
-    <string name="SettingsAddressChecker_InvalidAddress">Введенный вами адрес, похоже, недействителен. Пожалуйста, проверьте наличие опечаток или форматирования и повторите попытку.</string>
     <!--Banners-->
     <string name="SettingsBanner_Premium">Премиум</string>
     <string name="SettingsBanner_PremiumBannerDescription">Откройте новые возможности с Премиум-доступом!</string>

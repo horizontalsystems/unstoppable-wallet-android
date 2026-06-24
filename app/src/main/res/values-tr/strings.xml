@@ -1534,12 +1534,6 @@
     <string name="Send_Address_SanctionCheck">Yaptırım Kontrolü</string>
     <string name="Send_UnexpectedError">Beklenmeyen hata</string>
     <string name="Send_UnexpectedError_Description">İşleminiz gönderilirken bir hata oluştu. Lütfen tekrar deneyin veya hata kodunu kopyalayıp destek ekibiyle iletişime geçin.</string>
-    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis, kripto para adreslerini izleme, araştırma ve risk değerlendirmesi için araçlar sağlayan bir blockchain analiz platformudur. Yaptırımlar, dolandırıcılık ve diğer yasa dışı faaliyetlerle ilişkili adresleri belirlemeye yardımcı olur.</string>
-    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit, kullanıcıların cüzdan adreslerini yaptırımlar ve kara liste durumu gibi riskler açısından kontrol etmesini sağlayan bir güvenlik platformudur. Kullanıcıların kötü niyetli veya engellenmiş adreslerle etkileşimini önlemeye yardımcı olur.</string>
-    <string name="SettingsAddressChecker_OnSubject">%s üzerinde</string>
-    <string name="SettingsAddressChecker_SanctionsCheck">Yaptırım Kontrolü</string>
-    <string name="SettingsAddressChecker_Title">Adres Kontrol Aracı</string>
-    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Kara Liste Kontrolü</string>
     <string name="SettingsBanner_GameDescription">Testleri geçin, görevleri tamamlayın ve token kazanın!</string>
     <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsLaunchScreen_Auto">Oto</string>
@@ -1719,12 +1713,6 @@
     <string name="Send_Confirmation_Burn">Yakma</string>
     <string name="Send_Confirmation_Mint">Basım</string>
     <string name="Send_Fee_Info">Bu işlemin blok zincirinde işlenmesinin tahmini maliyeti.</string>
-    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
-    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
-    <string name="SettingsAddressChecker_InvalidAddress">Girdiğiniz adres geçersiz görünüyor. Lütfen yazım veya format hataları olup olmadığını kontrol edip tekrar deneyin.</string>
-    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Bir cüzdan adresinin PayPal tarafından çıkarılan PYUSD tarafından kara listeye alınıp alınmadığını doğrulamanın bir yolunu sunar. Kara listedeki adreslerde tutulan fonlar genellikle yasal veya güvenlik nedenleriyle dondurulabilir ve kullanılamaz hale gelebilir. Bu araç, PYUSD ile daha güvenli ve uyumlu işlemler sağlamaya yardımcı olur.</string>
-    <string name="SettingsAddressChecker_TetherBlacklistDescription">Bir cüzdan adresinin Tether (USDT) tarafından kara listeye alınıp alınmadığını doğrulamanıza olanak tanır. Bir adres kara listeye alınırsa, onunla ilişkili USDT token\'ları dondurularak erişilemez ve transfer edilemez hale gelebilir. Bu kontrol, kullanıcıların yüksek riskli veya kısıtlı adreslerle etkileşime girmesini önlemeye yardımcı olur.</string>
-    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Bir cüzdan adresinin USDC ihraççısı (Circle) tarafından kara listeye alınıp alınmadığını kontrol etmenize olanak tanır. Kara listedeki adreslerin USDC varlıkları uyumluluk, dolandırıcılık veya düzenleyici nedenlerle dondurulabilir. Bu kontrolü kullanmak, fonları engellenmiş veya şüpheli cüzdanlara gönderme riskini azaltır.</string>
     <string name="SettingsBanner_BePartOfTheFuture">Özel finansın geleceğinin bir parçası olun</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable hareketine katılarak açık ve özel finansı savunmuş olursunuz:</string>
     <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet\'ı destekleyerek büyümemize, gelişmemize ve bağımsız kalmamıza yardımcı olursunuz.</string>

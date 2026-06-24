@@ -852,18 +852,6 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minutos</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <!--Address Checker-->
-    <string name="SettingsAddressChecker_Title">Verificador de endereço</string>
-    <string name="SettingsAddressChecker_OnSubject">Em %s</string>
-    <string name="SettingsAddressChecker_SanctionsCheck">Verificar Sanções</string>
-    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
-    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
-    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis é uma plataforma de análise blockchain que fornece ferramentas para rastrear, investigar e avaliar o risco de endereços de criptomoedas. Ajuda a identificar endereços associados a sanções, fraudes e outras actividades ilícitas.</string>
-    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
-    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit é uma plataforma de segurança que permite aos usuários verificar os endereços da carteira por riscos como sanções e o status da lista negra. Isso ajuda os usuários a evitar interagir com endereços potencialmente maliciosos ou bloqueados.</string>
-    <string name="SettingsAddressChecker_TetherBlacklistDescription">Permite que você verifique se um endereço de carteira está na lista negra do Tether (USDT). Se um endereço estiver na lista negra, quaisquer tokens USDT associados a ele podem ser congelados, tornando-os inacessíveis e não-transferíveis. Esta verificação ajuda os usuários a evitar interação com endereços de alto risco ou restritos.</string>
-    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Permite que você verifique se um endereço de carteira está na lista negra do emissor USDC (Círcula). Os endereços da lista negra podem ver as suas explorações USDC congeladas por razões de conformidade, fraude ou regulação. O uso desta verificação reduz o risco de enviar fundos para carteiras bloqueadas ou suspeitas.</string>
-    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Fornece uma maneira de verificar se um endereço de carteira está na lista negra por PYUSD, emitido pelo PayPal. Os fundos mantidos em endereços na lista negra podem ser congelados e inutilizáveis, normalmente devido a questões legais ou de segurança. Esta ferramenta ajuda a garantir transações mais seguras e compatíveis com o PYUSD.</string>
-    <string name="SettingsAddressChecker_InvalidAddress">O endereço digitado parece ser inválido. Por favor, verifique se há erros de digitação ou problemas de formatação e tente novamente.</string>
     <!--Banners-->
     <string name="SettingsBanner_Premium">Prêmio</string>
     <string name="SettingsBanner_PremiumBannerDescription">Melhore a sua experiência com recursos Premium!</string>

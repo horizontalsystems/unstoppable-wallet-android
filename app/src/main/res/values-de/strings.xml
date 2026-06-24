@@ -852,18 +852,6 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 Stunde</string>
     <!--Address Checker-->
-    <string name="SettingsAddressChecker_Title">Adressprüfung</string>
-    <string name="SettingsAddressChecker_OnSubject">auf %s</string>
-    <string name="SettingsAddressChecker_SanctionsCheck">Sanktionsüberprüfung</string>
-    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
-    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
-    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalyse ist eine Plattform für Blockchain-Analyse, die Werkzeuge zur Erfassung, Untersuchung und Bewertung des Risikos von Kryptowährungsadressen bereitstellt. Es hilft bei der Identifizierung von Adressen im Zusammenhang mit Sanktionen, Betrug und anderen illegalen Aktivitäten.</string>
-    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
-    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit ist eine Sicherheitsplattform, die es Benutzern erlaubt, Brieftaschen-Adressen auf Risiken wie Sanktionen und schwarze Listen zu überprüfen. Es hilft Benutzern zu vermeiden, mit potenziell böswilligen oder blockierten Adressen zu interagieren.</string>
-    <string name="SettingsAddressChecker_TetherBlacklistDescription">Ermöglicht Ihnen zu überprüfen, ob eine Wallet-Adresse von Tether (USDT) gesperrt ist. Wenn eine Adresse auf der schwarzen Liste steht, können alle mit ihr verbundenen USDT-Token eingefroren werden, wodurch sie unzugänglich und nicht übertragbar sind. Diese Überprüfung hilft Anwendern zu vermeiden, mit hochriskanten oder eingeschränkten Adressen zu interagieren.</string>
-    <string name="SettingsAddressChecker_UsdcBlacklistDescription">Ermöglicht Ihnen zu überprüfen, ob eine Wallet-Adresse vom USDC Emittenten (Circle) auf die schwarze Liste gesetzt wird. Adressen auf der schwarzen Liste können ihre USDC Beteiligungen aufgrund von Compliance, Betrug oder regulatorischen Gründen einfrieren. Mit diesem Scheck wird das Risiko verringert, Guthaben an blockierte oder verdächtige Brieftaschen zu senden.</string>
-    <string name="SettingsAddressChecker_PyusdBlacklistDescription">Bietet eine Möglichkeit, um zu überprüfen, ob eine Wallet-Adresse von PYUSD, ausgestellt von PayPal, auf die schwarze Liste gesetzt ist. Gelder, die an Adressen auf der schwarzen Liste gehalten werden, können eingefroren und unbrauchbar sein, typischerweise aufgrund von Rechts- oder Sicherheitsangelegenheiten. Dieses Tool hilft Ihnen, sicherere und konforme Transaktionen mit PYUSD zu gewährleisten.</string>
-    <string name="SettingsAddressChecker_InvalidAddress">Die eingegebene Adresse scheint ungültig zu sein. Bitte überprüfen Sie auf Tippfehler oder Formatierungen und versuchen Sie es erneut.</string>
     <!--Banners-->
     <string name="SettingsBanner_Premium">Prämie</string>
     <string name="SettingsBanner_PremiumBannerDescription">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>

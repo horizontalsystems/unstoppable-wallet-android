@@ -851,18 +851,6 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 分钟</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
     <!--Address Checker-->
-    <string name="SettingsAddressChecker_Title">地址检查器</string>
-    <string name="SettingsAddressChecker_OnSubject">在 %s</string>
-    <string name="SettingsAddressChecker_SanctionsCheck">制裁检查</string>
-    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
-    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
-    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis 是一个区块链分析平台，它提供跟踪、调查和评估加密货币地址风险的工具。 它有助于查明与制裁、欺诈和其他非法活动有关的问题。</string>
-    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
-    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit 是一个安全平台，用户可以检查钱包地址的风险，如制裁和黑名单状态。 它有助于用户避免与潜在的恶意或被阻止的地址发生交互。</string>
-    <string name="SettingsAddressChecker_TetherBlacklistDescription">允许您验证钱包地址是否为Tether (UDT) 黑名单。 如果一个地址被黑名单，任何与之相关的 USDT 代币都可以被冻结，使其无法访问和不可转让。 此检查可帮助用户避免与高风险或受限制的地址发生交互作用。</string>
-    <string name="SettingsAddressChecker_UsdcBlacklistDescription">允许您检查一个钱包地址是否被 USDC 发行商(Circle)黑名单。 黑名单上的地址可能因为遵守规定、欺诈或管制原因而冻结美国国防军的持有量。 使用这种检查可以减少向被冻结或可疑的钱包发送资金的风险。</string>
-    <string name="SettingsAddressChecker_PyusdBlacklistDescription">提供一种方法来验证钱包地址是否是由 PayPal 发行的 PYUSD 黑名单上的。 在黑名单上的地址持有的资金可能被冻结和无法使用，主要是出于法律或安全考虑。 这个工具有助于确保交易更安全和符合客户关系管理系统。</string>
-    <string name="SettingsAddressChecker_InvalidAddress">您输入的地址似乎是无效的。请重新检查轮胎或格式问题，然后重试。</string>
     <!--Banners-->
     <string name="SettingsBanner_Premium">高級版</string>
     <string name="SettingsBanner_PremiumBannerDescription">使用高級版功能升級您的體驗！</string>

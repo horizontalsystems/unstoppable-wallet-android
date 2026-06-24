@@ -671,7 +671,6 @@ enum class StatPremiumTrigger(val value: String) {
     GetPremium("get_premium"),
     DuressMode("duress_mode"),
     VipSupport("vip_support"),
-    AddressChecker("address_checker"),
     Sectors("sectors"),
     PriceChange("price_change"),
     PricePeriod("price_period"),

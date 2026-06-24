@@ -1617,12 +1617,6 @@
     <string name="Send_Address_SanctionCheck">제재 목록 확인</string>
     <string name="Send_UnexpectedError">예기치 못한 오류</string>
     <string name="Send_UnexpectedError_Description">트랜잭션 전송 중 문제가 발생했습니다. 다시 시도하거나 오류 코드를 복사하여 지원팀에 문의하세요.</string>
-    <string name="SettingsAddressChecker_ChainalysisCheckDescription">Chainalysis는 암호화폐 주소를 추적, 조사하고 위험을 평가할 수 있는 도구를 제공하는 블록체인 분석 플랫폼입니다. 이 플랫폼은 제재, 사기, 기타 불법 활동과 관련된 주소를 식별하는 데 도움을 줍니다.</string>
-    <string name="SettingsAddressChecker_HashditCheckDescription">HashDit는 사용자들이 지갑 주소에 대한 제재나 블랙리스트 위험을 확인할 수 있도록 해주는 보안 플랫폼입니다. 사용자가 악의적이거나 차단된 주소와의 상호작용을 피하도록 도와줍니다.</string>
-    <string name="SettingsAddressChecker_OnSubject">%s 기준</string>
-    <string name="SettingsAddressChecker_SanctionsCheck">제재 목록 확인</string>
-    <string name="SettingsAddressChecker_Title">주소 확인 도구</string>
-    <string name="SettingsAddressChecker_TokenBlacklistCheck">%s 블랙리스트 확인</string>
     <string name="SettingsBanner_GameDescription">테스트를 통과하고 과제를 완료하여 토큰을 획득하세요!</string>
     <string name="SettingsLaunchScreen_Auto">자동</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">의심스러운 거래 숨기기</string>
@@ -1726,12 +1720,6 @@
     <string name="ScanQr_Photos">사진</string>
     <string name="ScanQr_QrDetected">QR 코드가 감지됨</string>
     <string name="Send_Address_Error_InvalidAddress_Description">이 주소는 선택한 네트워크에 맞지 않는 것 같습니다. 다시 확인해 주세요.</string>
-    <string name="SettingsAddressChecker_ChainalysisCheck">Chainalysis.com</string>
-    <string name="SettingsAddressChecker_HashditCheck">Hashdit.io</string>
-    <string name="SettingsAddressChecker_InvalidAddress">입력한 주소가 유효하지 않은 것 같습니다. 오타나 형식 문제가 없는지 다시 확인한 후 다시 시도해 주세요.</string>
-    <string name="SettingsAddressChecker_PyusdBlacklistDescription">PayPal에서 발행한 PYUSD에 의해 지갑 주소가 블랙리스트에 올랐는지 확인하는 방법을 제공합니다. 블랙리스트에 오른 주소에 보관된 자금은 일반적으로 법적 또는 보안상의 이유로 동결되어 사용할 수 없게 될 수 있습니다. 이 도구는 PYUSD로 더 안전하고 규정을 준수하는 거래를 보장하는 데 도움이 됩니다.</string>
-    <string name="SettingsAddressChecker_TetherBlacklistDescription">지갑 주소가 Tether(USDT)에 의해 블랙리스트에 올랐는지 확인할 수 있습니다. 주소가 블랙리스트에 오르면 해당 주소와 연결된 USDT 토큰이 동결되어 접근하거나 전송할 수 없게 될 수 있습니다. 이 검사는 사용자가 고위험 또는 제한된 주소와 상호작용하는 것을 방지하는 데 도움이 됩니다.</string>
-    <string name="SettingsAddressChecker_UsdcBlacklistDescription">USDC 발행사(Circle)에 의해 지갑 주소가 블랙리스트에 올랐는지 확인할 수 있습니다. 블랙리스트에 오른 주소는 규정 준수, 사기 또는 규제상의 이유로 USDC 보유분이 동결될 수 있습니다. 이 검사를 사용하면 차단되거나 의심스러운 지갑으로 자금을 보내는 위험을 줄일 수 있습니다.</string>
     <string name="SettingsBanner_BePartOfTheFuture">프라이빗 금융의 미래에 동참하세요</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable 운동에 동참함으로써 여러분은 개방적이고 사적인 금융을 지지하게 됩니다:</string>
     <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet을 지원함으로써 저희가 성장하고, 개선하며, 독립성을 유지하는 데 도움을 주실 수 있습니다.</string>

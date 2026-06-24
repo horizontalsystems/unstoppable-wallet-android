@@ -53,7 +53,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutPage
-import io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckPage
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppearancePage
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
@@ -86,7 +85,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.subscriptions.core.PrioritySupport
-import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
@@ -330,21 +328,6 @@ private fun SettingSections(
                 stat(
                     page = StatPage.Settings,
                     event = StatEvent.OpenPremium(StatPremiumTrigger.VipSupport)
-                )
-            }
-        )
-        HsDivider()
-        HsSettingCell(
-            title = R.string.SettingsAddressChecker_Title,
-            icon = R.drawable.ic_radar_24,
-            iconTint = ComposeAppTheme.colors.jacob,
-            onClick = {
-                navigation.paidAction(SecureSend) {
-                    navigation.slideFromRight(AddressCheckPage)
-                }
-                stat(
-                    page = StatPage.Settings,
-                    event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
                 )
             }
         )
