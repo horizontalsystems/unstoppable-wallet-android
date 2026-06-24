@@ -1781,4 +1781,8 @@
     <string name="PasskeyTerms_Responsibility_Description">Вы несёте ответственность за доступ к вашему устройству. Unstoppable не сможет восстановить этот кошелёк, если доступ будет утерян.</string>
     <string name="CoinPage_Buy">Купить</string>
     <string name="CoinPage_Sell">Продать</string>
+    <string name="MoneroNodeSettings_AutoSelect">Автоматический выбор</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">Автоматически использовать самый быстрый узел</string>
+    <string name="MoneroNodeSettings_Unreachable">Недоступно</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>

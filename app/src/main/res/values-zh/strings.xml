@@ -1774,4 +1774,8 @@
     <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum、Arbitrum、Optimism…</string>
     <string name="CoinPage_Buy">购买</string>
     <string name="CoinPage_Sell">出售</string>
+    <string name="MoneroNodeSettings_AutoSelect">自动选择</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">自动使用最快的节点</string>
+    <string name="MoneroNodeSettings_Unreachable">无法访问</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>

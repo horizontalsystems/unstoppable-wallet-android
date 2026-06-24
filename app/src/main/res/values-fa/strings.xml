@@ -706,4 +706,8 @@
     <string name="PasskeyTerms_Responsibility_Description">مسئولیت دسترسی به دستگاهتان بر عهده شماست. در صورت از دست رفتن دسترسی، Unstoppable نمی‌تواند این کیف‌پول را بازیابی کند.</string>
     <string name="CoinPage_Buy">خریدن</string>
     <string name="CoinPage_Sell">فروختن</string>
+    <string name="MoneroNodeSettings_AutoSelect">انتخاب خودکار</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">استفاده خودکار از سریع‌ترین گره</string>
+    <string name="MoneroNodeSettings_Unreachable">غیرقابل دسترس</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>

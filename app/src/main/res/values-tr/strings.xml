@@ -1775,4 +1775,8 @@
     <string name="Watch_Monero_Warning">Monero izleme cüzdanı yalnızca gelen işlemleri gösterir. Görüntülenen bakiye yanlış olabilir.</string>
     <string name="CoinPage_Buy">Satın Al</string>
     <string name="CoinPage_Sell">Sat</string>
+    <string name="MoneroNodeSettings_AutoSelect">Otomatik seçim</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">En hızlı düğümü otomatik olarak kullan</string>
+    <string name="MoneroNodeSettings_Unreachable">Ulaşılamaz</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>

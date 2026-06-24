@@ -1783,4 +1783,8 @@
     <string name="PasskeyTerms_Responsibility_Description">Sie sind für den Zugriff auf Ihr Gerät verantwortlich. Unstoppable kann dieses Wallet nicht wiederherstellen, wenn der Zugriff verloren geht.</string>
     <string name="CoinPage_Buy">Kaufen</string>
     <string name="CoinPage_Sell">Verkaufen</string>
+    <string name="MoneroNodeSettings_AutoSelect">Automatische Auswahl</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">Verwendet automatisch den schnellsten Node</string>
+    <string name="MoneroNodeSettings_Unreachable">Nicht erreichbar</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>

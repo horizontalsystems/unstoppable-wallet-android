@@ -1779,4 +1779,8 @@
     <string name="PasskeyTerms_Responsibility_Description">Você é responsável pelo acesso ao seu dispositivo. A Unstoppable não pode recuperar esta carteira se o acesso for perdido.</string>
     <string name="CoinPage_Buy">Comprar</string>
     <string name="CoinPage_Sell">Vender</string>
+    <string name="MoneroNodeSettings_AutoSelect">Seleção automática</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">Usar automaticamente o nó mais rápido</string>
+    <string name="MoneroNodeSettings_Unreachable">Inacessível</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>

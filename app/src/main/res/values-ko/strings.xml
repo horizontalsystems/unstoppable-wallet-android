@@ -1775,4 +1775,8 @@
     <string name="Watch_Monero_Warning">Monero 워치 지갑은 입금 거래만 표시합니다. 표시된 잔액이 정확하지 않을 수 있습니다.</string>
     <string name="CoinPage_Buy">구매</string>
     <string name="CoinPage_Sell">판매</string>
+    <string name="MoneroNodeSettings_AutoSelect">자동 선택</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">가장 빠른 노드를 자동으로 사용</string>
+    <string name="MoneroNodeSettings_Unreachable">연결할 수 없음</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
 </resources>
