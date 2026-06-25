@@ -1779,4 +1779,6 @@
     <string name="MoneroNodeSettings_AutoSelectDescription">En hızlı düğümü otomatik olarak kullan</string>
     <string name="MoneroNodeSettings_Unreachable">Ulaşılamaz</string>
     <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">Bu not blockchain üzerinde herkese açık olacaktır.</string>
+    <string name="Send_Memo_EncryptedInfo">Bu not şifrelenir ve yalnızca sizin ve alıcının tarafından görülür.</string>
 </resources>

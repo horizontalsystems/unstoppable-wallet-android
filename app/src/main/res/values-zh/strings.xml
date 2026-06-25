@@ -1778,4 +1778,6 @@
     <string name="MoneroNodeSettings_AutoSelectDescription">自动使用最快的节点</string>
     <string name="MoneroNodeSettings_Unreachable">无法访问</string>
     <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">此备忘录将在区块链上公开。</string>
+    <string name="Send_Memo_EncryptedInfo">此备忘录已加密，只有您和收款人可以看到。</string>
 </resources>

@@ -1779,4 +1779,6 @@
     <string name="MoneroNodeSettings_AutoSelectDescription">가장 빠른 노드를 자동으로 사용</string>
     <string name="MoneroNodeSettings_Unreachable">연결할 수 없음</string>
     <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">이 메모는 블록체인에 공개됩니다.</string>
+    <string name="Send_Memo_EncryptedInfo">이 메모는 암호화되어 있으며 귀하와 수신자에게만 표시됩니다.</string>
 </resources>
