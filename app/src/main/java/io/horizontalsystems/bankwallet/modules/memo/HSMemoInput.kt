@@ -1,31 +1,65 @@
 package io.horizontalsystems.bankwallet.modules.memo
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+
+/**
+ * Describes where a memo ends up once the transaction is sent, so the UI can
+ * communicate the privacy implications consistently across blockchains.
+ *
+ * - [Public]: written on-chain in clear text (e.g. Bitcoin OP_RETURN, Stellar, TON) — anyone can read it.
+ * - [Encrypted]: written on-chain but encrypted, readable only by sender and recipient (e.g. Zcash shielded, Monero, Zano).
+ */
+enum class MemoVisibility {
+    Public,
+    Encrypted
+}
 
 @Composable
 fun HSMemoInput(
     maxLength: Int,
     memo: String? = null,
+    visibility: MemoVisibility = MemoVisibility.Public,
     onValueChange: (String) -> Unit
 ) {
-    FormsInput(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        hint = stringResource(R.string.Send_DialogMemoHint),
-        initial = memo,
-        hintColor = ComposeAppTheme.colors.andy,
-        hintStyle = ComposeAppTheme.typography.bodyItalic,
-        textColor = ComposeAppTheme.colors.leah,
-        textStyle = ComposeAppTheme.typography.bodyItalic,
-        pasteEnabled = false,
-        singleLine = true,
-        maxLength = maxLength,
-        onValueChange = onValueChange
-    )
+    val state = when (visibility) {
+        MemoVisibility.Public -> DataState.Error(
+            FormsInputStateWarning(stringResource(R.string.Send_Memo_PublicWarning))
+        )
+
+        MemoVisibility.Encrypted -> null
+    }
+
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        FormsInput(
+            hint = stringResource(R.string.Send_DialogMemoHint),
+            initial = memo,
+            hintColor = ComposeAppTheme.colors.andy,
+            hintStyle = ComposeAppTheme.typography.bodyItalic,
+            textColor = ComposeAppTheme.colors.leah,
+            textStyle = ComposeAppTheme.typography.bodyItalic,
+            pasteEnabled = false,
+            singleLine = true,
+            maxLength = maxLength,
+            state = state,
+            onValueChange = onValueChange
+        )
+
+        if (visibility == MemoVisibility.Encrypted) {
+            caption_grey(
+                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
+                text = stringResource(R.string.Send_Memo_EncryptedInfo)
+            )
+        }
+    }
 }
