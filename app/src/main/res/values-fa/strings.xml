@@ -710,4 +710,6 @@
     <string name="MoneroNodeSettings_AutoSelectDescription">استفاده خودکار از سریع‌ترین گره</string>
     <string name="MoneroNodeSettings_Unreachable">غیرقابل دسترس</string>
     <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">این یادداشت در بلاک چین عمومی خواهد بود.</string>
+    <string name="Send_Memo_EncryptedInfo">این یادداشت رمزگذاری شده است و تنها برای شما و گیرنده قابل مشاهده است.</string>
 </resources>

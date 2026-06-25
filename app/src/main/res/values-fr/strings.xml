@@ -1780,4 +1780,6 @@
     <string name="MoneroNodeSettings_AutoSelectDescription">Utiliser automatiquement le nœud le plus rapide</string>
     <string name="MoneroNodeSettings_Unreachable">Inaccessible</string>
     <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">Ce mémo sera public sur la blockchain.</string>
+    <string name="Send_Memo_EncryptedInfo">Ce mémo est chiffré et visible uniquement pour vous et le destinataire.</string>
 </resources>
