@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
+import io.horizontalsystems.bankwallet.modules.memo.MemoVisibility
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskySheet
@@ -111,7 +112,8 @@ fun SendZCashScreen(
             if (memoIsAllowed) {
                 VSpacer(16.dp)
                 HSMemoInput(
-                    maxLength = viewModel.memoMaxLength
+                    maxLength = viewModel.memoMaxLength,
+                    visibility = MemoVisibility.Encrypted
                 ) {
                     viewModel.onEnterMemo(it)
                 }

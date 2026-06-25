@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
+import io.horizontalsystems.bankwallet.modules.memo.MemoVisibility
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskySheet
@@ -112,7 +113,7 @@ fun SendZanoScreen(
             )
 
             VSpacer(16.dp)
-            HSMemoInput(maxLength = 120, memo) {
+            HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Encrypted) {
                 viewModel.onEnterMemo(it)
             }
 
