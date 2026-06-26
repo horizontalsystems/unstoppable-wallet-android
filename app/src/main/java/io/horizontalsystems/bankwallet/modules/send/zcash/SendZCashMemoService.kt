@@ -44,7 +44,11 @@ class SendZCashMemoService {
     }
 
     private fun refreshMemoIsAllowed() {
-        memoIsAllowed = addressType == ZcashAdapter.ZCashAddressType.Shielded
+        // Encrypted memos are supported by any destination that has a shielded receiver:
+        // legacy Sapling addresses and modern unified (u1...) addresses. Transparent
+        // (including Tex) destinations have no memo field.
+        memoIsAllowed = addressType == ZcashAdapter.ZCashAddressType.Shielded ||
+                addressType == ZcashAdapter.ZCashAddressType.Unified
     }
 
     data class State(

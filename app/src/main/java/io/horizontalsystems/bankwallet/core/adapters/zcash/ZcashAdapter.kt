@@ -261,7 +261,7 @@ class ZcashAdapter(
             is AddressType.Invalid -> throw ZcashError.InvalidAddress
             is AddressType.Transparent -> ZCashAddressType.Transparent
             is AddressType.Shielded -> ZCashAddressType.Shielded
-            is AddressType.Tex -> ZCashAddressType.Shielded
+            is AddressType.Tex -> ZCashAddressType.Transparent
             AddressType.Unified -> ZCashAddressType.Unified
         }
     }
