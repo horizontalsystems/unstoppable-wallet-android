@@ -1079,6 +1079,7 @@
     "Send_LockTime_Off": "Off",
     "Send_LockTime_Year": "1 year",
     "Send_Memo_EncryptedInfo": "This memo is encrypted and visible only to you and the recipient.",
+    "Send_Memo_OffchainInfo": "Stored on this device only — not on-chain.",
     "Send_Memo_PublicWarning": "This memo will be public on the blockchain.",
     "Send_Rbf": "Replace by Fee",
     "Send_RbfDisabled": "Disabled",

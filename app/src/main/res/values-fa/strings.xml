@@ -712,4 +712,5 @@
     <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">این یادداشت در بلاک چین عمومی خواهد بود.</string>
     <string name="Send_Memo_EncryptedInfo">این یادداشت رمزگذاری شده است و تنها برای شما و گیرنده قابل مشاهده است.</string>
+    <string name="Send_Memo_OffchainInfo">فقط در این دستگاه ذخیره شده است — در بلاک‌چین نیست.</string>
 </resources>
