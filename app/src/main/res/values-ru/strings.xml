@@ -1787,4 +1787,5 @@
     <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">Этот меморандум будет открыт в блокчейне.</string>
     <string name="Send_Memo_EncryptedInfo">Этот меморандум зашифрован и видим только вам и получателю.</string>
+    <string name="Send_Memo_OffchainInfo">Сохранено только на этом устройстве — не в блокчейне.</string>
 </resources>

@@ -1782,4 +1782,5 @@
     <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">Ce mémo sera public sur la blockchain.</string>
     <string name="Send_Memo_EncryptedInfo">Ce mémo est chiffré et visible uniquement pour vous et le destinataire.</string>
+    <string name="Send_Memo_OffchainInfo">Stocké sur cet appareil uniquement — pas sur la blockchain.</string>
 </resources>

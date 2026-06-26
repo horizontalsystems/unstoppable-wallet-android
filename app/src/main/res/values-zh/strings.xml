@@ -1780,4 +1780,5 @@
     <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">此备忘录将在区块链上公开。</string>
     <string name="Send_Memo_EncryptedInfo">此备忘录已加密，只有您和收款人可以看到。</string>
+    <string name="Send_Memo_OffchainInfo">仅存储在此设备上 — 不在区块链上。</string>
 </resources>
