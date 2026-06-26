@@ -113,7 +113,7 @@ fun SendZanoScreen(
             )
 
             VSpacer(16.dp)
-            HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Encrypted) {
+            HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
                 viewModel.onEnterMemo(it)
             }
 

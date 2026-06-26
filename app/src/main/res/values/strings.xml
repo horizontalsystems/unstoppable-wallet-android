@@ -550,6 +550,7 @@
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_Memo_PublicWarning">This memo will be public on the blockchain.</string>
     <string name="Send_Memo_EncryptedInfo">This memo is encrypted and visible only to you and the recipient.</string>
+    <string name="Send_Memo_OffchainInfo">Stored on this device only — not on-chain.</string>
     <string name="Send_DialogLockTime" translatable="false">TimeLock</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>

@@ -18,11 +18,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
  * communicate the privacy implications consistently across blockchains.
  *
  * - [Public]: written on-chain in clear text (e.g. Bitcoin OP_RETURN, Stellar, TON) — anyone can read it.
- * - [Encrypted]: written on-chain but encrypted, readable only by sender and recipient (e.g. Zcash shielded, Monero, Zano).
+ * - [Encrypted]: written on-chain but encrypted, readable only by sender and recipient (e.g. Zcash shielded).
+ * - [Offchain]: kept only on this device, never broadcast to the blockchain, and not recovered on wallet
+ *   restore (e.g. Monero, Zano).
  */
 enum class MemoVisibility {
     Public,
-    Encrypted
+    Encrypted,
+    Offchain
 }
 
 @Composable
@@ -37,7 +40,14 @@ fun HSMemoInput(
             FormsInputStateWarning(stringResource(R.string.Send_Memo_PublicWarning))
         )
 
-        MemoVisibility.Encrypted -> null
+        MemoVisibility.Encrypted,
+        MemoVisibility.Offchain -> null
+    }
+
+    val infoText = when (visibility) {
+        MemoVisibility.Public -> null
+        MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
+        MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
     }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -55,10 +65,10 @@ fun HSMemoInput(
             onValueChange = onValueChange
         )
 
-        if (visibility == MemoVisibility.Encrypted) {
+        infoText?.let {
             caption_grey(
                 modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
-                text = stringResource(R.string.Send_Memo_EncryptedInfo)
+                text = it
             )
         }
     }
