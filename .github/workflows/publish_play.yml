@@ -43,7 +43,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: io.horizontalsystems.bankwallet
           releaseFiles: app/build/outputs/bundle/baseRelease/app-base-release.aab
-          track: internal
+          track: production
           status: draft
 
       - name: Notify Telegram on success
