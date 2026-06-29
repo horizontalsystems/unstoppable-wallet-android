@@ -340,46 +340,6 @@ class SwapQuoteService(
         reQuote()
     }
 
-    fun selectLeg1Quote(quote: SwapProviderQuote) {
-        val route = multiSwapRoute ?: return
-        val leg2Amount = quote.amountOut - route.commissionReserve
-        if (leg2Amount <= BigDecimal.ZERO) return
-
-        multiSwapRoute = route.copy(selectedLeg1Quote = quote)
-        emitState()
-
-        reQuoteLeg2(leg2Amount)
-    }
-
-    fun selectLeg2Quote(quote: SwapProviderQuote) {
-        val route = multiSwapRoute ?: return
-        multiSwapRoute = route.copy(selectedLeg2Quote = quote)
-        emitState()
-    }
-
-    private fun reQuoteLeg2(leg2Amount: BigDecimal) {
-        val route = multiSwapRoute ?: return
-        val tokenOut = tokenOut ?: return
-
-        coroutineScope.launch {
-            val leg2Providers = route.leg2Quotes.map { it.provider }
-            val newLeg2Quotes = fetchSwapQuotesUseCase(
-                providers = leg2Providers,
-                tokenIn = route.intermediateCoin,
-                tokenOut = tokenOut,
-                amountIn = leg2Amount,
-                settings = settings,
-            )
-            if (newLeg2Quotes.isEmpty()) return@launch
-
-            multiSwapRoute = multiSwapRoute?.copy(
-                leg2Quotes = newLeg2Quotes,
-                selectedLeg2Quote = newLeg2Quotes.first(),
-            )
-            emitState()
-        }
-    }
-
     fun getSwapSettings() = settings
 
     data class State(

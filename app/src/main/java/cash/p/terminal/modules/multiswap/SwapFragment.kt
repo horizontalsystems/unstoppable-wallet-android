@@ -73,7 +73,6 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.SwapDirectionIndicator
-import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItemTimeoutIndicator
@@ -88,7 +87,6 @@ import cash.p.terminal.ui_compose.components.subhead1_jacob
 import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
-import cash.p.terminal.ui_compose.components.subhead2_remus
 import cash.p.terminal.ui_compose.parcelable
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
@@ -157,9 +155,6 @@ private object SwapTransactionSettingsPage
 
 @Serializable
 private object SwapProvidersSettingsPage
-
-@Serializable
-private data class SwapSelectLegProviderPage(val legIndex: Int)
 
 @Serializable
 private enum class SwapCoinDirection { From, To }
@@ -235,44 +230,6 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
                     selectProviderViewModel.swapRates()
                 },
                 onSelectQuote = viewModel::onSelectQuote
-            )
-        }
-        composablePopup<SwapSelectLegProviderPage> { backStackEntry ->
-            val args = backStackEntry.toRoute<SwapSelectLegProviderPage>()
-            val route = viewModel.uiState.multiSwapRoute
-            if (route == null) {
-                LaunchedEffect(Unit) { swapNavController.navigateUp() }
-                return@composablePopup
-            }
-            val quotes = if (args.legIndex == 1) route.leg1Quotes else route.leg2Quotes
-            val currentQuote =
-                if (args.legIndex == 1) route.selectedLeg1Quote else route.selectedLeg2Quote
-            val onSelect: (SwapProviderQuote) -> Unit = if (args.legIndex == 1) {
-                viewModel::onSelectLeg1Quote
-            } else {
-                viewModel::onSelectLeg2Quote
-            }
-            val selectProviderViewModel = viewModel<SwapSelectProviderViewModel>(
-                viewModelStoreOwner = backStackEntry,
-                factory = SwapSelectProviderViewModel.Factory(quotes)
-            )
-            val swapProvidersRepository = remember { getKoinInstance<SwapProvidersRepository>() }
-            val disabledIds by swapProvidersRepository.disabledIds.collectAsStateWithLifecycle()
-            SwapSelectProviderScreen(
-                onClickClose = swapNavController::popBackStackSafely,
-                onClickSettings = {
-                    swapNavController.navigate(SwapProvidersSettingsPage)
-                },
-                quotes = selectProviderViewModel.uiState.quoteViewItems,
-                currentQuote = currentQuote,
-                mandatoryProviderIds = SwapProvidersRepository.MANDATORY_IDS,
-                disabledProviderIds = disabledIds,
-                onToggleProvider = swapProvidersRepository::setDisabled,
-                swapRates = {
-                    HudHelper.vibrate(App.instance)
-                    selectProviderViewModel.swapRates()
-                },
-                onSelectQuote = onSelect
             )
         }
         composablePage<SwapConfirmPage> {
@@ -368,9 +325,6 @@ private fun SwapMainScreen(
         uiState = uiState,
         timeRemainingProgress = { viewModel.timeRemainingProgress },
         onClickClose = fragmentNavController::navigateUpSafely,
-        onClickProvidersSettings = {
-            swapNavController.navigate(SwapProvidersSettingsPage)
-        },
         onClickCoinFrom = {
             swapNavController.navigate(SwapSelectCoinPage(SwapCoinDirection.From))
         },
@@ -407,10 +361,7 @@ private fun SwapMainScreen(
             viewModel.onActionCompleted()
         },
         navController = fragmentNavController,
-        onBalanceClicked = viewModel::toggleHideBalance,
-        onClickLegProvider = { legIndex ->
-            swapNavController.navigate(SwapSelectLegProviderPage(legIndex))
-        },
+        onBalanceClicked = viewModel::toggleHideBalance
     )
 }
 
@@ -419,7 +370,6 @@ private fun SwapScreenInner(
     uiState: SwapUiState,
     timeRemainingProgress: () -> Float?,
     onClickClose: () -> Unit,
-    onClickProvidersSettings: () -> Unit,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
     onSwitchPairs: () -> Unit,
@@ -434,8 +384,7 @@ private fun SwapScreenInner(
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
     onBalanceClicked: () -> Unit,
-    navController: NavController,
-    onClickLegProvider: (Int) -> Unit = {},
+    navController: NavController
 ) {
     LifecycleResumeEffect(uiState.timeout) {
         if (uiState.timeout) {
@@ -458,13 +407,15 @@ private fun SwapScreenInner(
                     timeRemainingProgress()?.let { progress ->
                         add(MenuItemTimeoutIndicator(progress))
                     }
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.swap_providers_title),
-                            icon = R.drawable.ic_manage_2_24,
-                            onClick = onClickProvidersSettings,
+                    if (quote?.swapQuote?.settings?.isNotEmpty() == true) {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.SwapSettings_Title),
+                                icon = R.drawable.ic_manage_2_24,
+                                onClick = onClickProviderSettings,
+                            )
                         )
-                    )
+                    }
                 }
             )
         },
@@ -631,7 +582,7 @@ private fun SwapScreenInner(
                 VSpacer(height = 12.dp)
                 if (quote != null) {
                     CardsSwapInfo {
-                        ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
+                        ProviderField(quote.provider, onClickProvider)
                         val finalTokenOut = uiState.tokenOut ?: quote.tokenOut
                         val finalAmountOut = uiState.multiSwapRoute?.selectedLeg2Quote?.amountOut ?: quote.amountOut
                         PriceField(quote.tokenIn, finalTokenOut, quote.amountIn, finalAmountOut)
@@ -758,7 +709,6 @@ fun PriceImpactField(
 private fun ProviderField(
     swapProvider: IMultiSwapProvider,
     onClickProvider: () -> Unit,
-    onClickProviderSettings: () -> Unit,
 ) {
     HSRow(
         modifier = Modifier
@@ -779,15 +729,6 @@ private fun ProviderField(
                 subhead1_leah(text = swapProvider.title)
             },
             onClickSelect = onClickProvider
-        )
-        HFillSpacer(minWidth = 16.dp)
-        Icon(
-            modifier = Modifier.clickable(
-                onClick = onClickProviderSettings
-            ),
-            painter = painterResource(R.drawable.ic_manage_2),
-            contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
         )
     }
 }
@@ -1160,64 +1101,6 @@ private fun AmountInput(
             }
             innerTextField()
         },
-    )
-}
-
-@Composable
-private fun MultiSwapLegCard(
-    legIndex: Int,
-    quote: SwapProviderQuote,
-    onClickProvider: () -> Unit,
-    onClickProviderSettings: () -> Unit,
-    navController: NavController,
-) {
-    CardsSwapInfo {
-        QuoteInfoRow(
-            title = {
-                subhead2_grey(text = stringResource(R.string.swap_leg_title, legIndex))
-            },
-            value = {}
-        )
-        ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
-        LegAmountRow(
-            label = stringResource(R.string.swap_you_send),
-            amount = quote.amountIn,
-            token = quote.tokenIn,
-            isReceive = false,
-        )
-        LegAmountRow(
-            label = stringResource(R.string.swap_you_receive),
-            amount = quote.amountOut,
-            token = quote.tokenOut,
-            isReceive = true,
-        )
-        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
-        quote.fields.forEach {
-            it.GetContent(navController, false)
-        }
-    }
-}
-
-@Composable
-private fun LegAmountRow(
-    label: String,
-    amount: BigDecimal,
-    token: Token,
-    isReceive: Boolean,
-) {
-    QuoteInfoRow(
-        borderTop = true,
-        title = {
-            subhead2_grey(text = label)
-        },
-        value = {
-            val formatted = CoinValue(token, amount).getFormattedFull()
-            if (isReceive) {
-                subhead2_remus(text = formatted)
-            } else {
-                subhead2_leah(text = formatted)
-            }
-        }
     )
 }
 

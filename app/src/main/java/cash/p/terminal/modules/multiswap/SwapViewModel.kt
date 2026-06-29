@@ -287,9 +287,6 @@ class SwapViewModel(
         }
     }
 
-    fun onSelectLeg1Quote(quote: SwapProviderQuote) = quoteService.selectLeg1Quote(quote)
-    fun onSelectLeg2Quote(quote: SwapProviderQuote) = quoteService.selectLeg2Quote(quote)
-
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()
