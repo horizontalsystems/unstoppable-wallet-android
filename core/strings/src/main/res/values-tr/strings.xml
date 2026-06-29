@@ -1975,6 +1975,8 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="scan_card_to_add">Token eklemek için kartı tarayın</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Takas tamamlandı</string>
+    <string name="multi_swap_via">%s üzerinden takas</string>
+    <string name="multi_swap_completed_via">%s üzerinden tamamlandı</string>
     <string name="multi_swap_no_providers">Kullanılabilir sağlayıcı yok</string>
     <string name="multi_swap_finding_best_provider">En iyi sağlayıcı aranıyor…</string>
     <string name="multi_swap_continue">Takasa devam et</string>
@@ -1987,6 +1989,14 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="multi_swap_cancel_swap">Takası iptal et</string>
     <string name="multi_swap_cancel_swap_warning">İlk takas zaten tamamlandı. Ara paralar cüzdanınızda ve size ait kalmaya devam edecek. Yalnızca takasın ikinci adımı iptal edilecek.</string>
     <string name="swap_leg_title">Takas %d</string>
+    <string name="swap_provider_type_info_title">Takas sağlayıcı türleri</string>
+    <string name="swap_provider_type_info_description">Aşağıdaki etiketler, farklı takas sağlayıcı türlerinin nasıl çalıştığını açıklar. Takasın nasıl gerçekleştirileceğini ve hangi ek kontrollerin veya koşulların geçerli olabileceğini anlamanıza yardımcı olur.</string>
+    <string name="swap_provider_type_auto_description">Takas otomatik olarak yürütülür. Takas tamamlanamazsa, fonlar genellikle kullanıcının herhangi bir işlem yapmasına gerek kalmadan otomatik olarak iade edilir.</string>
+    <string name="swap_provider_type_flexible_description">Sağlayıcı, takası gerçekleştirmek için kendi likiditesini kullanır. Nadir durumlarda, piyasa değişiklikleri nedeniyle nihai kur başlangıçtakinden biraz farklı olabilir.</string>
+    <string name="swap_provider_type_controlled_description">Sağlayıcı, üçüncü taraf likiditesi kullanabilir ve ek AML/KYC kontrolleri uygulayabilir. Bazı durumlarda takas geçici olarak askıya alınabilir veya işlem tamamlanmadan önce ek bir doğrulama gerekebilir.</string>
+    <string name="swap_provider_type_precheck_description">Takas başlamadan önce sağlayıcı, adres ve işlem parametreleri üzerinde ek kontroller yapar. Bu, hata olasılığını azaltmaya ve takasın başarı oranını artırmaya yardımcı olur.</string>
+    <string name="swap_sort_best_rate">En iyi kur</string>
+    <string name="swap_sort_best_time">En hızlı</string>
     <string name="scan">Tara</string>
     <string name="adding_tokens">Tokenler ekleniyor</string>
     <string name="scan_to_add_message">Token eklemek için kartı taramanız gerekir</string>

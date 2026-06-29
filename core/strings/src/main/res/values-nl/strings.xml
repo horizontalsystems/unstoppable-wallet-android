@@ -1981,6 +1981,8 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="scan_card_to_add">Scan kaart om token toe te voegen</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Ruil voltooid</string>
+    <string name="multi_swap_via">Ruil via %s</string>
+    <string name="multi_swap_completed_via">Voltooid via %s</string>
     <string name="multi_swap_no_providers">Geen providers beschikbaar</string>
     <string name="multi_swap_finding_best_provider">Beste aanbieder zoeken…</string>
     <string name="multi_swap_continue">Ruil voortzetten</string>
@@ -1993,6 +1995,14 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="multi_swap_cancel_swap">Ruil annuleren</string>
     <string name="multi_swap_cancel_swap_warning">De eerste ruil is al voltooid. De tussenliggende munten staan in uw portemonnee en blijven van u. Alleen de tweede ruilstap wordt geannuleerd.</string>
     <string name="swap_leg_title">Ruil %d</string>
+    <string name="swap_provider_type_info_title">Soorten ruilaanbieders</string>
+    <string name="swap_provider_type_info_description">De onderstaande labels leggen uit hoe verschillende soorten ruilaanbieders werken. Ze helpen je te begrijpen hoe de ruil wordt uitgevoerd en welke aanvullende controles of voorwaarden van toepassing kunnen zijn.</string>
+    <string name="swap_provider_type_auto_description">Automatische uitvoering van de ruil. Als de ruil niet kan worden voltooid, worden de tegoeden meestal automatisch terugbetaald zonder dat de gebruiker iets hoeft te doen.</string>
+    <string name="swap_provider_type_flexible_description">De aanbieder gebruikt zijn eigen liquiditeit om de ruil uit te voeren. In zeldzame gevallen kan de uiteindelijke koers iets afwijken van de oorspronkelijke door veranderingen in de markt.</string>
+    <string name="swap_provider_type_controlled_description">De aanbieder kan liquiditeit van derden gebruiken en aanvullende AML/KYC-controles toepassen. In sommige gevallen kan de ruil tijdelijk worden opgeschort of is er een aanvullende controle nodig voordat de transactie wordt voltooid.</string>
+    <string name="swap_provider_type_precheck_description">Voordat de ruil begint, voert de aanbieder aanvullende controles uit op het adres en de transactieparameters. Dit helpt de kans op fouten te verkleinen en het slagingspercentage van de ruil te verhogen.</string>
+    <string name="swap_sort_best_rate">Beste koers</string>
+    <string name="swap_sort_best_time">Snelste</string>
     <string name="scan">Scannen</string>
     <string name="adding_tokens">Tokens toevoegen</string>
     <string name="scan_to_add_message">U moet de kaart scannen om tokens toe te voegen</string>

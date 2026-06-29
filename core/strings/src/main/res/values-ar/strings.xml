@@ -1997,6 +1997,8 @@
     <string name="scan_card_to_add">امسح البطاقة لإضافة الرمز المميز</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">تم التبادل</string>
+    <string name="multi_swap_via">تبادل عبر %s</string>
+    <string name="multi_swap_completed_via">اكتمل عبر %s</string>
     <string name="multi_swap_no_providers">لا يوجد مزودون متاحون</string>
     <string name="multi_swap_finding_best_provider">جارٍ البحث عن أفضل مزود…</string>
     <string name="multi_swap_continue">متابعة التبادل</string>
@@ -2009,6 +2011,14 @@
     <string name="multi_swap_cancel_swap">إلغاء التبادل</string>
     <string name="multi_swap_cancel_swap_warning">تم إتمام التبادل الأول بالفعل. العملات الوسيطة موجودة في محفظتك وستبقى ملكك. سيتم إلغاء الخطوة الثانية من التبادل فقط.</string>
     <string name="swap_leg_title">مبادلة %d</string>
+    <string name="swap_provider_type_info_title">أنواع مزوّدي المبادلة</string>
+    <string name="swap_provider_type_info_description">توضّح التسميات أدناه كيفية عمل الأنواع المختلفة من مزوّدي المبادلة. وهي تساعدك على فهم كيفية تنفيذ المبادلة وما قد ينطبق من عمليات تحقق أو شروط إضافية.</string>
+    <string name="swap_provider_type_auto_description">تنفيذ تلقائي للمبادلة. إذا تعذّر إتمام المبادلة، تُعاد الأموال عادةً تلقائيًا دون الحاجة إلى أي إجراء من المستخدم.</string>
+    <string name="swap_provider_type_flexible_description">يستخدم المزوّد سيولته الخاصة لتنفيذ المبادلة. في حالات نادرة، قد يختلف السعر النهائي قليلًا عن السعر الأولي بسبب تغيّرات السوق.</string>
+    <string name="swap_provider_type_controlled_description">قد يستخدم المزوّد سيولة من أطراف ثالثة ويطبّق فحوصات إضافية لمكافحة غسل الأموال (AML) ومعرفة العميل (KYC). في بعض الحالات قد تُعلَّق المبادلة مؤقتًا أو تتطلّب فحصًا إضافيًا قبل إتمام العملية.</string>
+    <string name="swap_provider_type_precheck_description">قبل بدء المبادلة، يجري المزوّد فحوصات إضافية على العنوان وبارامترات المعاملة. يساعد ذلك على تقليل احتمال الأخطاء وزيادة معدّل نجاح المبادلة.</string>
+    <string name="swap_sort_best_rate">أفضل سعر</string>
+    <string name="swap_sort_best_time">الأسرع</string>
     <string name="scan">مسح</string>
     <string name="adding_tokens">جارٍ إضافة الرموز</string>
     <string name="scan_to_add_message">تحتاج إلى مسح البطاقة لإضافة الرموز المميزة</string>

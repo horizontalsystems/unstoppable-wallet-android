@@ -211,6 +211,8 @@ private fun ExchangeDetailContent(
                 currentQuote = viewModel.selectedLeg2Quote,
                 mandatoryProviderIds = SwapProvidersRepository.MANDATORY_IDS,
                 disabledProviderIds = disabledIds,
+                sortType = selectProviderViewModel.uiState.sortType,
+                onSortTypeChange = selectProviderViewModel::setSortType,
                 onToggleProvider = swapProvidersRepository::setDisabled,
                 swapRates = {
                     HudHelper.vibrate(App.instance)

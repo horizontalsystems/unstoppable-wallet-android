@@ -47,6 +47,7 @@ class QuickexProvider(
     override val id = "quickex"
     override val title = "Quickex"
     override val icon = R.drawable.ic_quickex
+    override val riskType = ProviderRiskType.PreCheck
 
     override val mevProtectionAvailable: Boolean = false
     private val currencies = mutableListOf<QuickexInstrument>()

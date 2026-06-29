@@ -1,8 +1,10 @@
 package cash.p.terminal.modules.multiswap
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.CoinValue
@@ -26,7 +28,8 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
     // To show straight or reversed rate in provider list item
     private var isRegularRateDirection = true
 
-    private var quoteViewItems = getViewItems(quotes)
+    private var sortType = ProviderSortType.BestPrice
+    private var quoteViewItems = getViewItems(quotes.sorted())
 
     init {
         viewModelScope.launch {
@@ -34,15 +37,32 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
                 .asFlow()
                 .collect {
                     rate = it.value
-                    quoteViewItems = getViewItems(quotes)
-                    emitState()
+                    rebuildViewItems()
                 }
         }
     }
 
+    private fun rebuildViewItems() {
+        quoteViewItems = getViewItems(quotes.sorted())
+        emitState()
+    }
+
+    private fun List<SwapProviderQuote>.sorted(): List<SwapProviderQuote> = when (sortType) {
+        ProviderSortType.BestPrice -> sortedWith(
+            compareByDescending<SwapProviderQuote> { it.amountOut }
+                .thenBy { it.estimationTime ?: Long.MAX_VALUE }
+        )
+
+        ProviderSortType.BestTime -> sortedWith(
+            compareBy<SwapProviderQuote> { it.estimationTime ?: Long.MAX_VALUE }
+                .thenByDescending { it.amountOut }
+        )
+    }
+
     private fun getViewItems(quotes: List<SwapProviderQuote>): List<QuoteViewItem> {
-        val bestProviderAmountOut = quotes.firstOrNull()?.amountOut ?: return emptyList()
-        return quotes.mapIndexed { index, quote ->
+        // Diff is always measured against the best rate, regardless of the active sort order.
+        val bestProviderAmountOut = quotes.maxOfOrNull { it.amountOut } ?: return emptyList()
+        return quotes.map { quote ->
             val fiatAmount = getFiatValue(quote.amountOut)?.getFormattedFull()
             val tokenAmount = App.numberFormatter.formatCoinFull(
                 value = quote.amountOut,
@@ -59,7 +79,7 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
                 quote = quote,
                 fiatAmount = fiatAmount,
                 tokenAmount = tokenAmount,
-                diffWithFirst = if (index != 0) {
+                diffWithFirst = if (quote.amountOut < bestProviderAmountOut) {
                     tryOrNull {
                         ((quote.amountOut - bestProviderAmountOut) / bestProviderAmountOut * BigDecimal(
                             100
@@ -70,14 +90,21 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
                     null
                 },
                 rateFrom = rateFrom,
-                rateTo = rateTo
+                rateTo = rateTo,
+                estimationTime = quote.estimationTime
             )
         }
     }
 
     override fun createState() = SwapSelectProviderUiState(
-        quoteViewItems = quoteViewItems
+        quoteViewItems = quoteViewItems,
+        sortType = sortType
     )
+
+    fun setSortType(sortType: ProviderSortType) {
+        this.sortType = sortType
+        rebuildViewItems()
+    }
 
     private fun getFiatValue(amount: BigDecimal?): CurrencyValue? {
         return amount?.let {
@@ -89,8 +116,7 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
 
     fun swapRates() {
         isRegularRateDirection = !isRegularRateDirection
-        quoteViewItems = getViewItems(quotes)
-        emitState()
+        rebuildViewItems()
     }
 
     private fun getRateString(
@@ -128,7 +154,10 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
     }
 }
 
-data class SwapSelectProviderUiState(val quoteViewItems: List<QuoteViewItem>)
+data class SwapSelectProviderUiState(
+    val quoteViewItems: List<QuoteViewItem>,
+    val sortType: ProviderSortType
+)
 
 data class QuoteViewItem(
     val quote: SwapProviderQuote,
@@ -136,5 +165,11 @@ data class QuoteViewItem(
     val tokenAmount: String,
     val diffWithFirst: BigDecimal?,
     val rateFrom: String,
-    val rateTo: String
+    val rateTo: String,
+    val estimationTime: Long?
 )
+
+enum class ProviderSortType(@StringRes val titleRes: Int) {
+    BestPrice(R.string.swap_sort_best_rate),
+    BestTime(R.string.swap_sort_best_time),
+}

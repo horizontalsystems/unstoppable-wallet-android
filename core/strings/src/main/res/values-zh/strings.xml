@@ -1959,6 +1959,8 @@
     <string name="scan_card_to_add">扫描卡片以添加代币</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">兑换完成</string>
+    <string name="multi_swap_via">通过 %s 兑换</string>
+    <string name="multi_swap_completed_via">通过 %s 完成</string>
     <string name="multi_swap_no_providers">没有可用的提供商</string>
     <string name="multi_swap_finding_best_provider">正在查找最佳提供商…</string>
     <string name="multi_swap_continue">继续兑换</string>
@@ -1971,6 +1973,14 @@
     <string name="multi_swap_cancel_swap">取消兑换</string>
     <string name="multi_swap_cancel_swap_warning">第一步兑换已完成。中间代币在您的钱包中，将继续归您所有。仅第二步兑换会被取消。</string>
     <string name="swap_leg_title">兑换 %d</string>
+    <string name="swap_provider_type_info_title">兑换提供商类型</string>
+    <string name="swap_provider_type_info_description">以下标签说明了不同类型的兑换提供商的运作方式。它们有助于您了解兑换将如何执行，以及可能适用哪些额外的检查或条件。</string>
+    <string name="swap_provider_type_auto_description">自动执行兑换。如果兑换无法完成，资金通常会自动退还，无需用户进行任何操作。</string>
+    <string name="swap_provider_type_flexible_description">提供商使用自有流动性执行兑换。在极少数情况下，由于市场变化，最终汇率可能与初始汇率略有不同。</string>
+    <string name="swap_provider_type_controlled_description">提供商可能使用第三方流动性，并进行额外的 AML/KYC 检查。在某些情况下，兑换可能会被暂时暂停，或在操作完成前需要进行额外的核查。</string>
+    <string name="swap_provider_type_precheck_description">在开始兑换前，提供商会对地址和交易参数进行额外检查。这有助于降低出错的可能性并提高兑换的成功率。</string>
+    <string name="swap_sort_best_rate">最佳汇率</string>
+    <string name="swap_sort_best_time">最快</string>
     <string name="scan">扫描</string>
     <string name="adding_tokens">正在添加代币</string>
     <string name="scan_to_add_message">您需要扫描卡片以添加代币</string>

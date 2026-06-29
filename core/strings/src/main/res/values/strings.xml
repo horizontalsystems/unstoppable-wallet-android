@@ -799,6 +799,18 @@ Proceed only if you\'re sure.</string>
     <string name="multi_swap_cancel_swap">Cancel Swap</string>
     <string name="multi_swap_cancel_swap_warning">The first swap has already been completed. The intermediate coins are in your wallet and will remain yours. Only the second swap step will be canceled.</string>
     <string name="swap_leg_title">Swap %d</string>
+    <string name="swap_provider_type_auto" translatable="false">Auto</string>
+    <string name="swap_provider_type_flexible" translatable="false">Flexible</string>
+    <string name="swap_provider_type_controlled" translatable="false">Controlled</string>
+    <string name="swap_provider_type_precheck" translatable="false">PreCheck</string>
+    <string name="swap_provider_type_info_title">Swap Provider Types</string>
+    <string name="swap_provider_type_info_description">The labels below explain how different types of swap providers operate. They help you understand how the swap will be executed and what additional checks or conditions may apply.</string>
+    <string name="swap_provider_type_auto_description">Automatic swap execution. If the swap cannot be completed, funds are usually refunded automatically without any action required from the user.</string>
+    <string name="swap_provider_type_flexible_description">The provider uses its own liquidity to execute the swap. In rare cases, the final rate may differ slightly from the initial one due to market changes.</string>
+    <string name="swap_provider_type_controlled_description">The provider may use third-party liquidity and apply additional AML/KYC checks. In some cases, the swap may be temporarily suspended or require an additional check before the operation is completed.</string>
+    <string name="swap_provider_type_precheck_description">Before starting the swap, the provider performs additional checks on the address and transaction parameters. This helps reduce the chance of errors and improves the swap success rate.</string>
+    <string name="swap_sort_best_rate">Best Rate</string>
+    <string name="swap_sort_best_time">Fastest</string>
     <string name="Swap_SwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -2424,6 +2436,8 @@ Proceed only if you\'re sure.</string>
 
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Swap completed</string>
+    <string name="multi_swap_via">Swap via %s</string>
+    <string name="multi_swap_completed_via">Completed via %s</string>
     <string name="multi_swap_no_providers">No providers available</string>
     <string name="multi_swap_finding_best_provider">Finding best provider…</string>
     <string name="multi_swap_continue">Continue swap</string>

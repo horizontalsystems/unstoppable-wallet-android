@@ -49,6 +49,7 @@ class ChangeNowProvider(
     override val id = "changenow"
     override val title = "ChangeNow"
     override val icon = R.drawable.ic_change_now
+    override val riskType = ProviderRiskType.PreCheck
 
     override val mevProtectionAvailable: Boolean = false
     private val currencies = mutableListOf<ChangeNowCurrency>()

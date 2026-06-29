@@ -19,6 +19,15 @@ interface ISwapQuote {
     val amountIn: BigDecimal
     val actionRequired: ISwapProviderAction?
     val cautions: List<HSCaution>
+
+    // Hardcoded 20-minute placeholder until real per-provider ETA is implemented;
+    // null means the provider exposes no estimation time.
+    val estimationTime: Long?
+        get() = DEFAULT_ESTIMATION_TIME
+
+    companion object {
+        const val DEFAULT_ESTIMATION_TIME = 20 * 60L
+    }
 }
 
 class SwapQuoteUniswap(

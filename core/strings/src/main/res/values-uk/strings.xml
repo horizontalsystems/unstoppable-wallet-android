@@ -2136,6 +2136,8 @@
     <string name="native_library_error_close">Закрити</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Обмін завершено</string>
+    <string name="multi_swap_via">Обмін через %s</string>
+    <string name="multi_swap_completed_via">Завершено через %s</string>
     <string name="multi_swap_no_providers">Немає доступних провайдерів</string>
     <string name="multi_swap_finding_best_provider">Пошук найкращого провайдера…</string>
     <string name="multi_swap_continue">Продовжити обмін</string>
@@ -2148,4 +2150,12 @@
     <string name="multi_swap_cancel_swap">Скасувати обмін</string>
     <string name="multi_swap_cancel_swap_warning">Перший обмін вже завершено. Проміжні монети знаходяться у вашому гаманці та залишаться вашими. Буде скасовано лише другий крок обміну.</string>
     <string name="swap_leg_title">Обмін %d</string>
+    <string name="swap_provider_type_info_title">Типи обмінних провайдерів</string>
+    <string name="swap_provider_type_info_description">Нижче наведено особливості роботи різних типів обмінних провайдерів. Ці позначки допомагають зрозуміти, як виконуватиметься обмін і які додаткові перевірки чи умови можуть застосовуватися.</string>
+    <string name="swap_provider_type_auto_description">Автоматичне виконання обміну. Якщо обмін не може бути завершений, кошти зазвичай повертаються автоматично без додаткових дій з боку користувача.</string>
+    <string name="swap_provider_type_flexible_description">Провайдер використовує власну ліквідність для виконання обміну. У рідкісних випадках підсумковий курс може незначно відрізнятися від початкового через зміну ринкової ситуації.</string>
+    <string name="swap_provider_type_controlled_description">Провайдер може використовувати сторонню ліквідність і застосовувати додаткові перевірки AML/KYC. В окремих випадках обмін може бути тимчасово призупинено або знадобиться додаткова перевірка перед завершенням операції.</string>
+    <string name="swap_provider_type_precheck_description">Перед початком обміну провайдер виконує додаткові перевірки адреси та параметрів транзакції. Це допомагає знизити ймовірність помилок і підвищити успішність обміну.</string>
+    <string name="swap_sort_best_rate">Найкращий курс</string>
+    <string name="swap_sort_best_time">Найшвидший</string>
 </resources>

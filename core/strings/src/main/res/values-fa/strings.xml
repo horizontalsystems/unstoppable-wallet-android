@@ -1978,6 +1978,8 @@
     <string name="scan_card_to_add">اسکن کارت برای افزودن توکن</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">مبادله انجام شد</string>
+    <string name="multi_swap_via">مبادله از طریق %s</string>
+    <string name="multi_swap_completed_via">انجام‌شده از طریق %s</string>
     <string name="multi_swap_no_providers">هیچ ارائه‌دهنده‌ای موجود نیست</string>
     <string name="multi_swap_finding_best_provider">جستجوی بهترین ارائه‌دهنده…</string>
     <string name="multi_swap_continue">ادامه مبادله</string>
@@ -1990,6 +1992,14 @@
     <string name="multi_swap_cancel_swap">لغو تبادل</string>
     <string name="multi_swap_cancel_swap_warning">اولین تبادل قبلاً انجام شده است. سکه‌های واسطه در کیف پول شما هستند و متعلق به شما باقی می‌مانند. فقط مرحله دوم تبادل لغو خواهد شد.</string>
     <string name="swap_leg_title">مبادله %d</string>
+    <string name="swap_provider_type_info_title">انواع ارائه‌دهندگان مبادله</string>
+    <string name="swap_provider_type_info_description">برچسب‌های زیر نحوه عملکرد انواع مختلف ارائه‌دهندگان مبادله را توضیح می‌دهند. آن‌ها به شما کمک می‌کنند تا بفهمید مبادله چگونه انجام می‌شود و چه بررسی‌ها یا شرایط اضافی ممکن است اعمال شود.</string>
+    <string name="swap_provider_type_auto_description">اجرای خودکار مبادله. اگر مبادله قابل تکمیل نباشد، معمولاً وجوه به‌طور خودکار و بدون نیاز به هیچ اقدامی از سوی کاربر بازگردانده می‌شوند.</string>
+    <string name="swap_provider_type_flexible_description">ارائه‌دهنده از نقدینگی خود برای انجام مبادله استفاده می‌کند. در موارد نادر، نرخ نهایی ممکن است به دلیل تغییرات بازار اندکی با نرخ اولیه متفاوت باشد.</string>
+    <string name="swap_provider_type_controlled_description">ارائه‌دهنده ممکن است از نقدینگی شخص ثالث استفاده کند و بررسی‌های اضافی AML/KYC را اعمال کند. در برخی موارد، مبادله ممکن است به‌طور موقت متوقف شود یا پیش از تکمیل عملیات به بررسی بیشتری نیاز داشته باشد.</string>
+    <string name="swap_provider_type_precheck_description">پیش از شروع مبادله، ارائه‌دهنده بررسی‌های اضافی روی آدرس و پارامترهای تراکنش انجام می‌دهد. این کار به کاهش احتمال خطا و افزایش میزان موفقیت مبادله کمک می‌کند.</string>
+    <string name="swap_sort_best_rate">بهترین نرخ</string>
+    <string name="swap_sort_best_time">سریع‌ترین</string>
     <string name="scan">اسکن</string>
     <string name="adding_tokens">در حال افزودن توکن‌ها</string>
     <string name="scan_to_add_message">برای افزودن توکن‌ها باید کارت را اسکن کنید</string>

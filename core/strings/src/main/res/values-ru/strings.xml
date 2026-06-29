@@ -604,6 +604,14 @@
     <string name="multi_swap_cancel_swap">Отказаться от обмена</string>
     <string name="multi_swap_cancel_swap_warning">Первый обмен уже завершён. Промежуточные монеты находятся в вашем кошельке и останутся у вас. Будет отменён только второй шаг обмена.</string>
     <string name="swap_leg_title">Обмен %d</string>
+    <string name="swap_provider_type_info_title">Типы обменных провайдеров</string>
+    <string name="swap_provider_type_info_description">Ниже указаны особенности работы различных типов обменных провайдеров. Эти метки помогают понять, как будет выполняться обмен и какие дополнительные проверки или условия могут применяться.</string>
+    <string name="swap_provider_type_auto_description">Автоматическое выполнение обмена. Если обмен не может быть завершён, средства обычно возвращаются автоматически без дополнительных действий со стороны пользователя.</string>
+    <string name="swap_provider_type_flexible_description">Провайдер использует собственную ликвидность для выполнения обмена. В редких случаях итоговый курс может незначительно отличаться от первоначального из-за изменения рыночной ситуации.</string>
+    <string name="swap_provider_type_controlled_description">Провайдер может использовать стороннюю ликвидность и применять дополнительные AML/KYC проверки. В отдельных случаях обмен может быть временно приостановлен или потребуется дополнительная проверка перед завершением операции.</string>
+    <string name="swap_provider_type_precheck_description">Перед началом обмена провайдер выполняет дополнительные проверки адреса и параметров транзакции. Это помогает снизить вероятность ошибок и повысить успешность обмена.</string>
+    <string name="swap_sort_best_rate">Лучший курс</string>
+    <string name="swap_sort_best_time">Самый быстрый</string>
     <string name="Swap_SwapProvider_Title">Провайдер</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
@@ -2169,6 +2177,8 @@
 
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Обмен завершён</string>
+    <string name="multi_swap_via">Обмен через %s</string>
+    <string name="multi_swap_completed_via">Завершено через %s</string>
     <string name="multi_swap_no_providers">Нет доступных провайдеров</string>
     <string name="multi_swap_finding_best_provider">Поиск лучшего провайдера…</string>
     <string name="multi_swap_continue">Продолжить обмен</string>

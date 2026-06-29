@@ -46,7 +46,10 @@ import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.settings.ISwapSetting
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.SelectorDialogCompose
+import cash.p.terminal.ui.compose.components.SelectorItem
 import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui_compose.components.DraggableCardSimple
 import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSpacer
@@ -69,6 +72,8 @@ fun SwapSelectProviderScreen(
     currentQuote: SwapProviderQuote?,
     mandatoryProviderIds: Set<String>,
     disabledProviderIds: Set<String>,
+    sortType: ProviderSortType,
+    onSortTypeChange: (ProviderSortType) -> Unit,
     onToggleProvider: (providerId: String, disabled: Boolean) -> Unit,
     swapRates: () -> Unit,
     onSelectQuote: (SwapProviderQuote) -> Unit,
@@ -108,6 +113,12 @@ fun SwapSelectProviderScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
+                VSpacer(height = 4.dp)
+                ProviderSortingSelector(
+                    sortType = sortType,
+                    sortTypes = ProviderSortType.entries,
+                    onSelectSortType = onSortTypeChange,
+                )
                 VSpacer(height = 4.dp)
             }
             items(quotes, key = { it.quote.provider.id }) { viewItem ->
@@ -225,47 +236,51 @@ private fun ProviderItem(
                 contentDescription = null
             )
             HSpacer(width = 16.dp)
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                subhead2_leah(
-                    text = viewItem.tokenAmount,
-                    textAlign = TextAlign.End,
-                    modifier = Modifier.align(Alignment.End)
-                )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    body_leah(
-                        text = provider.title,
-                        textAlign = TextAlign.End
-                    )
+                    body_leah(text = provider.title, modifier = Modifier.weight(1f))
+                    HSpacer(width = 8.dp)
+                    subhead2_leah(text = viewItem.tokenAmount, textAlign = TextAlign.End)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    ProviderRiskBadge(riskType = provider.riskType)
                     HFillSpacer(minWidth = 8.dp)
                     viewItem.fiatAmount?.let { fiatAmount ->
-                        Row {
-                            subhead2_grey(text = fiatAmount, textAlign = TextAlign.End)
-                            viewItem.diffWithFirst?.let { diff ->
-                                HSpacer(width = 4.dp)
-                                Text(
-                                    text = stringResource(
-                                        R.string.Swap_FiatPriceImpact,
-                                        diff.toPlainString()
-                                    ),
-                                    style = ComposeAppTheme.typography.subhead2,
-                                    color = getPriceImpactColor(PriceImpactLevel.Warning),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
+                        subhead2_grey(text = fiatAmount, textAlign = TextAlign.End)
+                        viewItem.diffWithFirst?.let { diff ->
+                            HSpacer(width = 4.dp)
+                            Text(
+                                text = stringResource(
+                                    R.string.Swap_FiatPriceImpact,
+                                    diff.toPlainString()
+                                ),
+                                style = ComposeAppTheme.typography.subhead2,
+                                color = getPriceImpactColor(PriceImpactLevel.Warning),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
                     }
                 }
-                ExchangeBlock(
-                    from = viewItem.rateFrom,
-                    to = viewItem.rateTo,
-                    swapRates = {
-                        onSelectQuote.invoke(viewItem.quote)
-                        swapRates()
-                    },
-                    modifier = Modifier.align(Alignment.End),
-                    enabled = !disabled,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    viewItem.estimationTime?.let { estimationTime ->
+                        EstimationTimeBadge(seconds = estimationTime)
+                    }
+                    HFillSpacer(minWidth = 8.dp)
+                    ExchangeBlock(
+                        from = viewItem.rateFrom,
+                        to = viewItem.rateTo,
+                        swapRates = {
+                            onSelectQuote.invoke(viewItem.quote)
+                            swapRates()
+                        },
+                        modifier = Modifier,
+                        enabled = !disabled,
+                    )
+                }
             }
         }
     }
@@ -303,6 +318,32 @@ private fun ExchangeBlock(
         )
         subhead2_grey(
             text = to
+        )
+    }
+}
+
+@Composable
+private fun ProviderSortingSelector(
+    sortType: ProviderSortType,
+    sortTypes: List<ProviderSortType>,
+    onSelectSortType: (ProviderSortType) -> Unit,
+) {
+    var showSortTypeSelectorDialog by remember { mutableStateOf(false) }
+
+    ButtonSecondaryWithIcon(
+        title = stringResource(sortType.titleRes),
+        iconRight = painterResource(R.drawable.ic_down_arrow_20),
+        onClick = { showSortTypeSelectorDialog = true }
+    )
+
+    if (showSortTypeSelectorDialog) {
+        SelectorDialogCompose(
+            title = stringResource(R.string.Balance_Sort_PopupTitle),
+            items = sortTypes.map {
+                SelectorItem(stringResource(it.titleRes), it == sortType, it)
+            },
+            onDismissRequest = { showSortTypeSelectorDialog = false },
+            onSelectItem = onSelectSortType
         )
     }
 }
@@ -363,6 +404,8 @@ private fun SwapSelectProviderScreenPreview() {
             onClickSettings = {},
             mandatoryProviderIds = emptySet(),
             disabledProviderIds = emptySet(),
+            sortType = ProviderSortType.BestPrice,
+            onSortTypeChange = {},
             onToggleProvider = { _, _ -> },
             quotes = listOf(
                 QuoteViewItem(
@@ -371,7 +414,8 @@ private fun SwapSelectProviderScreenPreview() {
                     fiatAmount = "$456.78",
                     diffWithFirst = null,
                     rateFrom = "1 ETH",
-                    rateTo = "100 PIRATE"
+                    rateTo = "100 PIRATE",
+                    estimationTime = 793
                 ),
                 QuoteViewItem(
                     quote = quote2,
@@ -379,7 +423,8 @@ private fun SwapSelectProviderScreenPreview() {
                     fiatAmount = "$455.12",
                     diffWithFirst = BigDecimal("-1.66"),
                     rateFrom = "1 ETH",
-                    rateTo = "99 PIRATE"
+                    rateTo = "99 PIRATE",
+                    estimationTime = null
                 ),
             ),
             currentQuote = quote1,

@@ -19,6 +19,9 @@ interface IMultiSwapProvider {
 
     val mevProtectionAvailable: Boolean
 
+    val riskType: ProviderRiskType
+        get() = ProviderRiskType.Auto
+
     suspend fun start() = Unit
 
     suspend fun supports(tokenFrom: Token, tokenTo: Token): Boolean {

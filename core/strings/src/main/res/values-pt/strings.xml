@@ -1974,6 +1974,8 @@
     <string name="scan_card_to_add">Digitalize o cartão para adicionar token</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Troca concluída</string>
+    <string name="multi_swap_via">Troca via %s</string>
+    <string name="multi_swap_completed_via">Concluído via %s</string>
     <string name="multi_swap_no_providers">Nenhum provedor disponível</string>
     <string name="multi_swap_finding_best_provider">Procurando o melhor provedor…</string>
     <string name="multi_swap_continue">Continuar troca</string>
@@ -1986,6 +1988,14 @@
     <string name="multi_swap_cancel_swap">Cancelar troca</string>
     <string name="multi_swap_cancel_swap_warning">A primeira troca já foi concluída. As moedas intermediárias estão na sua carteira e continuarão suas. Apenas o segundo passo da troca será cancelado.</string>
     <string name="swap_leg_title">Troca %d</string>
+    <string name="swap_provider_type_info_title">Tipos de provedores de troca</string>
+    <string name="swap_provider_type_info_description">Os rótulos abaixo explicam como funcionam os diferentes tipos de provedores de troca. Ajudam a perceber como a troca será executada e que verificações ou condições adicionais podem aplicar-se.</string>
+    <string name="swap_provider_type_auto_description">Execução automática da troca. Se a troca não puder ser concluída, os fundos são normalmente reembolsados automaticamente, sem necessidade de qualquer ação por parte do utilizador.</string>
+    <string name="swap_provider_type_flexible_description">O provedor utiliza a sua própria liquidez para executar a troca. Em casos raros, a taxa final pode diferir ligeiramente da inicial devido a alterações do mercado.</string>
+    <string name="swap_provider_type_controlled_description">O provedor pode utilizar liquidez de terceiros e aplicar verificações adicionais de AML/KYC. Em alguns casos, a troca pode ser temporariamente suspensa ou exigir uma verificação adicional antes de a operação ser concluída.</string>
+    <string name="swap_provider_type_precheck_description">Antes de iniciar a troca, o provedor realiza verificações adicionais do endereço e dos parâmetros da transação. Isto ajuda a reduzir a probabilidade de erros e a aumentar a taxa de sucesso da troca.</string>
+    <string name="swap_sort_best_rate">Melhor taxa</string>
+    <string name="swap_sort_best_time">Mais rápido</string>
     <string name="scan">Digitalizar</string>
     <string name="adding_tokens">A adicionar tokens</string>
     <string name="scan_to_add_message">Você precisa digitalizar o cartão para adicionar tokens</string>

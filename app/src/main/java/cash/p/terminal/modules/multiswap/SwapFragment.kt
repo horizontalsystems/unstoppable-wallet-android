@@ -4,13 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -224,6 +225,8 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
                 currentQuote = viewModel.uiState.quote,
                 mandatoryProviderIds = SwapProvidersRepository.MANDATORY_IDS,
                 disabledProviderIds = disabledIds,
+                sortType = selectProviderViewModel.uiState.sortType,
+                onSortTypeChange = selectProviderViewModel::setSortType,
                 onToggleProvider = swapProvidersRepository::setDisabled,
                 swapRates = {
                     HudHelper.vibrate(App.instance)
@@ -582,7 +585,7 @@ private fun SwapScreenInner(
                 VSpacer(height = 12.dp)
                 if (quote != null) {
                     CardsSwapInfo {
-                        ProviderField(quote.provider, onClickProvider)
+                        ProviderField(quote.provider, quote.estimationTime, onClickProvider)
                         val finalTokenOut = uiState.tokenOut ?: quote.tokenOut
                         val finalAmountOut = uiState.multiSwapRoute?.selectedLeg2Quote?.amountOut ?: quote.amountOut
                         PriceField(quote.tokenIn, finalTokenOut, quote.amountIn, finalAmountOut)
@@ -708,27 +711,45 @@ fun PriceImpactField(
 @Composable
 private fun ProviderField(
     swapProvider: IMultiSwapProvider,
+    estimationTime: Long?,
     onClickProvider: () -> Unit,
 ) {
     HSRow(
         modifier = Modifier
-            .height(40.dp)
-            .padding(horizontal = 16.dp),
+            .heightIn(min = 48.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClickProvider,
+            )
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         borderBottom = true,
     ) {
-        Selector(
-            icon = {
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(swapProvider.icon),
-                    contentDescription = null
-                )
-            },
-            text = {
-                subhead1_leah(text = swapProvider.title)
-            },
-            onClickSelect = onClickProvider
+        Image(
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(swapProvider.icon),
+            contentDescription = null
+        )
+        HSpacer(width = 8.dp)
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            subhead1_leah(text = swapProvider.title)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                estimationTime?.let { EstimationTimeBadge(seconds = it) }
+                ProviderRiskBadge(riskType = swapProvider.riskType)
+            }
+        }
+        HSpacer(width = 8.dp)
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_right),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
         )
     }
 }

@@ -44,6 +44,7 @@ class ExolixProvider(
     override val id = "exolix"
     override val title = "Exolix"
     override val icon = R.drawable.ic_exolix
+    override val riskType = ProviderRiskType.Controlled
 
     override val mevProtectionAvailable: Boolean = false
     private val currencyNetworksCache = mutableMapOf<String, List<ExolixNetwork>>()

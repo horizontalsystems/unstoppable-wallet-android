@@ -1972,6 +1972,8 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="scan_card_to_add">Scanner la carte pour ajouter un jeton</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Échange terminé</string>
+    <string name="multi_swap_via">Échange via %s</string>
+    <string name="multi_swap_completed_via">Terminé via %s</string>
     <string name="multi_swap_no_providers">Aucun fournisseur disponible</string>
     <string name="multi_swap_finding_best_provider">Recherche du meilleur fournisseur…</string>
     <string name="multi_swap_continue">Continuer l\'échange</string>
@@ -1984,6 +1986,14 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="multi_swap_cancel_swap">Annuler l\'échange</string>
     <string name="multi_swap_cancel_swap_warning">Le premier échange a déjà été effectué. Les jetons intermédiaires sont dans votre portefeuille et resteront les vôtres. Seule la deuxième étape de l\'échange sera annulée.</string>
     <string name="swap_leg_title">Échange %d</string>
+    <string name="swap_provider_type_info_title">Types de fournisseurs d\'échange</string>
+    <string name="swap_provider_type_info_description">Les libellés ci-dessous expliquent le fonctionnement des différents types de fournisseurs d\'échange. Ils vous aident à comprendre comment l\'échange sera exécuté et quelles vérifications ou conditions supplémentaires peuvent s\'appliquer.</string>
+    <string name="swap_provider_type_auto_description">Exécution automatique de l\'échange. Si l\'échange ne peut pas être finalisé, les fonds sont généralement remboursés automatiquement, sans aucune action de la part de l\'utilisateur.</string>
+    <string name="swap_provider_type_flexible_description">Le fournisseur utilise sa propre liquidité pour exécuter l\'échange. Dans de rares cas, le taux final peut différer légèrement du taux initial en raison de l\'évolution du marché.</string>
+    <string name="swap_provider_type_controlled_description">Le fournisseur peut utiliser la liquidité de tiers et appliquer des vérifications AML/KYC supplémentaires. Dans certains cas, l\'échange peut être temporairement suspendu ou nécessiter une vérification supplémentaire avant la finalisation de l\'opération.</string>
+    <string name="swap_provider_type_precheck_description">Avant de commencer l\'échange, le fournisseur effectue des vérifications supplémentaires de l\'adresse et des paramètres de la transaction. Cela permet de réduire le risque d\'erreurs et d\'augmenter le taux de réussite de l\'échange.</string>
+    <string name="swap_sort_best_rate">Meilleur taux</string>
+    <string name="swap_sort_best_time">Le plus rapide</string>
     <string name="scan">Scanner</string>
     <string name="adding_tokens">Ajout de jetons</string>
     <string name="scan_to_add_message">Vous devez scanner la carte pour ajouter des jetons</string>

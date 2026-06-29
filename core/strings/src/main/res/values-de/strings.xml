@@ -1966,6 +1966,8 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="scan_card_to_add">Karte scannen, um Token hinzuzufügen</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Tausch abgeschlossen</string>
+    <string name="multi_swap_via">Tausch über %s</string>
+    <string name="multi_swap_completed_via">Abgeschlossen über %s</string>
     <string name="multi_swap_no_providers">Keine Anbieter verfügbar</string>
     <string name="multi_swap_finding_best_provider">Besten Anbieter suchen…</string>
     <string name="multi_swap_continue">Tausch fortsetzen</string>
@@ -1978,6 +1980,14 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="multi_swap_cancel_swap">Tausch abbrechen</string>
     <string name="multi_swap_cancel_swap_warning">Der erste Tausch wurde bereits abgeschlossen. Die Zwischenmünzen befinden sich in Ihrer Wallet und bleiben Ihnen erhalten. Nur der zweite Tauschschritt wird abgebrochen.</string>
     <string name="swap_leg_title">Tausch %d</string>
+    <string name="swap_provider_type_info_title">Tausch-Anbietertypen</string>
+    <string name="swap_provider_type_info_description">Die folgenden Kennzeichnungen erklären, wie verschiedene Arten von Tausch-Anbietern arbeiten. Sie helfen zu verstehen, wie der Tausch ausgeführt wird und welche zusätzlichen Prüfungen oder Bedingungen gelten können.</string>
+    <string name="swap_provider_type_auto_description">Automatische Ausführung des Tauschs. Wenn der Tausch nicht abgeschlossen werden kann, werden die Mittel in der Regel automatisch zurückerstattet, ohne dass der Nutzer etwas tun muss.</string>
+    <string name="swap_provider_type_flexible_description">Der Anbieter nutzt seine eigene Liquidität, um den Tausch auszuführen. In seltenen Fällen kann der endgültige Kurs aufgrund von Marktveränderungen geringfügig vom ursprünglichen abweichen.</string>
+    <string name="swap_provider_type_controlled_description">Der Anbieter kann Liquidität von Drittanbietern nutzen und zusätzliche AML/KYC-Prüfungen durchführen. In einzelnen Fällen kann der Tausch vorübergehend ausgesetzt werden oder vor Abschluss des Vorgangs eine zusätzliche Prüfung erfordern.</string>
+    <string name="swap_provider_type_precheck_description">Vor Beginn des Tauschs führt der Anbieter zusätzliche Prüfungen der Adresse und der Transaktionsparameter durch. Das hilft, die Fehlerwahrscheinlichkeit zu verringern und die Erfolgsquote des Tauschs zu erhöhen.</string>
+    <string name="swap_sort_best_rate">Bester Kurs</string>
+    <string name="swap_sort_best_time">Am schnellsten</string>
     <string name="scan">Scannen</string>
     <string name="adding_tokens">Token werden hinzugefügt</string>
     <string name="scan_to_add_message">Sie müssen die Karte scannen, um Token hinzuzufügen</string>

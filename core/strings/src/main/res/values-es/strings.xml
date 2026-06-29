@@ -1966,6 +1966,8 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="scan_card_to_add">Escanear tarjeta para agregar token</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Intercambio completado</string>
+    <string name="multi_swap_via">Intercambio vía %s</string>
+    <string name="multi_swap_completed_via">Completado vía %s</string>
     <string name="multi_swap_no_providers">No hay proveedores disponibles</string>
     <string name="multi_swap_finding_best_provider">Buscando el mejor proveedor…</string>
     <string name="multi_swap_continue">Continuar intercambio</string>
@@ -1978,6 +1980,14 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="multi_swap_cancel_swap">Cancelar intercambio</string>
     <string name="multi_swap_cancel_swap_warning">El primer intercambio ya se ha completado. Las monedas intermedias están en su billetera y seguirán siendo suyas. Solo se cancelará el segundo paso del intercambio.</string>
     <string name="swap_leg_title">Intercambio %d</string>
+    <string name="swap_provider_type_info_title">Tipos de proveedores de intercambio</string>
+    <string name="swap_provider_type_info_description">Las siguientes etiquetas explican cómo funcionan los distintos tipos de proveedores de intercambio. Te ayudan a entender cómo se ejecutará el intercambio y qué comprobaciones o condiciones adicionales pueden aplicarse.</string>
+    <string name="swap_provider_type_auto_description">Ejecución automática del intercambio. Si el intercambio no puede completarse, los fondos suelen reembolsarse automáticamente sin necesidad de ninguna acción por parte del usuario.</string>
+    <string name="swap_provider_type_flexible_description">El proveedor utiliza su propia liquidez para ejecutar el intercambio. En casos excepcionales, la tasa final puede diferir ligeramente de la inicial debido a cambios del mercado.</string>
+    <string name="swap_provider_type_controlled_description">El proveedor puede utilizar liquidez de terceros y aplicar verificaciones adicionales de AML/KYC. En algunos casos, el intercambio puede suspenderse temporalmente o requerir una verificación adicional antes de completar la operación.</string>
+    <string name="swap_provider_type_precheck_description">Antes de iniciar el intercambio, el proveedor realiza verificaciones adicionales de la dirección y de los parámetros de la transacción. Esto ayuda a reducir la probabilidad de errores y a aumentar la tasa de éxito del intercambio.</string>
+    <string name="swap_sort_best_rate">Mejor tasa</string>
+    <string name="swap_sort_best_time">Más rápido</string>
     <string name="scan">Escanear</string>
     <string name="adding_tokens">Agregando tokens</string>
     <string name="scan_to_add_message">Necesitas escanear la tarjeta para agregar tokens</string>

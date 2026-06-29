@@ -17,6 +17,7 @@ import cash.p.terminal.modules.multiswap.TimerService
 import cash.p.terminal.core.ServiceStateFlow
 import cash.p.terminal.modules.multiswap.TokenBalanceService
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
+import cash.p.terminal.modules.multiswap.providers.ProviderRiskType
 import cash.p.terminal.modules.multiswap.providers.SwapProvidersRepository
 import cash.p.terminal.modules.multiswap.providers.isOffChain
 import cash.p.terminal.modules.multiswap.action.ActionCreate
@@ -402,6 +403,7 @@ class MultiSwapExchangeViewModel(
                 coinIconUrlOut = coinImageUrl(swap.coinUidIntermediate),
                 amountInFormatted = numberFormatter.formatCoinFull(swap.amountIn, null, 8),
                 amountOutFormatted = swap.leg1AmountOut?.let { numberFormatter.formatCoinFull(it, null, 8) },
+                riskType = leg1Provider?.riskType,
             ),
             leg2 = LegUiState(
                 status = leg2Status,
@@ -422,6 +424,8 @@ class MultiSwapExchangeViewModel(
                 coinIconUrlOut = coinImageUrl(swap.coinUidOut),
                 amountInFormatted = swap.leg1AmountOut?.let { numberFormatter.formatCoinFull(it, null, 8) },
                 amountOutFormatted = numberFormatter.formatCoinFull(leg2AmountOut, null, 8),
+                riskType = leg2Provider?.riskType,
+                estimationTime = selectedLeg2Quote?.estimationTime,
             ),
             buttonState = buttonState,
             showContinueLater = showContinueLater,
@@ -534,6 +538,8 @@ data class LegUiState(
     val amountOutFormatted: String? = null,
     val priceImpact: BigDecimal? = null,
     val priceImpactLevel: PriceImpactLevel? = null,
+    val riskType: ProviderRiskType? = null,
+    val estimationTime: Long? = null,
 )
 
 enum class LegStatus { Pending, Executing, Completed, Failed }

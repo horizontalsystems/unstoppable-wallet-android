@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,8 +50,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.multiswap.EstimationTimeBadge
 import cash.p.terminal.modules.multiswap.PriceField
 import cash.p.terminal.modules.multiswap.PriceImpactField
+import cash.p.terminal.modules.multiswap.ProviderRiskBadge
+import cash.p.terminal.modules.multiswap.providers.ProviderRiskType
 import cash.p.terminal.ui.compose.components.HSRow
 import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.TransparentModalBottomSheet
@@ -70,7 +75,6 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.subhead1_leah
-import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.entities.Currency
@@ -156,11 +160,13 @@ internal fun MultiSwapExchangeScreen(
                             borderColor = ComposeAppTheme.colors.grey,
                             modifier = Modifier.onSizeChanged { leg1CardHeight = it.height },
                             content = {
+
                                 Leg1Header(
                                     providerName = uiState.leg1.providerName,
                                     status = uiState.leg1.status,
                                     coinIconUrlIn = uiState.leg1.coinIconUrlIn,
                                     coinIconUrlOut = uiState.leg1.coinIconUrlOut,
+                                    riskType = uiState.leg1.riskType,
                                     onClick = if (uiState.leg1Clickable) onClickLeg1 else null,
                                 )
                                 LegContent(uiState.leg1)
@@ -177,6 +183,8 @@ internal fun MultiSwapExchangeScreen(
                                     clickable = uiState.leg2ProviderClickable,
                                     quoting = uiState.leg2Quoting,
                                     onClickProvider = onClickProvider,
+                                    riskType = uiState.leg2.riskType,
+                                    estimationTime = uiState.leg2.estimationTime,
                                 )
                                 LegContent(uiState.leg2)
                             }
@@ -332,11 +340,30 @@ private fun AmountRow(
 }
 
 @Composable
+private fun ProviderBadges(
+    riskType: ProviderRiskType?,
+    estimationTime: Long?,
+    modifier: Modifier = Modifier,
+) {
+    if (riskType == null && estimationTime == null) return
+    VSpacer(height = 4.dp)
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+    ) {
+        estimationTime?.let { EstimationTimeBadge(seconds = it) }
+        riskType?.let { ProviderRiskBadge(riskType = it) }
+    }
+}
+
+@Composable
 private fun Leg1Header(
     providerName: String?,
     status: LegStatus,
     coinIconUrlIn: String?,
     coinIconUrlOut: String?,
+    riskType: ProviderRiskType? = null,
     onClick: (() -> Unit)? = null,
 ) {
     CellUniversal(
@@ -375,14 +402,14 @@ private fun Leg1Header(
         }
         HSpacer(width = 16.dp)
         Column {
-            val titleText = when (status) {
-                LegStatus.Completed -> stringResource(R.string.multi_swap_completed)
-                else -> stringResource(R.string.Swap)
+            val titleText = when {
+                providerName == null -> stringResource(R.string.Swap)
+                status == LegStatus.Completed ->
+                    stringResource(R.string.multi_swap_completed_via, providerName)
+                else -> stringResource(R.string.multi_swap_via, providerName)
             }
             subhead1_leah(text = titleText)
-            if (providerName != null) {
-                subhead2_grey(text = providerName)
-            }
+            ProviderBadges(riskType = riskType, estimationTime = null)
         }
     }
 }
@@ -394,11 +421,13 @@ private fun Leg2Header(
     clickable: Boolean,
     quoting: Boolean,
     onClickProvider: () -> Unit,
+    riskType: ProviderRiskType? = null,
+    estimationTime: Long? = null,
 ) {
     HSRow(
         modifier = Modifier
-            .height(40.dp)
-            .padding(horizontal = 16.dp),
+            .heightIn(min = 40.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         borderBottom = true,
     ) {
@@ -414,7 +443,10 @@ private fun Leg2Header(
                     }
                 },
                 text = {
-                    subhead1_leah(text = providerName ?: "")
+                    Column {
+                        subhead1_leah(text = providerName ?: "")
+                        ProviderBadges(riskType = riskType, estimationTime = estimationTime)
+                    }
                 },
                 onClickSelect = onClickProvider
             )
@@ -428,7 +460,10 @@ private fun Leg2Header(
                 HSpacer(width = 8.dp)
             }
             when {
-                providerName != null -> subhead1_leah(text = providerName)
+                providerName != null -> Column {
+                    subhead1_leah(text = providerName)
+                    ProviderBadges(riskType = riskType, estimationTime = estimationTime)
+                }
                 quoting -> subhead1_grey(text = stringResource(R.string.multi_swap_finding_best_provider))
                 else -> subhead1_grey(text = stringResource(R.string.multi_swap_no_providers))
             }
@@ -612,12 +647,14 @@ private fun Leg1HeaderPreview() {
                 status = LegStatus.Executing,
                 coinIconUrlIn = null,
                 coinIconUrlOut = null,
+                riskType = ProviderRiskType.Flexible,
             )
             Leg1Header(
                 providerName = "STON.fi",
                 status = LegStatus.Completed,
                 coinIconUrlIn = null,
                 coinIconUrlOut = null,
+                riskType = ProviderRiskType.Auto,
             )
         }
     }
@@ -638,6 +675,7 @@ private fun MultiSwapExchangeScreenPreview() {
                     amountOutFormatted = "7.2235",
                     fiatAmountIn = BigDecimal("0.99"),
                     fiatAmountOut = BigDecimal("0.95"),
+                    riskType = ProviderRiskType.Flexible,
                 ),
                 leg2 = LegUiState(
                     status = LegStatus.Pending,
@@ -648,6 +686,8 @@ private fun MultiSwapExchangeScreenPreview() {
                     amountOutFormatted = "0.001476",
                     fiatAmountIn = BigDecimal("0.99"),
                     fiatAmountOut = BigDecimal("0.95"),
+                    riskType = ProviderRiskType.Controlled,
+                    estimationTime = 793L,
                 ),
                 buttonState = ButtonState.Disabled,
                 showContinueLater = true,
@@ -678,6 +718,7 @@ private fun MultiSwapExchangeScreenCompletedPreview() {
                     amountOutFormatted = "7.2235",
                     fiatAmountIn = BigDecimal("0.99"),
                     fiatAmountOut = BigDecimal("0.95"),
+                    riskType = ProviderRiskType.Auto,
                 ),
                 leg2 = LegUiState(
                     status = LegStatus.Pending,
@@ -688,6 +729,8 @@ private fun MultiSwapExchangeScreenCompletedPreview() {
                     amountOutFormatted = "0.001476",
                     fiatAmountIn = BigDecimal("0.99"),
                     fiatAmountOut = BigDecimal("0.95"),
+                    riskType = ProviderRiskType.Controlled,
+                    estimationTime = 793L,
                 ),
                 buttonState = ButtonState.Enabled,
                 showContinueLater = true,

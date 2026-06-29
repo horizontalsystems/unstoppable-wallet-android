@@ -1968,6 +1968,8 @@
     <string name="scan_card_to_add">토큰을 추가하려면 카드를 스캔하세요</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">교환 완료</string>
+    <string name="multi_swap_via">%s에서 교환</string>
+    <string name="multi_swap_completed_via">%s에서 완료</string>
     <string name="multi_swap_no_providers">사용 가능한 공급자 없음</string>
     <string name="multi_swap_finding_best_provider">최적의 공급자 검색 중…</string>
     <string name="multi_swap_continue">교환 계속하기</string>
@@ -1980,6 +1982,14 @@
     <string name="multi_swap_cancel_swap">스왑 취소</string>
     <string name="multi_swap_cancel_swap_warning">첫 번째 스왑은 이미 완료되었습니다. 중간 코인은 지갑에 있으며 계속 보유됩니다. 두 번째 스왑 단계만 취소됩니다.</string>
     <string name="swap_leg_title">스왑 %d</string>
+    <string name="swap_provider_type_info_title">스왑 제공자 유형</string>
+    <string name="swap_provider_type_info_description">아래 라벨은 다양한 유형의 스왑 제공자가 어떻게 작동하는지 설명합니다. 스왑이 어떻게 실행되며 어떤 추가 확인이나 조건이 적용될 수 있는지 이해하는 데 도움이 됩니다.</string>
+    <string name="swap_provider_type_auto_description">스왑이 자동으로 실행됩니다. 스왑을 완료할 수 없는 경우, 일반적으로 사용자의 별도 조치 없이 자금이 자동으로 환불됩니다.</string>
+    <string name="swap_provider_type_flexible_description">제공자가 자체 유동성을 사용하여 스왑을 실행합니다. 드문 경우 시장 변동으로 인해 최종 환율이 초기 환율과 약간 다를 수 있습니다.</string>
+    <string name="swap_provider_type_controlled_description">제공자가 제3자 유동성을 사용하고 추가 AML/KYC 확인을 적용할 수 있습니다. 일부 경우 스왑이 일시적으로 중단되거나 작업 완료 전에 추가 확인이 필요할 수 있습니다.</string>
+    <string name="swap_provider_type_precheck_description">스왑을 시작하기 전에 제공자가 주소와 거래 매개변수에 대한 추가 확인을 수행합니다. 이는 오류 가능성을 줄이고 스왑 성공률을 높이는 데 도움이 됩니다.</string>
+    <string name="swap_sort_best_rate">최적 환율</string>
+    <string name="swap_sort_best_time">가장 빠름</string>
     <string name="scan">스캔</string>
     <string name="adding_tokens">토큰 추가 중</string>
     <string name="scan_to_add_message">토큰을 추가하려면 카드를 스캔해야 합니다</string>
