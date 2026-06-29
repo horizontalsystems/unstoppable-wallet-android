@@ -2143,6 +2143,9 @@
     <string name="multi_swap_continue">Продовжити обмін</string>
     <string name="multi_swap_unfinished">Незавершений обмін</string>
     <string name="multi_swap_unfinished_plural">Незавершені обміни (%d)</string>
+    <string name="duration_short_hours">%1$dгод</string>
+    <string name="duration_short_minutes">%1$dхв</string>
+    <string name="duration_short_seconds">%1$dс</string>
     <string name="swap_through">Через</string>
     <string name="swap_you_send">Ви відправляєте</string>
     <string name="swap_you_receive">Ви отримаєте</string>

@@ -1985,6 +1985,9 @@
     <string name="multi_swap_continue">ادامه مبادله</string>
     <string name="multi_swap_unfinished">مبادله ناتمام</string>
     <string name="multi_swap_unfinished_plural">مبادلات ناتمام (%d)</string>
+    <string name="duration_short_hours">%1$dساعت</string>
+    <string name="duration_short_minutes">%1$dدقیقه</string>
+    <string name="duration_short_seconds">%1$dثانیه</string>
     <string name="swap_through">از طریق</string>
     <string name="swap_you_send">شما ارسال می‌کنید</string>
     <string name="swap_you_receive">شما دریافت می‌کنید</string>

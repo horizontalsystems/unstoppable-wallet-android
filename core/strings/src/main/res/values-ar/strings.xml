@@ -2004,6 +2004,9 @@
     <string name="multi_swap_continue">متابعة التبادل</string>
     <string name="multi_swap_unfinished">تبادل غير مكتمل</string>
     <string name="multi_swap_unfinished_plural">تبادلات غير مكتملة (%d)</string>
+    <string name="duration_short_hours">%1$dس</string>
+    <string name="duration_short_minutes">%1$dد</string>
+    <string name="duration_short_seconds">%1$dث</string>
     <string name="swap_through">عبر</string>
     <string name="swap_you_send">أنت ترسل</string>
     <string name="swap_you_receive">أنت تستلم</string>

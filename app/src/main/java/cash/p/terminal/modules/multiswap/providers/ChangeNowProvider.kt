@@ -19,6 +19,7 @@ import cash.p.terminal.modules.multiswap.ui.DataFieldRecipientExtended
 import cash.p.terminal.network.changenow.data.entity.BackendChangeNowResponseError
 import cash.p.terminal.network.changenow.data.entity.request.NewTransactionRequest
 import cash.p.terminal.network.changenow.domain.entity.ChangeNowCurrency
+import cash.p.terminal.network.changenow.domain.entity.ExchangeAmount
 import cash.p.terminal.network.changenow.domain.entity.NewTransactionResponse
 import cash.p.terminal.network.changenow.domain.repository.ChangeNowRepository
 import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
@@ -115,13 +116,13 @@ class ChangeNowProvider(
         tickerFrom: String,
         tickerTo: String,
         amountIn: BigDecimal
-    ): BigDecimal? {
+    ): ExchangeAmount {
         return try {
             changeNowRepository.getExchangeAmount(
                 tickerFrom = tickerFrom,
                 tickerTo = tickerTo,
                 amount = amountIn
-            ).estimatedAmount
+            )
         } catch (e: BackendChangeNowResponseError) {
             //extract decimal from message
             if (e.error == BackendChangeNowResponseError.Companion.DEPOSIT_TOO_SMALL) {
@@ -170,7 +171,8 @@ class ChangeNowProvider(
                 }
             }
 
-            val amountOut = getExchangeAmountOrThrow(tickerFrom, tickerTo, amountIn)
+            val exchangeAmount = getExchangeAmountOrThrow(tickerFrom, tickerTo, amountIn)
+            val amountOut = exchangeAmount.estimatedAmount
                 ?: throw IllegalStateException("ChangeNowProvider: amount is not found")
 
             val actionRequired = getCreateTokenActionRequired(tokenIn, tokenOut)
@@ -183,7 +185,8 @@ class ChangeNowProvider(
                 tokenIn = tokenIn,
                 tokenOut = tokenOut,
                 amountIn = amountIn,
-                actionRequired = actionRequired
+                actionRequired = actionRequired,
+                estimationTime = parseMinutesRangeToSeconds(exchangeAmount.transactionSpeedForecast),
             )
         }
     }
@@ -310,4 +313,16 @@ class ChangeNowProvider(
         transaction: SwapProviderTransaction,
         result: SendTransactionResult,
     ) = providerSupport.onTransactionCompleted(transaction, result)
+}
+
+/**
+ * Converts ChangeNow's `transactionSpeedForecast` (a minutes value, e.g. "30" or a range "10-60")
+ * into seconds. A single number yields that number; a range yields its upper bound (conservative).
+ * Returns null when the input has no digits to parse.
+ */
+internal fun parseMinutesRangeToSeconds(text: String?): Long? {
+    val maxMinutes = text?.let {
+        Regex("""\d+""").findAll(it).maxOfOrNull { match -> match.value.toLong() }
+    }
+    return maxMinutes?.let { it * 60 }
 }

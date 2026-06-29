@@ -1988,6 +1988,9 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="multi_swap_continue">Ruil voortzetten</string>
     <string name="multi_swap_unfinished">Onvoltooide ruil</string>
     <string name="multi_swap_unfinished_plural">Onvoltooide ruilingen (%d)</string>
+    <string name="duration_short_hours">%1$du</string>
+    <string name="duration_short_minutes">%1$dmin</string>
+    <string name="duration_short_seconds">%1$ds</string>
     <string name="swap_through">Via</string>
     <string name="swap_you_send">U verzendt</string>
     <string name="swap_you_receive">U ontvangt</string>

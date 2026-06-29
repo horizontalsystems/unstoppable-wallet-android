@@ -1975,6 +1975,9 @@
     <string name="multi_swap_continue">교환 계속하기</string>
     <string name="multi_swap_unfinished">미완료 교환</string>
     <string name="multi_swap_unfinished_plural">미완료 교환 (%d)</string>
+    <string name="duration_short_hours">%1$d시간</string>
+    <string name="duration_short_minutes">%1$d분</string>
+    <string name="duration_short_seconds">%1$d초</string>
     <string name="swap_through">경유</string>
     <string name="swap_you_send">보내는 금액</string>
     <string name="swap_you_receive">받는 금액</string>

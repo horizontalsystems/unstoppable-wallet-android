@@ -166,6 +166,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
+        val tokenPairOut = tokenPairs.first { it.token == tokenOut }
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
         val cautions = mutableListOf<HSCaution>()
@@ -217,6 +218,12 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
         }
 
+        val estimationTime = resolveAllBridgeTransferTimeSeconds(
+            transferTime = tokenPairIn.abToken.transferTime,
+            destinationChainSymbol = tokenPairOut.abToken.chainSymbol,
+            crossChain = crosschain,
+        )
+
         return object : ISwapQuote {
             override val amountOut: BigDecimal = amountOut
             override val priceImpact: BigDecimal? = null
@@ -228,6 +235,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             override val amountIn: BigDecimal = amountIn
             override val actionRequired: ISwapProviderAction? = actionRequired
             override val cautions: List<HSCaution> = cautions
+            override val estimationTime: Long? = estimationTime
         }
     }
 
@@ -542,6 +550,11 @@ interface AllBridgeAPI {
             val chainType: String,
             val chainName: String,
             val bridgeAddress: String,
+            // Average transfer time per destination chain symbol and messenger, in milliseconds.
+            // Messenger keys are named ("allbridge", "wormhole", …) on the official API and numeric
+            // ("1".."6") on the blocksdecoded proxy the app uses; a value may be null when the
+            // messenger is unavailable for the pair.
+            val transferTime: Map<String, Map<String, Long?>>? = null,
             //    "poolAddress": "string",
             //    "cctpAddress": "string",
             //    "cctpFeeShare": "string",
@@ -558,7 +571,27 @@ interface AllBridgeAPI {
 
 data class AllBridgeTokenPair(val abToken: Response.Token, val token: Token)
 
-class SlippageNotAvailable() : HSCaution(
+// ALLBRIDGE messenger key: "allbridge" on the official API, "1" on the blocksdecoded proxy.
+// The provider always bridges via ALLBRIDGE, so there is no fallback to other messengers.
+private val ALLBRIDGE_MESSENGER_KEYS = listOf("allbridge", "1")
+
+/**
+ * Resolves AllBridge's published average transfer time into seconds for a cross-chain swap.
+ * [transferTime] is keyed by destination chain symbol, then by messenger, in milliseconds.
+ * Returns null for same-chain swaps, an unknown destination, or a missing ALLBRIDGE value.
+ */
+internal fun resolveAllBridgeTransferTimeSeconds(
+    transferTime: Map<String, Map<String, Long?>>?,
+    destinationChainSymbol: String,
+    crossChain: Boolean,
+): Long? {
+    if (!crossChain) return null
+    val byMessenger = transferTime?.get(destinationChainSymbol) ?: return null
+    val milliseconds = ALLBRIDGE_MESSENGER_KEYS.firstNotNullOfOrNull { byMessenger[it] } ?: return null
+    return milliseconds / 1000
+}
+
+class SlippageNotAvailable : HSCaution(
     TranslatableString.ResString(R.string.SwapWarning_SlippageNotAvailable_Title),
     Type.Warning,
     TranslatableString.ResString(R.string.SwapWarning_SlippageNotAvailable_Description),

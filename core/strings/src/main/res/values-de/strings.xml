@@ -1973,6 +1973,9 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="multi_swap_continue">Tausch fortsetzen</string>
     <string name="multi_swap_unfinished">Unvollständiger Tausch</string>
     <string name="multi_swap_unfinished_plural">Unvollständige Tausche (%d)</string>
+    <string name="duration_short_hours">%1$dh</string>
+    <string name="duration_short_minutes">%1$dmin</string>
+    <string name="duration_short_seconds">%1$ds</string>
     <string name="swap_through">Über</string>
     <string name="swap_you_send">Sie senden</string>
     <string name="swap_you_receive">Sie erhalten</string>

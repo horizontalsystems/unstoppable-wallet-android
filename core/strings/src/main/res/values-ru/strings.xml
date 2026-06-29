@@ -2184,4 +2184,7 @@
     <string name="multi_swap_continue">Продолжить обмен</string>
     <string name="multi_swap_unfinished">Незавершенный обмен</string>
     <string name="multi_swap_unfinished_plural">Незавершенные обмены (%d)</string>
+    <string name="duration_short_hours">%1$dч</string>
+    <string name="duration_short_minutes">%1$dмин</string>
+    <string name="duration_short_seconds">%1$dс</string>
 </resources>

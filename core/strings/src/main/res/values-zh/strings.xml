@@ -1966,6 +1966,9 @@
     <string name="multi_swap_continue">继续兑换</string>
     <string name="multi_swap_unfinished">未完成的兑换</string>
     <string name="multi_swap_unfinished_plural">未完成的兑换 (%d)</string>
+    <string name="duration_short_hours">%1$d小时</string>
+    <string name="duration_short_minutes">%1$d分</string>
+    <string name="duration_short_seconds">%1$d秒</string>
     <string name="swap_through">经由</string>
     <string name="swap_you_send">发送金额</string>
     <string name="swap_you_receive">接收金额</string>

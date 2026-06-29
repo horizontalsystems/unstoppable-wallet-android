@@ -1981,6 +1981,9 @@
     <string name="multi_swap_continue">Continuar troca</string>
     <string name="multi_swap_unfinished">Troca não finalizada</string>
     <string name="multi_swap_unfinished_plural">Trocas não finalizadas (%d)</string>
+    <string name="duration_short_hours">%1$dh</string>
+    <string name="duration_short_minutes">%1$dmin</string>
+    <string name="duration_short_seconds">%1$ds</string>
     <string name="swap_through">Via</string>
     <string name="swap_you_send">Você envia</string>
     <string name="swap_you_receive">Você recebe</string>

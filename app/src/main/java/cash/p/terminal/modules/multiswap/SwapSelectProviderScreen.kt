@@ -387,6 +387,7 @@ private fun SwapSelectProviderScreenPreview() {
         override val actionRequired: ISwapProviderAction? =
             null
         override val cautions = emptyList<HSCaution>()
+        override val estimationTime: Long? = null
     }
 
     val quote1 = SwapProviderQuote(

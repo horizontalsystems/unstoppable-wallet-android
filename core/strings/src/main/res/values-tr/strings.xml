@@ -1982,6 +1982,9 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="multi_swap_continue">Takasa devam et</string>
     <string name="multi_swap_unfinished">Tamamlanmamış takas</string>
     <string name="multi_swap_unfinished_plural">Tamamlanmamış takaslar (%d)</string>
+    <string name="duration_short_hours">%1$dsa</string>
+    <string name="duration_short_minutes">%1$ddk</string>
+    <string name="duration_short_seconds">%1$dsn</string>
     <string name="swap_through">Üzerinden</string>
     <string name="swap_you_send">Gönderdiğiniz</string>
     <string name="swap_you_receive">Alacağınız</string>

@@ -183,7 +183,8 @@ abstract class BaseThorChainProvider(
             amountIn = amountIn,
             actionRequired = actionRequired,
             cautions = cautions,
-            slippageThreshold = slippageThreshold
+            slippageThreshold = slippageThreshold,
+            estimationTime = quoteSwap.total_swap_seconds,
         )
     }
 
@@ -425,11 +426,11 @@ interface ThornodeAPI {
 //  "gas_rate_units": "satsperbyte",
             val memo: String,
             val expected_amount_out: BigDecimal,
+            val total_swap_seconds: Long? = null,
 //  "expected_amount_out_streaming": "2035299208",
 //  "max_streaming_quantity": 8,
 //  "streaming_swap_blocks": 7,
 //  "streaming_swap_seconds": 42,
-//  "total_swap_seconds": 1674
         ) {
             data class Fees(
                 val affiliate: BigDecimal,

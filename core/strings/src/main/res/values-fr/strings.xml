@@ -1979,6 +1979,9 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="multi_swap_continue">Continuer l\'échange</string>
     <string name="multi_swap_unfinished">Échange non terminé</string>
     <string name="multi_swap_unfinished_plural">Échanges non terminés (%d)</string>
+    <string name="duration_short_hours">%1$dh</string>
+    <string name="duration_short_minutes">%1$dmin</string>
+    <string name="duration_short_seconds">%1$ds</string>
     <string name="swap_through">Via</string>
     <string name="swap_you_send">Vous envoyez</string>
     <string name="swap_you_receive">Vous recevez</string>

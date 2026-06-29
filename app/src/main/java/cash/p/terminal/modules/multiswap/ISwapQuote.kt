@@ -20,14 +20,10 @@ interface ISwapQuote {
     val actionRequired: ISwapProviderAction?
     val cautions: List<HSCaution>
 
-    // Hardcoded 20-minute placeholder until real per-provider ETA is implemented;
-    // null means the provider exposes no estimation time.
+    // Estimated execution time in seconds, or null when the provider exposes none (the UI then
+    // hides the ETA badge). Abstract on purpose: every quote must state its ETA explicitly, so a
+    // new provider can't silently inherit a default and forget to set it.
     val estimationTime: Long?
-        get() = DEFAULT_ESTIMATION_TIME
-
-    companion object {
-        const val DEFAULT_ESTIMATION_TIME = 20 * 60L
-    }
 }
 
 class SwapQuoteUniswap(
@@ -42,6 +38,7 @@ class SwapQuoteUniswap(
 ) : ISwapQuote {
     override val amountOut: BigDecimal = tradeData.amountOut!!
     override val priceImpact: BigDecimal? = tradeData.priceImpact
+    override val estimationTime: Long? = null
 }
 
 class SwapQuoteUniswapV3(
@@ -56,6 +53,7 @@ class SwapQuoteUniswapV3(
 ) : ISwapQuote {
     override val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
     override val priceImpact = tradeDataV3.priceImpact
+    override val estimationTime: Long? = null
 }
 
 class SwapQuoteOneInch(
@@ -68,7 +66,9 @@ class SwapQuoteOneInch(
     override val amountIn: BigDecimal,
     override val actionRequired: ISwapProviderAction?,
     override val cautions: List<HSCaution> = listOf()
-) : ISwapQuote
+) : ISwapQuote {
+    override val estimationTime: Long? = null
+}
 
 class SwapQuoteOffChain(
     override val amountOut: BigDecimal,
@@ -79,7 +79,8 @@ class SwapQuoteOffChain(
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
     override val actionRequired: ISwapProviderAction?,
-    override val cautions: List<HSCaution> = listOf()
+    override val cautions: List<HSCaution> = listOf(),
+    override val estimationTime: Long? = null,
 ) : ISwapQuote
 
 class SwapQuoteThorChain(
@@ -93,4 +94,5 @@ class SwapQuoteThorChain(
     override val actionRequired: ISwapProviderAction?,
     override val cautions: List<HSCaution>,
     val slippageThreshold: BigDecimal,
+    override val estimationTime: Long? = null,
 ) : ISwapQuote

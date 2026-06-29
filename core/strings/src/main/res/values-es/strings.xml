@@ -1973,6 +1973,9 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="multi_swap_continue">Continuar intercambio</string>
     <string name="multi_swap_unfinished">Intercambio sin terminar</string>
     <string name="multi_swap_unfinished_plural">Intercambios sin terminar (%d)</string>
+    <string name="duration_short_hours">%1$dh</string>
+    <string name="duration_short_minutes">%1$dmin</string>
+    <string name="duration_short_seconds">%1$ds</string>
     <string name="swap_through">Vía</string>
     <string name="swap_you_send">Usted envía</string>
     <string name="swap_you_receive">Usted recibe</string>

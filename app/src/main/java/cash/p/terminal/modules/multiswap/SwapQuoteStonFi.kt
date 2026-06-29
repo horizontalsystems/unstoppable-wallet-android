@@ -19,7 +19,9 @@ class SwapQuoteStonFi(
     override val actionRequired: ISwapProviderAction?,
     override val cautions: List<HSCaution> = listOf(),
     val swapData: StonFiSwapData
-) : ISwapQuote
+) : ISwapQuote {
+    override val estimationTime: Long? = null
+}
 
 data class StonFiSwapData(
     val offerAddress: String,

@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -111,16 +112,20 @@ fun EstimationTimeBadge(
     )
 }
 
+@Composable
+@ReadOnlyComposable
 fun formatDurationShort(totalSeconds: Long): String {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60
 
-    return buildString {
-        if (hours > 0) append("${hours}h ")
-        if (minutes > 0) append("${minutes}m ")
-        if (seconds > 0 || (hours == 0L && minutes == 0L)) append("${seconds}s")
-    }.trim()
+    val parts = mutableListOf<String>()
+    if (hours > 0) parts += stringResource(R.string.duration_short_hours, hours)
+    if (minutes > 0) parts += stringResource(R.string.duration_short_minutes, minutes)
+    if (seconds > 0 || (hours == 0L && minutes == 0L)) {
+        parts += stringResource(R.string.duration_short_seconds, seconds)
+    }
+    return parts.joinToString(" ")
 }
 
 @Preview
