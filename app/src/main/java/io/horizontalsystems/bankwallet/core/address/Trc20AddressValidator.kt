@@ -61,7 +61,7 @@ class Trc20AddressValidator {
     private fun isValidTronAddress(tronAddressHex: String): Boolean {
         try {
             tronAddress(tronAddressHex)
-        } catch (e: Exception) {
+        } catch (_: Throwable) {
             return false
         }
         return true
@@ -115,7 +115,7 @@ class Trc20AddressValidator {
 
             // If we can't determine the status, assume it's not clear (blacklisted)
             return@withContext false
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             when (e) {
                 is TokenError -> throw e
                 else -> throw TokenError.NetworkError
