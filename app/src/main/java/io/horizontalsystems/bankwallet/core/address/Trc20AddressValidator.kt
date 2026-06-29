@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -115,11 +116,12 @@ class Trc20AddressValidator {
 
             // If we can't determine the status, assume it's not clear (blacklisted)
             return@withContext false
-        } catch (e: Throwable) {
-            when (e) {
-                is TokenError -> throw e
-                else -> throw TokenError.NetworkError
-            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: TokenError) {
+            throw e
+        } catch (_: Throwable) {
+            throw TokenError.NetworkError
         }
     }
 
