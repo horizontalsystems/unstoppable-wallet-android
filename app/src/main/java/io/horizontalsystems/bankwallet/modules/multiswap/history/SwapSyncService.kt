@@ -5,12 +5,11 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,18 +54,15 @@ class SwapSyncService(
             return
         }
         try {
-            val isSingleTransactionEvmSwap = MultiSwapProviderRegistry.isSingleTransactionEvmSwap(
-                record.providerId, record.tokenInBlockchainTypeUid,
-                record.tokenOutBlockchainTypeUid
-            )
-            var request = SwapTrackRequestBuilder.build(record, isSingleTransactionEvmSwap)
+            val call = SwapTrackRequestBuilder.build(record)
+            var request = call.request
             if (BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server) {
                 request = request.copy(testActionRequired = true)
             }
-            val response = if (isSingleTransactionEvmSwap) {
-                unstoppableAPI.trackEvm(request)
-            } else {
-                unstoppableAPI.track(request)
+            val response = when (call.endpoint) {
+                SwapTrackRequestBuilder.Endpoint.Recorded -> unstoppableAPI.track(request)
+                SwapTrackRequestBuilder.Endpoint.Evm -> unstoppableAPI.trackEvm(request)
+                SwapTrackRequestBuilder.Endpoint.Thorchain -> unstoppableAPI.trackThorchain(request)
             }
 
             if (record.transactionHash == null && response.hash != null) {

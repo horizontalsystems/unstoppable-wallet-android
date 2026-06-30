@@ -2,13 +2,11 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import android.util.Base64
 import com.google.gson.JsonElement
-import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.entities.SimulateFailSwapMode
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
@@ -260,20 +258,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
     ): SwapQuote {
-        val bestRoute = quoteSwapBestRoute(
-            tokenIn,
-            tokenOut,
-            amountIn,
-            BigDecimal("1"),
-            null,
-            null,
-            null,
-            true,
-            null,
-            null
-        )
+        val bestRoute = rateBestRoute(tokenIn, tokenOut, amountIn, BigDecimal("1"))
 
-        val approvalAddress = bestRoute.meta?.approvalAddress?.let { router ->
+        val approvalAddress = bestRoute.approvalSpenderOrExecution?.let { router ->
             try {
                 Address(router)
             } catch (_: Throwable) {
@@ -297,57 +284,47 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         )
     }
 
-    private suspend fun quoteSwapBestRoute(
+    // /v2/rate — read-only price/route comparison narrowed to this provider. Picks the route
+    // with the best expectedBuyAmount. On an Exolix ZEC pair it additionally fans out a
+    // shielded (ZEC.ZECSHIELDED) variant and keeps the better-priced one; the winning
+    // sell/buy asset travels back on the route so commitSwap can replay the exact variant.
+    private suspend fun rateBestRoute(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal,
-        destinationAddress: String?,
-        sourceAddress: String?,
-        refundAddress: String?,
-        dry: Boolean,
-        sellAsset: String?,
-        buyAsset: String?,
-    ): UnstoppableAPI.Response.Quote.Route {
+    ): UnstoppableAPI.Response.Route {
         val usingDerivedIdentifiers = assetsMap.isEmpty()
-        val assetIn = sellAsset ?: assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val assetOut = buyAsset ?: assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val assetIn = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val assetOut = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
         val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
-        val requestQuote = UnstoppableAPI.Request.Quote(
+        val request = UnstoppableAPI.Request.Rate(
             sellAsset = assetIn,
             buyAsset = assetOut,
             sellAmount = amountIn.toPlainString(),
-            providers = setOf(provider.id),
             slippage = slippage,
-            destinationAddress = destinationAddress,
-            sourceAddress = sourceAddress,
-            refundAddress = refundAddress,
-            dry = dry,
+            providers = setOf(provider.id),
             chainId = chainId,
-            testActionRequired = if (!dry && BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server) true else null,
         )
-        val quote = unstoppableAPI.quote(requestQuote)
+        var bestRoute = unstoppableAPI.rate(request).routes.maxBy { it.expectedBuyAmountOrZero }
 
-        var bestRoute = quote.routes.maxBy { it.expectedBuyAmountOrZero }
-
-        if (provider == UProvider.Exolix && dry) {
-            val requestQuoteAlternate = when {
+        if (provider == UProvider.Exolix) {
+            val requestAlternate = when {
                 tokenIn.blockchainType == BlockchainType.Zcash -> {
-                    requestQuote.copy(sellAsset = ZCASH_SHIELDED_ASSET)
+                    request.copy(sellAsset = ZCASH_SHIELDED_ASSET)
                 }
 
                 tokenOut.blockchainType == BlockchainType.Zcash -> {
-                    requestQuote.copy(buyAsset = ZCASH_SHIELDED_ASSET)
+                    request.copy(buyAsset = ZCASH_SHIELDED_ASSET)
                 }
 
                 else -> null
             }
 
-            if (requestQuoteAlternate != null) {
+            if (requestAlternate != null) {
                 try {
-                    val quoteAlternate = unstoppableAPI.quote(requestQuoteAlternate)
-                    val bestRouteAlternate = quoteAlternate.routes.maxBy { it.expectedBuyAmountOrZero }
+                    val bestRouteAlternate = unstoppableAPI.rate(requestAlternate).routes.maxBy { it.expectedBuyAmountOrZero }
                     if (bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero) {
                         bestRoute = bestRouteAlternate
                     }
@@ -360,6 +337,46 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         }
 
         return bestRoute
+    }
+
+    // /v2/swap — commits the order with this single provider and returns the executable
+    // route (execution + uuid). `sellAsset`/`buyAsset` replay the variant the rate quote
+    // chose (Exolix ZEC). A committed route with no uuid can't be tracked, so reject it
+    // before the user sends funds rather than create an untrackable swap.
+    private suspend fun commitSwap(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        slippage: BigDecimal,
+        destinationAddress: String,
+        sourceAddress: String?,
+        refundAddress: String?,
+        sellAsset: String?,
+        buyAsset: String?,
+    ): UnstoppableAPI.Response.Route {
+        val usingDerivedIdentifiers = assetsMap.isEmpty()
+        val assetIn = sellAsset ?: assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val assetOut = buyAsset ?: assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
+
+        val request = UnstoppableAPI.Request.Swap(
+            sellAsset = assetIn,
+            buyAsset = assetOut,
+            sellAmount = amountIn.toPlainString(),
+            slippage = slippage,
+            provider = provider.id,
+            destinationAddress = destinationAddress,
+            refundAddress = refundAddress,
+            sourceAddress = sourceAddress,
+            chainId = chainId,
+        )
+        val route = unstoppableAPI.swap(request)
+
+        if (route.uuid.isNullOrEmpty()) {
+            throw IllegalStateException("Swap is not trackable (no uuid)")
+        }
+
+        return route
     }
 
     override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
@@ -386,10 +403,18 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             else -> SwapHelper.getReceiveAddressForToken(tokenOut)
         }
 
-        val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
+        // sourceAddress is the build signal — send it only for chains whose server-built tx
+        // we actually consume (EVM/Tron/TON/Solana), where it is also required for the
+        // signed_transaction `from`. For UTXO/Zcash/Monero/Zano/Stellar we omit it and build
+        // the transfer ourselves (e.g. multi-UTXO sweeps).
+        val sourceAddress = if (tokenIn.needsServerBuiltTx) {
+            SwapHelper.getSendingAddressForToken(tokenIn)
+        } else {
+            null
+        }
         val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
 
-        val bestRoute = quoteSwapBestRoute(
+        val bestRoute = commitSwap(
             tokenIn,
             tokenOut,
             amountIn,
@@ -397,7 +422,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             destination,
             sourceAddress,
             refundAddress,
-            false,
             selectedRoute?.sellAsset,
             selectedRoute?.buyAsset
         )
@@ -424,44 +448,41 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             sendTransactionData = getSendTransactionData(
                 tokenIn,
                 amountIn,
-                bestRoute,
-                tokenOut
+                bestRoute
             ),
             priceImpact = null,
             fields = fields,
             estimatedTime = bestRoute.estimatedTime?.total,
             slippage = slippage,
-            providerSwapId = bestRoute.providerSwapId,
+            providerSwapId = bestRoute.uuid,
             fromAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
             toAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
-            depositAddress = bestRoute.inboundAddress,
+            depositAddress = bestRoute.execution?.resolvedDepositAddress(),
         )
     }
 
     private fun getSendTransactionData(
         tokenIn: Token,
         amountIn: BigDecimal,
-        bestRoute: UnstoppableAPI.Response.Quote.Route,
-        tokenOut: Token
+        bestRoute: UnstoppableAPI.Response.Route,
     ): SendTransactionData {
         val blockchainType = tokenIn.blockchainType
+        val execution = bestRoute.execution ?: throw IllegalStateException("No execution found")
 
         if (blockchainType.isEvm) {
-            if (bestRoute.tx?.isJsonObject == true) {
-                val jsonObject = bestRoute.tx.asJsonObject
-                val transactionData = TransactionData(
-                    to = Address(jsonObject["to"].asString),
-                    value = BigInteger(jsonObject["value"].asString.stripHexPrefix(), 16),
-                    input = (jsonObject["data"].asString).hexStringToByteArray()
-                )
+            val signable = execution.primarySignable?.takeIf { it.kind == "evm" }
+                ?: throw IllegalStateException("No evm tx found")
 
-                return SendTransactionData.Evm(
-                    transactionData = transactionData,
-                    gasLimit = jsonObject["gas"]?.asString?.hexStringToByteArray()?.toLong(),
-                )
-            } else {
-                throw IllegalStateException("No tx found")
-            }
+            val transactionData = TransactionData(
+                to = Address(signable.to ?: throw IllegalStateException("No tx `to`")),
+                value = BigInteger((signable.value ?: "0x0").stripHexPrefix(), 16),
+                input = (signable.data ?: "0x").hexStringToByteArray()
+            )
+
+            return SendTransactionData.Evm(
+                transactionData = transactionData,
+                gasLimit = signable.gas?.hexStringToByteArray()?.toLong(),
+            )
         }
 
         when (blockchainType) {
@@ -476,8 +497,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 }
 
                 return SendTransactionData.Btc(
-                    address = bestRoute.inboundAddress,
-                    memo = bestRoute.txExtraAttribute?.get("memo"),
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
+                    memo = execution.resolvedMemo(),
                     amount = amountIn,
                     recommendedGasRate = null,
                     minimumSendAmount = null,
@@ -487,48 +508,38 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             }
 
             BlockchainType.Solana -> {
-                if (bestRoute.tx?.isJsonPrimitive == true) {
-                    return SendTransactionData.Solana.WithRawTransaction(
-                        Base64.decode(
-                            bestRoute.tx.asString,
-                            Base64.DEFAULT
-                        )
-                    )
-                } else {
-                    throw IllegalStateException("No tx found")
-                }
+                val message = execution.primarySignable?.takeIf { it.kind == "solana" }?.message
+                    ?: throw IllegalStateException("No solana tx found")
+
+                return SendTransactionData.Solana.WithRawTransaction(
+                    Base64.decode(message, Base64.DEFAULT)
+                )
             }
 
             BlockchainType.Tron -> {
-                if (bestRoute.tx != null) {
-                    val rawTransaction = APIClient.gson.fromJson(
-                        bestRoute.tx,
-                        CreatedTransaction::class.java
-                    )
+                val tx = execution.primarySignable?.takeIf { it.kind == "tron" }?.tx
+                    ?: throw IllegalStateException("No tron tx found")
 
-                    return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
-                } else {
-                    throw IllegalStateException("No tx found")
-                }
+                val rawTransaction = APIClient.gson.fromJson(tx, CreatedTransaction::class.java)
+                return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
             }
 
             BlockchainType.Stellar -> {
-                val memo = bestRoute.txExtraAttribute?.get("memo")
+                val memo = execution.resolvedMemo()
                     ?: throw IllegalStateException("No memo found")
 
                 return SendTransactionData.Stellar.Regular(
-                    address = bestRoute.inboundAddress,
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
                     memo = memo,
                     amount = amountIn
                 )
             }
 
             BlockchainType.Ton -> {
-                if (bestRoute.tx != null) {
-                    return SendTransactionData.Ton.SendRequest(JSONObject(bestRoute.tx.toString()))
-                } else {
-                    throw IllegalStateException("No tx found")
-                }
+                val tx = execution.primarySignable?.takeIf { it.kind == "ton" }?.tx
+                    ?: throw IllegalStateException("No ton tx found")
+
+                return SendTransactionData.Ton.SendRequest(JSONObject(tx.toString()))
             }
 
             BlockchainType.Zcash -> {
@@ -537,9 +548,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 }
 
                 return SendTransactionData.Zcash.Regular(
-                    address = bestRoute.inboundAddress,
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
                     amount = amountIn,
-                    memo = bestRoute.txExtraAttribute?.get("memo") ?: ""
+                    memo = execution.resolvedMemo() ?: ""
                 )
             }
 
@@ -549,9 +560,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 }
 
                 return SendTransactionData.Monero(
-                    address = bestRoute.inboundAddress,
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
                     amount = amountIn,
-                    memo = bestRoute.txExtraAttribute?.get("memo")
+                    memo = execution.resolvedMemo()
                 )
             }
 
@@ -561,9 +572,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 }
 
                 return SendTransactionData.Zano(
-                    address = bestRoute.inboundAddress,
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
                     amount = amountIn,
-                    memo = bestRoute.txExtraAttribute?.get("memo")
+                    memo = execution.resolvedMemo()
                 )
             }
 
@@ -573,13 +584,22 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
 
+    // Chains where we consume the server-built tx from `execution` (so we send sourceAddress
+    // on /v2/swap). Everything else builds its own transfer to the deposit address.
+    private val Token.needsServerBuiltTx: Boolean
+        get() = blockchainType.isEvm || blockchainType in setOf(
+            BlockchainType.Tron,
+            BlockchainType.Ton,
+            BlockchainType.Solana,
+        )
+
     companion object {
         // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
         // and lets the server expand it into this shielded variant.
         private const val ZCASH_SHIELDED_ASSET = "ZEC.ZECSHIELDED"
     }
 
-    data class SwapQuoteExtraData(val route: UnstoppableAPI.Response.Quote.Route) : SwapQuote.ExtraData
+    data class SwapQuoteExtraData(val route: UnstoppableAPI.Response.Route) : SwapQuote.ExtraData
 }
 
 interface UnstoppableAPI {
@@ -591,44 +611,78 @@ interface UnstoppableAPI {
         @Query("provider") provider: String
     ): Response.Tokens
 
-    @POST("quote")
-    suspend fun quote(
-        @Body quote: Request.Quote,
-    ): Response.Quote
+    // /v2/rate — read-only, prices the swap across the requested providers. Returns
+    // { routes: [...] } with economics only — no execution, no uuid.
+    @POST("rate")
+    suspend fun rate(
+        @Body request: Request.Rate,
+    ): Response.Rate
 
+    // /v2/swap — commits against ONE provider. Creates the order and returns the single
+    // executable route DIRECTLY (no { routes } wrapper), now carrying execution + uuid.
+    @POST("swap")
+    suspend fun swap(
+        @Body request: Request.Swap,
+    ): Response.Route
+
+    // /v2/track — our recorded swaps, tracked by the route's uuid alone (the server resolves
+    // the provider and every swap detail from the record).
     @POST("track")
     suspend fun track(
         @Body request: Request.Track,
     ): Response.Track
 
+    // /v2/track/evm — stateless on-chain reader for native EVM swaps (1inch/Uniswap/Pancake)
+    // that were not created through /v2/swap, so there is no record to look up by uuid.
     @POST("track/evm")
     suspend fun trackEvm(
         @Body request: Request.Track,
     ): Response.Track
 
-    @GET("quote/check-addresses")
+    // /v2/track/thorchain — stateless on-chain reader for native THORChain/Mayachain swaps.
+    @POST("track/thorchain")
+    suspend fun trackThorchain(
+        @Body request: Request.Track,
+    ): Response.Track
+
+    @GET("check-addresses")
     suspend fun checkAddresses(
         @Query("addresses") addresses: String,
     ): Response.CheckAddresses
 
     object Request {
-        data class Quote(
+        // /v2/rate request — compare routes; narrow the fan-out to a single provider.
+        data class Rate(
             val sellAsset: String,
             val buyAsset: String,
             val sellAmount: String,
-            val providers: Set<String>,
             val slippage: BigDecimal,
-            val destinationAddress: String?,
-            val sourceAddress: String?,
-            val refundAddress: String?,
-            val dry: Boolean,
+            val providers: Set<String>,
             val chainId: String? = null,
-            // Debug-only: forces the server to return an action_required swap. Null in release builds.
-            val testActionRequired: Boolean? = null,
+        )
+
+        // /v2/swap request — commit with the single provider. `sourceAddress` is the build
+        // signal: supply it and the server returns a ready-to-sign tx; omit it and we build
+        // the tx ourselves (UTXO/Zcash/Monero/Zano/Stellar).
+        data class Swap(
+            val sellAsset: String,
+            val buyAsset: String,
+            val sellAmount: String,
+            val slippage: BigDecimal,
+            val provider: String,
+            val destinationAddress: String,
+            val refundAddress: String? = null,
+            val sourceAddress: String? = null,
+            val chainId: String? = null,
         )
 
         data class Track(
-            val provider: String,
+            // Recorded swaps (/v2/track): the route's uuid resolves provider + all details.
+            val uuid: String? = null,
+            // Broadcast tx hash — required for DEX swaps, harmless for P2P/NEAR.
+            val inboundTxHash: String? = null,
+            // Stateless readers (/v2/track/evm, /v2/track/thorchain) carry full context.
+            val provider: String? = null,
             val hash: String? = null,
             val chainId: String? = null,
             val fromAsset: String? = null,
@@ -638,7 +692,6 @@ interface UnstoppableAPI {
             val toAddress: String? = null,
             val toAmount: String? = null,
             val depositAddress: String? = null,
-            val providerSwapId: String? = null,
             // Debug-only: forces the server to return an action_required swap. Null in release builds.
             val testActionRequired: Boolean? = null,
         )
@@ -673,32 +726,135 @@ interface UnstoppableAPI {
             val identifier: String,
         )
 
-        data class Quote(
+        // /v2/rate response — a list of routes to compare. Each route carries economics
+        // only (no execution, no uuid — those appear after committing with /v2/swap).
+        data class Rate(
             val routes: List<Route>
+        )
+
+        // A single route. From /rate it is economics-only; from /swap it additionally
+        // carries an `execution` block and a top-level `uuid` tracking handle.
+        data class Route(
+            val sellAsset: String?,
+            val buyAsset: String?,
+            val expectedBuyAmount: BigDecimal?,
+            val estimatedTime: EstimatedTime?,
+            // EVM ERC20 spender to approve before swapping (1inch/Barter/Circle). On a rate
+            // route it is top-level; on a committed route it rides execution.approval.spender.
+            val approvalSpender: String?,
+            // Present only on a committed (/v2/swap) route — tells you how to send funds.
+            val execution: Execution?,
+            // v2 tracking handle (swap_records.uuid), top-level on the committed response.
+            val uuid: String?,
         ) {
-            data class Route(
-                val sellAsset: String?,
-                val buyAsset: String?,
-                val expectedBuyAmount: BigDecimal?,
-                val tx: JsonElement?,
-                val inboundAddress: String,
-                val memo: String?,
-                val txExtraAttribute: Map<String, String>?,
-                val estimatedTime: EstimatedTime?,
-                val providerSwapId: String?,
-                val meta: Meta?
-            ) {
-                // should be getter, otherwise it will be null when restored from json
-                val expectedBuyAmountOrZero: BigDecimal
-                    get() = expectedBuyAmount ?: BigDecimal.ZERO
+            // should be getter, otherwise it will be null when restored from json
+            val expectedBuyAmountOrZero: BigDecimal
+                get() = expectedBuyAmount ?: BigDecimal.ZERO
 
-                data class EstimatedTime(
-                    val total: Long
-                )
+            // The ERC20 spender used to compute allowance, wherever it lives on the route.
+            val approvalSpenderOrExecution: String?
+                get() = approvalSpender ?: execution?.approvalSpender
 
-                data class Meta(val approvalAddress: String)
-            }
+            data class EstimatedTime(
+                val total: Long
+            )
         }
+
+        // /v2 `execution` discriminated union — switch on `method`. Modeled as one flat
+        // class (Gson-friendly) with accessors that read only the fields the method uses.
+        data class Execution(
+            val method: String,        // signed_transaction | transfer | thorchain_deposit
+            val chain: String?,
+            // signed_transaction
+            val transactions: List<SignableTx>?,
+            val approval: Approval?,
+            // transfer
+            val depositAddress: String?,
+            val amount: String?,
+            val asset: String?,
+            val attachment: Attachment?,
+            val unsignedTx: SignableTx?,
+            // thorchain_deposit
+            val protocol: String?,
+            val inboundAddress: String?,
+            val memo: String?,
+            val delivery: Delivery?,
+        ) {
+            // The single tx a client signs, if any: signed_transaction's first, or the
+            // optional unsignedTx on transfer / thorchain delivery (sent only when we
+            // supplied a sourceAddress).
+            val primarySignable: SignableTx?
+                get() = when (method) {
+                    "signed_transaction" -> transactions?.firstOrNull()
+                    "transfer" -> unsignedTx
+                    "thorchain_deposit" -> delivery?.unsignedTx
+                    else -> null
+                }
+
+            // The deposit address for the address-transfer methods. signed_transaction is
+            // tx-only and has none.
+            fun resolvedDepositAddress(): String? = when (method) {
+                "transfer" -> depositAddress
+                "thorchain_deposit" -> inboundAddress
+                else -> null
+            }
+
+            // The binding memo for an address transfer. For `transfer` a memo travels as a
+            // text attachment (RUNE/GAIA/TON/NEAR); a destination_tag is handled separately.
+            fun resolvedMemo(): String? = when (method) {
+                "thorchain_deposit" -> memo
+                "transfer" -> attachment?.takeIf { it.type == "text" }?.value
+                else -> null
+            }
+
+            val approvalSpender: String?
+                get() = when (method) {
+                    "signed_transaction" -> approval?.spender
+                    "thorchain_deposit" -> delivery?.approval?.spender
+                    else -> null
+                }
+        }
+
+        // A signable transaction the server built. `kind` tags the shape; each per-chain
+        // builder reads the matching field (evm: to/value/data/gas; solana: message;
+        // stellar: xdr; utxo: psbt; tron/ton/cosmos/ripple/near: tx).
+        data class SignableTx(
+            val kind: String,
+            // evm
+            val to: String?,
+            val from: String?,
+            val value: String?,
+            val data: String?,
+            val gas: String?,
+            val gasPrice: String?,
+            // base64 forms
+            val psbt: String?,
+            val message: String?,
+            val xdr: String?,
+            // object forms (cosmos / ripple / ton / tron / near)
+            val tx: JsonElement?,
+        )
+
+        data class Approval(
+            val token: String?,
+            val spender: String,
+            val amount: String?,
+        )
+
+        // transfer.attachment — an order identifier the provider uses to credit the deposit.
+        data class Attachment(
+            val type: String,   // destination_tag | text
+            val value: String,
+        )
+
+        // thorchain_deposit.delivery — chain-specific memo binding.
+        data class Delivery(
+            val kind: String,   // evm_contract_call | utxo_op_return | cosmos_memo
+            val router: String?,
+            val approval: Approval?,
+            val shieldedMemoAddress: String?,
+            val unsignedTx: SignableTx?,
+        )
 
         data class CheckAddresses(
             val passedAmlCheck: Boolean?,

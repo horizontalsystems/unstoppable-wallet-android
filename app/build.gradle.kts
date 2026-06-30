@@ -138,7 +138,7 @@ android {
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
-            resValue("string", "uswapApiBaseUrl", "https://swap-dev.unstoppable.money/api/v1/")
+            resValue("string", "uswapApiBaseUrl", "https://swap-dev.unstoppable.money/api/v2/")
         }
 
         release {
@@ -170,7 +170,7 @@ android {
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
-            resValue("string", "uswapApiBaseUrl", "https://swap-api.unstoppable.money/v1/")
+            resValue("string", "uswapApiBaseUrl", "https://swap-api.unstoppable.money/v2/")
         }
     }
 
