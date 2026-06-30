@@ -799,11 +799,16 @@ interface UnstoppableAPI {
                 else -> null
             }
 
-            // The binding memo for an address transfer. For `transfer` a memo travels as a
-            // text attachment (RUNE/GAIA/TON/NEAR); a destination_tag is handled separately.
+            // The binding memo for an address transfer — the order identifier the provider
+            // uses to credit the deposit, which we must echo back or the funds are lost.
+            // Every chain we build a transfer for here (Stellar/Zcash/Monero/Zano/UTXO) puts
+            // it in the memo field, whether the server typed it `text` (RUNE/GAIA/TON/NEAR)
+            // or `destination_tag` (a numeric tag, e.g. a Stellar memo-id), so accept both.
+            // The dedicated XRP destination-tag path (where the tag is a separate tx field,
+            // not a memo) is not built by this provider, so this can't misroute one.
             fun resolvedMemo(): String? = when (method) {
                 "thorchain_deposit" -> memo
-                "transfer" -> attachment?.takeIf { it.type == "text" }?.value
+                "transfer" -> attachment?.value
                 else -> null
             }
 
