@@ -37,21 +37,26 @@ object MainModule {
         }
     }
 
+    // MainActivity lives in :app; resolve its launcher intent without a compile-time
+    // reference so this module stays in :core.
+    private fun launchIntent(context: Context): Intent =
+        context.packageManager.getLaunchIntentForPackage(context.packageName)!!
+
     fun start(context: Context, data: Uri? = null) {
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = launchIntent(context)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         intent.data = data
         context.startActivity(intent)
     }
 
     fun startAsNewTask(context: Context) {
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = launchIntent(context)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
     }
 
     fun startAsNewTask(context: Activity) {
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = launchIntent(context)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
         val options = androidx.core.app.ActivityOptionsCompat.makeCustomAnimation(
