@@ -40,8 +40,8 @@ class NftStorage(
                 uid = it.providerUid,
                 name = it.name,
                 imageUrl = it.thumbnailImageUrl,
-                averagePrice7d = it.averagePrice7d?.let { _ -> NftPriceRecord(it.averagePrice7d) },
-                averagePrice30d = it.averagePrice30?.let { _ -> NftPriceRecord(it.averagePrice30) }
+                averagePrice7d = it.averagePrice7d?.let { price -> NftPriceRecord(price) },
+                averagePrice30d = it.averagePrice30?.let { price -> NftPriceRecord(price) }
             )
         }
         val assetRecords = addressMetadata.assets.map {
@@ -53,7 +53,7 @@ class NftStorage(
                 name = it.name,
                 imagePreviewUrl = it.previewImageUrl,
                 onSale = it.onSale,
-                lastSale = it.lastSalePrice?.let { _ -> NftPriceRecord(it.lastSalePrice) }
+                lastSale = it.lastSalePrice?.let { price -> NftPriceRecord(price) }
             )
         }
 

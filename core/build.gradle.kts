@@ -53,5 +53,13 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.core)
 
+    // Entities moved from :app expose these types in their public API -> api()
+    api(libs.androidx.room.runtime)
+    api(libs.androidx.room.ktx)
+    api(libs.kit.market)
+    api(libs.kit.ethereum)
+    api(libs.kit.bitcoin)
+    api(libs.gson)
+
     testImplementation(libs.junit)
 }
