@@ -44,12 +44,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".modules.qrscanner.QRScannerActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.keystore.KeyStoreActivity"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".modules.main.MainActivity"
