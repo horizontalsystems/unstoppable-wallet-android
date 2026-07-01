@@ -237,122 +237,10 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-
-    // AndroidX Core
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.splashscreen)
-    implementation(libs.androidx.glance.appwidget)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.browser)
-    implementation(libs.androidx.biometric)
-    implementation(libs.androidx.credentials)
-
-    // Lifecycle
-    implementation(libs.androidx.lifecycle.extensions)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.common.java8)
-    implementation(libs.androidx.lifecycle.reactivestreams.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    // Navigation 3
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.material3.adaptive.navigation3)
-    implementation(libs.kotlinx.serialization.core)
-
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.rxjava2)
-    ksp(libs.androidx.room.compiler)
-
-    // WorkManager
-    implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.androidx.work.rxjava2)
-
-    // Compose
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.compose.animation)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.androidx.compose.material3)
-
-    // Google Material
-    implementation(libs.google.material)
-
-    // Accompanist
-    implementation(libs.accompanist.navigation.animation)
-    implementation(libs.accompanist.appcompat.theme)
-    implementation(libs.accompanist.flowlayout)
-    implementation(libs.accompanist.permissions)
-
-    // Networking
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.adapter.rxjava2)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.converter.scalars)
-    implementation(libs.okhttp.logging)
-    implementation(libs.gson)
-
-    // Rx
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.rx2)
-
-    // Image loading
-    implementation(libs.coil.compose)
-    implementation(libs.coil.svg)
-    implementation(libs.coil.gif)
-
-    // Logging
-    implementation(libs.timber)
+    // Everything else now lives in :core, which re-exports its dependencies (api),
+    // so the thin :app shell only needs :core plus the flavor/test bits below.
+    implementation(project(":core"))
     debugImplementation(libs.leakcanary)
-
-    // Markdown
-    implementation(libs.commonmark)
-    implementation(libs.markwon)
-
-    // QR
-    api(libs.zxing)
-    implementation(libs.qrose)
-
-    // Web3
-    implementation(libs.web3j)
-    implementation(libs.unstoppable.domains)
-
-    // Wallet Kits
-    implementation(libs.kit.monero)
-    implementation(libs.kit.zano)
-    implementation(libs.kit.stellar)
-    implementation(libs.kit.ton)
-    implementation(libs.kit.bitcoin)
-    implementation(libs.kit.ethereum)
-    implementation(libs.kit.fee.rate)
-    implementation(libs.kit.market)
-    implementation(libs.kit.solana)
-    implementation(libs.kit.tron)
-    implementation(libs.zcash.android.sdk)
-
-    // BouncyCastle
-    implementation(libs.bouncycastle)
-
-    // Binance
-    implementation(libs.binance.connector) {
-        exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
-    }
 
     // Desugar
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -362,24 +250,6 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk18on")
         exclude(group = "org.bouncycastle", module = "bcutil-jdk18on")
     }
-
-    // Tor
-    implementation(libs.tor.android)
-    implementation(libs.jtorctl)
-
-    // Utils
-    implementation(libs.circleindicator)
-    implementation(libs.twitter.text)
-    api(libs.android.shell)
-    api(libs.portmapper)
-
-    // UI modules
-    implementation(project(":core"))
-    implementation(project(":components:icons"))
-    implementation(project(":components:chartview"))
-
-    implementation(project(":subscriptions-core"))
-    implementation(project(":dapp-core"))
 
     // UI Tests
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
