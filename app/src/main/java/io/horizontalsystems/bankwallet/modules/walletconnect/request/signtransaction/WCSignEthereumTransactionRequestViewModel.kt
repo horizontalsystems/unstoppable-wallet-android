@@ -44,9 +44,10 @@ class WCSignEthereumTransactionRequestViewModel(
 
     init {
         val gasPrice = transaction.getGasPriceObj()
+        val gasLimit = transaction.gasLimit
 
-        feeAmountData = if (gasPrice != null && transaction.gasLimit != null) {
-            GasData(gasLimit = transaction.gasLimit, gasPrice = gasPrice).let {
+        feeAmountData = if (gasPrice != null && gasLimit != null) {
+            GasData(gasLimit = gasLimit, gasPrice = gasPrice).let {
                 gasData = it
                 baseCoinService.amountData(
                     it.estimatedFee,
@@ -57,10 +58,11 @@ class WCSignEthereumTransactionRequestViewModel(
             null
         }
 
-        nonce = transaction.nonce
+        val txNonce = transaction.nonce
+        nonce = txNonce
 
-        fields = if (transaction.nonce != null) {
-            listOf(DataFieldNonce(transaction.nonce))
+        fields = if (txNonce != null) {
+            listOf(DataFieldNonce(txNonce))
         } else {
             emptyList()
         }
