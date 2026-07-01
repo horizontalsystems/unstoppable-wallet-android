@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -45,6 +46,12 @@ dependencies {
     implementation(libs.rxjava)
     implementation(libs.androidx.biometric)
     implementation(libs.google.material)
+
+    // App-infra base classes moved from :app
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.core)
 
     testImplementation(libs.junit)
 }
