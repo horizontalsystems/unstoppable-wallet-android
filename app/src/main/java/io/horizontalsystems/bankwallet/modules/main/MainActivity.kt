@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.Nav3
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
@@ -15,7 +16,7 @@ class MainActivity : BaseActivity() {
 
         setContent {
             ComposeAppTheme {
-                Nav3()
+                Nav3(EntryPage)
             }
         }
     }

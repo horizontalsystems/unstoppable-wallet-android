@@ -31,7 +31,6 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
-import io.horizontalsystems.core.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
@@ -43,20 +42,21 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountShe
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSheet
+import io.horizontalsystems.core.R
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.dapp.core.HSDAppEvent
 
 @Composable
-fun Nav3() {
+fun Nav3(entryPage: HSPage) {
     val mainActivityViewModel = viewModel<MainActivityViewModel>(factory = Factory())
     val isLocked by App.pinComponent.isLockedFlow.collectAsState()
 
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSPage>(EntryPage)
+        NavBackStack<HSPage>(entryPage)
     }
 
     val hsNavigation = remember { HSNavigation(backStack) }
