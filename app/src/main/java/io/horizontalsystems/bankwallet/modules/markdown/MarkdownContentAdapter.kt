@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.databinding.*
+import io.horizontalsystems.core.databinding.*
 
 class MarkdownContentAdapter(
     private val handleRelativeUrl: Boolean,

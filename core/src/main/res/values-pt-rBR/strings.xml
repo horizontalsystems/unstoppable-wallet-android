@@ -7,4 +7,1791 @@
     <string name="Duration_Hours">%d h.</string>
     <string name="Duration_Seconds">%d seg.</string>
     <string name="Duration_Minutes">%d min.</string>
+
+    <!--Common-->
+    <string name="Error_BrowserNotFound">Nenhum app encontrado para abrir este link</string>
+    <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="Alert_Cancel">Cancelar</string>
+    <string name="Alert_Copy">Copiar</string>
+    <string name="Button_Show">Mostrar</string>
+    <string name="Button_Hide">Ocultar</string>
+    <string name="Button_Cancel">Cancelar</string>
+    <string name="Button_Next">Próximo</string>
+    <string name="Button_Enable">Habilitar</string>
+    <string name="Button_Disable">Desativar</string>
+    <string name="Button_ScanQr">QR Code</string>
+    <string name="Button_Close">Fechar</string>
+    <string name="Button_Ok">Certo</string>
+    <string name="Button_Activate">Ativar</string>
+    <string name="Button_Later">Depois</string>
+    <string name="Button_Done">Concluído</string>
+    <string name="Button_Retry">Tentar de novo</string>
+    <string name="Button_Change">Alterar</string>
+    <string name="Button_Add">Adicionar</string>
+    <string name="Button_Confirm">Confirmar</string>
+    <string name="Button_Refresh">Atualizar</string>
+    <string name="Button_Connect">Conectar</string>
+    <string name="Button_Reject">Rejeitar</string>
+    <string name="Button_Disconnect">Desconectar</string>
+    <string name="Button_Create">Criar</string>
+    <string name="Button_Advanced">Avançado</string>
+    <string name="Button_Restore">Restaurar</string>
+    <string name="Button_Reset">Redefinir</string>
+    <string name="Button_Understand">Estou ciente</string>
+    <string name="Button_Switch">Alternar</string>
+    <string name="Button_Save">Salvar</string>
+    <string name="Button_IAgree">Eu concordo</string>
+    <string name="Button_Continue">Continuar</string>
+    <string name="Button_Search">Buscar</string>
+    <string name="Button_Back">Voltar</string>
+    <string name="Button_Copy">Copiar</string>
+    <string name="Button_Browser">Navegador</string>
+    <string name="Button_Delete">Deletar</string>
+    <string name="Button_LearnMore">Saiba Mais</string>
+    <string name="Button_Sign">Assinar</string>
+    <string name="Button_TryAgain">Tentar novamente</string>
+    <string name="Button_Share">Partilhar</string>
+    <string name="Button_Apply">Aplicar</string>
+    <string name="Button_SetAmount">Definir Quantidade</string>
+    <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
+    <string name="Button_CopyAddress">Copiar Endereço</string>
+    <string name="Button_HideCoin">Ocultar moeda</string>
+    <string name="Button_Approve">Aprovar</string>
+    <string name="Button_ViewMyAddress">Ver meu endereço</string>
+    <string name="Button_CopyError">Erro de cópia</string>
+    <string name="Attention_Title">Atenção</string>
+    <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
+    <string name="Error_NotInteger">Número inteiro errado</string>
+    <string name="Error_AssetNotEnabled">O destinatário não ativou %s, portanto ele não pode recebê-lo.</string>
+    <string name="Error">Erro</string>
+    <string name="NotAvailable">N/A</string>
+    <string name="Any">Qualquer</string>
+    <string name="SyncError">Erro de sincronização. Tente novamente</string>
+    <string name="Search_NotFounded">Não Encontrado</string>
+    <string name="Keyboard">Teclado</string>
+    <string name="AccountRecovery_Note">Observação</string>
+    <string name="AccountRecovery_MigrationRecommended">Esta carteira parece usar um caractere não padrão em sua frase de recuperação e/ou senha. Se você não vir um saldo ou transações, leia abaixo para obter detalhes.\n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
+    <string name="AccountRecovery_MigrationRequired">Esta é uma carteira não padrão. \n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
+    <!--Intro-->
+    <string name="Intro_Wallet_Screen2Title">Libere Recursos</string>
+    <string name="Intro_Wallet_Screen2Description">Não se prenda, e não deixe que te prendam.</string>
+    <string name="Intro_Wallet_Screen3Title">Seja sem fronteiras</string>
+    <string name="Intro_Wallet_Screen3Description">Ultrapasse barreiras e acesse mercados globais.</string>
+    <string name="Intro_Wallet_Screen4Title">Mantenha sua Privacidade</string>
+    <string name="Intro_Wallet_Screen4Description">Não vaze seus dados privados e financeiros para o mundo.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">Estou ciente</string>
+    <!--Welcome-->
+    <!--Create Wallet-->
+    <string name="CreateWallet_Advanced_Title">Avançado</string>
+    <string name="CreateWallet_Mnemonic">Frase de Recuperação</string>
+    <string name="CreateWallet_Wordlist">Listas de palavras</string>
+    <string name="Passphrase">Senha</string>
+    <string name="Password">Senha</string>
+    <string name="ConfirmPassphrase">Confirmar</string>
+    <string name="CreateWallet_N_WordsRecommended">%s palavras (recomendado)</string>
+    <string name="CreateWallet_N_Words">%s palavras</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, use apenas símbolos suportados: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ £% ]]></string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
+    <string name="CreateWallet_PassphraseDescription">As frases-chave fornecem uma camada adicional de segurança para carteiras. hen restaura uma carteira protegida por uma frase-senha, o usuário deve fornecer tanto a frase de recuperação quanto a senha.\n\nAs frases secretas também permitem que os usuários criem várias carteiras multi-coin independentes da mesma mnemônica, simplesmente usando senhas diferentes.</string>
+    <!--Languages-->
+    <string name="Language_English">Inglês</string>
+    <string name="Language_Japanese">Japonês</string>
+    <string name="Language_Korean">Coreano</string>
+    <string name="Language_Spanish">Espanhol</string>
+    <string name="Language_SimplifiedChinese">Chinês (Simplificado)</string>
+    <string name="Language_TraditionalChinese">Chinês (Tradicional)</string>
+    <string name="Language_French">Francês</string>
+    <string name="Language_Italian">Italiano</string>
+    <string name="Language_Czech">Tcheco</string>
+    <string name="Language_Portuguese">Português</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">GM!</string>
+    <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
+    <string name="RateApp_Button_RateIt">Avaliar</string>
+    <string name="RateApp_Button_NotNow">Agora não</string>
+    <string name="Restore_SelectNetwork_Title">Selecione a rede</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Title">EVM Redes</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum, Arbitrum, Otimizar…</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Title">TRON</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">Somente rede TRON.</string>
+    <!--Restore-->
+    <string name="Restore_Advanced_Title">Avançado</string>
+    <string name="Restore_Error_MnemonicWordCount">Número incorreto de palavras. Deve ter entre 12 ou 24 palavras. Você inseriu: %d</string>
+    <string name="Restore_Error_EmptyPassphrase">A senha não pode estar vazia</string>
+    <string name="Restore_InvalidChecksum">Soma de Verificação Inválida</string>
+    <string name="Restore_PassphraseDescription">Digite a senha que você usou ao criar esta frase de recuperação. A restauração de uma carteira existente com uma nova senha gerará uma nova carteira.</string>
+    <string name="Restore_Title">Escolha as Blockchains</string>
+    <string name="Restore_By">Por</string>
+    <string name="Restore_RestoreBy">Por</string>
+    <string name="Restore_RecoveryPhrase">Frase de Recuperação</string>
+    <string name="Restore_PrivateKey">Chave Privada</string>
+    <string name="Restore_PrivateKeyHint">Insira a Chave Privada EVM, a Chave Raiz BIP32 ou a Chave Privada Estendida de Conta</string>
+    <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
+    <string name="Restore_NonStandardRestore">Restauração Não-Padrão</string>
+    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de restauração de carteira para usuários do Unstoppable que possuem uma carteira fora do padrão. Essas carteiras podem ter sido criadas na versão Unstoppable 0.27 - 0.28 usando uma frase de recuperação diferente do inglês e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será ser mostrado 0 após restaurar tal carteira na versão 0.29 ou superior. Esta página permitirá que você restaure o acesso à sua carteira não padrão. Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
+    <string name="Restore_Bip_Recommended">(recomendado)</string>
+    <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
+    <string name="SelectContacts_All">Todas</string>
+    <string name="Restore_BirthdayHeight">Altura de aniversário</string>
+    <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
+    <string name="BirthdayHeight_Description">Você pode alterar a altura do bloco ou selecionar uma data aproximada para reescanear o histórico de transações.</string>
+    <string name="BirthdayHeight_RestoreDescription">Sua carteira será restaurada de um ponto de partida padrão. Você pode alterar a altura do bloco ou selecionar uma data de criação de carteira aproximada.</string>
+    <string name="BirthdayHeight_BlockDate">Data do Bloco</string>
+    <string name="BirthdayHeight_Rescan">Reescanear</string>
+    <string name="Restore_ZCash_RestoreAsNew">Restaurar como novo</string>
+    <!--Backup-->
+    <!--Market-->
+    <string name="Market_Field_MarketCap">Cap. de mercado</string>
+    <string name="Market_Field_Volume">Volume</string>
+    <string name="Market_Field_PriceDiff">Preço</string>
+    <string name="Market_Title">Mercados</string>
+    <string name="Market_Search">Buscar</string>
+    <string name="Market_All">Todas</string>
+    <string name="Market_Search_Sections_RecentTitle">RECENTES</string>
+    <string name="Market_Search_Sections_PopularTitle">Popular</string>
+    <string name="Market_Field_HighestCap">Maior capitalização</string>
+    <string name="Market_Field_LowestCap">Menor capitalização</string>
+    <string name="Market_Field_HighestVolume">Maior volume</string>
+    <string name="Market_Field_LowestVolume">Menor volume</string>
+    <string name="Market_Sort_PopupTitle">Organizar por</string>
+    <string name="Market_Filter_PopupTitle">Filtrar por</string>
+    <string name="Market_BtcDominance">Dominação BTC</string>
+    <string name="Market_SeeAll">Ver tudo</string>
+    <string name="Market_PoweredByApi">Desenvolvido por API CoinGeko</string>
+    <string name="Market_Tab_Posts">Notícias</string>
+    <string name="Market_Tab_Coins">Moedas</string>
+    <string name="Market_Tab_Platform">Plataformas</string>
+    <string name="Market_Tab_Pairs">Pares</string>
+    <string name="Market_Tab_Sectors">Setores</string>
+    <string name="Market_Tab_Watchlist">Catálogo</string>
+    <string name="Market_Tab_Earn">Ganhar</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
+    <string name="Market_Category_TopCoins">Top Moedas</string>
+    <string name="Market_Signals">Sinais</string>
+    <string name="Market_Volume">Volume</string>
+    <string name="Market_MarketCap">Capitalização de mercado</string>
+    <string name="Market_TVL">VTB</string>
+    <string name="Market_Signal_Description">Os sinais abaixo são baseados nos indicadores técnicos de preço das Bandas de Bollinger e RSI ao longo dos últimos aproximadamente 30 dias. Esses sinais são algorítmicos e podem mudar com frequência.</string>
+    <string name="Market_Signal_StrongBuy_Description">Alta confiança em aumento de preço.</string>
+    <string name="Market_Signal_Buy_Description">Provável aumento de preço no futuro próximo.</string>
+    <string name="Market_Signal_Neutral_Descripion">Sem tendência clara, o mercado está em equilíbrio.</string>
+    <string name="Market_Signal_Sell_Description">Provável queda de preço no futuro próximo.</string>
+    <string name="Market_Signal_StrongSell_Description">Alta probabilidade de redução de preço.</string>
+    <string name="Market_Signal_Risky_Description">Nível de risco elevado, requer cuidado.</string>
+    <string name="Market_Signal_Warning">Sempre lembre-se de aplicar o gerenciamento de risco, e observe que isso não é um conselho financeiro.</string>
+    <string name="Market_Signal_TurnOn">Ligar</string>
+    <string name="Market_Top_100">Top 100</string>
+    <string name="Market_Top_200">Top 200</string>
+    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_500">Top 500</string>
+    <!--Market Overview-->
+    <!--Market Top Platforms-->
+    <string name="MarketTopPlatforms_Title">Melhores Plataformas</string>
+    <string name="MarketTopPlatforms_Protocols">Protocolos: %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
+    <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Capitalização Total</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Valor total de mercado</string>
+    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_VolumeShort">Vol. em 24h</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">VTB</string>
+    <string name="MarketGlobalMetrics_EtfInflow">Entrada de ETF</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Volume de operação em 24h do mercado de cripto</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor Total Bloqueado (VTB) no DeFi</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadeia</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">Todas</string>
+    <string name="MarketGlobalMetrics_NoCoin">Esse projeto não tem uma moeda</string>
+    <!-- ETF-->
+    <string name="MarketEtf_HighestAssets">Ativos mais altos</string>
+    <string name="MarketEtf_LowestAssets">Menos Ativos</string>
+    <string name="MarketEtf_Inflow">Receita</string>
+    <string name="MarketEtf_Outflow">Despesa</string>
+    <string name="MarketEtf_BitcoinEtf">ETFs Bitcoin</string>
+    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
+    <string name="MarketEtf_EtfDescription">Entrada líquida de todos os ETFs %s , incluindo fundos locais e com base no futuro.</string>
+    <!--Market Search-->
+    <string name="EmptyResults">Nenhum resultado encontrado</string>
+    <string name="Market_Filters">Filtros</string>
+    <string name="Market_AdvancedSearch_Results">Resultados</string>
+    <string name="Market_Search_Hint">Buscar</string>
+    <string name="Market_Filter_ChooseSet">Escolha o Conjunto</string>
+    <string name="Market_Filter_MarketCap">Capitalização de mercado</string>
+    <string name="Market_Filter_Volume">Volume de Operações</string>
+    <string name="Market_Filter_Volume24h">Volume de Operações (24h)</string>
+    <string name="Market_Filter_PricePeriod">Período de Preço</string>
+    <string name="Market_Filter_TradingSignals">Sinais de negociação</string>
+    <string name="Market_Filter_PriceChange">Mudança de Preço</string>
+    <string name="Market_Filter_Sectors">Setores</string>
+    <string name="Market_PriceChange_24H">24 Horas</string>
+    <string name="Market_PriceChange_Utc">Meia-noite UTC</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
+    <string name="Market_Filter_OutperformedBtc">BTC superado</string>
+    <string name="Market_Filter_OutperformedEth">ETH superado</string>
+    <string name="Market_Filter_OutperformedBnb">BNB superado</string>
+    <string name="Market_Filter_OutperformedGold">Ouro realizado</string>
+    <string name="Market_Filter_OutperformedSnp">Saída S&amp;P 500</string>
+    <string name="Market_Filter_PriceCloseTo">Preço Próximo a</string>
+    <string name="Market_Filter_ListedOnTopExchanges">Listado nas principais trocas</string>
+    <string name="Market_Filter_SolidCex">Bom Volume de CEX</string>
+    <string name="Market_Filter_SolidCex_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_SolidDex">Bom Volume de DEX</string>
+    <string name="Market_Filter_SolidDex_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_GoodDistribution">Boa Distribuição</string>
+    <string name="Market_Filter_GoodDistribution_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_StrongBuy">Compra forte</string>
+    <string name="Market_Filter_Buy">Comprar</string>
+    <string name="Market_Filter_Neutral">Neutra</string>
+    <string name="Market_Filter_StrongSell">Venda forte</string>
+    <string name="Market_Filter_Sell">Irá vender</string>
+    <string name="Market_Filter_RiskToTrade">Arriscado</string>
+    <string name="Market_Filter_ATH_Description">(Maior Alta Histórica)</string>
+    <string name="Market_Filter_ATL_Description">(Maior Baixa Histórica)</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_200">Top 200</string>
+    <string name="Market_Filter_Top_300">Top 300</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_2000">Top 2000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
+    <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
+    <string name="Market_Filter_ShowResults_Counter">Mostrar Resultados: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M — 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B — 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_40M_200M">40M — 200M</string>
+    <string name="Market_Filter_Range_200M_2B">200M — 2B</string>
+    <string name="Market_Filter_Range_2B_10B">2B — 10B</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
+    <string name="Market_Filter_Range_50M_200M">50M — 200M</string>
+    <string name="Market_Filter_Range_200M_1B">200M — 1B</string>
+    <string name="Market_Filter_Range_1B_10B">1B — 10B</string>
+    <string name="Market_Filter_Range_10B_50B">10B — 50B</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
+    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
+    <string name="Market_Filter_Range_500M_2B">500M — 2B</string>
+    <string name="Market_Filter_Range_10B_100B">10B — 100B</string>
+    <string name="Market_Filter_Range_100B_500B">100B — 500B</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Dia</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Semana</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Semanas</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Meses</string>
+    <string name="Market_Filter_TimePeriod_3M">3 Meses</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
+    <string name="Market_Filter_TimePeriod_2Y">2 Anos</string>
+    <string name="Market_Filter_TimePeriod_3Y">3 Anos</string>
+    <string name="Market_Filter_TimePeriod_4Y">4 Anos</string>
+    <string name="Market_Filter_TimePeriod_5Y">5 Anos</string>
+    <string name="Market_Sorting_Manual">Manualmente</string>
+    <string name="Market_Sorting_Gainers">Ganhadores</string>
+    <string name="Market_Sorting_Losers">Perdedores</string>
+    <string name="Market_Sorting_HighestCap">Maior capitalização</string>
+    <string name="Market_Sorting_LowestCap">Menor capitalização</string>
+    <string name="Market_Filters_Select">Selecionado %d</string>
+    <!--Vaults-->
+    <string name="Market_Vaults_Sorting_APY">Maior APY</string>
+    <string name="Market_Vaults_Sorting_TVL">Maior TVL</string>
+    <string name="Market_Vaults_Filter_AllAssets">Todas as mídias</string>
+    <string name="Market_Vaults_Filter_AllChains">Todas as cadeias</string>
+    <string name="Market_Vaults_Filter_ETHYield">Rendimento ETH</string>
+    <string name="Market_Vaults_Filter_USDYield">Rendimento em USD</string>
+    <string name="Market_Vaults_OpenDapp">Abrir dapp</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d Correntes</string>
+    <string name="Market_Vaults_Vault_TVL">VTB</string>
+    <string name="Market_Vaults_Vault_Network">Rede</string>
+    <string name="Market_Vaults_Vault_Protocol">Protocol</string>
+    <string name="Market_Vaults_Vault_UnderlyingToken">Token subjacente</string>
+    <string name="Market_Vaults_Vault_Holders">Detentores</string>
+    <string name="Market_Vaults_ChartTvl">VTB</string>
+    <!--Coin Markets-->
+    <!--TVL Rank-->
+    <string name="TvlRank_MultiChain">Multi-Cadeia</string>
+    <!--Balance-->
+    <string name="Wallet_Title">Carteira</string>
+    <string name="Balance_Title">Saldo</string>
+    <string name="Balance_Send">Enviar</string>
+    <string name="Balance_Receive">Receber</string>
+    <string name="Balance_RatePerCoin">%1$s por %2$s</string>
+    <string name="Balance_SyncedUntil">até %s</string>
+    <string name="Balance_Syncing">Sincronizando...</string>
+    <string name="Balance_SearchingTransactions">Procurando transações...</string>
+    <string name="Balance_Downloading">Baixando…</string>
+    <string name="Balance_FoundTx">%s tx</string>
+    <string name="Balance_BlocksRemaining">Blocos restantes - %d</string>
+    <string name="Balance_Sort_Balance">Saldo</string>
+    <string name="Balance_Sort_PopupTitle">Organizar por</string>
+    <string name="Balance_Sort_Az">Nome</string>
+    <string name="Balance_Sort_24hPriceChange">Mudança de Preço</string>
+    <string name="Balance_NoCoinsAlert">Nenhum token aqui. Adicione um para começar.</string>
+    <string name="Balance_NoAssetsToSend">Você não tem ativos para enviar.</string>
+    <string name="Balance_Network">Rede</string>
+    <string name="Balance_Format">Formato</string>
+    <string name="Balance_NetworkSelectDescription">Escolha rede para receber um endereço.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Escolha um formato para fornecer um endereço a receber.</string>
+    <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
+    <string name="Balance_Receive_AddressType">Tipo de endereço</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">Escolha como você deseja receber Zcash.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">O formato de endereço em dinheiro é preferido para receber Bitcoin Cash (BCH) devido à sua experiência e compatibilidade melhoradas. No entanto, ambos os formatos de endereço podem ser usados internamente para receber BCH, independentemente do formato de endereço do remetente.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">O formato SegWit Nativo é preferido em Bitcoin para melhorar a taxa de transferência e a segurança. Todos os formatos de endereço (Taproot, SegWit, Legacy) podem ser usados intermudanças para receber BTC independentemente do formato de endereço do remetente, permitindo transações ininterruptas entre diferentes tipos de moedas.</string>
+    <string name="Balance_Receive_Amount">Montante</string>
+    <string name="Balance_Receive_SetAmount">Definir Quantidade</string>
+    <string name="Balance_Receive_Memo">Memo (Tag)</string>
+    <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
+    <string name="Balance_Receive_WatchAddressAlert">Este endereço é o endereço da conta monitorada</string>
+    <string name="Balance_Receive_UsedAddresses">Endereços Usados</string>
+    <string name="Balance_Receive_UsedAddressesDescriptoin">O número de endereços %s muda para privacidade e segurança. Abaixo está uma lista de endereços usados neste carteira.</string>
+    <string name="Balance_Receive_ReceiveAddresses">Endereços de Recebimento</string>
+    <string name="Balance_ReceiveAddress">Endereço de recebimento</string>
+    <string name="Balance_Receive_ChangeAddresses">Endereço de troco</string>
+    <string name="Balance_ReceiveHint_Search">Buscar</string>
+    <string name="Balance_Receive_ActivationRequired">Para receber um endereço você precisa ativar o token. Isso é necessário pela rede Stellar.</string>
+    <string name="Balance_Receive_Trustline">Trustline</string>
+    <string name="Balance_Receive_Subaddresses">Sub-endereços</string>
+    <string name="Balance_Receive_SubaddressesInfo">Subendereços permitem que você use vários endereços exclusivos dentro de uma carteira para conveniência e privacidade aprimorada.</string>
+    <string name="Balance_Receive_SubaddressesTransactions">Transações: %s</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">ZEC transparente detectado</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
+    <string name="Balance_Zcash_Transparent">Transparente</string>
+    <string name="Balance_Zcash_TransparentDescription">Use para receber de exchanges ou serviços que não suportam endereços blindados.</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Enviar</string>
+    <!--Send-->
+    <string name="Send_EnterAddress">Inserir Endereço</string>
+    <string name="Send_Title">Enviar %s</string>
+    <string name="Send_Hint_Address">Endereço ou Domínio</string>
+    <string name="Send_Fee">Taxa</string>
+    <string name="Send_Fee_Info">O custo estimado do processamento desta transação no blockchain.</string>
+    <string name="Send_Button_Paste">Colar</string>
+    <string name="Send_Button_Max">Máximo</string>
+    <string name="Send_Advanced">Avançado</string>
+    <string name="Send_Hodler_Description">TimeLock funciona apenas para enviar para endereços BIP44 (começando com 1)</string>
+    <string name="Send_UtxoExpertMode">Modo Especialista UTxO</string>
+    <string name="Send_Utxo_Description">Selecionar manualmente UTxO para gastar os fundos no saldo</string>
+    <string name="Send_Rbf">Substituir pela taxa</string>
+    <string name="Send_Rbf_Description">Essa opção permite que você reenvie uma transação travada aumentando o valor da taxa.</string>
+    <string name="Send_RbfEnabled">Ativado</string>
+    <string name="Send_RbfDisabled">Desativado</string>
+    <string name="Send_Utxo_AvailableBalance">Saldo Disponível</string>
+    <string name="Send_Utxo_UnselectAll">Desmarcar Tudo</string>
+    <string name="Send_Utxo_SelectAll">Marcar tudo</string>
+    <string name="Send_Confirmation_Title">Confirmar</string>
+    <string name="Send_Confirmation_YouSend">Enviar</string>
+    <string name="Send_Confirmation_YouReceive">Você Recebe</string>
+    <string name="Send_Confirmation_Mint">Hortelã</string>
+    <string name="Send_Confirmation_Burn">Queimar</string>
+    <string name="Send_Confirmation_To">Para</string>
+    <string name="Send_Confirmation_Own">Próprio</string>
+    <string name="Send_Confirmation_Method">Método</string>
+    <string name="Send_Confirmation_Send_Button">Enviar</string>
+    <string name="Send_Confirmation_Action">Ação</string>
+    <string name="Send_Address_Recent">Recente</string>
+    <string name="Send_Address_Error_InvalidAddress">Endereço Inválido</string>
+    <string name="Send_Address_Error_InvalidAddress_Description">Parece que esse endereço não se encaixa na rede selecionada. Por favor, verifique novamente.</string>
+    <string name="Send_Address_Error_Detected">Detectado</string>
+    <string name="Send_Address_Error_Clear">Limpar</string>
+    <string name="Send_Address_PhishingCheck">Verificação de Phishing</string>
+    <string name="Send_Address_BlacklistCheck">Verificar Lista Negra</string>
+    <string name="Send_Address_SanctionCheck">Verificar Sanções</string>
+    <string name="SecureSend_Config_Subtitle">Escolha verificações de segurança.</string>
+    <string name="SecureSend_Config_PhishingCheckDescription">Detecta endereços suspeitos antes de confirmar a transferência.</string>
+    <string name="SecureSend_Config_BlacklistCheckDescription">Verifica o endereço contra fraudes e bases de dados de alto risco.</string>
+    <string name="SecureSend_Config_SanctionCheckDescription">Verifica se o endereço está sujeito a restrições de sanções.</string>
+    <string name="SecureSend_Config_Disabled">Desativado</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Endereço de Phishing Detectado!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Endereço da Lista Negra Detectado!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Endereço Sancionado Detectado!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">O endereço que você digitou pode ser fraudulento. Os golpistas frequentemente alteram os primeiros e últimos caracteres. Verifique o endereço completo com atenção antes de prosseguir para evitar perdas.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">O endereço digitado está marcado na lista negra. As transações para este endereço podem levar a perda ou outros riscos. Por favor, verifique os dados do destinatário antes de prosseguir.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">O endereço que você digitou está marcado como sancionado. As transações para este endereço podem levar a perda ou outros riscos. Por favor, verifique os dados do destinatário antes de prosseguir.</string>
+    <string name="AddressEnter_NeedSubscription_Title">Atenção!</string>
+    <string name="AddressEnter_NeedSubscription_Content">O envio seguro está desativado. A sua transferência pode ir para um endereço de risco e o dinheiro pode ser perdido.</string>
+    <string name="AddressEnter_Safe_Title">Segura</string>
+    <string name="AddressEnter_Safe_Content">Endereço verificado. Nenhum phishing, lista negra ou sanções foram encontradas. É seguro de usar.</string>
+    <string name="Send_RiskyAddress">Endereço Arriscado!</string>
+    <string name="Send_RiskyAddress_AlertText">Você está prestes a enviar fundos para um endereço de alto risco. O processo pode resultar em perda ou outros riscos de segurança. Ao continuar, você aceita os perigos potenciais. Tem certeza que deseja continuar?</string>
+    <string name="Send_Success">\u2713 Enviado</string>
+    <string name="ScanQr_CameraPermission_Title">Permissão da câmera</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Por favor, permita acesso à câmera</string>
+    <string name="ScanQr_CameraPermissionDeniedText">O acesso à sua câmera para este app foi negado, você pode acessar as configurações e permitir o acesso</string>
+    <string name="ScanQr_GoToSettings">Ir para Configurações</string>
+    <string name="ScanQr_Photos">Fotos</string>
+    <string name="ScanQr_NoQrFound">Nenhum código QR encontrado</string>
+    <string name="ScanQr_QrDetected">Código QR detectado</string>
+    <string name="Send_Error_UnsupportedAddress">O bloqueio de tempo funciona apenas ao enviar para endereços de pagamento começando com 1... (também conhecidos como endereços BIP44)</string>
+    <string name="Send_Error_MinimumAmount">Valor mínimo: %s</string>
+    <string name="Send_Error_MaximumAmount">Valor máximo: %s</string>
+    <string name="Send_Error_SendToSelf">Não é possível enviar para você mesmo</string>
+    <string name="Send_DialogAvailableBalance">Saldo Disponível</string>
+    <string name="Send_DialogSpeed">Velocidade da Transação</string>
+    <string name="Send_LockTime_Off">Desligado</string>
+    <string name="Send_LockTime_Hour">1 hora</string>
+    <string name="Send_LockTime_Month">1 mês</string>
+    <string name="Send_LockTime_HalfYear">6 meses</string>
+    <string name="Send_LockTime_Year">1 ano</string>
+    <string name="Send_Sending">Enviando</string>
+    <string name="Send_UnexpectedError">Erro inesperado</string>
+    <string name="Send_UnexpectedError_Description">Algo deu errado ao enviar sua transação. Por favor, tente novamente ou copie o código de erro e contate o suporte.</string>
+    <string name="Send_Warning_LowFee">Atenção! Risco de ficar preso</string>
+    <string name="Send_Error_LowFee">Erro de taxa</string>
+    <string name="Send_Error_LowFee_Description">Taxa de taxa é muito baixa.</string>
+    <string name="Send_Warning_LowFee_Description">A transação pode ficar presa ou falhar</string>
+    <string name="Send_Error_FetchFeeRateFailed">Erro de taxa</string>
+    <string name="Send_Error_FetchFeeRateFailed_Description">A conexão com o servidor foi perdida. Para continuar, configure as taxas manualmente utilizando os dados no site.</string>
+    <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_Title">Avançado</string>
+    <string name="SendEvmSettings_SetRecipient">Definir Destinatário</string>
+    <string name="SendEvmSettings_Nonce">Nonce de Transação</string>
+    <string name="SendEvmSettings_EditFee">Editar taxa</string>
+    <string name="SendEvmSettings_Nonce_Info">O nonce é um valor inteiro exclusivo para uma transação dentro da carteira do usuário. Ele normalmente aumenta com cada transação enviada e não precisa ser alterado. Os usuários avançados podem defini-lo igual a um nonce de uma transação pendente para cancelar e substituir essa transação, desde que a nova transação tenha uma taxa suficientemente alta para evitar que a antiga seja confirmada (por exemplo, eles podem querer acelerar sua confirmação, ou alterar totalmente os parâmetros da transação). Quando várias transações pendentes têm o mesmo nonce, apenas uma é confirmada, geralmente aquela com a taxa mais alta.</string>
+    <string name="SendEvmSettings_SlippageTolerance">Tolerância de Slippage</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">O desvio de preço máximo aceitável para sua troca. Além deste limite, a transação é revertida.</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada agora.</string>
+    <!-- Fee Settings -->
+    <string name="FeeSettings_NetworkFee">Taxa</string>
+    <string name="FeeSettings_NetworkFee_Info">O custo estimado do envio de determinada transação na rede.</string>
+    <string name="FeeSettings_GasLimit_Info">A complexidade da transação é medida em unidades chamadas \"gas\". Ela varia dependendo do contrato inteligente ser executado. O Limite de Gas é estimado o gas máximo necessário para o executar. O gas real utilizado normalmente será mais baixo.</string>
+    <string name="FeeSettings_GasPrice_Info">A taxa para transação na rede é medida em unidades de gás. O preço do gás é a quantidade que um usuário está disposto a gastar por unidade de gás. Quando a rede está ocupada, os preços do gás são altos e baixos quando está inativa. Um preço de gás insuficiente é frequentemente uma razão para que uma transação permaneça pendente por um período prolongado.</string>
+    <string name="FeeSettings_BaseFee">Taxa Base</string>
+    <string name="FeeSettings_BaseFee_Info">O protocolo de rede determina o preço base por gas para cada bloco, a taxa base. Varia de acordo com o nível de utilização da rede de bloco para bloco. Ele pode aumentar ou diminuir em não mais do que 12,5% no próximo bloco, tornando as taxas mais previsíveis. O valor mostrado aqui é a taxa base de taxa atual do bloco.</string>
+    <string name="FeeSettings_MaxFee">Taxa Máxima</string>
+    <string name="FeeSettings_MaxFee_Info">Este é o preço total máximo por gas que o usuário está disposto a pagar. Ela deve cobrir a taxa base da rede e a taxa máxima de prioridade. O valor mostrado aqui é sugerido com base em uma estimativa da taxa base do próximo bloco mais a taxa máxima de prioridade escolhida pelo usuário. A taxa real paga normalmente será menor. Definir isso mais baixo que a taxa base atual irá limitar a taxa paga, mas resultará em períodos de espera mais longos para que a transação seja confirmada, ou até mesmo em uma transação travada.</string>
+    <string name="FeeSettings_MaxMinerTips">Taxa de prioridade máxima</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Os usuários pagam taxas de prioridade para incentivar uma transação a ser confirmada mais rapidamente. Às vezes são chamados de dicas. A taxa máxima de prioridade é o preço adicional máximo por gás que o usuário está disposto a pagar acima da taxa base. O valor mostrado aqui é sugerido com base nas condições previstas de rede. A taxa de prioridade real normalmente será menor. Definir como zero pode resultar em um longo tempo de espera para que a transação seja confirmada, como é colocado no final da fila de transações pendentes de todos os usuários.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Arriscado</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">A transação pode permanecer pendente por um tempo ou falhar completamente.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Arriscado</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Para garantir uma execução rápida da transação a taxa máxima (valor máximo subtraído para o minerador) deve ser maior do que a taxa base atual. Se não a transação pode permanecer pendente até que a condição seja cumprida.</string>
+    <string name="FeeSettings_Overpricing_Title">Taxa Muito Alta</string>
+    <string name="FeeSettings_Overpricing">A taxa de transação definida é maior que o necessário para processar esta transação agora.</string>
+    <string name="FeeSettings_FeeRate">Taxa de Taxa (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">Aqui é o valor recomendado para atingir os próximos 2 blocos</string>
+    <string name="FeeSettings_FeeRate_Info">Ao enviar uma transação, você deve pagar uma taxa de rede. Quanto maior for a rede, maior será a tarifa.
+        \n\nCarteira Imparável sugere uma taxa ideal para ajudar a sua transação a ser confirmada em um período razoável. Você pode aumentar ou diminuir este valor.
+        \n\nDefinir a taxa muito baixa pode fazer com que sua transação permaneça pendente por um longo tempo ou até mesmo seja rejeitada. Para uma confirmação mais rápida, use uma taxa maior.</string>
+    <!--Fee Info -->
+    <string name="FeeInfo_Title">Velocidade da Transação</string>
+    <string name="FeeInfo_Description">Tanto as blockchains do Bitcoin e Ethereum exigem que os usuários paguem taxas de rede quando enviam transações. As taxas são mais elevadas quando se realizam muitas transações na rede e mais baixas quando a cadeia de bloqueio está menos ocupada.</string>
+    <string name="FeeInfo_Slow">Baixo</string>
+    <string name="FeeInfo_SlowDescription">A seleção de um valor desse intervalo pode resultar na retenção de uma transação como pendente por horas ou acarretar rejeição. Quanto menor o valor, mais tempo levará para a confirmação da transação.</string>
+    <string name="FeeInfo_Average">Recomendado</string>
+    <string name="FeeInfo_AverageDescription">Normalmente, o valor de taxa recomendado deve ser suficiente para que uma transação seja processada em minutos ou uma hora para Bitcoin e em minutos para o Ethereum.</string>
+    <string name="FeeInfo_Fast">Alto</string>
+    <string name="FeeInfo_FastDescription">Para as operações em que a prioridade é importante, recomendamos a utilização do alto valor de taxa. É esperado que seja suficiente para concluir uma transação dentro de 10 minutos para o Bitcoin e dentro de 1 – 2 minutos para o Ethereum.</string>
+    <string name="FeeInfo_TronFee_Description">O custo estimado de envio de determinada transação na rede. (Sem excluir Eneregy, Bandwidth e Taxa de Ativação)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Taxa de ativação</string>
+    <string name="FeeInfo_TronActivationFee_Description">Este endereço não está ativo. A transferência de tokens TRX ou TRC-10 para um endereço de conta inativo irá ativar a conta.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">A bandwidth é a unidade que mede o tamanho dos bytes de transação armazenados no banco de dados blockchain. Quanto maior a transação, mais recursos de largura de banda serão consumidos.\n\nEnergy é a unidade que mede a quantidade de computação necessária pela máquina virtual TRON para realizar operações específicas na rede TRON.\n\nComo as transações de contrato inteligente exigem recursos de computação para executar, cada transação de contrato inteligente requer o pagamento da taxa de energy.</string>
+    <!--Tron-->
+    <string name="Tron_SelfSendTrxNotAllowed">Não é possível transferir TRX para si mesmo</string>
+    <string name="Tron_ZeroAmountTrxNotAllowed">Não é possível transferir 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActivated">Não ativado</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">Conta Não Ativa</string>
+    <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">As transações aparecerão após a ativação</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON requerem um depósito mínimo de 1 TRX para se tornarem ativas. Carteiras inativas podem armazenar e receber tokens, mas não atualizarão os saldos até serem ativadas.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Nova Conexão</string>
+    <string name="TonConnect_Error_InvalidUrl">Endereço URL Inválido</string>
+    <string name="TonConnect_Unnamed">Sem nome</string>
+    <string name="TonConnect_Wallet">Carteira</string>
+    <string name="TonConnect_ChooseWallet">Escolha uma Carteira</string>
+    <!--WalletConnect-->
+    <string name="WalletConnect_Status">SItuação</string>
+    <string name="WalletConnect_Approve_Hint">Ao clicar em conectar, você permite que este aplicativo visualize seu endereço público. Esta é uma importante etapa de segurança para proteger seus dados contra possíveis riscos de phishing.</string>
+    <string name="WalletConnect_Reconnect_Hint">Não foi possível estabelecer a conexão. Tente reconectar novamente.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Endereço URL Inválido</string>
+    <string name="WalletConnect_Status_Offline">Desconectado</string>
+    <string name="WalletConnect_Status_Online">On-line</string>
+    <string name="WalletConnect_Status_Connecting">Conectando...</string>
+    <string name="WalletConnect_NewConnect">Nova Conexão</string>
+    <string name="WalletConnect_SendTransactionRequest_Title">Enviar transação</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">Enviar</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Solicitação de assinatura</string>
+    <string name="WalletConnect_Error_NoWallet">Você precisa criar ou importar uma carteira antes de usar o WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Crie um backup da sua frase de recuperação e a senha associada. Isso permitirá que você restaure sua carteira se seu telefone for perdido, roubado ou danificado.</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported chain id</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">Sem conta adequada</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Nenhum kit evm adequado</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Correntes não suportadas: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Métodos não suportados: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Eventos não suportados: %s</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Pedido não encontrado erro</string>
+    <string name="WalletConnect_NoConnection">Você não tem nenhum Dapps conectado</string>
+    <string name="WalletConnect_ActiveWallet">Carteira</string>
+    <string name="WalletConnect_NotSupportedDescription">Seu tipo de carteira atual %s não suporta WalletConnect</string>
+    <string name="WalletConnect_Unnamed">Sem nome</string>
+    <string name="WalletConnect_PairedDApps">dApps pareados</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Excluir Tudo</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Você deseja excluir todos os dApps pareados?</string>
+    <string name="WalletConnect_Pairings_Delete">Deletar</string>
+    <string name="WalletConnect_DeleteAllPairs">Deletar todos pareados</string>
+    <string name="WalletConnect_Networks">Redes</string>
+    <string name="WalletConnect_ConnectTo">Conectar a %s</string>
+    <string name="WalletConnect_ConnectedTo">Conectado a %s</string>
+    <string name="WalletConnect_Disconnect">Desconectar %s</string>
+    <string name="WalletConnect_ConnectWarning">Ao clicar em conectar, você permite que este aplicativo veja seu endereço público.</string>
+    <string name="WalletConnect_Attention">Atenção!</string>
+    <string name="WalletConnect_Danger">Perigo!</string>
+    <string name="WalletConnect_Safe">Segura</string>
+    <string name="WalletConnect_Domain">Domínio</string>
+    <string name="WalletConnect_Message">mensagem</string>
+    <string name="WalletConnect_Checking">Verificando…</string>
+    <string name="WalletConnect_RequestFailed">Falha na solicitação</string>
+    <string name="WalletConnect_Value">Valor</string>
+    <string name="WalletConnect_TokenAllowance">Permitido de token</string>
+    <string name="WalletConnect_ConfirmTransaction">Confirmar transação</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s poderá mover esses tokens em seu nome.</string>
+    <string name="WalletConnect_RequestFailedDescription">Ocorreu um erro e a solicitação não pôde ser concluída</string>
+    <string name="WalletConnect_DisconnectWarning">Você tem certeza que deseja remover esta conexão?</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Você pode se conectar a um site falso e perder fundos. Me ligue para ficar protegido.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Este dApp não está verificado. A conexão pode colocar seus fundos em risco.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Eu marcei. Este dApp é seguro para se conectar.</string>
+    <string name="WalletConnect_ScamProtection">Proteção de Scam</string>
+    <string name="WalletConnect_DAppCheck">Verificação dApp</string>
+    <string name="WalletConnect_DAppCheck_Secure">Seguro</string>
+    <string name="WalletConnect_DAppCheck_Risky">Arriscado</string>
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Title">Conexão DApp</string>
+    <string name="DAppConnection_Requests">Solicitações</string>
+    <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Warning_Title">Aviso</string>
+    <string name="EthereumTransaction_Error_Title">Erro</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Saldo insuficiente</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">O saldo atual de %s está abaixo do valor necessário para processar a transação, incluindo taxa de transação.</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Taxa baixa</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">A taxa de transação definida é insuficiente para processar esta transação agora.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Liquidez Insuficiente</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Provavelmente não existe liquidez suficiente disponível para processar esta operação. Tente reduzir o valor.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Erro de Estimativa</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Verifique o saldo para garantir que haja %s suficiente para cobrir a taxa. Ou tente aumentar o preço do slippage e tente novamente. Será possível tentar novamente em 3 seg...</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">Considere deixar algum %s no saldo para poder pagar transações futuras.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Erro inesperado: %s</string>
+    <!--Swap-->
+    <string name="Swap">Trocar</string>
+    <string name="Swap_AML">AML</string>
+    <string name="Swap_FromAmountTitle">Você Paga</string>
+    <string name="Swap_ToAmountTitle">Você recebe</string>
+    <string name="Swap_TokenSelectorTitle">Selecionar</string>
+    <string name="Swap_Price">Preço</string>
+    <string name="Swap_AvailableBalance">Saldo Disponível</string>
+    <string name="Swap_PriceImpact">Impacto de preço</string>
+    <string name="Swap_ProviderRisk">Risco de Rota</string>
+    <string name="Swap_ProviderRisk_NoRisk">Sem Risco</string>
+    <string name="Swap_ProviderRisk_Risky">Arriscado</string>
+    <string name="Swap_ProviderRisk_Unknown">Desconhecido</string>
+    <string name="Swap_ProviderRisk_AlertTitle">Risco de Alto Congelamento!</string>
+    <string name="Swap_ProviderRisk_AlertBody">O fornecedor desta troca específica (%s) alertou que essa troca provavelmente será rejeitada ou até congelada. Voltar e selecionar um provedor de troca diferente.</string>
+    <string name="Swap_AmlRisk_Title">Risco Detectado</string>
+    <string name="Swap_AmlRisk_Description">Riscos potenciais foram identificados para esta transação. Durante o processamento, seus fundos podem ser rejeitados ou restringidos. Por favor, escolha outra rota.</string>
+    <string name="Swap_AmlRisk_Button">Escolher Outra Rota</string>
+    <string name="Swap_AmlUnknown_Title">Atenção!</string>
+    <string name="Swap_AmlUnknown_Description">Não foi possível concluir a verificação de risco desta transação. Se você continuar, esta troca poderá encontrar atrasos, rejeição ou restrições durante o processamento.</string>
+    <string name="Swap_AmlUnknown_Button">Continuar com Risco</string>
+    <string name="Swap_AmlError_Title">Problema de conexão</string>
+    <string name="Swap_AmlError_Description">Não foi possível obter uma resposta agora. Por favor, tente novamente.</string>
+    <string name="Swap_AmlError_Button">Tentar de novo</string>
+    <string name="Swap_EstimatedTime">Tempo estimado</string>
+    <string name="Swap_EstimatedTimeDescription">Tempo aproximado para receber fundos. O processamento do swap e as confirmações de transações podem levar tempo dependendo da rede e da rota.</string>
+    <string name="Swap_MinimumReceived">Valor garantido</string>
+    <string name="Swap_MinimumReceivedDescription">Este valor está em processo de validação. Assim que o status da transação for validado, você poderá usar essas moedas. A quantia mínima que um usuário perde </string>
+    <string name="Swap_Slippage">Corrente</string>
+    <string name="Swap_Recipient">Destinatário</string>
+    <string name="Swap_ErrorNoProviders">Nenhuma Rota</string>
+    <string name="Swap_ErrorNoQuote">Sem ofertas</string>
+    <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
+    <string name="Swap_ErrorTokenNotEnabled">Token não ativado</string>
+    <string name="Swap_ErrorWalletSyncing">Carteira está Sincronizando</string>
+    <string name="Swap_ErrorWalletNotSynced">Carteira não sincronizada</string>
+    <string name="Swap_Proceed">Próximo</string>
+    <string name="Swap_SelectTokenIn">Selecionar Token em</string>
+    <string name="Swap_SelectTokenOut">Selecionar Token de Saída</string>
+    <string name="Swap_EnterAmount">Inserir Quantidade</string>
+    <string name="Swap_Revoke">Revogar</string>
+    <string name="Swap_Revoking">Revogando...</string>
+    <string name="Swap_Approve">Aprovar</string>
+    <string name="Swap_Approving">Aprovando</string>
+    <string name="Swap_Swapping">Trocando</string>
+    <string name="Swap_Quoting">Cotação</string>
+    <string name="Swap_Providers">Rotas</string>
+    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMax">(máx)</string>
+    <string name="Swap_YouPay">Você Paga</string>
+    <string name="Swap_YouGet">Você recebe</string>
+    <string name="Swap_ConfirmApprove_Title">Confirmar aprovação</string>
+    <string name="Swap_ConfirmRevoke_Title">Confirmar Revogação</string>
+    <string name="Swap_Confirm_Title">Confirmar</string>
+    <string name="Swap_SlippageDescription">Este valor está em processo de validação. Assim que o status da transação for validado, você poderá usar essas moedas. O valor mínimo que um usuário receberá </string>
+    <string name="SwapDefense_PriceImpact_High_Title">Caro demais!</string>
+    <string name="SwapDefense_PriceImpact_High_Description">Você perderá uma grande parte (-%s%%) dos seus fundos neste swap.</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Title">Preço desfavorável!</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Description">Esta swap resultaria em uma grande perda (-%s%%) devido a liquidez muito baixa.</string>
+    <string name="SwapDefense_Attention_Title">Atenção!</string>
+    <string name="SwapDefense_Attention_Description">A proteção está desativada. Os bots podem interferir com sua troca e fazer com que você perca dinheiro.</string>
+    <string name="SwapDefense_Safe_Title">Protegido</string>
+    <string name="SwapDefense_Safe_Description">Estou impedindo que bots usem valor na sua troca.</string>
+    <string name="SwapConfirm_SwapProtection">Proteção de troca</string>
+    <string name="SwapConfirm_Mev">MEV</string>
+    <string name="SwapConfirm_MevDescription">Ative a proteção para proteger sua troca e evitar perder valor para bots.</string>
+    <string name="SwapError_FailedToFetchQuote">Falha ao obter citação.</string>
+    <string name="SwapTerms_Title">Trocar Termos</string>
+    <string name="SwapTerms_TopText">Para continuar, confirme seu acordo com cada item.</string>
+    <string name="SwapTerms_BottomText">Sempre escolha uma rota de swap que se alinhe com seus requisitos.</string>
+    <string name="SwapTerms_RiskRestrictions">Risco de restrições</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Algumas rotas podem rejeitar swaps ou restringir o acesso a fundos. Preste atenção aos scores de rota ao escolher uma rota.</string>
+    <string name="SwapTerms_UserResponsibility">Responsabilidade do usuário</string>
+    <string name="SwapTerms_UserResponsibility_Info">Revisei os riscos possíveis e aceito a responsabilidade pela minha escolha de rota.</string>
+    <!-- Swap Settings -->
+    <string name="SwapSettings_SlippageTitle">Tolerância de Slippage</string>
+    <string name="SwapSettings_RecipientAddressTitle">Endereço do Destinatário</string>
+    <string name="SwapSettings_Apply">Aplicar</string>
+    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
+    <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Tolerância do Slippage não pode ser maior que %s%%</string>
+    <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Endereço %s inválido</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Sua operação pode ser de front-running</string>
+    <string name="SwapSort_BestRate">Melhor tarifa</string>
+    <string name="SwapSort_BestTime">Super-rápida</string>
+    <string name="RiskLevel_ProviderRiskLevel">Pontuação da Rota</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Esses níveis mostram como as rotas lidam com swaps e verificações de transações.</string>
+    <!-- Swap Confirmation -->
+    <string name="ActivationRequired_DialogTitle">Ativar Token</string>
+    <string name="ActivationRequired_DialogDescription">Para receber %s, você precisa ativar o token. A rede Stellar requer que uma linha de confiança seja estabelecida para cada token. Sem isso, sua carteira não pode receber %s — a transação será rejeitada e os fundos não serão entregues.</string>
+    <string name="Activate_YouActivate">Você Ativar</string>
+    <string name="Activate_Activating">Ativando</string>
+    <string name="Activate_AlreadyActive_Title">Já ativo</string>
+    <string name="Activate_AlreadyActive_Description">O token já está ativo.</string>
+    <string name="Activate_InsufficientBalance_Title">Saldo insuficiente</string>
+    <string name="Activate_InsufficientBalance_Description">Você não tem saldo XLM suficiente para ativar este token.</string>
+    <!-- Swap History -->
+    <string name="SwapHistory_Title">Histórico de trocas</string>
+    <string name="SwapHistory_EmptyList">Você ainda não possui nenhum swap pendente ou anterior.</string>
+    <string name="SwapInfo_Title">Trocar informações</string>
+    <!-- Swap Info -->
+    <string name="SwapInfo_Provider">Rota</string>
+    <string name="SwapInfo_SourceAddress">Endereço de origem</string>
+    <string name="SwapInfo_StatusTitle">Status da transação</string>
+    <string name="SwapInfo_StatusDepositing">Depósito</string>
+    <string name="SwapInfo_StatusSwapping">Trocar</string>
+    <string name="SwapInfo_StatusSending">Enviar</string>
+    <string name="SwapInfo_StatusCompleted">Concluído</string>
+    <string name="SwapInfo_StatusRefunded">Reembolsado</string>
+    <string name="SwapInfo_StatusFailed">Falhou</string>
+    <string name="Button_View">Visualizar</string>
+    <!--Approve-->
+    <string name="Approve_RevokeAndApproveInfo">Você pode trocar %s, ou você precisa revogar e aprovar o novo valor</string>
+    <string name="Approve_Spender">Gastador</string>
+    <string name="Approve_YouRevoke">Você revoga</string>
+    <string name="Approve_Allowance">Valor da dedução</string>
+    <!--Swap Unlock Access-->
+    <string name="Swap_Approve_PageTitle">Aprovar</string>
+    <string name="Swap_Approve_Info">Conceda permissão a um contrato inteligente para negociar tokens em seu nome, especificando a quantidade permitida. Isso não afeta seu saldo, mas incorre em uma pequena taxa para aprovação.\n\nPré-aprovar uma quantidade maior para negociações futuras é mais econômico em comparação com aprovações sob demanda.</string>
+    <string name="Swap_Approve_Unlimited">Ilimitado</string>
+    <!--Uniswap Info -->
+    <string name="SwapInfo_PriceImpactTitle">Impacto de preço</string>
+    <string name="SwapInfo_PriceImpactDescription">O desvio de preço esperado de um valor mostrado, normalmente aumenta com o montante de swap.</string>
+    <!--Deposit-->
+    <string name="Deposit_Title">Receber %s</string>
+    <!--Transactions-->
+    <string name="Transactions_Title">Transações</string>
+    <string name="Transactions_EmptyList">Nenhuma transação pendente ou anterior ainda.</string>
+    <string name="Transactions_WaitForSync">Por favor, aguarde a sincronização concluir.</string>
+    <string name="Transactions_Pending">Pendente</string>
+    <string name="Transactions_Receive">Recebido</string>
+    <string name="Transactions_ChangeTrust">Mudar Confiança</string>
+    <string name="Transactions_Completed">Concluído</string>
+    <string name="Transactions_Processing">Processando</string>
+    <string name="Transactions_Send">Enviado</string>
+    <string name="Transactions_Burn">Queimar</string>
+    <string name="Transactions_Mint">Mint</string>
+    <string name="Transactions_Approve">Aprovado</string>
+    <string name="Transactions_Swap">Trocado</string>
+    <string name="Transactions_Failed">Falhou</string>
+    <string name="Transactions_Transfer">Transferir</string>
+    <string name="Transactions_ContractCall">Chamada de Contrato</string>
+    <string name="Transactions_ExternalContractCall">Ligação Externa</string>
+    <string name="Transactions_ContractCreation">Criação de contrato</string>
+    <string name="Transactions_ContractDeploy">Implantação de Contrato</string>
+    <string name="Transactions_To">para %s</string>
+    <string name="Transactions_From">de %s</string>
+    <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
+    <string name="Transaction_Unlimited">ilimitado</string>
+    <string name="Transactions_All">Todas</string>
+    <string name="Transactions_Filter_Blockchain">Blockchain</string>
+    <string name="Transactions_Filter_Coin">Moeda</string>
+    <string name="Transactions_Filter_Contacts">Contatos</string>
+    <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
+    <string name="Transactions_Filter_AllCoins">Todas as moedas</string>
+    <string name="Transactions_Filter_AllContacts">Todos os Contatos</string>
+    <string name="Transactions_Filter_ChooseCoin">Escolher Moedas</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Escolha Blockchain</string>
+    <string name="Transactions_Incoming">Recebido</string>
+    <string name="Transactions_Outgoing">Enviado</string>
+    <string name="Transactions_Swaps">Trocas</string>
+    <string name="Transactions_Approvals">Aprovações</string>
+    <string name="Transactions_Unknown">Transação Desconhecida</string>
+    <string name="Transactions_OperationType">Tipo de operação</string>
+    <string name="Transactions_OperationType_ChangeTrust">Mudar Confiança</string>
+    <string name="Transactions_OperationType_CreateAccount">Criar conta</string>
+    <string name="Transactions_TonTransaction">Transação TON</string>
+    <string name="Transactions_StellarTransaction">Transação Stellar</string>
+    <string name="Transactions_Unknown_Description">Transação não pôde ser analisada</string>
+    <string name="Transactions_Multiple">Múltiplo</string>
+    <string name="Transactions_Filter">Filtro</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transações Suspeitas</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Oculta transferências de entrada de baixo valor (por exemplo, USDT abaixo de US$ 1,5). Essas transações são frequentemente usadas para ataques de phishing e address poisoning.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">A filtragem de contato é suportada nas seguintes blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Opbitrum, Tron, Ton e ZCash. Abaixo estão os contatos adequados</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Você não tem nenhum contato adequado </string>
+    <!--Transaction Info-->
+    <string name="TransactionInfo_Title">Informações sobre a transação</string>
+    <string name="TransactionInfo_Status">SItuação</string>
+    <string name="TransactionInfo_Date">Data</string>
+    <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Service">Serviço</string>
+    <string name="TransactionInfo_RawTransaction">Transação bruta</string>
+    <string name="TransactionInfo_ContactName">Nome do Contato</string>
+    <string name="TransactionInfo_To">Para</string>
+    <string name="TransactionInfo_From">De</string>
+    <string name="TransactionInfo_Spender">Gastador</string>
+    <string name="TransactionInfo_LockedUntil">Bloqueado até %s</string>
+    <string name="TransactionInfo_UnlockedAt">Desbloqueado às %s</string>
+    <string name="TransactionInfo_RecipientHash">Destinatário</string>
+    <string name="TransactionInfo_HistoricalRate">Dados históricos</string>
+    <string name="TransactionInfo_Fee">Taxa</string>
+    <string name="TransactionInfo_FeeEstimated">Taxa (est.)</string>
+    <string name="TransactionInfo_SentToSelfNote">Esta transação é enviada para o próprio endereço</string>
+    <string name="TransactionInfo_DoubleSpendNote">Risco de gasto duplo!</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">Ver no %s</string>
+    <string name="TransactionInfo_Price">Preço</string>
+    <string name="TransactionInfo_YouGot">Você Tem</string>
+    <string name="TransactionInfo_YouSent">Enviar</string>
+    <string name="TransactionInfo_Received">Recebido</string>
+    <string name="TransactionInfo_Minted">Mint</string>
+    <string name="TransactionInfo_Sent">Enviado</string>
+    <string name="TransactionInfo_Approved">Aprovado</string>
+    <string name="TransactionInfo_SpeedUp">Acelerar</string>
+    <string name="TransactionInfo_TransactionSecretKey">Chave Secreta Tx</string>
+    <string name="TransactionInfo_SpamWarning">Esta transação é suspeita e pode ser um golpe. \nPor favor, não copie nenhum endereço desta transação.</string>
+    <string name="TransactionInfo_SpeedUpDescription">Esta ação tentará invalidar a transação anterior, reenviando-a com uma taxa maior.</string>
+    <string name="StatusInfo_Pending">Pendente</string>
+    <string name="StatusInfo_Processing">Processando</string>
+    <string name="StatusInfo_Confirmed">Concluído</string>
+    <string name="StatusInfo_Failed">Falhou</string>
+    <string name="StatusInfo_PendingDescription">A transação ainda não foi confirmada na blockchain. As transações enviadas com uma configuração de taxas recomendada ou maior são geralmente processadas dentro de alguns minutos. Transações enviadas com uma taxa baixa podem permanecer pendentes por algumas horas ou até mesmo dias, e podem até mesmo ser rejeitadas. Observe que o status de uma transação individual em interface da carteira Unstoppable normalmente é atualizado com um curto atraso.</string>
+    <string name="StatusInfo_ProcessingDescription">A transação já foi incluída na blockchain, mas ainda não atingiu a finalidade permanente. Neste ponto, é seguro considerar a transação como concluída para pagamentos menores. Para pagamentos maiores, é recomendado esperar até que o status da transação seja alterado.</string>
+    <string name="StatusInfo_ConfirmedDescription">A transação está concluída e considerada permanente e irreversível.</string>
+    <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo Unstoppable não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Acelerar</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Enviar novamente</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancelar</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancelar transação</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">A transação já foi confirmada</string>
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Transações Substituídas</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">Taxa (Sat)</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Taxa Baixa Muito</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF (Substituir por taxa) não ativado</string>
+    <string name="TransactionInfoOptions_Rbf_UnableToReplace">Incapaz de substituir</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
+    <string name="Info_LockTime_NoDateDescription">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
+    <string name="Info_Reserved_Title">Reservado</string>
+    <string name="Info_Reserved_Description">A rede Stellar bloqueia 1 XLM para ativar a carteira e 0.5 XLM como uma reserva para cada token ativado na sua carteira.</string>
+    <string name="Info_Reserved_WalletAction">Ativação da carteira</string>
+    <string name="Info_NotRelayed_Title">Transmissão</string>
+    <string name="Info_NotRelayed_Description">A transação que detém esse valor foi transmitida, mas ainda não foi aceita pela rede.</string>
+    <string name="Info_ProcessingBalance_Title">Processando quantia</string>
+    <string name="Info_ProcessingBalance_Description">Transações com esse valor ainda estão sincronizando. Quando forem confirmadas, esses tokens estarão disponíveis para gastar</string>
+    <string name="Info_DoubleSpend_Title">Gasto Duplo</string>
+    <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
+    <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Tx Conflitante</string>
+    <!--Guides-->
+    <string name="Guides_Title">Treinamento</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Página não encontrada</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Moeda base</string>
+    <string name="SettingsCurrency_Other">OUTRA</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Aviso Legal</string>
+    <string name="SettingsCurrency_DisclaimerText">Os dados da taxa de câmbio são fornecidos por um serviço de terceiros - Coingecko.com. \n\nO aplicativo de carteira Unstoppable não garante que esses valores sejam sempre corretos e que correspondam aos dados do mercado. A chance de inconsistência é maior se você selecionar qualquer moeda base que não seja %s.</string>
+    <!--Settings-->
+    <string name="Settings_Title">Configurações</string>
+    <string name="Settings_SecurityCenter">Segurança</string>
+    <string name="Settings_BaseCurrency">Moeda base</string>
+    <string name="Settings_Language">Idioma</string>
+    <string name="Settings_Theme">Tema</string>
+    <string name="Settings_Terms">Termos</string>
+    <string name="Settings_Privacy">Privacidade</string>
+    <string name="Settings_ShareThisWallet">Indique para amigos</string>
+    <string name="Settings_AppStatus">Status do app</string>
+    <string name="Settings_RateUs">Avalie-Nos</string>
+    <string name="Settings_LaunchScreen">Tela Inicial</string>
+    <string name="Settings_LaunchScreen_Tip">Escolha em qual tela o aplicativo será aberto por padrão.</string>
+    <string name="Settings_AppSettings">Aparência</string>
+    <string name="Settings_Subscription">Assinatura</string>
+    <string name="Settings_AutoLock">Auto-Bloqueio</string>
+    <string name="Settings_AutoLock_Description">Bloqueia automaticamente o aplicativo após um tempo selecionado.</string>
+    <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
+    <string name="Settings_Support">SUPORTE</string>
+    <string name="Settings_VipSupport">Suporte VIP</string>
+    <string name="Settings_Donate">Doar</string>
+    <string name="Settings_DonateToken">Doe %s</string>
+    <string name="Settings_Donate_Addresses">Endereços</string>
+    <string name="Settings_Donate_DonationAddresses">Endereços de Doação</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Imediato</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minuto</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 Minutos</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 Minutos</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 Minutos</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
+    <!--Address Checker-->
+    <!--Banners-->
+    <string name="SettingsBanner_Premium">Prêmio</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Melhore a sua experiência com recursos Premium!</string>
+    <string name="SettingsBanner_PremiumTryFee">Teste GRÁTIS</string>
+    <string name="SettingsBanner_GameDescription">Passe pelos testes, complete as tarefas e ganhe tokens!</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Faça parte do futuro das finanças privadas</string>
+    <string name="SettingsBanner_SupportTheProject">Apoie o Projeto!</string>
+    <!--Why Donate Page-->
+    <string name="SettingsBanner_DonateTitle">Apoie o movimento Imparável</string>
+    <string name="SettingsBanner_DonateSubtitle">Faça parte do futuro das finanças privadas</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">O Wallet não parável tem sido gratuito, sem anúncios e de código aberto desde o primeiro dia — e assim permanecerá.\"</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">Ao aderir ao movimento Incessável, você defende finanças abertas e privadas:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">A Equipe de Carteira Iparável</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">Seu apoio não tem apenas a ver com desbloquear recursos — é um compromisso com a privacidade, liberdade e acesso aberto para todos.</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Ele ajuda a manter a carteira livre de anúncios, segura e verdadeiramente independente - para você e para centenas de milhares de pessoas que dependem dela em todo o mundo.</string>
+    <string name="SettingsBanner_DonateExclusivelyOnFDroid">Exclusivamente em F-Droid</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Wallet Istoppable fornece recursos avançados — sem assinatura, sem limites:</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Análise completa e dados sobre tokens</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">Modo de privacidade &amp; Modo de Duress</string>
+    <string name="SettingsBanner_DonateFeatureSignals">Sinais para uma negociação segura</string>
+    <string name="SettingsBanner_DonateFeatureAddress">Verificação de endereço bloqueado</string>
+    <string name="SettingsBanner_DonateFeatureAdvanced">Busca e filtros avançados de ativos</string>
+    <string name="SettingsBanner_DonateFeaturePriority">Acesso prioritário ao suporte</string>
+    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Todos os apoios são importantes.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Ao apoiar Carteira Iparável, você nos ajuda a crescer, melhorar e permanecer independente.</string>
+    <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Ativo</string>
+    <string name="SettingsSubscription_GetPremium">Obter Premium</string>
+    <string name="SettingsSubscription_RestorePurchase">Restaurar Compra</string>
+    <string name="SettingsSubscription_ManageSubscription">Gerenciar Assinatura</string>
+    <string name="Period_Days">%s dias</string>
+    <string name="Premium_TitleForDroid">Premium (Gratuito para F-Droid)</string>
+    <!--Premium Screens-->
+    <string name="Premium_Title">Prêmio</string>
+    <string name="Premium_EnjoyFreePeriod">Aproveite a primeira %s GRÁTIS.</string>
+    <string name="Premium_CancelSubscriptionInfo">Você pode cancelar sua assinatura a qualquer momento.</string>
+    <string name="Premium_GetFreePeriod">Ganhe %s GRÁTIS</string>
+    <string name="Premium_Subscribe">Assinar</string>
+    <string name="Premium_TryForFree">Teste GRÁTIS</string>
+    <string name="Premium_Upgrade">Atualizar</string>
+    <string name="Premium_ThankYouForSubscription">Obrigado por sua \nassinatura!</string>
+    <string name="Premium_GoToApp">Ir ao App</string>
+    <string name="Premium_Banner_BlackFridayText">Melhore a sua experiência com recursos Premium!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Aproveite o poder total do aplicativo.</string>
+    <string name="Premium_SelectSubscription">Selecionar Assinatura</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Uma compra desbloqueia todos os recursos Premium.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Busca Avançada</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Sinais e Tendências</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection">Modo de Coação</string>
+    <string name="Premium_UpgradeFeature_SecureSend">Proteção contra Fraudes</string>
+    <string name="Premium_UpgradeFeature_ScamProtection">Proteção de Scam</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">Suporte VIP</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">Proteção de troca</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtragem multinível em múltiplos parâmetros</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoramento automático de tendências de mercado para seus tokens</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Segurança inteligente de fundos durante ameaças físicas</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Proteção automática eficaz contra fraudes e ataques de phishing</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantia de legalidade para suas operações com criptomoedas</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Impede que bots roubem fundos durante swaps.</string>
+    <string name="Premium_DefenseSystem">Sistema de defesa</string>
+    <string name="Premium_MarketInsights">Insights de mercado</string>
+    <string name="Premium_AdvancedControls">VIP</string>
+    <string name="Premium_HighlyRatedSecurity">Segurança altamente qualificada, privacidade excepcional e uma carteira verdadeiramente sem custódia.</string>
+    <string name="Premium_ApprovedBy">Aprovado e Auditado Por:</string>
+    <string name="Premium_SubscriptionPeriod_Month">mês</string>
+    <string name="Premium_SubscriptionPeriod_Year">ano</string>
+    <string name="Premium_SubscriptionPeriod_Annually">Anualmente</string>
+    <string name="Premium_SubscriptionPeriod_Monthly">Mensalmente</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">ECONOMIZE 31%</string>
+    <string name="Appearance_SendScreen">ENVIAR TELA</string>
+    <string name="Appearance_MarketsTab">TAB MARKETS</string>
+    <string name="Appearance_BalanceTab">ABA SALDO</string>
+    <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
+    <string name="Appearance_BalanceValue">Saldos das Moedas</string>
+    <string name="Appearance_BalanceValue_Tip">Mostrar saldos destacados em cripto ou fiat.</string>
+    <string name="Appearance_Warning_CloseApplication">Alterar o ícone fechará o aplicativo</string>
+    <string name="Appearance_HideMarketsTab">Esconder Mercados</string>
+    <string name="Appearance_HideMarketsTab_Tip">Ocultar a guia de Mercados completamente.</string>
+    <string name="Appearance_HideBalanceTabButtons">Ocultar Botões</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Esconder botões Enviar, Receber e Trocar no Saldo</string>
+    <string name="Appearance_AmountRounding">Arredondamento de valor</string>
+    <string name="Appearance_AmountRounding_Tip">Exibir saldos arredondados e valores de transações.</string>
+    <string name="Appearance_BalanceAutoHide">Balance Tab</string>
+    <string name="Appearance_BalanceAutoHide_Description">Esconder os botões Enviar, Receber e Trocar da aba Saldo.</string>
+    <string name="Appearance_PriceChangeInterval">Mudança de Preço %</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Selecione o período de tempo para a exibição de mudança de preço token de preço.</string>
+    <string name="Appearance_RecentlySent">Enviadas Recentemente</string>
+    <string name="Appearance_RecentlySent_Tip">Exibe o endereço enviado recentemente para o token</string>
+    <string name="BalanceViewType_CoinValue">Valor da Moeda</string>
+    <string name="BalanceViewType_FiatValue">Valor Fiat</string>
+    <string name="SettingsAboutApp_Title">Sobre o App</string>
+    <string name="SettingsAboutApp_Site">Site</string>
+    <string name="SettingsAboutApp_AppVersion">Versão da Aplicação</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Configurações da Blockchain</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Gerenciador de Backup</string>
+    <string name="BackupManager_RestoreBackup">Restaurar Backup</string>
+    <string name="BackupManager_CreateBackup">Criar backup</string>
+    <string name="BackupManager_BаckupFile">Arquivo de backup</string>
+    <string name="BackupManager_Wallets">Carteiras</string>
+    <string name="BackupManager_Other">Dados</string>
+    <string name="BackupManager_Restore">Restaurar</string>
+    <string name="BackupManager_BackupFileContents">Lista de conteúdo do arquivo de backup.</string>
+    <string name="BackupManager_MergeTitle">Atenção!</string>
+    <string name="BackupManager_MergeButton">Substituir</string>
+    <string name="BackupManager_MergeDescription">Os contatos salvos serão substituídos pelos dados do backup.</string>
+    <string name="BackupManager_BackupRequired">Backup necessário</string>
+    <string name="BackupManager_WatchWallets">Carteiras de Relógio</string>
+    <string name="BackupManager_Watchlist">Catálogo</string>
+    <string name="BackupManager_CustomRpc">RPC Personalizado</string>
+    <string name="BackupManager_AppSettingsTitle">Configurações do Aplicativo</string>
+    <string name="BackupManager_AppSettingsDescription">Linguagem, Moeda, Aparência …</string>
+    <!-- Privacy  -->
+    <string name="Privacy_Information">Não parável não coletar dados pessoais como seus saldos ou endereços de carteira. Usamos apenas dados anônimos para melhorar o aplicativo.</string>
+    <string name="ShareUiData">Compartilhar Dados de UI</string>
+    <string name="ShareUiDataDescription">Esta configuração permite que você desative a análise e mantenha sua atividade totalmente privada.</string>
+    <!-- Security Center -->
+    <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Adicionar novo</string>
+    <string name="EvmNetwork_Added">Adicionado</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">Url RPC</string>
+    <string name="AddEvmSyncSource_AddRPCSource">Adicionar fonte RPC</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Autenticação básica (opcional)</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">Fonte RPC com esta url já existe</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Url inserida é inválida. URL válida deve ter um dos seguintes esquemas: http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <string name="AddMoneroNode_AddNode">Adicionar node</string>
+    <string name="AddMoneroNode_NodeUrl">URL do nó</string>
+    <string name="AddMoneroNode_Username">Nome de usuário (opcional)</string>
+    <string name="AddMoneroNode_Pasword">Senha (opcional)</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Já existe um nó com esta url</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">URL inserida é inválida. URL válida deve ter um dos esquemas a seguir: https</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Preferências de Nó</string>
+    <string name="MoneroNodeSettings_TrustedDescription">O nó confiável — a carteira confia no nó selecionado e usa seus dados sem verificação extra.
+        \n\nEm → transações aparecem instantaneamente como pendentes quando a transmissão (sincronização mais rápida, mas baixa privacidade e confiança no nó).
+        \n\nOff → transações são mostradas apenas após confirmações da rede (lento, mas mais seguro e mais privado).</string>
+    <string name="MoneroNodeSettings_Trusted">Confiável</string>
+    <string name="MoneroNodeSettings_Description">Escolha o aplicativo \"Não\" Interparável para a sincronização de carteiras(s).</string>
+    <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte, a carteira terá que ressincronizar.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / Saídas de Transação</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Torne suas transações BTC, LTC e BCH mais difíceis de rastrear, alterando como as transações são estruturadas.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">A maioria das transações do Bitcoin, bem como as transações em criptomoedas, incluindo Bitcoin Cash, Dash, e Litecoin, geram duas saídas. Uma saída é a quantidade que vai para o destinatário e a outra é a mudança de saída que é retornada ao remetente. A maneira como a maioria das carteiras constrói as transações torna mais fácil para um terceiro entender qual das saídas foi para a parte receptora e qual foi a quantia alterada retornada ao remetente. Como a saída retornada ao remetente será usada mais tarde em transações futuras, uma conexão entre essas duas transações se torna evidente.\n\nA carteira Unstoppable implementa medidas para tornar mais difícil para alguém descobrir qual saída vai para onde.\n\nExistem duas opções disponíveis para usuários Unstoppable:\n\n1. Embaralhamento: A ordem de saídas da transação é randomizada em cada transação. Às vezes a mudança pode ser a primeira saída, às vezes pode ser a segunda. Se um usuário confia no desenvolvedor do aplicativo, considere esta opção recomendada.\n\n2. Determinístico: Há um padrão comumente acordado para encomendar saídas de transação (conhecido como BIP69). Nas carteiras de código aberto, que o padrão garante que os usuários de carteira não precisam confiar em como desenvolvedores do aplicativo implementam a ordenação das saídas. Como este padrão é novo, muitas carteiras ainda não o implementaram. Como resultado, é um pouco possível ver no blockchain se uma transação foi enviada de uma carteira que usa esse padrão ou não.</string>
+    <!--Info screen-->
+    <string name="Info_Title">Informação</string>
+    <!--Setting_Security-->
+    <string name="SettingsSecurity_Biometric_Authentication">Autenticação Biométrica</string>
+    <string name="SettingsSecurity_EnablePin">Senha</string>
+    <string name="SettingsSecurity_DisablePin">Desativar Senha</string>
+    <string name="SettingsSecurity_EditPin">Editar senha</string>
+    <string name="SettingsSecurity_ManageKeys">Gerenciar carteiras</string>
+    <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira Unstoppable.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Anonimize sua internet completamente enquanto estiver usando este aplicativo. Nota: em alguns casos, o recurso WalletConnect para apps DeFi pode ser muito lento ou nem funcionar.</string>
+    <string name="SettingsSecurity_SortingShuffle">Embaralhar</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Indexação aleatória</string>
+    <string name="SettingsSecurity_SortingBip69Short">Determinístico</string>
+    <string name="SettingsSecurity_SortingBip69">Bip69 Determinístico</string>
+    <string name="SettingsSecurity_SortingBip69Description">Indexação Lexicográfica</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">API Blockchair</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Sem Privado</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">Devagar, Sem Privado</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado.</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs">Ocultar eixos suspeitos</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs_Description">Esconde pequenas transferências suspeitas frequentemente usadas em ataques de phishing.</string>
+    <string name="SetDuressPin_Title">Senha do Modo Coação</string>
+    <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
+    <string name="EditDuressPin_Title">Editar Senha do Modo Coação</string>
+    <string name="EditDuressPin_Description">Defina uma senha para o modo de Coação</string>
+    <string name="DuressPin_Title">Modo de dureza</string>
+    <string name="DuressPin_Description">Esta modalidade permite ao usuário configurar várias senhas de desbloqueio de aplicativos, onde uma senha desejada mostra apenas carteiras especificadas. Projetado para manter carteiras selecionadas seguras sob coação ou ameaças.</string>
+    <string name="DuressPin_Notes">NOTAS</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Autenticação Biométrica</string>
+    <string name="DuressPin_Notes_Biometrics_Description">O recurso de Autenticação Biométrica funcionará para desbloquear o Modo Duche. Você pode desativar a Autenticação Biométrica para conveniência.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Desabilitação da Senha</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Desativar a senha no modo principal redefinirá automaticamente o Modo de Coação.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Alteração de Senha</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Alterar a senha no Modo de Coação também irá alterar a senha atual para esse modo.</string>
+    <string name="DuressPinSelectAccounts_Title">Escolher Carteiras</string>
+    <string name="DuressPinSelectAccounts_Description">Selecione as carteiras que serão exibidas no Modo de Coação.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">CARTEIRAS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ASSISTA CARTEIRAS</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_Backup">Frases de recuperação de backup seguros para cada carteira. É a única maneira de recuperar o acesso a fundos se o aplicativo não funcionar.</string>
+    <string name="SettingsTerms_DisablingPin">Desabilitando o PIN (código) no smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para restaurar o acesso aos fundos.</string>
+    <string name="SettingsTerms_PrivacyNotice">O aplicativo não espiona nem coleta dados sobre seus saldos ou transações. Nem sabemos quantas pessoas o usam. Ele apenas rastreia padrões de uso anônimos (páginas abertas, botões tocados) para melhorar a usabilidade. Você pode desligar isso em Configurações → Privacidade.</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">Nós não temos seus ativos e acessamos suas chaves privadas ou executamos transações em seu nome. O aplicativo não fornece serviços de corretagem, câmbio, custódia, escava ou de transmissão de dinheiro. Todas as transações são iniciadas, assinadas e transmitidas diretamente por você para as redes públicas da blockchain.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">Como parte do modelo de monetização, o aplicativo ganha pequenas comissões de swaps de DEX executados dentro da carteira. Isso nos ajuda a manter um código aberto, independente e livre de dinheiro de VC.</string>
+    <string name="SettingsTerms_TransactionsIrreversible">Transações Blockchain são irreversíveis. Sempre reveja os detalhes da transação antes de confirmar.</string>
+    <string name="SettingsTerms_OpenSource">O aplicativo é de código aberto de forma verificável, com todo o código-fonte publicado online. Tudo o que é descrito acima pode ser verificado publicamente por qualquer pessoa.</string>
+    <string name="SettingsTerms_LegalObligations">Você é o único responsável pela segurança dos seus fundos, pela sua conduta e pelo cumprimento das leis aplicáveis na sua jurisdição, bem como globalmente.</string>
+    <string name="SettingsTerms_UserResponsibility">Ao prosseguir, você reconhece que a segurança dos seus fundos e a conformidade jurídica são, em última análise, sua responsabilidade.</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Partilhar</string>
+    <string name="SettingsShare_Text">Seja Unstoppable</string>
+    <!--Setting_Contact-->
+    <!--Setting_Notifications-->
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Balance">Saldo</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Visão Geral do Mercado</string>
+    <string name="SettingsLaunchScreen_Watchlist">Catálogo</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Dark">Escuro</string>
+    <string name="SettingsTheme_Light">Claro</string>
+    <string name="SettingsTheme_System">Sistema</string>
+    <!--Errors-->
+    <!--Hud texts-->
+    <string name="Hud_Text_NoInternet">Sem Internet</string>
+    <string name="Hud_Text_Copied">Copiado</string>
+    <string name="Hud_Text_AddressCopied">Endereço copiado</string>
+    <string name="Hud_Text_Created">Criado</string>
+    <string name="Hud_Text_Restored">Restaurado</string>
+    <string name="Hud_Text_AddressAdded">Endereço Adicionado</string>
+    <string name="Hud_Text_Done">Concluído</string>
+    <string name="Hud_Text_Verified">Confirmado</string>
+    <string name="Hud_Added_To_Watchlist">Adicionado à Lista</string>
+    <string name="Hud_Added_To_Wallet">Adicionado à Carteira</string>
+    <string name="Hud_Removed_From_Wallet">Removido da Carteira</string>
+    <string name="Hud_Removed_from_Watchlist">Removido da Lista</string>
+    <string name="Hud_Removed">Removido</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Gerenciador de Moedas</string>
+    <string name="ManageCoins_Search">Nome, código ou endereço do contrato</string>
+    <string name="ManageCoins_AddToken">Adicionar token</string>
+    <string name="ManageCoins_BipsDescription">Existem 4 formatos de endereço comuns Carteiras %1$s podem usar para receber pagamentos recebidos:
+\n
+\n- BIP-44 (mais antigo)
+\n- BIP-49
+\n- BIP-84 (recomendado)
+\n- BIP-86 (mais recente)
+\n
+\nEnquanto que a carteira 4 deles oferece suporte a todos os 4 deles é recomendado usar uma carteira %2$s operando no formato BIP-84. As carteiras que operam neste formato pagam taxas mais baixas ao enviar transações de %3$s.</string>
+    <string name="ManageCoins_BchTypeDescription">Existem 2 formatos de endereço que as carteiras Bitcoin Cash podem usar para receber pagamentos:
+\n
+\n- TYPE0 (antigo)
+\n- TYPE145 (mais recente)
+\n
+\nEmbora a carteira Unstoppable suporte ambos, recomenda-se usar uma carteira Bitcoin Cash operando no formato TYPE145.</string>
+    <string name="ManageCoins_ContractAddress">ENDEREÇO DE CONTRACT</string>
+    <!-- Experimental Feature -->
+    <!-- Bitcoin Hodling -->
+    <!-- Testnet Settings -->
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Gerenciar carteiras</string>
+    <string name="ManageAccounts_CreateNewWallet">Criar</string>
+    <string name="ManageAccounts_ImportWallet">Restaurar</string>
+    <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">do Arquivo</string>
+    <string name="ImportWallet_BackupFile_Description">Importar um arquivo de backup da sua pasta local.</string>
+    <string name="ImportWallet_RecoveryPhrase">da frase de recuperação</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Importar uma carteira usando uma frase de recuperação ou uma chave privada.</string>
+    <string name="ImportWallet_WarningInvalidJson">Arquivo Json Inválido</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Este arquivo não é um backup válido da carteira, ou o arquivo foi corrompido e não pode ser restaurado.</string>
+    <string name="ImportWallet_SelectAnotherFile">Selecione Outro Arquivo</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Digite a senha</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Digite a senha de backup para importar sua carteira.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
+    <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
+    <string name="WatchWallet">Assistir Carteira</string>
+    <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
+    <string name="Watch_ViewKey">Chave Privada de Visualização</string>
+    <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
+    <string name="Watch_Select_Coins">Escolher Moedas</string>
+    <string name="Watch_Error_InvalidAddressFormat">Formato de endereço não suportado</string>
+    <string name="Watch_Monero_Warning">Monero watch wallet mostra apenas transações recebidas. O saldo exibido pode estar incorreto.</string>
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">Nome</string>
+    <string name="ManageAccount_Save">Salvar</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Manual</string>
+    <string name="ManageAccount_LocalBackup">Backup Local</string>
+    <string name="ManageAccount_Unlink">Desvincular Carteira</string>
+    <string name="ManageAccount_BackupRequired_Title">Backup necessário</string>
+    <string name="ManageAccount_BackupRequired_Description">Você precisa fazer um backup de %1$s antes de poder receber %2$s.</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">Se você não fizer o backup da chave privada desta carteira, perderá o acesso aos seus fundos.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Migração Necessária</string>
+    <string name="ManageAccount_BirthdayHeight">Altura de aniversário</string>
+    <string name="ManageAccount_NWords">%s palavras</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s palavras com senha</string>
+    <string name="ManageAccount_SwitchWallet_Title">Trocar carteira</string>
+    <string name="ManageAccount_Wallets">Carteiras</string>
+    <string name="ManageAccount_WatchAddresses">Carteiras de Relógio</string>
+    <string name="ManageAccount_DeleteWarning">Você quer parar de acompanhar este endereço da carteira?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Cofre Suado</item>
+        <item>🧂 Livro Razão Salgado</item>
+        <item>💧 Definitivamente Líquido</item>
+        <item>⏳ Transação Pendente</item>
+        <item>🌈 Lucros Imaginários</item>
+        <item>🤡 Âncora Instável</item>
+        <item>😤 Cope Máximo</item>
+        <item>☠️ Rekted Certificado</item>
+        <item>👑 Coroa Insolvente</item>
+        <item>📉 Retornos Mediocres</item>
+        <item>🕸️ Carteira Empoeirada</item>
+        <item>🧳 Bolsa Vintage</item>
+        <item>👻 Ganhos Fantasma</item>
+        <item>🐂 Touro Ilusório</item>
+        <item>🛒 Comprador Compulsivo</item>
+        <item>💼 Bagholder Premium</item>
+        <item>🤨 Rendimento Suspeito</item>
+        <item>♾️ Queda Eterna</item>
+        <item>💭 Convicção Emprestada</item>
+        <item>🦍 Macaco Quântico</item>
+        <item>🔍 Nó Paranoico</item>
+        <item>🛋️ Staker Preguiçoso</item>
+        <item>☕ Validador Cafeínado</item>
+        <item>🔮 Oráculo Quebrado</item>
+        <item>😴 Validador Sonolento</item>
+        <item>🎲 Gênio Acidental</item>
+        <item>🔐 Hodler Relutante</item>
+        <item>🤑 Oráculo Ganancioso</item>
+        <item>😵 Arbitragem Confusa</item>
+        <item>🏃 Exchange Frenética</item>
+        <item>🪢 Fundação Enganada</item>
+        <item>🌉 Ponte Suspeita</item>
+        <item>⛽ Taxas Absurdas</item>
+        <item>🌶️ Colateral Picante</item>
+        <item>🚌 Mempool Lotado</item>
+        <item>💨 Gênesis Fumegante</item>
+        <item>🕯️ Carteira Assombrada</item>
+        <item>⌛ Paciência Infinita</item>
+        <item>🥶 Cope Congelado</item>
+        <item>💊 Coragem Sintética</item>
+        <item>🎖️ Camponês Nobre</item>
+        <item>⚡ Milionário Temporário</item>
+        <item>🗺️ Pobreza Estratégica</item>
+        <item>😊 Rekted Alegre</item>
+        <item>🏰 Cidadela Imprudente</item>
+        <item>🎰 Paraíso Degen</item>
+        <item>🙏 Ruína Humilde</item>
+        <item>💎 Mãos de Diamante</item>
+        <item>🃏 Mãos de Papel</item>
+        <item>🌙 Ilusão Lunar</item>
+        <item>🚿 Trader Lavado</item>
+        <item>🤏 Alocação Minúscula</item>
+        <item>🎯 Chute Sortudo</item>
+        <item>🌊 Posição Submersa</item>
+        <item>💤 Gigante Adormecido</item>
+        <item>🎪 Circo Itinerante</item>
+        <item>🧸 Hedge Emocional</item>
+        <item>🐯 Tigre de Papel</item>
+        <item>🔁 Ganhos Recursivos</item>
+        <item>🥴 Retornos Tontos</item>
+        <item>🏚️ Fazenda Penhorada</item>
+        <item>🤫 Baleia Silenciosa</item>
+        <item>🌅 Falso Amanhecer</item>
+        <item>📊 Caminhada Aleatória</item>
+        <item>🌋 Montanha Volátil</item>
+        <item>🎁 Liquidação Surpresa</item>
+        <item>🏄 Passeio Arriscado</item>
+        <item>🧲 Perda Magnética</item>
+        <item>🏋️ Bolsa Pesada</item>
+        <item>🎈 Retornos Inflados</item>
+        <item>🧪 Fundo Experimental</item>
+        <item>🌸 Posição Frágil</item>
+        <item>🧋 Token Borbulhante</item>
+        <item>🏆 Troféu de Participação</item>
+        <item>🌝 Fundo Lua Cheia</item>
+        <item>🐸 Pepe Raro</item>
+        <item>🧟 Token Zumbi</item>
+        <item>🦄 Ganhos Míticos</item>
+        <item>🥊 Chance de Luta</item>
+        <item>🌟 Ignorância Feliz</item>
+        <item>🦆 Pato de Borracha</item>
+        <item>🎋 Protocolo Bambu</item>
+        <item>🏴‍☠️ Tesouro Pirata</item>
+        <item>🪄 Liquidez Mágica</item>
+        <item>🏊 Cofre Submerso</item>
+        <item>🎊 Liquidação Sortuda</item>
+        <item>🦋 Efeito Borboleta</item>
+        <item>🎸 Cofre Desligado</item>
+        <item>💥 Retornos Explosivos</item>
+        <item>🧠 Cérebro Liso</item>
+        <item>🪦 Pool Morto</item>
+        <item>🎡 Economia Circular</item>
+        <item>🧘 Liquidação Zen</item>
+        <item>📌 Fundo Perdido</item>
+        <item>🏴 Floresta Escura</item>
+        <item>😎 Perdedor Confiante</item>
+        <item>🌪️ Rendimento Caótico</item>
+        <item>🧬 Protocolo Mutante</item>
+        <item>🍕 Carteira Faminta</item>
+        <item>🎭 Lua Emprestada</item>
+    </string-array>
+
+    <string name="Balance_Receive_BackupRequired_Description">Você precisa fazer backup de %1$s</string>
+    <!--Network Settings-->
+    <!-- Show Key -->
+    <string name="ShowKey_Passphrase">Senha</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">Como medida de segurança, recomendamos que não use a ação de copiar na frase de recuperação.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Eu vou arriscar</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Não Copiar</string>
+    <!-- Backup Recovery Phrase -->
+    <string name="BackupRecoveryPhrase_ManualBackup">Backup Manual</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Backup Local</string>
+    <string name="BackupRecoveryPhrase_Later">Depois</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Conclua uma das opções de backup da carteira para começar a usar a carteira.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">É recomendável ter um backup manual para cada carteira.</string>
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Backup Local</string>
+    <string name="LocalBackup_SaveAndBackup">Salvar e fazer Backup</string>
+    <string name="LocalBackup_SetPassword">Definir Senha</string>
+    <string name="LocalBackup_BackupSaved">Backup Salvo</string>
+    <string name="LocalBackup_PasswordInvalid">Pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um símbolo.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Esta senha é usada para criptografar o arquivo de backup da sua carteira. Ela não pode ser recuperada ou redefinida se for perdida ou esquecida.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Defina a senha de desbloqueio para o seu backup. Deve consistir de pelo menos 8 símbolos e incluir pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial.</string>
+    <string name="LocalBackup_TermsWarningText">Dispositivos de armazenamento, ou seja, discos rígidos, discos USB, armazenamento em smartphone, etc. são todos vulneráveis a perdas devido a danos físicos, roubo ou outras circunstâncias imprevistas.</string>
+    <string name="LocalBackup_Term1">Eu entendo que o roubo ou dano de um dispositivo de backup resultará na perda de um backup de uma respectiva carteira.</string>
+    <!-- Recovery Phrase -->
+    <string name="RecoveryPhrase_Title">Frase de Recuperação</string>
+    <string name="RecoveryPhrase_Description">Escreva estas palavras em ordem e as mantenha seguras.</string>
+    <string name="RecoveryPhrase_ShowPhrase">Toque para mostrar a frase de recuperação</string>
+    <string name="RecoveryPhrase_Verify">Verificar</string>
+    <string name="RecoveryPhrase_CopyWarning_Title">Risco de Copiar</string>
+    <!-- Evm Private Key -->
+    <string name="EvmPrivateKey_Title">Chave Privada EVM</string>
+    <string name="TronPrivateKey_Title">Chave Privada TRON</string>
+    <string name="EvmPrivateKey_ShowPrivateKey">Toque para mostrar a chave privada</string>
+    <!-- Stellar Secret Key -->
+    <string name="StellarSecretKey_Title">Chave Secreta Estelar</string>
+    <string name="StellarSecretKey_ShowSecretKey">Toque para mostrar a chave secreta</string>
+    <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">Chave Raiz BIP32</string>
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
+    <string name="ExtendedKey_AccountInfo">Para fazer</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Chave Privada</string>
+    <string name="PrivateKeys_EvmPrivateKey">Chave Privada EVM</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Concede controle total sobre ativos em redes baseadas em EVM (por exemplo, Ethereum, BNB Smart Chain, Polygon, Avalanche) dentro desta carteira.</string>
+    <string name="PrivateKeys_TronPrivateKey">Chave Privada TRON</string>
+    <string name="PrivateKeys_TronPrivateKeyDescription">Concede controle total sobre ativos na rede TRON dentro desta carteira.</string>
+    <string name="PrivateKeys_StellarSecretKey">Chave Secreta Estelar</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Concede controle total sobre ativos na rede Stellar dentro desta carteira.</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">A chave mestra privada da carteira. Concede controle total sobre todas as contas derivadas e ativos.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Concede controle total sobre Bitcoin e outros ativos UTX (por exemplo, Litecoin, Bitcoin Cash, Dash) dentro desta carteira.</string>
+    <string name="PrivateKeys_NeverShareWarning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
+    <string name="PrivateKeys_MoneroPrivateKey">Monero Chaves Privadas</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">Concede controle total sobre os ativos Monero (XMR) nesta carteira, incluindo a capacidade de gastar fundos.</string>
+    <string name="MoneroKeyType">tipo</string>
+    <string name="MoneroKeyType_Spend">Gastar</string>
+    <string name="MoneroKeyType_View">Visualizar</string>
+    <string name="MoneroKeyType_Private">Monero Chaves Privadas</string>
+    <string name="MoneroKeyType_Public">Chaves públicas Monero</string>
+    <!-- Public Keys -->
+    <string name="PublicKeys_Title">Chaves públicas</string>
+    <string name="PublicKeys_EvmAddress">Endereço EVM</string>
+    <string name="PublicKeys_TronAddress">Endereço TRON</string>
+    <string name="PublicKeys_EvmAddress_Description">Permite o monitoramento somente leitura de carteiras mantendo ativos na Ethereum, na Binance Smart Chain e em outras blockchains baseadas em EVM.</string>
+    <string name="PublicKeys_TronAddress_Description">Permite o monitoramento somente leitura dos ativos da carteira mantendo na blockchain TRON.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Permite monitoramento somente leitura das carteiras segurando Bitcoin e outras cripto baseadas em UTXO (ou seja, Litecoin, Bitcoin Cash, Dash etc.).</string>
+    <string name="PublicKeys_MoneroPublicKey">Chaves públicas Monero</string>
+    <string name="PublicKeys_MoneroPublicKeyDescription">Permite monitoramento somente leitura de carteiras com Monero (XMR) ativos sem conceder acesso aos gastos.</string>
+    <!-- Recovery Phrase Verify -->
+    <string name="RecoveryPhraseVerify_Title">Verificar</string>
+    <string name="RecoveryPhraseVerify_Description">Selecione duas palavras solicitadas da sua frase de recuperação de carteira</string>
+    <!-- Backup Key -->
+    <string name="BackupConfirmKey_Error_InvalidWord">Palavra inválida</string>
+    <!--Manage Keys Delete Alert-->
+    <string name="ManageKeys_Delete_Title">Excluir Carteira</string>
+    <string name="ManageKeys_Delete_FromPhone">Excluir do telefone</string>
+    <string name="ManageKeys_StopWatching">Parar de Acompanhar</string>
+    <!-- Manage Keys Alert -->
+    <!-- Add Token Dialog-->
+    <!-- Enable Token -->
+    <!-- Add Token -->
+    <string name="AddToken_Title">Adicionar token</string>
+    <string name="AddToken_CoinName">Nome da Moeda</string>
+    <string name="AddToken_CoinCode">Código da Moeda</string>
+    <string name="AddToken_Decimals">Decimais</string>
+    <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
+    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
+    <string name="AddToken_InvalidContractAddress">Endereço do contrato inválido</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Endereço do contrato não encontrado em %s blockchain</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Description">Selecione o formato de endereço para receber pagamentos. Um formato correto deve ser escolhido quando restaurar uma carteira existente.</string>
+    <string name="AddressFormatSettings_Subtitle">Selecione o formato de endereço para a moeda.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Nativo</string>
+    <!-- Blockchain Settings -->
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Comum antes de 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Comum depois de 2018</string>
+    <!-- Nym VPN -->
+    <!-- Tor -->
+    <string name="Tor_Connection_Enable">Ativar Tor</string>
+    <string name="Tor_Connection_Disable">Desativar Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
+    <string name="TorPage_Connecting">Conectando Tor…</string>
+    <string name="TorPage_Failed">Falha ao conectar Tor</string>
+    <string name="Tor_TorIsActive">Tor está ativo</string>
+    <!--Coin Page-->
+    <string name="Coin_Chart">Gráfico</string>
+    <string name="Coin_Info">Inf. sobre moeda</string>
+    <string name="Coin_Tab_Overview">Preço</string>
+    <string name="Coin_Tab_Market">Mercados</string>
+    <string name="Coin_Tab_Details">Análises</string>
+    <string name="CoinPage_TimeDuration_Day">1D</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Month">1MB</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
+    <string name="CoinPage_TimeDuration_Month3">3MB</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6MB</string>
+    <string name="CoinPage_TimeDuration_Year">1A</string>
+    <string name="CoinPage_TimeDuration_Year2">2A</string>
+    <string name="CoinPage_TimeDuration_Year5">5A</string>
+    <string name="CoinPage_TimeDuration_All">Todas</string>
+    <string name="CoinPage_TradingVolume">Volume de Operações</string>
+    <string name="CoinPage_Audits_PoweredBy">Desenvolvido por Defiyield.app</string>
+    <string name="CoinPage_Audits_Issues">Problemas: %d</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filtros</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Desenvolvido por Bitcointreasuries.net</string>
+    <string name="CoinPage_Reports">Relatórios</string>
+    <string name="CoinPage_FundsInvested">Fundos Investidos</string>
+    <string name="CoinPage_Overview">Visão Geral</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_CoinTypes">Tipos de moeda</string>
+    <string name="CoinPage_Links">Links</string>
+    <string name="CoinPage_Guide">Guia</string>
+    <string name="CoinPage_Website">Site</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="CoinPage_MarketCap">Capitalização de mercado</string>
+    <string name="CoinPage_DilutedMarketCap">Cap. De Mercado diluído</string>
+    <string name="CoinPage_inCirculation">Em Circulação</string>
+    <string name="CoinPage_TotalSupply">Fornecimento total</string>
+    <string name="CoinPage_MarketCap_Thousand">KB</string>
+    <string name="CoinPage_MarketCap_Million">MM</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_MarketCap_Quadrillion">PQ</string>
+    <string name="CoinPage_Volume">Volume</string>
+    <string name="CoinPage_NoData">Sem dados</string>
+    <string name="CoinPage_NoDataAvailable">Não há dados disponíveis</string>
+    <string name="CoinPage_AddToWallet">Adicionar à Carteira</string>
+    <string name="CoinPage_ROI_Title">Mudança Relativa vs %s</string>
+    <string name="CoinPage_ROI_Vs">vs</string>
+    <string name="CoinPage_ROI_SelectCoins">Selecionar Moedas</string>
+    <string name="CoinPage_InWallet">Na Carteira</string>
+    <string name="CoinPage_Favorite">Favorito</string>
+    <string name="CoinPage_Unfavorite">Desfavoritar</string>
+    <string name="CoinPage_Performance_Day1">dia</string>
+    <string name="CoinPage_Performance_Week1">1 Semana</string>
+    <string name="CoinPage_Performance_Week2">2 semanas</string>
+    <string name="CoinPage_Performance_Month1">1 Meses</string>
+    <string name="CoinPage_Performance_Month3">3 Meses</string>
+    <string name="CoinPage_Performance_Month6">6 Meses</string>
+    <string name="CoinPage_Performance_Year1">1 Ano</string>
+    <string name="CoinPage_Performance_Year2">2 Anos</string>
+    <string name="CoinPage_Performance_Year5">5 Anos</string>
+    <string name="CoinPage_ShowMore">Mostrar Mais</string>
+    <string name="CoinPage_ShowLess">Mostrar menos</string>
+    <string name="CoinPage_LaunchDate">Data de Início</string>
+    <string name="CoinPage_Tvl">Valor Total Bloqueado</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">nos Top 10 Holders</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Número total de Holders: %s</string>
+    <string name="CoinPage_CoinInvestments_Lead">Conduzir</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nNão encontrado</string>
+    <string name="CoinPage_Indicators">Indicadores</string>
+    <string name="CoinPage_MovingAverages">Média em Movimento</string>
+    <string name="CoinPage_OscillatorsSettings">Osciladores</string>
+    <string name="CoinPage_EmaSettingsDescription">O EMA, SMA e WMA são médias móveis usadas em análise técnica:\n\nEMA enfatiza preços recentes para reações mais rápidas.\nSMA indica dados de preços médios para uma visão geral de tendência.\nSaldos WMA e redução de ruído por ponderação linearmente de dados recentes.</string>
+    <string name="CoinPage_RsiSettingsDescription">O Índice de Força Relativa (RSI) é um oscilador de momentum que mede a velocidade e a mudança de preços, identificando supercomprados (acima de 70) ou supervendidos (abaixo de 30) condições de mercado. Ele também pode detectar reversões de preço através de divergências.</string>
+    <string name="CoinPage_MacdSettingsDescription">A Divergência de Convergência Média em Movimento (MACD) é um indicador de momento que acompanha a relação entre dois EMAs de um preço de segurança. Sinais de compra ou venda de oportunidades quando a linha MACD (EMA de 12 períodos menos 26-period EMA) cruza o EMA de 9 períodos, conhecido como a linha de sinal.</string>
+    <string name="CoinPage_Type">tipo</string>
+    <string name="CoinPage_Period">Período</string>
+    <string name="CoinPage_RsiLength">Comprimento RSI</string>
+    <string name="CoinPage_FastLength">Comprimento Rápido</string>
+    <string name="CoinPage_SlowLength">Comprimento Lento</string>
+    <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
+    <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
+    <string name="CoinPage_AiGeneratedText">Esta é uma descrição gerada por IA com base no material de referência fornecido para a criptomoeda em questão. Pode conter erros.</string>
+    <string name="CoinPage_MarketsLabel_Verified">VERIFICADO</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Confirmado</string>
+    <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">Tipo de troca</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Todas</string>
+    <string name="ROI_SelectCoin_Title">Selecionar Moeda</string>
+    <string name="ROI_SelectCoin_SelectAssets">Selecionar Ativos</string>
+    <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">Somente moedas %s podem ser selecionadas</string>
+    <string name="ROI_Period_N">Período %s</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
+    <string name="CoinAnalytics_CexVolume_Info2">Gráfico mostrando a variação no volume diário de negociação do token nas principais corretoras centralizadas durante um período de 1 ano.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Classificação do Token baseada no volume de trading nas principais corretoras centralizadas durante um período de 30 dias.</string>
+    <string name="CoinAnalytics_CexVolume_Info4">Lista de todos os tokens com base no volume de trading em corretoras centralizadas ao longo de 24H / 7D / 1M.</string>
+    <string name="CoinAnalytics_DexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
+    <string name="CoinAnalytics_DexVolume_Info2">Gráfico mostrando a variação no volume diário de negociação do token nas principais corretoras centralizadas durante um período de 1 ano.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">A classificação do token é baseada no volume de negociação nas principais bolsas descentralizadas ao longo de um período de 30 dias.</string>
+    <string name="CoinAnalytics_DexVolume_Info4">Lista de todos os tokens com base no volume de trading em corretoras descentralizadas ao longo de 24H / 7D / 1M.</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes">DEXes que estão sendo rastreados:</string>
+    <string name="CoinAnalytics_DexLiquidity_Info1">Quantidade total de liquidez disponível para o token em corretoras descentralizadas.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info2">Gráfico mostrando a variação na liquidez disponível para o token nas principais corretoras descentralizadas durante o período de 1 ano.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info3">Lista de todos os tokens com base na liquidez disponível para o token nas principais exchanges descentralizadas.</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">DEXes que estão sendo rastreados:</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">Número total de endereços ativos diários únicos em um período de 24 horas.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Gráfico mostrando a variação na contagem diária de endereços ativos durante o período de 1 ano.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">Número total de endereços de blockchain únicos que realizam transações com token em um período de 30 dias.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Classificação do token com base no número de carteiras ativas que realizam transações com o período de 30 dias do token.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">Lista de todos os tokens classificados com base no número de endereços ativos diários que realizam transações com o token em intervalos de 24h / 7D / 1M.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">Número total de transações únicas de blockchain com token ao longo de um período de 30 dias.</string>
+    <string name="CoinAnalytics_TransactionCount_Info2">Gráfico mostrando a variação na contagem de transações no período de 1 ano.</string>
+    <string name="CoinAnalytics_TransactionCount_Info3">Ranking do token com base no número de transações com o período de 30 dias do token.</string>
+    <string name="CoinAnalytics_TransactionCount_Info4">Lista de todos os tokens classificados com base no número de transações com o token em intervalos de 24h / 7D / 1M.</string>
+    <string name="CoinAnalytics_TransactionCount_Info5">O número total de tokens transferidos sobre a blockchain ao longo do período de 30 dias.</string>
+    <string name="CoinAnalytics_Holders_Info1">Número total de endereços únicos que contêm o token em várias blockchains.</string>
+    <string name="CoinAnalytics_Holders_Info2">As 10 principais carteiras que possuem o token em cada blockchain.</string>
+    <string name="CoinAnalytics_Holders_TrackedBlockchains">Blockchains rastreadas: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
+    <string name="CoinAnalytics_ProjectTVL_Info1">Valor Total Bloqueado (ou ativos sob gestão) nos contratos inteligentes do projeto.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info2">Gráfico mostrando a variação de Valor Total Bloqueado nos contratos inteligentes do projeto durante o período de 1 ano.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Classificação do token com base no Valor Total Bloqueado atual.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">Lista de todos os tokens classificados com base no Valor Total Bloqueado atual.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info5">Valor de Mercado / proporção VTB para o projeto.</string>
+    <string name="CoinAnalytics_ProjectNoAnalyticData">Este projeto não tem dados analíticos</string>
+    <string name="CoinAnalytics_CexVolume">Volume CEX</string>
+    <string name="CoinAnalytics_CexVolumeRank">Ranking do Volume CEX</string>
+    <string name="CoinAnalytics_CexVolumeRank_Description">Tokens classificados por volume de negociação para o token em corretoras centralizadas.</string>
+    <string name="CoinAnalytics_DexVolume">Volume DEX</string>
+    <string name="CoinAnalytics_DexVolumeRank">Ranking do Volume DEX</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Tokens classificados por volume de negociação para o token em corretoras descentralizadas.</string>
+    <string name="CoinAnalytics_DexLiquidity">Liquidez DEX</string>
+    <string name="CoinAnalytics_DexLiquidityRank">Ranking de Liquidez DEX</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Tokens classificados por liquidez disponível em corretoras descentralizadas.</string>
+    <string name="CoinAnalytics_ActiveAddresses">Endereços ativos diários</string>
+    <string name="CoinAnalytics_ActiveAddressesRank">Ranking de Endereços Ativos</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens classificados pelo número de endereços exclusivos que realizam transações com o token.</string>
+    <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
+    <string name="CoinAnalytics_TransactionCountRank">Ranking de Contador Tx</string>
+    <string name="CoinAnalytics_Holders">Detentores</string>
+    <string name="CoinAnalytics_ProjectTvl">Projeto VTB</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto VTB (Valor Total Bloqueado)</string>
+    <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / VTB</string>
+    <string name="CoinAnalytics_ProjectRevenue">Receita do Projeto</string>
+    <string name="CoinAnalytics_ProjectFee">Taxa do Projeto</string>
+    <string name="CoinAnalytics_ProjectRevenueRank">Ranking da Receita do Projeto</string>
+    <string name="CoinAnalytics_ProjectFeeRank">Classificação da Taxa do Projeto</string>
+    <string name="CoinAnalytics_HoldersRank">Classificação dos Holders</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokens classificados por receitas geradas para os holders através de mecanismos, ou seja, burns por staking ou token.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokens ranqueados de acordo com as taxas geradas pelos respectivos projetos. A forma como as taxas são coletadas varia do projeto para o projeto.</string>
+    <string name="CoinAnalytics_HoldersRank_Description">Raking de tokens por endereços únicos guardando-os em várias blockchains.</string>
+    <string name="CoinAnalytics_OtherData">Outros dados</string>
+    <string name="CoinAnalytics_Reports">Relatórios</string>
+    <string name="CoinAnalytics_Funding">Financiamento</string>
+    <string name="Coin_Analytics_Audits">Auditorias</string>
+    <string name="Coin_Analytics_Last30d">últimos 30d</string>
+    <string name="Coin_Analytics_Current">atual</string>
+    <string name="Coin_Analytics_Rank">Classificação</string>
+    <string name="Coin_Analytics_30DayRank">Classificação 30-Dias</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30 Dias Endereços Únicos</string>
+    <string name="Coin_Analytics_30DayVolume">Volume 30 Dias</string>
+    <string name="Coin_Analytics_OverallScore">Pontuação geral</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Excelente</string>
+    <string name="Coin_Analytics_OverallScore_Good">Boa</string>
+    <string name="Coin_Analytics_OverallScore_Fair">Justa</string>
+    <string name="Coin_Analytics_OverallScore_Poor">Pobre</string>
+    <string name="Coin_Analytics_OverallScore_CexVolume">A pontuação geral é baseada no volume médio de trading diário em trocas centralizadas nos últimos 7 dias.</string>
+    <string name="Coin_Analytics_OverallScore_DexVolume">A pontuação geral é baseada no volume médio diário de trading em trocas descentralizadas nos últimos 7 dias.</string>
+    <string name="Coin_Analytics_OverallScore_DexLiquidity">A pontuação geral é baseada na liquidez total disponível em trocas descentralizadas.</string>
+    <string name="Coin_Analytics_OverallScore_ActiveAddresses">A pontuação geral é baseada na média diária ativa dos últimos 7 dias.</string>
+    <string name="Coin_Analytics_OverallScore_ProjectTvl">A pontuação geral é baseada no valor total bloqueado (ativos sob gestão) no projeto representado pelo token fornecido.</string>
+    <string name="Coin_Analytics_OverallScore_TransactionCount">A pontuação geral é baseada na contagem média de transações diárias nos últimos 7 dias.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">A pontuação geral é baseada no número total de endereços mantendo o respectivo token.</string>
+    <string name="Coin_Analytics_Period_30m">30 Minutos</string>
+    <string name="Coin_Analytics_Period_1h">1 hora</string>
+    <string name="Coin_Analytics_Period_4h">4 horas</string>
+    <string name="Coin_Analytics_Period_8h">8 horas</string>
+    <string name="Coin_Analytics_Period_1d">1 dia</string>
+    <string name="Coin_Analytics_Period_1w">1 semana</string>
+    <string name="Coin_Analytics_Period_1m">1 mês</string>
+    <string name="Coin_Analytics_Indicators_StrongBuy">Compra forte</string>
+    <string name="Coin_Analytics_Indicators_StrongSell">Venda forte</string>
+    <string name="Coin_Analytics_Indicators_Sell">Irá vender</string>
+    <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
+    <string name="Coin_Analytics_Indicators_Neutral">Neutra</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Análise de Contrato Inteligente</string>
+    <string name="CoinAnalytics_HighRiskItems">Itens de Alto Risco</string>
+    <string name="CoinAnalytics_MediumRiskItems">Itens de Risco Médio</string>
+    <string name="Coin_Analytics_Indicators_Risky">Arriscado</string>
+    <string name="CoinAnalytics_AttentionRequired">Atenção Requerida</string>
+    <string name="CoinAnalytics_PoweredByDeFi">Desenvolvido por De.Fi</string>
+    <string name="CoinAnalytics_CountItems">%d Itens</string>
+    <string name="TechnicalAdvice_Title">Indicadores Técnicos</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Sempre lembre-se de aplicar o gerenciamento de risco, e observe que isso não é um conselho financeiro.</string>
+    <string name="TechnicalAdvice_OverBought">sobrecomprado</string>
+    <string name="TechnicalAdvice_OverSold">sobrevendido</string>
+    <string name="TechnicalAdvice_Down">baixo</string>
+    <string name="TechnicalAdvice_Up">alto</string>
+    <string name="TechnicalAdvice_OverMain">As ações com o ativo são arriscadas.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">Começando a partir do %s</string>
+    <string name="TechnicalAdvice_OverIndicators">O ativo está fora do canal das Bandas de Bollinger e %s.</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s. Isso também indica que o ativo está %2$s.</string>
+    <string name="TechnicalAdvice_OverAdvice"> Pode haver um forte movimento %s, então é melhor esperar que o preço do ativo retorne ao canal.</string>
+    <string name="TechnicalAdvice_StrongIndicators">o ativo estava %s, mas agora retornou ao canal das Bandas de Bollinger. Isso indica uma possível reversão de tendência.</string>
+    <string name="TechnicalAdvice_StrongRsi">Enquanto isso, o RSI está %1$s, o que ainda indica que está %2$s.</string>
+    <string name="TechnicalAdvice_StrongAdvice">Este pode ser um sinal muito forte para entrar no mercado. Tenha em mente que pode haver várias tentativas de movimento em direção a %s após o retorno ao canal, então não se esqueça do gerenciamento de risco.</string>
+    <string name="TechnicalAdvice_StableRsi">Enquanto isso, o RSI está %s, o que também indica uma reversão de tendência (o RSI cruzou o limite em 70\%%).</string>
+    <string name="TechnicalAdvice_NeutralIndicators">O ativo estava na zona de sobrecompra/sobrevenda, mas no momento o preço retornou ao canal das Bandas de Bollinger na zona neutra. O RSI está em %s, o que também confirma a ausência de uma tendência forte, então, no geral, o preço do ativo está se movendo em direção à média e movimentos adicionais são possíveis em qualquer direção.</string>
+    <string name="TechnicalAdvice_NeutralAdvice">Em geral, o preço do ativo está se movendo em direção à média e movimentos adicionais são possíveis em qualquer direção.</string>
+    <string name="TechnicalAdvice_OtherTitle">Por favor, observe:</string>
+    <string name="TechnicalAdvice_EmaAbove">acima</string>
+    <string name="TechnicalAdvice_EmaBelow">abaixo</string>
+    <string name="TechnicalAdvice_EmaGrowth">crescimento</string>
+    <string name="TechnicalAdvice_EmaDecrease">decrescente</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200. Determina o sentimento geral e a tendência. O preço diário do ativo está localizado %1$s o EMA (%2$s). Isso significa que globalmente o ativo está configurado para %3$s.</string>
+    <string name="TechnicalAdvice_MacdPositive">acima</string>
+    <string name="TechnicalAdvice_MacdNegative">abaixo</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD. Avalia a força da tendência considerando a mudança média de preço. O valor diário do histograma é %1$s (%2$s). O preço do ativo globalmente pode se mover %3$s.</string>
+    <string name="TechnicalAdvice_InfoTitle">Indicadores Técnicos</string>
+    <string name="TechnicalAdvice_InfoDescription">Nós utilizamos a estratégia Bollinger Bands + RSI para determinar sinais de negociação. Todas as análises são baseadas em candlesticks diários e fornecem orientação para um prazo moderadamente longo. A essência da estratégia é que o preço do ativo deve atingir um extremo, saindo do canal das Bandas de Bollinger, e o RSI deve estar na zona de sobrecompra/sobrevenda. Após o preço retornar ao canal, há uma alta probabilidade de o preço retornar aos valores médios ou tentar romper o canal pelo outro lado. Note que a estratégia pode fornecer vários sinais falsos durante movimentos fortes do mercado antes de um sinal correto aparecer.\n\nPor favor, lembre-se de que é muito importante aplicar gerenciamento de risco à negociação e lembrar-se de cortar as perdas se a situação de mercado mudar!</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Compra forte</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Comprar</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Neutra</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Irá vender</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Venda forte</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Arriscado</string>
+    <string name="TechnicalAdvice_Details">Detalhes</string>
+    <string name="Detectors_TokenDetectors">Detectores de Token</string>
+    <string name="Detectors_GeneralDetectors">Detectores Gerais</string>
+    <string name="Detectors_IssuesCount">Problemas %d</string>
+    <!-- NFT Collection -->
+    <!-- NFT Collection Events -->
+    <!--Rate list-->
+    <string name="RateList_TopGainers">Ganhadores</string>
+    <string name="RateList_TopLosers">Perdedores</string>
+    <string name="Market_DaysAgo">%dd atrás</string>
+    <string name="Market_HoursAgo">%dh atrás</string>
+    <string name="Market_MinutesAgo">%dh atrás</string>
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_Title">Erro de Sincronização</string>
+    <string name="BalanceSyncError_ButtonRetry">Tentar de novo</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Mudar a fonte</string>
+    <string name="BalanceSyncError_Text">Erro de sincronização</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Falha ao obter dados da fonte atual. Você pode tentar novamente ou alternar para uma fonte de sincronização diferente.</string>
+    <string name="BalanceSyncError_ErrorText">Falha ao buscar dados da fonte atual. Tente novamente mais tarde.</string>
+    <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
+    <string name="ProUsersInfo_UnstoppablePass">Senha Unstoppable</string>
+    <string name="ProUsersInfo_Description">Para ativar estes dados, você deve obter o nível bronze de UW NFT \"Coin Info+\"\n\nTambém você terá acesso aos dados abaixo:</string>
+    <string name="ProUsersInfo_Features_DexVolume">Volume e Rank DEX</string>
+    <string name="ProUsersInfo_Features_DesLiquidity">Liquidez e Rank DEX</string>
+    <string name="ProUsersInfo_Features_ActiveAddresses">Endereços ativos</string>
+    <string name="ProUsersInfo_Features_TxCount">Contagem de transações</string>
+    <string name="ProUsersInfo_Features_TxVolume">Contagem de transações</string>
+    <string name="Hud_Text_LearnMore">Coming So Soon</string>
+    <string name="Hud_Text_Activate">Ativar</string>
+    <string name="ProUsersActivate_Title">Ativar passe</string>
+    <string name="ProUsersActivate_Description">Mountain Yak - Fique sem fronteiras. Mostrará a você dados de mercado importantes, ferramentas analíticas, gráficos úteis com base em dados on-chain que ajudarão você a visualizar os projetos</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Escolha o tipo</string>
+    <string name="Widget_EnableAutostartWarning">Para garantir que este widget funcione corretamente, você deve habilitar o início automático.</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">Erro de Keystore do Android</string>
+    <string name="Alert_KeysInvalidatedDescription">Os dados criptografados que continham sua carteira foram invalidados recentemente porque a tela de bloqueio do iOS foi alterada</string>
+    <string name="Alert_TitleWarning">Aviso</string>
+    <string name="Alert_CustomKeyboardIsUsed">Parece que o seu dispositivo usa um teclado que não é padrão. A Unstoppable recomenda a seleção de teclado padrão no seu dispositivo, já que teclados de terceiros podem potencialmente coletar e expor os dados de entrada dos usuários. \n\nClique no botão \'Avançar\' se você quiser continuar usando seu teclado preferido.</string>
+    <string name="Alert_DeviceIsRootedWarning">A equipe Unstoppable recomenda a execução do aplicativo apenas em telefones sem root (sem jailbreak).\n\nObserve que quando você usa um dispositivo com root, o aplicativo não pode mais garantir a segurança de sua criptomoeda contra software malicioso.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">PIN do telefone</string>
+    <string name="OSPin_Confirm_Desciption">Este aplicativo requer que o telefone tenha a senha (bloqueio de tela) ativada.\n\nVocê pode ativá-lo nas configurações do Android.\n\nObserve que quando você desativa o PIN no nível do sistema operacional, as medidas de segurança no armazenamento seguro do seu telefone tornou os dados armazenados anteriormente inválidos. Você precisará Restaurar as chaves da carteira para voltar à sua carteira.</string>
+    <string name="OSPin_Prompt_Desciption">Este aplicativo requer o PIN do seu telefone para manter os dados confidenciais de sua carteira no armazenamento seguro do Android e não no próprio aplicativo.</string>
+    <!--Unlock-->
+    <string name="Unlock_Title">Desbloquear</string>
+    <string name="Unlock_Passcode">Senha</string>
+    <string name="Unlock_EnterPasscode">Insira a senha</string>
+    <string name="Unlock_BiometricScanner">Leitura Biométrica</string>
+    <string name="Unlock_BiometricScannerDisabled_Description">Digite a senha ou tente novamente mais tarde</string>
+    <string name="Unlock_BiometricScannerDisabled_Info">Autenticação Biométrica desativada</string>
+    <string name="Unlock_WalletDisabledUntil">Desativar até: %s</string>
+    <string name="Unlock_AttemptsLeft">Tentativas restantes: %s</string>
+    <string name="Unlock_Random">Aleatório</string>
+    <!--Set Pin-->
+    <string name="PinSet_Title">Definir senha</string>
+    <string name="PinSet_Info">Sua senha será usada para desbloquear sua carteira</string>
+    <string name="PinSet_ConfirmInfo">Confirmar</string>
+    <string name="PinSet_ErrorPinsDontMatch">Senhas não conferem. Tente novamente.</string>
+    <string name="PinSet_ErrorFailedToSavePin">Ocorreu um erro ao enviar a mensagem. Tente novamente.</string>
+    <string name="PinSet_ForBiometrics">Definir uma senha para habilitar Biometria</string>
+    <string name="PinSet_ForDuress">Defina uma senha para ativar o modo de Coação</string>
+    <string name="PinSet_ErrorPinInUse">Esta senha já está sendo usada.</string>
+    <!--Edit Pin-->
+    <string name="EditPin_Title">Editar senha</string>
+    <string name="EditPin_NewPinInfo">Nova Senha</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Leitura Biométrica</string>
+    <!--Contacts-->
+    <string name="Contacts">Contatos</string>
+    <string name="Contacts_Backup">Backup de contatos</string>
+    <string name="Contacts_Restore">Restaurar contatos</string>
+    <string name="Contacts_Restore_Warning">Esta ação irá substituir completamente os seus contatos e excluir a sua lista de contatos. Deseja substituir a sua lista de contatos? </string>
+    <string name="Contacts_AddressesCount">Endereços: %s</string>
+    <string name="Contacts_NewContact">Novo Contato</string>
+    <string name="Contacts_AddNewContact">Adicionar um novo contato</string>
+    <string name="Contacts_NameHint">Nome</string>
+    <string name="Contacts_AddAddress">Adicionar endereço</string>
+    <string name="Contacts_AddAddress_NewContact">Criar Novo Contato</string>
+    <string name="Contacts_AddAddress_ExistingContact">Adicionar ao Contato Existente</string>
+    <string name="Contacts_AddAddress_Replace">Substituir</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">O contato selecionado já tem um endereço em %1$s. Esta ação substituirá o endereço %2$s por %3$s?</string>
+    <string name="Contacts_AddressHint">Endereço ou Domínio</string>
+    <string name="Contacts_DeleteContact">Excluir contato</string>
+    <string name="Contacts_DeleteContact_Warning">Você tem certeza que deseja excluir este contato?</string>
+    <string name="Contacts_DeleteAddress">Excluir Endereço</string>
+    <string name="Contacts_DeleteAddress_Warning">Você tem certeza que deseja excluir este endereço?</string>
+    <string name="Contacts_DiscardChanges">Descartar Alterações</string>
+    <string name="Contacts_KeepEditing">Continuar Editando</string>
+    <string name="Contacts_DiscardChanges_Warning">Tem certeza de que deseja descartar as novas alterações?</string>
+    <string name="Contacts_NoContacts">Nenhum contato adicionado ainda</string>
+    <string name="Contacts_ActionMore">Mais</string>
+    <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
+    <string name="Contacts_Error_DefinedName">O nome já existe</string>
+    <string name="Hud_Text_Connected">Conectado</string>
+    <string name="BirthdayDatePicker_Title">Selecione Data</string>
+    <string name="BirthdayDatePicker_Description">Escolha uma data de criação de carteira aproximada. \nA altura do bloco será calculada automaticamente.</string>
+    <string name="BackupManager_RestoreBackupDescription">Restaure sua carteira e dados do aplicativo de um arquivo de backup.</string>
+    <string name="BackupManager_CreateBackupDescription">Crie um arquivo de backup de suas carteiras e dados do aplicativo.</string>
+    <string name="BackupManager_SelectItemsDescription">Escolha o que incluir no seu backup. Você pode fazer backup de todos ou de itens selecionados.</string>
+    <string name="BackupManager_RestoreItemsDescription">Escolha o que restaurar. Você pode restaurar tudo ou apenas itens selecionados.</string>
+    <string name="BackupManager_CountSavedAddresses">%d endereços salvos</string>
+    <string name="BackupManager_CountAssets">%d ativos</string>
+    <string name="BackupManager_CountNetworks">%d redes</string>
+    <string name="BackupManager_CountWallets">%d carteiras</string>
+    <string name="AddZanoNode_AddNode">Adicionar nó</string>
+    <string name="AddZanoNode_NodeUrl">URL do nó</string>
+    <string name="ZanoNodeSettings_Description">Escolha o nó que o aplicativo Unstoppable deve usar para sincronizar a(s) carteira(s).</string>
+    <string name="LocalBackup_ProtectBackup">Proteger backup</string>
+    <string name="LocalBackup_ProtectBackupDescription">Crie uma senha para proteger seu arquivo de backup.</string>
+    <string name="LocalBackup_BackupName">Nome do backup</string>
+    <string name="LocalBackup_AddPassword">Adicionar senha</string>
+    <string name="LocalBackup_ConfirmPassword">Confirmar senha</string>
+    <string name="AddZanoNode_Warning_UrlExists">Já existe um nó com esta URL</string>
+    <string name="AddZanoNode_Error_InvalidUrl">A URL inserida é inválida. URLs válidas devem ter um dos seguintes esquemas: http, https</string>
+    <string name="Balance_Zcash_ShieldedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
+    <string name="RiskLevel_Excellent_Description">Execução direta on-chain. Sem verificações de rota ou congelamentos. Reembolsos automáticos se o swap falhar.</string>
+    <string name="RiskLevel_Good_Description">A rota verifica automaticamente as transações antes da conclusão. Se problemas forem detectados, o swap será rejeitado e os fundos serão reembolsados.</string>
+    <string name="RiskLevel_Fair_Description">Verificação adicional pode ser necessária para algumas transações. Se problemas forem detectados, os fundos serão reembolsados automaticamente.</string>
+    <string name="SwapInfo_RequestRefund">Solicitar reembolso</string>
+    <string name="SwapInfo_RequestRefundDescription">O provedor precisa dos detalhes do seu swap para processar um reembolso. Eles serão incluídos quando você entrar em contato com o provedor.</string>
+    <string name="SwapInfo_SwapId">ID do Swap</string>
+    <string name="SwapInfo_Amount">Quantidade</string>
+    <string name="SwapInfo_RefundAddress">Endereço de reembolso</string>
+    <string name="SwapInfo_CopyDetails">Copiar detalhes</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Swap interrompido pelo provedor</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Seu depósito foi recebido, mas o provedor não conseguiu concluir o swap. Solicite um reembolso abaixo para recuperar seus fundos.</string>
+    <string name="BackupRequired_Title">Faça backup da sua carteira</string>
+    <string name="BackupRequired_Description">Sem um backup, perder seu telefone significa perder seus fundos permanentemente. Não há forma de recuperá-los.</string>
+    <string name="BackupRequired_ManualBackupDescription">Anote sua frase de recuperação</string>
+    <string name="BackupRequired_LocalBackupDescription">Salve arquivo criptografado em seu dispositivo</string>
+    <string name="BackupRequired_RemindLater">Lembrar mais tarde</string>
+    <string name="OpenCryptoPay_Title">Pagamento</string>
+    <string name="OpenCryptoPay_Expired">Expirado</string>
+    <string name="OpenCryptoPay_Merchant">Comerciante</string>
+    <string name="OpenCryptoPay_Amount">Valor</string>
+    <string name="OpenCryptoPay_ChooseAsset">Escolher ativo</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Escolha o token que deseja usar para o pagamento</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">Nenhum método de pagamento suportado disponível para esta carteira</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Expira em</string>
+    <string name="OpenCryptoPay_PaymentId">ID de pagamento</string>
+    <string name="OpenCryptoPay_QuoteId">ID de cotação</string>
+    <string name="OpenCryptoPay_ProofStatus">Status da prova</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Enviado</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Pendente</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Reconciliação necessária</string>
+    <string name="OpenCryptoPay_RetryNow">Tentar novamente agora</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">Nenhum pagamento ativo neste terminal</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Falha ao buscar detalhes de pagamento</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Falha ao carregar detalhes de pagamento</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Não foi possível enviar o pagamento ao comerciante. Por favor, tente novamente.</string>
+    <string name="Swap_SwapTime">Tempo de Swap</string>
+    <string name="Swap_PopularTokens">Tokens Populares</string>
+    <string name="Swap_YourTokens">Seus Tokens</string>
+    <string name="Swap_TopTokens">Tokens Principais</string>
+    <string name="Swap_RecentSearch">Pesquisa Recente</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">scores de rota</string>
+    <string name="ZcashEndpointSettings_Description">Escolha o servidor lightwallet que o aplicativo Unstoppable deve usar para sincronizar a(s) carteira(s) Zcash.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">Adicionar ponto de extremidade</string>
+    <string name="AddZcashEndpoint_EndpointUrl">URL do ponto de extremidade</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">Já existe um ponto de extremidade com esta URL</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">A URL inserida é inválida. Uma URL válida deve usar o esquema https</string>
+    <string name="Restore_BlockchainsDescription">Selecione os blockchains que deseja restaurar.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">Carteira Somente Leitura</string>
+    <string name="Button_UnderstandAndContinue">Eu entendo e desejo continuar</string>
+    <string name="CreateNewWallet_Passkey">Passkey</string>
+    <string name="CreateNewWallet_PasskeyTerms">Termos da Wallet com Passkey</string>
+    <string name="CreateNewWallet_Standard">Padrão</string>
+    <string name="CreateNewWallet_Standard_Description">Uma carteira com uma frase de recuperação que requer backup manual.</string>
+    <string name="CreateWallet_AddPassphrase">Adicionar Frase Secreta</string>
+    <string name="CreateWallet_AdvancedOptions">Opções Avançadas</string>
+    <string name="CreateWallet_PassphraseOptional">Frase secreta (opcional)</string>
+    <string name="CreateWallet_PassphraseShortDescription">Adiciona proteção extra à sua wallet. Necessária junto com a frase de recuperação para restaurar o acesso.</string>
+    <string name="ImportWallet_Button_Understood">Entendido</string>
+    <string name="ImportWallet_Passkey">Via Passkey</string>
+    <string name="ImportWallet_PrivateKey">da Chave Privada</string>
+    <string name="ImportWallet_PrivateKey_Description">Importar uma carteira usando uma chave privada.</string>
+    <string name="ManageAccount_WalletName">Nome da Carteira</string>
+    <string name="ManageAccounts_AddWallet">Adicionar carteira</string>
+    <string name="ManageAccounts_CreateNewWalletDescription">Crie uma nova carteira para começar ou adicione uma nova.</string>
+    <string name="ManageAccounts_ExistingWallet">Carteira existente</string>
+    <string name="ManageAccounts_ExistingWalletDescription">Importe sua carteira se já tiver uma para continuar usando.</string>
+    <string name="ManageAccounts_NoActiveWallets">Nenhuma Wallet Ativa</string>
+    <string name="ManageAccounts_ViewOnlyWalletDescription">Visualize uma carteira pelo endereço sem acesso aos fundos.</string>
+    <string name="PasskeyTerms_LimitedAccess">Acesso multiplataforma limitado</string>
+    <string name="PasskeyTerms_Responsibility">Responsabilidade</string>
+    <string name="Passphrase_Placeholder">Frase secreta (opcional)</string>
+    <string name="SettingsLaunchScreen_Auto">Automático</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Criar carteira padrão</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Este dispositivo não oferece suporte a carteiras com Passkey. Em vez disso, você pode criar uma carteira padrão.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Não foi possível criar o Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">Uma carteira com uma frase de recuperação salva com segurança pelo seu dispositivo.</string>
+    <string name="ImportWallet_Passkey_Description">Restaure sua carteira usando seu dispositivo.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">Este dispositivo não oferece suporte à restauração com Passkey. Use outro método de restauração.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">A restauração com Passkey não é compatível</string>
+    <string name="PasskeyTerms_DeviceDependency">Dependência do dispositivo</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">O acesso requer seu dispositivo. Perder o acesso pode resultar na perda de fundos.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">Pode não funcionar em todos os dispositivos ou plataformas.</string>
+    <string name="PasskeyTerms_Responsibility_Description">Você é responsável pelo acesso ao seu dispositivo. A Unstoppable não pode recuperar esta carteira se o acesso for perdido.</string>
+    <string name="CoinPage_Buy">Comprar</string>
+    <string name="CoinPage_Sell">Vender</string>
+    <string name="MoneroNodeSettings_AutoSelect">Seleção automática</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">Usar automaticamente o nó mais rápido</string>
+    <string name="MoneroNodeSettings_Unreachable">Inacessível</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">Este memorando será público na blockchain.</string>
+    <string name="Send_Memo_EncryptedInfo">Este memorando está criptografado e é visível apenas para você e o destinatário.</string>
+    <string name="Send_Memo_OffchainInfo">Armazenado apenas neste dispositivo — não na blockchain.</string>
 </resources>
