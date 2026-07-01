@@ -339,7 +339,7 @@ class AddressHandlerMonero : IAddressHandler {
             val viewKey = uriInfo.viewKey
             val height = uriInfo.height
 
-            MoneroWatchAddress(address, viewKey, height)
+            MoneroWatchAddress(address, viewKey!!, height)
         } else {
             Address(hex = value, blockchainType = blockchainType)
         }
