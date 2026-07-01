@@ -1,0 +1,426 @@
+package io.horizontalsystems.bankwallet.modules.moneronetwork
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.core.R
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
+import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_remus
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object MoneroNetworkPage : HSPage() {
+
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        MoneroNetworkScreen(
+            navigation = navigation,
+            onBackPress = { navigation.removeLastOrNull() },
+        )
+    }
+
+}
+
+@Serializable
+data object AddNodePage : HSPage() {
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        AddMoneroNodeScreen(
+            navigation = navigation
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MoneroNetworkScreen(
+    navigation: HSNavigation,
+    onBackPress: () -> Unit,
+) {
+    val viewModel = viewModel<MoneroNetworkViewModel>(factory = MoneroNetworkModule.Factory())
+    var revealedCardId by remember { mutableStateOf<String?>(null) }
+    val view = LocalView.current
+    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var selectedNode by remember { mutableStateOf<MoneroNode?>(null) }
+
+    fun showTrustedSettings(node: MoneroNode) {
+        selectedNode = node
+        showBottomSheet = true
+    }
+
+    HSScaffold(
+        title = viewModel.title,
+        onBack = onBackPress,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Refresh),
+                icon = R.drawable.ic_refresh,
+                onClick = { viewModel.refresh() }
+            )
+        ),
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+
+            val autoSelect = viewModel.uiState.autoSelectEnabled
+
+            item {
+                VSpacer(12.dp)
+                subhead2_grey(
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    text = stringResource(R.string.MoneroNodeSettings_Description)
+                )
+                VSpacer(24.dp)
+                AutoSelectCell(
+                    enabled = autoSelect,
+                    onCheckedChange = { viewModel.onToggleAutoSelect(it) }
+                )
+                VSpacer(24.dp)
+            }
+
+            item {
+                CellUniversalLawrenceSection(viewModel.uiState.defaultItems) { item ->
+                    MoneroNodeRow(item, enabled = !autoSelect) {
+                        showTrustedSettings(item.node)
+                    }
+                }
+            }
+
+            if (viewModel.uiState.customItems.isNotEmpty()) {
+                customNodeListSection(
+                    viewModel.uiState.customItems,
+                    revealedCardId,
+                    onClick = { node ->
+                        if (!autoSelect) showTrustedSettings(node)
+                    },
+                    onReveal = { id ->
+                        if (revealedCardId != id) {
+                            revealedCardId = id
+                        }
+                    },
+                    onConceal = {
+                        revealedCardId = null
+                    }
+                ) {
+                    viewModel.onRemoveCustomNode(it)
+                    HudHelper.showErrorMessage(view, R.string.Hud_Removed)
+
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(32.dp))
+                AddButton {
+                    navigation.add(AddNodePage)
+                }
+                Spacer(Modifier.height(60.dp))
+            }
+        }
+
+        if (showBottomSheet) {
+            selectedNode?.let { node ->
+                BottomSheetContent(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    }, sheetState = sheetState
+                ) {
+                    MoneroNodeTrustBottomSheet(node = node, onDone = { checked ->
+                        viewModel.onSelectNode(node.copy(trusted = checked))
+                        coroutineScope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
+                        }
+                    }, onCloseClick = {
+                        viewModel.onSelectNode(node)
+                        coroutineScope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
+                        }
+                    })
+                }
+            }
+        }
+
+    }
+}
+
+private fun LazyListScope.customNodeListSection(
+    items: List<MoneroNetworkViewModel.ViewItem>,
+    revealedCardId: String?,
+    onClick: (MoneroNode) -> Unit,
+    onReveal: (String) -> Unit,
+    onConceal: () -> Unit,
+    onDelete: (MoneroNode) -> Unit
+) {
+    item {
+        Spacer(Modifier.height(32.dp))
+        HeaderText(
+            stringResource(R.string.EvmNetwork_Added),
+        )
+    }
+    itemsIndexed(items, key = { _, item -> item.id }) { index, item ->
+        val showDivider = showDivider(items.size, index)
+        val shape = getShape(items.size, index)
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            ActionsRow(
+                content = {
+                    HsIconButton(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(88.dp),
+                        onClick = { onDelete(item.node) },
+                        content = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                                tint = ComposeAppTheme.colors.grey,
+                                contentDescription = "delete",
+                            )
+                        }
+                    )
+                },
+            )
+            DraggableCardSimple(
+                key = item.id,
+                isRevealed = revealedCardId == item.id,
+                cardOffset = 72f,
+                onReveal = { onReveal(item.id) },
+                onConceal = onConceal,
+                content = {
+                    RpcCell(
+                        shape = shape,
+                        showDivider = showDivider,
+                        item = item,
+                        onItemClick = onClick
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AddButton(
+    onClick: () -> Unit
+) {
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(
+                onClick = onClick,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_plus),
+                    modifier = Modifier.size(24.dp),
+                    tint = ComposeAppTheme.colors.jacob,
+                    contentDescription = null
+                )
+                Spacer(Modifier.width(16.dp))
+                body_jacob(
+                    text = stringResource(R.string.EvmNetwork_AddNew)
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun RpcCell(
+    shape: Shape,
+    showDivider: Boolean = false,
+    item: MoneroNetworkViewModel.ViewItem,
+    onItemClick: (MoneroNode) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(shape)
+            .background(ComposeAppTheme.colors.lawrence)
+            .clickable {
+                onItemClick.invoke(item.node)
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        if (showDivider) {
+            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
+        }
+        Row(
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                val title = when {
+                    item.name.isNotBlank() -> item.name
+                    else -> stringResource(id = R.string.WalletConnect_Unnamed)
+                }
+
+                headline2_leah(
+                    text = title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                subhead2_grey(text = item.url)
+            }
+            PingBadge(item.ping)
+            if (item.selected) {
+                Spacer(Modifier.width(16.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_checkmark_20),
+                    tint = ComposeAppTheme.colors.jacob,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AutoSelectCell(
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    CellUniversalLawrenceSection(
+        listOf {
+            RowUniversal(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    body_leah(text = stringResource(id = R.string.MoneroNodeSettings_AutoSelect))
+                    Spacer(Modifier.height(1.dp))
+                    subhead2_grey(text = stringResource(id = R.string.MoneroNodeSettings_AutoSelectDescription))
+                }
+                Spacer(Modifier.width(12.dp))
+                HsSwitch(
+                    checked = enabled,
+                    onCheckedChange = onCheckedChange,
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun MoneroNodeRow(
+    item: MoneroNetworkViewModel.ViewItem,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+) {
+    RowUniversal(
+        onClick = if (enabled) onClick else null,
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            val title = item.name.ifBlank { stringResource(id = R.string.WalletConnect_Unnamed) }
+            body_leah(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(Modifier.height(1.dp))
+            subhead2_grey(
+                text = item.url,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        PingBadge(item.ping)
+        if (item.selected) {
+            Spacer(Modifier.width(16.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                tint = ComposeAppTheme.colors.jacob,
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@Composable
+private fun PingBadge(ping: MoneroNetworkViewModel.PingState) {
+    when (ping) {
+        MoneroNetworkViewModel.PingState.Loading -> {
+            CircularProgressIndicator(
+                modifier = Modifier.size(16.dp),
+                color = ComposeAppTheme.colors.grey,
+                strokeWidth = 2.dp
+            )
+        }
+
+        MoneroNetworkViewModel.PingState.Unreachable -> {
+            caption_lucian(text = stringResource(id = R.string.MoneroNodeSettings_Unreachable))
+        }
+
+        is MoneroNetworkViewModel.PingState.Reachable -> {
+            val text = stringResource(id = R.string.MoneroNodeSettings_Latency, ping.responseTimeMs)
+            when (ping.level) {
+                MoneroNetworkViewModel.PingState.Level.Good -> caption_remus(text = text)
+                MoneroNetworkViewModel.PingState.Level.Medium -> caption_jacob(text = text)
+                MoneroNetworkViewModel.PingState.Level.Slow -> caption_grey(text = text)
+            }
+        }
+    }
+}

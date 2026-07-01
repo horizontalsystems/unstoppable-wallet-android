@@ -14,7 +14,7 @@
     </queries>
 
     <application
-        android:name=".core.App"
+        android:name=".MainApp"
         android:allowBackup="false"
         android:icon="@mipmap/launcher_main"
         android:label="@string/App_Name"

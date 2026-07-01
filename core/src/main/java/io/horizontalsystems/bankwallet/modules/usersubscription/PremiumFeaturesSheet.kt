@@ -1,0 +1,256 @@
+package io.horizontalsystems.bankwallet.modules.usersubscription
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.core.R
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PremiumFeaturesScreen(
+    navigation: HSNavigation,
+    usedInHavHost: Boolean,
+    onClose: () -> Unit
+) {
+    val viewModel = viewModel<BuySubscriptionViewModel> {
+        BuySubscriptionViewModel()
+    }
+
+    val uiState = viewModel.uiState
+    val hasFreeTrial = uiState.hasFreeTrial
+
+    val coroutineScope = rememberCoroutineScope()
+    val plansModalBottomSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isPlanSelectBottomSheetVisible by remember { mutableStateOf(false) }
+
+    val onTryForFreeClick = {
+        //when used in NavHost
+        if (usedInHavHost) {
+            isPlanSelectBottomSheetVisible = true
+        } else {
+            onClose.invoke()
+            navigation.slideFromBottom(SelectPlanSheet)
+        }
+    }
+
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            TitleCenteredTopBar(
+                title = stringResource(R.string.Premium_Title),
+                onCloseClick = onClose
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .navigationBarsPadding()
+                .fillMaxSize()
+        ) {
+            RadialBackground()
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize()
+                    .padding(bottom = 70.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                VSpacer(24.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.prem_star_launch),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                )
+                VSpacer(24.dp)
+                ActionText()
+                VSpacer(24.dp)
+                FeaturesSection(
+                    features = uiState.defenseSystemFeatures +
+                        uiState.advancedControlsFeatures +
+                        uiState.marketInsightsFeatures,
+                )
+
+                VSpacer(32.dp)
+                headline2_leah(
+                    text = stringResource(R.string.Premium_HighlyRatedSecurity),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                )
+                VSpacer(24.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.security_rate_image),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(112.dp)
+                        .fillMaxWidth()
+                )
+                subhead2_grey(
+                    text = stringResource(R.string.Premium_ApprovedBy),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+                Row(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.bitcoin_logo),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.leah
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.wallet_scrutiny_logo),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.leah
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.certik_logo),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.leah
+                    )
+                }
+                VSpacer(52.dp)
+            }
+            val buttonTitle = if (hasFreeTrial) {
+                stringResource(R.string.Premium_TryForFree)
+            } else {
+                stringResource(R.string.Premium_Upgrade)
+            }
+
+            Column(
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(24.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    ComposeAppTheme.colors.transparent,
+                                    ComposeAppTheme.colors.tyler
+                                )
+                            )
+                        )
+                )
+                Column(
+                    modifier = Modifier
+                        .background(ComposeAppTheme.colors.tyler)
+                        .padding(horizontal = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    HSButton(
+                        title = buttonTitle,
+                        variant = ButtonVariant.Primary,
+                        size = ButtonSize.Medium,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onTryForFreeClick
+                    )
+                }
+                VSpacer(16.dp)
+            }
+            if (isPlanSelectBottomSheetVisible) {
+                SelectPlanBottomSheet(
+                    onDismiss = {
+                        coroutineScope.launch {
+                            plansModalBottomSheetState.hide()
+                            isPlanSelectBottomSheetVisible = false
+                        }
+                    },
+                    onPurchase = {
+                        coroutineScope.launch {
+                            plansModalBottomSheetState.hide()
+                            isPlanSelectBottomSheetVisible = false
+                        }
+                        navigation.add(PremiumSubscribedPage)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun FeaturesSection(
+    features: List<IPaidAction>
+) {
+    Column(
+        modifier = Modifier.clip(RoundedCornerShape(16.dp))
+    ) {
+        PlanItems(
+            items = features
+        )
+    }
+}
+
+@Composable
+private fun ActionText() {
+    val text = highlightText(
+        text = stringResource(R.string.Premium_Banner_BlackFridayText),
+        textColor = ComposeAppTheme.colors.leah,
+        highlightPart = stringResource(R.string.Premium_Title),
+        highlightColor = ComposeAppTheme.colors.jacob
+    )
+    Text(
+        text = text,
+        style = ComposeAppTheme.typography.headline1,
+        color = ComposeAppTheme.colors.leah,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+    )
+}

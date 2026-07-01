@@ -1,0 +1,57 @@
+package io.horizontalsystems.bankwallet.modules.coin.indicators
+
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import io.horizontalsystems.core.R
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object IndicatorsAlertSheet : HSBottomSheet() {
+
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        IndicatorsAlertScreen(navigation)
+    }
+
+}
+
+@Composable
+private fun IndicatorsAlertScreen(navigation: HSNavigation) {
+    ComposeAppTheme {
+        BottomSheetHeader(
+            iconPainter = painterResource(R.drawable.icon_24_lock),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
+            title = stringResource(R.string.CoinPage_Indicators),
+            onCloseClick = {
+                navigation.removeLastOrNull()
+            }
+        ) {
+            InfoText(
+                text = stringResource(R.string.CoinPage_IndicatorsAlertText)
+            )
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                title = stringResource(R.string.Button_LearnMore),
+                onClick = {
+
+                },
+            )
+            VSpacer(32.dp)
+        }
+    }
+}
