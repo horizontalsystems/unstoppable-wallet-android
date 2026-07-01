@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.compose) // MainActivity hosts the Compose nav entry
 
     // Optional, provides the @Serialize annotation for autogeneration of Serializers.
     alias(libs.plugins.jetbrains.kotlin.serialization)
@@ -49,6 +50,7 @@ android {
     }
 
     buildFeatures {
+        compose = true
         buildConfig = true
     }
 
