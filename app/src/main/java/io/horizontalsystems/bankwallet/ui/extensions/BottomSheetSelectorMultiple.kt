@@ -73,10 +73,11 @@ fun BottomSheetSelectorMultiple(
                 .padding(vertical = 8.dp),
         ) {
             config.viewItems.forEachIndexed { index, item ->
-                val onClick = if (item.copyableString != null) {
+                val copyableString = item.copyableString
+                val onClick = if (copyableString != null) {
                     {
                         HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                        TextHelper.copyText(item.copyableString)
+                        TextHelper.copyText(copyableString)
                     }
                 } else {
                     null
