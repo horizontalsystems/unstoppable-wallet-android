@@ -7,4 +7,1787 @@
     <string name="Duration_Hours">%d sa.</string>
     <string name="Duration_Minutes">%d dk.</string>
     <string name="Duration_Seconds">%d sn.</string>
+
+    <!--Common-->
+    <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
+    <string name="Alert_Cancel">İptal</string>
+    <string name="Alert_Copy">Kopyala</string>
+    <string name="Button_Show">Göster</string>
+    <string name="Button_Hide">Gizle</string>
+    <string name="Button_Cancel">İptal</string>
+    <string name="Button_Next">İleri</string>
+    <string name="Button_Enable">Etkinleştir</string>
+    <string name="Button_Disable">Etkisizleştir</string>
+    <string name="Button_ScanQr">QR Kod</string>
+    <string name="Button_Close">Kapat</string>
+    <string name="Button_Ok">Tamam</string>
+    <string name="Button_Later">Sonra</string>
+    <string name="Button_Done">Bitti</string>
+    <string name="Button_Retry">Yeniden Dene</string>
+    <string name="Button_Change">Değiştir</string>
+    <string name="Button_Add">Ekle</string>
+    <string name="Button_Confirm">Onayla</string>
+    <string name="Button_Refresh">Yenile</string>
+    <string name="Button_Connect">Bağlan</string>
+    <string name="Button_Reject">Reddet</string>
+    <string name="Button_Disconnect">Bağlantıyı Kes</string>
+    <string name="Button_Create">Oluştur</string>
+    <string name="Button_Advanced">İleri düzey</string>
+    <string name="Button_Restore">Geri Yükle</string>
+    <string name="Button_Reset">Sıfırla</string>
+    <string name="Button_Understand">Anlıyorum</string>
+    <string name="Button_Switch">Değiştir</string>
+    <string name="Button_Save">Kaydet</string>
+    <string name="Button_IAgree">Kabul Ediyorum</string>
+    <string name="Button_Continue">Devam</string>
+    <string name="Button_Search">Ara</string>
+    <string name="Button_Back">Geri</string>
+    <string name="Button_Copy">Kopyala</string>
+    <string name="Button_Browser">Tarayıcı</string>
+    <string name="Button_Delete">Sil</string>
+    <string name="Button_LearnMore">Daha fazla bilgi edin</string>
+    <string name="Button_Sign">kaydol</string>
+    <string name="Button_TryAgain">Tekrar deneyin</string>
+    <string name="Button_Share">Paylaş</string>
+    <string name="Button_Apply">Uygula</string>
+    <string name="Button_SetAmount">Miktarı Ayarla</string>
+    <string name="Button_ContinueAnyway">Yine de Devam Et</string>
+    <string name="Error_OutOfRange">%1$s\'den küçük veya %2$s\'den büyük olamaz</string>
+    <string name="Error_NotInteger">Hatalı tam sayı numarası</string>
+    <string name="Error">Hata</string>
+    <string name="NotAvailable">N/A</string>
+    <string name="Any">Herhangi</string>
+    <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
+    <string name="Keyboard">Klavye</string>
+    <string name="AccountRecovery_Note">Not</string>
+    <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
+    <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
+    <!--Intro-->
+    <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
+    <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
+    <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
+    <string name="Intro_Wallet_Screen3Description">Şartların getirdiği engelleri atlatın ve dünyanın her piyasasına erişim sağlayın.</string>
+    <string name="Intro_Wallet_Screen4Title">Gizli Kalın</string>
+    <string name="Intro_Wallet_Screen4Description">Özel ve finansal bilgilerinizi dünyaya açmayın.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">Anlıyorum</string>
+    <!--Welcome-->
+    <!--Create Wallet-->
+    <string name="CreateWallet_Advanced_Title">İleri düzey</string>
+    <string name="CreateWallet_Mnemonic">Kurtarma cümlesi</string>
+    <string name="CreateWallet_Wordlist">Kelime Listesi</string>
+    <string name="Passphrase">Parola</string>
+    <string name="Password">Şifre</string>
+    <string name="ConfirmPassphrase">Onayla</string>
+    <string name="CreateWallet_N_WordsRecommended">%s kelimeler (Tavsiye edilen)</string>
+    <string name="CreateWallet_N_Words">%s kelime</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Parola boş olamaz</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Lütfen yalnızca desteklenen sembolleri kullanın:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
+    <!--Languages-->
+    <string name="Language_English">İngilizce</string>
+    <string name="Language_Japanese">Japonca</string>
+    <string name="Language_Korean">Korece</string>
+    <string name="Language_Spanish">İspanyolca</string>
+    <string name="Language_SimplifiedChinese">Çince (Basitleştirilmiş)</string>
+    <string name="Language_TraditionalChinese">Çince (Geleneksel)</string>
+    <string name="Language_French">Fransızca</string>
+    <string name="Language_Italian">İtalyanca</string>
+    <string name="Language_Czech">Çekçe</string>
+    <string name="Language_Portuguese">Portekizce</string>
+    <!--Rate App-->
+    <string name="RateApp_Title_Rate_This_App">Günaydın!</string>
+    <string name="RateApp_Description_Rate_This_App">Unstoppable kullanmaktan keyif alıyor musunuz? Daha da iyi olması için görüşlerinizi paylaşın.</string>
+    <string name="RateApp_Button_RateIt">Puanla</string>
+    <string name="RateApp_Button_NotNow">Şimdi değil</string>
+    <!--Restore-->
+    <string name="Restore_Advanced_Title">İleri düzey</string>
+    <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
+    <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
+    <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
+    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
+    <string name="Restore_Title">Blok Zincirleri Seç</string>
+    <string name="Restore_By">İçerik</string>
+    <string name="Restore_RestoreBy">İçerik</string>
+    <string name="Restore_RecoveryPhrase">Kurtarma cümlesi</string>
+    <string name="Restore_PrivateKey">Gizli Anahtar</string>
+    <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
+    <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
+    <string name="Restore_NonStandardRestore">Standart Olmayan Geri Yükleme</string>
+    <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan Unstoppable kullanıcıları için özel geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak Unstoppable 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\n Bu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
+    <string name="Restore_Bip_Recommended">(ortalama)</string>
+    <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
+    <string name="SelectContacts_All">Hepsi</string>
+    <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
+    <string name="Restore_ZCash_Birthday_Hint">00000000 (isteğe bağlı)</string>
+    <string name="Restore_ZCash_RestoreAsNew">Yeni olarak geri yükle</string>
+    <!--Backup-->
+    <!--Market-->
+    <string name="Market_Field_MarketCap">P. Değeri</string>
+    <string name="Market_Field_Volume">Birim</string>
+    <string name="Market_Field_PriceDiff">Fiyat</string>
+    <string name="Market_Title">Marketler</string>
+    <string name="Market_Search">Ara</string>
+    <string name="Market_All">Hepsi</string>
+    <string name="Market_Search_Sections_RecentTitle">SON</string>
+    <string name="Market_Search_Sections_PopularTitle">POPÜLER</string>
+    <string name="Market_Field_HighestCap">En Yüksek</string>
+    <string name="Market_Field_LowestCap">En Düşük</string>
+    <string name="Market_Field_HighestVolume">En Yüksek HacIm</string>
+    <string name="Market_Field_LowestVolume">En Düşük HacIm</string>
+    <string name="Market_Sort_PopupTitle">Sıralama şekli</string>
+    <string name="Market_BtcDominance">BTC Hakimiyeti</string>
+    <string name="Market_SeeAll">Hepsini Gör</string>
+    <string name="Market_PoweredByApi">CoinGecko API İle Güçlendirildi</string>
+    <string name="Market_Tab_Posts">Haberler</string>
+    <string name="Market_Tab_Coins">Coin\'ler</string>
+    <string name="Market_Tab_Platform">Platformlar</string>
+    <string name="Market_Tab_Pairs">Çiftler</string>
+    <string name="Market_Tab_Sectors">Sektörler</string>
+    <string name="Market_Tab_Watchlist">İzleme Listesi</string>
+    <string name="Market_Tab_Watchlist_EmptyList">İzleme listeniz boş.</string>
+    <string name="Market_Category_TopCoins">En iyi Coinler</string>
+    <string name="Market_Signals">Sinyaller</string>
+    <string name="Market_Volume">Hacim</string>
+    <string name="Market_MarketCap">Piyasa Değeri</string>
+    <string name="Market_Signal_Description">Aşağıdaki sinyaller yaklaşık olarak son 30 gün boyunca Bollinger Bantları ve RSI teknik fiyat göstergelerine dayanmaktadır. Bu sinyaller algoritmiktir ve sık sık değişebilir.</string>
+    <string name="Market_Signal_StrongBuy_Description">Fiyat artışında yüksek güven.</string>
+    <string name="Market_Signal_Buy_Description">Yakın gelecekte muhtemel fiyat artışı.</string>
+    <string name="Market_Signal_Neutral_Descripion">Net bir trend yok, piyasa denge durumunda.</string>
+    <string name="Market_Signal_Sell_Description">Yakın gelecekte muhtemel fiyat düşüşü.</string>
+    <string name="Market_Signal_StrongSell_Description">Fiyatın yüksek olasılıkla düşeceği.</string>
+    <string name="Market_Signal_Risky_Description">Yüksek risk seviyesi, dikkat gerektirir.</string>
+    <string name="Market_Signal_Warning">Her zaman risk yönetimini uygulamayı unutmayın ve bu finansal tavsiye değildir.</string>
+    <string name="Market_Signal_TurnOn">Aç</string>
+    <!--Market Overview-->
+    <!--Market Top Platforms-->
+    <string name="MarketTopPlatforms_Title">En İyi Platformlar</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s zincirindeki tüm protokollerin piyasa değeri</string>
+    <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_TotalMarketCapShort">Toplam Piyasa Değeri</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Toplam Piyasa Değeri</string>
+    <string name="MarketGlobalMetrics_Volume">Hacim</string>
+    <string name="MarketGlobalMetrics_VolumeShort">24s Hacim</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF Girişi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Tüm kripto paraların toplam piyasa değeri</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Kripto piyasa 24 saatlik işlem hacmi</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">DeFi\'deki Toplam Kilit Değer (TVL)</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Zincir ile filtrele</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
+    <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_HighestAssets">En Yüksek Varlıklar</string>
+    <string name="MarketEtf_LowestAssets">En Düşük Varlıklar</string>
+    <string name="MarketEtf_Inflow">Giriş</string>
+    <string name="MarketEtf_Outflow">Çıkış</string>
+    <!--Market Search-->
+    <string name="EmptyResults">Sonuç bulunamadı</string>
+    <string name="Market_Filters">Filtreler</string>
+    <string name="Market_AdvancedSearch_Results">Sonuçlar</string>
+    <string name="Market_Search_Hint">Ara</string>
+    <string name="Market_Filter_ChooseSet">Set Seç</string>
+    <string name="Market_Filter_MarketCap">Piyasa Değeri</string>
+    <string name="Market_Filter_Volume">İşlem Hacmi</string>
+    <string name="Market_Filter_Volume24h">İşlem Hacmi (24 saat)</string>
+    <string name="Market_Filter_PricePeriod">Fiyat Periyodu</string>
+    <string name="Market_Filter_TradingSignals">Ticaret Sinyalleri</string>
+    <string name="Market_Filter_PriceChange">Fiyat Değişimi</string>
+    <string name="Market_Filter_Sectors">Sektörler</string>
+    <string name="Market_PriceChange_24H">24 Saat</string>
+    <string name="Market_PriceChange_Utc">Gece Yarısı UTC</string>
+    <string name="Market_Filter_OutperformedBtc">BTC\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_OutperformedEth">ETH\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_OutperformedBnb">BNB\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_PriceCloseTo">Kapanış fiyatı</string>
+    <string name="Market_Filter_ListedOnTopExchanges">En İyi Borsalarda Listelenmiş</string>
+    <string name="Market_Filter_SolidCex">İyi CEX Hacmi</string>
+    <string name="Market_Filter_SolidCex_Description">Genel Puan iyi veya mükemmel</string>
+    <string name="Market_Filter_SolidDex">İyi DEX Hacmi</string>
+    <string name="Market_Filter_SolidDex_Description">Genel Puan iyi veya mükemmel</string>
+    <string name="Market_Filter_GoodDistribution">İyi Dağılım</string>
+    <string name="Market_Filter_GoodDistribution_Description">Genel Puan iyi veya mükemmel</string>
+    <string name="Market_Filter_StrongBuy">Kuvvetli Al</string>
+    <string name="Market_Filter_Buy">Al</string>
+    <string name="Market_Filter_Neutral">Tarafsız</string>
+    <string name="Market_Filter_StrongSell">Kuvvetli Satış</string>
+    <string name="Market_Filter_Sell">Sat</string>
+    <string name="Market_Filter_RiskToTrade">Riskli</string>
+    <string name="Market_Filter_ATH_Description">(Tüm Zamanların En Yükseği)</string>
+    <string name="Market_Filter_ATL_Description">(Tüm Zamanların En Düşüğü)</string>
+    <string name="Market_Filter_ShowResults">Sonuçları Göster</string>
+    <string name="Market_Filter_ShowResults_Counter">Sonuçları Göster: %d</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Gün</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Hafta</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Hafta</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Ay</string>
+    <string name="Market_Filter_TimePeriod_3M">3 Ay</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Ay</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Yıl</string>
+    <string name="Market_Sorting_Manual">Manuel</string>
+    <string name="Market_Sorting_Gainers">Kazanlar</string>
+    <string name="Market_Sorting_Losers">Kaybedenler</string>
+    <string name="Market_Sorting_HighestCap">En Yüksek</string>
+    <string name="Market_Sorting_LowestCap">En Düşük</string>
+    <string name="Market_Filters_Select">%d Seç</string>
+    <!--Vaults-->
+    <string name="Market_Vaults_Vault_Network">Ağ</string>
+    <string name="Market_Vaults_Vault_Holders">Sahipler</string>
+    <!--Coin Markets-->
+    <!--TVL Rank-->
+    <!--Balance-->
+    <string name="Wallet_Title">Cüzdanı</string>
+    <string name="Balance_Title">Bakiye</string>
+    <string name="Balance_Send">Gönder</string>
+    <string name="Balance_Receive">Al</string>
+    <string name="Balance_RatePerCoin">%1$s için %2$s</string>
+    <string name="Balance_SyncedUntil">%s kadar</string>
+    <string name="Balance_Syncing">Eşitleniyor…</string>
+    <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
+    <string name="Balance_Sort_Balance">Bakiye</string>
+    <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
+    <string name="Balance_Sort_Az">İsim</string>
+    <string name="Balance_Sort_24hPriceChange">Fiyat Değişimi</string>
+    <string name="Balance_NoCoinsAlert">Burada token yok. Başlamak için bir tane ekleyin.</string>
+    <string name="Balance_NoAssetsToSend">Gönderilecek öğeniz yok.</string>
+    <string name="Balance_Network">Ağ</string>
+    <string name="Balance_Format">Biçim</string>
+    <string name="Balance_NetworkSelectDescription">Bir ağ seçin ve para yatırmak için bir adres alın.</string>
+    <string name="Balance_Receive_AddressFormatDescription">Adresinizi almak için bir adres biçimi seçin.</string>
+    <string name="Balance_Receive_AddressFormat">Adres Formatı</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Geliştirilmiş kullanıcı deneyimi ve uyumluluğu nedeniyle Bitcoin Cash (BCH) almak için Nakit Adresi formatı tercih edilmektedir. Ancak gönderenin adres formatı ne olursa olsun, BCH\'yi almak için her iki adres formatı da birbirinin yerine kullanılabilir.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Bitcoin\'de daha iyi bir verimlilik ve güvenlik için yerel SegWit formatı tercih edilir. Tüm adres formatları (Taproot, SegWit, Legacy), gönderenin adres formatına bakılmaksızın BTC almak için birbirinin yerine kullanılabilir ve farklı para birimlerinde kesintisiz işlemlere olanak tanır.</string>
+    <string name="Balance_Receive_Amount">Tutar</string>
+    <string name="Balance_Receive_SetAmount">Miktarı Ayarla</string>
+    <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
+    <string name="Balance_Receive_WatchAddressAlert">Bu adres izlenen hesabın adresidir</string>
+    <string name="Balance_Receive_UsedAddresses">Kullanılan Adresler</string>
+    <string name="Balance_Receive_UsedAddressesDescriptoin">%s adresi gizlilik ve güvenlik nedeniyle değişiyor. Bu cüzdanın kullanılan adreslerinin bir listesi aşağıda verilmiştir.</string>
+    <string name="Balance_Receive_ReceiveAddresses">Alıcının adresi</string>
+    <string name="Balance_Receive_ChangeAddresses">Değişiklik Adresleri</string>
+    <string name="Balance_ReceiveHint_Search">Ara</string>
+    <!--Send NFT-->
+    <string name="SendNft_Title">Gönder</string>
+    <!--Send-->
+    <string name="Send_EnterAddress">Adres Girin</string>
+    <string name="Send_Title">%s gönder</string>
+    <string name="Send_Hint_Address">Adres veya Domain</string>
+    <string name="Send_Fee">Masraf</string>
+    <string name="Send_Button_Paste">Yapıştır</string>
+    <string name="Send_Button_Max">Azami</string>
+    <string name="Send_Advanced">İleri düzey</string>
+    <string name="Send_Hodler_Description">TimeLock yalnızca BIP44 adreslerine (1 ile başlar) göndermek için çalışır</string>
+    <string name="Send_UtxoExpertMode">UTxO Uzman Modu</string>
+    <string name="Send_Utxo_Description">Bakiyedeki fonları harcamak için UTxO\'yu manuel olarak seçin</string>
+    <string name="Send_Rbf">Ücretle Değiştir</string>
+    <string name="Send_Rbf_Description">Bu seçenek, takılı kalmış bir işlemi ücret miktarını artırarak yeniden göndermenizi sağlar.</string>
+    <string name="Send_RbfEnabled">Etkinleştirildi</string>
+    <string name="Send_RbfDisabled">Etkisizleştirildi</string>
+    <string name="Send_Utxo_AvailableBalance">Mevcut Bakiye</string>
+    <string name="Send_Utxo_UnselectAll">Tümünü Kaldır</string>
+    <string name="Send_Utxo_SelectAll">Tümünü Seç</string>
+    <string name="Send_Confirmation_Title">Onayla</string>
+    <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
+    <string name="Send_Confirmation_YouReceive">Alacağınız</string>
+    <string name="Send_Confirmation_To">Alan</string>
+    <string name="Send_Confirmation_Own">Kendi</string>
+    <string name="Send_Confirmation_Method">Yöntem</string>
+    <string name="Send_Confirmation_Send_Button">Gönder</string>
+    <string name="Send_Confirmation_Action">İşlem</string>
+    <string name="Send_Address_Error_InvalidAddress">Geçersiz adres</string>
+    <string name="Send_Address_Error_Detected">Tespit Edildi</string>
+    <string name="Send_Address_Error_Clear">Temizle</string>
+    <string name="SecureSend_Config_Disabled">Etkisizleştirildi</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Oltalama Adresi Tespit Edildi!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Kara Listeye Alınmış Adres Tespit Edildi!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Yaptırım Uygulanan Adres Tespit Edildi!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Girdiğiniz adres kara listeye alınmış olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Girdiğiniz adres yaptırım altında olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
+    <string name="Send_RiskyAddress">Riskli Adres!</string>
+    <string name="Send_RiskyAddress_AlertText">Yüksek riskli bir adrese fon göndermek üzeresiniz. Devam etmek, para kaybına veya diğer güvenlik risklerine yol açabilir. Devam ederek potansiyel tehlikeleri kabul etmiş olursunuz. Devam etmek istediğinizden emin misiniz?</string>
+    <string name="Send_Success">\u2713 Gönderilen</string>
+    <string name="ScanQr_CameraPermission_Title">Kamera izni bulunmamaktadır</string>
+    <string name="ScanQr_PleaseGrantCameraPermission">Lütfen kamere erişim izni verin</string>
+    <string name="ScanQr_CameraPermissionDeniedText">Bu uygulama için kameranıza erişim reddedildi, ayarlara gidip erişime izin verebilirsiniz</string>
+    <string name="ScanQr_GoToSettings">Ayarlara gidin</string>
+    <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece BIP44 (1 ile başlayan) adresleriyle çalışır</string>
+    <string name="Send_Error_MinimumAmount">Minimum miktar %s</string>
+    <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
+    <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
+    <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
+    <string name="Send_DialogSpeed">İşlem hızı</string>
+    <string name="Send_LockTime_Off">Kapat</string>
+    <string name="Send_LockTime_Hour">1 saat</string>
+    <string name="Send_LockTime_Month">1 ay</string>
+    <string name="Send_LockTime_HalfYear">6 ay</string>
+    <string name="Send_LockTime_Year">1 yıl</string>
+    <string name="Send_Sending">Gönderiliyor</string>
+    <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
+    <string name="Send_Error_LowFee">Ücret Hatası</string>
+    <string name="Send_Error_LowFee_Description">Ücret Oranı çok düşük.</string>
+    <string name="Send_Warning_LowFee_Description">İşlem takılabilir veya başarısız olabilir</string>
+    <string name="Send_Error_FetchFeeRateFailed">Ücret Hatası</string>
+    <string name="Send_Error_FetchFeeRateFailed_Description">Sunucuyla bağlantı kesildi. Göndermek için sitedeki verileri kullanarak komisyonları manuel olarak ayarlayın.</string>
+    <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_Title">İleri düzey</string>
+    <string name="SendEvmSettings_Nonce">İşlem Nonce</string>
+    <string name="SendEvmSettings_Nonce_Info">Nonce, kullanıcının cüzdanındaki bir işlem için benzersiz bir tamsayı değeridir. Normalde gönderilen her işlemle birlikte artar ve değiştirilmesi gerekmez. İleri düzey kullanıcılar, yeni işlemin eskisinin onaylanmasını önlemek için yeterince yüksek bir ücrete sahip olduğu sürece, bu işlemi iptal etmek ve değiştirmek için bekleyen bir işlemin bir nonsine eşit olarak ayarlayabilirler (örneğin, onayını hızlandırmak veya işlem parametrelerini tamamen değiştirmek isteyebilirler). Birden fazla bekleyen işlem aynı nonce\'a sahip olduğunda, genellikle en yüksek ücrete sahip olan biri onaylanır.</string>
+    <string name="SendEvmSettings_SlippageTolerance">Slipaj Toleransı</string>
+    <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
+    <string name="SendEvmSettings_Error_NonceUsed">Bu nonce ile gerçekleştirilen bir işlem zaten var.</string>
+    <!-- Fee Settings -->
+    <string name="FeeSettings_NetworkFee">Masraf</string>
+    <string name="FeeSettings_NetworkFee_Info">Ağda belirli bir işlemi göndermenin tahmini maliyeti.</string>
+    <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
+    <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
+    <string name="FeeSettings_BaseFee">Baz Ücret</string>
+    <string name="FeeSettings_BaseFee_Info">Ağ protokolü, her blok için gaz başına taban fiyatı belirler ve buna baz ücret oranı denir. Bloktan bloğa ağ kullanım seviyesine göre değişir. Bir sonraki blokta% 12,5\'ten fazla artamaz veya azalabilir ve bu da ücretleri daha öngörülebilir hale getirir. Burada gösterilen değer, geçerli bloğun temel ücret oranıdır.</string>
+    <string name="FeeSettings_MaxFee">Maks. Ücret Oranı (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">Bu, kullanıcının ödemek istediği gaz başına maksimum toplam fiyattır. Ağın temel ücret oranını ve maksimum öncelik ücreti oranını kapsamalıdır. Burada gösterilen değer, bir sonraki bloğun taban ücret oranının tahmini artı kullanıcı tarafından seçilen maksimum öncelik ücreti oranına göre önerilir. Ödenen gerçek ücret oranı normalde daha düşük olacaktır. Bunu mevcut taban ücret oranından daha düşük bir değere ayarlamak, ödenen ücreti sınırlayacaktır, ancak işlemin onaylanması için daha uzun bekleme sürelerine, hatta sıkışmış bir işlemde bile sonuçlanacaktır.</string>
+    <string name="FeeSettings_MaxMinerTips">Maks. Öncelik Ücreti (Gwei)</string>
+    <string name="FeeSettings_MaxMinerTips_Info">Kullanıcılar, bir işlemin daha hızlı onaylanmasını teşvik etmek için öncelik ücretleri öderler. Bazen tips denir. Maksimum öncelik ücreti oranı, kullanıcının taban ücret oranının üzerine ödemek istediği gaz başına maksimum ek fiyattır. Burada gösterilen değer, tahmin edilen ağ koşullarına göre önerilir. Gerçek öncelik ücreti normalde daha düşük olacaktır. Bunu sıfıra ayarlamak, tüm kullanıcılardan bekleyen işlemler kuyruğunun sonuna yerleştirildiğinden, işlemin onaylanması için uzun bir bekleme süresine neden olabilir.</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Riskli</string>
+    <string name="FeeSettings_RiskOfGettingStuckLegacy">İşlem bir süre beklemede kalabilir veya tamamen başarısız olabilir.</string>
+    <string name="FeeSettings_RiskOfGettingStuck_Title">Riskli</string>
+    <string name="FeeSettings_RiskOfGettingStuck">İşlemin hızlı bir şekilde yürütülmesini sağlamak için maksimum ücret oranı (çıkarılan maksimum mineri tip) mevcut baz ücret oranından daha yüksek olmalıdır. Aksi takdirde işlem, koşul yerine getirilene kadar beklemede kalabilir.</string>
+    <string name="FeeSettings_Overpricing_Title">Ücret Çok Yüksek</string>
+    <string name="FeeSettings_Overpricing">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için gereken ücretten daha yüksek.</string>
+    <string name="FeeSettings_FeeRate">Ücret Oranı (SAT/BYTE)</string>
+    <string name="FeeSettings_FeeRate_RecommendedInfo">İşte sonraki 2 bloğa eklenmek için önerilen değer</string>
+    <!--Fee Info -->
+    <string name="FeeInfo_Title">İşlem hızı</string>
+    <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
+    <string name="FeeInfo_Slow">Yavaş</string>
+    <string name="FeeInfo_SlowDescription">Bu aralıktan bir değer seçmek, işlemin saatlerce beklemesine veya reddedilmesine neden olabilir. Değer ne kadar düşükse işlemin onaylanması o kadar uzun sürer.</string>
+    <string name="FeeInfo_Average">Ortalama</string>
+    <string name="FeeInfo_AverageDescription">Genellikle bu ücret, işlemin Bitcoin için dakikalar/saatler içinde ve Ethereum için dakikalar içinde işleme alınması için yeterli olacaktır.</string>
+    <string name="FeeInfo_Fast">Hızlı</string>
+    <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
+    <string name="FeeInfo_TronFee_Description">Ağda belirli bir işlemi göndermenin tahmini maliyeti. (Enerji, Bant Genişliği ve Aktivasyon Ücreti hariç)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Aktivasyon ücreti</string>
+    <string name="FeeInfo_TronActivationFee_Description">Bu adres aktif değil. TRX veya TRC-10 jetonlarını aktif olmayan bir hesap adresine transfer etmek, hesabı aktif hale getirecektir.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
+    <!--Tron-->
+    <string name="Tron_SelfSendTrxNotAllowed">TRX kendinize aktarılamıyor</string>
+    <string name="Tron_ZeroAmountTrxNotAllowed">0 %s aktarılamıyor</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">Hesap aktif değil</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Yeni TRON cüzdanları aktif hale gelmek için en az 1 TRX yatırılmasını gerektirir. Aktif olmayan cüzdanlar, tokenları alabilir ve saklayabilir, ancak etkinleştirilene kadar bakiyeleri güncellemez.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Yeni bağlantı</string>
+    <string name="TonConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
+    <string name="TonConnect_Unnamed">İsimsiz</string>
+    <string name="TonConnect_Wallet">Cüzdanı</string>
+    <string name="TonConnect_ChooseWallet">Cüzdan Seçin</string>
+    <!--WalletConnect-->
+    <string name="WalletConnect_Status">Durum</string>
+    <string name="WalletConnect_Approve_Hint">Onayla butonunu tıklayarak, bu uygulamanın açık adresinizi görüntülemesine izin vermiş olursunuz. Bu, verilerinizi olası kimlik hırsızlığı risklerinden korumak için önemli bir güvenlik adımıdır.</string>
+    <string name="WalletConnect_Reconnect_Hint">Bağlantı kurulamadı. Yeniden bağlanmayı deneyin.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
+    <string name="WalletConnect_Status_Offline">Çevrimdışı</string>
+    <string name="WalletConnect_Status_Online">Çevrimiçi</string>
+    <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
+    <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
+    <string name="WalletConnect_SendTransactionRequest_ButtonSend">Gönder</string>
+    <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
+    <string name="WalletConnect_Error_NoWallet">WalletConnect\'i kullanmadan önce bir cüzdan oluşturmanız veya içe aktarmanız gerekir</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen Blockchain</string>
+    <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Uygun evm kiti yok</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Desteklenmeyen zincirler: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Desteklenmeyen yöntemler: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Desteklenmeyen olaylar: %s</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">İstek bulunamadı hatası</string>
+    <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
+    <string name="WalletConnect_ActiveWallet">Cüzdanı</string>
+    <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
+    <string name="WalletConnect_Unnamed">İsimsiz</string>
+    <string name="WalletConnect_PairedDApps">Eşleştirilmiş dApps</string>
+    <string name="WalletConnect_Pairings_DeleteAll">Hepsini Sil</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Eşleştirilmiş tüm dAps\'leri silmek istiyor musunuz?</string>
+    <string name="WalletConnect_Pairings_Delete">Sil</string>
+    <string name="WalletConnect_DeleteAllPairs">Hepsini sil</string>
+    <string name="WalletConnect_DAppCheck_Risky">Riskli</string>
+    <!-- dApp Connection-->
+    <string name="DAppConnection_Title">DApp Bağlantısı</string>
+    <string name="DAppConnection_Requests">Talepler</string>
+    <!--EthereumTransaction-->
+    <string name="EthereumTransaction_Warning_Title">Uyarı</string>
+    <string name="EthereumTransaction_Error_Title">Hata</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance_Title">Yetersiz Bakiye</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Düşük Ücret</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Belirlenen işlem ücreti, bu işlemin şimdi işlenmesi için yetersiz.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Likidite Yetersiz</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Muhtemelen bu işlemin gerçekleşmesi için yeterli likidite mevcut değil. Tutarı düşürmeyi deneyin.</string>
+    <string name="EthereumTransaction_Error_CannotEstimate_Title">Tahmin Hatası</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Bakiyeyi kontrol edin ve ücreti karşılayacak kadar %s olduğundan emin olun. Veya fiyat kayma miktarını artırın ve tekrar deneyin. 3 saniye sonra otomatik olarak tekrar denenecektir…</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">Gelecekteki işlemler için ödeme yapabilmek için bakiyenizde biraz %s bırakmayı göz önünde bulundurun.</string>
+    <string name="EthereumTransaction_Error_ExecutionReverted">Beklenmeyen hata: %s</string>
+    <!--Swap-->
+    <string name="Swap">Takas</string>
+    <string name="Swap_FromAmountTitle">Ödediğiniz</string>
+    <string name="Swap_ToAmountTitle">Kazandığınız</string>
+    <string name="Swap_TokenSelectorTitle">Seç</string>
+    <string name="Swap_Price">Fiyat</string>
+    <string name="Swap_AvailableBalance">Mevcut Bakiye</string>
+    <string name="Swap_PriceImpact">Fiyat Etkisi</string>
+    <string name="Swap_ProviderRisk_Risky">Riskli</string>
+    <string name="Swap_AmlError_Button">Yeniden Dene</string>
+    <string name="Swap_MinimumReceived">Garantili Tutar</string>
+    <string name="Swap_Slippage">Kayma</string>
+    <string name="Swap_Recipient">Alıcı</string>
+    <string name="Swap_ErrorNoProviders">Rota Yok</string>
+    <string name="Swap_ErrorNoQuote">Teklif Yok</string>
+    <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
+    <string name="Swap_ErrorTokenNotEnabled">Jeton Etkin Değil</string>
+    <string name="Swap_ErrorWalletSyncing">Cüzdan senkronize ediliyor</string>
+    <string name="Swap_ErrorWalletNotSynced">Cüzdan Senkronize Edilmedi</string>
+    <string name="Swap_Proceed">İleri</string>
+    <string name="Swap_SelectTokenIn">Giriş Tokeni Seç</string>
+    <string name="Swap_SelectTokenOut">Çıkış Tokeni Seç</string>
+    <string name="Swap_EnterAmount">Miktar Girin</string>
+    <string name="Swap_Revoke">İptal et</string>
+    <string name="Swap_Revoking">İptal ediliyor...</string>
+    <string name="Swap_Approving">Onaylanıyor</string>
+    <string name="Swap_Swapping">Takas</string>
+    <string name="Swap_Quoting">Alıntı</string>
+    <string name="Swap_Providers">Rotalar</string>
+    <string name="Swap_AmountMin">(dk)</string>
+    <string name="Swap_AmountMax">(azami)</string>
+    <string name="Swap_YouPay">Ödediğiniz</string>
+    <string name="Swap_YouGet">Kazandığınız</string>
+    <string name="Swap_Confirm_Title">Onayla</string>
+    <!-- Swap Settings -->
+    <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
+    <string name="SwapSettings_RecipientAddressTitle">Alıcı Adresi</string>
+    <string name="SwapSettings_Apply">Uygula</string>
+    <string name="SwapSettings_Error_SlippageZero">Geçersiz Kayma</string>
+    <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Slipaj Toleransı %s%% üzerinde olamaz</string>
+    <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
+    <string name="SwapSettings_Error_InvalidBlockchainAddress">Geçersiz %s adres</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">İşleminiz varlık fiyatını etkileyebilir</string>
+    <!-- Swap Confirmation -->
+    <string name="Activate_InsufficientBalance_Title">Yetersiz Bakiye</string>
+    <!-- Swap History -->
+    <!-- Swap Info -->
+    <string name="SwapInfo_StatusSwapping">Takas</string>
+    <string name="SwapInfo_StatusSending">Gönder</string>
+    <!--Approve-->
+    <string name="Approve_RevokeAndApproveInfo">%s alışverişi yapabilir veya yeni tutarı iptal edip onaylamanız gerekir</string>
+    <string name="Approve_Spender">Harcayan</string>
+    <string name="Approve_YouRevoke">Sen iptal et</string>
+    <!--Swap Unlock Access-->
+    <string name="Swap_Approve_Info">Akıllı bir sözleşmeye, adınıza token ticareti yapabilmesi için izin verin ve izin verilen miktarı belirtin. Bakiyenize herhangi bir etkisi olmaz, ancak onay için küçük bir ücret alınır.\n\nGelecekteki işlemler için daha yüksek bir miktarın önceden onaylanması, talep üzerine onaylara göre maliyet açısından daha avantajlıdır.</string>
+    <string name="Swap_Approve_Unlimited">Sınırsız</string>
+    <!--Uniswap Info -->
+    <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
+    <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
+    <!--Deposit-->
+    <string name="Deposit_Title">%s al</string>
+    <!--Transactions-->
+    <string name="Transactions_Title">Hesap işlemleri</string>
+    <string name="Transactions_WaitForSync">Lütfen güncellemenin bitmesini bekleyin.</string>
+    <string name="Transactions_Pending">Devam ediyor</string>
+    <string name="Transactions_Receive">Alındı</string>
+    <string name="Transactions_Processing">İşleniyor</string>
+    <string name="Transactions_Send">Gönderildi</string>
+    <string name="Transactions_Approve">Onayla</string>
+    <string name="Transactions_Swap">Takas Edildi</string>
+    <string name="Transactions_Transfer">Aktar</string>
+    <string name="Transactions_ContractCall">Sözleşme Çağrısı</string>
+    <string name="Transactions_ExternalContractCall">Harici Çağrı</string>
+    <string name="Transactions_ContractCreation">Sözleşme Oluşturma</string>
+    <string name="Transactions_ContractDeploy">Kontrat Dağıtımı</string>
+    <string name="Transactions_To">%s kişisine</string>
+    <string name="Transactions_From">%s kişisinden</string>
+    <string name="Transaction_Unlimited_CoinCode">sınırsız %s</string>
+    <string name="Transaction_Unlimited">sınırsız</string>
+    <string name="Transactions_All">Hepsi</string>
+    <string name="Transactions_Filter_Blockchain">Blok zincirine göre filtrele</string>
+    <string name="Transactions_Filter_Contacts">Kişiler</string>
+    <string name="Transactions_Filter_AllBlockchains">Tüm Blok Zincirleri</string>
+    <string name="Transactions_Filter_AllCoins">Tüm paralar</string>
+    <string name="Transactions_Filter_AllContacts">Tüm Kişiler</string>
+    <string name="Transactions_Filter_ChooseCoin">Kripto Parayı Seç</string>
+    <string name="Transactions_Filter_ChooseBlockchain">Blockchain Seç</string>
+    <string name="Transactions_Incoming">Alındı</string>
+    <string name="Transactions_Outgoing">Gönderildi</string>
+    <string name="Transactions_Swaps">Swap</string>
+    <string name="Transactions_Approvals">Onaylar</string>
+    <string name="Transactions_Unknown">Bilinmeyen İşlem</string>
+    <string name="Transactions_TonTransaction">TON İşlemi</string>
+    <string name="Transactions_Unknown_Description">İşlem çözümlenemiyor</string>
+    <string name="Transactions_Multiple">Çoklu</string>
+    <string name="Transactions_Filter">Filtre</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Şüpheli İşlemleri Gizle</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Küçük tutarlı gelen transferleri gizler (ör. $1.5 altındaki USDT). Bu tür işlemler genellikle phishing ve adres zehirleme (address poisoning) saldırılarında kullanılır.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">İletişim filtrelemesi aşağıdaki blok zincirlerinde çalışır: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton ve ZCash. Aşağıda uygun iletişim bilgileri bulunmaktadır</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Uygun hiçbir iletişim bilginiz yok</string>
+    <!--Transaction Info-->
+    <string name="TransactionInfo_Title">İşlem Bilgileri</string>
+    <string name="TransactionInfo_Status">Durum</string>
+    <string name="TransactionInfo_Date">Tarih</string>
+    <string name="TransactionInfo_Id">Kimlik</string>
+    <string name="TransactionInfo_Service">Hizmet</string>
+    <string name="TransactionInfo_RawTransaction">Ham işlem</string>
+    <string name="TransactionInfo_ContactName">Kişi Adı</string>
+    <string name="TransactionInfo_To">Alan</string>
+    <string name="TransactionInfo_From">Gönderen</string>
+    <string name="TransactionInfo_Spender">Harcayan</string>
+    <string name="TransactionInfo_LockedUntil">Şu zamana kadar kitlendi %s</string>
+    <string name="TransactionInfo_UnlockedAt">Kilid açıldı %s</string>
+    <string name="TransactionInfo_RecipientHash">Alıcı</string>
+    <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
+    <string name="TransactionInfo_Fee">Masraf</string>
+    <string name="TransactionInfo_FeeEstimated">Ücret (tahmini)</string>
+    <string name="TransactionInfo_SentToSelfNote">Bu işlem kendi adresine gönderildi</string>
+    <string name="TransactionInfo_DoubleSpendNote">Çifte Harcama Riski Var!</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">%s göre görüntüleme</string>
+    <string name="TransactionInfo_Price">Fiyat</string>
+    <string name="TransactionInfo_YouGot">Aldığınız Tutar</string>
+    <string name="TransactionInfo_YouSent">Gönderdiniz</string>
+    <string name="TransactionInfo_Received">Alındı</string>
+    <string name="TransactionInfo_Sent">Gönderildi</string>
+    <string name="TransactionInfo_Approved">Onayla</string>
+    <string name="TransactionInfo_SpeedUp">Hızlandır</string>
+    <string name="TransactionInfo_SpamWarning">Bu işlem şüpheli ve dolandırıcılık olabilir. \nLütfen bu işlemden herhangi bir adres kopyalamayın.</string>
+    <string name="TransactionInfo_SpeedUpDescription">Bu işlem, önceki işlemi geçersiz kılmak için onu daha yüksek bir ücretle yeniden göndermeye çalışacaktır.</string>
+    <string name="StatusInfo_Pending">Devam ediyor</string>
+    <string name="StatusInfo_Processing">İşleniyor</string>
+    <string name="StatusInfo_PendingDescription">İşlem henüz blok zincirinde onaylanmadı. Tavsiye edilen veya daha yüksek ücret ayarı ile gönderilen işlemler genellikle birkaç dakika içerisinde işlenir. Düşük bir ücretle gönderilen işlemler birkaç saat, hatta günlerce beklemede kalabilir ve hatta reddedilebilir. Unstoppable cüzdan arayüzündeki bir işlemin durumunun genellikle kısa bir gecikmeyle güncellendiğini de unutmayın.</string>
+    <string name="StatusInfo_ProcessingDescription">İşlem blok zincirine dahil edildi ama kalıcı bir sonuca ulaşmadı. Bu noktada, küçük ödemeler için işlemin tamamlandığını düşünebilirsiniz. Daha büyük ödemeler için ise, işlem durumu tamamlandı olarak değişene kadar beklemeniz önerilir.</string>
+    <string name="StatusInfo_ConfirmedDescription">İşlem tamamlandı ve bunun kalıcı ve tersine çevrilemez olduğu kabul edilir.</string>
+    <string name="StatusInfo_FailedDescription">İşlem gerçekleşmedi ve herhangi bir değer transferi yapılmadı. Başarısız olma nedenine bağlı olarak, bazı başarısız işlemler, işlem ücreti tüketebilir. Başka bir işlemle değiştirilen veya iptal edilen işlemler, işlem ücretini tüketmez ve başarısız olarak görüntülenir. Unstoppable uygulaması başarısız işlemlerin nedenini gösteremez, ancak kullanıcılar bunu örneğin etherscan.io gibi herkese açık bir blok gezgininde kendileri arayabilirler.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Hızlandır</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Yeniden Gönder</string>
+    <string name="TransactionInfoOptions_Cancel_Title">İptal</string>
+    <string name="TransactionInfoOptions_Cancel_Button">İşlemi İptal Et</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">İşlem zaten blokta</string>
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Değiştirilmiş İşlemler</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">Ücret (Sat)</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Ücret Çok Düşük</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF (Ücretle Değiştir) etkin değil</string>
+    <string name="TransactionInfoOptions_Rbf_UnableToReplace">Değiştirilemiyor</string>
+    <!-- Info -->
+    <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
+    <string name="Info_NotRelayed_Title">Yayın</string>
+    <string name="Info_NotRelayed_Description">Bu miktarı içeren işlem yayınlandı ancak henüz ağ tarafından kabul edilmedi.</string>
+    <string name="Info_ProcessingBalance_Title">İşlem Miktarı</string>
+    <string name="Info_ProcessingBalance_Description">Bu tutardaki işlemler hala senkronize oluyor. Onaylandıklarında, bu tokenlar harcanmak için kullanılabilir olacak.</string>
+    <string name="Info_DoubleSpend_Title">Çifte Harcama</string>
+    <string name="Info_DoubleSpend_Description">Çifte Harcama Riski! Blockchain\'de, bu işlemde kullanılan girdileri harcamaya çalışan başka bir işlem var. Ağ tarafından yalnızca bir işlem kabul edilecektir</string>
+    <string name="Info_DoubleSpend_ThisTx">Bu Tx</string>
+    <string name="Info_DoubleSpend_ConflictingTx">Çakışan Tx</string>
+    <!--Guides-->
+    <string name="Guides_Title">Akademi</string>
+    <!--Markdown-->
+    <string name="Markdown_Error_NotFound">Hiçbir sayfa bulunamadı</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Para birimi</string>
+    <string name="SettingsCurrency_Other">DİĞER</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Uyarı</string>
+    <string name="SettingsCurrency_DisclaimerText">Üçüncü taraf bir hizmet olan Coingecko.com tarafından sağlanan döviz kuru verileri.\n\nDurdurulamaz cüzdan uygulaması, bu değerlerin her zaman doğru olduğunu ve piyasa verileriyle eşleştiğini garanti etmez. %s Dışında herhangi bir temel para birimi seçerseniz tutarsızlık olasılığı daha yüksektir.</string>
+    <!--Settings-->
+    <string name="Settings_Title">Ayarlar</string>
+    <string name="Settings_SecurityCenter">Güvenlik</string>
+    <string name="Settings_BaseCurrency">Para birimi</string>
+    <string name="Settings_Language">Dil</string>
+    <string name="Settings_Theme">Tema</string>
+    <string name="Settings_Terms">Şartlar</string>
+    <string name="Settings_Privacy">Gizlilik</string>
+    <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
+    <string name="Settings_AppStatus">Uygulama Durumu</string>
+    <string name="Settings_RateUs">Bizi Değerlendirin</string>
+    <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
+    <string name="Settings_AppSettings">Görünüm</string>
+    <string name="Settings_Subscription">Abonelik</string>
+    <string name="Settings_AutoLock">Otomatik kilit</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_Donate">Bağış yapmak</string>
+    <string name="Settings_DonateToken">Bağış yapmak %s</string>
+    <string name="Settings_Donate_Addresses">Adresler</string>
+    <string name="SettingsSecurity_AutoLock_Immediate">Hemen</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After1Hour">1 saat</string>
+    <!--Address Checker-->
+    <!--Banners-->
+    <string name="SettingsBanner_PremiumBannerDescription">Premium özelliklerle deneyiminizi yükseltin!</string>
+    <string name="SettingsBanner_PremiumTryFee">ÜCRETSİZ Deneyin</string>
+    <!--Why Donate Page-->
+    <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Aktif</string>
+    <string name="SettingsSubscription_RestorePurchase">Satın Almayı Geri Yükle</string>
+    <string name="SettingsSubscription_ManageSubscription">Aboneliği Yönet</string>
+    <string name="Period_Days">%s gün</string>
+    <!--Premium Screens-->
+    <string name="Premium_EnjoyFreePeriod">İlk %s ÜCRETSİZ olarak kullanın.</string>
+    <string name="Premium_CancelSubscriptionInfo">Aboneliğinizi istediğiniz zaman iptal edebilirsiniz.</string>
+    <string name="Premium_GetFreePeriod">%s ÜCRETSİZ Alın</string>
+    <string name="Premium_Subscribe">Abone Ol</string>
+    <string name="Premium_TryForFree">ÜCRETSİZ Deneyin</string>
+    <string name="Premium_Upgrade">Yükselt</string>
+    <string name="Premium_ThankYouForSubscription">Aboneliğiniz için \nteşekkürler!</string>
+    <string name="Premium_GoToApp">Uygulamaya Git</string>
+    <string name="Premium_Banner_BlackFridayText">Premium özelliklerle deneyiminizi yükseltin!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
+    <string name="Premium_SelectSubscription">Abonelik Seçin</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Gelişmiş Arama</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Sinyaller ve Trendler</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection">Tehdit Modu</string>
+    <string name="Premium_UpgradeFeature_SecureSend">Dolandırıcılık Koruması</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Çoklu parametreler üzerinden çok seviyeli filtreleme</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Tokenleriniz için piyasa trendlerinin otomatik takibi</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Fiziksel tehditler sırasında akıllı fon güvenliği</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Dolandırıcılık ve oltalama saldırılarına karşı etkili otomatik koruma</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Kripto işlemlerinizin yasallığı için garanti</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Botların takas işlemlerinde sizi zarara uğratmasını engeller.</string>
+    <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
+    <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
+    <string name="Premium_SubscriptionPeriod_Month">ay</string>
+    <string name="Premium_SubscriptionPeriod_Year">yıl</string>
+    <string name="Premium_SubscriptionPeriod_Annually">Yıllık</string>
+    <string name="Premium_SubscriptionPeriod_Monthly">Aylık</string>
+    <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
+    <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
+    <string name="Appearance_HideMarketsTab">Piyasaları Gizle</string>
+    <string name="Appearance_HideBalanceTabButtons">Düğmeleri Gizle</string>
+    <string name="Appearance_PriceChangeInterval">Fiyat Değişimi %</string>
+    <string name="BalanceViewType_CoinValue">Para değeri</string>
+    <string name="BalanceViewType_FiatValue">Fiat Değeri</string>
+    <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
+    <string name="SettingsAboutApp_Site">Web sitesi</string>
+    <string name="SettingsAboutApp_AppVersion">Uygulama Sürümü</string>
+    <!-- Blockchain Settings  -->
+    <string name="BlockchainSettings_Title">Blockchain Ayarları</string>
+    <!-- Backup Manager -->
+    <string name="BackupManager_Title">Yedekleme yöneticisi</string>
+    <string name="BackupManager_RestoreBackup">Yedeği Geri Yükle</string>
+    <string name="BackupManager_CreateBackup">Yedek Oluştur</string>
+    <string name="BackupManager_BаckupFile">Yedek Dosyası</string>
+    <string name="BackupManager_Wallets">Cüzdanlar</string>
+    <string name="BackupManager_Other">Veriler</string>
+    <string name="BackupManager_Restore">Geri Yükle</string>
+    <string name="BackupManager_BackupFileContents">Yedek dosyasındaki içeriklerin listesi.</string>
+    <string name="BackupManager_MergeTitle">Dikkat!</string>
+    <string name="BackupManager_MergeButton">Değiştir</string>
+    <string name="BackupManager_MergeDescription">Kaydedilmiş kişiler yedekteki verilerle değiştirilecektir.</string>
+    <string name="BackupManager_BackupRequired">Yedekleme Gerekli</string>
+    <string name="BackupManager_WatchWallets">Cüzdan İzle</string>
+    <string name="BackupManager_Watchlist">İzleme Listesi</string>
+    <string name="BackupManager_CustomRpc">Özel RPC</string>
+    <string name="BackupManager_AppSettingsTitle">Uygulama Ayarları</string>
+    <string name="BackupManager_AppSettingsDescription">Dil, Para Birimi, Görünüm...</string>
+    <!-- Privacy  -->
+    <string name="ShareUiData">UI Verilerini Paylaş</string>
+    <!-- Security Center -->
+    <!--Evm Network-->
+    <string name="EvmNetwork_AddNew">Yeni ekle</string>
+    <string name="EvmNetwork_Added">Eklendi</string>
+    <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
+    <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
+    <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
+    <!--Add Monero Node-->
+    <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Kaynak değiştirdikten sonra cüzdanın kendini yeniden senkronize etmesi gerekecek.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">İşlemler yapılmış cüzdanı geri yüklemek için veri kaynağını seçin.</string>
+    <string name="BtcBlockchainSettings_InputsOutputs">Giriş/Çıkış</string>
+    <string name="BtcBlockchainSettings_TransactionSettings">İşlem Ayarları</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputs">İşlem Girdileri / Çıktıları</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">İşlemlerin yapılandırılma şeklini değiştirerek BTC, LTC, BCH işlemlerinizin izlenilmesini zorlaştırın.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to Unstoppable users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
+    <!--Info screen-->
+    <string name="Info_Title">Bilgi</string>
+    <!--Setting_Security-->
+    <string name="SettingsSecurity_Biometric_Authentication">Biyometrik doğrulama</string>
+    <string name="SettingsSecurity_EnablePin">Kod</string>
+    <string name="SettingsSecurity_DisablePin">Şifre Kodunu Devre Dışı Bırak</string>
+    <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
+    <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
+    <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
+    <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
+    <string name="SettingsSecurity_SortingShuffleDescription">Rastgele Dizinleme</string>
+    <string name="SettingsSecurity_SortingBip69">BIP69</string>
+    <string name="SettingsSecurity_SortingBip69Description">Lexicographical Dizinleme</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Hızlı, Özel, Merkezileştirilmiş</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">Blok zincirine göre filtrele</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Yavaş, Özel.</string>
+    <string name="SetDuressPin_Title">Duress Şifre Kodu</string>
+    <string name="SetDuressPin_Description">Duress Modu için bir şifre kodu ayarlayın</string>
+    <string name="EditDuressPin_Title">Duress Şifresini Düzenle</string>
+    <string name="EditDuressPin_Description">Duress Modu için yeni şifreyi girin</string>
+    <string name="DuressPin_Title">Duress Modu</string>
+    <string name="DuressPin_Description">Bu mod, kullanıcıların sadece belirtilen cüzdanları gösteren istenen şifre kodlarıyla birden fazla uygulama kilidini ayarlamalarına olanak tanır. Seçilen cüzdanları zorlama veya tehditler altında güvende tutmak için tasarlanmıştır.</string>
+    <string name="DuressPin_Notes">NOTLAR</string>
+    <string name="DuressPin_Notes_Biometrics_Title">Biyometrik doğrulama</string>
+    <string name="DuressPin_Notes_Biometrics_Description">Biyometrik Kimlik Doğrulama özelliği Zorlama Modunun kilidini açmak için çalışacaktır. Kolaylık olması açısından Biyometrik Kimlik Doğrulamayı devre dışı bırakabilirsiniz.</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Title">Şifre Kodu Devre Dışı Bırakma</string>
+    <string name="DuressPin_Notes_PasscodeDisabling_Description">Ana modda şifre kodunu devre dışı bırakmak, Duress Modunu otomatik olarak sıfırlar.</string>
+    <string name="DuressPin_Notes_PasscodeChange_Title">Şifre Kodu Değiştirme</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Duress Modunda şifre kodunu değiştirmek, o mod için mevcut şifre kodunu da değiştirir.</string>
+    <string name="DuressPinSelectAccounts_Title">Cüzdanları Seçin</string>
+    <string name="DuressPinSelectAccounts_Description">Duress Modunda gösterilecek cüzdanları seçin.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">CÜZDANLARI İZLE</string>
+    <!--Setting_Terms-->
+    <string name="SettingsTerms_Backup">Her cüzdan için kurtarma ifadelerini güvenli bir şekilde yedekleyin. Uygulama arızalanırsa fonlara yeniden erişmenin tek yolu budur.</string>
+    <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
+    <!--Setting_Tell Friends-->
+    <string name="SettingsShare_Title">Paylaş</string>
+    <!--Setting_Contact-->
+    <!--Setting_Notifications-->
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Balance">Bakiye</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Piyasaya Genel Bakış</string>
+    <string name="SettingsLaunchScreen_Watchlist">İzleme Listesi</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Dark">Karanlık</string>
+    <string name="SettingsTheme_Light">Açık</string>
+    <string name="SettingsTheme_System">Sistem</string>
+    <!--Errors-->
+    <!--Hud texts-->
+    <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
+    <string name="Hud_Text_Copied">Kopyalandı</string>
+    <string name="Hud_Text_Created">Oluşturuldu</string>
+    <string name="Hud_Text_Restored">Geri yüklendi </string>
+    <string name="Hud_Text_AddressAdded">Adres eklendi</string>
+    <string name="Hud_Text_Done">Bitti</string>
+    <string name="Hud_Text_Verified">Onaylandı</string>
+    <string name="Hud_Added_To_Watchlist">İzleme Listesine Eklendi</string>
+    <string name="Hud_Added_To_Wallet">Cüzdana Eklendi</string>
+    <string name="Hud_Removed_From_Wallet">Cüzdandan Kaldırıldı</string>
+    <string name="Hud_Removed_from_Watchlist">İzleme Listesinden Kaldır</string>
+    <string name="Hud_Removed">Kaldır</string>
+    <!--Manage Coins-->
+    <string name="ManageCoins_title">Cüzdanlar</string>
+    <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
+    <string name="ManageCoins_AddToken">Token Ekle</string>
+    <string name="ManageCoins_BipsDescription">%1$s cüzdanının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:
+\n
+\n- BIP-44 (eski)
+\n- BİP-49
+\n- BIP-84 (önerilen)
+\n- BIP-86 (en yeni)
+\n
+\nDurdurulamaz cüzdan 4 tanesini de desteklerken, BIP-84 formatında çalışan bir %2$s cüzdanı kullanmanızı önerir. Bu biçimde çalışan cüzdanlar, %3$s işlemi gönderirken en düşük ücreti öderler.</string>
+    <string name="ManageCoins_BchTypeDescription">Bitcoin Cash cüzdanlarının gelen ödemeleri almak için kullanabileceği 2 adres formatı vardır: 
+\n 
+\n- TYPE0 (eski) 
+\n- TYPE145 (daha yeni) 
+\n 
+\nUnstoppable cüzdan her ikisini de desteklerken, TYPE145 formatında çalışan bir Bitcoin Cash cüzdanı kullanmanızı önerir.</string>
+    <string name="ManageCoins_ContractAddress">CONTRACT ADRESİ</string>
+    <!-- Experimental Feature -->
+    <!-- Bitcoin Hodling -->
+    <!-- Testnet Settings -->
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Cüzdanları yönet</string>
+    <string name="ManageAccounts_CreateNewWallet">Oluştur</string>
+    <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
+    <string name="ManageAccounts_WatchAddress">Adresi İzle</string>
+    <!-- Import Wallet -->
+    <string name="ImportWallet_BackupFile">Dosyadan</string>
+    <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar.</string>
+    <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
+    <string name="ImportWallet_WarningInvalidJson">Geçersiz Json Dosyası</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Bu dosya, cüzdanın geçerli bir yedeği değil veya dosya bozulmuş ve geri yüklenemez.</string>
+    <string name="ImportWallet_SelectAnotherFile">Başka Bir Dosya Seçin</string>
+    <!-- Import Backup File -->
+    <string name="ImportBackupFile_EnterPassword">Parolanı Gir</string>
+    <string name="ImportBackupFile_EnterPassword_Description">Cüzdanınızı içe aktarmak için yedek parolayı girin.</string>
+    <string name="ImportBackupFile_Error_InvalidPassword">Geçersiz şifre</string>
+    <string name="ImportBackupFile_BackupPassword">Yedek Şifre</string>
+    <string name="Watch_Select_Blockchains">Blok Zincirleri Seç</string>
+    <string name="Watch_Select_Coins">Kripto Parayı Seç</string>
+    <string name="Watch_Error_InvalidAddressFormat">Adres formatı desteklenmiyor</string>
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">İsim</string>
+    <string name="ManageAccount_Save">Kaydet</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Manuel Yedekleme</string>
+    <string name="ManageAccount_LocalBackup">Yerel Yedekleme</string>
+    <string name="ManageAccount_Unlink">Cüzdanın bağlantısını kaldır</string>
+    <string name="ManageAccount_BackupRequired_Title">Yedekleme Gerekli</string>
+    <string name="ManageAccount_BackupRequired_Description">%1$s almadan önce %2$s anahtarlarınızı yedeklemeniz gerekiyor.</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">Bu işlem Cüzdanını bu cihazdan kaldıracak.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">Bu cüzdanın özel anahtarını yedeklemediyseniz, fonlarınıza erişiminizi kaybedersiniz.</string>
+    <string name="ManageAccount_MigrationRequired_Title">Taşıma Gerekli</string>
+    <string name="ManageAccount_BirthdayHeight">%s Oluşturulma Günü Üst Sınırı</string>
+    <string name="ManageAccount_NWords">%s kelime</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s parolalı kelime</string>
+    <string name="ManageAccount_SwitchWallet_Title">Cüzdan Değiştir</string>
+    <string name="ManageAccount_Wallets">Cüzdanlar</string>
+    <string name="ManageAccount_WatchAddresses">Cüzdan İzle</string>
+    <string name="ManageAccount_DeleteWarning">Bu cüzdan adresini izlemeyi bırakmak istiyor musunuz?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Terli Kasa</item>
+        <item>🧂 Tuzlu Defter</item>
+        <item>💧 Kesinlikle Likit</item>
+        <item>⏳ Bekleyen İşlem</item>
+        <item>🌈 Hayali Karlar</item>
+        <item>🤡 Sallantılı Çıpa</item>
+        <item>😤 Maksimum Dayanma</item>
+        <item>☠️ Sertifikalı Batık</item>
+        <item>👑 Batkın Taç</item>
+        <item>📉 Vasat Getiri</item>
+        <item>🕸️ Tozlu Portföy</item>
+        <item>🧳 Vintage Çanta</item>
+        <item>👻 Hayalet Kazanç</item>
+        <item>🐂 Yanılsamalı Boğa</item>
+        <item>🛒 Seri Dip Alıcı</item>
+        <item>💼 Premium Çanta Taşıyıcı</item>
+        <item>🤨 Şüpheli Getiri</item>
+        <item>♾️ Sonsuz Dip</item>
+        <item>💭 Ödünç İnanç</item>
+        <item>🦍 Kuantum Maymun</item>
+        <item>🔍 Paranoyak Düğüm</item>
+        <item>🛋️ Tembel Staker</item>
+        <item>☕ Kafeinli Doğrulayıcı</item>
+        <item>🔮 Meteliksiz Kahin</item>
+        <item>😴 Uykulu Doğrulayıcı</item>
+        <item>🎲 Rastlantısal Dahi</item>
+        <item>🔐 İsteksiz Hodler</item>
+        <item>🤑 Açgözlü Kahin</item>
+        <item>😵 Kafası Karışık Arbitraj</item>
+        <item>🏃 Çılgın Borsa</item>
+        <item>🪢 Çakılmış Temel</item>
+        <item>🌉 Şüpheli Köprü</item>
+        <item>⛽ Aşırı Ücretler</item>
+        <item>🌶️ Acı Teminat</item>
+        <item>🚌 Tıkış Tıkış Mempool</item>
+        <item>💨 Dumanlı Başlangıç</item>
+        <item>🕯️ Lanetli Portföy</item>
+        <item>⌛ Sonsuz Sabır</item>
+        <item>🥶 Donmuş Dayanma</item>
+        <item>💊 Sentetik Cesaret</item>
+        <item>🎖️ Asil Köylü</item>
+        <item>⚡ Geçici Milyoner</item>
+        <item>🗺️ Stratejik Yoksulluk</item>
+        <item>😊 Neşeli Batma</item>
+        <item>🏰 Pervasız Kale</item>
+        <item>🎰 Degen Cenneti</item>
+        <item>🙏 Alçakgönüllü Enkaz</item>
+        <item>💎 Elmas Eller</item>
+        <item>🃏 Kağıt Eller</item>
+        <item>🌙 Ay Yanılsaması</item>
+        <item>🚿 Yıkanmış Trader</item>
+        <item>🤏 Küçücük Pozisyon</item>
+        <item>🎯 Şanslı Tahmin</item>
+        <item>🌊 Su Altı Pozisyonu</item>
+        <item>💤 Uyuyan Dev</item>
+        <item>🎪 Gezici Sirk</item>
+        <item>🧸 Duygusal Hedge</item>
+        <item>🐯 Kağıt Kaplan</item>
+        <item>🔁 Özyinelemeli Kazanç</item>
+        <item>🥴 Baş Döndürücü Getiri</item>
+        <item>🏚️ Hacizli Çiftlik</item>
+        <item>🤫 Sessiz Balina</item>
+        <item>🌅 Sahte Şafak</item>
+        <item>📊 Rastgele Yürüyüş</item>
+        <item>🌋 Değişken Dağ</item>
+        <item>🎁 Sürpriz Tasfiye</item>
+        <item>🏄 Riskli Yolculuk</item>
+        <item>🧲 Manyetik Kayıp</item>
+        <item>🏋️ Ağır Çanta</item>
+        <item>🎈 Şişirilmiş Getiri</item>
+        <item>🧪 Deneysel Fon</item>
+        <item>🌸 Kırılgan Pozisyon</item>
+        <item>🧋 Köpüklü Token</item>
+        <item>🏆 Katılım Kupası</item>
+        <item>🌝 Dolunay Fonu</item>
+        <item>🐸 Nadir Pepe</item>
+        <item>🧟 Zombi Token</item>
+        <item>🦄 Efsanevi Kazanç</item>
+        <item>🥊 Dövüş Şansı</item>
+        <item>🌟 Mutlu Cehalet</item>
+        <item>🦆 Lastik Ördek</item>
+        <item>🎋 Bambu Protokolü</item>
+        <item>🏴‍☠️ Korsan Hazinesi</item>
+        <item>🪄 Sihirli Likidite</item>
+        <item>🏊 Su Altı Kasa</item>
+        <item>🎊 Şanslı Tasfiye</item>
+        <item>🦋 Kelebek Etkisi</item>
+        <item>🎸 Fişi Çekilmiş Kasa</item>
+        <item>💥 Patlayıcı Getiri</item>
+        <item>🧠 Pürüzsüz Beyin</item>
+        <item>🪦 Ölü Havuz</item>
+        <item>🎡 Döngüsel Ekonomi</item>
+        <item>🧘 Zen Tasfiyesi</item>
+        <item>📌 Kaçırılan Dip</item>
+        <item>🏴 Karanlık Orman</item>
+        <item>😎 Kendine Güvenen Kaybeden</item>
+        <item>🌪️ Kaotik Getiri</item>
+        <item>🧬 Mutant Protokol</item>
+        <item>🍕 Aç Cüzdan</item>
+        <item>🎭 Ödünç Ay</item>
+    </string-array>
+
+    <string name="Balance_Receive_BackupRequired_Description">%1$s yedeğini almanız gerekiyor</string>
+    <!--Network Settings-->
+    <!-- Show Key -->
+    <string name="ShowKey_Passphrase">Parola</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">Bir güvenlik önlemi olarak, özel anahtar için kopyalama eylemi kullanılmamasını öneririz.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Riski alıyorum</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Kopyalama</string>
+    <!-- Backup Recovery Phrase -->
+    <string name="BackupRecoveryPhrase_ManualBackup">Manuel Yedekleme</string>
+    <string name="BackupRecoveryPhrase_LocalBackup">Yerel Yedekleme</string>
+    <string name="BackupRecoveryPhrase_Later">Sonra</string>
+    <string name="BackupRecoveryPhrase_BackupRequiredText">Cüzdanı kullanmaya başlamak için cüzdan yedekleme seçeneklerinden birini tamamlayın.</string>
+    <string name="BackupRecoveryPhrase_BackupRecomendedText">Her cüzdan için manuel bir yedeğin olması önerilir.</string>
+    <!-- Local Backup -->
+    <string name="LocalBackup_Title">Yerel Yedekleme</string>
+    <string name="LocalBackup_SaveAndBackup">Kaydet ve Yedekle</string>
+    <string name="LocalBackup_SetPassword">Şifre Ayarla</string>
+    <string name="LocalBackup_BackupSaved">Yedek Kaydedildi</string>
+    <string name="LocalBackup_PasswordInvalid">Bir büyük harf, bir küçük harf, bir rakam ve bir sembol dahil olmak üzere en az 8 karakter.</string>
+    <string name="LocalBackup_DontForgetPasswordWarning">Bu şifre, cüzdanınızın yedek dosyasını şifrelemek için kullanılır. Kaybolur veya unutulursa kurtarılamaz veya sıfırlanamaz.</string>
+    <string name="LocalBackup_ProtextBackupWithPasswordInfo">Yedeklemeniz için kilit açma parolasını ayarlayın. En az 8 sembolden oluşmalı ve en az bir küçük harf, büyük harf, sayı ve özel karakter içermelidir.</string>
+    <string name="LocalBackup_TermsWarningText">Depolama cihazları, yani sabit sürücüler, USB sürücüler , akıllı telefondaki depolama vb. fiziksel hasar, hırsızlık veya diğer öngörülemeyen durumlar nedeniyle kayba karşı savunmasızdır.</string>
+    <string name="LocalBackup_Term1">Bir yedekleme cihazının çalınmasının veya hasar görmesinin, ilgili cüzdanın yedeğinin kaybolmasına neden olacağını anlıyorum.</string>
+    <!-- Recovery Phrase -->
+    <string name="RecoveryPhrase_Title">Kurtarma cümlesi</string>
+    <string name="RecoveryPhrase_ShowPhrase">Kurtarma ifadesini göstermek için dokunun</string>
+    <string name="RecoveryPhrase_Verify">Doğrula</string>
+    <string name="RecoveryPhrase_CopyWarning_Title">Kopyalama Riski</string>
+    <!-- Evm Private Key -->
+    <string name="EvmPrivateKey_Title">EVM Özel anahtar</string>
+    <string name="EvmPrivateKey_ShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
+    <!-- Stellar Secret Key -->
+    <!-- Bip32 Root Key -->
+    <!-- Account Extended Keys -->
+    <string name="ExtendedKey_TapToShowPrivateKey">Özel anahtarı göstermek için dokunun</string>
+    <string name="ExtendedKey_AccountInfo">Yapılacak</string>
+    <!-- Private Keys -->
+    <string name="PrivateKeys_Title">Gizli Anahtar</string>
+    <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
+    <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
+    <!-- Public Keys -->
+    <string name="PublicKeys_Title">Genel Anahtarlar</string>
+    <string name="PublicKeys_EvmAddress">EVM Adresi</string>
+    <string name="PublicKeys_EvmAddress_Description">Ethereum, Binance Smart Chain ve diğer EVM tabanlı blok zincirlerinde varlık tutan cüzdanların salt okunur olarak izlenmesini sağlar.</string>
+    <string name="PublicKeys_AccountExtendedPublicKeyDescription">Bitcoin ve diğer UTXO tabanlı kriptoları (örneğin Litecoin, Bitcoin Cash, Dash vb.) tutan cüzdanların salt okunur olarak izlenmesine izin verir.</string>
+    <!-- Recovery Phrase Verify -->
+    <string name="RecoveryPhraseVerify_Title">Doğrula</string>
+    <string name="RecoveryPhraseVerify_Description">Cüzdan kurtarma ifadenizden istenen iki kelimeyi seçin</string>
+    <!-- Backup Key -->
+    <string name="BackupConfirmKey_Error_InvalidWord">Geçersiz kelime</string>
+    <!--Manage Keys Delete Alert-->
+    <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
+    <string name="ManageKeys_Delete_FromPhone">Cihazdan sil</string>
+    <string name="ManageKeys_StopWatching">İzlemeyi Durdur</string>
+    <!-- Manage Keys Alert -->
+    <!-- Add Token Dialog-->
+    <!-- Enable Token -->
+    <!-- Add Token -->
+    <string name="AddToken_Title">Token Ekle</string>
+    <string name="AddToken_CoinName">Kripto Para Adı</string>
+    <string name="AddToken_CoinCode">Coin Kodu</string>
+    <string name="AddToken_Decimals">Ondalıklar</string>
+    <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
+    <string name="AddToken_Blockchain">Blok zincirine göre filtrele</string>
+    <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
+    <string name="AddToken_InvalidContractAddress">Geçersiz sözleşme adresi</string>
+    <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Sözleşme adresi %s blockchain\'de bulunamadı</string>
+    <!-- Address Format Settings List -->
+    <string name="AddressFormatSettings_Description">Ödemeleri almak için adres biçimini seçin. Mevcut bir cüzdanı geri yüklerken doğru bir format seçilmelidir.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Yerel</string>
+    <!-- Blockchain Settings -->
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018 öncesinde yaygın</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018 sonrasında yaygın</string>
+    <!-- Nym VPN -->
+    <!-- Tor -->
+    <string name="Tor_Connection_Enable">Tor\'u etkinleştir</string>
+    <string name="Tor_Connection_Disable">Tor\'u devre dışı bırak</string>
+    <string name="Tor_Alert_Title">İnternet</string>
+    <string name="TorPage_Connecting">Tor Bağlanıyor…</string>
+    <string name="TorPage_Failed">Tor bağlanılamadı</string>
+    <string name="Tor_TorIsActive">Tor aktif</string>
+    <!--Coin Page-->
+    <string name="Coin_Info">Koin Bilgisi</string>
+    <string name="Coin_Tab_Overview">Fiyat</string>
+    <string name="Coin_Tab_Market">Marketler</string>
+    <string name="Coin_Tab_Details">Analitik</string>
+    <string name="CoinPage_TimeDuration_Day">1G</string>
+    <string name="CoinPage_TimeDuration_Week">7G</string>
+    <string name="CoinPage_TimeDuration_Month">1A</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2H</string>
+    <string name="CoinPage_TimeDuration_Month3">3A</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6A</string>
+    <string name="CoinPage_TimeDuration_All">Hepsi</string>
+    <string name="CoinPage_TradingVolume">İşlem Hacmi</string>
+    <string name="CoinPage_Audits_PoweredBy">Defiyield.app tarafından desteklenmektedir</string>
+    <string name="CoinPage_Audits_Issues">Sorunlar: %d</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filtreler</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Bitcointreasuries.net tarafından desteklenmektedir</string>
+    <string name="CoinPage_Reports">Raporlar</string>
+    <string name="CoinPage_FundsInvested">Yatırılan Fonlar</string>
+    <string name="CoinPage_Overview">İzleme</string>
+    <string name="CoinPage_CoinTypes">Coin çeşitleri</string>
+    <string name="CoinPage_Links">Bağlantılar</string>
+    <string name="CoinPage_Guide">Kılavuzu</string>
+    <string name="CoinPage_Website">Web sitesi</string>
+    <string name="CoinPage_MarketCap">Piyasa Değeri</string>
+    <string name="CoinPage_DilutedMarketCap">Seyreltilmiş P. Değeri</string>
+    <string name="CoinPage_inCirculation">Dolaşımda</string>
+    <string name="CoinPage_TotalSupply">Toplam arz</string>
+    <string name="CoinPage_Volume">Birim</string>
+    <string name="CoinPage_NoData">Veri Yok</string>
+    <string name="CoinPage_NoDataAvailable">Veri yok</string>
+    <string name="CoinPage_AddToWallet">Cüzdana Ekle</string>
+    <string name="CoinPage_InWallet">Cüzdanda</string>
+    <string name="CoinPage_Favorite">Favori</string>
+    <string name="CoinPage_Unfavorite">Favori Olmayan</string>
+    <string name="CoinPage_Performance_Week1">1 Hafta</string>
+    <string name="CoinPage_Performance_Month1">1 Ay</string>
+    <string name="CoinPage_Performance_Month3">3 Ay</string>
+    <string name="CoinPage_Performance_Month6">6 Ay</string>
+    <string name="CoinPage_Performance_Year1">1 Yıl</string>
+    <string name="CoinPage_ShowMore">Daha Fazlası</string>
+    <string name="CoinPage_ShowLess">Daha Fazla Oku</string>
+    <string name="CoinPage_LaunchDate">Başlangıç ​​tarihi</string>
+    <string name="CoinPage_Tvl">Kilitlenen Toplam Değer</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
+    <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
+    <string name="CoinPage_CoinInvestments_Lead">Önderlik</string>
+    <string name="CoinPage_CoinNotFound">[%s]\nBulunamadı</string>
+    <string name="CoinPage_Indicators">Göstergeler</string>
+    <string name="CoinPage_MovingAverages">Hareketli Ortalamalar</string>
+    <string name="CoinPage_OscillatorsSettings">Osilatörler</string>
+    <string name="CoinPage_EmaSettingsDescription">EMA, SMA ve WMA, teknik analizde kullanılan hareketli ortalamalardır:\n\nEMA, daha hızlı tepkiler için yakın dönem fiyatlarına vurgu yapar.\nSMA, genel bir trend görünümü için fiyat verilerini ortalayır.\nWMA, yakın dönem verilerini lineer olarak ağırlıklandırarak hassasiyeti ve gürültü azaltmayı dengelemektedir.</string>
+    <string name="CoinPage_RsiSettingsDescription">Göreceli Güç Endeksi (RSI), fiyat hızını ve değişimini ölçen, aşırı alım (70 üzeri) veya aşırı satım (30 altı) piyasa koşullarını tanımlayan bir momentum osilatörüdür. Ayrıca fiyat ters dönüşlerini değişimler yoluyla tespit edebilir.</string>
+    <string name="CoinPage_MacdSettingsDescription">Hareketli Ortalama Yakınsama Iraksama (MACD), bir güvenliğin fiyatının iki EMA\'sı arasındaki ilişkiyi izleyen bir momentum göstergesidir. MACD çizgisi (12 dönemlik EMA eksi 26 dönemlik EMA), sinyal çizgisi olarak bilinen 9 dönemlik EMA\'yı kestiğinde, alım veya satım fırsatlarını sinyalize eder.</string>
+    <string name="CoinPage_Period">Periyot</string>
+    <string name="CoinPage_RsiLength">RSI Uzunluğu</string>
+    <string name="CoinPage_FastLength">Hızlı Uzunluk</string>
+    <string name="CoinPage_SlowLength">Yavaş Uzunluk</string>
+    <string name="CoinPage_SignalSmoothing">Sinyal Düzleştirme</string>
+    <string name="CoinPage_IndicatorsAlertText">Göstergeler yalnızca Durdurulamaz Cüzdan premium kullanıcıları için mevcuttur.</string>
+    <string name="CoinPage_AiGeneratedText">Bu, verilen kripto para birimi için sağlanan referans materyale dayanarak yapay zeka tarafından oluşturulmuş bir açıklamadır. Hatalar içerebilir.</string>
+    <string name="CoinPage_MarketsLabel_Verified">DOĞRULANMIŞ</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Onaylandı</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">Hepsi</string>
+    <string name="CoinAnalytics_CexVolume_Info1">Önde gelen merkezileştirilmiş borsalarda token için 30 günlük süre boyunca toplam işlem hacmi.</string>
+    <string name="CoinAnalytics_CexVolume_Info2">Bir yıllık süre zarfında önde gelen merkezi olmayan borsalarda token için günlük işlem hacmindeki değişikliği gösteren grafik.</string>
+    <string name="CoinAnalytics_CexVolume_Info3">Token\'ın sıralaması, önde gelen merkezileştirilmiş borsalarda 30 günlük süre boyunca işlem hacmine dayanmaktadır.</string>
+    <string name="CoinAnalytics_CexVolume_Info4">24 Saat / 7 Gün / 1 Ay aralıklarında merkezi borsalarda işlem hacmine göre sıralanan tüm tokenların listesi.</string>
+    <string name="CoinAnalytics_DexVolume_Info1">Önde gelen merkezi olmayan borsalarda token için 30 günlük süre boyunca toplam işlem hacmi.</string>
+    <string name="CoinAnalytics_DexVolume_Info2">Bir yıllık süre zarfında önde gelen merkezi olmayan borsalarda token için günlük işlem hacmindeki değişikliği gösteren grafik.</string>
+    <string name="CoinAnalytics_DexVolume_Info3">30 günlük süre içinde önde gelen merkezi olmayan borsalarda işlem hacmine göre token sıralaması.</string>
+    <string name="CoinAnalytics_DexVolume_Info4">24 saat / 7 gün / 1 ay aralıklarında, merkezi olmayan borsalardaki işlem hacmine göre sıralanan tüm tokenlerin listesi.</string>
+    <string name="CoinAnalytics_DexVolume_TrackedDexes">İzlenen DEX\'ler:</string>
+    <string name="CoinAnalytics_DexLiquidity_Info1">Önde gelen merkezi olmayan borsalarda token için şu anda mevcut olan toplam likidite.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info2">Bir yıllık süre zarfında önde gelen merkezi olmayan borsalarda token için mevcut likiditedeki değişikliği gösteren grafik.</string>
+    <string name="CoinAnalytics_DexLiquidity_Info3">Önde gelen merkezi olmayan borsalarda token için mevcut likiditeye göre sıralanan tüm tokenlerin listesi.</string>
+    <string name="CoinAnalytics_DexLiquidity_TrackedDexes">İzlenen DEX\'ler:</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info1">24 saatlik süre boyunca benzersiz günlük aktif adreslerin toplam sayısı.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info2">Bir yıllık süre zarfında günlük aktif adres sayısındaki değişimi gösteren grafik.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info3">30 günlük süre boyunca token ile işlem yapan benzersiz blockchain adreslerinin toplam sayısı.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info4">Token\'ın sıralaması, 30 günlük süre boyunca token ile işlem yapan aktif cüzdan sayısına dayanmaktadır.</string>
+    <string name="CoinAnalytics_ActiveAddresses_Info5">24 saat / 7 gün / 1 ay aralıklarında, token ile işlem yapan günlük aktif adreslerin sayısına göre sıralanan tüm tokenlerin listesi.</string>
+    <string name="CoinAnalytics_TransactionCount_Info1">30 günlük süre boyunca token ile yapılan benzersiz blockchain işlemlerinin toplam sayısı.</string>
+    <string name="CoinAnalytics_TransactionCount_Info2">Bir yıllık süre zarfında işlem sayısındaki değişimi gösteren grafik.</string>
+    <string name="CoinAnalytics_TransactionCount_Info3">Token\'ın sıralaması, 30 günlük süre boyunca token ile yapılan işlem sayısına dayanmaktadır.</string>
+    <string name="CoinAnalytics_TransactionCount_Info4">24 saat / 7 gün / 1 ay aralıklarında, token ile yapılan işlem sayısına göre sıralanan tüm tokenlerin listesi.</string>
+    <string name="CoinAnalytics_TransactionCount_Info5">30 günlük süre boyunca blockchain üzerinden transfer edilen toplam token sayısı.</string>
+    <string name="CoinAnalytics_Holders_Info1">Çeşitli blockchain\'lerde tokeni tutan benzersiz adreslerin toplam sayısı.</string>
+    <string name="CoinAnalytics_Holders_Info2">Her blok zincirinde tokenı tutan en iyi 10 cüzdan.</string>
+    <string name="CoinAnalytics_Holders_TrackedBlockchains">İzlenen blok zincirleri: Ethereum, Binance Smart Chain, İyimserlik, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
+    <string name="CoinAnalytics_ProjectTVL_Info1">Projenin akıllı sözleşmelerinde Kilitlenen Toplam Değer (veya Yönetim Altındaki Varlıklar).</string>
+    <string name="CoinAnalytics_ProjectTVL_Info2">Projenin akıllı sözleşmelerindeki Toplam Kilit Değerdeki değişimi gösteren 1 yıllık döneme ait grafik.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Token\'ın sıralaması mevcut Toplam Kilitli Değer üzerine kuruludur.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">Mevcut Toplam Kilit Değere göre sıralanan tüm tokenların listesi.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info5">Proje için Piyasa Değeri / TVL oranı.</string>
+    <string name="CoinAnalytics_ProjectNoAnalyticData">Bu projenin analitik verisi yoktur</string>
+    <string name="CoinAnalytics_CexVolume">CEX Hacmi</string>
+    <string name="CoinAnalytics_CexVolumeRank">CEX Hacim Sıralaması</string>
+    <string name="CoinAnalytics_CexVolumeRank_Description">Merkezi borsalarda token için işlem hacmine göre sıralanan tokenlar.</string>
+    <string name="CoinAnalytics_DexVolume">DEX Hacmi</string>
+    <string name="CoinAnalytics_DexVolumeRank">DEX Hacim Sıralaması</string>
+    <string name="CoinAnalytics_DexVolumeRank_Description">Merkezi olmayan borsalarda token için işlem hacmine göre sıralanan tokenlar.</string>
+    <string name="CoinAnalytics_DexLiquidity">DEX Likiditesi</string>
+    <string name="CoinAnalytics_DexLiquidityRank">DEX Likidite Sıralaması</string>
+    <string name="CoinAnalytics_DexLiquidityRank_Description">Merkezi olmayan borsalarda mevcut likiditeye göre sıralanan tokenlar.</string>
+    <string name="CoinAnalytics_ActiveAddresses">Günlük Aktif Adresler</string>
+    <string name="CoinAnalytics_ActiveAddressesRank">Aktif Adresler Sıralaması</string>
+    <string name="CoinAnalytics_ActiveAddressesRank_Description">Token ile işlem yapan benzersiz adreslerin sayısına göre sıralanan tokenlar.</string>
+    <string name="CoinAnalytics_TransactionCount">İşlem Sayısı</string>
+    <string name="CoinAnalytics_TransactionCountRank">İşlem Sayısı Sıralaması</string>
+    <string name="CoinAnalytics_Holders">Sahipler</string>
+    <string name="CoinAnalytics_ProjectTvl">Proje TVL</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Proje TVL (Toplam Değer)</string>
+    <string name="CoinAnalytics_ProjectRevenue">Proje Geliri</string>
+    <string name="CoinAnalytics_ProjectFee">Proje Ücreti</string>
+    <string name="CoinAnalytics_ProjectRevenueRank">Proje Gelir Sıralaması</string>
+    <string name="CoinAnalytics_ProjectFeeRank">Proje Ücret Sıralaması</string>
+    <string name="CoinAnalytics_HoldersRank">Sahipler Sıralaması</string>
+    <string name="CoinAnalytics_ProjectRevenueRank_Description">Tokenlar, sahipler için mekanizmalar aracılığıyla oluşturulan gelire göre sıralanır, örneğin staking veya token yakma.</string>
+    <string name="CoinAnalytics_ProjectFeeRank_Description">Tokenlar, ilgili projeler tarafından üretilen ücretlere göre sıralanır. Ücretlerin toplanma şekli projeden projeye değişir.</string>
+    <string name="CoinAnalytics_HoldersRank_Description">Birden fazla blockchain\'de bulunan benzersiz adresler tarafından tutulan tokenları sıralama.</string>
+    <string name="CoinAnalytics_OtherData">Diğer Veriler</string>
+    <string name="CoinAnalytics_Reports">Raporlar</string>
+    <string name="CoinAnalytics_Funding">Finansman</string>
+    <string name="Coin_Analytics_Audits">Denetimler</string>
+    <string name="Coin_Analytics_Last30d">Son 30 gün</string>
+    <string name="Coin_Analytics_Current">mevcut</string>
+    <string name="Coin_Analytics_Rank">Sıralama</string>
+    <string name="Coin_Analytics_30DayRank">Son 30 Gün Sıralaması</string>
+    <string name="Coin_Analytics_30DayUniqueAddress">30 Günlük Benzersiz Adresler</string>
+    <string name="Coin_Analytics_30DayVolume">Son 30 Gün Hacmi</string>
+    <string name="Coin_Analytics_OverallScore">Genel Puan</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Mükemmel</string>
+    <string name="Coin_Analytics_OverallScore_Good">İyi</string>
+    <string name="Coin_Analytics_OverallScore_Fair">Orta</string>
+    <string name="Coin_Analytics_OverallScore_Poor">Zayıf</string>
+    <string name="Coin_Analytics_OverallScore_CexVolume">Genel puan, son 7 gündeki merkezi borsalarda ortalama günlük işlem hacmine dayanmaktadır.</string>
+    <string name="Coin_Analytics_OverallScore_DexVolume">Genel puan, son 7 gündeki merkezi olmayan borsalarda ortalama günlük işlem hacmine dayanmaktadır.</string>
+    <string name="Coin_Analytics_OverallScore_DexLiquidity">Genel puan, merkezi olmayan borsalardaki toplam mevcut likiditeye dayanmaktadır.</string>
+    <string name="Coin_Analytics_OverallScore_ActiveAddresses">Genel puan, son 7 gündeki ortalama günlük aktif adres sayısına dayanmaktadır.</string>
+    <string name="Coin_Analytics_OverallScore_ProjectTvl">Genel puan, verilen token tarafından temsil edilen projenin toplam değer kilitlenmesine (varlık yönetimi) dayanmaktadır.</string>
+    <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
+    <string name="Coin_Analytics_OverallScore_Holders">Genel puan, ilgili tokenı tutan adreslerin toplam sayısına dayanmaktadır.</string>
+    <string name="Coin_Analytics_Period_30m">30 dakika</string>
+    <string name="Coin_Analytics_Period_1h">1 saat</string>
+    <string name="Coin_Analytics_Period_4h">4 saat</string>
+    <string name="Coin_Analytics_Period_8h">8 saat</string>
+    <string name="Coin_Analytics_Period_1d">1 gün</string>
+    <string name="Coin_Analytics_Period_1w">1 hafta</string>
+    <string name="Coin_Analytics_Period_1m">1 ay</string>
+    <string name="Coin_Analytics_Indicators_StrongBuy">Kuvvetli Al</string>
+    <string name="Coin_Analytics_Indicators_StrongSell">Kuvvetli Satış</string>
+    <string name="Coin_Analytics_Indicators_Sell">Sat</string>
+    <string name="Coin_Analytics_Indicators_Buy">Al</string>
+    <string name="Coin_Analytics_Indicators_Neutral">Tarafsız</string>
+    <string name="CoinAnalytics_HighRiskItems">Yüksek Riskli Ögeler</string>
+    <string name="CoinAnalytics_MediumRiskItems">Orta Riskli Ögeler</string>
+    <string name="Coin_Analytics_Indicators_Risky">Riskli</string>
+    <string name="CoinAnalytics_AttentionRequired">İlgilenmeniz Gerekiyor</string>
+    <string name="CoinAnalytics_PoweredByDeFi">De.Fi tarafından desteklenmektedir</string>
+    <string name="CoinAnalytics_CountItems">%d adet</string>
+    <string name="TechnicalAdvice_Title">Teknik Göstergeleri</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Her zaman risk yönetimini uygulamayı unutmayın ve bu finansal tavsiye değildir.</string>
+    <string name="TechnicalAdvice_OverBought">aşırı alım</string>
+    <string name="TechnicalAdvice_OverSold">aşırı satım</string>
+    <string name="TechnicalAdvice_Down">aşağı</string>
+    <string name="TechnicalAdvice_Up">yukarı</string>
+    <string name="TechnicalAdvice_OverMain">Varlık ile yapılan işlemler risklidir.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">%s\'den başlayarak</string>
+    <string name="TechnicalAdvice_OverIndicators">Varlık, Bollinger Band kanalı dışında ve %s.</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s, Bu aynı zamanda varlığın %2$s olduğunu gösterir.</string>
+    <string name="TechnicalAdvice_OverAdvice"> Güçlü bir %s yönlü hareket olabilir, bu yüzden varlık fiyatının kanala dönmesini beklemek daha iyi olur.</string>
+    <string name="TechnicalAdvice_StrongIndicators">varlık %s idi, ancak şimdi Bollinger Band kanalına geri döndü. Bu, olası bir trend dönüşünü gösterir.</string>
+    <string name="TechnicalAdvice_StrongRsi">Bu arada, RSI %1$s, hala %2$s olduğunu gösteriyor.</string>
+    <string name="TechnicalAdvice_StrongAdvice">Bu piyasaya giriş için çok güçlü bir sinyal olabilir. Kanala dönüşten sonra %s yönlü hareketin birkaç denemesi olabileceğini unutmayın, bu yüzden risk yönetimini unutmayın.</string>
+    <string name="TechnicalAdvice_StableRsi">Bu arada, RSI %s, bu da bir trend dönüşünü gösteriyor (RSI 70\%% sınırını geçti).</string>
+    <string name="TechnicalAdvice_NeutralIndicators">varlık aşırı alım/aşırı satım bölgesindeydi, ancak şu anda fiyat nötr bölgedeki Bollinger Band kanalına geri döndü. RSI = %s ayrıca güçlü bir trendin olmadığını doğruluyor, bu nedenle genel olarak varlık fiyatı ortalama yapmaya doğru hareket ediyor ve daha fazla hareket herhangi bir yönde mümkün olabilir.</string>
+    <string name="TechnicalAdvice_NeutralAdvice">Genel olarak, varlık fiyatı ortalama hareket ediyor ve daha fazla hareket herhangi bir yönde mümkün olabilir.</string>
+    <string name="TechnicalAdvice_OtherTitle">Lütfen dikkate alın:</string>
+    <string name="TechnicalAdvice_EmaAbove">yukarıda</string>
+    <string name="TechnicalAdvice_EmaBelow">aşağıda</string>
+    <string name="TechnicalAdvice_EmaGrowth">büyüme</string>
+    <string name="TechnicalAdvice_EmaDecrease">azalış</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200. Genel duygu ve trendi belirler. Varlığın günlük fiyatı EMA (%1$s) \'nin %2$s\'den geçtiği yerde bulunuyor. Bu, genel olarak varlığın %3$s olduğu anlamına gelir.</string>
+    <string name="TechnicalAdvice_MacdPositive">yukarıda</string>
+    <string name="TechnicalAdvice_MacdNegative">aşağıda</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD. Ortalama fiyat değişimini dikkate alarak trendin gücünü değerlendirir. Histogramın günlük değeri %1$s (%2$s). Varlığın fiyatı genel olarak %3$s hareket edebilir.</string>
+    <string name="TechnicalAdvice_InfoTitle">Teknik Göstergeleri</string>
+    <string name="TechnicalAdvice_InfoDescription">Bollinger Bantları + RSI stratejisini kullanarak işlem sinyallerini belirliyoruz. Tüm hesaplamalar günlük mum grafiklerine dayanmakta ve ortalama uzun vadeli bir strateji için tavsiyeler sunmaktadır. Stratejinin özü, varlık fiyatının Bollinger Bantları kanalından çıkarak aşırı seviyelere ulaşması ve RSI\'nin aşırı alım/aşırı satım bölgesinde olması gerektiğidir. Fiyat kanala geri döndükten sonra, fiyatın ortalama değerlere geri dönme veya kanalı diğer taraftan kırmaya yönelik yüksek bir olasılığı vardır. Stratejinin güçlü piyasa hareketleri sırasında birkaç yanlış sinyal verebileceğini unutmayın, doğru bir sinyal ortaya çıkmadan önce.\n\nLütfen ticarette risk yönetimini uygulamanın çok önemli olduğunu ve piyasa durumu değişirse kayıpları kesmeyi unutmayın!</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Kuvvetli Al</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Al</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Tarafsız</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Sat</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Kuvvetli Satış</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Riskli</string>
+    <string name="TechnicalAdvice_Details">Ayrıntılar</string>
+    <string name="Detectors_TokenDetectors">Token Tespit Ediciler</string>
+    <string name="Detectors_GeneralDetectors">Genel Tespit Ediciler</string>
+    <string name="Detectors_IssuesCount">Sorunlar: %d</string>
+    <!-- NFT Collection -->
+    <!-- NFT Collection Events -->
+    <!--Rate list-->
+    <string name="RateList_TopGainers">Kazanlar</string>
+    <string name="RateList_TopLosers">Kaybedenler</string>
+    <string name="Market_DaysAgo">%dg önce</string>
+    <string name="Market_HoursAgo">%dsa önce</string>
+    <string name="Market_MinutesAgo">%ddk önce</string>
+    <!-- Balance Sync Error -->
+    <string name="BalanceSyncError_Title">Senk. hatası</string>
+    <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
+    <string name="BalanceSyncError_ButtonChangeSource">Kaynağı Değiştir</string>
+    <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">KATIL UNSTOPPABLES</string>
+    <string name="ProUsersInfo_Features_TxCount">İşlem Sayısı</string>
+    <string name="Hud_Text_LearnMore">Çok Yakında</string>
+    <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, and useful charts based on on-chain data that will help give you a clear view of projects</string>
+    <!--Widget-->
+    <string name="WidgetList_Config_Title">Türü Seç</string>
+    <string name="Widget_EnableAutostartWarning">Bu widget\'ın düzgün çalışması için Otomatik Başlatmayı etkinleştirmelisiniz.</string>
+    <!--Alert-->
+    <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
+    <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
+    <string name="Alert_TitleWarning">Uyarı</string>
+    <string name="Alert_CustomKeyboardIsUsed">Cihazınız varsayılan olmayan bir klavye kullanıyor gibi görünüyor. Unstoppable, üçüncü taraf klavyelerin kullanıcıların girdiği verileri toplayıp paylaşabileceği ihtimali nedeniyle, cihazınızda varsayılan klavyeyi seçmenizi önerir.\n\nTercih ettiğiniz klavyeyi kullanmaya devam etmek istiyorsanız \'Atla\' butonuna tıklayın.</string>
+    <string name="Alert_DeviceIsRootedWarning">Unstoppable ekibi, uygulamanın yalnızca root olmayan (jailbreak yapılmamış) telefonlarda çalıştırılmasını önerir.\n\nKöklü bir cihaz kullandığınızda, uygulamanın artık kripto para biriminizin kötü amaçlı yazılımlara karşı güvenliğini garanti edemeyeceğini lütfen unutmayın.</string>
+    <!--OS Pin-->
+    <string name="OSPin_Confirm_Title">Telefon PİN\'i</string>
+    <string name="OSPin_Confirm_Desciption">Bu uygulamayı kullanabilmeniz için telefonun Ekran Kilidi (Şifre/PİN) etkinleştirilmeli.\n\nAndroid Ayarlarından etkinleştirebilirsiniz.\n\nŞifreyi kaldırdığınızda, kullanılmakta olan güvenli bilgi deposu sistem tarafından kaldırılır. Cüzdanlarınızı gizli anahtar ile geri yüklemeniz gerekecek.</string>
+    <string name="OSPin_Prompt_Desciption">Bu uygulama, hassas bilgileri kendi deposunda tutmaktansa Android\'in güvenli deposunda tutmak için telefonun PİN\'ine ihtiyaç duyar.</string>
+    <!--Unlock-->
+    <string name="Unlock_Title">Kilidi Aç</string>
+    <string name="Unlock_Passcode">Şifre</string>
+    <string name="Unlock_EnterPasscode">Şifre Girin</string>
+    <string name="Unlock_BiometricScanner">Biyometri Tarayıcı</string>
+    <string name="Unlock_BiometricScannerDisabled_Description">Parolayı girin veya daha sonra tekrar deneyin</string>
+    <string name="Unlock_BiometricScannerDisabled_Info">Biyometrik kimlik. etkisizleştirildi</string>
+    <string name="Unlock_WalletDisabledUntil">Engellendi: %s</string>
+    <string name="Unlock_AttemptsLeft">%s deneme kaldı</string>
+    <string name="Unlock_Random">Rastgele</string>
+    <!--Set Pin-->
+    <string name="PinSet_Title">Şifre belirle</string>
+    <string name="PinSet_Info">Şifre, programı açmak ve para göndermek için kullanılacak</string>
+    <string name="PinSet_ConfirmInfo">Onayla</string>
+    <string name="PinSet_ErrorPinsDontMatch">Kod uyuşmadı. Tekrar deneyin.</string>
+    <string name="PinSet_ErrorFailedToSavePin">Şifre kaydedilirken hata oluştu. Tekrar deneyin.</string>
+    <string name="PinSet_ForBiometrics">Biyometriyi etkinleştirmek için bir şifre belirleyin</string>
+    <string name="PinSet_ForDuress">Duress Modunu etkinleştirmek için bir şifre kodu ayarlayın</string>
+    <string name="PinSet_ErrorPinInUse">Bu şifre zaten kullanılıyor.</string>
+    <!--Edit Pin-->
+    <string name="EditPin_Title">Kod Değiştir</string>
+    <string name="EditPin_NewPinInfo">Yeni Kod</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Biyometri Tarayıcı</string>
+    <!--Contacts-->
+    <string name="Contacts">Kişiler</string>
+    <string name="Contacts_Backup">Kişileri Yedekle</string>
+    <string name="Contacts_Restore">Kişileri Geri Yükle</string>
+    <string name="Contacts_Restore_Warning">Bu eylem, varolan kişi listenizi tamamini siler ve yenisini oluşturur. Kişi listenizi değiştirmek istiyor musunuz? </string>
+    <string name="Contacts_AddressesCount">Adresler: %s</string>
+    <string name="Contacts_NewContact">Yeni Kişi</string>
+    <string name="Contacts_AddNewContact">Yeni Kişi Ekle</string>
+    <string name="Contacts_NameHint">İsim</string>
+    <string name="Contacts_AddAddress">Adres ekle</string>
+    <string name="Contacts_AddAddress_NewContact">Yeni Kişi Oluştur</string>
+    <string name="Contacts_AddAddress_ExistingContact">Mevcut Kişiye Ekle</string>
+    <string name="Contacts_AddAddress_Replace">Değiştir</string>
+    <string name="Contacts_AddAddress_ReplaceWarning">Seçilen kişinin zaten %1$s üzerinde bir adresi var. Bu eylem, %2$s adresini %3$s ile değiştirecek?</string>
+    <string name="Contacts_AddressHint">Adres veya Domain</string>
+    <string name="Contacts_DeleteContact">Kişiyi Sil</string>
+    <string name="Contacts_DeleteContact_Warning">Bu kişi silmek istediğine emin misin?</string>
+    <string name="Contacts_DeleteAddress">Adresi Sil</string>
+    <string name="Contacts_DeleteAddress_Warning">Bu adresi silmek istediğinize emin misiniz?</string>
+    <string name="Contacts_DiscardChanges">Değişiklikleri İptal Et</string>
+    <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
+    <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
+    <string name="Contacts_ActionMore">Daha fazla</string>
+    <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
+    <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
+    <string name="Hud_Text_Connected">Bağlandı</string>
+    <string name="BackupManager_RestoreBackupDescription">Cüzdanınızı ve uygulama verilerinizi bir yedek dosyasından geri yükleyin.</string>
+    <string name="BackupManager_CreateBackupDescription">Cüzdanlarınız ve uygulama verilerinizin bir yedek dosyasını oluşturun.</string>
+    <string name="BackupManager_SelectItemsDescription">Yedeğinize neyi dahil edeceğinizi seçin. Tüm öğeleri veya seçili öğeleri yedekleyebilirsiniz.</string>
+    <string name="BackupManager_RestoreItemsDescription">Ne geri yüklemek istediğinizi seçin. Her şeyi veya yalnızca seçili öğeleri geri yükleyebilirsiniz.</string>
+    <string name="BackupManager_CountSavedAddresses">%d kaydedilmiş adres</string>
+    <string name="BackupManager_CountAssets">%d varlık</string>
+    <string name="BackupManager_CountNetworks">%d ağ</string>
+    <string name="BackupManager_CountWallets">%d cüzdan</string>
+    <string name="AddZanoNode_AddNode">Düğüm Ekle</string>
+    <string name="AddZanoNode_NodeUrl">Düğüm URL</string>
+    <string name="ZanoNodeSettings_Description">Unstoppable uygulamasının cüzdan(lar) senkronizasyonu için kullanması gereken düğümü seçin.</string>
+    <string name="LocalBackup_ProtectBackup">Yedeği Koru</string>
+    <string name="LocalBackup_ProtectBackupDescription">Yedek dosyasını korumak için bir parola oluşturun.</string>
+    <string name="LocalBackup_BackupName">Yedek Adı</string>
+    <string name="LocalBackup_AddPassword">Parola Ekle</string>
+    <string name="LocalBackup_ConfirmPassword">Parolayı Onayla</string>
+    <string name="AddZanoNode_Warning_UrlExists">Bu URL\'ye sahip bir düğüm zaten var</string>
+    <string name="AddZanoNode_Error_InvalidUrl">Girilen URL geçersizdir. Geçerli URL\'ler aşağıdaki şemalardan birine sahip olmalıdır: http, https</string>
+    <string name="Balance_Zcash_ShieldedDescription">Cüzdanlar arasında kişisel ve özel transferler için kullanın.</string>
+    <string name="Balance_Zcash_TransparentDescription">Korumalı adresleri desteklemeyen borsalar veya hizmetlerden almak için kullanın.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Rota Puanı</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Bu seviyeler, rotaların swapları ve işlem kontrollerini nasıl yönettiğini gösterir.</string>
+    <string name="RiskLevel_Excellent_Description">Doğrudan zincir üstü yürütme. Rota kontrolleri veya dondurmaları yok. Swap başarısız olursa otomatik geri ödeme.</string>
+    <string name="RiskLevel_Good_Description">Rota, tamamlanmadan önce işlemleri otomatik olarak kontrol eder. Sorunlar tespit edilirse, swap reddedilir ve fonlar geri ödenir.</string>
+    <string name="RiskLevel_Fair_Description">Bazı işlemler için ek doğrulama gerekebilir. Sorunlar tespit edilirse fonlar genellikle otomatik olarak geri ödenir.</string>
+    <string name="SwapInfo_RequestRefund">Geri Ödeme Talep Et</string>
+    <string name="SwapInfo_RequestRefundDescription">Sağlayıcının geri ödemeyi işlemek için takas ayrıntılarınıza ihtiyacı vardır. Sağlayıcıyla iletişim kurduğunuzda dahil edileceklerdir.</string>
+    <string name="SwapInfo_SwapId">Takas Kimliği</string>
+    <string name="SwapInfo_Amount">Miktar</string>
+    <string name="SwapInfo_RefundAddress">Geri Ödeme Adresi</string>
+    <string name="SwapInfo_CopyDetails">Ayrıntıları Kopyala</string>
+    <string name="SwapInfo_SwapStoppedByProvider">Takas sağlayıcı tarafından durduruldu</string>
+    <string name="SwapInfo_SwapStoppedByProviderDescription">Mevduatınız alındı, ancak sağlayıcı takası tamamlayamadı. Fonlarınızı geri almak için aşağıdan geri ödeme talep edin.</string>
+    <string name="BackupRequired_Title">Cüzdanınızı yedekleyin</string>
+    <string name="BackupRequired_Description">Yedekleme olmadan, telefonunuzu kaybetmek paranızı kalıcı olarak kaybetmek anlamına gelir. Onları kurtarmanın bir yolu yoktur.</string>
+    <string name="BackupRequired_ManualBackupDescription">Kurtarma ifadenizi yazın</string>
+    <string name="BackupRequired_LocalBackupDescription">Şifrelenmiş dosyayı cihazınıza kaydedin</string>
+    <string name="BackupRequired_RemindLater">Daha Sonra Hatırlat</string>
+    <string name="OpenCryptoPay_Title">Ödeme</string>
+    <string name="OpenCryptoPay_Expired">Süresi Doldu</string>
+    <string name="OpenCryptoPay_Merchant">Satıcı</string>
+    <string name="OpenCryptoPay_Amount">Miktar</string>
+    <string name="OpenCryptoPay_ChooseAsset">Varlık Seçin</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Ödeme için kullanmak istediğiniz token seçin</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">Bu cüzdan için desteklenen ödeme yöntemi yok</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Şu sürede sona eriyor</string>
+    <string name="OpenCryptoPay_PaymentId">Ödeme Kimliği</string>
+    <string name="OpenCryptoPay_QuoteId">Fiyat Teklifi Kimliği</string>
+    <string name="OpenCryptoPay_ProofStatus">Kanıt Durumu</string>
+    <string name="OpenCryptoPay_ProofStatus_Submitted">Gönderildi</string>
+    <string name="OpenCryptoPay_ProofStatus_Pending">Bekleniyor</string>
+    <string name="OpenCryptoPay_ProofStatus_Reconciliation">Uzlaştırma gerekli</string>
+    <string name="OpenCryptoPay_RetryNow">Şimdi yeniden deneyin</string>
+    <string name="OpenCryptoPay_Error_NoActivePayment">Bu terminalda aktif ödeme yok</string>
+    <string name="OpenCryptoPay_Error_FetchFailed">Ödeme detayları alınamadı</string>
+    <string name="OpenCryptoPay_Error_LoadFailed">Ödeme detayları yüklenemedi</string>
+    <string name="OpenCryptoPay_Error_SubmitFailed">Ödeme satıcıya gönderilemedi. Lütfen tekrar deneyin.</string>
+    <string name="Swap_SwapTime">Takas Süresi</string>
+    <string name="Swap_PopularTokens">Popüler Tokenler</string>
+    <string name="Swap_YourTokens">Sizin Tokenleriniz</string>
+    <string name="Swap_TopTokens">En İyi Tokenler</string>
+    <string name="Swap_RecentSearch">Son Arama</string>
+    <string name="SwapTerms_TopText">Devam etmek için lütfen her öğeye olan anlaşmanızı onaylayın.</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Bazı rotalar swapları reddedebilir veya fonlara erişimi kısıtlayabilir. Bir rota seçerken rota puanlarına dikkat edin.</string>
+    <string name="SwapTerms_RiskRestrictions_Highlight">rota puanları</string>
+    <string name="SwapTerms_UserResponsibility_Info">Olası riskleri gözden geçirdim ve rota seçimim için sorumluluğu kabul ediyorum.</string>
+    <string name="ZcashEndpointSettings_Description">Unstoppable uygulamasının Zcash cüzdan(larını) senkronize etmek için kullanması gereken lightwallet sunucusunu seçin.</string>
+    <string name="AddZcashEndpoint_AddEndpoint">Uç nokta ekle</string>
+    <string name="AddZcashEndpoint_EndpointUrl">Uç nokta URL\'si</string>
+    <string name="AddZcashEndpoint_Warning_UrlExists">Bu URL\'ye sahip bir uç nokta zaten var</string>
+    <string name="AddZcashEndpoint_Error_InvalidUrl">Girilen URL geçersizdir. Geçerli bir URL https şeması kullanmalıdır</string>
+    <string name="Restore_BlockchainsDescription">Geri yüklemek istediğiniz blokzincirleri seçin.</string>
+    <string name="Swap_ProviderRisk">Rota Riski</string>
+    <string name="Swap_AmlRisk_Description">Bu işlem için olası riskler tespit edildi. İşlem sırasında fonlarınız reddedilebilir veya kısıtlanabilir. Lütfen başka bir rota seçin.</string>
+    <string name="Swap_AmlRisk_Button">Başka Rota Seç</string>
+    <string name="Swap_EstimatedTimeDescription">Fonları alma için tahmini zaman. Swap işleme ve işlem onayları ağ ve rotaya bağlı olarak biraz zaman alabilir.</string>
+    <string name="SwapTerms_BottomText">Her zaman gereksinimlerinize uygun bir swap rotası seçin.</string>
+    <string name="SwapInfo_Provider">Rota</string>
+    <string name="SwapHistory_EmptyList">Henüz beklemede veya geçmiş takasınız yok.</string>
+    <string name="ManageAccounts_ViewOnlyWallet">Yalnızca Görüntüleme Cüzdanı</string>
+    <string name="ActivationRequired_DialogTitle">Token’i Aktive Et</string>
+    <string name="AddEvmSyncSource_RpcUrl">RPC URL</string>
+    <string name="AddMoneroNode_AddNode">Node Ekle</string>
+    <string name="AddMoneroNode_NodeUrl">Node URL’si</string>
+    <string name="AddMoneroNode_Warning_UrlExists">Bu URL’ye sahip bir node zaten mevcut</string>
+    <string name="AddressEnter_NeedSubscription_Title">Dikkat!</string>
+    <string name="Appearance_AmountRounding">Tutar Yuvarlama</string>
+    <string name="Appearance_AmountRounding_Tip">Yuvarlatılmış bakiyeleri ve işlem tutarlarını gösterin.</string>
+    <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
+    <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
+    <string name="Appearance_BalanceTab">Bakiye Sekmesi</string>
+    <string name="Appearance_BalanceValue">Coin Bakiyeleri</string>
+    <string name="Appearance_BalanceValue_Tip">Bakiyeleri crypto veya fiat cinsinden vurgulanmış şekilde gösterin.</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Balance sekmesindeki Send, Receive ve Swap butonlarını gizler.</string>
+    <string name="Appearance_HideMarketsTab_Tip">Piyasalar sekmesini tamamen gizle.</string>
+    <string name="Appearance_MarketsTab">Piyasalar Sekmesi</string>
+    <string name="Appearance_PriceChangeInterval_Tip">Token fiyat değişiminin gösterileceği zaman aralığını seçin.</string>
+    <string name="Appearance_RecentlySent">Son Gönderilenler</string>
+    <string name="Appearance_SendScreen">Gönderme Ekranı</string>
+    <string name="BalanceSyncError_ChangableSourceErrorText">Mevcut kaynaktan veri alınamadı. Yeniden deneyebilir veya farklı bir senkronizasyon kaynağına geçebilirsiniz.</string>
+    <string name="BalanceSyncError_ErrorText">Mevcut kaynaktan veri alınamadı. Lütfen daha sonra tekrar deneyin.</string>
+    <string name="BalanceSyncError_Text">Senk. hatası</string>
+    <string name="Balance_Downloading">İndiriliyor…</string>
+    <string name="Balance_ReceiveAddress">Alım Adresi</string>
+    <string name="Balance_Receive_AddressType">Adres Türü</string>
+    <string name="Balance_Receive_AddressTypeZcashDescription">Zcash’i nasıl almak istediğinizi seçin.</string>
+    <string name="Balance_Receive_SubaddressesTransactions">İşlemler: %s</string>
+    <string name="Balance_Receive_Trustline">Trustline</string>
+    <string name="Balance_Zcash_Transparent">Şeffaf</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Şeffaf ZEC Tespit Edildi</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Şeffaf bir adreste tutulan ZEC bakiyeniz var. Unstoppable’da kullanmak için tam gizlilik amacıyla shield edilmesi gerekir.</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Şeffaf Tutar</string>
+    <string name="Bip32RootKey">BIP32 Root Key</string>
+    <string name="BirthdayDatePicker_Description">Cüzdanın oluşturulduğu yaklaşık tarihi seçin. Blok yüksekliği otomatik olarak hesaplanacaktır.</string>
+    <string name="BirthdayDatePicker_Title">Tarih Seç</string>
+    <string name="BirthdayHeight_Description">İşlem geçmişinizi yeniden taramak için blok yüksekliğini değiştirebilir veya yaklaşık bir tarih seçebilirsiniz.</string>
+    <string name="BirthdayHeight_Rescan">Yeniden Tara</string>
+    <string name="BirthdayHeight_RestoreDescription">Daha hızlı senkronizasyon için cüzdanın doğum günü yüksekliğini girin.</string>
+    <string name="Button_Activate">Aktiveet</string>
+    <string name="Button_Approve">Onayla</string>
+    <string name="Button_CopyAddress">Adresi Kopyala</string>
+    <string name="Button_CopyError">Hata Kopyala</string>
+    <string name="Button_HideCoin">Coin’i Gizle</string>
+    <string name="Button_UnderstandAndContinue">Anlıyorum ve Devam Et</string>
+    <string name="Button_View">Görüntüle</string>
+    <string name="Button_ViewMyAddress">Adresimi görüntüle</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Akıllı Kontrat Analizi</string>
+    <string name="CoinAnalytics_TvlRatio">Piyasa Değeri / TVL Oranı</string>
+    <string name="CoinPage_Bips">BIPs</string>
+    <string name="CoinPage_Blockchains">Blockchain\'ler</string>
+    <string name="CoinPage_Performance_Year2">2 Yıl</string>
+    <string name="CoinPage_Performance_Year5">5 Yıl</string>
+    <string name="CoinPage_ROI_SelectCoins">Coinleri Seç</string>
+    <string name="CoinPage_ROI_Title">%s\'ya Göre Göreceli Değişim</string>
+    <string name="CoinPage_ROI_Vs">ROI</string>
+    <string name="CoinPage_TimeDuration_Year">1Y</string>
+    <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_TimeDuration_Year5">5Y</string>
+    <string name="CoinPage_Type">Tür</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="Coin_Chart">Grafik</string>
+    <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
+    <string name="CreateNewWallet_Passkey">Passkey</string>
+    <string name="CreateNewWallet_PasskeyTerms">Passkey Cüzdan Koşulları</string>
+    <string name="CreateNewWallet_Standard">Standart</string>
+    <string name="CreateNewWallet_Standard_Description">Manuel yedekleme gerektiren bir kurtarma ifadesine sahip cüzdan.</string>
+    <string name="CreateWallet_AddPassphrase">Parola Ekle</string>
+    <string name="CreateWallet_AdvancedOptions">Gelişmiş Seçenekler</string>
+    <string name="CreateWallet_PassphraseOptional">Parola (isteğe bağlı)</string>
+    <string name="CreateWallet_PassphraseShortDescription">Cüzdanınıza ekstra koruma sağlar. Erişimi geri yüklemek için kurtarma ifadenizle birlikte gereklidir.</string>
+    <string name="Hud_Text_Activate">Aktiveet</string>
+    <string name="ImportWallet_Button_Understood">Anlaşıldı</string>
+    <string name="ImportWallet_Passkey">Passkey ile</string>
+    <string name="ImportWallet_PrivateKey">Özel Anahtardan</string>
+    <string name="ImportWallet_PrivateKey_Description">Özel anahtar kullanarak bir cüzdan içe aktarın.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Kurtarma ifadesi kullanarak bir cüzdan içe aktarın.</string>
+    <string name="Info_Reserved_Description">Stellar ağı, cüzdanı etkinleştirmek için 1 XLM ve cüzdanınızda etkinleştirilen her token için 0.5 XLM rezerv olarak kilitler.</string>
+    <string name="Info_Reserved_Title">Kilitli</string>
+    <string name="Info_Reserved_WalletAction">Cüzdan aktivasyonu</string>
+    <string name="ManageAccount_WalletName">Cüzdan Adı</string>
+    <string name="ManageAccounts_AddWallet">Cüzdan Ekle</string>
+    <string name="ManageAccounts_CreateNewWalletDescription">Başlamak için yeni bir cüzdan oluşturun veya yeni bir tane ekleyin.</string>
+    <string name="ManageAccounts_ExistingWallet">Mevcut Cüzdan</string>
+    <string name="ManageAccounts_ExistingWalletDescription">Zaten bir cüzdanınız varsa kullanmaya devam etmek için içe aktarın.</string>
+    <string name="ManageAccounts_NoActiveWallets">Aktif Cüzdan Yok</string>
+    <string name="ManageAccounts_ViewOnlyWalletDescription">Fonlara erişim olmadan bir cüzdanı adresle görüntüleyin.</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
+    <string name="Market_Filter_Blockchains">Blockchain\'ler</string>
+    <string name="Market_Filter_OutperformedGold">Altını geride bıraktı</string>
+    <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
+    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
+    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
+    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
+    <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
+    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_TimePeriod_2Y">2 Yıl</string>
+    <string name="Market_Filter_TimePeriod_3Y">3 Yıl</string>
+    <string name="Market_Filter_TimePeriod_4Y">4 Yıl</string>
+    <string name="Market_Filter_TimePeriod_5Y">5 Yıl</string>
+    <string name="Market_TVL">TVL</string>
+    <string name="Market_Tab_Earn">Kazanç</string>
+    <string name="Market_Vaults_ChartTvl">TVL</string>
+    <string name="Market_Vaults_Filter_AllAssets">Tüm Varlıklar</string>
+    <string name="Market_Vaults_Filter_AllChains">Tüm Ağlar</string>
+    <string name="Market_Vaults_Filter_ETHYield">ETH Getirisi</string>
+    <string name="Market_Vaults_Filter_USDYield">USD Getirisi</string>
+    <string name="Market_Vaults_OpenDapp">DApp Aç</string>
+    <string name="Market_Vaults_Sorting_APY">En Yüksek APY</string>
+    <string name="Market_Vaults_Sorting_TVL">En Yüksek TVL</string>
+    <string name="Market_Vaults_Vault_Protocol">Protokol</string>
+    <string name="Market_Vaults_Vault_TVL">TVL</string>
+    <string name="Market_Vaults_Vault_UnderlyingToken">Temel Token</string>
+    <string name="MoneroKeyType">Tür</string>
+    <string name="MoneroKeyType_Private">Monero Özel Anahtarları</string>
+    <string name="MoneroKeyType_Public">Monero Genel Anahtarları</string>
+    <string name="MoneroKeyType_View">Görüntüle</string>
+    <string name="MoneroNodeSettings_Description">Unstoppable uygulamasının cüzdan(lar)ı senkronize etmek için kullanacağı node’u seçin.</string>
+    <string name="MoneroNodeSettings_TrustedTitle">Node Tercihleri</string>
+    <string name="PasskeyTerms_LimitedAccess">Sınırlı platformlar arası erişim</string>
+    <string name="PasskeyTerms_Responsibility">Sorumluluk</string>
+    <string name="Passphrase_Placeholder">Parola (isteğe bağlı)</string>
+    <string name="Premium_AdvancedControls">Gelişmiş Kontroller</string>
+    <string name="Premium_DefenseSystem">Savunma Sistemi</string>
+    <string name="Premium_MarketInsights">Piyasa İçgörüleri</string>
+    <string name="Premium_OnePurchaseUnlocksAllPremium">Tek bir satın alım tüm Premium özelliklerin kilidini açar.</string>
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">Öncelikli destek</string>
+    <string name="Premium_UpgradeFeature_ScamProtection">Dolandırıcılık Koruması</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">Swap Protection</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Bu cüzdan, Bitcoin ve diğer UTXO tabanlı varlıklar (örn. Litecoin, Bitcoin Cash, Dash) üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_Bip32RootKeyDescription">Cüzdanın ana özel anahtarı. Türev tüm hesaplar ve varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_EvmPrivateKeyDescription">Bu cüzdan, EVM tabanlı ağlardaki (ör. Ethereum, BNB Smart Chain, Polygon, Avalanche) varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_MoneroPrivateKey">Monero Özel Anahtarları</string>
+    <string name="PrivateKeys_MoneroPrivateKeyDescription">Bu cüzdan, Monero (XMR) varlıkları üzerinde tam kontrol sağlar; fon harcama yetkisi dâhil.</string>
+    <string name="PrivateKeys_StellarSecretKey">Stellar Gizli Anahtarı</string>
+    <string name="PrivateKeys_StellarSecretKeyDescription">Bu cüzdan, Stellar ağındaki varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_TronPrivateKey">Tron Özel Anahtarı</string>
+    <string name="PublicKeys_MoneroPublicKey">Monero Genel Anahtarları</string>
+    <string name="PublicKeys_MoneroPublicKeyDescription">Monero (XMR) varlıkları içeren cüzdanların yalnızca okuma modunda izlenmesine izin verir; harcama erişimi sağlamaz.</string>
+    <string name="PublicKeys_TronAddress">TRON Adresi</string>
+    <string name="RecoveryPhrase_Description">Bu kelimeleri doğru sırayla yazın ve güvenli bir yerde saklayın</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Title">EVM Ağları</string>
+    <string name="Restore_SelectNetwork_Title">Ağ Seçin</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">Yalnızca TRON Ağı.</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Title">TRON</string>
+    <string name="SecureSend_Config_BlacklistCheckDescription">Adresi dolandırıcılık ve yüksek riskli veri tabanlarında kontrol eder.</string>
+    <string name="SecureSend_Config_PhishingCheckDescription">Transferi onaylamadan önce şüpheli adresleri tespit eder.</string>
+    <string name="SecureSend_Config_SanctionCheckDescription">Adresin yaptırım kısıtlamalarına tabi olup olmadığını doğrular.</string>
+    <string name="SecureSend_Config_Subtitle">Güvenlik kontrollerini seçin.</string>
+    <string name="SendEvmSettings_EditFee">Ücret Düzenle</string>
+    <string name="SendEvmSettings_SetRecipient">Alıcıyı Ayarla</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">Swap işleminiz için kabul edilebilir maksimum fiyat sapması. Bu sınırın aşılması durumunda işlem geri alınır (reverted).</string>
+    <string name="Send_Address_BlacklistCheck">Kara Liste Kontrolü</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_Recent">Son İşlemler</string>
+    <string name="Send_Address_SanctionCheck">Yaptırım Kontrolü</string>
+    <string name="Send_UnexpectedError">Beklenmeyen hata</string>
+    <string name="Send_UnexpectedError_Description">İşleminiz gönderilirken bir hata oluştu. Lütfen tekrar deneyin veya hata kodunu kopyalayıp destek ekibiyle iletişime geçin.</string>
+    <string name="SettingsBanner_GameDescription">Testleri geçin, görevleri tamamlayın ve token kazanın!</string>
+    <string name="SettingsBanner_Premium">Premium</string>
+    <string name="SettingsLaunchScreen_Auto">Oto</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs">Şüpheli İşlemleri Gizle</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs_Description">Kimlik avı saldırılarında sıkça kullanılan şüpheli küçük transferleri gizler.</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministik</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsSubscription_GetPremium">Premium’a Geç</string>
+    <string name="SettingsTerms_LegalObligations">Fonlarınızın güvenliği, davranışlarınız ve bulunduğunuz yargı bölgesinde ve küresel olarak geçerli yasalara uyum tamamen sizin sorumluluğunuzdadır.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">Gelir modeli kapsamında, uygulama cüzdan içinde gerçekleştirilen DEX swap işlemlerinden küçük komisyonlar kazanır. Bu, bağımsız, open source ve VC fonlarından bağımsız kalmamıza yardımcı olur.</string>
+    <string name="SettingsTerms_OpenSource">Uygulama doğrulanabilir şekilde açık kaynaklıdır; tüm kaynak kodu çevrimiçi olarak yayımlanmıştır. Yukarıdaki tüm bilgiler herkes tarafından kamuya açık olarak doğrulanabilir.</string>
+    <string name="SettingsTerms_PrivacyNotice">Uygulama bakiye veya işlemlerinizle ilgili veri toplamaz veya sizi takip etmez — kaç kişinin uygulamayı kullandığını bile bilmiyoruz. Sadece anonim kullanım verilerini (açılan sayfalar, tıklanan butonlar) toplar ve bu da sadece kullanılabilirliği geliştirmek içindir. Ayarlar → Gizlilik bölümünden bunu kapatabilirsiniz</string>
+    <string name="SettingsTerms_TransactionsIrreversible">Blockchain işlemleri geri döndürülemez. Onaylamadan önce işlem detaylarını her zaman dikkatlice kontrol edin.</string>
+    <string name="SettingsTerms_UserResponsibility">Devam ederek, fonlarınızın güvenliği ve yasal mevzuata uyumun nihai olarak sizin sorumluluğunuzda olduğunu kabul edersiniz.</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">Varlıklarınızı tutmayız, private key’lerinize erişmeyiz ve sizin adınıza işlem gerçekleştirmeyiz. Uygulama; aracılık, borsa, saklama (custody), emanet (escrow) veya para transferi hizmetleri sunmaz. Tüm işlemler, doğrudan sizin tarafınızdan başlatılır, imzalanır ve herkese açık blockchain ağlarına yayınlanır.</string>
+    <string name="Settings_AutoLock_Description">Seçilen süre sonunda uygulamayı otomatik olarak kilitler.</string>
+    <string name="Settings_LaunchScreen_Tip">Uygulamanın varsayılan olarak hangi ekranda açılacağını seçin.</string>
+    <string name="Settings_VipSupport">Öncelikli destek</string>
+    <string name="ShareUiDataDescription">Bu ayar, UI/UX analizlerini devre dışı bırakmanıza ve tam gizlilik sağlamanıza olanak tanır.</string>
+    <string name="StatusInfo_Confirmed">Tamamlandı</string>
+    <string name="StatusInfo_Failed">Başarısız</string>
+    <string name="StellarSecretKey_ShowSecretKey">Gizli anahtarı göstermek için dokunun</string>
+    <string name="StellarSecretKey_Title">Stellar Gizli Anahtarı</string>
+    <string name="SwapConfirm_Mev">MEV</string>
+    <string name="SwapConfirm_MevDescription">Swap işleminizi güvence altına almak ve botlara karşı değer kaybını önlemek için korumayı açın.</string>
+    <string name="SwapConfirm_SwapProtection">Swap Protection</string>
+    <string name="SwapDefense_Attention_Title">Dikkat!</string>
+    <string name="SwapHistory_Title">Swap Geçmişi</string>
+    <string name="SwapInfo_StatusCompleted">Tamamlandı</string>
+    <string name="SwapInfo_StatusFailed">Başarısız</string>
+    <string name="SwapInfo_StatusRefunded">İade edildi</string>
+    <string name="SwapInfo_Title">Swap Bilgisi</string>
+    <string name="SwapSort_BestRate">En İyi Oran</string>
+    <string name="SwapSort_BestTime">En Hızlı</string>
+    <string name="SwapTerms_RiskRestrictions">Kısıtlama riski</string>
+    <string name="SwapTerms_Title">Swap Koşulları</string>
+    <string name="SwapTerms_UserResponsibility">Kullanıcı sorumluluğu</string>
+    <string name="Swap_AML">AML</string>
+    <string name="Swap_AmlError_Description">Şu anda yanıt alınamıyor. Lütfen tekrar deneyin.</string>
+    <string name="Swap_AmlError_Title">Bağlantı Sorunu</string>
+    <string name="Swap_AmlUnknown_Button">Riski Kabul Ederek Devam Et</string>
+    <string name="Swap_AmlUnknown_Description">Bu işlem için risk kontrolü tamamlanamadı. Devam ederseniz, bu takas işlemi sırasında gecikmeler, ret veya kısıtlamalarla karşılaşabilir.</string>
+    <string name="Swap_AmlUnknown_Title">Uyarı!</string>
+    <string name="Swap_Approve">Onayla</string>
+    <string name="Swap_Approve_PageTitle">Onayla</string>
+    <string name="Swap_EstimatedTime">Tahmini Süre</string>
+    <string name="Swap_ProviderRisk_Unknown">Bilinmiyor</string>
+    <string name="TransactionInfo_Minted">Mint</string>
+    <string name="TransactionInfo_TransactionSecretKey">Tx Secret Key</string>
+    <string name="Transactions_Burn">Burn</string>
+    <string name="Transactions_Completed">Tamamlandı</string>
+    <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
+    <string name="Transactions_Failed">Başarısız</string>
+    <string name="Transactions_Filter_Coin">Coin</string>
+    <string name="Transactions_Mint">Mint</string>
+    <string name="Transactions_StellarTransaction">Stellar İşlemi</string>
+    <string name="TronPrivateKey_Title">Tron Özel Anahtarı</string>
+    <string name="Tron_TokenPage_AddressNotActivated">Aktif Değil</string>
+    <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Cüzdan etkinleştirildikten sonra işlemler görünecektir.</string>
+    <string name="TvlRank_MultiChain">Çoklu Zincir</string>
+    <string name="WalletConnect_Attention">Dikkat!</string>
+    <string name="WalletConnect_ConnectTo">%s’ya bağlan</string>
+    <string name="WalletConnect_ConnectWarning">Onayla butonunu tıklayarak, bu uygulamanın açık adresinizi görüntülemesine izin vermiş olursunuz. Bu, verilerinizi olası kimlik hırsızlığı risklerinden korumak için önemli bir güvenlik adımıdır.</string>
+    <string name="WalletConnect_ConnectedTo">%s’ya bağlandı</string>
+    <string name="WalletConnect_DAppCheck_Secure">Güvenli</string>
+    <string name="WalletConnect_Danger">Tehlike!</string>
+    <string name="WalletConnect_Domain">Alan adı</string>
+    <string name="WalletConnect_Error_NeedBackup">Telefonunuzun kaybolması, çalınması, kırılması vb. durumlarda cüzdanınızı kurtarmanıza olanak sağlayacak kurtarma ifadesinin ve ilgili parolanın yedek bir kopyasını oluşturun.</string>
+    <string name="WalletConnect_Networks">Ağlar</string>
+    <string name="WalletConnect_ScamProtection">Dolandırıcılık Koruması</string>
+    <string name="WalletConnect_SendTransactionRequest_Title">İşlem Gönder</string>
+    <string name="WalletConnect_Value">Değer</string>
+    <string name="WatchWallet">Cüzdan İzle</string>
+    <string name="Watch_Address_Hint">Genel adresinizi veya XPUB anahtarınızı yapıştırın</string>
+    <string name="Watch_ViewKey">Özel Görüntüleme Anahtarı</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Standart Cüzdan Oluştur</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Bu cihaz Passkey cüzdanlarını desteklemiyor. Bunun yerine standart bir cüzdan oluşturabilirsiniz.</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Passkey oluşturulamadı</string>
+    <string name="CreateNewWallet_Passkey_Description">Cihazınız tarafından güvenli bir şekilde saklanan bir kurtarma ifadesine sahip cüzdan.</string>
+    <string name="ImportWallet_Passkey_Description">Cüzdanınızı cihazınızı kullanarak geri yükleyin.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">Bu cihaz Passkey ile geri yüklemeyi desteklemiyor. Başka bir geri yükleme yöntemi kullanın.</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">Passkey ile geri yükleme desteklenmiyor</string>
+    <string name="PasskeyTerms_DeviceDependency">Cihaz Bağımlılığı</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">Erişim için cihazınız gereklidir. Erişimi kaybetmek fonların kaybına yol açabilir.</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">Tüm cihazlarda veya platformlarda çalışmayabilir.</string>
+    <string name="PasskeyTerms_Responsibility_Description">Cihazınıza erişimden siz sorumlusunuz. Erişim kaybedilirse Unstoppable bu cüzdanı geri yükleyemez.</string>
+    <string name="Activate_Activating">Etkinleştiriliyor</string>
+    <string name="Activate_AlreadyActive_Description">Token zaten etkin.</string>
+    <string name="Activate_AlreadyActive_Title">Zaten Etkin</string>
+    <string name="Activate_InsufficientBalance_Description">Bu token\'ı etkinleştirmek için yeterli XLM bakiyeniz yok.</string>
+    <string name="Activate_YouActivate">Etkinleştiriyorsunuz</string>
+    <string name="ActivationRequired_DialogDescription">%1$s almak için token\'ı etkinleştirmeniz gerekir. Stellar ağı her token için bir güven hattı (trustline) oluşturulmasını gerektirir. Bu olmadan cüzdanınız %2$s alamaz — işlem reddedilir ve fonlar teslim edilmez.</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Girilen URL geçersiz. Geçerli bir URL şu şemalardan birini kullanmalıdır: https</string>
+    <string name="AddMoneroNode_Pasword">Parola (isteğe bağlı)</string>
+    <string name="AddMoneroNode_Username">Kullanıcı adı (isteğe bağlı)</string>
+    <string name="AddressEnter_NeedSubscription_Content">Güvenli Gönderim kapalı. Transferiniz riskli bir adrese gidebilir ve fonlar kaybolabilir.</string>
+    <string name="AddressEnter_Safe_Content">Adres kontrol edildi. Kimlik avı, kara liste veya yaptırım bulunamadı. Kullanımı güvenli.</string>
+    <string name="AddressEnter_Safe_Title">Güvenli</string>
+    <string name="AddressFormatSettings_Subtitle">Coin için adres formatını seçin.</string>
+    <string name="Appearance_RecentlySent_Tip">Token için son gönderilen adresi göster</string>
+    <string name="Approve_Allowance">İzin Tutarı</string>
+    <string name="Attention_Title">Dikkat</string>
+    <string name="Balance_BlocksRemaining">Kalan Bloklar - %d</string>
+    <string name="Balance_FoundTx">%s işlem</string>
+    <string name="Balance_Receive_ActivationRequired">Bir adres almak için token\'ı etkinleştirmeniz gerekir. Bu, Stellar ağı tarafından gereklidir.</string>
+    <string name="Balance_Receive_Memo">Memo (Etiket)</string>
+    <string name="Balance_Receive_Subaddresses">Alt adresler</string>
+    <string name="Balance_Receive_SubaddressesInfo">Alt adresler, kolaylık ve gelişmiş gizlilik için tek bir cüzdan içinde birden fazla benzersiz adres kullanmanıza olanak tanır.</string>
+    <string name="BirthdayHeight_BlockDate">Blok Tarihi:</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
+    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_MarketsVerifiedMenu_ExchangeType">Borsa Türü</string>
+    <string name="CoinPage_Performance_Day1">Gün</string>
+    <string name="CoinPage_Performance_Week2">2 Hafta</string>
+    <string name="CreateWallet_PassphraseDescription">Parolalar cüzdanlar için ek bir güvenlik katmanı sağlar. Parolayla korunan bir cüzdanı geri yüklerken kullanıcı hem kurtarma ifadesini hem de parolayı sağlamalıdır.\n\nParolalar ayrıca kullanıcıların yalnızca farklı parolalar kullanarak aynı anımsatıcıdan (mnemonic) birden fazla bağımsız çoklu coin cüzdanı oluşturmasına olanak tanır.</string>
+    <string name="Error_AssetNotEnabled">Alıcı %s\'yi etkinleştirmediği için onu alamaz.</string>
+    <string name="Error_BrowserNotFound">Bu bağlantıyı açacak bir uygulama bulunamadı</string>
+    <string name="FeeSettings_FeeRate_Info">Bir işlem gönderirken bir ağ ücreti ödemeniz gerekir. Ağ ne kadar yoğunsa ücret o kadar yüksek olur.\n\nUnstoppable Wallet, işleminizin makul bir sürede onaylanmasına yardımcı olmak için optimal bir ücret önerir. Bu değeri artırabilir veya azaltabilirsiniz.\n\nÜcreti çok düşük ayarlamak, işleminizin uzun süre beklemede kalmasına ve hatta reddedilmesine neden olabilir. Daha hızlı onay için daha yüksek bir ücret kullanın.</string>
+    <string name="Hud_Text_AddressCopied">Adres kopyalandı</string>
+    <string name="Info_LockTime_NoDateDescription">Gönderen, bu fonları gösterilen tarihte sona erecek bir harcama kilidiyle gönderdi.\n\nEndişelenmeyin, alınan Bitcoin\'ler zaten sizindir, ancak kilit süresi sona erene kadar bunları Bitcoin ağında harcayamazsınız.</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
+    <string name="MarketEtf_BitcoinEtf">Bitcoin ETF</string>
+    <string name="MarketEtf_EtfDescription">Spot ve vadeli işlem bazlı fonlar dahil tüm %s ETF\'lerinin net girişi.</string>
+    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
+    <string name="MarketTopPlatforms_Protocols">Protokoller: %s</string>
+    <string name="Market_Filter_OutperformedSnp">S&amp;P 500\'ü Geride Bıraktı</string>
+    <string name="Market_Filter_PopupTitle">Şuna göre filtrele</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
+    <string name="Market_Filter_Top_100">İlk 100</string>
+    <string name="Market_Filter_Top_1000">İlk 1000</string>
+    <string name="Market_Filter_Top_1500">İlk 1500</string>
+    <string name="Market_Filter_Top_200">İlk 200</string>
+    <string name="Market_Filter_Top_2000">İlk 2000</string>
+    <string name="Market_Filter_Top_2500">İlk 2500</string>
+    <string name="Market_Filter_Top_300">İlk 300</string>
+    <string name="Market_Filter_Top_500">İlk 500</string>
+    <string name="Market_Top_100">İlk 100</string>
+    <string name="Market_Top_200">İlk 200</string>
+    <string name="Market_Top_300">İlk 300</string>
+    <string name="Market_Top_500">İlk 500</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d Zincir</string>
+    <string name="MoneroKeyType_Spend">Harcama</string>
+    <string name="MoneroNodeSettings_Trusted">Güvenilir</string>
+    <string name="MoneroNodeSettings_TrustedDescription">Güvenilir düğüm — cüzdan seçili düğüme güvenir ve ek doğrulama yapmadan onun verilerini kullanır.\n\nAçık → işlemler yayınlandığında anında Beklemede olarak görünür (daha hızlı senkronizasyon, ancak daha düşük gizlilik ve düğüme bağımlılık).\n\nKapalı → işlemler yalnızca ağdan onay alındıktan sonra gösterilir (daha yavaş, ancak daha güvenli ve daha gizli).</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">%33 TASARRUF</string>
+    <string name="Premium_TitleForDroid">Premium (F-Droid için Ücretsiz)</string>
+    <string name="Privacy_Information">Unstoppable, bakiyeleriniz veya cüzdan adresleriniz gibi kişisel verileri toplamaz. Uygulamayı geliştirmek için yalnızca anonim veriler kullanırız.</string>
+    <string name="PrivateKeys_TronPrivateKeyDescription">Bu cüzdandaki TRON ağındaki varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="ProUsersActivate_Title">Pass\'ı Etkinleştir</string>
+    <string name="ProUsersInfo_Description">Bu verileri etkinleştirmek için bronz seviye UW NFT\'leri “Coin Info+” edinmelisiniz\n\nAyrıca aşağıdaki verilere erişebilirsiniz:</string>
+    <string name="ProUsersInfo_Features_ActiveAddresses">Aktif Adresler</string>
+    <string name="ProUsersInfo_Features_DesLiquidity">DEX Likiditesi ve Sıralaması</string>
+    <string name="ProUsersInfo_Features_DexVolume">DEX Hacmi ve Sıralaması</string>
+    <string name="ProUsersInfo_Features_TxVolume">İşlem Hacmi</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="PublicKeys_TronAddress_Description">TRON blok zincirinde varlık tutan cüzdanın salt okunur izlenmesine olanak tanır.</string>
+    <string name="ROI_Period_N">Dönem %s</string>
+    <string name="ROI_SelectCoin_SelectAssets">Varlıkları Seç</string>
+    <string name="ROI_SelectCoin_Title">Coin Seç</string>
+    <string name="ROI_SelectCoin_Warning_AllowedNumberOfCoins">Yalnızca %s coin seçilebilir</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum, Arbitrum, Optimism…</string>
+    <string name="ScanQr_NoQrFound">QR kodu bulunamadı</string>
+    <string name="ScanQr_Photos">Fotoğraflar</string>
+    <string name="ScanQr_QrDetected">QR kodu algılandı</string>
+    <string name="Search_NotFounded">Bulunamadı</string>
+    <string name="Send_Address_Error_InvalidAddress_Description">Bu adres seçilen ağa uymuyor gibi görünüyor. Lütfen tekrar kontrol edin.</string>
+    <string name="Send_Confirmation_Burn">Yakma</string>
+    <string name="Send_Confirmation_Mint">Basım</string>
+    <string name="Send_Fee_Info">Bu işlemin blok zincirinde işlenmesinin tahmini maliyeti.</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Özel finansın geleceğinin bir parçası olun</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable hareketine katılarak açık ve özel finansı savunmuş olursunuz:</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet\'ı destekleyerek büyümemize, gelişmemize ve bağımsız kalmamıza yardımcı olursunuz.</string>
+    <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Her türlü destek önemlidir.</string>
+    <string name="SettingsBanner_DonateExclusivelyOnFDroid">Yalnızca F-Droid\'de</string>
+    <string name="SettingsBanner_DonateFeatureAddress">Adres kara liste denetleyicisi</string>
+    <string name="SettingsBanner_DonateFeatureAdvanced">Gelişmiş varlık arama ve filtreler</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Token\'lar hakkında tam analiz ve veriler</string>
+    <string name="SettingsBanner_DonateFeaturePriority">Desteğe öncelikli erişim</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">Gizlilik Modu ve Baskı (Duress) Modu</string>
+    <string name="SettingsBanner_DonateFeatureSignals">Güvenli ticaret için sinyaller</string>
+    <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Bu, dünya çapında ona güvenen yüz binlerce kişi ve sizin için cüzdanın reklamsız, güvenli ve gerçekten bağımsız kalmasına yardımcı olur.</string>
+    <string name="SettingsBanner_DonateSubtitle">Özel finansın geleceğinin bir parçası olun</string>
+    <string name="SettingsBanner_DonateTitle">Unstoppable Hareketini Destekleyin</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet ilk günden beri ücretsiz, reklamsız ve açık kaynaklıdır — ve öyle kalacak.”</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Unstoppable Wallet size gelişmiş özellikler sunar — abonelik yok, sınır yok:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">Unstoppable Wallet Ekibi</string>
+    <string name="SettingsBanner_DonateYourSupportIsCommitment">Desteğiniz yalnızca özellikleri açmakla ilgili değil — herkes için gizlilik, özgürlük ve açık erişime olan bir bağlılıktır.</string>
+    <string name="SettingsBanner_SupportTheProject">Projeyi Destekleyin!</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="Settings_Donate_DonationAddresses">Bağış Adresleri</string>
+    <string name="Settings_Support">Destek</string>
+    <string name="SwapDefense_Attention_Description">Koruma kapalı. Botlar takasınıza müdahale edebilir ve para kaybetmenize neden olabilir.</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Description">Çok düşük likidite nedeniyle bu takas büyük bir kayba (-%s%%) yol açar.</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Title">Elverişsiz fiyat!</string>
+    <string name="SwapDefense_PriceImpact_High_Description">Bu takasta fonlarınızın büyük bir kısmını (-%s%%) kaybedeceksiniz.</string>
+    <string name="SwapDefense_PriceImpact_High_Title">Çok pahalı!</string>
+    <string name="SwapDefense_Safe_Description">Botların takasınızdaki değeri almasını engelliyorum.</string>
+    <string name="SwapDefense_Safe_Title">Korumalı</string>
+    <string name="SwapError_FailedToFetchQuote">Teklif alınamadı.</string>
+    <string name="SwapInfo_SourceAddress">Kaynak Adres</string>
+    <string name="SwapInfo_StatusDepositing">Yatırılıyor</string>
+    <string name="SwapInfo_StatusTitle">İşlem Durumu</string>
+    <string name="Swap_AmlRisk_Title">Risk Algılandı</string>
+    <string name="Swap_ConfirmApprove_Title">Onayı Doğrula</string>
+    <string name="Swap_ConfirmRevoke_Title">İptali Doğrula</string>
+    <string name="Swap_MinimumReceivedDescription">Bu tutar doğrulama sürecindedir. İşlem durumu doğrulandığında bu coinleri kullanabileceksiniz. Bir kullanıcının alacağı minimum tutar</string>
+    <string name="Swap_ProviderRisk_AlertBody">Bu belirli takasın sağlayıcısı (%s), bu takasın büyük olasılıkla reddedileceği ve hatta dondurulabileceği konusunda uyardı. Geri dönün ve farklı bir takas sağlayıcısı seçin.</string>
+    <string name="Swap_ProviderRisk_AlertTitle">Yüksek Dondurma Riski!</string>
+    <string name="Swap_ProviderRisk_NoRisk">Risk Yok</string>
+    <string name="Swap_SlippageDescription">Bu tutar doğrulama sürecindedir. İşlem durumu doğrulandığında bu coinleri kullanabileceksiniz. Bir kullanıcının alacağı minimum tutar</string>
+    <string name="Transactions_ChangeTrust">Güveni Değiştir</string>
+    <string name="Transactions_OperationType">İşlem Türü</string>
+    <string name="Transactions_OperationType_ChangeTrust">Güveni Değiştir</string>
+    <string name="Transactions_OperationType_CreateAccount">Hesap Oluştur</string>
+    <string name="WalletConnect_Checking">Kontrol ediliyor…</string>
+    <string name="WalletConnect_ConfirmTransaction">İşlemi Onayla</string>
+    <string name="WalletConnect_DAppCheck">dApp Kontrolü</string>
+    <string name="WalletConnect_DappWillBeAbleToMoveToken">%s sizin adınıza bu token\'ları taşıyabilecek.</string>
+    <string name="WalletConnect_DefenseMessage_Danger">Bu dApp doğrulanmadı. Bağlanmak fonlarınızı riske atabilir.</string>
+    <string name="WalletConnect_DefenseMessage_Safe">Kontrol ettim. Bu dApp bağlanmak için güvenli.</string>
+    <string name="WalletConnect_DefenseMessage_Warning">Sahte bir siteye bağlanıp fon kaybedebilirsiniz. Korunmak için beni açın.</string>
+    <string name="WalletConnect_Disconnect">%s bağlantısını kes</string>
+    <string name="WalletConnect_DisconnectWarning">Bu bağlantıyı kaldırmak istediğinizden emin misiniz?</string>
+    <string name="WalletConnect_Message">Mesaj</string>
+    <string name="WalletConnect_RequestFailed">İstek Başarısız</string>
+    <string name="WalletConnect_RequestFailedDescription">Bir şeyler ters gitti ve istek tamamlanamadı</string>
+    <string name="WalletConnect_Safe">Güvenli</string>
+    <string name="WalletConnect_TokenAllowance">Token İzni</string>
+    <string name="Watch_Monero_Warning">Monero izleme cüzdanı yalnızca gelen işlemleri gösterir. Görüntülenen bakiye yanlış olabilir.</string>
+    <string name="CoinPage_Buy">Satın Al</string>
+    <string name="CoinPage_Sell">Sat</string>
+    <string name="MoneroNodeSettings_AutoSelect">Otomatik seçim</string>
+    <string name="MoneroNodeSettings_AutoSelectDescription">En hızlı düğümü otomatik olarak kullan</string>
+    <string name="MoneroNodeSettings_Unreachable">Ulaşılamaz</string>
+    <string name="MoneroNodeSettings_Latency">%d ms</string>
+    <string name="Send_Memo_PublicWarning">Bu not blockchain üzerinde herkese açık olacaktır.</string>
+    <string name="Send_Memo_EncryptedInfo">Bu not şifrelenir ve yalnızca sizin ve alıcının tarafından görülür.</string>
+    <string name="Send_Memo_OffchainInfo">Yalnızca bu cihazda depolanır — zincir üzerinde değildir.</string>
 </resources>
