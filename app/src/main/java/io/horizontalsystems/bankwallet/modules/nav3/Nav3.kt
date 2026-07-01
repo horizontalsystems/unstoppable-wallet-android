@@ -142,6 +142,11 @@ private fun IntentEffect(viewModel: MainActivityViewModel, navigation: HSNavigat
         val consumer = Consumer<Intent> {
             if (!handleWalletConnectDeepLink(it, navigation)) {
                 viewModel.setIntent(it)
+                // The intent is consumed by MainScreen's observer, which only runs while
+                // MainScreen (EntryPage) is composed. If an inner screen (e.g. Receive) is on
+                // top, pop back to the root so the deeplink is processed immediately instead of
+                // waiting until the user manually returns to the main screen.
+                navigation.removeLastUntil(EntryPage::class, false)
             }
         }
         (activity as? ComponentActivity)?.addOnNewIntentListener(consumer)
