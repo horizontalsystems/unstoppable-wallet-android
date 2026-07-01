@@ -38,13 +38,13 @@ class WalletStorage(
                 val token = Token(
                     coin = Coin(
                         uid = coinUid,
-                        name = enabledWallet.coinName,
-                        code = enabledWallet.coinCode,
+                        name = enabledWallet.coinName!!,
+                        code = enabledWallet.coinCode!!,
                         image = enabledWallet.coinImage
                     ),
                     blockchain = blockchain,
                     type = tokenQuery.tokenType,
-                    decimals = enabledWallet.coinDecimals
+                    decimals = enabledWallet.coinDecimals!!
                 )
 
                 Wallet(token, account)
