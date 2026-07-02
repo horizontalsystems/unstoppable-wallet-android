@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.core.core.managers.Version
+import io.horizontalsystems.walletkit.core.managers.Version
 import junit.framework.TestCase
 import org.junit.Assert
 import org.junit.Test

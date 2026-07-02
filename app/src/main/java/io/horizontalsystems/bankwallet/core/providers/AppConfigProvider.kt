@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.core.core.ILocalStorage
-import io.horizontalsystems.core.core.order
-import io.horizontalsystems.core.core.providers.IAppConfigProvider
-import io.horizontalsystems.core.core.providers.Translator
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.order
+import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
+import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 

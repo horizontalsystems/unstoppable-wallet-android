@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.utils
 
-import io.horizontalsystems.core.core.utils.AddressUriParser
+import io.horizontalsystems.walletkit.core.utils.AddressUriParser
 
 class EvmAddressParserTest {
     private lateinit var addressParser: AddressUriParser

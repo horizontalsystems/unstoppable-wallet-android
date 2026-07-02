@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import io.horizontalsystems.core.core.BaseActivity
-import io.horizontalsystems.core.modules.nav3.EntryPage
-import io.horizontalsystems.core.modules.nav3.Nav3
-import io.horizontalsystems.core.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.core.BaseActivity
+import io.horizontalsystems.walletkit.modules.nav3.EntryPage
+import io.horizontalsystems.walletkit.modules.nav3.Nav3
+import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
 class MainActivity : BaseActivity() {
 

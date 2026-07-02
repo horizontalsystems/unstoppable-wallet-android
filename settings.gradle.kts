@@ -19,7 +19,7 @@ dependencyResolutionManagement {
 rootProject.name = "Unstoppable"
 
 include(":app")
-include(":core")
+include(":walletkit")
 include(":components:icons")
 include(":components:chartview")
 include(":subscriptions-core")

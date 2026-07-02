@@ -1,0 +1,118 @@
+package io.horizontalsystems.walletkit.modules.settings.faq
+
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.LocalizedException
+import io.horizontalsystems.walletkit.core.stats.StatEvent
+import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.core.stats.stat
+import io.horizontalsystems.walletkit.entities.Faq
+import io.horizontalsystems.walletkit.entities.ViewState
+import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
+import io.horizontalsystems.walletkit.modules.markdown.MarkdownPage
+import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
+import io.horizontalsystems.walletkit.ui.compose.components.ScreenMessageWithAction
+import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
+import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTopType
+import kotlinx.serialization.Serializable
+import java.net.UnknownHostException
+
+@Serializable
+data object FaqListPage : HSPage() {
+
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        FaqScreen(
+            onCloseClick = { navigation.removeLastOrNull() },
+            onItemClick = { faqItem ->
+                navigation.slideFromRight(
+                    MarkdownPage(MarkdownPage.Input(faqItem.markdown))
+                )
+
+                stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))
+            }
+        )
+    }
+
+}
+
+@Composable
+private fun FaqScreen(
+    onCloseClick: () -> Unit,
+    onItemClick: (Faq) -> Unit,
+    viewModel: FaqViewModel = viewModel(factory = FaqModule.Factory())
+) {
+    val viewState = viewModel.viewState
+
+    HSScaffold(
+        title = stringResource(R.string.Settings_Faq),
+        onBack = onCloseClick,
+    ) {
+        Column(modifier = Modifier.navigationBarsPadding()) {
+            Crossfade(viewState) { viewState ->
+                when (viewState) {
+                    ViewState.Loading -> {
+                        Loading()
+                    }
+
+                    is ViewState.Error -> {
+                        val s = when (val error = viewState.t) {
+                            is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                            is LocalizedException -> stringResource(error.errorTextRes)
+                            else -> stringResource(R.string.Hud_UnknownError, error)
+                        }
+
+                        ScreenMessageWithAction(s, R.drawable.ic_error_48)
+                    }
+
+                    ViewState.Success -> {
+                        Column {
+                            val tabItems =
+                                viewModel.sections.map {
+                                    TabItem(
+                                        it.section,
+                                        it == viewModel.selectedSection,
+                                        it
+                                    )
+                                }
+                            TabsTop(TabsTopType.Scrolled, tabItems) { tab ->
+                                viewModel.onSelectSection(tab)
+                            }
+
+                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                                Spacer(Modifier.height(12.dp))
+                                CellUniversalLawrenceSection(viewModel.faqItems) { faq ->
+                                    RowUniversal(
+                                        modifier = Modifier.padding(horizontal = 16.dp),
+                                        onClick = { onItemClick(faq) }
+                                    ) {
+                                        subhead1_leah(text = faq.title)
+                                    }
+                                }
+                                Spacer(Modifier.height(32.dp))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

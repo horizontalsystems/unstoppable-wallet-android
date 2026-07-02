@@ -1,0 +1,71 @@
+package io.horizontalsystems.walletkit.modules.market
+
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.IMarketStorage
+import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.managers.CurrencyManager
+import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
+import io.horizontalsystems.walletkit.entities.LaunchPage
+import io.horizontalsystems.walletkit.modules.market.MarketModule.Tab
+import io.horizontalsystems.marketkit.models.MarketGlobal
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
+
+class MarketViewModel(
+    private val marketStorage: IMarketStorage,
+    private val marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
+    localStorage: ILocalStorage
+) : ViewModelUiState<MarketModule.UiState>() {
+
+    val tabs = arrayOf(Tab.Coins, Tab.Watchlist)//Tab.entries.toTypedArray()
+    private var currency = currencyManager.baseCurrency
+
+    private var marketGlobal: MarketGlobal? = null
+    private var selectedTab: Tab = getInitialTab(localStorage.launchPage)
+
+    init {
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                currency = currencyManager.baseCurrency
+                emitState()
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                marketGlobal = marketKit.marketGlobalSingle(currency.code).await()
+                emitState()
+            } catch (e: Throwable) {
+                Log.e("TAG", "updateMarketOverview: ", e)
+            }
+        }
+    }
+
+    override fun createState() = MarketModule.UiState(
+        selectedTab = selectedTab,
+        marketGlobal = marketGlobal,
+        currency = currency
+    )
+
+    fun onSelect(tab: Tab) {
+        selectedTab = tab
+        marketStorage.currentMarketTab = tab
+        emitState()
+    }
+
+    private fun getInitialTab(launchPage: LaunchPage?) = when (launchPage) {
+        LaunchPage.Watchlist -> Tab.Watchlist
+        else -> {
+            val lastTab = marketStorage.currentMarketTab
+            if (lastTab == Tab.Watchlist || lastTab == Tab.Coins) {
+                lastTab
+            } else {
+                Tab.Coins
+            }
+        }
+    }
+}

@@ -1,0 +1,38 @@
+package io.horizontalsystems.walletkit.entities.transactionrecords.monero
+
+import io.horizontalsystems.walletkit.entities.TransactionValue
+import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
+import io.horizontalsystems.marketkit.models.Token
+import java.math.BigDecimal
+
+class MoneroIncomingTransactionRecord(
+    token: Token,
+    uid: String,
+    transactionHash: String,
+    transactionIndex: Int,
+    blockHeight: Int?,
+    confirmationsThreshold: Int?,
+    timestamp: Long,
+    fee: BigDecimal?,
+    failed: Boolean,
+    amount: BigDecimal,
+    val from: String?,
+    val to: String?,
+    memo: String?,
+    source: TransactionSource
+) : MoneroTransactionRecord(
+    uid = uid,
+    transactionHash = transactionHash,
+    transactionIndex = transactionIndex,
+    blockHeight = blockHeight,
+    confirmationsThreshold = confirmationsThreshold,
+    timestamp = timestamp,
+    fee = fee?.let { TransactionValue.CoinValue(token, it) },
+    failed = failed,
+    memo = memo,
+    source = source
+) {
+    val value: TransactionValue = TransactionValue.CoinValue(token, amount)
+
+    override val mainValue = value
+}

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
-import io.horizontalsystems.core.core.shorten
+import io.horizontalsystems.walletkit.core.shorten
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

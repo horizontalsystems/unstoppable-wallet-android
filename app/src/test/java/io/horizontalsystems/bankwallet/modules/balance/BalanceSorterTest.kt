@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-//import io.horizontalsystems.core.entities.Coin
-//import io.horizontalsystems.core.entities.CoinType
-import io.horizontalsystems.core.modules.balance.BalanceSorter
+//import io.horizontalsystems.walletkit.entities.Coin
+//import io.horizontalsystems.walletkit.entities.CoinType
+import io.horizontalsystems.walletkit.modules.balance.BalanceSorter
 
 class BalanceSorterTest {
 

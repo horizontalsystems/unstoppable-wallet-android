@@ -231,9 +231,9 @@ android {
 }
 
 dependencies {
-    // Everything else now lives in :core, which re-exports its dependencies (api),
-    // so the thin :app shell only needs :core plus the flavor/test bits below.
-    implementation(project(":core"))
+    // Everything else now lives in :walletkit, which re-exports its dependencies (api),
+    // so the thin :app shell only needs :walletkit plus the flavor/test bits below.
+    implementation(project(":walletkit"))
     implementation(libs.androidx.splashscreen) // MainActivity installs the splash screen
     debugImplementation(libs.leakcanary)
 
