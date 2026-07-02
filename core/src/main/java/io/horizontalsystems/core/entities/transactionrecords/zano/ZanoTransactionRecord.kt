@@ -1,0 +1,27 @@
+package io.horizontalsystems.core.entities.transactionrecords.zano
+
+import io.horizontalsystems.core.entities.TransactionValue
+import io.horizontalsystems.core.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.core.modules.transactions.TransactionSource
+
+abstract class ZanoTransactionRecord(
+    uid: String,
+    transactionHash: String,
+    transactionIndex: Int,
+    blockHeight: Int?,
+    confirmationsThreshold: Int?,
+    timestamp: Long,
+    val fee: TransactionValue?,
+    failed: Boolean,
+    val memo: String?,
+    source: TransactionSource
+) : TransactionRecord(
+    uid = uid,
+    transactionHash = transactionHash,
+    transactionIndex = transactionIndex,
+    blockHeight = blockHeight,
+    confirmationsThreshold = confirmationsThreshold,
+    timestamp = timestamp,
+    failed = failed,
+    source = source
+)

@@ -1,0 +1,59 @@
+package io.horizontalsystems.core.modules.multiswap.history
+
+import io.horizontalsystems.core.core.IAccountManager
+import io.horizontalsystems.core.core.storage.SwapRecordDao
+import io.horizontalsystems.core.entities.SwapRecord
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
+class SwapRecordManager(
+    private val accountManager: IAccountManager,
+    private val swapRecordDao: SwapRecordDao,
+) {
+
+    private val _recordsUpdatedFlow = MutableSharedFlow<Unit>(replay = 1)
+    val recordsUpdatedFlow = _recordsUpdatedFlow.asSharedFlow()
+
+    init {
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
+    fun save(record: SwapRecord) {
+        swapRecordDao.insert(record)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
+    fun getAll(): List<SwapRecord> {
+        val accountId = accountManager.activeAccount?.id ?: return emptyList()
+        return swapRecordDao.getAll(accountId)
+    }
+
+    fun getPending(): List<SwapRecord> {
+        val accountId = accountManager.activeAccount?.id ?: return emptyList()
+        return swapRecordDao.getPending(accountId)
+    }
+
+    fun getById(id: Int): SwapRecord? {
+        return swapRecordDao.getById(id)
+    }
+
+    fun updateStatus(id: Int, status: SwapStatus, pauseReason: String?) {
+        swapRecordDao.updateStatus(id, status.name, pauseReason)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
+    fun updateStatusAndAmountOut(id: Int, status: SwapStatus, amountOut: String, pauseReason: String?) {
+        swapRecordDao.updateStatusAndAmountOut(id, status.name, amountOut, pauseReason)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
+    fun updateTransactionHash(id: Int, hash: String) {
+        swapRecordDao.updateTransactionHash(id, hash)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
+    fun updateOutboundTransactionHash(id: Int, hash: String) {
+        swapRecordDao.updateOutboundTransactionHash(id, hash)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+}

@@ -1,10 +1,10 @@
 //package io.horizontalsystems.bankwallet.modules.send
 //
 //import com.nhaarman.mockito_kotlin.*
-//import io.horizontalsystems.bankwallet.core.*
-//import io.horizontalsystems.bankwallet.entities.*
-//import io.horizontalsystems.bankwallet.modules.RxBaseTest
-//import io.horizontalsystems.bankwallet.modules.transactions.CoinCode
+//import io.horizontalsystems.core.core.*
+//import io.horizontalsystems.core.entities.*
+//import io.horizontalsystems.core.modules.RxBaseTest
+//import io.horizontalsystems.core.modules.transactions.CoinCode
 //import io.reactivex.Flowable
 //import io.reactivex.Single
 //import io.reactivex.plugins.RxJavaPlugins

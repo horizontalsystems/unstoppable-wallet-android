@@ -1,9 +1,0 @@
-package io.horizontalsystems.bankwallet.modules.multiswap.ui
-
-import androidx.compose.runtime.Composable
-import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-
-interface DataField {
-    @Composable
-    fun GetContent(navigation: HSNavigation)
-}

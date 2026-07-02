@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.core.core.managers.BigDecimalRounded
+import io.horizontalsystems.core.core.managers.LargeNumberName
+import io.horizontalsystems.core.core.managers.NumberRounding
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.math.BigDecimal

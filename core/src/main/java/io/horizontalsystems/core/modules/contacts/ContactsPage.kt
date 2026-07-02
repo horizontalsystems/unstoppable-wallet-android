@@ -1,0 +1,175 @@
+package io.horizontalsystems.core.modules.contacts
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.core.core.App
+import io.horizontalsystems.core.modules.contacts.model.Contact
+import io.horizontalsystems.core.modules.contacts.model.ContactAddress
+import io.horizontalsystems.core.modules.contacts.screen.AddressScreen
+import io.horizontalsystems.core.modules.contacts.screen.BlockchainSelectorScreen
+import io.horizontalsystems.core.modules.contacts.screen.ContactScreen
+import io.horizontalsystems.core.modules.contacts.screen.ContactsScreen
+import io.horizontalsystems.core.modules.contacts.viewmodel.AddressViewModel
+import io.horizontalsystems.core.modules.contacts.viewmodel.ContactViewModel
+import io.horizontalsystems.core.modules.contacts.viewmodel.ContactsViewModel
+import io.horizontalsystems.core.modules.nav3.HSNavigation
+import io.horizontalsystems.core.modules.nav3.HSPage
+import io.horizontalsystems.core.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.core.modules.nav3.ResultEffect
+import kotlinx.serialization.Serializable
+import java.util.UUID
+
+
+@Serializable
+data class ContactsRouterPage(val input: Input) : HSPage() {
+
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        val mode = input.mode
+
+        val startDestination: HSPage
+        val addAddress: ContactAddress?
+
+        when (mode) {
+            is Mode.AddAddressToExistingContact -> {
+                addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
+                    ContactAddress(blockchain, mode.address)
+                }
+                startDestination = ContactsPage(mode, addAddress)
+            }
+            is Mode.AddAddressToNewContact -> {
+                addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
+                    ContactAddress(blockchain, mode.address)
+                }
+                startDestination = ContactPage(null, addAddress)
+            }
+            Mode.Full -> {
+                addAddress = null
+                startDestination = ContactsPage(mode, addAddress)
+            }
+        }
+
+        startDestination.GetContent(navigation)
+    }
+
+    @Serializable
+    data class Input(val mode: Mode)
+}
+
+@Serializable
+data class ContactsPage(val mode: Mode, val addAddress: ContactAddress?) : HSPage() {
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
+        ContactsScreen(
+            viewModel = viewModel,
+            onNavigateToBack = { navigation.removeLastOrNull() },
+            onNavigateToCreateContact = { navigation.add(ContactPage(null, null)) },
+            onNavigateToContact = { contact ->
+                navigation.add(ContactPage(contact, addAddress))
+            }
+        )
+    }
+}
+
+@Serializable
+data class ContactPage(
+    val contact: Contact?,
+    val newAddress: ContactAddress?
+) : HSPage() {
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(contact, newAddress))
+
+        // todo: find better solution
+        val uuid = rememberSaveable { UUID.randomUUID().toString() }
+        ResultEffect<AddressPage.Result>(resultKeyUuid = uuid) {
+            it.added_address?.let { editedAddress ->
+                viewModel.setAddress(editedAddress)
+            }
+            it.deleted_address?.let { deletedAddress ->
+                viewModel.deleteAddress(deletedAddress)
+            }
+        }
+
+        ContactScreen(
+            viewModel = viewModel,
+            onNavigateToBack = {
+                navigation.removeLastOrNull()
+            },
+            onNavigateToAddress = { address ->
+                val screen = AddressPage(
+                    contactUid = viewModel.contact.uid,
+                    address = address,
+                    definedAddresses = viewModel.uiState.addressViewItems.map { it.contactAddress },
+                )
+
+                screen.resultKey = uuid
+                navigation.add(screen)
+            }
+        )
+    }
+}
+
+@Serializable
+data class AddressPage(
+    val contactUid: String,
+    val address: ContactAddress?,
+    val definedAddresses: List<ContactAddress>
+) : HSPage() {
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = viewModel<AddressViewModel>(
+            factory = ContactsModule.AddressViewModelFactory(
+                contactUid = contactUid,
+                contactAddress = address,
+                definedAddresses = definedAddresses
+            )
+        )
+
+        val resultEventBus = LocalResultEventBus.current
+
+        AddressScreen(
+            viewModel = viewModel,
+            onNavigateToBlockchainSelector = {
+                navigation.add(BlockchainSelectorPage)
+            },
+            onDone = { contactAddress ->
+                resultEventBus.sendResult<Result>(Result(added_address = contactAddress))
+                navigation.removeLastOrNull()
+            },
+            onDelete = { contactAddress ->
+                resultEventBus.sendResult<Result>(Result(deleted_address = contactAddress))
+                navigation.removeLastOrNull()
+            },
+            onNavigateToBack = {
+                navigation.removeLastOrNull()
+            }
+        )
+    }
+
+    data class Result(val added_address: ContactAddress? = null, val deleted_address: ContactAddress? = null)
+}
+
+
+@Serializable
+data object BlockchainSelectorPage : HSPage() {
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        val viewModel = navigation.viewModelForScreen<AddressViewModel>(AddressPage::class)
+
+        BlockchainSelectorScreen(
+            blockchains = viewModel.uiState.availableBlockchains,
+            selectedBlockchain = viewModel.uiState.blockchain,
+            onSelectBlockchain = { blockchain ->
+                viewModel.onEnterBlockchain(blockchain)
+
+                navigation.removeLastOrNull()
+            },
+            onNavigateToBack = {
+                navigation.removeLastOrNull()
+            }
+        )
+    }
+}

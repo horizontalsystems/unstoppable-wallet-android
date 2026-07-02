@@ -24,7 +24,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <receiver
-            android:name=".widgets.MarketWidgetReceiver"
+            android:name="io.horizontalsystems.core.widgets.MarketWidgetReceiver"
             android:exported="false">
 
             <intent-filter>
@@ -37,7 +37,7 @@
         </receiver>
 
         <activity
-            android:name=".widgets.MarketWidgetConfigurationActivity"
+            android:name="io.horizontalsystems.core.widgets.MarketWidgetConfigurationActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

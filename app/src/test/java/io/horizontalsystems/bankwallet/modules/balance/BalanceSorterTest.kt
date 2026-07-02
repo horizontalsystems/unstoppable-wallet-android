@@ -1,12 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-//import io.horizontalsystems.bankwallet.entities.Coin
-//import io.horizontalsystems.bankwallet.entities.CoinType
-import io.horizontalsystems.bankwallet.entities.Wallet
-import org.junit.Assert
-import org.junit.Test
+//import io.horizontalsystems.core.entities.Coin
+//import io.horizontalsystems.core.entities.CoinType
+import io.horizontalsystems.core.modules.balance.BalanceSorter
 
 class BalanceSorterTest {
 

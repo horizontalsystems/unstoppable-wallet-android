@@ -1,0 +1,252 @@
+package io.horizontalsystems.core.modules.multiswap.providers
+
+import io.horizontalsystems.core.core.App
+import io.horizontalsystems.core.core.IReceiveAdapter
+import io.horizontalsystems.core.core.ISendBitcoinAdapter
+import io.horizontalsystems.core.core.adapters.BitcoinAdapter
+import io.horizontalsystems.core.core.adapters.BitcoinCashAdapter
+import io.horizontalsystems.core.core.adapters.DashAdapter
+import io.horizontalsystems.core.core.adapters.ECashAdapter
+import io.horizontalsystems.core.core.adapters.LitecoinAdapter
+import io.horizontalsystems.core.core.adapters.Trc20Adapter
+import io.horizontalsystems.core.core.adapters.toMoneroSeed
+import io.horizontalsystems.core.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.core.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.core.core.isEvm
+import io.horizontalsystems.core.core.managers.NoActiveAccount
+import io.horizontalsystems.core.entities.AccountType
+import io.horizontalsystems.core.entities.transactionrecords.tron.TronApproveTransactionRecord
+import io.horizontalsystems.core.modules.multiswap.action.ActionApprove
+import io.horizontalsystems.core.modules.multiswap.action.ActionRevoke
+import io.horizontalsystems.core.modules.multiswap.action.ISwapProviderAction
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.zanokit.ZanoKit
+import io.horizontalsystems.zanokit.ZanoWallet
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import java.math.BigDecimal
+import java.util.concurrent.ConcurrentHashMap
+
+object SwapHelper {
+
+    private val zcashAddressCache = ConcurrentHashMap<String, String>()
+    private val zcashAddressMutex = Mutex()
+
+    private val zcashUnifiedAddressCache = ConcurrentHashMap<String, String>()
+    private val zcashUnifiedAddressMutex = Mutex()
+
+    suspend fun getAllowanceTrc20(token: Token, spenderAddress: String): BigDecimal? {
+        if (token.type !is TokenType.Eip20) return null
+
+        val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token) ?: return null
+        return trc20Adapter.allowance(spenderAddress)
+    }
+
+    fun getSendingAddressForToken(token: Token): String? {
+        val blockchainType = token.blockchainType
+
+        if (blockchainType.isEvm
+            || blockchainType == BlockchainType.Solana
+            || blockchainType == BlockchainType.Tron
+            || blockchainType == BlockchainType.Ton
+            || blockchainType == BlockchainType.Stellar
+        ) {
+            App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
+                return it.receiveAddress
+            }
+        }
+
+        return null
+    }
+
+    suspend fun getSourceAddressesForAmlCheck(token: Token, amountIn: BigDecimal): List<String> {
+        val blockchainType = token.blockchainType
+
+        if (blockchainType.isEvm
+            || blockchainType == BlockchainType.Solana
+            || blockchainType == BlockchainType.Tron
+            || blockchainType == BlockchainType.Ton
+            || blockchainType == BlockchainType.Stellar
+            || blockchainType == BlockchainType.Zcash
+            || blockchainType == BlockchainType.Monero
+            || blockchainType == BlockchainType.Zano
+        ) {
+            App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
+                return listOf(it.receiveAddress)
+            }
+        }
+
+        // UTXO chains: select the UTXOs that will actually cover amountIn
+        val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token) ?: return emptyList()
+        val feeRate = try {
+            FeeRateProviderFactory.provider(token.blockchainType)?.getFeeRates()?.recommended
+        } catch (_: Throwable) {
+            null
+        }
+
+        return adapter.selectUnspentOutputs(amountIn, feeRate ?: 1).mapNotNull { it.address }.distinct()
+
+    }
+
+    suspend fun getReceiveAddressForToken(token: Token): String {
+        val blockchainType = token.blockchainType
+
+        App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
+            return if (it is ZcashAdapter) it.receiveAddressTransparent else it.receiveAddress
+        }
+
+        val accountManager = App.accountManager
+        val evmBlockchainManager = App.evmBlockchainManager
+
+        val account = accountManager.activeAccount ?: throw NoActiveAccount()
+
+        return when {
+            blockchainType.isEvm -> {
+                val chain = evmBlockchainManager.getChain(blockchainType)
+                val evmAddress = account.type.evmAddress(chain) ?: throw SwapError.NoDestinationAddress()
+                evmAddress.eip55
+            }
+
+            else -> when (blockchainType) {
+                BlockchainType.Bitcoin -> {
+                    BitcoinAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.BitcoinCash -> {
+                    BitcoinCashAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.Litecoin -> {
+                    LitecoinAdapter.firstAddress(account.type, token.type)
+                }
+
+                BlockchainType.Dash -> {
+                    DashAdapter.firstAddress(account.type)
+                }
+
+                BlockchainType.ECash -> {
+                    ECashAdapter.firstAddress(account.type)
+                }
+
+                BlockchainType.Tron -> {
+                    App.tronKitManager.getAddress(account.type)
+                }
+
+                BlockchainType.Stellar -> {
+                    App.stellarKitManager.getAddress(account.type)
+                }
+
+                BlockchainType.Solana -> {
+                    App.solanaKitManager.getAddress(account.type)
+                }
+
+                BlockchainType.Ton -> {
+                    App.tonKitManager.getAddress(account.type)
+                }
+
+                BlockchainType.Monero -> {
+                    withContext(Dispatchers.IO) {
+                        MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
+                    }
+                }
+
+                BlockchainType.Zano -> {
+                    val accountType = account.type as? AccountType.Mnemonic
+                        ?: throw SwapError.NoDestinationAddress()
+                    withContext(Dispatchers.IO) {
+                        ZanoKit.address(ZanoWallet.Bip39(accountType.words, accountType.passphrase, 0))
+                            ?: throw SwapError.NoDestinationAddress()
+                    }
+                }
+
+                BlockchainType.Zcash -> cachedZcashAddress(account.id, zcashAddressCache, zcashAddressMutex) {
+                    ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
+                }
+
+                else -> throw SwapError.NoDestinationAddress()
+            }
+        }
+    }
+
+    // Resolves the wallet's unified (shielded) Zcash address. Used for other->ZEC swaps where
+    // the provider can deliver directly into the shielded pool. Falls back to deriving the
+    // unified address from the active account when no Zcash adapter is enabled, caching the
+    // result to avoid re-running the expensive derivation (each call spins up a synchronizer).
+    suspend fun getReceiveAddressUnifiedForZcash(token: Token): String {
+        App.adapterManager.getAdapterForToken<ZcashAdapter>(token)?.let {
+            return it.receiveAddress
+        }
+
+        val account = App.accountManager.activeAccount ?: throw NoActiveAccount()
+
+        return cachedZcashAddress(account.id, zcashUnifiedAddressCache, zcashUnifiedAddressMutex) {
+            ZcashAdapter.getUnifiedAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
+        }
+    }
+
+    // Double-checked cache for a derived Zcash address. The derivation spins up a fresh
+    // synchronizer, so results are memoized per account under a mutex to serialize concurrent
+    // callers and run the work off the main thread.
+    private suspend fun cachedZcashAddress(
+        accountId: String,
+        cache: ConcurrentHashMap<String, String>,
+        mutex: Mutex,
+        derive: suspend () -> String,
+    ): String {
+        return cache[accountId] ?: mutex.withLock {
+            cache[accountId] ?: withContext(NonCancellable + Dispatchers.IO) { derive() }.also { cache[accountId] = it }
+        }
+    }
+
+    suspend fun actionApproveTrc20(
+        allowance: BigDecimal?,
+        amountIn: BigDecimal,
+        routerAddress: String,
+        token: Token,
+    ): ISwapProviderAction? {
+        if (allowance == null || allowance >= amountIn) return null
+        val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token) ?: return null
+
+        val approveTransaction = trc20Adapter.getPendingTransactions()
+            .filterIsInstance<TronApproveTransactionRecord>()
+            .filter { it.spender.equals(routerAddress, true) }
+            .maxByOrNull { it.timestamp }
+
+        val revoke = allowance > BigDecimal.ZERO && isUsdt(token)
+
+        return if (revoke) {
+            val revokeInProgress = approveTransaction != null && approveTransaction.value.zeroValue
+            ActionRevoke(
+                token,
+                routerAddress,
+                revokeInProgress,
+                allowance
+            )
+        } else {
+            val approveInProgress =
+                approveTransaction != null && !approveTransaction.value.zeroValue
+
+            return ActionApprove(
+                amountIn,
+                routerAddress,
+                token,
+                approveInProgress
+            )
+        }
+    }
+
+    private fun isUsdt(token: Token): Boolean {
+        val tokenType = token.type
+
+        return token.blockchainType is BlockchainType.Tron
+                && tokenType is TokenType.Eip20
+                && tokenType.address.lowercase() == "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t".lowercase()
+    }
+
+}

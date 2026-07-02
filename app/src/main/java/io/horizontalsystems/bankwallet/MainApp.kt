@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet
 
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.providers.IAppConfigProvider
+import io.horizontalsystems.core.core.App
+import io.horizontalsystems.core.core.ILocalStorage
+import io.horizontalsystems.core.core.providers.IAppConfigProvider
 
 /**
  * Concrete Application for this app. The composition root ([App]) lives in :core;

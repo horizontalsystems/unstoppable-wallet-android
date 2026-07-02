@@ -1,0 +1,143 @@
+package io.horizontalsystems.core.modules.walletconnect
+
+import io.horizontalsystems.core.core.IAccountManager
+import io.horizontalsystems.core.core.managers.ActiveAccountState
+import io.horizontalsystems.core.modules.walletconnect.storage.WCSessionStorage
+import io.horizontalsystems.core.modules.walletconnect.storage.WalletConnectV2Session
+import io.horizontalsystems.dapp.core.DAppManager
+import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppSession
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+
+class WCSessionManager(
+    private val accountManager: IAccountManager,
+    private val storage: WCSessionStorage,
+) {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    private val _sessionsFlow = MutableStateFlow<List<HSDAppSession>>(emptyList())
+    val sessionsFlow: StateFlow<List<HSDAppSession>>
+        get() = _sessionsFlow
+
+    private val _pendingRequestCountFlow = MutableStateFlow(0)
+    val pendingRequestCountFlow: StateFlow<Int>
+        get() = _pendingRequestCountFlow
+
+    val sessions: List<HSDAppSession>
+        get() {
+            val accountId = accountManager.activeAccount?.id ?: return emptyList()
+            return getSessions(accountId)
+        }
+
+    private var requestsQueue = listOf<HSDAppRequest>()
+
+    fun start() {
+        syncSessions()
+
+        coroutineScope.launch {
+            accountManager.activeAccountStateFlow.collect { activeAccountState ->
+                if (activeAccountState is ActiveAccountState.ActiveAccount) {
+                    syncSessions()
+                }
+            }
+        }
+
+        coroutineScope.launch {
+            WCDelegate.pendingRequestEvents.collect {
+                syncPendingRequest()
+            }
+        }
+
+        coroutineScope.launch {
+            accountManager.accountsDeletedFlowable.asFlow().collect {
+                handleDeletedAccount()
+            }
+        }
+
+        coroutineScope.launch {
+            WCDelegate.walletEvents.collect {
+                syncSessions()
+            }
+        }
+    }
+
+    private fun getCurrentSessionRequests(): List<HSDAppRequest> {
+        val accountId = accountManager.activeAccount?.id ?: return emptyList()
+        return requests(accountId)
+    }
+
+    private fun syncSessions() {
+        val accountId = accountManager.activeAccount?.id ?: return
+
+        val currentSessions = DAppManager.getActiveSessions()
+
+        val allDbSessions = storage.getAllSessions()
+        val allDbTopics = allDbSessions.map { it.topic }
+
+        val newSessions = currentSessions.filter { !allDbTopics.contains(it.topic) }
+        val deletedTopics = allDbTopics.filter { topic ->
+            !currentSessions.any { it.topic == topic }
+        }
+
+        storage.save(newSessions.map { WalletConnectV2Session(accountId, it.topic) })
+        storage.deleteSessionsByTopics(deletedTopics)
+
+        _sessionsFlow.update { getSessions(accountId) }
+        syncPendingRequest()
+        syncRequests()
+    }
+
+    private fun syncRequests() {
+        requestsQueue = getCurrentSessionRequests()
+    }
+
+    private fun getSessions(accountId: String): List<HSDAppSession> {
+        val sessions = DAppManager.getActiveSessions()
+        val dbSessions = storage.getSessionsByAccountId(accountId)
+
+        return sessions.filter { session ->
+            dbSessions.any { it.topic == session.topic }
+        }
+    }
+
+    private fun syncPendingRequest() {
+        val requestsCount = accountManager.activeAccount?.let { requests(it.id).size } ?: 0
+        _pendingRequestCountFlow.update { requestsCount }
+    }
+
+    private fun requests(accountId: String): List<HSDAppRequest> {
+        val sessions = getSessions(accountId)
+        return sessions.flatMap { session ->
+            DAppManager.getPendingRequests(session.topic)
+        }
+    }
+
+    private fun handleDeletedAccount() {
+        val existingAccountIds = accountManager.accounts.map { it.id }
+        storage.deleteSessionsExcept(accountIds = existingAccountIds)
+        syncSessions()
+    }
+
+    fun getNewSessionRequest(): HSDAppRequest? {
+        val updatedQueue = getCurrentSessionRequests()
+        val newRequests = updatedQueue - requestsQueue
+        syncRequests()
+        return newRequests.firstOrNull()
+    }
+
+    open class RequestDataError : Throwable() {
+        object UnsupportedChainId : RequestDataError()
+        object NoSuitableAccount : RequestDataError()
+        object NoSuitableEvmKit : RequestDataError()
+        object NoSigner : RequestDataError()
+        object RequestNotFoundError : RequestDataError()
+        object InvalidGasPrice : RequestDataError()
+        object InvalidNonce : RequestDataError()
+    }
+}

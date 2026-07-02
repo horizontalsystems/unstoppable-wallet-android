@@ -4,10 +4,10 @@
 
     <application>
         <activity
-            android:name="io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity"
+            android:name="io.horizontalsystems.core.modules.qrscanner.QRScannerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity"
+            android:name="io.horizontalsystems.core.modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
     </application>
 </manifest>

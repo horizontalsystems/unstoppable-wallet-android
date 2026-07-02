@@ -1,0 +1,99 @@
+package io.horizontalsystems.core.modules.backuplocal.fullbackup
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.core.core.App
+import io.horizontalsystems.core.core.ViewModelUiState
+import io.horizontalsystems.core.entities.Account
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.core.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.UIState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class SelectBackupItemsViewModel(
+    private val backupProvider: BackupProvider,
+    private val backupViewItemFactory: BackupViewItemFactory
+) : ViewModelUiState<UIState>() {
+
+    private var viewState: ViewState = ViewState.Loading
+    private var wallets: List<WalletBackupViewItem> = emptyList()
+    private var otherBackupItems: List<OtherBackupViewItem> = emptyList()
+
+    val selectedWallets: List<String>
+        get() = wallets.filter { it.selected }.map { it.account.id }
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val backupItems = backupProvider.fullBackupItems()
+            val viewItems = backupViewItemFactory.backupViewItems(backupItems)
+
+            wallets = viewItems.first
+            otherBackupItems = viewItems.second
+            viewState = ViewState.Success
+
+            emitState()
+        }
+    }
+
+    val selectedSections: Set<BackupSection>
+        get() = otherBackupItems.mapNotNull { if (it.selected) it.section else null }.toSet()
+
+    override fun createState() = UIState(
+        viewState = viewState,
+        wallets = wallets,
+        otherBackupItems = otherBackupItems,
+        nextEnabled = viewState == ViewState.Success &&
+            (selectedWallets.isNotEmpty() || selectedSections.isNotEmpty())
+    )
+
+    fun toggleOtherItem(item: OtherBackupViewItem) {
+        otherBackupItems = otherBackupItems.map {
+            if (it.section != null && it.section == item.section) it.copy(selected = !item.selected) else it
+        }
+        emitState()
+    }
+
+    fun toggle(wallet: WalletBackupViewItem) {
+        wallets = wallets.map {
+            if (wallet.account.id == it.account.id) {
+                it.copy(selected = !wallet.selected)
+            } else {
+                it
+            }
+        }
+
+        emitState()
+    }
+
+    data class UIState(
+        val viewState: ViewState,
+        val wallets: List<WalletBackupViewItem>,
+        val otherBackupItems: List<OtherBackupViewItem>,
+        val nextEnabled: Boolean = false
+    )
+
+    data class WalletBackupViewItem(
+        val account: Account,
+        val name: String,
+        val type: String,
+        val backupRequired: Boolean,
+        val selected: Boolean
+    )
+
+    data class OtherBackupViewItem(
+        val section: BackupSection?,
+        val title: String,
+        val value: String? = null,
+        val subtitle: String? = null,
+        val selected: Boolean = true
+    )
+
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return SelectBackupItemsViewModel(App.backupProvider, BackupViewItemFactory()) as T
+        }
+    }
+
+}

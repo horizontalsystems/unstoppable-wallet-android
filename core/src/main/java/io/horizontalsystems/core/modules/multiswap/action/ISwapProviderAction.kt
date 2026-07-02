@@ -1,0 +1,20 @@
+package io.horizontalsystems.core.modules.multiswap.action
+
+import androidx.compose.runtime.Composable
+import io.horizontalsystems.core.modules.nav3.HSNavigation
+
+interface ISwapProviderAction {
+    val inProgress: Boolean
+
+    @Composable
+    fun getTitle() : String
+
+    @Composable
+    fun getTitleInProgress() : String
+
+    @Composable
+    fun getDescription() : String? = null
+
+    @Composable
+    fun executor(navigation: HSNavigation, onActionCompleted: () -> Unit): () -> Unit
+}

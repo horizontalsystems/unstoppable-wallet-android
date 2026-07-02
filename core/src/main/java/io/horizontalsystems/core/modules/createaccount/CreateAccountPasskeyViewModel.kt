@@ -1,0 +1,114 @@
+package io.horizontalsystems.core.modules.createaccount
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.core.core.App
+import io.horizontalsystems.core.core.IAccountFactory
+import io.horizontalsystems.core.core.IAccountManager
+import io.horizontalsystems.core.core.ViewModelUiState
+import io.horizontalsystems.core.core.managers.WalletActivator
+import io.horizontalsystems.core.entities.Account
+import io.horizontalsystems.core.entities.AccountOrigin
+import io.horizontalsystems.core.entities.AccountType
+import io.horizontalsystems.core.entities.normalizeNFKD
+import io.horizontalsystems.hdwalletkit.Language
+import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
+
+class CreateAccountPasskeyViewModel(
+    private val accountFactory: IAccountFactory,
+    private val accountManager: IAccountManager,
+    private val walletActivator: WalletActivator,
+) : ViewModelUiState<CreateAccountPasskeyUiState>() {
+
+    private val defaultAccountName = accountFactory.getNextAccountName()
+    private var accountName: String = accountManager.getRandomWalletName()
+    private var success: AccountType? = null
+    private var error: String? = null
+
+    override fun createState() = CreateAccountPasskeyUiState(
+        defaultAccountName = defaultAccountName,
+        accountName = accountName,
+        success = success,
+        error = error,
+    )
+
+    fun createAccount(entropy: ByteArray) {
+        viewModelScope.launch {
+            try {
+                val words = Mnemonic().toMnemonic(entropy, Language.English)
+                    .map { it.normalizeNFKD() }
+                val accountType = AccountType.Mnemonic(words, "")
+                val account = accountFactory.account(
+                    name = accountName.ifBlank { defaultAccountName },
+                    type = accountType,
+                    origin = AccountOrigin.Created,
+                    backedUp = true,
+                    fileBackedUp = false,
+                )
+                accountManager.save(account)
+                activateDefaultWallets(account)
+                success = accountType
+                error = null
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                error = e.message
+                success = null
+            }
+            emitState()
+        }
+    }
+
+    fun onChangeAccountName(v: String) {
+        accountName = v
+        emitState()
+    }
+
+    fun generateRandomAccountName() {
+        accountName = accountManager.getRandomWalletName()
+        emitState()
+    }
+
+    fun onError(e: Throwable) {
+        error = e.message ?: e.javaClass.simpleName
+        success = null
+        emitState()
+    }
+
+    fun onErrorDisplayed() {
+        error = null
+        emitState()
+    }
+
+    private fun activateDefaultWallets(account: Account) {
+        val tokenQueries = listOf(
+            TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
+            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+        )
+        walletActivator.activateWallets(account, tokenQueries)
+    }
+
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return CreateAccountPasskeyViewModel(
+                App.accountFactory,
+                App.accountManager,
+                App.walletActivator,
+            ) as T
+        }
+    }
+}
+
+data class CreateAccountPasskeyUiState(
+    val defaultAccountName: String,
+    val accountName: String,
+    val success: AccountType? = null,
+    val error: String? = null,
+)

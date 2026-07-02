@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.core.core.managers.PoisoningScorer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
