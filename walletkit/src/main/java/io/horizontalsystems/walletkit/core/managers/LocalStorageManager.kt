@@ -430,6 +430,12 @@ class LocalStorageManager(
             preferences.edit().putString("simulate-failed-swap", value.name).apply()
         }
 
+    override var showSwapProviderName: Boolean
+        get() = preferences.getBoolean("show-swap-provider-name", false)
+        set(value) {
+            preferences.edit { putBoolean("show-swap-provider-name", value) }
+        }
+
     override var passkeyTermsAccepted: Boolean
         get() = preferences.getBoolean(PASSKEY_TERMS_ACCEPTED, false)
         set(value) {

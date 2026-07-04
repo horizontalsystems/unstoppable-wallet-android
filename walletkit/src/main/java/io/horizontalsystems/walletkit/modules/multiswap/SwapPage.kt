@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -605,6 +606,16 @@ private fun ProviderCellInfo(
                 )
             }
         )
+        if (BuildConfig.DEBUG && App.localStorage.showSwapProviderName) {
+            CellSecondary(
+                middle = {
+                    CellMiddleInfo(eyebrow = "Provider".hs)
+                },
+                right = {
+                    CellRightInfo(titleSubheadSb = quote.provider.title.hs)
+                }
+            )
+        }
         CellSecondary(
             middle = {
                 CellMiddleInfoTextIcon(
