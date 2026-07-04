@@ -444,9 +444,10 @@ private fun SettingSections(
 @Composable
 private fun DebugSettingsSection() {
     var simulateFailSwap by remember { mutableStateOf(App.localStorage.simulateFailSwap) }
+    var showSwapProviderName by remember { mutableStateOf(App.localStorage.showSwapProviderName) }
 
     CellUniversalLawrenceSection(
-        listOf {
+        listOf({
             RowUniversal(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onClick = {
@@ -468,7 +469,26 @@ private fun DebugSettingsSection() {
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
-        }
+        }, {
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onClick = {
+                    showSwapProviderName = !showSwapProviderName
+                    App.localStorage.showSwapProviderName = showSwapProviderName
+                }
+            ) {
+                body_leah(
+                    text = "Show swap provider name",
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f)
+                )
+                subhead1_grey(
+                    text = showSwapProviderName.toString(),
+                    maxLines = 1,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        })
     )
 }
 

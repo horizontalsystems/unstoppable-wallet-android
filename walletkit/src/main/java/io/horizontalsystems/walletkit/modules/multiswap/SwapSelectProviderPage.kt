@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -181,6 +182,13 @@ private fun SwapSelectProviderScreenInner(
                                                     color = it.color ?: ComposeAppTheme.colors.grey,
                                                 )
                                             }
+                                        }
+                                        if (BuildConfig.DEBUG && App.localStorage.showSwapProviderName) {
+                                            Text(
+                                                text = provider.title,
+                                                style = ComposeAppTheme.typography.subhead,
+                                                color = ComposeAppTheme.colors.grey,
+                                            )
                                         }
                                     }
                                     Column(
