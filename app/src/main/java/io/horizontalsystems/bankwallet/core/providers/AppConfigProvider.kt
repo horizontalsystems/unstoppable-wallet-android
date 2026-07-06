@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
-import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
@@ -15,92 +14,45 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val appId by lazy { localStorage.appId }
     override val appVersion by lazy { BuildConfig.VERSION_NAME }
     override val appBuild by lazy { BuildConfig.VERSION_CODE }
-    override val companyWebPageLink by lazy { Translator.getString(R.string.companyWebPageLink) }
-    override val appWebPageLink by lazy { Translator.getString(R.string.appWebPageLink) }
-    override val analyticsLink by lazy { Translator.getString(R.string.analyticsLink) }
-    override val appGithubLink by lazy { Translator.getString(R.string.appGithubLink) }
-    override val appTwitterLink by lazy { Translator.getString(R.string.appTwitterLink) }
-    override val appTelegramLink by lazy { Translator.getString(R.string.appTelegramLink) }
-    override val reportEmail by lazy { Translator.getString(R.string.reportEmail) }
-    override val releaseNotesUrl by lazy { Translator.getString(R.string.releaseNotesUrl) }
+    override val companyWebPageLink = BuildConfig.COMPANY_WEB_PAGE_LINK
+    override val appWebPageLink = BuildConfig.APP_WEB_PAGE_LINK
+    override val analyticsLink = BuildConfig.ANALYTICS_LINK
+    override val appGithubLink = BuildConfig.APP_GITHUB_LINK
+    override val appTwitterLink = BuildConfig.APP_TWITTER_LINK
+    override val appTelegramLink = BuildConfig.APP_TELEGRAM_LINK
+    override val reportEmail = BuildConfig.REPORT_EMAIL
+    override val releaseNotesUrl = BuildConfig.RELEASE_NOTES_URL
     override val mempoolSpaceUrl: String = "https://mempool.space"
     override val blockCypherUrl: String = "https://api.blockcypher.com"
     override val walletConnectUrl = "relay.walletconnect.com"
-    override val walletConnectProjectId by lazy { Translator.getString(R.string.walletConnectV2Key) }
-    override val walletConnectAppMetaDataName by lazy { Translator.getString(R.string.walletConnectAppMetaDataName) }
-    override val walletConnectAppMetaDataUrl by lazy { Translator.getString(R.string.walletConnectAppMetaDataUrl) }
-    override val walletConnectAppMetaDataIcon by lazy { Translator.getString(R.string.walletConnectAppMetaDataIcon) }
-    override val accountsBackupFileSalt by lazy { Translator.getString(R.string.accountsBackupFileSalt) }
+    override val walletConnectProjectId = BuildConfig.WALLET_CONNECT_V2_KEY
+    override val walletConnectAppMetaDataName = BuildConfig.WALLET_CONNECT_APP_META_DATA_NAME
+    override val walletConnectAppMetaDataUrl = BuildConfig.WALLET_CONNECT_APP_META_DATA_URL
+    override val walletConnectAppMetaDataIcon = BuildConfig.WALLET_CONNECT_APP_META_DATA_ICON
+    override val accountsBackupFileSalt = BuildConfig.ACCOUNTS_BACKUP_FILE_SALT
     override val simplexSupportChat = "https://smp11.simplex.im/g#yTrDh716RZCNYsdPSDrqMMlHnqZlW4XJGnFTugBrsAI"
     override val nymVpnLink = "https://nymtechnologies.pxf.io/N9vnr1"
     override val telegramSupportChat = "https://t.me/m/1TNZ9JE4MTNi"
 
-    override val blocksDecodedEthereumRpc by lazy {
-        Translator.getString(R.string.blocksDecodedEthereumRpc)
-    }
-    override val twitterBearerToken by lazy {
-        Translator.getString(R.string.twitterBearerToken)
-    }
-    override val etherscanApiKey by lazy {
-        Translator.getString(R.string.etherscanKey).split(",")
-    }
-    override val bscscanApiKey by lazy {
-        Translator.getString(R.string.bscscanKey).split(",")
-    }
-    override val otherScanApiKey by lazy {
-        Translator.getString(R.string.otherScanKey).split(",")
-    }
-    override val guidesUrl by lazy {
-        Translator.getString(R.string.guidesUrl)
-    }
-    override val eduUrl by lazy {
-        Translator.getString(R.string.eduUrl)
-    }
-    override val faqUrl by lazy {
-        Translator.getString(R.string.faqUrl)
-    }
-    override val coinsJsonUrl by lazy {
-        Translator.getString(R.string.coinsJsonUrl)
-    }
-    override val providerCoinsJsonUrl by lazy {
-        Translator.getString(R.string.providerCoinsJsonUrl)
-    }
-
-    override val marketApiBaseUrl by lazy {
-        Translator.getString(R.string.marketApiBaseUrl)
-    }
-
-    override val marketApiKey by lazy {
-        Translator.getString(R.string.marketApiKey)
-    }
-
-    override val openSeaApiKey by lazy {
-        Translator.getString(R.string.openSeaApiKey)
-    }
-
-    override val solanaAlchemyApiKey by lazy {
-        Translator.getString(R.string.solanaAlchemyApiKey)
-    }
-
-    override val solanaJupiterApiKey by lazy {
-        Translator.getString(R.string.solanaJupiterApiKey)
-    }
-
-    override val trongridApiKeys: List<String> by lazy {
-        Translator.getString(R.string.trongridApiKeys).split(",")
-    }
-
-    override val udnApiKey by lazy {
-        Translator.getString(R.string.udnApiKey)
-    }
-
-    override val oneInchApiKey by lazy {
-        Translator.getString(R.string.oneInchApiKey)
-    }
-
-    override val appLinksHost by lazy {
-        Translator.getString(R.string.appLinksHost)
-    }
+    override val blocksDecodedEthereumRpc = BuildConfig.BLOCKS_DECODED_ETHEREUM_RPC
+    override val twitterBearerToken = BuildConfig.TWITTER_BEARER_TOKEN
+    override val etherscanApiKey = BuildConfig.ETHERSCAN_KEY.split(",")
+    override val bscscanApiKey = BuildConfig.BSCSCAN_KEY.split(",")
+    override val otherScanApiKey = BuildConfig.OTHER_SCAN_KEY.split(",")
+    override val guidesUrl = BuildConfig.GUIDES_URL
+    override val eduUrl = BuildConfig.EDU_URL
+    override val faqUrl = BuildConfig.FAQ_URL
+    override val coinsJsonUrl = BuildConfig.COINS_JSON_URL
+    override val providerCoinsJsonUrl = BuildConfig.PROVIDER_COINS_JSON_URL
+    override val marketApiBaseUrl = BuildConfig.MARKET_API_BASE_URL
+    override val marketApiKey = BuildConfig.MARKET_API_KEY
+    override val openSeaApiKey = BuildConfig.OPEN_SEA_API_KEY
+    override val solanaAlchemyApiKey = BuildConfig.SOLANA_ALCHEMY_API_KEY
+    override val solanaJupiterApiKey = BuildConfig.SOLANA_JUPITER_API_KEY
+    override val trongridApiKeys: List<String> = BuildConfig.TRONGRID_API_KEYS.split(",")
+    override val udnApiKey = BuildConfig.UDN_API_KEY
+    override val oneInchApiKey = BuildConfig.ONE_INCH_API_KEY
+    override val appLinksHost = BuildConfig.APP_LINKS_HOST
 
     override val fiatDecimal: Int = 2
     override val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
@@ -195,34 +147,19 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
         "SOL" to BigDecimal("0.000001"),
     )
 
-    override val chainalysisBaseUrl by lazy {
-        Translator.getString(R.string.chainalysisBaseUrl)
-    }
+    override val chainalysisBaseUrl = BuildConfig.CHAINALYSIS_BASE_URL
 
-    override val chainalysisApiKey by lazy {
-        Translator.getString(R.string.chainalysisApiKey)
-    }
+    override val chainalysisApiKey = BuildConfig.CHAINALYSIS_API_KEY
 
-    override val hashDitBaseUrl by lazy {
-        Translator.getString(R.string.hashDitBaseUrl)
-    }
+    override val hashDitBaseUrl = BuildConfig.HASH_DIT_BASE_URL
 
-    override val hashDitApiKey by lazy {
-        Translator.getString(R.string.hashDitApiKey)
-    }
+    override val hashDitApiKey = BuildConfig.HASH_DIT_API_KEY
 
-    override val uswapApiBaseUrl by lazy {
-        Translator.getString(R.string.uswapApiBaseUrl)
-    }
+    override val uswapApiBaseUrl = BuildConfig.USWAP_API_BASE_URL
 
-    override val uswapApiKey by lazy {
-        Translator.getString(R.string.uswapApiKey)
-    }
+    override val uswapApiKey = BuildConfig.USWAP_API_KEY
 
-    override val oneInchPartnerFeeAddress by lazy {
-        Translator.getString(R.string.oneInchPartnerFeeAddress)
-    }
-
+    override val oneInchPartnerFeeAddress = BuildConfig.ONE_INCH_PARTNER_FEE_ADDRESS
 
     override val fdroidBuild: Boolean = BuildConfig.FDROID_BUILD
 }

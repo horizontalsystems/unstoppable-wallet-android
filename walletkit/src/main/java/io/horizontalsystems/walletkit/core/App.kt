@@ -242,7 +242,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     /**
      * Supplies the app/flavor-specific configuration. Implemented by the concrete
-     * Application in :app (which owns the resValue/BuildConfig-backed AppConfigProvider).
+     * Application in :app (which owns the BuildConfig-backed AppConfigProvider).
      */
     protected abstract fun createAppConfigProvider(localStorage: ILocalStorage): IAppConfigProvider
 

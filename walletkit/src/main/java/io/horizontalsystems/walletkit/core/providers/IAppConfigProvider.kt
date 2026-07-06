@@ -8,7 +8,7 @@ import java.math.BigDecimal
  * App/flavor-specific configuration seam.
  *
  * The concrete implementation ([AppConfigProvider]) lives in :app because it reads
- * resValue/BuildConfig values that are defined per product-flavor and build-type.
+ * BuildConfig values that are defined per product-flavor and build-type.
  * :core code (and the App composition root) depend only on this interface, so :core
  * stays reusable by another app that supplies its own configuration.
  */
