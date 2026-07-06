@@ -223,6 +223,9 @@ android {
             substitute(module("com.github.WalletConnect.Scarlet:stream-adapter-rxjava2:1.0.0")).using(module("com.walletconnect.Scarlet:stream-adapter-rxjava2:1.0.2"))
             substitute(module("com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0")).using(module("com.walletconnect.Scarlet:message-adapter-gson:1.0.2"))
             substitute(module("com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0")).using(module("com.walletconnect.Scarlet:lifecycle-android:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:scarlet-core:1.0.0")).using(module("com.walletconnect.Scarlet:scarlet-core:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:message-adapter-moshi:1.0.0")).using(module("com.walletconnect.Scarlet:message-adapter-moshi:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:stream-adapter-coroutines:1.0.0")).using(module("com.walletconnect.Scarlet:stream-adapter-coroutines:1.0.2"))
         }
 
         resolutionStrategy.eachDependency {
@@ -406,11 +409,14 @@ afterEvaluate {
         "fdroidCiImplementation"(project(":subscriptions-fdroid"))
         "ciImplementation"(project(":subscriptions-dev"))
 
-        findProject(":dapp-wallet-connect")?.let {
+        findProject(":dapp-reown")?.let {
             "baseDebugImplementation"(it)
             "baseReleaseImplementation"(it)
             "ciImplementation"(it)
         }
+
+        "fdroidImplementation"(project(":dapp-wallet-connect"))
+        "fdroidCiImplementation"(project(":dapp-wallet-connect"))
 
         "baseDebugImplementation"(libs.androidx.credentials.play.services.auth)
         "baseReleaseImplementation"(libs.androidx.credentials.play.services.auth)

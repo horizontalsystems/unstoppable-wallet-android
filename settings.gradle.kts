@@ -30,6 +30,9 @@ include(":subscriptions-dev")
 include(":subscriptions-fdroid")
 
 include(":dapp-core")
+if (file("dapp-reown").exists()) {
+    include(":dapp-reown")
+}
 if (file("dapp-wallet-connect").exists()) {
     include(":dapp-wallet-connect")
 }

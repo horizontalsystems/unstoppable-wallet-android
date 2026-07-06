@@ -1,11 +1,11 @@
-package io.horizontalsystems.dapp.walletconnect
+package io.horizontalsystems.dapp.reown
 
 import android.util.Log
-import com.walletconnect.android.Core
-import com.walletconnect.android.CoreClient
-import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.android.Core
+import com.reown.android.CoreClient
+import com.reown.android.relay.ConnectionType
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.dapp.core.DAppInitParams
 import io.horizontalsystems.dapp.core.DAppService
 import io.horizontalsystems.dapp.core.DAppServiceCallback
@@ -17,7 +17,7 @@ import io.horizontalsystems.dapp.core.HSDAppProposal
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.dapp.core.HSDAppSession
 
-class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
+class DAppServiceReown : DAppService, WalletKit.WalletDelegate, CoreClient.CoreDelegate {
 
     private var callback: DAppServiceCallback? = null
 
@@ -37,15 +37,15 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
             relayServerUrl = params.relayServerUrl,
             connectionType = ConnectionType.AUTOMATIC,
             application = params.application,
-            onError = { error -> Log.w("DAppServiceWC", "CoreClient init error: ${error.throwable}") },
+            onError = { error -> Log.w("DAppServiceReown", "CoreClient init error: ${error.throwable}") },
         )
 
-        Web3Wallet.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
-            Log.e("DAppServiceWC", "Web3Wallet init error: ${error.throwable}")
+        WalletKit.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
+            Log.e("DAppServiceReown", "WalletKit init error: ${error.throwable}")
         }
 
         CoreClient.setDelegate(this)
-        Web3Wallet.setWalletDelegate(this)
+        WalletKit.setWalletDelegate(this)
     }
 
     // region DAppService — Pairings
@@ -75,10 +75,10 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
     // region DAppService — Sessions
 
     override fun getActiveSessions(): List<HSDAppSession> =
-        Web3Wallet.getListOfActiveSessions().map { it.toHS() }
+        WalletKit.getListOfActiveSessions().map { it.toHS() }
 
     override fun disconnectSession(topic: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        Web3Wallet.disconnectSession(
+        WalletKit.disconnectSession(
             params = Wallet.Params.SessionDisconnect(topic),
             onSuccess = { onSuccess() },
             onError = { onError(it.throwable) }
@@ -90,14 +90,14 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
     // region DAppService — Requests
 
     override fun getPendingRequests(topic: String): List<HSDAppRequest> =
-        Web3Wallet.getPendingListOfSessionRequests(topic).map { it.toHS() }
+        WalletKit.getPendingListOfSessionRequests(topic).map { it.toHS() }
 
     override fun respondRequest(topic: String, requestId: Long, result: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
         val response = Wallet.Params.SessionRequestResponse(
             sessionTopic = topic,
             jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, result)
         )
-        Web3Wallet.respondSessionRequest(
+        WalletKit.respondSessionRequest(
             params = response,
             onSuccess = { onSuccess() },
             onError = { onError(it.throwable) }
@@ -113,7 +113,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
                 message = "Rejected by user"
             )
         )
-        Web3Wallet.respondSessionRequest(
+        WalletKit.respondSessionRequest(
             params = response,
             onSuccess = { onSuccess() },
             onError = { onError(it.throwable) }
@@ -125,17 +125,17 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
     // region DAppService — Session proposals
 
     override fun getSessionProposals(): List<HSDAppProposal> =
-        Web3Wallet.getSessionProposals().map { it.toHS() }
+        WalletKit.getSessionProposals().map { it.toHS() }
 
     override fun generateApprovedNamespaces(
         proposerPublicKey: String,
         supportedNamespaces: Map<String, HSDAppNamespaceSession>
     ): Map<String, HSDAppNamespaceSession> {
-        val proposal = Web3Wallet.getSessionProposals()
+        val proposal = WalletKit.getSessionProposals()
             .find { it.proposerPublicKey == proposerPublicKey }
             ?: return emptyMap()
 
-        return Web3Wallet.generateApprovedNamespaces(
+        return WalletKit.generateApprovedNamespaces(
             sessionProposal = proposal,
             supportedNamespaces = supportedNamespaces.toWC()
         ).toHS()
@@ -147,7 +147,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        val proposal = Web3Wallet.getSessionProposals()
+        val proposal = WalletKit.getSessionProposals()
             .find { it.proposerPublicKey == proposerPublicKey }
             ?: run { onError(IllegalStateException("Proposal not found: $proposerPublicKey")); return }
 
@@ -155,7 +155,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
             proposerPublicKey = proposal.proposerPublicKey,
             namespaces = namespaces.toWC()
         )
-        Web3Wallet.approveSession(
+        WalletKit.approveSession(
             params = approveParams,
             onSuccess = { onSuccess() },
             onError = { onError(it.throwable) }
@@ -168,7 +168,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        val proposal = Web3Wallet.getSessionProposals()
+        val proposal = WalletKit.getSessionProposals()
             .find { it.proposerPublicKey == proposerPublicKey }
             ?: run { onError(IllegalStateException("Proposal not found: $proposerPublicKey")); return }
 
@@ -176,7 +176,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
             proposerPublicKey = proposal.proposerPublicKey,
             reason = reason
         )
-        Web3Wallet.rejectSession(
+        WalletKit.rejectSession(
             params = rejectParams,
             onSuccess = { onSuccess() },
             onError = { onError(it.throwable) }
@@ -188,7 +188,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
     // region DAppService — Pairing
 
     override fun pair(uri: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
-        Web3Wallet.pair(
+        WalletKit.pair(
             params = Wallet.Params.Pair(uri.trim()),
             onSuccess = { onSuccess() },
             onError = { onError(it.throwable) }
@@ -197,12 +197,7 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
 
     // endregion
 
-    // region Web3Wallet.WalletDelegate
-
-    override fun onAuthRequest(
-        authRequest: Wallet.Model.AuthRequest,
-        verifyContext: Wallet.Model.VerifyContext
-    ) = Unit
+    // region WalletKit.WalletDelegate
 
     override fun onConnectionStateChange(state: Wallet.Model.ConnectionState) {
         callback?.onConnectionStateChange(state.isAvailable)
@@ -219,6 +214,8 @@ class DAppServiceWalletConnect : DAppService, Web3Wallet.WalletDelegate, CoreCli
         }
         topic?.let { callback?.onSessionDelete(it) }
     }
+
+    override fun onSessionExtend(session: Wallet.Model.Session) = Unit
 
     override fun onSessionProposal(
         sessionProposal: Wallet.Model.SessionProposal,

@@ -64,6 +64,9 @@ qrose = "1.1.2"
 # Reown (WalletConnect)
 reownBom = "1.6.12"
 
+# WalletConnect (pre-Reown, F-Droid compatible)
+walletconnectBom = "1.15.0"
+
 # Web3
 web3j = "5.0.2"
 unstoppableDomains = "v7.1.0"
@@ -219,6 +222,11 @@ qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
 reown-bom = { module = "com.reown:android-bom", version.ref = "reownBom" }
 reown-walletkit = { module = "com.reown:walletkit" }
 reown-android-core = { module = "com.reown:android-core" }
+
+# WalletConnect (pre-Reown, F-Droid compatible)
+walletconnect-bom = { module = "com.walletconnect:android-bom", version.ref = "walletconnectBom" }
+walletconnect-web3wallet = { module = "com.walletconnect:web3wallet" }
+walletconnect-android-core = { module = "com.walletconnect:android-core" }
 
 # Web3
 web3j = { module = "org.web3j:core", version.ref = "web3j" }
