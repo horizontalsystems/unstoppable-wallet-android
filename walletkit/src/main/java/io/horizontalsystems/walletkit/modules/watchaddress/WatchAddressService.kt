@@ -35,6 +35,7 @@ class WatchAddressService(
                 is AccountType.Mnemonic,
                 is AccountType.EvmPrivateKey,
                 is AccountType.TronPrivateKey,
+                is AccountType.Passkey,
                 is AccountType.StellarSecretKey -> Unit // N/A
                 is AccountType.SolanaAddress -> {
                     if (BlockchainType.Solana.supports(accountType)) {

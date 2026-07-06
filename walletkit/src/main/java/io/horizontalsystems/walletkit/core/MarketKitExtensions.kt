@@ -419,6 +419,13 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.MoneroWatchAccount ->
             this == BlockchainType.Monero
+
+        // Passkey smart-account: ERC-4337 Kernel on the supported EVM chains and GasFree on Tron.
+        is AccountType.Passkey ->
+            this == BlockchainType.Ethereum
+                    || this == BlockchainType.BinanceSmartChain
+                    || this == BlockchainType.Base
+                    || this == BlockchainType.Tron
     }
 }
 

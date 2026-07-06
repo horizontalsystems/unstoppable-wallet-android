@@ -1,11 +1,5 @@
 package io.horizontalsystems.walletkit.entities
 
-import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
-import io.horizontalsystems.walletkit.core.providers.Translator
-import io.horizontalsystems.walletkit.core.shorten
-import io.horizontalsystems.walletkit.serializers.BigIntegerSerializer
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -15,6 +9,12 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
+import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.core.shorten
+import io.horizontalsystems.walletkit.serializers.BigIntegerSerializer
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.text.Normalizer
@@ -228,6 +228,17 @@ sealed class AccountType {
     }
 
     @Serializable
+    data class Passkey(val credentialId: String) : AccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is Passkey && credentialId == other.credentialId
+        }
+
+        override fun hashCode(): Int {
+            return credentialId.hashCode()
+        }
+    }
+
+    @Serializable
     data class HdExtendedKey(val keySerialized: String) : AccountType() {
         val hdExtendedKey: HDExtendedKey
             get() = HDExtendedKey(keySerialized)
@@ -312,6 +323,7 @@ sealed class AccountType {
             is StellarAddress -> "Stellar Address"
             is EvmPrivateKey -> "EVM Private Key"
             is TronPrivateKey -> "TRON Private Key"
+            is Passkey -> "Passkey"
             is StellarSecretKey -> "Stellar Secret Key"
             is MoneroWatchAccount -> "Monero Watch Wallet"
             is HdExtendedKey -> {

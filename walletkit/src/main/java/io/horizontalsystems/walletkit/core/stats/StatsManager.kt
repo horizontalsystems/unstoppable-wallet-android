@@ -221,6 +221,10 @@ val AccountType.statAccountType: String
             "btc_address"
         }
 
+        is AccountType.Passkey -> {
+            "passkey"
+        }
+
         is AccountType.EvmAddress -> {
             "evm_address"
         }

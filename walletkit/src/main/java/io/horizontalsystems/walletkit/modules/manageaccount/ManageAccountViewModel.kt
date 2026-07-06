@@ -127,6 +127,8 @@ class ManageAccountViewModel(
                 }
             }
             is AccountType.MoneroWatchAccount -> listOf()
+            // Passkey account: the key lives in the passkey; nothing to export.
+            is AccountType.Passkey -> listOf()
         }
     }
 
