@@ -13,6 +13,11 @@ kotlin {
     }
 }
 
+// buildConfigField expects a Java expression, so plain strings need embedded quotes
+fun com.android.build.api.dsl.VariantDimension.buildConfigFieldString(name: String, value: String) {
+    buildConfigField("String", name, "\"$value\"")
+}
+
 android {
     namespace = "io.horizontalsystems.bankwallet"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -29,18 +34,18 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
-        buildConfigField("String", "COMPANY_WEB_PAGE_LINK", "\"https://horizontalsystems.io\"")
-        buildConfigField("String", "APP_WEB_PAGE_LINK", "\"https://unstoppable.money\"")
-        buildConfigField("String", "ANALYTICS_LINK", "\"https://unstoppable.money/analytics\"")
-        buildConfigField("String", "APP_GITHUB_LINK", "\"https://github.com/horizontalsystems/unstoppable-wallet-android\"")
-        buildConfigField("String", "APP_TWITTER_LINK", "\"https://twitter.com/UnstoppableByHS\"")
-        buildConfigField("String", "APP_TELEGRAM_LINK", "\"https://t.me/unstoppable_announcements\"")
-        buildConfigField("String", "REPORT_EMAIL", "\"support.unstoppable@protonmail.com\"")
-        buildConfigField("String", "RELEASE_NOTES_URL", "\"https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/\"")
-        buildConfigField("String", "WALLET_CONNECT_APP_META_DATA_NAME", "\"Unstoppable\"")
-        buildConfigField("String", "WALLET_CONNECT_APP_META_DATA_URL", "\"unstoppable.money\"")
-        buildConfigField("String", "WALLET_CONNECT_APP_META_DATA_ICON", "\"https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png\"")
-        buildConfigField("String", "ACCOUNTS_BACKUP_FILE_SALT", "\"unstoppable\"")
+        buildConfigFieldString("COMPANY_WEB_PAGE_LINK", "https://horizontalsystems.io")
+        buildConfigFieldString("APP_WEB_PAGE_LINK", "https://unstoppable.money")
+        buildConfigFieldString("ANALYTICS_LINK", "https://unstoppable.money/analytics")
+        buildConfigFieldString("APP_GITHUB_LINK", "https://github.com/horizontalsystems/unstoppable-wallet-android")
+        buildConfigFieldString("APP_TWITTER_LINK", "https://twitter.com/UnstoppableByHS")
+        buildConfigFieldString("APP_TELEGRAM_LINK", "https://t.me/unstoppable_announcements")
+        buildConfigFieldString("REPORT_EMAIL", "support.unstoppable@protonmail.com")
+        buildConfigFieldString("RELEASE_NOTES_URL", "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/")
+        buildConfigFieldString("WALLET_CONNECT_APP_META_DATA_NAME", "Unstoppable")
+        buildConfigFieldString("WALLET_CONNECT_APP_META_DATA_URL", "unstoppable.money")
+        buildConfigFieldString("WALLET_CONNECT_APP_META_DATA_ICON", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png")
+        buildConfigFieldString("ACCOUNTS_BACKUP_FILE_SALT", "unstoppable")
 
         buildConfigField("boolean", "FDROID_BUILD", "false")
 
@@ -73,15 +78,15 @@ android {
     productFlavors {
         create("base") {
             dimension = "distribution"
-            buildConfigField("String", "USWAP_API_KEY", "\"$uswapApiKeyAndroid\"")
-            buildConfigField("String", "ONE_INCH_PARTNER_FEE_ADDRESS", "\"$oneInchFeeAddressAndroid\"")
+            buildConfigFieldString("USWAP_API_KEY", uswapApiKeyAndroid)
+            buildConfigFieldString("ONE_INCH_PARTNER_FEE_ADDRESS", oneInchFeeAddressAndroid)
         }
 
         create("fdroid") {
             dimension = "distribution"
             buildConfigField("boolean", "FDROID_BUILD", "true")
-            buildConfigField("String", "USWAP_API_KEY", "\"$uswapApiKeyFdroid\"")
-            buildConfigField("String", "ONE_INCH_PARTNER_FEE_ADDRESS", "\"$oneInchFeeAddressFdroid\"")
+            buildConfigFieldString("USWAP_API_KEY", uswapApiKeyFdroid)
+            buildConfigFieldString("ONE_INCH_PARTNER_FEE_ADDRESS", oneInchFeeAddressFdroid)
         }
 
         create("fdroidCi") {
@@ -89,8 +94,8 @@ android {
             applicationIdSuffix = ".fdroidci"
             buildConfigField("boolean", "FDROID_BUILD", "true")
             signingConfig = signingConfigs.getByName("test")
-            buildConfigField("String", "USWAP_API_KEY", "\"$uswapApiKeyFdroid\"")
-            buildConfigField("String", "ONE_INCH_PARTNER_FEE_ADDRESS", "\"$oneInchFeeAddressFdroid\"")
+            buildConfigFieldString("USWAP_API_KEY", uswapApiKeyFdroid)
+            buildConfigFieldString("ONE_INCH_PARTNER_FEE_ADDRESS", oneInchFeeAddressFdroid)
         }
 
         create("ci") {
@@ -98,10 +103,10 @@ android {
             applicationIdSuffix = ".appcenter"
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
             signingConfig = signingConfigs.getByName("test")
-            buildConfigField("String", "APP_LINKS_HOST", "\"dev.unstoppable.money\"")
+            buildConfigFieldString("APP_LINKS_HOST", "dev.unstoppable.money")
             manifestPlaceholders["appLinksHost"] = "dev.unstoppable.money"
-            buildConfigField("String", "USWAP_API_KEY", "\"$uswapApiKeyAndroid\"")
-            buildConfigField("String", "ONE_INCH_PARTNER_FEE_ADDRESS", "\"$oneInchFeeAddressAndroid\"")
+            buildConfigFieldString("USWAP_API_KEY", uswapApiKeyAndroid)
+            buildConfigFieldString("ONE_INCH_PARTNER_FEE_ADDRESS", oneInchFeeAddressAndroid)
         }
     }
 
@@ -111,66 +116,66 @@ android {
             isDebuggable = true
             isMinifyEnabled = false
             applicationIdSuffix = ".dev"
-            buildConfigField("String", "APP_LINKS_HOST", "\"dev.unstoppable.money\"")
+            buildConfigFieldString("APP_LINKS_HOST", "dev.unstoppable.money")
             manifestPlaceholders["appLinksHost"] = "dev.unstoppable.money"
-            buildConfigField("String", "TWITTER_BEARER_TOKEN", "\"AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB\"")
-            buildConfigField("String", "ETHERSCAN_KEY", "\"GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE\"")
-            buildConfigField("String", "BSCSCAN_KEY", "\"R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN\"")
-            buildConfigField("String", "OTHER_SCAN_KEY", "\"FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP\"")
+            buildConfigFieldString("TWITTER_BEARER_TOKEN", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
+            buildConfigFieldString("ETHERSCAN_KEY", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE")
+            buildConfigFieldString("BSCSCAN_KEY", "R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN")
+            buildConfigFieldString("OTHER_SCAN_KEY", "FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP")
             buildConfigField("boolean", "IS_RELEASE", "false")
-            buildConfigField("String", "GUIDES_URL", "\"https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json\"")
-            buildConfigField("String", "EDU_URL", "\"https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json\"")
-            buildConfigField("String", "FAQ_URL", "\"https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json\"")
-            buildConfigField("String", "COINS_JSON_URL", "\"https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json\"")
-            buildConfigField("String", "PROVIDER_COINS_JSON_URL", "\"https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json\"")
-            buildConfigField("String", "MARKET_API_BASE_URL", "\"https://api-dev.blocksdecoded.com\"")
-            buildConfigField("String", "MARKET_API_KEY", "\"IQf1uAjkthZp1i2pYzkXFDom\"")
-            buildConfigField("String", "OPEN_SEA_API_KEY", "\"bfbd6061a33e455c8581b594774fecb3\"")
-            buildConfigField("String", "WALLET_CONNECT_V2_KEY", "\"8b4f41c60880a3e3ad57d82fddb30568\"")
-            buildConfigField("String", "SOLANA_ALCHEMY_API_KEY", "\"PKgWxOMarrHgyMESGjIkJ,BOlzgqJUeGYe5E7K613Fm\"")
-            buildConfigField("String", "SOLANA_JUPITER_API_KEY", "\"ec901a97-0375-45b1-8b7d-da1ea9934cb0\"")
-            buildConfigField("String", "TRONGRID_API_KEYS", "\"33374494-8060-447e-8367-90c5efd4ed95\"")
-            buildConfigField("String", "UDN_API_KEY", "\"r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz\"")
-            buildConfigField("String", "ONE_INCH_API_KEY", "\"3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq\"")
-            buildConfigField("String", "BLOCKS_DECODED_ETHEREUM_RPC", "\"https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet\"")
-            buildConfigField("String", "CHAINALYSIS_BASE_URL", "\"https://public.chainalysis.com/api/v1/\"")
-            buildConfigField("String", "CHAINALYSIS_API_KEY", "\"928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4\"")
-            buildConfigField("String", "HASH_DIT_BASE_URL", "\"https://service.hashdit.io/v2/hashdit/\"")
-            buildConfigField("String", "HASH_DIT_API_KEY", "\"aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF\"")
-            buildConfigField("String", "USWAP_API_BASE_URL", "\"https://swap-dev.unstoppable.money/api/v2/\"")
+            buildConfigFieldString("GUIDES_URL", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
+            buildConfigFieldString("EDU_URL", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json")
+            buildConfigFieldString("FAQ_URL", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json")
+            buildConfigFieldString("COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json")
+            buildConfigFieldString("PROVIDER_COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json")
+            buildConfigFieldString("MARKET_API_BASE_URL", "https://api-dev.blocksdecoded.com")
+            buildConfigFieldString("MARKET_API_KEY", "IQf1uAjkthZp1i2pYzkXFDom")
+            buildConfigFieldString("OPEN_SEA_API_KEY", "bfbd6061a33e455c8581b594774fecb3")
+            buildConfigFieldString("WALLET_CONNECT_V2_KEY", "8b4f41c60880a3e3ad57d82fddb30568")
+            buildConfigFieldString("SOLANA_ALCHEMY_API_KEY", "PKgWxOMarrHgyMESGjIkJ,BOlzgqJUeGYe5E7K613Fm")
+            buildConfigFieldString("SOLANA_JUPITER_API_KEY", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")
+            buildConfigFieldString("TRONGRID_API_KEYS", "33374494-8060-447e-8367-90c5efd4ed95")
+            buildConfigFieldString("UDN_API_KEY", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
+            buildConfigFieldString("ONE_INCH_API_KEY", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq")
+            buildConfigFieldString("BLOCKS_DECODED_ETHEREUM_RPC", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet")
+            buildConfigFieldString("CHAINALYSIS_BASE_URL", "https://public.chainalysis.com/api/v1/")
+            buildConfigFieldString("CHAINALYSIS_API_KEY", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
+            buildConfigFieldString("HASH_DIT_BASE_URL", "https://service.hashdit.io/v2/hashdit/")
+            buildConfigFieldString("HASH_DIT_API_KEY", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
+            buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-dev.unstoppable.money/api/v2/")
         }
 
         release {
             isDebuggable = false
             isMinifyEnabled = false
             isShrinkResources = false
-            buildConfigField("String", "APP_LINKS_HOST", "\"unstoppable.money\"")
+            buildConfigFieldString("APP_LINKS_HOST", "unstoppable.money")
             manifestPlaceholders["appLinksHost"] = "unstoppable.money"
-            buildConfigField("String", "TWITTER_BEARER_TOKEN", "\"AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB\"")
-            buildConfigField("String", "ETHERSCAN_KEY", "\"IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM,FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP\"")
-            buildConfigField("String", "BSCSCAN_KEY", "\"FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,8QW2JNMPHPUPAACFGXZ3A5PVQY6PBCJPEG\"")
-            buildConfigField("String", "OTHER_SCAN_KEY", "\"Y855XHV4XKUC9DTRM2ZQG8XAQ96EJV221Q,43DEJEEMA1P81YAU555A1TECRY5FPIWCFH\"")
+            buildConfigFieldString("TWITTER_BEARER_TOKEN", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
+            buildConfigFieldString("ETHERSCAN_KEY", "IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM,FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP")
+            buildConfigFieldString("BSCSCAN_KEY", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,8QW2JNMPHPUPAACFGXZ3A5PVQY6PBCJPEG")
+            buildConfigFieldString("OTHER_SCAN_KEY", "Y855XHV4XKUC9DTRM2ZQG8XAQ96EJV221Q,43DEJEEMA1P81YAU555A1TECRY5FPIWCFH")
             buildConfigField("boolean", "IS_RELEASE", "true")
-            buildConfigField("String", "GUIDES_URL", "\"https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json\"")
-            buildConfigField("String", "EDU_URL", "\"https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json\"")
-            buildConfigField("String", "FAQ_URL", "\"https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json\"")
-            buildConfigField("String", "COINS_JSON_URL", "\"https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json\"")
-            buildConfigField("String", "PROVIDER_COINS_JSON_URL", "\"https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json\"")
-            buildConfigField("String", "MARKET_API_BASE_URL", "\"https://api.blocksdecoded.com\"")
-            buildConfigField("String", "MARKET_API_KEY", "\"IQf1uAjkthZp1i2pYzkXFDom\"")
-            buildConfigField("String", "OPEN_SEA_API_KEY", "\"bfbd6061a33e455c8581b594774fecb3\"")
-            buildConfigField("String", "WALLET_CONNECT_V2_KEY", "\"0c5ca155c2f165a7d0c88686f2113a72\"")
-            buildConfigField("String", "SOLANA_ALCHEMY_API_KEY", "\"BOlzgqJUeGYe5E7K613Fm,Vmt7ucAGIMEux_c43Qqqf,uCordWq3EOD800awDx1kb,1uAryzn6DOEVs5PIugeoR,PKgWxOMarrHgyMESGjIkJ\"")
-            buildConfigField("String", "SOLANA_JUPITER_API_KEY", "\"ec901a97-0375-45b1-8b7d-da1ea9934cb0\"")
-            buildConfigField("String", "TRONGRID_API_KEYS", "\"8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280,d1511874-1547-48df-9536-a32cc85949ac\"")
-            buildConfigField("String", "UDN_API_KEY", "\"r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz\"")
-            buildConfigField("String", "ONE_INCH_API_KEY", "\"3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq\"")
-            buildConfigField("String", "BLOCKS_DECODED_ETHEREUM_RPC", "\"https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet\"")
-            buildConfigField("String", "CHAINALYSIS_BASE_URL", "\"https://public.chainalysis.com/api/v1/\"")
-            buildConfigField("String", "CHAINALYSIS_API_KEY", "\"928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4\"")
-            buildConfigField("String", "HASH_DIT_BASE_URL", "\"https://service.hashdit.io/v2/hashdit/\"")
-            buildConfigField("String", "HASH_DIT_API_KEY", "\"aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF\"")
-            buildConfigField("String", "USWAP_API_BASE_URL", "\"https://swap-api.unstoppable.money/v2/\"")
+            buildConfigFieldString("GUIDES_URL", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
+            buildConfigFieldString("EDU_URL", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json")
+            buildConfigFieldString("FAQ_URL", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json")
+            buildConfigFieldString("COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json")
+            buildConfigFieldString("PROVIDER_COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json")
+            buildConfigFieldString("MARKET_API_BASE_URL", "https://api.blocksdecoded.com")
+            buildConfigFieldString("MARKET_API_KEY", "IQf1uAjkthZp1i2pYzkXFDom")
+            buildConfigFieldString("OPEN_SEA_API_KEY", "bfbd6061a33e455c8581b594774fecb3")
+            buildConfigFieldString("WALLET_CONNECT_V2_KEY", "0c5ca155c2f165a7d0c88686f2113a72")
+            buildConfigFieldString("SOLANA_ALCHEMY_API_KEY", "BOlzgqJUeGYe5E7K613Fm,Vmt7ucAGIMEux_c43Qqqf,uCordWq3EOD800awDx1kb,1uAryzn6DOEVs5PIugeoR,PKgWxOMarrHgyMESGjIkJ")
+            buildConfigFieldString("SOLANA_JUPITER_API_KEY", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")
+            buildConfigFieldString("TRONGRID_API_KEYS", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280,d1511874-1547-48df-9536-a32cc85949ac")
+            buildConfigFieldString("UDN_API_KEY", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
+            buildConfigFieldString("ONE_INCH_API_KEY", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq")
+            buildConfigFieldString("BLOCKS_DECODED_ETHEREUM_RPC", "https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet")
+            buildConfigFieldString("CHAINALYSIS_BASE_URL", "https://public.chainalysis.com/api/v1/")
+            buildConfigFieldString("CHAINALYSIS_API_KEY", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
+            buildConfigFieldString("HASH_DIT_BASE_URL", "https://service.hashdit.io/v2/hashdit/")
+            buildConfigFieldString("HASH_DIT_API_KEY", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
+            buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-api.unstoppable.money/v2/")
         }
     }
 
