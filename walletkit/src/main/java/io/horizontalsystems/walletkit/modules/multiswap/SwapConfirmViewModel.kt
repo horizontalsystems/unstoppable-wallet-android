@@ -70,6 +70,7 @@ class SwapConfirmViewModel(
     private var error: Throwable? = null
     private var initialLoading = true
     private var loading = true
+    private var expired = false
     private var isInBackground = true
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
@@ -154,7 +155,8 @@ class SwapConfirmViewModel(
                 timerState = it
 
                 if (timerState.timeout) {
-                    refresh(silent = true)
+                    expired = true
+                    emitState()
                 }
             }
         }
@@ -218,6 +220,7 @@ class SwapConfirmViewModel(
         networkFee = sendTransactionState.networkFee,
         cautions = sendTransactionState.cautions,
         validQuote = error == null && sendTransactionState.sendable,
+        expired = expired,
         priceImpact = priceImpactState.priceImpact,
         priceImpactLevel = priceImpactState.priceImpactLevel,
         quoteFields = quoteFields,
@@ -241,6 +244,8 @@ class SwapConfirmViewModel(
 
     fun refresh(silent: Boolean = false) {
         if (isInBackground) return
+
+        expired = false
 
         if (!silent) {
             loading = true
@@ -271,6 +276,7 @@ class SwapConfirmViewModel(
 
                 ensureActive()
 
+                expired = false
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 estimatedTime = finalQuote.estimatedTime
@@ -410,6 +416,7 @@ data class SwapConfirmUiState(
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
     val validQuote: Boolean,
+    val expired: Boolean,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,

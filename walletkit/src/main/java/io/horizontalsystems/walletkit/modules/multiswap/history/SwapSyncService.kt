@@ -55,18 +55,15 @@ class SwapSyncService(
             return
         }
         try {
-            val isSingleTransactionEvmSwap = MultiSwapProviderRegistry.isSingleTransactionEvmSwap(
-                record.providerId, record.tokenInBlockchainTypeUid,
-                record.tokenOutBlockchainTypeUid
-            )
-            var request = SwapTrackRequestBuilder.build(record, isSingleTransactionEvmSwap)
+            val call = SwapTrackRequestBuilder.build(record)
+            var request = call.request
             if (BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server) {
                 request = request.copy(testActionRequired = true)
             }
-            val response = if (isSingleTransactionEvmSwap) {
-                unstoppableAPI.trackEvm(request)
-            } else {
-                unstoppableAPI.track(request)
+            val response = when (call.endpoint) {
+                SwapTrackRequestBuilder.Endpoint.Recorded -> unstoppableAPI.track(request)
+                SwapTrackRequestBuilder.Endpoint.Evm -> unstoppableAPI.trackEvm(request)
+                SwapTrackRequestBuilder.Endpoint.Thorchain -> unstoppableAPI.trackThorchain(request)
             }
 
             if (record.transactionHash == null && response.hash != null) {

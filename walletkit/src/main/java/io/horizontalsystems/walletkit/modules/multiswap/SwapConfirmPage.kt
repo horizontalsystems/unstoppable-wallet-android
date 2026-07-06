@@ -212,7 +212,7 @@ private fun SwapConfirmInternal(
             viewModel.setRecipient(it.address)
         },
         buttonsSlot = {
-            if (!uiState.validQuote) {
+            if (!uiState.validQuote || uiState.expired) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),

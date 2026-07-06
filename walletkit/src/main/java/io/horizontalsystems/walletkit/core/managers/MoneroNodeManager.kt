@@ -29,7 +29,7 @@ class MoneroNodeManager(
     val nodesUpdatedFlow = _nodesUpdatedFlow.asSharedFlow()
 
     val defaultNodesInitial = listOf(
-        MoneroNode("xmr.unstoppable.money:443", "unstoppable.money", "xmr.unstoppable.money:443/mainnet/unstoppable.money"),
+        MoneroNode("xmr.unstoppable.money:443", "unstoppable.money", "xmr.unstoppable.money:443/mainnet/unstoppable.money", trusted = true),
         MoneroNode("node.xmr.rocks:18089", "xmr.rocks", "node.xmr.rocks:18089/mainnet/xmr.rocks"),
         MoneroNode("opennode.xmr-tw.org:18089", "xmr-tw.org", "opennode.xmr-tw.org:18089/mainnet/xmr-tw.org"),
         MoneroNode("node.sethforprivacy.com:18089", "sethforprivacy.com", "node.sethforprivacy.com:18089/mainnet/sethforprivacy.com"),
@@ -42,7 +42,7 @@ class MoneroNodeManager(
         get() {
             val nodeRecordsMap = moneroNodeStorage.getAll().associateBy { it.url }
             return defaultNodesInitial.map {
-                it.copy(trusted = nodeRecordsMap[it.host]?.trusted ?: false)
+                it.copy(trusted = nodeRecordsMap[it.host]?.trusted ?: it.trusted)
             }
         }
 
