@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.info.ui.InfoBody
 import io.horizontalsystems.walletkit.modules.info.ui.InfoHeader
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -21,26 +20,24 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 fun BtcTransactionInputSortInfoScreen(
     onCloseClick: () -> Unit
 ) {
-    ComposeAppTheme {
-        HSScaffold(
-            title = "",
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = onCloseClick
-                )
+    HSScaffold(
+        title = "",
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = onCloseClick
             )
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                InfoHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs)
-                InfoBody(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
-                Spacer(Modifier.height(20.dp))
-            }
+            InfoHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs)
+            InfoBody(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
+            Spacer(Modifier.height(20.dp))
         }
     }
 }

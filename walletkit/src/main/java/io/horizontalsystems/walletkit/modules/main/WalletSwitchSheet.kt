@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
@@ -29,30 +28,28 @@ private fun WalletSwitchScreen(navigation: HSNavigation) {
     val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
     val uiState = viewModel.uiState
 
-    ComposeAppTheme {
-        BottomSheetContent(
-            onDismissRequest = {
+    BottomSheetContent(
+        onDismissRequest = {
+            navigation.removeLastOrNull()
+        },
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ) {
+        WalletSwitchBottomSheet(
+            wallets = uiState.wallets,
+            watchingAddresses = uiState.watchWallets,
+            selectedAccount = uiState.activeWallet,
+            onSelectListener = { account ->
+                viewModel.onSelect(account)
                 navigation.removeLastOrNull()
-            },
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        ) {
-            WalletSwitchBottomSheet(
-                wallets = uiState.wallets,
-                watchingAddresses = uiState.watchWallets,
-                selectedAccount = uiState.activeWallet,
-                onSelectListener = { account ->
-                    viewModel.onSelect(account)
-                    navigation.removeLastOrNull()
 
-                    stat(
-                        page = StatPage.SwitchWallet,
-                        event = StatEvent.Select(StatEntity.Wallet)
-                    )
-                },
-                onCancelClick = {
-                    navigation.removeLastOrNull()
-                }
-            )
-        }
+                stat(
+                    page = StatPage.SwitchWallet,
+                    event = StatEvent.Select(StatEntity.Wallet)
+                )
+            },
+            onCancelClick = {
+                navigation.removeLastOrNull()
+            }
+        )
     }
 }

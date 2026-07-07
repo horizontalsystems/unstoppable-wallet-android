@@ -27,7 +27,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.SendScreen
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import java.math.BigDecimal
@@ -60,101 +59,99 @@ fun SendZanoScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
-    ComposeAppTheme {
-        val focusRequester = remember { FocusRequester() }
+    val focusRequester = remember { FocusRequester() }
 
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
-        SendScreen(
-            title = title,
-            onBack = { navigation.removeLastOrNull() }
-        ) {
-            VSpacer(16.dp)
-            if (uiState.showAddressInput) {
-                HSAddressCell(
-                    title = stringResource(R.string.Send_Confirmation_To),
-                    value = uiState.address.hex,
-                    riskyAddress = riskyAddress
-                ) {
-                    navigation.removeLastOrNull()
-                }
-                VSpacer(16.dp)
-            }
-
-            HSAmountInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                focusRequester = focusRequester,
-                availableBalance = availableBalance ?: BigDecimal.ZERO,
-                caution = amountCaution,
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                onClickHint = {
-                    amountInputModeViewModel.onToggleInputType()
-                },
-                onValueChange = {
-                    viewModel.onEnterAmount(it)
-                },
-                inputType = amountInputType,
-                rate = viewModel.coinRate,
-                amountUnique = amountUnique
-            )
-
-            VSpacer(8.dp)
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
-
-            VSpacer(16.dp)
-            HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
-                viewModel.onEnterMemo(it)
-            }
-
-            VSpacer(16.dp)
-            HSFee(
-                coinCode = viewModel.feeToken.coin.code,
-                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = viewModel.feeCoinRate,
-                navigation = navigation,
-            )
-
-            val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
-                {
-                    AddressRiskySheet(
-                        AddressRiskySheet.Input(
-                            alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                        )
-                    )
-                }
+    SendScreen(
+        title = title,
+        onBack = { navigation.removeLastOrNull() }
+    ) {
+        VSpacer(16.dp)
+        if (uiState.showAddressInput) {
+            HSAddressCell(
+                title = stringResource(R.string.Send_Confirmation_To),
+                value = uiState.address.hex,
+                riskyAddress = riskyAddress
             ) {
-                openConfirm(navigation, sendEntryPointDestId)
+                navigation.removeLastOrNull()
             }
-
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                title = stringResource(R.string.Button_Next),
-                onClick = {
-                    if (riskyAddress) {
-                        keyboardController?.hide()
-                        forResult()
-                    } else {
-                        openConfirm(navigation, sendEntryPointDestId)
-                    }
-                },
-                enabled = proceedEnabled
-            )
+            VSpacer(16.dp)
         }
+
+        HSAmountInput(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            focusRequester = focusRequester,
+            availableBalance = availableBalance ?: BigDecimal.ZERO,
+            caution = amountCaution,
+            coinCode = wallet.coin.code,
+            coinDecimal = viewModel.coinMaxAllowedDecimals,
+            fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+            onClickHint = {
+                amountInputModeViewModel.onToggleInputType()
+            },
+            onValueChange = {
+                viewModel.onEnterAmount(it)
+            },
+            inputType = amountInputType,
+            rate = viewModel.coinRate,
+            amountUnique = amountUnique
+        )
+
+        VSpacer(8.dp)
+        AvailableBalance(
+            coinCode = wallet.coin.code,
+            coinDecimal = viewModel.coinMaxAllowedDecimals,
+            fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+            availableBalance = availableBalance,
+            amountInputType = amountInputType,
+            rate = viewModel.coinRate
+        )
+
+        VSpacer(16.dp)
+        HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
+            viewModel.onEnterMemo(it)
+        }
+
+        VSpacer(16.dp)
+        HSFee(
+            coinCode = viewModel.feeToken.coin.code,
+            coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
+            fee = fee,
+            amountInputType = amountInputType,
+            rate = viewModel.feeCoinRate,
+            navigation = navigation,
+        )
+
+        val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
+            {
+                AddressRiskySheet(
+                    AddressRiskySheet.Input(
+                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                    )
+                )
+            }
+        ) {
+            openConfirm(navigation, sendEntryPointDestId)
+        }
+
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            title = stringResource(R.string.Button_Next),
+            onClick = {
+                if (riskyAddress) {
+                    keyboardController?.hide()
+                    forResult()
+                } else {
+                    openConfirm(navigation, sendEntryPointDestId)
+                }
+            },
+            enabled = proceedEnabled
+        )
     }
 }
 

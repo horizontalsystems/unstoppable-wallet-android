@@ -53,83 +53,81 @@ data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
-    ComposeAppTheme {
-        BottomSheetContent(
-            onDismissRequest = navigation::removeLastOrNull,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            buttons = {
-                HSButton(
-                    title = stringResource(R.string.BackupRequired_RemindLater),
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = ButtonVariant.Secondary,
-                    onClick = navigation::removeLastOrNull
-                )
-            },
-            content = {
-                BottomSheetHeaderV3(
-                    image72 = painterResource(R.drawable.warning_filled_24),
-                    imageTint = ComposeAppTheme.colors.jacob,
-                    title = stringResource(R.string.BackupRequired_Title)
-                )
-                BottomSheetTextBlock(stringResource(R.string.BackupRequired_Description))
-                VSpacer(8.dp)
-                CellGroup(paddingValues = PaddingValues(horizontal = 16.dp)) {
-                    CellPrimary(
-                        left = {
-                            Icon(
-                                modifier = Modifier.size(24.dp),
-                                painter = painterResource(R.drawable.ic_edit_24px),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        },
-                        middle = {
-                            CellMiddleInfo(
-                                title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup).hs,
-                                subtitle = stringResource(R.string.BackupRequired_ManualBackupDescription).hs
-                            )
-                        },
-                        right = { CellRightNavigation() },
-                        onClick = {
-                            navigation.slideFromBottom(
-                                BackupKeyPage(account)
-                            )
+    BottomSheetContent(
+        onDismissRequest = navigation::removeLastOrNull,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.BackupRequired_RemindLater),
+                modifier = Modifier.fillMaxWidth(),
+                variant = ButtonVariant.Secondary,
+                onClick = navigation::removeLastOrNull
+            )
+        },
+        content = {
+            BottomSheetHeaderV3(
+                image72 = painterResource(R.drawable.warning_filled_24),
+                imageTint = ComposeAppTheme.colors.jacob,
+                title = stringResource(R.string.BackupRequired_Title)
+            )
+            BottomSheetTextBlock(stringResource(R.string.BackupRequired_Description))
+            VSpacer(8.dp)
+            CellGroup(paddingValues = PaddingValues(horizontal = 16.dp)) {
+                CellPrimary(
+                    left = {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(R.drawable.ic_edit_24px),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    },
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup).hs,
+                            subtitle = stringResource(R.string.BackupRequired_ManualBackupDescription).hs
+                        )
+                    },
+                    right = { CellRightNavigation() },
+                    onClick = {
+                        navigation.slideFromBottom(
+                            BackupKeyPage(account)
+                        )
 
-                            stat(
-                                page = StatPage.BackupRequired,
-                                event = StatEvent.Open(StatPage.ManualBackup)
-                            )
-                        }
-                    )
-                    HsDivider()
-                    CellPrimary(
-                        left = {
-                            Icon(
-                                modifier = Modifier.size(24.dp),
-                                painter = painterResource(R.drawable.ic_file_24),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                        },
-                        middle = {
-                            CellMiddleInfo(
-                                title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup).hs,
-                                subtitle = stringResource(R.string.BackupRequired_LocalBackupDescription).hs
-                            )
-                        },
-                        right = { CellRightNavigation() },
-                        onClick = {
-                            navigation.slideFromBottom(BackupLocalPage(account))
+                        stat(
+                            page = StatPage.BackupRequired,
+                            event = StatEvent.Open(StatPage.ManualBackup)
+                        )
+                    }
+                )
+                HsDivider()
+                CellPrimary(
+                    left = {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(R.drawable.ic_file_24),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    },
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(R.string.BackupRecoveryPhrase_LocalBackup).hs,
+                            subtitle = stringResource(R.string.BackupRequired_LocalBackupDescription).hs
+                        )
+                    },
+                    right = { CellRightNavigation() },
+                    onClick = {
+                        navigation.slideFromBottom(BackupLocalPage(account))
 
-                            stat(
-                                page = StatPage.BackupRequired,
-                                event = StatEvent.Open(StatPage.FileBackup)
-                            )
-                        }
-                    )
-                }
-                VSpacer(16.dp)
+                        stat(
+                            page = StatPage.BackupRequired,
+                            event = StatEvent.Open(StatPage.FileBackup)
+                        )
+                    }
+                )
             }
-        )
-    }
+            VSpacer(16.dp)
+        }
+    )
 }

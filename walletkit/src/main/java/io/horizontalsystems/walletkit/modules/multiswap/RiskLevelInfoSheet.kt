@@ -52,42 +52,40 @@ data object RiskLevelInfoSheet : HSBottomSheet() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RiskLevelInfoScreen(navigation: HSNavigation) {
-    ComposeAppTheme {
-        BottomSheetContent(
-            onDismissRequest = navigation::removeLastOrNull,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            buttons = {
-                HSButton(
-                    title = stringResource(R.string.Button_Close),
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = ButtonVariant.Secondary,
-                    onClick = {
-                        navigation.removeLastOrNull()
-                    }
-                )
-            },
-            content = {
-                BottomSheetHeaderV3(
-                    title = stringResource(R.string.RiskLevel_ProviderRiskLevel)
-                )
-                TextBlock(
-                    text = stringResource(R.string.RiskLevel_ProviderRiskLevel_Description),
-                )
-                VSpacer(20.dp)
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .imePadding()
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
-                ) {
-                    RiskLevelList()
+    BottomSheetContent(
+        onDismissRequest = navigation::removeLastOrNull,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Button_Close),
+                modifier = Modifier.fillMaxWidth(),
+                variant = ButtonVariant.Secondary,
+                onClick = {
+                    navigation.removeLastOrNull()
                 }
+            )
+        },
+        content = {
+            BottomSheetHeaderV3(
+                title = stringResource(R.string.RiskLevel_ProviderRiskLevel)
+            )
+            TextBlock(
+                text = stringResource(R.string.RiskLevel_ProviderRiskLevel_Description),
+            )
+            VSpacer(20.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
+            ) {
+                RiskLevelList()
             }
-        )
-    }
+        }
+    )
 }
 
 @Composable

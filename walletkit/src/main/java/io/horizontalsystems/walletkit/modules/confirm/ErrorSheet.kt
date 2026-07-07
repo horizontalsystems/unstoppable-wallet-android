@@ -41,30 +41,28 @@ fun ErrorBottomSheetScreen(
     navigation: HSNavigation,
     error: String
 ) {
-    ComposeAppTheme {
-        BottomSheetContent(
-            onDismissRequest = navigation::removeLastOrNull,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            buttons = {
-                HSButton(
-                    title = stringResource(R.string.Button_CopyError),
-                    modifier = Modifier.fillMaxWidth(),
-                    variant = ButtonVariant.Secondary,
-                    onClick = {
-                        TextHelper.copyText(error)
-                        navigation.removeLastOrNull()
-                    }
-                )
-            },
-            content = {
-                BottomSheetHeaderV3(
-                    image72 = painterResource(R.drawable.warning_filled_24),
-                    imageTint = ComposeAppTheme.colors.lucian,
-                    title = stringResource(R.string.Send_UnexpectedError)
-                )
-                TextBlock(text = stringResource(R.string.Send_UnexpectedError_Description), textAlign = TextAlign.Center)
-            }
-        )
-    }
+    BottomSheetContent(
+        onDismissRequest = navigation::removeLastOrNull,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Button_CopyError),
+                modifier = Modifier.fillMaxWidth(),
+                variant = ButtonVariant.Secondary,
+                onClick = {
+                    TextHelper.copyText(error)
+                    navigation.removeLastOrNull()
+                }
+            )
+        },
+        content = {
+            BottomSheetHeaderV3(
+                image72 = painterResource(R.drawable.warning_filled_24),
+                imageTint = ComposeAppTheme.colors.lucian,
+                title = stringResource(R.string.Send_UnexpectedError)
+            )
+            TextBlock(text = stringResource(R.string.Send_UnexpectedError_Description), textAlign = TextAlign.Center)
+        }
+    )
 }
 

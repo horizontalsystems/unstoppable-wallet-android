@@ -52,75 +52,73 @@ private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
         stringResource(R.string.BalanceSyncError_ErrorText)
     }
 
-    ComposeAppTheme {
-        BottomSheetContent(
-            onDismissRequest = {
-                navigation.removeLastOrNull()
-            },
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            buttons = {
+    BottomSheetContent(
+        onDismissRequest = {
+            navigation.removeLastOrNull()
+        },
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.BalanceSyncError_ButtonRetry),
+                modifier = Modifier.fillMaxWidth(),
+                variant = ButtonVariant.Primary,
+                onClick = {
+                    viewModel.retry()
+                    navigation.removeLastOrNull()
+                }
+            )
+            if (viewModel.sourceChangeable) {
                 HSButton(
-                    title = stringResource(R.string.BalanceSyncError_ButtonRetry),
+                    title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
                     modifier = Modifier.fillMaxWidth(),
-                    variant = ButtonVariant.Primary,
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Medium,
                     onClick = {
-                        viewModel.retry()
                         navigation.removeLastOrNull()
+
+                        val blockchainWrapper = viewModel.blockchainWrapper
+                        when (blockchainWrapper) {
+                            is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
+                                navigation.slideFromBottom(
+                                    BtcBlockchainSettingsPage(blockchainWrapper.blockchain),
+                                )
+                            }
+
+                            is SyncErrorModule.BlockchainWrapper.Evm -> {
+                                navigation.slideFromBottom(
+                                    EvmNetworkPage(blockchainWrapper.blockchain)
+                                )
+                            }
+
+                            SyncErrorModule.BlockchainWrapper.Monero -> {
+                                navigation.slideFromBottom(MoneroNetworkPage)
+                            }
+
+                            SyncErrorModule.BlockchainWrapper.Zano -> {
+                                navigation.slideFromBottom(ZanoNetworkPage)
+                            }
+
+                            SyncErrorModule.BlockchainWrapper.Zcash -> {
+                                navigation.slideFromBottom(ZcashNetworkPage)
+                            }
+
+                            else -> {}
+                        }
                     }
                 )
-                if (viewModel.sourceChangeable) {
-                    HSButton(
-                        title = stringResource(R.string.BalanceSyncError_ButtonChangeSource),
-                        modifier = Modifier.fillMaxWidth(),
-                        variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Medium,
-                        onClick = {
-                            navigation.removeLastOrNull()
-
-                            val blockchainWrapper = viewModel.blockchainWrapper
-                            when (blockchainWrapper) {
-                                is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
-                                    navigation.slideFromBottom(
-                                        BtcBlockchainSettingsPage(blockchainWrapper.blockchain),
-                                    )
-                                }
-
-                                is SyncErrorModule.BlockchainWrapper.Evm -> {
-                                    navigation.slideFromBottom(
-                                        EvmNetworkPage(blockchainWrapper.blockchain)
-                                    )
-                                }
-
-                                SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navigation.slideFromBottom(MoneroNetworkPage)
-                                }
-
-                                SyncErrorModule.BlockchainWrapper.Zano -> {
-                                    navigation.slideFromBottom(ZanoNetworkPage)
-                                }
-
-                                SyncErrorModule.BlockchainWrapper.Zcash -> {
-                                    navigation.slideFromBottom(ZcashNetworkPage)
-                                }
-
-                                else -> {}
-                            }
-                        }
-                    )
-                }
-            },
-            content = {
-                BottomSheetHeaderV3(
-                    image72 = painterResource(R.drawable.warning_filled_24),
-                    imageTint = ComposeAppTheme.colors.lucian,
-                    title = stringResource(R.string.BalanceSyncError_Title)
-                )
-                TextBlock(
-                    text = text,
-                    textAlign = TextAlign.Center
-                )
             }
-        )
-    }
+        },
+        content = {
+            BottomSheetHeaderV3(
+                image72 = painterResource(R.drawable.warning_filled_24),
+                imageTint = ComposeAppTheme.colors.lucian,
+                title = stringResource(R.string.BalanceSyncError_Title)
+            )
+            TextBlock(
+                text = text,
+                textAlign = TextAlign.Center
+            )
+        }
+    )
 }
 

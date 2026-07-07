@@ -37,31 +37,29 @@ data object ConfirmDeleteAllPairingsSheet : HSBottomSheet() {
 @Composable
 fun ConfirmDeleteAllScreen(navigation: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
-    ComposeAppTheme {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_delete_20),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-            title = stringResource(R.string.WalletConnect_DeleteAllPairs),
-            onCloseClick = {
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_delete_20),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+        title = stringResource(R.string.WalletConnect_DeleteAllPairs),
+        onCloseClick = {
+            navigation.removeLastOrNull()
+        }
+    ) {
+        TextImportantWarning(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            text = stringResource(R.string.WalletConnect_Pairings_ConfirmationDeleteAll)
+        )
+        Spacer(Modifier.height(20.dp))
+        ButtonPrimaryRed(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            title = stringResource(R.string.WalletConnect_Pairings_Delete),
+            onClick = {
+                resultEventBus.sendResult(ConfirmDeleteAllPairingsSheet.Result(true))
                 navigation.removeLastOrNull()
             }
-        ) {
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(R.string.WalletConnect_Pairings_ConfirmationDeleteAll)
-            )
-            Spacer(Modifier.height(20.dp))
-            ButtonPrimaryRed(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                title = stringResource(R.string.WalletConnect_Pairings_Delete),
-                onClick = {
-                    resultEventBus.sendResult(ConfirmDeleteAllPairingsSheet.Result(true))
-                    navigation.removeLastOrNull()
-                }
-            )
-            Spacer(Modifier.height(32.dp))
-        }
+        )
+        Spacer(Modifier.height(32.dp))
     }
 }

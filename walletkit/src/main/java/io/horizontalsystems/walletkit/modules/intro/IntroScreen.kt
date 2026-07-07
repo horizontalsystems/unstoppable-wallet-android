@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.SliderIndicator
@@ -37,18 +36,16 @@ fun IntroScreen() {
 
     val pageCount = 3
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }
-    ComposeAppTheme {
-        RadialBackground()
-        HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState,
-            verticalAlignment = Alignment.Top,
-        ) { index ->
-            SlidingContent(viewModel.slides[index])
-        }
-
-        StaticContent(viewModel, pagerState, pageCount)
+    RadialBackground()
+    HorizontalPager(
+        modifier = Modifier.fillMaxSize(),
+        state = pagerState,
+        verticalAlignment = Alignment.Top,
+    ) { index ->
+        SlidingContent(viewModel.slides[index])
     }
+
+    StaticContent(viewModel, pagerState, pageCount)
 }
 
 @Composable

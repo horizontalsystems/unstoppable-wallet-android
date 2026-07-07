@@ -85,153 +85,151 @@ fun SendBtcAdvancedSettingsScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    ComposeAppTheme {
-        HSScaffold(
-            title = stringResource(R.string.Send_Advanced),
-            onBack = navigation::removeLastOrNull,
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Reset),
-                    onClick = {
-                        sendBitcoinViewModel.reset()
-                        viewModel.reset()
-                    },
-                    tint = ComposeAppTheme.colors.jacob
-                )
+    HSScaffold(
+        title = stringResource(R.string.Send_Advanced),
+        onBack = navigation::removeLastOrNull,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                onClick = {
+                    sendBitcoinViewModel.reset()
+                    viewModel.reset()
+                },
+                tint = ComposeAppTheme.colors.jacob
             )
+        )
+    ) {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
-            ) {
 
-                VSpacer(12.dp)
-                HSFee(
-                    coinCode = wallet.coin.code,
-                    coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
-                    fee = sendUiState.fee,
-                    amountInputType = amountInputType,
-                    rate = rate,
-                    navigation = navigation
-                )
+            VSpacer(12.dp)
+            HSFee(
+                coinCode = wallet.coin.code,
+                coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
+                fee = sendUiState.fee,
+                amountInputType = amountInputType,
+                rate = rate,
+                navigation = navigation
+            )
 
-                if (feeRateVisible) {
-                    VSpacer(24.dp)
-                    EvmSettingsInput(
-                        title = stringResource(R.string.FeeSettings_FeeRate),
-                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
-                        value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-                        decimals = 0,
-                        caution = feeRateCaution,
-                        navigation = navigation,
-                        onValueChange = {
-                            sendBitcoinViewModel.updateFeeRate(it.toInt())
-                        },
-                        onClickIncrement = {
-                            sendBitcoinViewModel.incrementFeeRate()
-                        },
-                        onClickDecrement = {
-                            sendBitcoinViewModel.decrementFeeRate()
-                        }
-                    )
-                    InfoText(
-                        text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
-                    )
-                }
-
-                if (uiState.transactionSortingSupported) {
-                    VSpacer(24.dp)
-                    TransactionDataSortSettings(
-                        navigation,
-                        wallet.coin.code,
-                        viewModel.uiState.transactionSortTitle,
-                    ) {
-                        showBottomSheet = true
+            if (feeRateVisible) {
+                VSpacer(24.dp)
+                EvmSettingsInput(
+                    title = stringResource(R.string.FeeSettings_FeeRate),
+                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                    value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                    decimals = 0,
+                    caution = feeRateCaution,
+                    navigation = navigation,
+                    onValueChange = {
+                        sendBitcoinViewModel.updateFeeRate(it.toInt())
+                    },
+                    onClickIncrement = {
+                        sendBitcoinViewModel.incrementFeeRate()
+                    },
+                    onClickDecrement = {
+                        sendBitcoinViewModel.decrementFeeRate()
                     }
-                }
+                )
+                InfoText(
+                    text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
+                )
+            }
 
-                if (lockTimeEnabled) {
-                    VSpacer(32.dp)
-                    CellUniversalLawrenceSection(
-                        listOf {
-                            HSHodlerInput(
-                                lockTimeIntervals = lockTimeIntervals,
-                                lockTimeInterval = lockTimeInterval,
-                                onSelect = {
-                                    sendBitcoinViewModel.onEnterLockTimeInterval(it)
-                                }
-                            )
-                        }
-                    )
-                    InfoText(
-                        text = stringResource(R.string.Send_Hodler_Description),
-                    )
+            if (uiState.transactionSortingSupported) {
+                VSpacer(24.dp)
+                TransactionDataSortSettings(
+                    navigation,
+                    wallet.coin.code,
+                    viewModel.uiState.transactionSortTitle,
+                ) {
+                    showBottomSheet = true
                 }
+            }
 
+            if (lockTimeEnabled) {
                 VSpacer(32.dp)
                 CellUniversalLawrenceSection(
                     listOf {
-                        UtxoSwitch(
-                            enabled = uiState.utxoExpertModeEnabled,
-                            onChange = { viewModel.setUtxoExpertMode(it) }
+                        HSHodlerInput(
+                            lockTimeIntervals = lockTimeIntervals,
+                            lockTimeInterval = lockTimeInterval,
+                            onSelect = {
+                                sendBitcoinViewModel.onEnterLockTimeInterval(it)
+                            }
                         )
                     }
                 )
                 InfoText(
-                    text = stringResource(R.string.Send_Utxo_Description),
+                    text = stringResource(R.string.Send_Hodler_Description),
                 )
+            }
 
-                if (uiState.rbfVisible) {
-                    VSpacer(32.dp)
-                    CellUniversalLawrenceSection(
-                        listOf {
-                            RbfSwitch(
-                                enabled = uiState.rbfEnabled,
-                                onChange = { viewModel.setRbfEnabled(it) }
-                            )
-                        }
-                    )
-                    InfoText(
-                        text = stringResource(R.string.Send_Rbf_Description),
+            VSpacer(32.dp)
+            CellUniversalLawrenceSection(
+                listOf {
+                    UtxoSwitch(
+                        enabled = uiState.utxoExpertModeEnabled,
+                        onChange = { viewModel.setUtxoExpertMode(it) }
                     )
                 }
+            )
+            InfoText(
+                text = stringResource(R.string.Send_Utxo_Description),
+            )
 
+            if (uiState.rbfVisible) {
+                VSpacer(32.dp)
+                CellUniversalLawrenceSection(
+                    listOf {
+                        RbfSwitch(
+                            enabled = uiState.rbfEnabled,
+                            onChange = { viewModel.setRbfEnabled(it) }
+                        )
+                    }
+                )
                 InfoText(
                     text = stringResource(R.string.Send_Rbf_Description),
                 )
-
-                feeRateCaution?.let {
-                    FeeRateCaution(
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 12.dp
-                        ),
-                        feeRateCaution = it
-                    )
-                }
-
-                VSpacer(32.dp)
             }
-            if (showBottomSheet) {
-                BottomSheetContent(
-                    onDismissRequest = {
-                        showBottomSheet = false
+
+            InfoText(
+                text = stringResource(R.string.Send_Rbf_Description),
+            )
+
+            feeRateCaution?.let {
+                FeeRateCaution(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 12.dp
+                    ),
+                    feeRateCaution = it
+                )
+            }
+
+            VSpacer(32.dp)
+        }
+        if (showBottomSheet) {
+            BottomSheetContent(
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                BottomSheetTransactionOrderSelector(
+                    items = uiState.transactionSortOptions,
+                    onSelect = { mode ->
+                        viewModel.setTransactionMode(mode)
                     },
-                    sheetState = sheetState
-                ) {
-                    BottomSheetTransactionOrderSelector(
-                        items = uiState.transactionSortOptions,
-                        onSelect = { mode ->
-                            viewModel.setTransactionMode(mode)
-                        },
-                        onCloseClick = {
-                            scope.launch {
-                                sheetState.hide()
-                                showBottomSheet = false
-                            }
+                    onCloseClick = {
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
-                    )
-                }
+                    }
+                )
             }
         }
     }

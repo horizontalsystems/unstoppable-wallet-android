@@ -53,11 +53,13 @@ class KeyStoreActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            KeyStoreScreen(
-                viewModel = viewModel,
-                showBiometricPrompt = { showBiometricPrompt() },
-                closeApp = { finish() }
-            )
+            ComposeAppTheme {
+                KeyStoreScreen(
+                    viewModel = viewModel,
+                    showBiometricPrompt = { showBiometricPrompt() },
+                    closeApp = { finish() }
+                )
+            }
         }
     }
 
@@ -152,21 +154,19 @@ private fun KeyStoreScreen(
         showBiometricPrompt.invoke()
     }
 
-    ComposeAppTheme {
-        if (viewModel.showSystemLockWarning) {
-            Column(
-                modifier = Modifier
-                    .background(color = ComposeAppTheme.colors.tyler)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                NoSystemLockWarning()
-            }
+    if (viewModel.showSystemLockWarning) {
+        Column(
+            modifier = Modifier
+                .background(color = ComposeAppTheme.colors.tyler)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            NoSystemLockWarning()
         }
+    }
 
-        if (viewModel.showInvalidKeyWarning) {
-            KeysInvalidatedDialog { viewModel.onCloseInvalidKeyWarning() }
-        }
+    if (viewModel.showInvalidKeyWarning) {
+        KeysInvalidatedDialog { viewModel.onCloseInvalidKeyWarning() }
     }
 }
 

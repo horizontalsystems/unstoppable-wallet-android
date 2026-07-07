@@ -53,37 +53,35 @@ private fun RiskyAddressAlertView(
     onCloseClick: () -> Unit,
     onContinueClick: () -> Unit,
 ) {
-    ComposeAppTheme {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_attention_24),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-            title = stringResource(R.string.Send_RiskyAddress),
-            onCloseClick = onCloseClick
-        ) {
-            VSpacer(12.dp)
-            TextImportantError(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = alertText
-            )
-            VSpacer(32.dp)
-            ButtonPrimaryRed(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                title = stringResource(R.string.Button_ContinueAnyway),
-                onClick = {
-                    onContinueClick()
-                }
-            )
-            VSpacer(12.dp)
-            ButtonPrimaryTransparent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                title = stringResource(R.string.Button_Cancel),
-                onClick = onCloseClick
-            )
-            VSpacer(32.dp)
-        }
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_attention_24),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+        title = stringResource(R.string.Send_RiskyAddress),
+        onCloseClick = onCloseClick
+    ) {
+        VSpacer(12.dp)
+        TextImportantError(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = alertText
+        )
+        VSpacer(32.dp)
+        ButtonPrimaryRed(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            title = stringResource(R.string.Button_ContinueAnyway),
+            onClick = {
+                onContinueClick()
+            }
+        )
+        VSpacer(12.dp)
+        ButtonPrimaryTransparent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            title = stringResource(R.string.Button_Cancel),
+            onClick = onCloseClick
+        )
+        VSpacer(32.dp)
     }
 }

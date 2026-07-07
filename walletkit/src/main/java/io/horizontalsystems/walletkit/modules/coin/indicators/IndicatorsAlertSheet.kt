@@ -30,28 +30,26 @@ data object IndicatorsAlertSheet : HSBottomSheet() {
 
 @Composable
 private fun IndicatorsAlertScreen(navigation: HSNavigation) {
-    ComposeAppTheme {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.icon_24_lock),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
-            title = stringResource(R.string.CoinPage_Indicators),
-            onCloseClick = {
-                navigation.removeLastOrNull()
-            }
-        ) {
-            InfoText(
-                text = stringResource(R.string.CoinPage_IndicatorsAlertText)
-            )
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
-                title = stringResource(R.string.Button_LearnMore),
-                onClick = {
-
-                },
-            )
-            VSpacer(32.dp)
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.icon_24_lock),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
+        title = stringResource(R.string.CoinPage_Indicators),
+        onCloseClick = {
+            navigation.removeLastOrNull()
         }
+    ) {
+        InfoText(
+            text = stringResource(R.string.CoinPage_IndicatorsAlertText)
+        )
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 24.dp),
+            title = stringResource(R.string.Button_LearnMore),
+            onClick = {
+
+            },
+        )
+        VSpacer(32.dp)
     }
 }

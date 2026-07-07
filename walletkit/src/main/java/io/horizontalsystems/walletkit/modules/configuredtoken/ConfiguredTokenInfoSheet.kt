@@ -17,7 +17,6 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
@@ -48,55 +47,53 @@ private fun ConfiguredTokenInfo(navigation: HSNavigation, token: Token) {
     val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 
-    ComposeAppTheme {
-        BottomSheetHeaderMultiline(
-            iconPainter = uiState.iconSource.painter(),
-            title = uiState.title,
-            subtitle = uiState.subtitle,
-            onCloseClick = { navigation.removeLastOrNull() }
-        ) {
-            when (val tokenInfoType = uiState.tokenInfoType) {
-                is ConfiguredTokenInfoType.Contract -> {
-                    ContractInfo(tokenInfoType)
-                }
-                ConfiguredTokenInfoType.Bch -> {
-                    body_leah(
-                        text = stringResource(id = R.string.ManageCoins_BchTypeDescription),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
-                    )
-                }
-                is ConfiguredTokenInfoType.Bips -> {
-                    body_leah(
-                        text = stringResource(R.string.ManageCoins_BipsDescription, tokenInfoType.blockchainName, tokenInfoType.blockchainName, tokenInfoType.blockchainName),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
-                    )
-                }
-                is ConfiguredTokenInfoType.BirthdayHeight -> {
-                    CellUniversalLawrenceSection(showFrame = true) {
-                        RowUniversal(
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        ) {
-                            val view = LocalView.current
-                            body_leah(
-                                modifier = Modifier.weight(1f),
-                                text = stringResource(R.string.Restore_BirthdayHeight),
-                            )
-                            val birthdayHeight = tokenInfoType.height?.toString() ?: "---"
-                            ButtonSecondaryDefault(
-                                modifier = Modifier.padding(start = 16.dp),
-                                title = birthdayHeight,
-                                onClick = {
-                                    TextHelper.copyText(birthdayHeight)
-                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                }
-                            )
-                        }
+    BottomSheetHeaderMultiline(
+        iconPainter = uiState.iconSource.painter(),
+        title = uiState.title,
+        subtitle = uiState.subtitle,
+        onCloseClick = { navigation.removeLastOrNull() }
+    ) {
+        when (val tokenInfoType = uiState.tokenInfoType) {
+            is ConfiguredTokenInfoType.Contract -> {
+                ContractInfo(tokenInfoType)
+            }
+            ConfiguredTokenInfoType.Bch -> {
+                body_leah(
+                    text = stringResource(id = R.string.ManageCoins_BchTypeDescription),
+                    modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                )
+            }
+            is ConfiguredTokenInfoType.Bips -> {
+                body_leah(
+                    text = stringResource(R.string.ManageCoins_BipsDescription, tokenInfoType.blockchainName, tokenInfoType.blockchainName, tokenInfoType.blockchainName),
+                    modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                )
+            }
+            is ConfiguredTokenInfoType.BirthdayHeight -> {
+                CellUniversalLawrenceSection(showFrame = true) {
+                    RowUniversal(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        val view = LocalView.current
+                        body_leah(
+                            modifier = Modifier.weight(1f),
+                            text = stringResource(R.string.Restore_BirthdayHeight),
+                        )
+                        val birthdayHeight = tokenInfoType.height?.toString() ?: "---"
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(start = 16.dp),
+                            title = birthdayHeight,
+                            onClick = {
+                                TextHelper.copyText(birthdayHeight)
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                            }
+                        )
                     }
                 }
-                null -> Unit
             }
-            Spacer(Modifier.height(32.dp))
+            null -> Unit
         }
+        Spacer(Modifier.height(32.dp))
     }
 }
 

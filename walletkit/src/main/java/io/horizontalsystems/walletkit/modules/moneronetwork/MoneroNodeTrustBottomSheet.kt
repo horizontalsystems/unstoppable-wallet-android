@@ -38,50 +38,48 @@ fun MoneroNodeTrustBottomSheet(
 ) {
     var checked by remember(node.host) { mutableStateOf(node.trusted) }
 
-    ComposeAppTheme {
-        BottomSheetHeader(
-            iconPainter = painterResource(R.drawable.ic_settings_jacob),
-            title = stringResource(R.string.MoneroNodeSettings_TrustedTitle),
-            onCloseClick = onCloseClick
-        ) {
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_settings_jacob),
+        title = stringResource(R.string.MoneroNodeSettings_TrustedTitle),
+        onCloseClick = onCloseClick
+    ) {
 
-            InfoTextBody(
-                text = stringResource(R.string.MoneroNodeSettings_TrustedDescription)
-            )
-            VSpacer(12.dp)
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-            ) {
-                SectionUniversalItem {
-                    RowUniversal(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalPadding = 0.dp
-                    ) {
-                        Column(modifier = Modifier.padding(vertical = 12.dp)) {
-                            headline2_leah(text = stringResource(R.string.MoneroNodeSettings_Trusted))
-                            subhead2_grey(text = node.host)
-                        }
-                        Spacer(modifier = Modifier.weight(1f))
-                        HsSwitch(
-                            modifier = Modifier.padding(start = 5.dp),
-                            checked = checked,
-                            onCheckedChange = { checked = it }
-                        )
+        InfoTextBody(
+            text = stringResource(R.string.MoneroNodeSettings_TrustedDescription)
+        )
+        VSpacer(12.dp)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+        ) {
+            SectionUniversalItem {
+                RowUniversal(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalPadding = 0.dp
+                ) {
+                    Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                        headline2_leah(text = stringResource(R.string.MoneroNodeSettings_Trusted))
+                        subhead2_grey(text = node.host)
                     }
+                    Spacer(modifier = Modifier.weight(1f))
+                    HsSwitch(
+                        modifier = Modifier.padding(start = 5.dp),
+                        checked = checked,
+                        onCheckedChange = { checked = it }
+                    )
                 }
             }
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 32.dp),
-                title = stringResource(R.string.Button_Done),
-                onClick = {
-                    onDone(checked)
-                }
-            )
         }
+        ButtonPrimaryYellow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            title = stringResource(R.string.Button_Done),
+            onClick = {
+                onDone(checked)
+            }
+        )
     }
 }

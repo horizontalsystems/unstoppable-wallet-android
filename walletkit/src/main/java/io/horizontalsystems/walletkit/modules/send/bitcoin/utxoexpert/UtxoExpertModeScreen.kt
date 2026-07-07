@@ -59,67 +59,65 @@ fun UtxoExpertModeScreen(
     )
     val uiState = viewModel.uiState
 
-    ComposeAppTheme {
-        HSScaffold(
-            title = stringResource(R.string.Send_Utxos),
-            onBack = onBackClick,
-            bottomBar = {
-                Box(
-                    modifier = Modifier
-                        .height(62.dp)
-                        .systemBarsPadding()
-                        .fillMaxWidth()
-                ) {
-                    HsDivider(modifier = Modifier.fillMaxWidth())
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        ButtonSecondaryTransparent(
-                            title = stringResource(id = R.string.Send_Utxo_UnselectAll),
-                            enabled = uiState.unselectAllIsEnabled,
-                            onClick = {
-                                viewModel.unselectAll()
-                                updateUnspentOutputs(viewModel.customOutputs)
-                            }
-                        )
-                        ButtonSecondaryTransparent(
-                            title = stringResource(id = R.string.Send_Utxo_SelectAll),
-                            onClick = {
-                                viewModel.selectAll()
-                                updateUnspentOutputs(viewModel.customOutputs)
-                            }
-                        )
-                    }
-                }
-            }
-        ) {
-            Column(
+    HSScaffold(
+        title = stringResource(R.string.Send_Utxos),
+        onBack = onBackClick,
+        bottomBar = {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .height(62.dp)
+                    .systemBarsPadding()
+                    .fillMaxWidth()
             ) {
-                CellUniversalLawrenceSection {
-                    UtxoInfoCell(
-                        title = stringResource(R.string.Send_Utxo_AvailableBalance),
-                        value = uiState.availableBalanceInfo.value,
-                        subValue = uiState.availableBalanceInfo.subValue
-                    )
-                }
-                Box(
-                    modifier = Modifier.weight(1f)
+                HsDivider(modifier = Modifier.fillMaxWidth())
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    UtxoList(
-                        utxos = uiState.utxoItems,
-                        onItemClicked = {
-                            viewModel.onUnspentOutputClicked(it)
+                    ButtonSecondaryTransparent(
+                        title = stringResource(id = R.string.Send_Utxo_UnselectAll),
+                        enabled = uiState.unselectAllIsEnabled,
+                        onClick = {
+                            viewModel.unselectAll()
+                            updateUnspentOutputs(viewModel.customOutputs)
+                        }
+                    )
+                    ButtonSecondaryTransparent(
+                        title = stringResource(id = R.string.Send_Utxo_SelectAll),
+                        onClick = {
+                            viewModel.selectAll()
                             updateUnspentOutputs(viewModel.customOutputs)
                         }
                     )
                 }
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            CellUniversalLawrenceSection {
+                UtxoInfoCell(
+                    title = stringResource(R.string.Send_Utxo_AvailableBalance),
+                    value = uiState.availableBalanceInfo.value,
+                    subValue = uiState.availableBalanceInfo.subValue
+                )
+            }
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                UtxoList(
+                    utxos = uiState.utxoItems,
+                    onItemClicked = {
+                        viewModel.onUnspentOutputClicked(it)
+                        updateUnspentOutputs(viewModel.customOutputs)
+                    }
+                )
             }
         }
     }

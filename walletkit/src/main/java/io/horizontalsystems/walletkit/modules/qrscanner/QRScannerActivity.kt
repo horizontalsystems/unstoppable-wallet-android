@@ -85,12 +85,14 @@ class QRScannerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            QRScannerScreen(
-                showPasteButton = intent.getBooleanExtra(SHOW_PASTE_BUTTON, false),
-                onScan = { onScan(it) },
-                onCloseClick = { finish() },
-                onCameraPermissionSettingsClick = { openCameraPermissionSettings() }
-            )
+            ComposeAppTheme {
+                QRScannerScreen(
+                    showPasteButton = intent.getBooleanExtra(SHOW_PASTE_BUTTON, false),
+                    onScan = { onScan(it) },
+                    onCloseClick = { finish() },
+                    onCameraPermissionSettingsClick = { openCameraPermissionSettings() }
+                )
+            }
         }
     }
 
@@ -180,72 +182,52 @@ private fun QRScannerScreen(
         )
     }
 
-    ComposeAppTheme {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(color = ComposeAppTheme.colors.tyler),
-            contentAlignment = Alignment.Center
-        ) {
-            if (cameraPermissionState.status == PermissionStatus.Granted) {
-                ScannerView(onScan)
-            } else {
-                Spacer(
-                    Modifier
-                        .fillMaxSize()
-                        .background(color = ComposeAppTheme.colors.dark)
-                )
-                GoToSettingsBox(onCameraPermissionSettingsClick)
-            }
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(color = ComposeAppTheme.colors.tyler),
+        contentAlignment = Alignment.Center
+    ) {
+        if (cameraPermissionState.status == PermissionStatus.Granted) {
+            ScannerView(onScan)
+        } else {
+            Spacer(
+                Modifier
+                    .fillMaxSize()
+                    .background(color = ComposeAppTheme.colors.dark)
+            )
+            GoToSettingsBox(onCameraPermissionSettingsClick)
+        }
 
-            Box(Modifier.align(Alignment.TopCenter).fillMaxWidth()) {
-                AppBar(
-                    navigationIcon = {
-                        HsIconButton(onClick = onCloseClick) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_arrow_left_24),
-                                contentDescription = stringResource(R.string.Button_Back),
-                                tint = ComposeAppTheme.colors.white
-                            )
-                        }
-                    },
-                    backgroundColor = Color.Transparent
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(Modifier.height(24.dp))
-                if (showPasteButton) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        HSButton(
-                            modifier = Modifier.weight(1f),
-                            variant = ButtonVariant.Secondary,
-                            title = stringResource(R.string.ScanQr_Photos),
-                            icon = painterResource(R.drawable.ic_gallery_24),
-                            onClick = {
-                                galleryLauncher.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                )
-                            }
-                        )
-                        HSButton(
-                            modifier = Modifier.weight(1f),
-                            title = stringResource(R.string.Send_Button_Paste),
-                            icon = painterResource(R.drawable.ic_copy_24),
-                            onClick = { onScan(TextHelper.getCopiedText() ?: "") }
+        Box(Modifier.align(Alignment.TopCenter).fillMaxWidth()) {
+            AppBar(
+                navigationIcon = {
+                    HsIconButton(onClick = onCloseClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_left_24),
+                            contentDescription = stringResource(R.string.Button_Back),
+                            tint = ComposeAppTheme.colors.white
                         )
                     }
-                } else {
+                },
+                backgroundColor = Color.Transparent
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(24.dp))
+            if (showPasteButton) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     HSButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.weight(1f),
                         variant = ButtonVariant.Secondary,
                         title = stringResource(R.string.ScanQr_Photos),
                         icon = painterResource(R.drawable.ic_gallery_24),
@@ -255,9 +237,27 @@ private fun QRScannerScreen(
                             )
                         }
                     )
+                    HSButton(
+                        modifier = Modifier.weight(1f),
+                        title = stringResource(R.string.Send_Button_Paste),
+                        icon = painterResource(R.drawable.ic_copy_24),
+                        onClick = { onScan(TextHelper.getCopiedText() ?: "") }
+                    )
                 }
-                Spacer(Modifier.height(48.dp))
+            } else {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    title = stringResource(R.string.ScanQr_Photos),
+                    icon = painterResource(R.drawable.ic_gallery_24),
+                    onClick = {
+                        galleryLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
+                )
             }
+            Spacer(Modifier.height(48.dp))
         }
     }
 }
@@ -346,32 +346,30 @@ private fun PermissionNeededDialog(
     onOkClick: () -> Unit,
     onCancelClick: () -> Unit,
 ) {
-    ComposeAppTheme {
-        Dialog(onDismissRequest = onCancelClick) {
-            Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(color = ComposeAppTheme.colors.lawrence)
-                    .padding(horizontal = 24.dp, vertical = 20.dp)
+    Dialog(onDismissRequest = onCancelClick) {
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(color = ComposeAppTheme.colors.lawrence)
+                .padding(horizontal = 24.dp, vertical = 20.dp)
+        ) {
+            title3_leah(text = stringResource(R.string.ScanQr_CameraPermission_Title))
+            Spacer(Modifier.height(12.dp))
+            body_leah(text = stringResource(R.string.ScanQr_PleaseGrantCameraPermission))
+            Spacer(Modifier.height(32.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
             ) {
-                title3_leah(text = stringResource(R.string.ScanQr_CameraPermission_Title))
-                Spacer(Modifier.height(12.dp))
-                body_leah(text = stringResource(R.string.ScanQr_PleaseGrantCameraPermission))
-                Spacer(Modifier.height(32.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    ButtonPrimaryTransparent(
-                        onClick = onCancelClick,
-                        title = stringResource(R.string.Button_Cancel)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    ButtonPrimaryYellow(
-                        onClick = onOkClick,
-                        title = stringResource(R.string.Button_Ok)
-                    )
-                }
+                ButtonPrimaryTransparent(
+                    onClick = onCancelClick,
+                    title = stringResource(R.string.Button_Cancel)
+                )
+                Spacer(Modifier.width(8.dp))
+                ButtonPrimaryYellow(
+                    onClick = onOkClick,
+                    title = stringResource(R.string.Button_Ok)
+                )
             }
         }
     }
