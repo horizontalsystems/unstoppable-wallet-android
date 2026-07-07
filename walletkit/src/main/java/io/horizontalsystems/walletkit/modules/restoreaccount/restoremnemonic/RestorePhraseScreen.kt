@@ -74,7 +74,6 @@ import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
-import io.horizontalsystems.walletkit.ui.compose.components.B2
 import io.horizontalsystems.walletkit.ui.compose.components.BoxTyler44
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
@@ -82,12 +81,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefau
 import io.horizontalsystems.walletkit.ui.compose.components.CustomKeyboardWarningDialog
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
-import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey50
 import io.horizontalsystems.walletkit.ui.compose.components.captionSB_leah
 import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -105,7 +102,6 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeaderColored
-import io.horizontalsystems.hdwalletkit.Language
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -527,36 +523,5 @@ fun SuggestionsBar(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun MnemonicLanguageCell(
-    language: Language,
-    showLanguageSelectorDialog: () -> Unit
-) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = showLanguageSelectorDialog
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_globe_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
-        B2(
-            text = stringResource(R.string.CreateWallet_Wordlist),
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-        Spacer(Modifier.weight(1f))
-        subhead1_grey(
-            text = stringResource(language.displayNameStringRes),
-        )
-        Icon(
-            modifier = Modifier.padding(start = 4.dp),
-            painter = painterResource(id = R.drawable.ic_down_arrow_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
-        )
     }
 }

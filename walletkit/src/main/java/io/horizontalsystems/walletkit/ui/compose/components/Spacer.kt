@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.ui.compose.components
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -23,10 +22,4 @@ fun RowScope.HFillSpacer(minWidth: Dp) {
 @Composable
 fun VSpacer(height: Dp) {
     Spacer(modifier = Modifier.height(height))
-}
-
-@Composable
-fun ColumnScope.VFillSpacer(minHeight: Dp) {
-    Spacer(modifier = Modifier.height(minHeight))
-    Spacer(modifier = Modifier.weight(1f))
 }

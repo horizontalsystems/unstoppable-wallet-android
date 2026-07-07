@@ -33,49 +33,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.Orange
-
-@Composable
-fun ButtonPrimaryDefaultWithIcon(
-    modifier: Modifier = Modifier,
-    icon: Int,
-    iconTint: Color? = null,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-) {
-    ButtonPrimary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.leah,
-            contentColor = ComposeAppTheme.colors.blade,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            if (iconTint != null) {
-                Icon(
-                    painter = painterResource(icon),
-                    contentDescription = null,
-                    tint = iconTint
-                )
-            } else {
-                Icon(
-                    painter = painterResource(icon),
-                    contentDescription = null
-                )
-            }
-            HSpacer(width = 8.dp)
-            Text(
-                title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        },
-        enabled = enabled
-    )
-}
 
 @Composable
 fun ButtonPrimaryDefault(
@@ -174,43 +131,6 @@ fun ButtonPrimaryYellow(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            if (loadingIndicator) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
-                )
-                HSpacer(width = 8.dp)
-            }
-
-            Text(
-                title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonPrimaryOrange(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    loadingIndicator: Boolean = false
-) {
-    ButtonPrimary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = Orange,
-            contentColor = ComposeAppTheme.colors.tyler,
             disabledBackgroundColor = ComposeAppTheme.colors.blade,
             disabledContentColor = ComposeAppTheme.colors.andy,
         ),
@@ -359,7 +279,6 @@ fun ButtonPrimaryWrapper(
     }
 }
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ButtonPrimary(
@@ -407,7 +326,6 @@ object ButtonPrimaryDefaults {
         start = ButtonHorizontalPadding,
         end = ButtonHorizontalPadding
     )
-
 
     /**
      * The default min width applied for the [Button].

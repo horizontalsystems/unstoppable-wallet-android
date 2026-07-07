@@ -73,27 +73,6 @@ fun body_bran(
 }
 
 @Composable
-fun body_andy(
-    text: String,
-    modifier: Modifier = Modifier,
-    textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
-    maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
-) {
-    Text(
-        text = text,
-        modifier = modifier,
-        textAlign = textAlign,
-        overflow = overflow,
-        maxLines = maxLines,
-        onTextLayout = onTextLayout,
-        style = ComposeAppTheme.typography.body,
-        color = ComposeAppTheme.colors.andy,
-    )
-}
-
-@Composable
 fun L2(
     text: String,
     modifier: Modifier = Modifier,
@@ -129,27 +108,6 @@ fun headline1_leah(
         overflow = overflow,
         maxLines = maxLines,
         onTextLayout = onTextLayout,
-    )
-}
-
-@Composable
-fun headline1_jacob(
-    text: String,
-    modifier: Modifier = Modifier,
-    textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
-    maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
-) {
-    Text(
-        text = text,
-        modifier = modifier,
-        textAlign = textAlign,
-        overflow = overflow,
-        maxLines = maxLines,
-        onTextLayout = onTextLayout,
-        style = ComposeAppTheme.typography.headline1,
-        color = ComposeAppTheme.colors.jacob,
     )
 }
 
@@ -1496,25 +1454,6 @@ fun G2(
         color = ComposeAppTheme.colors.leah,
     )
 }
-@Composable
-fun subhead1Italic_leah(
-    text: String,
-    modifier: Modifier = Modifier,
-    textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
-    maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {}
-) {
-    G2(
-        text = text,
-        modifier = modifier,
-        textAlign = textAlign,
-        overflow = overflow,
-        maxLines = maxLines,
-        onTextLayout = onTextLayout,
-    )
-}
-
 @Composable
 fun H2(
     text: String,

@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
@@ -143,19 +142,6 @@ fun CellSingleLineLawrenceSection(
 }
 
 @Composable
-fun HSSectionRounded(
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp)),
-    ) {
-        content()
-    }
-}
-
-@Composable
 fun Item(content: @Composable () -> Unit) {
     CellSingleLineLawrence(
         content = content
@@ -203,41 +189,6 @@ fun CellSingleLine(
 
         content.invoke()
     }
-}
-
-@Composable
-fun CellHeaderSorting(
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    content: @Composable () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(44.dp)
-    ) {
-        if (borderTop) {
-            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
-        }
-
-        if (borderBottom) {
-            HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
-        }
-
-        content.invoke()
-    }
-}
-
-@Composable
-fun CellData2(content: @Composable () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-    ) {
-        content.invoke()
-    }
-
 }
 
 @Composable
@@ -302,7 +253,6 @@ fun CellSingleLineClear(
         )
     }
 }
-
 
 @Composable
 fun CellFooter(text: String) {
@@ -549,35 +499,5 @@ fun SectionItemBorderedRowUniversalClear(
         if (borderBottom) {
             HsDivider()
         }
-    }
-}
-
-@Composable
-fun CellBorderedRowUniversal(
-    modifier: Modifier = Modifier,
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
-    backgroundColor: Color = Color.Transparent,
-    content: @Composable RowScope.() -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-    ) {
-        if (borderTop) {
-            HsDivider(modifier = Modifier.align(Alignment.TopCenter))
-        }
-
-        if (borderBottom) {
-            HsDivider(modifier = Modifier.align(Alignment.BottomCenter))
-        }
-
-        RowUniversal(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            content = content
-        )
     }
 }

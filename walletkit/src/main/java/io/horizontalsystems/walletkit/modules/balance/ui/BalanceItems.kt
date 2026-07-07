@@ -4,7 +4,6 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -97,44 +96,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
-
-@Composable
-fun NoteWarning(
-    modifier: Modifier = Modifier,
-    text: String,
-    onClick: (() -> Unit),
-    onClose: (() -> Unit)?
-) {
-    Note(
-        modifier = modifier.clickable(onClick = onClick),
-        text = text,
-        title = stringResource(id = R.string.AccountRecovery_Note),
-        icon = R.drawable.ic_attention_20,
-        borderColor = ComposeAppTheme.colors.jacob,
-        backgroundColor = ComposeAppTheme.colors.yellow20,
-        textColor = ComposeAppTheme.colors.jacob,
-        iconColor = ComposeAppTheme.colors.jacob,
-        onClose = onClose
-    )
-}
-
-@Composable
-fun NoteError(
-    modifier: Modifier = Modifier,
-    text: String,
-    onClick: (() -> Unit)
-) {
-    Note(
-        modifier = modifier.clickable(onClick = onClick),
-        text = text,
-        title = stringResource(id = R.string.AccountRecovery_Note),
-        icon = R.drawable.ic_attention_20,
-        borderColor = ComposeAppTheme.colors.lucian,
-        backgroundColor = ComposeAppTheme.colors.red20,
-        textColor = ComposeAppTheme.colors.lucian,
-        iconColor = ComposeAppTheme.colors.lucian
-    )
-}
 
 @Composable
 fun Note(

@@ -65,7 +65,6 @@ import io.horizontalsystems.walletkit.modules.market.MarketViewItem
 import io.horizontalsystems.walletkit.modules.market.search.MarketSearchModule.DiscoveryItem
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -350,15 +349,6 @@ fun ScreenMessageWithAction(
         }
         VSpacer(62.dp)
     }
-}
-
-@Composable
-fun SortMenu(title: TranslatableString, onClick: () -> Unit) {
-    ButtonSecondaryTransparent(
-        title = title.getString(),
-        iconRight = R.drawable.ic_down_arrow_20,
-        onClick = onClick
-    )
 }
 
 @Composable

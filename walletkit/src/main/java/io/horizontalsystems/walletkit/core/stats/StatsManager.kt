@@ -192,7 +192,6 @@ val WatchlistSorting.statSortType: StatSortType
         WatchlistSorting.Losers -> StatSortType.TopLosers
     }
 
-
 val CoinModule.Tab.statTab: StatTab
     get() = when (this) {
         CoinModule.Tab.Overview -> StatTab.Overview
@@ -270,7 +269,6 @@ val AccountType.statAccountType: String
             "tron_address"
         }
     }
-
 
 val MetricsType.statPage: StatPage
     get() = when (this) {

@@ -42,32 +42,6 @@ val Token.iconPlaceholder: Int
         else -> R.drawable.coin_placeholder
     }
 
-val Token.protocolInfo: String
-    get() = when (type) {
-        TokenType.Native -> {
-            val parts = mutableListOf(blockchain.name)
-            when (this.blockchainType) {
-                BlockchainType.Ethereum -> parts.add("(ERC20)")
-                BlockchainType.BinanceSmartChain -> parts.add("(BEP20)")
-                else -> {}
-            }
-            parts.joinToString(" ")
-        }
-        is TokenType.Eip20,
-        is TokenType.Spl,
-        is TokenType.Jetton -> protocolType ?: ""
-        else -> ""
-    }
-
-val Token.copyableTypeInfo: String?
-    get() = when (val type = type) {
-        is TokenType.Eip20 -> type.address
-        is TokenType.Spl -> type.address
-        is TokenType.Jetton -> type.address
-        else -> null
-    }
-
-
 val TokenQuery.protocolType: String?
     get() = when (tokenType) {
         is TokenType.Native -> {
@@ -450,7 +424,6 @@ val TokenType.order: Int
         }
     }
 
-
 val TokenType.derivation: TokenType.Derivation?
     get() = when (this) {
         is TokenType.Derived -> this.derivation
@@ -474,9 +447,6 @@ val Coin.imagePlaceholder: Int
 
 val TopPlatform.imageUrl
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/${blockchain.uid}@3x.png"
-
-val FullCoin.typeLabel: String?
-    get() = tokens.singleOrNull()?.protocolType
 
 val FullCoin.supportedTokens
     get() = tokens

@@ -2,7 +2,6 @@ package io.horizontalsystems.walletkit.ui.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,19 +10,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -58,23 +51,6 @@ fun BottomSheetsElementsButtons(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-    }
-}
-
-@Composable
-fun BottomSheetsElementsInput(onValueChange: (String) -> Unit) {
-    Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-        FormsInput(
-            hint = stringResource(R.string.Restore_ZCash_Birthday_Hint),
-            pasteEnabled = false,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            textPreprocessor = object : TextPreprocessor {
-                override fun process(text: String): String {
-                    return text.replace("[^0-9]".toRegex(), "")
-                }
-            },
-            onValueChange = onValueChange
-        )
     }
 }
 
@@ -123,31 +99,5 @@ fun BottomSheetsElementsHeader(
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
-    }
-}
-
-@Composable
-fun BottomSheetsElementsCheckbox(
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        HsDivider()
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 14.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            var checked by remember { mutableStateOf(false) }
-            HsCheckbox(
-                checked = checked,
-                onCheckedChange = {
-                    checked = it
-                    onCheckedChange.invoke(it)
-                }
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            subhead2_leah(text = stringResource(R.string.Restore_ZCash_RestoreAsNew))
-        }
     }
 }

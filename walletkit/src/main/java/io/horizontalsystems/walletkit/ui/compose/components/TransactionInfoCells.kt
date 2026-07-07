@@ -463,27 +463,6 @@ fun TransactionInfoCancelCell(
 }
 
 @Composable
-fun TransactionInfoRbfCell(
-    rbfEnabled: Boolean
-) {
-    RowUniversal {
-        subhead2_grey(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Send_Rbf),
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        val enabledText = if (rbfEnabled) {
-            stringResource(R.string.Send_RbfEnabled)
-        } else {
-            stringResource(R.string.Send_RbfDisabled)
-        }
-        subhead1_leah(text = enabledText)
-        Spacer(modifier = Modifier.width(16.dp))
-    }
-}
-
-
-@Composable
 fun TransactionInfoTransactionHashCell(transactionHash: String) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -729,21 +708,6 @@ fun TransactionInfoSentToSelfCell() {
     }
 }
 
-@Composable
-fun TransactionInfoCell(title: String, value: String) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-    ) {
-        subhead2_grey(text = title)
-        HSpacer(16.dp)
-        subhead1_leah(
-            modifier = Modifier.weight(1f),
-            text = value,
-            textAlign = TextAlign.Right
-        )
-    }
-}
-
 private fun openTransactionOptionsModule(
     type: SpeedUpCancelType,
     transactionHash: String,
@@ -815,7 +779,6 @@ private fun SubHead2ColoredValue(value: ColoredValue) {
         }
     }
 }
-
 
 @Composable
 private fun SubHead1ColoredValue(value: ColoredValue) {

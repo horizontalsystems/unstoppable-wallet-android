@@ -49,11 +49,9 @@ import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionMo
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
-import io.horizontalsystems.walletkit.ui.compose.components.SecondaryButtonDefaults.buttonColors
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_bran
 import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
@@ -62,17 +60,12 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.Subscription
 
 val yellowGradient = Brush.horizontalGradient(
     colors = listOf(
         Color(0xFFFFD000),
         Color(0xFFFFA800),
     )
-)
-
-val steelBrush = Brush.horizontalGradient(
-    colors = listOf(Color(0x336E7899), Color(0x336E7899))
 )
 
 @Composable
@@ -232,91 +225,6 @@ fun TitleCenteredTopBar(
                 contentDescription = "close button",
                 tint = ComposeAppTheme.colors.grey,
             )
-        }
-    }
-}
-
-@Composable
-fun ColoredTextSecondaryButton(
-    title: String,
-    color: Color,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = buttonColors(
-            backgroundColor = ComposeAppTheme.colors.transparent,
-            contentColor = color,
-            disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            Text(
-                text = title,
-                maxLines = 1,
-                style = ComposeAppTheme.typography.body,
-                overflow = TextOverflow.Ellipsis,
-            )
-        },
-    )
-}
-
-@Composable
-fun SubscriptionTabs(
-    subscriptions: List<Subscription>,
-    selectedTabIndex: Int,
-    modifier: Modifier,
-    onTabSelected: (Int) -> Unit = {}
-) {
-    if (subscriptions.isNotEmpty()) {
-        TabRow(
-            selectedTabIndex = selectedTabIndex,
-            modifier = modifier,
-            backgroundColor = ComposeAppTheme.colors.transparent, // Dark background
-            contentColor = Color(0xFFEDD716),
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                        .height(0.dp), // No indicator line
-                    color = Color.Transparent
-                )
-            }
-        ) {
-            subscriptions.forEachIndexed { index, tab ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = {
-                        onTabSelected(index)
-                    },
-                    modifier = Modifier.background(
-                        brush =
-                        if (selectedTabIndex == index) yellowGradient else steelBrush,
-                    ),
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(44.dp)
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
-                            contentDescription = null,
-                            tint = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = tab.name,
-                            color = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.captionSB
-                        )
-                    }
-                }
-            }
         }
     }
 }

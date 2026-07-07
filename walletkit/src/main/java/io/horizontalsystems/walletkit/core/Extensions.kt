@@ -1,15 +1,9 @@
 package io.horizontalsystems.walletkit.core
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
-import android.widget.ImageView
-import coil.load
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.sorting.FullCoinSortContext
 import io.horizontalsystems.walletkit.core.sorting.SortCriterion
 import io.horizontalsystems.walletkit.core.sorting.sortedByCriteria
-import io.horizontalsystems.walletkit.modules.market.ImageSource
 import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
@@ -65,23 +59,6 @@ val Language.displayNameStringRes: Int
         Language.Czech -> R.string.Language_Czech
         Language.Portuguese -> R.string.Language_Portuguese
     }
-
-// ImageView
-
-fun ImageView.setRemoteImage(url: String, placeholder: Int? = R.drawable.ic_placeholder) {
-    load(url) {
-        if (placeholder != null) {
-            error(placeholder)
-        }
-    }
-}
-
-fun ImageView.setImage(imageSource: ImageSource) {
-    when (imageSource) {
-        is ImageSource.Local -> setImageResource(imageSource.resId)
-        is ImageSource.Remote -> setRemoteImage(imageSource.url, imageSource.placeholder)
-    }
-}
 
 // String
 
@@ -150,12 +127,6 @@ suspend fun <T> retryWhen(
         delay(1000)
     }
     return block()
-}
-
-fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
 }
 
 val BlockchainType.blockTime : Long?
