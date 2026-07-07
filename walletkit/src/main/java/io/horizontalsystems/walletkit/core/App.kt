@@ -109,8 +109,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIn
 import io.horizontalsystems.walletkit.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.walletkit.modules.pin.PinComponent
 import io.horizontalsystems.walletkit.modules.pin.core.PinDbStorage
-import io.horizontalsystems.walletkit.modules.profeatures.ProFeaturesAuthorizationManager
-import io.horizontalsystems.walletkit.modules.profeatures.storage.ProFeaturesStorage
 import io.horizontalsystems.walletkit.modules.roi.RoiManager
 import io.horizontalsystems.walletkit.modules.settings.appearance.AppIconService
 import io.horizontalsystems.walletkit.modules.settings.appearance.LaunchScreenService
@@ -174,7 +172,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
-        lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
         lateinit var moneroBirthdayProvider: MoneroBirthdayProvider
 
@@ -308,9 +305,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         accountCleaner = AccountCleaner()
         accountManager = AccountManager(accountsStorage, accountCleaner)
         userManager = UserManager(accountManager)
-
-        val proFeaturesStorage = ProFeaturesStorage(appDatabase)
-        proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
