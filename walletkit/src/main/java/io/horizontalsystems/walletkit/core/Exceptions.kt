@@ -50,21 +50,9 @@ open class HSCaution(
         }
     )
 }
-class NotEnoughData() : Exception()
 class UnsupportedException(override val message: String?) : Exception()
 class UnsupportedAccountException : Exception()
 class LocalizedException(val errorTextRes: Int) : Exception()
-class AdapterErrorWrongParameters(override val message: String) : Exception()
-class NoFeeSendTransactionError : Exception()
-class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) {
-    override fun toString() = message ?: "Transaction failed."
-}
-class NoDataException() : Exception() {
-    override fun getLocalizedMessage(): String {
-        return Translator.getString(R.string.CoinPage_NoData)
-    }
-}
-
 class NoAuthTokenException(override val message: String = "Auth Token is not set or empty") : Exception()
 class InvalidAuthTokenException(override val message: String = "Auth Token is expired or invalid") : Exception()
 

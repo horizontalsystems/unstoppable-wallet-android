@@ -528,7 +528,6 @@ sealed class ViewItem {
     class Fee(val networkFee: SendModule.AmountData) : ViewItem()
 }
 
-data class AmountValues(val coinAmount: String, val fiatAmount: String?)
 enum class ValueType {
     Regular, Disabled, Outgoing, Incoming, Warning, Forbidden
 }
