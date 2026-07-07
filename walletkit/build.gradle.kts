@@ -133,7 +133,6 @@ dependencies {
     api(libs.google.material)
 
     // Accompanist
-    api(libs.accompanist.navigation.animation)
     api(libs.accompanist.appcompat.theme)
     api(libs.accompanist.flowlayout)
     api(libs.accompanist.permissions)

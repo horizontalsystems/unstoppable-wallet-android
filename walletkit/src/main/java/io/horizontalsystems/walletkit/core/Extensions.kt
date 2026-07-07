@@ -4,14 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.widget.ImageView
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.core.tween
-import androidx.compose.runtime.Composable
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import coil.load
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.sorting.FullCoinSortContext
@@ -140,57 +132,6 @@ fun String.shorten(): String {
         prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
     else
         this
-}
-
-//Compose Animated Navigation
-
-fun NavGraphBuilder.composablePage(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
-) {
-    composable(
-        route = route,
-        arguments = arguments,
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(300)
-            )
-        },
-        popExitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(300)
-            )
-        },
-        popEnterTransition = { null },
-        content = content
-    )
-}
-
-fun NavGraphBuilder.composablePopup(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
-) {
-    composable(
-        route,
-        arguments = arguments,
-        enterTransition = {
-            slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(250)
-            )
-        },
-        popExitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Down,
-                animationSpec = tween(250)
-            )
-        },
-        content = content
-    )
 }
 
 suspend fun <T> retryWhen(
