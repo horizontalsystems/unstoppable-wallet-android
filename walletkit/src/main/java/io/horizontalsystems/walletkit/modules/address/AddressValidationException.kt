@@ -1,12 +1,9 @@
 package io.horizontalsystems.walletkit.modules.address
 
-import android.os.Parcelable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.providers.Translator
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-sealed class AddressValidationException : Exception(), Parcelable {
+sealed class AddressValidationException : Exception() {
     object Blank : AddressValidationException()
     class Unsupported(val blockchain: String? = null) : AddressValidationException()
     class Invalid(override val cause: Throwable, val blockchain: String? = null) : AddressValidationException()

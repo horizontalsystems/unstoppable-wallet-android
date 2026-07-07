@@ -1,27 +1,18 @@
 package io.horizontalsystems.subscriptions.core
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
-interface IPaidAction : Parcelable
+interface IPaidAction
 
-@Parcelize
 object AdvancedSearch : IPaidAction
 
-@Parcelize
 object TradeSignals : IPaidAction
 
-@Parcelize
 object RobberyProtection : IPaidAction
 
-@Parcelize
 object SecureSend : IPaidAction
 
-@Parcelize
 object ScamProtection : IPaidAction
 
-@Parcelize
 object SwapProtection : IPaidAction
 
-@Parcelize
 object PrioritySupport : IPaidAction

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.R
@@ -13,7 +12,6 @@ import io.horizontalsystems.walletkit.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.walletkit.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
-import kotlinx.parcelize.Parcelize
 
 object MainModule {
 
@@ -80,8 +78,7 @@ object MainModule {
         val badge: BadgeType? = null
     )
 
-    @Parcelize
-    enum class MainNavigation(val iconRes: Int, val titleRes: Int) : Parcelable {
+    enum class MainNavigation(val iconRes: Int, val titleRes: Int) {
         Market(R.drawable.ic_market_24, R.string.Market_Title),
         Balance(R.drawable.ic_wallet_24, R.string.Balance_Title),
         Swap(R.drawable.ic_swap_filled_24, R.string.Swap),

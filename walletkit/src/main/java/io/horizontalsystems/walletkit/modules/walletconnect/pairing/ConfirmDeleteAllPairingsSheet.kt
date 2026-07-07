@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.walletconnect.pairing
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,7 +18,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -30,8 +28,7 @@ data object ConfirmDeleteAllPairingsSheet : HSBottomSheet() {
         ConfirmDeleteAllScreen(navigation)
     }
 
-    @Parcelize
-    data class Result(val confirmed: Boolean) : Parcelable
+    data class Result(val confirmed: Boolean)
 }
 
 @Composable

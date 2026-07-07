@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.activatetoken
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +39,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -50,8 +48,7 @@ data class ActivateTokenPage(val wallet: Wallet) : HSPage() {
         ActivateTokenScreen(navigation, wallet)
     }
 
-    @Parcelize
-    data class Result(val activated: Boolean) : Parcelable
+    data class Result(val activated: Boolean)
 }
 
 

@@ -1,25 +1,21 @@
 package io.horizontalsystems.walletkit.modules.contacts.model
 
-import android.os.Parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.util.Objects
 
 @Serializable
-@Parcelize
 data class Contact(
     val uid: String,
     val name: String,
     val addresses: List<ContactAddress>
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class ContactAddress(
     val blockchain: Blockchain,
     val address: String
-) : Parcelable {
+) {
     override fun equals(other: Any?): Boolean {
         return other is ContactAddress && other.blockchain == blockchain && other.address.equals(address, ignoreCase = true)
     }

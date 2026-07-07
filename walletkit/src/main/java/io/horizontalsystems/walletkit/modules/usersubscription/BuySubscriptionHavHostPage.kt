@@ -1,13 +1,11 @@
 package io.horizontalsystems.walletkit.modules.usersubscription
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,8 +19,7 @@ data object BuySubscriptionHavHostPage : HSPage() {
         )
     }
 
-    @Parcelize
-    data class Input(val action: IPaidAction) : Parcelable
+    data class Input(val action: IPaidAction)
 
 }
 
@@ -39,6 +36,5 @@ data object PremiumSubscribedPage : HSPage() {
         )
     }
 
-    @Parcelize
-    class Result : Parcelable
+    class Result
 }

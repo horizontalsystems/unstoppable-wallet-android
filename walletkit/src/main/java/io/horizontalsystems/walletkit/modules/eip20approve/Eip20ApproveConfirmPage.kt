@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.eip20approve
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,7 +42,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
@@ -54,8 +52,7 @@ data object Eip20ApproveConfirmPage : HSPage() {
         Eip20ApproveConfirmScreen(navigation)
     }
 
-    @Parcelize
-    data class Result(val approved: Boolean) : Parcelable
+    data class Result(val approved: Boolean)
 }
 
 @Composable

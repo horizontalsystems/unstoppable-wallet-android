@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.manageaccount.dialogs
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -34,7 +33,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -46,8 +44,7 @@ data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
     }
 
     @Serializable
-    @Parcelize
-    data class Input(val account: Account) : Parcelable
+    data class Input(val account: Account)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

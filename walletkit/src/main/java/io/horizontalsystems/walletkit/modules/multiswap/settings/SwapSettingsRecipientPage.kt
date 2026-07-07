@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.multiswap.settings
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.walletkit.R.string.Button_Apply
@@ -11,7 +10,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,6 +33,5 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
     @Serializable
     data class Input(val token: Token, val recipient: Address?)
 
-    @Parcelize
-    data class Result(val address: Address?) : Parcelable
+    data class Result(val address: Address?)
 }

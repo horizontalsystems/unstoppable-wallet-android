@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.confirm
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -19,7 +18,6 @@ import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHea
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -31,8 +29,7 @@ data class ErrorSheet(val input: Input) : HSBottomSheet() {
     }
 
     @Serializable
-    @Parcelize
-    data class Input(val error: String) : Parcelable
+    data class Input(val error: String)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

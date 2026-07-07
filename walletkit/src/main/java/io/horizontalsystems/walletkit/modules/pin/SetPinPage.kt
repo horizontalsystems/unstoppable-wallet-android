@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.pin
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.walletkit.R
@@ -8,7 +7,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.modules.pin.ui.PinSet
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -31,6 +29,5 @@ data class SetPinPage(val input: Input? = null) : HSPage(screenshotEnabled = fal
     @Serializable
     data class Input(val descriptionResId: Int)
 
-    @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(val success: Boolean)
 }

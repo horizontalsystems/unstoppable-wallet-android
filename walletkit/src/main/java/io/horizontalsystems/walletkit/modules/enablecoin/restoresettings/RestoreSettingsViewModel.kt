@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.enablecoin.restoresettings
 
-import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +9,6 @@ import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.parcelize.Parcelize
 
 class RestoreSettingsViewModel(
     private val service: RestoreSettingsService,
@@ -65,5 +63,4 @@ class RestoreSettingsViewModel(
     }
 }
 
-@Parcelize
-data class BirthdayHeightConfig(val birthdayHeight: String?, val restoreAsNew: Boolean) : Parcelable
+data class BirthdayHeightConfig(val birthdayHeight: String?, val restoreAsNew: Boolean)

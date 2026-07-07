@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.walletconnect.request
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonParser
@@ -14,7 +13,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -201,12 +199,11 @@ sealed class SessionRequestUI {
     ) : SessionRequestUI()
 }
 
-@Parcelize
 data class WCChainData(
     val id: Int,
     val name: String,
     val address: String?
-) : Parcelable
+)
 
 data class PeerUI(
     val peerIcon: String,

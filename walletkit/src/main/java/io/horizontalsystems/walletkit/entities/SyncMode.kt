@@ -1,10 +1,7 @@
 package io.horizontalsystems.walletkit.entities
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-enum class SyncMode(val value: String) : Parcelable {
+enum class SyncMode(val value: String) {
     Fast("Fast"),
     Slow("Slow"),
     New("New");

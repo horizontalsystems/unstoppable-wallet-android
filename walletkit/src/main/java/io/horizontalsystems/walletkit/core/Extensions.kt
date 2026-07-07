@@ -3,8 +3,6 @@ package io.horizontalsystems.walletkit.core
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
-import android.os.Parcelable
 import android.widget.ImageView
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -112,11 +110,6 @@ fun ByteArray.toRawHexString(): String {
 fun ByteArray?.toHexString(): String {
     val rawHex = this?.toRawHexString() ?: return ""
     return "0x$rawHex"
-}
-
-// Intent & Parcelable Enum
-fun Intent.putParcelableExtra(key: String, value: Parcelable) {
-    putExtra(key, value)
 }
 
 fun LockTimeInterval?.stringResId(): Int {

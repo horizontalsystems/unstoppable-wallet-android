@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.core
 
-import android.os.Parcelable
 import cash.z.ecc.android.sdk.model.Proposal
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -64,7 +63,6 @@ import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.Date
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
@@ -394,13 +392,12 @@ interface IReceiveAdapter {
     }
 }
 
-@Parcelize
 @kotlinx.serialization.Serializable
 data class UsedAddress(
     val index: Int,
     val address: String,
     val explorerUrl: String
-): Parcelable
+)
 
 interface ISendBitcoinAdapter {
     val unspentOutputs: List<UnspentOutputInfo>

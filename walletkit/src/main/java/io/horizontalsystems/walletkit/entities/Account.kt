@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.entities
 
-import android.os.Parcelable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
@@ -16,14 +15,11 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.text.Normalizer
 
 @Serializable
-@Parcelize
 data class Account(
     val id: String,
     val name: String,
@@ -32,20 +28,16 @@ data class Account(
     val level: Int,
     val isBackedUp: Boolean = false,
     val isFileBackedUp: Boolean = false,
-) : Parcelable {
+) {
 
-    @IgnoredOnParcel
     val hasAnyBackup = isBackedUp || isFileBackedUp
 
-    @IgnoredOnParcel
     val isWatchAccount: Boolean
         get() = type.isWatchAccountType
 
-    @IgnoredOnParcel
     val watchAccountAddress: String?
         get() = type.watchAccountAddress
 
-    @IgnoredOnParcel
     val nonStandard: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val words = type.words.joinToString(separator = " ")
@@ -68,7 +60,6 @@ data class Account(
         }
     }
 
-    @IgnoredOnParcel
     val nonRecommended: Boolean by lazy {
         if (type is AccountType.Mnemonic) {
             val englishWords = WordList.wordList(Language.English).validWords(type.words)
@@ -92,9 +83,7 @@ data class Account(
     }
 }
 
-@Parcelize
-sealed class CexType : Parcelable {
-    @Parcelize
+sealed class CexType {
     class Binance(val apiKey: String, val secretKey: String) : CexType()
 
     fun serialized() = when (this) {
@@ -129,31 +118,24 @@ sealed class CexType : Parcelable {
 }
 
 @Serializable
-@Parcelize
-sealed class AccountType : Parcelable {
+sealed class AccountType {
 
     @Serializable
-    @Parcelize
     data class EvmAddress(val address: String) : AccountType()
 
     @Serializable
-    @Parcelize
     data class SolanaAddress(val address: String) : AccountType()
 
     @Serializable
-    @Parcelize
     data class TronAddress(val address: String) : AccountType()
 
     @Serializable
-    @Parcelize
     data class TonAddress(val address: String) : AccountType()
 
     @Serializable
-    @Parcelize
     data class StellarAddress(val address: String) : AccountType()
 
     @Serializable
-    @Parcelize
     data class BitcoinAddress(
         val address: String,
         val blockchainType: BlockchainType,
@@ -176,7 +158,6 @@ sealed class AccountType : Parcelable {
     }
 
     @Serializable
-    @Parcelize
     data class MoneroWatchAccount(
         val address: String,
         val privateViewKey: String,
@@ -200,9 +181,7 @@ sealed class AccountType : Parcelable {
     }
 
     @Serializable
-    @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
-        @IgnoredOnParcel
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
 
         override fun equals(other: Any?): Boolean {
@@ -217,7 +196,6 @@ sealed class AccountType : Parcelable {
     }
 
     @Serializable
-    @Parcelize
     data class StellarSecretKey(val key: String) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is StellarSecretKey && key == other.key
@@ -229,7 +207,6 @@ sealed class AccountType : Parcelable {
     }
 
     @Serializable
-    @Parcelize
     data class EvmPrivateKey(@Serializable(with = BigIntegerSerializer::class) val key: BigInteger) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is EvmPrivateKey && key == other.key
@@ -240,7 +217,6 @@ sealed class AccountType : Parcelable {
         }
     }
     @Serializable
-    @Parcelize
     data class TronPrivateKey(@Serializable(with = BigIntegerSerializer::class) val key: BigInteger) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is TronPrivateKey && key == other.key
@@ -252,7 +228,6 @@ sealed class AccountType : Parcelable {
     }
 
     @Serializable
-    @Parcelize
     data class HdExtendedKey(val keySerialized: String) : AccountType() {
         val hdExtendedKey: HDExtendedKey
             get() = HDExtendedKey(keySerialized)
@@ -266,8 +241,7 @@ sealed class AccountType : Parcelable {
         }
     }
 
-    @Parcelize
-    enum class Derivation(val value: String) : Parcelable {
+    enum class Derivation(val value: String) {
         bip44("bip44"),
         bip49("bip49"),
         bip84("bip84"),
@@ -461,8 +435,7 @@ val HDWallet.Purpose.tokenTypeDerivation: TokenType.Derivation
     }
 
 @Serializable
-@Parcelize
-enum class AccountOrigin(val value: String) : Parcelable {
+enum class AccountOrigin(val value: String) {
     Created("Created"),
     Restored("Restored");
 }

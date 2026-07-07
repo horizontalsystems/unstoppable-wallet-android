@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.multiswap
 import android.icu.text.MeasureFormat
 import android.icu.util.Measure
 import android.icu.util.MeasureUnit
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -78,7 +77,6 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Locale
@@ -90,8 +88,7 @@ data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {
         SwapConfirmScreen(navigation, parentScreenContentKey, contentKey())
     }
 
-    @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(val success: Boolean)
 }
 
 @Composable

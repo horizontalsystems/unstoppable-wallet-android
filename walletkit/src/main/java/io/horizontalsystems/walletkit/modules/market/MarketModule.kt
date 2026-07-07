@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.market
 
-import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -20,8 +19,6 @@ import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketGlobal
 import io.horizontalsystems.marketkit.models.MarketInfo
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 object MarketModule {
@@ -109,8 +106,7 @@ fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
     SortingField.TopLosers -> sortedByNullLast { it.diff }
 }
 
-@Parcelize
-enum class SortingField(@StringRes val titleResId: Int) : WithTranslatableTitle, Parcelable {
+enum class SortingField(@StringRes val titleResId: Int) : WithTranslatableTitle {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),
     TopGainers(R.string.RateList_TopGainers), TopLosers(R.string.RateList_TopLosers);
@@ -124,8 +120,7 @@ enum class SortingField(@StringRes val titleResId: Int) : WithTranslatableTitle,
     }
 }
 
-@Parcelize
-enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, Parcelable {
+enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle {
     PriceDiff(R.string.Market_Field_PriceDiff),
     MarketCap(R.string.Market_Field_MarketCap),
     Volume(R.string.Market_Field_Volume);
@@ -141,8 +136,7 @@ enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, 
     }
 }
 
-@Parcelize
-enum class TopMarket(val value: Int, val titleResId: Int) : WithTranslatableTitle, Parcelable {
+enum class TopMarket(val value: Int, val titleResId: Int) : WithTranslatableTitle {
     Top100(100, R.string.Market_Top_100),
     Top200(200, R.string.Market_Top_200),
     Top300(300, R.string.Market_Top_300),
@@ -221,13 +215,11 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
     TimePeriod.TimePeriod_5Y -> priceChange5y
 }
 
-@Parcelize
-enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
+enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle {
     OneDay(R.string.Market_Filter_TimePeriod_1D),
     SevenDay(R.string.Market_Filter_TimePeriod_1W),
     ThirtyDay(R.string.Market_Filter_TimePeriod_1M),
     ThreeMonths(R.string.Market_Filter_TimePeriod_3M);
 
-    @IgnoredOnParcel
     override val title = TranslatableString.ResString(titleResId)
 }

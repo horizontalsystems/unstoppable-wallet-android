@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.market.earn
 
-import android.os.Parcelable
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -31,7 +30,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -54,8 +52,7 @@ data class VaultBlockchainsSelectorPage(val input: Input) : HSPage() {
     @Serializable
     data class Input(val selected: List<Blockchain>, val allBlockchains: List<Blockchain>)
 
-    @Parcelize
-    data class Result(val selected: List<Blockchain>) : Parcelable
+    data class Result(val selected: List<Blockchain>)
 }
 
 @Composable

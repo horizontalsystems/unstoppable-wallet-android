@@ -1,11 +1,9 @@
 package io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDKeychain
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 object ShowExtendedKeyModule {
@@ -25,18 +23,14 @@ object ShowExtendedKeyModule {
     }
 
     @Serializable
-    @Parcelize
-    sealed class DisplayKeyType : Parcelable {
+    sealed class DisplayKeyType {
         @Serializable
-        @Parcelize
         object Bip32RootKey : DisplayKeyType()
 
         @Serializable
-        @Parcelize
         class AccountPrivateKey(val derivable: Boolean) : DisplayKeyType()
 
         @Serializable
-        @Parcelize
         class AccountPublicKey(val derivable: Boolean) : DisplayKeyType()
 
         val isDerivable: Boolean

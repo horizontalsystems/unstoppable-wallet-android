@@ -1,13 +1,11 @@
 package io.horizontalsystems.walletkit.modules.tonconnect
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.serializers.DAppRequestEntitySerializer
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,6 +23,5 @@ data class TonConnectNewPage(@Serializable(with = DAppRequestEntitySerializer::c
         )
     }
 
-    @Parcelize
-    data class Result(val approved: Boolean) : Parcelable
+    data class Result(val approved: Boolean)
 }

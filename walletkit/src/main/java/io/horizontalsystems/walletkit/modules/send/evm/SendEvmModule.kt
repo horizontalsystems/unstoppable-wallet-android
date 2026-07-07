@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.send.evm
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
@@ -13,7 +12,6 @@ import io.horizontalsystems.walletkit.modules.amount.SendAmountService
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.serializers.BigIntegerSerializer
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -24,9 +22,8 @@ data class SendEvmData(
     val additionalInfo: AdditionalInfo? = null
 ) {
     @Serializable
-    sealed class AdditionalInfo : Parcelable {
+    sealed class AdditionalInfo {
         @Serializable
-        @Parcelize
         class Send(val info: SendInfo) : AdditionalInfo()
 
         val sendInfo: SendInfo?
@@ -34,28 +31,25 @@ data class SendEvmData(
     }
 
     @Serializable
-    @Parcelize
     data class SendInfo(
         val nftShortMeta: NftShortMeta? = null
-    ) : Parcelable
+    )
 
     @Serializable
-    @Parcelize
     data class NftShortMeta(
         val nftName: String,
         val previewImageUrl: String?
-    ) : Parcelable
+    )
 }
 
 object SendEvmModule {
 
     @Serializable
-    @Parcelize
     data class TransactionDataParcelable(
         val toAddress: String,
         @Serializable(with = BigIntegerSerializer::class) val value: BigInteger,
         val input: ByteArray
-    ) : Parcelable {
+    ) {
         constructor(transactionData: TransactionData) : this(
             transactionData.to.hex,
             transactionData.value,

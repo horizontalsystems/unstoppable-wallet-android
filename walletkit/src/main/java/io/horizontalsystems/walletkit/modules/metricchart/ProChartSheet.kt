@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.metricchart
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -14,7 +13,6 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -41,11 +39,10 @@ data class ProChartSheet(val input: Input) : HSBottomSheet() {
     }
 
     @Serializable
-    @Parcelize
     data class Input(
         val coinUid: String,
         val title: String,
         val chartType: Int,
-    ) : Parcelable
+    )
 }
 

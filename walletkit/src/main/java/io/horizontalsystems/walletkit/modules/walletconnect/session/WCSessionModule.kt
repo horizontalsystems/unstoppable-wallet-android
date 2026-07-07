@@ -1,13 +1,11 @@
 package io.horizontalsystems.walletkit.modules.walletconnect.session
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 object WCSessionModule {
@@ -31,8 +29,7 @@ object WCSessionModule {
     }
 
     @Serializable
-    @Parcelize
-    data class Input(val sessionTopic: String) : Parcelable
+    data class Input(val sessionTopic: String)
 }
 
 enum class WCButtonState(val visible: Boolean, val enabled: Boolean) {

@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.transactionInfo.options
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +22,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -41,8 +39,7 @@ data class TransactionSpeedUpCancelPage(val input: Input) : HSPage() {
         val transactionHash: String
     )
 
-    @Parcelize
-    data class Result(val success: Boolean) : Parcelable
+    data class Result(val success: Boolean)
 }
 
 @Composable

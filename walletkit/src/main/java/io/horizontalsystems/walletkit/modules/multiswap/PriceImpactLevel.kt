@@ -1,10 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-enum class PriceImpactLevel(val lowerInclusive: Int, val upperExclusive: Int) : Parcelable {
+enum class PriceImpactLevel(val lowerInclusive: Int, val upperExclusive: Int) {
     Normal(1, 5),
     Warning(5, 10),
     High(10, 50),

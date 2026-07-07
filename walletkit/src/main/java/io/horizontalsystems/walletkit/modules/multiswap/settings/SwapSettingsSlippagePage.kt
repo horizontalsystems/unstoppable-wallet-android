@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.multiswap.settings
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +27,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
@@ -42,8 +40,7 @@ data class SwapSettingsSlippagePage(val input: Input) : HSPage() {
     @Serializable
     data class Input(@Serializable(with = BigDecimalSerializer::class) val slippage: BigDecimal)
 
-    @Parcelize
-    data class Result(val slippage: BigDecimal) : Parcelable
+    data class Result(val slippage: BigDecimal)
 }
 
 @Composable

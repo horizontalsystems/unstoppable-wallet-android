@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.contacts
 
-import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -43,7 +42,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -54,8 +52,7 @@ data class ChooseContactPage(val blockchainType: BlockchainType) : HSPage() {
         ChooseContactScreen(blockchainType, navigation)
     }
 
-    @Parcelize
-    data class Result(val address: String) : Parcelable
+    data class Result(val address: String)
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -17,7 +16,6 @@ import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHea
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -29,8 +27,7 @@ data class SwapInfoSheet(val input: Input) : HSBottomSheet() {
     }
 
     @Serializable
-    @Parcelize
-    data class Input(val title: String, val text: String) : Parcelable
+    data class Input(val title: String, val text: String)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

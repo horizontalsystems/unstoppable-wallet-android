@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.evmfee
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -14,7 +13,6 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,8 +24,7 @@ data class FeeSettingsInfoSheet(val input: Input) : HSBottomSheet() {
     }
 
     @Serializable
-    @Parcelize
-    data class Input(val title: String, val text: String) : Parcelable
+    data class Input(val title: String, val text: String)
 }
 
 @Composable

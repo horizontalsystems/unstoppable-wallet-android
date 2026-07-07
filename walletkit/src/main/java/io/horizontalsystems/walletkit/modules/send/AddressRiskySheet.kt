@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.send
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -19,7 +18,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -40,11 +38,9 @@ data class AddressRiskySheet(val input: Input) : HSBottomSheet() {
     }
 
     @Serializable
-    @Parcelize
-    data class Input(val alertText: String) : Parcelable
+    data class Input(val alertText: String)
 
-    @Parcelize
-    data class Result(val canContinue: Boolean) : Parcelable
+    data class Result(val canContinue: Boolean)
 }
 
 @Composable

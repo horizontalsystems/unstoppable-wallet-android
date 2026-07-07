@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.transactions
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,7 +24,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -39,8 +37,7 @@ data class SelectContactPage(val input: Input) : HSPage() {
     @Serializable
     data class Input(val selected: Contact?, val blockchainType: BlockchainType?)
 
-    @Parcelize
-    data class Result(val contact: Contact?) : Parcelable
+    data class Result(val contact: Contact?)
 
 }
 

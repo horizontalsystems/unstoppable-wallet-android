@@ -1,23 +1,20 @@
 package io.horizontalsystems.walletkit.modules.manageaccount.showmonerokey
 
-import android.os.Parcelable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.adapters.toMoneroSeed
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.monerokit.MoneroKit
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 object ShowMoneroKeyModule {
 
     @Serializable
-    @Parcelize
     class MoneroKeys(
         val spendKey: String,
         val viewKey: String,
         val isPrivate: Boolean,
         val title: Int = if (isPrivate) R.string.MoneroKeyType_Private else R.string.MoneroKeyType_Public
-    ) : Parcelable {
+    ) {
 
         fun getKey(type: MoneroKeyType) = when (type) {
             MoneroKeyType.Spend -> spendKey

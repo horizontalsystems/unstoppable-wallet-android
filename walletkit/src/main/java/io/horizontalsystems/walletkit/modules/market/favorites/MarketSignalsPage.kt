@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.market.favorites
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +34,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.sectionItemBorder
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -45,8 +43,7 @@ data object MarketSignalsPage : HSPage() {
         MarketSignalsScreen(navigation)
     }
 
-    @Parcelize
-    data class Result(val enabled: Boolean) : Parcelable
+    data class Result(val enabled: Boolean)
 }
 
 @Composable

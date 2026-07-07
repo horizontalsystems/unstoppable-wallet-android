@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.multiswap.swapterms
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +28,6 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftSelectors
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -40,8 +38,7 @@ data object SwapTermsPage : HSPage() {
         SwapTermsScreen(navigation)
     }
 
-    @Parcelize
-    data class Result(val accepted: Boolean) : Parcelable
+    data class Result(val accepted: Boolean)
 }
 
 @Composable

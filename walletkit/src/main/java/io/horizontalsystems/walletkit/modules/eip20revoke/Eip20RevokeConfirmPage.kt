@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.eip20revoke
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +31,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
@@ -50,8 +48,7 @@ data class Eip20RevokeConfirmPage(val input: Input) : HSPage() {
         @Serializable(with = BigDecimalSerializer::class) val allowance: BigDecimal,
     )
 
-    @Parcelize
-    data class Result(val revoked: Boolean) : Parcelable
+    data class Result(val revoked: Boolean)
 }
 
 @Composable
