@@ -1,0 +1,41 @@
+appId: io.horizontalsystems.bankwallet.dev
+---
+# Fresh install: pass the intro
+- launchApp:
+    clearState: true
+- tapOn: "Next"
+- tapOn: "Next"
+- tapOn: "Next"
+
+# Start wallet creation
+- tapOn: "New Wallet"
+
+# Accept all security terms
+- tapOn: "Securely back up.*"
+- tapOn: "Disabling your smartphone.*"
+- tapOn: "The app doesn't spy.*"
+- tapOn: "We do not hold your assets.*"
+- tapOn: "As part of its monetization.*"
+- tapOn: "Blockchain transactions are irreversible.*"
+- scrollUntilVisible:
+    element:
+      text: "The app is verifiably open source.*"
+- tapOn: "The app is verifiably open source.*"
+- scrollUntilVisible:
+    element:
+      text: "You are solely responsible.*"
+- tapOn: "You are solely responsible.*"
+- scrollUntilVisible:
+    element:
+      text: "By proceeding.*"
+- tapOn: "By proceeding.*"
+- tapOn: "Next"
+
+# Create a standard wallet with the suggested name
+- tapOn: "Standard"
+- tapOn: "Create"
+
+# Wallet is created: balance screen with wallet actions
+- assertVisible: "Receive"
+- assertVisible: "Send"
+- assertVisible: "$0"
