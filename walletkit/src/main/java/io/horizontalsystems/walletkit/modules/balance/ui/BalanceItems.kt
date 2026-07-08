@@ -589,6 +589,7 @@ fun BalanceActionButton(
         HSIconButton(
             variant = variant,
             icon = painterResource(icon),
+            contentDescription = title,
             enabled = enabled,
             onClick = onClick
         )
