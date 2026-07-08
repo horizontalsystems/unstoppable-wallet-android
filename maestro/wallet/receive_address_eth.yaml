@@ -1,0 +1,21 @@
+# Guards BIP39 -> BIP44 (m/44'/60'/0'/0/0) Ethereum address derivation:
+# the wallet restored from MNEMONIC must show exactly EXPECTED_ADDRESS
+# (independently derived, verified against a known test vector).
+appId: io.horizontalsystems.bankwallet.dev
+env:
+  MNEMONIC: "token weekend gadget save flush gaze ready debris input finish evidence diet"
+  EXPECTED_ADDRESS: "0x60A40e0483b2eE741A60C3079a06C8A68F3712ee"
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/restore_wallet_from_phrase.yaml
+
+# Open the ETH receive screen from the token screen
+- tapOn: "ETH"
+- tapOn:
+    text: "Receive"
+    index: 0
+
+# The exact address and network must be shown
+- assertVisible: ${EXPECTED_ADDRESS}
+- assertVisible: "Network: Ethereum"

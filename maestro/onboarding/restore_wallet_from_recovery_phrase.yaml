@@ -3,30 +3,13 @@ env:
   # Public BIP39 test vector. Override: maestro test -e MNEMONIC="..."
   MNEMONIC: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
 ---
-# Fresh install: pass the intro
+# Fresh install: restore a wallet from a recovery phrase
 - launchApp:
     clearState: true
-- runFlow: ../subflows/pass_intro.yaml
+- runFlow: ../subflows/restore_wallet_from_phrase.yaml
 
-# Start wallet import
-- tapOn: "Existing Wallet"
-
-# Accept all security terms
-- runFlow: ../subflows/accept_terms.yaml
-
-# Import from recovery phrase with the suggested name
-- tapOn: "from Recovery Phrase"
-- tapOn: "Enter Recovery Phrase"
-- inputText: ${MNEMONIC}
-- hideKeyboard
-- tapOn: "Next"
-
-# Select Bitcoin and confirm the default address format
-- tapOn: "Bitcoin"
-- tapOn: "Done"
-- tapOn: "Restore"
-
-# Wallet is restored: balance screen with the BTC coin
+# Wallet is restored: balance screen with the restored coins
 - assertVisible: "Receive"
 - assertVisible: "Send"
 - assertVisible: "BTC"
+- assertVisible: "ETH"

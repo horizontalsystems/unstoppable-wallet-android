@@ -1,0 +1,16 @@
+# Restores a Bitcoin + Ethereum wallet from ${MNEMONIC} (callers must define it).
+# Starts from the intro of a freshly launched app, ends on the balance screen.
+appId: io.horizontalsystems.bankwallet.dev
+---
+- runFlow: pass_intro.yaml
+- tapOn: "Existing Wallet"
+- runFlow: accept_terms.yaml
+- tapOn: "from Recovery Phrase"
+- tapOn: "Enter Recovery Phrase"
+- inputText: ${MNEMONIC}
+- hideKeyboard
+- tapOn: "Next"
+- tapOn: "Bitcoin"
+- tapOn: "Done"
+- tapOn: "Ethereum"
+- tapOn: "Restore"
