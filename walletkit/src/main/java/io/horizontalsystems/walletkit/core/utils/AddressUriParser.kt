@@ -74,13 +74,14 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
                 val chainEnd = rest.indexOf('/').let { if (it == -1) rest.length else it }
                 val chainPart = rest.substring(1, chainEnd)
                 rest = rest.substring(chainEnd)
-                chainPart.toLongOrNull()?.let { chainId ->
-                    // Reject URIs targeting EVM chains we don't support: a silent fall-through
-                    // would mis-render as a chain-agnostic native EVM URI in the UI
-                    val uid = chainId.blockchainTypeFromChainId?.uid
-                        ?: return AddressUriResult.InvalidBlockchainType
-                    parsedUri.parameters[AddressUri.Field.BlockchainUid] = uid
-                }
+                // EIP-681 requires a numeric chain id; ignoring a malformed one would
+                // mis-render the URI as chain-agnostic and cause chain confusion
+                val chainId = chainPart.toLongOrNull() ?: return AddressUriResult.WrongUri
+                // Reject URIs targeting EVM chains we don't support: a silent fall-through
+                // would mis-render as a chain-agnostic native EVM URI in the UI
+                val uid = chainId.blockchainTypeFromChainId?.uid
+                    ?: return AddressUriResult.InvalidBlockchainType
+                parsedUri.parameters[AddressUri.Field.BlockchainUid] = uid
             }
 
             if (rest.startsWith("/")) {
@@ -113,10 +114,11 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
             val recipient = parameters["address"] ?: return AddressUriResult.WrongUri
             val rawAmount = parameters["uint256"] ?: return AddressUriResult.WrongUri
             if (!isEvmAddress(contract) || !isEvmAddress(recipient)) return AddressUriResult.WrongUri
-            if (rawAmount.toBigIntegerOrNull() == null) return AddressUriResult.WrongUri
+            val amount = rawAmount.toBigIntegerOrNull() ?: return AddressUriResult.WrongUri
+            if (amount.signum() <= 0 || amount.bitLength() > 256) return AddressUriResult.WrongUri
 
             parsedUri.parameters[AddressUri.Field.TokenUid] = "eip20:${contract.lowercase()}"
-            parsedUri.parameters[AddressUri.Field.Value] = rawAmount
+            parsedUri.parameters[AddressUri.Field.Value] = amount.toString()
             rawPath = recipient
         }
 
