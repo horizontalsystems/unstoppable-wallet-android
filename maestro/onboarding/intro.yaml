@@ -1,0 +1,20 @@
+appId: io.horizontalsystems.bankwallet.dev
+---
+# First launch after a fresh install must show the intro
+- launchApp:
+    clearState: true
+- assertVisible: "Next"
+
+# Pass the intro (3 slides)
+- tapOn: "Next"
+- tapOn: "Next"
+- tapOn: "Next"
+
+# Passing the intro lands on the main screen
+- assertVisible: "Markets"
+- assertNotVisible: "Next"
+
+# Relaunch: the intro must not be shown again
+- launchApp
+- assertVisible: "Markets"
+- assertNotVisible: "Next"

@@ -1,5 +1,0 @@
-flows:
-  - onboarding/**
-  - wallet/**
-  - swap/**
-  - settings/**
