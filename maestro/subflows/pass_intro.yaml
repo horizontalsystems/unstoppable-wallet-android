@@ -1,0 +1,5 @@
+appId: io.horizontalsystems.bankwallet.dev
+---
+- tapOn: "Next"
+- tapOn: "Next"
+- tapOn: "Next"
