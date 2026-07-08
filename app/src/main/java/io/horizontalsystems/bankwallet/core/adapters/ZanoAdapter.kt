@@ -147,8 +147,8 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
         blocksRemained = remainingBlocks
     )
     is SyncState.Connecting -> AdapterState.Connecting
-    is SyncState.NotSynced.NotStarted,
-    is SyncState.NotSynced.NoNetwork -> AdapterState.Connecting
+    is SyncState.NotSynced.NotStarted -> AdapterState.Connecting
+    is SyncState.NotSynced.NoNetwork -> AdapterState.NotSynced(Exception("No network"))
     is SyncState.NotSynced.StartError -> AdapterState.NotSynced(Exception(message))
     is SyncState.NotSynced.StatusError -> AdapterState.NotSynced(Exception(message))
 }
