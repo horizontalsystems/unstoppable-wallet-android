@@ -1,19 +1,9 @@
 appId: io.horizontalsystems.bankwallet.dev
 ---
-# Fresh install: pass the intro
+# Fresh install: create a new standard wallet
 - launchApp:
     clearState: true
-- runFlow: ../subflows/pass_intro.yaml
-
-# Start wallet creation
-- tapOn: "New Wallet"
-
-# Accept all security terms
-- runFlow: ../subflows/accept_terms.yaml
-
-# Create a standard wallet with the suggested name
-- tapOn: "Standard"
-- tapOn: "Create"
+- runFlow: ../subflows/create_standard_wallet.yaml
 
 # Wallet is created: balance screen with wallet actions
 - assertVisible: "Receive"

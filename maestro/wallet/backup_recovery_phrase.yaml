@@ -1,0 +1,94 @@
+# Covers the full manual backup journey for a newly created wallet:
+# the app flags the wallet as backup-required, reveals the generated
+# 12-word phrase, demands verification, and after answering the quiz
+# with the correct words the wallet must be marked as backed up.
+appId: io.horizontalsystems.bankwallet.dev
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/create_standard_wallet.yaml
+
+# A fresh wallet must be flagged as not backed up
+- tapOn: "Settings"
+- tapOn: "Manage Wallets"
+- assertVisible: "Backup Required"
+
+# Open the manual backup
+- tapOn: "Manage Wallet"
+- tapOn: "Manual Backup"
+
+# Reveal the generated phrase
+- assertVisible: "Write these words down in order and keep them safe."
+- tapOn: "Tap to show recovery phrase"
+- assertNotVisible: "Tap to show recovery phrase"
+
+# Read the 12 words. They are the only lowercase single-word texts on
+# this screen and appear in display order in the hierarchy.
+- evalScript: ${output.words = []}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 0
+- evalScript: ${output.words[0] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 1
+- evalScript: ${output.words[1] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 2
+- evalScript: ${output.words[2] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 3
+- evalScript: ${output.words[3] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 4
+- evalScript: ${output.words[4] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 5
+- evalScript: ${output.words[5] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 6
+- evalScript: ${output.words[6] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 7
+- evalScript: ${output.words[7] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 8
+- evalScript: ${output.words[8] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 9
+- evalScript: ${output.words[9] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 10
+- evalScript: ${output.words[10] = maestro.copiedText}
+- copyTextFrom:
+    text: "[a-z]+"
+    index: 11
+- evalScript: ${output.words[11] = maestro.copiedText}
+
+# Answer the verification quiz with the words at the requested positions
+- tapOn: "Verify"
+- assertVisible: "Select requested words from your wallet recovery phrase"
+- copyTextFrom:
+    text: "\\d+\\."
+    index: 0
+- evalScript: ${output.q1 = parseInt(maestro.copiedText) - 1}
+- copyTextFrom:
+    text: "\\d+\\."
+    index: 1
+- evalScript: ${output.q2 = parseInt(maestro.copiedText) - 1}
+- tapOn: ${output.words[output.q1]}
+- tapOn: ${output.words[output.q2]}
+
+# Quiz passed: the wallet must no longer require backup
+- tapOn: "Back"
+- assertVisible: "12 words"
+- assertNotVisible: "Backup Required"
