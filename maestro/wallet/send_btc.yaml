@@ -1,0 +1,50 @@
+# Exercises the BTC send flow up to the confirmation screen and STOPS:
+# the final Send button is never tapped, so nothing is broadcast.
+# Uses the public "abandon" test wallet, which holds a little dust —
+# if that balance ever drops below AMOUNT + fee, this test will fail
+# at the amount step and the wallet needs a small top-up.
+appId: io.horizontalsystems.bankwallet.dev
+env:
+  MNEMONIC: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+  # The wallet's own first address: even if a send were ever broadcast
+  # by mistake, the funds would stay in the same wallet.
+  RECIPIENT: "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+  AMOUNT: "0.00001"
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/restore_wallet_from_phrase.yaml
+
+# Send needs spendable funds: wait for the BTC balance to sync
+- extendedWaitUntil:
+    notVisible: "Searching transactions…"
+    timeout: 90000
+
+# Open the send form from the token screen
+- tapOn: "BTC"
+- tapOn:
+    text: "Send"
+    index: 0
+
+# Enter the recipient
+- tapOn: "Address or Domain"
+- inputText: ${RECIPIENT}
+- hideKeyboard
+- tapOn: "Next"
+
+# Enter the amount; Next enables once the fee is calculated
+- inputText: ${AMOUNT}
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+      text: "Next"
+      enabled: true
+    timeout: 30000
+- tapOn: "Next"
+
+# Confirmation must show exactly what was entered.
+# Stop here — never tap the final Send button.
+- assertVisible: "Confirm Send"
+- assertVisible: ${AMOUNT}
+- assertVisible: ${RECIPIENT}
+- assertVisible: "Fee"
