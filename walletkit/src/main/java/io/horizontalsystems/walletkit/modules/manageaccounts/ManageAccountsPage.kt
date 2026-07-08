@@ -268,6 +268,7 @@ fun AccountCell(
                 CellRightControlsIconButton(
                     icon = icon,
                     iconTint = iconTint,
+                    contentDescription = stringResource(R.string.ManageAccounts_ManageWallet),
                     onClick = {
                         onOptionIconClick.invoke(accountViewItem)
                     }

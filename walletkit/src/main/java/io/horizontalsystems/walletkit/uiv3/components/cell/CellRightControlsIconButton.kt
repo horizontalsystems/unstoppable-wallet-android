@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButtonTinte
 fun CellRightControlsIconButton(
     icon: Int,
     iconTint: Color,
+    contentDescription: String? = null,
     onClick: () -> Unit,
 ) {
     HSIconButtonTinted(
@@ -21,6 +22,7 @@ fun CellRightControlsIconButton(
         size = ButtonSize.Small,
         icon = painterResource(icon),
         iconTint = iconTint,
+        contentDescription = contentDescription,
         onClick = onClick
     )
 }

@@ -1433,6 +1433,7 @@
 
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_ManageWallet">Manage Wallet</string>
     <string name="ManageAccounts_AddWallet">Add Wallet</string>
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
     <string name="ManageAccounts_CreateNewWalletDescription">Create a new wallet to get started or add a new one.</string>
