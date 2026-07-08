@@ -439,7 +439,7 @@ data class OpenSendTokenSelect(
     val blockchainTypes: List<BlockchainType>?,
     val tokenTypes: List<TokenType>?,
     val address: String,
-    val amount: BigDecimal? = null,
+    val amount: AddressUri.Amount? = null,
     val memo: String? = null
 )
 

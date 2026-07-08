@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.supported
 import io.horizontalsystems.walletkit.entities.AddressUri
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
-import java.math.BigDecimal
 import java.net.URI
 
 
@@ -61,17 +60,31 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
 
         val parsedUri = AddressUri(scheme = scheme)
 
-        // EIP-681 fix: Ethereum addresses sometimes come as address@chainId
+        // EIP-681 path: [pay-]<address>[@<chainId>][/<function>]
         var rawPath = path
+        var function: String? = null
 
-        if (scheme == "ethereum" && rawPath.contains("@")) {
-            val parts = rawPath.split("@")
-            if (parts.size == 2) {
-                rawPath = parts[0]
-                val chainIdFromPath = parts[1]
-                chainIdFromPath.toLongOrNull()?.blockchainTypeFromChainId?.uid?.let  {
-                    parsedUri.parameters[AddressUri.Field.BlockchainUid] = it
+        if (scheme == "ethereum") {
+            val stripped = path.removePrefix("pay-")
+            val addressEnd = stripped.indexOfFirst { it == '@' || it == '/' }.let { if (it == -1) stripped.length else it }
+            rawPath = stripped.take(addressEnd)
+            var rest = stripped.substring(addressEnd)
+
+            if (rest.startsWith("@")) {
+                val chainEnd = rest.indexOf('/').let { if (it == -1) rest.length else it }
+                val chainPart = rest.substring(1, chainEnd)
+                rest = rest.substring(chainEnd)
+                chainPart.toLongOrNull()?.let { chainId ->
+                    // Reject URIs targeting EVM chains we don't support: a silent fall-through
+                    // would mis-render as a chain-agnostic native EVM URI in the UI
+                    val uid = chainId.blockchainTypeFromChainId?.uid
+                        ?: return AddressUriResult.InvalidBlockchainType
+                    parsedUri.parameters[AddressUri.Field.BlockchainUid] = uid
                 }
+            }
+
+            if (rest.startsWith("/")) {
+                function = rest.substring(1).ifEmpty { null }
             }
         }
 
@@ -79,24 +92,32 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
         val query = schemeSpecificPart.substring(queryStartIndex)
 
         val parameters = parseQueryParameters(query)
-        if (parameters.isEmpty()) {
-            parsedUri.address = fullAddress(scheme, rawPath, parsedUri.value(AddressUri.Field.BlockchainUid))
 
-            return AddressUriResult.Uri(parsedUri)
-        }
-
+        // amounts stay in the units the uri declared them in (`value` = base units);
+        // conversion to a readable amount happens where the token is known
         for (parameter in parameters) {
             val (key, value) = parameter
             AddressUri.Field.entries.firstOrNull { it.value == key }?.let { field ->
-                if (field == AddressUri.Field.Value && scheme == "ethereum") {
-                    //convert from wei to amount
-                    value.toBigDecimalOrNull()?.divide(BigDecimal.TEN.pow(18))?.let {
-                        parsedUri.parameters[field] = it.toPlainString()
-                    }
-                } else {
-                    parsedUri.parameters[field] = value
-                }
+                parsedUri.parameters[field] = value
             }
+        }
+
+        if (function != null) {
+            // Only ERC-20 transfer(address,uint256) is supported. Anything else is rejected —
+            // a silent fallback into a "native send to contract address" interpretation would
+            // let a crafted URI phish a token transfer disguised as a plain coin transfer
+            if (function != "transfer") return AddressUriResult.WrongUri
+            if (parameters.containsKey(AddressUri.Field.Value.value)) return AddressUriResult.WrongUri
+
+            val contract = rawPath
+            val recipient = parameters["address"] ?: return AddressUriResult.WrongUri
+            val rawAmount = parameters["uint256"] ?: return AddressUriResult.WrongUri
+            if (!isEvmAddress(contract) || !isEvmAddress(recipient)) return AddressUriResult.WrongUri
+            if (rawAmount.toBigIntegerOrNull() == null) return AddressUriResult.WrongUri
+
+            parsedUri.parameters[AddressUri.Field.TokenUid] = "eip20:${contract.lowercase()}"
+            parsedUri.parameters[AddressUri.Field.Value] = rawAmount
+            rawPath = recipient
         }
 
         parsedUri.value<String>(AddressUri.Field.BlockchainUid)?.let { uid ->
@@ -113,6 +134,10 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
 
         parsedUri.address = fullAddress(scheme, rawPath, parsedUri.value(AddressUri.Field.BlockchainUid))
         return AddressUriResult.Uri(parsedUri)
+    }
+
+    private fun isEvmAddress(address: String): Boolean {
+        return evmAddressRegex.matches(address)
     }
 
     private fun parseQueryParameters(query: String?): Map<String, String> {
@@ -153,6 +178,8 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     }
 
     companion object {
+        private val evmAddressRegex = Regex("^0x[0-9a-fA-F]{40}$")
+
         fun hasUriPrefix(text: String): Boolean {
             return text.split(":").size > 1
         }

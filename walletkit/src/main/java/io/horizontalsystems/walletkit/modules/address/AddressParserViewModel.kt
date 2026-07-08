@@ -10,7 +10,11 @@ import io.horizontalsystems.walletkit.ui.compose.components.TextPreprocessor
 import java.math.BigDecimal
 import java.util.UUID
 
-class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount: BigDecimal?) : ViewModel(), TextPreprocessor {
+class AddressParserViewModel(
+    private val parser: IAddressParser,
+    private val tokenDecimals: Int,
+    prefilledAmount: BigDecimal?
+) : ViewModel(), TextPreprocessor {
     private var lastEnteredText: String? = null
 
     var amountUnique by mutableStateOf<AmountUnique?>(prefilledAmount?.let { AmountUnique(it) })
@@ -23,7 +27,7 @@ class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount
             val addressData = parser.parse(text)
             val amount = (addressData as? AddressUriResult.Uri)?.addressUri?.amount
             if (amount != null) {
-                amountUnique = AmountUnique(amount)
+                amountUnique = AmountUnique(amount.humanReadable(tokenDecimals))
                 processed = addressData.addressUri.address
             }
         }
