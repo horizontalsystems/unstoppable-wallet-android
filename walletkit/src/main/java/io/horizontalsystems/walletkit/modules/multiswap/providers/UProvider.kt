@@ -134,5 +134,17 @@ enum class UProvider(
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
+    ),
+    Jupiter(
+        id = "JUPITER",
+        title = "Jupiter",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = true,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = false,
+        isSingleTransactionSwap = true,
+        supportsSimpleUtxoTransactions = false
     );
 }

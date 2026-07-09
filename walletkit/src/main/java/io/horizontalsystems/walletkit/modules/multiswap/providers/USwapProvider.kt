@@ -245,14 +245,35 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
         } else {
             tokenFrom.blockchainType in supportedBlockchainTypes &&
-                    tokenTo.blockchainType in supportedBlockchainTypes
+                    tokenTo.blockchainType in supportedBlockchainTypes &&
+                    deriveIdentifier(tokenFrom) != null &&
+                    deriveIdentifier(tokenTo) != null
         }
     }
 
-    private fun deriveIdentifier(token: Token): String? = when (val type = token.type) {
-        is TokenType.Eip20 -> type.address
-        TokenType.Native if token.blockchainType.isEvm -> "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        else -> null
+    // Raw asset encoding for providers that sync no token list from the server (the
+    // /tokens response carries only supportedChainIds), so assets are encoded as raw
+    // chain addresses instead of resolved through the asset map.
+    private fun deriveIdentifier(token: Token): String? = when (provider) {
+        // Solana-only: raw SPL mint encoding, case-sensitive base58 — pass verbatim, never
+        // re-cased. The wSOL mint means native SOL server-side. The Solana check also makes
+        // `supports()` reject non-Solana pairs (`Native` alone would match any chain).
+        UProvider.Jupiter -> if (token.blockchainType != BlockchainType.Solana) {
+            null
+        } else when (val type = token.type) {
+            TokenType.Native -> WSOL_MINT
+            // The wSOL TOKEN is not swappable here: the server reads the wSOL mint as native
+            // SOL, so SOL→wSOL degenerates to "same asset" (wrapping is not a swap) and
+            // X→wSOL would deliver native SOL while the user watches the wSOL token balance.
+            is TokenType.Spl -> type.address.takeIf { it != WSOL_MINT }
+            else -> null
+        }
+        // Raw EVM address encoding (BARTER's server adapter expects addresses, not identifiers).
+        else -> when (val type = token.type) {
+            is TokenType.Eip20 -> type.address
+            TokenType.Native if token.blockchainType.isEvm -> "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+            else -> null
+        }
     }
 
     override suspend fun fetchQuote(
@@ -606,6 +627,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
         // and lets the server expand it into this shielded variant.
         private const val ZCASH_SHIELDED_ASSET = "ZEC.ZECSHIELDED"
+
+        // Wrapped-SOL mint — the JUPITER server adapter reads it as native SOL.
+        private const val WSOL_MINT = "So11111111111111111111111111111111111111112"
     }
 
     data class SwapQuoteExtraData(val route: UnstoppableAPI.Response.Route) : SwapQuote.ExtraData
