@@ -21,6 +21,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.evm.EvmTransac
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.SwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
@@ -421,11 +422,14 @@ object TransactionViewItemFactoryHelper {
         exchangeAddress: String,
         valueOut: TransactionValue?,
         valueIn: TransactionValue?,
+        // A ready display label for the exchange (non-EVM swaps, e.g. "Jupiter"); when null the
+        // label is resolved from `exchangeAddress` via the EVM label map.
+        exchangeName: String? = null,
     ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             TransactionInfoViewItem.Value(
                 Translator.getString(R.string.TransactionInfo_Service),
-                evmLabelManager.mapped(exchangeAddress)
+                exchangeName ?: evmLabelManager.mapped(exchangeAddress)
             )
         )
 
@@ -675,6 +679,12 @@ object TransactionViewItemFactoryHelper {
                 }
 
             is SolanaOutgoingTransactionRecord -> {
+                transaction.fee?.let {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
+            is SolanaSwapTransactionRecord -> {
                 transaction.fee?.let {
                     items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }

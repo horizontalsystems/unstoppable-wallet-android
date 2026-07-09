@@ -20,6 +20,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroI
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronContractCallTransactionRecord
@@ -571,6 +572,33 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf,
                         nftMetadata = nftMetadata,
                         blockchainType = blockchainType,
+                    )
+                )
+            }
+
+            is SolanaSwapTransactionRecord -> {
+                // Both values are null while the swap is pending (the kit stores no balance
+                // changes until confirmation) — the section would be empty, so skip it.
+                if (transaction.valueIn != null || transaction.valueOut != null) {
+                    itemSections.add(
+                        getSwapEventSectionItems(
+                            valueIn = transaction.valueIn,
+                            valueOut = transaction.valueOut,
+                            rates = rates,
+                            amount = null,
+                            hideAmount = transactionItem.hideAmount,
+                            hasRecipient = false
+                        )
+                    )
+                }
+
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getSwapDetailsSectionItems(
+                        rates = rates,
+                        exchangeAddress = "",
+                        valueOut = transaction.valueOut,
+                        valueIn = transaction.valueIn,
+                        exchangeName = transaction.exchangeName,
                     )
                 )
             }

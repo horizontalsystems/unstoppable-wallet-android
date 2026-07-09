@@ -8,6 +8,7 @@ import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -16,6 +17,8 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.models.FullTransaction
+import io.horizontalsystems.solanakit.models.Transaction
+import io.horizontalsystems.solanakit.transactions.KnownPrograms
 import java.math.BigDecimal
 
 class SolanaTransactionConverter(
@@ -25,6 +28,16 @@ class SolanaTransactionConverter(
         solanaKitWrapper: SolanaKitWrapper
 ) {
     private val userAddress = solanaKitWrapper.solanaKit.receiveAddress
+
+    // The display label of the first recognized swap program this transaction invoked, or null.
+    private fun swapExchangeName(transaction: Transaction): String? =
+        transaction.programIds?.split(" ")?.firstNotNullOfOrNull { swapProgramLabels[it] }
+
+    // The swap-relevant leg of one side: the SPL transfer when a native-SOL leg rides along
+    // (token-account rent), otherwise the single/first leg (a genuinely-SOL swap side).
+    private fun primaryTransfer(transfers: List<SolanaTransactionRecord.Transfer>): SolanaTransactionRecord.Transfer? =
+        transfers.firstOrNull { (it.value as? TransactionValue.CoinValue)?.token != baseToken }
+            ?: transfers.firstOrNull()
 
     suspend fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
         val transaction = fullTransaction.transaction
@@ -65,6 +78,25 @@ class SolanaTransactionConverter(
             }
         }
 
+        // A recognized DEX interaction (via SolanaKit KnownPrograms) renders as a swap when it has
+        // legs on both sides, or no legs yet (pending — the kit stores no balance changes until
+        // confirmation, but the program id is known at send time). A side can carry a spurious SOL
+        // leg next to the real SPL one (token-account rent when the swap created the output ATA),
+        // so each side prefers its non-SOL leg over a bare `size == 1` match.
+        val exchangeName = swapExchangeName(transaction)
+        if (exchangeName != null &&
+            ((incomingTransfers.isNotEmpty() && outgoingTransfers.isNotEmpty()) || (incomingTransfers.isEmpty() && outgoingTransfers.isEmpty()))
+        ) {
+            return SolanaSwapTransactionRecord(
+                transaction = transaction,
+                baseToken = baseToken,
+                source = source,
+                exchangeName = exchangeName,
+                valueIn = primaryTransfer(outgoingTransfers)?.value,
+                valueOut = primaryTransfer(incomingTransfers)?.value
+            )
+        }
+
         return when {
             (incomingTransfers.size == 1 && outgoingTransfers.isEmpty()) -> {
                 val transfer = incomingTransfers.first()
@@ -100,6 +132,14 @@ class SolanaTransactionConverter(
                 SolanaUnknownTransactionRecord(transaction, baseToken, source, incomingTransfers, outgoingTransfers, spam)
             }
         }
+    }
+
+    companion object {
+        // Display labels for the swap programs SolanaKit recognizes (`Transaction.programIds`).
+        // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").
+        private val swapProgramLabels = mapOf(
+            KnownPrograms.jupiterV6 to "Jupiter",
+        )
     }
 
 }

@@ -25,6 +25,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroO
 import io.horizontalsystems.walletkit.entities.transactionrecords.nftUids
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronContractCallTransactionRecord
@@ -135,6 +136,7 @@ class TransactionInfoService(
                 is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
                 is SolanaIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is SolanaOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
+                is SolanaSwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
                 is SolanaUnknownTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
                     tempCoinUidList.addAll(tx.incomingTransfers.map { it.value.coinUid })

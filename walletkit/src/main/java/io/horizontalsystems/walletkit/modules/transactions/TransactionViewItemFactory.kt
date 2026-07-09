@@ -29,6 +29,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroI
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronContractCallTransactionRecord
@@ -333,6 +334,12 @@ class TransactionViewItemFactory(
                 progress = progress,
                 icon = icon,
                 nftMetadata = transactionItem.nftMetadata
+            )
+
+            is SolanaSwapTransactionRecord -> createViewItemFromSolanaSwapTransactionRecord(
+                record = record,
+                progress = progress,
+                icon = icon
             )
 
             is SolanaUnknownTransactionRecord -> createViewItemFromSolanaUnknownTransactionRecord(
@@ -691,6 +698,28 @@ class TransactionViewItemFactory(
             sentToSelf = sentToSelf,
             date = Date(record.timestamp * 1000),
             icon = icon ?: iconX
+        )
+    }
+
+    private fun createViewItemFromSolanaSwapTransactionRecord(
+        record: SolanaSwapTransactionRecord,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) }
+        val secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Swap),
+            subtitle = record.exchangeName,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            spam = record.spam,
+            icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
         )
     }
 
