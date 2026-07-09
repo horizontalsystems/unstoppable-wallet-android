@@ -1,5 +1,7 @@
 {
-  "app/src/main/res/values/strings.xml": {
+  "components/chartview/src/main/res/values/strings.xml": {},
+  "components/icons/src/main/res/values/strings.xml": {},
+  "walletkit/src/main/res/values/strings.xml": {
     "AccountRecovery_MigrationRecommended": "This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\\n\\nCLICK TO GET MORE INFO",
     "AccountRecovery_MigrationRequired": "This is a non-standard wallet. Please migrate to a standard wallet to avoid risk of fund loss. \\n\\nCLICK TO GET MORE INFO",
     "AccountRecovery_Note": "Note",
@@ -473,6 +475,11 @@
     "Detectors_GeneralDetectors": "General Detectors",
     "Detectors_IssuesCount": "Issues %d",
     "Detectors_TokenDetectors": "Token Detectors",
+    "Duration_Hours": "%d h.",
+    "Duration_Minutes": "%d min.",
+    "Duration_Seconds": "%d sec.",
+    "Duration_Within": "within %s",
+    "Duration_instant": "instant",
     "DuressPinSelectAccounts_Description": "Select the wallets that will be displayed in duress mode.",
     "DuressPinSelectAccounts_SectionWallets_Title": "WALLETS",
     "DuressPinSelectAccounts_SectionWatchWallets_Title": "WATCH WALLETS",
@@ -1368,6 +1375,8 @@
     "TechnicalAdvice_StrongRsi": "Meanwhile, the RSI is %1$s, which still indicates that it is %2$s.",
     "TechnicalAdvice_Title": "Trading Assistant",
     "TechnicalAdvice_Up": "up",
+    "Timestamp_Today": "Тoday",
+    "Timestamp_Yesterday": "Yesterday",
     "TonConnect_ChooseWallet": "Choose a Wallet",
     "TonConnect_Error_InvalidUrl": "Invalid URL Address",
     "TonConnect_NewConnect": "New Connection",
@@ -1551,16 +1560,5 @@
     "Widget_EnableAutostartWarning": "To make sure that this widget works properly, you should enable Autostart.",
     "ZanoNodeSettings_Description": "Choose the node Unstoppable app should use for synchronizing wallet(s).",
     "ZcashEndpointSettings_Description": "Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s)."
-  },
-  "components/chartview/src/main/res/values/strings.xml": {},
-  "components/icons/src/main/res/values/strings.xml": {},
-  "core/src/main/res/values/strings.xml": {
-    "Duration_Hours": "%d h.",
-    "Duration_Minutes": "%d min.",
-    "Duration_Seconds": "%d sec.",
-    "Duration_Within": "within %s",
-    "Duration_instant": "instant",
-    "Timestamp_Today": "Тoday",
-    "Timestamp_Yesterday": "Yesterday"
   }
 }
