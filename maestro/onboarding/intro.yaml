@@ -1,4 +1,4 @@
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
 # First launch after a fresh install must show the intro
 - launchApp:

@@ -3,7 +3,7 @@
 # Uses the public "abandon" test wallet, which holds a little dust —
 # if that balance ever drops below AMOUNT + fee, this test will fail
 # at the amount step and the wallet needs a small top-up.
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 env:
   MNEMONIC: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
   # The wallet's own first address: even if a send were ever broadcast

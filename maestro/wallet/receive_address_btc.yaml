@@ -3,7 +3,7 @@
 # verified against the BIP84 spec test vector). The phrase must stay
 # unused on-chain: any transaction on it shifts the first unused
 # address and breaks this test. Never send funds to it.
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 env:
   MNEMONIC: "token weekend gadget save flush gaze ready debris input finish evidence diet"
   EXPECTED_ADDRESS: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"

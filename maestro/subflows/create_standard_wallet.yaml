@@ -1,6 +1,6 @@
 # Creates a new standard wallet with the suggested name.
 # Starts from the intro of a freshly launched app, ends on the balance screen.
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
 - runFlow: pass_intro.yaml
 - tapOn: "New Wallet"

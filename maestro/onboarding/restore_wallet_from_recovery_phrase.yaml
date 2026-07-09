@@ -1,4 +1,4 @@
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 env:
   # Public BIP39 test vector. Override: maestro test -e MNEMONIC="..."
   MNEMONIC: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"

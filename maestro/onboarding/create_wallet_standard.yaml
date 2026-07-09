@@ -1,4 +1,4 @@
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
 # Fresh install: create a new standard wallet
 - launchApp:

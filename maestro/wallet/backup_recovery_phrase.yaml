@@ -2,7 +2,7 @@
 # the app flags the wallet as backup-required, reveals the generated
 # 12-word phrase, demands verification, and after answering the quiz
 # with the correct words the wallet must be marked as backed up.
-appId: io.horizontalsystems.bankwallet.dev
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
 - launchApp:
     clearState: true
