@@ -74,7 +74,7 @@ bitcoinKit = "7a552c4"
 ethereumKit = "8c70f5e021"
 feeRateKit = "393cc14"
 marketKit = "3be4e8a"
-solanaKit = "900e80e"
+solanaKit = "b487161"
 tronKit = "2f07e86"
 zcashSdk = "2.5.2"
 
