@@ -3,13 +3,11 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 import android.util.Base64
 import com.google.gson.JsonElement
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
-import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.derivation
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
-import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
@@ -26,6 +24,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.hexStringToByteArray
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
 import retrofit2.http.Body
@@ -316,17 +315,21 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     ): SwapQuote {
         val bestRoute = rateBestRoute(tokenIn, tokenOut, amountIn, BigDecimal("1"))
 
-        val approvalAddress = bestRoute.approvalSpenderOrExecution?.let { router ->
-            try {
-                Address(router)
-            } catch (_: Throwable) {
-                null
-            }
-        }
+        val approvalAddress = bestRoute.approvalSpenderOrExecution
+        val actionRequired = approvalAddress?.let { approvalAddress ->
+            when {
+                tokenIn.blockchainType.isEvm -> {
+                    val allowance = EvmSwapHelper.getAllowance(tokenIn, approvalAddress)
+                    EvmSwapHelper.actionApprove(allowance, amountIn, approvalAddress, tokenIn)
+                }
 
-        val allowance = approvalAddress?.let { EvmSwapHelper.getAllowance(tokenIn, it) }
-        val actionApprove = approvalAddress?.let {
-            EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
+                tokenIn.blockchainType == BlockchainType.Tron -> {
+                    val allowance = SwapHelper.getAllowanceTrc20(tokenIn, approvalAddress)
+                    SwapHelper.actionApproveTrc20(allowance, amountIn, approvalAddress, tokenIn)
+                }
+
+                else -> null
+            }
         }
 
         return SwapQuote(
@@ -334,7 +337,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove,
+            actionRequired = actionRequired,
             estimationTime = bestRoute.estimatedTime?.total,
             extraData = SwapQuoteExtraData(bestRoute)
         )
