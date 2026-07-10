@@ -146,5 +146,19 @@ enum class UProvider(
         isEvm = false,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
+    ),
+    Lifi(
+        id = "LIFI",
+        title = "LI.FI",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = true,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = false,
+        // Cross-chain default; a same-chain LI.FI pair IS a single tx —
+        // USwapProvider.isSingleTransactionSwap resolves that per pair.
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = false
     );
 }

@@ -44,7 +44,12 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val requireTerms = provider.requireTerms
     override val riskLevel = provider.riskLevel
 
-    override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = provider.isSingleTransactionSwap
+    override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = when (provider) {
+        // LI.FI spans both: a same-chain pair is a plain single-tx DEX swap, a cross-chain
+        // pair is deposit → bridge → delivery, so the flag depends on the pair, not the provider.
+        UProvider.Lifi -> tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
+        else -> provider.isSingleTransactionSwap
+    }
 
     private val unstoppableAPI = APIClient.build(
         App.appConfigProvider.uswapApiBaseUrl,
@@ -267,6 +272,34 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             // X→wSOL would deliver native SOL while the user watches the wSOL token balance.
             is TokenType.Spl -> type.address.takeIf { it != WSOL_MINT }
             else -> null
+        }
+        // No token list (BARTER-style), but LI.FI is CROSS-CHAIN, so each side must be
+        // self-describing — the chain travels with the asset so the server resolves a
+        // cross-chain pair without a shared `chainId` hint. EVM token → `<CHAIN>.<contract>`,
+        // EVM native → `<CHAIN>.<0xeee…>` sentinel, Solana → `SOL.<mint>` (wSOL = native SOL),
+        // Tron → `TRON.TRX` (native) / `TRON.<contract>` (TRC20).
+        UProvider.Lifi -> when (token.blockchainType) {
+            BlockchainType.Solana -> when (val type = token.type) {
+                TokenType.Native -> "SOL.$WSOL_MINT"
+                // The wSOL TOKEN is excluded for the same reason as on the JUPITER path above.
+                is TokenType.Spl -> type.address.takeIf { it != WSOL_MINT }?.let { "SOL.$it" }
+                else -> null
+            }
+            // Tron is TVM (base58 addresses, not `0x`): the server resolves `TRON.TRX` as native
+            // and `TRON.<contract>` as a TRC20 — the EVM `0xeee…` native sentinel does not apply.
+            // TRC20 contracts ride the `Eip20` type with a base58 address.
+            BlockchainType.Tron -> when (val type = token.type) {
+                TokenType.Native -> "TRON.TRX"
+                is TokenType.Eip20 -> "TRON.${type.address}"
+                else -> null
+            }
+            else -> lifiChainCodes[token.blockchainType]?.let { code ->
+                when (val type = token.type) {
+                    is TokenType.Eip20 -> "$code.${type.address}"
+                    TokenType.Native -> "$code.0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+                    else -> null
+                }
+            }
         }
         // Raw EVM address encoding (BARTER's server adapter expects addresses, not identifiers).
         else -> when (val type = token.type) {
@@ -630,6 +663,21 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
         // Wrapped-SOL mint — the JUPITER server adapter reads it as native SOL.
         private const val WSOL_MINT = "So11111111111111111111111111111111111111112"
+
+        // LI.FI has no token list, so assets are encoded self-describingly as `<CHAIN>.<address>`
+        // (see `deriveIdentifier`). This maps each supported EVM chain to the server's chain
+        // code — the prefix the server's LI.FI resolver expects. Solana and Tron are handled
+        // inline (`SOL.` / `TRON.` prefixes) since their address formats aren't the EVM
+        // `0xeee…`/contract shape.
+        private val lifiChainCodes = mapOf(
+            BlockchainType.Ethereum to "ETH",
+            BlockchainType.Polygon to "POL",
+            BlockchainType.ArbitrumOne to "ARB",
+            BlockchainType.Optimism to "OP",
+            BlockchainType.Base to "BASE",
+            BlockchainType.Avalanche to "AVAX",
+            BlockchainType.BinanceSmartChain to "BSC",
+        )
     }
 
     data class SwapQuoteExtraData(val route: UnstoppableAPI.Response.Route) : SwapQuote.ExtraData

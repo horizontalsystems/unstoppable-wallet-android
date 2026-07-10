@@ -24,6 +24,7 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.Circle),
         USwapProvider(UProvider.Pegasus),
         USwapProvider(UProvider.Jupiter),
+        USwapProvider(UProvider.Lifi),
     )
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
