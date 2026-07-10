@@ -319,10 +319,15 @@ class SwapConfirmViewModel(
     }
 
     private suspend fun saveSwapRecord(result: SendTransactionResult) {
+        // The broadcast hash becomes the record's inboundTxHash — required for tracking DEX
+        // swaps (Jupiter, LI.FI), where the server polls the provider's status by the source
+        // chain transaction.
         val transactionHash = when (result) {
             is SendTransactionResult.Evm -> result.fullTransaction.transaction.hash.toHexString()
             is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
             is SendTransactionResult.Zcash -> result.transactionHash
+            is SendTransactionResult.Solana -> result.txHash
+            is SendTransactionResult.Tron -> result.txHash
             else -> null
         }
 
