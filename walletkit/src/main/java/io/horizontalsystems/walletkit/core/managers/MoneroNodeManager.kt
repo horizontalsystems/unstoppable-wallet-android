@@ -147,9 +147,21 @@ class MoneroNodeManager(
     }
 
     private fun serializeNode(uri: Uri, username: String?, password: String?): String {
-        // nodes saved before port validation was added may have no port; url scheme is always https
-        val port = if (uri.port == -1) 443 else uri.port
-        return "$username:$password@${uri.host}:$port/mainnet/${uri.host ?: ""}"
+        return "$username:$password@${uri.host}:${effectivePort(uri)}/mainnet/${uri.host ?: ""}"
+    }
+
+    // nodes saved before port validation was added may have no port; url scheme is always https
+    private fun effectivePort(uri: Uri) = if (uri.port == -1) 443 else uri.port
+
+    // canonical "host:port"; default nodes store host that way already, custom nodes store a full url
+    private fun endpoint(hostOrUrl: String): String {
+        val uri = hostOrUrl.toUri()
+        return uri.host?.let { "$it:${effectivePort(uri)}" } ?: hostOrUrl
+    }
+
+    fun hasNode(url: String): Boolean {
+        val endpoint = endpoint(url)
+        return allNodes.any { endpoint(it.host) == endpoint }
     }
 
     fun addMoneroNode(url: String, username: String?, password: String?, trusted: Boolean) {

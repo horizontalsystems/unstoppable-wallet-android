@@ -64,7 +64,7 @@ class AddMoneroNodeViewModel(
             return
         }
 
-        if (nodeManager.allNodes.any { it.host == url }) {
+        if (nodeManager.hasNode(url)) {
             urlCaution = Caution(Translator.getString(R.string.AddMoneroNode_Warning_UrlExists), Caution.Type.Warning)
             emitState()
             return
