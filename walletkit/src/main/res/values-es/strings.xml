@@ -1789,4 +1789,6 @@
     <string name="Send_Memo_PublicWarning">Este memo será público en la blockchain.</string>
     <string name="Send_Memo_EncryptedInfo">Este memo está cifrado y solo es visible para usted y el destinatario.</string>
     <string name="Send_Memo_OffchainInfo">Almacenado solo en este dispositivo — no en la cadena de bloques.</string>
+    <string name="AddMoneroNode_Error_PortRequired">La URL del nodo debe incluir un puerto, por ejemplo https://node.com:18081</string>
+    <string name="ManageAccounts_ManageWallet">Gestionar Wallet</string>
 </resources>
