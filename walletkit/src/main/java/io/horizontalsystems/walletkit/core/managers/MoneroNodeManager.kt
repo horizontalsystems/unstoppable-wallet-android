@@ -147,7 +147,9 @@ class MoneroNodeManager(
     }
 
     private fun serializeNode(uri: Uri, username: String?, password: String?): String {
-        return "$username:$password@${uri.host}:${uri.port}/mainnet/${uri.host ?: ""}"
+        // nodes saved before port validation was added may have no port; url scheme is always https
+        val port = if (uri.port == -1) 443 else uri.port
+        return "$username:$password@${uri.host}:$port/mainnet/${uri.host ?: ""}"
     }
 
     fun addMoneroNode(url: String, username: String?, password: String?, trusted: Boolean) {

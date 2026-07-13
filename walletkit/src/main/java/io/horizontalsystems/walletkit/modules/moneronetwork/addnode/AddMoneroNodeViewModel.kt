@@ -58,6 +58,12 @@ class AddMoneroNodeViewModel(
             return
         }
 
+        if (sourceUri.port == -1) {
+            urlCaution = Caution(Translator.getString(R.string.AddMoneroNode_Error_PortRequired), Caution.Type.Error)
+            emitState()
+            return
+        }
+
         if (nodeManager.allNodes.any { it.host == url }) {
             urlCaution = Caution(Translator.getString(R.string.AddMoneroNode_Warning_UrlExists), Caution.Type.Warning)
             emitState()

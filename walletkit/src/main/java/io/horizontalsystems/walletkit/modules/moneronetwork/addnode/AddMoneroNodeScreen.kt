@@ -62,7 +62,7 @@ fun AddMoneroNodeScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     qrScannerEnabled = true,
                     onValueChange = viewModel::onEnterRpcUrl,
-                    hint = "",
+                    hint = "https://node.com:port",
                     state = getState(viewModel.uiState.urlCaution)
                 )
                 Spacer(modifier = Modifier.height(24.dp))
