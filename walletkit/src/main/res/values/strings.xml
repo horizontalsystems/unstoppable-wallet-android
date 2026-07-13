@@ -1271,6 +1271,7 @@
     <string name="AddMoneroNode_Pasword">Password (optional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Node with this url already exists</string>
     <string name="AddMoneroNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https</string>
+    <string name="AddMoneroNode_Error_PortRequired">Node url must include a port, e.g. https://node.com:18081</string>
     <string name="AddZanoNode_Warning_UrlExists">Node with this url already exists</string>
     <string name="AddZanoNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https</string>
     <string name="MoneroNodeSettings_TrustedTitle">Node Preferences</string>
