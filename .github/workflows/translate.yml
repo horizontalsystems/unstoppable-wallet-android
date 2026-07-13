@@ -33,15 +33,39 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python .github/scripts/translate_strings.py
 
+      # Commit via the GraphQL createCommitOnBranch mutation instead of
+      # git push: commits created through the API are signed by GitHub
+      # and show as Verified.
       - name: Commit and push translations
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.head_ref }}
         run: |
-          git config user.name "translator[bot]"
-          git config user.email "translator[bot]@users.noreply.github.com"
-          find . -path '*/src/main/res/values-*/strings.xml' -exec git add {} +
-          git add translation_snapshot.json 2>/dev/null || true
-          if git diff --staged --quiet; then
+          files=$(git ls-files --modified --others --exclude-standard -- \
+            '*src/main/res/values-*/strings.xml' translation_snapshot.json)
+          if [ -z "$files" ]; then
             echo "No translation changes to commit."
-          else
-            git commit -m "Translate new strings"
-            git push
+            exit 0
           fi
+          additions=$(while IFS= read -r f; do
+            jq -n --arg path "$f" --arg contents "$(base64 -w0 "$f")" \
+              '{path: $path, contents: $contents}'
+          done <<< "$files" | jq -s .)
+          jq -n \
+            --arg repo "$GITHUB_REPOSITORY" \
+            --arg branch "$BRANCH" \
+            --arg oid "$(git rev-parse HEAD)" \
+            --argjson additions "$additions" \
+            '{
+              query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+              variables: {input: {
+                branch: {repositoryNameWithOwner: $repo, branchName: $branch},
+                expectedHeadOid: $oid,
+                message: {headline: "Translate new strings"},
+                fileChanges: {additions: $additions}
+              }}
+            }' > "$RUNNER_TEMP/commit_payload.json"
+          response=$(curl -sf -H "Authorization: bearer $GH_TOKEN" \
+            -d @"$RUNNER_TEMP/commit_payload.json" https://api.github.com/graphql)
+          echo "$response" | jq .
+          echo "$response" | jq -e '(.errors | not) and .data.createCommitOnBranch.commit.oid' > /dev/null
