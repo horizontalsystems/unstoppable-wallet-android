@@ -47,15 +47,22 @@ jobs:
             echo "No translation changes to commit."
             exit 0
           fi
-          additions=$(while IFS= read -r f; do
-            jq -n --arg path "$f" --arg contents "$(base64 -w0 "$f")" \
-              '{path: $path, contents: $contents}'
-          done <<< "$files" | jq -s .)
+          # Pass file contents to jq via --rawfile/--slurpfile, never as
+          # command-line arguments: base64 of a large strings.xml exceeds
+          # the kernel's 128KB per-argument limit (MAX_ARG_STRLEN).
+          additions="$RUNNER_TEMP/additions.jsonl"
+          : > "$additions"
+          while IFS= read -r f; do
+            base64 -w0 "$f" > "$RUNNER_TEMP/file.b64"
+            jq -n --arg path "$f" --rawfile contents "$RUNNER_TEMP/file.b64" \
+              '{path: $path, contents: $contents}' >> "$additions"
+          done <<< "$files"
+          [ "$(jq -s length "$additions")" -eq "$(echo "$files" | wc -l)" ]
           jq -n \
             --arg repo "$GITHUB_REPOSITORY" \
             --arg branch "$BRANCH" \
             --arg oid "$(git rev-parse HEAD)" \
-            --argjson additions "$additions" \
+            --slurpfile additions "$additions" \
             '{
               query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
               variables: {input: {
