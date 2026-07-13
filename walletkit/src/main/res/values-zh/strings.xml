@@ -1789,4 +1789,6 @@
     <string name="Send_Memo_PublicWarning">此备忘录将在区块链上公开。</string>
     <string name="Send_Memo_EncryptedInfo">此备忘录已加密，只有您和收款人可以看到。</string>
     <string name="Send_Memo_OffchainInfo">仅存储在此设备上 — 不在区块链上。</string>
+    <string name="AddMoneroNode_Error_PortRequired">节点URL必须包含端口，例如 https://node.com:18081</string>
+    <string name="ManageAccounts_ManageWallet">管理钱包</string>
 </resources>

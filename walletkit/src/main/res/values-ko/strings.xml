@@ -1790,4 +1790,6 @@
     <string name="Send_Memo_PublicWarning">이 메모는 블록체인에 공개됩니다.</string>
     <string name="Send_Memo_EncryptedInfo">이 메모는 암호화되어 있으며 귀하와 수신자에게만 표시됩니다.</string>
     <string name="Send_Memo_OffchainInfo">이 기기에만 저장됨 — 블록체인에 기록되지 않음.</string>
+    <string name="AddMoneroNode_Error_PortRequired">노드 URL에 포트가 포함되어야 합니다(예: https://node.com:18081)</string>
+    <string name="ManageAccounts_ManageWallet">지갑 관리</string>
 </resources>

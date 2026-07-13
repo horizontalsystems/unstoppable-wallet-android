@@ -1796,4 +1796,6 @@
     <string name="Send_Memo_PublicWarning">Этот меморандум будет открыт в блокчейне.</string>
     <string name="Send_Memo_EncryptedInfo">Этот меморандум зашифрован и видим только вам и получателю.</string>
     <string name="Send_Memo_OffchainInfo">Сохранено только на этом устройстве — не в блокчейне.</string>
+    <string name="AddMoneroNode_Error_PortRequired">URL узла должен включать порт, например https://node.com:18081</string>
+    <string name="ManageAccounts_ManageWallet">Управление кошельком</string>
 </resources>
