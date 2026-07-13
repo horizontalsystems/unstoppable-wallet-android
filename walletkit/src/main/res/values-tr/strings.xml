@@ -1790,4 +1790,6 @@
     <string name="Send_Memo_PublicWarning">Bu not blockchain üzerinde herkese açık olacaktır.</string>
     <string name="Send_Memo_EncryptedInfo">Bu not şifrelenir ve yalnızca sizin ve alıcının tarafından görülür.</string>
     <string name="Send_Memo_OffchainInfo">Yalnızca bu cihazda depolanır — zincir üzerinde değildir.</string>
+    <string name="AddMoneroNode_Error_PortRequired">Düğüm URL\'si bir port içermelidir, örneğin https://node.com:18081</string>
+    <string name="ManageAccounts_ManageWallet">Cüzdanı Yönet</string>
 </resources>
