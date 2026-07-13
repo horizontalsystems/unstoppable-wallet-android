@@ -35,6 +35,7 @@ class TransactionRecordRepository(
     private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
     private val loading = AtomicBoolean(false)
+    private val reloadRequested = AtomicBoolean(false)
     private var allLoaded = AtomicBoolean(false)
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
@@ -209,8 +210,13 @@ class TransactionRecordRepository(
     }
 
     private fun loadItems(page: Int) {
-        if (loading.get()) return
-        loading.set(true)
+        // If a load is already in flight, remember the request and replay it after the
+        // current load finishes — otherwise an update arriving mid-load is lost and the
+        // list stays stale until the screen is reopened
+        if (!loading.compareAndSet(false, true)) {
+            reloadRequested.set(true)
+            return
+        }
 
         val itemsCount = page * itemsPerPage
 
@@ -226,6 +232,9 @@ class TransactionRecordRepository(
 
             } finally {
                 loading.set(false)
+                if (reloadRequested.compareAndSet(true, false)) {
+                    loadItems(loadedPageNumber)
+                }
             }
         }
     }
