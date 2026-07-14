@@ -92,16 +92,44 @@ class SendZanoViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendZanoUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.fee != null,
-        showAddressInput = showAddressInput,
-        fee = feeState.fee,
-        feeInProgress = feeState.inProgress,
-        address = address
-    )
+    override fun createState(): SendZanoUiState {
+        val feeCaution = feeCaution()
+        return SendZanoUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            feeCaution = feeCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.fee != null && feeCaution == null,
+            showAddressInput = showAddressInput,
+            fee = feeState.fee,
+            feeInProgress = feeState.inProgress,
+            address = address
+        )
+    }
+
+    // The fee is always paid in native ZANO. For confidential assets the sent amount
+    // and the fee come from different balances, so the amount validator alone can't
+    // catch an unaffordable fee.
+    private fun feeCaution(): HSCaution? {
+        val fee = feeState.fee ?: return null
+        val insufficient = if (adapter.isNativeAsset) {
+            val amount = amountState.amount ?: return null
+            amount + fee > adapter.nativeAvailableBalance
+        } else {
+            fee > adapter.nativeAvailableBalance
+        }
+
+        if (!insufficient) return null
+
+        return HSCaution(
+            s = TranslatableString.ResString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
+            type = HSCaution.Type.Error,
+            description = TranslatableString.ResString(
+                R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
+                feeToken.coin.code
+            )
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -185,6 +213,7 @@ class SendZanoViewModel(
 data class SendZanoUiState(
     val availableBalance: BigDecimal?,
     val amountCaution: HSCaution?,
+    val feeCaution: HSCaution?,
     val addressError: Throwable?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,

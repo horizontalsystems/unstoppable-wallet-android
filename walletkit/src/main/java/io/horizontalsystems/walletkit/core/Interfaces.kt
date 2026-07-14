@@ -509,6 +509,8 @@ interface ISendMoneroAdapter {
 
 interface ISendZanoAdapter {
     val balanceData: BalanceData
+    val isNativeAsset: Boolean
+    val nativeAvailableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, address: String, memo: String?): String
     suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
 }

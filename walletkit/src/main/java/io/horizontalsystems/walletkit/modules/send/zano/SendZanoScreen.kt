@@ -28,6 +28,7 @@ import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.SendScreen
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -124,6 +125,15 @@ fun SendZanoScreen(
             rate = viewModel.feeCoinRate,
             navigation = navigation,
         )
+
+        uiState.feeCaution?.let { caution ->
+            VSpacer(12.dp)
+            TextImportantError(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = caution.getString(),
+                text = caution.getDescription() ?: ""
+            )
+        }
 
         val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
             {
