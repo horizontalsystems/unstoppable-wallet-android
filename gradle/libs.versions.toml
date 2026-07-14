@@ -67,7 +67,7 @@ unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
 moneroKit = "0bab15a"
-zanoKit = "0f41a3f"
+zanoKit = "4bf2274"
 stellarKit = "09a8a96"
 tonKit = "947c48a"
 bitcoinKit = "7a552c4"
