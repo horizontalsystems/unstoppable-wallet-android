@@ -127,6 +127,14 @@ class EvmKitManager(
                 address = Address(accountType.address)
             }
 
+            is AccountType.Passkey -> {
+                // Smart-account: the address comes from the app's AA layer via the
+                // registered resolver; the kit runs in watch mode (signing goes
+                // through the ERC-4337 pipeline, not the kit signer).
+                address = SmartAccountAddressResolver.provider?.evmAddress(account, blockchainType)
+                    ?: throw UnsupportedAccountException()
+            }
+
             else -> throw UnsupportedAccountException()
         }
 
