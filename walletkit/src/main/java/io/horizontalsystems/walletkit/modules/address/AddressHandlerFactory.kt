@@ -2,6 +2,8 @@ package io.horizontalsystems.walletkit.modules.address
 
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.bitcoinkit.MainNet
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.address.ZanoAliasResolver
 import io.horizontalsystems.walletkit.core.supported
 import io.horizontalsystems.dashkit.MainNetDash
 import io.horizontalsystems.ecash.MainNetECash
@@ -108,6 +110,10 @@ class AddressHandlerFactory(
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
                 domainAddressHandlers.add(AddressHandlerEns(blockchainType, EnsResolverHolder.resolver))
+            }
+
+            BlockchainType.Zano -> {
+                domainAddressHandlers.add(AddressHandlerZanoAlias(ZanoAliasResolver(App.zanoNodeManager)))
             }
 
             else -> {}

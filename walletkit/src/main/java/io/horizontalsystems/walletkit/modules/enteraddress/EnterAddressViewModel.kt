@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.address.AddressCheckManager
 import io.horizontalsystems.walletkit.core.address.AddressCheckResult
 import io.horizontalsystems.walletkit.core.address.AddressCheckType
+import io.horizontalsystems.walletkit.core.address.ZanoAliasResolver
 import io.horizontalsystems.walletkit.core.factories.AddressValidatorFactory
 import io.horizontalsystems.walletkit.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
@@ -17,11 +18,14 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerEns
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerUdn
+import io.horizontalsystems.walletkit.modules.address.AddressHandlerZanoAlias
 import io.horizontalsystems.walletkit.modules.address.AddressParserChain
 import io.horizontalsystems.walletkit.modules.address.EnsResolverHolder
+import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.send.address.AddressExtractor
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.subscriptions.core.ScamProtection
@@ -298,8 +302,11 @@ class EnterAddressViewModel(
             val ensHandler = AddressHandlerEns(blockchainType, EnsResolverHolder.resolver)
             val udnHandler =
                 AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
-            val addressParserChain =
-                AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
+            val domainHandlers = mutableListOf(ensHandler, udnHandler)
+            if (blockchainType == BlockchainType.Zano) {
+                domainHandlers.add(AddressHandlerZanoAlias(ZanoAliasResolver(App.zanoNodeManager)))
+            }
+            val addressParserChain = AddressParserChain(domainHandlers = domainHandlers)
             val addressUriParser = AddressUriParser(token.blockchainType, token.type)
             val recentAddressManager =
                 RecentAddressManager(
