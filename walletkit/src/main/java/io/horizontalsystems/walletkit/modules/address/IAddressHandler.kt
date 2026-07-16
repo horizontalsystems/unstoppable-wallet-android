@@ -383,7 +383,8 @@ class AddressHandlerZanoAlias(private val resolver: ZanoAliasResolver) : IAddres
     }
 
     companion object {
-        private val aliasRegex = Regex("^[a-z0-9]{1,25}\$")
+        // on-chain alias charset is a-z 0-9 . - with max length 25
+        private val aliasRegex = Regex("^[a-z0-9.-]{1,25}\$")
 
         fun normalize(value: String): String? {
             val hasPrefix = value.startsWith("@")

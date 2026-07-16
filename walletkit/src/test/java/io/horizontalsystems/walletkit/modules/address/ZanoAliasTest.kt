@@ -15,6 +15,10 @@ class ZanoAliasTest {
         assertEquals("alias123", AddressHandlerZanoAlias.normalize("alias123"))
         assertEquals("a", AddressHandlerZanoAlias.normalize("@a"))
         assertEquals("a".repeat(25), AddressHandlerZanoAlias.normalize("a".repeat(25)))
+        // dots and hyphens are part of the on-chain alias charset
+        assertEquals("-axel-", AddressHandlerZanoAlias.normalize("-axel-"))
+        assertEquals("---007", AddressHandlerZanoAlias.normalize("@---007"))
+        assertEquals("some.name", AddressHandlerZanoAlias.normalize("some.name"))
     }
 
     @Test
@@ -23,7 +27,6 @@ class ZanoAliasTest {
         assertNull(AddressHandlerZanoAlias.normalize(""))
         assertNull(AddressHandlerZanoAlias.normalize("@"))
         assertNull(AddressHandlerZanoAlias.normalize("MyName"))
-        assertNull(AddressHandlerZanoAlias.normalize("name.eth"))
         assertNull(AddressHandlerZanoAlias.normalize("with space"))
         assertNull(AddressHandlerZanoAlias.normalize("under_score"))
         assertNull(AddressHandlerZanoAlias.normalize("a".repeat(26)))
