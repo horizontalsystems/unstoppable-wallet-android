@@ -124,7 +124,7 @@ fun UtxoExpertModeScreen(
 }
 
 @Composable
-private fun UtxoList(
+fun UtxoList(
     utxos: List<UtxoExpertModeModule.UnspentOutputViewItem>,
     onItemClicked: (String) -> Unit,
 ) {
@@ -157,7 +157,7 @@ private fun UtxoList(
 }
 
 @Composable
-private fun UtxoInfoCell(
+fun UtxoInfoCell(
     title: String,
     value: String?,
     subValue: String?
@@ -188,7 +188,7 @@ private fun UtxoInfoCell(
 }
 
 @Composable
-private fun UtxoCell(
+fun UtxoCell(
     id: String,
     selected: Boolean,
     showTopBorder: Boolean,

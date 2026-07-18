@@ -20,6 +20,7 @@ object SendMoneroModule {
         private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter = App.adapterManager.getAdapterForWallet<ISendMoneroAdapter>(wallet) ?: throw IllegalStateException("ISendMoneroAdapter is null")
+        val balanceAdapter = App.adapterManager.getBalanceAdapterForWallet(wallet) ?: throw IllegalStateException("IBalanceAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -32,7 +33,7 @@ object SendMoneroModule {
                 availableBalance = adapter.balanceData.available
             )
             val addressService = SendMoneroAddressService()
-            val feeService = SendMoneroFeeService(adapter)
+            val feeService = SendMoneroFeeService(adapter, App.connectivityManager)
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
             val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Monero, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -49,7 +50,9 @@ object SendMoneroModule {
                 addressService,
                 feeService,
                 App.contactsRepository,
-                App.recentAddressManager
+                App.recentAddressManager,
+                balanceAdapter,
+                App.localStorage
             ) as T
         }
     }

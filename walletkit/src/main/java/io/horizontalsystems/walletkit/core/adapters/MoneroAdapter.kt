@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.AccountOrigin
@@ -107,9 +108,30 @@ class MoneroAdapter(
     override val debugInfo: String
         get() = ""
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String {
+    override val unspentOutputs: List<MoneroUnspentOutput>
+        get() {
+            val timestamps = kit.allTransactionsFlow.value.associate { it.hash to it.timestamp }
+            return kit.getUnspentOutputs()
+                .filter { it.unlocked && !it.frozen }
+                .map { output ->
+                    MoneroUnspentOutput(
+                        keyImage = output.keyImage,
+                        amount = output.amount.scaledDown(DECIMALS),
+                        txHash = output.txHash,
+                        address = kit.getSubaddress(0, output.subaddressIndex)?.address ?: "",
+                        timestamp = timestamps[output.txHash]
+                    )
+                }
+        }
+
+    override suspend fun send(
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+        selectedOutputs: List<String>?
+    ): String {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        return kit.send(amountInPiconero, address, memo)
+        return kit.send(amountInPiconero, address, memo, selectedOutputs)
     }
 
     override suspend fun estimateFee(

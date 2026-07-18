@@ -9,7 +9,7 @@ import java.math.BigDecimal
 class SendAmountService(
     private val amountValidator: AmountValidator,
     private val coinCode: String,
-    private val availableBalance: BigDecimal,
+    private var availableBalance: BigDecimal,
     private val leaveSomeBalanceForFee: Boolean = false
 ) {
     private var amount: BigDecimal? = null
@@ -64,6 +64,14 @@ class SendAmountService(
 
     fun setMinimumSendAmount(minimumSendAmount: BigDecimal?) {
         this.minimumSendAmount = minimumSendAmount
+
+        validateAmount()
+
+        emitState()
+    }
+
+    fun setAvailableBalance(availableBalance: BigDecimal) {
+        this.availableBalance = availableBalance
 
         validateAmount()
 

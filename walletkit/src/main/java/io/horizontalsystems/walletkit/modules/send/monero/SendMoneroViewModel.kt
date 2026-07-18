@@ -7,9 +7,13 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.AppLogger
+import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.HSCaution
+import io.horizontalsystems.walletkit.core.IBalanceAdapter
+import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.LocalizedException
+import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
 import io.horizontalsystems.walletkit.entities.Address
@@ -18,12 +22,15 @@ import io.horizontalsystems.walletkit.modules.amount.SendAmountService
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationData
 import io.horizontalsystems.walletkit.modules.send.SendResult
+import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -32,7 +39,7 @@ class SendMoneroViewModel(
     val wallet: Wallet,
     private val sendToken: Token,
     val feeToken: Token,
-    private val adapter: ISendMoneroAdapter,
+    val adapter: ISendMoneroAdapter,
     val coinMaxAllowedDecimals: Int,
     private val xRateService: XRateService,
     private val address: Address,
@@ -42,6 +49,8 @@ class SendMoneroViewModel(
     private val feeService: SendMoneroFeeService,
     private val contactsRepo: ContactsRepository,
     private val recentAddressManager: RecentAddressManager,
+    private val balanceAdapter: IBalanceAdapter,
+    private val localStorage: ILocalStorage,
 ) : ViewModelUiState<SendMoneroUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -51,6 +60,13 @@ class SendMoneroViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
+
+    private var utxoData: SendBitcoinModule.UtxoData? = null
+    private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
+    private var balanceState = balanceAdapter.balanceState
+
+    var customUnspentOutputs: List<MoneroUnspentOutput>? = null
+        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
@@ -89,8 +105,50 @@ class SendMoneroViewModel(
                 feeCoinRate = it
             }
         }
+        viewModelScope.launch(Dispatchers.Default) {
+            updateUtxoData()
+
+            emitState()
+        }
+        viewModelScope.launch(Dispatchers.Default) {
+            localStorage.utxoExpertModeEnabledFlow.collect { enabled ->
+                utxoExpertModeEnabled = enabled
+
+                emitState()
+            }
+        }
+        viewModelScope.launch(Dispatchers.Default) {
+            merge(
+                balanceAdapter.balanceStateUpdatedFlowable.asFlow(),
+                balanceAdapter.balanceUpdatedFlowable.asFlow()
+            ).collect {
+                handleBalanceAdapterUpdate()
+            }
+        }
 
         addressService.setAddress(address)
+    }
+
+    private fun handleBalanceAdapterUpdate() {
+        balanceState = balanceAdapter.balanceState
+
+        // while the wallet scans, outputs appear and disappear; drop selections
+        // that no longer reference an existing spendable output
+        val outputs = adapter.unspentOutputs
+        customUnspentOutputs?.let { selection ->
+            val validKeyImages = outputs.map { it.keyImage }.toSet()
+            val pruned = selection.filter { it.keyImage in validKeyImages }
+            if (pruned.size != selection.size) {
+                customUnspentOutputs = pruned.ifEmpty { null }
+            }
+        }
+
+        amountService.setAvailableBalance(
+            customUnspentOutputs?.sumOf { it.amount } ?: adapter.balanceData.available
+        )
+        updateUtxoData()
+
+        emitState()
     }
 
 
@@ -98,12 +156,39 @@ class SendMoneroViewModel(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
         addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.fee != null,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.fee != null && balanceState is AdapterState.Synced,
         showAddressInput = showAddressInput,
         fee = feeState.fee,
         feeInProgress = feeState.inProgress,
-        address = address
+        address = address,
+        utxoData = if (utxoExpertModeEnabled) utxoData else null,
+        syncState = balanceState,
+        feeCaution = feeState.error?.let { createCaution(it) },
     )
+
+    fun updateCustomUnspentOutputs(customUnspentOutputs: List<MoneroUnspentOutput>) {
+        this.customUnspentOutputs = customUnspentOutputs.ifEmpty { null }
+
+        amountService.setAvailableBalance(
+            this.customUnspentOutputs?.sumOf { it.amount } ?: adapter.balanceData.available
+        )
+
+        viewModelScope.launch(Dispatchers.Default) {
+            updateUtxoData()
+
+            emitState()
+        }
+    }
+
+    private fun updateUtxoData() {
+        // unlike Bitcoin, wallet2 does not reveal which inputs auto-selection will use
+        // before the transaction is created, so Auto mode shows only the total count
+        val totalOutputs = adapter.unspentOutputs.size
+        utxoData = SendBitcoinModule.UtxoData(
+            type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
+            value = customUnspentOutputs?.let { "${it.size} / $totalOutputs" } ?: "$totalOutputs"
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -165,7 +250,12 @@ class SendMoneroViewModel(
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+            adapter.send(
+                amountState.amount!!,
+                addressState.address?.hex!!,
+                memo,
+                customUnspentOutputs?.map { it.keyImage }
+            )
 
             sendResult = SendResult.Sent()
             logger.info("success")
@@ -193,4 +283,7 @@ data class SendMoneroUiState(
     val fee: BigDecimal?,
     val feeInProgress: Boolean,
     val address: Address,
+    val utxoData: SendBitcoinModule.UtxoData?,
+    val syncState: AdapterState,
+    val feeCaution: HSCaution?,
 )

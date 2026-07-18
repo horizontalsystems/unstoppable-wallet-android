@@ -1,7 +1,9 @@
 package io.horizontalsystems.walletkit.modules.send.monero
 
+import android.util.Log
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.ServiceState
+import io.horizontalsystems.walletkit.core.managers.ConnectivityManager
 import io.horizontalsystems.walletkit.entities.Address
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -14,8 +16,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
+import java.net.UnknownHostException
 
-class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : ServiceState<SendMoneroFeeService.State>(), AutoCloseable {
+class SendMoneroFeeService(
+    private val adapter: ISendMoneroAdapter,
+    private val connectivityManager: ConnectivityManager,
+) : ServiceState<SendMoneroFeeService.State>(), AutoCloseable {
     private var memo: String? = null
     private var address: Address? = null
     private var amount: BigDecimal? = null
@@ -26,6 +32,14 @@ class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : ServiceSta
     private val mutex = Mutex()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var estimateFeeJob: Job? = null
+
+    init {
+        coroutineScope.launch {
+            connectivityManager.networkAvailabilityFlow.collect {
+                refreshFeeAndEmitState()
+            }
+        }
+    }
 
     override fun createState() = State(
         fee = fee,
@@ -41,6 +55,18 @@ class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : ServiceSta
         estimateFeeJob?.cancel()
         estimateFeeJob = coroutineScope.launch {
             if (amount != null && address != null) {
+                // the native fee estimator blocks on daemon RPC and cannot be
+                // cancelled, so fail fast while there is no network at all
+                if (!connectivityManager.isConnected) {
+                    mutex.withLock {
+                        fee = null
+                        error = UnknownHostException()
+                        inProgress = false
+                        emitState()
+                    }
+                    return@launch
+                }
+
                 mutex.withLock {
                     inProgress = true
                     error = null
@@ -60,6 +86,7 @@ class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : ServiceSta
                     } catch (e: CancellationException) {
                         throw e
                     } catch (e: Throwable) {
+                        Log.e("SendMoneroFeeService", "estimateFee attempt ${attempts + 1} failed", e)
                         lastError = e
                         attempts++
                         if (attempts < MAX_FEE_ATTEMPTS) delay(500)
