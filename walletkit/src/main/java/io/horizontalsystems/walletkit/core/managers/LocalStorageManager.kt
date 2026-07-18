@@ -103,7 +103,7 @@ class LocalStorageManager(
     private val ENABLED_PAID_ACTIONS = "enabled_paid_actions"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
+    private val _utxoExpertModeEnabledFlow = MutableStateFlow(preferences.getBoolean(UTXO_EXPERT_MODE, false))
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
 
     private val _marketSignalsStateChangedFlow =  MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
