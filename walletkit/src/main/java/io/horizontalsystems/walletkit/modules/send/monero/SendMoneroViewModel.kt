@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.send.SendResult
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.merge
@@ -260,7 +259,7 @@ class SendMoneroViewModel(
             sendResult = SendResult.Sent()
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
+            recentAddressManager.setRecentAddress(addressState.address!!, wallet.token.blockchainType)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
