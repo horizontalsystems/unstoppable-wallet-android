@@ -48,6 +48,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -209,6 +210,7 @@ fun SendBitcoinScreen(
                             navigation.add(UtxoExpertModePage)
                         }
                     )
+                    HsDivider(modifier = Modifier.fillMaxWidth())
                 }
                 HSFeeRaw(
                     coinCode = wallet.coin.code,
