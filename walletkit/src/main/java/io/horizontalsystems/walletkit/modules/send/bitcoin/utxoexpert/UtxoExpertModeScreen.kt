@@ -164,9 +164,9 @@ private fun UtxoInfoCell(
 ) {
     RowUniversal(
         modifier = Modifier
-            .height(64.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
+        verticalPadding = 12.dp,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
