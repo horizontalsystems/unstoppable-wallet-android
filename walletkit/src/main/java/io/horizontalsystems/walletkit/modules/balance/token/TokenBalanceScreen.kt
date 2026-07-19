@@ -19,6 +19,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,10 @@ import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.balance.token.moneroaccounts.MoneroAccountsPage
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.balance.AttentionIconType
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem
@@ -234,6 +238,13 @@ fun TokenBalanceScreen(
                                     ))
                                 )
                             }
+                        )
+                    }
+
+                    if (balanceViewItem.wallet.token.blockchainType == BlockchainType.Monero) {
+                        MoneroAccountCell(
+                            wallet = balanceViewItem.wallet,
+                            navigation = navigation
                         )
                     }
 
@@ -580,6 +591,40 @@ private fun LockedBalanceSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MoneroAccountCell(
+    wallet: Wallet,
+    navigation: HSNavigation
+) {
+    val adapter = remember(wallet) {
+        App.adapterManager.getAdapterForWallet<IMoneroAccountsAdapter>(wallet)
+    } ?: return
+    val activeAccountIndex by adapter.activeAccountFlow.collectAsState()
+    val accounts by adapter.accountsFlow.collectAsState()
+    val label = accounts.firstOrNull { it.index == activeAccountIndex }
+        ?.let { "${it.index}. ${it.label}" }
+        ?: "$activeAccountIndex."
+
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfo(eyebrow = stringResource(R.string.Monero_Account).hs)
+            },
+            right = {
+                CellRightNavigation(
+                    subtitle = label.hs(color = ComposeAppTheme.colors.leah)
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = {
+                navigation.slideFromRight(
+                    MoneroAccountsPage(MoneroAccountsPage.Input(wallet))
+                )
+            }
+        )
     }
 }
 

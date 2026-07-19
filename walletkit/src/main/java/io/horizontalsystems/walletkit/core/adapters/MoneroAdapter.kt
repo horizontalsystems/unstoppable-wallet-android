@@ -9,9 +9,11 @@ import io.horizontalsystems.walletkit.core.BackgroundManagerState
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
+import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.MoneroAccountInfo
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -22,6 +24,7 @@ import io.horizontalsystems.monerokit.Balance
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.Seed
 import io.horizontalsystems.monerokit.SyncState
+import io.horizontalsystems.monerokit.data.MoneroAccount
 import io.horizontalsystems.monerokit.data.Subaddress
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -29,6 +32,12 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -40,7 +49,8 @@ class MoneroAdapter(
     private val transactionsProvider: MoneroTransactionsProvider,
     private val transactionsAdapter: MoneroTransactionsAdapter,
     private val backgroundManager: BackgroundManager,
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, ITransactionsAdapter by transactionsAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, IMoneroAccountsAdapter,
+    ITransactionsAdapter by transactionsAdapter {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -61,7 +71,37 @@ class MoneroAdapter(
         get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val receiveAddress: String
-        get() = kit.receiveAddress
+        get() = kit.receiveAddress(activeAccount)
+
+    private val _activeAccountFlow = MutableStateFlow(0)
+    override val activeAccountFlow = _activeAccountFlow.asStateFlow()
+
+    override var activeAccount: Int
+        get() = _activeAccountFlow.value
+        set(value) {
+            _activeAccountFlow.value = value
+            // poke balance collectors so screens re-read account-scoped data
+            balanceUpdatedSubject.onNext(Unit)
+        }
+
+    override val accountsFlow: StateFlow<List<MoneroAccountInfo>> = kit.accountsFlow
+        .map { accounts -> accounts.map { it.toAccountInfo() } }
+        .stateIn(coroutineScope, SharingStarted.Eagerly, kit.accountsFlow.value.map { it.toAccountInfo() })
+
+    override val activeAccountBalanceData: BalanceData
+        get() {
+            val account = kit.accountsFlow.value.firstOrNull { it.index == activeAccount }
+                ?: return BalanceData(BigDecimal.ZERO)
+            return account.balance.toBalanceData()
+        }
+
+    override fun createAccount(label: String?) {
+        kit.createAccount(label)
+    }
+
+    override fun renameAccount(accountIndex: Int, label: String) {
+        kit.setAccountLabel(accountIndex, label)
+    }
 
     override val isMainNet: Boolean
         get() = true
@@ -110,15 +150,16 @@ class MoneroAdapter(
 
     override val unspentOutputs: List<MoneroUnspentOutput>
         get() {
+            val accountIndex = activeAccount
             val timestamps = kit.allTransactionsFlow.value.associate { it.hash to it.timestamp }
-            return kit.getUnspentOutputs()
+            return kit.getUnspentOutputs(accountIndex)
                 .filter { it.unlocked && !it.frozen }
                 .map { output ->
                     MoneroUnspentOutput(
                         keyImage = output.keyImage,
                         amount = output.amount.scaledDown(DECIMALS),
                         txHash = output.txHash,
-                        address = kit.getSubaddress(0, output.subaddressIndex)?.address ?: "",
+                        address = kit.getSubaddress(accountIndex, output.subaddressIndex)?.address ?: "",
                         timestamp = timestamps[output.txHash]
                     )
                 }
@@ -131,7 +172,7 @@ class MoneroAdapter(
         selectedOutputs: List<String>?
     ): String {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        return kit.send(amountInPiconero, address, memo, selectedOutputs)
+        return kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount)
     }
 
     override suspend fun estimateFee(
@@ -140,11 +181,11 @@ class MoneroAdapter(
         memo: String?
     ): BigDecimal {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        return kit.estimateFee(amountInPiconero, address, memo).scaledDown(DECIMALS)
+        return kit.estimateFee(amountInPiconero, address, memo, activeAccount).scaledDown(DECIMALS)
     }
 
     fun getSubaddresses(): List<Subaddress> {
-        return kit.getSubaddresses()
+        return kit.getSubaddresses(activeAccount)
     }
 
     val statusInfo: Map<String, Any>
@@ -243,3 +284,10 @@ fun Balance.toBalanceData(): BalanceData {
     val pending = (all - unlocked).coerceAtLeast(0).scaledDown(MoneroAdapter.DECIMALS)
     return BalanceData(available, pending = pending)
 }
+
+fun MoneroAccount.toAccountInfo() = MoneroAccountInfo(
+    index = index,
+    label = label,
+    balance = balance.all.scaledDown(MoneroAdapter.DECIMALS),
+    unlocked = balance.unlocked.scaledDown(MoneroAdapter.DECIMALS),
+)
