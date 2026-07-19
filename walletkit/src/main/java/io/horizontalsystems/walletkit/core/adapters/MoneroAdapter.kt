@@ -159,15 +159,16 @@ class MoneroAdapter(
     // JNI: refreshes the coins list under the wallet2 mutex, which the background
     // refresh can hold for seconds - never call on the main thread
     override suspend fun getUnspentOutputs(): List<MoneroUnspentOutput> = withContext(Dispatchers.IO) {
+        val accountIndex = activeAccount
         val timestamps = kit.allTransactionsFlow.value.associate { it.hash to it.timestamp }
-        kit.getUnspentOutputs()
+        kit.getUnspentOutputs(accountIndex)
             .filter { it.unlocked && !it.frozen }
             .map { output ->
                 MoneroUnspentOutput(
                     keyImage = output.keyImage,
                     amount = output.amount.scaledDown(DECIMALS),
                     txHash = output.txHash,
-                    address = kit.getSubaddress(0, output.subaddressIndex)?.address ?: "",
+                    address = kit.getSubaddress(accountIndex, output.subaddressIndex)?.address ?: "",
                     timestamp = timestamps[output.txHash]
                 )
             }
