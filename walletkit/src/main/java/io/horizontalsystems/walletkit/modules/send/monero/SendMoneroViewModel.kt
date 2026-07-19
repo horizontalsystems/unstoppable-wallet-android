@@ -26,7 +26,9 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -120,9 +122,19 @@ class SendMoneroViewModel(
             merge(
                 balanceAdapter.balanceStateUpdatedFlowable.asFlow(),
                 balanceAdapter.balanceUpdatedFlowable.asFlow()
-            ).collect {
-                handleBalanceAdapterUpdate()
-            }
+            )
+                .catch { logger.warning("balance updates flow failed", it) }
+                .collect {
+                    // the handler reaches JNI; one native error must not kill
+                    // this collector for the rest of the screen's lifetime
+                    try {
+                        handleBalanceAdapterUpdate()
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Throwable) {
+                        logger.warning("handleBalanceAdapterUpdate failed", e)
+                    }
+                }
         }
 
         addressService.setAddress(address)
