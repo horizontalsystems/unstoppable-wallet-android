@@ -503,7 +503,7 @@ interface ISendStellarAdapter {
 
 interface ISendMoneroAdapter {
     val balanceData: BalanceData
-    val unspentOutputs: List<MoneroUnspentOutput>
+    suspend fun getUnspentOutputs(): List<MoneroUnspentOutput>
     suspend fun send(amount: BigDecimal, address: String, memo: String?, selectedOutputs: List<String>? = null): String
     suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
 }

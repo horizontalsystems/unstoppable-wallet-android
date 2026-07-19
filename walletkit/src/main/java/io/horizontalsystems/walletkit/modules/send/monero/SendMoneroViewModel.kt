@@ -128,12 +128,12 @@ class SendMoneroViewModel(
         addressService.setAddress(address)
     }
 
-    private fun handleBalanceAdapterUpdate() {
+    private suspend fun handleBalanceAdapterUpdate() {
         balanceState = balanceAdapter.balanceState
 
         // while the wallet scans, outputs appear and disappear; drop selections
         // that no longer reference an existing spendable output
-        val outputs = adapter.unspentOutputs
+        val outputs = adapter.getUnspentOutputs()
         customUnspentOutputs?.let { selection ->
             val validKeyImages = outputs.map { it.keyImage }.toSet()
             val pruned = selection.filter { it.keyImage in validKeyImages }
@@ -179,10 +179,10 @@ class SendMoneroViewModel(
         }
     }
 
-    private fun updateUtxoData() {
+    private suspend fun updateUtxoData() {
         // unlike Bitcoin, wallet2 does not reveal which inputs auto-selection will use
         // before the transaction is created, so Auto mode shows only the total count
-        val totalOutputs = adapter.unspentOutputs.size
+        val totalOutputs = adapter.getUnspentOutputs().size
         utxoData = SendBitcoinModule.UtxoData(
             type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
             value = customUnspentOutputs?.let { "${it.size} / $totalOutputs" } ?: "$totalOutputs"

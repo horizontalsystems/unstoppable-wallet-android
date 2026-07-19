@@ -28,6 +28,7 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -108,21 +109,22 @@ class MoneroAdapter(
     override val debugInfo: String
         get() = ""
 
-    override val unspentOutputs: List<MoneroUnspentOutput>
-        get() {
-            val timestamps = kit.allTransactionsFlow.value.associate { it.hash to it.timestamp }
-            return kit.getUnspentOutputs()
-                .filter { it.unlocked && !it.frozen }
-                .map { output ->
-                    MoneroUnspentOutput(
-                        keyImage = output.keyImage,
-                        amount = output.amount.scaledDown(DECIMALS),
-                        txHash = output.txHash,
-                        address = kit.getSubaddress(0, output.subaddressIndex)?.address ?: "",
-                        timestamp = timestamps[output.txHash]
-                    )
-                }
-        }
+    // JNI: refreshes the coins list under the wallet2 mutex, which the background
+    // refresh can hold for seconds - never call on the main thread
+    override suspend fun getUnspentOutputs(): List<MoneroUnspentOutput> = withContext(Dispatchers.IO) {
+        val timestamps = kit.allTransactionsFlow.value.associate { it.hash to it.timestamp }
+        kit.getUnspentOutputs()
+            .filter { it.unlocked && !it.frozen }
+            .map { output ->
+                MoneroUnspentOutput(
+                    keyImage = output.keyImage,
+                    amount = output.amount.scaledDown(DECIMALS),
+                    txHash = output.txHash,
+                    address = kit.getSubaddress(0, output.subaddressIndex)?.address ?: "",
+                    timestamp = timestamps[output.txHash]
+                )
+            }
+    }
 
     override suspend fun send(
         amount: BigDecimal,

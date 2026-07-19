@@ -12,6 +12,8 @@ import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoExpertModeModule
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
 
@@ -22,7 +24,7 @@ class MoneroUtxoExpertModeViewModel(
     xRateService: XRateService,
 ) : ViewModelUiState<UtxoExpertModeModule.UiState>() {
 
-    private val unspentOutputs = adapter.unspentOutputs
+    private var unspentOutputs = listOf<MoneroUnspentOutput>()
     private var unspentOutputViewItems = listOf<UtxoExpertModeModule.UnspentOutputViewItem>()
     private var selectedUnspentOutputs = listOf<String>()
     private var coinRate = xRateService.getRate(token.coin.uid)
@@ -43,8 +45,13 @@ class MoneroUtxoExpertModeViewModel(
             setUnspentOutputViewItems()
             emitState()
         }
-        setAvailableBalanceInfo()
-        setUnspentOutputViewItems()
+        // the output list comes from JNI and must not be fetched on the main thread
+        viewModelScope.launch(Dispatchers.IO) {
+            unspentOutputs = adapter.getUnspentOutputs()
+            setAvailableBalanceInfo()
+            setUnspentOutputViewItems()
+            emitState()
+        }
         emitState()
     }
 
