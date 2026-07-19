@@ -47,6 +47,10 @@ class SendMoneroFeeService(
         error = error,
     )
 
+    // triggered concurrently from the view model's collectors and the
+    // connectivity collector; the monitor makes each cancel+launch pair atomic
+    // so exactly one estimate job survives - the latest
+    @Synchronized
     private fun refreshFeeAndEmitState() {
         val amount = amount
         val address = address
@@ -110,18 +114,21 @@ class SendMoneroFeeService(
         }
     }
 
+    @Synchronized
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
 
         refreshFeeAndEmitState()
     }
 
+    @Synchronized
     fun setAddress(address: Address?) {
         this.address = address
 
         refreshFeeAndEmitState()
     }
 
+    @Synchronized
     fun setMemo(memo: String?) {
         this.memo = memo
 
