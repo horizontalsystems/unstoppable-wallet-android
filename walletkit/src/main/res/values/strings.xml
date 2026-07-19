@@ -493,6 +493,12 @@
     <string name="Send_Utxos" translatable="false">UTxOs</string>
     <string name="Send_UtxoExpertMode">UTxO Expert Mode</string>
     <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
+    <string name="Monero_Account">Account</string>
+    <string name="Monero_Accounts">Accounts</string>
+    <string name="Monero_NewAccount">New Account</string>
+    <string name="Monero_RenameAccount">Rename Account</string>
+    <string name="Monero_AccountName">Name</string>
+    <string name="Monero_Accounts_Description">Accounts are separate compartments of the same Monero wallet. Receive, send and balance apply to the selected account. Moving funds between accounts is a regular on-chain transaction with a network fee.</string>
     <string name="Send_Rbf">Replace by Fee</string>
     <string name="Send_Rbf_Description">This option allows you to resend a stuck transaction by increasing the amount of the fee.</string>
     <string name="Send_RbfEnabled">Enabled</string>

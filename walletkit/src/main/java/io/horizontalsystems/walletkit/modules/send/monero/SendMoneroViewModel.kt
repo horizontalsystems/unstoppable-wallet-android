@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
@@ -52,6 +53,7 @@ class SendMoneroViewModel(
     private val recentAddressManager: RecentAddressManager,
     private val balanceAdapter: IBalanceAdapter,
     private val localStorage: ILocalStorage,
+    private val accountsAdapter: IMoneroAccountsAdapter,
 ) : ViewModelUiState<SendMoneroUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -155,7 +157,7 @@ class SendMoneroViewModel(
         }
 
         amountService.setAvailableBalance(
-            customUnspentOutputs?.sumOf { it.amount } ?: adapter.balanceData.available
+            customUnspentOutputs?.sumOf { it.amount } ?: accountsAdapter.activeAccountBalanceData.available
         )
         updateUtxoData()
 
@@ -181,7 +183,7 @@ class SendMoneroViewModel(
         this.customUnspentOutputs = customUnspentOutputs.ifEmpty { null }
 
         amountService.setAvailableBalance(
-            this.customUnspentOutputs?.sumOf { it.amount } ?: adapter.balanceData.available
+            this.customUnspentOutputs?.sumOf { it.amount } ?: accountsAdapter.activeAccountBalanceData.available
         )
 
         viewModelScope.launch(Dispatchers.Default) {

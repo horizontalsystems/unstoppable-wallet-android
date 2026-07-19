@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.send.monero
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -21,6 +22,7 @@ object SendMoneroModule {
     ) : ViewModelProvider.Factory {
         val adapter = App.adapterManager.getAdapterForWallet<ISendMoneroAdapter>(wallet) ?: throw IllegalStateException("ISendMoneroAdapter is null")
         val balanceAdapter = App.adapterManager.getBalanceAdapterForWallet(wallet) ?: throw IllegalStateException("IBalanceAdapter is null")
+        val accountsAdapter = App.adapterManager.getAdapterForWallet<IMoneroAccountsAdapter>(wallet) ?: throw IllegalStateException("IMoneroAccountsAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -30,7 +32,7 @@ object SendMoneroModule {
             val amountService = SendAmountService(
                 amountValidator = amountValidator,
                 coinCode = wallet.coin.code,
-                availableBalance = adapter.balanceData.available
+                availableBalance = accountsAdapter.activeAccountBalanceData.available
             )
             val addressService = SendMoneroAddressService()
             val feeService = SendMoneroFeeService(adapter, App.connectivityManager)
@@ -52,7 +54,8 @@ object SendMoneroModule {
                 App.contactsRepository,
                 App.recentAddressManager,
                 balanceAdapter,
-                App.localStorage
+                App.localStorage,
+                accountsAdapter
             ) as T
         }
     }

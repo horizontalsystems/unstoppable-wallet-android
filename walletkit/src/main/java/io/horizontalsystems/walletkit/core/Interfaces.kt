@@ -516,6 +516,22 @@ data class MoneroUnspentOutput(
     val timestamp: Long?,
 )
 
+interface IMoneroAccountsAdapter {
+    val accountsFlow: StateFlow<List<MoneroAccountInfo>>
+    val activeAccountFlow: StateFlow<Int>
+    var activeAccount: Int
+    val activeAccountBalanceData: BalanceData
+    fun createAccount(label: String?)
+    fun renameAccount(accountIndex: Int, label: String)
+}
+
+data class MoneroAccountInfo(
+    val index: Int,
+    val label: String,
+    val balance: BigDecimal,
+    val unlocked: BigDecimal,
+)
+
 interface ISendZanoAdapter {
     val balanceData: BalanceData
     val isNativeAsset: Boolean
