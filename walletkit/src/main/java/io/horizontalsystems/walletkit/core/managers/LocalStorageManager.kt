@@ -513,6 +513,13 @@ class LocalStorageManager(
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
         }
 
+    override fun moneroActiveAccount(accountId: String): Int =
+        preferences.getInt("monero_active_account_$accountId", 0)
+
+    override fun setMoneroActiveAccount(accountId: String, accountIndex: Int) {
+        preferences.edit().putInt("monero_active_account_$accountId", accountIndex).apply()
+    }
+
     override var marketFavoritesSorting: WatchlistSorting?
         get() = preferences.getString(MARKET_FAVORITES_SORTING, null)?.let {
             WatchlistSorting.valueOf(it)
