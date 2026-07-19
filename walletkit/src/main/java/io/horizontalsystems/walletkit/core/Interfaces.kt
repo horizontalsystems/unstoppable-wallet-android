@@ -127,6 +127,8 @@ interface ILocalStorage {
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
     var mainTab: MainModule.MainNavigation?
+    fun moneroActiveAccount(accountId: String): Int
+    fun setMoneroActiveAccount(accountId: String, accountIndex: Int)
     var marketFavoritesSorting: WatchlistSorting?
     var marketFavoritesShowSignals: Boolean
     var marketFavoritesManualSortingOrder: List<String>

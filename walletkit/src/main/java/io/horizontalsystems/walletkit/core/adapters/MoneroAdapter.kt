@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.BackgroundManagerState
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
+import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
@@ -50,6 +51,8 @@ class MoneroAdapter(
     private val transactionsAdapter: MoneroTransactionsAdapter,
     private val backgroundManager: BackgroundManager,
     private val _activeAccountFlow: MutableStateFlow<Int>,
+    private val localStorage: ILocalStorage,
+    private val walletAccountId: String,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, IMoneroAccountsAdapter,
     ITransactionsAdapter by transactionsAdapter {
 
@@ -58,12 +61,10 @@ class MoneroAdapter(
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    private var balance = Balance(0, 0)
-
     override var balanceState: AdapterState = kit.syncStateFlow.value.toAdapterState()
 
     override val balanceData: BalanceData
-        get() = balance.toBalanceData()
+        get() = activeAccountBalanceData
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -80,6 +81,7 @@ class MoneroAdapter(
         get() = _activeAccountFlow.value
         set(value) {
             _activeAccountFlow.value = value
+            localStorage.setMoneroActiveAccount(walletAccountId, value)
             // poke balance collectors so screens re-read account-scoped data
             balanceUpdatedSubject.onNext(Unit)
         }
@@ -90,7 +92,8 @@ class MoneroAdapter(
 
     override val activeAccountBalanceData: BalanceData
         get() {
-            val account = kit.accountsFlow.value.firstOrNull { it.index == activeAccount }
+            // accounts are dense and ordered (0..n-1), so position equals index
+            val account = kit.accountsFlow.value.getOrNull(activeAccount)
                 ?: return BalanceData(BigDecimal.ZERO)
             return account.balance.toBalanceData()
         }
@@ -107,8 +110,12 @@ class MoneroAdapter(
         get() = true
 
     override fun start() {
-        kit.balanceFlow.collectWith(coroutineScope) {
-            balance = it
+        kit.accountsFlow.collectWith(coroutineScope) { accounts ->
+            // a persisted selection may point to an account that no longer exists
+            // (e.g. the wallet was re-created from seed)
+            if (accounts.isNotEmpty() && accounts.none { it.index == activeAccount }) {
+                activeAccount = 0
+            }
 
             balanceUpdatedSubject.onNext(Unit)
         }
@@ -235,7 +242,8 @@ class MoneroAdapter(
                 node.trusted
             )
 
-            val activeAccountFlow = MutableStateFlow(0)
+            val walletAccountId = wallet.account.id
+            val activeAccountFlow = MutableStateFlow(App.localStorage.moneroActiveAccount(walletAccountId))
             val transactionsProvider = MoneroTransactionsProvider(activeAccountFlow)
             val transactionsAdapter = MoneroTransactionsAdapter(kit, transactionsProvider, wallet)
 
@@ -244,7 +252,9 @@ class MoneroAdapter(
                 transactionsProvider,
                 transactionsAdapter,
                 App.backgroundManager,
-                activeAccountFlow
+                activeAccountFlow,
+                App.localStorage,
+                walletAccountId
             )
         }
 
