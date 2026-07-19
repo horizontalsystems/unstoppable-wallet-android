@@ -15,7 +15,9 @@ import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.rx2.asFlowable
 
 class MoneroTransactionsAdapter(
@@ -54,10 +56,16 @@ class MoneroTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?
     ): Flow<List<TransactionRecord>> {
-        return transactionsProvider.getNewTransactionsFlow(transactionType)
+        val newTransactions = transactionsProvider.getNewTransactionsFlow(transactionType)
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
             }
+        // any emission makes TransactionAdapterWrapper drop its cache and re-query,
+        // which is exactly what an account switch needs
+        val accountSwitch = transactionsProvider.activeAccountFlow.drop(1)
+            .map { emptyList<TransactionRecord>() }
+
+        return merge(newTransactions, accountSwitch)
     }
 
     override fun getTransactionUrl(transactionHash: String): String =

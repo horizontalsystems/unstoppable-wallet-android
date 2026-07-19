@@ -4,11 +4,16 @@ import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlin.math.min
 
-class MoneroTransactionsProvider {
+// transactions are exposed for the active wallet2 account only; the account
+// state is owned by MoneroAdapter, this is a read-only view of it
+class MoneroTransactionsProvider(
+    val activeAccountFlow: StateFlow<Int>,
+) {
     private var transactions = listOf<TransactionInfo>()
     private val newTransactionsFlow = MutableSharedFlow<List<TransactionInfo>>(extraBufferCapacity = 1)
 
@@ -59,6 +64,7 @@ class MoneroTransactionsProvider {
 
     private fun getFilters(transactionType: FilterTransactionType) =
         buildList<(TransactionInfo) -> Boolean> {
+            add { it.accountIndex == activeAccountFlow.value }
             when (transactionType) {
                 FilterTransactionType.All -> Unit
                 FilterTransactionType.Incoming -> add { it.direction == TransactionInfo.Direction.Direction_In }

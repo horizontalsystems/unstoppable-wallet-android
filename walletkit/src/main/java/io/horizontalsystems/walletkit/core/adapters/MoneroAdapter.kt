@@ -50,6 +50,7 @@ class MoneroAdapter(
     private val transactionsProvider: MoneroTransactionsProvider,
     private val transactionsAdapter: MoneroTransactionsAdapter,
     private val backgroundManager: BackgroundManager,
+    private val _activeAccountFlow: MutableStateFlow<Int>,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, IMoneroAccountsAdapter,
     ITransactionsAdapter by transactionsAdapter {
 
@@ -74,8 +75,7 @@ class MoneroAdapter(
     override val receiveAddress: String
         get() = kit.receiveAddress(activeAccount)
 
-    private val _activeAccountFlow = MutableStateFlow(0)
-    override val activeAccountFlow = _activeAccountFlow.asStateFlow()
+    override val activeAccountFlow: StateFlow<Int> = _activeAccountFlow.asStateFlow()
 
     override var activeAccount: Int
         get() = _activeAccountFlow.value
@@ -236,14 +236,16 @@ class MoneroAdapter(
                 node.trusted
             )
 
-            val transactionsProvider = MoneroTransactionsProvider()
+            val activeAccountFlow = MutableStateFlow(0)
+            val transactionsProvider = MoneroTransactionsProvider(activeAccountFlow)
             val transactionsAdapter = MoneroTransactionsAdapter(kit, transactionsProvider, wallet)
 
             return MoneroAdapter(
                 kit,
                 transactionsProvider,
                 transactionsAdapter,
-                App.backgroundManager
+                App.backgroundManager,
+                activeAccountFlow
             )
         }
 
