@@ -54,6 +54,9 @@ class SendAmountService(
         )
     }
 
+    // mutated from the UI thread and background collectors (e.g. Monero account
+    // switches); all mutators are serialized to keep validation consistent
+    @Synchronized
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
 
@@ -62,6 +65,7 @@ class SendAmountService(
         emitState()
     }
 
+    @Synchronized
     fun setMinimumSendAmount(minimumSendAmount: BigDecimal?) {
         this.minimumSendAmount = minimumSendAmount
 
@@ -70,6 +74,7 @@ class SendAmountService(
         emitState()
     }
 
+    @Synchronized
     fun setAvailableBalance(availableBalance: BigDecimal) {
         this.availableBalance = availableBalance
 
