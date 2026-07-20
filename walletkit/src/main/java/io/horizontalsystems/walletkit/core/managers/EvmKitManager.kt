@@ -147,16 +147,21 @@ class EvmKitManager(
             account.id
         )
 
-        Erc20Kit.addTransactionSyncer(evmKit)
-        Erc20Kit.addDecorators(evmKit)
+        // A registered config provider may own the kit's transaction pipeline
+        // (syncers + decorators) for this account; defaults only otherwise.
+        val configured = EvmKitConfigResolver.provider?.configure(evmKit, account, blockchainType) == true
+        if (!configured) {
+            Erc20Kit.addTransactionSyncer(evmKit)
+            Erc20Kit.addDecorators(evmKit)
 
-        UniswapKit.addDecorators(evmKit)
-        try {
-            UniswapV3Kit.addDecorators(evmKit)
-        } catch (e: UnsupportedChainError.NoWethAddress) {
-            //do nothing
+            UniswapKit.addDecorators(evmKit)
+            try {
+                UniswapV3Kit.addDecorators(evmKit)
+            } catch (e: UnsupportedChainError.NoWethAddress) {
+                //do nothing
+            }
+            OneInchKit.addDecorators(evmKit)
         }
-        OneInchKit.addDecorators(evmKit)
 
         val nftKit: NftKit? = null
 //        var nftKit: NftKit? = null

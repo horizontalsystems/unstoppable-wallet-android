@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.managers.EvmKitWrapper
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
+import io.horizontalsystems.walletkit.core.managers.EvmTransactionConverterResolver
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
@@ -34,6 +35,15 @@ class EvmTransactionsAdapter(
 
     private val evmKit = evmKitWrapper.evmKit
     private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseToken, evmLabelManager)
+
+    // A registered converter fully replaces the stock conversion for this
+    // adapter; rows it maps to null stay hidden.
+    private val customConverter = EvmTransactionConverterResolver.provider
+        ?.converter(source, baseToken, evmKit.receiveAddress)
+
+    private suspend fun records(fullTransactions: List<FullTransaction>, token: Token?): List<TransactionRecord> =
+        customConverter?.let { converter -> fullTransactions.mapNotNull { converter.convert(it, token) } }
+            ?: fullTransactions.map { transactionConverter.transactionRecord(it) }
 
     override val explorerTitle: String
         get() = evmTransactionSource.name
@@ -65,19 +75,21 @@ class EvmTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): List<TransactionRecord> {
-        return evmKit.getFullTransactionsAsync(
-            getFilters(token, transactionType, address?.lowercase()),
-            from?.transactionHash?.hexStringToByteArray(),
-            limit
+        return records(
+            evmKit.getFullTransactionsAsync(
+                getFilters(token, transactionType, address?.lowercase()),
+                from?.transactionHash?.hexStringToByteArray(),
+                limit
+            ).await(),
+            token
         )
-            .await()
-            .map { tx -> transactionConverter.transactionRecord(tx) }
     }
 
     override suspend fun getTransactionsAfter(fromTransactionId: String?): List<TransactionRecord> {
-        return evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull())
-            .await()
-            .map { tx -> transactionConverter.transactionRecord(tx) }
+        return records(
+            evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull()).await(),
+            null
+        )
     }
 
     override suspend fun getFullTransactionsBefore(
@@ -98,7 +110,7 @@ class EvmTransactionsAdapter(
     ): Flow<List<TransactionRecord>> {
         return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address))
             .asFlow()
-            .map { it.map { tx -> transactionConverter.transactionRecord(tx) } }
+            .map { records(it, token) }
     }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
