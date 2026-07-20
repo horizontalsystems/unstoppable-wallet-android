@@ -174,23 +174,26 @@ class MoneroAdapter(
             }
     }
 
+    // JNI: builds and broadcasts the transaction, blocking for seconds on decoy
+    // fetching and signing - keep it off the CPU-bound Default pool
     override suspend fun send(
         amount: BigDecimal,
         address: String,
         memo: String?,
         selectedOutputs: List<String>?
-    ): String {
+    ): String = withContext(Dispatchers.IO) {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        return kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount)
+        kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount)
     }
 
+    // JNI: blocks on daemon RPC
     override suspend fun estimateFee(
         amount: BigDecimal,
         address: String,
         memo: String?
-    ): BigDecimal {
+    ): BigDecimal = withContext(Dispatchers.IO) {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        return kit.estimateFee(amountInPiconero, address, memo, activeAccount).scaledDown(DECIMALS)
+        kit.estimateFee(amountInPiconero, address, memo, activeAccount).scaledDown(DECIMALS)
     }
 
     fun getSubaddresses(): List<Subaddress> {
