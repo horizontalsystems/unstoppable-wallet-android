@@ -20,6 +20,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.evm.ContractCr
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.EvmTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.SwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
@@ -705,6 +706,14 @@ object TransactionViewItemFactoryHelper {
             }
 
             is ZanoOutgoingTransactionRecord -> {
+                transaction.fee?.let { fee ->
+                    if (!fee.zeroValue) {
+                        items.add(getFee(fee, rates[fee.coinUid]))
+                    }
+                }
+            }
+
+            is ThorchainOutgoingTransactionRecord -> {
                 transaction.fee?.let { fee ->
                     if (!fee.zeroValue) {
                         items.add(getFee(fee, rates[fee.coinUid]))

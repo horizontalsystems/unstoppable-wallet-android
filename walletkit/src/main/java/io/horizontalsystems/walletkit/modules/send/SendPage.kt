@@ -25,6 +25,9 @@ import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarModule
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarScreen
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarViewModel
+import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainModule
+import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainScreen
+import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewModel
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonModule
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonScreen
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
@@ -174,6 +177,20 @@ data class SendPage(val input: Input) : HSPage() {
                     title,
                     navigation,
                     sendStellarViewModel,
+                    amountInputModeViewModel,
+                    sendEntryPointDestId,
+                    amount,
+                    riskyAddress = riskyAddress
+                )
+            }
+
+            BlockchainType.Thorchain -> {
+                val factory = SendThorchainModule.Factory(wallet, address, hideAddress)
+                val sendThorchainViewModel = viewModel<SendThorchainViewModel>(factory = factory)
+                SendThorchainScreen(
+                    title,
+                    navigation,
+                    sendThorchainViewModel,
                     amountInputModeViewModel,
                     sendEntryPointDestId,
                     amount,

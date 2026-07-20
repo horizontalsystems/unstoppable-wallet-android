@@ -16,6 +16,7 @@ import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.SolanaKitManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
+import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
@@ -41,6 +42,7 @@ class AppStatusViewModel(
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
+    private val thorchainKitManager: ThorchainKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val zanoKitManager: ZanoKitManager,
@@ -222,6 +224,10 @@ class AppStatusViewModel(
 
         stellarKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Stellar"] = statusInfo
+        }
+
+        thorchainKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Thorchain"] = statusInfo
         }
 
         solanaKitManager.statusInfo?.let { statusInfo ->

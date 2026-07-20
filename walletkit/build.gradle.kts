@@ -183,6 +183,7 @@ dependencies {
     api(libs.kit.fee.rate)
     api(libs.kit.market)
     api(libs.kit.solana)
+    api(libs.kit.thorchain)
     api(libs.kit.tron)
     api(libs.zcash.android.sdk)
 

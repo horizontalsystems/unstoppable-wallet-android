@@ -61,6 +61,7 @@ import io.horizontalsystems.walletkit.core.managers.SolanaWalletManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.walletkit.core.managers.StellarAccountManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
+import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
 import io.horizontalsystems.walletkit.core.managers.SystemInfoManager
 import io.horizontalsystems.walletkit.core.managers.TermsManager
@@ -183,6 +184,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var tronKitManager: TronKitManager
         lateinit var tonKitManager: TonKitManager
         lateinit var stellarKitManager: StellarKitManager
+        lateinit var thorchainKitManager: ThorchainKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
@@ -327,6 +329,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
         stellarKitManager = StellarKitManager(backgroundManager)
+        thorchainKitManager = ThorchainKitManager(backgroundManager)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -407,6 +410,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tronKitManager = tronKitManager,
             tonKitManager = tonKitManager,
             stellarKitManager = stellarKitManager,
+            thorchainKitManager = thorchainKitManager,
             backgroundManager = backgroundManager,
             restoreSettingsManager = restoreSettingsManager,
             coinManager = coinManager,
@@ -424,6 +428,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tronKitManager,
             tonKitManager,
             stellarKitManager,
+            thorchainKitManager,
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
         spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)

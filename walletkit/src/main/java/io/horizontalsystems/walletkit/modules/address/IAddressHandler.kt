@@ -18,6 +18,8 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.stellarkit.StellarKit
+import io.horizontalsystems.thorchainkit.models.Address as ThorchainAddress
+import io.horizontalsystems.thorchainkit.network.Network as ThorchainNetwork
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
 import io.horizontalsystems.zanokit.ZanoKit
@@ -134,6 +136,7 @@ class AddressHandlerUdn(
             BlockchainType.Tron -> "TRX"
             BlockchainType.Ton -> "TON"
             BlockchainType.Stellar -> "XLM"
+            BlockchainType.Thorchain -> "RUNE"
             BlockchainType.Monero -> "XMR"
             BlockchainType.Zano -> "ZANO"
             is BlockchainType.Unsupported -> blockchainType.uid
@@ -311,6 +314,21 @@ class AddressHandlerStellar : IAddressHandler {
 
     override fun isSupported(value: String) = try {
         StellarKit.validateAddress(value)
+        true
+    } catch (e: Exception) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(value, blockchainType = blockchainType)
+    }
+}
+
+class AddressHandlerThorchain : IAddressHandler {
+    override val blockchainType = BlockchainType.Thorchain
+
+    override fun isSupported(value: String) = try {
+        ThorchainAddress.fromString(value, ThorchainNetwork.Mainnet)
         true
     } catch (e: Exception) {
         false

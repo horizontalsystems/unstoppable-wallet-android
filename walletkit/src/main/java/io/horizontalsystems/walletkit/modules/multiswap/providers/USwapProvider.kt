@@ -220,6 +220,14 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
                 }
 
+                BlockchainType.Thorchain -> {
+                    if (token.address.isNullOrBlank()) {
+                        App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
+                            assetsMap[it] = token.identifier
+                        }
+                    }
+                }
+
                 BlockchainType.Zano -> {
                     val tokenType = if (!token.address.isNullOrBlank()) {
                         TokenType.ZanoAsset(token.address)

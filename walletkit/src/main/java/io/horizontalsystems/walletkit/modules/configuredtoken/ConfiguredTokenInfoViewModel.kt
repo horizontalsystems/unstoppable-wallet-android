@@ -55,6 +55,9 @@ class ConfiguredTokenInfoViewModel(
             is TokenType.ZanoAsset -> {
                 ConfiguredTokenInfoType.Contract(type.reference, token.blockchain.type.imageUrl, null)
             }
+            is TokenType.ThorchainAsset -> {
+                ConfiguredTokenInfoType.Contract(type.denom, token.blockchain.type.imageUrl, null)
+            }
             is TokenType.Unsupported -> null
         }
 

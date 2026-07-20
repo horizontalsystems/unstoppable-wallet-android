@@ -161,6 +161,7 @@ class BalanceViewItemFactory {
         BlockchainType.Solana,
         BlockchainType.Tron,
         BlockchainType.Stellar,
+        BlockchainType.Thorchain,
         BlockchainType.Ton -> 50
 
         is BlockchainType.Unsupported -> 0

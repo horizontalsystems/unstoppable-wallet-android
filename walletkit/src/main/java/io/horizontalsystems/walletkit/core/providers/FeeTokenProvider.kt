@@ -17,6 +17,7 @@ class FeeTokenProvider(
             is TokenType.Jetton,
             is TokenType.Asset,
             is TokenType.ZanoAsset,
+            is TokenType.ThorchainAsset,
             -> {
                 TokenQuery(token.blockchainType, TokenType.Native)
             }

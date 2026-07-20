@@ -112,6 +112,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Stellar -> {
             tokenType is TokenType.Native || tokenType is TokenType.Asset
         }
+        BlockchainType.Thorchain -> {
+            tokenType is TokenType.Native || tokenType is TokenType.ThorchainAsset
+        }
         BlockchainType.Monero -> {
             tokenType is TokenType.Native
         }
@@ -143,6 +146,7 @@ val Blockchain.description: String
         BlockchainType.Tron -> "TRX, TRC20 tokens"
         BlockchainType.Ton -> "TON"
         BlockchainType.Stellar -> "XLM, Stellar assets"
+        BlockchainType.Thorchain -> "RUNE, THORChain assets"
         BlockchainType.Monero -> "XMR"
         BlockchainType.Zano -> "ZANO"
         else -> ""
@@ -180,6 +184,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
         BlockchainType.Stellar,
+        BlockchainType.Thorchain,
         BlockchainType.Dash,
         BlockchainType.Litecoin,
         BlockchainType.BitcoinCash,
@@ -238,6 +243,7 @@ val BlockchainType.title: String
     BlockchainType.Tron -> "Tron"
     BlockchainType.Ton -> "Ton"
     BlockchainType.Stellar -> "Stellar"
+    BlockchainType.Thorchain -> "THORChain"
     BlockchainType.Monero -> "Monero"
     BlockchainType.Zano -> "Zano"
     is BlockchainType.Unsupported -> this.uid
@@ -314,6 +320,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Litecoin,
         BlockchainType.Solana,
         BlockchainType.Stellar,
+        BlockchainType.Thorchain,
         BlockchainType.Ton,
         BlockchainType.Tron,
         is BlockchainType.Unsupported,
@@ -345,6 +352,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 BlockchainType.Polygon,
                 BlockchainType.Solana,
                 BlockchainType.Stellar,
+                BlockchainType.Thorchain,
                 BlockchainType.Ton,
                 BlockchainType.Tron,
                 BlockchainType.Zcash,
@@ -621,6 +629,7 @@ val TokenType.meta: String?
         is TokenType.Derived -> this.derivation.name
         is TokenType.AddressTyped -> this.type.name
         is TokenType.ZanoAsset -> this.reference
+        is TokenType.ThorchainAsset -> this.denom
         else -> null
     }
 
@@ -646,6 +655,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Tron,
         BlockchainType.Ton,
         BlockchainType.Stellar,
+        BlockchainType.Thorchain,
         BlockchainType.Monero,
         BlockchainType.Zano,
     )

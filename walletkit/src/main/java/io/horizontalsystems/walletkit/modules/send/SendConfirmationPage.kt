@@ -11,6 +11,8 @@ import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaConfirmation
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarViewModel
+import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainConfirmationScreen
+import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewModel
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
@@ -89,6 +91,16 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 )
             }
 
+            Type.Thorchain -> {
+                val sendThorchainViewModel = navigation.viewModelForScreen<SendThorchainViewModel>(SendPage::class)
+
+                SendThorchainConfirmationScreen(
+                    navigation,
+                    sendThorchainViewModel,
+                    input.sendEntryPointDestId
+                )
+            }
+
             Type.Monero -> {
                 val sendMoneroViewModel = navigation.viewModelForScreen<SendMoneroViewModel>(SendPage::class)
 
@@ -113,7 +125,7 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
 
     @Serializable
     enum class Type {
-        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Monero, Zano
+        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Thorchain, Monero, Zano
     }
 
     @Serializable

@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
 import io.horizontalsystems.walletkit.core.ISendStellarAdapter
+import io.horizontalsystems.walletkit.core.ISendThorchainAdapter
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
 import io.horizontalsystems.walletkit.core.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter.ZcashError
@@ -56,6 +57,14 @@ class TonAddressValidator : EnterAddressValidator {
 
 class StellarAddressValidator(private val token: Token) : EnterAddressValidator {
     private val sendAdapter by lazy { App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token) }
+    override suspend fun validate(address: Address) {
+        val adapter = sendAdapter ?: throw AddressValidationError.NoAdapter()
+        adapter.validate(address.hex)
+    }
+}
+
+class ThorchainAddressValidator(private val token: Token) : EnterAddressValidator {
+    private val sendAdapter by lazy { App.adapterManager.getAdapterForToken<ISendThorchainAdapter>(token) }
     override suspend fun validate(address: Address) {
         val adapter = sendAdapter ?: throw AddressValidationError.NoAdapter()
         adapter.validate(address.hex)

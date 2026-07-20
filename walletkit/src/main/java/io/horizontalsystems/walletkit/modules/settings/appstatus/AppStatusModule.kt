@@ -20,6 +20,7 @@ object AppStatusModule {
                 App.tronKitManager,
                 App.tonKitManager,
                 App.stellarKitManager,
+                App.thorchainKitManager,
                 App.solanaKitManager,
                 App.btcBlockchainManager,
                 App.zanoKitManager,

@@ -299,6 +299,23 @@ class CoinOverviewViewModel(
                         )
                     }
 
+                    is TokenType.ThorchainAsset -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.denom,
+                                copyValue = tokenType.denom,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
+
                     is TokenType.Unsupported -> {
                         items.add(
                             TokenVariant(

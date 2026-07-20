@@ -18,6 +18,8 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.evm.SwapTransa
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainIncomingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
@@ -489,6 +491,34 @@ class TransactionInfoViewItemFactory(
                 if (!transaction.txKey.isNullOrEmpty()) {
                     miscItemsSection.add(TransactionInfoViewItem.TransactionSecretKey(transaction.txKey))
                 }
+            }
+
+            is ThorchainIncomingTransactionRecord -> {
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                        value = transaction.value,
+                        fromAddress = transaction.from,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        blockchainType = blockchainType,
+                    )
+                )
+                addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is ThorchainOutgoingTransactionRecord -> {
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getSendSectionItems(
+                        value = transaction.value,
+                        toAddress = transaction.to,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        sentToSelf = transaction.sentToSelf,
+                        blockchainType = blockchainType,
+                    )
+                )
+                addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is ZanoIncomingTransactionRecord -> {

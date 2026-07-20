@@ -22,6 +22,8 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.evm.SwapTransa
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.UnknownSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainIncomingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.nftUids
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
@@ -177,6 +179,12 @@ class TransactionInfoService(
                     listOf(tx.value.coinUid)
                 }
                 is ZanoOutgoingTransactionRecord -> {
+                    listOf(tx.fee?.coinUid, tx.value.coinUid)
+                }
+                is ThorchainIncomingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
+                }
+                is ThorchainOutgoingTransactionRecord -> {
                     listOf(tx.fee?.coinUid, tx.value.coinUid)
                 }
                 else -> emptyList()

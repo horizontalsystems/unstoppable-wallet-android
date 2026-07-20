@@ -24,6 +24,9 @@ import io.horizontalsystems.walletkit.core.adapters.SplAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionsAdapter
+import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
+import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionConverter
+import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.TonAdapter
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionsAdapter
@@ -41,6 +44,7 @@ import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SolanaKitManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
+import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
@@ -61,6 +65,7 @@ class AdapterFactory(
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
+    private val thorchainKitManager: ThorchainKitManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val zanoKitManager: ZanoKitManager,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
@@ -180,6 +185,9 @@ class AdapterFactory(
             BlockchainType.Stellar -> {
                 StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
             }
+            BlockchainType.Thorchain -> {
+                ThorchainAdapter(thorchainKitManager.getThorchainKitWrapper(wallet.account), wallet)
+            }
             BlockchainType.Monero -> {
                 if (moneroNodeManager.isResolvingFastestNode) {
                     // Defer creation until startup Auto-Select picks the fastest node, so the
@@ -215,6 +223,10 @@ class AdapterFactory(
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
         is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
+        is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
+            BlockchainType.Thorchain -> ThorchainAdapter(thorchainKitManager.getThorchainKitWrapper(wallet.account), wallet)
+            else -> null
+        }
         is TokenType.ZanoAsset -> when (wallet.token.blockchainType) {
             BlockchainType.Zano -> ZanoAdapter.create(
                 wallet = wallet,
@@ -275,6 +287,22 @@ class AdapterFactory(
         return StellarTransactionsAdapter(stellarKitWrapper, transactionConverter)
     }
 
+    fun thorchainTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val thorchainKitWrapper = thorchainKitManager.getThorchainKitWrapper(source.account)
+
+        val tokenQuery = TokenQuery(BlockchainType.Thorchain, TokenType.Native)
+        val baseToken = coinManager.getToken(tokenQuery) ?: return null
+
+        val transactionConverter = ThorchainTransactionConverter(
+            coinManager,
+            source,
+            thorchainKitWrapper.thorchainKit.receiveAddress,
+            baseToken
+        )
+
+        return ThorchainTransactionsAdapter(thorchainKitWrapper, transactionConverter)
+    }
+
     fun tonTransactionConverter(
         address: Address,
         source: TransactionSource,
@@ -313,6 +341,9 @@ class AdapterFactory(
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(wallet.account)
             }
+            BlockchainType.Thorchain -> {
+                thorchainKitManager.unlink(wallet.account)
+            }
             BlockchainType.Zano -> {
                 zanoKitManager.unlink(wallet.account)
             }
@@ -343,6 +374,9 @@ class AdapterFactory(
             }
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Thorchain -> {
+                thorchainKitManager.unlink(transactionSource.account)
             }
             else -> Unit
         }

@@ -73,9 +73,10 @@ tonKit = "947c48a"
 bitcoinKit = "7a552c4"
 ethereumKit = "8c70f5e021"
 feeRateKit = "393cc14"
-marketKit = "3be4e8a"
+marketKit = "003ce35"
 solanaKit = "b487161"
 tronKit = "ce966b7"
+thorchainKit = "c88bef8"
 zcashSdk = "2.5.2"
 
 # Binance
@@ -241,6 +242,7 @@ kit-fee-rate = { module = "com.github.horizontalsystems:blockchain-fee-rate-kit-
 kit-market = { module = "com.github.horizontalsystems:market-kit-android", version.ref = "marketKit" }
 kit-solana = { module = "com.github.horizontalsystems:solana-kit-android", version.ref = "solanaKit" }
 kit-tron = { module = "com.github.horizontalsystems:tron-kit-android", version.ref = "tronKit" }
+kit-thorchain = { module = "com.github.horizontalsystems:thorchain-kit-android", version.ref = "thorchainKit" }
 zcash-android-sdk = { module = "cash.z.ecc.android:zcash-android-sdk", version.ref = "zcashSdk" }
 
 # Binance

@@ -503,6 +503,15 @@ interface ISendStellarAdapter {
     suspend fun send(transactionEnvelope: String)
 }
 
+interface ISendThorchainAdapter {
+    val availableBalance: BigDecimal
+    val runeAvailableBalance: BigDecimal
+    val fee: BigDecimal
+    val isNativeCoin: Boolean
+    fun validate(address: String)
+    suspend fun send(amount: BigDecimal, address: String, memo: String?): String
+}
+
 interface ISendMoneroAdapter {
     val balanceData: BalanceData
     suspend fun getUnspentOutputs(): List<MoneroUnspentOutput>

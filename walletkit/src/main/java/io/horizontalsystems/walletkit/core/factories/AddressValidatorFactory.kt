@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.MoneroAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.SolanaAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.StellarAddressValidator
+import io.horizontalsystems.walletkit.modules.send.address.ThorchainAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TonAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.ZanoAddressValidator
@@ -57,6 +58,10 @@ object AddressValidatorFactory {
 
             is BlockchainType.Stellar -> {
                 StellarAddressValidator(token)
+            }
+
+            is BlockchainType.Thorchain -> {
+                ThorchainAddressValidator(token)
             }
 
             is BlockchainType.Monero -> {

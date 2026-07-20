@@ -238,6 +238,7 @@ class WatchAddressViewModel(
         BlockchainType.Monero -> Type.MoneroAddress
         BlockchainType.Zcash,
         BlockchainType.Zano,
+        BlockchainType.Thorchain,
         is BlockchainType.Unsupported,
         null -> Type.Unsupported
     }

@@ -81,6 +81,10 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerStellar())
             }
 
+            BlockchainType.Thorchain -> {
+                addressHandlers.add(AddressHandlerThorchain())
+            }
+
             BlockchainType.Monero -> {
                 addressHandlers.add(AddressHandlerMonero())
             }

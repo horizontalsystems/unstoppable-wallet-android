@@ -67,6 +67,7 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceZano(adapter)
             }
 
+            BlockchainType.Thorchain,
             is BlockchainType.Unsupported,
                 -> throw UnsupportedException("")
         }
