@@ -237,14 +237,14 @@ class MoneroAccountsViewModel(
     private var activeAccountIndex = adapter.activeAccountFlow.value
 
     init {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             adapter.accountsFlow.collect {
                 accounts = it
 
                 emitState()
             }
         }
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             adapter.activeAccountFlow.collect {
                 activeAccountIndex = it
 
