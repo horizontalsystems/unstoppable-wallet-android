@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -128,19 +129,21 @@ fun MoneroAccountsScreen(
             onDismissRequest = { sheetMode = null },
             sheetState = sheetState
         ) {
-            AccountNameSheet(
-                mode = mode,
-                onConfirm = { name ->
-                    when (mode) {
-                        is AccountNameSheetMode.Create -> viewModel.onCreateAccount(name.ifBlank { null })
-                        is AccountNameSheetMode.Rename -> viewModel.onRenameAccount(mode.account.index, name)
+            key(mode) {
+                AccountNameSheet(
+                    mode = mode,
+                    onConfirm = { name ->
+                        when (mode) {
+                            is AccountNameSheetMode.Create -> viewModel.onCreateAccount(name.ifBlank { null })
+                            is AccountNameSheetMode.Rename -> viewModel.onRenameAccount(mode.account.index, name)
+                        }
+                        scope.launch {
+                            sheetState.hide()
+                            sheetMode = null
+                        }
                     }
-                    scope.launch {
-                        sheetState.hide()
-                        sheetMode = null
-                    }
-                }
-            )
+                )
+            }
         }
     }
 }
