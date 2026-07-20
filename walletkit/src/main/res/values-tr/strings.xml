@@ -1792,4 +1792,10 @@
     <string name="Send_Memo_OffchainInfo">Yalnızca bu cihazda depolanır — zincir üzerinde değildir.</string>
     <string name="AddMoneroNode_Error_PortRequired">Düğüm URL\'si bir port içermelidir, örneğin https://node.com:18081</string>
     <string name="ManageAccounts_ManageWallet">Wallet\'ı Yönet</string>
+    <string name="Monero_Account">Hesap</string>
+    <string name="Monero_Accounts">Hesaplar</string>
+    <string name="Monero_NewAccount">Yeni Hesap</string>
+    <string name="Monero_RenameAccount">Hesabı Yeniden Adlandır</string>
+    <string name="Monero_AccountName">Ad</string>
+    <string name="Monero_Accounts_Description">Hesaplar, aynı Monero cüzdanının ayrı bölmeleridir. Bakiye, işlemler, alma ve gönderme hepsi seçili hesaba uygulanır. Hesaplar arasında fon taşımak, ağ ücretli normal bir zincir üstü işlemdir.</string>
 </resources>

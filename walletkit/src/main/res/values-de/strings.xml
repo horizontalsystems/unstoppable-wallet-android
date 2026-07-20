@@ -1800,4 +1800,10 @@
     <string name="Send_Memo_OffchainInfo">Nur auf diesem Gerät gespeichert — nicht in der Blockchain.</string>
     <string name="AddMoneroNode_Error_PortRequired">Node-URL muss einen Port enthalten, z. B. https://node.com:18081</string>
     <string name="ManageAccounts_ManageWallet">Wallet verwalten</string>
+    <string name="Monero_Account">Konto</string>
+    <string name="Monero_Accounts">Konten</string>
+    <string name="Monero_NewAccount">Neues Konto</string>
+    <string name="Monero_RenameAccount">Konto umbenennen</string>
+    <string name="Monero_AccountName">Name</string>
+    <string name="Monero_Accounts_Description">Konten sind separate Bereiche derselben Monero-Wallet. Saldo, Transaktionen, Empfangen und Senden gelten alle für das ausgewählte Konto. Das Verschieben von Mitteln zwischen Konten ist eine reguläre On-Chain-Transaktion mit einer Netzwerkgebühr.</string>
 </resources>

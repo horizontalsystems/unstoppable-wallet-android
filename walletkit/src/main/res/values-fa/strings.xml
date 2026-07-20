@@ -723,4 +723,10 @@
     <string name="Send_Memo_OffchainInfo">فقط در این دستگاه ذخیره شده است — در بلاک‌چین نیست.</string>
     <string name="AddMoneroNode_Error_PortRequired">آدرس گره باید شامل یک پورت باشد، برای مثال https://node.com:18081</string>
     <string name="ManageAccounts_ManageWallet">مدیریت کیف پول</string>
+    <string name="Monero_Account">حساب</string>
+    <string name="Monero_Accounts">حسابات</string>
+    <string name="Monero_NewAccount">حساب جدید</string>
+    <string name="Monero_RenameAccount">تغییر نام حساب</string>
+    <string name="Monero_AccountName">نام</string>
+    <string name="Monero_Accounts_Description">حسابات بخش‌های جداگانه‌ای از یک کیف پول مونرو هستند. موجودی، تراکنش‌ها، دریافت و ارسال برای حساب انتخاب‌شده اعمال می‌شود. انتقال وجوه بین حسابات یک تراکنش معمولی درون‌زنجیری با هزینه شبکه است.</string>
 </resources>

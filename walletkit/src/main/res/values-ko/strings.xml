@@ -1792,4 +1792,10 @@
     <string name="Send_Memo_OffchainInfo">이 기기에만 저장됨 — 블록체인에 기록되지 않음.</string>
     <string name="AddMoneroNode_Error_PortRequired">노드 URL에 포트가 포함되어야 합니다(예: https://node.com:18081)</string>
     <string name="ManageAccounts_ManageWallet">지갑 관리</string>
+    <string name="Monero_Account">계정</string>
+    <string name="Monero_Accounts">계정들</string>
+    <string name="Monero_NewAccount">새 계정</string>
+    <string name="Monero_RenameAccount">계정 이름 변경</string>
+    <string name="Monero_AccountName">이름</string>
+    <string name="Monero_Accounts_Description">계정은 동일한 모네로 지갑의 별도 구획입니다. 잔액, 거래, 수신 및 전송은 모두 선택한 계정에 적용됩니다. 계정 간의 자금 이동은 네트워크 수수료가 있는 일반적인 온체인 거래입니다.</string>
 </resources>

@@ -1791,4 +1791,10 @@
     <string name="Send_Memo_OffchainInfo">仅存储在此设备上 — 不在区块链上。</string>
     <string name="AddMoneroNode_Error_PortRequired">节点URL必须包含端口，例如 https://node.com:18081</string>
     <string name="ManageAccounts_ManageWallet">管理钱包</string>
+    <string name="Monero_Account">账户</string>
+    <string name="Monero_Accounts">账户</string>
+    <string name="Monero_NewAccount">新建账户</string>
+    <string name="Monero_RenameAccount">重命名账户</string>
+    <string name="Monero_AccountName">名称</string>
+    <string name="Monero_Accounts_Description">账户是同一个门罗币钱包中的独立隔间。余额、交易、接收和发送都适用于选定的账户。在账户之间转移资金是一笔普通的链上交易，需要支付网络费用。</string>
 </resources>

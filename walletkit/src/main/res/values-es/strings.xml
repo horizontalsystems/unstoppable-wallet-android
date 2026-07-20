@@ -1791,4 +1791,10 @@
     <string name="Send_Memo_OffchainInfo">Almacenado solo en este dispositivo — no en la cadena de bloques.</string>
     <string name="AddMoneroNode_Error_PortRequired">La URL del nodo debe incluir un puerto, p. ej. https://node.com:18081</string>
     <string name="ManageAccounts_ManageWallet">Administrar Wallet</string>
+    <string name="Monero_Account">Cuenta</string>
+    <string name="Monero_Accounts">Cuentas</string>
+    <string name="Monero_NewAccount">Nueva Cuenta</string>
+    <string name="Monero_RenameAccount">Renombrar Cuenta</string>
+    <string name="Monero_AccountName">Nombre</string>
+    <string name="Monero_Accounts_Description">Las cuentas son compartimentos separados de la misma cartera Monero. El saldo, las transacciones, la recepción y el envío se aplican a la cuenta seleccionada. Mover fondos entre cuentas es una transacción normal en cadena con una comisión de red.</string>
 </resources>

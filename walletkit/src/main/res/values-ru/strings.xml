@@ -1798,4 +1798,10 @@
     <string name="Send_Memo_OffchainInfo">Сохранено только на этом устройстве — не в блокчейне.</string>
     <string name="AddMoneroNode_Error_PortRequired">URL узла должен включать порт, например https://node.com:18081</string>
     <string name="ManageAccounts_ManageWallet">Управление кошельком</string>
+    <string name="Monero_Account">Счет</string>
+    <string name="Monero_Accounts">Счета</string>
+    <string name="Monero_NewAccount">Новый счет</string>
+    <string name="Monero_RenameAccount">Переименовать счет</string>
+    <string name="Monero_AccountName">Имя</string>
+    <string name="Monero_Accounts_Description">Счета - это отдельные разделы одного кошелька Monero. Баланс, транзакции, получение и отправка применяются к выбранному счету. Перемещение средств между счетами - это обычная внутрицепочечная транзакция с сетевой комиссией.</string>
 </resources>
