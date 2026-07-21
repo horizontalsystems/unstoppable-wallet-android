@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.UnsupportedException
 import io.horizontalsystems.walletkit.core.adapters.MoneroAdapter
+import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
 import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -67,7 +68,12 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceZano(adapter)
             }
 
-            BlockchainType.Thorchain,
+            BlockchainType.Thorchain -> {
+                val adapter = App.adapterManager.getAdapterForToken<ThorchainAdapter>(token)
+                    ?: throw IllegalStateException("ThorchainAdapter is null")
+                SendTransactionServiceThorchain(adapter)
+            }
+
             is BlockchainType.Unsupported,
                 -> throw UnsupportedException("")
         }

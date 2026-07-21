@@ -78,6 +78,22 @@ sealed class SendTransactionData {
         ) : Zcash()
     }
 
+    sealed class Thorchain : SendTransactionData() {
+        // MsgDeposit to the protocol (no inbound address), used by THORChain itself
+        data class Deposit(
+            val asset: String,
+            val amount: BigDecimal,
+            val memo: String,
+        ) : Thorchain()
+
+        // MsgSend to an inbound vault address, used by protocols with a THORChain inbound (e.g. Maya)
+        data class Send(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+        ) : Thorchain()
+    }
+
     data class Monero(
         val address: String,
         val amount: BigDecimal,

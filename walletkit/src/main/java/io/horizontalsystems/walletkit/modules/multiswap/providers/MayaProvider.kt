@@ -59,7 +59,7 @@ object MayaProvider : BaseThorChainProvider(
             }
 
             return SendTransactionData.Zcash.ShieldedMemo(
-                address = quoteSwap.inbound_address,
+                address = checkNotNull(quoteSwap.inbound_address),
                 amount = amountIn,
                 memo = quoteSwap.memo,
                 memoShieldedAddress = shieldedMemoConfig.unified_address

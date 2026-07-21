@@ -12,5 +12,6 @@ sealed class SendTransactionResult {
     object Ton : SendTransactionResult()
     data class Zcash(val transactionHash: String?) : SendTransactionResult()
     data class Monero(val txHash: String? = null) : SendTransactionResult()
+    data class Thorchain(val txHash: String? = null) : SendTransactionResult()
     data class Zano(val txHash: String? = null) : SendTransactionResult()
 }

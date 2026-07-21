@@ -21,6 +21,8 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.thorchainkit.models.Asset as ThorAsset
+import io.horizontalsystems.thorchainkit.models.Denom
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -36,6 +38,11 @@ abstract class BaseThorChainProvider(
     override val type = SwapProviderType.DEX
     override val requireTerms = false
 
+    companion object {
+        // bump to invalidate cached asset maps when the mapping logic changes
+        private const val ASSETS_MAP_VERSION = 2
+    }
+
     protected val thornodeAPI =
         APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
 
@@ -50,13 +57,15 @@ abstract class BaseThorChainProvider(
         "BASE" to BlockchainType.Base,
         "DASH" to BlockchainType.Dash,
         "ZEC" to BlockchainType.Zcash,
+        "THOR" to BlockchainType.Thorchain,
     )
 
     private var assetsMap = mapOf<Token, String>()
 
     override suspend fun start() {
         assetsMap = SwapProviderCacheHelper.getOrFetch(
-            providerId = id,
+            // versioned so cached maps built by older asset-mapping logic are not reused
+            providerId = "$id-v$ASSETS_MAP_VERSION",
             deserialize = { it },
             serialize = { it },
             fetch = { fetchAssetsMap() }
@@ -109,8 +118,22 @@ abstract class BaseThorChainProvider(
                     assetsMap.putAll(tokens.map { it to pool.asset })
                 }
 
+                BlockchainType.Thorchain -> {
+                    val denom = Denom.denomFor(ThorAsset.fromString(pool.asset))
+                    val tokenType = if (denom == Denom.RUNE) TokenType.Native else TokenType.ThorchainAsset(denom)
+
+                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let { token ->
+                        assetsMap[token] = pool.asset
+                    }
+                }
+
                 else -> Unit
             }
+        }
+
+        // RUNE is the settlement asset of every pool and is never listed in /pools
+        App.marketKit.token(TokenQuery(BlockchainType.Thorchain, TokenType.Native))?.let { rune ->
+            assetsMap[rune] = "THOR.RUNE"
         }
 
         return assetsMap
@@ -251,12 +274,31 @@ abstract class BaseThorChainProvider(
         quoteSwap: Response.QuoteSwap,
         tokenOut: Token,
     ): SendTransactionData {
-        val inboundAddress = quoteSwap.inbound_address
         val memo = quoteSwap.memo
 
         val router = quoteSwap.router
-        val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
         val dustThreshold = quoteSwap.dust_threshold?.toInt()
+
+        if (tokenIn.blockchainType == BlockchainType.Thorchain) {
+            // native input: MsgDeposit when the quote has no inbound vault (THORChain itself),
+            // MsgSend to the vault otherwise (e.g. Maya's THORChain inbound)
+            return when (val inboundAddress = quoteSwap.inbound_address) {
+                null -> SendTransactionData.Thorchain.Deposit(
+                    asset = assetsMap[tokenIn]!!,
+                    amount = amountIn,
+                    memo = memo,
+                )
+
+                else -> SendTransactionData.Thorchain.Send(
+                    address = inboundAddress,
+                    amount = amountIn,
+                    memo = memo,
+                )
+            }
+        }
+
+        val inboundAddress = checkNotNull(quoteSwap.inbound_address)
+        val recommendedGasRate = checkNotNull(quoteSwap.recommended_gas_rate).toInt()
 
         return when (tokenIn.blockchainType) {
             BlockchainType.ArbitrumOne,
@@ -350,7 +392,8 @@ interface ThornodeAPI {
 
     object Response {
         data class QuoteSwap(
-            val inbound_address: String,
+            // absent when the input asset is THORChain-native (MsgDeposit, no inbound vault)
+            val inbound_address: String?,
 //  "inbound_confirmation_blocks": 1,
             val inbound_confirmation_seconds: Long?,
 //  "outbound_delay_blocks": 179,
@@ -373,7 +416,8 @@ interface ThornodeAPI {
 //  "notes": "First output should be to inbound_address, second output should be change back to self, third output should be OP_RETURN, limited to 80 bytes. Do not send below the dust threshold. Do not use exotic spend scripts, locks or address formats (P2WSH with Bech32 address format preferred).",
             val dust_threshold: String?,
 //  "recommended_min_amount_in": "10760",
-            val recommended_gas_rate: String,
+            // absent when the input asset is THORChain-native
+            val recommended_gas_rate: String?,
 //  "gas_rate_units": "satsperbyte",
             val memo: String,
             val expected_amount_out: BigDecimal,

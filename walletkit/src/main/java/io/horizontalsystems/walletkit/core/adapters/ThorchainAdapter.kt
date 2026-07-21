@@ -13,6 +13,7 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.Address
+import io.horizontalsystems.thorchainkit.models.Asset
 import io.horizontalsystems.thorchainkit.models.Denom
 import io.horizontalsystems.thorchainkit.transaction.Signer
 import io.reactivex.BackpressureStrategy
@@ -120,6 +121,15 @@ class ThorchainAdapter(
             to = Address.fromString(address, thorchainKit.network),
             amount = amount.movePointRight(Denom.DECIMALS).toBigInteger(),
             denom = denom,
+            memo = memo,
+            signer = signer
+        )
+    }
+
+    suspend fun deposit(asset: String, amount: BigDecimal, memo: String): String {
+        return thorchainKit.deposit(
+            asset = Asset.fromString(asset),
+            amount = amount.movePointRight(Denom.DECIMALS).toBigInteger(),
             memo = memo,
             signer = signer
         )
