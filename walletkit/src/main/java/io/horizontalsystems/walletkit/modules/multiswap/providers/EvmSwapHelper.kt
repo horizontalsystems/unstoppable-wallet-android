@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.ApproveTransactionRecord
+import io.horizontalsystems.walletkit.modules.multiswap.SwapApprovalPolicy
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
@@ -50,6 +51,10 @@ object EvmSwapHelper {
         routerAddress: Address,
         token: Token,
     ): ISwapProviderAction? {
+        // Accounts that bundle the approve into their own swap operation never
+        // get a separate approve/revoke step — the execution layer owns it.
+        if (SwapApprovalPolicy.provider?.approvalsBundledWithSwap() == true) return null
+
         if (allowance == null || allowance >= amountIn) return null
         val eip20Adapter = App.adapterManager.getAdapterForToken<Eip20Adapter>(token) ?: return null
 
