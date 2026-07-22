@@ -14,6 +14,8 @@ import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Currency
+import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
+import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
@@ -46,6 +48,7 @@ class SwapViewModel(
     private val adapterManager: IAdapterManager,
     tokenIn: Token?,
     tokenOut: Token? = null,
+    private val allowancePolicy: ISwapAllowancePolicy? = null,
 ) : ViewModelUiState<SwapUiState>() {
 
     private val quoteLifetime = 20
@@ -234,7 +237,18 @@ class SwapViewModel(
             quoteState.quote?.estimationTime,
             quoteState.quotes.map { it.estimationTime }
         ),
+        allowanceActionSuppressed = allowanceActionSuppressed(),
     )
+
+    // The caller's policy can declare approve/revoke unnecessary (the execution
+    // layer owns the allowance); other action types are never suppressed.
+    private fun allowanceActionSuppressed(): Boolean {
+        val action = quoteState.quote?.actionRequired ?: return false
+        if (action !is ActionApprove && action !is ActionRevoke) return false
+        val tokenIn = quoteState.tokenIn ?: return false
+        val amountIn = quoteState.amountIn ?: return false
+        return allowancePolicy?.allowanceNotRequired(tokenIn, amountIn) == true
+    }
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
         this.networkState = networkState
@@ -377,6 +391,8 @@ class SwapViewModel(
         private val tokenOut: Token? = null,
         // null = the full provider registry
         private val providers: List<IMultiSwapProvider>? = null,
+        // null = stock behavior (approve/revoke steps surface as usual)
+        private val allowancePolicy: ISwapAllowancePolicy? = null,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -401,6 +417,7 @@ class SwapViewModel(
                 App.adapterManager,
                 tokenIn,
                 tokenOut,
+                allowancePolicy,
             ) as T
         }
     }
@@ -426,6 +443,7 @@ data class SwapUiState(
     val amlChecking: Boolean,
     val initialShowRegularPrice: Boolean,
     val swapTimeStatus: SwapTimeStatus,
+    val allowanceActionSuppressed: Boolean = false,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
@@ -434,7 +452,7 @@ data class SwapUiState(
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
         amlChecking -> SwapStep.AmlChecking
-        quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
+        quote?.actionRequired != null && !allowanceActionSuppressed -> SwapStep.ActionRequired(quote.actionRequired!!)
         else -> SwapStep.Proceed
     }
 }
