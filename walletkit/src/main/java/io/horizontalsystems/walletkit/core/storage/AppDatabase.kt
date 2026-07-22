@@ -56,6 +56,7 @@ import io.horizontalsystems.walletkit.core.storage.migrations.Migration_78_79
 import io.horizontalsystems.walletkit.core.storage.migrations.Migration_79_80
 import io.horizontalsystems.walletkit.core.storage.migrations.Migration_80_81
 import io.horizontalsystems.walletkit.core.storage.migrations.Migration_81_82
+import io.horizontalsystems.walletkit.core.storage.migrations.Migration_82_83
 import io.horizontalsystems.walletkit.entities.ActiveAccount
 import io.horizontalsystems.walletkit.entities.BlockchainSettingRecord
 import io.horizontalsystems.walletkit.entities.EnabledWallet
@@ -89,7 +90,7 @@ import io.horizontalsystems.walletkit.modules.pin.core.PinDao
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 82, exportSchema = false, entities = [
+@Database(version = 83, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -220,6 +221,7 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_79_80,
                     Migration_80_81,
                     Migration_81_82,
+                    Migration_82_83,
                 )
                 .build()
         }

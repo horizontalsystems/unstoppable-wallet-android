@@ -37,6 +37,10 @@ class SwapRecordManager(
         return swapRecordDao.getById(id)
     }
 
+    fun getByTrackingHandle(trackingHandle: String): SwapRecord? {
+        return swapRecordDao.getByTrackingHandle(trackingHandle)
+    }
+
     fun updateStatus(id: Int, status: SwapStatus, pauseReason: String?) {
         swapRecordDao.updateStatus(id, status.name, pauseReason)
         _recordsUpdatedFlow.tryEmit(Unit)

@@ -40,4 +40,7 @@ data class SwapRecord(
     val depositAddress: String?,
     val status: String,
     val pauseReason: String? = null,
+    // opaque handle linking the record to an external settlement mechanism
+    // (e.g. a smart-account userOp hash) until the real transactionHash is known
+    val trackingHandle: String? = null,
 )
