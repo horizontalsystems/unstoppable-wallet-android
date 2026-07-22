@@ -10,10 +10,12 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
  * A full replacement for the stock EVM transaction-record conversion. `token`
  * is the caller's filter scope (null = unscoped consumers): a converter may
  * shape the same transaction differently per token, e.g. one hash carrying
- * transfer legs in two tokens. A null record hides the row.
+ * transfer legs in two tokens. A null record hides the row. Suspend so
+ * implementations can consult suspend services (spam scoring), like the
+ * stock converter does.
  */
 interface IEvmTransactionConverter {
-    fun convert(fullTransaction: FullTransaction, token: Token?): TransactionRecord?
+    suspend fun convert(fullTransaction: FullTransaction, token: Token?): TransactionRecord?
 }
 
 /**
