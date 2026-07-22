@@ -78,7 +78,7 @@ ethereumKit = "8c70f5e021"
 feeRateKit = "393cc14"
 marketKit = "3bfaaae"
 solanaKit = "82c5ef4"
-tronKit = "2f07e86"
+tronKit = "2f07e864"
 zcashSdk = "2.5.2"
 
 # Binance
