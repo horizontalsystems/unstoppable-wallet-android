@@ -372,10 +372,15 @@ class SwapViewModel(
         requoteOnTimeout = false
     }
 
-    class Factory(private val tokenIn: Token?, private val tokenOut: Token? = null) : ViewModelProvider.Factory {
+    class Factory(
+        private val tokenIn: Token?,
+        private val tokenOut: Token? = null,
+        // null = the full provider registry
+        private val providers: List<IMultiSwapProvider>? = null,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val swapQuoteService = SwapQuoteService()
+            val swapQuoteService = providers?.let { SwapQuoteService(it) } ?: SwapQuoteService()
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
             val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
 

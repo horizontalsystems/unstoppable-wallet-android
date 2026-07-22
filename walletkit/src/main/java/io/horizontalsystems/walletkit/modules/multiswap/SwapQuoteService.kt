@@ -17,11 +17,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import java.math.BigDecimal
 
-class SwapQuoteService {
+class SwapQuoteService(
+    // Callers with restricted execution capabilities (e.g. smart accounts that
+    // can only broadcast a subset of providers) pass their own set.
+    private val allProviders: List<IMultiSwapProvider> = MultiSwapProviderRegistry.allProviders,
+) {
     private val tag = "SwapQuoteService"
-
-    private val allProviders = SwapProviderFilter.provider?.providers(MultiSwapProviderRegistry.allProviders)
-        ?: MultiSwapProviderRegistry.allProviders
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
