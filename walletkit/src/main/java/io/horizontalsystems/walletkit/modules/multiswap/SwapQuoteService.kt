@@ -20,7 +20,8 @@ import java.math.BigDecimal
 class SwapQuoteService {
     private val tag = "SwapQuoteService"
 
-    private val allProviders = MultiSwapProviderRegistry.allProviders
+    private val allProviders = SwapProviderFilter.provider?.providers(MultiSwapProviderRegistry.allProviders)
+        ?: MultiSwapProviderRegistry.allProviders
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
