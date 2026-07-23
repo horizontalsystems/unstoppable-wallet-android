@@ -15,9 +15,12 @@ open class EvmTransactionRecord(
     val protected: Boolean,
     val foreignTransaction: Boolean = false,
     spam: Boolean = false,
+    // display identity override; the two records of one AA swap share a
+    // transactionHash and need distinct uids to coexist in the list
+    customUid: String? = null,
 ) :
     TransactionRecord(
-        uid = transaction.hashString,
+        uid = customUid ?: transaction.hashString,
         transactionHash = transaction.hashString,
         transactionIndex = transaction.transactionIndex ?: 0,
         blockHeight = transaction.blockNumber?.toInt(),

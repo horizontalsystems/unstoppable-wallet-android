@@ -12,14 +12,16 @@ open class EvmIncomingTransactionRecord(
     val from: String,
     val value: TransactionValue,
     isSpam: Boolean,
-    protected: Boolean
+    protected: Boolean,
+    customUid: String? = null
 ) : EvmTransactionRecord(
     transaction = transaction,
     baseToken = baseToken,
     source = source,
     protected = protected,
     foreignTransaction = true,
-    spam = isSpam
+    spam = isSpam,
+    customUid = customUid
 ) {
 
     override val mainValue = value

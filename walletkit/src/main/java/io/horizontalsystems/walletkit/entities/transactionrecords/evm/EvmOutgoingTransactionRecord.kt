@@ -12,8 +12,9 @@ open class EvmOutgoingTransactionRecord(
     val to: String,
     val value: TransactionValue,
     val sentToSelf: Boolean,
-    protected: Boolean
-) : EvmTransactionRecord(transaction, baseToken, source, protected) {
+    protected: Boolean,
+    customUid: String? = null
+) : EvmTransactionRecord(transaction, baseToken, source, protected, customUid = customUid) {
 
     override val mainValue = value
 

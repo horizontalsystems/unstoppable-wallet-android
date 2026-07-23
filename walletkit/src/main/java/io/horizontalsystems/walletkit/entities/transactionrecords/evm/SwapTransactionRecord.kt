@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.Token
 
-open class SwapTransactionRecord(
+class SwapTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,

@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRec
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.entities.AccountType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -64,6 +65,14 @@ class TransactionRecordRepository(
         val mergedWallets = mutableListOf<TransactionWallet>()
 
         transactionWallets.forEach { wallet ->
+            // AA (passkey) histories pool per token — the AA converter's shapes are
+            // token-scoped and one swap is two records (a leg per token pool), so a
+            // merged token-less pool would degrade its rows to the unknown fallback
+            if (wallet.source.account.type is AccountType.Passkey) {
+                mergedWallets.add(wallet)
+                return@forEach
+            }
+
             when (wallet.source.blockchain.type) {
                 BlockchainType.Bitcoin,
                 BlockchainType.BitcoinCash,
