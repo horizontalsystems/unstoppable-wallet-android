@@ -64,6 +64,24 @@ class PasskeyManager {
         return parsePrf(assertionJson) ?: error("PRF output missing from assertion response")
     }
 
+    /**
+     * PRF assertion on a specific credential — returns the PRF entropy for that
+     * passkey (the seed source for keys bound to it). The iOS analog is
+     * PasskeyManager.loginWith(credentialID:).
+     */
+    suspend fun authenticate(context: Context, credentialId: String): ByteArray {
+        val credentialManager = CredentialManager.create(context)
+
+        val result = credentialManager.getCredential(
+            context = context,
+            request = GetCredentialRequest(
+                listOf(GetPublicKeyCredentialOption(buildAssertJson(randomBytes(32), credentialId)))
+            ),
+        )
+        val assertionJson = (result.credential as PublicKeyCredential).authenticationResponseJson
+        return parsePrf(assertionJson) ?: error("PRF output missing from assertion response")
+    }
+
     suspend fun authenticate(context: Context): AuthResult {
         val credentialManager = CredentialManager.create(context)
 
