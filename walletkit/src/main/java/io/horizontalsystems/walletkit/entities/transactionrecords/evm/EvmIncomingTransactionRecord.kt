@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.Token
 
-class EvmIncomingTransactionRecord(
+open class EvmIncomingTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
