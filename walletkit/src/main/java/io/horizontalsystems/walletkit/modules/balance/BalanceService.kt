@@ -90,15 +90,21 @@ class BalanceService(
     private fun sortAndEmitItems() {
         sortAndEmitJob?.cancel()
         sortAndEmitJob = coroutineScope.launch {
-            allBalanceItems = balanceSorter.sort(allBalanceItems, sortType)
+            // Sort into a local — never write the result back to allBalanceItems.
+            // This job runs outside the mutex and is cancelled by the next update;
+            // a cancelled job writing its (already stale) sorted list back would
+            // overwrite a newer state that arrived mid-sort, and the lost update
+            // leaves a row frozen (e.g. permanently "Syncing"/"Sync error"),
+            // because an unchanged adapter state never emits again.
+            val sortedItems = balanceSorter.sort(allBalanceItems, sortType)
 
             ensureActive()
 
             _balanceItemsFlow.update {
                 if (hideZeroBalances) {
-                    allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
+                    sortedItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
                 } else {
-                    allBalanceItems
+                    sortedItems
                 }
             }
         }

@@ -18,7 +18,7 @@ import io.horizontalsystems.thorchainkit.models.Denom
 import io.horizontalsystems.thorchainkit.transaction.Signer
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -46,8 +46,13 @@ class ThorchainAdapter(
         }
     }
 
-    private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    // BehaviorSubject, not PublishSubject: the balance screen (re)subscribes to these
+    // flowables asynchronously, after the item list is built. The kit's state burst on
+    // start can fire entirely inside that gap, and a lost event leaves the row frozen
+    // on a stale snapshot forever — re-syncing an unchanged state emits nothing.
+    // Replaying the last event makes every (re)subscription re-read the live state.
+    private val balanceUpdatedSubject: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
+    private val balanceStateUpdatedSubject: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
 
     override var balanceState: AdapterState = thorchainKit.syncState.toAdapterState()
 

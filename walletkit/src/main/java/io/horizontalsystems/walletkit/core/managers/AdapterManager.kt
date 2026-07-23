@@ -29,7 +29,9 @@ class AdapterManager(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
-    private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
+
+    @Volatile
+    private var adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
     override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
         adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -59,7 +61,12 @@ class AdapterManager(
     @Synchronized
     private fun initAdapters(wallets: List<Wallet>) {
         val currentAdapters = adaptersMap.toMutableMap()
-        adaptersMap.clear()
+
+        // Build into a new map and swap it in atomically. Clearing and refilling the
+        // live map exposes a window where enabled wallets briefly have no adapter;
+        // the balance module subscribing to adapter updates during that window
+        // silently skips those wallets and their rows freeze on a stale sync state.
+        val newAdaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
         wallets.forEach { wallet ->
             var adapter = currentAdapters.remove(wallet)
@@ -72,9 +79,11 @@ class AdapterManager(
             }
 
             adapter?.let {
-                adaptersMap[wallet] = it
+                newAdaptersMap[wallet] = it
             }
         }
+
+        adaptersMap = newAdaptersMap
 
         adaptersReadySubject.onNext(adaptersMap)
 

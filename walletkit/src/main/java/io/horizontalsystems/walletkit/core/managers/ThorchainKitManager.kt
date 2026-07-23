@@ -56,9 +56,7 @@ class ThorchainKitManager(
 
                 else -> throw UnsupportedAccountException()
             }
-            scope.launch {
-                start()
-            }
+            start()
             useCount = 0
             currentAccount = account
         }
@@ -101,14 +99,23 @@ class ThorchainKitManager(
         currentAccount = null
     }
 
-    private suspend fun start() {
+    private fun start() {
         thorchainKitWrapper?.thorchainKit?.start()
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    thorchainKitWrapper?.thorchainKit?.let { kit ->
-                        delay(1000)
-                        kit.refresh()
+                when (state) {
+                    // Pause while backgrounded: Android cuts network for the process,
+                    // so timer syncs only fail with UnknownHostException and leave the
+                    // kit showing NotSynced when the app comes back
+                    BackgroundManagerState.EnterBackground -> {
+                        thorchainKitWrapper?.thorchainKit?.pause()
+                    }
+
+                    BackgroundManagerState.EnterForeground -> {
+                        thorchainKitWrapper?.thorchainKit?.let { kit ->
+                            delay(1000)
+                            kit.resume()
+                        }
                     }
                 }
             }
