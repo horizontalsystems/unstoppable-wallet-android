@@ -94,7 +94,11 @@ class TronKitManager(
                 is AccountType.Mnemonic -> createKitInstance(accountType, account)
                 is AccountType.TronAddress -> createKitInstance(accountType, account)
                 is AccountType.TronPrivateKey -> createKitInstance(accountType, account)
-                else -> throw UnsupportedAccountException()
+                // externally-resolved watch address (e.g. a GasFree wallet):
+                // no signer — sends go through the app's own pipeline
+                else -> TronAddressResolver.provider?.tronAddress(account)
+                    ?.let { createWatchKitInstance(it, account) }
+                    ?: throw UnsupportedAccountException()
             }
             start()
             useCount = 0
@@ -131,6 +135,19 @@ class TronKitManager(
         val kit = TronKit.getInstance(
             application = App.instance,
             address = Address.fromBase58(accountType.address),
+            network = network,
+            rpcSource = tronRpcSource(),
+            transactionSource = tronTransactionSource(),
+            walletId = account.id
+        )
+
+        return TronKitWrapper(kit, null)
+    }
+
+    private fun createWatchKitInstance(base58Address: String, account: Account): TronKitWrapper {
+        val kit = TronKit.getInstance(
+            application = App.instance,
+            address = Address.fromBase58(base58Address),
             network = network,
             rpcSource = tronRpcSource(),
             transactionSource = tronTransactionSource(),
