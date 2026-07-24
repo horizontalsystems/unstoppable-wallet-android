@@ -151,7 +151,10 @@ class TronKitManager(
             network = network,
             rpcSource = tronRpcSource(),
             transactionSource = tronTransactionSource(),
-            walletId = account.id
+            walletId = account.id,
+            // externally-resolved watch addresses are gasless CREATE2 wallets:
+            // TRC20 balances exist before the on-chain account does
+            gaslessAccount = true
         )
 
         return TronKitWrapper(kit, null)
