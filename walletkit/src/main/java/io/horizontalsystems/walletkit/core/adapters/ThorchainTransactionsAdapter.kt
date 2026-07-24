@@ -43,7 +43,7 @@ class ThorchainTransactionsAdapter(
         address: String?,
     ): List<TransactionRecord> {
         return thorchainKit.getTransactions(fromTimestamp = from?.timestamp)
-            .mapNotNull { transactionConverter.convert(it) }
+            .flatMap { transactionConverter.convert(it) }
             .filter { matches(it, token, transactionType, address) }
             .take(limit)
     }
@@ -55,7 +55,7 @@ class ThorchainTransactionsAdapter(
     ): Flow<List<TransactionRecord>> {
         return thorchainKit.transactionsFlow.map { transactions ->
             transactions
-                .mapNotNull { transactionConverter.convert(it) }
+                .flatMap { transactionConverter.convert(it) }
                 .filter { matches(it, token, transactionType, address) }
         }
     }

@@ -10,7 +10,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.thorchainkit.models.Asset
 import io.horizontalsystems.thorchainkit.models.CoinTransfer
 import io.horizontalsystems.thorchainkit.models.Denom
 import io.horizontalsystems.thorchainkit.models.Transaction
@@ -22,51 +21,59 @@ class ThorchainTransactionConverter(
     private val baseToken: Token,
 ) {
 
-    fun convert(transaction: Transaction): ThorchainTransactionRecord? {
-        // Midgard action semantics: `incoming` transfers enter the action (spent by their
-        // address), `outgoing` transfers leave it (received by their address)
-        val sentByUser = transaction.incoming.any { it.address == userAddress }
-
-        val transfer = if (sentByUser) {
-            transaction.incoming.firstOrNull { it.address == userAddress }
-        } else {
-            transaction.outgoing.firstOrNull { it.address == userAddress }
-        } ?: return null
-
+    // Midgard action semantics: `incoming` transfers enter the action (spent by their
+    // address), `outgoing` transfers leave it (received by their address). One action
+    // can carry the user on BOTH sides with different assets — a swap spends RUNE and
+    // delivers TCY in the same action — so every user-side transfer becomes its own
+    // record; a single-record conversion would drop the received asset entirely.
+    fun convert(transaction: Transaction): List<ThorchainTransactionRecord> {
         val failed = transaction.status == "failed"
         val blockHeight = if (transaction.isPending) null else transaction.blockHeight.toInt()
-        val value = transactionValue(transfer)
-        val uid = "${transaction.hash}-${transfer.asset.lowercase()}"
 
-        return if (sentByUser) {
+        val userSpends = transaction.incoming.filter { it.address == userAddress }
+        val userReceives = transaction.outgoing.filter { it.address == userAddress }
+        val spentAssets = userSpends.map { it.asset }.toSet()
+
+        val records = mutableListOf<ThorchainTransactionRecord>()
+
+        userSpends.forEach { transfer ->
             val to = transaction.outgoing.firstOrNull()?.address
-            ThorchainOutgoingTransactionRecord(
-                uid = uid,
+            records += ThorchainOutgoingTransactionRecord(
+                uid = "${transaction.hash}-${transfer.asset.lowercase()}",
                 transactionHash = transaction.hash,
                 blockHeight = blockHeight,
                 timestamp = transaction.timestamp,
                 fee = null,
                 failed = failed,
-                value = value,
+                value = transactionValue(transfer),
                 to = to,
-                sentToSelf = to == userAddress,
+                sentToSelf = userReceives.any { it.asset == transfer.asset },
                 memo = transaction.memo,
                 source = source
             )
-        } else {
-            ThorchainIncomingTransactionRecord(
-                uid = uid,
+        }
+
+        userReceives.forEach { transfer ->
+            // a same-asset receive in an action the user also spent from is change or a
+            // self-transfer (or a refund) — already represented by the outgoing record,
+            // and a second record would collide with its uid
+            if (transfer.asset in spentAssets) return@forEach
+
+            records += ThorchainIncomingTransactionRecord(
+                uid = "${transaction.hash}-${transfer.asset.lowercase()}",
                 transactionHash = transaction.hash,
                 blockHeight = blockHeight,
                 timestamp = transaction.timestamp,
                 fee = null,
                 failed = failed,
-                value = value,
+                value = transactionValue(transfer),
                 from = transaction.incoming.firstOrNull()?.address,
                 memo = transaction.memo,
                 source = source
             )
         }
+
+        return records
     }
 
     fun token(midgardAsset: String): Token? {
@@ -86,7 +93,11 @@ class ThorchainTransactionConverter(
         return if (token != null) {
             TransactionValue.CoinValue(token, amount)
         } else {
-            val ticker = transfer.asset.substringAfterLast('.').substringBefore('-').uppercase()
+            val ticker = try {
+                Denom.assetFor(transfer.asset).ticker
+            } catch (_: Throwable) {
+                transfer.asset.substringAfterLast('.').substringBefore('-').uppercase()
+            }
             TransactionValue.TokenValue(
                 tokenName = ticker,
                 tokenCode = ticker,
@@ -96,8 +107,12 @@ class ThorchainTransactionConverter(
         }
     }
 
+    // Midgard reports swap assets in full notation ("THOR.RUNE") but native token
+    // sends in bank-denom notation ("TCY") — assetFor normalizes both; a plain
+    // Asset.fromString throws on the delimiter-less denom form and TCY transfers
+    // would silently degrade to a coin-less value that every token filter drops
     private fun denom(midgardAsset: String): String? = try {
-        Denom.denomFor(Asset.fromString(midgardAsset))
+        Denom.denomFor(Denom.assetFor(midgardAsset))
     } catch (_: Throwable) {
         null
     }
