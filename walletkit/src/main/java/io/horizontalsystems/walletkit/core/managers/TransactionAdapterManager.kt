@@ -81,8 +81,11 @@ class TransactionAdapterManager(
                 }
             }
 
-            txAdapter?.let {
-                this.adaptersMap[source] = it
+            txAdapter?.let { adapterToRegister ->
+                val decorated = TransactionsAdapterDecoratorResolver.provider
+                    ?.decorate(adapterToRegister, source)
+                    ?: adapterToRegister
+                this.adaptersMap[source] = decorated
             }
         }
 

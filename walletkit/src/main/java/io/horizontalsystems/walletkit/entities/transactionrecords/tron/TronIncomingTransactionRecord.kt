@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.models.Transaction
 
-class TronIncomingTransactionRecord(
+open class TronIncomingTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
