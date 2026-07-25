@@ -185,7 +185,7 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Thorchain -> {
-                val factory = SendThorchainModule.Factory(wallet, address, hideAddress)
+                val factory = SendThorchainModule.Factory(wallet, address, hideAddress, memo)
                 val sendThorchainViewModel = viewModel<SendThorchainViewModel>(factory = factory)
                 SendThorchainScreen(
                     title,
@@ -194,6 +194,7 @@ data class SendPage(val input: Input) : HSPage() {
                     amountInputModeViewModel,
                     sendEntryPointDestId,
                     amount,
+                    memo,
                     riskyAddress = riskyAddress
                 )
             }

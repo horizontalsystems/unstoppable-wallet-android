@@ -37,7 +37,9 @@ class ThorchainTransactionConverter(
         val records = mutableListOf<ThorchainTransactionRecord>()
 
         userSpends.forEach { transfer ->
-            val to = transaction.outgoing.firstOrNull()?.address
+            // counterparty must be matched by asset: in a swap the first outgoing
+            // entry is the user's own receive of the other asset, not the recipient
+            val to = transaction.outgoing.firstOrNull { it.asset == transfer.asset }?.address
             records += ThorchainOutgoingTransactionRecord(
                 uid = "${transaction.hash}-${transfer.asset.lowercase()}",
                 transactionHash = transaction.hash,
@@ -67,7 +69,7 @@ class ThorchainTransactionConverter(
                 fee = null,
                 failed = failed,
                 value = transactionValue(transfer),
-                from = transaction.incoming.firstOrNull()?.address,
+                from = transaction.incoming.firstOrNull { it.asset == transfer.asset }?.address,
                 memo = transaction.memo,
                 source = source
             )

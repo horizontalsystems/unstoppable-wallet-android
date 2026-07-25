@@ -72,14 +72,20 @@ class ThorchainAdapter(
 
     override fun start() {
         coroutineScope.launch {
-            thorchainKit.getDenomBalanceFlow(denom).collect {
-                balanceUpdatedSubject.onNext(Unit)
+            try {
+                thorchainKit.getDenomBalanceFlow(denom).collect {
+                    balanceUpdatedSubject.onNext(Unit)
+                }
+            } catch (_: Throwable) {
             }
         }
         coroutineScope.launch {
-            thorchainKit.syncStateFlow.collect {
-                balanceState = it.toAdapterState()
-                balanceStateUpdatedSubject.onNext(Unit)
+            try {
+                thorchainKit.syncStateFlow.collect {
+                    balanceState = it.toAdapterState()
+                    balanceStateUpdatedSubject.onNext(Unit)
+                }
+            } catch (_: Throwable) {
             }
         }
         coroutineScope.launch {

@@ -306,6 +306,12 @@ class AppStatusViewModel(
             blocks.add(block)
         }
 
+        thorchainKitManager.statusInfo?.let { statusInfo ->
+            val title = if (blocks.isEmpty()) "Blockchain Status" else null
+            val block = getBlockchainInfoBlock(title, "Thorchain", statusInfo)
+            blocks.add(block)
+        }
+
         solanaKitManager.statusInfo?.let {
             val title = if (blocks.isEmpty()) "Blockchain Status" else null
             val block = getBlockchainInfoBlock(title, "Solana", it)

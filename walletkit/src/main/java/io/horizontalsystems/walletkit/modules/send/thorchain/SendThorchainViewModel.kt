@@ -23,6 +23,7 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -40,7 +41,8 @@ class SendThorchainViewModel(
     private val amountService: SendAmountService,
     private val addressService: SendThorchainAddressService,
     private val contactsRepo: ContactsRepository,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
+    initialMemo: String?
 ) : ViewModelUiState<SendThorchainUiState>() {
     private val fee = adapter.fee
 
@@ -50,7 +52,7 @@ class SendThorchainViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private var memo: String? = null
+    private var memo: String? = initialMemo?.ifBlank { null }
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
@@ -73,14 +75,18 @@ class SendThorchainViewModel(
             }
         }
         viewModelScope.launch(Dispatchers.Default) {
-            xRateService.getRateFlow(sendToken.coin.uid).collect {
-                coinRate = it
-            }
+            xRateService.getRateFlow(sendToken.coin.uid)
+                .catch { logger.warning("coin rate flow failed", it) }
+                .collect {
+                    coinRate = it
+                }
         }
         viewModelScope.launch(Dispatchers.Default) {
-            xRateService.getRateFlow(feeToken.coin.uid).collect {
-                feeCoinRate = it
-            }
+            xRateService.getRateFlow(feeToken.coin.uid)
+                .catch { logger.warning("fee coin rate flow failed", it) }
+                .collect {
+                    feeCoinRate = it
+                }
         }
 
         addressService.setAddress(address)

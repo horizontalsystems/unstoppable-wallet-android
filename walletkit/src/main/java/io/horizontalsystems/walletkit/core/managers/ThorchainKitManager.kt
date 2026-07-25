@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import android.util.Log
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
@@ -10,6 +11,7 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.thorchainkit.ThorchainKit
 import io.horizontalsystems.thorchainkit.network.Network
 import io.horizontalsystems.thorchainkit.transaction.Signer
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -103,20 +105,28 @@ class ThorchainKitManager(
         thorchainKitWrapper?.thorchainKit?.start()
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
-                when (state) {
-                    // Pause while backgrounded: Android cuts network for the process,
-                    // so timer syncs only fail with UnknownHostException and leave the
-                    // kit showing NotSynced when the app comes back
-                    BackgroundManagerState.EnterBackground -> {
-                        thorchainKitWrapper?.thorchainKit?.pause()
-                    }
+                // a throw here would cancel the shared scope for good — start() reuses
+                // it after stop(), so background handling would silently die forever
+                try {
+                    when (state) {
+                        // Pause while backgrounded: Android cuts network for the process,
+                        // so timer syncs only fail with UnknownHostException and leave the
+                        // kit showing NotSynced when the app comes back
+                        BackgroundManagerState.EnterBackground -> {
+                            thorchainKitWrapper?.thorchainKit?.pause()
+                        }
 
-                    BackgroundManagerState.EnterForeground -> {
-                        thorchainKitWrapper?.thorchainKit?.let { kit ->
-                            delay(1000)
-                            kit.resume()
+                        BackgroundManagerState.EnterForeground -> {
+                            thorchainKitWrapper?.thorchainKit?.let { kit ->
+                                delay(1000)
+                                kit.resume()
+                            }
                         }
                     }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Log.e("ThorchainKitManager", "background state handling error: ${e.message}", e)
                 }
             }
         }

@@ -288,10 +288,10 @@ class AdapterFactory(
     }
 
     fun thorchainTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        val thorchainKitWrapper = thorchainKitManager.getThorchainKitWrapper(source.account)
-
         val tokenQuery = TokenQuery(BlockchainType.Thorchain, TokenType.Native)
         val baseToken = coinManager.getToken(tokenQuery) ?: return null
+
+        val thorchainKitWrapper = thorchainKitManager.getThorchainKitWrapper(source.account)
 
         val transactionConverter = ThorchainTransactionConverter(
             coinManager,

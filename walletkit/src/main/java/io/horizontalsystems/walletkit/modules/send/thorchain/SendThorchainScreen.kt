@@ -40,6 +40,7 @@ fun SendThorchainScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
     amount: BigDecimal?,
+    memo: String?,
     riskyAddress: Boolean
 ) {
     val wallet = viewModel.wallet
@@ -109,7 +110,7 @@ fun SendThorchainScreen(
         )
 
         VSpacer(16.dp)
-        HSMemoInput(maxLength = 250, visibility = MemoVisibility.Public) {
+        HSMemoInput(maxLength = 250, memo = memo, visibility = MemoVisibility.Public) {
             viewModel.onEnterMemo(it)
         }
 

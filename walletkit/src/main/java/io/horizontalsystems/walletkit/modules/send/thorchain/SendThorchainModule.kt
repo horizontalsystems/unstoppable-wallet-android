@@ -19,6 +19,7 @@ object SendThorchainModule {
         private val wallet: Wallet,
         private val address: Address,
         private val hideAddress: Boolean,
+        private val memo: String?,
     ) : ViewModelProvider.Factory {
         val adapter = App.adapterManager.getAdapterForWallet<ISendThorchainAdapter>(wallet) ?: throw IllegalStateException("ISendThorchainAdapter is null")
 
@@ -55,7 +56,8 @@ object SendThorchainModule {
                 amountService,
                 addressService,
                 App.contactsRepository,
-                App.recentAddressManager
+                App.recentAddressManager,
+                memo
             ) as T
         }
     }
