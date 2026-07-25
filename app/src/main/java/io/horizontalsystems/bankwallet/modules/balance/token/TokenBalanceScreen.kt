@@ -61,6 +61,7 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import io.horizontalsystems.bankwallet.modules.zcashmigration.ZcashMigrationConfirmFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -353,10 +354,13 @@ fun TokenBalanceScreen(
         ZcashMigrationBottomSheet(
             sheetState = migrationSheetState,
             onMigrateClick = {
-                // TODO: launch the Orchard -> Ironwood migration flow
                 coroutineScope.launch {
                     migrationSheetState.hide()
                     isMigrationSheetVisible = false
+                    navController.slideFromRight(
+                        R.id.zcashMigrationConfirm,
+                        ZcashMigrationConfirmFragment.Input(viewModel.wallet)
+                    )
                 }
             },
             onClose = {

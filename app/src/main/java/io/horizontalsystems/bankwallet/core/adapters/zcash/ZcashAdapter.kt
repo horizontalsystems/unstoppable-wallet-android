@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.core.adapters.zcash
 import android.content.Context
 import android.util.Log
 import cash.z.ecc.android.sdk.CloseableSynchronizer
+import cash.z.ecc.android.sdk.MigrationSchedule
+import cash.z.ecc.android.sdk.OrchardMigrationSdk
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
@@ -85,6 +87,11 @@ class ZcashAdapter(
         ZcashNetwork.Testnet -> 4_134_000
         else -> 3_428_143 // NU6.3 mainnet activation
     }
+
+    private val appContext: Context = context.applicationContext
+    private val migrationEndpoint: LightWalletEndpoint = lightWalletEndpoint
+    private var migrationSdk: OrchardMigrationSdk? = null
+    private var migrationSchedule: MigrationSchedule? = null
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -312,6 +319,40 @@ class ZcashAdapter(
 //            receiveAddressTransparent
 //        }
     }
+
+    /**
+     * Proposes an immediate full-balance Orchard -> Ironwood migration and returns the
+     * net migrated amount plus the implied fee (Orchard total minus migrated amount).
+     * The proposed schedule is retained for the subsequent execution step.
+     */
+    suspend fun proposeIronwoodMigration(): IronwoodMigrationProposal {
+        val orchard = accountBalance?.orchard ?: throw IllegalStateException("Orchard balance is not loaded yet")
+        val orchardTotal = orchard.available + orchard.pending
+
+        val sdk = migrationSdk ?: OrchardMigrationSdk.new(
+            appContext = appContext,
+            zcashNetwork = network,
+            lightWalletEndpoint = migrationEndpoint,
+            account = zcashAccount.accountUuid,
+            alias = getValidAliasFromAccountId(wallet.account.id)
+        ).also { migrationSdk = it }
+
+        val schedule = sdk.proposeImmediateMigration()
+        migrationSchedule = schedule
+
+        val migratedZatoshi = schedule.transfers.sumOf { it.amountZatoshi }
+        val feeZatoshi = (orchardTotal.value - migratedZatoshi).coerceAtLeast(0)
+
+        return IronwoodMigrationProposal(
+            amount = Zatoshi(migratedZatoshi).convertZatoshiToZec(decimalCount),
+            fee = Zatoshi(feeZatoshi).convertZatoshiToZec(decimalCount)
+        )
+    }
+
+    data class IronwoodMigrationProposal(
+        val amount: BigDecimal,
+        val fee: BigDecimal
+    )
 
     suspend fun sendShieldProposal() {
         val shieldProposal = shieldProposal() ?: throw IllegalStateException("Couldn't create shield proposal")

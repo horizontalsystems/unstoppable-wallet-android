@@ -64,7 +64,7 @@ class BalanceViewModel(
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
     private var amountRoundingEnabled = localStorage.amountRoundingEnabledFlow.value
-    private var showZcashMigrationAlert = false
+    private var zcashMigrationAlertWallet: Wallet? = null
     private var zcashMigrationAlertShown = false
     private var totalUiState = createTotalUiState(totalService.stateFlow.value)
 
@@ -199,7 +199,7 @@ class BalanceViewModel(
         },
         balanceHidden = balanceHidden,
         totalUiState = totalUiState,
-        showZcashMigrationAlert = showZcashMigrationAlert
+        zcashMigrationAlertWallet = zcashMigrationAlertWallet
     )
 
     private fun checkZcashMigrationRequired(items: List<BalanceModule.BalanceItem>?) {
@@ -214,12 +214,12 @@ class BalanceViewModel(
             ?.ironwoodMigrationRequiredBalance ?: return
 
         zcashMigrationAlertShown = true
-        showZcashMigrationAlert = true
+        zcashMigrationAlertWallet = zcashWallet
         emitState()
     }
 
     fun zcashMigrationAlertHandled() {
-        showZcashMigrationAlert = false
+        zcashMigrationAlertWallet = null
         emitState()
     }
 
@@ -459,7 +459,7 @@ data class BalanceUiState(
     val loading: Boolean,
     val balanceHidden: Boolean,
     val totalUiState: TotalUIState,
-    val showZcashMigrationAlert: Boolean = false
+    val zcashMigrationAlertWallet: Wallet? = null
 )
 
 data class OpenSendTokenSelect(

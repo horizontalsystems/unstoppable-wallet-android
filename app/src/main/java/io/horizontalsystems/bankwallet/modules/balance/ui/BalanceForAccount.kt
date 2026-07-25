@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
+import io.horizontalsystems.bankwallet.modules.zcashmigration.ZcashMigrationConfirmFragment
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -205,14 +206,17 @@ fun BalanceForAccount(
             }
         }
     }
-    if (uiState.showZcashMigrationAlert) {
+    uiState.zcashMigrationAlertWallet?.let { zcashWallet ->
         ZcashMigrationBottomSheet(
             sheetState = zcashMigrationSheetState,
             onMigrateClick = {
-                // TODO: launch the Orchard -> Ironwood migration flow
                 scope.launch {
                     zcashMigrationSheetState.hide()
                     viewModel.zcashMigrationAlertHandled()
+                    navController.slideFromRight(
+                        R.id.zcashMigrationConfirm,
+                        ZcashMigrationConfirmFragment.Input(zcashWallet)
+                    )
                 }
             },
             onClose = {
