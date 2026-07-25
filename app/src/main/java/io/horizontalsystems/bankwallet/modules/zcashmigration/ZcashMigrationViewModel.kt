@@ -60,6 +60,7 @@ class ZcashMigrationViewModel(
                 logger.warning("propose failed", e)
                 error = e
             }
+
         }
     }
 

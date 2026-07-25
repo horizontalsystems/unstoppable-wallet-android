@@ -4,10 +4,8 @@ import android.content.Context
 import android.util.Log
 import cash.z.ecc.android.sdk.CloseableSynchronizer
 import cash.z.ecc.android.sdk.MigrationSchedule
-import cash.z.ecc.android.sdk.NetworkPrivacyOptions
 import cash.z.ecc.android.sdk.OrchardMigrationSdk
 import cash.z.ecc.android.sdk.SdkSynchronizer
-import cash.z.ecc.android.sdk.TransferResult
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
@@ -94,7 +92,7 @@ class ZcashAdapter(
     private val appContext: Context = context.applicationContext
     private val migrationEndpoint: LightWalletEndpoint = lightWalletEndpoint
     private var migrationSdk: OrchardMigrationSdk? = null
-    private var migrationSchedule: MigrationSchedule? = null
+    private var migrationProposal: Proposal? = null
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -333,26 +331,65 @@ class ZcashAdapter(
      * net migrated amount plus the implied fee (Orchard total minus migrated amount).
      * The proposed schedule is retained for the subsequent execution step.
      */
+    /**
+     * Proposes an immediate Orchard -> Ironwood migration as a full-balance transfer to the
+     * wallet's own unified address. Post-NU6.3 the Orchard receiver routes outputs into the
+     * Ironwood pool (librustzcash: "Ironwood shares the Orchard receiver"), so this is a
+     * single-transaction migration through the ordinary send path. The proposal is retained
+     * for [executeIronwoodMigration].
+     */
     suspend fun proposeIronwoodMigration(): IronwoodMigrationProposal {
         val orchard = accountBalance?.orchard ?: throw IllegalStateException("Orchard balance is not loaded yet")
-        val orchardTotal = orchard.available + orchard.pending
+        val availableZatoshi = orchard.available.value
+        if (availableZatoshi <= 0) {
+            throw IllegalStateException("No spendable Orchard balance yet, wait for the wallet to finish syncing")
+        }
 
-        val sdk = migrationSdk ?: OrchardMigrationSdk.new(
-            appContext = appContext,
-            zcashNetwork = network,
-            lightWalletEndpoint = migrationEndpoint,
-            account = zcashAccount.accountUuid,
-            alias = getValidAliasFromAccountId(wallet.account.id)
-        ).also { migrationSdk = it }
+        // Find the sweep amount: proposeTransfer throws when amount + fee exceeds the balance
+        // (it does not report the required fee), so grow the fee reserve until a proposal
+        // succeeds, then tighten to the actual required fee.
+        var feeReserve = 20_000L
+        var proposedAmount = 0L
+        var sweep: Proposal? = null
+        while (sweep == null && feeReserve <= 1_000_000L) {
+            val amountZatoshi = availableZatoshi - feeReserve
+            if (amountZatoshi <= 0) throw IllegalStateException("Balance too small to cover the migration fee")
+            try {
+                sweep = synchronizer.proposeTransfer(
+                    account = zcashAccount,
+                    recipient = receiveAddress,
+                    amount = Zatoshi(amountZatoshi),
+                    memo = ""
+                )
+                proposedAmount = amountZatoshi
+            } catch (_: Exception) {
+                feeReserve += 10_000L
+            }
+        }
+        var proposal = sweep ?: throw IllegalStateException("Could not create migration sweep proposal")
 
-        val schedule = sdk.proposeImmediateMigration()
-        migrationSchedule = schedule
+        val requiredFee = proposal.totalFeeRequired().value
+        if (requiredFee < feeReserve) {
+            // Reserve overshot: retry with the exact fee so the whole balance is swept.
+            // On failure keep the working proposal; the difference returns as Ironwood change.
+            try {
+                proposal = synchronizer.proposeTransfer(
+                    account = zcashAccount,
+                    recipient = receiveAddress,
+                    amount = Zatoshi(availableZatoshi - requiredFee),
+                    memo = ""
+                )
+                proposedAmount = availableZatoshi - requiredFee
+            } catch (_: Exception) {
+                // keep the reserve-based proposal
+            }
+        }
 
-        val migratedZatoshi = schedule.transfers.sumOf { it.amountZatoshi }
-        val feeZatoshi = (orchardTotal.value - migratedZatoshi).coerceAtLeast(0)
+        val feeZatoshi = proposal.totalFeeRequired().value
+        migrationProposal = proposal
 
         return IronwoodMigrationProposal(
-            amount = Zatoshi(migratedZatoshi).convertZatoshiToZec(decimalCount),
+            amount = Zatoshi(proposedAmount).convertZatoshiToZec(decimalCount),
             fee = Zatoshi(feeZatoshi).convertZatoshiToZec(decimalCount)
         )
     }
@@ -363,40 +400,36 @@ class ZcashAdapter(
     )
 
     /**
-     * Signs and broadcasts the migration schedule retained by [proposeIronwoodMigration].
-     * The immediate proposal always contains a single, immediately executable transfer.
-     * Returns the broadcast transaction id.
+     * Proposes an immediate migration through [OrchardMigrationSdk.proposeImmediateMigration]
+     * and returns the schedule for review. NOTE: the merged engine currently returns the
+     * staggered ZIP 318 schedule here — the documented single-transfer immediate contract is
+     * not implemented upstream yet (regression since the rewire onto zcash_pool_migration).
+     * Use [proposeIronwoodMigration] for the working single-transaction migration.
+     */
+    suspend fun proposeImmediateMigrationSchedule(): MigrationSchedule {
+        val sdk = migrationSdk ?: OrchardMigrationSdk.new(
+            appContext = appContext,
+            zcashNetwork = network,
+            lightWalletEndpoint = migrationEndpoint,
+            account = zcashAccount.accountUuid,
+            alias = getValidAliasFromAccountId(wallet.account.id)
+        ).also { migrationSdk = it }
+        return sdk.proposeImmediateMigration()
+    }
+
+    /**
+     * Signs and broadcasts the self-transfer proposal retained by [proposeIronwoodMigration]
+     * through the ordinary send path, records the txid for transaction-history labeling, and
+     * returns it.
      */
     suspend fun executeIronwoodMigration(): String {
-        val sdk = migrationSdk ?: throw IllegalStateException("Migration was not proposed")
-        val schedule = migrationSchedule ?: throw IllegalStateException("Migration was not proposed")
+        val proposal = migrationProposal ?: throw IllegalStateException("Migration was not proposed")
 
-        val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
-        sdk.signAndStoreMigrationSchedule(schedule, spendingKey)
+        val txHash = send(proposal) ?: throw IllegalStateException("Migration send returned no transaction id")
 
-        val result = sdk.executeNextPendingTransfer(
-            NetworkPrivacyOptions(useTor = false, submissionEndpoint = null)
-        )
-
-        return when (result) {
-            is TransferResult.Success -> {
-                migrationSchedule = null
-                localStorage.zcashMigrationTransactionIds += result.txId.lowercase()
-                result.txId
-            }
-
-            is TransferResult.NetworkError ->
-                throw IllegalStateException("Migration broadcast failed: network error (retryable=${result.retryable})")
-
-            TransferResult.InvalidNote ->
-                throw IllegalStateException("Migration input note was already spent, propose the migration again")
-
-            TransferResult.Expired ->
-                throw IllegalStateException("Migration transfer expired, propose the migration again")
-
-            null ->
-                throw IllegalStateException("No pending migration transfer to execute")
-        }
+        migrationProposal = null
+        localStorage.zcashMigrationTransactionIds += txHash.lowercase()
+        return txHash
     }
 
     suspend fun sendShieldProposal() {
