@@ -76,9 +76,10 @@ class ZcashMigrationViewModel(
         try {
             sendResult = SendResult.Sending
 
-            // TODO: execute the migration via OrchardMigrationSdk:
-            //  signAndStoreMigrationSchedule(schedule, usk) + executeNextPendingTransfer(options)
-            throw NotImplementedError("Migration execution is not wired yet")
+            val txId = adapter.executeIronwoodMigration()
+
+            logger.info("success, txId=$txId")
+            sendResult = SendResult.Sent()
 
         } catch (e: Throwable) {
             logger.warning("failed", e)

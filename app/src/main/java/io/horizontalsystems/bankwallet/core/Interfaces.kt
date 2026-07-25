@@ -88,6 +88,7 @@ interface ILocalStorage {
     var marketSearchRecentCoinUids: List<String>
     var swapRecentTokenQueryIds: List<String>
     var zcashAccountIds: Set<String>
+    var zcashMigrationTransactionIds: Set<String>
     var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?

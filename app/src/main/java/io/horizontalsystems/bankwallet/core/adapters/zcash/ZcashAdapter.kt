@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import cash.z.ecc.android.sdk.CloseableSynchronizer
 import cash.z.ecc.android.sdk.MigrationSchedule
+import cash.z.ecc.android.sdk.NetworkPrivacyOptions
 import cash.z.ecc.android.sdk.OrchardMigrationSdk
 import cash.z.ecc.android.sdk.SdkSynchronizer
+import cash.z.ecc.android.sdk.TransferResult
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
@@ -49,6 +51,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
+import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
@@ -215,7 +218,12 @@ class ZcashAdapter(
         zcashAccount = runBlocking { synchronizer.getAccounts().first() }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
-        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, synchronizer as SdkSynchronizer)
+        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, synchronizer as SdkSynchronizer) { txHash ->
+            // Migration txids recorded at broadcast; match both hash orientations since
+            // TransferResult.Success txid endianness is not guaranteed
+            val migrationTxIds = localStorage.zcashMigrationTransactionIds
+            migrationTxIds.contains(txHash.toRawHexString()) || migrationTxIds.contains(txHash.toReversedHex())
+        }
         synchronizer.onCriticalErrorHandler = { error ->
             Log.e("ZcashAdapter", "Critical error", error)
             true
@@ -353,6 +361,43 @@ class ZcashAdapter(
         val amount: BigDecimal,
         val fee: BigDecimal
     )
+
+    /**
+     * Signs and broadcasts the migration schedule retained by [proposeIronwoodMigration].
+     * The immediate proposal always contains a single, immediately executable transfer.
+     * Returns the broadcast transaction id.
+     */
+    suspend fun executeIronwoodMigration(): String {
+        val sdk = migrationSdk ?: throw IllegalStateException("Migration was not proposed")
+        val schedule = migrationSchedule ?: throw IllegalStateException("Migration was not proposed")
+
+        val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
+        sdk.signAndStoreMigrationSchedule(schedule, spendingKey)
+
+        val result = sdk.executeNextPendingTransfer(
+            NetworkPrivacyOptions(useTor = false, submissionEndpoint = null)
+        )
+
+        return when (result) {
+            is TransferResult.Success -> {
+                migrationSchedule = null
+                localStorage.zcashMigrationTransactionIds += result.txId.lowercase()
+                result.txId
+            }
+
+            is TransferResult.NetworkError ->
+                throw IllegalStateException("Migration broadcast failed: network error (retryable=${result.retryable})")
+
+            TransferResult.InvalidNote ->
+                throw IllegalStateException("Migration input note was already spent, propose the migration again")
+
+            TransferResult.Expired ->
+                throw IllegalStateException("Migration transfer expired, propose the migration again")
+
+            null ->
+                throw IllegalStateException("No pending migration transfer to execute")
+        }
+    }
 
     suspend fun sendShieldProposal() {
         val shieldProposal = shieldProposal() ?: throw IllegalStateException("Couldn't create shield proposal")
@@ -616,7 +661,7 @@ class ZcashAdapter(
                     showRawTransaction = false,
                     amount = transaction.value.convertZatoshiToZec(decimalCount).negate(),
                     to = transaction.recipients?.firstOrNull()?.addressValue,
-                    sentToSelf = false,
+                    sentToSelf = transaction.sentToSelf,
                     memo = transaction.memo,
                     source = wallet.transactionSource,
                     replaceable = false

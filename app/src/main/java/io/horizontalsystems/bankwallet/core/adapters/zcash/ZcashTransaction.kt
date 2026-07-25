@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.core.adapters.zcash
 
 import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
+import cash.z.ecc.android.sdk.model.TransactionOutput
 import cash.z.ecc.android.sdk.model.TransactionOverview
+import cash.z.ecc.android.sdk.model.TransactionPool
 import cash.z.ecc.android.sdk.model.TransactionRecipient
 import cash.z.ecc.android.sdk.model.TransactionState
 import cash.z.ecc.android.sdk.model.Zatoshi
@@ -22,8 +24,16 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val failed: Boolean
     val isIncoming: Boolean
     val shieldDirection: ShieldDirection?
+    val sentToSelf: Boolean
 
-    constructor(accountId: AccountUuid, confirmedTransaction: TransactionOverview, recipients: List<TransactionRecipient>?, memo: String?) {
+    constructor(
+        accountId: AccountUuid,
+        confirmedTransaction: TransactionOverview,
+        recipients: List<TransactionRecipient>?,
+        memo: String?,
+        isIronwoodMigration: Boolean,
+        outputs: List<TransactionOutput>
+    ) {
         confirmedTransaction.let {
             val hasSpentAndReceived = it.totalSpent.value > 0 && it.totalReceived.value > 0
 
@@ -32,12 +42,25 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
                     it.isSentTransaction &&
                     recipients.all { recipient -> recipient.accountUuid == accountId }
 
+            // Unshielding is a self-transfer with a transparent output; a shielded
+            // self-transfer is a migration only when its txid was recorded at broadcast,
+            // otherwise it is an ordinary send to own address.
+            val isUnshielding = internalTransaction &&
+                    outputs.any { output -> output.pool == TransactionPool.TRANSPARENT }
+
             if (it.isShielding || internalTransaction) {
-                shieldDirection = if (it.isShielding) ShieldDirection.Shield else ShieldDirection.Unshield
+                shieldDirection = when {
+                    it.isShielding -> ShieldDirection.Shield
+                    isIronwoodMigration -> ShieldDirection.MigrateToIronwood
+                    isUnshielding -> ShieldDirection.Unshield
+                    else -> null
+                }
+                sentToSelf = shieldDirection == null
                 feePaid = it.feePaid
                 value = it.totalReceived
             } else {
                 shieldDirection = null
+                sentToSelf = false
                 feePaid = it.feePaid
                 value = it.netValue
             }
@@ -87,7 +110,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     }
 
     enum class ShieldDirection {
-        Shield, Unshield
+        Shield, Unshield, MigrateToIronwood
     }
 
 }
