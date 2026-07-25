@@ -699,7 +699,7 @@ object ZcashAddressValidator {
 }
 
 val AccountBalance.available: Zatoshi
-    get() = this.sapling.available + this.orchard.available
+    get() = this.sapling.available + this.orchard.available + this.ironwood.available
 
 val AccountBalance.pending: Zatoshi
-    get() = this.sapling.pending + this.orchard.pending
+    get() = this.sapling.pending + this.orchard.pending + this.ironwood.pending
