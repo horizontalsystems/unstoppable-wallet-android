@@ -80,7 +80,7 @@ marketKit = "3bfaaae"
 solanaKit = "82c5ef4"
 tronKit = "2f07e864"
 # TODO: replace with the official Ironwood-ready tag once ECC publishes it (expected 2026-07-27)
-zcashSdk = "1118bc23"
+zcashSdk = "548b268"
 
 # Binance
 binanceConnector = "3.4.1"
