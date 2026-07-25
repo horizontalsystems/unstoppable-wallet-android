@@ -81,6 +81,10 @@ class ZcashAdapter(
     private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = 1_077_550
+    private val ironwoodActivationHeight: Long = when (network) {
+        ZcashNetwork.Testnet -> 4_134_000
+        else -> 3_428_143 // NU6.3 mainnet activation
+    }
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -121,6 +125,22 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override var balanceData: BalanceData? = null
+
+    private var accountBalance: AccountBalance? = null
+
+    /**
+     * Orchard-pool balance that must be migrated to the Ironwood pool, or null while
+     * the network has not reached NU6.3 activation or there is nothing to migrate.
+     */
+    val ironwoodMigrationRequiredBalance: BigDecimal?
+        get() {
+            val tip = synchronizer.latestHeight?.value ?: return null
+            if (tip < ironwoodActivationHeight) return null
+            val orchard = accountBalance?.orchard ?: return null
+            val orchardTotal = orchard.available + orchard.pending
+            if (orchardTotal.value <= 0) return null
+            return orchardTotal.convertZatoshiToZec(decimalCount)
+        }
 
     val statusInfo: Map<String, Any>
         get() {
@@ -479,6 +499,7 @@ class ZcashAdapter(
     }
 
     private fun onBalance(balance: AccountBalance) {
+        accountBalance = balance
         val balanceAvailable = balance.available.convertZatoshiToZec(decimalCount)
         val balancePending = balance.pending.convertZatoshiToZec(decimalCount)
         val balanceUnshielded = balance.unshielded.convertZatoshiToZec(decimalCount)

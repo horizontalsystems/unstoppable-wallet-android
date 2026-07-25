@@ -89,6 +89,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -108,6 +109,9 @@ fun TokenBalanceScreen(
     val tronBottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isTronAlertVisible by remember { mutableStateOf(false) }
+    var isMigrationSheetVisible by remember { mutableStateOf(false) }
+    val migrationSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
@@ -241,6 +245,13 @@ fun TokenBalanceScreen(
                         )
                     }
 
+                    uiState.zcashMigrationRequiredAmount?.let { amount ->
+                        MigrationRequiredCell(
+                            amount = amount,
+                            onClick = { isMigrationSheetVisible = true }
+                        )
+                    }
+
                     LockedBalanceSection(
                         balanceViewItem = balanceViewItem,
                         showBottomSheet = { content ->
@@ -336,6 +347,24 @@ fun TokenBalanceScreen(
             }
         }
 
+    }
+    if (isMigrationSheetVisible) {
+        ZcashMigrationBottomSheet(
+            sheetState = migrationSheetState,
+            onMigrateClick = {
+                // TODO: launch the Orchard -> Ironwood migration flow
+                coroutineScope.launch {
+                    migrationSheetState.hide()
+                    isMigrationSheetVisible = false
+                }
+            },
+            onClose = {
+                coroutineScope.launch {
+                    migrationSheetState.hide()
+                    isMigrationSheetVisible = false
+                }
+            }
+        )
     }
     if (isTronAlertVisible) {
         val context = LocalContext.current
@@ -587,6 +616,64 @@ private fun LockedBalanceSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MigrationRequiredCell(
+    amount: String,
+    onClick: () -> Unit
+) {
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfo(
+                    eyebrow = stringResource(R.string.Balance_Zcash_MigrationRequired).hs(color = ComposeAppTheme.colors.jacob)
+                )
+            },
+            right = {
+                CellRightInfoTextIcon(
+                    text = amount.hs(color = ComposeAppTheme.colors.jacob),
+                    icon = painterResource(R.drawable.warning_filled_24),
+                    iconTint = ComposeAppTheme.colors.jacob
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = onClick
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ZcashMigrationBottomSheet(
+    sheetState: SheetState,
+    onMigrateClick: () -> Unit,
+    onClose: () -> Unit
+) {
+    BottomSheetContent(
+        onDismissRequest = onClose,
+        sheetState = sheetState,
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Balance_Zcash_Migration_Migrate),
+                variant = ButtonVariant.Primary,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onMigrateClick
+            )
+        }
+    ) {
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.ic_share_24),
+            title = stringResource(R.string.Balance_Zcash_Migration_Title)
+        )
+
+        InfoTextBody(
+            text = stringResource(R.string.Balance_Zcash_Migration_Description),
+            color = ComposeAppTheme.colors.grey,
+            textAlign = TextAlign.Center
+        )
+        VSpacer(16.dp)
     }
 }
 

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -60,6 +61,7 @@ class TokenBalanceViewModel(
     private var alertUnshieldedBalance: BigDecimal? = null
     private var attentionIcon: AttentionIcon? = null
     private var showTronNotActiveAlert: Boolean? = null
+    private var zcashMigrationRequiredAmount: String? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -118,6 +120,7 @@ class TokenBalanceViewModel(
         alertUnshieldedBalance = alertUnshieldedBalance,
         attentionIcon = attentionIcon,
         showTronNotActiveAlert = showTronNotActiveAlert ?: false,
+        zcashMigrationRequiredAmount = zcashMigrationRequiredAmount,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -175,6 +178,10 @@ class TokenBalanceViewModel(
     }
 
     private fun handleZcashBalanceUpdate(balanceItem: BalanceModule.BalanceItem) {
+        zcashMigrationRequiredAmount = adapterManager.getAdapterForWallet<ZcashAdapter>(wallet)
+            ?.ironwoodMigrationRequiredBalance
+            ?.let { App.numberFormatter.formatCoinShort(it, wallet.coin.code, wallet.decimal) }
+
         if (balanceItem.state == AdapterState.Synced && balanceItem.balanceData.unshielded > ZcashAdapter.minimalShieldThreshold) {
             val unshielded = balanceItem.balanceData.unshielded
             val lastAlertedUnshieldedBalance = getLastAlertedUnshieldedBalance(wallet)
