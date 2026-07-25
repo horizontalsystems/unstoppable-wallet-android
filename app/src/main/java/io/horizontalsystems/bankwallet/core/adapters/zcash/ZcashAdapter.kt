@@ -142,6 +142,10 @@ class ZcashAdapter(
      */
     val ironwoodMigrationRequiredBalance: BigDecimal?
         get() {
+            // Only report when fully synced: mid-sync the Orchard balance is provisional
+            // (notes spent in not-yet-scanned blocks still count), so the migration
+            // alerts would show with a wrong amount
+            if (syncState != AdapterState.Synced) return null
             val tip = synchronizer.latestHeight?.value ?: return null
             if (tip < ironwoodActivationHeight) return null
             val orchard = accountBalance?.orchard ?: return null
