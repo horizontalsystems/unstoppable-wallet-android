@@ -44,11 +44,14 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
 
             // Unshielding is a self-transfer with a transparent output; a shielded
             // self-transfer is a migration only when its txid was recorded at broadcast,
-            // otherwise it is an ordinary send to own address.
+            // otherwise it is an ordinary send to own address. A recorded migration txid
+            // classifies on its own: after the transaction is mined and re-scanned from
+            // the chain, recipients are no longer reported as the wallet's own account,
+            // so the internal-transaction heuristic stops matching.
             val isUnshielding = internalTransaction &&
                     outputs.any { output -> output.pool == TransactionPool.TRANSPARENT }
 
-            if (it.isShielding || internalTransaction) {
+            if (it.isShielding || internalTransaction || isIronwoodMigration) {
                 shieldDirection = when {
                     it.isShielding -> ShieldDirection.Shield
                     isIronwoodMigration -> ShieldDirection.MigrateToIronwood

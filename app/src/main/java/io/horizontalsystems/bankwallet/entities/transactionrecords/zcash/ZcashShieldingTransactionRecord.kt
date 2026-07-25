@@ -48,7 +48,7 @@ class ZcashShieldingTransactionRecord(
     enum class Direction(val title: Int, val icon: Int) {
         Shield(R.string.Transactions_Shield, R.drawable.ic_shield_24),
         Unshield(R.string.Transactions_Unshield, R.drawable.ic_shield_off_24),
-        MigrateToIronwood(R.string.Transactions_Migrate, R.drawable.ic_share_24);
+        MigrateToIronwood(R.string.Transactions_Migrate, R.drawable.ic_migrate_24);
 
         companion object {
             fun from(wrapperDirection: ShieldDirection): Direction {
