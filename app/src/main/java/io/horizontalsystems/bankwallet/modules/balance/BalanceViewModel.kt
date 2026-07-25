@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
@@ -63,6 +64,8 @@ class BalanceViewModel(
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
     private var amountRoundingEnabled = localStorage.amountRoundingEnabledFlow.value
+    private var showZcashMigrationAlert = false
+    private var zcashMigrationAlertShown = false
     private var totalUiState = createTotalUiState(totalService.stateFlow.value)
 
     private val sortTypes =
@@ -90,6 +93,7 @@ class BalanceViewModel(
 
                 balanceItems = items
 
+                checkZcashMigrationRequired(items)
                 refreshViewItems()
             }
         }
@@ -194,8 +198,30 @@ class BalanceViewModel(
             it.loading
         },
         balanceHidden = balanceHidden,
-        totalUiState = totalUiState
+        totalUiState = totalUiState,
+        showZcashMigrationAlert = showZcashMigrationAlert
     )
+
+    private fun checkZcashMigrationRequired(items: List<BalanceModule.BalanceItem>?) {
+        if (zcashMigrationAlertShown) return
+        val zcashWallet = items
+            ?.firstOrNull { it.wallet.token.blockchainType == BlockchainType.Zcash }
+            ?.wallet ?: return
+        // BackupRequiredAlert fires for accounts with funds and no backup — let it win;
+        // the migration alert fires on a later emission once the account is backed up.
+        if (!zcashWallet.account.hasAnyBackup) return
+        adapterManager.getAdapterForWallet<ZcashAdapter>(zcashWallet)
+            ?.ironwoodMigrationRequiredBalance ?: return
+
+        zcashMigrationAlertShown = true
+        showZcashMigrationAlert = true
+        emitState()
+    }
+
+    fun zcashMigrationAlertHandled() {
+        showZcashMigrationAlert = false
+        emitState()
+    }
 
     private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
@@ -432,7 +458,8 @@ data class BalanceUiState(
     val networkAvailable: Boolean,
     val loading: Boolean,
     val balanceHidden: Boolean,
-    val totalUiState: TotalUIState
+    val totalUiState: TotalUIState,
+    val showZcashMigrationAlert: Boolean = false
 )
 
 data class OpenSendTokenSelect(

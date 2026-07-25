@@ -52,6 +52,7 @@ import io.horizontalsystems.bankwallet.modules.balance.LockedValue
 import io.horizontalsystems.bankwallet.modules.balance.StellarLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
+import io.horizontalsystems.bankwallet.modules.balance.ui.ZcashMigrationBottomSheet
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
@@ -641,39 +642,6 @@ private fun MigrationRequiredCell(
             backgroundColor = ComposeAppTheme.colors.lawrence,
             onClick = onClick
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ZcashMigrationBottomSheet(
-    sheetState: SheetState,
-    onMigrateClick: () -> Unit,
-    onClose: () -> Unit
-) {
-    BottomSheetContent(
-        onDismissRequest = onClose,
-        sheetState = sheetState,
-        buttons = {
-            HSButton(
-                title = stringResource(R.string.Balance_Zcash_Migration_Migrate),
-                variant = ButtonVariant.Primary,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onMigrateClick
-            )
-        }
-    ) {
-        BottomSheetHeaderV3(
-            image72 = painterResource(R.drawable.ic_share_24),
-            title = stringResource(R.string.Balance_Zcash_Migration_Title)
-        )
-
-        InfoTextBody(
-            text = stringResource(R.string.Balance_Zcash_Migration_Description),
-            color = ComposeAppTheme.colors.grey,
-            textAlign = TextAlign.Center
-        )
-        VSpacer(16.dp)
     }
 }
 

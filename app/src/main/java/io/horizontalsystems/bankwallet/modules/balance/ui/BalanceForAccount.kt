@@ -62,6 +62,9 @@ fun BalanceForAccount(
         skipPartiallyExpanded = true
     )
     var isWCInvalidUrlBottomSheetVisible by remember { mutableStateOf(false) }
+    val zcashMigrationSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     val scope = rememberCoroutineScope()
     val qrScannerLauncher =
@@ -201,6 +204,24 @@ fun BalanceForAccount(
                 }
             }
         }
+    }
+    if (uiState.showZcashMigrationAlert) {
+        ZcashMigrationBottomSheet(
+            sheetState = zcashMigrationSheetState,
+            onMigrateClick = {
+                // TODO: launch the Orchard -> Ironwood migration flow
+                scope.launch {
+                    zcashMigrationSheetState.hide()
+                    viewModel.zcashMigrationAlertHandled()
+                }
+            },
+            onClose = {
+                scope.launch {
+                    zcashMigrationSheetState.hide()
+                    viewModel.zcashMigrationAlertHandled()
+                }
+            }
+        )
     }
     if (isWCInvalidUrlBottomSheetVisible) {
         WCInvalidUrlBottomSheet(
