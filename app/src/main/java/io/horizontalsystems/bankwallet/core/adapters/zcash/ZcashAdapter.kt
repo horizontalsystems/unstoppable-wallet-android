@@ -364,16 +364,17 @@ class ZcashAdapter(
 
     /**
      * Signs and broadcasts the self-transfer proposal retained by [proposeIronwoodMigration]
-     * through the ordinary send path, records the txid for transaction-history labeling, and
-     * returns it.
+     * through the ordinary send path, records every submitted txid for transaction-history
+     * labeling, and returns the first one.
      */
     suspend fun executeIronwoodMigration(): String {
         val proposal = migrationProposal ?: throw IllegalStateException("Migration was not proposed")
 
-        val txHash = send(proposal) ?: throw IllegalStateException("Migration send returned no transaction id")
+        val txHashes = send(proposal)
+        val txHash = txHashes.firstOrNull() ?: throw IllegalStateException("Migration send returned no transaction id")
 
         migrationProposal = null
-        localStorage.zcashMigrationTransactionIds += txHash.lowercase()
+        localStorage.zcashMigrationTransactionIds += txHashes.map { it.lowercase() }
         return txHash
     }
 
@@ -410,16 +411,16 @@ class ZcashAdapter(
         memo = memo
     )
 
-    private suspend fun send(proposal: Proposal): String? {
+    private suspend fun send(proposal: Proposal): List<String> {
         val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
 
         try {
             val results = synchronizer.createProposedTransactions(proposal, spendingKey).toList()
-            var firstTxHash: String? = null
+            val txHashes = mutableListOf<String>()
             results.forEach { result ->
                 when (result) {
                     is TransactionSubmitResult.Success -> {
-                        if (firstTxHash == null) firstTxHash = result.txIdString()
+                        txHashes.add(result.txIdString())
                     }
 
                     is TransactionSubmitResult.Failure -> {
@@ -438,7 +439,7 @@ class ZcashAdapter(
                     }
                 }
             }
-            return firstTxHash
+            return txHashes
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Invalid proposal: ${e.message}", e)
         } catch (e: Exception) {
@@ -455,7 +456,7 @@ class ZcashAdapter(
     }
 
     override suspend fun sendProposal(proposal: Proposal): String? {
-        return send(proposal)
+        return send(proposal).firstOrNull()
     }
 
     private fun createPaymentUri(outputs: List<TransferOutput>): String {
