@@ -145,9 +145,12 @@ class ZcashAdapter(
             val tip = synchronizer.latestHeight?.value ?: return null
             if (tip < ironwoodActivationHeight) return null
             val orchard = accountBalance?.orchard ?: return null
-            val orchardTotal = orchard.available + orchard.pending
-            if (orchardTotal.value <= 0) return null
-            return orchardTotal.convertZatoshiToZec(decimalCount)
+            // Spendable balance only, matching what proposeIronwoodMigration can sweep:
+            // the all-or-nothing proposal fails while any Orchard note is still pending,
+            // and showing pending funds here would advertise an amount the confirmation
+            // screen cannot migrate
+            if (orchard.available.value <= 0) return null
+            return orchard.available.convertZatoshiToZec(decimalCount)
         }
 
     val statusInfo: Map<String, Any>
