@@ -1806,4 +1806,14 @@
     <string name="PasskeyTerms_LimitedAccess_Description">Funktioniert möglicherweise nicht auf allen Geräten oder Plattformen.</string>
     <string name="PasskeyTerms_Responsibility_Description">Sie sind für den Zugriff auf Ihr Gerät verantwortlich. Unstoppable kann dieses Wallet nicht wiederherstellen, wenn der Zugriff verloren geht.</string>
     <string name="Send_Error_NodeUnreachable">Knoten konnte nicht erreicht werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.</string>
+    <string name="Balance_Zcash_MigrationRequired">Migration erforderlich</string>
+    <string name="Balance_Zcash_Migration_Title">Migration zu Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash-Netzwerk-Upgrade:
+Verschieben Sie Ihre ZEC vom Orchard-Pool zum neuen Ironwood-Pool. Ihre Gelder sind sicher.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Migrieren</string>
+    <string name="Zcash_Migration_Confirm_Title">Migration bestätigen</string>
+    <string name="Transactions_Migrate">Migrieren</string>
+    <string name="Transactions_Migrate_ToIronwood">zu Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Öffentlich sichtbarer Betrag</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Das Verschieben von Gedern zwischen Pools erfordert, dass der migrierte Betrag öffentlich sichtbar auf der Blockchain ist. Absender, Empfänger und Ihre Adressen bleiben privat.</string>
 </resources>

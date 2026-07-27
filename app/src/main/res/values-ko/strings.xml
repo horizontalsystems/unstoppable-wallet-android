@@ -1798,4 +1798,14 @@
     <string name="WalletConnect_RequestFailedDescription">문제가 발생하여 요청을 완료할 수 없습니다</string>
     <string name="Watch_Monero_Warning">Monero 워치 지갑은 입금 거래만 표시합니다. 표시된 잔액이 정확하지 않을 수 있습니다.</string>
     <string name="Send_Error_NodeUnreachable">노드에 도달할 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
+    <string name="Balance_Zcash_MigrationRequired">마이그레이션 필요</string>
+    <string name="Balance_Zcash_Migration_Title">Ironwood로 마이그레이션</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash 네트워크 업그레이드:
+ZEC를 Orchard 풀에서 새로운 Ironwood 풀로 이동하세요. 자금은 안전합니다.</string>
+    <string name="Balance_Zcash_Migration_Migrate">마이그레이션</string>
+    <string name="Zcash_Migration_Confirm_Title">마이그레이션 확인</string>
+    <string name="Transactions_Migrate">마이그레이션</string>
+    <string name="Transactions_Migrate_ToIronwood">Ironwood로</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">공개적으로 표시되는 금액</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">풀 간 자금 이동을 위해서는 마이그레이션된 금액이 블록체인에 공개적으로 표시되어야 합니다. 발신자, 수신자 및 주소는 비공개 상태로 유지됩니다.</string>
 </resources>

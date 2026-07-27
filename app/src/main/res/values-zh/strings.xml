@@ -1797,4 +1797,14 @@
     <string name="PasskeyTerms_Responsibility_Description">您需要对设备的访问权限负责。如果访问权限丢失，Unstoppable 无法恢复此钱包。</string>
     <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum、Arbitrum、Optimism…</string>
     <string name="Send_Error_NodeUnreachable">无法连接到节点。请检查您的连接并重试。</string>
+    <string name="Balance_Zcash_MigrationRequired">需要迁移</string>
+    <string name="Balance_Zcash_Migration_Title">迁移至 Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash 网络升级:
+将您的 ZEC 从 Orchard 池迁移至新的 Ironwood 池。您的资金是安全的。</string>
+    <string name="Balance_Zcash_Migration_Migrate">迁移</string>
+    <string name="Zcash_Migration_Confirm_Title">确认迁移</string>
+    <string name="Transactions_Migrate">迁移</string>
+    <string name="Transactions_Migrate_ToIronwood">至 Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">公开可见金额</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">在池之间转移资金需要迁移金额在区块链上公开可见。发送人、接收人和您的地址保持隐私。</string>
 </resources>

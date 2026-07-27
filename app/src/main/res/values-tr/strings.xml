@@ -1798,4 +1798,14 @@
     <string name="WalletConnect_TokenAllowance">Token İzni</string>
     <string name="Watch_Monero_Warning">Monero izleme cüzdanı yalnızca gelen işlemleri gösterir. Görüntülenen bakiye yanlış olabilir.</string>
     <string name="Send_Error_NodeUnreachable">Düğüme ulaşılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="Balance_Zcash_MigrationRequired">Geçiş gerekli</string>
+    <string name="Balance_Zcash_Migration_Title">Ironwood\'a Geçiş</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash ağı yükseltmesi:
+ZEC\'inizi Orchard havuzundan yeni Ironwood havuzuna taşıyın. Fonlarınız güvenlidir.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Geçir</string>
+    <string name="Zcash_Migration_Confirm_Title">Geçişi onaylayın</string>
+    <string name="Transactions_Migrate">Geçir</string>
+    <string name="Transactions_Migrate_ToIronwood">Ironwood\'a</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Herkese açık görünür tutar</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Havuzlar arasında para transferi, geçirilen tutarın blokzincirde herkese açık şekilde görünür olmasını gerektirir. Gönderici, alıcı ve adresleriniz özel kalır.</string>
 </resources>
