@@ -35,7 +35,8 @@ fun ZcashMigrationConfirmScreen(
     viewModel: ZcashMigrationViewModel
 ) {
     val view = LocalView.current
-    val sendResult = viewModel.sendResult
+    val uiState = viewModel.uiState
+    val sendResult = uiState.sendResult
     // Resolved during composition: caution strings are @Composable and cannot be
     // read inside the effect coroutine
     val failedMessage = (sendResult as? SendResult.Failed)?.caution?.let {
@@ -76,7 +77,7 @@ fun ZcashMigrationConfirmScreen(
                         .padding(horizontal = 16.dp),
                     sendResult = sendResult,
                     onClick = viewModel::onClickMigrate,
-                    enabled = viewModel.error == null
+                    enabled = uiState.error == null
                 )
             }
         }
@@ -89,9 +90,9 @@ fun ZcashMigrationConfirmScreen(
             VSpacer(16.dp)
             ConfirmationTopSection(
                 token = viewModel.wallet.token,
-                amount = viewModel.amount,
+                amount = uiState.amount,
                 coinMaxAllowedDecimals = viewModel.coinMaxAllowedDecimals,
-                rate = viewModel.coinRate,
+                rate = uiState.coinRate,
                 address = null,
                 contact = null,
             )
@@ -99,8 +100,8 @@ fun ZcashMigrationConfirmScreen(
             ConfirmationBottomSection(
                 feeCoin = viewModel.wallet.coin,
                 feeCoinMaxAllowedDecimals = viewModel.coinMaxAllowedDecimals,
-                fee = viewModel.fee,
-                feeCoinRate = viewModel.coinRate,
+                fee = uiState.fee,
+                feeCoinRate = uiState.coinRate,
                 navController = navController,
                 memo = null
             )
@@ -113,7 +114,7 @@ fun ZcashMigrationConfirmScreen(
                 icon = R.drawable.ic_warning_filled_20
             )
 
-            viewModel.error?.let {
+            uiState.error?.let {
                 Cautions(listOf(CautionViewItem.fromThrowable(it)))
             }
         }

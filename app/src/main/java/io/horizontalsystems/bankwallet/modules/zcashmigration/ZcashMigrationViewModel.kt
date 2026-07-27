@@ -1,16 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.zcashmigration
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -25,30 +23,30 @@ class ZcashMigrationViewModel(
     private val adapter: ZcashAdapter,
     val wallet: Wallet,
     xRateService: XRateService,
-) : ViewModel() {
+) : ViewModelUiState<ZcashMigrationUiState>() {
     private val logger = AppLogger("Zcash-Ironwood-Migration")
 
     val coinMaxAllowedDecimals = wallet.token.decimals
 
-    var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
-        private set
-
-    var sendResult by mutableStateOf<SendResult?>(null)
-        private set
-
+    private var coinRate = xRateService.getRate(wallet.coin.uid)
+    private var sendResult: SendResult? = null
     // Migration-required Orchard balance shown while the exact proposal is loading
-    var amount by mutableStateOf(adapter.ironwoodMigrationRequiredBalance ?: BigDecimal.ZERO)
-        private set
+    private var amount = adapter.ironwoodMigrationRequiredBalance ?: BigDecimal.ZERO
+    private var fee: BigDecimal? = null
+    private var error: Throwable? = null
 
-    var fee by mutableStateOf<BigDecimal?>(null)
-        private set
-
-    var error by mutableStateOf<Throwable?>(null)
-        private set
+    override fun createState() = ZcashMigrationUiState(
+        coinRate = coinRate,
+        sendResult = sendResult,
+        amount = amount,
+        fee = fee,
+        error = error,
+    )
 
     init {
         xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
             coinRate = it
+            emitState()
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -60,7 +58,7 @@ class ZcashMigrationViewModel(
                 logger.warning("propose failed", e)
                 error = e
             }
-
+            emitState()
         }
     }
 
@@ -76,6 +74,7 @@ class ZcashMigrationViewModel(
 
         try {
             sendResult = SendResult.Sending
+            emitState()
 
             val txId = adapter.executeIronwoodMigration()
 
@@ -86,6 +85,7 @@ class ZcashMigrationViewModel(
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))
         }
+        emitState()
     }
 
     private fun createCaution(error: Throwable) = when (error) {
@@ -94,3 +94,11 @@ class ZcashMigrationViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 }
+
+data class ZcashMigrationUiState(
+    val coinRate: CurrencyValue?,
+    val sendResult: SendResult?,
+    val amount: BigDecimal,
+    val fee: BigDecimal?,
+    val error: Throwable?,
+)
