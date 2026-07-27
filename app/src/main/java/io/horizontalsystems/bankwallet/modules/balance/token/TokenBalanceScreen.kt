@@ -250,6 +250,7 @@ fun TokenBalanceScreen(
                     uiState.zcashMigrationRequiredAmount?.let { amount ->
                         MigrationRequiredCell(
                             amount = amount,
+                            balanceHidden = balanceViewItem.balanceHidden,
                             onClick = { isMigrationSheetVisible = true }
                         )
                     }
@@ -627,6 +628,7 @@ private fun LockedBalanceSection(
 @Composable
 private fun MigrationRequiredCell(
     amount: String,
+    balanceHidden: Boolean,
     onClick: () -> Unit
 ) {
     BoxBordered(bottom = true) {
@@ -638,7 +640,7 @@ private fun MigrationRequiredCell(
             },
             right = {
                 CellRightInfoTextIcon(
-                    text = amount.hs(color = ComposeAppTheme.colors.jacob),
+                    text = (if (!balanceHidden) amount else "*****").hs(color = ComposeAppTheme.colors.jacob),
                     icon = painterResource(R.drawable.warning_filled_24),
                     iconTint = ComposeAppTheme.colors.jacob
                 )
