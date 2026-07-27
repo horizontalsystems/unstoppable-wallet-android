@@ -36,32 +36,32 @@ fun ZcashMigrationConfirmScreen(
 ) {
     val view = LocalView.current
     val sendResult = viewModel.sendResult
-
-    when (sendResult) {
-        is SendResult.Sent -> {
-            HudHelper.showSuccessMessage(
-                view,
-                R.string.Send_Success,
-                SnackbarDuration.LONG
-            )
-        }
-
-        is SendResult.Failed -> {
-            navController.slideFromBottom(
-                R.id.errorBottomSheet,
-                ErrorBottomSheet.Input(
-                    sendResult.caution.getDescription() ?: sendResult.caution.getString()
-                )
-            )
-        }
-
-        else -> Unit
+    // Resolved during composition: caution strings are @Composable and cannot be
+    // read inside the effect coroutine
+    val failedMessage = (sendResult as? SendResult.Failed)?.caution?.let {
+        it.getDescription() ?: it.getString()
     }
 
     LaunchedEffect(sendResult) {
-        if (sendResult is SendResult.Sent) {
-            delay(1200)
-            navController.popBackStack()
+        when (sendResult) {
+            is SendResult.Sent -> {
+                HudHelper.showSuccessMessage(
+                    view,
+                    R.string.Send_Success,
+                    SnackbarDuration.LONG
+                )
+                delay(1200)
+                navController.popBackStack()
+            }
+
+            is SendResult.Failed -> {
+                navController.slideFromBottom(
+                    R.id.errorBottomSheet,
+                    ErrorBottomSheet.Input(failedMessage ?: "")
+                )
+            }
+
+            else -> Unit
         }
     }
 
