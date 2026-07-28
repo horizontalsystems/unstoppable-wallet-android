@@ -220,6 +220,7 @@ class TronKitManager(
     fun getAddress(account: Account) = when (val type = account.type) {
         is AccountType.TronAddress -> type.address
         is AccountType.Mnemonic -> TronKit.getAddress(type.seed, network).base58
+        is AccountType.TronPrivateKey -> Signer.address(type.key, network).base58
         // externally-resolved watch address (e.g. a GasFree wallet)
         else -> TronAddressResolver.provider?.tronAddress(account)
             ?: throw UnsupportedAccountException()
