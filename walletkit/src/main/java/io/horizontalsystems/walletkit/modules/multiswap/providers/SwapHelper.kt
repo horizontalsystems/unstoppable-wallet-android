@@ -135,7 +135,7 @@ object SwapHelper {
                 }
 
                 BlockchainType.Tron -> {
-                    App.tronKitManager.getAddress(account.type)
+                    App.tronKitManager.getAddress(account)
                 }
 
                 BlockchainType.Stellar -> {

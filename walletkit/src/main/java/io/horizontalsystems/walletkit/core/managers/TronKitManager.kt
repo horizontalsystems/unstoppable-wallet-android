@@ -217,10 +217,12 @@ class TronKitManager(
         }
     }
 
-    fun getAddress(type: AccountType) = when (type) {
+    fun getAddress(account: Account) = when (val type = account.type) {
         is AccountType.TronAddress -> type.address
         is AccountType.Mnemonic -> TronKit.getAddress(type.seed, network).base58
-        else -> throw UnsupportedAccountException()
+        // externally-resolved watch address (e.g. a GasFree wallet)
+        else -> TronAddressResolver.provider?.tronAddress(account)
+            ?: throw UnsupportedAccountException()
     }
 }
 
