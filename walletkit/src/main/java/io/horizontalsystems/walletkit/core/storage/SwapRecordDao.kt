@@ -20,7 +20,7 @@ interface SwapRecordDao {
     @Query("SELECT * FROM SwapRecord WHERE id = :id")
     fun getById(id: Int): SwapRecord?
 
-    @Query("SELECT * FROM SwapRecord WHERE trackingHandle = :trackingHandle ORDER BY timestamp DESC LIMIT 1")
+    @Query("SELECT * FROM SwapRecord WHERE trackingHandle = :trackingHandle ORDER BY timestamp DESC, id DESC LIMIT 1")
     fun getByTrackingHandle(trackingHandle: String): SwapRecord?
 
     @Query("UPDATE SwapRecord SET status = :status, pauseReason = :pauseReason WHERE id = :id")
