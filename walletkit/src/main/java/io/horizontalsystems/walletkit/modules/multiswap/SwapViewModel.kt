@@ -49,6 +49,8 @@ class SwapViewModel(
     tokenIn: Token?,
     tokenOut: Token? = null,
     private val allowancePolicy: ISwapAllowancePolicy? = null,
+    // false = tokenOut stays empty until the user picks it explicitly
+    private val autoResolveTokenOut: Boolean = true,
 ) : ViewModelUiState<SwapUiState>() {
 
     private val quoteLifetime = 20
@@ -120,10 +122,12 @@ class SwapViewModel(
                 requoteIfTimeout()
             }
         }
-        viewModelScope.launch {
-            defaultTokenService.stateFlow.collect {
-                if (tokenOut == null) {
-                    it.tokenOut?.let { quoteService.setTokenOut(it) }
+        if (autoResolveTokenOut) {
+            viewModelScope.launch {
+                defaultTokenService.stateFlow.collect {
+                    if (tokenOut == null) {
+                        it.tokenOut?.let { quoteService.setTokenOut(it) }
+                    }
                 }
             }
         }
@@ -393,6 +397,8 @@ class SwapViewModel(
         private val providers: List<IMultiSwapProvider>? = null,
         // null = stock behavior (approve/revoke steps surface as usual)
         private val allowancePolicy: ISwapAllowancePolicy? = null,
+        // false = tokenOut stays empty until the user picks it explicitly
+        private val autoResolveTokenOut: Boolean = true,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -418,6 +424,7 @@ class SwapViewModel(
                 tokenIn,
                 tokenOut,
                 allowancePolicy,
+                autoResolveTokenOut,
             ) as T
         }
     }
