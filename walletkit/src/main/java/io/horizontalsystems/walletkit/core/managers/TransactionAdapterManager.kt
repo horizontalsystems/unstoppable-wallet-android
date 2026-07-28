@@ -79,14 +79,14 @@ class TransactionAdapterManager(
                     }
                     else -> adapter as? ITransactionsAdapter
                 }
+                    // decorate only freshly created adapters — reused entries from
+                    // adaptersMap are already decorated, wrapping again would stack
+                    ?.let { raw ->
+                        TransactionsAdapterDecoratorResolver.provider?.decorate(raw, source) ?: raw
+                    }
             }
 
-            txAdapter?.let { adapterToRegister ->
-                val decorated = TransactionsAdapterDecoratorResolver.provider
-                    ?.decorate(adapterToRegister, source)
-                    ?: adapterToRegister
-                this.adaptersMap[source] = decorated
-            }
+            txAdapter?.let { this.adaptersMap[source] = it }
         }
 
         currentAdapters.forEach {
