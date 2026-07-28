@@ -70,6 +70,9 @@ class ManageAccountViewModel(
         if (account.type is AccountType.HdExtendedKey
             || account.type is AccountType.EvmPrivateKey
             || account.type is AccountType.StellarSecretKey
+            // no phrase to back up manually; only the encrypted local backup
+            // can serialize the credential id
+            || account.type is AccountType.Passkey
         ) {
             return listOf(BackupItem.LocalBackup(false))
         }
