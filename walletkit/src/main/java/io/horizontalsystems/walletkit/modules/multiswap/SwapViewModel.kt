@@ -171,7 +171,7 @@ class SwapViewModel(
         if (hasExplicitTokens || tokensManuallySet) return
         viewModelScope.launch(Dispatchers.IO) {
             val (resolvedIn, resolvedOut) = resolveDefaultTokens()
-            applyTokens(resolvedIn, resolvedOut)
+            applyTokens(resolvedIn, if (autoResolveTokenOut) resolvedOut else null)
         }
     }
 
