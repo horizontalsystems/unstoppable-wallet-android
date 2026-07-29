@@ -607,7 +607,7 @@
     <string name="Swap_AmlError_Description">Не удалось получить ответ прямо сейчас. Пожалуйста, попробуйте еще раз.</string>
     <string name="Swap_AmlError_Button">Повторить</string>
     <string name="Swap_EstimatedTime">Время</string>
-    <string name="Swap_EstimatedTimeDescription">Приблизительное время получения средств. Обработка обмена и подтверждение транзакций могут занять некоторое время в зависимости от сети и маршрута.</string>
+    <string name="Swap_EstimatedTimeDescription">Это приблизительное время, необходимое для завершения обмена и получения ваших средств. Фактическое время может быть короче или длиннее в зависимости от состояния сети, подтверждений транзакций и выбранного маршрута обмена.</string>
     <string name="Swap_MinimumReceived">Гарантированно</string>
     <string name="Swap_MinimumReceivedDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
     <string name="Swap_Slippage">Отклонение от курса</string>

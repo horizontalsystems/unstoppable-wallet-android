@@ -1315,7 +1315,7 @@
     "Swap_ErrorWalletNotSynced": "Wallet Not Synced",
     "Swap_ErrorWalletSyncing": "Wallet is Syncing",
     "Swap_EstimatedTime": "Est. Time",
-    "Swap_EstimatedTimeDescription": "Approximate time to receive funds. Swap processing and transaction confirmations may take some time depending on the network and route.",
+    "Swap_EstimatedTimeDescription": "This is the estimated time required to complete the swap and receive your funds. The actual time may be shorter or longer depending on network conditions, transaction confirmations, and the selected swap route.",
     "Swap_FromAmountTitle": "You Pay",
     "Swap_MinimumReceived": "Guaranteed",
     "Swap_MinimumReceivedDescription": "This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going",

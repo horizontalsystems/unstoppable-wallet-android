@@ -604,7 +604,7 @@
     <string name="Swap_AmlError_Description">现在无法获得响应。请再试一次。</string>
     <string name="Swap_AmlError_Button">重试</string>
     <string name="Swap_EstimatedTime">估计时间</string>
-    <string name="Swap_EstimatedTimeDescription">接收资金的大约时间。交换处理和交易确认可能需要一些时间，具体取决于网络和路由。</string>
+    <string name="Swap_EstimatedTimeDescription">这是完成兑换并接收您资金所需的估计时间。实际时间可能会因网络状况、交易确认和选定的兑换路线而缩短或延长。</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_MinimumReceivedDescription">这一数额正在审定过程中。 一旦交易状态得到验证，您将能够使用这些硬币。用户正在使用的最低金额 </string>
     <string name="Swap_Slippage">滑点</string>

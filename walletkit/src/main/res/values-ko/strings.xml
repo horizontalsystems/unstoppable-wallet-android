@@ -1530,7 +1530,7 @@
     <string name="Swap_ProviderRisk">경로 위험도</string>
     <string name="Swap_AmlRisk_Description">이 거래에 대해 잠재적 위험이 식별되었습니다. 처리 중에 자금이 거부되거나 제한될 수 있습니다. 다른 경로를 선택하시기 바랍니다.</string>
     <string name="Swap_AmlRisk_Button">다른 경로 선택</string>
-    <string name="Swap_EstimatedTimeDescription">자금 수령 예상 시간입니다. 스왑 처리 및 거래 확인은 네트워크 및 경로에 따라 시간이 소요될 수 있습니다.</string>
+    <string name="Swap_EstimatedTimeDescription">이는 스왑을 완료하고 자금을 받기 위해 필요한 예상 시간입니다. 실제 시간은 네트워크 상태, 거래 확인 및 선택한 스왑 경로에 따라 더 짧거나 길 수 있습니다.</string>
     <string name="SwapTerms_BottomText">항상 귀하의 요구 사항과 일치하는 스왑 경로를 선택하세요.</string>
     <string name="SwapInfo_Provider">경로</string>
     <string name="SwapHistory_EmptyList">아직 대기 중이거나 이전의 스왑이 없습니다.</string>

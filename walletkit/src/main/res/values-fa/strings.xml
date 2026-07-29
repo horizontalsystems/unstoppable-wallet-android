@@ -695,7 +695,7 @@
     <string name="Swap_ProviderRisk">ریسک مسیر</string>
     <string name="Swap_AmlRisk_Description">ریسک های احتمالی برای این معامله شناسایی شد. در حین پردازش، ممکن است وجوه شما رد یا محدود شود. لطفاً مسیر دیگری را انتخاب کنید.</string>
     <string name="Swap_AmlRisk_Button">انتخاب مسیر دیگر</string>
-    <string name="Swap_EstimatedTimeDescription">زمان تقریبی برای دریافت وجوه. پردازش swap و تأیید معاملات بسته به شبکه و مسیر می‌تواند مدتی طول بکشد.</string>
+    <string name="Swap_EstimatedTimeDescription">این زمان تخمینی مورد نیاز برای تکمیل تبدیل و دریافت وجوه شما است. زمان واقعی ممکن است بسته به شرایط شبکه، تأیید تراکنش‌ها و مسیر تبدیل انتخاب شده کوتاه‌تر یا طولانی‌تر باشد.</string>
     <string name="SwapTerms_BottomText">همیشه مسیر swap را انتخاب کنید که با نیازهای شما مطابقت داشته باشد.</string>
     <string name="SwapInfo_Provider">مسیر</string>
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>

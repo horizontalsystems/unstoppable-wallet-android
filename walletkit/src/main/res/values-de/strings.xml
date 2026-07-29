@@ -605,7 +605,7 @@
     <string name="Swap_AmlError_Description">Kann momentan keine Antwort erhalten. Bitte versuchen Sie es erneut.</string>
     <string name="Swap_AmlError_Button">Wiederholen</string>
     <string name="Swap_EstimatedTime">Geschätzte Zeit</string>
-    <string name="Swap_EstimatedTimeDescription">Ungefähre Zeit zum Empfang der Gelder. Die Swap-Verarbeitung und Transaktionsbestätigungen können je nach Netzwerk und Route einige Zeit dauern.</string>
+    <string name="Swap_EstimatedTimeDescription">Dies ist die geschätzte Zeit, die erforderlich ist, um den Swap abzuschließen und Ihre Gelder zu erhalten. Die tatsächliche Zeit kann je nach Netzwerkbedingungen, Transaktionsbestätigungen und der ausgewählten Swap-Route kürzer oder länger sein.</string>
     <string name="Swap_MinimumReceived">Garantiebetrag</string>
     <string name="Swap_MinimumReceivedDescription">Dieser Betrag ist im Prozess der Validierung. Sobald der Transaktionsstatus bestätigt ist, können Sie diese Münzen verwenden. Der Mindestbetrag für den ein Benutzer geht </string>
     <string name="Swap_Slippage">Slippage</string>

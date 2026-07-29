@@ -605,7 +605,7 @@
     <string name="Swap_AmlError_Description">Impossible d\'obtenir une réponse pour le moment. Veuillez réessayer.</string>
     <string name="Swap_AmlError_Button">Réessayer</string>
     <string name="Swap_EstimatedTime">Est. Time</string>
-    <string name="Swap_EstimatedTimeDescription">Temps approximatif pour recevoir les fonds. Le traitement du swap et les confirmations de transaction peuvent prendre du temps selon le réseau et l\'itinéraire.</string>
+    <string name="Swap_EstimatedTimeDescription">Ceci est le temps estimé requis pour finaliser l\'échange et recevoir vos fonds. Le temps réel peut être plus court ou plus long selon les conditions du réseau, les confirmations de transaction et l\'itinéraire d\'échange sélectionné.</string>
     <string name="Swap_MinimumReceived">Garantie</string>
     <string name="Swap_MinimumReceivedDescription">Ce montant est en cours de validation. Dès que le statut de la transaction est validé, vous serez en mesure d\'utiliser ces pièces. Le montant minimum d\'un utilisateur va </string>
     <string name="Swap_Slippage">Slippage</string>

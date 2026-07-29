@@ -1369,7 +1369,7 @@
     <string name="Swap_ProviderRisk">Rota Riski</string>
     <string name="Swap_AmlRisk_Description">Bu işlem için olası riskler tespit edildi. İşlem sırasında fonlarınız reddedilebilir veya kısıtlanabilir. Lütfen başka bir rota seçin.</string>
     <string name="Swap_AmlRisk_Button">Başka Rota Seç</string>
-    <string name="Swap_EstimatedTimeDescription">Fonları alma için tahmini zaman. Swap işleme ve işlem onayları ağ ve rotaya bağlı olarak biraz zaman alabilir.</string>
+    <string name="Swap_EstimatedTimeDescription">Bu, takası tamamlamak ve fonlarınızı almak için gereken tahmini süredir. Gerçek süre, ağ koşullarına, işlem onaylarına ve seçilen takas rotasına bağlı olarak daha kısa veya daha uzun olabilir.</string>
     <string name="SwapTerms_BottomText">Her zaman gereksinimlerinize uygun bir swap rotası seçin.</string>
     <string name="SwapInfo_Provider">Rota</string>
     <string name="SwapHistory_EmptyList">Henüz beklemede veya geçmiş takasınız yok.</string>
