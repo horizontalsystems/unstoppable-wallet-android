@@ -18,7 +18,8 @@ class WalletManager(
     private val storage: IWalletStorage,
 ) {
 
-    val activeWallets get() = walletsSet.toList()
+    val activeWallets: List<Wallet>
+        @Synchronized get() = walletsSet.toList()
     val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
     private val walletsSet = mutableSetOf<Wallet>()
@@ -53,6 +54,7 @@ class WalletManager(
         notifyActiveWallets()
     }
 
+    @Synchronized
     fun clear() {
         storage.clear()
         walletsSet.clear()
@@ -67,6 +69,7 @@ class WalletManager(
     // Re-emit the current active wallets to (re)initialize adapters without tearing existing ones
     // down. Used after Monero startup Auto-Select resolves the fastest node so the Monero adapter
     // is created once (existing adapters are reused, none are deleted).
+    @Synchronized
     fun refreshActiveWallets() {
         notifyActiveWallets()
     }
