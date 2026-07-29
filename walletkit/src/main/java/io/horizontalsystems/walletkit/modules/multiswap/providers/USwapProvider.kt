@@ -538,6 +538,7 @@ class USwapProvider(
             fromAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
             toAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
             depositAddress = bestRoute.execution?.resolvedDepositAddress(),
+            approvalSpender = bestRoute.approvalSpenderOrExecution,
         )
     }
 

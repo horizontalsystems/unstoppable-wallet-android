@@ -20,4 +20,7 @@ data class SwapFinalQuote(
     val fromAsset: String? = null,
     val toAsset: String? = null,
     val depositAddress: String? = null,
+    // Spender of the committed route's approval, when the provider reports one —
+    // it can differ from the transaction's `to` (routers vs. dedicated spenders).
+    val approvalSpender: String? = null,
 )
