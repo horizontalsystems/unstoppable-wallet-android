@@ -56,6 +56,15 @@ class SwapRecordManager(
         _recordsUpdatedFlow.tryEmit(Unit)
     }
 
+    /**
+     * Releases the record from app-side tracking: with the handle gone, the
+     * server-side sync loop owns the record's advancement.
+     */
+    fun clearTrackingHandle(id: Int) {
+        swapRecordDao.clearTrackingHandle(id)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
     fun updateOutboundTransactionHash(id: Int, hash: String) {
         swapRecordDao.updateOutboundTransactionHash(id, hash)
         _recordsUpdatedFlow.tryEmit(Unit)
