@@ -35,4 +35,8 @@ object MultiSwapProviderRegistry {
         val provider = providersById[providerId] ?: return false
         return provider.isSingleTransactionSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid)
     }
+
+    fun providerType(providerId: String): SwapProviderType? {
+        return providersById[providerId]?.type
+    }
 }

@@ -23,16 +23,16 @@ data class SwapInfoSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        SwapInfoView(input.title, input.text) { navigation.removeLastOrNull() }
+        SwapInfoView(input.title, input.text, input.icon) { navigation.removeLastOrNull() }
     }
 
     @Serializable
-    data class Input(val title: String, val text: String)
+    data class Input(val title: String, val text: String, val icon: Int? = null)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SwapInfoView(title: String, text: String, onCloseClick: () -> Unit) {
+fun SwapInfoView(title: String, text: String, icon: Int? = null, onCloseClick: () -> Unit) {
     BottomSheetContent(
         onDismissRequest = onCloseClick,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -46,7 +46,7 @@ fun SwapInfoView(title: String, text: String, onCloseClick: () -> Unit) {
         }
     ) {
         BottomSheetHeaderV3(
-            image72 = painterResource(R.drawable.book_24),
+            image72 = painterResource(icon ?: R.drawable.book_24),
             title = title
         )
         TextBlock(

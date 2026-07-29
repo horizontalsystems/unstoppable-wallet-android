@@ -70,6 +70,7 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -427,6 +428,11 @@ private fun SwapScreenInner(
                                 },
                                 onClickProviderScoreInfo = {
                                     navigation.slideFromBottom(RiskLevelInfoSheet)
+                                },
+                                onClickSwapTimeInfo = { infoTitle, infoText ->
+                                    navigation.slideFromBottom(
+                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                    )
                                 }
                             )
                         }
@@ -576,6 +582,7 @@ private fun ProviderCellInfo(
     onClickPrice: () -> Unit,
     onClickProvider: () -> Unit,
     onClickProviderScoreInfo: () -> Unit,
+    onClickSwapTimeInfo: (title: String, text: String) -> Unit,
 ) {
     val swapPriceUIHelper = SwapPriceUIHelper(
         quote.tokenIn,
@@ -631,12 +638,24 @@ private fun ProviderCellInfo(
         )
         if (swapTimeStatus == SwapTimeStatus.Attention) {
             quote.estimationTime?.let { estimationTime ->
+                val infoTitle = stringResource(R.string.Swap_SwapTime)
+                val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
                 CellSecondary(
                     middle = {
-                        CellMiddleInfo(eyebrow = stringResource(R.string.Swap_SwapTime).hs)
+                        CellMiddleInfoTextIcon(
+                            text = infoTitle.hs,
+                            icon = painterResource(R.drawable.ic_info_24),
+                            iconTint = ComposeAppTheme.colors.grey,
+                        )
                     },
                     right = {
-                        SwapTime(estimationTime = estimationTime)
+                        SwapTime(
+                            estimationTime = estimationTime,
+                            providerType = quote.provider.type,
+                        )
+                    },
+                    onClick = {
+                        onClickSwapTimeInfo(infoTitle, infoText)
                     }
                 )
             }
@@ -648,6 +667,7 @@ private fun ProviderCellInfo(
 private fun SwapTime(
     modifier: Modifier = Modifier,
     estimationTime: Long,
+    providerType: SwapProviderType,
 ) {
     val color = ComposeAppTheme.colors.jacob
     Row(
@@ -655,7 +675,7 @@ private fun SwapTime(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = formatDurationShort(estimationTime),
+            text = formatSwapTime(estimationTime, providerType),
             style = ComposeAppTheme.typography.subheadSB,
             color = color,
             overflow = TextOverflow.Ellipsis,

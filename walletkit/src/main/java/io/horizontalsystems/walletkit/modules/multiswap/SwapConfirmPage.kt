@@ -40,6 +40,7 @@ import io.horizontalsystems.walletkit.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.walletkit.modules.confirm.ErrorSheet
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.evmfee.Cautions
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapSettingsRecipientPage
 import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapSettingsSlippagePage
 import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapTransactionNonceSettingsPage
@@ -306,14 +307,23 @@ private fun SwapConfirmInternal(
                     )
                 }
                 uiState.estimatedTime?.let { estimatedTime ->
-                    val infoTitle = stringResource(id = R.string.Swap_EstimatedTime)
+                    val infoTitle = stringResource(id = R.string.Swap_SwapTime)
                     val infoText = stringResource(id = R.string.Swap_EstimatedTimeDescription)
+                    val timeText = when (uiState.providerType) {
+                        SwapProviderType.CEX -> formatSwapTimeRange(estimatedTime)
+                        SwapProviderType.DEX -> "~${formatDuration(estimatedTime)}"
+                    }
+                    val timeColor = if (swapTimeStatus(estimatedTime, listOf(estimatedTime)) == SwapTimeStatus.Attention) {
+                        ComposeAppTheme.colors.jacob
+                    } else {
+                        ComposeAppTheme.colors.leah
+                    }
                     QuoteInfoRow(
-                        title = stringResource(id = R.string.Swap_EstimatedTime),
-                        value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
+                        title = stringResource(id = R.string.Swap_SwapTime),
+                        value = timeText.hs(timeColor),
                         onInfoClick = {
                             navigation.slideFromBottom(
-                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
                             )
                         }
                     )

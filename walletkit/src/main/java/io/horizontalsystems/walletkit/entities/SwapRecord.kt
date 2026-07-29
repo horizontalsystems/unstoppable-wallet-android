@@ -43,4 +43,6 @@ data class SwapRecord(
     // opaque handle linking the record to an external settlement mechanism
     // (e.g. a smart-account userOp hash) until the real transactionHash is known
     val trackingHandle: String? = null,
+    // estimated swap duration in seconds, as quoted at swap time
+    val estimatedTime: Long? = null,
 )

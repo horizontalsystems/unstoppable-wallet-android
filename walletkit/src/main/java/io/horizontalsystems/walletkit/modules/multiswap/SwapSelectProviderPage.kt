@@ -30,6 +30,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -48,6 +49,7 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
 import kotlinx.serialization.Serializable
+import kotlin.math.roundToLong
 
 @Serializable
 data class SwapSelectProviderPage(val parentScreenContentKey: String) : HSPage() {
@@ -203,7 +205,7 @@ private fun SwapSelectProviderScreenInner(
                                         )
                                         Text(
                                             text = viewItem.estimationTime?.let {
-                                                formatDurationShort(it)
+                                                formatSwapTime(it, provider.type)
                                             } ?: stringResource(R.string.NotAvailable),
                                             style = ComposeAppTheme.typography.subheadSB,
                                             color = if (viewItem.timeStatus == SwapTimeStatus.Attention) {
@@ -281,6 +283,27 @@ fun formatDurationShort(totalSeconds: Long): String {
         if (seconds > 0 || (hours == 0L && minutes == 0L)) append("${seconds}s")
     }.trim()
 }
+
+// CEX estimates are a measured average, so display them as a ±25% range;
+// DEX providers quote their own timing and keep the single value.
+fun formatSwapTime(estimationTime: Long, providerType: SwapProviderType): String =
+    when (providerType) {
+        SwapProviderType.CEX -> formatSwapTimeRange(estimationTime)
+        SwapProviderType.DEX -> formatDurationShort(estimationTime)
+    }
+
+fun formatSwapTimeRange(totalSeconds: Long): String {
+    val minSeconds = roundSecondsToMinutes(totalSeconds * 0.75)
+    val maxSeconds = roundSecondsToMinutes(totalSeconds * 1.25)
+    return if (minSeconds == maxSeconds) {
+        formatDurationShort(minSeconds)
+    } else {
+        "${formatDurationShort(minSeconds)}-${formatDurationShort(maxSeconds)}"
+    }
+}
+
+private fun roundSecondsToMinutes(seconds: Double): Long =
+    (seconds / 60).roundToLong().coerceAtLeast(1) * 60
 
 @Preview
 @Composable

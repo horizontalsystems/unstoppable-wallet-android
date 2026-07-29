@@ -20,6 +20,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
@@ -235,6 +236,7 @@ class SwapConfirmViewModel(
         recipient = recipient,
         slippage = slippage,
         estimatedTime = estimatedTime,
+        providerType = swapProvider.type,
         error = error
     )
 
@@ -359,6 +361,7 @@ class SwapConfirmViewModel(
             toAsset = toAsset,
             depositAddress = depositAddress,
             status = SwapStatus.Depositing.name,
+            estimatedTime = estimatedTime,
         )
         App.swapRecordManager.save(record)
     }
@@ -436,5 +439,6 @@ data class SwapConfirmUiState(
     val recipient: Address?,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,
+    val providerType: SwapProviderType,
     val error: Throwable?,
 )

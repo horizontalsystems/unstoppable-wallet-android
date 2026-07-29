@@ -13,10 +13,15 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.helpers.DateHelper
+import io.horizontalsystems.walletkit.modules.multiswap.SwapTimeStatus
+import io.horizontalsystems.walletkit.modules.multiswap.formatDuration
+import io.horizontalsystems.walletkit.modules.multiswap.formatSwapTimeRange
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
+import io.horizontalsystems.walletkit.modules.multiswap.swapTimeStatus
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,6 +60,8 @@ class SwapInfoViewModel(
     private var sendingTxUrl: String? = null
     private var isSingleTransactionSwap: Boolean = false
     private var pauseReason: PauseReason? = null
+    private var swapTime: String? = null
+    private var swapTimeAttention: Boolean = false
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -79,6 +86,8 @@ class SwapInfoViewModel(
         sendingTxUrl = sendingTxUrl,
         isSingleTransactionSwap = isSingleTransactionSwap,
         pauseReason = pauseReason,
+        swapTime = swapTime,
+        swapTimeAttention = swapTimeAttention,
     )
 
     init {
@@ -130,6 +139,14 @@ class SwapInfoViewModel(
             record.tokenOutBlockchainTypeUid,
         )
         pauseReason = PauseReason.fromApi(record.pauseReason)
+        swapTime = record.estimatedTime?.let { time ->
+            when (MultiSwapProviderRegistry.providerType(record.providerId)) {
+                SwapProviderType.CEX -> formatSwapTimeRange(time)
+                else -> "~${formatDuration(time)}"
+            }
+        }
+        swapTimeAttention =
+            swapTimeStatus(record.estimatedTime, listOf(record.estimatedTime)) == SwapTimeStatus.Attention
 
         emitState()
     }
@@ -228,4 +245,6 @@ data class SwapInfoUiState(
     val sendingTxUrl: String?,
     val isSingleTransactionSwap: Boolean,
     val pauseReason: PauseReason?,
+    val swapTime: String?,
+    val swapTimeAttention: Boolean,
 )

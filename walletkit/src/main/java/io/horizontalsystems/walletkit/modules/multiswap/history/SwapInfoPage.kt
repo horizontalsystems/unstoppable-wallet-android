@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -229,6 +230,36 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
                         CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
                     },
                 )
+                // Swap Time
+                uiState.swapTime?.let { swapTime ->
+                    val infoTitle = stringResource(R.string.Swap_SwapTime)
+                    val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
+                    CellSecondary(
+                        middle = {
+                            CellMiddleInfoTextIcon(
+                                text = infoTitle.hs,
+                                icon = painterResource(R.drawable.ic_info_24),
+                                iconTint = ComposeAppTheme.colors.grey,
+                            )
+                        },
+                        right = {
+                            CellRightInfoTextIcon(
+                                text = swapTime.hs(
+                                    color = if (uiState.swapTimeAttention) {
+                                        ComposeAppTheme.colors.jacob
+                                    } else {
+                                        leah
+                                    }
+                                )
+                            )
+                        },
+                        onClick = {
+                            navigation.slideFromBottom(
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                            )
+                        },
+                    )
+                }
                 // Recipient
                 uiState.recipientAddress?.let { address ->
                     CellSecondary(
