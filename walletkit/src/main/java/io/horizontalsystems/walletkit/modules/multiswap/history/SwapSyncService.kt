@@ -50,6 +50,10 @@ class SwapSyncService(
     }
 
     private suspend fun syncRecord(record: SwapRecord) {
+        // A tracking handle means the app advances this record through its own
+        // tracking service — the server tracker must leave it alone.
+        if (record.trackingHandle != null) return
+
         if (record.providerId == AllBridgeProvider.id) {
             syncAllBridgeRecord(record)
             return
