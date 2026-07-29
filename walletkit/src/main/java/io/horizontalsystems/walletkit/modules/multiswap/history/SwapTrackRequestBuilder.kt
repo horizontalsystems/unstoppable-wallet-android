@@ -33,6 +33,9 @@ object SwapTrackRequestBuilder {
 
     fun build(record: SwapRecord): TrackCall {
         val providerApiName = apiProviderName(record.providerId)
+        // App-resolved sending address: when broadcasts are bundled/relayed, the
+        // on-chain `from` is an operator account, not the user's — the app knows better.
+        val fromAddress = SwapTrackEnrichmentResolver.provider?.fromAddress(record)
 
         return when {
             record.providerId == ThorChainProvider.id || record.providerId == MayaProvider.id -> TrackCall(
@@ -43,6 +46,7 @@ object SwapTrackRequestBuilder {
                     inboundTxHash = record.transactionHash,
                     depositAddress = if (record.transactionHash == null) record.depositAddress else null,
                     fromAsset = record.fromAsset,
+                    fromAddress = fromAddress,
                     toAsset = record.toAsset,
                     toAddress = record.recipientAddress,
                 )
@@ -57,6 +61,7 @@ object SwapTrackRequestBuilder {
                 UnstoppableAPI.Request.Track(
                     uuid = record.providerSwapId,
                     inboundTxHash = record.transactionHash,
+                    fromAddress = fromAddress,
                 )
             )
 
@@ -70,6 +75,7 @@ object SwapTrackRequestBuilder {
                     hash = record.transactionHash,
                     chainId = evmChainIds[record.tokenInBlockchainTypeUid],
                     fromAsset = record.fromAsset,
+                    fromAddress = fromAddress,
                     toAsset = record.toAsset,
                     toAddress = record.recipientAddress,
                 )
