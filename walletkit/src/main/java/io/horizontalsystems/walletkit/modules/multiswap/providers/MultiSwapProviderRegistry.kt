@@ -3,7 +3,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 object MultiSwapProviderRegistry {
     val allProviders: List<IMultiSwapProvider> = listOf(
         // Single-chain DEX providers
-        OneInchProvider,
+        OneInchProvider(),
 //        UniswapProvider,
         UniswapV3Provider,
 //        PancakeSwapProvider,

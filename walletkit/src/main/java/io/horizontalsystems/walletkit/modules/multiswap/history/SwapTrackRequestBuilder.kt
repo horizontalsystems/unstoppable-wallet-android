@@ -61,7 +61,7 @@ object SwapTrackRequestBuilder {
             )
 
             // Native single-tx EVM swaps — stateless on-chain reader.
-            record.providerId == OneInchProvider.id ||
+            record.providerId == OneInchProvider.ID ||
             record.providerId == UniswapV3Provider.id ||
             record.providerId == PancakeSwapV3Provider.id -> TrackCall(
                 Endpoint.Evm,
@@ -82,7 +82,7 @@ object SwapTrackRequestBuilder {
     private fun apiProviderName(providerId: String): String = when (providerId) {
         ThorChainProvider.id -> "THORCHAIN"
         MayaProvider.id -> "MAYACHAIN"
-        OneInchProvider.id -> "ONEINCH"
+        OneInchProvider.ID -> "ONEINCH"
         PancakeSwapV3Provider.id -> "PANCAKESWAP"
         UniswapV3Provider.id -> "UNISWAP_V3"
         else -> if (providerId.startsWith("u_")) providerId.removePrefix("u_") else providerId.uppercase()

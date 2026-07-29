@@ -22,19 +22,28 @@ import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-object OneInchProvider : IMultiSwapProvider {
-    override val id = "oneinch"
+class OneInchProvider(
+    // 1inch simulates the sender's allowance/balance server-side before returning
+    // calldata; true skips the simulation (e.g. when the approve is batched into
+    // the same operation and the allowance is still zero at quote time)
+    private val disableEstimate: Boolean? = null,
+) : IMultiSwapProvider {
+    override val id = ID
     override val title = "1inch"
     override val type = SwapProviderType.DEX
     override val isEvm = true
     override val requireTerms = false
     override val riskLevel = RiskLevel.FAIR
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
-    private const val PARTNER_FEE: Float = 1F
-    private val PARTNER_ADDRESS: String = App.appConfigProvider.oneInchPartnerFeeAddress
+    private val partnerAddress: String by lazy { App.appConfigProvider.oneInchPartnerFeeAddress }
 
-    // TODO take evmCoinAddress from oneInchKit
-    private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    companion object {
+        const val ID = "oneinch"
+        private const val PARTNER_FEE: Float = 1F
+
+        // TODO take evmCoinAddress from oneInchKit
+        private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    }
 
     override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
 
@@ -121,8 +130,9 @@ object OneInchProvider : IMultiSwapProvider {
             slippagePercentage = slippage.toFloat(),
             recipient = recipient?.hex?.let { Address(it) },
             gasPrice = gasPrice,
-            referrer = PARTNER_ADDRESS,
-            fee = PARTNER_FEE
+            referrer = partnerAddress,
+            fee = PARTNER_FEE,
+            disableEstimate = disableEstimate,
         ).await()
 
         val swapTx = swap.transaction
