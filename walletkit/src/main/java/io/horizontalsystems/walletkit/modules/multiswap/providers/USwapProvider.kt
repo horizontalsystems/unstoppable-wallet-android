@@ -34,7 +34,12 @@ import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
+class USwapProvider(
+    private val provider: UProvider,
+    // Narrows the sell side to sources the host app can actually execute (e.g. a
+    // route-calldata provider offered only where contract calls are possible).
+    private val supportsSourceToken: (Token) -> Boolean = { true },
+) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
     override val type = provider.type
@@ -253,6 +258,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
+        if (!supportsSourceToken(tokenFrom)) return false
         return if (assetsMap.isNotEmpty()) {
             assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
         } else {
