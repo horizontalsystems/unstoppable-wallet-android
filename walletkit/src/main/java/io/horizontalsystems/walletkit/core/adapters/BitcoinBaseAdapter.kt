@@ -12,6 +12,7 @@ import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.models.TransactionStatus
 import io.horizontalsystems.bitcoincore.models.TransactionType
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransaction
+import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionBuilder
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.bitcoincore.storage.FullTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutput
@@ -237,12 +238,16 @@ abstract class BitcoinBaseAdapter(
         return kit.getRawTransaction(transactionHash)
     }
 
-    fun speedUpTransactionInfo(transactionHash: String): ReplacementTransactionInfo? {
-        return kit.speedUpTransactionInfo(transactionHash)
+    fun speedUpTransactionInfo(transactionHash: String): ReplacementTransactionInfo? = try {
+        kit.speedUpTransactionInfo(transactionHash)
+    } catch (e: ReplacementTransactionBuilder.BuildError) {
+        null
     }
 
-    fun cancelTransactionInfo(transactionHash: String): ReplacementTransactionInfo? {
-        return kit.cancelTransactionInfo(transactionHash)
+    fun cancelTransactionInfo(transactionHash: String): ReplacementTransactionInfo? = try {
+        kit.cancelTransactionInfo(transactionHash)
+    } catch (e: ReplacementTransactionBuilder.BuildError) {
+        null
     }
 
     fun speedUpTransaction(transactionHash: String, minFee: Long): Pair<ReplacementTransaction, BitcoinTransactionRecord> {
