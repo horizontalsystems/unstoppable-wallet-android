@@ -47,7 +47,7 @@ class ThorchainTransactionConverter(
                 timestamp = transaction.timestamp,
                 fee = null,
                 failed = failed,
-                value = transactionValue(transfer),
+                value = transactionValue(transfer, negative = true),
                 to = to,
                 sentToSelf = userReceives.any { it.asset == transfer.asset },
                 memo = transaction.memo,
@@ -88,9 +88,12 @@ class ThorchainTransactionConverter(
         }
     }
 
-    private fun transactionValue(transfer: CoinTransfer): TransactionValue {
+    private fun transactionValue(transfer: CoinTransfer, negative: Boolean = false): TransactionValue {
         val token = token(transfer.asset)
-        val amount = transfer.amount.toBigDecimal().movePointLeft(Denom.DECIMALS)
+        var amount = transfer.amount.toBigDecimal().movePointLeft(Denom.DECIMALS)
+        if (negative) {
+            amount = amount.negate()
+        }
 
         return if (token != null) {
             TransactionValue.CoinValue(token, amount)
