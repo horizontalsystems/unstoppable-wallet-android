@@ -25,6 +25,10 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.Pegasus),
         USwapProvider(UProvider.Jupiter),
         USwapProvider(UProvider.Lifi),
+        // Stellar-only pairs through uswap-server's Stellar venues (SOROSWAP/AQUARIUS/
+        // STELLAR_DEX behind the single StellarBroker card) — not a USwapProvider because
+        // it waterfalls across several server provider ids per quote.
+        StellarSwapProvider(),
     )
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {

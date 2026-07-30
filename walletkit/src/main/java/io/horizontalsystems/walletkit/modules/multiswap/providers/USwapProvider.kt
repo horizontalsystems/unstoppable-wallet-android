@@ -872,10 +872,17 @@ interface UnstoppableAPI {
             val execution: Execution?,
             // v2 tracking handle (swap_records.uuid), top-level on the committed response.
             val uuid: String?,
+            // The provider(s) that produced this route. On a /v2/rate fan-out each route
+            // carries exactly one — how a multi-provider request (StellarSwapProvider's
+            // waterfall) knows which provider to commit with.
+            val providers: List<String>? = null,
         ) {
             // should be getter, otherwise it will be null when restored from json
             val expectedBuyAmountOrZero: BigDecimal
                 get() = expectedBuyAmount ?: BigDecimal.ZERO
+
+            val providerId: String?
+                get() = providers?.firstOrNull()
 
             // The ERC20 spender used to compute allowance, wherever it lives on the route.
             val approvalSpenderOrExecution: String?
