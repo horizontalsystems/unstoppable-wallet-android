@@ -210,7 +210,7 @@
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
     <string name="Swap_ProviderRisk_Risky">پرمخاطره</string>
     <string name="Swap_AmlError_Button">دوباره امتحان کنید</string>
-    <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
+    <string name="Swap_MinimumReceived">مبلغ تضمین شده</string>
     <string name="Swap_Recipient">گیرنده</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_Proceed">بعدي</string>
@@ -729,4 +729,5 @@
     <string name="Monero_RenameAccount">تغییر نام حساب</string>
     <string name="Monero_AccountName">نام</string>
     <string name="Monero_Accounts_Description">حسابات بخش‌های جداگانه‌ای از یک کیف پول مونرو هستند. موجودی، تراکنش‌ها، دریافت و ارسال برای حساب انتخاب‌شده اعمال می‌شود. انتقال وجوه بین حسابات یک تراکنش معمولی درون‌زنجیری با هزینه شبکه است.</string>
+    <string name="Swap_MinimumReceivedDescription">حداقل مبلغی که پس از تکمیل تبدیل دریافت خواهید کرد. این مبلغ توسط ارائه دهنده تضمین شده است و تحت تأثیر تغییرات قیمت در حین پردازش نمی باشد.</string>
 </resources>

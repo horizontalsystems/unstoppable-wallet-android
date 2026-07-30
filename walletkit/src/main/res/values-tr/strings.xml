@@ -1757,7 +1757,7 @@
     <string name="Swap_AmlRisk_Title">Risk Algılandı</string>
     <string name="Swap_ConfirmApprove_Title">Onayı Doğrula</string>
     <string name="Swap_ConfirmRevoke_Title">İptali Doğrula</string>
-    <string name="Swap_MinimumReceivedDescription">Bu tutar doğrulama sürecindedir. İşlem durumu doğrulandığında bu coinleri kullanabileceksiniz. Bir kullanıcının alacağı minimum tutar</string>
+    <string name="Swap_MinimumReceivedDescription">Takas tamamlandıktan sonra alacağınız minimum tutar. Bu tutar sağlayıcı tarafından garantilidir ve işlem sırasında fiyat değişikliklerinden etkilenmez.</string>
     <string name="Swap_ProviderRisk_AlertBody">Bu belirli takasın sağlayıcısı (%s), bu takasın büyük olasılıkla reddedileceği ve hatta dondurulabileceği konusunda uyardı. Geri dönün ve farklı bir takas sağlayıcısı seçin.</string>
     <string name="Swap_ProviderRisk_AlertTitle">Yüksek Dondurma Riski!</string>
     <string name="Swap_ProviderRisk_NoRisk">Risk Yok</string>

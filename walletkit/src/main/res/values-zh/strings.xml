@@ -606,7 +606,7 @@
     <string name="Swap_EstimatedTime">估计时间</string>
     <string name="Swap_EstimatedTimeDescription">这是完成兑换并接收您资金所需的估计时间。实际时间可能会因网络状况、交易确认和选定的兑换路线而缩短或延长。</string>
     <string name="Swap_MinimumReceived">保证金额</string>
-    <string name="Swap_MinimumReceivedDescription">这一数额正在审定过程中。 一旦交易状态得到验证，您将能够使用这些硬币。用户正在使用的最低金额 </string>
+    <string name="Swap_MinimumReceivedDescription">交换完成后您将收到的最低金额。此金额由供应商保证，不受处理期间价格变化的影响。</string>
     <string name="Swap_Slippage">滑点</string>
     <string name="Swap_Recipient">收款人</string>
     <string name="Swap_ErrorNoProviders">无路由</string>

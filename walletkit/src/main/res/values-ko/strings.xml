@@ -539,7 +539,7 @@
     <string name="Swap_PriceImpact">가격 영향</string>
     <string name="Swap_ProviderRisk_Risky">위험</string>
     <string name="Swap_AmlError_Button">재시도</string>
-    <string name="Swap_MinimumReceived">보증 금액</string>
+    <string name="Swap_MinimumReceived">보장된 금액</string>
     <string name="Swap_Slippage">미끄러짐</string>
     <string name="Swap_Recipient">수령인</string>
     <string name="Swap_ErrorNoProviders">경로 없음</string>
@@ -1764,7 +1764,7 @@
     <string name="Swap_AmlRisk_Title">위험 감지됨</string>
     <string name="Swap_ConfirmApprove_Title">승인 확인</string>
     <string name="Swap_ConfirmRevoke_Title">취소 확인</string>
-    <string name="Swap_MinimumReceivedDescription">이 금액은 검증 중입니다. 거래 상태가 검증되는 즉시 이 코인을 사용할 수 있습니다. 사용자가 받게 되는 최소 금액</string>
+    <string name="Swap_MinimumReceivedDescription">스왑 완료 후 받게 될 최소 금액입니다. 이 금액은 제공자가 보장하며 처리 중 가격 변동의 영향을 받지 않습니다.</string>
     <string name="Swap_ProviderRisk_AlertBody">이 특정 스왑의 공급자(%s)가 이 스왑이 거부되거나 심지어 동결될 가능성이 높다고 경고했습니다. 뒤로 돌아가 다른 스왑 공급자를 선택하세요.</string>
     <string name="Swap_ProviderRisk_AlertTitle">높은 동결 위험!</string>
     <string name="Swap_ProviderRisk_NoRisk">위험 없음</string>

@@ -608,8 +608,8 @@
     <string name="Swap_AmlError_Button">Повторить</string>
     <string name="Swap_EstimatedTime">Время</string>
     <string name="Swap_EstimatedTimeDescription">Это приблизительное время, необходимое для завершения обмена и получения ваших средств. Фактическое время может быть короче или длиннее в зависимости от состояния сети, подтверждений транзакций и выбранного маршрута обмена.</string>
-    <string name="Swap_MinimumReceived">Гарантированно</string>
-    <string name="Swap_MinimumReceivedDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
+    <string name="Swap_MinimumReceived">Гарантированная сумма</string>
+    <string name="Swap_MinimumReceivedDescription">Минимальная сумма, которую вы получите после завершения обмена. Эта сумма гарантирована поставщиком и не зависит от колебаний цены во время обработки.</string>
     <string name="Swap_Slippage">Отклонение от курса</string>
     <string name="Swap_Recipient">Получатель</string>
     <string name="Swap_ErrorNoProviders">Нет маршрутов</string>
