@@ -331,6 +331,7 @@ class SwapConfirmViewModel(
             is SendTransactionResult.Solana -> result.txHash
             is SendTransactionResult.Tron -> result.txHash
             is SendTransactionResult.Thorchain -> result.txHash
+            is SendTransactionResult.Stellar -> result.txHash
             else -> null
         }
 
