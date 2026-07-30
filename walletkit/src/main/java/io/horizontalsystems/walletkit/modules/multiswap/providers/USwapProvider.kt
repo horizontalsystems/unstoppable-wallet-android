@@ -510,14 +510,12 @@ class USwapProvider(
 
         val amountOut = bestRoute.expectedBuyAmountOrZero
 
-        // The server's `minBuyAmount` is the enforced floor; `null` means the route is a floating
-        // P2P estimate — nothing guarantees the amount (or applies our slippage), so the confirm
-        // page must not show the "Guaranteed" (amountOutMin) or slippage rows.
+        // The server's `minBuyAmount` is the enforced floor the route can deliver — show it
+        // directly as the "Guaranteed" amount instead of deriving one from slippage. `null`
+        // means the route is a floating P2P estimate — nothing guarantees the amount (or applies
+        // our slippage), so the confirm page must not show the "Guaranteed" or slippage rows.
+        val amountOutMin = bestRoute.minBuyAmount
         val effectiveSlippage = if (bestRoute.minBuyAmount != null) slippage else null
-
-        val amountOutMin = effectiveSlippage?.let {
-            amountOut.subtract(amountOut.multiply(it.movePointLeft(2)))
-        }
 
         val fields = buildList {
             recipient?.let {
