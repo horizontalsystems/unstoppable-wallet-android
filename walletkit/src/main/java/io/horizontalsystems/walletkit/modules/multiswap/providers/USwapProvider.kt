@@ -621,7 +621,19 @@ class USwapProvider(
 
             BlockchainType.Tron -> {
                 val tx = execution.primarySignable?.takeIf { it.kind == "tron" }?.tx
-                    ?: throw IllegalStateException("No tron tx found")
+
+                if (tx == null) {
+                    // Same opt-out contract as the EVM branch: a bare transfer route
+                    // maps to the plain-transfer shape, but only without a memo — a
+                    // simple send cannot carry the provider's crediting identifier.
+                    val depositAddress = execution.takeIf { it.method == "transfer" }?.depositAddress
+                    if (depositAddress != null && execution.resolvedMemo() == null &&
+                        !shouldIncludeSourceAddress(tokenIn)
+                    ) {
+                        return SendTransactionData.Tron.Simple(depositAddress, amountIn)
+                    }
+                    throw IllegalStateException("No tron tx found")
+                }
 
                 val rawTransaction = APIClient.gson.fromJson(tx, CreatedTransaction::class.java)
                 return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
