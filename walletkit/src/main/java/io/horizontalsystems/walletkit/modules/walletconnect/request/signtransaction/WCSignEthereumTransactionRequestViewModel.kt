@@ -106,6 +106,10 @@ class WCSignEthereumTransactionRequestViewModel(
 
     fun reject() {
         WCDelegate.sessionRequestEvent?.let { sessionRequest ->
+            // Clear the active request pointer synchronously. rejectRequest() only nulls it in its
+            // async onSuccess, but the sheet closes immediately and reEmitPendingWcEventIfNeeded()
+            // would otherwise re-open the same request while it's still non-null.
+            WCDelegate.discardActiveSessionRequest()
             WCDelegate.rejectRequest(sessionRequest.topic, sessionRequest.requestId)
         }
     }
