@@ -203,8 +203,11 @@ class USwapProvider(
                 }
 
                 BlockchainType.Stellar -> {
-                    val tokenType = if (!token.address.isNullOrBlank()) {
-                        null
+                    val issuer = token.address
+                    val tokenType = if (!issuer.isNullOrBlank()) {
+                        // Classic asset: the server sends the issuer in `address` and the
+                        // asset code in `ticker` (the Axelar ITS SHX case).
+                        token.ticker?.let { TokenType.Asset(it, issuer) }
                     } else {
                         TokenType.Native
                     }
@@ -638,6 +641,13 @@ class USwapProvider(
             }
 
             BlockchainType.Stellar -> {
+                // Server-built XDR envelope (signed_transaction — Axelar ITS' Stellar leg):
+                // sign and submit it. Otherwise a deposit-address transfer (P2P providers)
+                // with the provider's binding memo.
+                execution.primarySignable?.takeIf { it.kind == "stellar" }?.xdr?.let { xdr ->
+                    return SendTransactionData.Stellar.WithTransactionEnvelope(xdr)
+                }
+
                 val memo = execution.resolvedMemo()
                     ?: throw IllegalStateException("No memo found")
 
@@ -846,6 +856,9 @@ interface UnstoppableAPI {
             val chainId: String,
             val address: String?,
             val identifier: String,
+            // Asset code for chains whose assets are identified by code + issuer (Stellar:
+            // `address` carries the issuer, `ticker` the code).
+            val ticker: String? = null,
         )
 
         // /v2/rate response — a list of routes to compare. Each route carries economics

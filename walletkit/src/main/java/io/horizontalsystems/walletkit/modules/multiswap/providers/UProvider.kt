@@ -160,5 +160,21 @@ enum class UProvider(
         // USwapProvider.isSingleTransactionSwap resolves that per pair.
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false
+    ),
+    // Same-token 1:1 bridge (not a swap) for XLM and classic SHX between Stellar and
+    // Ethereum via Axelar's Interchain Token Service. Both legs are server-built signed
+    // transactions (EVM contract call / Stellar XDR envelope).
+    AxelarIts(
+        id = "AXELAR_ITS",
+        title = "Axelar ITS",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = true,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = false,
+        // Cross-chain: the signed inbound tx is followed by Axelar's GMP delivery leg.
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = false
     );
 }

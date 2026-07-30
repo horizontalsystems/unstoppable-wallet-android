@@ -1,5 +1,8 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
+import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.marketkit.models.BlockchainType
+
 object MultiSwapProviderRegistry {
     val allProviders: List<IMultiSwapProvider> = listOf(
         // Single-chain DEX providers
@@ -25,6 +28,12 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.Pegasus),
         USwapProvider(UProvider.Jupiter),
         USwapProvider(UProvider.Lifi),
+        // Axelar ITS' Stellar leg is a server-built XDR envelope (signed_transaction), so
+        // Stellar joins the default sourceAddress build signal (EVM covers the other leg).
+        USwapProvider(
+            UProvider.AxelarIts,
+            shouldIncludeSourceAddress = { it.blockchainType.isEvm || it.blockchainType == BlockchainType.Stellar },
+        ),
         // Stellar-only pairs through uswap-server's Stellar venues (SOROSWAP/AQUARIUS/
         // STELLAR_DEX behind the single StellarBroker card) — not a USwapProvider because
         // it waterfalls across several server provider ids per quote.
