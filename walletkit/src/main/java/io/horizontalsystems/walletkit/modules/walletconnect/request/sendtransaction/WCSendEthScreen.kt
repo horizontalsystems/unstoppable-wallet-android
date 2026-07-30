@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AppLogger
+import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -41,6 +42,9 @@ import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.components.AlertCard
+import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
+import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -164,6 +168,9 @@ fun WCSendEthRequestScreen(
                     }
                 )
             }
+            uiState.cautions.forEach { caution ->
+                CautionCell(caution)
+            }
             ButtonsGroupHorizontal {
                 HSButton(
                     title = stringResource(R.string.Button_Reject),
@@ -239,6 +246,24 @@ fun DataBlock(
             }
         }
     }
+}
+
+@Composable
+fun CautionCell(caution: CautionViewItem) {
+    val alertType = when (caution.type) {
+        CautionViewItem.Type.Error -> AlertType.Critical
+        CautionViewItem.Type.Warning -> AlertType.Caution
+    }
+
+    AlertCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+        format = AlertFormat.Structured,
+        type = alertType,
+        text = caution.text,
+        titleCustom = caution.title
+    )
 }
 
 @Composable

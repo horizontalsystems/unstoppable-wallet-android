@@ -57,7 +57,9 @@ object WCDelegate : DAppServiceCallback {
     }
 
     override fun onSessionRequest(request: HSDAppRequest) {
-        sessionRequestEvent = null
+        // Do NOT clear sessionRequestEvent before we have a replacement: onSessionRequest can be
+        // delivered more than once for the same request, and a duplicate/empty callback would
+        // otherwise wipe the request currently shown to the user (dApp then hangs pending).
         val newRequest = App.wcSessionManager.getNewSessionRequest() ?: return
         if (App.wcWalletRequestHandler.handle(newRequest)) return
 
