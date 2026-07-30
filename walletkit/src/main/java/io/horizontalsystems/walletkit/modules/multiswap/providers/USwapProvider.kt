@@ -44,6 +44,10 @@ class USwapProvider(
     // batched into its own signer flow) turns it off so the server returns the
     // plain deposit route instead of building and gas-estimating a transaction.
     private val shouldIncludeSourceAddress: (Token) -> Boolean = { it.needsServerBuiltTx },
+    // Builds the EVM source leg of a transfer route committed without a server-built
+    // tx (sourceAddress omitted): the app supplies the deposit calldata its own
+    // signer executes. Without it such routes fail the final quote.
+    private val buildEvmDepositTransfer: ((tokenIn: Token, amountIn: BigDecimal, depositAddress: String) -> SendTransactionData.Evm)? = null,
 ) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
@@ -558,7 +562,14 @@ class USwapProvider(
 
         if (blockchainType.isEvm) {
             val signable = execution.primarySignable?.takeIf { it.kind == "evm" }
-                ?: throw IllegalStateException("No evm tx found")
+
+            if (signable == null) {
+                val depositAddress = execution.resolvedDepositAddress()
+                if (buildEvmDepositTransfer != null && depositAddress != null) {
+                    return buildEvmDepositTransfer.invoke(tokenIn, amountIn, depositAddress)
+                }
+                throw IllegalStateException("No evm tx found")
+            }
 
             val transactionData = TransactionData(
                 to = Address(signable.to ?: throw IllegalStateException("No tx `to`")),
