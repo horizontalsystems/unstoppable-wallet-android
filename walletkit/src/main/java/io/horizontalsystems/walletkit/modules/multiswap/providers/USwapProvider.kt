@@ -564,8 +564,13 @@ class USwapProvider(
             val signable = execution.primarySignable?.takeIf { it.kind == "evm" }
 
             if (signable == null) {
-                val depositAddress = execution.resolvedDepositAddress()
-                if (buildEvmDepositTransfer != null && depositAddress != null) {
+                // A transfer route committed without sourceAddress carries no
+                // server-built tx by design — the app builds the deposit transfer.
+                // Any other signable-less response is malformed and must fail.
+                val depositAddress = execution.takeIf { it.method == "transfer" }?.depositAddress
+                if (buildEvmDepositTransfer != null && depositAddress != null &&
+                    !shouldIncludeSourceAddress(tokenIn)
+                ) {
                     return buildEvmDepositTransfer.invoke(tokenIn, amountIn, depositAddress)
                 }
                 throw IllegalStateException("No evm tx found")
