@@ -1,14 +1,9 @@
 package io.horizontalsystems.walletkit.modules.coin
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -16,15 +11,10 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.CoinOverviewScreen
-import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.walletkit.modules.multiswap.SwapPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -69,9 +59,6 @@ fun CoinContent(
     HSScaffold(
         title = viewModel.fullCoin.coin.code,
         onBack = navigation::removeLastOrNull,
-        bottomBar = {
-            CoinBottomButtons(viewModel, navigation)
-        },
         menuItems = buildList {
             if (viewModel.isWatchlistEnabled) {
                 if (viewModel.isFavorite) {
@@ -113,6 +100,8 @@ fun CoinContent(
         Column {
             CoinOverviewScreen(
                 fullCoin = viewModel.fullCoin,
+                coinToken = viewModel.coinToken,
+                popularToken = viewModel.popularToken,
                 navigation = navigation
             )
 
@@ -121,54 +110,6 @@ fun CoinContent(
 
                 viewModel.onSuccessMessageShown()
             }
-        }
-    }
-}
-
-@Composable
-private fun CoinBottomButtons(
-    viewModel: CoinViewModel,
-    navigation: HSNavigation
-) {
-    val coinToken = viewModel.coinToken ?: return
-    val popularToken = viewModel.popularToken
-
-    ButtonsGroupWithShade {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = 16.dp)
-        ) {
-            ButtonPrimaryYellow(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.CoinPage_Buy),
-                onClick = {
-                    navigation.slideFromRight(
-                        SwapPage(
-                            SwapPage.Input(
-                                tokenIn = popularToken,
-                                tokenOut = coinToken
-                            )
-                        )
-                    )
-                }
-            )
-
-            HSpacer(8.dp)
-
-            ButtonPrimaryDefault(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.CoinPage_Sell),
-                onClick = {
-                    navigation.slideFromRight(
-                        SwapPage(
-                            SwapPage.Input(
-                                tokenIn = coinToken,
-                                tokenOut = popularToken
-                            )
-                        )
-                    )
-                }
-            )
         }
     }
 }
