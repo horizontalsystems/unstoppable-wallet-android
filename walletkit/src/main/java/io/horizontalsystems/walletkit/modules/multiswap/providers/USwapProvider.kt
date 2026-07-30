@@ -39,6 +39,11 @@ class USwapProvider(
     // Narrows the sell side to sources the host app can actually execute (e.g. a
     // route-calldata provider offered only where contract calls are possible).
     private val supportsSourceToken: (Token) -> Boolean = { true },
+    // Whether /swap gets `sourceAddress` for this sell token — the server-built-tx
+    // signal. An app that builds the source leg itself (e.g. a deposit transfer
+    // batched into its own signer flow) turns it off so the server returns the
+    // plain deposit route instead of building and gas-estimating a transaction.
+    private val shouldIncludeSourceAddress: (Token) -> Boolean = { it.needsServerBuiltTx },
 ) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
@@ -477,10 +482,10 @@ class USwapProvider(
         }
 
         // sourceAddress is the build signal — send it only for chains whose server-built tx
-        // we actually consume (EVM/Tron/TON/Solana), where it is also required for the
-        // signed_transaction `from`. For UTXO/Zcash/Monero/Zano/Stellar we omit it and build
-        // the transfer ourselves (e.g. multi-UTXO sweeps).
-        val sourceAddress = if (tokenIn.needsServerBuiltTx) {
+        // we actually consume (by default EVM/Tron/TON/Solana), where it is also required
+        // for the signed_transaction `from`. For UTXO/Zcash/Monero/Zano/Stellar (and any
+        // token the host app opts out of) we omit it and build the transfer ourselves.
+        val sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
             SwapHelper.getSendingAddressForToken(tokenIn)
         } else {
             null
@@ -665,15 +670,6 @@ class USwapProvider(
 
         throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
-
-    // Chains where we consume the server-built tx from `execution` (so we send sourceAddress
-    // on /v2/swap). Everything else builds its own transfer to the deposit address.
-    private val Token.needsServerBuiltTx: Boolean
-        get() = blockchainType.isEvm || blockchainType in setOf(
-            BlockchainType.Tron,
-            BlockchainType.Ton,
-            BlockchainType.Solana,
-        )
 
     companion object {
         // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
@@ -1011,3 +1007,12 @@ interface UnstoppableAPI {
         }
     }
 }
+
+// Chains where we consume the server-built tx from `execution` (so we send sourceAddress
+// on /v2/swap). Everything else builds its own transfer to the deposit address.
+private val Token.needsServerBuiltTx: Boolean
+    get() = blockchainType.isEvm || blockchainType in setOf(
+        BlockchainType.Tron,
+        BlockchainType.Ton,
+        BlockchainType.Solana,
+    )
