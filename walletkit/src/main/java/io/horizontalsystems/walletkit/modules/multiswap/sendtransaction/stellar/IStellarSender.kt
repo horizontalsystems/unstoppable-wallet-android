@@ -10,7 +10,10 @@ import java.math.BigDecimal
 
 interface IStellarSender {
     fun getFee(): BigDecimal?
-    suspend fun sendTransaction(): String?
+
+    // Returns the hash Horizon reported for the submitted transaction — the server's
+    // StellarTracker verifies DEX swaps on Horizon by it.
+    suspend fun sendTransaction(): String
 }
 
 class StellarSenderRegular(
@@ -22,7 +25,7 @@ class StellarSenderRegular(
 ) : IStellarSender {
     override fun getFee() = stellarKit.sendFee
 
-    override suspend fun sendTransaction(): String? = withContext(Dispatchers.IO) {
+    override suspend fun sendTransaction(): String = withContext(Dispatchers.IO) {
         val memo = memo.ifBlank { null }
 
         when (val tokenType = token.tokenQuery.tokenType) {
@@ -37,8 +40,6 @@ class StellarSenderRegular(
 
             else -> throw IllegalArgumentException("Unsupported token type $tokenType")
         }
-
-        null
     }
 }
 
@@ -48,12 +49,7 @@ class StellarSenderTransactionEnvelope(
 ) : IStellarSender {
     override fun getFee() = StellarKit.estimateFee(transactionEnvelope)
 
-    override suspend fun sendTransaction(): String? = withContext(Dispatchers.IO) {
+    override suspend fun sendTransaction(): String = withContext(Dispatchers.IO) {
         stellarKit.sendTransaction(transactionEnvelope)
-
-        // A Stellar transaction hash is the SHA-256 of the network id + signature base and
-        // does not depend on signatures, so hashing the unsigned envelope yields exactly the
-        // hash Horizon reports for the submitted transaction.
-        stellarKit.getTransaction(transactionEnvelope).hashHex()
     }
 }
