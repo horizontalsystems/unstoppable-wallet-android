@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.CreateCredentialCancellationException
+import androidx.credentials.exceptions.CreateCredentialCustomException
 import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
@@ -163,6 +164,13 @@ fun CreateAccountPasskeyScreen(
                             } catch (e: CreateCredentialCancellationException) {
                             } catch (e: CreateCredentialNoCreateOptionException) {
                                 navigation.slideFromBottom(CreatePasskeyNotSupportedSheet)
+                            } catch (e: CreateCredentialCustomException) {
+                                // the provider refused with its own internal state
+                                // (locked vault, pending verification) — instructions,
+                                // not an error
+                                navigation.slideFromBottom(
+                                    PasskeyProviderAttentionSheet(PasskeyProviderAttentionSheet.isGpmPassphrase(e))
+                                )
                             } catch (e: Exception) {
                                 viewModel.onError(e)
                             } finally {

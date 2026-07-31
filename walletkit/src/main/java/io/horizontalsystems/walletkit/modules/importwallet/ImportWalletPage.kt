@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialCustomException
 import androidx.credentials.exceptions.NoCredentialException
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -38,6 +39,7 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.backuplocal.fullbackup.BackupFileValidator
 import io.horizontalsystems.walletkit.modules.contacts.screen.ConfirmationBottomSheet
+import io.horizontalsystems.walletkit.modules.createaccount.PasskeyProviderAttentionSheet
 import io.horizontalsystems.walletkit.modules.createaccount.RestorePasskeyNotSupportedSheet
 import io.horizontalsystems.walletkit.modules.createaccount.WalletType
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule
@@ -196,6 +198,13 @@ private fun ImportWalletScreen(
                         } catch (e: GetCredentialCancellationException) {
                         } catch (e: NoCredentialException) {
                             navigation.slideFromBottom(RestorePasskeyNotSupportedSheet)
+                        } catch (e: GetCredentialCustomException) {
+                            // the provider refused with its own internal state
+                            // (locked vault, pending verification) — instructions,
+                            // not an error
+                            navigation.slideFromBottom(
+                                PasskeyProviderAttentionSheet(PasskeyProviderAttentionSheet.isGpmPassphrase(e))
+                            )
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {
