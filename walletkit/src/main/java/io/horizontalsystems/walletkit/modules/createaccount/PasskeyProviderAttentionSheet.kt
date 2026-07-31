@@ -73,7 +73,9 @@ fun PasskeyProviderAttentionScreen(navigation: HSNavigation, gpmPassphrase: Bool
                 }
             ),
             color = ComposeAppTheme.colors.grey,
-            textAlign = TextAlign.Center
+            // the numbered GPM steps read as a list; only the short generic
+            // text stays centered
+            textAlign = if (gpmPassphrase) TextAlign.Start else TextAlign.Center
         )
         ButtonsStack {
             HSButton(
