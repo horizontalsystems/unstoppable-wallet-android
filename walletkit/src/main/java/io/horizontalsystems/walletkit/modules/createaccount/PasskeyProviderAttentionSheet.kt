@@ -34,9 +34,13 @@ data class PasskeyProviderAttentionSheet(val gpmPassphrase: Boolean) : HSBottomS
     companion object {
         // The "[11000] Passphrase required" envelope is Play-services-styled and
         // Google Password Manager is the only provider with a sync-passphrase
-        // vault lock, so the message alone identifies the case.
-        fun isGpmPassphrase(e: Throwable): Boolean =
-            e.message?.contains("passphrase", ignoreCase = true) == true
+        // vault lock. Require both markers — the error code and the passphrase
+        // word — so another provider's passphrase wording never picks up the
+        // Google-specific steps, while tolerating minor message drift.
+        fun isGpmPassphrase(e: Throwable): Boolean {
+            val message = e.message ?: return false
+            return message.contains("[11000]") && message.contains("passphrase", ignoreCase = true)
+        }
     }
 
     @Composable
