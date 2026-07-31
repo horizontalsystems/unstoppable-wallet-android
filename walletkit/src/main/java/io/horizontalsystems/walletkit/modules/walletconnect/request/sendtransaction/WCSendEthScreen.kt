@@ -86,7 +86,7 @@ fun WCSendEthRequestScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            WCDelegate.discardActiveSessionRequest()
+            WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
             navigation.removeLastOrNull()
         },
         sheetState = sheetState,
@@ -178,7 +178,7 @@ fun WCSendEthRequestScreen(
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        viewModel.reject()
+                        viewModel.reject(sessionRequestUI.topic, sessionRequestUI.requestId)
                         navigation.removeLastOrNull()
                     }
                 )

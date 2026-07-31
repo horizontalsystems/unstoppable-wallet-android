@@ -153,10 +153,17 @@ object WCDelegate : DAppServiceCallback {
         )
     }
 
-    // The user dismissed the request UI (tapped outside / back) without responding. The request
-    // stays in DAppManager's pending list (still reachable from the WC list), but clear the
-    // "active request" pointer so reEmitPendingWcEventIfNeeded() doesn't auto-reopen it on the
-    // next resume (removing the bottom sheet overlay re-resumes the screen underneath).
+    // The user dismissed/rejected the request UI without responding. The request stays in
+    // DAppManager's pending list (still reachable from the WC list), but clear the "active request"
+    // pointer so reEmitPendingWcEventIfNeeded() doesn't auto-reopen it on the next resume (removing
+    // the bottom sheet overlay re-resumes the screen underneath). Pass the displayed request's id so
+    // a newer request that became active while the sheet was shown is not discarded by mistake.
+    fun discardActiveSessionRequest(requestId: Long) {
+        clearSessionRequestEventIfMatches(requestId)
+    }
+
+    // No-id variant for the error screen, which is shown when there is no resolvable request to
+    // identify (unsupported chain / missing event); clears whatever stale pointer remains.
     fun discardActiveSessionRequest() {
         sessionRequestEvent = null
     }

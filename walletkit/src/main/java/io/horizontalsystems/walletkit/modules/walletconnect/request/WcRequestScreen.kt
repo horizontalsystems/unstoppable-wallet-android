@@ -66,7 +66,7 @@ fun WcRequestScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            WCDelegate.discardActiveSessionRequest()
+            WCDelegate.discardActiveSessionRequest(sessionRequest.requestId)
             navigation.removeLastOrNull()
         },
         sheetState = sheetState

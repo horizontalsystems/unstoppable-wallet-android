@@ -84,7 +84,7 @@ fun WCSignEthereumTransactionRequestScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            WCDelegate.discardActiveSessionRequest()
+            WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
             navigation.removeLastOrNull()
         },
         sheetState = sheetState,
@@ -178,7 +178,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        viewModel.reject()
+                        viewModel.reject(sessionRequestUI.topic, sessionRequestUI.requestId)
                         navigation.removeLastOrNull()
                     }
                 )
@@ -239,7 +239,7 @@ fun WCSignEthereumTransactionRequestScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Reject),
                 onClick = {
-                    viewModel.reject()
+                    viewModel.reject(sessionRequestUI.topic, sessionRequestUI.requestId)
                     navigation.removeLastOrNull()
                 }
             )
