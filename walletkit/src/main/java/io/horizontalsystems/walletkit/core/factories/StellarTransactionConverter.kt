@@ -131,44 +131,40 @@ class StellarTransactionConverter(
         }
 
         operation.contractBalanceChanges?.let { changes ->
-            // Horizon's per-asset balance movements of a contract call (SAC events). Sent
-            // one asset and received another — a swap (Soroswap/Aquarius); one-directional
-            // movements render as plain transfers (e.g. the Axelar ITS deposit).
-            val outgoing = changes.filter { it.from == selfAddress }
-            val incoming = changes.filter { it.to == selfAddress }
-
-            val outValue = outgoing.firstOrNull()?.let { change ->
-                val amount = outgoing.filter { it.asset == change.asset }.sumOf { it.amount }
-                transactionValue(change.asset, amount.negate()) to change
-            }
-            val inValue = incoming.firstOrNull()?.let { change ->
-                val amount = incoming.filter { it.asset == change.asset }.sumOf { it.amount }
-                transactionValue(change.asset, amount) to change
-            }
-
-            when {
-                outValue != null && inValue != null -> {
-                    type = Type.Swap(valueIn = outValue.first, valueOut = inValue.first)
+            // Horizon's per-asset balance movements of a contract call (SAC events),
+            // aggregated by asset. Sold one asset and received another — a swap
+            // (Soroswap/Aquarius); one-directional movements render as plain transfers
+            // (e.g. the Axelar ITS deposit); multi-asset movements stay Unsupported
+            // rather than showing understated amounts.
+            when (val movement = StellarContractMovement.resolve(changes, selfAddress)) {
+                is StellarContractMovement.Swap -> {
+                    type = Type.Swap(
+                        valueIn = transactionValue(movement.sold.asset, movement.sold.amount),
+                        valueOut = transactionValue(movement.received.asset, movement.received.amount),
+                    )
                 }
 
-                outValue != null -> {
+                is StellarContractMovement.Outgoing -> {
                     type = Type.Send(
-                        value = outValue.first,
-                        to = outValue.second.to ?: "",
+                        value = transactionValue(movement.movement.asset, movement.movement.amount),
+                        to = movement.counterparty ?: "",
                         sentToSelf = false,
                         comment = operation.memo,
                         accountCreated = false,
                     )
                 }
 
-                inValue != null -> {
+                is StellarContractMovement.Incoming -> {
                     type = Type.Receive(
-                        value = inValue.first,
-                        from = inValue.second.from ?: "",
+                        value = transactionValue(movement.movement.asset, movement.movement.amount),
+                        from = movement.counterparty ?: "",
                         comment = operation.memo,
                         accountCreated = false,
                     )
                 }
+
+                StellarContractMovement.None,
+                StellarContractMovement.Unrepresentable -> Unit
             }
         }
 
