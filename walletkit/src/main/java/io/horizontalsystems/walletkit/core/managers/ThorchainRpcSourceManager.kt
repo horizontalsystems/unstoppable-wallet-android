@@ -26,10 +26,13 @@ class ThorchainRpcSourceManager(
     // Displayed/stored URLs carry no secret. The Liquify entry shows its public path; the
     // API key is injected only at request time (see thornodeUrl), mirroring how
     // TronKitManager swaps in the TronGrid key only for the TronGrid source.
+    // Order matters: allRpcSources[0] is the default, and the failover list (thornodeUrls)
+    // tries the selected source first, then the rest in this order. Keplr (a reputable,
+    // established operator) leads; Liquify is last as it returns intermittent 500s.
     val allRpcSources = listOf(
-        ThorchainRpcSource("Liquify", LIQUIFY_PUBLIC_URL),
         ThorchainRpcSource("Keplr", "https://lcd-thorchain.keplr.app/"),
         ThorchainRpcSource("Rorcual", "https://api-thorchain.rorcual.xyz/"),
+        ThorchainRpcSource("Liquify", LIQUIFY_PUBLIC_URL),
     )
 
     // The selection is persisted by name under the shared "evm-sync-source-url" key, keyed
@@ -43,16 +46,23 @@ class ThorchainRpcSourceManager(
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(blockchainType.uid)
 
-    // Resolved thornode base URL for the selected source, with the Liquify key applied.
+    // Failover list for the kit: the selected source first (it serves ~all traffic), then the
+    // remaining providers as backup. The kit's ThornodeApiProvider.withFailover retries the next
+    // URL on 5xx/network errors, so a single provider's intermittent 500s no longer break sync.
     // Every entry ends in "/" so the kit's Retrofit baseUrl accepts it.
-    fun thornodeUrl(): URL {
-        val source = rpcSource
-        return if (source.url == LIQUIFY_PUBLIC_URL) {
+    fun thornodeUrls(): List<URL> {
+        val selected = rpcSource
+        val ordered = listOf(selected) + allRpcSources.filter { it.name != selected.name }
+        return ordered.map { resolvedUrl(it) }
+    }
+
+    // The Liquify entry shows a public path but is keyed with the app API key at request time.
+    private fun resolvedUrl(source: ThorchainRpcSource): URL =
+        if (source.url == LIQUIFY_PUBLIC_URL) {
             URL("https://gateway.liquify.com/api=${App.appConfigProvider.thorchainApiKey}/thorchain_api/")
         } else {
             URL(source.url)
         }
-    }
 
     fun save(rpcSource: ThorchainRpcSource) {
         blockchainSettingsStorage.save(rpcSource.name, blockchainType)

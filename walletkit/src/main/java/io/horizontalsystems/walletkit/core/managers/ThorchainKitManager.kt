@@ -80,9 +80,9 @@ class ThorchainKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): ThorchainKitWrapper {
-        // User-selected thornode provider (Liquify keyed by default). Overrides the kit's
-        // built-in Network defaults; the URL already ends in "/" as Retrofit requires.
-        val thornodeUrls = listOf(rpcSourceManager.thornodeUrl())
+        // User-selected thornode provider first, then the others as failover. Overrides the
+        // kit's built-in Network defaults; every URL ends in "/" as Retrofit requires.
+        val thornodeUrls = rpcSourceManager.thornodeUrls()
         val kit = ThorchainKit.getInstance(
             App.instance,
             accountType.seed,
