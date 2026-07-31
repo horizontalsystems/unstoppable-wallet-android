@@ -2,11 +2,13 @@ package io.horizontalsystems.walletkit.modules.multiswap.action
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.activatetoken.ActivateTokenPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import kotlinx.coroutines.delay
@@ -37,26 +39,40 @@ class ActionActivateStellarAsset(
             }
         }
 
+        val view = LocalView.current
         val scope = rememberCoroutineScope()
         return {
             scope.launch {
-                ensureWalletEnabled()
-                runActivation()
+                // ActivateTokenPage resolves its adapter from the wallet synchronously, so
+                // navigating without one would land on a broken page — surface an error
+                // instead and let the user tap again (the adapter rebuild keeps running).
+                if (ensureAdapterReady()) {
+                    runActivation()
+                } else {
+                    HudHelper.showErrorMessage(view, R.string.Error)
+                }
             }
         }
     }
 
-    // Swapping INTO a token the user never added: the trustline check found no wallet, but
-    // ActivateTokenPage resolves its adapter from the wallet synchronously — so enable the
-    // wallet first and wait out the async adapter rebuild before navigating.
-    private suspend fun ensureWalletEnabled() {
-        if (App.walletManager.activeWallets.contains(wallet)) return
+    // Swapping INTO a token the user never added: the trustline check found no wallet, so
+    // enable it first and wait out the async adapter rebuild. True when the adapter is
+    // available, false when it did not appear within the polling window.
+    private suspend fun ensureAdapterReady(): Boolean {
+        if (adapterReady()) return true
 
-        App.walletActivator.activateTokens(wallet.account, listOf(wallet.token))
+        if (!App.walletManager.activeWallets.contains(wallet)) {
+            App.walletActivator.activateTokens(wallet.account, listOf(wallet.token))
+        }
 
         repeat(20) {
-            if (App.adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet) != null) return
+            if (adapterReady()) return true
             delay(100)
         }
+
+        return false
     }
+
+    private fun adapterReady() =
+        App.adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet) != null
 }

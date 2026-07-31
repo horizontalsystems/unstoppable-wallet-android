@@ -36,7 +36,10 @@ object MultiSwapProviderRegistry {
         ),
         // Stellar-only pairs through uswap-server's Stellar venues (SOROSWAP/AQUARIUS/
         // STELLAR_DEX behind the single StellarBroker card) — not a USwapProvider because
-        // it waterfalls across several server provider ids per quote.
+        // it waterfalls across several server provider ids per quote. StellarBroker is
+        // only the card's name: as a VENUE it stays disabled pending fee terms via
+        // StellarSwapProvider.stellarBrokerEnabled, so registering the card does not
+        // expose SB routes.
         StellarSwapProvider(),
     )
 
