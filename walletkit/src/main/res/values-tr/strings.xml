@@ -1798,4 +1798,7 @@
     <string name="Monero_RenameAccount">Hesabı Yeniden Adlandır</string>
     <string name="Monero_AccountName">Ad</string>
     <string name="Monero_Accounts_Description">Hesaplar, aynı Monero cüzdanının ayrı bölmeleridir. Bakiye, işlemler, alma ve gönderme hepsi seçili hesaba uygulanır. Hesaplar arasında fon taşımak, ağ ücretli normal bir zincir üstü işlemdir.</string>
+    <string name="Passkey_ProviderAttention_Title">Passkey Sağlayıcınızı Kontrol Edin</string>
+    <string name="Passkey_ProviderAttention_Description">Passkey sağlayıcınız isteği tamamlayamadı. Passkey\'lerinizi depolayan uygulamayı veya hesabı açın, istenen herhangi bir oturum açma veya doğrulamayı tamamlayın ve tekrar deneyin.</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">Google Şifre Yöneticisi, passkeys kullanabilmek için kilidinin açılması gerekir. Cihaz Ayarlarınızı açın → Google → Google Hesabınızı Yönetin veya Google Şifre Yöneticisini açın ve parolayı girin veya istenen doğrulamayı tamamlayın. Sonra tekrar deneyin.</string>
 </resources>

@@ -730,4 +730,7 @@
     <string name="Monero_AccountName">نام</string>
     <string name="Monero_Accounts_Description">حسابات بخش‌های جداگانه‌ای از یک کیف پول مونرو هستند. موجودی، تراکنش‌ها، دریافت و ارسال برای حساب انتخاب‌شده اعمال می‌شود. انتقال وجوه بین حسابات یک تراکنش معمولی درون‌زنجیری با هزینه شبکه است.</string>
     <string name="Swap_MinimumReceivedDescription">حداقل مبلغی که پس از تکمیل تبدیل دریافت خواهید کرد. این مبلغ توسط ارائه دهنده تضمین شده است و تحت تأثیر تغییرات قیمت در حین پردازش نمی باشد.</string>
+    <string name="Passkey_ProviderAttention_Title">ارائه‌دهنده Passkey خود را بررسی کنید</string>
+    <string name="Passkey_ProviderAttention_Description">ارائه‌دهنده passkey شما نتوانست درخواست را تکمیل کند. برنامه یا حسابی که passkey های خود را ذخیره می‌کند را باز کنید، هرگونه ورود یا تایید درخواستی را تکمیل کنید و دوباره سعی کنید.</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">مدیر رمز عبور Google باید قبل از استفاده از passkeys باز شود. تنظیمات دستگاه خود → Google → مدیریت حساب Google خود را باز کنید یا مدیر رمز عبور Google را باز کنید و عبارت عبور را وارد کنید یا تایید درخواستی را تکمیل کنید. سپس دوباره سعی کنید.</string>
 </resources>

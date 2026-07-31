@@ -1804,4 +1804,7 @@
     <string name="Monero_RenameAccount">Переименовать счет</string>
     <string name="Monero_AccountName">Имя</string>
     <string name="Monero_Accounts_Description">Счета - это отдельные разделы одного кошелька Monero. Баланс, транзакции, получение и отправка применяются к выбранному счету. Перемещение средств между счетами - это обычная внутрицепочечная транзакция с сетевой комиссией.</string>
+    <string name="Passkey_ProviderAttention_Title">Проверьте своего поставщика Passkey</string>
+    <string name="Passkey_ProviderAttention_Description">Ваш поставщик passkey не смог завершить запрос. Откройте приложение или учетную запись, в которой хранятся ваши passkeys, завершите все необходимые входы или проверки и повторите попытку.</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">Диспетчер паролей Google необходимо разблокировать перед использованием passkeys. Откройте Параметры устройства → Google → Управление аккаунтом Google или откройте Диспетчер паролей Google и введите пароль или завершите требуемую проверку. Затем повторите попытку.</string>
 </resources>

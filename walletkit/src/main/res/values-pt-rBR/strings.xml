@@ -1802,4 +1802,7 @@
     <string name="Monero_RenameAccount">Renomear Conta</string>
     <string name="Monero_AccountName">Nome</string>
     <string name="Monero_Accounts_Description">Contas são compartimentos separados da mesma carteira Monero. Saldo, transações, recebimento e envio se aplicam à conta selecionada. Mover fundos entre contas é uma transação normal na cadeia com uma taxa de rede.</string>
+    <string name="Passkey_ProviderAttention_Title">Verifique seu provedor de Passkey</string>
+    <string name="Passkey_ProviderAttention_Description">Seu provedor de passkey não conseguiu concluir a solicitação. Abra o aplicativo ou a conta que armazena suas passkeys, conclua qualquer login ou verificação solicitado e tente novamente.</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">O Gerenciador de senhas do Google precisa ser desbloqueado antes de poder usar passkeys. Abra Configurações do dispositivo → Google → Gerenciar sua Conta do Google ou abra o Gerenciador de senhas do Google e insira a senha ou conclua a verificação solicitada. Depois tente novamente.</string>
 </resources>

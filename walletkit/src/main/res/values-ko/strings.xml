@@ -1798,4 +1798,7 @@
     <string name="Monero_RenameAccount">계정 이름 변경</string>
     <string name="Monero_AccountName">이름</string>
     <string name="Monero_Accounts_Description">계정은 동일한 모네로 지갑의 별도 구획입니다. 잔액, 거래, 수신 및 전송은 모두 선택한 계정에 적용됩니다. 계정 간의 자금 이동은 네트워크 수수료가 있는 일반적인 온체인 거래입니다.</string>
+    <string name="Passkey_ProviderAttention_Title">Passkey 제공업체 확인</string>
+    <string name="Passkey_ProviderAttention_Description">Passkey 제공업체가 요청을 완료할 수 없었습니다. Passkey를 저장하는 앱 또는 계정을 열고 요청된 로그인 또는 인증을 완료한 후 다시 시도하세요.</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">Google 비밀번호 관리자는 Passkey를 사용하기 전에 잠금을 해제해야 합니다. 기기 설정 → Google → Google 계정 관리를 열거나 Google 비밀번호 관리자를 열고 비밀번호를 입력하거나 요청된 인증을 완료하세요. 그런 다음 다시 시도하세요.</string>
 </resources>

@@ -1799,4 +1799,7 @@
     <string name="Monero_RenameAccount">Renommer Compte</string>
     <string name="Monero_AccountName">Nom</string>
     <string name="Monero_Accounts_Description">Les comptes sont des compartiments distincts du même portefeuille Monero. Le solde, les transactions, la réception et l\'envoi s\'appliquent tous au compte sélectionné. Transférer des fonds entre comptes est une transaction normale sur la chaîne avec des frais réseau.</string>
+    <string name="Passkey_ProviderAttention_Title">Vérifiez votre fournisseur de Passkey</string>
+    <string name="Passkey_ProviderAttention_Description">Votre fournisseur de passkey n\'a pas pu traiter la demande. Ouvrez l\'application ou le compte qui stocke vos passkeys, terminez toute connexion ou vérification demandée et réessayez.</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">Le Gestionnaire de mots de passe Google doit être déverrouillé avant de pouvoir utiliser des passkeys. Ouvrez Paramètres de l\'appareil → Google → Gérer votre compte Google ou ouvrez le Gestionnaire de mots de passe Google et entrez la phrase de passe ou complétez la vérification demandée. Ensuite, réessayez.</string>
 </resources>
