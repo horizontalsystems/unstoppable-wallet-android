@@ -52,6 +52,8 @@ def has_cdata(value: str) -> bool:
 
 def escape_xml_value(value: str) -> str:
     """Escape characters that must be escaped in Android strings.xml values."""
+    # translations arrive as plain text — real newlines become Android \n escapes
+    value = value.replace('\n', '\\n')
     # & first — convert XML quote entities to Android escapes, then
     # escape any bare & that isn't part of a remaining named entity
     value = value.replace('&apos;', "\\'")
@@ -94,12 +96,26 @@ def save_snapshot(snapshot: dict) -> None:
         json.dump(snapshot, f, indent=2, ensure_ascii=False, sort_keys=True)
 
 
+def unescape_android(value: str) -> str:
+    """Android strings.xml value → plain text for the translation prompt.
+
+    The model works with plain text and standard JSON escaping only;
+    escape_xml_value() re-applies the Android escaping on the way back.
+    Asking the model to emit Android escapes inside JSON values produced
+    invalid JSON (\\' is not a JSON escape; unescaped quotes end the string).
+    """
+    value = value.replace("\\'", "'").replace('\\"', '"').replace("\\n", "\n")
+    value = value.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+    return value
+
+
 def translate_new_strings(new_strings: dict[str, str]) -> dict[str, dict[str, str]]:
-    """Call Claude API. Returns {lang_code: {key: translated_value}}."""
+    """Call Claude API. Returns {lang_code: {key: translated_value}} as plain text."""
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
     strings_block = "\n".join(
-        f'<string name="{k}">{v}</string>' for k, v in new_strings.items()
+        f'<string name="{k}">{unescape_android(v)}</string>'
+        for k, v in new_strings.items()
     )
     lang_list = "\n".join(f"- {code}: {name}" for code, name in LANGUAGES.items())
 
@@ -114,8 +130,7 @@ English strings:
 Rules:
 - Keep name attributes exactly as-is (never translate the keys)
 - Preserve all Android format placeholders: %s, %d, %1$s, %2$s, %3$s, etc.
-- Preserve literal \\n newline sequences as \\n
-- Preserve XML entities &amp; &lt; &gt; — do NOT use &apos; or &quot;, use \' and \" instead (Android requirement)
+- Values are plain text: use standard JSON string escaping ONLY. Do not apply Android escaping — no backslash-apostrophe sequences, no XML entities. Multi-line values use the JSON \\n escape.
 - Return ONLY valid JSON with this exact structure:
 {{
   "de": {{"KeyName": "translated value", ...}},
@@ -127,12 +142,17 @@ No markdown fences, no explanation. Only the JSON object.
 
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=8192,
+        max_tokens=16000,
         messages=[{"role": "user", "content": prompt}],
     )
 
     text = re.sub(r"```(?:json)?\s*|\s*```", "", message.content[0].text).strip()
-    return json.loads(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as e:
+        print(f"    Model response was not valid JSON ({e}); first 500 chars:")
+        print(f"    {text[:500]!r}")
+        raise
 
 
 def apply_translations(lang_file: str, new_translations: dict[str, str], deleted_keys: set[str]) -> None:
