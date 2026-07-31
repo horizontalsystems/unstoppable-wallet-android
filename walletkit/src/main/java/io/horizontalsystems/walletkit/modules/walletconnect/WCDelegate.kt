@@ -34,7 +34,16 @@ object WCDelegate : DAppServiceCallback {
     val connectionAvailableEvent: StateFlow<Boolean?> = _connectionAvailableEvent.asStateFlow()
 
     var sessionProposalEvent: HSDAppProposal? = null
-    var sessionRequestEvent: HSDAppRequest? = null
+
+    // sessionRequestEvent is touched from WC SDK callback threads, IO coroutines and the main
+    // thread (UI reject/discard, lifecycle re-emission). Guard every read/replace/clear behind a
+    // monitor lock so observers never see a torn/stale transition. A coroutine Mutex is unusable
+    // here because most access points are synchronous (non-suspend) property access.
+    private val sessionRequestLock = Any()
+    private var _sessionRequestEvent: HSDAppRequest? = null
+    var sessionRequestEvent: HSDAppRequest?
+        get() = synchronized(sessionRequestLock) { _sessionRequestEvent }
+        set(value) = synchronized(sessionRequestLock) { _sessionRequestEvent = value }
 
     // region DAppServiceCallback
 
@@ -132,12 +141,12 @@ object WCDelegate : DAppServiceCallback {
             onSuccess = {
                 onSuccessResult()
                 scope.launch {
-                    sessionRequestEvent = null
+                    clearSessionRequestEventIfMatches(requestId)
                     _pendingRequestEvents.emit(Unit)
                 }
             },
             onError = { error ->
-                sessionRequestEvent = null
+                clearSessionRequestEventIfMatches(requestId)
                 onErrorResult(error)
                 scope.launch { _walletEvents.emit(HSDAppEvent.Error(error)) }
             }
@@ -152,6 +161,17 @@ object WCDelegate : DAppServiceCallback {
         sessionRequestEvent = null
     }
 
+    // Clear the active request only if it is still the one being responded to/rejected. respond and
+    // reject callbacks arrive asynchronously, so by the time one lands a newer request may already
+    // be active; an unconditional clear would wipe it. Compound check-and-clear under the lock.
+    private fun clearSessionRequestEventIfMatches(requestId: Long) {
+        synchronized(sessionRequestLock) {
+            if (_sessionRequestEvent?.requestId == requestId) {
+                _sessionRequestEvent = null
+            }
+        }
+    }
+
     fun rejectRequest(
         topic: String,
         requestId: Long,
@@ -164,12 +184,12 @@ object WCDelegate : DAppServiceCallback {
             onSuccess = {
                 onSuccessResult()
                 scope.launch {
-                    sessionRequestEvent = null
+                    clearSessionRequestEventIfMatches(requestId)
                     _pendingRequestEvents.emit(Unit)
                 }
             },
             onError = { error ->
-                sessionRequestEvent = null
+                clearSessionRequestEventIfMatches(requestId)
                 onErrorResult(error)
                 scope.launch { _walletEvents.emit(HSDAppEvent.Error(error)) }
             }
