@@ -122,7 +122,10 @@ class EvmTransactionsAdapter(
 
     private fun coinTagName(token: Token) = when (val type = token.type) {
         TokenType.Native -> TransactionTag.EVM_COIN
-        is TokenType.Eip20 -> type.address
+        // EvmKit writes transaction tags with the contract address lowercased (Address.hex),
+        // but a user-added custom token can carry a checksummed address — normalize, or the
+        // token's history filter never matches (catalog tokens are already lowercase).
+        is TokenType.Eip20 -> type.address.lowercase()
         else -> ""
     }
 
