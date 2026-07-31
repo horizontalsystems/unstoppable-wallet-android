@@ -50,6 +50,14 @@ class StellarTransactionRecord(
             val value: TransactionValue
         ) : Type()
 
+        // A swap on the own account: a path payment to self (Stellar DEX) or a contract
+        // call that both spent and received assets (Soroswap/Aquarius). valueIn is what
+        // was sold (negative), valueOut what was received.
+        data class Swap(
+            val valueIn: TransactionValue,
+            val valueOut: TransactionValue,
+        ) : Type()
+
         class Unsupported(val type: String) : Type()
 
         val mainValue: TransactionValue?
@@ -57,6 +65,7 @@ class StellarTransactionRecord(
                 is Receive -> value
                 is Send -> value
                 is ChangeTrust -> value
+                is Swap -> valueOut
                 is Unsupported -> null
             }
     }
@@ -76,6 +85,7 @@ class StellarTransactionRecord(
 
                 is Type.ChangeTrust,
                 is Type.Send,
+                is Type.Swap,
                 is Type.Unsupported -> listOf()
             }
     }

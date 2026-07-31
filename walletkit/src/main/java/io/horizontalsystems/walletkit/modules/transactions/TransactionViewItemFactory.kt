@@ -575,6 +575,16 @@ class TransactionViewItemFactory(
                 iconX = singleValueIconType(recordType.value)
             }
 
+            is StellarTransactionRecord.Type.Swap -> {
+                title = Translator.getString(R.string.Transactions_Swap)
+                subtitle = ""
+
+                primaryValue = getColoredValue(recordType.valueOut, ColorName.Remus)
+                secondaryValue = getColoredValue(recordType.valueIn, ColorName.Leah)
+
+                iconX = doubleValueIconType(recordType.valueOut, recordType.valueIn)
+            }
+
             is StellarTransactionRecord.Type.Unsupported -> {
                 iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                 title = Translator.getString(R.string.Transactions_StellarTransaction)

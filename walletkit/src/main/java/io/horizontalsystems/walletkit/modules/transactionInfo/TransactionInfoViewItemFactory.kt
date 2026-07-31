@@ -124,6 +124,19 @@ class TransactionInfoViewItemFactory(
                         )
                     }
 
+                    is StellarTransactionRecord.Type.Swap -> {
+                        itemSections.add(
+                            getSwapEventSectionItems(
+                                valueIn = transactionType.valueIn,
+                                valueOut = transactionType.valueOut,
+                                rates = rates,
+                                amount = null,
+                                hideAmount = transactionItem.hideAmount,
+                                hasRecipient = false
+                            )
+                        )
+                    }
+
                     is StellarTransactionRecord.Type.Unsupported -> {
                         itemSections.add(
                             listOf(
