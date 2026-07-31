@@ -53,6 +53,7 @@ interface IAppConfigProvider {
     val trongridApiKeys: List<String>
     val udnApiKey: String
     val oneInchApiKey: String
+    val thorchainApiKey: String
     val appLinksHost: String
     val fiatDecimal: Int
     val feeRateAdjustForCurrencies: List<String>

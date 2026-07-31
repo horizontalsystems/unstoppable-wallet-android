@@ -22,6 +22,7 @@ import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
@@ -122,6 +123,7 @@ class BackupProvider(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
+    private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val moneroNodeStorage: MoneroNodeStorage,
     private val zanoNodeManager: ZanoNodeManager,
@@ -271,6 +273,10 @@ class BackupProvider(
 
             settings.solanaSyncSource?.let {
                 blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
+            }
+
+            settings.thorchainSyncSource?.let {
+                blockchainSettingsStorage.save(settings.thorchainSyncSource.name, BlockchainType.Thorchain)
             }
 
             if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
@@ -557,6 +563,8 @@ class BackupProvider(
 
         val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
 
+        val thorchainSyncSource = ThorchainSyncSource(BlockchainType.Thorchain.uid, thorchainRpcSourceManager.rpcSource.name)
+
         val selectedMoneroNode = MoneroNodeBackup(BlockchainType.Monero.uid, moneroNodeManager.currentNode.host, null, null, false)
         val customMoneroNodes = if (BackupSection.CustomRpc in sections) {
             moneroNodeManager.customNodes.map { node ->
@@ -603,6 +611,7 @@ class BackupProvider(
             priceChangeMode = localStorage.priceChangeInterval,
             evmSyncSources = evmSyncSources,
             solanaSyncSource = solanaSyncSource,
+            thorchainSyncSource = thorchainSyncSource,
             moneroNodes = moneroNodes,
             zanoNodes = zanoNodes,
             zcashEndpoints = zcashEndpoints,
@@ -804,6 +813,12 @@ data class SolanaSyncSource(
     val name: String
 )
 
+data class ThorchainSyncSource(
+    @SerializedName("blockchain_type_id")
+    val blockchainTypeId: String,
+    val name: String
+)
+
 data class MoneroNodeBackup(
     @SerializedName("blockchain_type_id")
     val blockchainTypeId: String,
@@ -897,6 +912,8 @@ data class Settings(
     val evmSyncSources: EvmSyncSources,
     @SerializedName("solana_sync_source")
     val solanaSyncSource: SolanaSyncSource?,
+    @SerializedName("thorchain_sync_source")
+    val thorchainSyncSource: ThorchainSyncSource?,
     @SerializedName("monero_nodes")
     val moneroNodes: MoneroNodes?,
     @SerializedName("zano_nodes")

@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.modules.moneronetwork.MoneroNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.solananetwork.SolanaNetworkPage
+import io.horizontalsystems.walletkit.modules.thorchainnetwork.ThorchainNetworkPage
 import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
 import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -126,6 +127,15 @@ private fun onClick(
             stat(
                 page = StatPage.BlockchainSettings,
                 event = StatEvent.Open(StatPage.BlockchainSettingsSolana)
+            )
+        }
+
+        is BlockchainSettingsModule.BlockchainItem.Thorchain -> {
+            navigation.slideFromBottom(ThorchainNetworkPage)
+
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.Open(StatPage.BlockchainSettingsThorchain)
             )
         }
 

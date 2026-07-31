@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
@@ -23,6 +24,7 @@ class BlockchainSettingsService(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
+    private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val zanoNodeManager: ZanoNodeManager,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
@@ -59,6 +61,11 @@ class BlockchainSettingsService(
         }
         coroutineScope.launch {
             solanaRpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+                syncBlockchainItems()
+            }
+        }
+        coroutineScope.launch {
+            thorchainRpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
                 syncBlockchainItems()
             }
         }
@@ -109,6 +116,11 @@ class BlockchainSettingsService(
             solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
         }
 
+        val thorchainBlockchainItems = mutableListOf<BlockchainItem>()
+        thorchainRpcSourceManager.blockchain?.let {
+            thorchainBlockchainItems.add(BlockchainItem.Thorchain(it, thorchainRpcSourceManager.rpcSource))
+        }
+
         val moneroBlockchainItems = mutableListOf<BlockchainItem>()
         moneroNodeManager.blockchain?.let {
             moneroBlockchainItems.add(BlockchainItem.Monero(it, moneroNodeManager.currentNode))
@@ -124,7 +136,7 @@ class BlockchainSettingsService(
             zcashBlockchainItems.add(BlockchainItem.Zcash(it, zcashEndpointManager.currentEndpoint))
         }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + moneroBlockchainItems + zanoBlockchainItems + zcashBlockchainItems).sortedBy { it.order }
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + thorchainBlockchainItems + moneroBlockchainItems + zanoBlockchainItems + zcashBlockchainItems).sortedBy { it.order }
     }
 
 }

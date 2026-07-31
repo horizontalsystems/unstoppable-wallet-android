@@ -16,18 +16,31 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class ThorchainKitManager(
     private val backgroundManager: BackgroundManager,
+    private val rpcSourceManager: ThorchainRpcSourceManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
+    private var sourceJob: Job? = null
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
+
+    // Signals that the running kit was torn down because the user changed the RPC provider;
+    // WalletManager reloads Thorchain wallets on this, which rebuilds the adapter + kit with
+    // the newly selected source. tryEmit stays synchronous so it fires before handleUpdateNetwork
+    // cancels the collector coroutine it runs in.
+    private val _kitStoppedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val kitStoppedFlow: SharedFlow<Unit> = _kitStoppedFlow.asSharedFlow()
 
     var thorchainKitWrapper: ThorchainKitWrapper? = null
         private set(value) {
@@ -68,7 +81,16 @@ class ThorchainKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): ThorchainKitWrapper {
-        val kit = ThorchainKit.getInstance(App.instance, accountType.seed, Network.Mainnet, account.id)
+        // User-selected thornode provider (Liquify keyed by default). Overrides the kit's
+        // built-in Network defaults; the URL already ends in "/" as Retrofit requires.
+        val thornodeUrls = listOf(rpcSourceManager.thornodeUrl())
+        val kit = ThorchainKit.getInstance(
+            App.instance,
+            accountType.seed,
+            Network.Mainnet,
+            account.id,
+            thornodeUrls = thornodeUrls,
+        )
 
         return ThorchainKitWrapper(kit)
     }
@@ -94,15 +116,28 @@ class ThorchainKitManager(
         }
     }
 
+    private fun handleUpdateNetwork() {
+        stop()
+        _kitStoppedFlow.tryEmit(Unit)
+    }
+
     private fun stop() {
         thorchainKitWrapper?.thorchainKit?.stop()
         job?.cancel()
+        sourceJob?.cancel()
         thorchainKitWrapper = null
         currentAccount = null
     }
 
     private fun start() {
         thorchainKitWrapper?.thorchainKit?.start()
+        // Re-established on every kit creation, mirroring SolanaKitManager: the collector only
+        // lives while a kit exists, and reloadWallets recreates it after a provider change.
+        sourceJob = scope.launch {
+            rpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+                handleUpdateNetwork()
+            }
+        }
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
                 // a throw here would cancel the shared scope for good — start() reuses

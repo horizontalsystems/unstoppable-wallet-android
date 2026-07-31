@@ -96,6 +96,12 @@ class BlockchainSettingsViewModel(
                             imageUrl = item.blockchain.type.imageUrl,
                             blockchainItem = item
                         )
+                        is BlockchainSettingsModule.BlockchainItem.Thorchain -> BlockchainSettingsModule.BlockchainViewItem(
+                            title = item.blockchain.name,
+                            subtitle = item.rpcSource.name,
+                            imageUrl = item.blockchain.type.imageUrl,
+                            blockchainItem = item
+                        )
                         else -> null
                     }
                 }

@@ -52,6 +52,7 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val trongridApiKeys: List<String> = BuildConfig.TRONGRID_API_KEYS.split(",")
     override val udnApiKey = BuildConfig.UDN_API_KEY
     override val oneInchApiKey = BuildConfig.ONE_INCH_API_KEY
+    override val thorchainApiKey = BuildConfig.THORCHAIN_API_KEY
     override val appLinksHost = BuildConfig.APP_LINKS_HOST
 
     override val fiatDecimal: Int = 2

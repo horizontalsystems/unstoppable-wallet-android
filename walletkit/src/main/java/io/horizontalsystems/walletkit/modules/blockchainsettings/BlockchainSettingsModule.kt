@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager.ZanoNode
+import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSource
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager.ZcashEndpoint
 import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.entities.BtcRestoreMode
@@ -23,6 +24,7 @@ object BlockchainSettingsModule {
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
                     App.solanaRpcSourceManager,
+                    App.thorchainRpcSourceManager,
                     App.moneroNodeManager,
                     App.zanoNodeManager,
                     App.zcashEndpointManager,
@@ -55,6 +57,11 @@ object BlockchainSettingsModule {
         class Solana(
             override val blockchain: Blockchain,
             val rpcSource: RpcSource
+        ) : BlockchainItem()
+
+        class Thorchain(
+            override val blockchain: Blockchain,
+            val rpcSource: ThorchainRpcSource
         ) : BlockchainItem()
 
         class Monero(
