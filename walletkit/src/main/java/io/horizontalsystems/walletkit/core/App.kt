@@ -61,6 +61,7 @@ import io.horizontalsystems.walletkit.core.managers.SolanaWalletManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.walletkit.core.managers.StellarAccountManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
+import io.horizontalsystems.walletkit.core.managers.ThorchainAccountManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
@@ -388,6 +389,9 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         val stellarAccountManager = StellarAccountManager(accountManager, walletManager, stellarKitManager, tokenAutoEnableManager)
         stellarAccountManager.start()
+
+        val thorchainAccountManager = ThorchainAccountManager(accountManager, walletManager, thorchainKitManager, marketKit, tokenAutoEnableManager)
+        thorchainAccountManager.start()
 
         systemInfoManager = SystemInfoManager(appConfigProvider)
 
