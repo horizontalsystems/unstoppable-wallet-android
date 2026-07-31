@@ -52,8 +52,8 @@ def has_cdata(value: str) -> bool:
 
 def escape_xml_value(value: str) -> str:
     """Escape characters that must be escaped in Android strings.xml values."""
-    # translations arrive as plain text — real newlines become Android \n escapes
-    value = value.replace('\n', '\\n')
+    # translations arrive as plain text — real newlines/tabs become Android escapes
+    value = value.replace('\n', '\\n').replace('\t', '\\t')
     # & first — convert XML quote entities to Android escapes, then
     # escape any bare & that isn't part of a remaining named entity
     value = value.replace('&apos;', "\\'")
@@ -104,8 +104,13 @@ def unescape_android(value: str) -> str:
     Asking the model to emit Android escapes inside JSON values produced
     invalid JSON (\\' is not a JSON escape; unescaped quotes end the string).
     """
-    value = value.replace("\\'", "'").replace('\\"', '"').replace("\\n", "\n")
-    value = value.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+    # backslash escapes: \n and \t map to their characters, any other
+    # escaped character (\', \", \@, \?, \\) drops the backslash
+    value = re.sub(r"\\(.)", lambda m: {"n": "\n", "t": "\t"}.get(m.group(1), m.group(1)), value)
+    # entities: quote entities too; &amp; last so it can't re-form others
+    value = value.replace("&lt;", "<").replace("&gt;", ">")
+    value = value.replace("&quot;", '"').replace("&apos;", "'")
+    value = value.replace("&amp;", "&")
     return value
 
 
@@ -148,11 +153,23 @@ No markdown fences, no explanation. Only the JSON object.
 
     text = re.sub(r"```(?:json)?\s*|\s*```", "", message.content[0].text).strip()
     try:
-        return json.loads(text)
+        data = json.loads(text)
     except json.JSONDecodeError as e:
         print(f"    Model response was not valid JSON ({e}); first 500 chars:")
         print(f"    {text[:500]!r}")
         raise
+
+    # json.loads only checks syntax — enforce {lang: {key: str}} before the
+    # result is written into XML files
+    if not isinstance(data, dict):
+        raise ValueError(f"Translation payload is {type(data).__name__}, expected object")
+    for lang, entries in data.items():
+        if not isinstance(entries, dict):
+            raise ValueError(f"Translations for {lang!r} are {type(entries).__name__}, expected object")
+        for key, translated in entries.items():
+            if not isinstance(translated, str):
+                raise ValueError(f"Translation {lang!r}/{key!r} is {type(translated).__name__}, expected string")
+    return data
 
 
 def apply_translations(lang_file: str, new_translations: dict[str, str], deleted_keys: set[str]) -> None:
