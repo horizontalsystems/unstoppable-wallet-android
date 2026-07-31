@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class ThorchainKitManager(
     private val backgroundManager: BackgroundManager,
@@ -134,7 +133,7 @@ class ThorchainKitManager(
         // Re-established on every kit creation, mirroring SolanaKitManager: the collector only
         // lives while a kit exists, and reloadWallets recreates it after a provider change.
         sourceJob = scope.launch {
-            rpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+            rpcSourceManager.rpcSourceUpdatedFlow.collect {
                 handleUpdateNetwork()
             }
         }

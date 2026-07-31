@@ -65,7 +65,7 @@ class BlockchainSettingsService(
             }
         }
         coroutineScope.launch {
-            thorchainRpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+            thorchainRpcSourceManager.rpcSourceUpdatedFlow.collect {
                 syncBlockchainItems()
             }
         }

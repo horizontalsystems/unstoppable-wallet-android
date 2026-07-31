@@ -9,6 +9,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.Denom
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -64,11 +65,20 @@ class ThorchainAccountManager(
         var initial = true
         balanceSubscriptionJob = coroutineScope.launch {
             wrapper.thorchainKit.balancesFlow.collect { balances ->
-                if (balances.isEmpty()) return@collect
+                // A throw here would escape the launch and cancel coroutineScope (a plain Job,
+                // not a SupervisorJob), permanently killing the kitStartedFlow collector — so
+                // swallow and log, letting collection continue.
+                try {
+                    if (balances.isEmpty()) return@collect
 
-                val isInitial = initial
-                initial = false
-                handle(balances, account, isInitial)
+                    val isInitial = initial
+                    initial = false
+                    handle(balances, account, isInitial)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    logger.warning("error", e)
+                }
             }
         }
     }

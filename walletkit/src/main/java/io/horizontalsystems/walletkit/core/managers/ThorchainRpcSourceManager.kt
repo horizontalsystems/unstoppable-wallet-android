@@ -4,8 +4,9 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.net.URL
 
 data class ThorchainRpcSource(val name: String, val url: String)
@@ -16,10 +17,11 @@ class ThorchainRpcSourceManager(
 ) {
 
     private val blockchainType = BlockchainType.Thorchain
-    private val rpcSourceSubjectUpdate = PublishSubject.create<Unit>()
 
-    val rpcSourceUpdateObservable: Observable<Unit>
-        get() = rpcSourceSubjectUpdate
+    // extraBufferCapacity = 1 lets the non-suspend save() tryEmit without an active collector,
+    // matching the fire-and-forget change signal PublishSubject provided.
+    private val _rpcSourceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val rpcSourceUpdatedFlow: SharedFlow<Unit> = _rpcSourceUpdatedFlow.asSharedFlow()
 
     // Displayed/stored URLs carry no secret. The Liquify entry shows its public path; the
     // API key is injected only at request time (see thornodeUrl), mirroring how
@@ -54,7 +56,7 @@ class ThorchainRpcSourceManager(
 
     fun save(rpcSource: ThorchainRpcSource) {
         blockchainSettingsStorage.save(rpcSource.name, blockchainType)
-        rpcSourceSubjectUpdate.onNext(Unit)
+        _rpcSourceUpdatedFlow.tryEmit(Unit)
     }
 
     companion object {
