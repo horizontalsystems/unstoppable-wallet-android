@@ -32,14 +32,17 @@ import kotlinx.serialization.Serializable
 data class PasskeyProviderAttentionSheet(val gpmPassphrase: Boolean) : HSBottomSheet() {
 
     companion object {
-        // The "[11000] Passphrase required" envelope is Play-services-styled and
-        // Google Password Manager is the only provider with a sync-passphrase
-        // vault lock. Require both markers — the error code and the passphrase
-        // word — so another provider's passphrase wording never picks up the
-        // Google-specific steps, while tolerating minor message drift.
+        // Play services' passphrase/key-retrieval error family: 11000
+        // "Passphrase required" (sync passphrase not entered) and 11014
+        // "Key retrieval required" (vault recovery pending on a new device).
+        // Both mean Google Password Manager's vault is locked and both resolve
+        // through the same Google account prompts. Requiring the code AND its
+        // wording keeps another provider's phrasing off the Google-specific
+        // steps while tolerating minor message drift.
         fun isGpmPassphrase(e: Throwable): Boolean {
             val message = e.message ?: return false
-            return message.contains("[11000]") && message.contains("passphrase", ignoreCase = true)
+            return (message.contains("[11000]") && message.contains("passphrase", ignoreCase = true)) ||
+                (message.contains("[11014]") && message.contains("key retrieval", ignoreCase = true))
         }
     }
 
