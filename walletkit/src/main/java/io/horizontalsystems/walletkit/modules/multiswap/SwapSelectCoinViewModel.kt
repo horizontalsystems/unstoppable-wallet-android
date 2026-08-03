@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.eligibleTokens
 import io.horizontalsystems.walletkit.core.sorting.SortCriterion
 import io.horizontalsystems.walletkit.core.sorting.TokenSortContext
 import io.horizontalsystems.walletkit.core.supported
+import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.balance.BalanceSorter
@@ -87,7 +88,10 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private suspend fun loadRecent(ids: List<String>): List<CoinBalanceItem> =
         withContext(Dispatchers.Default) {
             val activeWallets = App.walletManager.activeWallets
+            // recent ids are stored globally, so after an account switch they may name
+            // tokens the now-active account can't hold
             ids.mapNotNull { id -> TokenQuery.fromId(id)?.let { marketKit.token(it) } }
+                .filter { supportedByAccount(it) }
                 .map { coinBalanceItem(it, activeWallets) }
         }
 
@@ -109,8 +113,11 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             .map { coinBalanceItem(it.token, activeWallets) }
             .sortedByCriteria(BalanceSorter.VALUE_CRITERIA)
 
-        // Popular Tokens — context-aware list (built from the opposite token)
-        popular = SwapPopularTokens.build(marketKit, otherSelectedToken).map { CoinBalanceItem(it, null, null) }
+        // Popular Tokens — context-aware list (built from the opposite token), minus
+        // tokens the active account can't hold (they'd be dead bubbles)
+        popular = SwapPopularTokens.build(marketKit, otherSelectedToken)
+            .filter { supportedByAccount(it) }
+            .map { CoinBalanceItem(it, null, null) }
 
         // Top Tokens — top 25 by market cap, excluding everything in Popular and Your Tokens
         val excludedIds = (popular + yourTokens).map { it.token.tokenQuery.id }.toMutableSet()
@@ -182,6 +189,11 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 recent = recent,
             )
         }
+    }
+
+    private fun supportedByAccount(token: Token): Boolean {
+        val accountType = activeAccount?.type ?: return true
+        return token.supports(accountType) && token.blockchainType.supports(accountType)
     }
 
     private fun getFiatValue(token: Token, balance: BigDecimal?): CurrencyValue? {

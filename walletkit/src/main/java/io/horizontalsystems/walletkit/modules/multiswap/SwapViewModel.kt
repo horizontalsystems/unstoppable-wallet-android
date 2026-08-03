@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -13,6 +14,8 @@ import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
+import io.horizontalsystems.walletkit.core.supports
+import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
@@ -46,6 +49,7 @@ class SwapViewModel(
     private val marketKit: MarketKitWrapper,
     private val walletManager: WalletManager,
     private val adapterManager: IAdapterManager,
+    private val accountManager: IAccountManager,
     tokenIn: Token?,
     tokenOut: Token? = null,
     private val allowancePolicy: ISwapAllowancePolicy? = null,
@@ -187,7 +191,7 @@ class SwapViewModel(
 
     private fun resolveDefaultTokens(): Pair<Token?, Token?> {
         val lastRecord = swapRecordManager.getAll().firstOrNull()
-        return if (lastRecord != null) {
+        val (resolvedIn, resolvedOut) = if (lastRecord != null) {
             val lastIn = TokenQuery.fromId(lastRecord.tokenInUid)?.let { marketKit.token(it) }
             val lastOut = TokenQuery.fromId(lastRecord.tokenOutUid)?.let { marketKit.token(it) }
             Pair(lastIn, lastOut)
@@ -203,7 +207,20 @@ class SwapViewModel(
                 ?: marketKit.token(TokenQuery(BlockchainType.Monero, TokenType.Native))
             Pair(tokenIn, xmrToken)
         }
+
+        // The defaults above (and a swap record left by another account) may name coins the
+        // active account can never hold — e.g. BTC for a Monero-only or watch account. Show
+        // only tokens the token selector itself would offer, falling back to the account's
+        // first enabled wallet; a dead default pair reads as a broken screen.
+        val accountType = accountManager.activeAccount?.type ?: return Pair(resolvedIn, resolvedOut)
+        val tokenIn = resolvedIn?.takeIf { it.supportedBy(accountType) }
+            ?: walletManager.activeWallets.firstOrNull()?.token
+        val tokenOut = resolvedOut?.takeIf { it.supportedBy(accountType) && it != tokenIn }
+        return Pair(tokenIn, tokenOut)
     }
+
+    private fun Token.supportedBy(accountType: AccountType): Boolean =
+        supports(accountType) && blockchainType.supports(accountType)
 
     // Prefer the user's active wallet for the same coin (keeps their chosen derivation),
     // falling back to the canonical token from the popular list.
@@ -415,12 +432,13 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
-                SwapDefaultTokenService(App.marketKit, App.walletManager),
+                SwapDefaultTokenService(App.marketKit, App.walletManager, App.accountManager),
                 App.swapTermsManager,
                 App.swapRecordManager,
                 App.marketKit,
                 App.walletManager,
                 App.adapterManager,
+                App.accountManager,
                 tokenIn,
                 tokenOut,
                 allowancePolicy,
