@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.IThirdKeyboard
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.managers.MoneroMnemonicValidator
 import io.horizontalsystems.walletkit.core.managers.WordsManager
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -13,6 +12,7 @@ import io.horizontalsystems.walletkit.entities.normalizeNFKD
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.hdwalletkit.Language
+import io.horizontalsystems.monerokit.MoneroMnemonic
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 
@@ -77,17 +77,17 @@ class RestoreMnemonicViewModel(
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
         wordSuggestions = wordItemWithCursor?.let { item ->
             val word = item.word.normalizeNFKD()
-            val options = mnemonicWordList.fetchSuggestions(word) + MoneroMnemonicValidator.fetchSuggestions(word)
+            val options = mnemonicWordList.fetchSuggestions(word) + MoneroMnemonic.suggestions(word)
             RestoreMnemonicModule.WordSuggestions(item, options.distinct())
         }
     }
 
     private fun validWord(word: String): Boolean {
-        return mnemonicWordList.validWord(word, false) || MoneroMnemonicValidator.validWord(word, false)
+        return mnemonicWordList.validWord(word, false) || MoneroMnemonic.isValidWord(word, false)
     }
 
     private fun validWordPartial(word: String): Boolean {
-        return mnemonicWordList.validWord(word, true) || MoneroMnemonicValidator.validWord(word, true)
+        return mnemonicWordList.validWord(word, true) || MoneroMnemonic.isValidWord(word, true)
     }
 
     fun onToggleAdvancedOptions(enabled: Boolean) {
@@ -136,7 +136,7 @@ class RestoreMnemonicViewModel(
                 invalidWordRanges = invalidWordItems.map { it.range }
             }
             // 25 words can only be a Monero legacy seed: BIP39 tops out at 24
-            wordItems.size == MoneroMnemonicValidator.WORD_COUNT -> {
+            wordItems.size == MoneroMnemonic.WORD_COUNT -> {
                 proceedWithMoneroMnemonic()
             }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
@@ -161,14 +161,14 @@ class RestoreMnemonicViewModel(
     private fun proceedWithMoneroMnemonic() {
         val words = wordItems.map { it.word.normalizeNFKD() }
 
-        val notMoneroWords = wordItems.filter { !MoneroMnemonicValidator.validWord(it.word.normalizeNFKD(), false) }
+        val notMoneroWords = wordItems.filter { !MoneroMnemonic.isValidWord(it.word.normalizeNFKD(), false) }
         if (notMoneroWords.isNotEmpty()) {
             invalidWordRanges = notMoneroWords.map { it.range }
             return
         }
 
         try {
-            MoneroMnemonicValidator.validateChecksum(words)
+            MoneroMnemonic.validateChecksum(words)
 
             accountType = AccountType.MoneroMnemonic(words, passphrase.normalizeNFKD())
             error = null
