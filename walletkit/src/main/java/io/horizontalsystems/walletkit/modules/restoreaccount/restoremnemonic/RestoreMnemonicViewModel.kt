@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.IThirdKeyboard
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.managers.MoneroMnemonicValidator
 import io.horizontalsystems.walletkit.core.managers.WordsManager
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -57,23 +58,36 @@ class RestoreMnemonicViewModel(
 
     private fun processText() {
         wordItems = wordItems(text)
-        invalidWordItems = wordItems.filter { !mnemonicWordList.validWord(it.word.normalizeNFKD(), false) }
+        // A word may belong to the BIP39 list of the selected language or to Monero's legacy
+        // wordlist (the two are disjoint); which seed kind it is gets decided by the final
+        // word count in onProceed, so both stay unmarked while typing.
+        invalidWordItems = wordItems.filter { !validWord(it.word.normalizeNFKD()) }
 
         val wordItemWithCursor = wordItems.find {
             it.range.contains(cursorPosition - 1)
         }
 
         val invalidWordItemsExcludingCursoredPartiallyValid = when {
-            wordItemWithCursor != null && mnemonicWordList.validWord(wordItemWithCursor.word.normalizeNFKD(), true) -> {
+            wordItemWithCursor != null && validWordPartial(wordItemWithCursor.word.normalizeNFKD()) -> {
                 invalidWordItems.filter { it != wordItemWithCursor }
             }
             else -> invalidWordItems
         }
 
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
-        wordSuggestions = wordItemWithCursor?.let {
-            RestoreMnemonicModule.WordSuggestions(it, mnemonicWordList.fetchSuggestions(it.word.normalizeNFKD()))
+        wordSuggestions = wordItemWithCursor?.let { item ->
+            val word = item.word.normalizeNFKD()
+            val options = mnemonicWordList.fetchSuggestions(word) + MoneroMnemonicValidator.fetchSuggestions(word)
+            RestoreMnemonicModule.WordSuggestions(item, options.distinct())
         }
+    }
+
+    private fun validWord(word: String): Boolean {
+        return mnemonicWordList.validWord(word, false) || MoneroMnemonicValidator.validWord(word, false)
+    }
+
+    private fun validWordPartial(word: String): Boolean {
+        return mnemonicWordList.validWord(word, true) || MoneroMnemonicValidator.validWord(word, true)
     }
 
     fun onToggleAdvancedOptions(enabled: Boolean) {
@@ -121,6 +135,10 @@ class RestoreMnemonicViewModel(
             invalidWordItems.isNotEmpty() -> {
                 invalidWordRanges = invalidWordItems.map { it.range }
             }
+            // 25 words can only be a Monero legacy seed: BIP39 tops out at 24
+            wordItems.size == MoneroMnemonicValidator.WORD_COUNT -> {
+                proceedWithMoneroMnemonic()
+            }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
                 error = Translator.getString(R.string.Restore_Error_MnemonicWordCount)
             }
@@ -138,6 +156,25 @@ class RestoreMnemonicViewModel(
         }
 
         emitState()
+    }
+
+    private fun proceedWithMoneroMnemonic() {
+        val words = wordItems.map { it.word.normalizeNFKD() }
+
+        val notMoneroWords = wordItems.filter { !MoneroMnemonicValidator.validWord(it.word.normalizeNFKD(), false) }
+        if (notMoneroWords.isNotEmpty()) {
+            invalidWordRanges = notMoneroWords.map { it.range }
+            return
+        }
+
+        try {
+            MoneroMnemonicValidator.validateChecksum(words)
+
+            accountType = AccountType.MoneroMnemonic(words, passphrase.normalizeNFKD())
+            error = null
+        } catch (checksumException: Exception) {
+            error = Translator.getString(R.string.Restore_InvalidChecksum)
+        }
     }
 
     fun onSelectCoinsShown() {

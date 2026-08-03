@@ -130,6 +130,10 @@ class ManageAccountViewModel(
                 }
             }
             is AccountType.MoneroWatchAccount -> listOf()
+            // the 25-word phrase is the only exportable secret; there are no BIP32 keys behind it
+            is AccountType.MoneroMnemonic -> listOf(
+                KeyAction.RecoveryPhrase,
+            )
             // Passkey account: the key lives in the passkey; nothing to export.
             is AccountType.Passkey -> listOf()
         }

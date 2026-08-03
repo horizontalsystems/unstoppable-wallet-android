@@ -22,8 +22,14 @@ class BackupConfirmKeyViewModel(
     private var error: Throwable? = null
 
     init {
-        if (account.type is AccountType.Mnemonic) {
-            wordsIndexed = account.type.words.mapIndexed { index, s ->
+        val words = when (val type = account.type) {
+            is AccountType.Mnemonic -> type.words
+            is AccountType.MoneroMnemonic -> type.words
+            else -> null
+        }
+
+        if (words != null) {
+            wordsIndexed = words.mapIndexed { index, s ->
                 Pair(index, s)
             }
 
@@ -46,7 +52,7 @@ class BackupConfirmKeyViewModel(
         val wordsCountToGuess = when (wordsIndexed.size) {
             12 -> 2
             15, 18, 21 -> 3
-            24 -> 4
+            24, 25 -> 4
             else -> 2
         }
 

@@ -195,6 +195,22 @@ sealed class AccountType {
         }
     }
 
+    // Monero legacy 25-word (Electrum-style) mnemonic. Unlike Mnemonic it encodes a raw
+    // ed25519 spend key, so no other blockchain can be derived from it; the passphrase is
+    // wallet2's seed offset, not a BIP39 passphrase.
+    @Serializable
+    data class MoneroMnemonic(val words: List<String>, val passphrase: String) : AccountType() {
+        override fun equals(other: Any?): Boolean {
+            return other is MoneroMnemonic
+                    && words.toTypedArray().contentEquals(other.words.toTypedArray())
+                    && passphrase == other.passphrase
+        }
+
+        override fun hashCode(): Int {
+            return words.toTypedArray().contentHashCode() + passphrase.hashCode()
+        }
+    }
+
     @Serializable
     data class StellarSecretKey(val key: String) : AccountType() {
         override fun equals(other: Any?): Boolean {
@@ -313,6 +329,13 @@ sealed class AccountType {
                     Translator.getString(R.string.ManageAccount_NWordsWithPassphrase, count)
                 } else {
                     Translator.getString(R.string.ManageAccount_NWords, count)
+                }
+            }
+            is MoneroMnemonic -> {
+                if (passphrase.isNotBlank()) {
+                    Translator.getString(R.string.ManageAccount_NWordsWithPassphrase, words.size)
+                } else {
+                    Translator.getString(R.string.ManageAccount_NWords, words.size)
                 }
             }
             is BitcoinAddress -> "BTC Address"

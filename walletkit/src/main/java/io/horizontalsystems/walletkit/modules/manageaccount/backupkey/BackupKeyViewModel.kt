@@ -17,11 +17,20 @@ class BackupKeyViewModel(val account: Account) : ViewModel() {
         private set
 
     init {
-        if (account.type is AccountType.Mnemonic) {
-            wordsNumbered = account.type.words.mapIndexed { index, word ->
-                RecoveryPhraseModule.WordNumbered(word, index + 1)
+        when (val type = account.type) {
+            is AccountType.Mnemonic -> {
+                wordsNumbered = type.words.mapIndexed { index, word ->
+                    RecoveryPhraseModule.WordNumbered(word, index + 1)
+                }
+                passphrase = type.passphrase
             }
-            passphrase = account.type.passphrase
+            is AccountType.MoneroMnemonic -> {
+                wordsNumbered = type.words.mapIndexed { index, word ->
+                    RecoveryPhraseModule.WordNumbered(word, index + 1)
+                }
+                passphrase = type.passphrase
+            }
+            else -> Unit
         }
     }
 }

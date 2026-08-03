@@ -18,16 +18,27 @@ class RecoveryPhraseViewModel(account: Account) : ViewModel() {
         private set
 
     init {
-        if (account.type is AccountType.Mnemonic) {
-            words = account.type.words
-            wordsNumbered = words.mapIndexed { index, word ->
-                RecoveryPhraseModule.WordNumbered(word, index + 1)
+        when (val type = account.type) {
+            is AccountType.Mnemonic -> {
+                words = type.words
+                wordsNumbered = words.mapIndexed { index, word ->
+                    RecoveryPhraseModule.WordNumbered(word, index + 1)
+                }
+                passphrase = type.passphrase
+                seed = type.seed
             }
-            passphrase = account.type.passphrase
-            seed = account.type.seed
-        } else {
-            words = listOf()
-            seed = null
+            is AccountType.MoneroMnemonic -> {
+                words = type.words
+                wordsNumbered = words.mapIndexed { index, word ->
+                    RecoveryPhraseModule.WordNumbered(word, index + 1)
+                }
+                passphrase = type.passphrase
+                seed = null
+            }
+            else -> {
+                words = listOf()
+                seed = null
+            }
         }
     }
 

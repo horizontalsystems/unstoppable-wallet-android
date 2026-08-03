@@ -20,6 +20,7 @@ object BackupLocalModule {
     private const val BITCOIN_ADDRESS = "bitcoin_address"
     private const val HD_EXTENDED_LEY = "hd_extended_key"
     private const val MONERO_WATCH_ACCOUNT = "monero_watch_account"
+    private const val MONERO_MNEMONIC = "monero_mnemonic"
     private const val PASSKEY = "passkey"
 
     //Backup Json file data structure
@@ -83,6 +84,7 @@ object BackupLocalModule {
         is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
         is AccountType.HdExtendedKey -> HD_EXTENDED_LEY
         is AccountType.MoneroWatchAccount -> MONERO_WATCH_ACCOUNT
+        is AccountType.MoneroMnemonic -> MONERO_MNEMONIC
         is AccountType.Passkey -> PASSKEY
     }
 
@@ -110,6 +112,12 @@ object BackupLocalModule {
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
             MONERO_WATCH_ACCOUNT -> AccountType.MoneroWatchAccount.fromSerialized(String(data, Charsets.UTF_8))
+            MONERO_MNEMONIC -> {
+                val parts = String(data, Charsets.UTF_8).split("@", limit = 2)
+                val words = parts[0].split(" ")
+                val passphrase = if (parts.size > 1) parts[1] else ""
+                AccountType.MoneroMnemonic(words, passphrase)
+            }
             PASSKEY -> AccountType.Passkey(String(data, Charsets.UTF_8))
             else -> throw IllegalStateException("Unknown account type")
         }
@@ -137,6 +145,14 @@ object BackupLocalModule {
         is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
         is AccountType.MoneroWatchAccount -> accountType.serialized.toByteArray(Charsets.UTF_8)
+        is AccountType.MoneroMnemonic -> {
+            val passphrasePart = if (accountType.passphrase.isNotBlank()) {
+                "@" + accountType.passphrase
+            } else {
+                ""
+            }
+            (accountType.words.joinToString(" ") + passphrasePart).toByteArray(Charsets.UTF_8)
+        }
         is AccountType.Passkey -> accountType.credentialId.toByteArray(Charsets.UTF_8)
     }
 

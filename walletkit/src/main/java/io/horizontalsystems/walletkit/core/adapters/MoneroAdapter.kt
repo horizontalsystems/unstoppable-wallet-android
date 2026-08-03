@@ -225,6 +225,11 @@ class MoneroAdapter(
                     seed = Seed.WatchOnly(accountType.address, accountType.privateViewKey)
                 }
 
+                is AccountType.MoneroMnemonic -> {
+                    birthdayHeightStr = restoreSettings.birthdayHeight?.toString()
+                    seed = Seed.Electrum(accountType.words, accountType.passphrase)
+                }
+
                 else -> throw IllegalStateException("Unsupported account type: ${wallet.account.type.javaClass.simpleName}")
             }
 
@@ -293,6 +298,7 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
 
 fun AccountType.toMoneroSeed() = when (this) {
     is AccountType.Mnemonic -> Seed.Bip39(words, passphrase)
+    is AccountType.MoneroMnemonic -> Seed.Electrum(words, passphrase)
     else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to Monero Seed")
 }
 

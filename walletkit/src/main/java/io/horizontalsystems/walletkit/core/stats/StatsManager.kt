@@ -245,6 +245,10 @@ val AccountType.statAccountType: String
             "monero_watch_account"
         }
 
+        is AccountType.MoneroMnemonic -> {
+            if (passphrase.isEmpty()) "monero_mnemonic" else "monero_mnemonic_with_passphrase"
+        }
+
         is AccountType.HdExtendedKey -> {
             if (hdExtendedKey.isPublic) {
                 "account_x_pub_key"
