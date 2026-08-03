@@ -1799,5 +1799,5 @@
     <string name="Monero_Accounts_Description">账户是同一个门罗币钱包中的独立隔间。余额、交易、接收和发送都适用于选定的账户。在账户之间转移资金是一笔普通的链上交易，需要支付网络费用。</string>
     <string name="Passkey_ProviderAttention_Title">检查您的 Passkey 提供商</string>
     <string name="Passkey_ProviderAttention_Description">您的 Passkey 提供商无法完成该请求。打开存储您的密钥的应用或账户，完成它要求的任何登录或验证，然后重试。</string>
-    <string name="Passkey_ProviderAttention_Gpm_Description">Google 密码管理器需要先解锁才能使用密钥。打开您的设备设置 → Google → 管理您的 Google 账户，或打开 Google 密码管理器，输入密码或完成它要求的验证。然后重试。</string>
+    <string name="Passkey_ProviderAttention_Gpm_Description">Google密码管理器需要解锁才能使用密钥。\n\n1. 打开设置 → Google → 管理您的Google账户，或者更简单地，打开已登录该账户的Chrome，并查找\"验证是否为您\"或密码短语提示。输入您的同步密码短语（或在出现提示时输入旧设备的PIN或图案）。\n\n2. 或者，直接打开Google密码管理器（设置 → 密码和账户，或Chrome中的passwordmanager.google.com），如果保管库已锁定，它将显示解锁提示。\n\n3. 如果您忘记了自定义密码短语，Google提供的唯一方式是重置同步数据（Chrome设置 → \"重置同步\"），这会清除密码短语。\n\n4. 然后重试。</string>
 </resources>
