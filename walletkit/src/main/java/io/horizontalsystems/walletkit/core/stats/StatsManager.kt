@@ -246,7 +246,8 @@ val AccountType.statAccountType: String
         }
 
         is AccountType.MoneroMnemonic -> {
-            if (passphrase.isEmpty()) "monero_mnemonic" else "monero_mnemonic_with_passphrase"
+            // same blank-passphrase rule as backup serialization and description
+            if (passphrase.isBlank()) "monero_mnemonic" else "monero_mnemonic_with_passphrase"
         }
 
         is AccountType.HdExtendedKey -> {
