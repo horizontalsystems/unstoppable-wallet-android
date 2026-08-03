@@ -170,7 +170,11 @@ class RestoreMnemonicViewModel(
         try {
             MoneroMnemonic.validateChecksum(words)
 
-            accountType = AccountType.MoneroMnemonic(words, passphrase.normalizeNFKD())
+            // The passphrase is wallet2's seed offset. A whitespace-only value would derive a
+            // real offset wallet, yet local backup drops it (isNotBlank) and restores it as "",
+            // silently yielding a different wallet — collapse blank to empty so every consumer
+            // (backup, stats, description) agrees the offset is absent.
+            accountType = AccountType.MoneroMnemonic(words, passphrase.normalizeNFKD().ifBlank { "" })
             error = null
         } catch (checksumException: Exception) {
             error = Translator.getString(R.string.Restore_InvalidChecksum)
