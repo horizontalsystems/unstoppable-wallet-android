@@ -34,11 +34,15 @@ class SwapDefaultTokenService(
         // chain's native coin. See token_picker spec (Popular Tokens, Cases А/Б).
         // Entries the active account can never hold are skipped (e.g. everything but XMR for a
         // Monero-only account): the auto-pick must not name a coin the token picker itself hides.
+        // The Bitcoin fallbacks must never yield the input token itself (e.g. a BTC-only
+        // watch account, where the only active wallet IS the input token); the popular list
+        // already excludes the context token by construction.
         tokenOut = SwapPopularTokens.build(marketKit, token).firstOrNull { supportedByAccount(it) }
             ?: walletManager.activeWallets
-                .firstOrNull { it.token.blockchainType == BlockchainType.Bitcoin }
+                .firstOrNull { it.token != token && it.token.blockchainType == BlockchainType.Bitcoin }
                 ?.token
-            ?: marketKit.token(BlockchainType.Bitcoin.defaultTokenQuery)?.takeIf { supportedByAccount(it) }
+            ?: marketKit.token(BlockchainType.Bitcoin.defaultTokenQuery)
+                ?.takeIf { it != token && supportedByAccount(it) }
     }
 
     private fun supportedByAccount(token: Token): Boolean {
