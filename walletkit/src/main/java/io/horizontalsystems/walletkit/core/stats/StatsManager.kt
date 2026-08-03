@@ -214,7 +214,8 @@ val CoinAnalyticsModule.RankType.statPage: StatPage
 val AccountType.statAccountType: String
     get() = when (this) {
         is AccountType.Mnemonic -> {
-            if (passphrase.isEmpty()) "mnemonic_${words.size}" else "mnemonic_with_passphrase_${words.size}"
+            // same blank-passphrase rule as backup serialization and description
+            if (passphrase.isBlank()) "mnemonic_${words.size}" else "mnemonic_with_passphrase_${words.size}"
         }
 
         is AccountType.BitcoinAddress -> {
