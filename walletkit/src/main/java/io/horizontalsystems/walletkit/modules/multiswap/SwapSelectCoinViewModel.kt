@@ -192,7 +192,8 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     }
 
     private fun supportedByAccount(token: Token): Boolean {
-        val accountType = activeAccount?.type ?: return true
+        // read at call time: the picker can outlive an account switch
+        val accountType = App.accountManager.activeAccount?.type ?: return true
         return token.supports(accountType) && token.blockchainType.supports(accountType)
     }
 
