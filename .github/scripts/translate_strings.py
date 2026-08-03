@@ -114,6 +114,24 @@ def unescape_android(value: str) -> str:
     return value
 
 
+def response_schema(keys) -> dict:
+    """JSON schema for the translation payload — constrained decoding makes
+    invalid JSON impossible (prompt-only compliance broke on long multilingual
+    values) and pins the exact {lang: {key: str}} shape."""
+    entry = {
+        "type": "object",
+        "properties": {key: {"type": "string"} for key in keys},
+        "required": list(keys),
+        "additionalProperties": False,
+    }
+    return {
+        "type": "object",
+        "properties": {lang: entry for lang in LANGUAGES},
+        "required": list(LANGUAGES),
+        "additionalProperties": False,
+    }
+
+
 def translate_new_strings(new_strings: dict[str, str]) -> dict[str, dict[str, str]]:
     """Call Claude API. Returns {lang_code: {key: translated_value}} as plain text."""
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -148,6 +166,7 @@ No markdown fences, no explanation. Only the JSON object.
     message = client.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=16000,
+        output_config={"format": {"type": "json_schema", "schema": response_schema(new_strings.keys())}},
         messages=[{"role": "user", "content": prompt}],
     )
 
