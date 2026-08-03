@@ -217,7 +217,9 @@ def apply_translations(lang_file: str, new_translations: dict[str, str], deleted
         )
         new_entry = f'<string name="{key}">{value}</string>'
         if existing_pat.search(content):
-            content = existing_pat.sub(new_entry, content)
+            # lambda keeps new_entry literal — as a replacement template,
+            # re.sub would turn the Android \n escapes into real newlines
+            content = existing_pat.sub(lambda _: new_entry, content)
         else:
             content = content.replace("</resources>", f"    {new_entry}\n</resources>")
 
