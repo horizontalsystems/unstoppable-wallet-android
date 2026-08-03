@@ -37,7 +37,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class HSBottomSheet : HSPage(bottomSheet = true)
+abstract class HSBottomSheet(
+    // opt-in for tall sheets: open fully expanded instead of at the half stop
+    val expanded: Boolean = false,
+) : HSPage(bottomSheet = true, expandedBottomSheet = expanded)
 
 @Composable
 fun BottomSheetHeader(

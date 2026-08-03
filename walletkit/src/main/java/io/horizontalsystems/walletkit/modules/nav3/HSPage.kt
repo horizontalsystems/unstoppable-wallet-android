@@ -19,6 +19,9 @@ import java.util.UUID
 @Serializable
 abstract class HSPage(
     val bottomSheet: Boolean = false,
+    // opens the sheet at full height instead of the half-screen stop —
+    // for tall sheet content that would otherwise show partially
+    val expandedBottomSheet: Boolean = false,
     val screenshotEnabled: Boolean = true,
     var resultKey: String? = null,
     val uuid: String = UUID.randomUUID().toString(),
@@ -30,7 +33,7 @@ abstract class HSPage(
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata() = buildMap {
         if (bottomSheet) {
-            putAll(BottomSheetSceneStrategy.bottomSheet())
+            putAll(BottomSheetSceneStrategy.bottomSheet(skipPartiallyExpanded = expandedBottomSheet))
         }
 
         putAll(getAnimationMetadata())

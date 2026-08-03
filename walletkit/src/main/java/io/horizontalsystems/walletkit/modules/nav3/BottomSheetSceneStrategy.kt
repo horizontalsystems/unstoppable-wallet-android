@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.nav3
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.OverlayScene
@@ -19,6 +20,7 @@ internal class BottomSheetScene<T : Any>(
     override val overlaidEntries: List<NavEntry<T>>,
     private val entry: NavEntry<T>,
     private val modalBottomSheetProperties: ModalBottomSheetProperties,
+    private val skipPartiallyExpanded: Boolean,
     private val onBack: () -> Unit,
 ) : OverlayScene<T> {
 
@@ -27,6 +29,7 @@ internal class BottomSheetScene<T : Any>(
     override val content: @Composable (() -> Unit) = {
         ModalBottomSheet(
             onDismissRequest = onBack,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded),
             properties = modalBottomSheetProperties,
             dragHandle = null
         ) {
@@ -55,6 +58,7 @@ class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
                 overlaidEntries = entries.dropLast(1),
                 entry = lastEntry,
                 modalBottomSheetProperties = properties,
+                skipPartiallyExpanded = lastEntry.metadata[BOTTOM_SHEET_EXPANDED_KEY] == true,
                 onBack = onBack
             )
         }
@@ -67,12 +71,19 @@ class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
          *
          * @param modalBottomSheetProperties properties that should be passed to the containing
          * [ModalBottomSheet].
+         * @param skipPartiallyExpanded opens the sheet at full height instead of the
+         * half-screen stop — for tall content that would otherwise show partially.
          */
         @OptIn(ExperimentalMaterial3Api::class)
         fun bottomSheet(
-            modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties()
-        ): Map<String, Any> = mapOf(BOTTOM_SHEET_KEY to modalBottomSheetProperties)
+            modalBottomSheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(),
+            skipPartiallyExpanded: Boolean = false,
+        ): Map<String, Any> = mapOf(
+            BOTTOM_SHEET_KEY to modalBottomSheetProperties,
+            BOTTOM_SHEET_EXPANDED_KEY to skipPartiallyExpanded,
+        )
 
         internal const val BOTTOM_SHEET_KEY = "bottomsheet"
+        internal const val BOTTOM_SHEET_EXPANDED_KEY = "bottomsheet_expanded"
     }
 }
