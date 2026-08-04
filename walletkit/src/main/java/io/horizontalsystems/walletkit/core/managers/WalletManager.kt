@@ -122,7 +122,11 @@ class WalletManager(
                     trigger
                         .catch { Timber.e(it, "Chain plugin %s trigger failed", plugin.blockchainType.uid) }
                         .collect {
-                            reloadWallets(plugin.blockchainType)
+                            try {
+                                reloadWallets(plugin.blockchainType)
+                            } catch (e: Throwable) {
+                                Timber.e(e, "Reloading %s wallets failed", plugin.blockchainType.uid)
+                            }
                         }
                 }
             }

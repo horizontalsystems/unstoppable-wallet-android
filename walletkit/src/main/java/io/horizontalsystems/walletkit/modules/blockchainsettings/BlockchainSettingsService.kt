@@ -81,7 +81,11 @@ class BlockchainSettingsService(
                     trigger
                         .catch { Timber.e(it, "Chain plugin %s trigger failed", plugin.blockchainType.uid) }
                         .collect {
-                            syncBlockchainItems()
+                            try {
+                                syncBlockchainItems()
+                            } catch (e: Throwable) {
+                                Timber.e(e, "Syncing blockchain settings items failed")
+                            }
                         }
                 }
             }
