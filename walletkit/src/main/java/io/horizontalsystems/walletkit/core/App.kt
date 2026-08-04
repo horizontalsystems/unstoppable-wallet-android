@@ -323,7 +323,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         zanoNodeStorage = ZanoNodeStorage(appDatabase)
         zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
         zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
-        ChainRegistry.register(ZanoChainPlugin(zanoNodeManager, zanoKitManager))
+        ChainRegistry.register(ZanoChainPlugin({ zanoNodeManager }, { zanoKitManager }))
         zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
         coinManager = CoinManager(marketKit, walletManager)

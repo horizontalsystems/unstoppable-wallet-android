@@ -5,10 +5,13 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.factories.removeScheme
 import io.horizontalsystems.walletkit.core.factories.uriScheme
 import io.horizontalsystems.walletkit.entities.AccountType
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.math.BigInteger
@@ -25,6 +28,16 @@ import java.math.BigInteger
  *   ./gradlew :walletkit:testDebugUnitTest --tests "*ChainBehaviorParityTest*" -PupdateParityFixture=true
  */
 class ChainBehaviorParityTest {
+
+    @Before
+    fun registerChainPlugins() {
+        // Mirrors the registration in App.onCreate. Runtime managers are never touched by
+        // the pure hooks this test exercises.
+        ChainRegistry.register(ZanoChainPlugin(
+            { error("ZanoNodeManager is not available in unit tests") },
+            { error("ZanoKitManager is not available in unit tests") },
+        ))
+    }
 
     private val sampleTokenTypes: List<Pair<String, TokenType>> = listOf(
         "Native" to TokenType.Native,

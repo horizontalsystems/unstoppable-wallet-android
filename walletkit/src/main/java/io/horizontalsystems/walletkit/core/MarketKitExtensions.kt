@@ -21,6 +21,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.marketkit.models.TopPlatform
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.nftkit.models.NftType
 import java.math.BigDecimal
 
@@ -667,8 +668,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
         BlockchainType.Monero,
-        BlockchainType.Zano,
-    )
+    ) + ChainRegistry.all.map { it.blockchainType }
 
 val CoinPrice.diff: BigDecimal?
     get() = when (App.priceManager.priceChangeInterval) {
