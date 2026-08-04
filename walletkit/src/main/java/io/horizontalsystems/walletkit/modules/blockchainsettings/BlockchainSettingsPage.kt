@@ -28,7 +28,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.solananetwork.SolanaNetworkPage
 import io.horizontalsystems.walletkit.modules.thorchainnetwork.ThorchainNetworkPage
-import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
 import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
@@ -148,12 +147,12 @@ private fun onClick(
             )
         }
 
-        is BlockchainSettingsModule.BlockchainItem.Zano -> {
-            navigation.slideFromBottom(ZanoNetworkPage)
+        is BlockchainSettingsModule.BlockchainItem.Chain -> {
+            navigation.slideFromBottom(item.blockchainItem.page)
 
             stat(
                 page = StatPage.BlockchainSettings,
-                event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
+                event = item.blockchainItem.statEvent
             )
         }
 

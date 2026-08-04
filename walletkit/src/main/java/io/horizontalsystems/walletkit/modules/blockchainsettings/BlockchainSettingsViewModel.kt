@@ -58,12 +58,13 @@ class BlockchainSettingsViewModel(
                         blockchainItem = item
                     )
                 }
-            val zanoItems = blockchainItems
-                .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Zano>()
+            val chainItems = blockchainItems
+                .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Chain>()
+                .filter { it.btcLike }
                 .map { item ->
                     BlockchainSettingsModule.BlockchainViewItem(
                         title = item.blockchain.name,
-                        subtitle = item.node.name,
+                        subtitle = item.subtitle,
                         imageUrl = item.blockchain.type.imageUrl,
                         blockchainItem = item
                     )
@@ -78,7 +79,7 @@ class BlockchainSettingsViewModel(
                         blockchainItem = item
                     )
                 }
-            btcLikeChains = (btcItems + moneroItems + zanoItems + zcashItems).sortedBy { it.blockchainItem.blockchain.type.order }
+            btcLikeChains = (btcItems + moneroItems + chainItems + zcashItems).sortedBy { it.blockchainItem.blockchain.type.order }
 
             otherChains = blockchainItems
                 .filterNot { it is BlockchainSettingsModule.BlockchainItem.Btc }
@@ -102,6 +103,15 @@ class BlockchainSettingsViewModel(
                             imageUrl = item.blockchain.type.imageUrl,
                             blockchainItem = item
                         )
+                        is BlockchainSettingsModule.BlockchainItem.Chain -> if (item.btcLike) null else {
+                            BlockchainSettingsModule.BlockchainViewItem(
+                                title = item.blockchain.name,
+                                subtitle = item.subtitle,
+                                imageUrl = item.blockchain.type.imageUrl,
+                                blockchainItem = item
+                            )
+                        }
+
                         else -> null
                     }
                 }

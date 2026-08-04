@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
@@ -79,6 +80,9 @@ interface ChainPlugin {
     /** The chain's send screen. Default renders nothing (matches the previous silent else). */
     @Composable
     fun SendScreen(args: ChainSendScreenArgs) = Unit
+
+    /** Row shown in Settings > Blockchain Settings, or null to omit the chain there. */
+    fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? = null
 }
 
 /** Everything SendPage provides to a chain's send screen. */

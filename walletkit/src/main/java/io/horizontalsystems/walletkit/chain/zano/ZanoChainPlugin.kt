@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.statusInfo
+import io.horizontalsystems.walletkit.core.stats.StatEvent
+import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.send.zano.SendZanoModule
 import io.horizontalsystems.walletkit.modules.send.zano.SendZanoScreen
@@ -69,6 +71,18 @@ class ZanoChainPlugin(
     override fun statusInfo(): Map<String, Any>? = zanoKitManager().statusInfo
 
     override fun networkSettingsPage(): HSPage = ZanoNetworkPage
+
+    override fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? {
+        val nodeManager = zanoNodeManager()
+        val blockchain = nodeManager.blockchain ?: return null
+        return BlockchainSettingsModule.BlockchainItem.Chain(
+            blockchain = blockchain,
+            subtitle = nodeManager.currentNode.name,
+            btcLike = true,
+            page = ZanoNetworkPage,
+            statEvent = StatEvent.OpenBlockchainSettingsCryptoNote(blockchain.uid),
+        )
+    }
 
     @Composable
     override fun SendScreen(args: ChainSendScreenArgs) {

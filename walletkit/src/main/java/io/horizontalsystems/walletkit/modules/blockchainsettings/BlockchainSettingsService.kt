@@ -7,7 +7,7 @@ import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
-import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -26,7 +26,6 @@ class BlockchainSettingsService(
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
-    private val zanoNodeManager: ZanoNodeManager,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val marketKit: MarketKitWrapper
 ) {
@@ -74,9 +73,13 @@ class BlockchainSettingsService(
                 syncBlockchainItems()
             }
         }
-        coroutineScope.launch {
-            zanoNodeManager.currentNodeUpdatedFlow.collect {
-                syncBlockchainItems()
+        ChainRegistry.all.forEach { plugin ->
+            plugin.walletReloadTrigger?.let { trigger ->
+                coroutineScope.launch {
+                    trigger.collect {
+                        syncBlockchainItems()
+                    }
+                }
             }
         }
         coroutineScope.launch {
@@ -126,17 +129,14 @@ class BlockchainSettingsService(
             moneroBlockchainItems.add(BlockchainItem.Monero(it, moneroNodeManager.currentNode))
         }
 
-        val zanoBlockchainItems = mutableListOf<BlockchainItem>()
-        zanoNodeManager.blockchain?.let {
-            zanoBlockchainItems.add(BlockchainItem.Zano(it, zanoNodeManager.currentNode))
-        }
+        val chainBlockchainItems = ChainRegistry.all.mapNotNull { it.blockchainSettingsItem() }
 
         val zcashBlockchainItems = mutableListOf<BlockchainItem>()
         zcashEndpointManager.blockchain?.let {
             zcashBlockchainItems.add(BlockchainItem.Zcash(it, zcashEndpointManager.currentEndpoint))
         }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + thorchainBlockchainItems + moneroBlockchainItems + zanoBlockchainItems + zcashBlockchainItems).sortedBy { it.order }
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + thorchainBlockchainItems + moneroBlockchainItems + chainBlockchainItems + zcashBlockchainItems).sortedBy { it.order }
     }
 
 }
