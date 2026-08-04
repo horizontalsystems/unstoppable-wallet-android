@@ -679,7 +679,13 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             // wallet syncs through it without opening the node screen. The Monero adapter creation
             // is deferred (MoneroNodeManager.isResolvingFastestNode) until this completes; then a
             // single non-churning re-init creates it once with the fastest node already selected.
-            ChainRegistry.all.forEach { it.onAppStart() }
+            ChainRegistry.all.forEach { plugin ->
+                try {
+                    plugin.onAppStart()
+                } catch (e: Throwable) {
+                    Timber.e(e, "Chain plugin %s onAppStart failed", plugin.blockchainType.uid)
+                }
+            }
             walletManager.refreshActiveWallets()
         }
 
