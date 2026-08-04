@@ -8,8 +8,14 @@ import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.statusInfo
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
+import io.horizontalsystems.walletkit.modules.send.zano.SendZanoModule
+import io.horizontalsystems.walletkit.modules.send.zano.SendZanoScreen
+import io.horizontalsystems.walletkit.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
@@ -63,4 +69,20 @@ class ZanoChainPlugin(
     override fun statusInfo(): Map<String, Any>? = zanoKitManager().statusInfo
 
     override fun networkSettingsPage(): HSPage = ZanoNetworkPage
+
+    @Composable
+    override fun SendScreen(args: ChainSendScreenArgs) {
+        val factory = SendZanoModule.Factory(args.wallet, args.address, args.hideAddress)
+        val sendZanoViewModel = viewModel<SendZanoViewModel>(factory = factory)
+        SendZanoScreen(
+            args.title,
+            args.navigation,
+            sendZanoViewModel,
+            args.amountInputModeViewModel,
+            args.sendEntryPointDestId,
+            args.amount,
+            args.memo,
+            riskyAddress = args.riskyAddress,
+        )
+    }
 }

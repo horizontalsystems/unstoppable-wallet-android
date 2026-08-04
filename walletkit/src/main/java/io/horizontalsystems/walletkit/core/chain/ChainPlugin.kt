@@ -6,12 +6,18 @@ import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
+import androidx.compose.runtime.Composable
+import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
+import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import kotlinx.coroutines.flow.Flow
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.Date
+import kotlin.reflect.KClass
 
 /**
  * Per-blockchain extension point. Optional chains implement this and register in
@@ -69,4 +75,22 @@ interface ChainPlugin {
 
     /** The chain's network/node settings page, opened from sync errors and settings. */
     fun networkSettingsPage(): HSPage? = null
+
+    /** The chain's send screen. Default renders nothing (matches the previous silent else). */
+    @Composable
+    fun SendScreen(args: ChainSendScreenArgs) = Unit
 }
+
+/** Everything SendPage provides to a chain's send screen. */
+class ChainSendScreenArgs(
+    val wallet: Wallet,
+    val title: String,
+    val navigation: HSNavigation,
+    val amountInputModeViewModel: AmountInputModeViewModel,
+    val sendEntryPointDestId: KClass<out HSPage>,
+    val address: Address,
+    val amount: BigDecimal?,
+    val memo: String?,
+    val hideAddress: Boolean,
+    val riskyAddress: Boolean,
+)

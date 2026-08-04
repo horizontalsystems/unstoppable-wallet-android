@@ -34,9 +34,8 @@ import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronModule
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoModule
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoScreen
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoViewModel
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashViewModel
@@ -214,22 +213,22 @@ data class SendPage(val input: Input) : HSPage() {
                 )
             }
 
-            BlockchainType.Zano -> {
-                val factory = SendZanoModule.Factory(wallet, address, hideAddress)
-                val sendZanoViewModel = viewModel<SendZanoViewModel>(factory = factory)
-                SendZanoScreen(
-                    title,
-                    navigation,
-                    sendZanoViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId,
-                    amount,
-                    memo,
-                    riskyAddress = riskyAddress
+            else -> {
+                ChainRegistry[wallet.token.blockchainType]?.SendScreen(
+                    ChainSendScreenArgs(
+                        wallet = wallet,
+                        title = title,
+                        navigation = navigation,
+                        amountInputModeViewModel = amountInputModeViewModel,
+                        sendEntryPointDestId = sendEntryPointDestId,
+                        address = address,
+                        amount = amount,
+                        memo = memo,
+                        hideAddress = hideAddress,
+                        riskyAddress = riskyAddress,
+                    )
                 )
             }
-
-            else -> {}
         }
     }
 
