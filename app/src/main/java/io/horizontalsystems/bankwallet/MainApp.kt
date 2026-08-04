@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 
@@ -12,4 +14,8 @@ import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 class MainApp : App() {
     override fun createAppConfigProvider(localStorage: ILocalStorage): IAppConfigProvider =
         AppConfigProvider(localStorage)
+
+    override fun registerChainPlugins() {
+        ChainRegistry.register(ZanoChainPlugin({ App.zanoNodeManager }, { App.backgroundManager }))
+    }
 }

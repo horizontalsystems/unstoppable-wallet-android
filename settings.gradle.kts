@@ -20,6 +20,7 @@ rootProject.name = "Unstoppable"
 
 include(":app")
 include(":walletkit")
+include(":walletkit-chain-zano")
 include(":components:icons")
 include(":components:chartview")
 include(":subscriptions-core")

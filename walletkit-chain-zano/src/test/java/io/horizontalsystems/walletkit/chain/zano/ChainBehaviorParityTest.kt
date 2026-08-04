@@ -1,14 +1,30 @@
-package io.horizontalsystems.walletkit.core
+package io.horizontalsystems.walletkit.chain.zano
 
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.blockTime
+import io.horizontalsystems.walletkit.core.brandColor
+import io.horizontalsystems.walletkit.core.chainId
+import io.horizontalsystems.walletkit.core.defaultTokenQuery
+import io.horizontalsystems.walletkit.core.description
 import io.horizontalsystems.walletkit.core.factories.removeScheme
 import io.horizontalsystems.walletkit.core.factories.uriScheme
+import io.horizontalsystems.walletkit.core.feePriceScale
+import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.walletkit.core.isSupported
+import io.horizontalsystems.walletkit.core.nativeTokenQueries
+import io.horizontalsystems.walletkit.core.order
+import io.horizontalsystems.walletkit.core.protocolType
+import io.horizontalsystems.walletkit.core.restoreSettingTypes
+import io.horizontalsystems.walletkit.core.supported
+import io.horizontalsystems.walletkit.core.supportedNftTypes
+import io.horizontalsystems.walletkit.core.supports
+import io.horizontalsystems.walletkit.core.title
+import io.horizontalsystems.walletkit.core.tokenIconPlaceholder
 import io.horizontalsystems.walletkit.entities.AccountType
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -35,7 +51,7 @@ class ChainBehaviorParityTest {
         // the pure hooks this test exercises.
         ChainRegistry.register(ZanoChainPlugin(
             { error("ZanoNodeManager is not available in unit tests") },
-            { error("ZanoKitManager is not available in unit tests") },
+            { error("BackgroundManager is not available in unit tests") },
         ))
     }
 

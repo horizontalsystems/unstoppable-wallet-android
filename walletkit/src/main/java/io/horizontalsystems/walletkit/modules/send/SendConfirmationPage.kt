@@ -17,8 +17,6 @@ import io.horizontalsystems.walletkit.modules.send.ton.SendTonConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
@@ -111,21 +109,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 )
             }
 
-            Type.Zano -> {
-                val sendZanoViewModel = navigation.viewModelForScreen<SendZanoViewModel>(SendPage::class)
-
-                SendZanoConfirmationScreen(
-                    navigation,
-                    sendZanoViewModel,
-                    input.sendEntryPointDestId
-                )
-            }
         }
     }
 
     @Serializable
     enum class Type {
-        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Thorchain, Monero, Zano
+        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Thorchain, Monero
     }
 
     @Serializable

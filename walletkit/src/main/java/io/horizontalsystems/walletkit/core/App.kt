@@ -16,7 +16,6 @@ import coil.decode.SvgDecoder
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.CoreApp
 import io.horizontalsystems.walletkit.ICoreApp
-import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.factories.AccountFactory
 import io.horizontalsystems.walletkit.core.factories.AdapterFactory
@@ -82,7 +81,6 @@ import io.horizontalsystems.walletkit.core.managers.WalletActivator
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.managers.WalletStorage
 import io.horizontalsystems.walletkit.core.managers.WordsManager
-import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
@@ -213,7 +211,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var moneroNodeStorage: MoneroNodeStorage
         lateinit var zanoNodeStorage: ZanoNodeStorage
         lateinit var zanoNodeManager: ZanoNodeManager
-        lateinit var zanoKitManager: ZanoKitManager
         lateinit var zcashEndpointStorage: ZcashEndpointStorage
         lateinit var zcashEndpointManager: ZcashLightWalletEndpointManager
         lateinit var nftMetadataManager: NftMetadataManager
@@ -249,6 +246,13 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
      * Application in :app (which owns the BuildConfig-backed AppConfigProvider).
      */
     protected abstract fun createAppConfigProvider(localStorage: ILocalStorage): IAppConfigProvider
+
+    /**
+     * Registers optional-chain plugins into [ChainRegistry]. Called during onCreate after
+     * core storages/managers are ready but before adapters and wallet loading start.
+     * Subclasses register the chains their app ships (e.g. ZanoChainPlugin).
+     */
+    protected open fun registerChainPlugins() = Unit
 
     override fun onCreate() {
         super.onCreate()
@@ -322,8 +326,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         moneroNodeManager = MoneroNodeManager(this, blockchainSettingsStorage, moneroNodeStorage, marketKit)
         zanoNodeStorage = ZanoNodeStorage(appDatabase)
         zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
-        zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
-        ChainRegistry.register(ZanoChainPlugin({ zanoNodeManager }, { zanoKitManager }))
+        registerChainPlugins()
         zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
         coinManager = CoinManager(marketKit, walletManager)

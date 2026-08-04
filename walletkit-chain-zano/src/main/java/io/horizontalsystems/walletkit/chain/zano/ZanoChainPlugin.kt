@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
+import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.App
@@ -41,20 +42,25 @@ import java.util.Date
  */
 class ZanoChainPlugin(
     private val zanoNodeManager: () -> ZanoNodeManager,
-    private val zanoKitManager: () -> ZanoKitManager,
+    private val backgroundManager: () -> BackgroundManager,
 ) : ChainPlugin {
+
+    // Created on first use: before any Zano wallet exists the kit manager's node/background
+    // subscriptions are no-ops, so lazy construction preserves startup behavior.
+    private val kitManager by lazy { ZanoKitManager(zanoNodeManager(), backgroundManager()) }
+
 
     override val blockchainType: BlockchainType = BlockchainType.Zano
 
     override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter =
         ZanoAdapter.create(
             wallet = wallet,
-            zanoKitManager = zanoKitManager(),
+            zanoKitManager = kitManager,
             restoreSettings = restoreSettings,
         )
 
     override fun unlink(account: Account) {
-        zanoKitManager().unlink(account)
+        kitManager.unlink(account)
     }
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerZano())
@@ -75,7 +81,7 @@ class ZanoChainPlugin(
     override val walletReloadTrigger: Flow<*>
         get() = zanoNodeManager().currentNodeUpdatedFlow
 
-    override fun statusInfo(): Map<String, Any>? = zanoKitManager().statusInfo
+    override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 
     override fun networkSettingsPage(): HSPage = ZanoNetworkPage
 

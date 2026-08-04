@@ -175,7 +175,6 @@ dependencies {
 
     // Wallet Kits
     api(libs.kit.monero)
-    api(libs.kit.zano)
     api(libs.kit.stellar)
     api(libs.kit.ton)
     api(libs.kit.bitcoin)
