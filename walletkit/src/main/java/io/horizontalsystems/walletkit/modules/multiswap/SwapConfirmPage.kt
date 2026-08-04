@@ -32,6 +32,7 @@ import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.CurrencyValue
@@ -83,10 +84,14 @@ import java.math.BigDecimal
 import java.util.Locale
 
 @Serializable
-data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {
+data class SwapConfirmPage(
+    val parentScreenContentKey: String,
+    // serialized with the page so an external recipient survives process recreation
+    val initialRecipient: Address? = null,
+) : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        SwapConfirmScreen(navigation, parentScreenContentKey, contentKey())
+        SwapConfirmScreen(navigation, parentScreenContentKey, contentKey(), initialRecipient)
     }
 
     data class Result(val success: Boolean)
@@ -96,11 +101,12 @@ data class SwapConfirmPage(val parentScreenContentKey: String) : HSPage() {
 fun SwapConfirmScreen(
     navigation: HSNavigation,
     parentScreenContentKey: String,
-    screenContentKey: String
+    screenContentKey: String,
+    pageRecipient: Address? = null,
 ) {
     val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
-    val initialRecipient = remember { swapViewModel.externalRecipient }
+    val initialRecipient = remember { pageRecipient ?: swapViewModel.externalRecipient }
 
     val viewModel = viewModel<SwapConfirmViewModel>(
         initializer = SwapConfirmViewModel.init(currentQuote, initialRecipient)

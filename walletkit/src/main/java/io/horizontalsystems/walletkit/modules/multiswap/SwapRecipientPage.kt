@@ -24,7 +24,9 @@ data class SwapRecipientPage(val input: Input) : HSPage() {
         val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(input.parentScreenContentKey)
 
         val openConfirmation = navigation.slideFromRightForResult<SwapConfirmPage.Result>(
-            { SwapConfirmPage(input.parentScreenContentKey) }
+            // recipient rides in the page input so it survives process recreation
+            // (the parent view model's copy is in-memory only)
+            { SwapConfirmPage(input.parentScreenContentKey, swapViewModel.externalRecipient) }
         ) { result ->
             if (result.success) {
                 // the confirmation popped itself — drop this page too so the user
