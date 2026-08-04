@@ -5,6 +5,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
+import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.entities.Address
@@ -91,9 +92,54 @@ interface ChainPlugin {
      */
     suspend fun swapDestinationAddress(account: Account): String? = null
 
+    /** Startup work after core managers are ready (e.g. Monero fastest-node auto-select). */
+    suspend fun onAppStart() = Unit
+
+    /** True when the chain replaces the generic receive screen with [ReceiveScreen]. */
+    val hasReceiveScreen: Boolean get() = false
+
+    /** Chain-specific receive screen; only called when [hasReceiveScreen] is true. */
+    @Composable
+    fun ReceiveScreen(navigation: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) = Unit
+
+    /** Extra cells on the token balance screen (e.g. Monero account picker). */
+    @Composable
+    fun TokenBalanceExtraCells(wallet: Wallet, navigation: HSNavigation) = Unit
+
+    /** Validates a watch-account private view key against an address; throws when invalid. */
+    fun validateWatchViewKey(viewKey: String, address: String) {
+        throw UnsupportedOperationException("watch accounts not supported")
+    }
+
+    /** Word suggestions for the chain's own mnemonic scheme (e.g. Monero 25-word legacy). */
+    fun altMnemonicSuggestions(word: String): List<String> = emptyList()
+
+    /** Whether [word] belongs to the chain's own mnemonic word list. */
+    fun isAltMnemonicWord(word: String, partial: Boolean): Boolean = false
+
+    /** Word count identifying the chain's own mnemonic scheme, or null if none. */
+    val altMnemonicWordCount: Int? get() = null
+
+    /** Builds the account for the chain's own mnemonic scheme; null = invalid checksum. */
+    fun buildAltMnemonicAccount(words: List<String>, passphrase: String): AccountType? = null
+
+    /** Rows contributed to the manage-account private keys screen. */
+    fun privateKeyRows(account: Account): List<ChainKeyRow> = emptyList()
+
+    /** Rows contributed to the manage-account public keys screen. */
+    fun publicKeyRows(account: Account): List<ChainKeyRow> = emptyList()
+
     /** Send-transaction service used by multiswap/OpenCryptoPay confirm flows. */
     fun sendTransactionService(token: Token): AbstractSendTransactionService? = null
 }
+
+/** A row on the manage-account private/public keys screens, navigating to a chain page. */
+class ChainKeyRow(
+    val titleRes: Int,
+    val descriptionRes: Int,
+    val page: HSPage,
+    val statPage: io.horizontalsystems.walletkit.core.stats.StatPage,
+)
 
 /** Everything SendPage provides to a chain's send screen. */
 class ChainSendScreenArgs(

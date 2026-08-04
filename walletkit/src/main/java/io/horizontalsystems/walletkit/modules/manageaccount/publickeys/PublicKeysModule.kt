@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey
-import io.horizontalsystems.walletkit.modules.manageaccount.showmonerokey.ShowMoneroKeyModule.MoneroKeys
+import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 object PublicKeysModule {
@@ -21,7 +21,7 @@ object PublicKeysModule {
         val evmAddress: String? = null,
         val tronAddress: String? = null,
         val extendedPublicKey: ExtendedPublicKey? = null,
-        val moneroKeys: MoneroKeys? = null
+        val chainKeyRows: List<ChainKeyRow> = emptyList()
     )
 
     data class ExtendedPublicKey(

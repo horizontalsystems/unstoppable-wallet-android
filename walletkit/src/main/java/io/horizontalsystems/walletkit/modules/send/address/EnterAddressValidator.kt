@@ -26,7 +26,6 @@ import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.stellarkit.Network as StellarNetwork
 import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.room.StellarAsset
@@ -164,11 +163,6 @@ class ThorchainAddressValidator(private val token: Token) : EnterAddressValidato
     }
 }
 
-class MoneroAddressValidator() : EnterAddressValidator {
-    override suspend fun validate(address: Address) {
-        MoneroKit.validateAddress(address.hex)
-    }
-}
 
 class TronAddressValidator(
     private val token: Token,

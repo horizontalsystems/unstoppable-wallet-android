@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.adapters.DashAdapter
 import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
-import io.horizontalsystems.walletkit.core.adapters.toMoneroSeed
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.core.isEvm
@@ -23,7 +22,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderActi
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -159,12 +157,6 @@ object SwapHelper {
 
                 BlockchainType.Ton -> {
                     App.tonKitManager.getAddress(account.type)
-                }
-
-                BlockchainType.Monero -> {
-                    withContext(Dispatchers.IO) {
-                        MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
-                    }
                 }
 
                 BlockchainType.Zcash -> cachedZcashAddress(account.id, zcashAddressCache, zcashAddressMutex) {

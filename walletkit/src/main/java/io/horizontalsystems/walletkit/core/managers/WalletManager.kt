@@ -98,7 +98,6 @@ class WalletManager(
 
     fun start(
         restoreSettingsManager: RestoreSettingsManager,
-        moneroNodeManager: MoneroNodeManager,
         zcashEndpointManager: ZcashLightWalletEndpointManager,
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
@@ -109,11 +108,6 @@ class WalletManager(
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
                 reloadWallets(blockchainType)
-            }
-        }
-        coroutineScope.launch {
-            moneroNodeManager.currentNodeUpdatedFlow.collect {
-                reloadWallets(BlockchainType.Monero)
             }
         }
         ChainRegistry.all.forEach { plugin ->

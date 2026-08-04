@@ -4,7 +4,8 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
-import io.horizontalsystems.monerokit.NodePingResult
+import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.NodePingResult
+import io.horizontalsystems.monerokit.NodePingResult as KitNodePingResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -114,8 +115,8 @@ class MoneroNetworkViewModel(
             return PingState.Unreachable
         }
         val level = when {
-            result.responseTime <= NodePingResult.PING_GOOD -> PingState.Level.Good
-            result.responseTime <= NodePingResult.PING_MEDIUM -> PingState.Level.Medium
+            result.responseTime <= KitNodePingResult.PING_GOOD -> PingState.Level.Good
+            result.responseTime <= KitNodePingResult.PING_MEDIUM -> PingState.Level.Medium
             else -> PingState.Level.Slow
         }
         return PingState.Reachable(result.responseTime.toInt(), level)

@@ -17,7 +17,7 @@ import io.horizontalsystems.walletkit.entities.tokenType
 import io.horizontalsystems.walletkit.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -150,7 +150,7 @@ class WatchAddressViewModel(
         emitState()
 
         try {
-            MoneroKit.validatePrivateViewKey(key, address.hex)
+            ChainRegistry[BlockchainType.Monero]?.validateWatchViewKey(key, address.hex)
             viewKeyState = DataState.Success(key)
             viewKey = key
         } catch (ex: Exception) {

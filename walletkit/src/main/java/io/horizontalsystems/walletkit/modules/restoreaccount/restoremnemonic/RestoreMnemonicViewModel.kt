@@ -12,7 +12,7 @@ import io.horizontalsystems.walletkit.entities.normalizeNFKD
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.hdwalletkit.Language
-import io.horizontalsystems.monerokit.MoneroMnemonic
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 
@@ -77,17 +77,17 @@ class RestoreMnemonicViewModel(
         invalidWordRanges = invalidWordItemsExcludingCursoredPartiallyValid.map { it.range }
         wordSuggestions = wordItemWithCursor?.let { item ->
             val word = item.word.normalizeNFKD()
-            val options = mnemonicWordList.fetchSuggestions(word) + MoneroMnemonic.suggestions(word)
+            val options = mnemonicWordList.fetchSuggestions(word) + ChainRegistry.all.flatMap { it.altMnemonicSuggestions(word) }
             RestoreMnemonicModule.WordSuggestions(item, options.distinct())
         }
     }
 
     private fun validWord(word: String): Boolean {
-        return mnemonicWordList.validWord(word, false) || MoneroMnemonic.isValidWord(word, false)
+        return mnemonicWordList.validWord(word, false) || ChainRegistry.all.any { it.isAltMnemonicWord(word, false) }
     }
 
     private fun validWordPartial(word: String): Boolean {
-        return mnemonicWordList.validWord(word, true) || MoneroMnemonic.isValidWord(word, true)
+        return mnemonicWordList.validWord(word, true) || ChainRegistry.all.any { it.isAltMnemonicWord(word, true) }
     }
 
     fun onToggleAdvancedOptions(enabled: Boolean) {
@@ -135,9 +135,9 @@ class RestoreMnemonicViewModel(
             invalidWordItems.isNotEmpty() -> {
                 invalidWordRanges = invalidWordItems.map { it.range }
             }
-            // 25 words can only be a Monero legacy seed: BIP39 tops out at 24
-            wordItems.size == MoneroMnemonic.WORD_COUNT -> {
-                proceedWithMoneroMnemonic()
+            // 25 words can only be a chain-specific legacy seed (Monero): BIP39 tops out at 24
+            ChainRegistry.all.any { it.altMnemonicWordCount == wordItems.size } -> {
+                proceedWithAltMnemonic()
             }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
                 error = Translator.getString(R.string.Restore_Error_MnemonicWordCount)
@@ -158,25 +158,21 @@ class RestoreMnemonicViewModel(
         emitState()
     }
 
-    private fun proceedWithMoneroMnemonic() {
+    private fun proceedWithAltMnemonic() {
         val words = wordItems.map { it.word.normalizeNFKD() }
+        val plugin = ChainRegistry.all.firstOrNull { it.altMnemonicWordCount == words.size } ?: return
 
-        val notMoneroWords = wordItems.filter { !MoneroMnemonic.isValidWord(it.word.normalizeNFKD(), false) }
-        if (notMoneroWords.isNotEmpty()) {
-            invalidWordRanges = notMoneroWords.map { it.range }
+        val invalidForChain = wordItems.filter { !plugin.isAltMnemonicWord(it.word.normalizeNFKD(), false) }
+        if (invalidForChain.isNotEmpty()) {
+            invalidWordRanges = invalidForChain.map { it.range }
             return
         }
 
-        try {
-            MoneroMnemonic.validateChecksum(words)
-
-            // The passphrase is wallet2's seed offset. A whitespace-only value would derive a
-            // real offset wallet, yet local backup drops it (isNotBlank) and restores it as "",
-            // silently yielding a different wallet — collapse blank to empty so every consumer
-            // (backup, stats, description) agrees the offset is absent.
-            accountType = AccountType.MoneroMnemonic(words, passphrase.normalizeNFKD().ifBlank { "" })
+        val account = plugin.buildAltMnemonicAccount(words, passphrase.normalizeNFKD())
+        if (account != null) {
+            accountType = account
             error = null
-        } catch (checksumException: Exception) {
+        } else {
             error = Translator.getString(R.string.Restore_InvalidChecksum)
         }
     }

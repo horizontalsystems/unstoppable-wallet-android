@@ -1,7 +1,7 @@
 package io.horizontalsystems.walletkit.modules.enablecoin.restoresettings
 
 import io.horizontalsystems.walletkit.core.Clearable
-import io.horizontalsystems.walletkit.core.managers.MoneroBirthdayProvider
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
@@ -15,8 +15,7 @@ import io.reactivex.subjects.PublishSubject
 
 class RestoreSettingsService(
     private val restoreSettingsManager: RestoreSettingsManager,
-    private val zcashBirthdayProvider: ZcashBirthdayProvider,
-    private val moneroBirthdayProvider: MoneroBirthdayProvider
+    private val zcashBirthdayProvider: ZcashBirthdayProvider
 ) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
@@ -58,7 +57,7 @@ class RestoreSettingsService(
         settings.birthdayHeight = if (config.restoreAsNew) {
             when (token.blockchainType) {
                 BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
-                BlockchainType.Monero -> moneroBirthdayProvider.restoreHeightForNewWallet()
+                BlockchainType.Monero -> ChainRegistry[BlockchainType.Monero]?.newWalletBirthdayHeight()
                 else -> null
             }
         } else {

@@ -12,7 +12,7 @@ import io.horizontalsystems.walletkit.core.eligibleTokens
 import io.horizontalsystems.walletkit.core.isDefault
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
-import io.horizontalsystems.walletkit.core.managers.MoneroBirthdayProvider
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
@@ -40,7 +40,6 @@ class ReceiveTokenSelectViewModel(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val zcashBirthdayProvider: ZcashBirthdayProvider,
-    private val moneroBirthdayProvider: MoneroBirthdayProvider,
     private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
     private var fullCoins: List<FullCoin> = listOf()
@@ -197,7 +196,7 @@ class ReceiveTokenSelectViewModel(
 
     private fun getBirthdayHeightForNewWallet(blockchainType: BlockchainType): Long? = when (blockchainType) {
         BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
-        BlockchainType.Monero -> moneroBirthdayProvider.restoreHeightForNewWallet()
+        BlockchainType.Monero -> ChainRegistry[BlockchainType.Monero]?.newWalletBirthdayHeight()
         else -> null
     }
 
@@ -247,7 +246,6 @@ class ReceiveTokenSelectViewModel(
                 App.currencyManager,
                 App.marketKit,
                 App.zcashBirthdayProvider,
-                App.moneroBirthdayProvider,
                 App.restoreSettingsManager
             ) as T
         }

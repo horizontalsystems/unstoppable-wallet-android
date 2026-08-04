@@ -33,7 +33,6 @@ import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
-import io.horizontalsystems.walletkit.modules.send.SendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.SendPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.UtxoCell
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
@@ -244,10 +243,5 @@ private fun openConfirm(
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    navigation.slideFromRight(
-        SendConfirmationPage(SendConfirmationPage.Input(
-            SendConfirmationPage.Type.Monero,
-            sendEntryPointDestId
-        ))
-    )
+    navigation.slideFromRight(SendMoneroConfirmationPage(sendEntryPointDestId))
 }

@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.adapters.BaseTonAdapter
 import io.horizontalsystems.walletkit.core.adapters.BitcoinBaseAdapter
-import io.horizontalsystems.walletkit.core.adapters.MoneroAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
@@ -203,13 +202,6 @@ class AppStatusViewModel(
                 }
             }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Monero }
-            ?.let { wallet ->
-                adapterManager.getAdapterForWallet<MoneroAdapter>(wallet)?.let { adapter ->
-                    blockchainStatus["Monero"] = adapter.statusInfo
-                }
-            }
-
         ChainRegistry.all.forEach { plugin ->
             plugin.statusInfo()?.let { statusInfo ->
                 blockchainStatus[plugin.blockchainType.title] = statusInfo
@@ -283,15 +275,6 @@ class AppStatusViewModel(
                 evmBlockchainManager.getEvmKitManager(blockchain.type).statusInfo?.let { statusInfo ->
                     val title = if (blocks.isEmpty()) "Blockchain Status" else null
                     val block = getBlockchainInfoBlock(title, blockchain.name, statusInfo)
-                    blocks.add(block)
-                }
-            }
-
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Monero }
-            ?.let { wallet ->
-                adapterManager.getAdapterForWallet<MoneroAdapter>(wallet)?.let { adapter ->
-                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                    val block = getBlockchainInfoBlock(title, "Monero", adapter.statusInfo)
                     blocks.add(block)
                 }
             }

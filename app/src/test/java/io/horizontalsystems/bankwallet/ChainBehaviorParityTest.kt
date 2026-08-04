@@ -5,6 +5,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.blockTime
@@ -50,6 +51,10 @@ class ChainBehaviorParityTest {
     fun registerChainPlugins() {
         // Mirrors the registration in App.onCreate. Runtime managers are never touched by
         // the pure hooks this test exercises.
+        ChainRegistry.register(MoneroChainPlugin(
+            { error("Context is not available in unit tests") },
+            { error("MoneroNodeManager is not available in unit tests") },
+        ))
         ChainRegistry.register(ZanoChainPlugin(
             { error("ZanoNodeManager is not available in unit tests") },
             { error("BackgroundManager is not available in unit tests") },

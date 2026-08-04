@@ -42,7 +42,6 @@ import io.horizontalsystems.walletkit.core.managers.LocalStorageManager
 import io.horizontalsystems.walletkit.core.managers.MarketFavoritesManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MigrationManager
-import io.horizontalsystems.walletkit.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.NetworkManager
 import io.horizontalsystems.walletkit.core.managers.NftAdapterManager
@@ -176,7 +175,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
-        lateinit var moneroBirthdayProvider: MoneroBirthdayProvider
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
@@ -308,8 +306,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
         zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        moneroBirthdayProvider = MoneroBirthdayProvider()
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider, moneroBirthdayProvider)
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
         AppLog.logsDao = appDatabase.logsDao()
 
@@ -323,7 +320,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletManager = WalletManager(accountManager, walletStorage)
 
         moneroNodeStorage = MoneroNodeStorage(appDatabase)
-        moneroNodeManager = MoneroNodeManager(this, blockchainSettingsStorage, moneroNodeStorage, marketKit)
+        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
         zanoNodeStorage = ZanoNodeStorage(appDatabase)
         zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
         registerChainPlugins()
@@ -429,7 +426,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             coinManager = coinManager,
             evmLabelManager = evmLabelManager,
             localStorage = localStorage,
-            moneroNodeManager = moneroNodeManager,
             zcashEndpointManager = zcashEndpointManager,
         )
         adapterManager = AdapterManager(
@@ -650,7 +646,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(restoreSettingsManager, moneroNodeManager, zcashEndpointManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager, thorchainKitManager)
+            walletManager.start(restoreSettingsManager, zcashEndpointManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager, thorchainKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()
@@ -683,7 +679,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             // wallet syncs through it without opening the node screen. The Monero adapter creation
             // is deferred (MoneroNodeManager.isResolvingFastestNode) until this completes; then a
             // single non-churning re-init creates it once with the fastest node already selected.
-            moneroNodeManager.autoSelectFastestNodeOnStartup()
+            ChainRegistry.all.forEach { it.onAppStart() }
             walletManager.refreshActiveWallets()
         }
 

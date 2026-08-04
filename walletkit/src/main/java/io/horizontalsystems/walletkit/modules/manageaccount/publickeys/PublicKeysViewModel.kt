@@ -9,7 +9,7 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.modules.manageaccount.publickeys.PublicKeysModule.ExtendedPublicKey
 import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey
-import io.horizontalsystems.walletkit.modules.manageaccount.showmonerokey.ShowMoneroKeyModule
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
@@ -71,13 +71,13 @@ class PublicKeysViewModel(
             null
         }
 
-        val moneroKeys = ShowMoneroKeyModule.getPublicMoneroKeys(account)
+        val chainKeyRows = ChainRegistry.all.flatMap { it.publicKeyRows(account) }
 
         viewState = PublicKeysModule.ViewState(
             evmAddress = evmAddress,
             tronAddress = tronAddress,
             extendedPublicKey = publicKey?.let { ExtendedPublicKey(it, accountPublicKey) },
-            moneroKeys = moneroKeys
+            chainKeyRows = chainKeyRows
         )
     }
 

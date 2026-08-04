@@ -22,7 +22,7 @@ object RestoreBlockchainsModule {
     ) : ViewModelProvider.Factory {
 
         private val restoreSettingsService by lazy {
-            RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider, App.moneroBirthdayProvider)
+            RestoreSettingsService(App.restoreSettingsManager, App.zcashBirthdayProvider)
         }
         private val blockchainTokensService by lazy {
             BlockchainTokensService()

@@ -14,7 +14,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.receive.monero.ReceiveMoneroScreen
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.walletkit.modules.receive.ui.UsedAddressesParams
 import io.horizontalsystems.walletkit.modules.receive.viewmodels.ReceiveAddressViewModel
@@ -44,9 +44,6 @@ data class ReceivePage(val input: Input) : HSPage() {
                 }
             }
 
-            BlockchainType.Monero -> {
-                ReceiveMoneroScreen(navigation, wallet, input.receiveEntryPointDestId)
-            }
 //        BlockchainType.ArbitrumOne -> TODO()
 //        BlockchainType.Avalanche -> TODO()
 //        BlockchainType.Base -> TODO()
@@ -68,7 +65,12 @@ data class ReceivePage(val input: Input) : HSPage() {
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
                 else -> {
-                    ReceiveScreen(navigation, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
+                    val plugin = ChainRegistry[token.blockchainType]
+                    if (plugin?.hasReceiveScreen == true) {
+                        plugin.ReceiveScreen(navigation, wallet, input.receiveEntryPointDestId)
+                    } else {
+                        ReceiveScreen(navigation, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
+                    }
                 }
             }
     }

@@ -23,7 +23,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchainSettingsPage
 import io.horizontalsystems.walletkit.modules.evmnetwork.EvmNetworkPage
-import io.horizontalsystems.walletkit.modules.moneronetwork.MoneroNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.solananetwork.SolanaNetworkPage
@@ -135,15 +134,6 @@ private fun onClick(
             stat(
                 page = StatPage.BlockchainSettings,
                 event = StatEvent.Open(StatPage.BlockchainSettingsThorchain)
-            )
-        }
-
-        is BlockchainSettingsModule.BlockchainItem.Monero -> {
-            navigation.slideFromBottom(MoneroNetworkPage)
-
-            stat(
-                page = StatPage.BlockchainSettings,
-                event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
             )
         }
 

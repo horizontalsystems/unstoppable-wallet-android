@@ -69,7 +69,6 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.Ton -> listOf(AddressHandlerTon())
         BlockchainType.Stellar -> listOf(AddressHandlerStellar())
         BlockchainType.Thorchain -> listOf(AddressHandlerThorchain())
-        BlockchainType.Monero -> listOf(AddressHandlerMonero())
 
         else -> ChainRegistry[blockchainType]?.addressHandlers().orEmpty()
     }

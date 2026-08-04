@@ -667,7 +667,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Ton,
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
-        BlockchainType.Monero,
     ) + ChainRegistry.all.map { it.blockchainType }
 
 val CoinPrice.diff: BigDecimal?

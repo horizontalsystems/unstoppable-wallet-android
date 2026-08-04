@@ -43,9 +43,8 @@ import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.walletkit.modules.balance.token.moneroaccounts.MoneroAccountsPage
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.balance.AttentionIconType
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem
@@ -241,12 +240,8 @@ fun TokenBalanceScreen(
                         )
                     }
 
-                    if (balanceViewItem.wallet.token.blockchainType == BlockchainType.Monero) {
-                        MoneroAccountCell(
-                            wallet = balanceViewItem.wallet,
-                            navigation = navigation
-                        )
-                    }
+                    ChainRegistry[balanceViewItem.wallet.token.blockchainType]
+                        ?.TokenBalanceExtraCells(balanceViewItem.wallet, navigation)
 
                     LockedBalanceSection(
                         balanceViewItem = balanceViewItem,
@@ -594,39 +589,6 @@ private fun LockedBalanceSection(
     }
 }
 
-@Composable
-private fun MoneroAccountCell(
-    wallet: Wallet,
-    navigation: HSNavigation
-) {
-    val adapter = remember(wallet) {
-        App.adapterManager.getAdapterForWallet<IMoneroAccountsAdapter>(wallet)
-    } ?: return
-    val activeAccountIndex by adapter.activeAccountFlow.collectAsState()
-    val accounts by adapter.accountsFlow.collectAsState()
-    val label = accounts.firstOrNull { it.index == activeAccountIndex }
-        ?.let { "${it.index}. ${it.label}" }
-        ?: "$activeAccountIndex."
-
-    BoxBordered(bottom = true) {
-        CellPrimary(
-            middle = {
-                CellMiddleInfo(eyebrow = stringResource(R.string.Monero_Account).hs)
-            },
-            right = {
-                CellRightNavigation(
-                    subtitle = label.hs(color = ComposeAppTheme.colors.leah)
-                )
-            },
-            backgroundColor = ComposeAppTheme.colors.lawrence,
-            onClick = {
-                navigation.slideFromRight(
-                    MoneroAccountsPage(MoneroAccountsPage.Input(wallet))
-                )
-            }
-        )
-    }
-}
 
 @Composable
 private fun BirthdayHeightCell(

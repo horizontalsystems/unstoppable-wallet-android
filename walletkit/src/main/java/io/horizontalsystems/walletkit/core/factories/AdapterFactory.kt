@@ -16,7 +16,6 @@ import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.JettonAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.MoneroAdapter
 import io.horizontalsystems.walletkit.core.adapters.SolanaAdapter
 import io.horizontalsystems.walletkit.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.SolanaTransactionsAdapter
@@ -39,7 +38,6 @@ import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
-import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SolanaKitManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
@@ -65,7 +63,6 @@ class AdapterFactory(
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
-    private val moneroNodeManager: MoneroNodeManager,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
@@ -185,21 +182,6 @@ class AdapterFactory(
             }
             BlockchainType.Thorchain -> {
                 ThorchainAdapter(thorchainKitManager.getThorchainKitWrapper(wallet.account), wallet)
-            }
-            BlockchainType.Monero -> {
-                if (moneroNodeManager.isResolvingFastestNode) {
-                    // Defer creation until startup Auto-Select picks the fastest node, so the
-                    // adapter connects once to it instead of reconnecting. reloadWallets(Monero)
-                    // recreates the adapter when resolution finishes.
-                    null
-                } else {
-                    MoneroAdapter.create(
-                        context = context,
-                        wallet = wallet,
-                        restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
-                        node = moneroNodeManager.currentNode
-                    )
-                }
             }
             else -> registryAdapter(wallet)
         }

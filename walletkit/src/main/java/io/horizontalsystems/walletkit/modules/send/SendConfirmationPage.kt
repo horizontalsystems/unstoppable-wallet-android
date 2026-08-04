@@ -5,8 +5,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarConfirmationScreen
@@ -99,15 +97,8 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 )
             }
 
-            Type.Monero -> {
-                val sendMoneroViewModel = navigation.viewModelForScreen<SendMoneroViewModel>(SendPage::class)
-
-                SendMoneroConfirmationScreen(
-                    navigation,
-                    sendMoneroViewModel,
-                    input.sendEntryPointDestId
-                )
-            }
+            // Legacy: moved to SendMoneroConfirmationPage in the Monero chain module.
+            Type.Monero -> Unit
 
             Type.Zano -> Unit
 

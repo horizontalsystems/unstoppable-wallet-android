@@ -15,7 +15,6 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.thorchainkit.models.Address as ThorchainAddress
 import io.horizontalsystems.thorchainkit.network.Network as ThorchainNetwork
@@ -337,31 +336,6 @@ class AddressHandlerThorchain : IAddressHandler {
     }
 }
 
-class AddressHandlerMonero : IAddressHandler {
-    override val blockchainType = BlockchainType.Monero
-
-    override fun isSupported(value: String) = try {
-        val uriInfo = MoneroUriParser.parse(value)
-        val address = uriInfo?.address ?: value
-        MoneroKit.validateAddress(address)
-        true
-    } catch (_: Exception) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        val uriInfo = MoneroUriParser.parse(value)
-        return if (uriInfo?.viewKey != null) {
-            val address = uriInfo.address
-            val viewKey = uriInfo.viewKey
-            val height = uriInfo.height
-
-            MoneroWatchAddress(address, viewKey!!, height)
-        } else {
-            Address(hex = value, blockchainType = blockchainType)
-        }
-    }
-}
 
 class AddressHandlerPure(override val blockchainType: BlockchainType) : IAddressHandler {
 

@@ -16,9 +16,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroModule
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroScreen
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
@@ -198,20 +195,6 @@ data class SendPage(val input: Input) : HSPage() {
                 )
             }
 
-            BlockchainType.Monero -> {
-                val factory = SendMoneroModule.Factory(wallet, address, hideAddress)
-                val sendMoneroViewModel = viewModel<SendMoneroViewModel>(factory = factory)
-                SendMoneroScreen(
-                    title,
-                    navigation,
-                    sendMoneroViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId,
-                    amount,
-                    memo,
-                    riskyAddress = riskyAddress
-                )
-            }
 
             else -> {
                 ChainRegistry[wallet.token.blockchainType]?.SendScreen(

@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.core.managers
 
-import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
@@ -8,14 +7,12 @@ import io.horizontalsystems.walletkit.core.storage.MoneroNodeStorage
 import io.horizontalsystems.walletkit.entities.MoneroNodeRecord
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.util.Objects
 
 class MoneroNodeManager(
-    private val context: Context,
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
     private val moneroNodeStorage: MoneroNodeStorage,
     private val marketKitWrapper: MarketKitWrapper
@@ -96,11 +93,21 @@ class MoneroNodeManager(
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(blockchainType.uid)
 
-    suspend fun pingNodes(serialized: List<String>) =
-        MoneroKit.pingNodes(context, serialized)
+    /**
+     * Pings node endpoints and reports reachability/latency. Supplied by the Monero chain
+     * plugin (the implementation lives in monero-kit); null while the module is absent.
+     */
+    @Volatile
+    var nodePinger: (suspend (serialized: List<String>) -> List<NodePingResult>)? = null
+
+    suspend fun pingNodes(serialized: List<String>): List<NodePingResult> =
+        nodePinger?.invoke(serialized) ?: emptyList()
 
     suspend fun autoSelectFastestNodeOnStartup() {
-        if (!autoSelectEnabled) return
+        if (!autoSelectEnabled || nodePinger == null) {
+            isResolvingFastestNode = false
+            return
+        }
 
         var target = currentNode
         try {
@@ -192,6 +199,12 @@ class MoneroNodeManager(
 
         _nodesUpdatedFlow.tryEmit(node.host)
     }
+
+    data class NodePingResult(
+        val serialized: String,
+        val isValid: Boolean,
+        val responseTime: Double,
+    )
 
     data class MoneroNode(
         val host: String,

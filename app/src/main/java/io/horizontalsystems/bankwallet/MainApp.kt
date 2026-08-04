@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -16,6 +17,8 @@ class MainApp : App() {
         AppConfigProvider(localStorage)
 
     override fun registerChainPlugins() {
+        // Registration order defines the tail of BlockchainType.supported: monero, zano.
+        ChainRegistry.register(MoneroChainPlugin({ App.instance }, { App.moneroNodeManager }))
         ChainRegistry.register(ZanoChainPlugin({ App.zanoNodeManager }, { App.backgroundManager }))
     }
 }

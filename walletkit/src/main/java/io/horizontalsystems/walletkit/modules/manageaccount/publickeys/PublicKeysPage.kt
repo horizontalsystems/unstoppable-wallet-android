@@ -17,7 +17,6 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccount.evmaddress.AddressPage
 import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyPage
-import io.horizontalsystems.walletkit.modules.manageaccount.showmonerokey.ShowMoneroKeyPage
 import io.horizontalsystems.walletkit.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -90,17 +89,16 @@ fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
                 }
             }
 
-            viewModel.viewState.moneroKeys?.let { moneroKeys ->
+            viewModel.viewState.chainKeyRows.forEach { row ->
                 KeyActionItem(
-                    title = stringResource(id = R.string.PublicKeys_MoneroPublicKey),
-                    description = stringResource(id = R.string.PublicKeys_MoneroPublicKeyDescription),
+                    title = stringResource(id = row.titleRes),
+                    description = stringResource(id = row.descriptionRes),
                     onClick = navigation.authorizedAction {
-                        navigation.slideFromRight(
-                            ShowMoneroKeyPage(ShowMoneroKeyPage.Input(moneroKeys))
-                        )
+                        navigation.slideFromRight(row.page)
+
                         stat(
                             page = StatPage.PublicKeys,
-                            event = StatEvent.Open(StatPage.MoneroPublicKey)
+                            event = StatEvent.Open(row.statPage)
                         )
                     },
                 )
