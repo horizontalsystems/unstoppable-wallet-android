@@ -240,6 +240,7 @@ dependencies {
     // so the thin :app shell only needs :walletkit plus the flavor/test bits below.
     implementation(project(":walletkit"))
     implementation(project(":walletkit-chain-zano"))
+    implementation(project(":walletkit-chain-monero"))
     implementation(libs.androidx.splashscreen) // MainActivity installs the splash screen
     debugImplementation(libs.leakcanary)
 

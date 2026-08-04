@@ -274,10 +274,6 @@ class MoneroAdapter(
     }
 }
 
-fun Long.scaledDown(decimals: Int): BigDecimal {
-    return this.toBigDecimal().movePointLeft(decimals).stripTrailingZeros()
-}
-
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> {
         if (error is MoneroKit.SyncError.NotStarted) {

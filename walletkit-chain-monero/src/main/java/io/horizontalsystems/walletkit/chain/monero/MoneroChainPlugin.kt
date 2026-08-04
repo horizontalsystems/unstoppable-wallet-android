@@ -70,6 +70,10 @@ class MoneroChainPlugin(
         )
     }
 
+    override fun clearAccountData(accountId: String) {
+        MoneroAdapter.clear(accountId)
+    }
+
     override suspend fun onAppStart() {
         val nodeManager = moneroNodeManager()
         nodeManager.nodePinger = { serialized ->

@@ -21,6 +21,7 @@ rootProject.name = "Unstoppable"
 include(":app")
 include(":walletkit")
 include(":walletkit-chain-zano")
+include(":walletkit-chain-monero")
 include(":components:icons")
 include(":components:chartview")
 include(":subscriptions-core")

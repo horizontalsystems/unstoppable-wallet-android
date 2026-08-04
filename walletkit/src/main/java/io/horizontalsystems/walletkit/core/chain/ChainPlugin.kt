@@ -95,6 +95,9 @@ interface ChainPlugin {
     /** Startup work after core managers are ready (e.g. Monero fastest-node auto-select). */
     suspend fun onAppStart() = Unit
 
+    /** Deletes the chain's locally stored data for a removed account. */
+    fun clearAccountData(accountId: String) = Unit
+
     /** True when the chain replaces the generic receive screen with [ReceiveScreen]. */
     val hasReceiveScreen: Boolean get() = false
 
