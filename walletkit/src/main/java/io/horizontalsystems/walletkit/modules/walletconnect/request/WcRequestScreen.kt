@@ -65,7 +65,9 @@ fun WcRequestScreen(
     val view = LocalView.current
     LaunchedEffect(uiState.error) {
         uiState.error?.let {
-            HudHelper.showErrorMessage(view, it.message ?: it::class.java.simpleName)
+            val message = it.message?.takeIf { m -> m.isNotBlank() }
+                ?: it::class.java.simpleName.ifBlank { "Error" }
+            HudHelper.showErrorMessage(view, message)
         }
     }
 

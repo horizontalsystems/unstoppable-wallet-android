@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.dapp.core.HSDAppRequest
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -52,23 +53,31 @@ class WCRequestViewModel(
         approveInProgress = true
         emitState()
 
-        val actionResult = wcAction.performAction()
+        try {
+            val actionResult = wcAction.performAction()
 
-        WCDelegate.respondPendingRequest(
-            sessionRequest.requestId,
-            sessionRequest.topic,
-            actionResult,
-            onSuccessResult = {
-                approveInProgress = false
-                finish = true
-                emitState()
-            },
-            onErrorResult = {
-                approveInProgress = false
-                error = it
-                emitState()
-            }
-        )
+            WCDelegate.respondPendingRequest(
+                sessionRequest.requestId,
+                sessionRequest.topic,
+                actionResult,
+                onSuccessResult = {
+                    approveInProgress = false
+                    finish = true
+                    emitState()
+                },
+                onErrorResult = {
+                    approveInProgress = false
+                    error = it
+                    emitState()
+                }
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            approveInProgress = false
+            error = e
+            emitState()
+        }
     }
 
     fun reject() = viewModelScope.launch(Dispatchers.Default) {

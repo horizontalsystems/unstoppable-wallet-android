@@ -69,12 +69,12 @@ function signApk () {
     response=$(docker run -it --rm -e KS_PASS --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -c \
       "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass env:KS_PASS ${BUILT_APK_FILE}")
 
-    echo $response
+    printf '%s\n' "$response"
 
     response2=$(docker run -it --rm -e KS_PASS --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -c \
       "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass env:KS_PASS ${BUILT_APK_FILE_FDROID}")
 
-    echo $response2
+    printf '%s\n' "$response2"
 
     rm "${WORK_DIR}/${KEYSTORE_FILENAME}"
 }

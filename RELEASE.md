@@ -49,7 +49,7 @@ $ git branch version/0.1
 You will find a bash script located at `[Wallet-Project-Path]/docker/build-apk.sh`
 1. Create and go to temporary folder for APK output
 2. Run command:
-```
+```bash
 ./build-apk.sh [REPO-TAG] [FULL_PATH_TO_KEYSTORE]
 ```
 Where:<br>
@@ -60,7 +60,7 @@ The script prompts for the keystore password interactively (it must not be
 passed as an argument, so it never ends up in shell history).
 
 Example:
-```
+```bash
 ./build-apk.sh 0.18.0 ~/Documents/Keystore/Apk_HorSys/horsys
 ```
 
