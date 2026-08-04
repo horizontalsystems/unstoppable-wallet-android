@@ -6,6 +6,8 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.EnabledWallet
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import kotlinx.coroutines.flow.catch
+import timber.log.Timber
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -117,9 +119,11 @@ class WalletManager(
         ChainRegistry.all.forEach { plugin ->
             plugin.walletReloadTrigger?.let { trigger ->
                 coroutineScope.launch {
-                    trigger.collect {
-                        reloadWallets(plugin.blockchainType)
-                    }
+                    trigger
+                        .catch { Timber.e(it, "Chain plugin %s trigger failed", plugin.blockchainType.uid) }
+                        .collect {
+                            reloadWallets(plugin.blockchainType)
+                        }
                 }
             }
         }

@@ -91,7 +91,7 @@ chain knowledge in the codebase), `nativeTokenQueries`, `defaultTokenQuery`, `ba
 
 ### 2.1 Module layout
 
-```
+```text
 :walletkit-core        ← market-kit, storage/Room, accounts, ChainRegistry + ChainPlugin SPI,
                           shared UI (nav3, compose components, TransactionInfoViewItem vocabulary),
                           generic screens (balance list, transactions list, settings hub, backup engine)

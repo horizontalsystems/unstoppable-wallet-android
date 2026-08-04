@@ -41,7 +41,7 @@ import java.math.BigInteger
  * conversion step is provably behavior-preserving.
  *
  * To regenerate the fixture after an INTENTIONAL behavior change:
- *   ./gradlew :walletkit:testDebugUnitTest --tests "*ChainBehaviorParityTest*" -PupdateParityFixture=true
+ *   ./gradlew :walletkit-chain-zano:testDebugUnitTest --tests "*ChainBehaviorParityTest*" -PupdateParityFixture=true
  */
 class ChainBehaviorParityTest {
 

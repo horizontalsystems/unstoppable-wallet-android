@@ -12,6 +12,8 @@ import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointMana
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
+import kotlinx.coroutines.flow.catch
+import timber.log.Timber
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -76,9 +78,11 @@ class BlockchainSettingsService(
         ChainRegistry.all.forEach { plugin ->
             plugin.walletReloadTrigger?.let { trigger ->
                 coroutineScope.launch {
-                    trigger.collect {
-                        syncBlockchainItems()
-                    }
+                    trigger
+                        .catch { Timber.e(it, "Chain plugin %s trigger failed", plugin.blockchainType.uid) }
+                        .collect {
+                            syncBlockchainItems()
+                        }
                 }
             }
         }

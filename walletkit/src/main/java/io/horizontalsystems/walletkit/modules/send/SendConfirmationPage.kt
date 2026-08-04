@@ -109,12 +109,18 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 )
             }
 
+            Type.Zano -> Unit
+
         }
     }
 
     @Serializable
     enum class Type {
-        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Thorchain, Monero
+        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Thorchain, Monero,
+
+        // Legacy: Zano confirmation moved to SendZanoConfirmationPage in walletkit-chain-zano.
+        // Kept so a back stack persisted before the split still deserializes; renders nothing.
+        Zano,
     }
 
     @Serializable
