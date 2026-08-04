@@ -427,7 +427,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmLabelManager = evmLabelManager,
             localStorage = localStorage,
             moneroNodeManager = moneroNodeManager,
-            zanoKitManager = zanoKitManager,
             zcashEndpointManager = zcashEndpointManager,
         )
         adapterManager = AdapterManager(

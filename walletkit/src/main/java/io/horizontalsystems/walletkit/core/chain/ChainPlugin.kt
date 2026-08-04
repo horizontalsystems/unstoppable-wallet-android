@@ -1,6 +1,10 @@
 package io.horizontalsystems.walletkit.core.chain
 
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.core.IAdapter
+import io.horizontalsystems.walletkit.core.managers.RestoreSettings
+import io.horizontalsystems.walletkit.entities.Account
+import io.horizontalsystems.walletkit.entities.Wallet
 
 /**
  * Per-blockchain extension point. Optional chains implement this and register in
@@ -14,4 +18,15 @@ import io.horizontalsystems.marketkit.models.BlockchainType
  */
 interface ChainPlugin {
     val blockchainType: BlockchainType
+
+    /**
+     * Creates the balance/send adapter for a wallet of this chain. [restoreSettings] holds
+     * the chain's stored restore configuration (e.g. birthday height) and is empty for
+     * chains without restore settings. Returning null defers creation (the adapter is
+     * recreated on the next reloadWallets for this chain).
+     */
+    fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter? = null
+
+    /** Releases kit-manager resources held for [account] when its last wallet is unlinked. */
+    fun unlink(account: Account) = Unit
 }

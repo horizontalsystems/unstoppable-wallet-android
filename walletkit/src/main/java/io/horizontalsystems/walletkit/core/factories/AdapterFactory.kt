@@ -34,7 +34,6 @@ import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
@@ -47,7 +46,7 @@ import io.horizontalsystems.walletkit.core.managers.StellarKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
-import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -67,7 +66,6 @@ class AdapterFactory(
     private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
     private val moneroNodeManager: MoneroNodeManager,
-    private val zanoKitManager: ZanoKitManager,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
@@ -203,15 +201,7 @@ class AdapterFactory(
                     )
                 }
             }
-            BlockchainType.Zano -> {
-                ZanoAdapter.create(
-                    wallet = wallet,
-                    zanoKitManager = zanoKitManager,
-                    restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
-                )
-            }
-
-            else -> null
+            else -> registryAdapter(wallet)
         }
         is TokenType.Eip20 -> {
             if (wallet.token.blockchainType == BlockchainType.Tron) {
@@ -227,16 +217,15 @@ class AdapterFactory(
             BlockchainType.Thorchain -> ThorchainAdapter(thorchainKitManager.getThorchainKitWrapper(wallet.account), wallet)
             else -> null
         }
-        is TokenType.ZanoAsset -> when (wallet.token.blockchainType) {
-            BlockchainType.Zano -> ZanoAdapter.create(
-                wallet = wallet,
-                zanoKitManager = zanoKitManager,
-                restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
-            )
-            else -> null
-        }
+        is TokenType.ZanoAsset -> registryAdapter(wallet)
         is TokenType.Unsupported -> null
     }
+
+    private fun registryAdapter(wallet: Wallet): IAdapter? =
+        ChainRegistry[wallet.token.blockchainType]?.createAdapter(
+            wallet,
+            restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
+        )
 
     fun evmTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
         val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(source.account, blockchainType)
@@ -344,10 +333,9 @@ class AdapterFactory(
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(wallet.account)
             }
-            BlockchainType.Zano -> {
-                zanoKitManager.unlink(wallet.account)
+            else -> {
+                ChainRegistry[blockchainType]?.unlink(wallet.account)
             }
-            else -> Unit
         }
     }
 
