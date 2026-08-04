@@ -7,11 +7,11 @@ jobs:
   notify:
     if: ${{ !startsWith(github.head_ref, 'l10n_version/') }}
     runs-on: ubuntu-latest
+    permissions: {}
 
     steps:
-      - uses: actions/checkout@v3
       - name: Notify to Telegram
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@221e6b684967abe813051ee4a37dd61770a83ad3 # v1.0.1
         with:
           to: ${{secrets.TELEGRAM_TO}}
           token: ${{secrets.TELEGRAM_TOKEN}}
