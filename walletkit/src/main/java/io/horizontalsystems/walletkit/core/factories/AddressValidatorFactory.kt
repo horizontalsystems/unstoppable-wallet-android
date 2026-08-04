@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.factories
 
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.send.address.BitcoinAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
@@ -10,7 +11,6 @@ import io.horizontalsystems.walletkit.modules.send.address.StellarAddressValidat
 import io.horizontalsystems.walletkit.modules.send.address.ThorchainAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TonAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
-import io.horizontalsystems.walletkit.modules.send.address.ZanoAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.ZcashAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -18,6 +18,10 @@ import io.horizontalsystems.marketkit.models.Token
 object AddressValidatorFactory {
 
     fun get(token: Token): EnterAddressValidator {
+        ChainRegistry[token.blockchainType]?.addressValidator(token)?.let {
+            return it
+        }
+
         return when (token.blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
@@ -68,11 +72,7 @@ object AddressValidatorFactory {
                 MoneroAddressValidator()
             }
 
-            is BlockchainType.Zano -> {
-                ZanoAddressValidator()
-            }
-
-            is BlockchainType.Unsupported -> throw IllegalStateException("Unsupported blockchain type: ${token.blockchainType}")
+            else -> throw IllegalStateException("Unsupported blockchain type: ${token.blockchainType}")
         }
     }
 

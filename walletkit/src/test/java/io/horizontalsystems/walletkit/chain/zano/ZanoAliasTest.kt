@@ -1,6 +1,5 @@
-package io.horizontalsystems.walletkit.modules.address
+package io.horizontalsystems.walletkit.chain.zano
 
-import io.horizontalsystems.walletkit.core.address.ZanoAliasResolver
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

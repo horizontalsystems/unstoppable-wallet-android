@@ -6,6 +6,7 @@ import io.horizontalsystems.dashkit.MainNetDash
 import io.horizontalsystems.ecash.MainNetECash
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 
 /**
  * Plain (non-domain) address handlers per blockchain — the single source of truth used by
@@ -69,7 +70,6 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.Stellar -> listOf(AddressHandlerStellar())
         BlockchainType.Thorchain -> listOf(AddressHandlerThorchain())
         BlockchainType.Monero -> listOf(AddressHandlerMonero())
-        BlockchainType.Zano -> listOf(AddressHandlerZano())
 
-        is BlockchainType.Unsupported -> emptyList()
+        else -> ChainRegistry[blockchainType]?.addressHandlers().orEmpty()
     }

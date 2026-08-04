@@ -8,7 +8,10 @@ import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.address.IAddressHandler
+import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 
 /**
  * Managers are passed as providers so the plugin's pure hooks (metadata, support matrix)
@@ -31,4 +34,11 @@ class ZanoChainPlugin(
     override fun unlink(account: Account) {
         zanoKitManager().unlink(account)
     }
+
+    override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerZano())
+
+    override fun domainAddressHandlers(): List<IAddressHandler> =
+        listOf(AddressHandlerZanoAlias(ZanoAliasResolver(zanoNodeManager())))
+
+    override fun addressValidator(token: Token): EnterAddressValidator = ZanoAddressValidator()
 }

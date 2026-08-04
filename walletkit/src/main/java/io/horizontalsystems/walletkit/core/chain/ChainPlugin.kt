@@ -1,10 +1,13 @@
 package io.horizontalsystems.walletkit.core.chain
 
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.address.IAddressHandler
+import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 
 /**
  * Per-blockchain extension point. Optional chains implement this and register in
@@ -29,4 +32,13 @@ interface ChainPlugin {
 
     /** Releases kit-manager resources held for [account] when its last wallet is unlinked. */
     fun unlink(account: Account) = Unit
+
+    /** Handlers recognizing this chain's plain address formats. */
+    fun addressHandlers(): List<IAddressHandler> = emptyList()
+
+    /** Handlers resolving this chain's naming/alias systems to addresses. */
+    fun domainAddressHandlers(): List<IAddressHandler> = emptyList()
+
+    /** Validator used by send/enter-address flows, or null to fall back to core dispatch. */
+    fun addressValidator(token: Token): EnterAddressValidator? = null
 }

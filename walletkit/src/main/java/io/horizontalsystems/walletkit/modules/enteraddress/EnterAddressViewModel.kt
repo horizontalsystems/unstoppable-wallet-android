@@ -9,7 +9,7 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.address.AddressCheckManager
 import io.horizontalsystems.walletkit.core.address.AddressCheckResult
 import io.horizontalsystems.walletkit.core.address.AddressCheckType
-import io.horizontalsystems.walletkit.core.address.ZanoAliasResolver
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.factories.AddressValidatorFactory
 import io.horizontalsystems.walletkit.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
@@ -18,7 +18,6 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerEns
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerUdn
-import io.horizontalsystems.walletkit.modules.address.AddressHandlerZanoAlias
 import io.horizontalsystems.walletkit.modules.address.AddressParserChain
 import io.horizontalsystems.walletkit.modules.address.EnsResolverHolder
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
@@ -303,9 +302,7 @@ class EnterAddressViewModel(
             val udnHandler =
                 AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
             val domainHandlers = mutableListOf(ensHandler, udnHandler)
-            if (blockchainType == BlockchainType.Zano) {
-                domainHandlers.add(AddressHandlerZanoAlias(ZanoAliasResolver(App.zanoNodeManager)))
-            }
+            domainHandlers.addAll(ChainRegistry[blockchainType]?.domainAddressHandlers().orEmpty())
             val addressParserChain = AddressParserChain(domainHandlers = domainHandlers)
             val addressUriParser = AddressUriParser(token.blockchainType, token.type)
             val recentAddressManager =

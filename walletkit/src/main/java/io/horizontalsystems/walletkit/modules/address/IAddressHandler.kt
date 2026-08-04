@@ -7,7 +7,6 @@ import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
 import io.horizontalsystems.bitcoincore.utils.CashAddressConverter
 import io.horizontalsystems.bitcoincore.utils.SegwitAddressConverter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAddressValidator
-import io.horizontalsystems.walletkit.core.address.ZanoAliasResolver
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.BitcoinAddress
 import io.horizontalsystems.walletkit.entities.MoneroWatchAddress
@@ -22,7 +21,6 @@ import io.horizontalsystems.thorchainkit.models.Address as ThorchainAddress
 import io.horizontalsystems.thorchainkit.network.Network as ThorchainNetwork
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
-import io.horizontalsystems.zanokit.ZanoKit
 import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
@@ -361,56 +359,6 @@ class AddressHandlerMonero : IAddressHandler {
             MoneroWatchAddress(address, viewKey!!, height)
         } else {
             Address(hex = value, blockchainType = blockchainType)
-        }
-    }
-}
-
-class AddressHandlerZano : IAddressHandler {
-    override val blockchainType = BlockchainType.Zano
-
-    override fun isSupported(value: String) = try {
-        ZanoKit.isValidAddress(value)
-    } catch (_: Exception) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        return Address(value, blockchainType = blockchainType)
-    }
-}
-
-class AddressHandlerZanoAlias(private val resolver: ZanoAliasResolver) : IAddressHandler {
-    override val blockchainType = BlockchainType.Zano
-    private val cache = mutableMapOf<String, Address>()
-
-    override fun isSupported(value: String): Boolean {
-        val alias = normalize(value) ?: return false
-        if (cache.containsKey(value)) return true
-
-        return try {
-            val resolved = resolver.resolve(alias) ?: return false
-            cache[value] = Address(resolved, value, blockchainType)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    override fun parseAddress(value: String): Address {
-        return cache[value]!!
-    }
-
-    companion object {
-        // on-chain alias charset is a-z 0-9 . - with max length 25
-        private val aliasRegex = Regex("^[a-z0-9.-]{1,25}\$")
-
-        fun normalize(value: String): String? {
-            val hasPrefix = value.startsWith("@")
-            val alias = if (hasPrefix) value.substring(1) else value
-            if (!aliasRegex.matches(alias)) return null
-            // without "@" the intent is ambiguous, require 2+ chars to avoid a lookup on the first keystroke
-            if (!hasPrefix && alias.length < 2) return null
-            return alias
         }
     }
 }

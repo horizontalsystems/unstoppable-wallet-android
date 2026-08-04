@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.modules.address
 
-import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.address.ZanoAliasResolver
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.supported
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -28,12 +27,9 @@ class AddressHandlerFactory(
                 domainAddressHandlers.add(AddressHandlerEns(blockchainType, EnsResolverHolder.resolver))
             }
 
-            BlockchainType.Zano -> {
-                domainAddressHandlers.add(AddressHandlerZanoAlias(ZanoAliasResolver(App.zanoNodeManager)))
-            }
-
             else -> {}
         }
+        domainAddressHandlers.addAll(ChainRegistry[blockchainType]?.domainAddressHandlers().orEmpty())
         return domainAddressHandlers
     }
 
