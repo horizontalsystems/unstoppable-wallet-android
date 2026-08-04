@@ -27,11 +27,15 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.stellarkit.Network as StellarNetwork
 import io.horizontalsystems.stellarkit.StellarKit
+import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.thorchainkit.network.Network
 import io.horizontalsystems.tonkit.FriendlyAddress
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.io.File
 
 interface EnterAddressValidator {
@@ -121,10 +125,28 @@ class StellarAddressValidator(private val token: Token) : EnterAddressValidator 
         val adapter = sendAdapter
         if (adapter != null) {
             adapter.validate(address.hex)
-        } else {
-            // no enabled wallet (external swap recipient) — format check only; the
-            // adapter's trustline check needs a kit and is skipped
-            StellarKit.validateAddress(address.hex)
+            return
+        }
+
+        // no enabled wallet (external swap recipient) — static format check, plus the
+        // same trustline requirement the adapter enforces: a non-native asset sent to
+        // an account without the trustline is rejected by the network
+        StellarKit.validateAddress(address.hex)
+
+        val tokenType = token.type
+        if (tokenType is TokenType.Asset) {
+            val enabled = withContext(Dispatchers.IO) {
+                StellarKit.isAssetEnabled(
+                    StellarNetwork.MainNet,
+                    StellarAsset.Asset(tokenType.code, tokenType.issuer),
+                    address.hex
+                )
+            }
+            if (!enabled) {
+                throw AddressValidationError.InvalidAddress(
+                    Translator.getString(R.string.Swap_RecipientAddress_NoTrustline, tokenType.code)
+                )
+            }
         }
     }
 }

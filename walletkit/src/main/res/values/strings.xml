@@ -770,6 +770,7 @@
     <string name="Swap_RecipientAddress_Description">The wallet that will receive the swapped funds.</string>
     <string name="Swap_RecipientAddress_EnterAddress">Enter %s Address</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">The selected provider can only deliver to a transparent (t-) Zcash address</string>
+    <string name="Swap_RecipientAddress_NoTrustline">The recipient address has no %s trustline and cannot receive it</string>
     <string name="Swap_ErrorNoProviders">No Routes</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
