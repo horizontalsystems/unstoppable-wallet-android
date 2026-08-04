@@ -44,9 +44,18 @@ jobs:
           track: production
           status: draft
 
+  # Runs in a separate job so the third-party action never shares a workspace
+  # with the decoded upload keystore or the Play service account credentials
+  notify:
+    needs: publish
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    permissions: {}
+
+    steps:
       - name: Notify Telegram on success
-        if: success()
-        uses: appleboy/telegram-action@master
+        if: needs.publish.result == 'success'
+        uses: appleboy/telegram-action@221e6b684967abe813051ee4a37dd61770a83ad3 # v1.0.1
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -57,8 +66,8 @@ jobs:
             Author: @${{ github.actor }}
 
       - name: Notify Telegram on failure
-        if: failure()
-        uses: appleboy/telegram-action@master
+        if: needs.publish.result == 'failure'
+        uses: appleboy/telegram-action@221e6b684967abe813051ee4a37dd61770a83ad3 # v1.0.1
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
