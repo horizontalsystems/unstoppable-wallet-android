@@ -736,4 +736,5 @@
     <string name="Swap_RecipientAddress_Description">کیف پولی که وجوه مبادله شده را دریافت خواهد کرد.</string>
     <string name="Swap_RecipientAddress_EnterAddress">آدرس %s را وارد کنید</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">ارائه دهنده انتخاب شده فقط می تواند به آدرس شفاف Zcash (t-) تحویل دهد</string>
+    <string name="Swap_RecipientAddress_NoTrustline">آدرس گیرنده خط اعتماد %s ندارد و نمی‌تواند آن را دریافت کند</string>
 </resources>

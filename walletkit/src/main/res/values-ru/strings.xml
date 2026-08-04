@@ -1810,4 +1810,5 @@
     <string name="Swap_RecipientAddress_Description">Кошелек, который получит обменённые средства.</string>
     <string name="Swap_RecipientAddress_EnterAddress">Введите адрес %s</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">Выбранный поставщик может доставить только на прозрачный (t-) адрес Zcash</string>
+    <string name="Swap_RecipientAddress_NoTrustline">Адрес получателя не имеет доверительной линии %s и не может его получить</string>
 </resources>

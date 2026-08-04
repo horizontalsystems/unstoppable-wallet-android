@@ -1805,4 +1805,5 @@
     <string name="Swap_RecipientAddress_Description">Le portefeuille qui recevra les fonds échangés.</string>
     <string name="Swap_RecipientAddress_EnterAddress">Entrez l\'adresse %s</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">Le fournisseur sélectionné ne peut livrer que vers une adresse Zcash transparente (t-)</string>
+    <string name="Swap_RecipientAddress_NoTrustline">L\'adresse du destinataire n\'a pas de ligne de confiance %s et ne peut pas la recevoir</string>
 </resources>

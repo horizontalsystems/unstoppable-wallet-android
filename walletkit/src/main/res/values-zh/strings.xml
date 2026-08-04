@@ -1803,4 +1803,5 @@
     <string name="Swap_RecipientAddress_Description">将接收交换资金的钱包。</string>
     <string name="Swap_RecipientAddress_EnterAddress">输入%s地址</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">选定的提供商只能交付到透明(t-)Zcash地址</string>
+    <string name="Swap_RecipientAddress_NoTrustline">收款人地址没有 %s 信任额度，无法接收</string>
 </resources>

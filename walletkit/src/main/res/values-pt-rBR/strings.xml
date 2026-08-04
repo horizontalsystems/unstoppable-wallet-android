@@ -1808,4 +1808,5 @@
     <string name="Swap_RecipientAddress_Description">A carteira que receberá os fundos trocados.</string>
     <string name="Swap_RecipientAddress_EnterAddress">Digite o endereço de %s</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">O provedor selecionado só pode entregar a um endereço Zcash transparente (t-)</string>
+    <string name="Swap_RecipientAddress_NoTrustline">O endereço do destinatário não possui linha de confiança %s e não pode recebê-lo</string>
 </resources>

@@ -1803,4 +1803,5 @@
     <string name="Swap_RecipientAddress_Description">La billetera que recibirá los fondos intercambiados.</string>
     <string name="Swap_RecipientAddress_EnterAddress">Ingrese la dirección de %s</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">El proveedor seleccionado solo puede entregar a una dirección de Zcash transparente (t-)</string>
+    <string name="Swap_RecipientAddress_NoTrustline">La dirección del destinatario no tiene línea de confianza %s y no puede recibirla</string>
 </resources>

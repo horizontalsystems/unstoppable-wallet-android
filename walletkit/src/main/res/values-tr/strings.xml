@@ -1804,4 +1804,5 @@
     <string name="Swap_RecipientAddress_Description">Değiştirilen fonları alacak cüzdan.</string>
     <string name="Swap_RecipientAddress_EnterAddress">%s Adresini Girin</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">Seçilen sağlayıcı yalnızca şeffaf (t-) Zcash adresine teslim edebilir</string>
+    <string name="Swap_RecipientAddress_NoTrustline">Alıcı adresi %s güven satırına sahip değil ve bunu alamaz</string>
 </resources>

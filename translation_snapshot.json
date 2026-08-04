@@ -1338,6 +1338,7 @@
     "Swap_Recipient": "Recipient",
     "Swap_RecipientAddress_Description": "The wallet that will receive the swapped funds.",
     "Swap_RecipientAddress_EnterAddress": "Enter %s Address",
+    "Swap_RecipientAddress_NoTrustline": "The recipient address has no %s trustline and cannot receive it",
     "Swap_RecipientAddress_TransparentZcashRequired": "The selected provider can only deliver to a transparent (t-) Zcash address",
     "Swap_Revoke": "Revoke",
     "Swap_Revoking": "Revoking...",

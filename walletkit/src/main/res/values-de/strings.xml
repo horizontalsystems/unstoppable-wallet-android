@@ -1812,4 +1812,5 @@
     <string name="Swap_RecipientAddress_Description">Das Wallet, das die ausgetauschten Mittel erhält.</string>
     <string name="Swap_RecipientAddress_EnterAddress">%s Adresse eingeben</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">Der ausgewählte Anbieter kann nur an eine transparente (t-) Zcash-Adresse liefern</string>
+    <string name="Swap_RecipientAddress_NoTrustline">Die Empfängeradresse hat keine %s-Vertrauenslinie und kann diese nicht empfangen</string>
 </resources>
