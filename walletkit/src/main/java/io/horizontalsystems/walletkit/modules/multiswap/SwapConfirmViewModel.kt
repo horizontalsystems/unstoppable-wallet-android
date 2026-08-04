@@ -323,6 +323,12 @@ class SwapConfirmViewModel(
 
         val result = sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
         saveSwapRecord(result)
+
+        // remember the delivery address so the recipient page can suggest it next time
+        recipient?.let {
+            App.recentAddressManager.setRecentAddress(it, tokenOut.blockchainType)
+        }
+
         result
     }
 
