@@ -1,10 +1,11 @@
-package io.horizontalsystems.walletkit.chain.zano
+package io.horizontalsystems.bankwallet
 
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.blockTime
 import io.horizontalsystems.walletkit.core.brandColor
@@ -41,7 +42,7 @@ import java.math.BigInteger
  * conversion step is provably behavior-preserving.
  *
  * To regenerate the fixture after an INTENTIONAL behavior change:
- *   ./gradlew :walletkit-chain-zano:testDebugUnitTest --tests "*ChainBehaviorParityTest*" -PupdateParityFixture=true
+ *   ./gradlew :app:testBaseDebugUnitTest --tests "*ChainBehaviorParityTest*" -PupdateParityFixture=true
  */
 class ChainBehaviorParityTest {
 

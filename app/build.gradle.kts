@@ -305,3 +305,12 @@ configurations.all {
         force("io.ktor:ktor-client-core:2.3.7")
     }
 }
+
+// Forward -PupdateParityFixture=true to the test JVM so ChainBehaviorParityTest can
+// regenerate its golden fixture (see walletkit/docs/Walletkit-Modularization-Plan.md).
+tasks.withType<Test>().configureEach {
+    systemProperty(
+        "updateParityFixture",
+        providers.gradleProperty("updateParityFixture").getOrElse("false")
+    )
+}
