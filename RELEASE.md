@@ -50,16 +50,18 @@ You will find a bash script located at `[Wallet-Project-Path]/docker/build-apk.s
 1. Create and go to temporary folder for APK output
 2. Run command:
 ```
-./build-apk.sh [REPO-TAG] [FULL_PATH_TO_KEYSTORE] [KEYSTORE_PASSWORD]
+./build-apk.sh [REPO-TAG] [FULL_PATH_TO_KEYSTORE]
 ```
 Where:<br>
 REPO-TAG: Repository tag from which you want to build APK<br>
 FULL_PATH_TO_KEYSTORE: Full Location of the keystore file<br>
-KEYSTORE_PASSWORD: Keystore password<br>
+
+The script prompts for the keystore password interactively (it must not be
+passed as an argument, so it never ends up in shell history).
 
 Example:
 ```
-./build-apk.sh 0.18.0 ~/Documents/Keystore/Apk_HorSys/horsys Keystore_Psw
+./build-apk.sh 0.18.0 ~/Documents/Keystore/Apk_HorSys/horsys
 ```
 
 #### 7.2 Verify apk file is reproducible from source code

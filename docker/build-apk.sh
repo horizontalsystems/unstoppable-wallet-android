@@ -1,12 +1,13 @@
 #!/bin/bash
 
 function usage() {
-    echo "Usage: ./build-apk.sh [REPO-TAG]  [FULL_PATH_TO_KEYSTORE] [KEYSTORE_PASSWORD]"
+    echo "Usage: ./build-apk.sh [REPO-TAG]  [FULL_PATH_TO_KEYSTORE]"
+    echo "The keystore password is prompted interactively."
 }
 
 ####################################
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -ne 2 ]; then
     echo "Error! Illegal number of args."
     usage
     exit 1
@@ -27,7 +28,11 @@ TAG=$1
 
 KEYSTORE=$2
 KEYSTORE_FILENAME="$(basename -- $KEYSTORE)"
-KEYSTORE_PASSWORD=$3
+# Prompted instead of taken as an argument so the password never appears in
+# shell history, process args, xtrace output or docker container metadata
+read -r -s -p "Keystore password: " KS_PASS
+echo
+export KS_PASS
 BUILT_APK_FILE="app/build/outputs/apk/base/release/app-base-release.apk"
 BUILT_APK_FILE_FDROID="app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk"
 ####################################
@@ -50,9 +55,9 @@ function buildApk () {
     echo "Starting docker container  ${DOCKER_IMAGE} ..."
     echo "Building apk file ..."
 
-    docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
+    docker run -it --rm --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
       './gradlew :app:assembleBaseRelease --no-daemon'
-    docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
+    docker run -it --rm --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
       './gradlew :app:assembleFdroidRelease --no-daemon'
 }
 
@@ -61,13 +66,13 @@ function signApk () {
 
     cp $KEYSTORE "${WORK_DIR}"
 
-    response=$(docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
-      "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass pass:${KEYSTORE_PASSWORD} ${BUILT_APK_FILE}")
+    response=$(docker run -it --rm -e KS_PASS --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -c \
+      "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass env:KS_PASS ${BUILT_APK_FILE}")
 
     echo $response
 
-    response2=$(docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
-      "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass pass:${KEYSTORE_PASSWORD} ${BUILT_APK_FILE_FDROID}")
+    response2=$(docker run -it --rm -e KS_PASS --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -c \
+      "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass env:KS_PASS ${BUILT_APK_FILE_FDROID}")
 
     echo $response2
 
