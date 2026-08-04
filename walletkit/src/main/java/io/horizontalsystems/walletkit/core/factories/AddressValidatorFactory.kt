@@ -17,7 +17,9 @@ import io.horizontalsystems.marketkit.models.Token
 
 object AddressValidatorFactory {
 
-    fun get(token: Token): EnterAddressValidator {
+    // allowOwnAddress: swap recipients may name the user's own address (the default
+    // delivery target anyway); the Send flow keeps the send-to-self protection
+    fun get(token: Token, allowOwnAddress: Boolean = false): EnterAddressValidator {
         ChainRegistry[token.blockchainType]?.addressValidator(token)?.let {
             return it
         }
@@ -32,7 +34,7 @@ object AddressValidatorFactory {
             }
 
             BlockchainType.Zcash -> {
-                ZcashAddressValidator(token, App.adapterManager)
+                ZcashAddressValidator(token, App.adapterManager, allowOwnAddress)
             }
 
             BlockchainType.Ethereum,
@@ -53,7 +55,7 @@ object AddressValidatorFactory {
             }
 
             BlockchainType.Tron -> {
-                TronAddressValidator(token, App.adapterManager)
+                TronAddressValidator(token, App.adapterManager, allowOwnAddress)
             }
 
             BlockchainType.Ton -> {

@@ -292,6 +292,7 @@ class EnterAddressViewModel(
         private val token: Token,
         private val address: String?,
         private val allowNull: Boolean,
+        private val allowOwnAddress: Boolean = false,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -311,7 +312,7 @@ class EnterAddressViewModel(
                     App.appDatabase.recentAddressDao(),
                     ActionCompletedDelegate
                 )
-            val addressValidator = AddressValidatorFactory.get(token)
+            val addressValidator = AddressValidatorFactory.get(token, allowOwnAddress)
             val addressCheckManager = AddressCheckManager(
                 App.spamManager,
                 App.appConfigProvider,

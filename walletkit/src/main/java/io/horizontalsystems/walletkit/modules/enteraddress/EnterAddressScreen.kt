@@ -65,6 +65,7 @@ fun EnterAddressScreen(
     allowNull: Boolean,
     initialAddress: String?,
     description: String? = null,
+    allowOwnAddress: Boolean = false,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
@@ -72,6 +73,7 @@ fun EnterAddressScreen(
             token = token,
             address = initialAddress,
             allowNull = allowNull,
+            allowOwnAddress = allowOwnAddress,
         )
     )
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(

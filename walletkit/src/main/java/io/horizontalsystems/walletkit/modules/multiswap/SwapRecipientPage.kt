@@ -32,6 +32,7 @@ data class SwapRecipientPage(val input: Input) : HSPage() {
             allowNull = false,
             initialAddress = input.initialAddress,
             description = stringResource(R.string.Swap_RecipientAddress_Description),
+            allowOwnAddress = true,
         ) { address, _ ->
             address?.let {
                 resultEventBus.sendResult(Result(it))

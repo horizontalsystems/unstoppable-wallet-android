@@ -23,7 +23,8 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
             title = stringResource(SendEvmSettings_SetRecipient),
             buttonTitle = stringResource(Button_Apply),
             allowNull = input.allowRemoval,
-            initialAddress = input.recipient?.hex
+            initialAddress = input.recipient?.hex,
+            allowOwnAddress = true,
         ) { address, _ ->
             resultEventBus.sendResult<Result>(Result(address))
             navigation.removeLastOrNull()
