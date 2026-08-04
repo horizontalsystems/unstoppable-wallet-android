@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.defaultTokenQuery
 import io.horizontalsystems.walletkit.core.eligibleTokens
 import io.horizontalsystems.walletkit.core.sorting.SortCriterion
 import io.horizontalsystems.walletkit.core.sorting.TokenSortContext
@@ -19,8 +20,10 @@ import io.horizontalsystems.walletkit.modules.balance.BalanceSorter
 import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinViewModel.Companion.RECENT_LIMIT
 import io.horizontalsystems.walletkit.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -138,7 +141,7 @@ class SwapSelectCoinViewModel(
             val eligible = if (activeAccount != null && !allowExternalReceive) {
                 fullCoin.eligibleTokens(activeAccount.type)
             } else {
-                fullCoin.tokens.filter { it.blockchainType in BlockchainType.supported }
+                externallyReceivableTokens(fullCoin)
             }
             val representative = eligible
                 .map { CoinBalanceItem(it, null, null) }
@@ -161,7 +164,7 @@ class SwapSelectCoinViewModel(
             coinsProvider.getItems()
                 .map { fullCoin ->
                     if (allowExternalReceive) {
-                        fullCoin.supportedTokens
+                        externallyReceivableTokens(fullCoin)
                     } else {
                         fullCoin.eligibleTokens(activeAccount.type)
                     }
@@ -204,6 +207,16 @@ class SwapSelectCoinViewModel(
             )
         }
     }
+
+    // For external delivery the derivation/address-format variants of a chain are
+    // indistinguishable — the funds go to whatever address the user enters — so only
+    // the chain's default variant is offered (e.g. one BTC row with BIP84, not four)
+    private fun externallyReceivableTokens(fullCoin: FullCoin): List<Token> =
+        fullCoin.supportedTokens.filter {
+            val type = it.type
+            (type !is TokenType.Derived && type !is TokenType.AddressTyped) ||
+                it.tokenQuery == it.blockchainType.defaultTokenQuery
+        }
 
     private fun supportedByAccount(token: Token): Boolean {
         if (allowExternalReceive) return true
