@@ -16,6 +16,8 @@ import coil.decode.SvgDecoder
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.CoreApp
 import io.horizontalsystems.walletkit.ICoreApp
+import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.factories.AccountFactory
 import io.horizontalsystems.walletkit.core.factories.AdapterFactory
 import io.horizontalsystems.walletkit.core.factories.EvmAccountManagerFactory
@@ -321,6 +323,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         zanoNodeStorage = ZanoNodeStorage(appDatabase)
         zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
         zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
+        ChainRegistry.register(ZanoChainPlugin(zanoNodeManager, zanoKitManager))
         zcashEndpointStorage = ZcashEndpointStorage(appDatabase)
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
         coinManager = CoinManager(marketKit, walletManager)
