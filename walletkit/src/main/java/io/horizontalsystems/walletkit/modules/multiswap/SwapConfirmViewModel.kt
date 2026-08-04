@@ -18,6 +18,7 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
@@ -27,6 +28,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -59,6 +61,11 @@ class SwapConfirmViewModel(
     // tokenOut the account can't hold — the recipient came from SwapRecipientPage,
     // is mandatory and must not be cleared (there is no own-wallet address to fall back to)
     val recipientRequired = !SwapHelper.isTokenReceivableByAccount(tokenOut)
+
+    // only Maya delivers ZEC to shielded/unified receivers; every other route needs
+    // a transparent recipient address
+    val zcashTransparentRecipientOnly =
+        tokenOut.blockchainType == BlockchainType.Zcash && swapProvider !== MayaProvider
     private val amountIn = swapQuote.amountIn.let { amount ->
         if (amount.scale() > tokenIn.decimals) {
             amount.setScale(tokenIn.decimals, RoundingMode.DOWN)

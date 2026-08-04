@@ -244,6 +244,9 @@ kit-solana = { module = "com.github.horizontalsystems:solana-kit-android", versi
 kit-tron = { module = "com.github.horizontalsystems:tron-kit-android", version.ref = "tronKit" }
 kit-thorchain = { module = "com.github.horizontalsystems:thorchain-kit-android", version.ref = "thorchainKit" }
 zcash-android-sdk = { module = "cash.z.ecc.android:zcash-android-sdk", version.ref = "zcashSdk" }
+# rust backend of the sdk (transitive implementation dep) — needed at compile time for
+# synchronizer-free address validation (RustBackend.isValid*Addr)
+zcash-android-backend = { module = "cash.z.ecc.android:zcash-android-backend", version.ref = "zcashSdk" }
 
 # Binance
 binance-connector = { module = "io.github.binance:binance-connector-java", version.ref = "binanceConnector" }

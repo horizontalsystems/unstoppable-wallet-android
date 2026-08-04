@@ -214,6 +214,7 @@ private fun SwapConfirmInternal(
                         uiState.tokenOut,
                         uiState.recipient,
                         allowRemoval = !uiState.recipientRequired,
+                        zcashTransparentOnly = viewModel.zcashTransparentRecipientOnly,
                     )
                 )
             }

@@ -33,6 +33,7 @@ import io.horizontalsystems.walletkit.modules.address.AddressParserModule
 import io.horizontalsystems.walletkit.modules.address.AddressParserViewModel
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.send.address.AddressValidationError
 import io.horizontalsystems.walletkit.modules.settings.security.securesend.SecureSendConfigSheet
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -68,6 +69,7 @@ fun EnterAddressScreen(
     // shown while nothing is entered yet, e.g. "Enter Bitcoin Address"
     buttonTitleEmpty: String? = null,
     allowOwnAddress: Boolean = false,
+    zcashTransparentOnly: Boolean = false,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
@@ -76,6 +78,7 @@ fun EnterAddressScreen(
             address = initialAddress,
             allowNull = allowNull,
             allowOwnAddress = allowOwnAddress,
+            zcashTransparentOnly = zcashTransparentOnly,
         )
     )
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
@@ -228,6 +231,14 @@ fun AddressCheck(
     if (addressValidationInProgress) {
         //show nothing
     } else if (addressValidationError != null) {
+        // our own validation errors carry a translated, user-facing message (e.g.
+        // send-to-self, transparent-Zcash-only); raw parser exceptions get generic text
+        val customMessage = when (addressValidationError) {
+            is AddressValidationError.InvalidAddress,
+            is AddressValidationError.SendToSelfForbidden -> addressValidationError.message
+
+            else -> null
+        }
         AlertCard(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -235,7 +246,7 @@ fun AddressCheck(
             format = AlertFormat.Structured,
             type = AlertType.Critical,
             titleCustom = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-            text = stringResource(R.string.Send_Address_Error_InvalidAddress_Description),
+            text = customMessage ?: stringResource(R.string.Send_Address_Error_InvalidAddress_Description),
         )
         VSpacer(32.dp)
     }

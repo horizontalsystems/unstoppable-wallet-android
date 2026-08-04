@@ -185,6 +185,7 @@ dependencies {
     api(libs.kit.thorchain)
     api(libs.kit.tron)
     api(libs.zcash.android.sdk)
+    implementation(libs.zcash.android.backend)
 
     // BouncyCastle
     api(libs.bouncycastle)

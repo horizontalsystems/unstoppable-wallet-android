@@ -70,6 +70,7 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
@@ -108,6 +109,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -187,6 +189,10 @@ fun SwapScreen(
                         parentScreenContentKey = parentScreenContentKey,
                         closeAfterSwap = closeAfterSwap,
                         initialAddress = viewModel.externalRecipient?.hex,
+                        // only Maya delivers ZEC to shielded/unified receivers; every
+                        // other route needs a transparent address
+                        zcashTransparentOnly = tokenOut.blockchainType == BlockchainType.Zcash &&
+                                viewModel.uiState.quote?.provider !== MayaProvider,
                     )
                 )
             )

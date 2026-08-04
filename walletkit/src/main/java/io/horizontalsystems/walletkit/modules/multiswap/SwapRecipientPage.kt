@@ -51,6 +51,7 @@ data class SwapRecipientPage(val input: Input) : HSPage() {
             initialAddress = input.initialAddress,
             description = stringResource(R.string.Swap_RecipientAddress_Description),
             allowOwnAddress = true,
+            zcashTransparentOnly = input.zcashTransparentOnly,
         ) { address, _ ->
             address?.let {
                 swapViewModel.setExternalRecipient(it)
@@ -65,5 +66,7 @@ data class SwapRecipientPage(val input: Input) : HSPage() {
         val parentScreenContentKey: String,
         val closeAfterSwap: Boolean,
         val initialAddress: String? = null,
+        // the selected route delivers only to transparent Zcash addresses
+        val zcashTransparentOnly: Boolean = false,
     )
 }

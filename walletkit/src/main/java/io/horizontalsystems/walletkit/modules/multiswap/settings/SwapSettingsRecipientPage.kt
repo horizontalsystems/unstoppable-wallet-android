@@ -25,6 +25,7 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
             allowNull = input.allowRemoval,
             initialAddress = input.recipient?.hex,
             allowOwnAddress = true,
+            zcashTransparentOnly = input.zcashTransparentOnly,
         ) { address, _ ->
             resultEventBus.sendResult<Result>(Result(address))
             navigation.removeLastOrNull()
@@ -36,6 +37,8 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
         val token: Token,
         val recipient: Address?,
         val allowRemoval: Boolean = true,
+        // the selected route delivers only to transparent Zcash addresses
+        val zcashTransparentOnly: Boolean = false,
     )
 
     data class Result(val address: Address?)
