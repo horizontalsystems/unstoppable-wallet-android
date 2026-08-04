@@ -29,7 +29,6 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val walletConnectAppMetaDataName = BuildConfig.WALLET_CONNECT_APP_META_DATA_NAME
     override val walletConnectAppMetaDataUrl = BuildConfig.WALLET_CONNECT_APP_META_DATA_URL
     override val walletConnectAppMetaDataIcon = BuildConfig.WALLET_CONNECT_APP_META_DATA_ICON
-    override val accountsBackupFileSalt = BuildConfig.ACCOUNTS_BACKUP_FILE_SALT
     override val simplexSupportChat = "https://smp11.simplex.im/g#yTrDh716RZCNYsdPSDrqMMlHnqZlW4XJGnFTugBrsAI"
     override val nymVpnLink = "https://nymtechnologies.pxf.io/N9vnr1"
     override val telegramSupportChat = "https://t.me/m/1TNZ9JE4MTNi"

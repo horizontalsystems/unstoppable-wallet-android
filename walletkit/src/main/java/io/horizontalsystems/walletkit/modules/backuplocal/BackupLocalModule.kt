@@ -1,8 +1,9 @@
 package io.horizontalsystems.walletkit.modules.backuplocal
 
 import com.google.gson.annotations.SerializedName
-import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.managers.EncryptDecryptManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
+import io.horizontalsystems.walletkit.toHexString
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.tronkit.toBigInteger
@@ -156,11 +157,13 @@ object BackupLocalModule {
         is AccountType.Passkey -> accountType.credentialId.toByteArray(Charsets.UTF_8)
     }
 
-    val kdfDefault = KdfParams(
+    // Salt must be unique per backup file so derived keys can't be precomputed
+    // or correlated across backups; restore reads it back from the file's kdfparams
+    fun kdfParams() = KdfParams(
         dklen = 32,
         n = 16384,
         p = 4,
         r = 8,
-        salt = App.appConfigProvider.accountsBackupFileSalt
+        salt = EncryptDecryptManager.generateRandomBytes(16).toHexString()
     )
 }
