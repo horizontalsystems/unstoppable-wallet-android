@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
@@ -83,6 +84,15 @@ interface ChainPlugin {
 
     /** Row shown in Settings > Blockchain Settings, or null to omit the chain there. */
     fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? = null
+
+    /**
+     * Derives the account's receive address for swap destinations without requiring an
+     * enabled wallet. Null means the address cannot be derived for this account type.
+     */
+    suspend fun swapDestinationAddress(account: Account): String? = null
+
+    /** Send-transaction service used by multiswap/OpenCryptoPay confirm flows. */
+    fun sendTransactionService(token: Token): AbstractSendTransactionService? = null
 }
 
 /** Everything SendPage provides to a chain's send screen. */

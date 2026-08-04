@@ -23,8 +23,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
-import io.horizontalsystems.zanokit.ZanoKit
-import io.horizontalsystems.zanokit.ZanoWallet
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
@@ -160,20 +159,12 @@ object SwapHelper {
                     }
                 }
 
-                BlockchainType.Zano -> {
-                    val accountType = account.type as? AccountType.Mnemonic
-                        ?: throw SwapError.NoDestinationAddress()
-                    withContext(Dispatchers.IO) {
-                        ZanoKit.address(ZanoWallet.Bip39(accountType.words, accountType.passphrase, 0))
-                            ?: throw SwapError.NoDestinationAddress()
-                    }
-                }
-
                 BlockchainType.Zcash -> cachedZcashAddress(account.id, zcashAddressCache, zcashAddressMutex) {
                     ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
                 }
 
-                else -> throw SwapError.NoDestinationAddress()
+                else -> ChainRegistry[token.blockchainType]?.swapDestinationAddress(account)
+                    ?: throw SwapError.NoDestinationAddress()
             }
         }
     }

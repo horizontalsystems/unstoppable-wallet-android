@@ -6,8 +6,15 @@ import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Account
+import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceZano
+import io.horizontalsystems.zanokit.ZanoWallet
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
@@ -82,6 +89,19 @@ class ZanoChainPlugin(
             page = ZanoNetworkPage,
             statEvent = StatEvent.OpenBlockchainSettingsCryptoNote(blockchain.uid),
         )
+    }
+
+    override suspend fun swapDestinationAddress(account: Account): String? {
+        val accountType = account.type as? AccountType.Mnemonic ?: return null
+        return withContext(Dispatchers.IO) {
+            ZanoKit.address(ZanoWallet.Bip39(accountType.words, accountType.passphrase, 0))
+        }
+    }
+
+    override fun sendTransactionService(token: Token): AbstractSendTransactionService {
+        val adapter = App.adapterManager.getAdapterForToken<ZanoAdapter>(token)
+            ?: throw IllegalStateException("ZanoAdapter is null")
+        return SendTransactionServiceZano(adapter)
     }
 
     @Composable
