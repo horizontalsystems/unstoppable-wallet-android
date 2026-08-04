@@ -370,6 +370,11 @@ class SwapViewModel(
     }
 
     fun onSelectTokenOut(token: Token) {
+        // picking the current sell token on the You Get side swaps the pair — blocked
+        // when the current tokenOut can't be signed by the account (same rule as the
+        // switch arrow), else an externally-delivered token would become the sell side
+        if (token == quoteState.tokenIn && externalRecipientRequired(quoteState.tokenOut)) return
+
         tokensManuallySet = true
         quoteService.setTokenOut(token)
 
