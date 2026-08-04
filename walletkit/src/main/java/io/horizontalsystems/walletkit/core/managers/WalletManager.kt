@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.IWalletStorage
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.EnabledWallet
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -96,7 +97,6 @@ class WalletManager(
     fun start(
         restoreSettingsManager: RestoreSettingsManager,
         moneroNodeManager: MoneroNodeManager,
-        zanoNodeManager: ZanoNodeManager,
         zcashEndpointManager: ZcashLightWalletEndpointManager,
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
@@ -114,9 +114,13 @@ class WalletManager(
                 reloadWallets(BlockchainType.Monero)
             }
         }
-        coroutineScope.launch {
-            zanoNodeManager.currentNodeUpdatedFlow.collect {
-                reloadWallets(BlockchainType.Zano)
+        ChainRegistry.all.forEach { plugin ->
+            plugin.walletReloadTrigger?.let { trigger ->
+                coroutineScope.launch {
+                    trigger.collect {
+                        reloadWallets(plugin.blockchainType)
+                    }
+                }
             }
         }
         coroutineScope.launch {

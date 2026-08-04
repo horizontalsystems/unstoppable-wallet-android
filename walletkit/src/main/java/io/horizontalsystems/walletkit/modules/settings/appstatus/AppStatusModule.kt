@@ -23,7 +23,6 @@ object AppStatusModule {
                 App.thorchainKitManager,
                 App.solanaKitManager,
                 App.btcBlockchainManager,
-                App.zanoKitManager,
             )
             return viewModel as T
         }

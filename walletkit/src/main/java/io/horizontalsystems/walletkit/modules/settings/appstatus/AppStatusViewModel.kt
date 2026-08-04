@@ -20,7 +20,8 @@ import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
-import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.title
 import io.horizontalsystems.walletkit.core.managers.statusInfo
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.helpers.DateHelper
@@ -45,7 +46,6 @@ class AppStatusViewModel(
     private val thorchainKitManager: ThorchainKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
-    private val zanoKitManager: ZanoKitManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
 
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
@@ -210,8 +210,10 @@ class AppStatusViewModel(
                 }
             }
 
-        zanoKitManager.statusInfo?.let { statusInfo ->
-            blockchainStatus["Zano"] = statusInfo
+        ChainRegistry.all.forEach { plugin ->
+            plugin.statusInfo()?.let { statusInfo ->
+                blockchainStatus[plugin.blockchainType.title] = statusInfo
+            }
         }
 
         tronKitManager.statusInfo?.let { statusInfo ->
@@ -294,10 +296,12 @@ class AppStatusViewModel(
                 }
             }
 
-        zanoKitManager.statusInfo?.let { statusInfo ->
-            val title = if (blocks.isEmpty()) "Blockchain Status" else null
-            val block = getBlockchainInfoBlock(title, "Zano", statusInfo)
-            blocks.add(block)
+        ChainRegistry.all.forEach { plugin ->
+            plugin.statusInfo()?.let { statusInfo ->
+                val title = if (blocks.isEmpty()) "Blockchain Status" else null
+                val block = getBlockchainInfoBlock(title, plugin.blockchainType.title, statusInfo)
+                blocks.add(block)
+            }
         }
 
         tronKitManager.statusInfo?.let { statusInfo ->

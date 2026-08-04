@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.marketkit.models.Blockchain
 
 object SyncErrorModule {
@@ -26,7 +27,7 @@ object SyncErrorModule {
         data class Bitcoin(val blockchain: Blockchain) : BlockchainWrapper()
         data class Evm(val blockchain: Blockchain) : BlockchainWrapper()
         object Monero : BlockchainWrapper()
-        object Zano : BlockchainWrapper()
+        data class ChainPage(val page: HSPage) : BlockchainWrapper()
         object Zcash : BlockchainWrapper()
     }
 }

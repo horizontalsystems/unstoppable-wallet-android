@@ -7,7 +7,11 @@ import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+import java.util.Date
 
 /**
  * Per-blockchain extension point. Optional chains implement this and register in
@@ -41,4 +45,28 @@ interface ChainPlugin {
 
     /** Validator used by send/enter-address flows, or null to fall back to core dispatch. */
     fun addressValidator(token: Token): EnterAddressValidator? = null
+
+    /** Birthday height stored when a NEW wallet of this chain is created, or null if unused. */
+    fun newWalletBirthdayHeight(): Long? = null
+
+    /** Date of the chain's first block, for the restore birthday-height date picker. */
+    fun firstBlockDate(): LocalDate? = null
+
+    /** Estimates the date a block at [height] was mined. */
+    suspend fun estimateBlockDate(height: Long): Date? = null
+
+    /** Estimates the block height at [date]. */
+    suspend fun estimateBlockHeightFromDate(date: Date): Long? = null
+
+    /**
+     * Emissions trigger reloadWallets for this chain (e.g. after a node/endpoint change).
+     * Collected once by WalletManager.start.
+     */
+    val walletReloadTrigger: Flow<*>? get() = null
+
+    /** Kit status details for the App Status debug screen. */
+    fun statusInfo(): Map<String, Any>? = null
+
+    /** The chain's network/node settings page, opened from sync errors and settings. */
+    fun networkSettingsPage(): HSPage? = null
 }

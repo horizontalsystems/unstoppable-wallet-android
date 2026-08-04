@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.monerokit.MoneroKit
-import io.horizontalsystems.zanokit.ZanoKit
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -25,8 +25,7 @@ object BirthdayHeightHelper {
     fun getFirstBlockDate(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Zcash -> LocalDate.of(2018, 10, 29)
         BlockchainType.Monero -> LocalDate.of(2014, 4, 18)
-        BlockchainType.Zano -> LocalDate.of(2019, 5, 8)
-        else -> throw IllegalArgumentException()
+        else -> ChainRegistry[blockchainType]?.firstBlockDate() ?: throw IllegalArgumentException()
     }
 
     fun getInitialDateForPicker(cachedDate: Date?): LocalDate {
@@ -51,10 +50,7 @@ object BirthdayHeightHelper {
             BlockchainType.Monero -> {
                 MoneroKit.dateForRestoreHeight(height)
             }
-            BlockchainType.Zano -> {
-                ZanoKit.dateForRestoreHeight(height)
-            }
-            else -> null
+            else -> ChainRegistry[blockchainType]?.estimateBlockDate(height)
         }
     }
 
@@ -77,10 +73,7 @@ object BirthdayHeightHelper {
             BlockchainType.Monero -> {
                 MoneroKit.restoreHeightForDate(selectedDate)
             }
-            BlockchainType.Zano -> {
-                ZanoKit.restoreHeightForDate(selectedDate)
-            }
-            else -> null
+            else -> ChainRegistry[blockchainType]?.estimateBlockHeightFromDate(selectedDate)
         }
     }
 

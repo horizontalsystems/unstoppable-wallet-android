@@ -8,7 +8,7 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.RestoreSettingRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.zanokit.ZanoKit
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -71,11 +71,7 @@ class RestoreSettingsManager(
                         return moneroBirthdayProvider.restoreHeightForNewWallet().toString()
                     }
 
-                    BlockchainType.Zano -> {
-                        return ZanoKit.restoreHeightForDate(java.util.Date()).toString()
-                    }
-
-                    else -> null
+                    else -> ChainRegistry[blockchainType]?.newWalletBirthdayHeight()?.toString()
                 }
             }
         }

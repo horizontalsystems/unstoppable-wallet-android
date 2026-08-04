@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SyncErrorService(
@@ -17,10 +18,12 @@ class SyncErrorService(
     val blockchainWrapper by lazy {
         when (wallet.token.blockchainType) {
             BlockchainType.Monero -> SyncErrorModule.BlockchainWrapper.Monero
-            BlockchainType.Zano -> SyncErrorModule.BlockchainWrapper.Zano
             BlockchainType.Zcash -> SyncErrorModule.BlockchainWrapper.Zcash
             BlockchainType.Tron -> SyncErrorModule.BlockchainWrapper.Evm(wallet.token.blockchain)
             else -> {
+                ChainRegistry[wallet.token.blockchainType]?.networkSettingsPage()?.let {
+                    return@lazy SyncErrorModule.BlockchainWrapper.ChainPage(it)
+                }
                 btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
                     SyncErrorModule.BlockchainWrapper.Bitcoin(it)
                 } ?: run {

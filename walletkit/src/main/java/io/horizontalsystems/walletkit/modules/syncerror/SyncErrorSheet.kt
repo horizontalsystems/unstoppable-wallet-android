@@ -15,7 +15,6 @@ import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchai
 import io.horizontalsystems.walletkit.modules.evmnetwork.EvmNetworkPage
 import io.horizontalsystems.walletkit.modules.moneronetwork.MoneroNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
 import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
@@ -91,8 +90,8 @@ private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
                                 navigation.slideFromBottom(MoneroNetworkPage)
                             }
 
-                            SyncErrorModule.BlockchainWrapper.Zano -> {
-                                navigation.slideFromBottom(ZanoNetworkPage)
+                            is SyncErrorModule.BlockchainWrapper.ChainPage -> {
+                                navigation.slideFromBottom(blockchainWrapper.page)
                             }
 
                             SyncErrorModule.BlockchainWrapper.Zcash -> {

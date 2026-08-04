@@ -8,10 +8,17 @@ import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.core.managers.statusInfo
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
+import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.zanokit.ZanoKit
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+import java.util.Date
 
 /**
  * Managers are passed as providers so the plugin's pure hooks (metadata, support matrix)
@@ -41,4 +48,19 @@ class ZanoChainPlugin(
         listOf(AddressHandlerZanoAlias(ZanoAliasResolver(zanoNodeManager())))
 
     override fun addressValidator(token: Token): EnterAddressValidator = ZanoAddressValidator()
+
+    override fun newWalletBirthdayHeight(): Long = ZanoKit.restoreHeightForDate(Date())
+
+    override fun firstBlockDate(): LocalDate = LocalDate.of(2019, 5, 8)
+
+    override suspend fun estimateBlockDate(height: Long): Date? = ZanoKit.dateForRestoreHeight(height)
+
+    override suspend fun estimateBlockHeightFromDate(date: Date): Long = ZanoKit.restoreHeightForDate(date)
+
+    override val walletReloadTrigger: Flow<*>
+        get() = zanoNodeManager().currentNodeUpdatedFlow
+
+    override fun statusInfo(): Map<String, Any>? = zanoKitManager().statusInfo
+
+    override fun networkSettingsPage(): HSPage = ZanoNetworkPage
 }
