@@ -44,7 +44,6 @@ android {
         buildConfigFieldString("WALLET_CONNECT_APP_META_DATA_NAME", "Unstoppable")
         buildConfigFieldString("WALLET_CONNECT_APP_META_DATA_URL", "unstoppable.money")
         buildConfigFieldString("WALLET_CONNECT_APP_META_DATA_ICON", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png")
-        buildConfigFieldString("ACCOUNTS_BACKUP_FILE_SALT", "unstoppable")
         buildConfigFieldString("THORCHAIN_API_KEY", "THORCHAIN_APIJ4R0S3UWZI8GEXTQ")
 
         buildConfigField("boolean", "FDROID_BUILD", "false")

@@ -678,7 +678,7 @@ class BackupProvider(
     }
 
     private fun encrypted(data: String, passphrase: String): BackupLocalModule.BackupCrypto {
-        val kdfParams = BackupLocalModule.kdfDefault
+        val kdfParams = BackupLocalModule.kdfParams()
         val secretText = data.toByteArray(Charsets.UTF_8)
         val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: throw Exception("Couldn't get encryption key")
 
@@ -698,7 +698,7 @@ class BackupProvider(
 
     @Throws
     private fun walletBackup(account: Account, passphrase: String): BackupLocalModule.WalletBackup {
-        val kdfParams = BackupLocalModule.kdfDefault
+        val kdfParams = BackupLocalModule.kdfParams()
         val secretText = BackupLocalModule.getDataForEncryption(account.type)
         val id = getId(secretText)
         val key = EncryptDecryptManager.getKey(passphrase, kdfParams) ?: throw Exception("Couldn't get encryption key")

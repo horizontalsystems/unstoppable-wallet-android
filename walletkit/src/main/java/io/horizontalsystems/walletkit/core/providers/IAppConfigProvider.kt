@@ -31,7 +31,6 @@ interface IAppConfigProvider {
     val walletConnectAppMetaDataName: String
     val walletConnectAppMetaDataUrl: String
     val walletConnectAppMetaDataIcon: String
-    val accountsBackupFileSalt: String
     val simplexSupportChat: String
     val nymVpnLink: String
     val telegramSupportChat: String
