@@ -175,25 +175,21 @@ fun SwapScreen(
         }
     }
 
-    // tokenOut the account can't hold: ask for the external delivery address first,
-    // then proceed to confirmation with it
-    val forResultRecipient = navigation.slideFromRightForResult<SwapRecipientPage.Result>(
-        {
-            SwapRecipientPage(
-                SwapRecipientPage.Input(
-                    viewModel.uiState.tokenOut!!,
-                    viewModel.externalRecipient?.hex,
+    val navigateToSwapConfirm = {
+        val tokenOut = viewModel.uiState.tokenOut
+        if (viewModel.uiState.externalRecipientRequired && tokenOut != null) {
+            // tokenOut the account can't hold: the recipient page collects the external
+            // delivery address and opens the confirmation itself
+            navigation.slideFromRight(
+                SwapRecipientPage(
+                    SwapRecipientPage.Input(
+                        token = tokenOut,
+                        parentScreenContentKey = parentScreenContentKey,
+                        closeAfterSwap = closeAfterSwap,
+                        initialAddress = viewModel.externalRecipient?.hex,
+                    )
                 )
             )
-        }
-    ) {
-        viewModel.setExternalRecipient(it.address)
-        forResult()
-    }
-
-    val navigateToSwapConfirm = {
-        if (viewModel.uiState.externalRecipientRequired && viewModel.uiState.tokenOut != null) {
-            forResultRecipient()
         } else {
             forResult()
         }

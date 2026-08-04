@@ -65,6 +65,8 @@ fun EnterAddressScreen(
     allowNull: Boolean,
     initialAddress: String?,
     description: String? = null,
+    // shown while nothing is entered yet, e.g. "Enter Bitcoin Address"
+    buttonTitleEmpty: String? = null,
     allowOwnAddress: Boolean = false,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
@@ -141,10 +143,13 @@ fun EnterAddressScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),
-                    title = if (uiState.addressValidationError != null)
-                        stringResource(R.string.Send_Address_Error_InvalidAddress)
-                    else
-                        buttonTitle,
+                    title = when {
+                        uiState.addressValidationError != null ->
+                            stringResource(R.string.Send_Address_Error_InvalidAddress)
+
+                        buttonTitleEmpty != null && uiState.value.isBlank() -> buttonTitleEmpty
+                        else -> buttonTitle
+                    },
                     onClick = {
                         onResult.invoke(uiState.address, uiState.risky)
                     },
