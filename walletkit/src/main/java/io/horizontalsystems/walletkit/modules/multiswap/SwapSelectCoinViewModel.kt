@@ -211,15 +211,19 @@ class SwapSelectCoinViewModel(
     // For external delivery the derivation/address-format variants of a chain are
     // indistinguishable — the funds go to whatever address the user enters — so only
     // the chain's default variant is offered (e.g. one BTC row with BIP84, not four)
+    private fun isExternallyReceivable(token: Token): Boolean {
+        val type = token.type
+        return (type !is TokenType.Derived && type !is TokenType.AddressTyped) ||
+            token.tokenQuery == token.blockchainType.defaultTokenQuery
+    }
+
     private fun externallyReceivableTokens(fullCoin: FullCoin): List<Token> =
-        fullCoin.supportedTokens.filter {
-            val type = it.type
-            (type !is TokenType.Derived && type !is TokenType.AddressTyped) ||
-                it.tokenQuery == it.blockchainType.defaultTokenQuery
-        }
+        fullCoin.supportedTokens.filter { isExternallyReceivable(it) }
 
     private fun supportedByAccount(token: Token): Boolean {
-        if (allowExternalReceive) return true
+        // externally receivable tokens are still narrowed to the chain-default variant,
+        // so recents saved by other sessions (e.g. BTC BIP44) stay canonical here too
+        if (allowExternalReceive) return isExternallyReceivable(token)
         // read at call time: the picker can outlive an account switch
         val accountType = App.accountManager.activeAccount?.type ?: return true
         return token.supports(accountType) && token.blockchainType.supports(accountType)
