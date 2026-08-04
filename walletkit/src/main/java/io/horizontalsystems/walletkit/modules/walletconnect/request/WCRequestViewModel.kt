@@ -43,7 +43,8 @@ class WCRequestViewModel(
         finish = finish,
         runnable = !approveInProgress && actionState.runnable,
         approveButtonTitle = wcAction.getApproveButtonTitle(),
-        contentItems = actionState.items
+        contentItems = actionState.items,
+        error = error
     )
 
     fun approve() = viewModelScope.launch(Dispatchers.Default) {
@@ -63,7 +64,7 @@ class WCRequestViewModel(
                 emitState()
             },
             onErrorResult = {
-                approveInProgress = true
+                approveInProgress = false
                 error = it
                 emitState()
             }
@@ -106,5 +107,6 @@ data class WCRequestUiState(
     val finish: Boolean,
     val runnable: Boolean,
     val approveButtonTitle: TranslatableString,
-    val contentItems: List<SectionViewItem>
+    val contentItems: List<SectionViewItem>,
+    val error: Throwable?
 )

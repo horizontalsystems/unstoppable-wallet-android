@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
@@ -57,6 +59,13 @@ fun WcRequestScreen(
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
             navigation.removeLastOrNull()
+        }
+    }
+
+    val view = LocalView.current
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            HudHelper.showErrorMessage(view, it.message ?: it::class.java.simpleName)
         }
     }
 
