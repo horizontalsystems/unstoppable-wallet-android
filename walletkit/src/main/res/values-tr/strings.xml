@@ -1801,4 +1801,7 @@
     <string name="Passkey_ProviderAttention_Title">Passkey Sağlayıcınızı Kontrol Edin</string>
     <string name="Passkey_ProviderAttention_Description">Passkey sağlayıcınız isteği tamamlayamadı. Passkey\'lerinizi depolayan uygulamayı veya hesabı açın, istenen herhangi bir oturum açma veya doğrulamayı tamamlayın ve tekrar deneyin.</string>
     <string name="Passkey_ProviderAttention_Gpm_Description">Google Şifre Yöneticisi, parolalar kullanılmadan önce kilidi açılmalıdır.\n\n1. Ayarlar → Google → Google Hesabınızı yönetin seçeneğini açın — veya daha basit bir şekilde, bu hesapla Chrome\'u açın ve \"Bunun siz olduğunu doğrulayın\" veya parola ifadesi istemini arayın. Senkronizasyon parolanızı girin (veya istenildiğinde eski cihazınızın PIN\'ini veya desenini).\n\n2. Alternatif olarak, Google Şifre Yöneticisini doğrudan açın (Ayarlar → Şifreler ve hesaplar veya Chrome\'da passwordmanager.google.com) – kasa kilitliyse kilit açma istemini gösterecektir.\n\n3. Özel bir parola ifadesini unuttuysanız, Google\'ın sunduğu tek yol senkronizasyon verilerini sıfırlamaktır (Chrome ayarları → \"Senkronizasyonu sıfırla\"), bu da parola ifadesini siler.\n\n4. Sonra tekrar deneyin.</string>
+    <string name="Swap_RecipientAddress_Description">Değiştirilen fonları alacak cüzdan.</string>
+    <string name="Swap_RecipientAddress_EnterAddress">%s Adresini Girin</string>
+    <string name="Swap_RecipientAddress_TransparentZcashRequired">Seçilen sağlayıcı yalnızca şeffaf (t-) Zcash adresine teslim edebilir</string>
 </resources>

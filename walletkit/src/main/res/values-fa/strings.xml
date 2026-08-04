@@ -733,4 +733,7 @@
     <string name="Passkey_ProviderAttention_Title">ارائه‌دهنده Passkey خود را بررسی کنید</string>
     <string name="Passkey_ProviderAttention_Description">ارائه‌دهنده passkey شما نتوانست درخواست را تکمیل کند. برنامه یا حسابی که passkey های خود را ذخیره می‌کند را باز کنید، هرگونه ورود یا تایید درخواستی را تکمیل کنید و دوباره سعی کنید.</string>
     <string name="Passkey_ProviderAttention_Gpm_Description">Google Password Manager باید قبل از استفاده از کلیدهای دسترسی باز شود.\n\n1. تنظیمات → Google → مدیریت حساب Google خود را باز کنید — یا ساده‌تر، Chrome را در آن حساب باز کنید و به دنبال یک اخطار \"تأیید کنید که این شما هستید\" یا پاسفریز بگردید. عبارت عبور همگام‌سازی خود را وارد کنید (یا پین یا الگوی دستگاه قدیمی خود در صورت درخواست).\n\n2. متناوباً، Google Password Manager را مستقیماً باز کنید (تنظیمات → رمزهای عبور و حساب‌ها، یا passwordmanager.google.com در Chrome) — اگر گاوصندوق قفل باشد، اخطار باز کردن را نشان می‌دهد.\n\n3. اگر یک پاسفریز سفارشی را فراموش کرده‌اید، تنها راه پیشنهادی Google بازنشانی داده‌های همگام‌سازی است (تنظیمات Chrome → \"بازنشانی همگام‌سازی\")، که پاسفریز را حذف می‌کند.\n\n4. سپس دوباره تلاش کنید.</string>
+    <string name="Swap_RecipientAddress_Description">کیف پولی که وجوه مبادله شده را دریافت خواهد کرد.</string>
+    <string name="Swap_RecipientAddress_EnterAddress">آدرس %s را وارد کنید</string>
+    <string name="Swap_RecipientAddress_TransparentZcashRequired">ارائه دهنده انتخاب شده فقط می تواند به آدرس شفاف Zcash (t-) تحویل دهد</string>
 </resources>

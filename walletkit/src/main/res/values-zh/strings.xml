@@ -1800,4 +1800,7 @@
     <string name="Passkey_ProviderAttention_Title">检查您的 Passkey 提供商</string>
     <string name="Passkey_ProviderAttention_Description">您的 Passkey 提供商无法完成该请求。打开存储您的密钥的应用或账户，完成它要求的任何登录或验证，然后重试。</string>
     <string name="Passkey_ProviderAttention_Gpm_Description">Google密码管理器需要解锁才能使用密钥。\n\n1. 打开设置 → Google → 管理您的Google账户，或者更简单地，打开已登录该账户的Chrome，并查找\"验证是否为您\"或密码短语提示。输入您的同步密码短语（或在出现提示时输入旧设备的PIN或图案）。\n\n2. 或者，直接打开Google密码管理器（设置 → 密码和账户，或Chrome中的passwordmanager.google.com），如果保管库已锁定，它将显示解锁提示。\n\n3. 如果您忘记了自定义密码短语，Google提供的唯一方式是重置同步数据（Chrome设置 → \"重置同步\"），这会清除密码短语。\n\n4. 然后重试。</string>
+    <string name="Swap_RecipientAddress_Description">将接收交换资金的钱包。</string>
+    <string name="Swap_RecipientAddress_EnterAddress">输入%s地址</string>
+    <string name="Swap_RecipientAddress_TransparentZcashRequired">选定的提供商只能交付到透明(t-)Zcash地址</string>
 </resources>
