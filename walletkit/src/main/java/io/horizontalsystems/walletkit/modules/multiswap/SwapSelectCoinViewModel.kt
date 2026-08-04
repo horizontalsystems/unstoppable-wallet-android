@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.eligibleTokens
 import io.horizontalsystems.walletkit.core.sorting.SortCriterion
 import io.horizontalsystems.walletkit.core.sorting.TokenSortContext
 import io.horizontalsystems.walletkit.core.supported
+import io.horizontalsystems.walletkit.core.supportedTokens
 import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -25,9 +26,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewModel() {
+class SwapSelectCoinViewModel(
+    private val otherSelectedToken: Token?,
+    // "You Get" side: tokens the account can't hold stay selectable — the swap is
+    // delivered to an external address the user enters before confirmation
+    private val allowExternalReceive: Boolean,
+) : ViewModel() {
     private val activeAccount = App.accountManager.activeAccount
-    private val coinsProvider = activeAccount?.let { FullCoinsProvider(App.marketKit, it) }
+    private val coinsProvider = activeAccount?.let {
+        FullCoinsProvider(App.marketKit, it, filterByAccountSupport = !allowExternalReceive)
+    }
     private val adapterManager = App.adapterManager
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
@@ -127,7 +135,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         for (fullCoin in topCoins) {
             if (top.size >= 25) break
 
-            val eligible = if (activeAccount != null) {
+            val eligible = if (activeAccount != null && !allowExternalReceive) {
                 fullCoin.eligibleTokens(activeAccount.type)
             } else {
                 fullCoin.tokens.filter { it.blockchainType in BlockchainType.supported }
@@ -151,7 +159,13 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
         if (coinsProvider != null && activeAccount != null) {
             coinsProvider.getItems()
-                .map { it.eligibleTokens(activeAccount.type) }
+                .map { fullCoin ->
+                    if (allowExternalReceive) {
+                        fullCoin.supportedTokens
+                    } else {
+                        fullCoin.eligibleTokens(activeAccount.type)
+                    }
+                }
                 .flatten()
                 .map { token ->
                     val wallet = activeWallets.firstOrNull { it.token == token }
@@ -192,6 +206,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     }
 
     private fun supportedByAccount(token: Token): Boolean {
+        if (allowExternalReceive) return true
         // read at call time: the picker can outlive an account switch
         val accountType = App.accountManager.activeAccount?.type ?: return true
         return token.supports(accountType) && token.blockchainType.supports(accountType)
@@ -216,10 +231,13 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         }
     }
 
-    class Factory(private val otherSelectedToken: Token?) : ViewModelProvider.Factory {
+    class Factory(
+        private val otherSelectedToken: Token?,
+        private val allowExternalReceive: Boolean,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectCoinViewModel(otherSelectedToken) as T
+            return SwapSelectCoinViewModel(otherSelectedToken, allowExternalReceive) as T
         }
     }
 

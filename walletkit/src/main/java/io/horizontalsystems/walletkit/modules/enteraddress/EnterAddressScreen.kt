@@ -64,6 +64,7 @@ fun EnterAddressScreen(
     buttonTitle: String,
     allowNull: Boolean,
     initialAddress: String?,
+    description: String? = null,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
@@ -92,6 +93,12 @@ fun EnterAddressScreen(
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize()
             ) {
+                description?.let {
+                    subhead2_grey(
+                        text = it,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                    )
+                }
                 FormsInputAddress(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                     value = uiState.value,

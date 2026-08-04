@@ -175,8 +175,28 @@ fun SwapScreen(
         }
     }
 
-    val navigateToSwapConfirm = {
+    // tokenOut the account can't hold: ask for the external delivery address first,
+    // then proceed to confirmation with it
+    val forResultRecipient = navigation.slideFromRightForResult<SwapRecipientPage.Result>(
+        {
+            SwapRecipientPage(
+                SwapRecipientPage.Input(
+                    viewModel.uiState.tokenOut!!,
+                    viewModel.externalRecipient?.hex,
+                )
+            )
+        }
+    ) {
+        viewModel.setExternalRecipient(it.address)
         forResult()
+    }
+
+    val navigateToSwapConfirm = {
+        if (viewModel.uiState.externalRecipientRequired && viewModel.uiState.tokenOut != null) {
+            forResultRecipient()
+        } else {
+            forResult()
+        }
         stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
     }
 
@@ -264,7 +284,15 @@ fun SwapScreen(
             viewModel.onSelectTokenIn(it)
         },
         onClickCoinTo = navigation.slideFromBottomForResult<Token>(
-            { SwapSelectCoinPage(SwapSelectCoinPage.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))) },
+            {
+                SwapSelectCoinPage(
+                    SwapSelectCoinPage.Input(
+                        uiState.tokenIn,
+                        context.getString(R.string.Swap_YouGet),
+                        allowExternalReceive = true,
+                    )
+                )
+            },
         ) {
             viewModel.onSelectTokenOut(it)
         },
@@ -373,6 +401,7 @@ private fun SwapScreenInner(
                     fiatAmountIn = uiState.fiatAmountIn,
                     fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                     onSwitchPairs = onSwitchPairs,
+                    switchPairsEnabled = !uiState.externalRecipientRequired,
                     amountOut = quote?.amountOut,
                     fiatAmountOut = uiState.fiatAmountOut,
                     fiatPriceImpact = uiState.fiatPriceImpact,
@@ -783,6 +812,7 @@ private fun SwapInput(
     fiatAmountIn: BigDecimal?,
     fiatAmountInputEnabled: Boolean,
     onSwitchPairs: () -> Unit,
+    switchPairsEnabled: Boolean,
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
     fiatPriceImpact: BigDecimal?,
@@ -830,6 +860,7 @@ private fun SwapInput(
                 style = ButtonStyle.Solid,
                 size = ButtonSize.Small,
                 icon = painterResource(id = R.drawable.ic_arrow_down_20),
+                enabled = switchPairsEnabled,
                 onClick = onSwitchPairs
             )
         }

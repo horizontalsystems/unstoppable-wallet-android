@@ -48,12 +48,17 @@ class SwapConfirmViewModel(
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService,
     private val swapDefenseSystemService: SwapDefenseSystemService,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    initialRecipient: Address? = null,
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
     private val tokenIn = swapQuote.tokenIn
     private val tokenOut = swapQuote.tokenOut
+
+    // tokenOut the account can't hold — the recipient came from SwapRecipientPage,
+    // is mandatory and must not be cleared (there is no own-wallet address to fall back to)
+    val recipientRequired = !SwapHelper.isTokenReceivableByAccount(tokenOut)
     private val amountIn = swapQuote.amountIn.let { amount ->
         if (amount.scale() > tokenIn.decimals) {
             amount.setScale(tokenIn.decimals, RoundingMode.DOWN)
@@ -62,7 +67,7 @@ class SwapConfirmViewModel(
         }
     }
     private var fiatAmountIn: BigDecimal? = null
-    private var recipient: Address? = null
+    private var recipient: Address? = initialRecipient
     private var slippage: BigDecimal? = null
 
     private var fiatAmountOut: BigDecimal? = null
@@ -234,6 +239,7 @@ class SwapConfirmViewModel(
                 swapProvider.mevProtectionAllowed(tokenIn, tokenOut),
         mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
         recipient = recipient,
+        recipientRequired = recipientRequired,
         slippage = slippage,
         estimatedTime = estimatedTime,
         providerType = swapProvider.type,
@@ -368,6 +374,9 @@ class SwapConfirmViewModel(
     }
 
     fun setRecipient(recipient: Address?) {
+        // a mandatory external recipient can be changed but never cleared
+        if (recipient == null && recipientRequired) return
+
         this.recipient = recipient
 
         refresh()
@@ -386,7 +395,10 @@ class SwapConfirmViewModel(
     }
 
     companion object {
-        fun init(quote: SwapProviderQuote): CreationExtras.() -> SwapConfirmViewModel = {
+        fun init(
+            quote: SwapProviderQuote,
+            initialRecipient: Address? = null,
+        ): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
 
             SwapConfirmViewModel(
@@ -404,7 +416,8 @@ class SwapConfirmViewModel(
                             quote.provider.mevProtectionAllowed(quote.tokenIn, quote.tokenOut),
                     App.paidActionSettingsManager
                 ),
-                App.backgroundManager
+                App.backgroundManager,
+                initialRecipient,
             )
         }
     }
@@ -438,6 +451,7 @@ data class SwapConfirmUiState(
     val supportsMevProtection: Boolean,
     val mevProtectionActionAllowed: Boolean,
     val recipient: Address?,
+    val recipientRequired: Boolean,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,
     val providerType: SwapProviderType,

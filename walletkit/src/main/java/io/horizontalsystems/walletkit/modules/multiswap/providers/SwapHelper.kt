@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.NoActiveAccount
+import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronApproveTransactionRecord
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
@@ -33,6 +34,13 @@ import java.math.BigDecimal
 import java.util.concurrent.ConcurrentHashMap
 
 object SwapHelper {
+
+    // False when the active account can't hold the token (e.g. TRX for a Monero-only
+    // account) — such a swap is deliverable only to an external recipient address
+    fun isTokenReceivableByAccount(token: Token): Boolean {
+        val accountType = App.accountManager.activeAccount?.type ?: return true
+        return token.supports(accountType) && token.blockchainType.supports(accountType)
+    }
 
     private val zcashAddressCache = ConcurrentHashMap<String, String>()
     private val zcashAddressMutex = Mutex()

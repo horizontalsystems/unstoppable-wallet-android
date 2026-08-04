@@ -16,6 +16,7 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.AccountType
+import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
@@ -74,6 +75,19 @@ class SwapViewModel(
     private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
     private var amlChecking = false
     private var initialShowRegularPrice = true
+
+    // External delivery address entered on SwapRecipientPage, remembered together with
+    // the tokenOut it was entered for so it silently expires when the pair changes
+    private var externalRecipientAddress: Address? = null
+    private var externalRecipientToken: Token? = null
+
+    val externalRecipient: Address?
+        get() = externalRecipientAddress?.takeIf { externalRecipientToken == quoteState.tokenOut }
+
+    fun setExternalRecipient(address: Address) {
+        externalRecipientAddress = address
+        externalRecipientToken = quoteState.tokenOut
+    }
 
     val amlCheckEventFlow = MutableSharedFlow<AmlCheckEvent>(extraBufferCapacity = 1)
 
@@ -209,13 +223,14 @@ class SwapViewModel(
         }
 
         // The defaults above (and a swap record left by another account) may name coins the
-        // active account can never hold — e.g. BTC for a Monero-only or watch account. Show
-        // only tokens the token selector itself would offer, falling back to the account's
-        // first enabled wallet; a dead default pair reads as a broken screen.
+        // active account can never hold — e.g. BTC for a Monero-only or watch account. The
+        // sell side must be signable, so fall back to the account's first enabled wallet.
+        // The buy side may stay unsupported: such swaps are delivered to an external
+        // recipient address entered before confirmation.
         val accountType = accountManager.activeAccount?.type ?: return Pair(resolvedIn, resolvedOut)
         val tokenIn = resolvedIn?.takeIf { it.supportedBy(accountType) }
             ?: walletManager.activeWallets.firstOrNull()?.token
-        val tokenOut = resolvedOut?.takeIf { it.supportedBy(accountType) && it != tokenIn }
+        val tokenOut = resolvedOut?.takeIf { it != tokenIn }
         return Pair(tokenIn, tokenOut)
     }
 
@@ -259,7 +274,16 @@ class SwapViewModel(
             quoteState.quotes.map { it.estimationTime }
         ),
         allowanceActionSuppressed = allowanceActionSuppressed(),
+        externalRecipientRequired = externalRecipientRequired(quoteState.tokenOut),
     )
+
+    // tokenOut the account can't hold: the swap is deliverable only to an external
+    // address, which the user is asked for before the confirmation screen
+    private fun externalRecipientRequired(tokenOut: Token?): Boolean {
+        if (tokenOut == null) return false
+        val accountType = accountManager.activeAccount?.type ?: return false
+        return !tokenOut.supportedBy(accountType)
+    }
 
     // The caller's policy can declare approve/revoke unnecessary (the execution
     // layer owns the allowance); other action types are never suppressed.
@@ -353,6 +377,10 @@ class SwapViewModel(
     }
 
     fun onSwitchPairs() {
+        // an externally-delivered tokenOut can't become the sell side — the account
+        // can't sign transactions for it
+        if (externalRecipientRequired(quoteState.tokenOut)) return
+
         quoteService.switchPairs()
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
@@ -432,7 +460,7 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
-                SwapDefaultTokenService(App.marketKit, App.walletManager, App.accountManager),
+                SwapDefaultTokenService(App.marketKit, App.walletManager),
                 App.swapTermsManager,
                 App.swapRecordManager,
                 App.marketKit,
@@ -469,6 +497,7 @@ data class SwapUiState(
     val initialShowRegularPrice: Boolean,
     val swapTimeStatus: SwapTimeStatus,
     val allowanceActionSuppressed: Boolean = false,
+    val externalRecipientRequired: Boolean = false,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting

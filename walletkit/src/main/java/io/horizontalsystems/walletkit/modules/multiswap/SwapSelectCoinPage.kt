@@ -12,11 +12,15 @@ import kotlinx.serialization.Serializable
 data class SwapSelectCoinPage(val input: Input) : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        SwapSelectCoinScreen(navigation, input.token, input.title)
+        SwapSelectCoinScreen(navigation, input.token, input.title, input.allowExternalReceive)
     }
 
     @Serializable
-    data class Input(val token: Token?, val title: String)
+    data class Input(
+        val token: Token?,
+        val title: String,
+        val allowExternalReceive: Boolean = false,
+    )
 
 }
 
@@ -24,11 +28,12 @@ data class SwapSelectCoinPage(val input: Input) : HSPage() {
 private fun SwapSelectCoinScreen(
     navigation: HSNavigation,
     token: Token?,
-    title: String?
+    title: String?,
+    allowExternalReceive: Boolean,
 ) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapSelectCoinViewModel>(
-        factory = SwapSelectCoinViewModel.Factory(token)
+        factory = SwapSelectCoinViewModel.Factory(token, allowExternalReceive)
     )
     val uiState = viewModel.uiState
 

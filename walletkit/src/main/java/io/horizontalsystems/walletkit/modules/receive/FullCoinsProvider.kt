@@ -16,7 +16,10 @@ import io.horizontalsystems.marketkit.models.TokenType
 
 class FullCoinsProvider(
     private val marketKit: MarketKitWrapper,
-    val activeAccount: Account
+    val activeAccount: Account,
+    // false: offer coins the account can't hold too (swap "You Get" side — such
+    // swaps are delivered to an external recipient address)
+    private val filterByAccountSupport: Boolean = true,
 ) {
     private var activeWallets = listOf<Wallet>()
     private var predefinedTokens = listOf<Token>()
@@ -31,7 +34,7 @@ class FullCoinsProvider(
 
     private fun updatePredefinedTokens() {
         val allowedBlockchainTypes =
-            BlockchainType.supported.filter { it.supports(activeAccount.type) }
+            BlockchainType.supported.filter { !filterByAccountSupport || it.supports(activeAccount.type) }
         val tokenQueries = allowedBlockchainTypes
             .map { it.nativeTokenQueries }
             .flatten()
@@ -76,7 +79,11 @@ class FullCoinsProvider(
             .sortedByFilter(tmpQuery ?: "")
             .filter { fullCoin ->
                 fullCoin.tokens.any { token ->
-                    token.blockchainType.supports(activeAccount.type)
+                    if (filterByAccountSupport) {
+                        token.blockchainType.supports(activeAccount.type)
+                    } else {
+                        token.blockchainType in BlockchainType.supported
+                    }
                 }
             }
             .let { filtered ->

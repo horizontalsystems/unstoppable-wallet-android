@@ -22,7 +22,7 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
             token = input.token,
             title = stringResource(SendEvmSettings_SetRecipient),
             buttonTitle = stringResource(Button_Apply),
-            allowNull = true,
+            allowNull = input.allowRemoval,
             initialAddress = input.recipient?.hex
         ) { address, _ ->
             resultEventBus.sendResult<Result>(Result(address))
@@ -31,7 +31,11 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
     }
 
     @Serializable
-    data class Input(val token: Token, val recipient: Address?)
+    data class Input(
+        val token: Token,
+        val recipient: Address?,
+        val allowRemoval: Boolean = true,
+    )
 
     data class Result(val address: Address?)
 }

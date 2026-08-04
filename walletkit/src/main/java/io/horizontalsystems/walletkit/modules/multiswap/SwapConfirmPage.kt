@@ -100,9 +100,10 @@ fun SwapConfirmScreen(
 ) {
     val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
+    val initialRecipient = remember { swapViewModel.externalRecipient }
 
     val viewModel = viewModel<SwapConfirmViewModel>(
-        initializer = SwapConfirmViewModel.init(currentQuote)
+        initializer = SwapConfirmViewModel.init(currentQuote, initialRecipient)
     )
 
     val uiState = viewModel.uiState
@@ -205,7 +206,17 @@ private fun SwapConfirmInternal(
             }
         },
         onClickRecipientSettings = navigation.slideFromRightForResult<SwapSettingsRecipientPage.Result>(
-            { SwapSettingsRecipientPage(SwapSettingsRecipientPage.Input(uiState.tokenIn, uiState.recipient)) }
+            {
+                // the recipient receives tokenOut, so the address is validated against
+                // its blockchain; a mandatory external recipient can't be removed
+                SwapSettingsRecipientPage(
+                    SwapSettingsRecipientPage.Input(
+                        uiState.tokenOut,
+                        uiState.recipient,
+                        allowRemoval = !uiState.recipientRequired,
+                    )
+                )
+            }
         ) {
             viewModel.setRecipient(it.address)
         },

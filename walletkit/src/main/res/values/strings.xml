@@ -767,6 +767,8 @@
     <string name="Swap_MinimumReceivedDescription">The minimum amount you will receive after the swap is completed. This amount is guaranteed by the provider and is not affected by price changes during processing.</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
+    <string name="Swap_RecipientAddress_Description">The wallet that will receive the swapped funds.</string>
+    <string name="Swap_RecipientAddress_EnterAddress">Enter %s Address</string>
     <string name="Swap_ErrorNoProviders">No Routes</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
