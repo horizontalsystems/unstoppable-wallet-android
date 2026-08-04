@@ -255,18 +255,18 @@ private object ZcashStaticAddressValidator {
         }
     }
 
-    suspend fun isValid(address: String): Boolean {
+    suspend fun isValid(address: String): Boolean = withContext(Dispatchers.IO) {
         val backend = backend()
-        return backend.isValidTransparentAddr(address) ||
+        backend.isValidTransparentAddr(address) ||
             backend.isValidSaplingAddr(address) ||
             backend.isValidUnifiedAddr(address) ||
             backend.isValidTexAddr(address)
     }
 
     // TEX counts as transparent, mirroring ZcashAdapter's AddressType.Tex mapping
-    suspend fun isTransparent(address: String): Boolean {
+    suspend fun isTransparent(address: String): Boolean = withContext(Dispatchers.IO) {
         val backend = backend()
-        return backend.isValidTransparentAddr(address) || backend.isValidTexAddr(address)
+        backend.isValidTransparentAddr(address) || backend.isValidTexAddr(address)
     }
 }
 
