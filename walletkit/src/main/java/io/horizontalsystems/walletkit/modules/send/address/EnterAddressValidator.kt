@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.ISendStellarAdapter
 import io.horizontalsystems.walletkit.core.ISendThorchainAdapter
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
 import io.horizontalsystems.walletkit.core.ISendZcashAdapter
+import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter.ZcashError
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
@@ -31,6 +32,7 @@ import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.thorchainkit.network.Network
 import io.horizontalsystems.tonkit.FriendlyAddress
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -120,32 +122,39 @@ class TonAddressValidator : EnterAddressValidator {
 
 class StellarAddressValidator(private val token: Token) : EnterAddressValidator {
     private val sendAdapter by lazy { App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token) }
-    override suspend fun validate(address: Address) {
-        val adapter = sendAdapter
-        if (adapter != null) {
-            adapter.validate(address.hex)
-            return
-        }
 
-        // no enabled wallet (external swap recipient) — static format check, plus the
-        // same trustline requirement the adapter enforces: a non-native asset sent to
-        // an account without the trustline is rejected by the network
+    override suspend fun validate(address: Address) {
+        // format is decided locally and is authoritative
         StellarKit.validateAddress(address.hex)
 
-        val tokenType = token.type
-        if (tokenType is TokenType.Asset) {
-            val enabled = withContext(Dispatchers.IO) {
-                StellarKit.isAssetEnabled(
+        // native XLM needs no trustline
+        val tokenType = token.type as? TokenType.Asset ?: return
+
+        // A non-native asset sent to an account without the trustline is rejected by the
+        // network, so the recipient's trustline is part of address validity. Null means
+        // the state could not be resolved (Horizon unreachable) — a well-formed address
+        // must not be rejected for that; the network stays the authority at send time.
+        val trustlineEstablished = withContext(Dispatchers.IO) {
+            try {
+                sendAdapter?.let { adapter ->
+                    adapter.validate(address.hex)
+                    true
+                } ?: StellarKit.isAssetEnabled(
                     StellarNetwork.MainNet,
                     StellarAsset.Asset(tokenType.code, tokenType.issuer),
                     address.hex
                 )
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: StellarAssetAdapter.NoTrustlineError) {
+                false
+            } catch (_: Throwable) {
+                null
             }
-            if (!enabled) {
-                throw AddressValidationError.InvalidAddress(
-                    Translator.getString(R.string.Swap_RecipientAddress_NoTrustline, tokenType.code)
-                )
-            }
+        }
+
+        if (trustlineEstablished == false) {
+            throw StellarAssetAdapter.NoTrustlineError(tokenType.code)
         }
     }
 }
