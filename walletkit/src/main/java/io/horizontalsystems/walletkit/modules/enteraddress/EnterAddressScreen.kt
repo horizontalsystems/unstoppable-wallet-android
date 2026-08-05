@@ -231,14 +231,7 @@ fun AddressCheck(
     if (addressValidationInProgress) {
         //show nothing
     } else if (addressValidationError != null) {
-        // our own validation errors carry a translated, user-facing message (e.g.
-        // send-to-self, transparent-Zcash-only); raw parser exceptions get generic text
-        val customMessage = when (addressValidationError) {
-            is AddressValidationError.InvalidAddress,
-            is AddressValidationError.SendToSelfForbidden -> addressValidationError.message
-
-            else -> null
-        }
+        val customMessage = addressValidationError.getErrorMessage()
         AlertCard(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -303,13 +296,20 @@ fun AddressCheck(
     }
 }
 
+// Null means no user-facing text: the generic invalid-address description is shown
+// instead of a raw parser exception message
 @Composable
 private fun Throwable.getErrorMessage() = when (this) {
     is StellarAssetAdapter.NoTrustlineError -> {
-        stringResource(R.string.Error_AssetNotEnabled, code)
+        stringResource(R.string.Swap_RecipientAddress_NoTrustline, code)
     }
 
-    else -> this.message
+    // our own validation errors carry a translated, user-facing message
+    // (transparent-Zcash-only, missing trustline, send-to-self)
+    is AddressValidationError.InvalidAddress,
+    is AddressValidationError.SendToSelfForbidden -> message
+
+    else -> null
 }
 
 @Composable
