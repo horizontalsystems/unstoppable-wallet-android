@@ -73,7 +73,9 @@ class WCRequestViewModel(
             )
         } catch (e: CancellationException) {
             throw e
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
+            // Throwable, not Exception: app-level failures here subclass Error
+            // (e.g. NoTrustlineError) or Throwable directly, not Exception
             approveInProgress = false
             error = e
             emitState()
