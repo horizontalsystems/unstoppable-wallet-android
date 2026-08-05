@@ -157,7 +157,7 @@ class SendThorchainViewModel(
             sendResult = SendResult.Sent()
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Thorchain)
+            recentAddressManager.setRecentAddress(addressState.address!!, wallet.token.blockchainType)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)

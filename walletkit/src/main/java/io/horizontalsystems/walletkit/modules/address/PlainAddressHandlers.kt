@@ -6,6 +6,7 @@ import io.horizontalsystems.dashkit.MainNetDash
 import io.horizontalsystems.ecash.MainNetECash
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.thorchainkit.network.Network as ThorchainNetwork
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 
 /**
@@ -68,7 +69,8 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.Tron -> listOf(AddressHandlerTron())
         BlockchainType.Ton -> listOf(AddressHandlerTon())
         BlockchainType.Stellar -> listOf(AddressHandlerStellar())
-        BlockchainType.Thorchain -> listOf(AddressHandlerThorchain())
+        BlockchainType.Thorchain -> listOf(AddressHandlerThorchain(ThorchainNetwork.Mainnet, BlockchainType.Thorchain))
+        BlockchainType.Mayachain -> listOf(AddressHandlerThorchain(ThorchainNetwork.MayaMainnet, BlockchainType.Mayachain))
 
         else -> ChainRegistry[blockchainType]?.addressHandlers().orEmpty()
     }

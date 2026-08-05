@@ -14,7 +14,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.Address
 import io.horizontalsystems.thorchainkit.models.Asset
-import io.horizontalsystems.thorchainkit.models.Denom
 import io.horizontalsystems.thorchainkit.transaction.Signer
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -34,7 +33,7 @@ class ThorchainAdapter(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val denom = when (val tokenType = wallet.token.type) {
-        is TokenType.Native -> Denom.RUNE
+        is TokenType.Native -> thorchainKit.nativeDenom
         is TokenType.ThorchainAsset -> tokenType.denom
         else -> throw IllegalStateException("Unsupported token type: $tokenType")
     }
@@ -90,7 +89,7 @@ class ThorchainAdapter(
         }
         coroutineScope.launch {
             try {
-                cachedFee = thorchainKit.estimateFee().toBigDecimal().movePointLeft(Denom.DECIMALS)
+                cachedFee = thorchainKit.estimateFee().toBigDecimal().movePointLeft(thorchainKit.decimals)
             } catch (_: Throwable) {
             }
         }
@@ -110,12 +109,12 @@ class ThorchainAdapter(
     // ISendThorchainAdapter
 
     override val availableBalance: BigDecimal
-        get() = thorchainKit.getDenomBalance(denom).toBigDecimal().movePointLeft(Denom.DECIMALS)
+        get() = thorchainKit.getDenomBalance(denom).toBigDecimal().movePointLeft(thorchainKit.decimals)
 
     override val runeAvailableBalance: BigDecimal
-        get() = thorchainKit.runeBalance.toBigDecimal().movePointLeft(Denom.DECIMALS)
+        get() = thorchainKit.runeBalance.toBigDecimal().movePointLeft(thorchainKit.decimals)
 
-    override val isNativeCoin = denom == Denom.RUNE
+    override val isNativeCoin = denom == thorchainKit.nativeDenom
 
     // network fee is fixed; the cached value is refreshed from the node on start()
     private var cachedFee: BigDecimal = BigDecimal("0.02")
@@ -130,7 +129,7 @@ class ThorchainAdapter(
     override suspend fun send(amount: BigDecimal, address: String, memo: String?): String {
         return thorchainKit.send(
             to = Address.fromString(address, thorchainKit.network),
-            amount = amount.movePointRight(Denom.DECIMALS).toBigInteger(),
+            amount = amount.movePointRight(thorchainKit.decimals).toBigInteger(),
             denom = denom,
             memo = memo,
             signer = signer
@@ -140,7 +139,7 @@ class ThorchainAdapter(
     suspend fun deposit(asset: String, amount: BigDecimal, memo: String): String {
         return thorchainKit.deposit(
             asset = Asset.fromString(asset),
-            amount = amount.movePointRight(Denom.DECIMALS).toBigInteger(),
+            amount = amount.movePointRight(thorchainKit.decimals).toBigInteger(),
             memo = memo,
             signer = signer
         )

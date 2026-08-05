@@ -95,6 +95,7 @@ class TransactionRecordRepository(
                 BlockchainType.Tron,
                 BlockchainType.Stellar,
                 BlockchainType.Thorchain,
+                BlockchainType.Mayachain,
                 BlockchainType.Monero,
                 BlockchainType.Zano,
                 BlockchainType.Ton -> {

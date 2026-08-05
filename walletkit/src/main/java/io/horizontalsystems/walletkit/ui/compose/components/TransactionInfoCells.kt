@@ -746,6 +746,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.Ton,
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
+        BlockchainType.Mayachain,
         BlockchainType.Monero,
         BlockchainType.Zano,
         is BlockchainType.Unsupported -> Unit

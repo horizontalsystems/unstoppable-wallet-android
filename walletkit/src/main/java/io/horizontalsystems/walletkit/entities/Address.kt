@@ -62,6 +62,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Ton,
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
+        BlockchainType.Mayachain,
         BlockchainType.Monero,
         BlockchainType.Zano,
         is BlockchainType.Unsupported,

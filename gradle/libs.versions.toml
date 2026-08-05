@@ -73,10 +73,10 @@ tonKit = "947c48a"
 bitcoinKit = "7a552c4"
 ethereumKit = "665021b"
 feeRateKit = "393cc14"
-marketKit = "13e2045"
+marketKit = "c045ed4"
 solanaKit = "b487161"
 tronKit = "6fc27cf"
-thorchainKit = "fcbb556"
+thorchainKit = "9950fce"
 zcashSdk = "2.5.2"
 
 # Binance

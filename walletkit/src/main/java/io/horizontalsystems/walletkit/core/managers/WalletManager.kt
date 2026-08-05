@@ -104,6 +104,7 @@ class WalletManager(
         solanaKitManager: SolanaKitManager,
         tronKitManager: TronKitManager,
         thorchainKitManager: ThorchainKitManager,
+        mayachainKitManager: ThorchainKitManager,
     ) {
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
@@ -156,6 +157,11 @@ class WalletManager(
         coroutineScope.launch {
             thorchainKitManager.kitStoppedFlow.collect {
                 reloadWallets(BlockchainType.Thorchain)
+            }
+        }
+        coroutineScope.launch {
+            mayachainKitManager.kitStoppedFlow.collect {
+                reloadWallets(BlockchainType.Mayachain)
             }
         }
     }

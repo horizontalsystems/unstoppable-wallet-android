@@ -8,7 +8,6 @@ import io.horizontalsystems.walletkit.entities.EnabledWallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.thorchainkit.models.Denom
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +25,8 @@ class ThorchainAccountManager(
     private val thorchainKitManager: ThorchainKitManager,
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
+    private val blockchainType: BlockchainType,
 ) {
-    private val blockchainType = BlockchainType.Thorchain
     private val logger = AppLogger("thorchain-account-manager")
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var balanceSubscriptionJob: Job? = null
@@ -59,6 +58,7 @@ class ThorchainAccountManager(
     private fun subscribeToBalances() {
         val wrapper = thorchainKitManager.thorchainKitWrapper ?: return
         val account = accountManager.activeAccount ?: return
+        val nativeDenom = wrapper.thorchainKit.nativeDenom
 
         // The first synced (non-empty) balance snapshot is the "initial" one that carries the
         // restore-time auto-enable gate; balancesFlow is a StateFlow that starts at emptyMap.
@@ -73,7 +73,7 @@ class ThorchainAccountManager(
 
                     val isInitial = initial
                     initial = false
-                    handle(balances, account, isInitial)
+                    handle(balances, account, isInitial, nativeDenom)
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Throwable) {
@@ -83,18 +83,18 @@ class ThorchainAccountManager(
         }
     }
 
-    private fun handle(balances: Map<String, BigInteger>, account: Account, initial: Boolean) {
+    private fun handle(balances: Map<String, BigInteger>, account: Account, initial: Boolean, nativeDenom: String) {
         val shouldAutoEnableTokens = tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
 
         if (initial && account.origin == AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnableTokens) {
             return
         }
 
-        // Native RUNE is enabled with the blockchain itself; here we only add held tokens.
-        val denoms = balances.filter { it.value > BigInteger.ZERO && it.key != Denom.RUNE }.keys
+        // The native coin (RUNE/CACAO) is enabled with the blockchain itself; here we only add held tokens.
+        val denoms = balances.filter { it.value > BigInteger.ZERO && it.key != nativeDenom }.keys
         if (denoms.isEmpty()) return
 
-        val queries = denoms.map { TokenQuery(blockchainType, TokenType.ThorchainAsset(it)) }
+        val queries = denoms.map { TokenQuery(blockchainType, thorchainAssetType(blockchainType, it)) }
 
         val existingTokenTypeIds = walletManager.activeWallets.map { it.token.type.id }
         val newQueries = queries.filter { !existingTokenTypeIds.contains(it.tokenType.id) }

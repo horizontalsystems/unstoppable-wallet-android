@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.Thor
 import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.thorchainkit.network.Network
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,7 +22,9 @@ class ThorchainTransactionsAdapter(
 ) : ITransactionsAdapter {
     private val thorchainKit = thorchainKitWrapper.thorchainKit
 
-    override val explorerTitle = "RuneScan"
+    private val isMaya = thorchainKit.network == Network.MayaMainnet
+
+    override val explorerTitle = if (isMaya) "MayaScan" else "RuneScan"
 
     override val transactionsState: AdapterState
         get() = thorchainKit.transactionsSyncState.toAdapterState()
@@ -92,6 +95,10 @@ class ThorchainTransactionsAdapter(
     }
 
     override fun getTransactionUrl(transactionHash: String): String {
-        return "https://runescan.io/tx/$transactionHash"
+        return if (isMaya) {
+            "https://www.mayascan.org/tx/$transactionHash"
+        } else {
+            "https://runescan.io/tx/$transactionHash"
+        }
     }
 }

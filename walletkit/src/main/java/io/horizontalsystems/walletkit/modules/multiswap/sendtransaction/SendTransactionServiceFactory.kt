@@ -56,10 +56,11 @@ object SendTransactionServiceFactory {
             }
 
 
-            BlockchainType.Thorchain -> {
+            BlockchainType.Thorchain,
+            BlockchainType.Mayachain -> {
                 val adapter = App.adapterManager.getAdapterForToken<ThorchainAdapter>(token)
                     ?: throw IllegalStateException("ThorchainAdapter is null")
-                SendTransactionServiceThorchain(adapter)
+                SendTransactionServiceThorchain(adapter, blockchainType)
             }
 
             else -> ChainRegistry[blockchainType]?.sendTransactionService(token)

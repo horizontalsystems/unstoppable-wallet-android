@@ -134,6 +134,7 @@ class AddressHandlerUdn(
             BlockchainType.Ton -> "TON"
             BlockchainType.Stellar -> "XLM"
             BlockchainType.Thorchain -> "RUNE"
+            BlockchainType.Mayachain -> "CACAO"
             BlockchainType.Monero -> "XMR"
             BlockchainType.Zano -> "ZANO"
             is BlockchainType.Unsupported -> blockchainType.uid
@@ -321,11 +322,13 @@ class AddressHandlerStellar : IAddressHandler {
     }
 }
 
-class AddressHandlerThorchain : IAddressHandler {
-    override val blockchainType = BlockchainType.Thorchain
+class AddressHandlerThorchain(
+    private val network: ThorchainNetwork,
+    override val blockchainType: BlockchainType,
+) : IAddressHandler {
 
     override fun isSupported(value: String) = try {
-        ThorchainAddress.fromString(value, ThorchainNetwork.Mainnet)
+        ThorchainAddress.fromString(value, network)
         true
     } catch (e: Exception) {
         false

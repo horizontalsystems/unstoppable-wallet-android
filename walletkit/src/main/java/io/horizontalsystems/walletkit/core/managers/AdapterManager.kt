@@ -25,6 +25,7 @@ class AdapterManager(
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
+    private val mayachainKitManager: ThorchainKitManager,
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -56,6 +57,7 @@ class AdapterManager(
         tonKitManager.tonKitWrapper?.tonKit?.refresh()
         stellarKitManager.stellarKitWrapper?.stellarKit?.refresh()
         thorchainKitManager.thorchainKitWrapper?.thorchainKit?.refresh()
+        mayachainKitManager.thorchainKitWrapper?.thorchainKit?.refresh()
     }
 
     @Synchronized

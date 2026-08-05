@@ -237,7 +237,8 @@ class USwapProvider(
                     }
                 }
 
-                BlockchainType.Thorchain -> {
+                BlockchainType.Thorchain,
+                BlockchainType.Mayachain -> {
                     if (token.address.isNullOrBlank()) {
                         App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
                             assetsMap[it] = token.identifier

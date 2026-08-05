@@ -71,7 +71,8 @@ object AddressValidatorFactory {
                 StellarAddressValidator(token)
             }
 
-            is BlockchainType.Thorchain -> {
+            is BlockchainType.Thorchain,
+            is BlockchainType.Mayachain -> {
                 ThorchainAddressValidator(token)
             }
 

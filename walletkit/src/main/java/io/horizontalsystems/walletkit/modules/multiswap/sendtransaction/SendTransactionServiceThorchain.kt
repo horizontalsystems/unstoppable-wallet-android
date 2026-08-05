@@ -13,11 +13,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SendTransactionServiceThorchain(
-    private val adapter: ThorchainAdapter
+    private val adapter: ThorchainAdapter,
+    blockchainType: BlockchainType,
 ) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Thorchain())
 
-    private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Thorchain, TokenType.Native))
+    // Fee is paid in the chain's native coin (RUNE on THORChain, CACAO on Maya).
+    private val feeToken = App.coinManager.getToken(TokenQuery(blockchainType, TokenType.Native))
         ?: throw IllegalArgumentException()
 
     private var sendData: SendTransactionData.Thorchain? = null

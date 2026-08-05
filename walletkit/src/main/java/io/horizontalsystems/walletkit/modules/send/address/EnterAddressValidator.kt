@@ -30,7 +30,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.Network as StellarNetwork
 import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.room.StellarAsset
-import io.horizontalsystems.thorchainkit.network.Network
+import io.horizontalsystems.walletkit.core.managers.thorchainNetwork
 import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -167,8 +167,8 @@ class ThorchainAddressValidator(private val token: Token) : EnterAddressValidato
         if (adapter != null) {
             adapter.validate(address.hex)
         } else {
-            // no enabled wallet (external swap recipient) — static mainnet parse
-            io.horizontalsystems.thorchainkit.models.Address.fromString(address.hex, Network.Mainnet)
+            // no enabled wallet (external swap recipient) — static parse against the chain's network
+            io.horizontalsystems.thorchainkit.models.Address.fromString(address.hex, token.blockchainType.thorchainNetwork())
         }
     }
 }

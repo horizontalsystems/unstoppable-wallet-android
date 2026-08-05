@@ -116,6 +116,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Thorchain -> {
             tokenType is TokenType.Native || tokenType is TokenType.ThorchainAsset
         }
+        BlockchainType.Mayachain -> {
+            tokenType is TokenType.Native
+        }
         BlockchainType.Monero -> {
             tokenType is TokenType.Native
         }
@@ -148,6 +151,7 @@ val Blockchain.description: String
         BlockchainType.Ton -> "TON"
         BlockchainType.Stellar -> "XLM, Stellar assets"
         BlockchainType.Thorchain -> "RUNE, THORChain assets"
+        BlockchainType.Mayachain -> "CACAO, MayaChain assets"
         BlockchainType.Monero -> "XMR"
         BlockchainType.Zano -> "ZANO"
         else -> ""
@@ -186,6 +190,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Optimism,
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
+        BlockchainType.Mayachain,
         BlockchainType.Dash,
         BlockchainType.Litecoin,
         BlockchainType.BitcoinCash,
@@ -245,6 +250,7 @@ val BlockchainType.title: String
     BlockchainType.Ton -> "Ton"
     BlockchainType.Stellar -> "Stellar"
     BlockchainType.Thorchain -> "THORChain"
+    BlockchainType.Mayachain -> "MayaChain"
     BlockchainType.Monero -> "Monero"
     BlockchainType.Zano -> "Zano"
     is BlockchainType.Unsupported -> this.uid
@@ -322,6 +328,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Solana,
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
+        BlockchainType.Mayachain,
         BlockchainType.Ton,
         BlockchainType.Tron,
         is BlockchainType.Unsupported,
@@ -354,6 +361,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 BlockchainType.Solana,
                 BlockchainType.Stellar,
                 BlockchainType.Thorchain,
+                BlockchainType.Mayachain,
                 BlockchainType.Ton,
                 BlockchainType.Tron,
                 BlockchainType.Zcash,
@@ -667,6 +675,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Ton,
         BlockchainType.Stellar,
         BlockchainType.Thorchain,
+        BlockchainType.Mayachain,
     ) + ChainRegistry.all.map { it.blockchainType }
 
 val CoinPrice.diff: BigDecimal?

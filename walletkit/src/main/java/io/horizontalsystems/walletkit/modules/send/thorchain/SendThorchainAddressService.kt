@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendThorchainAddressService {
+class SendThorchainAddressService(
+    // Mainnet (thor) for THORChain, MayaMainnet (maya) for Maya — parsing against the wrong
+    // network rejects an otherwise-valid address and keeps the send Next button disabled.
+    private val network: Network,
+) {
     private var address: Address? = null
     private var addressError: Throwable? = null
 
@@ -35,7 +39,7 @@ class SendThorchainAddressService {
         val address = this.address ?: return
 
         try {
-            ThorchainAddress.fromString(address.hex, Network.Mainnet)
+            ThorchainAddress.fromString(address.hex, network)
         } catch (e: Exception) {
             addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }

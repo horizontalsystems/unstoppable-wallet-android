@@ -63,6 +63,7 @@ class AdapterFactory(
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
+    private val mayachainKitManager: ThorchainKitManager,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
@@ -180,8 +181,9 @@ class AdapterFactory(
             BlockchainType.Stellar -> {
                 StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
             }
-            BlockchainType.Thorchain -> {
-                ThorchainAdapter(thorchainKitManager.getThorchainKitWrapper(wallet.account), wallet)
+            BlockchainType.Thorchain,
+            BlockchainType.Mayachain -> {
+                ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
             }
             else -> registryAdapter(wallet)
         }
@@ -258,17 +260,25 @@ class AdapterFactory(
         return StellarTransactionsAdapter(stellarKitWrapper, transactionConverter)
     }
 
-    fun thorchainTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        val tokenQuery = TokenQuery(BlockchainType.Thorchain, TokenType.Native)
+    // THORChain (RUNE) and Maya (CACAO) share the ThorchainKit; pick the right per-chain manager.
+    private fun thorchainFamilyKitManager(blockchainType: BlockchainType) = when (blockchainType) {
+        BlockchainType.Mayachain -> mayachainKitManager
+        else -> thorchainKitManager
+    }
+
+    fun thorchainTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
+        val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
         val baseToken = coinManager.getToken(tokenQuery) ?: return null
 
-        val thorchainKitWrapper = thorchainKitManager.getThorchainKitWrapper(source.account)
+        val thorchainKitWrapper = thorchainFamilyKitManager(blockchainType).getThorchainKitWrapper(source.account)
 
         val transactionConverter = ThorchainTransactionConverter(
             coinManager,
             source,
             thorchainKitWrapper.thorchainKit.receiveAddress,
-            baseToken
+            baseToken,
+            blockchainType,
+            thorchainKitWrapper.thorchainKit.network,
         )
 
         return ThorchainTransactionsAdapter(thorchainKitWrapper, transactionConverter)
@@ -315,6 +325,9 @@ class AdapterFactory(
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(wallet.account)
             }
+            BlockchainType.Mayachain -> {
+                mayachainKitManager.unlink(wallet.account)
+            }
             else -> {
                 ChainRegistry[blockchainType]?.unlink(wallet.account)
             }
@@ -347,6 +360,9 @@ class AdapterFactory(
             }
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Mayachain -> {
+                mayachainKitManager.unlink(transactionSource.account)
             }
             else -> Unit
         }

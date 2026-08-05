@@ -22,7 +22,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.Asset as ThorAsset
-import io.horizontalsystems.thorchainkit.models.Denom
+import io.horizontalsystems.thorchainkit.models.ThorchainAssetResolver
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -38,9 +38,15 @@ abstract class BaseThorChainProvider(
     override val type = SwapProviderType.DEX
     override val requireTerms = false
 
+    // The provider's settlement chain and its native asset — the asset that backs every pool and
+    // is never listed in /pools. THORChain/RUNE by default; MayaProvider overrides to Maya/CACAO.
+    // Referenced only from runtime functions, so overrides are safe despite init order.
+    protected open val settlementBlockchainType: BlockchainType = BlockchainType.Thorchain
+    protected open val settlementAsset: String = "THOR.RUNE"
+
     companion object {
         // bump to invalidate cached asset maps when the mapping logic changes
-        private const val ASSETS_MAP_VERSION = 2
+        private const val ASSETS_MAP_VERSION = 3
     }
 
     protected val thornodeAPI =
@@ -119,8 +125,8 @@ abstract class BaseThorChainProvider(
                 }
 
                 BlockchainType.Thorchain -> {
-                    val denom = Denom.denomFor(ThorAsset.fromString(pool.asset))
-                    val tokenType = if (denom == Denom.RUNE) TokenType.Native else TokenType.ThorchainAsset(denom)
+                    val denom = ThorchainAssetResolver.denomFor(ThorAsset.fromString(pool.asset))
+                    val tokenType = if (denom == ThorchainAssetResolver.nativeDenom) TokenType.Native else TokenType.ThorchainAsset(denom)
 
                     App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let { token ->
                         assetsMap[token] = pool.asset
@@ -131,9 +137,10 @@ abstract class BaseThorChainProvider(
             }
         }
 
-        // RUNE is the settlement asset of every pool and is never listed in /pools
-        App.marketKit.token(TokenQuery(BlockchainType.Thorchain, TokenType.Native))?.let { rune ->
-            assetsMap[rune] = "THOR.RUNE"
+        // The settlement asset (RUNE on THORChain, CACAO on Maya) backs every pool and is never
+        // listed in /pools, so add it explicitly — otherwise swaps to/from it show no route.
+        App.marketKit.token(TokenQuery(settlementBlockchainType, TokenType.Native))?.let { native ->
+            assetsMap[native] = settlementAsset
         }
 
         return assetsMap
@@ -279,9 +286,9 @@ abstract class BaseThorChainProvider(
         val router = quoteSwap.router
         val dustThreshold = quoteSwap.dust_threshold?.toInt()
 
-        if (tokenIn.blockchainType == BlockchainType.Thorchain) {
-            // native input: MsgDeposit when the quote has no inbound vault (THORChain itself),
-            // MsgSend to the vault otherwise (e.g. Maya's THORChain inbound)
+        if (tokenIn.blockchainType == settlementBlockchainType) {
+            // native input (RUNE/CACAO): MsgDeposit when the quote has no inbound vault (the
+            // settlement chain itself), MsgSend to the vault otherwise (e.g. Maya's THORChain inbound)
             return when (val inboundAddress = quoteSwap.inbound_address) {
                 null -> SendTransactionData.Thorchain.Deposit(
                     asset = assetsMap[tokenIn]!!,

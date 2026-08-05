@@ -27,6 +27,9 @@ import kotlinx.coroutines.launch
 class ThorchainKitManager(
     private val backgroundManager: BackgroundManager,
     private val rpcSourceManager: ThorchainRpcSourceManager,
+    // The kit is unified: Network.Mainnet drives THORChain (RUNE), Network.MayaMainnet drives
+    // Maya (CACAO). App.kt creates one manager instance per chain, so each keeps its own kit.
+    private val network: Network,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -86,7 +89,7 @@ class ThorchainKitManager(
         val kit = ThorchainKit.getInstance(
             App.instance,
             accountType.seed,
-            Network.Mainnet,
+            network,
             account.id,
             thornodeUrls = thornodeUrls,
         )
@@ -95,12 +98,12 @@ class ThorchainKitManager(
     }
 
     fun getSigner(accountType: AccountType): Signer = when (accountType) {
-        is AccountType.Mnemonic -> Signer.getInstance(accountType.seed, Network.Mainnet)
+        is AccountType.Mnemonic -> Signer.getInstance(accountType.seed, network)
         else -> throw UnsupportedAccountException()
     }
 
     fun getAddress(accountType: AccountType): String = when (accountType) {
-        is AccountType.Mnemonic -> ThorchainKit.getAddress(accountType.seed, Network.Mainnet).toString()
+        is AccountType.Mnemonic -> ThorchainKit.getAddress(accountType.seed, network).toString()
         else -> throw UnsupportedAccountException()
     }
 

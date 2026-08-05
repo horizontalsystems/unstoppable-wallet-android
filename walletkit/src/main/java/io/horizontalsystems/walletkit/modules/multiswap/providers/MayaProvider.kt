@@ -16,6 +16,10 @@ object MayaProvider : BaseThorChainProvider(
     override val title = "Maya Protocol"
     override val riskLevel = RiskLevel.EXCELLENT
 
+    // Maya settles pools in CACAO, not RUNE — without this, swaps to/from CACAO show no route.
+    override val settlementBlockchainType = BlockchainType.Mayachain
+    override val settlementAsset = "MAYA.CACAO"
+
     override suspend fun resolveDestinationAddress(tokenOut: Token): String {
         // Maya delivers ZEC directly to unified/sapling/orchard receivers via its transparent
         // vault, so for ZEC out we resolve the wallet's unified address. Every other tokenOut

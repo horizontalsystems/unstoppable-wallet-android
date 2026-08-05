@@ -5,20 +5,22 @@ import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainTransactionRecord
+import io.horizontalsystems.walletkit.core.managers.thorchainAssetType
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.CoinTransfer
-import io.horizontalsystems.thorchainkit.models.Denom
 import io.horizontalsystems.thorchainkit.models.Transaction
+import io.horizontalsystems.thorchainkit.network.Network
 
 class ThorchainTransactionConverter(
     private val coinManager: ICoinManager,
     private val source: TransactionSource,
     private val userAddress: String,
     private val baseToken: Token,
+    private val blockchainType: BlockchainType,
+    private val network: Network,
 ) {
 
     // Midgard action semantics: `incoming` transfers enter the action (spent by their
@@ -81,16 +83,16 @@ class ThorchainTransactionConverter(
     fun token(midgardAsset: String): Token? {
         val denom = denom(midgardAsset) ?: return null
 
-        return if (denom == Denom.RUNE) {
+        return if (denom == network.nativeDenom) {
             baseToken
         } else {
-            coinManager.getToken(TokenQuery(BlockchainType.Thorchain, TokenType.ThorchainAsset(denom)))
+            coinManager.getToken(TokenQuery(blockchainType, thorchainAssetType(blockchainType, denom)))
         }
     }
 
     private fun transactionValue(transfer: CoinTransfer, negative: Boolean = false): TransactionValue {
         val token = token(transfer.asset)
-        var amount = transfer.amount.toBigDecimal().movePointLeft(Denom.DECIMALS)
+        var amount = transfer.amount.toBigDecimal().movePointLeft(network.decimals)
         if (negative) {
             amount = amount.negate()
         }
@@ -99,14 +101,14 @@ class ThorchainTransactionConverter(
             TransactionValue.CoinValue(token, amount)
         } else {
             val ticker = try {
-                Denom.assetFor(transfer.asset).ticker
+                network.assetResolver.assetFor(transfer.asset).ticker
             } catch (_: Throwable) {
                 transfer.asset.substringAfterLast('.').substringBefore('-').uppercase()
             }
             TransactionValue.TokenValue(
                 tokenName = ticker,
                 tokenCode = ticker,
-                tokenDecimals = Denom.DECIMALS,
+                tokenDecimals = network.decimals,
                 value = amount
             )
         }
@@ -117,7 +119,7 @@ class ThorchainTransactionConverter(
     // Asset.fromString throws on the delimiter-less denom form and TCY transfers
     // would silently degrade to a coin-less value that every token filter drops
     private fun denom(midgardAsset: String): String? = try {
-        Denom.denomFor(Denom.assetFor(midgardAsset))
+        network.assetResolver.denomFor(network.assetResolver.assetFor(midgardAsset))
     } catch (_: Throwable) {
         null
     }

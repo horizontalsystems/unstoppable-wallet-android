@@ -180,7 +180,8 @@ data class SendPage(val input: Input) : HSPage() {
                 )
             }
 
-            BlockchainType.Thorchain -> {
+            BlockchainType.Thorchain,
+            BlockchainType.Mayachain -> {
                 val factory = SendThorchainModule.Factory(wallet, address, hideAddress, memo)
                 val sendThorchainViewModel = viewModel<SendThorchainViewModel>(factory = factory)
                 SendThorchainScreen(

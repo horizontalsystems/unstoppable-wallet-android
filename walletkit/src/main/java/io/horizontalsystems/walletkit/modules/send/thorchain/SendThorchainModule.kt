@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendThorchainAdapter
+import io.horizontalsystems.walletkit.core.managers.thorchainNetwork
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.amount.AmountValidator
@@ -40,9 +41,9 @@ object SendThorchainModule {
                 availableBalance = availableBalance,
                 leaveSomeBalanceForFee = false
             )
-            val addressService = SendThorchainAddressService()
+            val addressService = SendThorchainAddressService(wallet.token.blockchainType.thorchainNetwork())
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-            val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Thorchain, TokenType.Native)) ?: throw IllegalArgumentException()
+            val feeToken = App.coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native)) ?: throw IllegalArgumentException()
 
             return SendThorchainViewModel(
                 wallet,
