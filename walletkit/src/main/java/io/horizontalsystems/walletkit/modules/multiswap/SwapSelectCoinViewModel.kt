@@ -35,10 +35,10 @@ class SwapSelectCoinViewModel(
     // delivered to an external address the user enters before confirmation
     private val allowExternalReceive: Boolean,
 ) : ViewModel() {
-    private val activeAccount = App.accountManager.activeAccount
-    private val coinsProvider = activeAccount?.let {
-        FullCoinsProvider(App.marketKit, it, filterByAccountSupport = !allowExternalReceive)
-    }
+    // Account-scoped state is resolved per call, not snapshotted at construction:
+    // the picker can outlive an account switch, and a long-lived snapshot would mix
+    // old-account sections with new-account filtering
+    private var coinsProvider: FullCoinsProvider? = null
     private val adapterManager = App.adapterManager
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
@@ -64,11 +64,30 @@ class SwapSelectCoinViewModel(
         private set
 
     init {
-        coinsProvider?.setActiveWallets(App.walletManager.activeWallets)
         viewModelScope.launch {
             loadSections()
             emitState()
         }
+    }
+
+    // Returns a provider bound to the currently active account, rebuilding it after
+    // an account switch so search never serves results scoped to a stale account
+    private fun currentCoinsProvider(): FullCoinsProvider? {
+        val account = App.accountManager.activeAccount ?: run {
+            coinsProvider = null
+            return null
+        }
+
+        coinsProvider?.let { cached ->
+            if (cached.activeAccount == account) return cached
+        }
+
+        return FullCoinsProvider(App.marketKit, account, filterByAccountSupport = !allowExternalReceive)
+            .apply {
+                setActiveWallets(App.walletManager.activeWallets)
+                setQuery(query)
+            }
+            .also { coinsProvider = it }
     }
 
     fun setQuery(q: String) {
@@ -135,11 +154,13 @@ class SwapSelectCoinViewModel(
         val top = mutableListOf<CoinBalanceItem>()
         val topCoins = marketKit.fullCoins("", 100)
             .sortedBy { it.coin.marketCapRank ?: Int.MAX_VALUE }
+        // read at call time: the picker can outlive an account switch
+        val accountType = App.accountManager.activeAccount?.type
         for (fullCoin in topCoins) {
             if (top.size >= 25) break
 
-            val eligible = if (activeAccount != null && !allowExternalReceive) {
-                fullCoin.eligibleTokens(activeAccount.type)
+            val eligible = if (accountType != null && !allowExternalReceive) {
+                fullCoin.eligibleTokens(accountType)
             } else {
                 externallyReceivableTokens(fullCoin)
             }
@@ -159,14 +180,16 @@ class SwapSelectCoinViewModel(
 
     private suspend fun search(q: String): List<CoinBalanceItem> = withContext(Dispatchers.Default) {
         val activeWallets = App.walletManager.activeWallets
+        val coinsProvider = currentCoinsProvider()
 
-        if (coinsProvider != null && activeAccount != null) {
+        if (coinsProvider != null) {
+            val accountType = coinsProvider.activeAccount.type
             coinsProvider.getItems()
                 .map { fullCoin ->
                     if (allowExternalReceive) {
                         externallyReceivableTokens(fullCoin)
                     } else {
-                        fullCoin.eligibleTokens(activeAccount.type)
+                        fullCoin.eligibleTokens(accountType)
                     }
                 }
                 .flatten()
