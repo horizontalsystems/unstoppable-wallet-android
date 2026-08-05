@@ -73,7 +73,7 @@ class WCRequestViewModel(
             )
         } catch (e: CancellationException) {
             throw e
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             approveInProgress = false
             error = e
             emitState()
