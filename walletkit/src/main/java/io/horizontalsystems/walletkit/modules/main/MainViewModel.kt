@@ -3,7 +3,7 @@ package io.horizontalsystems.walletkit.modules.main
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.IPinComponent
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App

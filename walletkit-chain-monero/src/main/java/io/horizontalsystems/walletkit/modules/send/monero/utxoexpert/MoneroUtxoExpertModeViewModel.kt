@@ -3,7 +3,7 @@ package io.horizontalsystems.walletkit.modules.send.monero.utxoexpert
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput

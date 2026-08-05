@@ -3,7 +3,7 @@ package io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
+import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
