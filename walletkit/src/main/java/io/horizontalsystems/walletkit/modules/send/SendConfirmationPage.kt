@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.send
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinConfirmationScreen
@@ -98,9 +99,18 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
             }
 
             // Legacy: moved to SendMoneroConfirmationPage in the Monero chain module.
-            Type.Monero -> Unit
+            // A back stack persisted before the split may still restore this entry - pop it.
+            Type.Monero -> {
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
+            }
 
-            Type.Zano -> Unit
+            Type.Zano -> {
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
+            }
 
         }
     }

@@ -138,6 +138,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.security.MessageDigest
 import java.util.logging.Level
@@ -682,6 +683,8 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             ChainRegistry.all.forEach { plugin ->
                 try {
                     plugin.onAppStart()
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (e: Throwable) {
                     Timber.e(e, "Chain plugin %s onAppStart failed", plugin.blockchainType.uid)
                 }
