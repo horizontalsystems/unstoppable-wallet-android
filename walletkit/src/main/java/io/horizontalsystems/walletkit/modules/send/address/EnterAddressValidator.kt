@@ -148,7 +148,8 @@ class StellarAddressValidator(private val token: Token) : EnterAddressValidator 
                 throw e
             } catch (_: StellarAssetAdapter.NoTrustlineError) {
                 false
-            } catch (_: Throwable) {
+            } catch (_: Exception) {
+                // fatal Errors (OOM, LinkageError) are left to propagate
                 null
             }
         }
