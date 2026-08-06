@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,solana,ecash,tron,the-open-network,stellar,thorchain,monero,zano,zcash
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,solana,ecash,tron,the-open-network,stellar,thorchain,mayachain,monero,zano,zcash
 
 chain bitcoin
   title=Bitcoin
@@ -87,7 +87,7 @@ chain polygon-pos
 chain avalanche
   title=Avalanche
   description=AVAX, ERC20 tokens
-  order=17
+  order=18
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -150,7 +150,7 @@ chain base
 chain zksync
   title=ZKsync
   description=L2 chain
-  order=20
+  order=21
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -192,7 +192,7 @@ chain arbitrum-one
 chain gnosis
   title=Gnosis
   description=xDAI, ERC20 tokens
-  order=21
+  order=22
   isEvm=true
   blockTime=5
   uriScheme=ethereum
@@ -213,7 +213,7 @@ chain gnosis
 chain fantom
   title=Fantom
   description=FTM, ERC20 tokens
-  order=22
+  order=23
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -234,7 +234,7 @@ chain fantom
 chain dash
   title=Dash
   description=DASH
-  order=14
+  order=15
   isEvm=false
   blockTime=150
   uriScheme=dash
@@ -255,7 +255,7 @@ chain dash
 chain bitcoin-cash
   title=Bitcoin Cash
   description=BCH (Legacy, CashAddress)
-  order=16
+  order=17
   isEvm=false
   blockTime=600
   uriScheme=bitcoincash
@@ -276,7 +276,7 @@ chain bitcoin-cash
 chain litecoin
   title=Litecoin
   description=LTC (BIP44, BIP49, BIP84, BIP86)
-  order=15
+  order=16
   isEvm=false
   blockTime=150
   uriScheme=litecoin
@@ -318,7 +318,7 @@ chain solana
 chain ecash
   title=Ecash
   description=XEC
-  order=19
+  order=20
   isEvm=false
   blockTime=600
   uriScheme=ecash
@@ -360,7 +360,7 @@ chain tron
 chain the-open-network
   title=Ton
   description=TON
-  order=18
+  order=19
   isEvm=false
   blockTime=5
   uriScheme=toncoin
@@ -418,6 +418,27 @@ chain thorchain
   supportedTokenTypes=Native,ThorchainAsset
   protocolType[Native]=THORChain
   protocolType[Eip20]=THORChain
+  supports=Mnemonic
+
+chain mayachain
+  title=MayaChain
+  description=CACAO, MayaChain assets
+  order=14
+  isEvm=false
+  blockTime=null
+  uriScheme=null
+  removeScheme=false
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=
+  nativeTokenQueries=mayachain|native
+  defaultTokenQuery=mayachain|native
+  supportedNftTypes=
+  supportedTokenTypes=Native
+  protocolType[Native]=MayaChain
+  protocolType[Eip20]=MayaChain
   supports=Mnemonic
 
 chain monero
