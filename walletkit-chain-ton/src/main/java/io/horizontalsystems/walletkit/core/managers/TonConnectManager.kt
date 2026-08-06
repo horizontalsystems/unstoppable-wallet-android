@@ -6,12 +6,14 @@ import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tonkit.models.Network
 import io.horizontalsystems.tonkit.models.SignTransaction
 import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class TonConnectManager(
     context: Context,
@@ -34,8 +36,14 @@ class TonConnectManager(
     fun start() {
         kit.start()
         scope.launch {
-            kit.sendRequestFlow.collect {
-                _pendingSendRequest.value = it
+            try {
+                kit.sendRequestFlow.collect {
+                    _pendingSendRequest.value = it
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Timber.e(e, "TonConnect send-request collection failed")
             }
         }
     }
@@ -53,7 +61,7 @@ class TonConnectManager(
             val dAppRequest = kit.readData(scannedText)
             _pendingDappRequest.value = DAppRequestEntityWrapper(dAppRequest, closeAppOnResult)
         } catch (e: Throwable) {
-
+            Timber.e(e, "Reading TonConnect request failed")
         }
     }
 }

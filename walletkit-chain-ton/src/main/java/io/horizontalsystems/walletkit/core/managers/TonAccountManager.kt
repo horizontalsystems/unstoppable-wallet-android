@@ -24,7 +24,7 @@ class TonAccountManager(
     private val tokenAutoEnableManager: TokenAutoEnableManager,
 ) {
     private val blockchainType: BlockchainType = BlockchainType.Ton
-    private val logger = AppLogger("evm-account-manager")
+    private val logger = AppLogger("ton-account-manager")
     private val singleDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val singleDispatcherCoroutineScope = CoroutineScope(singleDispatcher)
     private val coroutineScope = CoroutineScope(Dispatchers.IO)

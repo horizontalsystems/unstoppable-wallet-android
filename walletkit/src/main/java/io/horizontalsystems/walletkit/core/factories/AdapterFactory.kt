@@ -239,17 +239,8 @@ class AdapterFactory(
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(transactionSource.account)
             }
-            BlockchainType.Solana -> {
-                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
-            }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(transactionSource.account)
-            }
-            BlockchainType.Ton -> {
-                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
-            }
-            BlockchainType.Stellar -> {
-                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(transactionSource.account)
@@ -257,7 +248,7 @@ class AdapterFactory(
             BlockchainType.Mayachain -> {
                 mayachainKitManager.unlink(transactionSource.account)
             }
-            else -> Unit
+            else -> ChainRegistry[blockchainType]?.unlink(transactionSource.account)
         }
     }
 }

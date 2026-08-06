@@ -36,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -304,7 +305,14 @@ class BalanceViewModel(
 
             val deepLinkPlugin = ChainRegistry.all.firstOrNull { it.isDeepLinkSupported(scannedText, fromScanner = true) }
             if (deepLinkPlugin != null) {
-                deepLinkPlugin.handleDeepLink(scannedText, closeApp = false)
+                try {
+                    deepLinkPlugin.handleDeepLink(scannedText, closeApp = false)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                    emitState()
+                }
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {
