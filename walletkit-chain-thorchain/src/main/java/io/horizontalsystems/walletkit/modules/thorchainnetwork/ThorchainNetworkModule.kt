@@ -15,7 +15,9 @@ object ThorchainNetworkModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val service = ThorchainNetworkService(
-                (ChainRegistry[BlockchainType.Thorchain] as ThorchainChainPlugin).rpcSourceManager
+                requireNotNull(ChainRegistry[BlockchainType.Thorchain] as? ThorchainChainPlugin) {
+                    "Thorchain plugin is not registered"
+                }.rpcSourceManager
             )
 
             return ThorchainNetworkViewModel(service) as T

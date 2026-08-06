@@ -34,11 +34,3 @@ dependencies {
     testImplementation(libs.junit)
 }
 
-// Forward -PupdateParityFixture=true to the test JVM so ChainBehaviorParityTest can
-// regenerate its golden fixture (see docs/Walletkit-Modularization-Plan.md).
-tasks.withType<Test>().configureEach {
-    systemProperty(
-        "updateParityFixture",
-        providers.gradleProperty("updateParityFixture").getOrElse("false")
-    )
-}

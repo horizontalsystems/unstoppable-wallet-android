@@ -6,7 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlinx.coroutines.rx2.asFlow
 
 class ThorchainNetworkViewModel(private val service: ThorchainNetworkService) : ViewModel() {
@@ -22,9 +24,11 @@ class ThorchainNetworkViewModel(private val service: ThorchainNetworkService) : 
 
     init {
         viewModelScope.launch {
-            service.itemsObservable.asFlow().collect {
-                sync(it)
-            }
+            service.itemsObservable.asFlow()
+                .catch { Timber.e(it, "Thorchain network items collection failed") }
+                .collect {
+                    sync(it)
+                }
         }
     }
 
