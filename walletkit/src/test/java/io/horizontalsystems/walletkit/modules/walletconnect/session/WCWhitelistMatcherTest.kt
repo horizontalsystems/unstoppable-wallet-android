@@ -44,6 +44,17 @@ class WCWhitelistMatcherTest {
     }
 
     @Test
+    fun `does not trust apex when only the www host is whitelisted`() {
+        // www is a label like any other, so it must not stand in for the apex
+        assertFalse(
+            WCWhitelistMatcher.isHostInWhiteList(
+                "https://uniswap.org",
+                listOf("https://www.uniswap.org")
+            )
+        )
+    }
+
+    @Test
     fun `rejects unrelated and unparseable input`() {
         assertFalse(matches("https://example.com"))
         assertFalse(matches(""))
@@ -66,7 +77,7 @@ class WCWhitelistMatcherTest {
     }
 
     @Test
-    fun `ignores www prefix trailing slash and case`() {
+    fun `treats www as a subdomain and ignores trailing slash and case`() {
         assertTrue(matches("https://WWW.Uniswap.ORG/"))
     }
 
@@ -86,7 +97,7 @@ class WCWhitelistMatcherTest {
 
     @Test
     fun `hostOf normalizes and fails closed`() {
-        assertEquals("uniswap.org", WCWhitelistMatcher.hostOf("https://WWW.Uniswap.org./swap"))
+        assertEquals("www.uniswap.org", WCWhitelistMatcher.hostOf("https://WWW.Uniswap.org./swap"))
         assertEquals("evil.com", WCWhitelistMatcher.hostOf("https://uniswap.org@evil.com"))
         assertNull(WCWhitelistMatcher.hostOf(""))
         assertNull(WCWhitelistMatcher.hostOf("http://"))

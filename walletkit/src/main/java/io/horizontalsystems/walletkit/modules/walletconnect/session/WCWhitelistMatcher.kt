@@ -40,9 +40,12 @@ object WCWhitelistMatcher {
             null
         } ?: return null
 
+        // Case and the root's trailing dot carry no meaning, but every label does: stripping "www."
+        // would let a whitelisted "www.example.com" stand in for the apex and all of its other
+        // subdomains. A dApp reporting "www.example.com" still matches a whitelisted
+        // "example.com" through the subdomain rule.
         return host.lowercase()
             .removeSuffix(".")
-            .removePrefix("www.")
             .takeIf { it.isNotEmpty() }
     }
 }
