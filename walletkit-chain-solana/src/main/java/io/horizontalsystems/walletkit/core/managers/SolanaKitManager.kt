@@ -11,12 +11,13 @@ import io.horizontalsystems.solanakit.SolanaKit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
+import timber.log.Timber
 
 class SolanaKitManager(
     private val rpcSourceManager: SolanaRpcSourceManager,
@@ -162,7 +163,15 @@ class SolanaKitManager(
         }
         rpcUpdatedJob = coroutineScope.launch {
             rpcSourceManager.rpcSourceUpdateFlow.collect {
-                handleUpdateNetwork()
+                // a failed restart must not cancel the collector — later RPC
+                // source changes still need to be applied
+                try {
+                    handleUpdateNetwork()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Timber.e(e, "Restarting SolanaKit for new RPC source failed")
+                }
             }
         }
     }

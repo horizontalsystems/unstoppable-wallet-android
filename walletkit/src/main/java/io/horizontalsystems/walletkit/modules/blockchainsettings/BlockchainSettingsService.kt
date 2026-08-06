@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
@@ -84,7 +86,11 @@ class BlockchainSettingsService(
         coroutineScope.cancel()
     }
 
-    private fun syncBlockchainItems() {
+    // collectors run on independent coroutines; the lock keeps an older
+    // snapshot from being published after a newer one
+    private val syncMutex = Mutex()
+
+    private suspend fun syncBlockchainItems() = syncMutex.withLock {
         val btcBlockchainItems = btcBlockchainManager.allBlockchains.map { blockchain ->
             val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
             BlockchainItem.Btc(blockchain, restoreMode)
