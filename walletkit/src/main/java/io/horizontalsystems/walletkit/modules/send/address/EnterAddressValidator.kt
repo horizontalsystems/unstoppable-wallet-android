@@ -104,11 +104,6 @@ class EvmAddressValidator : EnterAddressValidator {
     }
 }
 
-class SolanaAddressValidator : EnterAddressValidator {
-    override suspend fun validate(address: Address) {
-        io.horizontalsystems.solanakit.models.Address(address.hex)
-    }
-}
 
 class TonAddressValidator : EnterAddressValidator {
     override suspend fun validate(address: Address) {

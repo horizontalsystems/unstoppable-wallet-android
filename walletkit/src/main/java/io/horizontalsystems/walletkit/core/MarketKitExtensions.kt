@@ -668,7 +668,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Dash,
         BlockchainType.BitcoinCash,
         BlockchainType.Litecoin,
-        BlockchainType.Solana,
         BlockchainType.ECash,
         BlockchainType.Tron,
         BlockchainType.Ton,

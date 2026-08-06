@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
+import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.EvmError
 import io.horizontalsystems.walletkit.core.ISendSolanaAdapter
@@ -35,7 +37,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
         token.type.isNative,
     )
     private val solToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
-    private val balance = App.solanaKitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
+    private val balance = (ChainRegistry[BlockchainType.Solana] as SolanaChainPlugin).kitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
     private val solBalance = SolanaAdapter.balanceInBigDecimal(balance, solToken.decimals) - SolanaKit.accountRentAmount
     private val addressService = SendSolanaAddressService()
 

@@ -4,7 +4,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.BackgroundManagerState
 import io.horizontalsystems.walletkit.core.UnsupportedAccountException
-import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.solanakit.Signer
@@ -19,7 +18,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class SolanaKitManager(
-    private val appConfigProvider: IAppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
     private val backgroundManager: BackgroundManager

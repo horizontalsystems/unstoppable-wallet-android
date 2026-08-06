@@ -6,8 +6,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarViewModel
 import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainConfirmationScreen
@@ -54,14 +52,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 )
             }
 
+            // Legacy: moved to SendSolanaConfirmationPage in the Solana chain module.
+            // A back stack persisted before the split may still restore this entry - pop it.
             Type.Solana -> {
-                val sendSolanaViewModel = navigation.viewModelForScreen<SendSolanaViewModel>(SendPage::class)
-
-                SendSolanaConfirmationScreen(
-                    navigation,
-                    sendSolanaViewModel,
-                    input.sendEntryPointDestId
-                )
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
             }
 
             Type.Ton -> {

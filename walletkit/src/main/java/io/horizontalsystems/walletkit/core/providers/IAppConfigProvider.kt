@@ -47,8 +47,6 @@ interface IAppConfigProvider {
     val marketApiBaseUrl: String
     val marketApiKey: String
     val openSeaApiKey: String
-    val solanaAlchemyApiKey: String
-    val solanaJupiterApiKey: String
     val trongridApiKeys: List<String>
     val udnApiKey: String
     val oneInchApiKey: String

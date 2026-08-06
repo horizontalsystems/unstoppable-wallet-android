@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.core.managers
 
-import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -10,7 +9,8 @@ import io.reactivex.subjects.PublishSubject
 
 class SolanaRpcSourceManager(
         private val blockchainSettingsStorage: BlockchainSettingsStorage,
-        private val marketKitWrapper: MarketKitWrapper
+        private val marketKitWrapper: MarketKitWrapper,
+        alchemyApiKey: String,
 ) {
 
     private val blockchainType = BlockchainType.Solana
@@ -19,7 +19,7 @@ class SolanaRpcSourceManager(
     val rpcSourceUpdateObservable: Observable<Unit>
         get() = rpcSourceSubjectUpdate
 
-    val allRpcSources = listOf(RpcSource.Alchemy(App.appConfigProvider.solanaAlchemyApiKey))
+    val allRpcSources = listOf(RpcSource.Alchemy(alchemyApiKey))
 
     val rpcSource: RpcSource
         get() {

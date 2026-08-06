@@ -2,7 +2,11 @@ package io.horizontalsystems.walletkit.core.chain
 
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.walletkit.core.IAdapter
+import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule
+import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -102,6 +106,9 @@ interface ChainPlugin {
     /** Kit status details for the App Status debug screen. */
     fun statusInfo(): Map<String, Any>? = null
 
+    /** Refreshes the chain's kit on user-initiated refresh, if one is running. */
+    fun refreshKit() = Unit
+
     /** The chain's network/node settings page, opened from sync errors and settings. */
     fun networkSettingsPage(): HSPage? = null
 
@@ -123,6 +130,18 @@ interface ChainPlugin {
 
     /** Deletes the chain's locally stored data for a removed account. */
     fun clearAccountData(accountId: String) = Unit
+
+    /** Dedicated transactions adapter, or null when the balance adapter serves both roles. */
+    fun createTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? = null
+
+    /** True when the chain supports adding custom tokens by reference. */
+    val supportsCustomTokens: Boolean get() = false
+
+    /** Resolves custom-token info for the add-token flow; null when unsupported. */
+    fun addTokenBlockchainService(blockchain: Blockchain): AddTokenModule.IAddTokenBlockchainService? = null
+
+    /** The chain's sync-source/node display name for the settings backup, or null. */
+    fun backupSyncSourceName(): String? = null
 
     /** True when the chain replaces the generic receive screen with [ReceiveScreen]. */
     val hasReceiveScreen: Boolean get() = false

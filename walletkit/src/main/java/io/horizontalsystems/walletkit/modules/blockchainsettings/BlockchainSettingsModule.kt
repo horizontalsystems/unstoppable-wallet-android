@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.walletkit.entities.EvmSyncSource
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.solanakit.models.RpcSource
 
 object BlockchainSettingsModule {
 
@@ -22,7 +21,6 @@ object BlockchainSettingsModule {
                     App.btcBlockchainManager,
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
-                    App.solanaRpcSourceManager,
                     App.thorchainRpcSourceManager,
                     App.marketKit
                 )
@@ -48,11 +46,6 @@ object BlockchainSettingsModule {
         class Evm(
             override val blockchain: Blockchain,
             val syncSource: EvmSyncSource
-        ) : BlockchainItem()
-
-        class Solana(
-            override val blockchain: Blockchain,
-            val rpcSource: RpcSource
         ) : BlockchainItem()
 
         class Thorchain(

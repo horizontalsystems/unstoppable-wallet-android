@@ -64,7 +64,6 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne -> listOf(AddressHandlerEvm(blockchainType))
 
-        BlockchainType.Solana -> listOf(AddressHandlerSolana())
         BlockchainType.Tron -> listOf(AddressHandlerTron())
         BlockchainType.Ton -> listOf(AddressHandlerTon())
         BlockchainType.Stellar -> listOf(AddressHandlerStellar())

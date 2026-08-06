@@ -21,7 +21,6 @@ object AppStatusModule {
                 App.tonKitManager,
                 App.stellarKitManager,
                 App.thorchainKitManager,
-                App.solanaKitManager,
                 App.btcBlockchainManager,
             )
             return viewModel as T

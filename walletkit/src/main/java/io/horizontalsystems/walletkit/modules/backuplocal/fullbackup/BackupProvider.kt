@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAccountFactory
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IEnabledWalletStorage
@@ -21,7 +22,6 @@ import io.horizontalsystems.walletkit.core.managers.MarketFavoritesManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
-import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
@@ -122,7 +122,6 @@ class BackupProvider(
     private val currencyManager: CurrencyManager,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val moneroNodeStorage: MoneroNodeStorage,
@@ -561,7 +560,8 @@ class BackupProvider(
             custom = customEvmSyncSources + customTronSyncSources
         )
 
-        val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
+        val solanaSyncSource = ChainRegistry[BlockchainType.Solana]?.backupSyncSourceName()
+            ?.let { SolanaSyncSource(BlockchainType.Solana.uid, it) }
 
         val thorchainSyncSource = ThorchainSyncSource(BlockchainType.Thorchain.uid, thorchainRpcSourceManager.rpcSource.name)
 

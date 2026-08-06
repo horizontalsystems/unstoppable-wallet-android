@@ -6,6 +6,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
+import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.chain.zcash.ZcashChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -64,6 +65,10 @@ class ChainBehaviorParityTest {
             { error("Context is not available in unit tests") },
             { error("ZcashLightWalletEndpointManager is not available in unit tests") },
             { error("ILocalStorage is not available in unit tests") },
+        ))
+        ChainRegistry.register(SolanaChainPlugin(
+            { error("alchemy key is not available in unit tests") },
+            { error("jupiter key is not available in unit tests") },
         ))
     }
 

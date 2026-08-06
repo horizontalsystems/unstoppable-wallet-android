@@ -55,9 +55,6 @@ import io.horizontalsystems.walletkit.core.managers.RateAppManager
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
 import io.horizontalsystems.walletkit.core.managers.ReleaseNotesManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
-import io.horizontalsystems.walletkit.core.managers.SolanaKitManager
-import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
-import io.horizontalsystems.walletkit.core.managers.SolanaWalletManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.walletkit.core.managers.StellarAccountManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
@@ -181,7 +178,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var tonKitManager: TonKitManager
         lateinit var stellarKitManager: StellarKitManager
@@ -205,7 +201,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
         lateinit var thorchainRpcSourceManager: ThorchainRpcSourceManager
         lateinit var mayachainRpcSourceManager: ThorchainRpcSourceManager
         lateinit var moneroNodeManager: MoneroNodeManager
@@ -330,9 +325,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         zcashEndpointManager = ZcashLightWalletEndpointManager(blockchainSettingsStorage, zcashEndpointStorage, marketKit)
         coinManager = CoinManager(marketKit, walletManager)
 
-        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
-        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
-        solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
@@ -423,7 +415,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             btcBlockchainManager = btcBlockchainManager,
             evmBlockchainManager = evmBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
-            solanaKitManager = solanaKitManager,
             tronKitManager = tronKitManager,
             tonKitManager = tonKitManager,
             stellarKitManager = stellarKitManager,
@@ -439,7 +430,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             walletManager,
             adapterFactory,
             evmBlockchainManager,
-            solanaKitManager,
             tronKitManager,
             tonKitManager,
             stellarKitManager,
@@ -538,7 +528,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             currencyManager = currencyManager,
             btcBlockchainManager = btcBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
-            solanaRpcSourceManager = solanaRpcSourceManager,
             thorchainRpcSourceManager = thorchainRpcSourceManager,
             moneroNodeManager = moneroNodeManager,
             moneroNodeStorage = moneroNodeStorage,
@@ -654,7 +643,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(restoreSettingsManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager, thorchainKitManager, mayachainKitManager)
+            walletManager.start(restoreSettingsManager, btcBlockchainManager, evmBlockchainManager, tronKitManager, thorchainKitManager, mayachainKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()

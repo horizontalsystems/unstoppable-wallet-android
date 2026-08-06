@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
@@ -61,9 +62,6 @@ class TransactionAdapterManager(
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
                         adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
-                    }
-                    BlockchainType.Solana -> {
-                        adapterFactory.solanaTransactionsAdapter(wallet.transactionSource)
                     }
                     BlockchainType.Tron -> {
                         adapterFactory.tronTransactionsAdapter(wallet.transactionSource)

@@ -16,10 +16,6 @@ import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.JettonAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.SolanaAdapter
-import io.horizontalsystems.walletkit.core.adapters.SolanaTransactionConverter
-import io.horizontalsystems.walletkit.core.adapters.SolanaTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.SplAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionsAdapter
@@ -38,7 +34,6 @@ import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
-import io.horizontalsystems.walletkit.core.managers.SolanaKitManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
@@ -56,7 +51,6 @@ class AdapterFactory(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
@@ -85,12 +79,6 @@ class AdapterFactory(
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
 
         return Eip20Adapter(context, evmKitWrapper, address, baseToken, coinManager, wallet, evmLabelManager)
-    }
-
-    private fun getSplAdapter(wallet: Wallet, address: String): IAdapter? {
-        val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
-
-        return SplAdapter(solanaKitWrapper, wallet, address)
     }
 
     private fun getTrc20Adapter(wallet: Wallet, address: String): Trc20Adapter? {
@@ -162,10 +150,6 @@ class AdapterFactory(
                 getEvmAdapter(wallet)
             }
 
-            BlockchainType.Solana -> {
-                val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
-                SolanaAdapter(solanaKitWrapper)
-            }
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
             }
@@ -188,7 +172,7 @@ class AdapterFactory(
                 getEip20Adapter(wallet, tokenType.address)
             }
         }
-        is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
+        is TokenType.Spl -> registryAdapter(wallet)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
         is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
         is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
@@ -212,14 +196,6 @@ class AdapterFactory(
         val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
 
         return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource, evmLabelManager)
-    }
-
-    fun solanaTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(source.account)
-        val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: return null
-        val solanaTransactionConverter = SolanaTransactionConverter(coinManager, source, baseToken, solanaKitWrapper)
-
-        return SolanaTransactionsAdapter(solanaKitWrapper, solanaTransactionConverter)
     }
 
     fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
@@ -305,9 +281,6 @@ class AdapterFactory(
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(wallet.account)
             }
-            BlockchainType.Solana -> {
-                solanaKitManager.unlink(wallet.account)
-            }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(wallet.account)
             }
@@ -342,7 +315,7 @@ class AdapterFactory(
                 evmKitManager.unlink(transactionSource.account)
             }
             BlockchainType.Solana -> {
-                solanaKitManager.unlink(transactionSource.account)
+                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(transactionSource.account)

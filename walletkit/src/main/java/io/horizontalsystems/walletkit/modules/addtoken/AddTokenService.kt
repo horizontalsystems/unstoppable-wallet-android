@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.addtoken
 
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ICoinManager
@@ -35,8 +36,7 @@ class AddTokenService(
         BlockchainType.Optimism,
         BlockchainType.Base,
         BlockchainType.ZkSync,
-        BlockchainType.Solana
-    )
+    ) + ChainRegistry.all.filter { it.supportsCustomTokens }.map { it.blockchainType }
 
     val blockchains = marketKit
         .blockchains(blockchainTypes.map { it.uid })
@@ -54,10 +54,8 @@ class AddTokenService(
             BlockchainType.Ton -> {
                 AddTonTokenBlockchainService(blockchain)
             }
-            BlockchainType.Solana -> {
-                AddSolanaTokenBlockchainService.getInstance(blockchain, App.appConfigProvider.solanaJupiterApiKey)
-            }
-            else -> AddEvmTokenBlockchainService.getInstance(blockchain)
+            else -> ChainRegistry[blockchain.type]?.addTokenBlockchainService(blockchain)
+                ?: AddEvmTokenBlockchainService.getInstance(blockchain)
         }
 
         if (!blockchainService.isValid(reference)) throw TokenError.InvalidReference

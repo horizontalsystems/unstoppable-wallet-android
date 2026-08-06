@@ -8,7 +8,6 @@ import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
 import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
 import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.walletkit.core.adapters.SolanaAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 
 class AccountCleaner : IAccountCleaner {
@@ -24,7 +23,6 @@ class AccountCleaner : IAccountCleaner {
         DashAdapter.clear(accountId)
         EvmAdapter.clear(accountId)
         Eip20Adapter.clear(accountId)
-        SolanaAdapter.clear(accountId)
         TronAdapter.clear(accountId)
         ChainRegistry.all.forEach { it.clearAccountData(accountId) }
     }

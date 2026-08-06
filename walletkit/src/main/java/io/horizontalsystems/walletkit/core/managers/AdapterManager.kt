@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
@@ -20,7 +21,6 @@ class AdapterManager(
     private val walletManager: WalletManager,
     private val adapterFactory: AdapterFactory,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
@@ -52,7 +52,7 @@ class AdapterManager(
             evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
         }
 
-        solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
+        ChainRegistry.all.forEach { it.refreshKit() }
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
         tonKitManager.tonKitWrapper?.tonKit?.refresh()
         stellarKitManager.stellarKitWrapper?.stellarKit?.refresh()

@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchai
 import io.horizontalsystems.walletkit.modules.evmnetwork.EvmNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.solananetwork.SolanaNetworkPage
 import io.horizontalsystems.walletkit.modules.thorchainnetwork.ThorchainNetworkPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
@@ -115,15 +114,6 @@ private fun onClick(
             stat(
                 page = StatPage.BlockchainSettings,
                 event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
-            )
-        }
-
-        is BlockchainSettingsModule.BlockchainItem.Solana -> {
-            navigation.slideFromBottom(SolanaNetworkPage)
-
-            stat(
-                page = StatPage.BlockchainSettings,
-                event = StatEvent.Open(StatPage.BlockchainSettingsSolana)
             )
         }
 

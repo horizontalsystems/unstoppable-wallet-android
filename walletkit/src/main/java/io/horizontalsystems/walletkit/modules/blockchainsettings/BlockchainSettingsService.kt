@@ -4,7 +4,6 @@ import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
-import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
@@ -23,7 +22,6 @@ class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val marketKit: MarketKitWrapper
 ) {
@@ -53,11 +51,6 @@ class BlockchainSettingsService(
         }
         coroutineScope.launch {
             evmSyncSourceManager.syncSourceObservable.asFlow().collect {
-                syncBlockchainItems()
-            }
-        }
-        coroutineScope.launch {
-            solanaRpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
                 syncBlockchainItems()
             }
         }
@@ -108,11 +101,6 @@ class BlockchainSettingsService(
             tronBlockchainItems.add(BlockchainItem.Evm(blockchain, syncSource))
         }
 
-        val solanaBlockchainItems = mutableListOf<BlockchainItem>()
-        solanaRpcSourceManager.blockchain?.let {
-            solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
-        }
-
         val thorchainBlockchainItems = mutableListOf<BlockchainItem>()
         thorchainRpcSourceManager.blockchain?.let {
             thorchainBlockchainItems.add(BlockchainItem.Thorchain(it, thorchainRpcSourceManager.rpcSource))
@@ -120,7 +108,7 @@ class BlockchainSettingsService(
 
         val chainBlockchainItems = ChainRegistry.all.mapNotNull { it.blockchainSettingsItem() }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + thorchainBlockchainItems + chainBlockchainItems).sortedBy { it.order }
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + thorchainBlockchainItems + chainBlockchainItems).sortedBy { it.order }
     }
 
 }

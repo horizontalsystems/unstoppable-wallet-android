@@ -145,10 +145,6 @@ object SwapHelper {
                     App.thorchainKitManager.getAddress(account.type)
                 }
 
-                BlockchainType.Solana -> {
-                    App.solanaKitManager.getAddress(account.type)
-                }
-
                 BlockchainType.Ton -> {
                     App.tonKitManager.getAddress(account.type)
                 }

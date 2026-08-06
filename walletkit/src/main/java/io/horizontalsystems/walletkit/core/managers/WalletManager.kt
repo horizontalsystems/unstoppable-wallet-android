@@ -101,7 +101,6 @@ class WalletManager(
         restoreSettingsManager: RestoreSettingsManager,
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
-        solanaKitManager: SolanaKitManager,
         tronKitManager: TronKitManager,
         thorchainKitManager: ThorchainKitManager,
         mayachainKitManager: ThorchainKitManager,
@@ -137,11 +136,6 @@ class WalletManager(
                     .collect {
                         reloadWallets(blockchain.type)
                     }
-            }
-        }
-        coroutineScope.launch {
-            solanaKitManager.kitStoppedObservable.asFlow().collect {
-                reloadWallets(BlockchainType.Solana)
             }
         }
         coroutineScope.launch {

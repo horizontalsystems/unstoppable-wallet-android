@@ -40,9 +40,6 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceStellar(stellarKitWrapper.stellarKit, token)
             }
 
-            BlockchainType.Solana -> {
-                SendTransactionServiceSolana(token)
-            }
 
             BlockchainType.Ton -> {
                 SendTransactionServiceTon(token)

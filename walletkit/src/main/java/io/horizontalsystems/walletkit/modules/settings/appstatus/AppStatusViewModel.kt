@@ -12,7 +12,6 @@ import io.horizontalsystems.walletkit.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
-import io.horizontalsystems.walletkit.core.managers.SolanaKitManager
 import io.horizontalsystems.walletkit.core.managers.StellarKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
@@ -42,7 +41,6 @@ class AppStatusViewModel(
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
-    private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
 
@@ -223,9 +221,6 @@ class AppStatusViewModel(
             blockchainStatus["Thorchain"] = statusInfo
         }
 
-        solanaKitManager.statusInfo?.let { statusInfo ->
-            blockchainStatus["Solana"] = statusInfo
-        }
 
         return blockchainStatus
     }
@@ -288,12 +283,6 @@ class AppStatusViewModel(
         thorchainKitManager.statusInfo?.let { statusInfo ->
             val title = if (blocks.isEmpty()) "Blockchain Status" else null
             val block = getBlockchainInfoBlock(title, "Thorchain", statusInfo)
-            blocks.add(block)
-        }
-
-        solanaKitManager.statusInfo?.let {
-            val title = if (blocks.isEmpty()) "Blockchain Status" else null
-            val block = getBlockchainInfoBlock(title, "Solana", it)
             blocks.add(block)
         }
 

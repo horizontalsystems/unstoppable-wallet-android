@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,solana,ecash,tron,the-open-network,stellar,thorchain,mayachain,monero,zano,zcash
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,the-open-network,stellar,thorchain,mayachain,monero,zano,zcash,solana
 
 chain bitcoin
   title=Bitcoin
@@ -294,27 +294,6 @@ chain litecoin
   protocolType[Eip20]=Litecoin
   supports=Mnemonic
 
-chain solana
-  title=Solana
-  description=SOL, SPL tokens
-  order=6
-  isEvm=false
-  blockTime=null
-  uriScheme=solana
-  removeScheme=true
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=coin_placeholder
-  restoreSettingTypes=
-  nativeTokenQueries=solana|native
-  defaultTokenQuery=solana|native
-  supportedNftTypes=
-  supportedTokenTypes=Native,Spl
-  protocolType[Native]=Solana
-  protocolType[Eip20]=Solana
-  supports=Mnemonic,SolanaAddress
-
 chain ecash
   title=Ecash
   description=XEC
@@ -503,4 +482,25 @@ chain zcash
   protocolType[Native]=Zcash
   protocolType[Eip20]=Zcash
   supports=Mnemonic
+
+chain solana
+  title=Solana
+  description=SOL, SPL tokens
+  order=6
+  isEvm=false
+  blockTime=null
+  uriScheme=solana
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=
+  nativeTokenQueries=solana|native
+  defaultTokenQuery=solana|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,Spl
+  protocolType[Native]=Solana
+  protocolType[Eip20]=Solana
+  supports=Mnemonic,SolanaAddress
 

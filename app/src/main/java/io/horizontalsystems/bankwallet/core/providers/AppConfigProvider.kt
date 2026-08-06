@@ -46,8 +46,6 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val marketApiBaseUrl = BuildConfig.MARKET_API_BASE_URL
     override val marketApiKey = BuildConfig.MARKET_API_KEY
     override val openSeaApiKey = BuildConfig.OPEN_SEA_API_KEY
-    override val solanaAlchemyApiKey = BuildConfig.SOLANA_ALCHEMY_API_KEY
-    override val solanaJupiterApiKey = BuildConfig.SOLANA_JUPITER_API_KEY
     override val trongridApiKeys: List<String> = BuildConfig.TRONGRID_API_KEYS.split(",")
     override val udnApiKey = BuildConfig.UDN_API_KEY
     override val oneInchApiKey = BuildConfig.ONE_INCH_API_KEY

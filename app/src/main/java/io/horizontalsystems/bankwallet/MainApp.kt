@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
+import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
 import io.horizontalsystems.walletkit.chain.zcash.ZcashChainPlugin
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -22,5 +23,6 @@ class MainApp : App() {
         ChainRegistry.register(MoneroChainPlugin({ App.instance }, { App.moneroNodeManager }))
         ChainRegistry.register(ZanoChainPlugin({ App.zanoNodeManager }, { App.backgroundManager }))
         ChainRegistry.register(ZcashChainPlugin({ App.instance }, { App.zcashEndpointManager }, { App.localStorage }))
+        ChainRegistry.register(SolanaChainPlugin({ BuildConfig.SOLANA_ALCHEMY_API_KEY }, { BuildConfig.SOLANA_JUPITER_API_KEY }))
     }
 }

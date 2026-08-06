@@ -2,6 +2,8 @@ package io.horizontalsystems.walletkit.modules.send.solana
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.ISendSolanaAdapter
@@ -42,7 +44,7 @@ object SendSolanaModule {
                         wallet.token.type.isNative,
                     )
                     val solToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
-                    val balance = App.solanaKitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
+                    val balance = (ChainRegistry[BlockchainType.Solana] as SolanaChainPlugin).kitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
                     val solBalance = SolanaAdapter.balanceInBigDecimal(balance, solToken.decimals) - SolanaKit.accountRentAmount
                     val addressService = SendSolanaAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)

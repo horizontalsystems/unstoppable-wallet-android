@@ -16,9 +16,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
-import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaModule
-import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaScreen
-import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarModule
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarScreen
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarViewModel
@@ -108,19 +105,6 @@ data class SendPage(val input: Input) : HSPage() {
                 )
             }
 
-            BlockchainType.Solana -> {
-                val factory = SendSolanaModule.Factory(wallet, address, hideAddress)
-                val sendSolanaViewModel = viewModel<SendSolanaViewModel>(factory = factory)
-                SendSolanaScreen(
-                    title = title,
-                    navigation = navigation,
-                    viewModel = sendSolanaViewModel,
-                    amountInputModeViewModel = amountInputModeViewModel,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                    amount = amount,
-                    riskyAddress = riskyAddress
-                )
-            }
 
             BlockchainType.Ton -> {
                 val factory = SendTonModule.Factory(wallet, address, hideAddress)
