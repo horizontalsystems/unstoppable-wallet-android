@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import kotlin.coroutines.cancellation.CancellationException
 
 class WalletManager(
     private val accountManager: IAccountManager,
@@ -161,7 +162,13 @@ class WalletManager(
         }
         coroutineScope.launch {
             mayachainKitManager.kitStoppedFlow.collect {
-                reloadWallets(BlockchainType.Mayachain)
+                try {
+                    reloadWallets(BlockchainType.Mayachain)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Timber.e(e, "Reloading %s wallets failed", BlockchainType.Mayachain.uid)
+                }
             }
         }
     }

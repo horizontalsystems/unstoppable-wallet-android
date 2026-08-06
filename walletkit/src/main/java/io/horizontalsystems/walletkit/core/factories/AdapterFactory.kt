@@ -198,7 +198,8 @@ class AdapterFactory(
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
         is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
         is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
-            BlockchainType.Thorchain -> ThorchainAdapter(thorchainKitManager.getThorchainKitWrapper(wallet.account), wallet)
+            BlockchainType.Thorchain,
+            BlockchainType.Mayachain -> ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
             else -> null
         }
         is TokenType.ZanoAsset -> registryAdapter(wallet)
