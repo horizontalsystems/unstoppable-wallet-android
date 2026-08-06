@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.send.address.BitcoinAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
-import io.horizontalsystems.walletkit.modules.send.address.ThorchainAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -50,10 +49,6 @@ object AddressValidatorFactory {
 
             BlockchainType.Tron -> {
                 TronAddressValidator(token, App.adapterManager, allowOwnAddress)
-            }
-
-            is BlockchainType.Mayachain -> {
-                ThorchainAddressValidator(token)
             }
 
             else -> throw IllegalStateException("Unsupported blockchain type: ${token.blockchainType}")

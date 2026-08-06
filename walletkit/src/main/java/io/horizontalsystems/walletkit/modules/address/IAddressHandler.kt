@@ -14,8 +14,6 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.thorchainkit.models.Address as ThorchainAddress
-import io.horizontalsystems.thorchainkit.network.Network as ThorchainNetwork
 import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
 
@@ -250,22 +248,6 @@ class AddressHandlerTron : IAddressHandler {
 
 
 
-class AddressHandlerThorchain(
-    private val network: ThorchainNetwork,
-    override val blockchainType: BlockchainType,
-) : IAddressHandler {
-
-    override fun isSupported(value: String) = try {
-        ThorchainAddress.fromString(value, network)
-        true
-    } catch (e: Exception) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        return Address(value, blockchainType = blockchainType)
-    }
-}
 
 
 class AddressHandlerPure(override val blockchainType: BlockchainType) : IAddressHandler {

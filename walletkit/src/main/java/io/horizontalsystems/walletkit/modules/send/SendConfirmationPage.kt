@@ -6,8 +6,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
@@ -72,14 +70,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 }
             }
 
+            // Legacy: moved to SendThorchainConfirmationPage in the Thorchain chain module.
+            // A back stack persisted before the split may still restore this entry - pop it.
             Type.Thorchain -> {
-                val sendThorchainViewModel = navigation.viewModelForScreen<SendThorchainViewModel>(SendPage::class)
-
-                SendThorchainConfirmationScreen(
-                    navigation,
-                    sendThorchainViewModel,
-                    input.sendEntryPointDestId
-                )
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
             }
 
             // Legacy: moved to SendMoneroConfirmationPage in the Monero chain module.

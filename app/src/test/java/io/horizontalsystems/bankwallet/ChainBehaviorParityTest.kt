@@ -8,6 +8,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
 import io.horizontalsystems.walletkit.chain.stellar.StellarChainPlugin
+import io.horizontalsystems.walletkit.chain.thorchain.MayachainChainPlugin
 import io.horizontalsystems.walletkit.chain.thorchain.ThorchainChainPlugin
 import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
@@ -76,6 +77,7 @@ class ChainBehaviorParityTest {
         ChainRegistry.register(StellarChainPlugin())
         ChainRegistry.register(TonChainPlugin())
         ChainRegistry.register(ThorchainChainPlugin())
+        ChainRegistry.register(MayachainChainPlugin())
     }
 
     private val sampleTokenTypes: List<Pair<String, TokenType>> = listOf(

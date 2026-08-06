@@ -69,8 +69,8 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
+import io.horizontalsystems.walletkit.modules.multiswap.history.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
@@ -192,7 +192,7 @@ fun SwapScreen(
                         // only Maya delivers ZEC to shielded/unified receivers; every
                         // other route needs a transparent address
                         zcashTransparentOnly = tokenOut.blockchainType == BlockchainType.Zcash &&
-                                viewModel.uiState.quote?.provider !== MayaProvider,
+                                viewModel.uiState.quote?.provider?.id != MAYA_PROVIDER_ID,
                     )
                 )
             )

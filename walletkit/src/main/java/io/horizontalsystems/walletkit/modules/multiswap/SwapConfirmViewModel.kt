@@ -17,8 +17,8 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
+import io.horizontalsystems.walletkit.modules.multiswap.history.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
@@ -65,7 +65,7 @@ class SwapConfirmViewModel(
     // only Maya delivers ZEC to shielded/unified receivers; every other route needs
     // a transparent recipient address
     val zcashTransparentRecipientOnly =
-        tokenOut.blockchainType == BlockchainType.Zcash && swapProvider !== MayaProvider
+        tokenOut.blockchainType == BlockchainType.Zcash && swapProvider.id != MAYA_PROVIDER_ID
     private val amountIn = swapQuote.amountIn.let { amount ->
         if (amount.scale() > tokenIn.decimals) {
             amount.setScale(tokenIn.decimals, RoundingMode.DOWN)

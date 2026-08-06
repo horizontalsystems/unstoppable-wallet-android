@@ -484,7 +484,3 @@ class DepositWithExpiryMethod(
     override fun getArguments() = listOf(inboundAddress, asset, amount, memo, expiry)
 }
 
-
-sealed class SwapError : Exception() {
-    class NoDestinationAddress : SwapError()
-}

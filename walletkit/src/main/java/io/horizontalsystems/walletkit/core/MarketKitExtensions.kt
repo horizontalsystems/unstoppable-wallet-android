@@ -670,7 +670,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Litecoin,
         BlockchainType.ECash,
         BlockchainType.Tron,
-        BlockchainType.Mayachain,
     ) + ChainRegistry.all.map { it.blockchainType }
 
 val CoinPrice.diff: BigDecimal?

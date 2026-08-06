@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,mayachain,monero,zano,zcash,solana,stellar,the-open-network,thorchain
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,monero,zano,zcash,solana,stellar,the-open-network,thorchain,mayachain
 
 chain bitcoin
   title=Bitcoin
@@ -336,27 +336,6 @@ chain tron
   protocolType[Eip20]=TRC20
   supports=Mnemonic,TronAddress,TronPrivateKey,Passkey
 
-chain mayachain
-  title=MayaChain
-  description=CACAO, MayaChain assets
-  order=14
-  isEvm=false
-  blockTime=null
-  uriScheme=null
-  removeScheme=false
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=coin_placeholder
-  restoreSettingTypes=
-  nativeTokenQueries=mayachain|native
-  defaultTokenQuery=mayachain|native
-  supportedNftTypes=
-  supportedTokenTypes=Native
-  protocolType[Native]=MayaChain
-  protocolType[Eip20]=MayaChain
-  supports=Mnemonic
-
 chain monero
   title=Monero
   description=XMR
@@ -502,5 +481,26 @@ chain thorchain
   supportedTokenTypes=Native,ThorchainAsset
   protocolType[Native]=THORChain
   protocolType[Eip20]=THORChain
+  supports=Mnemonic
+
+chain mayachain
+  title=MayaChain
+  description=CACAO, MayaChain assets
+  order=14
+  isEvm=false
+  blockTime=null
+  uriScheme=null
+  removeScheme=false
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=
+  nativeTokenQueries=mayachain|native
+  defaultTokenQuery=mayachain|native
+  supportedNftTypes=
+  supportedTokenTypes=Native
+  protocolType[Native]=MayaChain
+  protocolType[Eip20]=MayaChain
   supports=Mnemonic
 

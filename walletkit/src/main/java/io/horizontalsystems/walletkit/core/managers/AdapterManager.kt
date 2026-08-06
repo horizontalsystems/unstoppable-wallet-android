@@ -22,7 +22,6 @@ class AdapterManager(
     private val adapterFactory: AdapterFactory,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val tronKitManager: TronKitManager,
-    private val mayachainKitManager: ThorchainKitManager,
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -51,7 +50,6 @@ class AdapterManager(
 
         ChainRegistry.all.forEach { it.refreshKit() }
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
-        mayachainKitManager.thorchainKitWrapper?.thorchainKit?.refresh()
     }
 
     @Synchronized

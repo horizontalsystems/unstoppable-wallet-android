@@ -1,10 +1,8 @@
 package io.horizontalsystems.walletkit.modules.multiswap.history
 
 import io.horizontalsystems.walletkit.entities.SwapRecord
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.PancakeSwapV3Provider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
@@ -38,7 +36,7 @@ object SwapTrackRequestBuilder {
         val fromAddress = SwapTrackEnrichmentResolver.provider?.fromAddress(record)
 
         return when {
-            record.providerId == ThorChainProvider.id || record.providerId == MayaProvider.id -> TrackCall(
+            record.providerId == THORCHAIN_PROVIDER_ID || record.providerId == MAYA_PROVIDER_ID -> TrackCall(
                 Endpoint.Thorchain,
                 UnstoppableAPI.Request.Track(
                     provider = providerApiName,
@@ -86,11 +84,16 @@ object SwapTrackRequestBuilder {
     }
 
     private fun apiProviderName(providerId: String): String = when (providerId) {
-        ThorChainProvider.id -> "THORCHAIN"
-        MayaProvider.id -> "MAYACHAIN"
+        THORCHAIN_PROVIDER_ID -> "THORCHAIN"
+        MAYA_PROVIDER_ID -> "MAYACHAIN"
         OneInchProvider.ID -> "ONEINCH"
         PancakeSwapV3Provider.id -> "PANCAKESWAP"
         UniswapV3Provider.id -> "UNISWAP_V3"
         else -> if (providerId.startsWith("u_")) providerId.removePrefix("u_") else providerId.uppercase()
     }
 }
+
+// Provider ids for the thorchain-family swap providers; the provider objects live in the
+// optional walletkit-chain-thorchain module, so history rendering matches by id.
+const val THORCHAIN_PROVIDER_ID = "thorchain"
+const val MAYA_PROVIDER_ID = "mayachain"

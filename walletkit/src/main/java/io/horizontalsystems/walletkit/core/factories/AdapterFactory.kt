@@ -15,9 +15,6 @@ import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
 import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
-import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionConverter
-import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
@@ -27,7 +24,6 @@ import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
-import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -42,7 +38,6 @@ class AdapterFactory(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val tronKitManager: TronKitManager,
-    private val mayachainKitManager: ThorchainKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -128,9 +123,6 @@ class AdapterFactory(
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
             }
-            BlockchainType.Mayachain -> {
-                ThorchainAdapter(mayachainKitManager.getThorchainKitWrapper(wallet.account), wallet)
-            }
             else -> registryAdapter(wallet)
         }
         is TokenType.Eip20 -> {
@@ -143,10 +135,7 @@ class AdapterFactory(
         is TokenType.Spl -> registryAdapter(wallet)
         is TokenType.Jetton -> registryAdapter(wallet)
         is TokenType.Asset -> registryAdapter(wallet)
-        is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
-            BlockchainType.Mayachain -> ThorchainAdapter(mayachainKitManager.getThorchainKitWrapper(wallet.account), wallet)
-            else -> registryAdapter(wallet)
-        }
+        is TokenType.ThorchainAsset -> registryAdapter(wallet)
         is TokenType.ZanoAsset -> registryAdapter(wallet)
         is TokenType.Unsupported -> null
     }
@@ -173,24 +162,6 @@ class AdapterFactory(
         return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
     }
 
-    fun thorchainTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
-        val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
-        val baseToken = coinManager.getToken(tokenQuery) ?: return null
-
-        val thorchainKitWrapper = mayachainKitManager.getThorchainKitWrapper(source.account)
-
-        val transactionConverter = ThorchainTransactionConverter(
-            coinManager,
-            source,
-            thorchainKitWrapper.thorchainKit.receiveAddress,
-            baseToken,
-            blockchainType,
-            thorchainKitWrapper.thorchainKit.network,
-        )
-
-        return ThorchainTransactionsAdapter(thorchainKitWrapper, transactionConverter)
-    }
-
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
@@ -205,9 +176,6 @@ class AdapterFactory(
             }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(wallet.account)
-            }
-            BlockchainType.Mayachain -> {
-                mayachainKitManager.unlink(wallet.account)
             }
             else -> {
                 ChainRegistry[blockchainType]?.unlink(wallet.account)
@@ -234,7 +202,7 @@ class AdapterFactory(
                 ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             BlockchainType.Mayachain -> {
-                mayachainKitManager.unlink(transactionSource.account)
+                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             else -> ChainRegistry[blockchainType]?.unlink(transactionSource.account)
         }

@@ -31,6 +31,8 @@ android {
 dependencies {
     api(project(":walletkit"))
 
+    api(libs.kit.thorchain)
+
     testImplementation(libs.junit)
 }
 

@@ -16,9 +16,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
-import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainModule
-import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainScreen
-import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronModule
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
@@ -116,21 +113,6 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
 
-            BlockchainType.Thorchain,
-            BlockchainType.Mayachain -> {
-                val factory = SendThorchainModule.Factory(wallet, address, hideAddress, memo)
-                val sendThorchainViewModel = viewModel<SendThorchainViewModel>(factory = factory)
-                SendThorchainScreen(
-                    title,
-                    navigation,
-                    sendThorchainViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId,
-                    amount,
-                    memo,
-                    riskyAddress = riskyAddress
-                )
-            }
 
 
             else -> {

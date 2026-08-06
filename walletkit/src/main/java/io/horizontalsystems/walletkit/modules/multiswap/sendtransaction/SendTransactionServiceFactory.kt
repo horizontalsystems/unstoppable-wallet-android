@@ -2,7 +2,6 @@ package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.UnsupportedException
-import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -35,12 +34,6 @@ object SendTransactionServiceFactory {
             }
 
 
-
-            BlockchainType.Mayachain -> {
-                val adapter = App.adapterManager.getAdapterForToken<ThorchainAdapter>(token)
-                    ?: throw IllegalStateException("ThorchainAdapter is null")
-                SendTransactionServiceThorchain(adapter, blockchainType)
-            }
 
             else -> ChainRegistry[blockchainType]?.sendTransactionService(token)
                 ?: throw UnsupportedException("")

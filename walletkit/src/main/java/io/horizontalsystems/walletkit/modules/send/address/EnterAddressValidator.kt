@@ -4,7 +4,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
-import io.horizontalsystems.walletkit.core.ISendThorchainAdapter
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
@@ -21,7 +20,6 @@ import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.walletkit.core.managers.thorchainNetwork
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -101,18 +99,6 @@ class EvmAddressValidator : EnterAddressValidator {
 
 
 
-class ThorchainAddressValidator(private val token: Token) : EnterAddressValidator {
-    private val sendAdapter by lazy { App.adapterManager.getAdapterForToken<ISendThorchainAdapter>(token) }
-    override suspend fun validate(address: Address) {
-        val adapter = sendAdapter
-        if (adapter != null) {
-            adapter.validate(address.hex)
-        } else {
-            // no enabled wallet (external swap recipient) — static parse against the chain's network
-            io.horizontalsystems.thorchainkit.models.Address.fromString(address.hex, token.blockchainType.thorchainNetwork())
-        }
-    }
-}
 
 
 class TronAddressValidator(

@@ -102,7 +102,6 @@ class WalletManager(
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
         tronKitManager: TronKitManager,
-        mayachainKitManager: ThorchainKitManager,
     ) {
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
@@ -140,17 +139,6 @@ class WalletManager(
         coroutineScope.launch {
             tronKitManager.kitStoppedObservable.asFlow().collect {
                 reloadWallets(BlockchainType.Tron)
-            }
-        }
-        coroutineScope.launch {
-            mayachainKitManager.kitStoppedFlow.collect {
-                try {
-                    reloadWallets(BlockchainType.Mayachain)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Throwable) {
-                    Timber.e(e, "Reloading %s wallets failed", BlockchainType.Mayachain.uid)
-                }
             }
         }
     }

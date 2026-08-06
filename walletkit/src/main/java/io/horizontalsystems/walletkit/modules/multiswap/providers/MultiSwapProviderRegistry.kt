@@ -14,8 +14,6 @@ object MultiSwapProviderRegistry {
         PancakeSwapV3Provider,
 //        QuickSwapProvider,
         // Cross-chain providers
-        ThorChainProvider,
-        MayaProvider,
         AllBridgeProvider,
         USwapProvider(UProvider.Near),
         USwapProvider(UProvider.QuickEx),

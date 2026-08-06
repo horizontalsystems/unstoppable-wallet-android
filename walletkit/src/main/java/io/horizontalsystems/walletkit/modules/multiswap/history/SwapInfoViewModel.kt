@@ -16,10 +16,8 @@ import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.multiswap.SwapTimeStatus
 import io.horizontalsystems.walletkit.modules.multiswap.formatDuration
 import io.horizontalsystems.walletkit.modules.multiswap.formatSwapTimeRange
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
-import io.horizontalsystems.walletkit.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
 import io.horizontalsystems.walletkit.modules.multiswap.swapTimeStatus
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -174,8 +172,8 @@ class SwapInfoViewModel(
     }
 
     private fun buildProviderTxUrl(providerId: String, txHash: String?, depositAddress: String?): String? = when (providerId) {
-        ThorChainProvider.id -> txHash?.let { "https://thorchain.net/tx/$it" }
-        MayaProvider.id -> txHash?.let { "https://www.mayascan.org/tx/$it" }
+        THORCHAIN_PROVIDER_ID -> txHash?.let { "https://thorchain.net/tx/$it" }
+        MAYA_PROVIDER_ID -> txHash?.let { "https://www.mayascan.org/tx/$it" }
         "u_${UProvider.Near.id}" -> depositAddress?.let { "https://explorer.near-intents.org/transactions/$it" }
         else -> null
     }

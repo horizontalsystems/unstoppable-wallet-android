@@ -66,9 +66,6 @@ class TransactionAdapterManager(
                     BlockchainType.Tron -> {
                         adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
                     }
-                    BlockchainType.Mayachain -> {
-                        adapterFactory.thorchainTransactionsAdapter(wallet.transactionSource, blockchainType)
-                    }
                     else -> ChainRegistry[blockchainType]?.createTransactionsAdapter(wallet.transactionSource)
                         ?: adapter as? ITransactionsAdapter
                 }
