@@ -23,7 +23,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.ZcashAddressTypeSelectPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
-import io.horizontalsystems.walletkit.modules.send.address.ZcashAddressValidator
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashViewModel

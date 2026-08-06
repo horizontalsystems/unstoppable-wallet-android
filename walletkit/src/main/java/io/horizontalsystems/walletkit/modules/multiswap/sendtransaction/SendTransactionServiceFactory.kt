@@ -4,7 +4,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.UnsupportedException
 import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 
@@ -49,11 +48,6 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceTon(token)
             }
 
-            BlockchainType.Zcash -> {
-                val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token)
-                    ?: throw IllegalStateException("ZcashAdapter is null")
-                SendTransactionServiceZcash(adapter)
-            }
 
 
             BlockchainType.Thorchain,

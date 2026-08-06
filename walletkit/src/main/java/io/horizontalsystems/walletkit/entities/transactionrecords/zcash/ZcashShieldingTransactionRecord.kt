@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.entities.transactionrecords.zcash
 
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashTransaction.ShieldDirection
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionLockInfo
@@ -58,4 +57,8 @@ class ZcashShieldingTransactionRecord(
             }
         }
     }
+}
+
+enum class ShieldDirection {
+    Shield, Unshield
 }

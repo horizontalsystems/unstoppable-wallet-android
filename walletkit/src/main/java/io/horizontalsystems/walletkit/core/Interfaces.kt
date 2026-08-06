@@ -8,7 +8,6 @@ import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.core.adapters.BitcoinFeeInfo
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
 import io.horizontalsystems.walletkit.core.managers.EvmKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MiniAppRegisterService.RegisterAppResponse

@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.adapters.zcash
 
+import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ShieldDirection
 import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.TransactionOverview
@@ -84,10 +85,6 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             } catch (t: Throwable) {
                 "Unable to parse memo."
             }
-    }
-
-    enum class ShieldDirection {
-        Shield, Unshield
     }
 
 }
