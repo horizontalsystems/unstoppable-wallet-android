@@ -23,6 +23,8 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.Exolix),
         USwapProvider(UProvider.Cce),
         USwapProvider(UProvider.Swapuz),
+        USwapProvider(UProvider.Lizex),
+        USwapProvider(UProvider.Bitania),
         USwapProvider(UProvider.Barter),
         USwapProvider(UProvider.Circle),
         USwapProvider(UProvider.Pegasus),

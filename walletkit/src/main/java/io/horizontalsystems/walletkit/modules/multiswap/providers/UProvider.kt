@@ -99,6 +99,30 @@ enum class UProvider(
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
     ),
+    Lizex(
+        "LIZEX",
+        "Lizex",
+        SwapProviderType.CEX,
+        true,
+        false,
+        true,
+        RiskLevel.GOOD,
+        isEvm = false,
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
+    ),
+    Bitania(
+        "BITANIA",
+        "Bitania",
+        SwapProviderType.CEX,
+        true,
+        false,
+        true,
+        RiskLevel.GOOD,
+        isEvm = false,
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
+    ),
     Barter(
         "BARTER",
         "Barter",
