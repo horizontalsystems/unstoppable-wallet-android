@@ -289,26 +289,7 @@ class WCSessionViewModel(
         url: String,
         whiteList: List<ServiceWCWhitelist.WCWhiteList>
     ): Boolean {
-        val normalizedUrl = normalizeUrl(url)
-
-        return whiteList.any { whiteListItem ->
-            val normalizedWhiteListUrl = normalizeUrl(whiteListItem.url)
-
-            normalizedUrl == normalizedWhiteListUrl ||
-                    normalizedUrl.endsWith(".$normalizedWhiteListUrl") ||
-                    normalizedUrl.endsWith(normalizedWhiteListUrl) ||
-                    normalizedWhiteListUrl.endsWith(".$normalizedUrl") ||
-                    normalizedWhiteListUrl.endsWith(normalizedUrl)
-        }
-    }
-
-    private fun normalizeUrl(url: String): String {
-        return url.lowercase()
-            .removePrefix("https://")
-            .removePrefix("http://")
-            .removePrefix("www.")
-            .removeSuffix("/")
-            .trim()
+        return WCWhitelistMatcher.isHostInWhiteList(url, whiteList.map { it.url })
     }
 
     private fun sync(state: WCSessionServiceState, connection: Boolean?) {
