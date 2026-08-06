@@ -3,6 +3,8 @@ package io.horizontalsystems.walletkit.modules.multiswap.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.modules.multiswap.providers.THORCHAIN_PROVIDER_ID
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAppNumberFormatter

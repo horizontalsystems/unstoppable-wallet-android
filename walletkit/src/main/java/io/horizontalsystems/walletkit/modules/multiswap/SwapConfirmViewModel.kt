@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.multiswap
 
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.BackgroundManagerState
@@ -17,7 +18,6 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
-import io.horizontalsystems.walletkit.modules.multiswap.history.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper

@@ -13,7 +13,7 @@ object MayaProvider : BaseThorChainProvider(
     affiliate = "hrz_android",
     affiliateBps = 100,
 ) {
-    override val id = "mayachain"
+    override val id = MAYA_PROVIDER_ID
     override val title = "Maya Protocol"
     override val riskLevel = RiskLevel.EXCELLENT
 

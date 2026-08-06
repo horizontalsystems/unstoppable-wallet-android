@@ -38,7 +38,9 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.network.Network
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class ThorchainChainPlugin : ChainPlugin {
 
@@ -129,7 +131,7 @@ class ThorchainChainPlugin : ChainPlugin {
     override fun backupSyncSourceName(): String = rpcSourceManager.rpcSource.name
 
     override suspend fun swapDestinationAddress(account: Account): String =
-        kitManager.getAddress(account.type)
+        withContext(Dispatchers.IO) { kitManager.getAddress(account.type) }
 
     override fun sendTransactionService(token: Token): AbstractSendTransactionService {
         val adapter = App.adapterManager.getAdapterForToken<ThorchainAdapter>(token)

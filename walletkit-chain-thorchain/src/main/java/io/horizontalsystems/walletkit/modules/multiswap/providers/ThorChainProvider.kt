@@ -7,7 +7,7 @@ object ThorChainProvider : BaseThorChainProvider(
     affiliateBps = 100,
 ) {
     override val streamingInterval: Long = 0
-    override val id = "thorchain"
+    override val id = THORCHAIN_PROVIDER_ID
     override val title = "THORChain"
     override val riskLevel = RiskLevel.EXCELLENT
 }

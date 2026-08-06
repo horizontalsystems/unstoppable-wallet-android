@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap.history
 
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
+import io.horizontalsystems.walletkit.modules.multiswap.providers.THORCHAIN_PROVIDER_ID
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.PancakeSwapV3Provider
@@ -93,7 +95,3 @@ object SwapTrackRequestBuilder {
     }
 }
 
-// Provider ids for the thorchain-family swap providers; the provider objects live in the
-// optional walletkit-chain-thorchain module, so history rendering matches by id.
-const val THORCHAIN_PROVIDER_ID = "thorchain"
-const val MAYA_PROVIDER_ID = "mayachain"

@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
@@ -69,7 +70,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
-import io.horizontalsystems.walletkit.modules.multiswap.history.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage

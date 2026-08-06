@@ -20,7 +20,7 @@ class SendTransactionServiceThorchain(
 
     // Fee is paid in the chain's native coin (RUNE on THORChain, CACAO on Maya).
     private val feeToken = App.coinManager.getToken(TokenQuery(blockchainType, TokenType.Native))
-        ?: throw IllegalArgumentException()
+        ?: throw IllegalArgumentException("Native token not found for ${'$'}{blockchainType.uid}")
 
     private var sendData: SendTransactionData.Thorchain? = null
     private var cautions: List<CautionViewItem> = emptyList()
