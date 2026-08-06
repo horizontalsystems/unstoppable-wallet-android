@@ -18,7 +18,7 @@ data class HSDAppVerification(
          * Used where the protocol supplies no attestation. Callers treat it as "not verified"
          * rather than "verified fine", so a missing signal never reads as trust.
          */
-        val Unknown = HSDAppVerification(
+        val unknown = HSDAppVerification(
             validation = HSDAppValidation.Unknown,
             origin = null,
             isScam = false,

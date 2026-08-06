@@ -312,7 +312,7 @@ class DAppServiceWalletConnect : DAppService, WalletKit.WalletDelegate, CoreClie
     // Proposals carry no id to look the attestation up by, so it can only come from the
     // onSessionProposal callback. Restored proposals stay Unknown, i.e. unverified.
     private fun Wallet.Model.SessionProposal.toHS(
-        verification: HSDAppVerification = HSDAppVerification.Unknown
+        verification: HSDAppVerification = HSDAppVerification.unknown
     ) = HSDAppProposal(
         proposerPublicKey = proposerPublicKey,
         name = name,
@@ -325,9 +325,9 @@ class DAppServiceWalletConnect : DAppService, WalletKit.WalletDelegate, CoreClie
     )
 
     private fun verificationOf(requestId: Long): HSDAppVerification = try {
-        WalletKit.getVerifyContext(requestId)?.toHS() ?: HSDAppVerification.Unknown
+        WalletKit.getVerifyContext(requestId)?.toHS() ?: HSDAppVerification.unknown
     } catch (e: Exception) {
-        HSDAppVerification.Unknown
+        HSDAppVerification.unknown
     }
 
     private fun Wallet.Model.VerifyContext.toHS() = HSDAppVerification(

@@ -72,7 +72,7 @@ class WCSessionViewModel(
     private var closeDialog = false
     private var scamProtectionEnabled = paidActionSettingsManager.isActionEnabled(ScamProtection)
     private var scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
-    private var verification: HSDAppVerification = HSDAppVerification.Unknown
+    private var verification: HSDAppVerification = HSDAppVerification.unknown
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
