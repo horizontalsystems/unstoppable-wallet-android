@@ -20,11 +20,12 @@ class MainApp : App() {
         AppConfigProvider(localStorage)
 
     override fun registerChainPlugins() {
-        // Registration order defines the tail of BlockchainType.supported: monero, zano.
+        // Registration order defines the tail of BlockchainType.supported:
+        // monero, zano, zcash, solana, stellar.
         ChainRegistry.register(MoneroChainPlugin({ App.instance }, { App.moneroNodeManager }))
         ChainRegistry.register(ZanoChainPlugin({ App.zanoNodeManager }, { App.backgroundManager }))
         ChainRegistry.register(ZcashChainPlugin({ App.instance }, { App.zcashEndpointManager }, { App.localStorage }))
         ChainRegistry.register(SolanaChainPlugin({ BuildConfig.SOLANA_ALCHEMY_API_KEY }, { BuildConfig.SOLANA_JUPITER_API_KEY }))
-       ChainRegistry.register(StellarChainPlugin())
+        ChainRegistry.register(StellarChainPlugin())
     }
 }

@@ -171,7 +171,7 @@ class SendStellarViewModel(
             sendResult = SendResult.Sent()
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Stellar)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)

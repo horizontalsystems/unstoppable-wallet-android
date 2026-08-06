@@ -99,7 +99,8 @@ class StellarChainPlugin : ChainPlugin {
         kitManager.getAddress(account.type)
 
     override fun sendTransactionService(token: Token): AbstractSendTransactionService {
-        val activeAccount = App.accountManager.activeAccount!!
+        val activeAccount = App.accountManager.activeAccount
+            ?: throw IllegalStateException("No active account for Stellar send")
         val stellarKitWrapper = kitManager.getStellarKitWrapper(activeAccount)
         return SendTransactionServiceStellar(stellarKitWrapper.stellarKit, token)
     }
