@@ -44,6 +44,14 @@ abstract class BaseThorChainProvider(
     protected open val settlementBlockchainType: BlockchainType = BlockchainType.Thorchain
     protected open val settlementAsset: String = "THOR.RUNE"
 
+    // Base-unit scale the protocol uses for a quote amount. Every pool asset is quoted at 1e8,
+    // regardless of its real decimals (ETH is still 1e8 here, and so are ThorChain secured assets).
+    // The lone exception is the settlement asset's own native coin, quoted in its native decimals —
+    // 1e8 for THORChain's RUNE, 1e10 for Maya's CACAO. Encoding CACAO at 1e8 sends a 100x-too-small
+    // amount and the quote fails with "not enough asset to pay for fees" — i.e. no route.
+    private fun protocolDecimals(token: Token): Int =
+        if (token.type is TokenType.Native && token.blockchainType == settlementBlockchainType) token.decimals else 8
+
     companion object {
         // bump to invalidate cached asset maps when the mapping logic changes
         private const val ASSETS_MAP_VERSION = 3
@@ -178,7 +186,7 @@ abstract class BaseThorChainProvider(
         }
 
         return SwapQuote(
-            amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
+            amountOut = quoteSwap.expected_amount_out.movePointLeft(protocolDecimals(tokenOut)),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
@@ -202,7 +210,7 @@ abstract class BaseThorChainProvider(
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn,
             toAsset = assetOut,
-            amount = amountIn.movePointRight(8).toLong(),
+            amount = amountIn.movePointRight(protocolDecimals(tokenIn)).toLong(),
             destination = destinationAddress,
             affiliate = affiliate,
             affiliateBps = affiliateBps,
@@ -240,7 +248,7 @@ abstract class BaseThorChainProvider(
         val destination = recipient?.hex ?: resolveDestinationAddress(tokenOut)
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, destination, getRefundAddress(tokenIn), getFromAddress(tokenIn))
 
-        val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
+        val amountOut = quoteSwap.expected_amount_out.movePointLeft(protocolDecimals(tokenOut))
 
         val amountOutMin = amountOut.subtract(amountOut.multiply(slippage.movePointLeft(2)))
 
