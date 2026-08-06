@@ -50,7 +50,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.models.Contract
@@ -63,7 +62,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.util.Date
-import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 interface IAdapterManager {

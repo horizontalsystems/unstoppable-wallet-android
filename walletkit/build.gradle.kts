@@ -180,7 +180,6 @@ dependencies {
     api(libs.kit.ethereum)
     api(libs.kit.fee.rate)
     api(libs.kit.market)
-    api(libs.kit.solana)
     api(libs.kit.thorchain)
     api(libs.kit.tron)
 
