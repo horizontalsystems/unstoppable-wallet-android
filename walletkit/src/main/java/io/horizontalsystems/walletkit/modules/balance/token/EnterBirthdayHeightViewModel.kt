@@ -11,7 +11,9 @@ import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.Date
@@ -71,19 +73,26 @@ class EnterBirthdayHeightViewModel(
         emitState()
 
         viewModelScope.launch {
-            walletManager.activeWallets.firstOrNull {
-                it.account == account && it.token.blockchainType == blockchainType
-            }?.let { wallet ->
-                ChainRegistry[blockchainType]?.prepareRescan(wallet)
+            try {
+                walletManager.activeWallets.firstOrNull {
+                    it.account == account && it.token.blockchainType == blockchainType
+                }?.let { wallet ->
+                    ChainRegistry[blockchainType]?.prepareRescan(wallet)
+                }
+
+                val settings = RestoreSettings()
+                settings.birthdayHeight = newHeight
+                restoreSettingsManager.save(settings, account, blockchainType)
+
+                closeAfterRescan = true
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Timber.e(e, "Rescan preparation failed")
+            } finally {
+                rescanLoading = false
+                emitState()
             }
-
-            val settings = RestoreSettings()
-            settings.birthdayHeight = newHeight
-            restoreSettingsManager.save(settings, account, blockchainType)
-
-            rescanLoading = false
-            closeAfterRescan = true
-            emitState()
         }
     }
 

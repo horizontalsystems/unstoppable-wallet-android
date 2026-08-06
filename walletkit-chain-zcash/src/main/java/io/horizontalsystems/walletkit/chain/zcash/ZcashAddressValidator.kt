@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.IAdapterManager
-import io.horizontalsystems.walletkit.core.ISendZcashAdapter
+import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter.ZcashError
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address

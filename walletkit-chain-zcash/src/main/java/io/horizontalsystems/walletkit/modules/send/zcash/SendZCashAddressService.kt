@@ -1,7 +1,7 @@
 package io.horizontalsystems.walletkit.modules.send.zcash
 
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.ISendZcashAdapter
+import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address

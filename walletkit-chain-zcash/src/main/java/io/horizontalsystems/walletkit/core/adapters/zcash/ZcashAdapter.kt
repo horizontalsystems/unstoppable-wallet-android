@@ -33,7 +33,7 @@ import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
-import io.horizontalsystems.walletkit.core.ISendZcashAdapter
+import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.UnsupportedAccountException
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings

@@ -1,7 +1,6 @@
-package io.horizontalsystems.walletkit.core
+package io.horizontalsystems.walletkit.core.adapters.zcash
 
 import cash.z.ecc.android.sdk.model.Proposal
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import java.math.BigDecimal
 
 interface ISendZcashAdapter {

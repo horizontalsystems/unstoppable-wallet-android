@@ -3,7 +3,7 @@ package io.horizontalsystems.walletkit.modules.send.zcash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.ISendZcashAdapter
+import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.amount.AmountValidator

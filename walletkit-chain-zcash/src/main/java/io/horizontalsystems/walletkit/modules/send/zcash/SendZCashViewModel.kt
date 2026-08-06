@@ -8,7 +8,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.HSCaution
-import io.horizontalsystems.walletkit.core.ISendZcashAdapter
+import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
