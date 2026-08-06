@@ -1,21 +1,29 @@
 package io.horizontalsystems.walletkit.entities.transactionrecords.solana
 
-import io.horizontalsystems.walletkit.core.adapters.BaseSolanaAdapter
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.solanakit.models.Transaction
+import java.math.BigDecimal
 
-open class SolanaTransactionRecord(transaction: Transaction, baseToken: Token, source: TransactionSource, spam: Boolean = false) :
+/** Kit-free essentials of a Solana transaction, extracted by the chain module's converter. */
+data class SolanaTransactionInfo(
+        val hash: String,
+        val pending: Boolean,
+        val timestamp: Long,
+        val failed: Boolean,
+        val fee: BigDecimal?,
+)
+
+open class SolanaTransactionRecord(transaction: SolanaTransactionInfo, baseToken: Token, source: TransactionSource, spam: Boolean = false) :
         TransactionRecord(
                 uid = transaction.hash,
                 transactionHash = transaction.hash,
                 transactionIndex = 0,
                 blockHeight = if (transaction.pending) null else 0,
-                confirmationsThreshold = BaseSolanaAdapter.confirmationsThreshold,
+                confirmationsThreshold = CONFIRMATIONS_THRESHOLD,
                 timestamp = transaction.timestamp,
-                failed = transaction.error != null,
+                failed = transaction.failed,
                 spam = spam,
                 source = source
         ) {
@@ -28,4 +36,8 @@ open class SolanaTransactionRecord(transaction: Transaction, baseToken: Token, s
         fee = transaction.fee?.let { TransactionValue.CoinValue(baseToken, it) }
     }
 
+
+    companion object {
+        const val CONFIRMATIONS_THRESHOLD: Int = 12
+    }
 }

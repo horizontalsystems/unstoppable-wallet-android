@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendSolanaAdapter
 import io.horizontalsystems.walletkit.core.managers.SolanaKitWrapper
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaTransactionRecord
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.models.FullTransaction
 import java.math.BigDecimal
@@ -42,7 +43,7 @@ abstract class BaseSolanaAdapter(
     }
 
     companion object {
-        const val confirmationsThreshold: Int = 12
+        const val confirmationsThreshold: Int = SolanaTransactionRecord.CONFIRMATIONS_THRESHOLD
     }
 
 }

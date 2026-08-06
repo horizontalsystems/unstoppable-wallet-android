@@ -2,10 +2,9 @@ package io.horizontalsystems.walletkit.entities.transactionrecords.solana
 
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.solanakit.models.Transaction
 
 class SolanaUnknownTransactionRecord(
-        transaction: Transaction,
+        transaction: SolanaTransactionInfo,
         baseToken: Token,
         source: TransactionSource,
         val incomingTransfers: List<Transfer>,

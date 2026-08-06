@@ -18,6 +18,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.solanakit.models.Transaction
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaTransactionInfo
 import io.horizontalsystems.solanakit.transactions.KnownPrograms
 import java.math.BigDecimal
 
@@ -88,7 +89,7 @@ class SolanaTransactionConverter(
         val exchangeName = swapExchangeName(transaction)
         if (exchangeName != null) {
             return SolanaSwapTransactionRecord(
-                transaction = transaction,
+                transaction = transaction.essentials(),
                 baseToken = baseToken,
                 source = source,
                 exchangeName = exchangeName,
@@ -107,12 +108,12 @@ class SolanaTransactionConverter(
                     transaction.timestamp,
                     null
                 )
-                SolanaIncomingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value, spam)
+                SolanaIncomingTransactionRecord(transaction.essentials(), baseToken, source, transfer.address, transfer.value, spam)
             }
 
             (incomingTransfers.isEmpty() && outgoingTransfers.size == 1) -> {
                 val transfer = outgoingTransfers.first()
-                SolanaOutgoingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value, transfer.address == userAddress)
+                SolanaOutgoingTransactionRecord(transaction.essentials(), baseToken, source, transfer.address, transfer.value, transfer.address == userAddress)
             }
 
             else -> {
@@ -129,7 +130,7 @@ class SolanaTransactionConverter(
                 } else {
                     false
                 }
-                SolanaUnknownTransactionRecord(transaction, baseToken, source, incomingTransfers, outgoingTransfers, spam)
+                SolanaUnknownTransactionRecord(transaction.essentials(), baseToken, source, incomingTransfers, outgoingTransfers, spam)
             }
         }
     }
@@ -144,3 +145,11 @@ class SolanaTransactionConverter(
     }
 
 }
+
+private fun Transaction.essentials() = SolanaTransactionInfo(
+    hash = hash,
+    pending = pending,
+    timestamp = timestamp,
+    failed = error != null,
+    fee = fee,
+)
