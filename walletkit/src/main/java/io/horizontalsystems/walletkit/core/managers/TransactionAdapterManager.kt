@@ -76,7 +76,8 @@ class TransactionAdapterManager(
                     BlockchainType.Mayachain -> {
                         adapterFactory.thorchainTransactionsAdapter(wallet.transactionSource, blockchainType)
                     }
-                    else -> adapter as? ITransactionsAdapter
+                    else -> ChainRegistry[blockchainType]?.createTransactionsAdapter(wallet.transactionSource)
+                        ?: adapter as? ITransactionsAdapter
                 }
                     // decorate only freshly created adapters — reused entries from
                     // adaptersMap are already decorated, wrapping again would stack

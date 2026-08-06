@@ -1,11 +1,12 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.solanakit.models.RpcSource
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 
 class SolanaRpcSourceManager(
         private val blockchainSettingsStorage: BlockchainSettingsStorage,
@@ -14,10 +15,10 @@ class SolanaRpcSourceManager(
 ) {
 
     private val blockchainType = BlockchainType.Solana
-    private val rpcSourceSubjectUpdate = PublishSubject.create<Unit>()
+    private val _rpcSourceUpdateFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
-    val rpcSourceUpdateObservable: Observable<Unit>
-        get() = rpcSourceSubjectUpdate
+    val rpcSourceUpdateFlow: SharedFlow<Unit>
+        get() = _rpcSourceUpdateFlow.asSharedFlow()
 
     val allRpcSources = listOf(RpcSource.Alchemy(alchemyApiKey))
 
@@ -34,7 +35,7 @@ class SolanaRpcSourceManager(
 
     fun save(rpcSource: RpcSource) {
         blockchainSettingsStorage.save(rpcSource.name, blockchainType)
-        rpcSourceSubjectUpdate.onNext(Unit)
+        _rpcSourceUpdateFlow.tryEmit(Unit)
     }
 
 }

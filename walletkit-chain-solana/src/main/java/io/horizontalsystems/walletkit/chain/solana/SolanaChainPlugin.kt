@@ -38,7 +38,6 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.rx2.asFlow
 
 class SolanaChainPlugin(
     private val alchemyApiKey: () -> String,
@@ -83,7 +82,12 @@ class SolanaChainPlugin(
     }
 
     override val walletReloadTrigger: Flow<*>
-        get() = kitManager.kitStoppedObservable.asFlow()
+        get() = kitManager.kitStoppedFlow
+
+    // The settings row shows the current RPC source, so it refreshes on source changes
+    // (the kit-stopped signal only fires when a running kit restarts).
+    override val settingsRefreshTrigger: Flow<*>
+        get() = rpcSourceManager.rpcSourceUpdateFlow
 
     override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 

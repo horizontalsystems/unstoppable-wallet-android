@@ -103,6 +103,9 @@ interface ChainPlugin {
      */
     val walletReloadTrigger: Flow<*>? get() = null
 
+    /** Emissions refresh the blockchain-settings rows; defaults to [walletReloadTrigger]. */
+    val settingsRefreshTrigger: Flow<*>? get() = walletReloadTrigger
+
     /** Kit status details for the App Status debug screen. */
     fun statusInfo(): Map<String, Any>? = null
 

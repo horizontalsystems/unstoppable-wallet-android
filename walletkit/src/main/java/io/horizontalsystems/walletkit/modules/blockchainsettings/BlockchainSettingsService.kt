@@ -60,7 +60,7 @@ class BlockchainSettingsService(
             }
         }
         ChainRegistry.all.forEach { plugin ->
-            plugin.walletReloadTrigger?.let { trigger ->
+            plugin.settingsRefreshTrigger?.let { trigger ->
                 coroutineScope.launch {
                     trigger
                         .catch { Timber.e(it, "Chain plugin %s trigger failed", plugin.blockchainType.uid) }

@@ -8,8 +8,9 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,10 +34,10 @@ class SolanaKitManager(
     private var useCount = 0
     var currentAccount: Account? = null
         private set
-    private val solanaKitStoppedSubject = PublishSubject.create<Unit>()
+    private val _kitStoppedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
-    val kitStoppedObservable: Observable<Unit>
-        get() = solanaKitStoppedSubject
+    val kitStoppedFlow: SharedFlow<Unit>
+        get() = _kitStoppedFlow.asSharedFlow()
 
     val statusInfo: Map<String, Any>?
         get() = solanaKitWrapper?.solanaKit?.statusInfo()
@@ -44,7 +45,7 @@ class SolanaKitManager(
     private fun handleUpdateNetwork() {
         stopKit()
 
-        solanaKitStoppedSubject.onNext(Unit)
+        _kitStoppedFlow.tryEmit(Unit)
     }
 
     @Synchronized
@@ -160,7 +161,7 @@ class SolanaKitManager(
             }
         }
         rpcUpdatedJob = coroutineScope.launch {
-            rpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+            rpcSourceManager.rpcSourceUpdateFlow.collect {
                 handleUpdateNetwork()
             }
         }
