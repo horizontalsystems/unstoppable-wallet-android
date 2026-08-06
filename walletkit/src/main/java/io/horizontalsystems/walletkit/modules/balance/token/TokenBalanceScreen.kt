@@ -57,9 +57,7 @@ import io.horizontalsystems.walletkit.modules.coin.CoinPage
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.receive.ReceivePage
-import io.horizontalsystems.walletkit.modules.receive.ZcashAddressTypeSelectPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
-import io.horizontalsystems.walletkit.modules.send.zcash.shield.ShieldZcashPage
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionViewItem
@@ -172,10 +170,9 @@ fun TokenBalanceScreen(
     ) {
         val onClickReceive = {
             val wallet = viewModel.wallet
-            if (wallet.token.blockchainType == BlockchainType.Zcash) {
-                navigation.slideFromRight(
-                    ZcashAddressTypeSelectPage(ZcashAddressTypeSelectPage.Input(wallet))
-                )
+            val chainReceivePage = ChainRegistry[wallet.token.blockchainType]?.receivePage(wallet)
+            if (chainReceivePage != null) {
+                navigation.slideFromRight(chainReceivePage)
             } else {
                 navigation.slideFromRight(
                     ReceivePage(ReceivePage.Input(wallet))
@@ -309,9 +306,9 @@ fun TokenBalanceScreen(
                         coroutineScope.launch {
                             bottomSheetState.hide()
                             bottomSheetContent = null
-                            navigation.slideFromRight(
-                                ShieldZcashPage(ShieldZcashPage.Input(wallet, TokenBalancePage::class))
-                            )
+                            ChainRegistry[wallet.token.blockchainType]
+                                ?.shieldPage(wallet, TokenBalancePage::class)
+                                ?.let { navigation.slideFromRight(it) }
                         }
                     },
                     onClose = {

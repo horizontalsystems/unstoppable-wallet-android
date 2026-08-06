@@ -52,7 +52,6 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
             listOf(AddressHandlerBase58(network, blockchainType))
         }
 
-        BlockchainType.Zcash -> listOf(AddressHandlerZcash())
 
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,

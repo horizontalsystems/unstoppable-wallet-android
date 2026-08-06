@@ -27,7 +27,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.solananetwork.SolanaNetworkPage
 import io.horizontalsystems.walletkit.modules.thorchainnetwork.ThorchainNetworkPage
-import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -146,14 +145,6 @@ private fun onClick(
             )
         }
 
-        is BlockchainSettingsModule.BlockchainItem.Zcash -> {
-            navigation.slideFromBottom(ZcashNetworkPage)
-
-            stat(
-                page = StatPage.BlockchainSettings,
-                event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
-            )
-        }
     }
 }
 

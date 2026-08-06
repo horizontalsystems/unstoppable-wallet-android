@@ -45,12 +45,8 @@ data object ReceiveChooseCoinPage : HSPage() {
                 viewModel.coinUid = coinUid
                 navigation.add(NetworkSelectPage)
             },
-            onMultipleZcashAddressTypeClick = { wallet ->
-                navigation.add(
-                    ZcashAddressTypeSelectPage(
-                        ZcashAddressTypeSelectPage.Input(wallet, ReceiveChooseCoinPage::class)
-                    )
-                )
+            onChainPageClick = { page ->
+                navigation.slideFromRight(page)
             },
             onCoinClick = { wallet ->
                 onSelectWallet(wallet, navigation)

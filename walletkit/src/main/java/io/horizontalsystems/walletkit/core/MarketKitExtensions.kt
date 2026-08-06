@@ -665,7 +665,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
-        BlockchainType.Zcash,
         BlockchainType.Dash,
         BlockchainType.BitcoinCash,
         BlockchainType.Litecoin,

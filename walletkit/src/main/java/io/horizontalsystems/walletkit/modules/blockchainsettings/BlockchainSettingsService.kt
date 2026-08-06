@@ -7,7 +7,6 @@ import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
@@ -26,7 +25,6 @@ class BlockchainSettingsService(
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
-    private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val marketKit: MarketKitWrapper
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -83,11 +81,6 @@ class BlockchainSettingsService(
                 }
             }
         }
-        coroutineScope.launch {
-            zcashEndpointManager.currentEndpointUpdatedFlow.collect {
-                syncBlockchainItems()
-            }
-        }
 
         coroutineScope.launch {
             syncBlockchainItems()
@@ -127,12 +120,7 @@ class BlockchainSettingsService(
 
         val chainBlockchainItems = ChainRegistry.all.mapNotNull { it.blockchainSettingsItem() }
 
-        val zcashBlockchainItems = mutableListOf<BlockchainItem>()
-        zcashEndpointManager.blockchain?.let {
-            zcashBlockchainItems.add(BlockchainItem.Zcash(it, zcashEndpointManager.currentEndpoint))
-        }
-
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + thorchainBlockchainItems + chainBlockchainItems + zcashBlockchainItems).sortedBy { it.order }
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + thorchainBlockchainItems + chainBlockchainItems).sortedBy { it.order }
     }
 
 }

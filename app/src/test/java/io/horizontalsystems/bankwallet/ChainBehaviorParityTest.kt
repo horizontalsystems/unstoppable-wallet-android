@@ -7,6 +7,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
+import io.horizontalsystems.walletkit.chain.zcash.ZcashChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.blockTime
 import io.horizontalsystems.walletkit.core.brandColor
@@ -58,6 +59,11 @@ class ChainBehaviorParityTest {
         ChainRegistry.register(ZanoChainPlugin(
             { error("ZanoNodeManager is not available in unit tests") },
             { error("BackgroundManager is not available in unit tests") },
+        ))
+        ChainRegistry.register(ZcashChainPlugin(
+            { error("Context is not available in unit tests") },
+            { error("ZcashLightWalletEndpointManager is not available in unit tests") },
+            { error("ILocalStorage is not available in unit tests") },
         ))
     }
 

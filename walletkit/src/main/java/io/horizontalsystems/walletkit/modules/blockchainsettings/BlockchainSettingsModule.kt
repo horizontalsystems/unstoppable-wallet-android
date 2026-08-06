@@ -6,7 +6,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSource
-import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager.ZcashEndpoint
 import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.walletkit.entities.EvmSyncSource
@@ -25,7 +24,6 @@ object BlockchainSettingsModule {
                     App.evmSyncSourceManager,
                     App.solanaRpcSourceManager,
                     App.thorchainRpcSourceManager,
-                    App.zcashEndpointManager,
                     App.marketKit
                 )
             return BlockchainSettingsViewModel(service) as T
@@ -68,11 +66,6 @@ object BlockchainSettingsModule {
             val btcLike: Boolean,
             val page: HSPage,
             val statEvent: StatEvent,
-        ) : BlockchainItem()
-
-        class Zcash(
-            override val blockchain: Blockchain,
-            val endpoint: ZcashEndpoint
         ) : BlockchainItem()
 
         val order

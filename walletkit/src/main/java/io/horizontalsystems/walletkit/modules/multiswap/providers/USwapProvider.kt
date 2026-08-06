@@ -18,6 +18,7 @@ import io.horizontalsystems.ethereumkit.core.stripHexPrefix
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.ethereumkit.spv.core.toLong
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -483,7 +484,8 @@ class USwapProvider(
             recipient != null -> recipient.hex
 
             selectedRoute?.buyAsset == ZCASH_SHIELDED_ASSET -> {
-                SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
+                ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenOut)
+                    ?: throw IllegalStateException("Zcash support is not available")
             }
 
             else -> SwapHelper.getReceiveAddressForToken(tokenOut)

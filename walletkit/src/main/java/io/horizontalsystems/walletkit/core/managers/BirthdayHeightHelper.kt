@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.core.managers
 
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -15,14 +14,10 @@ object BirthdayHeightHelper {
 
     val MAX_BIRTHDAY_HEIGHT: Long = UInt.MAX_VALUE.toLong()
 
-    fun minBirthdayHeight(blockchainType: BlockchainType): Long = when (blockchainType) {
-        BlockchainType.Zcash -> 420_000L
-        BlockchainType.Monero -> 0L
-        else -> 0L
-    }
+    fun minBirthdayHeight(blockchainType: BlockchainType): Long =
+        ChainRegistry[blockchainType]?.minBirthdayHeight() ?: 0L
 
     fun getFirstBlockDate(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Zcash -> LocalDate.of(2018, 10, 29)
         else -> ChainRegistry[blockchainType]?.firstBlockDate() ?: throw IllegalArgumentException()
     }
 
@@ -42,9 +37,6 @@ object BirthdayHeightHelper {
 
     suspend fun estimateBlockDate(blockchainType: BlockchainType, height: Long): Date? = withContext(Dispatchers.IO) {
         when (blockchainType) {
-            BlockchainType.Zcash -> {
-                ZcashAdapter.estimateBirthdayDate(App.instance, height)
-            }
             else -> ChainRegistry[blockchainType]?.estimateBlockDate(height)
         }
     }
@@ -62,9 +54,6 @@ object BirthdayHeightHelper {
         val selectedDate = Date(calendar.timeInMillis)
 
         when (blockchainType) {
-            BlockchainType.Zcash -> {
-                ZcashAdapter.estimateBirthdayHeight(App.instance, selectedDate)
-            }
             else -> ChainRegistry[blockchainType]?.estimateBlockHeightFromDate(selectedDate)
         }
     }

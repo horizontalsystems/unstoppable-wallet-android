@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.adapters.DashAdapter
 import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.NoActiveAccount
@@ -39,12 +38,6 @@ object SwapHelper {
         val accountType = App.accountManager.activeAccount?.type ?: return true
         return token.supports(accountType) && token.blockchainType.supports(accountType)
     }
-
-    private val zcashAddressCache = ConcurrentHashMap<String, String>()
-    private val zcashAddressMutex = Mutex()
-
-    private val zcashUnifiedAddressCache = ConcurrentHashMap<String, String>()
-    private val zcashUnifiedAddressMutex = Mutex()
 
     suspend fun getAllowanceTrc20(token: Token, spenderAddress: String): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
@@ -103,7 +96,8 @@ object SwapHelper {
         val blockchainType = token.blockchainType
 
         App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
-            return if (it is ZcashAdapter) it.receiveAddressTransparent else it.receiveAddress
+            // chains that distinguish address types (Zcash) expose a transparent variant
+            return it.receiveAddressTransparent ?: it.receiveAddress
         }
 
         val accountManager = App.accountManager
@@ -159,45 +153,13 @@ object SwapHelper {
                     App.tonKitManager.getAddress(account.type)
                 }
 
-                BlockchainType.Zcash -> cachedZcashAddress(account.id, zcashAddressCache, zcashAddressMutex) {
-                    ZcashAdapter.getTransparentAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
-                }
-
                 else -> ChainRegistry[token.blockchainType]?.swapDestinationAddress(account)
                     ?: throw SwapError.NoDestinationAddress()
             }
         }
     }
 
-    // Resolves the wallet's unified (shielded) Zcash address. Used for other->ZEC swaps where
-    // the provider can deliver directly into the shielded pool. Falls back to deriving the
-    // unified address from the active account when no Zcash adapter is enabled, caching the
-    // result to avoid re-running the expensive derivation (each call spins up a synchronizer).
-    suspend fun getReceiveAddressUnifiedForZcash(token: Token): String {
-        App.adapterManager.getAdapterForToken<ZcashAdapter>(token)?.let {
-            return it.receiveAddress
-        }
 
-        val account = App.accountManager.activeAccount ?: throw NoActiveAccount()
-
-        return cachedZcashAddress(account.id, zcashUnifiedAddressCache, zcashUnifiedAddressMutex) {
-            ZcashAdapter.getUnifiedAddress(account, App.zcashEndpointManager.currentLightWalletEndpoint)
-        }
-    }
-
-    // Double-checked cache for a derived Zcash address. The derivation spins up a fresh
-    // synchronizer, so results are memoized per account under a mutex to serialize concurrent
-    // callers and run the work off the main thread.
-    private suspend fun cachedZcashAddress(
-        accountId: String,
-        cache: ConcurrentHashMap<String, String>,
-        mutex: Mutex,
-        derive: suspend () -> String,
-    ): String {
-        return cache[accountId] ?: mutex.withLock {
-            cache[accountId] ?: withContext(NonCancellable + Dispatchers.IO) { derive() }.also { cache[accountId] = it }
-        }
-    }
 
     suspend fun actionApproveTrc20(
         allowance: BigDecimal?,

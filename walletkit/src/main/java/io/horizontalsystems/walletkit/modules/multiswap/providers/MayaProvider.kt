@@ -1,7 +1,8 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.walletkit.core.IReceiveAdapter
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -25,14 +26,15 @@ object MayaProvider : BaseThorChainProvider(
         // vault, so for ZEC out we resolve the wallet's unified address. Every other tokenOut
         // goes through the generic destination resolver.
         if (tokenOut.blockchainType == BlockchainType.Zcash) {
-            return SwapHelper.getReceiveAddressUnifiedForZcash(tokenOut)
+            return ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenOut)
+                ?: throw IllegalStateException("Zcash support is not available")
         }
         return super.resolveDestinationAddress(tokenOut)
     }
 
     override fun getRefundAddress(tokenIn: Token): String? {
         return if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddressTransparent
+            App.adapterManager.getAdapterForToken<IReceiveAdapter>(tokenIn)?.receiveAddressTransparent
         } else {
             null
         }
@@ -40,7 +42,7 @@ object MayaProvider : BaseThorChainProvider(
 
     override fun getFromAddress(tokenIn: Token): String? {
         return if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddress
+            App.adapterManager.getAdapterForToken<IReceiveAdapter>(tokenIn)?.receiveAddress
         } else {
             null
         }

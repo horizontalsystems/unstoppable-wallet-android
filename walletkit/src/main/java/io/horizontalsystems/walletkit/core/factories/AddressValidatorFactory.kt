@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.modules.send.address.StellarAddressValidat
 import io.horizontalsystems.walletkit.modules.send.address.ThorchainAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TonAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
-import io.horizontalsystems.walletkit.modules.send.address.ZcashAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 
@@ -25,7 +24,7 @@ object AddressValidatorFactory {
         allowOwnAddress: Boolean = false,
         zcashTransparentOnly: Boolean = false,
     ): EnterAddressValidator {
-        ChainRegistry[token.blockchainType]?.addressValidator(token)?.let {
+        ChainRegistry[token.blockchainType]?.addressValidator(token, allowOwnAddress, zcashTransparentOnly)?.let {
             return it
         }
 
@@ -36,10 +35,6 @@ object AddressValidatorFactory {
             BlockchainType.Litecoin,
             BlockchainType.Dash -> {
                 BitcoinAddressValidator(token, App.adapterManager)
-            }
-
-            BlockchainType.Zcash -> {
-                ZcashAddressValidator(token, App.adapterManager, allowOwnAddress, zcashTransparentOnly)
             }
 
             BlockchainType.Ethereum,

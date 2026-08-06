@@ -13,10 +13,10 @@ import io.horizontalsystems.walletkit.core.isDefault
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
-import io.horizontalsystems.walletkit.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.walletkit.core.sorting.FullCoinSortContext
 import io.horizontalsystems.walletkit.core.sorting.SortCriterion
 import io.horizontalsystems.walletkit.core.sorting.sortedByCriteria
@@ -39,7 +39,6 @@ class ReceiveTokenSelectViewModel(
     private val adapterManager: IAdapterManager,
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
-    private val zcashBirthdayProvider: ZcashBirthdayProvider,
     private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
     private var fullCoins: List<FullCoin> = listOf()
@@ -124,8 +123,9 @@ class ReceiveTokenSelectViewModel(
             eligibleTokens.isEmpty() -> null
             eligibleTokens.size == 1 -> {
                 val wallet = getOrCreateWallet(eligibleTokens.first())
-                if (eligibleTokens.first().blockchainType == BlockchainType.Zcash) {
-                    CoinForReceiveType.MultipleZcashAddressTypes(wallet)
+                val chainReceivePage = ChainRegistry[eligibleTokens.first().blockchainType]?.receivePage(wallet)
+                if (chainReceivePage != null) {
+                    CoinForReceiveType.ChainPage(chainReceivePage)
                 } else {
                     CoinForReceiveType.Single(wallet)
                 }
@@ -195,7 +195,7 @@ class ReceiveTokenSelectViewModel(
     }
 
     private fun getBirthdayHeightForNewWallet(blockchainType: BlockchainType): Long? = when (blockchainType) {
-        BlockchainType.Zcash -> zcashBirthdayProvider.getLatestCheckpointBlockHeight()
+        BlockchainType.Zcash -> ChainRegistry[BlockchainType.Zcash]?.newWalletBirthdayHeight()
         BlockchainType.Monero -> ChainRegistry[BlockchainType.Monero]?.newWalletBirthdayHeight()
         else -> null
     }
@@ -245,7 +245,6 @@ class ReceiveTokenSelectViewModel(
                 App.adapterManager,
                 App.currencyManager,
                 App.marketKit,
-                App.zcashBirthdayProvider,
                 App.restoreSettingsManager
             ) as T
         }
@@ -254,7 +253,7 @@ class ReceiveTokenSelectViewModel(
 
 sealed interface CoinForReceiveType {
     data class Single(val wallet: Wallet) : CoinForReceiveType
-    data class MultipleZcashAddressTypes(val wallet: Wallet) : CoinForReceiveType
+    data class ChainPage(val page: HSPage) : CoinForReceiveType
     object MultipleDerivations : CoinForReceiveType
     object MultipleAddressTypes : CoinForReceiveType
     object MultipleBlockchains : CoinForReceiveType

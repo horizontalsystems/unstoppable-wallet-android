@@ -3,7 +3,7 @@ package io.horizontalsystems.walletkit.modules.balance.token
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.BirthdayHeightHelper
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
@@ -71,18 +71,10 @@ class EnterBirthdayHeightViewModel(
         emitState()
 
         viewModelScope.launch {
-            if (blockchainType == BlockchainType.Zcash) {
-                val zcashWallet = walletManager.activeWallets.firstOrNull {
-                    it.account == account && it.token.blockchainType == BlockchainType.Zcash
-                }
-
-                zcashWallet?.let { wallet ->
-                    val adapter: ZcashAdapter? = adapterManager.getAdapterForWallet(wallet)
-                    withContext(Dispatchers.IO) {
-                        adapter?.stop()
-                        ZcashAdapter.clear(account.id)
-                    }
-                }
+            walletManager.activeWallets.firstOrNull {
+                it.account == account && it.token.blockchainType == blockchainType
+            }?.let { wallet ->
+                ChainRegistry[blockchainType]?.prepareRescan(wallet)
             }
 
             val settings = RestoreSettings()

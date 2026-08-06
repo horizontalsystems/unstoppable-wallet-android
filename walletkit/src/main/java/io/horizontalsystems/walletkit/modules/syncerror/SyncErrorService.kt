@@ -17,7 +17,6 @@ class SyncErrorService(
 
     val blockchainWrapper by lazy {
         when (wallet.token.blockchainType) {
-            BlockchainType.Zcash -> SyncErrorModule.BlockchainWrapper.Zcash
             BlockchainType.Tron -> SyncErrorModule.BlockchainWrapper.Evm(wallet.token.blockchain)
             else -> {
                 ChainRegistry[wallet.token.blockchainType]?.networkSettingsPage()?.let {

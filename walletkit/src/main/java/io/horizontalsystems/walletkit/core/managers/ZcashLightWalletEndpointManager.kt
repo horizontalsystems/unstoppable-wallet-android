@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.core.managers
 
-import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.walletkit.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.walletkit.entities.ZcashEndpointRecord
@@ -9,7 +8,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import java.net.URI
 
 class ZcashLightWalletEndpointManager(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
@@ -53,9 +51,6 @@ class ZcashLightWalletEndpointManager(
             return allEndpoints.firstOrNull { it.url == url } ?: defaultEndpoints.first()
         }
 
-    val currentLightWalletEndpoint: LightWalletEndpoint
-        get() = currentEndpoint.toLightWalletEndpoint()
-
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(BlockchainType.Zcash.uid)
 
@@ -80,13 +75,5 @@ class ZcashLightWalletEndpointManager(
     }
 
     data class ZcashEndpoint(val url: String, val name: String) {
-        fun toLightWalletEndpoint(): LightWalletEndpoint {
-            val uri = URI(url)
-            return LightWalletEndpoint(
-                host = uri.host ?: url,
-                port = uri.port.takeIf { it > 0 } ?: 443,
-                isSecure = uri.scheme?.lowercase() == "https"
-            )
-        }
     }
 }

@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,zcash,dash,bitcoin-cash,litecoin,solana,ecash,tron,the-open-network,stellar,thorchain,monero,zano
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,solana,ecash,tron,the-open-network,stellar,thorchain,monero,zano,zcash
 
 chain bitcoin
   title=Bitcoin
@@ -231,27 +231,6 @@ chain fantom
   protocolType[Eip20]=Fantom
   supports=Mnemonic,EvmAddress,EvmPrivateKey
 
-chain zcash
-  title=Zcash
-  description=ZEC
-  order=3
-  isEvm=false
-  blockTime=75
-  uriScheme=zcash
-  removeScheme=true
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=coin_placeholder
-  restoreSettingTypes=BirthdayHeight
-  nativeTokenQueries=zcash|native
-  defaultTokenQuery=zcash|native
-  supportedNftTypes=
-  supportedTokenTypes=Native
-  protocolType[Native]=Zcash
-  protocolType[Eip20]=Zcash
-  supports=Mnemonic
-
 chain dash
   title=Dash
   description=DASH
@@ -481,5 +460,26 @@ chain zano
   supportedTokenTypes=Native,ZanoAsset
   protocolType[Native]=Zano
   protocolType[Eip20]=Zano
+  supports=Mnemonic
+
+chain zcash
+  title=Zcash
+  description=ZEC
+  order=3
+  isEvm=false
+  blockTime=75
+  uriScheme=zcash
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=BirthdayHeight
+  nativeTokenQueries=zcash|native
+  defaultTokenQuery=zcash|native
+  supportedNftTypes=
+  supportedTokenTypes=Native
+  protocolType[Native]=Zcash
+  protocolType[Eip20]=Zcash
   supports=Mnemonic
 

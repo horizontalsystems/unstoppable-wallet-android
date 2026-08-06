@@ -83,7 +83,6 @@ import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.managers.WalletStorage
 import io.horizontalsystems.walletkit.core.managers.WordsManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
-import io.horizontalsystems.walletkit.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.core.providers.EvmLabelProvider
 import io.horizontalsystems.walletkit.core.providers.FeeRateProvider
@@ -177,7 +176,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
-        lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
 
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
@@ -310,8 +308,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage)
 
         AppLog.logsDao = appDatabase.logsDao()
 
@@ -437,7 +434,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             coinManager = coinManager,
             evmLabelManager = evmLabelManager,
             localStorage = localStorage,
-            zcashEndpointManager = zcashEndpointManager,
         )
         adapterManager = AdapterManager(
             walletManager,
@@ -658,7 +654,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(restoreSettingsManager, zcashEndpointManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager, thorchainKitManager, mayachainKitManager)
+            walletManager.start(restoreSettingsManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager, thorchainKitManager, mayachainKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()

@@ -55,6 +55,32 @@ interface ChainPlugin {
     /** Validator used by send/enter-address flows, or null to fall back to core dispatch. */
     fun addressValidator(token: Token): EnterAddressValidator? = null
 
+    /**
+     * Validator variant for swap-recipient entry. [allowOwnAddress] permits the wallet's
+     * own address; [transparentOnly] restricts to transparent-style addresses where the
+     * chain distinguishes them (Zcash). Defaults to the plain validator.
+     */
+    fun addressValidator(token: Token, allowOwnAddress: Boolean, transparentOnly: Boolean): EnterAddressValidator? =
+        addressValidator(token)
+
+    /** Page replacing the default receive flow (e.g. Zcash address-type picker). */
+    fun receivePage(wallet: Wallet, entryPoint: KClass<out HSPage>? = null): HSPage? = null
+
+    /** Page for shielding transparent funds, opened from the locked-balance sheet. */
+    fun shieldPage(wallet: Wallet, entryPoint: KClass<out HSPage>): HSPage? = null
+
+    /** Threshold above which an unshielded balance triggers the balance-screen alert. */
+    fun unshieldedBalanceThreshold(): BigDecimal? = null
+
+    /** Lowest accepted birthday height for the restore date picker. */
+    fun minBirthdayHeight(): Long? = null
+
+    /** Stops the chain's adapter and clears local data so a rescan starts clean. */
+    suspend fun prepareRescan(wallet: Wallet) = Unit
+
+    /** The wallet's unified/shielded receive address for swap delivery, or null. */
+    suspend fun swapUnifiedReceiveAddress(token: Token): String? = null
+
     /** Birthday height stored when a NEW wallet of this chain is created, or null if unused. */
     fun newWalletBirthdayHeight(): Long? = null
 

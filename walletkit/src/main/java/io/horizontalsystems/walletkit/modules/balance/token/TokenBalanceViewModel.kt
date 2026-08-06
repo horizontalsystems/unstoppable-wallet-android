@@ -7,7 +7,7 @@ import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.managers.BalanceHiddenManager
 import io.horizontalsystems.walletkit.core.managers.ConnectivityManager
@@ -175,7 +175,8 @@ class TokenBalanceViewModel(
     }
 
     private fun handleZcashBalanceUpdate(balanceItem: BalanceModule.BalanceItem) {
-        if (balanceItem.state == AdapterState.Synced && balanceItem.balanceData.unshielded > ZcashAdapter.minimalShieldThreshold) {
+        val threshold = ChainRegistry[wallet.token.blockchainType]?.unshieldedBalanceThreshold() ?: return
+        if (balanceItem.state == AdapterState.Synced && balanceItem.balanceData.unshielded > threshold) {
             val unshielded = balanceItem.balanceData.unshielded
             val lastAlertedUnshieldedBalance = getLastAlertedUnshieldedBalance(wallet)
 

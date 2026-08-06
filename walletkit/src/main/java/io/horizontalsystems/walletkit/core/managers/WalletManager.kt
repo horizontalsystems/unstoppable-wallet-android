@@ -99,7 +99,6 @@ class WalletManager(
 
     fun start(
         restoreSettingsManager: RestoreSettingsManager,
-        zcashEndpointManager: ZcashLightWalletEndpointManager,
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
         solanaKitManager: SolanaKitManager,
@@ -125,11 +124,6 @@ class WalletManager(
                             }
                         }
                 }
-            }
-        }
-        coroutineScope.launch {
-            zcashEndpointManager.currentEndpointUpdatedFlow.collect {
-                reloadWallets(BlockchainType.Zcash)
             }
         }
         coroutineScope.launch {

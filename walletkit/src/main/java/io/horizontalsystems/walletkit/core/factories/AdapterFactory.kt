@@ -33,7 +33,6 @@ import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
@@ -45,7 +44,6 @@ import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -64,7 +62,6 @@ class AdapterFactory(
     private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
     private val mayachainKitManager: ThorchainKitManager,
-    private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -151,9 +148,6 @@ class AdapterFactory(
             BlockchainType.Dash -> {
                 val syncMode = btcBlockchainManager.syncMode(BlockchainType.Dash, wallet.account.origin)
                 DashAdapter(wallet, syncMode, backgroundManager)
-            }
-            BlockchainType.Zcash -> {
-                ZcashAdapter(context, wallet, restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType), localStorage, zcashEndpointManager.currentLightWalletEndpoint)
             }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,

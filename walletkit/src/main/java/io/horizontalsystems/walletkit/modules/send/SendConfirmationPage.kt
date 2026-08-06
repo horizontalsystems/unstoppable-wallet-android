@@ -16,8 +16,6 @@ import io.horizontalsystems.walletkit.modules.send.ton.SendTonConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
-import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -38,14 +36,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 )
             }
 
+            // Legacy: moved to SendZcashConfirmationPage in the Zcash chain module.
+            // A back stack persisted before the split may still restore this entry - pop it.
             Type.ZCash -> {
-                val sendZCashViewModel = navigation.viewModelForScreen<SendZCashViewModel>(SendPage::class)
-
-                SendZCashConfirmationScreen(
-                    navigation,
-                    sendZCashViewModel,
-                    input.sendEntryPointDestId
-                )
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
             }
 
             Type.Tron -> {

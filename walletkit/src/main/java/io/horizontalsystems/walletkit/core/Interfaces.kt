@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.core
 
-import cash.z.ecc.android.sdk.model.Proposal
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
@@ -461,14 +460,6 @@ interface ISendEthereumAdapter {
     fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
 }
 
-interface ISendZcashAdapter {
-    val availableBalance: BigDecimal
-
-    suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal
-    suspend fun proposeTransfer(amount: BigDecimal, address: String, memo: String): Proposal
-    suspend fun sendProposal(proposal: Proposal): String?
-}
 
 interface IAdapter {
     fun start()

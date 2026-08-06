@@ -6,7 +6,6 @@ import io.horizontalsystems.bitcoincore.network.Network
 import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
 import io.horizontalsystems.bitcoincore.utils.CashAddressConverter
 import io.horizontalsystems.bitcoincore.utils.SegwitAddressConverter
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAddressValidator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.BitcoinAddress
 import io.horizontalsystems.walletkit.entities.MoneroWatchAddress
@@ -261,18 +260,6 @@ class AddressHandlerSolana : IAddressHandler {
 
 }
 
-class AddressHandlerZcash : IAddressHandler {
-    override val blockchainType = BlockchainType.Zcash
-
-    override fun isSupported(value: String): Boolean {
-        return ZcashAddressValidator.validate(value)
-    }
-
-    override fun parseAddress(value: String): Address {
-        return Address(value, blockchainType = blockchainType)
-    }
-
-}
 
 class AddressHandlerTron : IAddressHandler {
     override val blockchainType = BlockchainType.Tron

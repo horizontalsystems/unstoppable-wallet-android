@@ -33,9 +33,6 @@ import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
-import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashModule
-import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashScreen
-import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -80,19 +77,6 @@ data class SendPage(val input: Input) : HSPage() {
                 )
             }
 
-            BlockchainType.Zcash -> {
-                val factory = SendZCashModule.Factory(wallet, address, hideAddress)
-                val sendZCashViewModel = viewModel<SendZCashViewModel>(factory = factory)
-                SendZCashScreen(
-                    title = title,
-                    navigation = navigation,
-                    viewModel = sendZCashViewModel,
-                    amountInputModeViewModel = amountInputModeViewModel,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                    amount = amount,
-                    riskyAddress = riskyAddress
-                )
-            }
 
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,

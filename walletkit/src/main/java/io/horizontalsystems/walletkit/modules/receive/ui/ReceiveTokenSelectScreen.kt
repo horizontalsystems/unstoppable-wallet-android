@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.viewmodels.CoinForReceiveType
 import io.horizontalsystems.walletkit.modules.receive.viewmodels.ReceiveTokenSelectViewModel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -50,7 +51,7 @@ fun ReceiveTokenSelectScreen(
     onMultipleAddressesClick: (String) -> Unit,
     onMultipleDerivationsClick: (String) -> Unit,
     onMultipleBlockchainsClick: (String) -> Unit,
-    onMultipleZcashAddressTypeClick: (Wallet) -> Unit,
+    onChainPageClick: (HSPage) -> Unit,
     onCoinClick: (Wallet) -> Unit,
     onBackPress: () -> Unit,
 ) {
@@ -114,7 +115,7 @@ fun ReceiveTokenSelectScreen(
                                             onMultipleAddressesClick,
                                             onMultipleDerivationsClick,
                                             onMultipleBlockchainsClick,
-                                            onMultipleZcashAddressTypeClick,
+                                            onChainPageClick,
                                             onCoinClick
                                         )
                                     }
@@ -149,7 +150,7 @@ private fun processCoinClick(
     onMultipleAddressesClick: (String) -> Unit,
     onMultipleDerivationsClick: (String) -> Unit,
     onMultipleBlockchainsClick: (String) -> Unit,
-    onMultipleZcashAddressTypeClick: (Wallet) -> Unit,
+    onChainPageClick: (HSPage) -> Unit,
     onCoinClick: (Wallet) -> Unit
 ) {
     when (type) {
@@ -165,8 +166,8 @@ private fun processCoinClick(
             fullCoin.coin.uid
         )
 
-        is CoinForReceiveType.MultipleZcashAddressTypes -> onMultipleZcashAddressTypeClick(
-            type.wallet
+        is CoinForReceiveType.ChainPage -> onChainPageClick(
+            type.page
         )
 
         is CoinForReceiveType.Single -> {
