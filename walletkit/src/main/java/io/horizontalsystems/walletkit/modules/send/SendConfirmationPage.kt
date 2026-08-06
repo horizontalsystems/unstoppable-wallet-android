@@ -8,8 +8,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinConfirmati
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewModel
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
@@ -58,14 +56,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 }
             }
 
+            // Legacy: moved to SendTonConfirmationPage in the Ton chain module.
+            // A back stack persisted before the split may still restore this entry - pop it.
             Type.Ton -> {
-                val sendTonViewModel = navigation.viewModelForScreen<SendTonViewModel>(SendPage::class)
-
-                SendTonConfirmationScreen(
-                    navigation,
-                    sendTonViewModel,
-                    input.sendEntryPointDestId
-                )
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
             }
 
             // Legacy: moved to SendStellarConfirmationPage in the Stellar chain module.

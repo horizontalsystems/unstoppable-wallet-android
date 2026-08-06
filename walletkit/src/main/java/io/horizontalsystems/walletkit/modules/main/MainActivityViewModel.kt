@@ -11,13 +11,10 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.managers.DAppRequestEntityWrapper
-import io.horizontalsystems.walletkit.core.managers.TonConnectManager
 import io.horizontalsystems.walletkit.core.managers.UserManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.security.KeyStoreValidationError
 import io.horizontalsystems.dapp.core.HSDAppEvent
-import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -26,14 +23,11 @@ class MainActivityViewModel(
     private val accountManager: IAccountManager,
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
-    private val localStorage: ILocalStorage,
-    private val tonConnectManager: TonConnectManager
+    private val localStorage: ILocalStorage
 ) : ViewModelUiState<MainUIState>() {
 
     val navigateToMainLiveData = MutableLiveData<String?>(null)
     val wcEvent = MutableLiveData<HSDAppEvent?>()
-    val tcSendRequest = MutableLiveData<SignTransaction?>()
-    val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
 
     var mainShowedOnce = localStorage.mainShowedOnceFlow.value
@@ -60,16 +54,6 @@ class MainActivityViewModel(
                 wcEvent.value = it
             }
         }
-        viewModelScope.launch {
-            tonConnectManager.sendRequestFlow.collect {
-                tcSendRequest.postValue(it)
-            }
-        }
-        viewModelScope.launch {
-            tonConnectManager.dappRequestFlow.collect {
-                tcDappRequest.postValue(it)
-            }
-        }
     }
 
     fun onWcEventHandled() {
@@ -86,14 +70,6 @@ class MainActivityViewModel(
         WCDelegate.sessionProposalEvent?.let {
             wcEvent.value = HSDAppEvent.SessionProposal(it)
         }
-    }
-
-    fun onTcSendRequestHandled() {
-        tcSendRequest.postValue(null)
-    }
-
-    fun onTcDappRequestHandled() {
-        tcDappRequest.postValue(null)
     }
 
     fun validate() {
@@ -133,7 +109,6 @@ class MainActivityViewModel(
                 App.systemInfoManager,
                 App.keyStoreManager,
                 App.localStorage,
-                App.tonConnectManager,
             ) as T
         }
     }

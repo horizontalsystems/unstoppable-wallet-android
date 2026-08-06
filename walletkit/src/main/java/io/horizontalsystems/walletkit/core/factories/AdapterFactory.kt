@@ -14,14 +14,10 @@ import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
 import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
 import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.JettonAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.TonAdapter
-import io.horizontalsystems.walletkit.core.adapters.TonTransactionConverter
-import io.horizontalsystems.walletkit.core.adapters.TonTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
@@ -32,7 +28,6 @@ import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
-import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -40,7 +35,6 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.tonkit.Address
 
 class AdapterFactory(
     private val context: Context,
@@ -48,7 +42,6 @@ class AdapterFactory(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val tronKitManager: TronKitManager,
-    private val tonKitManager: TonKitManager,
     private val thorchainKitManager: ThorchainKitManager,
     private val mayachainKitManager: ThorchainKitManager,
     private val backgroundManager: BackgroundManager,
@@ -81,12 +74,6 @@ class AdapterFactory(
         val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
 
         return Trc20Adapter(tronKitWrapper, address, wallet, coinManager, baseToken, evmLabelManager)
-    }
-
-    private fun getJettonAdapter(wallet: Wallet, address: String): IAdapter {
-        val tonKitWrapper = tonKitManager.getTonKitWrapper(wallet.account)
-
-        return JettonAdapter(tonKitWrapper, address, wallet)
     }
 
     fun getAdapterOrNull(wallet: Wallet) = try {
@@ -142,9 +129,6 @@ class AdapterFactory(
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
             }
-            BlockchainType.Ton -> {
-                TonAdapter(tonKitManager.getTonKitWrapper(wallet.account))
-            }
             BlockchainType.Thorchain,
             BlockchainType.Mayachain -> {
                 ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
@@ -159,7 +143,7 @@ class AdapterFactory(
             }
         }
         is TokenType.Spl -> registryAdapter(wallet)
-        is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
+        is TokenType.Jetton -> registryAdapter(wallet)
         is TokenType.Asset -> registryAdapter(wallet)
         is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
             BlockchainType.Thorchain,
@@ -192,15 +176,6 @@ class AdapterFactory(
         return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
     }
 
-    fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        val tonKitWrapper = tonKitManager.getTonKitWrapper(source.account)
-        val address = tonKitWrapper.tonKit.receiveAddress
-
-        val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
-
-        return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
-    }
-
     // THORChain (RUNE) and Maya (CACAO) share the ThorchainKit; pick the right per-chain manager.
     private fun thorchainFamilyKitManager(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Mayachain -> mayachainKitManager
@@ -225,20 +200,6 @@ class AdapterFactory(
         return ThorchainTransactionsAdapter(thorchainKitWrapper, transactionConverter)
     }
 
-    fun tonTransactionConverter(
-        address: Address,
-        source: TransactionSource,
-    ): TonTransactionConverter? {
-        val query = TokenQuery(BlockchainType.Ton, TokenType.Native)
-        val baseToken = coinManager.getToken(query) ?: return null
-        return TonTransactionConverter(
-            address,
-            coinManager,
-            source,
-            baseToken
-        )
-    }
-
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
@@ -253,9 +214,6 @@ class AdapterFactory(
             }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(wallet.account)
-            }
-            BlockchainType.Ton -> {
-                tonKitManager.unlink(wallet.account)
             }
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(wallet.account)
@@ -288,7 +246,7 @@ class AdapterFactory(
                 tronKitManager.unlink(transactionSource.account)
             }
             BlockchainType.Ton -> {
-                tonKitManager.unlink(transactionSource.account)
+                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             BlockchainType.Stellar -> {
                 ChainRegistry[blockchainType]?.unlink(transactionSource.account)

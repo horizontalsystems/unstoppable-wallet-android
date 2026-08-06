@@ -19,9 +19,6 @@ import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainModule
 import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainScreen
 import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewModel
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonModule
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonScreen
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronModule
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
@@ -103,19 +100,6 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
 
-            BlockchainType.Ton -> {
-                val factory = SendTonModule.Factory(wallet, address, hideAddress)
-                val sendTonViewModel = viewModel<SendTonViewModel>(factory = factory)
-                SendTonScreen(
-                    title,
-                    navigation,
-                    sendTonViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId,
-                    amount,
-                    riskyAddress = riskyAddress
-                )
-            }
 
             BlockchainType.Tron -> {
                 val factory = SendTronModule.Factory(wallet, address, hideAddress)

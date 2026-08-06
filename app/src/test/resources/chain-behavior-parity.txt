@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,the-open-network,thorchain,mayachain,monero,zano,zcash,solana,stellar
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,thorchain,mayachain,monero,zano,zcash,solana,stellar,the-open-network
 
 chain bitcoin
   title=Bitcoin
@@ -336,27 +336,6 @@ chain tron
   protocolType[Eip20]=TRC20
   supports=Mnemonic,TronAddress,TronPrivateKey,Passkey
 
-chain the-open-network
-  title=Ton
-  description=TON
-  order=19
-  isEvm=false
-  blockTime=5
-  uriScheme=toncoin
-  removeScheme=true
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=the_open_network_jetton
-  restoreSettingTypes=
-  nativeTokenQueries=the-open-network|native
-  defaultTokenQuery=the-open-network|native
-  supportedNftTypes=
-  supportedTokenTypes=Native,Jetton
-  protocolType[Native]=null
-  protocolType[Eip20]=Ton
-  supports=Mnemonic,TonAddress
-
 chain thorchain
   title=THORChain
   description=RUNE, THORChain assets
@@ -503,4 +482,25 @@ chain stellar
   protocolType[Native]=Stellar
   protocolType[Eip20]=Stellar
   supports=Mnemonic,StellarAddress,StellarSecretKey
+
+chain the-open-network
+  title=Ton
+  description=TON
+  order=19
+  isEvm=false
+  blockTime=5
+  uriScheme=toncoin
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=the_open_network_jetton
+  restoreSettingTypes=
+  nativeTokenQueries=the-open-network|native
+  defaultTokenQuery=the-open-network|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,Jetton
+  protocolType[Native]=null
+  protocolType[Eip20]=Ton
+  supports=Mnemonic,TonAddress
 

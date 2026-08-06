@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.core.adapters
 
+import io.horizontalsystems.walletkit.core.adapters.TonEventInfo
+
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -36,7 +38,9 @@ class TonTransactionConverter(
             )
         }
 
-        return TonTransactionRecord(source, event, baseToken, actions)
+        return TonTransactionRecord(
+            source,
+            event.essentials(), baseToken, actions)
     }
 
     private fun convertAmount(amount: BigInteger, decimal: Int, negative: Boolean): BigDecimal {
@@ -172,3 +176,12 @@ class TonTransactionConverter(
         return TonTransactionRecord.Action.Type.Unsupported(action.type.name)
     }
 }
+
+private fun Event.essentials() = TonEventInfo(
+    id = id,
+    lt = lt,
+    timestamp = timestamp,
+    scam = scam,
+    inProgress = inProgress,
+    extra = extra,
+)

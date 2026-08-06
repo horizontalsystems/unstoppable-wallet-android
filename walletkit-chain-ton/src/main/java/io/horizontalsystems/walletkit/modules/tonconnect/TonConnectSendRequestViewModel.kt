@@ -5,7 +5,10 @@ import com.tonapps.blockchain.ton.TonNetwork
 import com.tonapps.extensions.equalsAddress
 import com.tonapps.wallet.data.core.entity.RawMessageEntity
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
+import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.adapters.TonTransactionConverter
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
@@ -33,7 +36,7 @@ class TonConnectSendRequestViewModel(
     private val sendRequestEntity = signTransaction?.request
     private var error: TonConnectSendRequestError? = null
     private val transactionSigner = tonConnectManager.transactionSigner
-    private val tonConnectKit = App.tonConnectManager.kit
+    private val tonConnectKit = tonConnectManager.kit
     private var tonTransactionRecord: TonTransactionRecord? = null
 
     private var tonWallet: TonWallet.FullAccess? = null
@@ -131,7 +134,7 @@ class TonConnectSendRequestViewModel(
         val tonWallet = account.type.toTonWalletFullAccess().also {
             tonWallet = it
         }
-        val tonKitWrapper = App.tonKitManager.getNonActiveTonKitWrapper(account).also {
+        val tonKitWrapper = (ChainRegistry[BlockchainType.Ton] as TonChainPlugin).kitManager.getNonActiveTonKitWrapper(account).also {
             tonKitWrapper = it
         }
 
@@ -163,9 +166,11 @@ class TonConnectSendRequestViewModel(
 
         val transactionSource = TransactionSource(token.blockchain, account, token.type.meta)
 
-        val tonTransactionConverter = tonConnectManager.adapterFactory.tonTransactionConverter(
+        val tonTransactionConverter = TonTransactionConverter(
             tonKitWrapper.tonKit.receiveAddress,
-            transactionSource
+            App.coinManager,
+            transactionSource,
+            token
         )
 
         tonTransactionRecord = tonTransactionConverter?.createTransactionRecord(tonEvent)

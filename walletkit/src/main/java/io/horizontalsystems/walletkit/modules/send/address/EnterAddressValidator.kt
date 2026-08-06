@@ -22,7 +22,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.core.managers.thorchainNetwork
-import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -100,11 +99,6 @@ class EvmAddressValidator : EnterAddressValidator {
 }
 
 
-class TonAddressValidator : EnterAddressValidator {
-    override suspend fun validate(address: Address) {
-        FriendlyAddress.parse(address.hex)
-    }
-}
 
 
 class ThorchainAddressValidator(private val token: Token) : EnterAddressValidator {

@@ -18,7 +18,6 @@ object AppStatusModule {
                 App.marketKit,
                 App.evmBlockchainManager,
                 App.tronKitManager,
-                App.tonKitManager,
                 App.thorchainKitManager,
                 App.btcBlockchainManager,
             )

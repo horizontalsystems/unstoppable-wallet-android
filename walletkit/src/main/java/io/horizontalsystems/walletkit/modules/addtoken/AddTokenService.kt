@@ -27,7 +27,6 @@ class AddTokenService(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Tron,
-        BlockchainType.Ton,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Gnosis,
@@ -50,9 +49,6 @@ class AddTokenService(
         val blockchainService = when (blockchain.type) {
             BlockchainType.Tron -> {
                 AddTronTokenBlockchainService.getInstance(blockchain)
-            }
-            BlockchainType.Ton -> {
-                AddTonTokenBlockchainService(blockchain)
             }
             else -> ChainRegistry[blockchain.type]?.addTokenBlockchainService(blockchain)
                 ?: AddEvmTokenBlockchainService.getInstance(blockchain)

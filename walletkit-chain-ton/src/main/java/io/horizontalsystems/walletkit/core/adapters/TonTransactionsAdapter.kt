@@ -110,5 +110,4 @@ class TonTransactionsAdapter(
         return "https://tonviewer.com/transaction/$transactionHash"
     }
 
-    class NotSupportedException : Exception()
 }

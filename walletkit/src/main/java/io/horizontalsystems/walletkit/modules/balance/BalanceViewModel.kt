@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -301,11 +302,9 @@ class BalanceViewModel(
                 return@launch
             }
 
-            if (
-                scannedText.startsWith("tc:") ||
-                scannedText.startsWith("https://unstoppable.money/ton-connect")
-            ) {
-                App.tonConnectManager.handle(scannedText)
+            val deepLinkPlugin = ChainRegistry.all.firstOrNull { it.isDeepLinkSupported(scannedText, fromScanner = true) }
+            if (deepLinkPlugin != null) {
+                deepLinkPlugin.handleDeepLink(scannedText, closeApp = false)
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {

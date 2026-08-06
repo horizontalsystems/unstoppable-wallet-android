@@ -141,10 +141,6 @@ object SwapHelper {
                     App.thorchainKitManager.getAddress(account.type)
                 }
 
-                BlockchainType.Ton -> {
-                    App.tonKitManager.getAddress(account.type)
-                }
-
                 else -> ChainRegistry[token.blockchainType]?.swapDestinationAddress(account)
                     ?: throw SwapError.NoDestinationAddress()
             }

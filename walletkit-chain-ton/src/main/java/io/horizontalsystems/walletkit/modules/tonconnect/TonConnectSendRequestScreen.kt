@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
+import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.walletkit.modules.main.MainActivityViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.xtransaction.cells.HeaderCell
 import io.horizontalsystems.walletkit.modules.xtransaction.helpers.TransactionInfoHelper
@@ -49,16 +49,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun TonConnectSendRequestScreen(navigation: HSNavigation) {
     val logger = remember { AppLogger("ton-connect request") }
-    val mainActivityViewModel =
-        viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
+    val tonConnectManager = TonChainPlugin.tonConnectManager
     val viewModel = viewModel<TonConnectSendRequestViewModel>(initializer = {
-        val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
-        mainActivityViewModel.onTcSendRequestHandled()
+        val sendRequestEntity = tonConnectManager.pendingSendRequest.value
+        tonConnectManager.onSendRequestHandled()
 
         TonConnectSendRequestViewModel(
             sendRequestEntity,
             App.accountManager,
-            App.tonConnectManager
+            tonConnectManager
         )
     })
 

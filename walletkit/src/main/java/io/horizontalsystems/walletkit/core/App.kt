@@ -65,9 +65,6 @@ import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
 import io.horizontalsystems.walletkit.core.managers.SystemInfoManager
 import io.horizontalsystems.walletkit.core.managers.TermsManager
 import io.horizontalsystems.walletkit.core.managers.TokenAutoEnableManager
-import io.horizontalsystems.walletkit.core.managers.TonAccountManager
-import io.horizontalsystems.walletkit.core.managers.TonConnectManager
-import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TorManager
 import io.horizontalsystems.walletkit.core.managers.TransactionAdapterManager
 import io.horizontalsystems.walletkit.core.managers.TronAccountManager
@@ -176,7 +173,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var tronKitManager: TronKitManager
-        lateinit var tonKitManager: TonKitManager
         lateinit var thorchainKitManager: ThorchainKitManager
         lateinit var mayachainKitManager: ThorchainKitManager
         lateinit var numberFormatter: IAppNumberFormatter
@@ -220,7 +216,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
-        lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
         lateinit var roiManager: RoiManager
         lateinit var appIconService: AppIconService
@@ -323,7 +318,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
 
         tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
-        tonKitManager = TonKitManager(backgroundManager)
         thorchainRpcSourceManager = ThorchainRpcSourceManager(blockchainSettingsStorage, marketKit, BlockchainType.Thorchain, ThorchainRpcSourceManager.thorchainSources)
         thorchainKitManager = ThorchainKitManager(backgroundManager, thorchainRpcSourceManager, ThorchainNetwork.Mainnet)
         mayachainRpcSourceManager = ThorchainRpcSourceManager(blockchainSettingsStorage, marketKit, BlockchainType.Mayachain, ThorchainRpcSourceManager.mayachainSources)
@@ -378,8 +372,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         tronAccountManager.start()
 
-        val tonAccountManager = TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
-        tonAccountManager.start()
 
 
         val thorchainAccountManager = ThorchainAccountManager(accountManager, walletManager, thorchainKitManager, marketKit, tokenAutoEnableManager, BlockchainType.Thorchain)
@@ -409,7 +401,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmBlockchainManager = evmBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
             tronKitManager = tronKitManager,
-            tonKitManager = tonKitManager,
             thorchainKitManager = thorchainKitManager,
             mayachainKitManager = mayachainKitManager,
             backgroundManager = backgroundManager,
@@ -423,7 +414,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             adapterFactory,
             evmBlockchainManager,
             tronKitManager,
-            tonKitManager,
             thorchainKitManager,
             mayachainKitManager,
         )
@@ -530,14 +520,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             zcashEndpointStorage = zcashEndpointStorage,
             contactsRepository = contactsRepository
         )
-
-        tonConnectManager = TonConnectManager(
-            context = this,
-            adapterFactory = adapterFactory,
-            appName = "unstoppable",
-            appVersion = appConfigProvider.appVersion
-        )
-        tonConnectManager.start()
 
         roiManager = RoiManager(localStorage)
 

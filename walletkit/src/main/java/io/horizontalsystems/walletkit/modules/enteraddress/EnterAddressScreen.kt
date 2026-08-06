@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.adapters.NoTrustlineError
 import io.horizontalsystems.walletkit.core.address.AddressCheckResult
@@ -395,7 +394,7 @@ fun CheckLocked() {
 @Composable
 private fun ContactItem(contact: SContact) {
     headline2_leah(contact.name)
-    subhead2_grey(contact.address.shortAddress)
+    subhead2_grey(contact.address.shortenedAddress())
 }
 
 @Composable
@@ -411,3 +410,7 @@ data class SContact(
     val name: String,
     val address: String
 )
+
+// Replaces tonkeeper's shortAddress extension: first and last 4 chars with an ellipsis.
+private fun String.shortenedAddress(): String =
+    if (length > 8) "${take(4)}…${takeLast(4)}" else this

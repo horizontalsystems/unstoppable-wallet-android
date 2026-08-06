@@ -2,7 +2,6 @@ package io.horizontalsystems.walletkit.core
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
@@ -50,7 +49,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.transaction.Fee
@@ -462,15 +460,6 @@ interface IAdapter {
     val debugInfo: String
 }
 
-
-interface ISendTonAdapter {
-    val availableBalance: BigDecimal
-    suspend fun sign(request: SendRequestEntity): String
-    suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?)
-    suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?) : BigDecimal
-    suspend fun send(boc: String)
-    suspend fun estimateFee(boc: String) : BigDecimal
-}
 
 interface ISendStellarAdapter {
     val maxSendableBalance: BigDecimal

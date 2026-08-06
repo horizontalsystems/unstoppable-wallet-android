@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
 import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
 import io.horizontalsystems.walletkit.core.managers.StellarTransactionEventExtractor
-import io.horizontalsystems.walletkit.core.adapters.TonTransactionsAdapter.NotSupportedException
 import io.horizontalsystems.walletkit.core.factories.StellarTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toAdapterState

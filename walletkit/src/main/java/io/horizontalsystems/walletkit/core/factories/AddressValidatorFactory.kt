@@ -6,7 +6,6 @@ import io.horizontalsystems.walletkit.modules.send.address.BitcoinAddressValidat
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.ThorchainAddressValidator
-import io.horizontalsystems.walletkit.modules.send.address.TonAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -51,10 +50,6 @@ object AddressValidatorFactory {
 
             BlockchainType.Tron -> {
                 TronAddressValidator(token, App.adapterManager, allowOwnAddress)
-            }
-
-            BlockchainType.Ton -> {
-                TonAddressValidator()
             }
 
             is BlockchainType.Thorchain,

@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.tonconnect
 import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
+import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -14,7 +15,7 @@ class TonConnectListViewModel(
     accountManager: IAccountManager,
 ) : ViewModelUiState<TonConnectListUiState>() {
 
-    private val tonConnectKit = App.tonConnectManager.kit
+    private val tonConnectKit = TonChainPlugin.tonConnectManager.kit
 
     private var dapps = mapOf<String, List<DAppEntity>>()
     private var dAppRequestEntity: DAppRequestEntity? = null

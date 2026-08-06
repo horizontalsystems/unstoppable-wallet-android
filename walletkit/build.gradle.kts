@@ -174,7 +174,6 @@ dependencies {
     api(libs.unstoppable.domains)
 
     // Wallet Kits
-    api(libs.kit.ton)
     api(libs.kit.bitcoin)
     api(libs.kit.ethereum)
     api(libs.kit.fee.rate)

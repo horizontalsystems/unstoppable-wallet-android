@@ -34,10 +34,6 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceTron(token)
             }
 
-            BlockchainType.Ton -> {
-                SendTransactionServiceTon(token)
-            }
-
 
 
             BlockchainType.Thorchain,

@@ -7,18 +7,15 @@ import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.adapters.BaseTonAdapter
 import io.horizontalsystems.walletkit.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
-import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.title
-import io.horizontalsystems.walletkit.core.managers.statusInfo
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.settings.appstatus.AppStatusModule.BlockContent
@@ -37,7 +34,6 @@ class AppStatusViewModel(
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val tronKitManager: TronKitManager,
-    private val tonKitManager: TonKitManager,
     private val thorchainKitManager: ThorchainKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
@@ -207,9 +203,6 @@ class AppStatusViewModel(
             blockchainStatus["Tron"] = statusInfo
         }
 
-        tonKitManager.statusInfo?.let { statusInfo ->
-            blockchainStatus["Ton"] = statusInfo
-        }
 
 
         thorchainKitManager.statusInfo?.let { statusInfo ->
@@ -280,15 +273,6 @@ class AppStatusViewModel(
             val block = getBlockchainInfoBlock(title, "Thorchain", statusInfo)
             blocks.add(block)
         }
-
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
-            ?.let { wallet ->
-                adapterManager.getAdapterForWallet<BaseTonAdapter>(wallet)?.let { adapter ->
-                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                    val block = getBlockchainInfoBlock(title, "Ton", adapter.statusInfo)
-                    blocks.add(block)
-                }
-            }
 
         return blocks
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.IPinComponent
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IBackupManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
@@ -458,17 +459,18 @@ class MainViewModel(
         // let getNavigationDataForDeeplink() detect it (by `wc:` prefix or host == "wc").
         val isWalletConnectDeeplink = deeplinkString.startsWith("wc:") || uri.host == "wc"
 
-        if (!isWalletConnectDeeplink &&
-            (deeplinkString.startsWith("unstoppable.money:") || deeplinkString.startsWith("tc:"))
-        ) {
-            val returnParam = uri.getQueryParameter("ret")
-            // when app is opened from camera app, it returns "none" as ret param
-            // so we don't need closing app in this case
-            val closeApp = returnParam != "none"
-            viewModelScope.launch {
-                App.tonConnectManager.handle(uri.toString(), closeApp)
+        if (!isWalletConnectDeeplink) {
+            val plugin = ChainRegistry.all.firstOrNull { it.isDeepLinkSupported(deeplinkString, fromScanner = false) }
+            if (plugin != null) {
+                val returnParam = uri.getQueryParameter("ret")
+                // when app is opened from camera app, it returns "none" as ret param
+                // so we don't need closing app in this case
+                val closeApp = returnParam != "none"
+                viewModelScope.launch {
+                    plugin.handleDeepLink(deeplinkString, closeApp)
+                }
+                return
             }
-            return
         }
 
         if (

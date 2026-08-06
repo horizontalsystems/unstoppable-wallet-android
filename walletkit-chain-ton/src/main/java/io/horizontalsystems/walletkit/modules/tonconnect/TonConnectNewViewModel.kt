@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import com.tonapps.wallet.data.tonconnect.entities.reply.DAppConnectEventError
+import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.toTonWalletFullAccess
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 class TonConnectNewViewModel(
     private val requestEntity: DAppRequestEntity,
 ) : ViewModelUiState<TonConnectNewUiState>() {
-    private val tonConnectKit = App.tonConnectManager.kit
+    private val tonConnectKit = TonChainPlugin.tonConnectManager.kit
 
     private var manifest: DAppManifestEntity? = null
     private var accounts: List<Account> = listOf()

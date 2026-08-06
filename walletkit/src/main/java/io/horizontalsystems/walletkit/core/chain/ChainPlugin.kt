@@ -182,6 +182,16 @@ interface ChainPlugin {
     /** Rows contributed to the manage-account public keys screen. */
     fun publicKeyRows(account: Account): List<ChainKeyRow> = emptyList()
 
+    /** True when the plugin recognizes this deep link / scanned text as its own. */
+    fun isDeepLinkSupported(link: String, fromScanner: Boolean): Boolean = false
+
+    /** Handles a deep link previously accepted by [isDeepLinkSupported]. */
+    suspend fun handleDeepLink(link: String, closeApp: Boolean) = Unit
+
+    /** Effects composed on the main screen (e.g. chain-specific request sheets). */
+    @Composable
+    fun MainScreenEffects(navigation: HSNavigation) = Unit
+
     /** WalletConnect handlers to register at app start. */
     fun wcHandlers(): List<IWCHandler> = emptyList()
 
