@@ -156,14 +156,13 @@ class TransactionViewItemFactory(
 
                 is TransactionValue.CoinValue,
                 is TransactionValue.RawValue,
+                is TransactionValue.JettonValue,
                 is TransactionValue.TokenValue -> {
                     backRectangle = false
                     backUrl = secondaryValue.coinIconUrl
                     backAlternativeUrl = secondaryValue.alternativeCoinIconUrl
                     backPlaceHolder = secondaryValue.coinIconPlaceholder
                 }
-
-                is TransactionValue.JettonValue -> TODO()
             }
         } else {
             backRectangle = false
