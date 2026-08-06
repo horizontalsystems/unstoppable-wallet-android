@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
@@ -14,6 +13,7 @@ import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.Date
+import kotlinx.coroutines.launch
 
 class UtxoExpertModeViewModel(
     private val adapter: ISendBitcoinAdapter,
@@ -37,9 +37,11 @@ class UtxoExpertModeViewModel(
         initialCustomUnspentOutputs?.forEach {
             selectedUnspentOutputs = selectedUnspentOutputs + getUnspentId(it)
         }
-        xRateService.getRateFlow(token.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
-            setUnspentOutputViewItems()
+        viewModelScope.launch {
+            xRateService.getRateFlow(token.coin.uid).collect {
+                coinRate = it
+                setUnspentOutputViewItems()
+            }
         }
         setAvailableBalanceInfo()
         setUnspentOutputViewItems()

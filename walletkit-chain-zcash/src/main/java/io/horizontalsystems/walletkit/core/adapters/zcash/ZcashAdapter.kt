@@ -7,7 +7,6 @@ import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
-import io.horizontalsystems.walletkit.core.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
 import cash.z.ecc.android.sdk.ext.fromHex
@@ -52,6 +51,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -420,11 +420,21 @@ class ZcashAdapter(
         //       related viewModelScope instead of the synchronizer's scope.
         //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
         val scope = synchronizer.coroutineScope
-        synchronizer.allTransactions.collectWith(scope, transactionsProvider::onTransactions)
-        synchronizer.status.collectWith(scope, ::onStatus)
-        synchronizer.progress.collectWith(scope, ::onDownloadProgress)
-        synchronizer.walletBalances.mapNotNull { it?.get(zcashAccount.accountUuid) }.collectWith(scope, ::onBalance)
-        synchronizer.processorInfo.collectWith(scope, ::onProcessorInfo)
+        scope.launch {
+            synchronizer.allTransactions.collect(transactionsProvider::onTransactions)
+        }
+        scope.launch {
+            synchronizer.status.collect(::onStatus)
+        }
+        scope.launch {
+            synchronizer.progress.collect(::onDownloadProgress)
+        }
+        scope.launch {
+            synchronizer.walletBalances.mapNotNull { it?.get(zcashAccount.accountUuid) }.collect(::onBalance)
+        }
+        scope.launch {
+            synchronizer.processorInfo.collect(::onProcessorInfo)
+        }
     }
 
     private fun onProcessorError(error: Throwable?): Boolean {

@@ -5,9 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.onFirstWith
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class AmountInputModeViewModel(
     private val localStorage: ILocalStorage,
@@ -26,10 +27,10 @@ class AmountInputModeViewModel(
         private set
 
     init {
-        xRateService.getCoinPriceFlow(coinUid)
-            .onFirstWith(viewModelScope) { coinPrice ->
-                hasValidRate = coinPrice.expired == false
-            }
+        viewModelScope.launch {
+            val coinPrice = xRateService.getCoinPriceFlow(coinUid).first()
+            hasValidRate = coinPrice.expired == false
+        }
     }
 
     fun onToggleInputType() {

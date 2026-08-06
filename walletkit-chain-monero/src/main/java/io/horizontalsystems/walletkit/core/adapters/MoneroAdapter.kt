@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
@@ -111,23 +110,29 @@ class MoneroAdapter(
         get() = true
 
     override fun start() {
-        kit.accountsFlow.collectWith(coroutineScope) { accounts ->
-            // a persisted selection may point to an account that no longer exists
-            // (e.g. the wallet was re-created from seed)
-            if (accounts.isNotEmpty() && accounts.none { it.index == activeAccount }) {
-                activeAccount = 0
+        coroutineScope.launch {
+            kit.accountsFlow.collect { accounts ->
+                // a persisted selection may point to an account that no longer exists
+                // (e.g. the wallet was re-created from seed)
+                if (accounts.isNotEmpty() && accounts.none { it.index == activeAccount }) {
+                    activeAccount = 0
+                }
+
+                balanceUpdatedSubject.onNext(Unit)
             }
-
-            balanceUpdatedSubject.onNext(Unit)
         }
 
-        kit.syncStateFlow.collectWith(coroutineScope) {
-            balanceState = it.toAdapterState()
+        coroutineScope.launch {
+            kit.syncStateFlow.collect {
+                balanceState = it.toAdapterState()
 
-            balanceStateUpdatedSubject.onNext(Unit)
+                balanceStateUpdatedSubject.onNext(Unit)
+            }
         }
 
-        kit.allTransactionsFlow.collectWith(coroutineScope, transactionsProvider::onTransactions)
+        coroutineScope.launch {
+            kit.allTransactionsFlow.collect(transactionsProvider::onTransactions)
+        }
 
         kit.start()
 

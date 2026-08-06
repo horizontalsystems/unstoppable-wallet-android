@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.main
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.IPinComponent
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -105,23 +104,31 @@ class MainViewModel(
     private var openSendTokenSelect: OpenSendTokenSelect? = null
 
     init {
-        localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) { enabled ->
-            marketsTabEnabled = enabled
-            syncNavigation()
+        viewModelScope.launch {
+            localStorage.marketsTabEnabledFlow.collect { enabled ->
+                marketsTabEnabled = enabled
+                syncNavigation()
+            }
         }
 
-        termsManager.termsAcceptedSharedFlow.collectWith(viewModelScope) {
-            updateSettingsBadge()
+        viewModelScope.launch {
+            termsManager.termsAcceptedSharedFlow.collect {
+                updateSettingsBadge()
+            }
         }
 
-        wcSessionManager.pendingRequestCountFlow.collectWith(viewModelScope) {
-            wcPendingRequestsCount = it
-            updateSettingsBadge()
+        viewModelScope.launch {
+            wcSessionManager.pendingRequestCountFlow.collect {
+                wcPendingRequestsCount = it
+                updateSettingsBadge()
+            }
         }
 
-        rateAppManager.showRateAppFlow.collectWith(viewModelScope) {
-            showRateAppDialog = it
-            emitState()
+        viewModelScope.launch {
+            rateAppManager.showRateAppFlow.collect {
+                showRateAppDialog = it
+                emitState()
+            }
         }
 
         viewModelScope.launch {

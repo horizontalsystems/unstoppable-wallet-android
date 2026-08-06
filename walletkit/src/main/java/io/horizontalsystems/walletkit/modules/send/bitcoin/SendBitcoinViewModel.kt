@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.R
@@ -79,27 +78,41 @@ class SendBitcoinViewModel(
         private set
 
     init {
-        feeRateService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedFeeRateState(it)
+        viewModelScope.launch {
+            feeRateService.stateFlow.collect {
+                handleUpdatedFeeRateState(it)
+            }
         }
-        amountService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAmountState(it)
+        viewModelScope.launch {
+            amountService.stateFlow.collect {
+                handleUpdatedAmountState(it)
+            }
         }
-        addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+        viewModelScope.launch {
+            addressService.stateFlow.collect {
+                handleUpdatedAddressState(it)
+            }
         }
-        pluginService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedPluginState(it)
+        viewModelScope.launch {
+            pluginService.stateFlow.collect {
+                handleUpdatedPluginState(it)
+            }
         }
-        feeService.bitcoinFeeInfoFlow.collectWith(viewModelScope) {
-            handleUpdatedFeeInfo(it)
+        viewModelScope.launch {
+            feeService.bitcoinFeeInfoFlow.collect {
+                handleUpdatedFeeInfo(it)
+            }
         }
-        xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch {
+            xRateService.getRateFlow(wallet.coin.uid).collect {
+                coinRate = it
+            }
         }
-        localStorage.utxoExpertModeEnabledFlow.collectWith(viewModelScope) { enabled ->
-            utxoExpertModeEnabled = enabled
-            emitState()
+        viewModelScope.launch {
+            localStorage.utxoExpertModeEnabledFlow.collect { enabled ->
+                utxoExpertModeEnabled = enabled
+                emitState()
+            }
         }
 
         viewModelScope.launch {

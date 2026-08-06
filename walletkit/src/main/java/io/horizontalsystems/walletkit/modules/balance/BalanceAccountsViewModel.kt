@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
 import io.horizontalsystems.walletkit.entities.AccountType
+import kotlinx.coroutines.launch
 
 class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
@@ -16,9 +16,11 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
         private set
 
     init {
-        accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
-                handleAccount(it)
+        viewModelScope.launch {
+            accountManager.activeAccountStateFlow.collect {
+                    handleAccount(it)
             }
+        }
     }
 
     private fun handleAccount(activeAccountState: ActiveAccountState) {

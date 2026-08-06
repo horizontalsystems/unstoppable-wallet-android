@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.EvmError
@@ -67,17 +66,25 @@ class SendSolanaViewModel(
         get() = amountState.amount!!
 
     init {
-        amountService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAmountState(it)
+        viewModelScope.launch {
+            amountService.stateFlow.collect {
+                handleUpdatedAmountState(it)
+            }
         }
-        addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+        viewModelScope.launch {
+            addressService.stateFlow.collect {
+                handleUpdatedAddressState(it)
+            }
         }
-        xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch {
+            xRateService.getRateFlow(sendToken.coin.uid).collect {
+                coinRate = it
+            }
         }
-        xRateService.getRateFlow(feeToken.coin.uid).collectWith(viewModelScope) {
-            feeCoinRate = it
+        viewModelScope.launch {
+            xRateService.getRateFlow(feeToken.coin.uid).collect {
+                feeCoinRate = it
+            }
         }
 
         addressService.setAddress(address)

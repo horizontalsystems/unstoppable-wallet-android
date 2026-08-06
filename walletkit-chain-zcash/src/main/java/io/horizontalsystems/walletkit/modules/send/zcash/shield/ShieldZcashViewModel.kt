@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.HSCaution
@@ -42,8 +41,10 @@ class ShieldZcashViewModel(
         private set
 
     init {
-        xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch {
+            xRateService.getRateFlow(wallet.coin.uid).collect {
+                coinRate = it
+            }
         }
 
         viewModelScope.launch {

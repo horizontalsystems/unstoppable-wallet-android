@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.send.monero.utxoexpert
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
@@ -40,10 +39,12 @@ class MoneroUtxoExpertModeViewModel(
         initialCustomUnspentOutputs?.forEach {
             selectedUnspentOutputs = selectedUnspentOutputs + it.keyImage
         }
-        xRateService.getRateFlow(token.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
-            setUnspentOutputViewItems()
-            emitState()
+        viewModelScope.launch {
+            xRateService.getRateFlow(token.coin.uid).collect {
+                coinRate = it
+                setUnspentOutputViewItems()
+                emitState()
+            }
         }
         // the output list comes from JNI and must not be fetched on the main thread
         viewModelScope.launch(Dispatchers.IO) {

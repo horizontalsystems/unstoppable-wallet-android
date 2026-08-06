@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendEthereumAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -16,6 +15,7 @@ import io.horizontalsystems.walletkit.modules.send.SendUiState
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import kotlinx.coroutines.launch
 
 class SendEvmViewModel(
     val wallet: Wallet,
@@ -38,14 +38,20 @@ class SendEvmViewModel(
         private set
 
     init {
-        amountService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAmountState(it)
+        viewModelScope.launch {
+            amountService.stateFlow.collect {
+                handleUpdatedAmountState(it)
+            }
         }
-        addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+        viewModelScope.launch {
+            addressService.stateFlow.collect {
+                handleUpdatedAddressState(it)
+            }
         }
-        xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch {
+            xRateService.getRateFlow(sendToken.coin.uid).collect {
+                coinRate = it
+            }
         }
 
         addressService.setAddress(address)

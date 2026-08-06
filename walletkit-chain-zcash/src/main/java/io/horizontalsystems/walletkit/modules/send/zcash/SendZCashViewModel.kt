@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.collectWith
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.AppLogger
@@ -62,8 +61,10 @@ class SendZCashViewModel(
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
     init {
-        xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch {
+            xRateService.getRateFlow(wallet.coin.uid).collect {
+                coinRate = it
+            }
         }
         viewModelScope.launch {
             amountService.stateFlow.collect {
