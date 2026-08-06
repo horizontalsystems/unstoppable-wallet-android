@@ -28,6 +28,7 @@ import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.dapp.core.HSDAppProposal
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.dapp.core.HSDAppSession
+import io.horizontalsystems.dapp.core.HSDAppVerification
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -71,6 +72,7 @@ class WCSessionViewModel(
     private var closeDialog = false
     private var scamProtectionEnabled = paidActionSettingsManager.isActionEnabled(ScamProtection)
     private var scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
+    private var verification: HSDAppVerification = HSDAppVerification.Unknown
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
@@ -86,7 +88,8 @@ class WCSessionViewModel(
         whiteListState = whiteListState,
         hasSubscription = hasSubscription,
         scamProtectionActionAllowed = scamProtectionActionAllowed,
-        closeDialog = closeDialog
+        closeDialog = closeDialog,
+        verification = verification
     )
 
     private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
@@ -226,6 +229,7 @@ class WCSessionViewModel(
                 }
 
                 proposal = sessionProposal
+                verification = sessionProposal.verification
 
                 sessionServiceState = try {
                     wcManager.validate(sessionProposal.requiredNamespaces)

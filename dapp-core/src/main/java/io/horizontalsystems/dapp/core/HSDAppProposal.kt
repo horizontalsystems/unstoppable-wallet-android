@@ -8,4 +8,5 @@ data class HSDAppProposal(
     val icons: List<String>,
     val requiredNamespaces: Map<String, HSDAppNamespaceProposal>,
     val optionalNamespaces: Map<String, HSDAppNamespaceProposal>,
+    val verification: HSDAppVerification = HSDAppVerification.Unknown,
 )

@@ -713,6 +713,13 @@
     <string name="WalletConnect_DAppCheck">dApp Check</string>
     <string name="WalletConnect_DAppCheck_Secure">Secure</string>
     <string name="WalletConnect_DAppCheck_Risky">Risky</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">Impersonation Detected!</string>
+    <string name="WalletConnect_Verify_Mismatch">This request comes from %s, which does not match the site it claims to be. This is a common phishing technique.</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">This request comes from a different site than the one it claims to be. This is a common phishing technique.</string>
+    <string name="WalletConnect_Verify_Scam_Title">Known Scam!</string>
+    <string name="WalletConnect_Verify_Scam">This site is on a list of known malicious domains. Connecting is very likely to cost you funds.</string>
+    <string name="WalletConnect_Verify_Unknown_Title">Unverified Site</string>
+    <string name="WalletConnect_Verify_Unknown">The identity of this site could not be confirmed. Check the address carefully before connecting.</string>
 
 
     <!-- dApp Connection-->

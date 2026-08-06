@@ -16,6 +16,8 @@ import io.horizontalsystems.dapp.core.HSDAppPairing
 import io.horizontalsystems.dapp.core.HSDAppProposal
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.dapp.core.HSDAppSession
+import io.horizontalsystems.dapp.core.HSDAppValidation
+import io.horizontalsystems.dapp.core.HSDAppVerification
 
 class DAppServiceWalletConnect : DAppService, WalletKit.WalletDelegate, CoreClient.CoreDelegate {
 
@@ -221,14 +223,14 @@ class DAppServiceWalletConnect : DAppService, WalletKit.WalletDelegate, CoreClie
         sessionProposal: Wallet.Model.SessionProposal,
         verifyContext: Wallet.Model.VerifyContext
     ) {
-        callback?.onSessionProposal(sessionProposal.toHS())
+        callback?.onSessionProposal(sessionProposal.toHS(verifyContext.toHS()))
     }
 
     override fun onSessionRequest(
         sessionRequest: Wallet.Model.SessionRequest,
         verifyContext: Wallet.Model.VerifyContext
     ) {
-        callback?.onSessionRequest(sessionRequest.toHS())
+        callback?.onSessionRequest(sessionRequest.toHS(verifyContext.toHS()))
     }
 
     override fun onSessionSettleResponse(settleSessionResponse: Wallet.Model.SettledSessionResponse) {
@@ -292,16 +294,26 @@ class DAppServiceWalletConnect : DAppService, WalletKit.WalletDelegate, CoreClie
         events = events,
     )
 
-    private fun Wallet.Model.SessionRequest.toHS() = HSDAppRequest(
+    // Requests reach the UI through getPendingListOfSessionRequests(), not through the
+    // onSessionRequest callback, so the attestation is looked up by request id here rather than
+    // only being threaded down from the callback.
+    private fun Wallet.Model.SessionRequest.toHS(
+        verification: HSDAppVerification = verificationOf(request.id)
+    ) = HSDAppRequest(
         topic = topic,
         chainId = chainId,
         method = request.method,
         requestId = request.id,
         params = request.params,
         peerMetaData = peerMetaData?.toHS(),
+        verification = verification,
     )
 
-    private fun Wallet.Model.SessionProposal.toHS() = HSDAppProposal(
+    // Proposals carry no id to look the attestation up by, so it can only come from the
+    // onSessionProposal callback. Restored proposals stay Unknown, i.e. unverified.
+    private fun Wallet.Model.SessionProposal.toHS(
+        verification: HSDAppVerification = HSDAppVerification.Unknown
+    ) = HSDAppProposal(
         proposerPublicKey = proposerPublicKey,
         name = name,
         url = url,
@@ -309,6 +321,23 @@ class DAppServiceWalletConnect : DAppService, WalletKit.WalletDelegate, CoreClie
         icons = icons.map { it.toString() },
         requiredNamespaces = requiredNamespaces.mapValues { (_, ns) -> ns.toHS() },
         optionalNamespaces = optionalNamespaces.mapValues { (_, ns) -> ns.toHS() },
+        verification = verification,
+    )
+
+    private fun verificationOf(requestId: Long): HSDAppVerification = try {
+        WalletKit.getVerifyContext(requestId)?.toHS() ?: HSDAppVerification.Unknown
+    } catch (e: Exception) {
+        HSDAppVerification.Unknown
+    }
+
+    private fun Wallet.Model.VerifyContext.toHS() = HSDAppVerification(
+        validation = when (validation) {
+            Wallet.Model.Validation.VALID -> HSDAppValidation.Valid
+            Wallet.Model.Validation.INVALID -> HSDAppValidation.Invalid
+            Wallet.Model.Validation.UNKNOWN -> HSDAppValidation.Unknown
+        },
+        origin = origin.takeIf { it.isNotBlank() },
+        isScam = isScam == true,
     )
 
     // endregion

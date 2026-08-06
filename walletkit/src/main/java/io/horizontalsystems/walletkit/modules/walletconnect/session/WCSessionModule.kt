@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppVerification
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 
@@ -73,6 +74,7 @@ data class WCSessionUiState(
     val hasSubscription: Boolean,
     val scamProtectionActionAllowed: Boolean,
     val closeDialog: Boolean,
+    val verification: HSDAppVerification,
 )
 
 enum class Status(val value: Int) {

@@ -36,6 +36,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.dapp.core.HSDAppValidation
+import io.horizontalsystems.dapp.core.HSDAppVerification
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -164,6 +166,8 @@ fun WCSessionScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             VSpacer(16.dp)
+
+            VerificationAlert(uiState.verification)
 
             SectionHeader(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -376,3 +380,49 @@ fun IconsFromUrls(
     }
 }
 
+
+/**
+ * Shows the protocol's origin attestation for the dApp.
+ *
+ * The name and url above this are reported by the dApp about itself and can say anything, so this
+ * is the only part of the screen a phishing site cannot control. It is deliberately not gated
+ * behind the Scam Protection subscription: an impersonation signal is precisely what a user has no
+ * way to check by reading the screen.
+ */
+@Composable
+private fun VerificationAlert(verification: HSDAppVerification) {
+    val alert: Triple<AlertType, String, String>? = when {
+        verification.isScam -> Triple(
+            AlertType.Critical,
+            stringResource(R.string.WalletConnect_Verify_Scam_Title),
+            stringResource(R.string.WalletConnect_Verify_Scam)
+        )
+
+        verification.validation == HSDAppValidation.Invalid -> Triple(
+            AlertType.Critical,
+            stringResource(R.string.WalletConnect_Verify_Mismatch_Title),
+            verification.origin
+                ?.let { stringResource(R.string.WalletConnect_Verify_Mismatch, TextHelper.getCleanedUrl(it)) }
+                ?: stringResource(R.string.WalletConnect_Verify_Mismatch_NoOrigin)
+        )
+
+        verification.validation == HSDAppValidation.Unknown -> Triple(
+            AlertType.Caution,
+            stringResource(R.string.WalletConnect_Verify_Unknown_Title),
+            stringResource(R.string.WalletConnect_Verify_Unknown)
+        )
+
+        else -> null
+    }
+
+    val (type, title, text) = alert ?: return
+
+    AlertCard(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        format = AlertFormat.Structured,
+        type = type,
+        titleCustom = title,
+        text = text,
+    )
+    VSpacer(16.dp)
+}

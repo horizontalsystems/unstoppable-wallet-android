@@ -7,4 +7,5 @@ data class HSDAppRequest(
     val requestId: Long,
     val params: String,
     val peerMetaData: HSDAppAppMetaData?,
+    val verification: HSDAppVerification = HSDAppVerification.Unknown,
 )
