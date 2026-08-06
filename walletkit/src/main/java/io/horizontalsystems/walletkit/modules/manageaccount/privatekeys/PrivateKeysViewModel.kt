@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
-import io.horizontalsystems.walletkit.core.managers.toStellarWallet
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -16,7 +15,6 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.tronkit.network.Network
 import java.math.BigInteger
 import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
@@ -74,13 +72,6 @@ class PrivateKeysViewModel(
                 null
             }
 
-        val stellarSecretKey = try {
-            val stellarWallet = account.type.toStellarWallet()
-            StellarKit.getSecretSeed(stellarWallet)
-        } catch (e: Throwable) {
-            null
-        }
-
         val chainKeyRows = ChainRegistry.all.flatMap { it.privateKeyRows(account) }
 
         viewState = PrivateKeysModule.ViewState(
@@ -92,7 +83,6 @@ class PrivateKeysViewModel(
             accountExtendedPrivateKey = accountExtendedPrivateKey?.let {
                 PrivateKeysModule.ExtendedKey(it, accountExtendedDisplayType)
             },
-            stellarSecretKey = stellarSecretKey,
             chainKeyRows = chainKeyRows
         )
     }

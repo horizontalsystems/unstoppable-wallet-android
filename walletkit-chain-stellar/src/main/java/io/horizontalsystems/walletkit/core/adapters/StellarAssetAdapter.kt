@@ -97,5 +97,4 @@ class StellarAssetAdapter(
         stellarKit.validateEnablingAsset()
     }
 
-    data class NoTrustlineError(val code: String) : Error()
 }

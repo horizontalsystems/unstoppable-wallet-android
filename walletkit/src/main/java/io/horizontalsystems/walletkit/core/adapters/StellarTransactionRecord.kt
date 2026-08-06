@@ -6,12 +6,12 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.evm.TransferEv
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.stellarkit.room.Operation
+import java.math.BigDecimal
 
 class StellarTransactionRecord(
     baseToken: Token,
     source: TransactionSource,
-    val operation: Operation,
+    val operation: StellarOperationInfo,
     val type: Type,
     spam: Boolean,
 ) : TransactionRecord(
@@ -90,3 +90,12 @@ class StellarTransactionRecord(
             }
     }
 }
+/** Kit-free projection of the stellar-kit Operation fields the record needs. */
+data class StellarOperationInfo(
+    val id: Long,
+    val transactionHash: String,
+    val timestamp: Long,
+    val transactionSuccessful: Boolean,
+    val fee: BigDecimal?,
+    val memo: String?,
+)

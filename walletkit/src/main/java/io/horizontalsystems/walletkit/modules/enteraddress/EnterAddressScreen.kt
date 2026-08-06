@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
+import io.horizontalsystems.walletkit.core.adapters.NoTrustlineError
 import io.horizontalsystems.walletkit.core.address.AddressCheckResult
 import io.horizontalsystems.walletkit.core.address.AddressCheckType
 import io.horizontalsystems.walletkit.entities.Address
@@ -300,7 +300,7 @@ fun AddressCheck(
 // instead of a raw parser exception message
 @Composable
 private fun Throwable.getErrorMessage() = when (this) {
-    is StellarAssetAdapter.NoTrustlineError -> {
+    is NoTrustlineError -> {
         stringResource(R.string.Swap_RecipientAddress_NoTrustline, code)
     }
 

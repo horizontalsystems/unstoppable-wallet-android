@@ -4,7 +4,6 @@ import android.util.Log
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.walletkit.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.walletkit.entities.ScannedTransaction
@@ -34,7 +33,6 @@ class SpamManager(
     // Transaction event extractors for each blockchain
     val evmExtractor = EvmTransactionEventExtractor()
     val tronExtractor = TronTransactionEventExtractor()
-    val stellarExtractor = StellarTransactionEventExtractor()
 
 
     // Cache for trusted addresses from contacts (blockchainType:address -> true)
@@ -100,7 +98,7 @@ class SpamManager(
         source: TransactionSource,
         timestamp: Long,
         blockHeight: Int?,
-        stellarOperationId: Long? = null
+        operationId: Long? = null
     ): Boolean {
         // Check database first for stored result
         scannedTransactionStorage.getScannedTransaction(transactionHash)?.let {
@@ -143,7 +141,7 @@ class SpamManager(
 
         // Phase 2: Score is in gray zone (1-6), need correlation check
         // Only now do we fetch outgoing context (expensive DB queries)
-        val outgoingContext = getOutgoingContext(source, transactionHash, stellarOperationId)
+        val outgoingContext = getOutgoingContext(source, transactionHash, operationId)
         val correlationResult = poisoningScorer.calculateCorrelationScore(
             events = events,
             incomingTimestamp = timestamp,
@@ -166,7 +164,7 @@ class SpamManager(
     private suspend fun getOutgoingContext(
         source: TransactionSource,
         transactionHash: ByteArray,
-        stellarOperationId: Long?,
+        operationId: Long?,
     ): List<PoisoningScorer.OutgoingTxInfo> {
         val adapter = transactionAdapterManager.adaptersMap[source] ?: return emptyList()
 
@@ -184,11 +182,8 @@ class SpamManager(
                         .sortedByDescending { it.transaction.timestamp }
                         .mapNotNull { tronExtractor.extractOutgoingInfo(it, userAddress) }
                 }
-                is StellarTransactionsAdapter -> {
-                    val selfAddress = adapter.stellarKitWrapper.stellarKit.receiveAddress
-                    adapter.getStellarOperationsBefore(stellarOperationId, OUTGOING_CONTEXT_SIZE)
-                        .sortedByDescending { it.timestamp }
-                        .mapNotNull { stellarExtractor.extractOutgoingInfo(it, selfAddress) }
+                is ISpamOutgoingContextSource -> {
+                    adapter.getOutgoingContext(operationId, OUTGOING_CONTEXT_SIZE)
                 }
                 else -> emptyList()
             }
@@ -227,4 +222,11 @@ class SpamManager(
         }
     }
 
+}
+/**
+ * Transactions adapters whose chain module supplies outgoing-transfer context for
+ * address-poisoning correlation without leaking kit types into the core interface.
+ */
+interface ISpamOutgoingContextSource {
+    suspend fun getOutgoingContext(operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo>
 }

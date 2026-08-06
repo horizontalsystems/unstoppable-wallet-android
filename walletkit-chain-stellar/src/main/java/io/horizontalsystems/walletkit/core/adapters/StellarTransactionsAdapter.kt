@@ -2,6 +2,9 @@ package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
+import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
+import io.horizontalsystems.walletkit.core.managers.StellarTransactionEventExtractor
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionsAdapter.NotSupportedException
 import io.horizontalsystems.walletkit.core.factories.StellarTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
@@ -28,7 +31,8 @@ import kotlinx.coroutines.rx2.asFlowable
 class StellarTransactionsAdapter(
     val stellarKitWrapper: StellarKitWrapper,
     private val transactionConverter: StellarTransactionConverter,
-) : ITransactionsAdapter {
+) : ITransactionsAdapter, ISpamOutgoingContextSource {
+    private val spamContextExtractor = StellarTransactionEventExtractor()
     private val stellarKit = stellarKitWrapper.stellarKit
 
     override val explorerTitle = "Stellar Expert"
@@ -118,10 +122,10 @@ class StellarTransactionsAdapter(
         return "https://stellar.expert/explorer/public/tx/${transactionHash}"
     }
 
-    override suspend fun getStellarOperationsBefore(
-        fromId: Long?,
-        limit: Int
-    ): List<io.horizontalsystems.stellarkit.room.Operation> {
-        return stellarKit.operationsBefore(TagQuery(null, null, null), fromId = fromId, limit = limit)
+    override suspend fun getOutgoingContext(operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo> {
+        val selfAddress = stellarKit.receiveAddress
+        return stellarKit.operationsBefore(TagQuery(null, null, null), fromId = operationId, limit = limit)
+            .sortedByDescending { it.timestamp }
+            .mapNotNull { spamContextExtractor.extractOutgoingInfo(it, selfAddress) }
     }
 }

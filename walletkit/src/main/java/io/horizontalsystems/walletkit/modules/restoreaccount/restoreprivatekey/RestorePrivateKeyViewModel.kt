@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.hexToByteArray
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -15,7 +16,6 @@ import io.horizontalsystems.walletkit.modules.restoreaccount.restoreprivatekey.R
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NonPrivateKey
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NotSupportedDerivedType
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
 class RestorePrivateKeyViewModel(
@@ -71,8 +71,9 @@ class RestorePrivateKeyViewModel(
             )
         }
 
-        if (StellarKit.isValidSecretKey(textCleaned)) {
-            return listOf(AccountType.StellarSecretKey(textCleaned))
+        val chainAccountTypes = ChainRegistry.all.flatMap { it.privateKeyAccountTypes(textCleaned) }
+        if (chainAccountTypes.isNotEmpty()) {
+            return chainAccountTypes
         }
 
         try {

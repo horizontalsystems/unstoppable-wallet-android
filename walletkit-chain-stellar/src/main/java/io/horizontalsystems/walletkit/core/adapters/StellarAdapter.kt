@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
+import io.horizontalsystems.walletkit.core.StellarAssetBalance
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toAdapterState
@@ -29,7 +30,7 @@ class StellarAdapter(
         get() = BalanceData(
             availableBalance,
             minimumBalance = minimumBalance,
-            stellarAssets = assets
+            stellarAssets = assets.map { StellarAssetBalance(it.code) }
         )
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()

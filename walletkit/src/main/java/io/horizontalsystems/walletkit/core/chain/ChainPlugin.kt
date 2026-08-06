@@ -16,7 +16,9 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
@@ -110,7 +112,7 @@ interface ChainPlugin {
     fun statusInfo(): Map<String, Any>? = null
 
     /** Refreshes the chain's kit on user-initiated refresh, if one is running. */
-    fun refreshKit() = Unit
+    suspend fun refreshKit() = Unit
 
     /** The chain's network/node settings page, opened from sync errors and settings. */
     fun networkSettingsPage(): HSPage? = null
@@ -179,6 +181,15 @@ interface ChainPlugin {
 
     /** Rows contributed to the manage-account public keys screen. */
     fun publicKeyRows(account: Account): List<ChainKeyRow> = emptyList()
+
+    /** WalletConnect handlers to register at app start. */
+    fun wcHandlers(): List<IWCHandler> = emptyList()
+
+    /** Swap providers contributed to the multiswap registry. */
+    fun swapProviders(): List<IMultiSwapProvider> = emptyList()
+
+    /** Account types restorable from a pasted private key. */
+    fun privateKeyAccountTypes(privateKey: String): List<AccountType> = emptyList()
 
     /** Send-transaction service used by multiswap/OpenCryptoPay confirm flows. */
     fun sendTransactionService(token: Token): AbstractSendTransactionService? = null

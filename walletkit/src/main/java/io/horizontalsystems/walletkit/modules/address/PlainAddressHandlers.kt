@@ -66,7 +66,6 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
 
         BlockchainType.Tron -> listOf(AddressHandlerTron())
         BlockchainType.Ton -> listOf(AddressHandlerTon())
-        BlockchainType.Stellar -> listOf(AddressHandlerStellar())
         BlockchainType.Thorchain -> listOf(AddressHandlerThorchain(ThorchainNetwork.Mainnet, BlockchainType.Thorchain))
         BlockchainType.Mayachain -> listOf(AddressHandlerThorchain(ThorchainNetwork.MayaMainnet, BlockchainType.Mayachain))
 

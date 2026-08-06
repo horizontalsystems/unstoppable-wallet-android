@@ -243,6 +243,7 @@ dependencies {
     implementation(project(":walletkit-chain-monero"))
     implementation(project(":walletkit-chain-zcash"))
     implementation(project(":walletkit-chain-solana"))
+   implementation(project(":walletkit-chain-stellar"))
     implementation(libs.androidx.splashscreen) // MainActivity installs the splash screen
     debugImplementation(libs.leakcanary)
 

@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
-import io.horizontalsystems.walletkit.modules.send.SendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.SendScreen
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -159,9 +158,6 @@ private fun openConfirm(
     sendEntryPointDestId: KClass<out HSPage>
 ) {
     navigation.slideFromRight(
-        SendConfirmationPage(SendConfirmationPage.Input(
-            SendConfirmationPage.Type.Stellar,
-            sendEntryPointDestId
-        ))
+        SendStellarConfirmationPage(sendEntryPointDestId)
     )
 }

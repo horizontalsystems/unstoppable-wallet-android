@@ -69,9 +69,6 @@ class TransactionAdapterManager(
                     BlockchainType.Ton -> {
                         adapterFactory.tonTransactionsAdapter(wallet.transactionSource)
                     }
-                    BlockchainType.Stellar -> {
-                        adapterFactory.stellarTransactionsAdapter(wallet.transactionSource)
-                    }
                     BlockchainType.Thorchain,
                     BlockchainType.Mayachain -> {
                         adapterFactory.thorchainTransactionsAdapter(wallet.transactionSource, blockchainType)

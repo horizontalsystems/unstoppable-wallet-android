@@ -56,8 +56,6 @@ import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
 import io.horizontalsystems.walletkit.core.managers.ReleaseNotesManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
-import io.horizontalsystems.walletkit.core.managers.StellarAccountManager
-import io.horizontalsystems.walletkit.core.managers.StellarKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainAccountManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
@@ -119,7 +117,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCWalletRequestHandler
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.WCHandlerEvm
-import io.horizontalsystems.walletkit.modules.walletconnect.stellar.WCHandlerStellar
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.walletkit.security.EncryptionManager
 import io.horizontalsystems.walletkit.security.KeyStoreManager
@@ -180,7 +177,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var tronKitManager: TronKitManager
         lateinit var tonKitManager: TonKitManager
-        lateinit var stellarKitManager: StellarKitManager
         lateinit var thorchainKitManager: ThorchainKitManager
         lateinit var mayachainKitManager: ThorchainKitManager
         lateinit var numberFormatter: IAppNumberFormatter
@@ -328,7 +324,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
-        stellarKitManager = StellarKitManager(backgroundManager)
         thorchainRpcSourceManager = ThorchainRpcSourceManager(blockchainSettingsStorage, marketKit, BlockchainType.Thorchain, ThorchainRpcSourceManager.thorchainSources)
         thorchainKitManager = ThorchainKitManager(backgroundManager, thorchainRpcSourceManager, ThorchainNetwork.Mainnet)
         mayachainRpcSourceManager = ThorchainRpcSourceManager(blockchainSettingsStorage, marketKit, BlockchainType.Mayachain, ThorchainRpcSourceManager.mayachainSources)
@@ -386,8 +381,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val tonAccountManager = TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
         tonAccountManager.start()
 
-        val stellarAccountManager = StellarAccountManager(accountManager, walletManager, stellarKitManager, tokenAutoEnableManager)
-        stellarAccountManager.start()
 
         val thorchainAccountManager = ThorchainAccountManager(accountManager, walletManager, thorchainKitManager, marketKit, tokenAutoEnableManager, BlockchainType.Thorchain)
         thorchainAccountManager.start()
@@ -417,7 +410,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmSyncSourceManager = evmSyncSourceManager,
             tronKitManager = tronKitManager,
             tonKitManager = tonKitManager,
-            stellarKitManager = stellarKitManager,
             thorchainKitManager = thorchainKitManager,
             mayachainKitManager = mayachainKitManager,
             backgroundManager = backgroundManager,
@@ -432,7 +424,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmBlockchainManager,
             tronKitManager,
             tonKitManager,
-            stellarKitManager,
             thorchainKitManager,
             mayachainKitManager,
         )
@@ -456,7 +447,9 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         wcManager = WCManager(accountManager)
         wcManager.addWcHandler(WCHandlerEvm(evmBlockchainManager))
-        wcManager.addWcHandler(WCHandlerStellar(stellarKitManager))
+        ChainRegistry.all.forEach { plugin ->
+            plugin.wcHandlers().forEach(wcManager::addWcHandler)
+        }
         wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)

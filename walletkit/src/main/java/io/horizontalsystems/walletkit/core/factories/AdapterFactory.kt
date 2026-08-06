@@ -16,9 +16,6 @@ import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.JettonAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.StellarAdapter
-import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
-import io.horizontalsystems.walletkit.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainTransactionsAdapter
@@ -34,7 +31,6 @@ import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
-import io.horizontalsystems.walletkit.core.managers.StellarKitManager
 import io.horizontalsystems.walletkit.core.managers.ThorchainKitManager
 import io.horizontalsystems.walletkit.core.managers.TonKitManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
@@ -53,7 +49,6 @@ class AdapterFactory(
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
-    private val stellarKitManager: StellarKitManager,
     private val thorchainKitManager: ThorchainKitManager,
     private val mayachainKitManager: ThorchainKitManager,
     private val backgroundManager: BackgroundManager,
@@ -92,12 +87,6 @@ class AdapterFactory(
         val tonKitWrapper = tonKitManager.getTonKitWrapper(wallet.account)
 
         return JettonAdapter(tonKitWrapper, address, wallet)
-    }
-
-    private fun getStellarAssetAdapter(wallet: Wallet, code: String, issuer: String): IAdapter {
-        val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(wallet.account)
-
-        return StellarAssetAdapter(stellarKitWrapper, code, issuer)
     }
 
     fun getAdapterOrNull(wallet: Wallet) = try {
@@ -156,9 +145,6 @@ class AdapterFactory(
             BlockchainType.Ton -> {
                 TonAdapter(tonKitManager.getTonKitWrapper(wallet.account))
             }
-            BlockchainType.Stellar -> {
-                StellarAdapter(stellarKitManager.getStellarKitWrapper(wallet.account))
-            }
             BlockchainType.Thorchain,
             BlockchainType.Mayachain -> {
                 ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
@@ -174,7 +160,7 @@ class AdapterFactory(
         }
         is TokenType.Spl -> registryAdapter(wallet)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
-        is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
+        is TokenType.Asset -> registryAdapter(wallet)
         is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
             BlockchainType.Thorchain,
             BlockchainType.Mayachain -> ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
@@ -213,22 +199,6 @@ class AdapterFactory(
         val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
 
         return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
-    }
-
-    fun stellarTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
-        val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(source.account)
-
-        val tokenQuery = TokenQuery(BlockchainType.Stellar, TokenType.Native)
-        val baseToken = coinManager.getToken(tokenQuery) ?: return null
-
-        val transactionConverter = StellarTransactionConverter(
-            source,
-            stellarKitWrapper.stellarKit.receiveAddress,
-            coinManager,
-            baseToken
-        )
-
-        return StellarTransactionsAdapter(stellarKitWrapper, transactionConverter)
     }
 
     // THORChain (RUNE) and Maya (CACAO) share the ThorchainKit; pick the right per-chain manager.
@@ -287,9 +257,6 @@ class AdapterFactory(
             BlockchainType.Ton -> {
                 tonKitManager.unlink(wallet.account)
             }
-            BlockchainType.Stellar -> {
-                stellarKitManager.unlink(wallet.account)
-            }
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(wallet.account)
             }
@@ -324,7 +291,7 @@ class AdapterFactory(
                 tonKitManager.unlink(transactionSource.account)
             }
             BlockchainType.Stellar -> {
-                stellarKitManager.unlink(transactionSource.account)
+                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             BlockchainType.Thorchain -> {
                 thorchainKitManager.unlink(transactionSource.account)

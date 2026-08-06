@@ -50,7 +50,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
@@ -310,11 +309,6 @@ interface ITransactionsAdapter {
         limit: Int
     ): List<io.horizontalsystems.tronkit.models.FullTransaction> = emptyList()
 
-    suspend fun getStellarOperationsBefore(
-        fromId: Long?,
-        limit: Int
-    ): List<io.horizontalsystems.stellarkit.room.Operation> = emptyList()
-
     fun getRawTransaction(transactionHash: String): String? = null
 
     fun getTransactionRecordsFlow(
@@ -336,13 +330,15 @@ interface IBalanceAdapter {
     val balanceUpdatedFlowable: Flowable<Unit>
 }
 
+data class StellarAssetBalance(val code: String)
+
 data class BalanceData(
     val available: BigDecimal,
     val timeLocked: BigDecimal = BigDecimal.ZERO,
     val notRelayed: BigDecimal = BigDecimal.ZERO,
     val pending: BigDecimal = BigDecimal.ZERO,
     val minimumBalance: BigDecimal = BigDecimal.ZERO,
-    val stellarAssets: List<StellarAsset.Asset> = listOf(),
+    val stellarAssets: List<StellarAssetBalance> = listOf(),
     val unshielded: BigDecimal = BigDecimal.ZERO
 ) {
     val total: BigDecimal

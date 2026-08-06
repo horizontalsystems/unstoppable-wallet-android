@@ -36,13 +36,6 @@ data class ReceivePage(val input: Input) : HSPage() {
         val wallet = input.wallet
         val token = wallet.token
         when (token.blockchainType) {
-            BlockchainType.Stellar -> {
-                if (token.type is TokenType.Asset) {
-                    ReceiveStellarAssetScreen(navigation, wallet, input.receiveEntryPointDestId)
-                } else if (token.type == TokenType.Native) {
-                    ReceiveScreen(navigation, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
-                }
-            }
 
 //        BlockchainType.ArbitrumOne -> TODO()
 //        BlockchainType.Avalanche -> TODO()

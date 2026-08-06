@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object MultiSwapProviderRegistry {
@@ -36,14 +37,7 @@ object MultiSwapProviderRegistry {
             UProvider.AxelarIts,
             shouldIncludeSourceAddress = { it.blockchainType.isEvm || it.blockchainType == BlockchainType.Stellar },
         ),
-        // Stellar-only pairs through uswap-server's Stellar venues (SOROSWAP/AQUARIUS/
-        // STELLAR_DEX behind the single StellarBroker card) — not a USwapProvider because
-        // it waterfalls across several server provider ids per quote. StellarBroker is
-        // only the card's name: as a VENUE it stays disabled pending fee terms via
-        // StellarSwapProvider.stellarBrokerEnabled, so registering the card does not
-        // expose SB routes.
-        StellarSwapProvider(),
-    )
+    ) + ChainRegistry.all.flatMap { it.swapProviders() }
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
         allProviders.associateBy { it.id }

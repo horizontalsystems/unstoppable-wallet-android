@@ -671,7 +671,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ECash,
         BlockchainType.Tron,
         BlockchainType.Ton,
-        BlockchainType.Stellar,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
     ) + ChainRegistry.all.map { it.blockchainType }

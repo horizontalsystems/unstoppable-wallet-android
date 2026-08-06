@@ -1,6 +1,8 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
+import io.horizontalsystems.walletkit.chain.stellar.StellarChainPlugin
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
@@ -221,7 +223,7 @@ class StellarSwapProvider : IMultiSwapProvider {
         val established = try {
             App.adapterManager.getAdapterForToken<StellarAssetAdapter>(tokenOut)?.isTrustlineEstablished()
                 ?: withContext(Dispatchers.IO) {
-                    App.stellarKitManager.getStellarKitWrapper(account).stellarKit
+                    (ChainRegistry[BlockchainType.Stellar] as StellarChainPlugin).kitManager.getStellarKitWrapper(account).stellarKit
                         .isAssetEnabled(StellarAsset.Asset(tokenType.code, tokenType.issuer))
                 }
         } catch (e: CancellationException) {

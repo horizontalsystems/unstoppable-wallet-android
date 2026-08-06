@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,the-open-network,stellar,thorchain,mayachain,monero,zano,zcash,solana
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,the-open-network,thorchain,mayachain,monero,zano,zcash,solana,stellar
 
 chain bitcoin
   title=Bitcoin
@@ -357,27 +357,6 @@ chain the-open-network
   protocolType[Eip20]=Ton
   supports=Mnemonic,TonAddress
 
-chain stellar
-  title=Stellar
-  description=XLM, Stellar assets
-  order=12
-  isEvm=false
-  blockTime=5
-  uriScheme=stellar
-  removeScheme=true
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=stellar_asset
-  restoreSettingTypes=
-  nativeTokenQueries=stellar|native
-  defaultTokenQuery=stellar|native
-  supportedNftTypes=
-  supportedTokenTypes=Native,Asset
-  protocolType[Native]=Stellar
-  protocolType[Eip20]=Stellar
-  supports=Mnemonic,StellarAddress,StellarSecretKey
-
 chain thorchain
   title=THORChain
   description=RUNE, THORChain assets
@@ -503,4 +482,25 @@ chain solana
   protocolType[Native]=Solana
   protocolType[Eip20]=Solana
   supports=Mnemonic,SolanaAddress
+
+chain stellar
+  title=Stellar
+  description=XLM, Stellar assets
+  order=12
+  isEvm=false
+  blockTime=5
+  uriScheme=stellar
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=stellar_asset
+  restoreSettingTypes=
+  nativeTokenQueries=stellar|native
+  defaultTokenQuery=stellar|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,Asset
+  protocolType[Native]=Stellar
+  protocolType[Eip20]=Stellar
+  supports=Mnemonic,StellarAddress,StellarSecretKey
 

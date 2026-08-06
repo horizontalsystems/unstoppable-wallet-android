@@ -91,7 +91,7 @@ class SolanaChainPlugin(
 
     override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 
-    override fun refreshKit() {
+    override suspend fun refreshKit() {
         kitManager.solanaKitWrapper?.solanaKit?.refresh()
     }
 

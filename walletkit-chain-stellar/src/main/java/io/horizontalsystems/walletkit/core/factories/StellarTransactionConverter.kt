@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.factories
 
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ICoinManager
+import io.horizontalsystems.walletkit.core.adapters.StellarOperationInfo
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord.Type
 import io.horizontalsystems.walletkit.core.tokenIconPlaceholder
@@ -205,7 +206,7 @@ class StellarTransactionConverter(
             false
         }
 
-        return StellarTransactionRecord(baseToken, source, operation, type, spam)
+        return StellarTransactionRecord(baseToken, source, operation.essentials(), type, spam)
     }
 
     private fun transactionValue(asset: StellarAsset, amount: java.math.BigDecimal): TransactionValue {
@@ -238,3 +239,12 @@ class StellarTransactionConverter(
 
 
 }
+
+private fun Operation.essentials() = StellarOperationInfo(
+    id = id,
+    transactionHash = transactionHash,
+    timestamp = timestamp,
+    transactionSuccessful = transactionSuccessful,
+    fee = fee,
+    memo = memo,
+)

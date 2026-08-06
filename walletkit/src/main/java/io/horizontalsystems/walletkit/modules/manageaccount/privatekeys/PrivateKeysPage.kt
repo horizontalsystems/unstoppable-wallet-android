@@ -17,7 +17,6 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccount.evmprivatekey.PrivateKeyPage
 import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyPage
-import io.horizontalsystems.walletkit.modules.manageaccount.stellarsecretkey.StellarSecretKeyPage
 import io.horizontalsystems.walletkit.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -75,22 +74,6 @@ fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
                         stat(
                             page = StatPage.PrivateKeys,
                             event = StatEvent.Open(StatPage.TronPrivateKey)
-                        )
-                    }
-                )
-            }
-            viewModel.viewState.stellarSecretKey?.let { key ->
-                KeyActionItem(
-                    title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
-                    description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription),
-                    onClick = navigation.authorizedAction {
-                        navigation.slideFromRight(
-                            StellarSecretKeyPage(StellarSecretKeyPage.Input(key))
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.StellarSecretKey)
                         )
                     }
                 )
