@@ -1804,4 +1804,11 @@
     <string name="Swap_RecipientAddress_EnterAddress">Ingrese la dirección de %s</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">El proveedor seleccionado solo puede entregar a una dirección de Zcash transparente (t-)</string>
     <string name="Swap_RecipientAddress_NoTrustline">La dirección del destinatario no tiene línea de confianza %s y no puede recibirla</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">¡Suplantación detectada!</string>
+    <string name="WalletConnect_Verify_Mismatch">Esta solicitud proviene de %s, que no coincide con el sitio que pretende ser. Esta es una técnica de phishing común.</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">Esta solicitud proviene de un sitio diferente al que pretende ser. Esta es una técnica de phishing común.</string>
+    <string name="WalletConnect_Verify_Scam_Title">¡Estafa conocida!</string>
+    <string name="WalletConnect_Verify_Scam">Este sitio está en una lista de dominios maliciosos conocidos. Conectarse muy probablemente le costará fondos.</string>
+    <string name="WalletConnect_Verify_Unknown_Title">Sitio no verificado</string>
+    <string name="WalletConnect_Verify_Unknown">No se pudo confirmar la identidad de este sitio. Verifique cuidadosamente la dirección antes de conectarse.</string>
 </resources>

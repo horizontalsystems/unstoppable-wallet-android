@@ -1805,4 +1805,11 @@
     <string name="Swap_RecipientAddress_EnterAddress">%s 주소 입력</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">선택한 제공자는 투명한(t-) Zcash 주소로만 전송할 수 있습니다</string>
     <string name="Swap_RecipientAddress_NoTrustline">수취인 주소에 %s 신뢰선이 없어 이를 수취할 수 없습니다</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">사칭 감지됨!</string>
+    <string name="WalletConnect_Verify_Mismatch">이 요청은 %s에서 오며, 이는 주장하는 사이트와 일치하지 않습니다. 이것은 일반적인 피싱 기법입니다.</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">이 요청은 주장하는 사이트와 다른 사이트에서 옵니다. 이것은 일반적인 피싱 기법입니다.</string>
+    <string name="WalletConnect_Verify_Scam_Title">알려진 사기!</string>
+    <string name="WalletConnect_Verify_Scam">이 사이트는 알려진 악의적인 도메인 목록에 있습니다. 연결하면 자금이 손실될 가능성이 매우 높습니다.</string>
+    <string name="WalletConnect_Verify_Unknown_Title">확인되지 않은 사이트</string>
+    <string name="WalletConnect_Verify_Unknown">이 사이트의 신원을 확인할 수 없습니다. 연결하기 전에 주소를 신중하게 확인하세요.</string>
 </resources>

@@ -1805,4 +1805,11 @@
     <string name="Swap_RecipientAddress_EnterAddress">%s Adresini Girin</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">Seçilen sağlayıcı yalnızca şeffaf (t-) Zcash adresine teslim edebilir</string>
     <string name="Swap_RecipientAddress_NoTrustline">Alıcı adresi %s güven satırına sahip değil ve bunu alamaz</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">Kimlik Avı Tespit Edildi!</string>
+    <string name="WalletConnect_Verify_Mismatch">Bu istek %s\'den gelir ve iddia ettiği siteyle eşleşmez. Bu yaygın bir kimlik avı tekniğidir.</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">Bu istek, iddia ettiği siteden farklı bir siteden gelir. Bu yaygın bir kimlik avı tekniğidir.</string>
+    <string name="WalletConnect_Verify_Scam_Title">Bilinen Dolandırıcılık!</string>
+    <string name="WalletConnect_Verify_Scam">Bu site, bilinen kötü amaçlı alan adlarının listesinde yer almaktadır. Bağlanmak size para kaybettirecek olasılığı çok yüksektir.</string>
+    <string name="WalletConnect_Verify_Unknown_Title">Doğrulanmamış Site</string>
+    <string name="WalletConnect_Verify_Unknown">Bu sitenin kimliği doğrulanamadı. Bağlanmadan önce adresi dikkatlice kontrol edin.</string>
 </resources>

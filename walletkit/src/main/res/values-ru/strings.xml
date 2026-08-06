@@ -1811,4 +1811,11 @@
     <string name="Swap_RecipientAddress_EnterAddress">Введите адрес %s</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">Выбранный поставщик может доставить только на прозрачный (t-) адрес Zcash</string>
     <string name="Swap_RecipientAddress_NoTrustline">Адрес получателя не имеет доверительной линии %s и не может его получить</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">Обнаружена подделка!</string>
+    <string name="WalletConnect_Verify_Mismatch">Этот запрос поступает с %s, что не соответствует сайту, выдающему себя за него. Это распространённая техника фишинга.</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">Этот запрос поступает с сайта, отличного от того, за который он выдаёт себя. Это распространённая техника фишинга.</string>
+    <string name="WalletConnect_Verify_Scam_Title">Известная афера!</string>
+    <string name="WalletConnect_Verify_Scam">Этот сайт находится в списке известных вредоносных доменов. Подключение очень вероятно обойдётся вам в деньги.</string>
+    <string name="WalletConnect_Verify_Unknown_Title">Неверифицированный сайт</string>
+    <string name="WalletConnect_Verify_Unknown">Не удалось подтвердить личность этого сайта. Тщательно проверьте адрес перед подключением.</string>
 </resources>

@@ -1804,4 +1804,11 @@
     <string name="Swap_RecipientAddress_EnterAddress">输入%s地址</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">选定的提供商只能交付到透明(t-)Zcash地址</string>
     <string name="Swap_RecipientAddress_NoTrustline">收款人地址没有 %s 信任额度，无法接收</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">检测到冒充!</string>
+    <string name="WalletConnect_Verify_Mismatch">此请求来自%s，与其声称的网站不匹配。这是一种常见的网络钓鱼手段。</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">此请求来自与其声称的网站不同的网站。这是一种常见的网络钓鱼手段。</string>
+    <string name="WalletConnect_Verify_Scam_Title">已知诈骗!</string>
+    <string name="WalletConnect_Verify_Scam">该网站位于已知恶意域名列表中。连接很可能会导致资金损失。</string>
+    <string name="WalletConnect_Verify_Unknown_Title">未验证的网站</string>
+    <string name="WalletConnect_Verify_Unknown">无法确认该网站的身份。连接前请仔细检查地址。</string>
 </resources>

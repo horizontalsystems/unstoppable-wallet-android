@@ -737,4 +737,11 @@
     <string name="Swap_RecipientAddress_EnterAddress">آدرس %s را وارد کنید</string>
     <string name="Swap_RecipientAddress_TransparentZcashRequired">ارائه دهنده انتخاب شده فقط می تواند به آدرس شفاف Zcash (t-) تحویل دهد</string>
     <string name="Swap_RecipientAddress_NoTrustline">آدرس گیرنده خط اعتماد %s ندارد و نمی‌تواند آن را دریافت کند</string>
+    <string name="WalletConnect_Verify_Mismatch_Title">جعل‌سازی تشخیص داده شد!</string>
+    <string name="WalletConnect_Verify_Mismatch">این درخواست از %s می‌آید که با سایتی که ادعا می‌کند منطبق نیست. این یک تکنیک فیشینگ رایج است.</string>
+    <string name="WalletConnect_Verify_Mismatch_NoOrigin">این درخواست از سایتی متفاوت می‌آید تا سایتی که ادعا می‌کند. این یک تکنیک فیشینگ رایج است.</string>
+    <string name="WalletConnect_Verify_Scam_Title">کلاهبرداری شناخته شده!</string>
+    <string name="WalletConnect_Verify_Scam">این سایت در فهرست دامنه‌های مخرب شناخته شدگی است. اتصال بسیار احتمال دارد که هزینه‌ای برای شما داشته باشد.</string>
+    <string name="WalletConnect_Verify_Unknown_Title">سایت تایید نشده</string>
+    <string name="WalletConnect_Verify_Unknown">هویت این سایت نتوانست تایید شود. آدرس را به دقت بررسی کنید قبل از اتصال.</string>
 </resources>
