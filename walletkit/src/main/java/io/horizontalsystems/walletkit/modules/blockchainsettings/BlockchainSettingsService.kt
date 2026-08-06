@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -69,7 +70,9 @@ class BlockchainSettingsService(
                         .collect {
                             try {
                                 syncBlockchainItems()
-                            } catch (e: Throwable) {
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
                                 Timber.e(e, "Syncing blockchain settings items failed")
                             }
                         }

@@ -44,9 +44,11 @@ class SolanaKitManager(
         get() = solanaKitWrapper?.solanaKit?.statusInfo()
 
     private fun handleUpdateNetwork() {
-        stopKit()
-
-        _kitStoppedFlow.tryEmit(Unit)
+        try {
+            stopKit()
+        } finally {
+            _kitStoppedFlow.tryEmit(Unit)
+        }
     }
 
     @Synchronized
@@ -124,12 +126,15 @@ class SolanaKitManager(
     }
 
     private fun stopKit() {
-        solanaKitWrapper?.solanaKit?.stop()
-        solanaKitWrapper = null
-        currentAccount = null
-        tokenAccountJob?.cancel()
-        backgroundEventListenerJob?.cancel()
-        rpcUpdatedJob?.cancel()
+        try {
+            solanaKitWrapper?.solanaKit?.stop()
+        } finally {
+            solanaKitWrapper = null
+            currentAccount = null
+            tokenAccountJob?.cancel()
+            backgroundEventListenerJob?.cancel()
+            rpcUpdatedJob?.cancel()
+        }
     }
 
     private fun startKit() {
@@ -169,7 +174,7 @@ class SolanaKitManager(
                     handleUpdateNetwork()
                 } catch (e: CancellationException) {
                     throw e
-                } catch (e: Throwable) {
+                } catch (e: Exception) {
                     Timber.e(e, "Restarting SolanaKit for new RPC source failed")
                 }
             }
