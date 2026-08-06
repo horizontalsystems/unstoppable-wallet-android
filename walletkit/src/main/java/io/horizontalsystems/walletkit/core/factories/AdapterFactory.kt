@@ -42,7 +42,6 @@ class AdapterFactory(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val tronKitManager: TronKitManager,
-    private val thorchainKitManager: ThorchainKitManager,
     private val mayachainKitManager: ThorchainKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
@@ -129,9 +128,8 @@ class AdapterFactory(
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
             }
-            BlockchainType.Thorchain,
             BlockchainType.Mayachain -> {
-                ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
+                ThorchainAdapter(mayachainKitManager.getThorchainKitWrapper(wallet.account), wallet)
             }
             else -> registryAdapter(wallet)
         }
@@ -146,9 +144,8 @@ class AdapterFactory(
         is TokenType.Jetton -> registryAdapter(wallet)
         is TokenType.Asset -> registryAdapter(wallet)
         is TokenType.ThorchainAsset -> when (wallet.token.blockchainType) {
-            BlockchainType.Thorchain,
-            BlockchainType.Mayachain -> ThorchainAdapter(thorchainFamilyKitManager(wallet.token.blockchainType).getThorchainKitWrapper(wallet.account), wallet)
-            else -> null
+            BlockchainType.Mayachain -> ThorchainAdapter(mayachainKitManager.getThorchainKitWrapper(wallet.account), wallet)
+            else -> registryAdapter(wallet)
         }
         is TokenType.ZanoAsset -> registryAdapter(wallet)
         is TokenType.Unsupported -> null
@@ -176,17 +173,11 @@ class AdapterFactory(
         return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
     }
 
-    // THORChain (RUNE) and Maya (CACAO) share the ThorchainKit; pick the right per-chain manager.
-    private fun thorchainFamilyKitManager(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Mayachain -> mayachainKitManager
-        else -> thorchainKitManager
-    }
-
     fun thorchainTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
         val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
         val baseToken = coinManager.getToken(tokenQuery) ?: return null
 
-        val thorchainKitWrapper = thorchainFamilyKitManager(blockchainType).getThorchainKitWrapper(source.account)
+        val thorchainKitWrapper = mayachainKitManager.getThorchainKitWrapper(source.account)
 
         val transactionConverter = ThorchainTransactionConverter(
             coinManager,
@@ -215,9 +206,6 @@ class AdapterFactory(
             BlockchainType.Tron -> {
                 tronKitManager.unlink(wallet.account)
             }
-            BlockchainType.Thorchain -> {
-                thorchainKitManager.unlink(wallet.account)
-            }
             BlockchainType.Mayachain -> {
                 mayachainKitManager.unlink(wallet.account)
             }
@@ -243,7 +231,7 @@ class AdapterFactory(
                 tronKitManager.unlink(transactionSource.account)
             }
             BlockchainType.Thorchain -> {
-                thorchainKitManager.unlink(transactionSource.account)
+                ChainRegistry[blockchainType]?.unlink(transactionSource.account)
             }
             BlockchainType.Mayachain -> {
                 mayachainKitManager.unlink(transactionSource.account)

@@ -22,7 +22,6 @@ import io.horizontalsystems.walletkit.core.managers.MarketFavoritesManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
-import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
@@ -122,7 +121,6 @@ class BackupProvider(
     private val currencyManager: CurrencyManager,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val moneroNodeStorage: MoneroNodeStorage,
     private val zanoNodeManager: ZanoNodeManager,
@@ -563,7 +561,8 @@ class BackupProvider(
         val solanaSyncSource = ChainRegistry[BlockchainType.Solana]?.backupSyncSourceName()
             ?.let { SolanaSyncSource(BlockchainType.Solana.uid, it) }
 
-        val thorchainSyncSource = ThorchainSyncSource(BlockchainType.Thorchain.uid, thorchainRpcSourceManager.rpcSource.name)
+        val thorchainSyncSource = ChainRegistry[BlockchainType.Thorchain]?.backupSyncSourceName()
+            ?.let { ThorchainSyncSource(BlockchainType.Thorchain.uid, it) }
 
         val selectedMoneroNode = MoneroNodeBackup(BlockchainType.Monero.uid, moneroNodeManager.currentNode.host, null, null, false)
         val customMoneroNodes = if (BackupSection.CustomRpc in sections) {

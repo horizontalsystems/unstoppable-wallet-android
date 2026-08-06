@@ -4,7 +4,6 @@ import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
-import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -25,7 +24,6 @@ class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val thorchainRpcSourceManager: ThorchainRpcSourceManager,
     private val marketKit: MarketKitWrapper
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -54,11 +52,6 @@ class BlockchainSettingsService(
         }
         coroutineScope.launch {
             evmSyncSourceManager.syncSourceObservable.asFlow().collect {
-                syncBlockchainItems()
-            }
-        }
-        coroutineScope.launch {
-            thorchainRpcSourceManager.rpcSourceUpdatedFlow.collect {
                 syncBlockchainItems()
             }
         }
@@ -110,14 +103,9 @@ class BlockchainSettingsService(
             tronBlockchainItems.add(BlockchainItem.Evm(blockchain, syncSource))
         }
 
-        val thorchainBlockchainItems = mutableListOf<BlockchainItem>()
-        thorchainRpcSourceManager.blockchain?.let {
-            thorchainBlockchainItems.add(BlockchainItem.Thorchain(it, thorchainRpcSourceManager.rpcSource))
-        }
-
         val chainBlockchainItems = ChainRegistry.all.mapNotNull { it.blockchainSettingsItem() }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + thorchainBlockchainItems + chainBlockchainItems).sortedBy { it.order }
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + chainBlockchainItems).sortedBy { it.order }
     }
 
 }

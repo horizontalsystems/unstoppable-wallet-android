@@ -1,4 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,thorchain,mayachain,monero,zano,zcash,solana,stellar,the-open-network
+supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,mayachain,monero,zano,zcash,solana,stellar,the-open-network,thorchain
 
 chain bitcoin
   title=Bitcoin
@@ -336,27 +336,6 @@ chain tron
   protocolType[Eip20]=TRC20
   supports=Mnemonic,TronAddress,TronPrivateKey,Passkey
 
-chain thorchain
-  title=THORChain
-  description=RUNE, THORChain assets
-  order=13
-  isEvm=false
-  blockTime=null
-  uriScheme=null
-  removeScheme=false
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=coin_placeholder
-  restoreSettingTypes=
-  nativeTokenQueries=thorchain|native
-  defaultTokenQuery=thorchain|native
-  supportedNftTypes=
-  supportedTokenTypes=Native,ThorchainAsset
-  protocolType[Native]=THORChain
-  protocolType[Eip20]=THORChain
-  supports=Mnemonic
-
 chain mayachain
   title=MayaChain
   description=CACAO, MayaChain assets
@@ -503,4 +482,25 @@ chain the-open-network
   protocolType[Native]=null
   protocolType[Eip20]=Ton
   supports=Mnemonic,TonAddress
+
+chain thorchain
+  title=THORChain
+  description=RUNE, THORChain assets
+  order=13
+  isEvm=false
+  blockTime=null
+  uriScheme=null
+  removeScheme=false
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=
+  nativeTokenQueries=thorchain|native
+  defaultTokenQuery=thorchain|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,ThorchainAsset
+  protocolType[Native]=THORChain
+  protocolType[Eip20]=THORChain
+  supports=Mnemonic
 

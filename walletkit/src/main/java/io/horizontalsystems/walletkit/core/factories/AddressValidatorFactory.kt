@@ -52,7 +52,6 @@ object AddressValidatorFactory {
                 TronAddressValidator(token, App.adapterManager, allowOwnAddress)
             }
 
-            is BlockchainType.Thorchain,
             is BlockchainType.Mayachain -> {
                 ThorchainAddressValidator(token)
             }

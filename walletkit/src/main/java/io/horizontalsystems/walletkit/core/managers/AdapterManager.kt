@@ -22,7 +22,6 @@ class AdapterManager(
     private val adapterFactory: AdapterFactory,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val tronKitManager: TronKitManager,
-    private val thorchainKitManager: ThorchainKitManager,
     private val mayachainKitManager: ThorchainKitManager,
 ) : IAdapterManager {
 
@@ -52,7 +51,6 @@ class AdapterManager(
 
         ChainRegistry.all.forEach { it.refreshKit() }
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
-        thorchainKitManager.thorchainKitWrapper?.thorchainKit?.refresh()
         mayachainKitManager.thorchainKitWrapper?.thorchainKit?.refresh()
     }
 

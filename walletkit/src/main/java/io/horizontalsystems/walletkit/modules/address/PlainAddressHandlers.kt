@@ -65,7 +65,6 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.ArbitrumOne -> listOf(AddressHandlerEvm(blockchainType))
 
         BlockchainType.Tron -> listOf(AddressHandlerTron())
-        BlockchainType.Thorchain -> listOf(AddressHandlerThorchain(ThorchainNetwork.Mainnet, BlockchainType.Thorchain))
         BlockchainType.Mayachain -> listOf(AddressHandlerThorchain(ThorchainNetwork.MayaMainnet, BlockchainType.Mayachain))
 
         else -> ChainRegistry[blockchainType]?.addressHandlers().orEmpty()

@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchai
 import io.horizontalsystems.walletkit.modules.evmnetwork.EvmNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.thorchainnetwork.ThorchainNetworkPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -117,14 +116,6 @@ private fun onClick(
             )
         }
 
-        is BlockchainSettingsModule.BlockchainItem.Thorchain -> {
-            navigation.slideFromBottom(ThorchainNetworkPage)
-
-            stat(
-                page = StatPage.BlockchainSettings,
-                event = StatEvent.Open(StatPage.BlockchainSettingsThorchain)
-            )
-        }
 
         is BlockchainSettingsModule.BlockchainItem.Chain -> {
             navigation.slideFromBottom(item.blockchainItem.page)

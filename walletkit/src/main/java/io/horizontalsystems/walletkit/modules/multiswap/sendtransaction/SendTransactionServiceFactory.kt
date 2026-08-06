@@ -36,7 +36,6 @@ object SendTransactionServiceFactory {
 
 
 
-            BlockchainType.Thorchain,
             BlockchainType.Mayachain -> {
                 val adapter = App.adapterManager.getAdapterForToken<ThorchainAdapter>(token)
                     ?: throw IllegalStateException("ThorchainAdapter is null")

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSource
 import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.walletkit.entities.EvmSyncSource
@@ -21,7 +20,6 @@ object BlockchainSettingsModule {
                     App.btcBlockchainManager,
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
-                    App.thorchainRpcSourceManager,
                     App.marketKit
                 )
             return BlockchainSettingsViewModel(service) as T
@@ -46,11 +44,6 @@ object BlockchainSettingsModule {
         class Evm(
             override val blockchain: Blockchain,
             val syncSource: EvmSyncSource
-        ) : BlockchainItem()
-
-        class Thorchain(
-            override val blockchain: Blockchain,
-            val rpcSource: ThorchainRpcSource
         ) : BlockchainItem()
 
         class Chain(
