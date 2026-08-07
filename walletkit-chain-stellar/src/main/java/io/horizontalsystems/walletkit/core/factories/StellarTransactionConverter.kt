@@ -8,7 +8,7 @@ import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord.Typ
 import io.horizontalsystems.walletkit.core.tokenIconPlaceholder
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
+import io.horizontalsystems.walletkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery

@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.core.sorting.FullCoinSortContext
 import io.horizontalsystems.walletkit.core.sorting.SortCriterion
 import io.horizontalsystems.walletkit.core.sorting.sortedByCriteria
 import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
-import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -79,6 +78,20 @@ fun ByteArray.toRawHexString(): String {
 fun ByteArray?.toHexString(): String {
     val rawHex = this?.toRawHexString() ?: return ""
     return "0x$rawHex"
+}
+
+fun String.hexStringToByteArray(): ByteArray {
+    val cleaned = removePrefix("0x")
+    require(cleaned.length % 2 == 0) { "Invalid hex string length" }
+    return ByteArray(cleaned.length / 2) { i ->
+        ((Character.digit(cleaned[i * 2], 16) shl 4) + Character.digit(cleaned[i * 2 + 1], 16)).toByte()
+    }
+}
+
+fun String.hexStringToByteArrayOrNull(): ByteArray? = try {
+    hexStringToByteArray()
+} catch (e: Exception) {
+    null
 }
 
 fun LockTimeInterval?.stringResId(): Int {

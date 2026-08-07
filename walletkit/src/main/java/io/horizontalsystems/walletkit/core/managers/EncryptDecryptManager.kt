@@ -2,8 +2,8 @@ package io.horizontalsystems.walletkit.core.managers
 
 import android.util.Base64
 import io.horizontalsystems.walletkit.modules.backuplocal.BackupLocalModule
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.ethereumkit.crypto.CryptoUtils
+import io.horizontalsystems.walletkit.core.hexStringToByteArray
+import org.bouncycastle.crypto.digests.KeccakDigest
 import org.bouncycastle.crypto.generators.SCrypt
 import java.security.MessageDigest
 import java.security.SecureRandom
@@ -66,7 +66,7 @@ class EncryptDecryptManager {
             val result = ByteArray(16 + cipherText.size)
             System.arraycopy(derivedKey, 16, result, 0, 16)
             System.arraycopy(cipherText, 0, result, 16, cipherText.size)
-            return CryptoUtils.sha3(result) //get Keccak Hash
+            return keccak256(result) //get Keccak Hash
         }
 
         fun generateRandomBytes(number: Int): ByteArray {
@@ -88,4 +88,12 @@ class EncryptDecryptManager {
         }
     }
 
+}
+
+private fun keccak256(data: ByteArray): ByteArray {
+    val digest = KeccakDigest(256)
+    digest.update(data, 0, data.size)
+    val out = ByteArray(digest.digestSize)
+    digest.doFinal(out, 0)
+    return out
 }

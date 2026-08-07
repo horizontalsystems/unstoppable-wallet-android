@@ -6,7 +6,7 @@ import io.horizontalsystems.walletkit.core.managers.TronKitWrapper
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
+import io.horizontalsystems.walletkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.TronKit
