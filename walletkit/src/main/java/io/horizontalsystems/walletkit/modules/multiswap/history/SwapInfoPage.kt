@@ -240,6 +240,11 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
                                 text = infoTitle.hs,
                                 icon = painterResource(R.drawable.ic_info_24),
                                 iconTint = ComposeAppTheme.colors.grey,
+                                onIconClick = {
+                                    navigation.slideFromBottom(
+                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                    )
+                                },
                             )
                         },
                         right = {
@@ -251,11 +256,6 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
                                         leah
                                     }
                                 )
-                            )
-                        },
-                        onClick = {
-                            navigation.slideFromBottom(
-                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
                             )
                         },
                     )
