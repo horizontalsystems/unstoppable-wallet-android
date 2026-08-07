@@ -44,9 +44,7 @@ import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MigrationManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.NetworkManager
-import io.horizontalsystems.walletkit.core.managers.NftAdapterManager
 import io.horizontalsystems.walletkit.core.managers.NftMetadataManager
-import io.horizontalsystems.walletkit.core.managers.NftMetadataSyncer
 import io.horizontalsystems.walletkit.core.managers.NumberFormatter
 import io.horizontalsystems.walletkit.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.walletkit.core.managers.PasskeyManager
@@ -193,8 +191,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var zcashEndpointStorage: ZcashEndpointStorage
         lateinit var zcashEndpointManager: ZcashLightWalletEndpointManager
         lateinit var nftMetadataManager: NftMetadataManager
-        lateinit var nftAdapterManager: NftAdapterManager
-        lateinit var nftMetadataSyncer: NftMetadataSyncer
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
@@ -435,8 +431,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
         nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)
-        nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
-        nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 
         DAppManager.initialize(
             params = DAppInitParams(
@@ -593,7 +587,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()
-            nftMetadataSyncer.start()
             pinComponent.initDefaultPinLevel()
             accountManager.clearAccounts()
             wcSessionManager.start()

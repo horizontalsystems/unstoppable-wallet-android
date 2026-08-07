@@ -21,7 +21,6 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.marketkit.models.TopPlatform
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.nftkit.models.NftType
 import java.math.BigDecimal
 
 val Token.protocolType: String?
@@ -255,15 +254,6 @@ val BlockchainType.title: String
     is BlockchainType.Unsupported -> this.uid
 }
 
-val BlockchainType.supportedNftTypes: List<NftType>
-    get() = when (this) {
-        BlockchainType.Ethereum -> listOf(NftType.Eip721, NftType.Eip1155)
-//        BlockchainType.BinanceSmartChain -> listOf(NftType.Eip721)
-//        BlockchainType.Polygon -> listOf(NftType.Eip721, NftType.Eip1155)
-//        BlockchainType.Avalanche -> listOf(NftType.Eip721)
-//        BlockchainType.ArbitrumOne -> listOf(NftType.Eip721)
-        else -> listOf()
-    }
 
 val BlockchainType.brandColor: Color?
     get() = when (this) {
