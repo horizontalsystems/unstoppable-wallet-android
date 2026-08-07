@@ -249,6 +249,7 @@ fun WCSessionScreen(
             VSpacer(16.dp)
         }
         ActionButtons(
+            navigation = navigation,
             buttonsStates = buttonsStates,
             onConnectClick = { viewModel.connect() },
             onDisconnectClick = { viewModel.disconnect() },
@@ -264,6 +265,7 @@ fun WCSessionScreen(
 
 @Composable
 private fun ActionButtons(
+    navigation: HSNavigation,
     buttonsStates: WCSessionButtonStates?,
     onConnectClick: () -> Unit,
     onDisconnectClick: () -> Unit,
@@ -287,7 +289,9 @@ private fun ActionButtons(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
                     enabled = connectButtonEnabled,
-                    onClick = {
+                    // Guarded first, so cancelling the passcode prompt leaves the button usable
+                    // instead of latching it disabled.
+                    onClick = navigation.authorizedAction {
                         connectButtonEnabled = false
                         onConnectClick()
                     }
