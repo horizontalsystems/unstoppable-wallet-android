@@ -563,7 +563,7 @@ fun TransactionInfoSecretKeyCell(secretKey: String) {
         ButtonSecondaryCircle(
             icon = R.drawable.ic_copy_20,
             onClick = {
-                TextHelper.copyText(secretKey)
+                TextHelper.copySecret(secretKey)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
                 stat(

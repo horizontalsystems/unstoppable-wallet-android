@@ -258,7 +258,7 @@ private fun ShowExtendedKeyScreen(
                         sheetState.hide()
                         showBottomSheet = false
                     }
-                    TextHelper.copyText(viewModel.extendedKey)
+                    TextHelper.copySecret(viewModel.extendedKey)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                     showBottomSheet = false
 

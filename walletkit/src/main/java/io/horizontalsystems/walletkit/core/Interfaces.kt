@@ -240,6 +240,13 @@ interface INetworkManager {
 
 interface IClipboardManager {
     fun copyText(text: String)
+
+    /**
+     * Copies secret material — recovery phrase, private key, passphrase — marking the clip so the
+     * system and keyboards keep it out of clipboard previews and history. Use [copyText] for
+     * everything else; marking ordinary values sensitive would only hide them from the user.
+     */
+    fun copySecret(text: String)
     fun getCopiedText(): String?
     val hasPrimaryClip: Boolean
 }

@@ -114,7 +114,7 @@ private fun RecoveryPhraseScreen(
                         showBottomSheet = false
                     }
 
-                    TextHelper.copyText(viewModel.words.joinToString(" "))
+                    TextHelper.copySecret(viewModel.words.joinToString(" "))
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
                     stat(

@@ -92,7 +92,7 @@ fun SecretKeyScreen(
                         showBottomSheet = false
 
                     }
-                    TextHelper.copyText(secretKey)
+                    TextHelper.copySecret(secretKey)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
                     onCopyKey()

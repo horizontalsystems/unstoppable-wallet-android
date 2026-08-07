@@ -193,7 +193,7 @@ fun PassphraseCell(passphrase: String, hidden: Boolean) {
                         icon = if (!hidden) painterResource(R.drawable.copy_filled_24) else null,
                         iconTint = ComposeAppTheme.colors.grey,
                         onIconClick = if (!hidden) {
-                            { TextHelper.copyText(passphrase) }
+                            { TextHelper.copySecret(passphrase) }
                         } else null
                     )
                 }
