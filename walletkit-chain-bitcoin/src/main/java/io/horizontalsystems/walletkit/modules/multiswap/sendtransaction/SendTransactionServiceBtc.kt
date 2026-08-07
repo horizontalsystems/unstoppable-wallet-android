@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false) {
+class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false), ISignOnlySendTransactionService {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!
     private val provider = FeeRateProviderFactory.provider(token.blockchainType)!!
     private val feeService = SendBitcoinFeeService(adapter)
@@ -158,7 +158,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
         memo = data.memo
         changeToFirstInput = data.changeToFirstInput
-        utxoFilters = data.utxoFilters
 
         data.recommendedGasRate?.let {
             feeRateService.setRecommendedAndMin(it, it)
@@ -166,6 +165,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
         feeService.setMemo(memo)
         feeService.setChangeToFirstInput(changeToFirstInput)
+        utxoFilters = data.utxoFilters
         feeService.setUtxoFilters(utxoFilters)
 
         amountService.setMemo(memo)
@@ -186,7 +186,12 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         SendBtcFeeSettingsScreen(navigation, sendSettingsViewModel)
     }
 
-    fun signTransaction(): SignedRawTransaction {
+    override fun signTransaction(): SignedTransactionInfo {
+        val signed = signRawTransaction()
+        return SignedTransactionInfo(hex = signed.hex, transactionHash = signed.transactionHash)
+    }
+
+    private fun signRawTransaction(): SignedRawTransaction {
         return adapter.rawTransaction(
             amount = amountState.amount!!,
             address = addressState.validAddress?.hex!!,

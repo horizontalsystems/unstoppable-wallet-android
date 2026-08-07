@@ -21,7 +21,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
-import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchainSettingsPage
 import io.horizontalsystems.walletkit.modules.evmnetwork.EvmNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -96,17 +95,6 @@ private fun onClick(
     navigation: HSNavigation
 ) {
     when (item.blockchainItem) {
-        is BlockchainSettingsModule.BlockchainItem.Btc -> {
-            navigation.slideFromBottom(
-                BtcBlockchainSettingsPage(item.blockchainItem.blockchain)
-            )
-
-            stat(
-                page = StatPage.BlockchainSettings,
-                event = StatEvent.OpenBlockchainSettingsBtc(item.blockchainItem.blockchain.uid)
-            )
-        }
-
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
             navigation.slideFromBottom(EvmNetworkPage(item.blockchainItem.blockchain))
 

@@ -1,25 +1,4 @@
-supported=bitcoin,ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,dash,bitcoin-cash,litecoin,ecash,tron,monero,zano,zcash,solana,stellar,the-open-network,thorchain,mayachain
-
-chain bitcoin
-  title=Bitcoin
-  description=BTC (BIP44, BIP49, BIP84, BIP86)
-  order=0
-  isEvm=false
-  blockTime=600
-  uriScheme=bitcoin
-  removeScheme=true
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=coin_placeholder
-  restoreSettingTypes=
-  nativeTokenQueries=bitcoin|derived:bip44,bitcoin|derived:bip49,bitcoin|derived:bip84,bitcoin|derived:bip86
-  defaultTokenQuery=bitcoin|derived:bip84
-  supportedNftTypes=
-  supportedTokenTypes=Derived(Bip84)
-  protocolType[Native]=Bitcoin
-  protocolType[Eip20]=Bitcoin
-  supports=Mnemonic,BitcoinAddress(Bitcoin)
+supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,dash,monero,zano,zcash,solana,stellar,the-open-network,thorchain,mayachain
 
 chain ethereum
   title=Ethereum
@@ -231,26 +210,47 @@ chain fantom
   protocolType[Eip20]=Fantom
   supports=Mnemonic,EvmAddress,EvmPrivateKey
 
-chain dash
-  title=Dash
-  description=DASH
-  order=15
+chain tron
+  title=Tron
+  description=TRX, TRC20 tokens
+  order=7
   isEvm=false
-  blockTime=150
-  uriScheme=dash
+  blockTime=3
+  uriScheme=tron
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=tron_trc20
+  restoreSettingTypes=
+  nativeTokenQueries=tron|native
+  defaultTokenQuery=tron|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,Eip20
+  protocolType[Native]=null
+  protocolType[Eip20]=TRC20
+  supports=Mnemonic,TronAddress,TronPrivateKey,Passkey
+
+chain bitcoin
+  title=Bitcoin
+  description=BTC (BIP44, BIP49, BIP84, BIP86)
+  order=0
+  isEvm=false
+  blockTime=600
+  uriScheme=bitcoin
   removeScheme=true
   chainId=null
   brandColor=null
   feePriceScale=Gwei
   tokenIconPlaceholder=coin_placeholder
   restoreSettingTypes=
-  nativeTokenQueries=dash|native
-  defaultTokenQuery=dash|native
+  nativeTokenQueries=bitcoin|derived:bip44,bitcoin|derived:bip49,bitcoin|derived:bip84,bitcoin|derived:bip86
+  defaultTokenQuery=bitcoin|derived:bip84
   supportedNftTypes=
-  supportedTokenTypes=Native
-  protocolType[Native]=Dash
-  protocolType[Eip20]=Dash
-  supports=Mnemonic
+  supportedTokenTypes=Derived(Bip84)
+  protocolType[Native]=Bitcoin
+  protocolType[Eip20]=Bitcoin
+  supports=Mnemonic,BitcoinAddress(Bitcoin)
 
 chain bitcoin-cash
   title=Bitcoin Cash
@@ -271,27 +271,6 @@ chain bitcoin-cash
   supportedTokenTypes=AddressTyped(Type145)
   protocolType[Native]=Bitcoin Cash
   protocolType[Eip20]=Bitcoin Cash
-  supports=Mnemonic
-
-chain litecoin
-  title=Litecoin
-  description=LTC (BIP44, BIP49, BIP84, BIP86)
-  order=16
-  isEvm=false
-  blockTime=150
-  uriScheme=litecoin
-  removeScheme=true
-  chainId=null
-  brandColor=null
-  feePriceScale=Gwei
-  tokenIconPlaceholder=coin_placeholder
-  restoreSettingTypes=
-  nativeTokenQueries=litecoin|derived:bip44,litecoin|derived:bip49,litecoin|derived:bip84,litecoin|derived:bip86
-  defaultTokenQuery=litecoin|derived:bip84
-  supportedNftTypes=
-  supportedTokenTypes=Derived(Bip84)
-  protocolType[Native]=Litecoin
-  protocolType[Eip20]=Litecoin
   supports=Mnemonic
 
 chain ecash
@@ -315,26 +294,47 @@ chain ecash
   protocolType[Eip20]=Ecash
   supports=Mnemonic
 
-chain tron
-  title=Tron
-  description=TRX, TRC20 tokens
-  order=7
+chain litecoin
+  title=Litecoin
+  description=LTC (BIP44, BIP49, BIP84, BIP86)
+  order=16
   isEvm=false
-  blockTime=3
-  uriScheme=tron
+  blockTime=150
+  uriScheme=litecoin
   removeScheme=true
   chainId=null
   brandColor=null
   feePriceScale=Gwei
-  tokenIconPlaceholder=tron_trc20
+  tokenIconPlaceholder=coin_placeholder
   restoreSettingTypes=
-  nativeTokenQueries=tron|native
-  defaultTokenQuery=tron|native
+  nativeTokenQueries=litecoin|derived:bip44,litecoin|derived:bip49,litecoin|derived:bip84,litecoin|derived:bip86
+  defaultTokenQuery=litecoin|derived:bip84
   supportedNftTypes=
-  supportedTokenTypes=Native,Eip20
-  protocolType[Native]=null
-  protocolType[Eip20]=TRC20
-  supports=Mnemonic,TronAddress,TronPrivateKey,Passkey
+  supportedTokenTypes=Derived(Bip84)
+  protocolType[Native]=Litecoin
+  protocolType[Eip20]=Litecoin
+  supports=Mnemonic
+
+chain dash
+  title=Dash
+  description=DASH
+  order=15
+  isEvm=false
+  blockTime=150
+  uriScheme=dash
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=
+  nativeTokenQueries=dash|native
+  defaultTokenQuery=dash|native
+  supportedNftTypes=
+  supportedTokenTypes=Native
+  protocolType[Native]=Dash
+  protocolType[Eip20]=Dash
+  supports=Mnemonic
 
 chain monero
   title=Monero

@@ -52,13 +52,13 @@ import io.horizontalsystems.walletkit.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.TransactionSpeedUpCancelPage
-import io.horizontalsystems.walletkit.modules.transactionInfo.resendbitcoin.ResendBitcoinPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
@@ -715,16 +715,6 @@ private fun openTransactionOptionsModule(
     navigation: HSNavigation
 ) {
     when (blockchainType) {
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash,
-        BlockchainType.ECash,
-        BlockchainType.Litecoin,
-        BlockchainType.Dash -> {
-            navigation.slideFromRight(
-                ResendBitcoinPage(ResendBitcoinPage.Input(type))
-            )
-        }
-
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
@@ -738,18 +728,11 @@ private fun openTransactionOptionsModule(
             )
         }
 
-        BlockchainType.Zcash,
-        BlockchainType.Solana,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.Tron,
-        BlockchainType.Ton,
-        BlockchainType.Stellar,
-        BlockchainType.Thorchain,
-        BlockchainType.Mayachain,
-        BlockchainType.Monero,
-        BlockchainType.Zano,
-        is BlockchainType.Unsupported -> Unit
+        else -> {
+            ChainRegistry[blockchainType]?.resendTransactionPage(type)?.let {
+                navigation.slideFromRight(it)
+            }
+        }
     }
 
     stat(

@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.factories
 
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.providers.FeeRateProvider
 import io.horizontalsystems.walletkit.core.IFeeRateProvider
 import io.horizontalsystems.walletkit.core.providers.BitcoinCashFeeRateProvider
 import io.horizontalsystems.walletkit.core.providers.BitcoinFeeRateProvider
@@ -10,8 +11,10 @@ import io.horizontalsystems.walletkit.core.providers.LitecoinFeeRateProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object FeeRateProviderFactory {
+    private val provider by lazy { FeeRateProvider(App.appConfigProvider) }
+
     fun provider(blockchainType: BlockchainType): IFeeRateProvider? {
-        val feeRateProvider = App.feeRateProvider
+        val feeRateProvider = provider
 
         return when (blockchainType) {
             is BlockchainType.Bitcoin -> BitcoinFeeRateProvider(feeRateProvider)

@@ -2,14 +2,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
-import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.BitcoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.BitcoinCashAdapter
-import io.horizontalsystems.walletkit.core.adapters.DashAdapter
-import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
-import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
-import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.NoActiveAccount
 import io.horizontalsystems.walletkit.core.supports
@@ -80,15 +73,8 @@ object SwapHelper {
             }
         }
 
-        // UTXO chains: select the UTXOs that will actually cover amountIn
-        val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token) ?: return emptyList()
-        val feeRate = try {
-            FeeRateProviderFactory.provider(token.blockchainType)?.getFeeRates()?.recommended
-        } catch (_: Throwable) {
-            null
-        }
-
-        return adapter.selectUnspentOutputs(amountIn, feeRate ?: 1).mapNotNull { it.address }.distinct()
+        // UTXO chains: the chain plugin selects the UTXOs that will actually cover amountIn
+        return ChainRegistry[token.blockchainType]?.swapSourceAddresses(token, amountIn).orEmpty()
 
     }
 
@@ -113,31 +99,11 @@ object SwapHelper {
             }
 
             else -> when (blockchainType) {
-                BlockchainType.Bitcoin -> {
-                    BitcoinAdapter.firstAddress(account.type, token.type)
-                }
-
-                BlockchainType.BitcoinCash -> {
-                    BitcoinCashAdapter.firstAddress(account.type, token.type)
-                }
-
-                BlockchainType.Litecoin -> {
-                    LitecoinAdapter.firstAddress(account.type, token.type)
-                }
-
-                BlockchainType.Dash -> {
-                    DashAdapter.firstAddress(account.type)
-                }
-
-                BlockchainType.ECash -> {
-                    ECashAdapter.firstAddress(account.type)
-                }
-
                 BlockchainType.Tron -> {
                     App.tronKitManager.getAddress(account)
                 }
 
-                else -> ChainRegistry[token.blockchainType]?.swapDestinationAddress(account)
+                else -> ChainRegistry[token.blockchainType]?.swapDestinationAddress(account, token)
                     ?: throw SwapError.NoDestinationAddress()
             }
         }

@@ -6,7 +6,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.core.order
-import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.walletkit.entities.EvmSyncSource
 import io.horizontalsystems.marketkit.models.Blockchain
 
@@ -17,7 +16,6 @@ object BlockchainSettingsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service =
                 BlockchainSettingsService(
-                    App.btcBlockchainManager,
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
                     App.marketKit
@@ -35,11 +33,6 @@ object BlockchainSettingsModule {
 
     sealed class BlockchainItem {
         abstract val blockchain: Blockchain
-
-        class Btc(
-            override val blockchain: Blockchain,
-            val restoreMode: BtcRestoreMode
-        ) : BlockchainItem()
 
         class Evm(
             override val blockchain: Blockchain,

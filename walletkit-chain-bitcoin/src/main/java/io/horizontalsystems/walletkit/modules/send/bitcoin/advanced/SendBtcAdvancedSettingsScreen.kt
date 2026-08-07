@@ -235,28 +235,6 @@ fun SendBtcAdvancedSettingsScreen(
     }
 }
 
-@Composable
-fun UtxoSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
-    RowUniversal(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = { onChange.invoke(!enabled) }
-        ),
-    ) {
-        body_leah(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = stringResource(R.string.Send_UtxoExpertMode),
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        HsSwitch(
-            modifier = Modifier.padding(end = 16.dp),
-            checked = enabled,
-            onCheckedChange = { onChange.invoke(it) }
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-    }
-}
 
 @Composable
 fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
@@ -366,25 +344,3 @@ private fun TransactionDataSortSettings(
     )
 }
 
-@Composable
-fun FeeRateCaution(modifier: Modifier, feeRateCaution: HSCaution) {
-    when (feeRateCaution.type) {
-        HSCaution.Type.Error -> {
-            TextImportantError(
-                modifier = modifier,
-                icon = R.drawable.ic_attention_20,
-                title = feeRateCaution.getString(),
-                text = feeRateCaution.getDescription() ?: ""
-            )
-        }
-
-        HSCaution.Type.Warning -> {
-            TextImportantWarning(
-                modifier = modifier,
-                icon = R.drawable.ic_attention_20,
-                title = feeRateCaution.getString(),
-                text = feeRateCaution.getDescription() ?: ""
-            )
-        }
-    }
-}

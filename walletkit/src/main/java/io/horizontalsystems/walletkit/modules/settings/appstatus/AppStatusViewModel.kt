@@ -7,7 +7,7 @@ import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.walletkit.core.adapters.IStatusInfoAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
@@ -174,7 +174,7 @@ class AppStatusViewModel(
             .filter { bitcoinLikeChains.contains(it.token.blockchainType) }
             .sortedBy { it.token.coin.name }
             .forEach { wallet ->
-                adapterManager.getAdapterForWallet<BitcoinBaseAdapter>(wallet)?.let { adapter ->
+                adapterManager.getAdapterForWallet<IStatusInfoAdapter>(wallet)?.let { adapter ->
                     val statusTitle =
                         "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}"
                     val restoreMode = btcBlockchainManager.restoreMode(wallet.token.blockchainType)
@@ -225,7 +225,7 @@ class AppStatusViewModel(
             .forEach {
                 val wallet = it
                 val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                val block = adapterManager.getAdapterForWallet<BitcoinBaseAdapter>(wallet)?.let { adapter ->
+                val block = adapterManager.getAdapterForWallet<IStatusInfoAdapter>(wallet)?.let { adapter ->
                     val restoreMode =
                         btcBlockchainManager.restoreMode(wallet.token.blockchainType)
                     val statusInfo = mutableMapOf<String, Any>("Sync Mode" to restoreMode.name)

@@ -6,6 +6,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule
+import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
@@ -130,6 +131,9 @@ interface ChainPlugin {
      */
     suspend fun swapDestinationAddress(account: Account): String? = null
 
+    /** Token-aware variant for chains whose first address depends on the token's derivation. */
+    suspend fun swapDestinationAddress(account: Account, token: Token): String? = swapDestinationAddress(account)
+
     /** Startup work after core managers are ready (e.g. Monero fastest-node auto-select). */
     suspend fun onAppStart() = Unit
 
@@ -191,6 +195,12 @@ interface ChainPlugin {
     /** Effects composed on the main screen (e.g. chain-specific request sheets). */
     @Composable
     fun MainScreenEffects(navigation: HSNavigation) = Unit
+
+    /** Page for speeding up / cancelling a pending transaction, or null when unsupported. */
+    fun resendTransactionPage(type: SpeedUpCancelType): HSPage? = null
+
+    /** Source addresses whose UTXOs cover amountIn for a swap, or null when not a UTXO chain. */
+    suspend fun swapSourceAddresses(token: Token, amountIn: BigDecimal): List<String>? = null
 
     /** WalletConnect handlers to register at app start. */
     fun wcHandlers(): List<IWCHandler> = emptyList()

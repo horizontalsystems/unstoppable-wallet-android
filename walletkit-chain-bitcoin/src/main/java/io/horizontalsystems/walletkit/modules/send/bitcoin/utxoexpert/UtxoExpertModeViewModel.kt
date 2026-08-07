@@ -123,42 +123,19 @@ class UtxoExpertModeViewModel(
 
 }
 
-object UtxoExpertModeModule {
 
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val adapter: ISendBitcoinAdapter,
-        private val token: Token,
-        private val customUnspentOutputs: List<UnspentOutputInfo>?,
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return UtxoExpertModeViewModel(
-                adapter = adapter,
-                token = token,
-                initialCustomUnspentOutputs = customUnspentOutputs,
-                xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-            ) as T
-        }
+@Suppress("UNCHECKED_CAST")
+class UtxoExpertModeFactory(
+    private val adapter: ISendBitcoinAdapter,
+    private val token: Token,
+    private val customUnspentOutputs: List<UnspentOutputInfo>?,
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return UtxoExpertModeViewModel(
+            adapter = adapter,
+            token = token,
+            initialCustomUnspentOutputs = customUnspentOutputs,
+            xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
+        ) as T
     }
-
-    data class UiState(
-        val availableBalanceInfo: InfoItem,
-        val utxoItems: List<UnspentOutputViewItem>,
-        val unselectAllIsEnabled: Boolean,
-    )
-
-    data class InfoItem(
-        val value: String?,
-        val subValue: String?,
-    )
-
-    data class UnspentOutputViewItem(
-        val id: String,
-        val outputIndex: Int,
-        val date: String,
-        val amountToken: String,
-        val amountFiat: String,
-        val address: String,
-        val selected: Boolean,
-    )
 }

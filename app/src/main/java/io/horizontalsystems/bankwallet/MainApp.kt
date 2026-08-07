@@ -1,6 +1,11 @@
 package io.horizontalsystems.bankwallet
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinCashChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.DashChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.ECashChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.LitecoinChainPlugin
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
@@ -23,8 +28,13 @@ class MainApp : App() {
         AppConfigProvider(localStorage)
 
     override fun registerChainPlugins() {
+        ChainRegistry.register(BitcoinChainPlugin())
+        ChainRegistry.register(BitcoinCashChainPlugin())
+        ChainRegistry.register(ECashChainPlugin())
+        ChainRegistry.register(LitecoinChainPlugin())
+        ChainRegistry.register(DashChainPlugin())
         // Registration order defines the tail of BlockchainType.supported:
-        // monero, zano, zcash, solana, stellar, ton.
+        // bitcoin, bitcoinCash, ecash, litecoin, dash, monero, zano, zcash, solana, stellar, ton.
         ChainRegistry.register(MoneroChainPlugin({ App.instance }, { App.moneroNodeManager }))
         ChainRegistry.register(ZanoChainPlugin({ App.zanoNodeManager }, { App.backgroundManager }))
         ChainRegistry.register(ZcashChainPlugin({ App.instance }, { App.zcashEndpointManager }, { App.localStorage }))

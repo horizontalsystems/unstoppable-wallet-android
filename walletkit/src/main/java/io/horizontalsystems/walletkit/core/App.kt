@@ -73,7 +73,6 @@ import io.horizontalsystems.walletkit.core.managers.WordsManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.core.providers.EvmLabelProvider
-import io.horizontalsystems.walletkit.core.providers.FeeRateProvider
 import io.horizontalsystems.walletkit.core.providers.FeeTokenProvider
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.core.stats.StatsManager
@@ -138,7 +137,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     companion object : ICoreApp by CoreApp {
         lateinit var backgroundManager: BackgroundManager
         lateinit var preferences: SharedPreferences
-        lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
@@ -272,7 +270,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         priceManager = PriceManager(localStorage)
 
-        feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager()
 
         appDatabase = AppDatabase.getInstance(this)
@@ -381,7 +378,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         val adapterFactory = AdapterFactory(
             context = instance,
-            btcBlockchainManager = btcBlockchainManager,
             evmBlockchainManager = evmBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
             tronKitManager = tronKitManager,

@@ -10,9 +10,6 @@ import io.horizontalsystems.walletkit.modules.amount.AmountInputModeModule
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinScreen
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
@@ -47,23 +44,6 @@ data class SendPage(val input: Input) : HSPage() {
         )
 
         when (wallet.token.blockchainType) {
-            BlockchainType.Bitcoin,
-            BlockchainType.BitcoinCash,
-            BlockchainType.ECash,
-            BlockchainType.Litecoin,
-            BlockchainType.Dash -> {
-                val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
-                val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>(factory = factory)
-                SendBitcoinScreen(
-                    title = title,
-                    navigation = navigation,
-                    viewModel = sendBitcoinViewModel,
-                    amountInputModeViewModel = amountInputModeViewModel,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                    amount = amount,
-                    riskyAddress = riskyAddress
-                )
-            }
 
 
             BlockchainType.Ethereum,

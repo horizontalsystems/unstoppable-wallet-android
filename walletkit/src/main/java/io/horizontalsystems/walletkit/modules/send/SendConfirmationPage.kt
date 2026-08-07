@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
@@ -18,14 +16,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         when (input.type) {
+            // Legacy: moved to SendBitcoinConfirmationPage in the Bitcoin chain module.
+            // A back stack persisted before the split may still restore this entry - pop it.
             Type.Bitcoin -> {
-                val sendBitcoinViewModel = navigation.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
-
-                SendBitcoinConfirmationScreen(
-                    navigation,
-                    sendBitcoinViewModel,
-                    input.sendEntryPointDestId
-                )
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
             }
 
             // Legacy: moved to SendZcashConfirmationPage in the Zcash chain module.

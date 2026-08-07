@@ -71,6 +71,7 @@ zanoKit = "d83a9a5"
 stellarKit = "4ecccc5"
 tonKit = "947c48a"
 bitcoinKit = "63bd25e"
+hdWalletKit = "a74b51f3"
 ethereumKit = "665021b"
 feeRateKit = "393cc14"
 marketKit = "c045ed4"
@@ -237,6 +238,9 @@ kit-zano = { module = "com.github.horizontalsystems:zano-kit-android", version.r
 kit-stellar = { module = "com.github.horizontalsystems:stellar-kit-android", version.ref = "stellarKit" }
 kit-ton = { module = "com.github.horizontalsystems:ton-kit-android", version.ref = "tonKit" }
 kit-bitcoin = { module = "com.github.horizontalsystems:bitcoin-kit-android", version.ref = "bitcoinKit" }
+kit-hd-wallet = { module = "com.github.horizontalsystems:hd-wallet-kit-android", version.ref = "hdWalletKit" }
+kit-hodler = { module = "com.github.horizontalsystems.bitcoin-kit-android:hodler", version.ref = "bitcoinKit" }
+kit-bitcoin-core = { module = "com.github.horizontalsystems.bitcoin-kit-android:bitcoincore", version.ref = "bitcoinKit" }
 kit-ethereum = { module = "com.github.horizontalsystems:ethereum-kit-android", version.ref = "ethereumKit" }
 kit-fee-rate = { module = "com.github.horizontalsystems:blockchain-fee-rate-kit-android", version.ref = "feeRateKit" }
 kit-market = { module = "com.github.horizontalsystems:market-kit-android", version.ref = "marketKit" }

@@ -75,8 +75,3 @@ class ECashFeeRateProvider : IFeeRateProvider {
         return FeeRates(2)
     }
 }
-
-data class FeeRates(
-    val recommended: Int,
-    val minimum: Int = 0,
-)

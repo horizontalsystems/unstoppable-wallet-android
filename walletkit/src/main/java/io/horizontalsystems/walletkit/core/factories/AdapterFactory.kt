@@ -7,19 +7,13 @@ import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.BitcoinAdapter
-import io.horizontalsystems.walletkit.core.adapters.BitcoinCashAdapter
-import io.horizontalsystems.walletkit.core.adapters.DashAdapter
-import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
 import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
 import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
 import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
-import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
@@ -34,7 +28,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 
 class AdapterFactory(
     private val context: Context,
-    private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val tronKitManager: TronKitManager,
@@ -78,35 +71,9 @@ class AdapterFactory(
     }
 
     private fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
-        is TokenType.Derived -> {
-            when (wallet.token.blockchainType) {
-                BlockchainType.Bitcoin -> {
-                    val syncMode = btcBlockchainManager.syncMode(BlockchainType.Bitcoin, wallet.account.origin)
-                    BitcoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
-                }
-                BlockchainType.Litecoin -> {
-                    val syncMode = btcBlockchainManager.syncMode(BlockchainType.Litecoin, wallet.account.origin)
-                    LitecoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
-                }
-                else -> null
-            }
-        }
-        is TokenType.AddressTyped -> {
-            if (wallet.token.blockchainType == BlockchainType.BitcoinCash) {
-                val syncMode = btcBlockchainManager.syncMode(BlockchainType.BitcoinCash, wallet.account.origin)
-                BitcoinCashAdapter(wallet, syncMode, backgroundManager, tokenType.type)
-            }
-            else null
-        }
+        is TokenType.Derived -> registryAdapter(wallet)
+        is TokenType.AddressTyped -> registryAdapter(wallet)
         TokenType.Native -> when (wallet.token.blockchainType) {
-            BlockchainType.ECash -> {
-                val syncMode = btcBlockchainManager.syncMode(BlockchainType.ECash, wallet.account.origin)
-                ECashAdapter(wallet, syncMode, backgroundManager)
-            }
-            BlockchainType.Dash -> {
-                val syncMode = btcBlockchainManager.syncMode(BlockchainType.Dash, wallet.account.origin)
-                DashAdapter(wallet, syncMode, backgroundManager)
-            }
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,

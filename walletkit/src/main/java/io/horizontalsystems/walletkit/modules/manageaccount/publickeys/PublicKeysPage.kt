@@ -16,7 +16,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccount.evmaddress.AddressPage
-import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyPage
 import io.horizontalsystems.walletkit.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -68,24 +67,6 @@ fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
                     )
 
                     stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.TronAddress))
-                }
-            }
-            viewModel.viewState.extendedPublicKey?.let { publicKey ->
-                KeyActionItem(
-                    title = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKey),
-                    description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
-                ) {
-                    navigation.slideFromRight(
-                        ShowExtendedKeyPage(ShowExtendedKeyPage.Input(
-                            publicKey.hdKey,
-                            publicKey.accountPublicKey
-                        ))
-                    )
-
-                    stat(
-                        page = StatPage.PublicKeys,
-                        event = StatEvent.Open(StatPage.AccountExtendedPublicKey)
-                    )
                 }
             }
 

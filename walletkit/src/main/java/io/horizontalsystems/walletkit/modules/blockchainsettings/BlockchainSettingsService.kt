@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.blockchainsettings
 
-import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
@@ -21,7 +20,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class BlockchainSettingsService(
-    private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val marketKit: MarketKitWrapper
@@ -40,16 +38,6 @@ class BlockchainSettingsService(
 
 
     fun start() {
-        coroutineScope.launch {
-            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect {
-                syncBlockchainItems()
-            }
-        }
-        coroutineScope.launch {
-            btcBlockchainManager.transactionSortModeUpdatedObservable.asFlow().collect {
-                syncBlockchainItems()
-            }
-        }
         coroutineScope.launch {
             evmSyncSourceManager.syncSourceObservable.asFlow().collect {
                 syncBlockchainItems()
@@ -87,11 +75,6 @@ class BlockchainSettingsService(
     private val syncMutex = Mutex()
 
     private suspend fun syncBlockchainItems() = syncMutex.withLock {
-        val btcBlockchainItems = btcBlockchainManager.allBlockchains.map { blockchain ->
-            val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
-            BlockchainItem.Btc(blockchain, restoreMode)
-        }
-
         val evmBlockchainItems = evmBlockchainManager.allBlockchains.map { blockchain ->
             val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
             BlockchainItem.Evm(blockchain, syncSource)
@@ -105,7 +88,7 @@ class BlockchainSettingsService(
 
         val chainBlockchainItems = ChainRegistry.all.mapNotNull { it.blockchainSettingsItem() }
 
-        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + chainBlockchainItems).sortedBy { it.order }
+        blockchainItems = (evmBlockchainItems + tronBlockchainItems + chainBlockchainItems).sortedBy { it.order }
     }
 
 }

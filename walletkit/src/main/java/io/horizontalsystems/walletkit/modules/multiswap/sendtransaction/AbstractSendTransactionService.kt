@@ -57,3 +57,11 @@ data class SendTransactionServiceState(
     val loading: Boolean,
     val fields: List<DataField>,
 )
+
+/** Kit-free projection of a signed raw transaction for flows that submit externally. */
+data class SignedTransactionInfo(val hex: String, val transactionHash: String)
+
+/** Send services that can sign without broadcasting (e.g. OpenCryptoPay proof-of-payment). */
+interface ISignOnlySendTransactionService {
+    fun signTransaction(): SignedTransactionInfo
+}

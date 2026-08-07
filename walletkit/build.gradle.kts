@@ -174,10 +174,11 @@ dependencies {
     api(libs.unstoppable.domains)
 
     // Wallet Kits
-    api(libs.kit.bitcoin)
     api(libs.kit.ethereum)
-    api(libs.kit.fee.rate)
     api(libs.kit.market)
+    api(libs.kit.hd.wallet)
+    api(libs.kit.bitcoin.core)
+    api(libs.kit.hodler)
     api(libs.kit.tron)
 
     // BouncyCastle

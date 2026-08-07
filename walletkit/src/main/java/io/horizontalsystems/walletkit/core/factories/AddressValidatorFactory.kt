@@ -2,7 +2,6 @@ package io.horizontalsystems.walletkit.core.factories
 
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.walletkit.modules.send.address.BitcoinAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
@@ -25,14 +24,6 @@ object AddressValidatorFactory {
         }
 
         return when (token.blockchainType) {
-            BlockchainType.Bitcoin,
-            BlockchainType.BitcoinCash,
-            BlockchainType.ECash,
-            BlockchainType.Litecoin,
-            BlockchainType.Dash -> {
-                BitcoinAddressValidator(token, App.adapterManager)
-            }
-
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,

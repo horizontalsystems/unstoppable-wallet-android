@@ -23,7 +23,8 @@ import io.horizontalsystems.walletkit.modules.amount.SendAmountService
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationData
 import io.horizontalsystems.walletkit.modules.send.SendResult
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule
+import io.horizontalsystems.walletkit.modules.send.bitcoin.UtxoData
+import io.horizontalsystems.walletkit.modules.send.bitcoin.UtxoType
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
@@ -64,7 +65,7 @@ class SendMoneroViewModel(
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
 
-    private var utxoData: SendBitcoinModule.UtxoData? = null
+    private var utxoData: UtxoData? = null
     private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
     private var balanceState = balanceAdapter.balanceState
 
@@ -197,8 +198,8 @@ class SendMoneroViewModel(
         // unlike Bitcoin, wallet2 does not reveal which inputs auto-selection will use
         // before the transaction is created, so Auto mode shows only the total count
         val totalOutputs = adapter.getUnspentOutputs().size
-        utxoData = SendBitcoinModule.UtxoData(
-            type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
+        utxoData = UtxoData(
+            type = if (customUnspentOutputs == null) UtxoType.Auto else UtxoType.Manual,
             value = customUnspentOutputs?.let { "${it.size} / $totalOutputs" } ?: "$totalOutputs"
         )
     }
@@ -296,7 +297,7 @@ data class SendMoneroUiState(
     val fee: BigDecimal?,
     val feeInProgress: Boolean,
     val address: Address,
-    val utxoData: SendBitcoinModule.UtxoData?,
+    val utxoData: UtxoData?,
     val syncState: AdapterState,
     val feeCaution: HSCaution?,
 )

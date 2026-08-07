@@ -1,10 +1,5 @@
 package io.horizontalsystems.walletkit.modules.address
 
-import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
-import io.horizontalsystems.bitcoinkit.MainNet
-import io.horizontalsystems.dashkit.MainNetDash
-import io.horizontalsystems.ecash.MainNetECash
-import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 
@@ -14,44 +9,6 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
  */
 fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> =
     when (blockchainType) {
-        BlockchainType.Bitcoin -> {
-            val network = MainNet()
-            listOf(
-                AddressHandlerBase58(network, blockchainType),
-                AddressHandlerBech32(network, blockchainType),
-            )
-        }
-
-        BlockchainType.BitcoinCash -> {
-            val network = MainNetBitcoinCash()
-            listOf(
-                AddressHandlerBase58(network, blockchainType),
-                AddressHandlerBitcoinCash(network, blockchainType),
-            )
-        }
-
-        BlockchainType.ECash -> {
-            val network = MainNetECash()
-            listOf(
-                AddressHandlerBase58(network, blockchainType),
-                AddressHandlerBitcoinCash(network, blockchainType),
-            )
-        }
-
-        BlockchainType.Litecoin -> {
-            val network = MainNetLitecoin()
-            listOf(
-                AddressHandlerBase58(network, blockchainType),
-                AddressHandlerBech32(network, blockchainType),
-            )
-        }
-
-        BlockchainType.Dash -> {
-            val network = MainNetDash()
-            listOf(AddressHandlerBase58(network, blockchainType))
-        }
-
-
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,

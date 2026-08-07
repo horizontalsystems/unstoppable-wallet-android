@@ -5,6 +5,11 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinCashChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.DashChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.ECashChainPlugin
+import io.horizontalsystems.walletkit.chain.bitcoin.LitecoinChainPlugin
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
 import io.horizontalsystems.walletkit.chain.stellar.StellarChainPlugin
@@ -57,6 +62,11 @@ class ChainBehaviorParityTest {
     fun registerChainPlugins() {
         // Mirrors the registration in App.onCreate. Runtime managers are never touched by
         // the pure hooks this test exercises.
+        ChainRegistry.register(BitcoinChainPlugin())
+        ChainRegistry.register(BitcoinCashChainPlugin())
+        ChainRegistry.register(ECashChainPlugin())
+        ChainRegistry.register(LitecoinChainPlugin())
+        ChainRegistry.register(DashChainPlugin())
         ChainRegistry.register(MoneroChainPlugin(
             { error("Context is not available in unit tests") },
             { error("MoneroNodeManager is not available in unit tests") },

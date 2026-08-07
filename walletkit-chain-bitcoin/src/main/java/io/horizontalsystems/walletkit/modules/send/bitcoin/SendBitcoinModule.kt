@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object SendBitcoinModule {
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val wallet: Wallet,
@@ -47,15 +48,7 @@ object SendBitcoinModule {
         }
     }
 
-    data class UtxoData(
-        val type: UtxoType? = null,
-        val value: String = "0 / 0",
-    )
 
-    enum class UtxoType {
-        Auto,
-        Manual
-    }
 
     val BlockchainType.rbfSupported: Boolean
         get() = when (this) {

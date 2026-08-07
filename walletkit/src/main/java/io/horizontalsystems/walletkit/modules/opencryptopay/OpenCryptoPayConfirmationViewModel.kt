@@ -14,7 +14,7 @@ import io.horizontalsystems.walletkit.entities.OcpPaymentRecord
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
-import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceBtc
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.ISignOnlySendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.ValueType
@@ -133,7 +133,7 @@ class OpenCryptoPayConfirmationViewModel(
         val baseUrl = proofUrl.substringBefore("/tx/").let { it.trimEnd('/') + "/" }
         if (wallet.token.blockchainType == BlockchainType.Bitcoin) {
             val signed = withContext(Dispatchers.IO) {
-                (sendTransactionService as SendTransactionServiceBtc).signTransaction()
+                (sendTransactionService as ISignOnlySendTransactionService).signTransaction()
             }
             submitProofHexWithRetry(baseUrl, signed.hex)
 

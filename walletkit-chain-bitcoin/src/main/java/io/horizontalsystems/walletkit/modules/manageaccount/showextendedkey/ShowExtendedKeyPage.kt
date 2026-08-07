@@ -275,59 +275,6 @@ private fun ShowExtendedKeyScreen(
     }
 }
 
-@Composable
-fun MenuItem(
-    title: String,
-    value: String,
-    infoButtonClick: (() -> Unit)? = null,
-    onClick: (() -> Unit)?
-) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
-    ) {
-        body_leah(
-            text = title,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        infoButtonClick?.let { click ->
-            HSpacer(width = 8.dp)
-            HsIconButton(
-                modifier = Modifier.size(20.dp),
-                onClick = click
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_info_20),
-                    contentDescription = "info button",
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
-        }
-
-        Spacer(Modifier.weight(1f))
-
-        Row(
-            Modifier
-                .fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            subhead1_grey(
-                text = value,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-            if (onClick != null) {
-                Icon(
-                    modifier = Modifier.padding(start = 4.dp),
-                    painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun NoExtendKeyScreen() {

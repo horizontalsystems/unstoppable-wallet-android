@@ -8,11 +8,8 @@ import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
-import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.tronkit.network.Network
@@ -54,35 +51,11 @@ class PrivateKeysViewModel(
 
         val hdExtendedKey = (account.type as? AccountType.HdExtendedKey)?.hdExtendedKey
 
-        val bip32RootKey = if (account.type is AccountType.Mnemonic) {
-            val seed = Mnemonic().toSeed(account.type.words, account.type.passphrase)
-            HDExtendedKey(seed, HDWallet.Purpose.BIP44)
-        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Master) {
-            hdExtendedKey
-        } else {
-            null
-        }
-
-        var accountExtendedDisplayType = ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(true)
-        val accountExtendedPrivateKey = bip32RootKey
-            ?: if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && !hdExtendedKey.isPublic) {
-                accountExtendedDisplayType = ShowExtendedKeyModule.DisplayKeyType.AccountPrivateKey(false)
-                hdExtendedKey
-            } else {
-                null
-            }
-
         val chainKeyRows = ChainRegistry.all.flatMap { it.privateKeyRows(account) }
 
         viewState = PrivateKeysModule.ViewState(
             evmPrivateKey = ethereumPrivateKey,
             tronPrivateKey = tronPrivateKey,
-            bip32RootKey = bip32RootKey?.let {
-                PrivateKeysModule.ExtendedKey(it, ShowExtendedKeyModule.DisplayKeyType.Bip32RootKey)
-            },
-            accountExtendedPrivateKey = accountExtendedPrivateKey?.let {
-                PrivateKeysModule.ExtendedKey(it, accountExtendedDisplayType)
-            },
             chainKeyRows = chainKeyRows
         )
     }

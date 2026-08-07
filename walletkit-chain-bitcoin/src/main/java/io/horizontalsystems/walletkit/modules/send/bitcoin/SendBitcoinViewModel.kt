@@ -62,7 +62,7 @@ class SendBitcoinViewModel(
     private var addressState = addressService.stateFlow.value
     private var pluginState = pluginService.stateFlow.value
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
-    private var utxoData = SendBitcoinModule.UtxoData()
+    private var utxoData = UtxoData()
     private var memo: String? = null
     private val rbfEnabled: Boolean
         get() = blockchainType.rbfSupported && localStorage.rbfEnabled
@@ -194,8 +194,8 @@ class SendBitcoinViewModel(
     }
 
     private fun updateUtxoData(usedUtxosSize: Int) {
-        utxoData = SendBitcoinModule.UtxoData(
-            type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
+        utxoData = UtxoData(
+            type = if (customUnspentOutputs == null) UtxoType.Auto else UtxoType.Manual,
             value = "$usedUtxosSize / ${adapter.unspentOutputs.size}"
         )
     }
@@ -239,7 +239,7 @@ class SendBitcoinViewModel(
     private fun handleUpdatedFeeInfo(info: BitcoinFeeInfo?) {
         fee = info?.fee
         if (info == null && customUnspentOutputs == null) {
-            utxoData = SendBitcoinModule.UtxoData()
+            utxoData = UtxoData()
         } else if (customUnspentOutputs == null) {
             //set unspent outputs as auto
             updateUtxoData(info?.unspentOutputs?.size ?: 0)
@@ -323,5 +323,5 @@ data class SendBitcoinUiState(
     val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val utxoData: SendBitcoinModule.UtxoData?
+    val utxoData: UtxoData?
 )

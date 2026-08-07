@@ -1,11 +1,6 @@
 package io.horizontalsystems.walletkit.modules.address
 
 import com.unstoppabledomains.resolution.Resolution
-import io.horizontalsystems.bitcoincore.crypto.Base58
-import io.horizontalsystems.bitcoincore.network.Network
-import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
-import io.horizontalsystems.bitcoincore.utils.CashAddressConverter
-import io.horizontalsystems.bitcoincore.utils.SegwitAddressConverter
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.BitcoinAddress
 import io.horizontalsystems.walletkit.entities.MoneroWatchAddress
@@ -186,53 +181,8 @@ class AddressHandlerEvm(override val blockchainType: BlockchainType) : IAddressH
 
 }
 
-class AddressHandlerBase58(network: Network, override val blockchainType: BlockchainType) : IAddressHandler {
-    private val converter = Base58AddressConverter(network.addressVersion, network.addressScriptVersion)
 
-    override fun isSupported(value: String) = try {
-        converter.convert(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
 
-    override fun parseAddress(value: String): Address {
-        val address = converter.convert(value)
-        return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
-    }
-}
-
-class AddressHandlerBech32(network: Network, override val blockchainType: BlockchainType) : IAddressHandler {
-    private val converter = SegwitAddressConverter(network.addressSegwitHrp)
-
-    override fun isSupported(value: String) = try {
-        converter.convert(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        val address = converter.convert(value)
-        return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
-    }
-}
-
-class AddressHandlerBitcoinCash(network: Network, override val blockchainType: BlockchainType) : IAddressHandler {
-    private val converter = CashAddressConverter(network.addressSegwitHrp)
-
-    override fun isSupported(value: String) = try {
-        converter.convert(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        val address = converter.convert(value)
-        return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
-    }
-}
 
 
 

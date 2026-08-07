@@ -38,16 +38,6 @@ class BlockchainSettingsViewModel(
 
     private fun sync(blockchainItems: List<BlockchainSettingsModule.BlockchainItem>) {
         viewModelScope.launch {
-            val btcItems = blockchainItems
-                .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Btc>()
-                .map { item ->
-                    BlockchainSettingsModule.BlockchainViewItem(
-                        title = item.blockchain.name,
-                        subtitle = Translator.getString(item.restoreMode.title),
-                        imageUrl = item.blockchain.type.imageUrl,
-                        blockchainItem = item
-                    )
-                }
             val chainItems = blockchainItems
                 .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Chain>()
                 .filter { it.btcLike }
@@ -59,10 +49,9 @@ class BlockchainSettingsViewModel(
                         blockchainItem = item
                     )
                 }
-            btcLikeChains = (btcItems + chainItems).sortedBy { it.blockchainItem.blockchain.type.order }
+            btcLikeChains = chainItems.sortedBy { it.blockchainItem.blockchain.type.order }
 
             otherChains = blockchainItems
-                .filterNot { it is BlockchainSettingsModule.BlockchainItem.Btc }
                 .mapNotNull { item ->
                     when (item) {
                         is BlockchainSettingsModule.BlockchainItem.Evm -> BlockchainSettingsModule.BlockchainViewItem(

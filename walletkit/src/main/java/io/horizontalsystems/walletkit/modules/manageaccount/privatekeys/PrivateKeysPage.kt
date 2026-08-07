@@ -16,7 +16,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccount.evmprivatekey.PrivateKeyPage
-import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyPage
 import io.horizontalsystems.walletkit.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -76,41 +75,6 @@ fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
                             event = StatEvent.Open(StatPage.TronPrivateKey)
                         )
                     }
-                )
-            }
-            viewModel.viewState.bip32RootKey?.let { key ->
-                KeyActionItem(
-                    title = stringResource(id = R.string.PrivateKeys_Bip32RootKey),
-                    description = stringResource(id = R.string.PrivateKeys_Bip32RootKeyDescription),
-                    onClick = navigation.authorizedAction {
-                        navigation.slideFromRight(
-                            ShowExtendedKeyPage(ShowExtendedKeyPage.Input(
-                                key.hdKey,
-                                key.displayKeyType
-                            ))
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.Bip32RootKey)
-                        )
-                    },
-                )
-            }
-            viewModel.viewState.accountExtendedPrivateKey?.let { key ->
-                KeyActionItem(
-                    title = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKey),
-                    description = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKeyDescription),
-                    onClick = navigation.authorizedAction {
-                        navigation.slideFromRight(
-                            ShowExtendedKeyPage(ShowExtendedKeyPage.Input(key.hdKey, key.displayKeyType))
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.AccountExtendedPrivateKey)
-                        )
-                    },
                 )
             }
             viewModel.viewState.chainKeyRows.forEach { row ->

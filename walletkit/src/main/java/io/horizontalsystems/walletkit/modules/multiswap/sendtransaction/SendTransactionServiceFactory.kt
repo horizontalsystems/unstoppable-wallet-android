@@ -21,14 +21,6 @@ object SendTransactionServiceFactory {
             BlockchainType.Fantom,
                 -> SendTransactionServiceEvm(blockchainType)
 
-            BlockchainType.Bitcoin,
-            BlockchainType.BitcoinCash,
-            BlockchainType.ECash,
-            BlockchainType.Litecoin,
-            BlockchainType.Dash -> {
-                SendTransactionServiceBtc(token)
-            }
-
             BlockchainType.Tron -> {
                 SendTransactionServiceTron(token)
             }

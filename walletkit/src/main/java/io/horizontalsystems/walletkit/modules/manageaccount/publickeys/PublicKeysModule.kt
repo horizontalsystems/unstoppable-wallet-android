@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Account
-import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
 
 object PublicKeysModule {
 
@@ -20,12 +18,6 @@ object PublicKeysModule {
     data class ViewState(
         val evmAddress: String? = null,
         val tronAddress: String? = null,
-        val extendedPublicKey: ExtendedPublicKey? = null,
         val chainKeyRows: List<ChainKeyRow> = emptyList()
-    )
-
-    data class ExtendedPublicKey(
-        val hdKey: HDExtendedKey,
-        val accountPublicKey: AccountPublicKey
     )
 }

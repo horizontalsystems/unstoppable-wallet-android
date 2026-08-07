@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.core
 
 import androidx.compose.ui.graphics.Color
-import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -557,12 +556,6 @@ val TokenType.Derivation.accountTypeDerivation: AccountType.Derivation
         TokenType.Derivation.Bip86 -> AccountType.Derivation.bip86
     }
 
-val TokenType.AddressType.kitCoinType: MainNetBitcoinCash.CoinType
-    get() = when (this) {
-        TokenType.AddressType.Type0 -> MainNetBitcoinCash.CoinType.Type0
-        TokenType.AddressType.Type145 -> MainNetBitcoinCash.CoinType.Type145
-    }
-
 val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
     get() = when (this) {
         TokenType.AddressType.Type0 -> BitcoinCashCoinType.type0
@@ -657,7 +650,6 @@ val TokenType.meta: String?
 
 val BlockchainType.Companion.supported: List<BlockchainType>
     get() = listOf(
-        BlockchainType.Bitcoin,
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,
@@ -668,10 +660,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
-        BlockchainType.Dash,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin,
-        BlockchainType.ECash,
         BlockchainType.Tron,
     ) + ChainRegistry.all.map { it.blockchainType }
 

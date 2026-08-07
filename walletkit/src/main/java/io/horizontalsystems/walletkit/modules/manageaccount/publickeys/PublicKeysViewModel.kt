@@ -7,12 +7,8 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
-import io.horizontalsystems.walletkit.modules.manageaccount.publickeys.PublicKeysModule.ExtendedPublicKey
-import io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType.AccountPublicKey
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.tronkit.network.Network
@@ -53,30 +49,11 @@ class PublicKeysViewModel(
             else -> null
         }
 
-        val hdExtendedKey = (account.type as? AccountType.HdExtendedKey)?.hdExtendedKey
-        var accountPublicKey = AccountPublicKey(false)
-
-        val publicKey = if (account.type is AccountType.Mnemonic) {
-            accountPublicKey = AccountPublicKey(true)
-            val seed = Mnemonic().toSeed(account.type.words, account.type.passphrase)
-            HDExtendedKey(seed, HDWallet.Purpose.BIP44)
-        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Master) {
-            accountPublicKey = AccountPublicKey(true)
-            hdExtendedKey
-        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && !hdExtendedKey.isPublic) {
-            hdExtendedKey
-        } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Account && hdExtendedKey.isPublic) {
-            hdExtendedKey
-        } else {
-            null
-        }
-
         val chainKeyRows = ChainRegistry.all.flatMap { it.publicKeyRows(account) }
 
         viewState = PublicKeysModule.ViewState(
             evmAddress = evmAddress,
             tronAddress = tronAddress,
-            extendedPublicKey = publicKey?.let { ExtendedPublicKey(it, accountPublicKey) },
             chainKeyRows = chainKeyRows
         )
     }
