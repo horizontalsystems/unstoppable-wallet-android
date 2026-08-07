@@ -1,15 +1,13 @@
 package io.horizontalsystems.walletkit.entities.transactionrecords.evm
 
-import io.horizontalsystems.walletkit.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 open class EvmTransactionRecord(
-    transaction: Transaction,
+    transaction: EvmTransactionInfo,
     baseToken: Token,
     source: TransactionSource,
     val protected: Boolean,
@@ -24,7 +22,7 @@ open class EvmTransactionRecord(
         transactionHash = transaction.hashString,
         transactionIndex = transaction.transactionIndex ?: 0,
         blockHeight = transaction.blockNumber?.toInt(),
-        confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
+        confirmationsThreshold = CONFIRMATIONS_THRESHOLD,
         timestamp = transaction.timestamp,
         failed = transaction.isFailed,
         spam = spam,
@@ -49,6 +47,8 @@ open class EvmTransactionRecord(
     }
 
     companion object {
+        const val CONFIRMATIONS_THRESHOLD: Int = 12
+
         private fun sameType(value: TransactionValue, value2: TransactionValue): Boolean =
             when {
                 value is TransactionValue.CoinValue && value2 is TransactionValue.CoinValue ->
@@ -103,3 +103,15 @@ open class EvmTransactionRecord(
     }
 
 }
+
+/** Kit-free projection of the ethereum-kit Transaction fields the records need. */
+data class EvmTransactionInfo(
+    val hashString: String,
+    val transactionIndex: Int?,
+    val blockNumber: Long?,
+    val timestamp: Long,
+    val isFailed: Boolean,
+    val gasUsed: Long?,
+    val gasLimit: Long?,
+    val gasPrice: Long?,
+)

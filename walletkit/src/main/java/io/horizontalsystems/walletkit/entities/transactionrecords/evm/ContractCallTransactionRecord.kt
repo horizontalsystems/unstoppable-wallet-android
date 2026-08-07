@@ -2,11 +2,10 @@ package io.horizontalsystems.walletkit.entities.transactionrecords.evm
 
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.models.Transaction
 import io.horizontalsystems.marketkit.models.Token
 
 class ContractCallTransactionRecord(
-    transaction: Transaction,
+    transaction: EvmTransactionInfo,
     baseToken: Token,
     source: TransactionSource,
     val contractAddress: String,
