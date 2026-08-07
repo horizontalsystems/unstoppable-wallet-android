@@ -718,6 +718,10 @@
     <string name="WalletConnect_Verify_Mismatch_NoOrigin">This request comes from a different site than the one it claims to be. This is a common phishing technique.</string>
     <string name="WalletConnect_Verify_Scam_Title">Known Scam!</string>
     <string name="WalletConnect_Verify_Scam">This site is on a list of known malicious domains. Connecting is very likely to cost you funds.</string>
+    <string name="WalletConnect_TypedData_Contract">Contract</string>
+    <string name="WalletConnect_TypedData_Type">Request Type</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">Wrong Network!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">This request is bound to a different network than the one you are connected to. Signing it would produce a signature valid somewhere you did not intend.</string>
     <string name="WalletConnect_Verify_Unknown_Title">Unverified Site</string>
     <string name="WalletConnect_Verify_Unknown">The identity of this site could not be confirmed. Check the address carefully before connecting.</string>
 

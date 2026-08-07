@@ -67,10 +67,20 @@ class WCRequestEvmViewModel(
                 method = sessionRequest.method,
                 chainName = chainName,
                 chainAddress = chainAddress,
+                typedData = getTypedData(sessionRequest),
+                sessionChainId = chainData?.id,
                 walletName = accountManager.activeAccount?.name ?: ""
             )
         } ?: SessionRequestUI.Initial
     }
+
+    // Parsed for display only. The signer keeps receiving the untouched request payload, so what
+    // is signed never depends on whether this succeeds.
+    private fun getTypedData(sessionRequest: HSDAppRequest): Eip712TypedData? =
+        when (sessionRequest.method) {
+            TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4 -> Eip712Parser.parse(getParam(sessionRequest))
+            else -> null
+        }
 
     private fun getParam(sessionRequest: HSDAppRequest) =
         when (sessionRequest.method) {
@@ -195,8 +205,22 @@ sealed class SessionRequestUI {
         val method: String,
         val chainName: String?,
         val chainAddress: String?,
+        val typedData: Eip712TypedData? = null,
+        val sessionChainId: Int? = null,
         val walletName: String,
-    ) : SessionRequestUI()
+    ) : SessionRequestUI() {
+
+        /**
+         * True when the payload is bound to a different chain than the session it arrived on. The
+         * signature would then be valid somewhere the user did not think they were acting.
+         */
+        val chainIdMismatch: Boolean
+            get() {
+                val payloadChainId = typedData?.chainId ?: return false
+                val sessionId = sessionChainId ?: return false
+                return payloadChainId != sessionId.toLong()
+            }
+    }
 }
 
 data class WCChainData(

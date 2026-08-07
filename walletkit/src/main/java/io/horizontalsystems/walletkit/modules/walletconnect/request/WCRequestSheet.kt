@@ -50,6 +50,9 @@ import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.components.AlertCard
+import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
+import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -310,6 +313,21 @@ fun WCNewSignRequestScreen(
                 sessionRequestUI.chainAddress?.let {
                     DomainCell(it, { snackbarActions.showSuccessMessage(it)})
                 }
+
+                // For typed data the domain decides what the signature is worth: which contract may
+                // use it and on which chain. Surface it instead of leaving it buried in the JSON.
+                sessionRequestUI.typedData?.let { typedData ->
+                    typedData.primaryType?.let {
+                        TitleValueCell(stringResource(R.string.WalletConnect_TypedData_Type), it)
+                    }
+                    typedData.domainName?.let {
+                        TitleValueCell(stringResource(R.string.WalletConnect_Domain), it)
+                    }
+                    typedData.verifyingContract?.let {
+                        TitleValueCell(stringResource(R.string.WalletConnect_TypedData_Contract), it)
+                    }
+                }
+
                 MessageCell(
                     message = sessionRequestUI.param,
                     onMessageClick = {
@@ -325,6 +343,17 @@ fun WCNewSignRequestScreen(
                 TitleValueCell(
                     stringResource(R.string.Wallet_Title),
                     sessionRequestUI.walletName
+                )
+            }
+
+            if (sessionRequestUI.chainIdMismatch) {
+                VSpacer(16.dp)
+                AlertCard(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    format = AlertFormat.Structured,
+                    type = AlertType.Critical,
+                    titleCustom = stringResource(R.string.WalletConnect_TypedData_ChainMismatch_Title),
+                    text = stringResource(R.string.WalletConnect_TypedData_ChainMismatch),
                 )
             }
 
@@ -388,9 +417,9 @@ fun MessageCell(
             )
         },
         right = {
-            CellRightNavigation(
-                subtitle = "Unknown".hs,
-            )
+            // No summary value: the row opens the full payload, and labelling it "Unknown" claimed
+            // the message could not be read while the request type sits right above it.
+            CellRightNavigation()
         },
         onClick = {
             onMessageClick.invoke(message)
