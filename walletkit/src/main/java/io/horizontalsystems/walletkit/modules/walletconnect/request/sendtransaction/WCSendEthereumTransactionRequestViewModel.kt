@@ -15,10 +15,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
-import io.horizontalsystems.walletkit.modules.sendevmtransaction.ValueType
-import io.horizontalsystems.walletkit.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
-import io.horizontalsystems.walletkit.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -70,28 +67,14 @@ class WCSendEthereumTransactionRequestViewModel(
         sectionViewItems = getSectionViewItems()
     )
 
-    private fun getSectionViewItems(): List<SectionViewItem> {
-        val items = sendEvmTransactionViewItemFactory.getItems(
+    // The chain is rendered on the approval screen from the session request, which already
+    // resolves it, so no empty section is appended here.
+    private fun getSectionViewItems(): List<SectionViewItem> =
+        sendEvmTransactionViewItemFactory.getItems(
             transactionData,
             null,
             sendTransactionService.decorate(transactionData)
-        ) + SectionViewItem(
-            buildList {
-                val chain: WCChainData? = null // todo: need to implement it
-                chain?.let {
-                    add(
-                        ViewItem.Value(
-                            it.name,
-                            it.address ?: "",
-                            ValueType.Regular
-                        )
-                    )
-                }
-            }
         )
-
-        return items
-    }
 
     suspend fun confirm() = withContext(Dispatchers.Default) {
         val sendResult = sendTransactionService.sendTransaction()

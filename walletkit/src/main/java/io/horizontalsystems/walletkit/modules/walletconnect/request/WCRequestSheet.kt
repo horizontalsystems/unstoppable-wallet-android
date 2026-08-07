@@ -316,6 +316,12 @@ fun WCNewSignRequestScreen(
                         messageBottomSheet = it
                     }
                 )
+                // The screen already names the signing address; the chain it belongs to matters
+                // just as much, since the same signature carries different weight per network.
+                sessionRequestUI.chainName?.let { chainName ->
+                    TitleValueCell(stringResource(R.string.Balance_Network), chainName)
+                }
+
                 TitleValueCell(
                     stringResource(R.string.Wallet_Title),
                     sessionRequestUI.walletName

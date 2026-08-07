@@ -155,6 +155,12 @@ fun WCSignEthereumTransactionRequestScreen(
                     }
                 )
 
+                // A signed transaction is bound to a chain, so name it here rather than leaving the
+                // user to infer it from the dApp.
+                sessionRequestUI.chainName?.let { chainName ->
+                    TitleValueCell(stringResource(R.string.Balance_Network), chainName)
+                }
+
                 TitleValueCell(
                     stringResource(R.string.Wallet_Title),
                     sessionRequestUI.walletName

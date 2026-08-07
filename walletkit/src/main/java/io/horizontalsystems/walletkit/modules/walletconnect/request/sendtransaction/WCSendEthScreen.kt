@@ -153,6 +153,12 @@ fun WCSendEthRequestScreen(
                     onCopy = { snackbarActions.showSuccessMessage(it) }
                 )
 
+                // Which chain the transaction lands on decides what the signature is worth, so it
+                // is named on the approval rather than left implicit.
+                sessionRequestUI.chainName?.let { chainName ->
+                    TitleValueCell(stringResource(R.string.Balance_Network), chainName)
+                }
+
                 TitleValueCell(
                     stringResource(R.string.Wallet_Title),
                     sessionRequestUI.walletName
