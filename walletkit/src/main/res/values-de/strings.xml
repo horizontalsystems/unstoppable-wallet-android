@@ -1820,4 +1820,8 @@
     <string name="WalletConnect_Verify_Scam">Diese Website steht auf einer Liste bekannter bösartiger Domains. Eine Verbindung wird Sie sehr wahrscheinlich Geld kosten.</string>
     <string name="WalletConnect_Verify_Unknown_Title">Nicht verifizierte Website</string>
     <string name="WalletConnect_Verify_Unknown">Die Identität dieser Website konnte nicht bestätigt werden. Überprüfen Sie die Adresse sorgfältig, bevor Sie sich verbinden.</string>
+    <string name="WalletConnect_TypedData_Contract">Vertrag</string>
+    <string name="WalletConnect_TypedData_Type">Anforderungstyp</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">Falsches Netzwerk!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">Diese Anforderung ist an ein anderes Netzwerk gebunden als das, mit dem Sie verbunden sind. Das Signieren würde eine Signatur erzeugen, die an einem Ort gültig ist, wo Sie dies nicht beabsichtigt haben.</string>
 </resources>

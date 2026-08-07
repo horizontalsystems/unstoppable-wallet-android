@@ -1812,4 +1812,8 @@
     <string name="WalletConnect_Verify_Scam">이 사이트는 알려진 악의적인 도메인 목록에 있습니다. 연결하면 자금이 손실될 가능성이 매우 높습니다.</string>
     <string name="WalletConnect_Verify_Unknown_Title">확인되지 않은 사이트</string>
     <string name="WalletConnect_Verify_Unknown">이 사이트의 신원을 확인할 수 없습니다. 연결하기 전에 주소를 신중하게 확인하세요.</string>
+    <string name="WalletConnect_TypedData_Contract">계약</string>
+    <string name="WalletConnect_TypedData_Type">요청 유형</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">잘못된 네트워크!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">이 요청은 연결된 네트워크와 다른 네트워크에 바인딩되어 있습니다. 이에 서명하면 의도하지 않은 곳에서 유효한 서명이 생성됩니다.</string>
 </resources>

@@ -1813,4 +1813,8 @@
     <string name="WalletConnect_Verify_Scam">Ce site figure sur une liste de domaines malveillants connus. Se connecter vous coûtera très probablement des fonds.</string>
     <string name="WalletConnect_Verify_Unknown_Title">Site non vérifié</string>
     <string name="WalletConnect_Verify_Unknown">L\'identité de ce site n\'a pas pu être confirmée. Vérifiez soigneusement l\'adresse avant de vous connecter.</string>
+    <string name="WalletConnect_TypedData_Contract">Contrat</string>
+    <string name="WalletConnect_TypedData_Type">Type de Demande</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">Mauvais Réseau!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">Cette demande est liée à un réseau différent de celui auquel vous êtes connecté. La signer produirait une signature valide quelque part où vous n\'aviez pas l\'intention.</string>
 </resources>

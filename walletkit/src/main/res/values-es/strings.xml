@@ -1811,4 +1811,8 @@
     <string name="WalletConnect_Verify_Scam">Este sitio está en una lista de dominios maliciosos conocidos. Conectarse muy probablemente le costará fondos.</string>
     <string name="WalletConnect_Verify_Unknown_Title">Sitio no verificado</string>
     <string name="WalletConnect_Verify_Unknown">No se pudo confirmar la identidad de este sitio. Verifique cuidadosamente la dirección antes de conectarse.</string>
+    <string name="WalletConnect_TypedData_Contract">Contrato</string>
+    <string name="WalletConnect_TypedData_Type">Tipo de Solicitud</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">¡Red Incorrecta!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">Esta solicitud está vinculada a una red diferente a la que está conectado. Firmarla produciría una firma válida en un lugar donde no pretendía.</string>
 </resources>

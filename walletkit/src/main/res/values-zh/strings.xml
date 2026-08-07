@@ -1811,4 +1811,8 @@
     <string name="WalletConnect_Verify_Scam">该网站位于已知恶意域名列表中。连接很可能会导致资金损失。</string>
     <string name="WalletConnect_Verify_Unknown_Title">未验证的网站</string>
     <string name="WalletConnect_Verify_Unknown">无法确认该网站的身份。连接前请仔细检查地址。</string>
+    <string name="WalletConnect_TypedData_Contract">合约</string>
+    <string name="WalletConnect_TypedData_Type">请求类型</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">错误的网络!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">此请求与您连接的网络不同的网络绑定。签署它将在您未曾打算的地方产生有效的签名。</string>
 </resources>

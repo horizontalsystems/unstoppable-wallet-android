@@ -1812,4 +1812,8 @@
     <string name="WalletConnect_Verify_Scam">Bu site, bilinen kötü amaçlı alan adlarının listesinde yer almaktadır. Bağlanmak size para kaybettirecek olasılığı çok yüksektir.</string>
     <string name="WalletConnect_Verify_Unknown_Title">Doğrulanmamış Site</string>
     <string name="WalletConnect_Verify_Unknown">Bu sitenin kimliği doğrulanamadı. Bağlanmadan önce adresi dikkatlice kontrol edin.</string>
+    <string name="WalletConnect_TypedData_Contract">Sözleşme</string>
+    <string name="WalletConnect_TypedData_Type">İstek Türü</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">Yanlış Ağ!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">Bu istek, bağlı olduğunuz ağdan farklı bir ağa bağlıdır. İmzalamak, amaçlamadığınız bir yerde geçerli olan bir imza üretir.</string>
 </resources>

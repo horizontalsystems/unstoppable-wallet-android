@@ -1818,4 +1818,8 @@
     <string name="WalletConnect_Verify_Scam">Этот сайт находится в списке известных вредоносных доменов. Подключение очень вероятно обойдётся вам в деньги.</string>
     <string name="WalletConnect_Verify_Unknown_Title">Неверифицированный сайт</string>
     <string name="WalletConnect_Verify_Unknown">Не удалось подтвердить личность этого сайта. Тщательно проверьте адрес перед подключением.</string>
+    <string name="WalletConnect_TypedData_Contract">Контракт</string>
+    <string name="WalletConnect_TypedData_Type">Тип Запроса</string>
+    <string name="WalletConnect_TypedData_ChainMismatch_Title">Неправильная Сеть!</string>
+    <string name="WalletConnect_TypedData_ChainMismatch">Этот запрос привязан к другой сети, чем та, к которой вы подключены. Подписание его создаст подпись, действительную в месте, которое вы не предполагали.</string>
 </resources>
