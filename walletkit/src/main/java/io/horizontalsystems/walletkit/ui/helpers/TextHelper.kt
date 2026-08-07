@@ -22,7 +22,8 @@ object TextHelper : IClipboardManager {
 
     override fun copySecret(text: String) {
         // An empty label keeps the clip from announcing what it holds, and the sensitive flag asks
-        // the system and the keyboard to keep the value out of clipboard previews and history.
+        // supported system and keyboard clients to redact the value instead of showing it in
+        // previews and clipboard history. Neither is a boundary: the clip itself stays readable.
         val clip = ClipData.newPlainText("", text).apply {
             description.extras = PersistableBundle().apply {
                 putBoolean(EXTRA_IS_SENSITIVE, true)

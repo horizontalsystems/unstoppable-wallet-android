@@ -44,8 +44,10 @@ object Eip712Parser {
         null
     }
 
+    // Only genuine strings: Gson stringifies booleans and numbers too, so a crafted
+    // "primaryType": true would otherwise be displayed as "true" as if the dApp had sent it.
     private fun JsonElement?.asStringOrNull(): String? = this
-        ?.takeIf { it.isJsonPrimitive }
+        ?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isString }
         ?.asString
         ?.trim()
         ?.takeIf { it.isNotEmpty() }

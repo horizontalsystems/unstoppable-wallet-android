@@ -242,9 +242,11 @@ interface IClipboardManager {
     fun copyText(text: String)
 
     /**
-     * Copies secret material — recovery phrase, private key, passphrase — marking the clip so the
-     * system and keyboards keep it out of clipboard previews and history. Use [copyText] for
-     * everything else; marking ordinary values sensitive would only hide them from the user.
+     * Copies secret material — recovery phrase, private key, passphrase — marking the clip so that
+     * supported system and keyboard clients redact it in previews and leave it out of clipboard
+     * history. The mark is a hint to those clients, not a boundary: whatever is on the clipboard
+     * stays readable by anything that can read the clipboard at all. Use [copyText] for everything
+     * else; marking ordinary values sensitive would only hide them from the user.
      */
     fun copySecret(text: String)
     fun getCopiedText(): String?

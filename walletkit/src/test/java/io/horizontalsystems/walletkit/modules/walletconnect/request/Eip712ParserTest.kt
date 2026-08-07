@@ -88,6 +88,24 @@ class Eip712ParserTest {
     }
 
     @Test
+    fun `ignores boolean and numeric values in string fields`() {
+        // Gson stringifies these, so without a string check they would render as "true" or "42"
+        val json = """{"primaryType":true,"domain":{"name":42,"verifyingContract":false}}"""
+
+        assertNull(Eip712Parser.parse(json))
+    }
+
+    @Test
+    fun `keeps readable fields when a sibling field is wrongly typed`() {
+        val json = """{"primaryType":"Permit","domain":{"name":42,"chainId":1}}"""
+        val data = Eip712Parser.parse(json)
+
+        assertEquals("Permit", data?.primaryType)
+        assertEquals(1L, data?.chainId)
+        assertNull(data?.domainName)
+    }
+
+    @Test
     fun `ignores a domain that is not an object`() {
         val json = """{"primaryType":"Permit","domain":"nope"}"""
         val data = Eip712Parser.parse(json)
