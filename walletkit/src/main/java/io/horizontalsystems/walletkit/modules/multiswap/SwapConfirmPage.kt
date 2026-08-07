@@ -331,7 +331,7 @@ private fun SwapConfirmInternal(
                         SwapProviderType.CEX -> formatSwapTimeRange(estimatedTime)
                         SwapProviderType.DEX -> "~${formatDuration(estimatedTime)}"
                     }
-                    val timeColor = if (swapTimeStatus(estimatedTime, listOf(estimatedTime)) == SwapTimeStatus.Attention) {
+                    val timeColor = if (swapTimeStatus(estimatedTime, uiState.providerType) == SwapTimeStatus.Attention) {
                         ComposeAppTheme.colors.jacob
                     } else {
                         ComposeAppTheme.colors.leah

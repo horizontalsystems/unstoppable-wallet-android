@@ -1,33 +1,36 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
+
 enum class SwapTimeStatus {
     None,
     Attention,
 }
 
 private const val SWAP_TIME_THRESHOLD_SECONDS = 30 * 60L // 30 minutes
-private const val SWAP_TIME_RATIO = 2.0
 
 /**
- * Swap time is highlighted (yellow) only when it is critical for the user, see swap_time_spec_v2.
+ * Swap time is highlighted (orange) when the highest time the user may have to wait is 30 min or more.
  *
- * - Multiple providers: attention when ratio >= 2 (relative to the fastest provider) AND time > 30 min.
- * - Single provider: attention when time > 30 min (no relative comparison possible).
- *
- * In both modes the absolute threshold is a strict "> 30 min", so exactly 30 min stays silent.
+ * The comparison uses the same upper limit that is displayed:
+ * - CEX providers show a ±25% range, so the top of that range is used.
+ * - DEX providers show the single quoted value, which is used directly.
  */
-fun swapTimeStatus(estimationTime: Long?, allEstimationTimes: List<Long?>): SwapTimeStatus {
-    if (estimationTime == null || estimationTime <= SWAP_TIME_THRESHOLD_SECONDS) {
+fun swapTimeStatus(estimationTime: Long?, providerType: SwapProviderType?): SwapTimeStatus {
+    if (estimationTime == null || providerType == null) {
         return SwapTimeStatus.None
     }
 
-    val knownTimes = allEstimationTimes.filterNotNull()
-    if (knownTimes.size <= 1) {
-        // single provider — only the absolute threshold applies
-        return SwapTimeStatus.Attention
+    val upperLimitSeconds = swapTimeUpperLimitSeconds(estimationTime, providerType)
+    return if (upperLimitSeconds >= SWAP_TIME_THRESHOLD_SECONDS) {
+        SwapTimeStatus.Attention
+    } else {
+        SwapTimeStatus.None
     }
-
-    val baseline = knownTimes.min()
-    val ratio = estimationTime.toDouble() / baseline
-    return if (ratio >= SWAP_TIME_RATIO) SwapTimeStatus.Attention else SwapTimeStatus.None
 }
+
+private fun swapTimeUpperLimitSeconds(estimationTime: Long, providerType: SwapProviderType): Long =
+    when (providerType) {
+        SwapProviderType.CEX -> roundSecondsToMinutes(estimationTime * 1.25)
+        SwapProviderType.DEX -> estimationTime
+    }

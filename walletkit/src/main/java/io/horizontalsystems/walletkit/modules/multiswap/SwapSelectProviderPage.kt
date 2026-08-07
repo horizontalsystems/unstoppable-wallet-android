@@ -302,7 +302,7 @@ fun formatSwapTimeRange(totalSeconds: Long): String {
     }
 }
 
-private fun roundSecondsToMinutes(seconds: Double): Long =
+fun roundSecondsToMinutes(seconds: Double): Long =
     (seconds / 60).roundToLong().coerceAtLeast(1) * 60
 
 @Preview

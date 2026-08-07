@@ -271,7 +271,7 @@ class SwapViewModel(
         initialShowRegularPrice = initialShowRegularPrice,
         swapTimeStatus = swapTimeStatus(
             quoteState.quote?.estimationTime,
-            quoteState.quotes.map { it.estimationTime }
+            quoteState.quote?.provider?.type
         ),
         allowanceActionSuppressed = allowanceActionSuppressed(),
         externalRecipientRequired = externalRecipientRequired(quoteState.tokenOut),

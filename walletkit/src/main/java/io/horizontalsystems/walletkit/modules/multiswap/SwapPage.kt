@@ -667,29 +667,28 @@ private fun ProviderCellInfo(
             },
             onClick = onClickProviderScoreInfo
         )
-        if (swapTimeStatus == SwapTimeStatus.Attention) {
-            quote.estimationTime?.let { estimationTime ->
-                val infoTitle = stringResource(R.string.Swap_SwapTime)
-                val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
-                CellSecondary(
-                    middle = {
-                        CellMiddleInfoTextIcon(
-                            text = infoTitle.hs,
-                            icon = painterResource(R.drawable.ic_info_24),
-                            iconTint = ComposeAppTheme.colors.grey,
-                        )
-                    },
-                    right = {
-                        SwapTime(
-                            estimationTime = estimationTime,
-                            providerType = quote.provider.type,
-                        )
-                    },
-                    onClick = {
-                        onClickSwapTimeInfo(infoTitle, infoText)
-                    }
-                )
-            }
+        quote.estimationTime?.let { estimationTime ->
+            val infoTitle = stringResource(R.string.Swap_SwapTime)
+            val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
+            CellSecondary(
+                middle = {
+                    CellMiddleInfoTextIcon(
+                        text = infoTitle.hs,
+                        icon = painterResource(R.drawable.ic_info_24),
+                        iconTint = ComposeAppTheme.colors.grey,
+                    )
+                },
+                right = {
+                    SwapTime(
+                        estimationTime = estimationTime,
+                        providerType = quote.provider.type,
+                        timeStatus = swapTimeStatus,
+                    )
+                },
+                onClick = {
+                    onClickSwapTimeInfo(infoTitle, infoText)
+                }
+            )
         }
     }
 }
@@ -699,8 +698,13 @@ private fun SwapTime(
     modifier: Modifier = Modifier,
     estimationTime: Long,
     providerType: SwapProviderType,
+    timeStatus: SwapTimeStatus,
 ) {
-    val color = ComposeAppTheme.colors.jacob
+    val color = if (timeStatus == SwapTimeStatus.Attention) {
+        ComposeAppTheme.colors.jacob
+    } else {
+        ComposeAppTheme.colors.grey
+    }
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically

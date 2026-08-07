@@ -146,7 +146,10 @@ class SwapInfoViewModel(
             }
         }
         swapTimeAttention =
-            swapTimeStatus(record.estimatedTime, listOf(record.estimatedTime)) == SwapTimeStatus.Attention
+            swapTimeStatus(
+                record.estimatedTime,
+                MultiSwapProviderRegistry.providerType(record.providerId)
+            ) == SwapTimeStatus.Attention
 
         emitState()
     }
