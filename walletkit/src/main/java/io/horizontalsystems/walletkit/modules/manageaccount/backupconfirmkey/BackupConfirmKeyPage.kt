@@ -37,7 +37,9 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BackupConfirmKeyPage(val input: Account) : HSPage() {
+// The word options are drawn from the user's own recovery phrase, so this screen shows real seed
+// words and needs the same screenshot protection as the screen that displays the phrase itself.
+data class BackupConfirmKeyPage(val input: Account) : HSPage(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
