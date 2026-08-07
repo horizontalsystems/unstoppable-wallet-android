@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.adapters.ZanoAdapter
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -76,7 +77,7 @@ class SendTransactionServiceZano(
                 result.add(
                     CautionViewItem(
                         title = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
-                        text = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, feeToken.coin.code),
+                        text = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, feeToken.coinCodeWithNetwork),
                         type = CautionViewItem.Type.Error
                     )
                 )

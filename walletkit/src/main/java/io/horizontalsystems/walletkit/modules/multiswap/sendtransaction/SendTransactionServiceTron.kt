@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.HSCaution.Type
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
@@ -90,7 +91,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
                         description = TranslatableString.PlainString(
                             Translator.getString(
                                 R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                                nativeToken.coin.code
+                                nativeToken.coinCodeWithNetwork
                             )
                         )
                     ).toCautionViewItem()

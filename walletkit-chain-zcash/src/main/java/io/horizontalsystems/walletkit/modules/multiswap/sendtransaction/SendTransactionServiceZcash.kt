@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.model.Proposal
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.InsufficientBalance
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
@@ -65,7 +66,7 @@ class SendTransactionServiceZcash(
         } catch (e: Throwable) {
             val message = e.message
             error = if (message != null && message.contains("Insufficient balance", ignoreCase = true)) {
-                InsufficientBalance(feeToken.coin.code)
+                InsufficientBalance(feeToken.coinCodeWithNetwork)
             } else {
                 e
             }

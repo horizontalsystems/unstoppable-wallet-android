@@ -573,6 +573,9 @@ private val noBadgeCoinCodes by lazy {
     listOf("AVAX", "XLM", "DASH", "ZEC", "XMR", "XEC", "POL", "SOL", "XDAI", "FTM")
 }
 
+val Token.coinCodeWithNetwork: String
+    get() = "${coin.code} (${blockchain.name})"
+
 val Token.badge: String?
     get() {
         val tokenType = type

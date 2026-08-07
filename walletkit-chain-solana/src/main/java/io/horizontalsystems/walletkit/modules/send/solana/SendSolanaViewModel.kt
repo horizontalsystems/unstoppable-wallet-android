@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.EvmError
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.ISendSolanaAdapter
@@ -161,7 +162,7 @@ class SendSolanaViewModel(
     private fun createCaution(error: Throwable) = when (error) {
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        is EvmError.InsufficientBalanceWithFee -> SendErrorInsufficientBalance(feeToken.coin.code)
+        is EvmError.InsufficientBalanceWithFee -> SendErrorInsufficientBalance(feeToken.coinCodeWithNetwork)
         else -> HSCaution(TranslatableString.PlainString(error.cause?.message ?: error.message ?: ""))
     }
 

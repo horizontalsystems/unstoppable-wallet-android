@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.core.ethereum
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.EvmError
 import io.horizontalsystems.walletkit.core.Warning
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.convertedError
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsError
@@ -55,7 +56,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                        baseCoinService.token.coin.code
+                        baseCoinService.token.coinCodeWithNetwork
                     ),
                     CautionViewItem.Type.Error
                 )
@@ -81,7 +82,7 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
                     Translator.getString(
                         R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                        baseCoinService.token.coin.code
+                        baseCoinService.token.coinCodeWithNetwork
                     )
                 )
             }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.AppLogger
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
 import io.horizontalsystems.walletkit.core.LocalizedException
@@ -155,7 +156,7 @@ class SendTronViewModel(
                     description = TranslatableString.PlainString(
                         Translator.getString(
                             R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                            feeToken.coin.code
+                            feeToken.coinCodeWithNetwork
                         )
                     )
                 )

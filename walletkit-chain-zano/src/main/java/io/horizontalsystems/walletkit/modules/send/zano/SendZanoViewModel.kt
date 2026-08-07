@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.AppLogger
+import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.ISendZanoAdapter
 import io.horizontalsystems.walletkit.core.LocalizedException
@@ -126,7 +127,7 @@ class SendZanoViewModel(
             type = HSCaution.Type.Error,
             description = TranslatableString.ResString(
                 R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
-                feeToken.coin.code
+                feeToken.coinCodeWithNetwork
             )
         )
     }
