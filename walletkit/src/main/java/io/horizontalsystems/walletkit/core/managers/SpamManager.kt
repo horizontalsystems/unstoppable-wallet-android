@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.core.managers
 import android.util.Log
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ILocalStorage
-import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.walletkit.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.walletkit.entities.ScannedTransaction
@@ -31,7 +30,6 @@ class SpamManager(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     // Transaction event extractors for each blockchain
-    val evmExtractor = EvmTransactionEventExtractor()
     val tronExtractor = TronTransactionEventExtractor()
 
 
@@ -170,12 +168,6 @@ class SpamManager(
 
         return try {
             when (adapter) {
-                is EvmTransactionsAdapter -> {
-                    val userAddress = adapter.evmKitWrapper.evmKit.receiveAddress
-                    adapter.getFullTransactionsBefore(transactionHash, OUTGOING_CONTEXT_SIZE)
-                        .sortedByDescending { it.transaction.timestamp }
-                        .mapNotNull { evmExtractor.extractOutgoingInfo(it, userAddress) }
-                }
                 is TronTransactionsAdapter -> {
                     val userAddress = adapter.tronKitWrapper.tronKit.address
                     adapter.getTronFullTransactionsBefore(transactionHash, OUTGOING_CONTEXT_SIZE)
@@ -183,7 +175,7 @@ class SpamManager(
                         .mapNotNull { tronExtractor.extractOutgoingInfo(it, userAddress) }
                 }
                 is ISpamOutgoingContextSource -> {
-                    adapter.getOutgoingContext(operationId, OUTGOING_CONTEXT_SIZE)
+                    adapter.getOutgoingContext(transactionHash, operationId, OUTGOING_CONTEXT_SIZE)
                 }
                 else -> emptyList()
             }
@@ -228,5 +220,5 @@ class SpamManager(
  * address-poisoning correlation without leaking kit types into the core interface.
  */
 interface ISpamOutgoingContextSource {
-    suspend fun getOutgoingContext(operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo>
+    suspend fun getOutgoingContext(transactionHash: ByteArray, operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo>
 }

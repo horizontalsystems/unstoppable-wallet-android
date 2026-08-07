@@ -121,7 +121,7 @@ class StellarTransactionsAdapter(
         return "https://stellar.expert/explorer/public/tx/${transactionHash}"
     }
 
-    override suspend fun getOutgoingContext(operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo> {
+    override suspend fun getOutgoingContext(transactionHash: ByteArray, operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo> {
         val selfAddress = stellarKit.receiveAddress
         return stellarKit.operationsBefore(TagQuery(null, null, null), fromId = operationId, limit = limit)
             .sortedByDescending { it.timestamp }

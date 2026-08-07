@@ -1,6 +1,9 @@
 package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
+import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
+import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
+import io.horizontalsystems.walletkit.core.managers.EvmTransactionEventExtractor
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.managers.EvmKitWrapper
@@ -31,7 +34,16 @@ class EvmTransactionsAdapter(
     source: TransactionSource,
     private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource,
     evmLabelManager: EvmLabelManager
-) : ITransactionsAdapter {
+) : ITransactionsAdapter, ISpamOutgoingContextSource {
+    private val spamContextExtractor = EvmTransactionEventExtractor()
+
+    override suspend fun getOutgoingContext(transactionHash: ByteArray, operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo> {
+        val userAddress = evmKitWrapper.evmKit.receiveAddress
+        return getFullTransactionsBefore(transactionHash, limit)
+            .sortedByDescending { it.transaction.timestamp }
+            .mapNotNull { spamContextExtractor.extractOutgoingInfo(it, userAddress) }
+    }
+
 
     private val evmKit = evmKitWrapper.evmKit
     private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, source, baseToken, evmLabelManager)
