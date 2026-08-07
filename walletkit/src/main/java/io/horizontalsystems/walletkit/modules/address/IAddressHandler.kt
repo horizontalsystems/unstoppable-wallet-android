@@ -32,6 +32,10 @@ class AddressHandlerEns(
     override fun isSupported(value: String): Boolean {
         if (!value.contains(".")) return false
 
+        // Refuse to resolve a name whose letters mix scripts: it would be shown to the user as the
+        // destination while imitating a different, familiar name.
+        if (DomainScriptCheck.isMixedScript(value)) return false
+
         if (!EnsResolver.isValidEnsName(value)) return false
 
         try {
@@ -61,6 +65,10 @@ class AddressHandlerUdn(
 
     override fun isSupported(value: String): Boolean {
         if (!value.contains(".")) return false
+
+        // Same reasoning as the ENS handler: a mixed-script name can imitate a familiar one.
+        if (DomainScriptCheck.isMixedScript(value)) return false
+
         return try {
             cache[value] = Address(resolveAddress(value), value, blockchainType)
             true
