@@ -109,7 +109,9 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
         val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token) ?: return emptyList()
         val feeRate = try {
             FeeRateProviderFactory.provider(token.blockchainType)?.getFeeRates()?.recommended
-        } catch (_: Throwable) {
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
             null
         }
 
