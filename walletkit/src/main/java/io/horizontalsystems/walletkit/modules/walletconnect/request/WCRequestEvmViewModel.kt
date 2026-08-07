@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.walletconnect.request
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonParser
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
@@ -125,7 +126,7 @@ class WCRequestEvmViewModel(
     private fun getEthereumKitWrapper(): EvmKitWrapper? {
         val blockchainType = blockchainType ?: return null
         val account = accountManager.activeAccount ?: return null
-        val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
+        val evmKitManager = EvmKitManagerRegistry.getEvmKitManager(blockchainType)
 
         return evmKitManager.getEvmKitWrapper(account, blockchainType)
     }

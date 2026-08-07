@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.entities
 
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -437,10 +438,10 @@ sealed class AccountType {
     fun sign(message: ByteArray, isLegacy: Boolean = false): ByteArray? {
         val signer = when (this) {
             is Mnemonic -> {
-                Signer.getInstance(seed, App.evmBlockchainManager.getChain(BlockchainType.Ethereum))
+                Signer.getInstance(seed, EvmKitManagerRegistry.getChain(BlockchainType.Ethereum))
             }
             is EvmPrivateKey -> {
-                Signer.getInstance(key, App.evmBlockchainManager.getChain(BlockchainType.Ethereum))
+                Signer.getInstance(key, EvmKitManagerRegistry.getChain(BlockchainType.Ethereum))
             }
             else -> null
         } ?: return null

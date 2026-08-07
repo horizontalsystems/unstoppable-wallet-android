@@ -34,8 +34,8 @@ class HashDitAddressValidator(
     suspend fun isClear(address: Address, blockchainType: BlockchainType): Boolean {
         if (!supportedBlockchainTypes.contains(blockchainType)) throw UnsupportedBlockchainType()
 
-        val chain = evmBlockchainManager.getChain(blockchainType)
-        val request = AddressSecurityRequest(chain.id.toString(), address.hex)
+        val chainId = evmBlockchainManager.getChainId(blockchainType)
+        val request = AddressSecurityRequest(chainId.toString(), address.hex)
 
         var response = apiService.addressSecurity(request)
         if (response.status == "in progress") {

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
@@ -70,7 +71,7 @@ class SendTransactionServiceEvm(
     private val evmKitWrapper by lazy {
         val account =
             App.accountManager.activeAccount ?: throw IllegalArgumentException("No active account")
-        App.evmBlockchainManager.getEvmKitManager(blockchainType)
+        EvmKitManagerRegistry.getEvmKitManager(blockchainType)
             .getEvmKitWrapper(account, blockchainType)
     }
     private val gasPriceService: IEvmGasPriceService by lazy {

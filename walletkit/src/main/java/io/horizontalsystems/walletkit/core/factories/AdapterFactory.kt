@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.factories
 
 import android.content.Context
 import android.util.Log
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.evmTransactionSource
 import io.horizontalsystems.walletkit.core.BackgroundManager
@@ -42,7 +43,7 @@ class AdapterFactory(
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(
+        val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).getEvmKitWrapper(
             wallet.account,
             blockchainType
         )
@@ -52,7 +53,7 @@ class AdapterFactory(
 
     private fun getEip20Adapter(wallet: Wallet, address: String): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(wallet.account, blockchainType)
+        val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).getEvmKitWrapper(wallet.account, blockchainType)
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
 
         return Eip20Adapter(context, evmKitWrapper, address, baseToken, coinManager, wallet, evmLabelManager)
@@ -116,7 +117,7 @@ class AdapterFactory(
         )
 
     fun evmTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).getEvmKitWrapper(source.account, blockchainType)
+        val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).getEvmKitWrapper(source.account, blockchainType)
         val baseCoin = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
         val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
 
@@ -140,7 +141,7 @@ class AdapterFactory(
             BlockchainType.Base,
             BlockchainType.ZkSync,
             BlockchainType.ArbitrumOne -> {
-                val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
+                val evmKitManager = EvmKitManagerRegistry.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(wallet.account)
             }
             BlockchainType.Tron -> {
@@ -161,7 +162,7 @@ class AdapterFactory(
             BlockchainType.Base,
             BlockchainType.ZkSync,
             BlockchainType.ArbitrumOne -> {
-                val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
+                val evmKitManager = EvmKitManagerRegistry.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(transactionSource.account)
             }
             BlockchainType.Tron -> {

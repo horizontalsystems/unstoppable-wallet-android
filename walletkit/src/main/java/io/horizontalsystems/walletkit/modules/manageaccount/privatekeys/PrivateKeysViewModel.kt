@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
@@ -28,7 +29,7 @@ class PrivateKeysViewModel(
 
         val ethereumPrivateKey = when (val accountType = account.type) {
             is AccountType.Mnemonic -> {
-                val chain = evmBlockchainManager.getChain(BlockchainType.Ethereum)
+                val chain = EvmKitManagerRegistry.getChain(BlockchainType.Ethereum)
                 toHexString(Signer.privateKey(accountType.words, accountType.passphrase, chain))
             }
 

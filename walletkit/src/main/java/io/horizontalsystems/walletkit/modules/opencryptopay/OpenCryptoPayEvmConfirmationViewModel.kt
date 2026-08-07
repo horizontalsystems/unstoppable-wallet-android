@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.opencryptopay
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendEthereumAdapter
@@ -190,7 +191,7 @@ class OpenCryptoPayEvmConfirmationViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val minGasPrice: GasPrice? = minFee?.let { fee ->
                 val feeLong = kotlin.math.ceil(fee).toLong()
-                if (App.evmBlockchainManager.getChain(blockchainType).isEIP1559Supported) {
+                if (EvmKitManagerRegistry.getChain(blockchainType).isEIP1559Supported) {
                     GasPrice.Eip1559(maxFeePerGas = feeLong, maxPriorityFeePerGas = 0)
                 } else {
                     GasPrice.Legacy(feeLong)

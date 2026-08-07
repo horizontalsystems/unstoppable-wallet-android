@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
@@ -93,7 +94,7 @@ object SwapHelper {
 
         return when {
             blockchainType.isEvm -> {
-                val chain = evmBlockchainManager.getChain(blockchainType)
+                val chain = EvmKitManagerRegistry.getChain(blockchainType)
                 val evmAddress = account.type.evmAddress(chain) ?: throw SwapError.NoDestinationAddress()
                 evmAddress.eip55
             }

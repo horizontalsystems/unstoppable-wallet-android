@@ -185,6 +185,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
+        lateinit var evmAccountManagerFactory: io.horizontalsystems.walletkit.core.factories.EvmAccountManagerFactory
         lateinit var moneroNodeManager: MoneroNodeManager
         lateinit var moneroNodeStorage: MoneroNodeStorage
         lateinit var zanoNodeStorage: ZanoNodeStorage
@@ -335,18 +336,13 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
         swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
         swapProviderInfoManager = SwapProviderInfoManager(appConfigProvider)
-        val evmAccountManagerFactory = EvmAccountManagerFactory(
+        evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
             marketKit,
             tokenAutoEnableManager
         )
-        evmBlockchainManager = EvmBlockchainManager(
-            backgroundManager,
-            evmSyncSourceManager,
-            marketKit,
-            evmAccountManagerFactory
-        )
+        evmBlockchainManager = EvmBlockchainManager(marketKit)
 
         val tronAccountManager = TronAccountManager(
             accountManager,

@@ -59,7 +59,7 @@ class NftAdapterManager(
             if (adapter != null) {
                 adaptersMap[nftKey] = adapter
             } else if (evmBlockchainManager.getBlockchain(nftKey.blockchainType) != null) {
-                val evmKitManager = evmBlockchainManager.getEvmKitManager(nftKey.blockchainType)
+                val evmKitManager = EvmKitManagerRegistry.getEvmKitManager(nftKey.blockchainType)
                 val evmKitWrapper = evmKitManager.getEvmKitWrapper(nftKey.account, nftKey.blockchainType)
 
                 val nftKit = evmKitWrapper.nftKit
@@ -74,7 +74,7 @@ class NftAdapterManager(
         }
 
         currentAdapters.forEach { (nftKey, _) ->
-            evmBlockchainManager.getEvmKitManager(nftKey.blockchainType).unlink(nftKey.account)
+            EvmKitManagerRegistry.getEvmKitManager(nftKey.blockchainType).unlink(nftKey.account)
         }
 
         _adaptersUpdatedFlow.update { adaptersMap.toMap() }

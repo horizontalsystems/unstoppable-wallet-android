@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.transactionInfo.options
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -133,7 +134,7 @@ class TransactionSpeedUpCancelViewModel(
             )
 
             val evmKitWrapper =
-                App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
+                EvmKitManagerRegistry.getEvmKitManager(blockchainType).evmKitWrapper!!
 
             return TransactionSpeedUpCancelViewModel(
                 sendTransactionService,

@@ -44,10 +44,6 @@ class AdapterManager(
     override suspend fun refresh() {
         adaptersMap.values.forEach { it.refresh() }
 
-        for (blockchain in evmBlockchainManager.allBlockchains) {
-            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
-        }
-
         ChainRegistry.all.forEach { it.refreshKit() }
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
     }
@@ -91,7 +87,9 @@ class AdapterManager(
         val blockchain = evmBlockchainManager.getBlockchain(wallet.token)
 
         if (blockchain != null) {
-            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
+            coroutineScope.launch {
+                ChainRegistry[blockchain.type]?.refreshKit()
+            }
         } else {
             adaptersMap[wallet]?.refresh()
         }

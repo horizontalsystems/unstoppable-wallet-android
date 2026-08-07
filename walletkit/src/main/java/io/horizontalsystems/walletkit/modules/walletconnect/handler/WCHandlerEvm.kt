@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.walletconnect.handler
 
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.UnsupportedAccountException
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.entities.Account
@@ -13,7 +14,7 @@ import io.horizontalsystems.ethereumkit.models.Chain
 class WCHandlerEvm(
     private val evmBlockchainManager: EvmBlockchainManager
 ) : IWCHandler {
-    private val supportedEvmChains = EvmBlockchainManager.blockchainTypes.map { evmBlockchainManager.getChain(it) }
+    private val supportedEvmChains = EvmBlockchainManager.blockchainTypes.map { EvmKitManagerRegistry.getChain(it) }
 
     override val chainNamespace = "eip155"
 

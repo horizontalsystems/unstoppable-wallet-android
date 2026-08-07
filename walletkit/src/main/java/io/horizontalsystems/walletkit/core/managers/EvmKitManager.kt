@@ -293,3 +293,37 @@ class EvmKitWrapper(
             }
     }
 }
+
+/**
+ * Kit-side registry for the per-chain EvmKitManager/EvmAccountManager pairs; the kit-free
+ * EvmBlockchainManager stays in core while this moves with the EVM chain module.
+ */
+object EvmKitManagerRegistry {
+    private val evmKitManagersMap = mutableMapOf<BlockchainType, Pair<EvmKitManager, EvmAccountManager>>()
+
+    fun getChain(blockchainType: BlockchainType): Chain = when (blockchainType) {
+        BlockchainType.Ethereum -> Chain.Ethereum
+        BlockchainType.BinanceSmartChain -> Chain.BinanceSmartChain
+        BlockchainType.Polygon -> Chain.Polygon
+        BlockchainType.Avalanche -> Chain.Avalanche
+        BlockchainType.Optimism -> Chain.Optimism
+        BlockchainType.Base -> Chain.Base
+        BlockchainType.ZkSync -> Chain.ZkSync
+        BlockchainType.ArbitrumOne -> Chain.ArbitrumOne
+        BlockchainType.Gnosis -> Chain.Gnosis
+        BlockchainType.Fantom -> Chain.Fantom
+        else -> throw IllegalArgumentException("Unsupported blockchain type ${'$'}blockchainType")
+    }
+
+    @Synchronized
+    private fun managers(blockchainType: BlockchainType): Pair<EvmKitManager, EvmAccountManager> =
+        evmKitManagersMap.getOrPut(blockchainType) {
+            val evmKitManager = EvmKitManager(getChain(blockchainType), App.backgroundManager, App.evmSyncSourceManager)
+            val evmAccountManager = App.evmAccountManagerFactory.evmAccountManager(blockchainType, evmKitManager)
+            Pair(evmKitManager, evmAccountManager)
+        }
+
+    fun getEvmKitManager(blockchainType: BlockchainType): EvmKitManager = managers(blockchainType).first
+
+    fun getEvmAccountManager(blockchainType: BlockchainType): EvmAccountManager = managers(blockchainType).second
+}

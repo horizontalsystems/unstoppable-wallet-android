@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.walletconnect.request.signtransac
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
@@ -121,7 +122,7 @@ class WCSignEthereumTransactionRequestViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val token = App.evmBlockchainManager.getBaseToken(blockchainType)!!
-            val evmKitWrapper = App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
+            val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).evmKitWrapper!!
             val coinServiceFactory = EvmCoinServiceFactory(
                 token,
                 App.marketKit,

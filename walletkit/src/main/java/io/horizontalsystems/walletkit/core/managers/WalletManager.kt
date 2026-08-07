@@ -128,14 +128,6 @@ class WalletManager(
                 reloadWallets(blockchainType)
             }
         }
-        for (blockchain in evmBlockchainManager.allBlockchains) {
-            coroutineScope.launch {
-                evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
-                    .collect {
-                        reloadWallets(blockchain.type)
-                    }
-            }
-        }
         coroutineScope.launch {
             tronKitManager.kitStoppedObservable.asFlow().collect {
                 reloadWallets(BlockchainType.Tron)
