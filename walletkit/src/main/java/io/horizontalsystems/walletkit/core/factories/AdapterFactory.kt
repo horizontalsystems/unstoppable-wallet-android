@@ -2,6 +2,8 @@ package io.horizontalsystems.walletkit.core.factories
 
 import android.content.Context
 import android.util.Log
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.managers.evmTransactionSource
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ICoinManager
@@ -118,7 +120,7 @@ class AdapterFactory(
         val baseCoin = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
         val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
 
-        return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, syncSource.transactionSource, evmLabelManager)
+        return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, evmTransactionSource(blockchainType, App.appConfigProvider), evmLabelManager)
     }
 
     fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {

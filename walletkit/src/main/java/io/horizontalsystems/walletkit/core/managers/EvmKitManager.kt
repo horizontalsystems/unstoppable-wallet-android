@@ -143,7 +143,7 @@ class EvmKitManager(
             address,
             chain,
             syncSource.rpcSource,
-            syncSource.transactionSource,
+            evmTransactionSource(blockchainType, App.appConfigProvider),
             account.id
         )
 

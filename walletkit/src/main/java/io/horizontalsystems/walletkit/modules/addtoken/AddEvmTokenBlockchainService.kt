@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.addtoken
 
+import io.horizontalsystems.walletkit.core.managers.rpcSource
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.customCoinUid
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule.IAddTokenBlockchainService

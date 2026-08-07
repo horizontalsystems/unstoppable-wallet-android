@@ -1,29 +1,19 @@
 package io.horizontalsystems.walletkit.entities
 
 import androidx.room.Entity
-import io.horizontalsystems.ethereumkit.models.RpcSource
-import io.horizontalsystems.ethereumkit.models.TransactionSource
 import java.net.URI
 
 data class EvmSyncSource(
     val id: String,
     val name: String,
-    val rpcSource: RpcSource,
-    val transactionSource: TransactionSource
+    val uris: List<URI>,
+    val isWebSocket: Boolean = false,
+    val auth: String? = null,
 ) {
-    val isHttp: Boolean = rpcSource is RpcSource.Http
+    val isHttp: Boolean get() = !isWebSocket
 
     val uri: URI
-        get() = when (val source = rpcSource) {
-            is RpcSource.Http -> source.uris[0]
-            is RpcSource.WebSocket -> source.uri
-        }
-
-    val auth: String?
-        get() = when (val source = rpcSource) {
-            is RpcSource.Http -> source.auth
-            is RpcSource.WebSocket -> source.auth
-        }
+        get() = uris[0]
 }
 
 @Entity(primaryKeys = ["blockchainTypeUid", "url"])

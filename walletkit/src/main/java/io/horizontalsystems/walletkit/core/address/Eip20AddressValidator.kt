@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.address
 
+import io.horizontalsystems.walletkit.core.managers.rpcSource
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod

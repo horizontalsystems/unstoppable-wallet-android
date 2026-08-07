@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.core.managers.rpcSource
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.uris
 import io.horizontalsystems.walletkit.entities.EvmSyncSource

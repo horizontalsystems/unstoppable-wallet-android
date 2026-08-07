@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.walletkit.core.managers.rpcSource
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.marketkit.models.BlockchainType
