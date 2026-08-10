@@ -20,5 +20,5 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 - assertVisible: "App Version"
 - scrollUntilVisible:
     element:
-      text: "Blockchain Status"
+      text: "Bitcoin-BIP84"
 - assertVisible: "Bitcoin-BIP84"
