@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,10 +51,16 @@ fun WCSessionList(
     val uiState by viewModel.uiState.collectAsState(initial = WalletConnectListUiState())
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
+    val view = LocalView.current
+
+    // Both calls used to run straight from the composition pass, so the hud fired again on every
+    // recomposition until the state cleared, and errorShown() wrote view model state while the
+    // frame was still composing. Keyed on the message so it runs once per error.
     uiState.showError?.let { message ->
-        val view = LocalView.current
-        HudHelper.showErrorMessage(view, text = message)
-        viewModel.errorShown()
+        LaunchedEffect(message) {
+            HudHelper.showErrorMessage(view, text = message)
+            viewModel.errorShown()
+        }
     }
 
     LazyColumn(contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
