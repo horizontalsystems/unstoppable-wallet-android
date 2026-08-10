@@ -35,9 +35,11 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WCListPage
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import timber.log.Timber
 
 class MainViewModel(
     private val pinComponent: IPinComponent,
@@ -467,7 +469,16 @@ class MainViewModel(
                 // so we don't need closing app in this case
                 val closeApp = returnParam != "none"
                 viewModelScope.launch {
-                    plugin.handleDeepLink(deeplinkString, closeApp)
+                    try {
+                        plugin.handleDeepLink(deeplinkString, closeApp)
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        // A malformed link must not escape the coroutine and take the app down.
+                        // This screen has no error surface, so it stays silent here, unlike the
+                        // scanner path which reports it.
+                        Timber.e(e, "Handling deep link failed")
+                    }
                 }
                 return
             }

@@ -56,13 +56,14 @@ class TonConnectManager(
         _pendingDappRequest.value = null
     }
 
+    /**
+     * Throws when the request cannot be read. Callers decide how to report it — the scanner turns
+     * a failure into a visible "invalid QR code" message, which swallowing it here defeated: a
+     * malformed code looked exactly like nothing having happened.
+     */
     suspend fun handle(scannedText: String, closeAppOnResult: Boolean = false) {
-        try {
-            val dAppRequest = kit.readData(scannedText)
-            _pendingDappRequest.value = DAppRequestEntityWrapper(dAppRequest, closeAppOnResult)
-        } catch (e: Throwable) {
-            Timber.e(e, "Reading TonConnect request failed")
-        }
+        val dAppRequest = kit.readData(scannedText)
+        _pendingDappRequest.value = DAppRequestEntityWrapper(dAppRequest, closeAppOnResult)
     }
 }
 
