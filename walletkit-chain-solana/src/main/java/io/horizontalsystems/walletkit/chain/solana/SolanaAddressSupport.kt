@@ -1,7 +1,7 @@
 package io.horizontalsystems.walletkit.chain.solana
 
 import io.horizontalsystems.bitcoincore.crypto.Base58
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.walletkit.core.address.EvmAddressValidator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
@@ -29,7 +29,7 @@ class AddressHandlerSolana : IAddressHandler {
             //simulate steps in Solana kit init
             io.horizontalsystems.solanakit.models.Address(value)
         } catch (e: Throwable) {
-            throw AddressValidator.AddressValidationException(e.message ?: "")
+            throw EvmAddressValidator.AddressValidationException(e.message ?: "")
         }
 
         return Address(value, blockchainType = blockchainType)

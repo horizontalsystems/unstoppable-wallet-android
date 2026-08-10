@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.BitcoinAddress
 import io.horizontalsystems.walletkit.entities.MoneroWatchAddress
 import io.horizontalsystems.walletkit.modules.watchaddress.MoneroUriParser
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.walletkit.core.address.EvmAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -168,15 +168,15 @@ class AddressHandlerUdn(
 class AddressHandlerEvm(override val blockchainType: BlockchainType) : IAddressHandler {
 
     override fun isSupported(value: String) = try {
-        AddressValidator.validate(value)
+        EvmAddressValidator.validate(value)
         true
-    } catch (e: AddressValidator.AddressValidationException) {
+    } catch (e: EvmAddressValidator.AddressValidationException) {
         false
     }
 
     override fun parseAddress(value: String): Address {
-        val evmAddress = io.horizontalsystems.ethereumkit.models.Address(value)
-        return Address(evmAddress.hex, blockchainType = blockchainType)
+        EvmAddressValidator.validate(value)
+        return Address(value.lowercase(), blockchainType = blockchainType)
     }
 
 }

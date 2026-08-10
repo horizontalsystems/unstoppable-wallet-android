@@ -1,10 +1,9 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
-import io.horizontalsystems.ethereumkit.models.FullTransaction
 
 sealed class SendTransactionResult {
-    data class Evm(val fullTransaction: FullTransaction) : SendTransactionResult()
+    data class Evm(val transactionHash: String?) : SendTransactionResult()
     data class Btc(val transactionRecord: BitcoinTransactionRecord?) : SendTransactionResult()
     data class Tron(val txHash: String? = null) : SendTransactionResult()
     data class Stellar(val txHash: String? = null) : SendTransactionResult()

@@ -79,10 +79,10 @@ class WCSendEthereumTransactionRequestViewModel(
 
     suspend fun confirm() = withContext(Dispatchers.Default) {
         val sendResult = sendTransactionService.sendTransaction()
-        val transactionHash = sendResult.fullTransaction.transaction.hash
+        val transactionHash = sendResult.transactionHash ?: throw Exception("No transaction hash")
 
         WCDelegate.sessionRequestEvent?.let { sessionRequest ->
-            WCDelegate.respondPendingRequest(sessionRequest.requestId, sessionRequest.topic, transactionHash.toHexString())
+            WCDelegate.respondPendingRequest(sessionRequest.requestId, sessionRequest.topic, transactionHash)
         }
     }
 

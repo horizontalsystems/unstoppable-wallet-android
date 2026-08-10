@@ -207,6 +207,9 @@ interface ChainPlugin {
     /** Page for speeding up / cancelling a pending transaction, or null when unsupported. */
     fun resendTransactionPage(type: SpeedUpCancelType, transactionHash: String): HSPage? = null
 
+    /** Maps a chain-library error to a user-presentable one, or null when not recognized. */
+    fun convertError(throwable: Throwable): Throwable? = null
+
     /** Address reported to market analytics for this chain, or null. */
     fun analyticsAddress(accountType: AccountType): String? = null
 

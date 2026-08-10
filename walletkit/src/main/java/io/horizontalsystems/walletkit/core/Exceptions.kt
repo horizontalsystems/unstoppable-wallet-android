@@ -5,8 +5,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.walletkit.core.address.EvmAddressValidator
 
 interface ICaution {
     fun toCautionViewItem(): CautionViewItem
@@ -78,24 +77,10 @@ sealed class EvmAddressError : Throwable() {
 }
 
 val Throwable.convertedError: Throwable
-    get() = when (this) {
-        is JsonRpc.ResponseError.RpcError -> {
-            if (error.message.contains("insufficient funds for transfer") || error.message.contains(
-                    "gas required exceeds allowance"
-                )
-            ) {
-                EvmError.InsufficientBalanceWithFee
-            } else if (error.message.contains("max fee per gas less than block base fee") ||
-                error.message.contains("fee cap less than block base fee")
-            ) {
-                EvmError.LowerThanBaseGasLimit
-            } else if (error.message.contains("execution reverted")) {
-                EvmError.ExecutionReverted(error.message)
-            } else {
-                EvmError.RpcError(error.message)
-            }
-        }
-        is AddressValidator.AddressValidationException -> {
+    get() = io.horizontalsystems.walletkit.core.chain.ChainRegistry.all
+        .firstNotNullOfOrNull { it.convertError(this) }
+        ?: when (this) {
+        is EvmAddressValidator.AddressValidationException -> {
             EvmAddressError.InvalidAddress
         }
         is retrofit2.HttpException -> {

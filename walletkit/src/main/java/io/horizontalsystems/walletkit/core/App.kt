@@ -113,7 +113,6 @@ import io.horizontalsystems.walletkit.widgets.MarketWidgetRepository
 import io.horizontalsystems.walletkit.widgets.MarketWidgetWorker
 import io.horizontalsystems.dapp.core.DAppInitParams
 import io.horizontalsystems.dapp.core.DAppManager
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
@@ -572,7 +571,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     private fun startTasks() {
         coroutineScope.launch {
-            EthereumKit.init()
             walletManager.start(restoreSettingsManager, btcBlockchainManager, evmBlockchainManager, tronKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()

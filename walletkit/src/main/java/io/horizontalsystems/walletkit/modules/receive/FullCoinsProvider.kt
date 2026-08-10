@@ -8,7 +8,7 @@ import io.horizontalsystems.walletkit.core.supported
 import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.walletkit.core.address.EvmAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
@@ -98,9 +98,9 @@ class FullCoinsProvider(
     }
 
     private fun isContractAddress(filter: String) = try {
-        AddressValidator.validate(filter)
+        EvmAddressValidator.validate(filter)
         true
-    } catch (e: AddressValidator.AddressValidationException) {
+    } catch (e: EvmAddressValidator.AddressValidationException) {
         false
     }
 

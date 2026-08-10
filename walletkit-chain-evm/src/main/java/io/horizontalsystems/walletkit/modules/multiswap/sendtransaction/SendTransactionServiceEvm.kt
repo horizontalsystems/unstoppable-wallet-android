@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.toHexString
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.walletkit.core.ethereum.EvmCoinServiceFactory
@@ -247,7 +248,7 @@ class SendTransactionServiceEvm(
 
         val fullTransaction = evmKitWrapper
             .sendSingle(transactionData, gasPrice, gasLimit, nonce, mevProtectionEnabled).await()
-        return SendTransactionResult.Evm(fullTransaction)
+        return SendTransactionResult.Evm(fullTransaction.transaction.hash.toHexString())
     }
 
     fun decorate(transactionData: TransactionData): TransactionDecoration? {

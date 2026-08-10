@@ -344,7 +344,7 @@ class SwapConfirmViewModel(
         // swaps (Jupiter, LI.FI), where the server polls the provider's status by the source
         // chain transaction.
         val transactionHash = when (result) {
-            is SendTransactionResult.Evm -> result.fullTransaction.transaction.hash.toHexString()
+            is SendTransactionResult.Evm -> result.transactionHash
             is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
             is SendTransactionResult.Zcash -> result.transactionHash
             is SendTransactionResult.Solana -> result.txHash

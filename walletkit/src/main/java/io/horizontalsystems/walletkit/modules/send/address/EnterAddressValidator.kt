@@ -6,7 +6,7 @@ import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
-import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.walletkit.core.address.EvmAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -25,8 +25,7 @@ interface EnterAddressValidator {
 
 class EvmAddressValidator : EnterAddressValidator {
     override suspend fun validate(address: Address) {
-        AddressValidator.validate(address.hex)
-        io.horizontalsystems.ethereumkit.models.Address(address.hex)
+        io.horizontalsystems.walletkit.core.address.EvmAddressValidator.validate(address.hex)
     }
 }
 
