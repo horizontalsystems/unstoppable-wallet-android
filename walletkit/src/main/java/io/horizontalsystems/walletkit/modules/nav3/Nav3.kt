@@ -7,8 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -103,7 +103,10 @@ fun Nav3(entryPage: HSPage) {
         AnimatedVisibility(
             visible = isLocked,
             enter = fadeIn(),
-            exit = fadeOut()
+            // Leaves immediately rather than fading. The secure flag is cleared as soon as the app
+            // unlocks, so an exit animation would keep the keypad composited on a surface that is
+            // capturable again. Entering is unaffected: the flag is set before the fade in starts.
+            exit = ExitTransition.None
         ) {
             PinUnlock(isLocked = isLocked)
         }
