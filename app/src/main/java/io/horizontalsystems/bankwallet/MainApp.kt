@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.walletkit.chain.evm.EvmChainPlugin
+import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinCashChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.DashChainPlugin
@@ -28,6 +30,10 @@ class MainApp : App() {
         AppConfigProvider(localStorage)
 
     override fun registerChainPlugins() {
+        // EVM chains come first so BlockchainType.supported keeps its pre-plugin order.
+        EvmBlockchainManager.blockchainTypes.forEach { blockchainType ->
+            ChainRegistry.register(EvmChainPlugin(blockchainType))
+        }
         ChainRegistry.register(BitcoinChainPlugin())
         ChainRegistry.register(BitcoinCashChainPlugin())
         ChainRegistry.register(ECashChainPlugin())
