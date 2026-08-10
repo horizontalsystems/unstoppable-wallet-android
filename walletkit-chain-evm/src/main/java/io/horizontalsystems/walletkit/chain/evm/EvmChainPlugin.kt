@@ -166,7 +166,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         }
 
     override fun wcHandlers(): List<IWCHandler> =
-        if (isFamilyAnchor) listOf(WCHandlerEvm(App.evmBlockchainManager)) else emptyList()
+        if (isFamilyAnchor) listOf(WCHandlerEvm()) else emptyList()
 
     override fun wcWalletRequestHandler(): IWCWalletRequestHandler? =
         if (isFamilyAnchor) WCWalletRequestHandler(App.evmBlockchainManager) else null

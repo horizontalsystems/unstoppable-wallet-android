@@ -11,7 +11,7 @@ object PublicKeysModule {
     class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PublicKeysViewModel(account, App.evmBlockchainManager) as T
+            return PublicKeysViewModel(account) as T
         }
     }
 

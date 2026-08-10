@@ -1,8 +1,8 @@
 package io.horizontalsystems.walletkit.modules.walletconnect.handler
 
+import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.UnsupportedAccountException
-import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.modules.walletconnect.request.AbstractWCAction
@@ -11,9 +11,7 @@ import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 
-class WCHandlerEvm(
-    private val evmBlockchainManager: EvmBlockchainManager
-) : IWCHandler {
+class WCHandlerEvm : IWCHandler {
     private val supportedEvmChains = EvmBlockchainManager.blockchainTypes.map { EvmKitManagerRegistry.getChain(it) }
 
     override val chainNamespace = "eip155"
@@ -39,7 +37,7 @@ class WCHandlerEvm(
     }
 
     override fun getMethodData(method: String, chainInternalId: String?): MethodData {
-        val evmChain = supportedEvmChains.firstOrNull { it.id == chainInternalId?.toInt() }
+        val evmChain = supportedEvmChains.firstOrNull { it.id == chainInternalId?.toIntOrNull() }
 
         val title = when (method) {
             "personal_sign" -> "Personal Sign Request"
@@ -83,7 +81,7 @@ class WCHandlerEvm(
         }
 
     override fun getChainName(chainInternalId: String): String? {
-        val evmChainId = chainInternalId.toInt()
+        val evmChainId = chainInternalId.toIntOrNull() ?: return null
         return supportedEvmChains.find { it.id == evmChainId }?.name
     }
 }

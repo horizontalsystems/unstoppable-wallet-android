@@ -32,6 +32,7 @@ class EvmNftAdapter(
 
     override fun nftRecord(nftUid: NftUid): NftRecord? {
         val evm = (nftUid as? NftUid.Evm) ?: return null
+        if (evm.blockchainType != blockchainType) return null
 
         val tokenId = evm.tokenId.toBigIntegerOrNull() ?: return null
 

@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -15,10 +14,7 @@ import io.horizontalsystems.tronkit.network.Network
 import java.math.BigInteger
 import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
 
-class PrivateKeysViewModel(
-    account: Account,
-    evmBlockchainManager: EvmBlockchainManager,
-) : ViewModel() {
+class PrivateKeysViewModel(account: Account) : ViewModel() {
 
     var viewState by mutableStateOf(PrivateKeysModule.ViewState())
         private set
