@@ -22,7 +22,6 @@ class WCHandlerEvm(
     override val supportedMethods = listOf(
         "eth_sendTransaction",
         "personal_sign",
-        "eth_sign",
         "eth_signTransaction",
         "eth_signTypedData",
         "eth_signTypedData_v4",
@@ -44,7 +43,6 @@ class WCHandlerEvm(
 
         val title = when (method) {
             "personal_sign" -> "Personal Sign Request"
-            "eth_sign" -> "Standard Sign Request"
             "eth_signTypedData" -> "Typed Sign Request"
             "eth_sendTransaction" -> "Approve Transaction"
             "eth_signTransaction" -> "Sign Transaction"
@@ -53,7 +51,6 @@ class WCHandlerEvm(
 
         val shortTitle = when (method) {
             "personal_sign" -> "Sign"
-            "eth_sign" -> "Sign"
             "eth_signTypedData" -> "Sign"
             "eth_sendTransaction" -> "Approve"
             "eth_signTransaction" -> "Sign"

@@ -22,7 +22,6 @@ import kotlin.coroutines.suspendCoroutine
 private const val PERSONAL_SIGN_METHOD = "personal_sign"
 private const val TYPED_DATA_METHOD = "eth_signTypedData"
 private const val TYPED_DATA_METHOD_V4 = "eth_signTypedData_v4"
-private const val ETH_SIGN_METHOD = "eth_sign"
 private const val SEND_TRANSACTION_METHOD = "eth_sendTransaction"
 private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
 
@@ -89,15 +88,6 @@ class WCRequestEvmViewModel(
                 extractMessageParamFromPersonalSign(sessionRequest.params)
             }
 
-            ETH_SIGN_METHOD -> {
-                val params = JsonParser.parseString(sessionRequest.params).asJsonArray
-                if (params.size() >= 2) {
-                    params.get(1).asString
-                } else {
-                    throw Exception("Invalid Data")
-                }
-            }
-
             TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
                 val params = JsonParser.parseString(sessionRequest.params).asJsonArray
                 params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
@@ -138,15 +128,6 @@ class WCRequestEvmViewModel(
             val sessionRequest = sessionRequestUi as? SessionRequestUI.Content
             if (sessionRequest != null) {
                 val result = when (sessionRequest.method) {
-                    ETH_SIGN_METHOD -> {
-                        val message = sessionRequest.param.hexStringToByteArray()
-                        if (message.size == 32) {
-                            signer.signByteArrayLegacy(message = message)
-                        } else {
-                            signer.signByteArray(message = message)
-                        }
-                    }
-
                     PERSONAL_SIGN_METHOD -> {
                         signer.signByteArray(message = sessionRequest.param.toByteArray())
                     }
@@ -155,7 +136,7 @@ class WCRequestEvmViewModel(
                         signer.signTypedData(rawJsonMessage = sessionRequest.param)
                     }
 
-                    else -> throw Exception("Unsupported Chain")
+                    else -> throw Exception("Unsupported method: ${sessionRequest.method}")
                 }
 
                 WCDelegate.discardActiveSessionRequest(sessionRequest.requestId)

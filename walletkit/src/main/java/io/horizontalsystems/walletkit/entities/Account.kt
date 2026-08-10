@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.entities
 
-import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -11,7 +10,6 @@ import io.horizontalsystems.hdwalletkit.WordList
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.shorten
@@ -435,23 +433,6 @@ sealed class AccountType {
         else -> null
     }
 
-    fun sign(message: ByteArray, isLegacy: Boolean = false): ByteArray? {
-        val signer = when (this) {
-            is Mnemonic -> {
-                Signer.getInstance(seed, EvmKitManagerRegistry.getChain(BlockchainType.Ethereum))
-            }
-            is EvmPrivateKey -> {
-                Signer.getInstance(key, EvmKitManagerRegistry.getChain(BlockchainType.Ethereum))
-            }
-            else -> null
-        } ?: return null
-
-        return if (isLegacy) {
-            signer.signByteArrayLegacy(message)
-        } else {
-            signer.signByteArray(message)
-        }
-    }
 }
 
 val HDWallet.Purpose.derivation: AccountType.Derivation
