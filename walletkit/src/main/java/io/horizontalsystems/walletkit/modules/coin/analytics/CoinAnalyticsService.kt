@@ -78,9 +78,14 @@ class CoinAnalyticsService(
     }
 
     private suspend fun preview() {
-        val addresses = accountManager.accounts.mapNotNull { account ->
-            ChainRegistry.all.firstNotNullOfOrNull { it.analyticsAddress(account.type) }
-        }
+        // Only the active account. Sending every account's address in one request tells the server
+        // that all of those wallets belong to the same person, which is a correlation the user
+        // never asked for and cannot undo.
+        val addresses = listOfNotNull(
+            accountManager.activeAccount?.let { account ->
+                ChainRegistry.all.firstNotNullOfOrNull { it.analyticsAddress(account.type) }
+            }
+        )
 
         try {
             marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses).await()
