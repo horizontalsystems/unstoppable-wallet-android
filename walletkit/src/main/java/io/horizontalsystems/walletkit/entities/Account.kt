@@ -1,7 +1,5 @@
 package io.horizontalsystems.walletkit.entities
 
-import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Language
@@ -426,12 +424,6 @@ sealed class AccountType {
             is MoneroWatchAccount -> address
             else -> null
         }
-
-    fun evmAddress(chain: Chain) = when (this) {
-        is Mnemonic -> Signer.address(seed, chain)
-        is EvmPrivateKey -> Signer.address(key)
-        else -> null
-    }
 
 }
 

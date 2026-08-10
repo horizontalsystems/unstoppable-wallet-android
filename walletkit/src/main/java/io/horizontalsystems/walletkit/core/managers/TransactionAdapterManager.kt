@@ -51,18 +51,6 @@ class TransactionAdapterManager(
             var txAdapter = currentAdapters.remove(source)
             if (txAdapter == null) {
                 txAdapter = when (val blockchainType = source.blockchain.type) {
-                    BlockchainType.Ethereum,
-                    BlockchainType.BinanceSmartChain,
-                    BlockchainType.Polygon,
-                    BlockchainType.Avalanche,
-                    BlockchainType.Optimism,
-                    BlockchainType.Base,
-                    BlockchainType.ZkSync,
-                    BlockchainType.Gnosis,
-                    BlockchainType.Fantom,
-                    BlockchainType.ArbitrumOne -> {
-                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
-                    }
                     BlockchainType.Tron -> {
                         adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
                     }

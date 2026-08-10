@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.address
 
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
@@ -21,7 +22,7 @@ class AddressCheckManager(
                 appConfigProvider.hashDitApiKey,
                 evmBlockchainManager
             ),
-            Eip20AddressValidator(evmSyncSourceManager),
+            ChainRegistry.all.mapNotNull { it.blacklistAddressChecker() },
             Trc20AddressValidator()
         ),
         AddressCheckType.Sanction to SanctionAddressChecker(

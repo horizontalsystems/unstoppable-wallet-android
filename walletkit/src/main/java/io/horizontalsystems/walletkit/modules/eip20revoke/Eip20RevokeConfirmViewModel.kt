@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
+import io.horizontalsystems.walletkit.core.IEip20ApproveAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.isEvm
@@ -20,7 +20,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.Abstract
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.send.SendModule
-import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
@@ -109,11 +108,11 @@ class Eip20RevokeConfirmViewModel(
     private fun prepareEvmRevokeTransaction() {
         val eip20Adapter =
             walletManager.activeWallets.firstOrNull { it.token == token }?.let { wallet ->
-                adapterManager.getAdapterForWallet<Eip20Adapter>(wallet)
+                adapterManager.getAdapterForWallet<IEip20ApproveAdapter>(wallet)
             } ?: throw IllegalStateException("Eip20Adapter not found for token")
         viewModelScope.launch {
             val transactionData =
-                eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
+                eip20Adapter.buildRevokeTransactionData(spenderAddress)
             sendTransactionService.setSendTransactionData(
                 SendTransactionData.Evm(transactionData, null)
             )

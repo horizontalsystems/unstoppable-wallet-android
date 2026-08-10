@@ -19,7 +19,7 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchException
+import io.horizontalsystems.walletkit.modules.multiswap.providers.RetryableSwapError
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
@@ -310,7 +310,7 @@ class SwapConfirmViewModel(
                 priceImpactService.setProviderTitle(swapProvider.title)
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: OneInchException) {
+            } catch (e: RetryableSwapError) {
                 // in this case we should keep state as loading
                 // temp solution. need find better one
             } catch (t: Throwable) {

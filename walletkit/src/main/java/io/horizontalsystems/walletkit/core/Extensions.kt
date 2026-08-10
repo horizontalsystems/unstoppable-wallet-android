@@ -80,6 +80,8 @@ fun ByteArray?.toHexString(): String {
     return "0x$rawHex"
 }
 
+fun String.stripHexPrefix(): String = removePrefix("0x")
+
 fun String.hexStringToByteArray(): ByteArray {
     val cleaned = removePrefix("0x")
     require(cleaned.length % 2 == 0) { "Invalid hex string length" }

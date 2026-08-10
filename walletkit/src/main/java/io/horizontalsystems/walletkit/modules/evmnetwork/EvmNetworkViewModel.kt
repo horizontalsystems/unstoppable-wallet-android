@@ -5,9 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.managers.rpcSource
 import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
-import io.horizontalsystems.walletkit.core.managers.uris
 import io.horizontalsystems.walletkit.entities.EvmSyncSource
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.launchIn
@@ -49,7 +47,7 @@ class EvmNetworkViewModel(
                 syncSource = evmSyncSource,
                 id = evmSyncSource.id,
                 name = evmSyncSource.name,
-                url = evmSyncSource.rpcSource.uris.first().toString(),
+                url = evmSyncSource.uris.first().toString(),
                 selected = evmSyncSource.id == currentSyncSourceId
             )
         }

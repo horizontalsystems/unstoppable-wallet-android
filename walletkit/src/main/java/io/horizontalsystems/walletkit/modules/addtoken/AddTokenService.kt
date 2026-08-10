@@ -51,7 +51,7 @@ class AddTokenService(
                 AddTronTokenBlockchainService.getInstance(blockchain)
             }
             else -> ChainRegistry[blockchain.type]?.addTokenBlockchainService(blockchain)
-                ?: AddEvmTokenBlockchainService.getInstance(blockchain)
+                ?: throw TokenError.InvalidReference
         }
 
         if (!blockchainService.isValid(reference)) throw TokenError.InvalidReference

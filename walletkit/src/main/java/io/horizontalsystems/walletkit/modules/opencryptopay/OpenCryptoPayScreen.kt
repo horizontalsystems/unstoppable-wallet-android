@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.walletkit.modules.balance.ui.BalanceCardSubtitleType
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectViewModel
@@ -54,31 +55,10 @@ fun OpenCryptoPayScreen(
         viewModel.onErrorShown()
     }
 
-    uiState.navigateToEvmConfirm?.let { data ->
-        navigation.slideFromRight(
-            OpenCryptoPayEvmConfirmationPage(
-                OpenCryptoPayEvmConfirmationPage.Input(
-                    wallet = data.wallet,
-                    callbackUrl = data.callbackUrl,
-                    quoteId = data.quoteId,
-                    paymentId = data.paymentId,
-                    method = data.method,
-                    asset = data.asset,
-                    assetAmount = data.assetAmount,
-                    blockchainType = data.blockchainType,
-                    merchant = data.merchant,
-                    expirationIso = data.expirationIso,
-                    minFee = data.minFee,
-                    sendEntryPointDestId = OpenCryptoPayPage::class,
-                )
-            ),
-        )
-        viewModel.onNavigatedToEvmConfirm()
-    }
-
     uiState.navigateToConfirm?.let { data ->
-        navigation.slideFromRight(
-            OpenCryptoPayConfirmationPage(
+        val page = ChainRegistry[data.blockchainType]
+            ?.openCryptoPayConfirmationPage(data, OpenCryptoPayPage::class)
+            ?: OpenCryptoPayConfirmationPage(
                 OpenCryptoPayConfirmationPage.Input(
                     wallet = data.wallet,
                     callbackUrl = data.callbackUrl,
@@ -92,8 +72,8 @@ fun OpenCryptoPayScreen(
                     minFee = data.minFee,
                     sendEntryPointDestId = OpenCryptoPayPage::class,
                 )
-            ),
-        )
+            )
+        navigation.slideFromRight(page)
         viewModel.onNavigatedToConfirm()
     }
 

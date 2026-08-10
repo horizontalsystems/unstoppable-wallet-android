@@ -30,6 +30,7 @@ android {
 
 dependencies {
     api(project(":walletkit"))
+    api(project(":walletkit-chain-evm"))
 
     api(libs.kit.thorchain)
 

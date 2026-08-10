@@ -3,18 +3,18 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.blockTime
 import io.horizontalsystems.walletkit.core.hexToByteArray
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.providers.AllBridgeAPI.Response
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldSlippage
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -88,6 +88,13 @@ object AllBridgeProvider : IMultiSwapProvider {
         allBridgeAPI.transferStatus(chain, txId)
 
     private var tokensMap = mapOf<Token, ABToken>()
+
+    private fun getProxyFee(amountIn: BigDecimal): BigDecimal {
+        // need to fetch it from contract
+        val feeBP = 100
+        val feeMultiplier = feeBP.toBigDecimal().movePointLeft(4).stripTrailingZeros()
+        return amountIn * feeMultiplier
+    }
 
     private fun getProxyAddress(bridgeAddress: String) = proxies[bridgeAddress]
 
@@ -186,8 +193,9 @@ object AllBridgeProvider : IMultiSwapProvider {
             val proxyAddress = getProxyAddress(bridgeAddress)
             val finalAddress = proxyAddress ?: bridgeAddress
 
-            val allowance = EvmSwapHelper.getAllowance(tokenIn, finalAddress)
-            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, finalAddress, tokenIn)
+            val plugin = ChainRegistry[tokenIn.blockchainType]
+            val allowance = plugin?.eip20Allowance(tokenIn, finalAddress)
+            actionRequired = plugin?.eip20ApproveAction(allowance, amountIn, finalAddress, tokenIn)
         } else if (tokenIn.blockchainType == BlockchainType.Tron) {
             val allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
             actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
@@ -222,7 +230,7 @@ object AllBridgeProvider : IMultiSwapProvider {
         val bridgeAddress = tokenPairIn.bridgeAddress
 
         getProxyAddress(bridgeAddress)?.let { proxyAddress ->
-            val proxyFee = EvmSwapHelper.getAllBridgeProxyFee(proxyAddress, amountIn)
+            val proxyFee = getProxyFee(amountIn)
 
             resAmountIn -= proxyFee
 
@@ -366,8 +374,8 @@ object AllBridgeProvider : IMultiSwapProvider {
                 val finalAddress = proxyAddress ?: bridgeAddress
 
                 SendTransactionData.Evm(
-                    transactionData = TransactionData(
-                        to = Address(finalAddress),
+                    transactionData = EvmTransactionData(
+                        to = finalAddress,
                         value = rawTransaction.value?.toBigInteger() ?: BigInteger.ZERO,
                         input = rawTransaction.data.hexStringToByteArray(),
                     ),

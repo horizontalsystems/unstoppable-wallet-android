@@ -135,7 +135,7 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
     override fun addressValidator(token: Token): EnterAddressValidator =
         BitcoinAddressValidator(token, App.adapterManager)
 
-    override fun resendTransactionPage(type: SpeedUpCancelType): HSPage =
+    override fun resendTransactionPage(type: SpeedUpCancelType, transactionHash: String): HSPage =
         ResendBitcoinPage(ResendBitcoinPage.Input(type))
 
     @Composable

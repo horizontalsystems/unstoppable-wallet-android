@@ -3,16 +3,12 @@ package io.horizontalsystems.walletkit.modules.send
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.ISendEthereumAdapter
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeModule
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronModule
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
@@ -46,35 +42,6 @@ data class SendPage(val input: Input) : HSPage() {
         when (wallet.token.blockchainType) {
 
 
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Avalanche,
-            BlockchainType.Optimism,
-            BlockchainType.Base,
-            BlockchainType.ZkSync,
-            BlockchainType.Gnosis,
-            BlockchainType.Fantom,
-            BlockchainType.ArbitrumOne -> {
-                val adapter = App.adapterManager.getAdapterForWallet<ISendEthereumAdapter>(wallet) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
-
-                val sendEvmViewModel = viewModel<SendEvmViewModel>(
-                    factory = SendEvmModule.Factory(wallet, address, hideAddress, adapter)
-                )
-
-                SendEvmScreen(
-                    title = title,
-                    navigation = navigation,
-                    amountInputModeViewModel = amountInputModeViewModel,
-                    viewModel = sendEvmViewModel,
-                    address = address,
-                    wallet = wallet,
-                    amount = amount,
-                    hideAddress = hideAddress,
-                    riskyAddress = riskyAddress,
-                    sendEntryPointDestId = sendEntryPointDestId
-                )
-            }
 
 
 

@@ -45,18 +45,6 @@ fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-            viewModel.viewState.evmAddress?.let { evmAddress ->
-                KeyActionItem(
-                    title = stringResource(id = R.string.PublicKeys_EvmAddress),
-                    description = stringResource(R.string.PublicKeys_EvmAddress_Description)
-                ) {
-                    navigation.slideFromRight(
-                        AddressPage(AddressPage.Input(evmAddress, AddressPage.Type.Evm))
-                    )
-
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
-                }
-            }
             viewModel.viewState.tronAddress?.let { tronAddress ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PublicKeys_TronAddress),

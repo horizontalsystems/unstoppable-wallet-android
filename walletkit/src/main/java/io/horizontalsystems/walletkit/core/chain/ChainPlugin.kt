@@ -17,6 +17,7 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
@@ -196,14 +197,44 @@ interface ChainPlugin {
     @Composable
     fun MainScreenEffects(navigation: HSNavigation) = Unit
 
+    /** Renders this chain's WalletConnect request sheet content; false when not handled. */
+    @Composable
+    fun WcRequestSheetScreen(navigation: HSNavigation): Boolean = false
+
+    /** Chain-specific blacklist checker consulted by the address-check flow, or null. */
+    fun blacklistAddressChecker(): io.horizontalsystems.walletkit.core.address.AddressChecker? = null
+
     /** Page for speeding up / cancelling a pending transaction, or null when unsupported. */
-    fun resendTransactionPage(type: SpeedUpCancelType): HSPage? = null
+    fun resendTransactionPage(type: SpeedUpCancelType, transactionHash: String): HSPage? = null
+
+    /** Address reported to market analytics for this chain, or null. */
+    fun analyticsAddress(accountType: AccountType): String? = null
+
+    /** Current EIP-20 allowance granted to spender, or null when not applicable. */
+    suspend fun eip20Allowance(token: Token, spenderAddress: String): BigDecimal? = null
+
+    /** Approve/revoke action required before swapping, or null when none is needed. */
+    fun eip20ApproveAction(
+        allowance: BigDecimal?,
+        amountIn: BigDecimal,
+        spenderAddress: String,
+        token: Token,
+    ): ISwapProviderAction? = null
+
+    /** Chain-specific OpenCryptoPay confirmation page, or null to use the generic one. */
+    fun openCryptoPayConfirmationPage(
+        data: io.horizontalsystems.walletkit.modules.opencryptopay.OcpConfirmData,
+        sendEntryPointDestId: KClass<out HSPage>,
+    ): HSPage? = null
 
     /** Source addresses whose UTXOs cover amountIn for a swap, or null when not a UTXO chain. */
     suspend fun swapSourceAddresses(token: Token, amountIn: BigDecimal): List<String>? = null
 
     /** WalletConnect handlers to register at app start. */
     fun wcHandlers(): List<IWCHandler> = emptyList()
+
+    /** Silent handler for wallet_* WalletConnect requests, or null. */
+    fun wcWalletRequestHandler(): io.horizontalsystems.walletkit.modules.walletconnect.IWCWalletRequestHandler? = null
 
     /** Swap providers contributed to the multiswap registry. */
     fun swapProviders(): List<IMultiSwapProvider> = emptyList()

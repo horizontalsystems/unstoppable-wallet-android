@@ -25,8 +25,7 @@ class OpenCryptoPayViewModel(
     private var methods: List<OcpMethodViewItem> = emptyList()
     private var secondsUntilExpiry: Int? = null
     private var error: String? = null
-    private var navigateToEvmConfirm: OcpEvmConfirmData? = null
-    private var navigateToConfirm: OcpEvmConfirmData? = null
+    private var navigateToConfirm: OcpConfirmData? = null
 
     private var paymentResponse: OcpPaymentResponse? = null
     private var countdownJob: Job? = null
@@ -44,7 +43,6 @@ class OpenCryptoPayViewModel(
         methods = methods,
         secondsUntilExpiry = secondsUntilExpiry,
         error = error,
-        navigateToEvmConfirm = navigateToEvmConfirm,
         navigateToConfirm = navigateToConfirm,
     )
 
@@ -135,7 +133,7 @@ class OpenCryptoPayViewModel(
         val response = paymentResponse ?: return
         val quote = response.quote ?: return
 
-        val data = OcpEvmConfirmData(
+        val data = OcpConfirmData(
             wallet = methodItem.wallet,
             callbackUrl = response.callback,
             quoteId = quote.id,
@@ -148,16 +146,7 @@ class OpenCryptoPayViewModel(
             expirationIso = quote.expiration,
             minFee = methodItem.transfer.minFee,
         )
-        if (isEvmMethod(methodItem.transfer.method)) {
-            navigateToEvmConfirm = data
-        } else {
-            navigateToConfirm = data
-        }
-        emitState()
-    }
-
-    fun onNavigatedToEvmConfirm() {
-        navigateToEvmConfirm = null
+        navigateToConfirm = data
         emitState()
     }
 
@@ -236,12 +225,6 @@ fun resolveApiUrl(lnurl: String): String {
     }
 }
 
-private val evmMethods = setOf(
-    "Ethereum", "BinanceSmartChain", "Polygon", "Arbitrum", "Optimism", "Base"
-)
-
-fun isEvmMethod(method: String) = method in evmMethods
-
 data class OpenCryptoPayUiState(
     val loading: Boolean,
     val merchant: String?,
@@ -250,8 +233,7 @@ data class OpenCryptoPayUiState(
     val methods: List<OcpMethodViewItem>,
     val secondsUntilExpiry: Int?,
     val error: String?,
-    val navigateToEvmConfirm: OcpEvmConfirmData?,
-    val navigateToConfirm: OcpEvmConfirmData?,
+    val navigateToConfirm: OcpConfirmData?,
 )
 
 data class OcpMethodViewItem(
@@ -261,7 +243,7 @@ data class OcpMethodViewItem(
     val wallet: Wallet,
 )
 
-data class OcpEvmConfirmData(
+data class OcpConfirmData(
     val wallet: Wallet,
     val callbackUrl: String,
     val quoteId: String,

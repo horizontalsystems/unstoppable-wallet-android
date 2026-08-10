@@ -51,7 +51,6 @@ import io.horizontalsystems.walletkit.modules.transactionInfo.ColorName
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
-import io.horizontalsystems.walletkit.modules.transactionInfo.options.TransactionSpeedUpCancelPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
@@ -715,21 +714,8 @@ private fun openTransactionOptionsModule(
     navigation: HSNavigation
 ) {
     when (blockchainType) {
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.ArbitrumOne -> {
-            navigation.slideFromRight(
-                TransactionSpeedUpCancelPage(TransactionSpeedUpCancelPage.Input(blockchainType, type, transactionHash))
-            )
-        }
-
         else -> {
-            ChainRegistry[blockchainType]?.resendTransactionPage(type)?.let {
+            ChainRegistry[blockchainType]?.resendTransactionPage(type, transactionHash)?.let {
                 navigation.slideFromRight(it)
             }
         }

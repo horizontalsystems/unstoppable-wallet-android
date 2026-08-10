@@ -1,12 +1,12 @@
 package io.horizontalsystems.walletkit.modules.multiswap.history
 
+import io.horizontalsystems.walletkit.modules.multiswap.providers.PANCAKE_V3_PROVIDER_ID
+import io.horizontalsystems.walletkit.modules.multiswap.providers.UNISWAP_V3_PROVIDER_ID
+import io.horizontalsystems.walletkit.modules.multiswap.providers.ONEINCH_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.THORCHAIN_PROVIDER_ID
 import io.horizontalsystems.walletkit.entities.SwapRecord
-import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 
 object SwapTrackRequestBuilder {
@@ -66,9 +66,9 @@ object SwapTrackRequestBuilder {
             )
 
             // Native single-tx EVM swaps — stateless on-chain reader.
-            record.providerId == OneInchProvider.ID ||
-            record.providerId == UniswapV3Provider.id ||
-            record.providerId == PancakeSwapV3Provider.id -> TrackCall(
+            record.providerId == ONEINCH_PROVIDER_ID ||
+            record.providerId == UNISWAP_V3_PROVIDER_ID ||
+            record.providerId == PANCAKE_V3_PROVIDER_ID -> TrackCall(
                 Endpoint.Evm,
                 UnstoppableAPI.Request.Track(
                     provider = providerApiName,
@@ -88,9 +88,9 @@ object SwapTrackRequestBuilder {
     private fun apiProviderName(providerId: String): String = when (providerId) {
         THORCHAIN_PROVIDER_ID -> "THORCHAIN"
         MAYA_PROVIDER_ID -> "MAYACHAIN"
-        OneInchProvider.ID -> "ONEINCH"
-        PancakeSwapV3Provider.id -> "PANCAKESWAP"
-        UniswapV3Provider.id -> "UNISWAP_V3"
+        ONEINCH_PROVIDER_ID -> "ONEINCH"
+        PANCAKE_V3_PROVIDER_ID -> "PANCAKESWAP"
+        UNISWAP_V3_PROVIDER_ID -> "UNISWAP_V3"
         else -> if (providerId.startsWith("u_")) providerId.removePrefix("u_") else providerId.uppercase()
     }
 }

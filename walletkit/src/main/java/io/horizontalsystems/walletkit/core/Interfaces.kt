@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.core
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
-import io.horizontalsystems.walletkit.core.managers.EvmKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MiniAppRegisterService.RegisterAppResponse
 import io.horizontalsystems.walletkit.core.managers.ServiceWCWhitelist
 import io.horizontalsystems.walletkit.core.providers.FeeRates
@@ -38,8 +37,6 @@ import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLoc
 import io.horizontalsystems.walletkit.modules.settings.terms.TermsModule
 import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
@@ -301,11 +298,6 @@ interface ITransactionsAdapter {
         fromTransactionId: String?
     ): List<TransactionRecord> = emptyList()
 
-    suspend fun getFullTransactionsBefore(
-        fromTransactionHash: ByteArray?,
-        limit: Int
-    ): List<io.horizontalsystems.ethereumkit.models.FullTransaction> = emptyList()
-
     suspend fun getTronFullTransactionsBefore(
         fromTransactionHash: ByteArray?,
         limit: Int
@@ -396,12 +388,6 @@ data class UsedAddress(
 )
 
 
-interface ISendEthereumAdapter {
-    val evmKitWrapper: EvmKitWrapper
-    val balanceData: BalanceData
-
-    fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
-}
 
 
 interface IAdapter {
@@ -589,4 +575,11 @@ interface ITermsManager {
 
 interface Clearable {
     fun clear()
+}
+
+/** EIP-20 approve/revoke transaction building without exposing ethereum-kit types. */
+interface IEip20ApproveAdapter {
+    fun buildApproveTransactionData(spender: String, amount: java.math.BigDecimal): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
+    fun buildApproveUnlimitedTransactionData(spender: String): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
+    fun buildRevokeTransactionData(spender: String): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
 }

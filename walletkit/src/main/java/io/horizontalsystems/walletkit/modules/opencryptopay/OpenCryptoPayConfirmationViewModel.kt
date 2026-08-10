@@ -12,6 +12,8 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.storage.OcpPaymentDao
 import io.horizontalsystems.walletkit.entities.OcpPaymentRecord
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
+import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.ISignOnlySendTransactionService
@@ -41,7 +43,7 @@ class OpenCryptoPayConfirmationViewModel(
     private val expirationIso: String,
     private val minFee: Double?,
     private val ocpPaymentDao: OcpPaymentDao,
-) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
+) : ViewModelUiState<OpenCryptoPayConfirmationUiState>() {
 
     val sendTransactionService = SendTransactionServiceFactory.create(wallet.token)
 
@@ -94,7 +96,7 @@ class OpenCryptoPayConfirmationViewModel(
         }
     }
 
-    override fun createState() = OpenCryptoPayEvmConfirmationUiState(
+    override fun createState() = OpenCryptoPayConfirmationUiState(
         networkFee = sendTransactionState.networkFee,
         cautions = fetchError?.let { listOf(it) } ?: sendTransactionState.cautions,
         payEnabled = fetchError == null && sendTransactionState.sendable,
@@ -275,3 +277,15 @@ class OpenCryptoPayConfirmationViewModel(
         }
     }
 }
+
+data class OpenCryptoPayConfirmationUiState(
+    val networkFee: SendModule.AmountData?,
+    val cautions: List<CautionViewItem>,
+    val payEnabled: Boolean,
+    val transactionFields: List<DataField>,
+    val sectionViewItems: List<SectionViewItem>,
+    val initialLoading: Boolean,
+    val merchant: String?,
+    val url: String,
+    val secondsUntilExpiry: Int?,
+)

@@ -10,14 +10,12 @@ import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldSlippage
-import io.horizontalsystems.ethereumkit.core.stripHexPrefix
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.ethereumkit.spv.core.toLong
+import io.horizontalsystems.walletkit.core.stripHexPrefix
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -347,8 +345,9 @@ class USwapProvider(
         val actionRequired = approvalAddress?.let { approvalAddress ->
             when {
                 tokenIn.blockchainType.isEvm -> {
-                    val allowance = EvmSwapHelper.getAllowance(tokenIn, approvalAddress)
-                    EvmSwapHelper.actionApprove(allowance, amountIn, approvalAddress, tokenIn)
+                    val plugin = ChainRegistry[tokenIn.blockchainType]
+                    val allowance = plugin?.eip20Allowance(tokenIn, approvalAddress)
+                    plugin?.eip20ApproveAction(allowance, amountIn, approvalAddress, tokenIn)
                 }
 
                 tokenIn.blockchainType == BlockchainType.Tron -> {
@@ -580,15 +579,15 @@ class USwapProvider(
                 throw IllegalStateException("No evm tx found")
             }
 
-            val transactionData = TransactionData(
-                to = Address(signable.to ?: throw IllegalStateException("No tx `to`")),
+            val transactionData = EvmTransactionData(
+                to = signable.to ?: throw IllegalStateException("No tx `to`"),
                 value = BigInteger((signable.value ?: "0x0").stripHexPrefix(), 16),
                 input = (signable.data ?: "0x").hexStringToByteArray()
             )
 
             return SendTransactionData.Evm(
                 transactionData = transactionData,
-                gasLimit = signable.gas?.hexStringToByteArray()?.toLong(),
+                gasLimit = signable.gas?.let { java.math.BigInteger(it.stripHexPrefix(), 16).toLong() },
             )
         }
 

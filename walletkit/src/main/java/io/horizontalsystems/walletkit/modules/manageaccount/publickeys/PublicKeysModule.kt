@@ -16,7 +16,6 @@ object PublicKeysModule {
     }
 
     data class ViewState(
-        val evmAddress: String? = null,
         val tronAddress: String? = null,
         val chainKeyRows: List<ChainKeyRow> = emptyList()
     )

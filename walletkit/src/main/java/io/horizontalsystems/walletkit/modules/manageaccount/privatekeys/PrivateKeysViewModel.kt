@@ -4,13 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.tronkit.network.Network
@@ -26,16 +24,6 @@ class PrivateKeysViewModel(
         private set
 
     init {
-
-        val ethereumPrivateKey = when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
-                val chain = EvmKitManagerRegistry.getChain(BlockchainType.Ethereum)
-                toHexString(Signer.privateKey(accountType.words, accountType.passphrase, chain))
-            }
-
-            is AccountType.EvmPrivateKey -> toHexString(accountType.key)
-            else -> null
-        }
 
         val tronPrivateKey = when (val accountType = account.type) {
             is AccountType.Mnemonic -> {
@@ -55,7 +43,6 @@ class PrivateKeysViewModel(
         val chainKeyRows = ChainRegistry.all.flatMap { it.privateKeyRows(account) }
 
         viewState = PrivateKeysModule.ViewState(
-            evmPrivateKey = ethereumPrivateKey,
             tronPrivateKey = tronPrivateKey,
             chainKeyRows = chainKeyRows
         )

@@ -1,6 +1,6 @@
 package io.horizontalsystems.walletkit.modules.coin.analytics
 
-import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.InvalidAuthTokenException
@@ -78,8 +78,8 @@ class CoinAnalyticsService(
     }
 
     private suspend fun preview() {
-        val addresses = accountManager.accounts.mapNotNull {
-            it.type.evmAddress(EvmKitManagerRegistry.getChain(BlockchainType.Ethereum))?.hex
+        val addresses = accountManager.accounts.mapNotNull { account ->
+            ChainRegistry.all.firstNotNullOfOrNull { it.analyticsAddress(account.type) }
         }
 
         try {

@@ -19,7 +19,6 @@ import io.horizontalsystems.walletkit.ICoreApp
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.factories.AccountFactory
 import io.horizontalsystems.walletkit.core.factories.AdapterFactory
-import io.horizontalsystems.walletkit.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.walletkit.core.managers.AccountCleaner
 import io.horizontalsystems.walletkit.core.managers.AccountManager
 import io.horizontalsystems.walletkit.core.managers.ActionCompletedDelegate
@@ -105,8 +104,7 @@ import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
-import io.horizontalsystems.walletkit.modules.walletconnect.WCWalletRequestHandler
-import io.horizontalsystems.walletkit.modules.walletconnect.handler.WCHandlerEvm
+import io.horizontalsystems.walletkit.modules.walletconnect.IWCWalletRequestHandler
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.walletkit.security.EncryptionManager
 import io.horizontalsystems.walletkit.security.KeyStoreManager
@@ -172,7 +170,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var coinManager: ICoinManager
         lateinit var wcSessionManager: WCSessionManager
         lateinit var wcManager: WCManager
-        lateinit var wcWalletRequestHandler: WCWalletRequestHandler
+        var wcWalletRequestHandler: IWCWalletRequestHandler? = null
         lateinit var termsManager: ITermsManager
         lateinit var swapTermsManager: SwapTermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
@@ -183,7 +181,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
         lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var evmAccountManagerFactory: io.horizontalsystems.walletkit.core.factories.EvmAccountManagerFactory
         lateinit var moneroNodeManager: MoneroNodeManager
         lateinit var moneroNodeStorage: MoneroNodeStorage
         lateinit var zanoNodeStorage: ZanoNodeStorage
@@ -332,12 +329,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
         swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
         swapProviderInfoManager = SwapProviderInfoManager(appConfigProvider)
-        evmAccountManagerFactory = EvmAccountManagerFactory(
-            accountManager,
-            walletManager,
-            marketKit,
-            tokenAutoEnableManager
-        )
         evmBlockchainManager = EvmBlockchainManager(marketKit)
 
         val tronAccountManager = TronAccountManager(
@@ -404,11 +395,10 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
         wcManager = WCManager(accountManager)
-        wcManager.addWcHandler(WCHandlerEvm(evmBlockchainManager))
         ChainRegistry.all.forEach { plugin ->
             plugin.wcHandlers().forEach(wcManager::addWcHandler)
         }
-        wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
+        wcWalletRequestHandler = ChainRegistry.all.firstNotNullOfOrNull { it.wcWalletRequestHandler() }
 
         termsManager = TermsManager(localStorage)
         swapTermsManager = SwapTermsManager(localStorage)

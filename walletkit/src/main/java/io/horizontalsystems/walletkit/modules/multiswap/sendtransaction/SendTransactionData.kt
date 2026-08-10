@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
 import org.json.JSONObject
@@ -9,7 +8,7 @@ import java.math.BigDecimal
 
 sealed class SendTransactionData {
     data class Evm(
-        val transactionData: TransactionData,
+        val transactionData: EvmTransactionData,
         val gasLimit: Long?,
     ): SendTransactionData()
 
@@ -107,3 +106,10 @@ sealed class SendTransactionData {
     ) : SendTransactionData()
 
 }
+
+/** Kit-free projection of ethereum-kit's TransactionData. */
+data class EvmTransactionData(
+    val to: String,
+    val value: java.math.BigInteger,
+    val input: ByteArray,
+)

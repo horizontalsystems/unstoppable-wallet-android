@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.modules.settings.appstatus
 
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.ISystemInfoManager
 import io.horizontalsystems.walletkit.core.AppLog
 import io.horizontalsystems.walletkit.core.IAccountManager
@@ -185,13 +184,6 @@ class AppStatusViewModel(
                 }
             }
 
-        evmBlockchainManager.allBlockchains
-            .forEach { blockchain ->
-                EvmKitManagerRegistry.getEvmKitManager(blockchain.type).statusInfo?.let { statusInfo ->
-                    blockchainStatus[blockchain.name] = statusInfo
-                }
-            }
-
         ChainRegistry.all.forEach { plugin ->
             plugin.statusInfo()?.let { statusInfo ->
                 blockchainStatus[plugin.blockchainType.title] = statusInfo
@@ -239,15 +231,6 @@ class AppStatusViewModel(
                 }
 
                 block?.let { blocks.add(it) }
-            }
-
-        evmBlockchainManager.allBlockchains
-            .forEach { blockchain ->
-                EvmKitManagerRegistry.getEvmKitManager(blockchain.type).statusInfo?.let { statusInfo ->
-                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                    val block = getBlockchainInfoBlock(title, blockchain.name, statusInfo)
-                    blocks.add(block)
-                }
             }
 
         ChainRegistry.all.forEach { plugin ->

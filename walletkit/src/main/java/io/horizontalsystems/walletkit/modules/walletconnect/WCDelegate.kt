@@ -70,7 +70,7 @@ object WCDelegate : DAppServiceCallback {
         // delivered more than once for the same request, and a duplicate/empty callback would
         // otherwise wipe the request currently shown to the user (dApp then hangs pending).
         val newRequest = App.wcSessionManager.getNewSessionRequest() ?: return
-        if (App.wcWalletRequestHandler.handle(newRequest)) return
+        if (App.wcWalletRequestHandler?.handle(newRequest) == true) return
 
         sessionRequestEvent = newRequest
         scope.launch {

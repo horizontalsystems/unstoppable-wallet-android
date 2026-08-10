@@ -29,15 +29,15 @@ class PhishingAddressChecker(
 
 class BlacklistAddressChecker(
     private val hashDitAddressValidator: HashDitAddressValidator,
-    private val eip20AddressValidator: Eip20AddressValidator,
+    private val chainCheckers: List<AddressChecker>,
     private val trc20AddressValidator: Trc20AddressValidator,
 ) : AddressChecker {
     override suspend fun isClear(address: Address, token: Token): Boolean {
         if (token.blockchainType == BlockchainType.Tron) {
             return trc20AddressValidator.isClear(address, token)
         }
-        if (eip20AddressValidator.supports(token)) {
-            if (!eip20AddressValidator.isClear(address, token)) {
+        for (checker in chainCheckers) {
+            if (checker.supports(token) && !checker.isClear(address, token)) {
                 return false
             }
         }
@@ -53,7 +53,7 @@ class BlacklistAddressChecker(
         if(token.blockchainType == BlockchainType.Tron) {
             return trc20AddressValidator.supports(token)
         }
-        return hashDitAddressValidator.supports(token) || eip20AddressValidator.supports(token)
+        return hashDitAddressValidator.supports(token) || chainCheckers.any { it.supports(token) }
     }
 }
 

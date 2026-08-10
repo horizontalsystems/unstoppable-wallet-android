@@ -1,17 +1,14 @@
 package io.horizontalsystems.walletkit.modules.walletconnect
 
 import android.net.Uri
-import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.MethodData
 import io.horizontalsystems.walletkit.modules.walletconnect.request.AbstractWCAction
-import io.horizontalsystems.walletkit.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.walletkit.modules.walletconnect.session.ValidationError
 import io.horizontalsystems.dapp.core.HSDAppNamespaceSession
 import io.horizontalsystems.dapp.core.HSDAppRequest
-import io.horizontalsystems.marketkit.models.BlockchainType
 
 class WCManager(
     private val accountManager: IAccountManager,
@@ -79,15 +76,6 @@ class WCManager(
             tmpAccount.type.supportsWalletConnect -> SupportState.Supported
             else -> SupportState.NotSupported(tmpAccount.type.description)
         }
-    }
-
-    fun getBlockchainType(sessionChainId: String?): BlockchainType? {
-        val chainId = getChainData(sessionChainId)?.id
-        return chainId?.let { App.evmBlockchainManager.getBlockchain(it) }?.type
-    }
-
-    fun getChainData(chainId: String?): WCChainData? {
-        return WCUtils.getChainData(chainId ?: return null)
     }
 
     fun validate(requiredNamespaces: Map<String, io.horizontalsystems.dapp.core.HSDAppNamespaceProposal>) {

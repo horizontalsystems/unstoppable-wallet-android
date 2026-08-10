@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ThornodeAPI.Response
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldSlippage
@@ -353,7 +354,7 @@ abstract class BaseThorChainProvider(
                 }
 
                 SendTransactionData.Evm(
-                    transactionData = transactionData,
+                    transactionData = transactionData.toEvmTransactionData(),
                     gasLimit = null,
                 )
             }

@@ -2,17 +2,12 @@ package io.horizontalsystems.walletkit.core.factories
 
 import android.content.Context
 import android.util.Log
-import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.managers.evmTransactionSource
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
-import io.horizontalsystems.walletkit.core.adapters.Eip20Adapter
-import io.horizontalsystems.walletkit.core.adapters.EvmAdapter
-import io.horizontalsystems.walletkit.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.adapters.TronAdapter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
@@ -41,24 +36,6 @@ class AdapterFactory(
     private val localStorage: ILocalStorage,
 ) {
 
-    private fun getEvmAdapter(wallet: Wallet): IAdapter? {
-        val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
-        val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).getEvmKitWrapper(
-            wallet.account,
-            blockchainType
-        )
-
-        return EvmAdapter(evmKitWrapper, coinManager)
-    }
-
-    private fun getEip20Adapter(wallet: Wallet, address: String): IAdapter? {
-        val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
-        val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).getEvmKitWrapper(wallet.account, blockchainType)
-        val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
-
-        return Eip20Adapter(context, evmKitWrapper, address, baseToken, coinManager, wallet, evmLabelManager)
-    }
-
     private fun getTrc20Adapter(wallet: Wallet, address: String): Trc20Adapter? {
         val tronKitWrapper = tronKitManager.getTronKitWrapper(wallet.account)
         val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
@@ -77,19 +54,6 @@ class AdapterFactory(
         is TokenType.Derived -> registryAdapter(wallet)
         is TokenType.AddressTyped -> registryAdapter(wallet)
         TokenType.Native -> when (wallet.token.blockchainType) {
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Avalanche,
-            BlockchainType.Optimism,
-            BlockchainType.Base,
-            BlockchainType.ZkSync,
-            BlockchainType.Gnosis,
-            BlockchainType.Fantom,
-            BlockchainType.ArbitrumOne -> {
-                getEvmAdapter(wallet)
-            }
-
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
             }
@@ -99,7 +63,7 @@ class AdapterFactory(
             if (wallet.token.blockchainType == BlockchainType.Tron) {
                 getTrc20Adapter(wallet, tokenType.address)
             } else {
-                getEip20Adapter(wallet, tokenType.address)
+                registryAdapter(wallet)
             }
         }
         is TokenType.Spl -> registryAdapter(wallet)
@@ -116,14 +80,6 @@ class AdapterFactory(
             restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
         )
 
-    fun evmTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
-        val evmKitWrapper = EvmKitManagerRegistry.getEvmKitManager(blockchainType).getEvmKitWrapper(source.account, blockchainType)
-        val baseCoin = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
-        val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
-
-        return EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source, evmTransactionSource(blockchainType, App.appConfigProvider), evmLabelManager)
-    }
-
     fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val tronKitWrapper = tronKitManager.getTronKitWrapper(source.account)
         val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
@@ -134,16 +90,6 @@ class AdapterFactory(
 
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Optimism,
-            BlockchainType.Base,
-            BlockchainType.ZkSync,
-            BlockchainType.ArbitrumOne -> {
-                val evmKitManager = EvmKitManagerRegistry.getEvmKitManager(blockchainType)
-                evmKitManager.unlink(wallet.account)
-            }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(wallet.account)
             }
@@ -155,16 +101,6 @@ class AdapterFactory(
 
     fun unlinkAdapter(transactionSource: TransactionSource) {
         when (val blockchainType = transactionSource.blockchain.type) {
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Optimism,
-            BlockchainType.Base,
-            BlockchainType.ZkSync,
-            BlockchainType.ArbitrumOne -> {
-                val evmKitManager = EvmKitManagerRegistry.getEvmKitManager(blockchainType)
-                evmKitManager.unlink(transactionSource.account)
-            }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(transactionSource.account)
             }
