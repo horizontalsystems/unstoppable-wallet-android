@@ -244,6 +244,12 @@ class SwapViewModel(
             it.token.coin.uid == token.coin.uid && it.token.blockchainType == token.blockchainType
         }?.token ?: token
 
+    override fun onCleared() {
+        // The quote service keeps a standing subscription to provider suspensions, so it stays
+        // referenced until its own scope is cancelled.
+        quoteService.clear()
+    }
+
     private fun requoteIfTimeout() {
         if (requoteOnTimeout && timerState.timeout) {
             reQuote()

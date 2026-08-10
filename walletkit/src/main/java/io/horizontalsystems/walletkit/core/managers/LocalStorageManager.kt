@@ -101,6 +101,8 @@ class LocalStorageManager(
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val LAST_MIGRATION_VERSION = "last_migration_version"
     private val ENABLED_PAID_ACTIONS = "enabled_paid_actions"
+    private val USWAP_SUSPENSIONS = "uswap_suspensions"
+    private val USWAP_SUSPENSIONS_SYNC_TIME = "uswap_suspensions_sync_time"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(preferences.getBoolean(UTXO_EXPERT_MODE, false))
@@ -155,6 +157,21 @@ class LocalStorageManager(
             ?.split(",")?.filter { it.isNotBlank() } ?: listOf()
         set(value) {
             preferences.edit { putString("swapRecentTokenQueryIds", value.joinToString(",")) }
+        }
+
+    // Provider suspensions as JSON, cached so a cold launch keeps honouring them until the next
+    // sync. Null means never stored, which is what makes the manager sync regardless of the
+    // interval.
+    override var uSwapSuspensions: String?
+        get() = preferences.getString(USWAP_SUSPENSIONS, null)
+        set(value) {
+            preferences.edit { putString(USWAP_SUSPENSIONS, value) }
+        }
+
+    override var uSwapSuspensionsSyncTime: Long
+        get() = preferences.getLong(USWAP_SUSPENSIONS_SYNC_TIME, 0)
+        set(value) {
+            preferences.edit { putLong(USWAP_SUSPENSIONS_SYNC_TIME, value) }
         }
 
     override var zcashAccountIds: Set<String>

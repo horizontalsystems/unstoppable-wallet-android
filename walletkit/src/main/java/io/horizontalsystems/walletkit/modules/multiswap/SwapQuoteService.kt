@@ -1,17 +1,21 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
 import android.util.Log
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -21,8 +25,11 @@ class SwapQuoteService(
     // Callers with restricted execution capabilities (e.g. smart accounts that
     // can only broadcast a subset of providers) pass their own set.
     private val allProviders: List<IMultiSwapProvider> = MultiSwapProviderRegistry.allProviders,
+    private val providerInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
 ) {
     private val tag = "SwapQuoteService"
+
+    private var suspensions = providerInfoManager.suspensionsFlow.value
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
@@ -56,6 +63,25 @@ class SwapQuoteService(
             startProviders()
             runQuotation()
         }
+
+        coroutineScope.launch {
+            providerInfoManager.sync()
+        }
+
+        coroutineScope.launch {
+            // Dropping the current value: it already seeded `suspensions`, and re-quoting on it
+            // would cancel the quotation the launch above has just started. A sync that only
+            // changes which PAIRS a provider may serve leaves the token selection untouched, so
+            // this is the only thing that re-runs quotation for it.
+            providerInfoManager.suspensionsFlow.drop(1).collect {
+                suspensions = it
+                runQuotation(silent = true)
+            }
+        }
+    }
+
+    fun clear() {
+        coroutineScope.cancel()
     }
 
     fun restart(onRestart: () -> Unit) {
@@ -109,7 +135,13 @@ class SwapQuoteService(
         val amountIn = amountIn
 
         if (tokenIn != null && tokenOut != null) {
-            val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
+            val supportedProviders = allProviders.filter { provider ->
+                // Checked here, in the one place every provider passes through, rather than inside
+                // each `supports` implementation — and it is the only enforcement that exists for
+                // the providers this app quotes natively, since those never reach the server.
+                !suspensions.isSuspended(provider.id, tokenIn, tokenOut) &&
+                    provider.supports(tokenIn, tokenOut)
+            }
 
             if (supportedProviders.isEmpty()) {
                 error = NoSupportedSwapProvider()

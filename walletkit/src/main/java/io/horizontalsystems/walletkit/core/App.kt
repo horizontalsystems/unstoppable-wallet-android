@@ -327,7 +327,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
         swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
-        swapProviderInfoManager = SwapProviderInfoManager(appConfigProvider)
+        swapProviderInfoManager = SwapProviderInfoManager(appConfigProvider, localStorage)
         evmBlockchainManager = EvmBlockchainManager(marketKit)
 
         val tronAccountManager = TronAccountManager(

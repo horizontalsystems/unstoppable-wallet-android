@@ -839,6 +839,12 @@ interface UnstoppableAPI {
             val amlPolicy: String? = null,
             val amlPolicyDescription: String? = null,
             val contacts: Contacts? = null,
+            // Whole-provider kill switch.
+            val suspended: Boolean = false,
+            // Scoped restrictions — asset, chain or directed pair. See SwapSuspension. Nullable
+            // because the field is absent for the many providers that carry no rules, and Gson
+            // fills absent fields with null rather than the declared default.
+            val suspensions: List<SwapSuspension>? = null,
         ) {
             data class Contacts(
                 val email: String? = null,
