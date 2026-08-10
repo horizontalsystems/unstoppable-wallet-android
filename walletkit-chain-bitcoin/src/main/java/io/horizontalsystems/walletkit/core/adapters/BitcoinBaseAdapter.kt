@@ -61,7 +61,7 @@ abstract class BitcoinBaseAdapter(
     private val backgroundManager: BackgroundManager,
     val wallet: Wallet,
     protected val decimal: Int = 8
-) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter {
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter, IStatusInfoAdapter {
 
     private val scope = CoroutineScope(Dispatchers.Default)
     private var transactionConfirmationsThreshold = 3
@@ -511,7 +511,7 @@ abstract class BitcoinBaseAdapter(
 
     }
 
-    val statusInfo: Map<String, Any>
+    override val statusInfo: Map<String, Any>
         get() = kit.statusInfo()
 
     override fun satoshiToBTC(value: Long): BigDecimal {

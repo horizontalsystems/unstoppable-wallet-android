@@ -1,0 +1,24 @@
+# The App Status debug screen must open and render its blockchain
+# status sections for a wallet with default coins enabled.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+---
+- launchApp:
+    clearState: true
+- runFlow: ../subflows/create_standard_wallet.yaml
+
+- tapOn: "Settings"
+- scrollUntilVisible:
+    element:
+      text: "About App"
+- tapOn: "About App"
+- tapOn: "App Status"
+
+# The screen lists app info followed by per-chain status blocks. The
+# blockchain section is the regression-sensitive part: it casts adapters
+# to IStatusInfoAdapter and crashed when an adapter didn't implement it.
+- assertVisible: "App Status"
+- assertVisible: "App Version"
+- scrollUntilVisible:
+    element:
+      text: "Blockchain Status"
+- assertVisible: "Bitcoin-BIP84"
