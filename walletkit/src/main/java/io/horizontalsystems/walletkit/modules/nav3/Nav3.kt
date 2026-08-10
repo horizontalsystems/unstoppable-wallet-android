@@ -65,7 +65,7 @@ fun Nav3(entryPage: HSPage) {
     IntentEffect(mainActivityViewModel, hsNavigation)
     Validate(mainActivityViewModel)
     HandleWcEvent(mainActivityViewModel, hsNavigation)
-    ToggleScreenshot(hsNavigation)
+    ToggleScreenshot(hsNavigation, isLocked)
 
     LaunchedEffect(isLocked) {
         if (!isLocked) {
@@ -256,13 +256,17 @@ private fun HandleWcEvent(
 }
 
 @Composable
-private fun ToggleScreenshot(navigation: HSNavigation) {
+private fun ToggleScreenshot(navigation: HSNavigation, isLocked: Boolean) {
     val activity = LocalActivity.current
     val currentScreen = navigation.lastOrNull()
-    LaunchedEffect(currentScreen) {
+    LaunchedEffect(currentScreen, isLocked) {
         if (activity != null) {
             activity.currentFocus?.hideKeyboard(activity)
-            if (currentScreen?.screenshotEnabled == false) {
+            // The unlock keypad is drawn as an overlay rather than pushed as a page, so it has no
+            // screenshotEnabled of its own. Without the lock state here the flag stays however the
+            // page underneath left it, and locking over an ordinary screen leaves passcode entry
+            // recordable.
+            if (isLocked || currentScreen?.screenshotEnabled == false) {
                 activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
             } else {
                 activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
