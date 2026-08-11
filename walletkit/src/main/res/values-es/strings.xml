@@ -1815,4 +1815,8 @@
     <string name="WalletConnect_TypedData_Type">Tipo de Solicitud</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">¡Red Incorrecta!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">Esta solicitud está vinculada a una red diferente a la que está conectado. Firmarla produciría una firma válida en un lugar donde no pretendía.</string>
+    <string name="WalletConnect_Permit_Token">Token</string>
+    <string name="WalletConnect_Permit_Expires">Permiso Vence</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">¡Permiso Ilimitado!</string>
+    <string name="WalletConnect_Permit_Unlimited">Firmar esto permite que %s mueva cualquier cantidad de este token de su wallet en cualquier momento hasta que se revoque el permiso. Nada aparece en cadena ahora, por lo que no verá que suceda.</string>
 </resources>

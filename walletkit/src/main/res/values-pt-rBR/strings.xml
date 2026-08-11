@@ -1820,4 +1820,8 @@
     <string name="WalletConnect_TypedData_Type">Tipo de Solicitação</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">Rede Incorreta!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">Esta solicitação está vinculada a uma rede diferente da que você está conectado. Assiná-la produziria uma assinatura válida em um local onde você não pretendia.</string>
+    <string name="WalletConnect_Permit_Token">Token</string>
+    <string name="WalletConnect_Permit_Expires">Permissão Expira</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">Permissão Ilimitada!</string>
+    <string name="WalletConnect_Permit_Unlimited">Assinar isto permite que %s mova qualquer quantidade deste token de sua carteira, a qualquer momento até que a permissão seja revogada. Nada aparece na blockchain agora, então você não verá isso acontecer.</string>
 </resources>

@@ -1816,4 +1816,8 @@
     <string name="WalletConnect_TypedData_Type">요청 유형</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">잘못된 네트워크!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">이 요청은 연결된 네트워크와 다른 네트워크에 바인딩되어 있습니다. 이에 서명하면 의도하지 않은 곳에서 유효한 서명이 생성됩니다.</string>
+    <string name="WalletConnect_Permit_Token">토큰</string>
+    <string name="WalletConnect_Permit_Expires">허용 만료</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">무제한 허용!</string>
+    <string name="WalletConnect_Permit_Unlimited">이에 서명하면 %s가 허용이 취소될 때까지 언제든지 지갑에서 이 토큰의 모든 금액을 이동할 수 있습니다. 지금은 체인에 아무것도 나타나지 않으므로 이것이 발생하는 것을 보지 못할 것입니다.</string>
 </resources>

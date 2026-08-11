@@ -1817,4 +1817,8 @@
     <string name="WalletConnect_TypedData_Type">Type de Demande</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">Mauvais Réseau!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">Cette demande est liée à un réseau différent de celui auquel vous êtes connecté. La signer produirait une signature valide quelque part où vous n\'aviez pas l\'intention.</string>
+    <string name="WalletConnect_Permit_Token">Token</string>
+    <string name="WalletConnect_Permit_Expires">Approbation Expire</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">Approbation Illimitée!</string>
+    <string name="WalletConnect_Permit_Unlimited">Signer ceci permet à %s de déplacer n\'importe quelle quantité de ce token de votre portefeuille, à tout moment jusqu\'à ce que l\'approbation soit révoquée. Rien n\'apparaît sur la chaîne maintenant, vous ne verrez donc pas cela se produire.</string>
 </resources>

@@ -1822,4 +1822,8 @@
     <string name="WalletConnect_TypedData_Type">Тип Запроса</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">Неправильная Сеть!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">Этот запрос привязан к другой сети, чем та, к которой вы подключены. Подписание его создаст подпись, действительную в месте, которое вы не предполагали.</string>
+    <string name="WalletConnect_Permit_Token">Токен</string>
+    <string name="WalletConnect_Permit_Expires">Разрешение истекает</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">Неограниченное разрешение!</string>
+    <string name="WalletConnect_Permit_Unlimited">Подписав это, вы разрешите %s перемещать любое количество этого токена из вашего кошелька в любое время до отзыва разрешения. Сейчас ничего не появляется в цепи, поэтому вы не увидите, как это происходит.</string>
 </resources>

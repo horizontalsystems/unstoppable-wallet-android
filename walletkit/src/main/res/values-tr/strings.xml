@@ -1816,4 +1816,8 @@
     <string name="WalletConnect_TypedData_Type">İstek Türü</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">Yanlış Ağ!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">Bu istek, bağlı olduğunuz ağdan farklı bir ağa bağlıdır. İmzalamak, amaçlamadığınız bir yerde geçerli olan bir imza üretir.</string>
+    <string name="WalletConnect_Permit_Token">Token</string>
+    <string name="WalletConnect_Permit_Expires">İzin Süresi Doluyor</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">Sınırsız İzin!</string>
+    <string name="WalletConnect_Permit_Unlimited">Bunu imzalamak, %s\'nin izin iptal edilene kadar istediği zaman cüzdanınızdan bu tokenin herhangi bir miktarını taşımasına izin verir. Şu anda zincirde hiçbir şey görünmüyor, bu nedenle bunun gerçekleştiğini görmezsiniz.</string>
 </resources>

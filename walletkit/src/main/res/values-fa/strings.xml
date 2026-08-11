@@ -748,4 +748,8 @@
     <string name="WalletConnect_TypedData_Type">نوع درخواست</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">شبکه غلط!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">این درخواست به شبکه متفاوتی محدود است تا آن شبکه ای که متصل هستید. امضای آن امضایی معتبر در جایی تولید می کند که قصد نداشتید.</string>
+    <string name="WalletConnect_Permit_Token">توکن</string>
+    <string name="WalletConnect_Permit_Expires">اجازه منقضی می‌شود</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">اجازه نامحدود!</string>
+    <string name="WalletConnect_Permit_Unlimited">امضای این اجازه می‌دهد %s در هر زمان تا زمان لغو اجازه، هر مقدار از این توکن را از کیف پول شما منتقل کند. هم‌اکنون هیچ چیزی در زنجیره ظاهر نمی‌شود، بنابراین شما آن را مشاهده نخواهید کرد.</string>
 </resources>

@@ -1824,4 +1824,8 @@
     <string name="WalletConnect_TypedData_Type">Anforderungstyp</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">Falsches Netzwerk!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">Diese Anforderung ist an ein anderes Netzwerk gebunden als das, mit dem Sie verbunden sind. Das Signieren würde eine Signatur erzeugen, die an einem Ort gültig ist, wo Sie dies nicht beabsichtigt haben.</string>
+    <string name="WalletConnect_Permit_Token">Token</string>
+    <string name="WalletConnect_Permit_Expires">Genehmigung läuft ab</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">Unbegrenzte Genehmigung!</string>
+    <string name="WalletConnect_Permit_Unlimited">Durch das Signieren dieser Nachricht erlauben Sie %s, jede Menge dieses Tokens jederzeit aus Ihrer Wallet zu bewegen, bis die Genehmigung widerrufen wird. Jetzt erscheint nichts in der Blockchain, daher sehen Sie es nicht geschehen.</string>
 </resources>

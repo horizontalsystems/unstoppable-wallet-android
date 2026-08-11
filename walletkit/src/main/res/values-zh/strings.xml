@@ -1815,4 +1815,8 @@
     <string name="WalletConnect_TypedData_Type">请求类型</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">错误的网络!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">此请求与您连接的网络不同的网络绑定。签署它将在您未曾打算的地方产生有效的签名。</string>
+    <string name="WalletConnect_Permit_Token">代币</string>
+    <string name="WalletConnect_Permit_Expires">授权过期</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">无限授权!</string>
+    <string name="WalletConnect_Permit_Unlimited">签署此授权允许 %s 在授权被撤销前的任何时间，从您的钱包中转移该代币的任何数量。目前链上不会显示任何内容，所以您看不到这一切发生。</string>
 </resources>
