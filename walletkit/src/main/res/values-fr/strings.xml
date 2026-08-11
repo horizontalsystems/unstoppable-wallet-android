@@ -1821,4 +1821,5 @@
     <string name="WalletConnect_Permit_Expires">Approbation Expire</string>
     <string name="WalletConnect_Permit_Unlimited_Title">Approbation Illimitée!</string>
     <string name="WalletConnect_Permit_Unlimited">Signer ceci permet à %s de déplacer n\'importe quelle quantité de ce token de votre portefeuille, à tout moment jusqu\'à ce que l\'approbation soit révoquée. Rien n\'apparaît sur la chaîne maintenant, vous ne verrez donc pas cela se produire.</string>
+    <string name="WalletConnect_Permit_SignatureValid">Signature valide jusqu\'au</string>
 </resources>

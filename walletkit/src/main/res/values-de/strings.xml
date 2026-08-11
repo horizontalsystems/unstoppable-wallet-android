@@ -1828,4 +1828,5 @@
     <string name="WalletConnect_Permit_Expires">Genehmigung läuft ab</string>
     <string name="WalletConnect_Permit_Unlimited_Title">Unbegrenzte Genehmigung!</string>
     <string name="WalletConnect_Permit_Unlimited">Durch das Signieren dieser Nachricht erlauben Sie %s, jede Menge dieses Tokens jederzeit aus Ihrer Wallet zu bewegen, bis die Genehmigung widerrufen wird. Jetzt erscheint nichts in der Blockchain, daher sehen Sie es nicht geschehen.</string>
+    <string name="WalletConnect_Permit_SignatureValid">Signatur gültig bis</string>
 </resources>

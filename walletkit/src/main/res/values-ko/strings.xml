@@ -1820,4 +1820,5 @@
     <string name="WalletConnect_Permit_Expires">허용 만료</string>
     <string name="WalletConnect_Permit_Unlimited_Title">무제한 허용!</string>
     <string name="WalletConnect_Permit_Unlimited">이에 서명하면 %s가 허용이 취소될 때까지 언제든지 지갑에서 이 토큰의 모든 금액을 이동할 수 있습니다. 지금은 체인에 아무것도 나타나지 않으므로 이것이 발생하는 것을 보지 못할 것입니다.</string>
+    <string name="WalletConnect_Permit_SignatureValid">서명 유효 기한</string>
 </resources>

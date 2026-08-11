@@ -1819,4 +1819,5 @@
     <string name="WalletConnect_Permit_Expires">Permiso Vence</string>
     <string name="WalletConnect_Permit_Unlimited_Title">¡Permiso Ilimitado!</string>
     <string name="WalletConnect_Permit_Unlimited">Firmar esto permite que %s mueva cualquier cantidad de este token de su wallet en cualquier momento hasta que se revoque el permiso. Nada aparece en cadena ahora, por lo que no verá que suceda.</string>
+    <string name="WalletConnect_Permit_SignatureValid">Firma válida hasta</string>
 </resources>

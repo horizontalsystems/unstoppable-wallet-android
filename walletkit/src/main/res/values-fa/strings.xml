@@ -752,4 +752,5 @@
     <string name="WalletConnect_Permit_Expires">اجازه منقضی می‌شود</string>
     <string name="WalletConnect_Permit_Unlimited_Title">اجازه نامحدود!</string>
     <string name="WalletConnect_Permit_Unlimited">امضای این اجازه می‌دهد %s در هر زمان تا زمان لغو اجازه، هر مقدار از این توکن را از کیف پول شما منتقل کند. هم‌اکنون هیچ چیزی در زنجیره ظاهر نمی‌شود، بنابراین شما آن را مشاهده نخواهید کرد.</string>
+    <string name="WalletConnect_Permit_SignatureValid">امضا معتبر تا</string>
 </resources>

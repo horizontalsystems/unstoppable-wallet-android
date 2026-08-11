@@ -1820,4 +1820,5 @@
     <string name="WalletConnect_Permit_Expires">İzin Süresi Doluyor</string>
     <string name="WalletConnect_Permit_Unlimited_Title">Sınırsız İzin!</string>
     <string name="WalletConnect_Permit_Unlimited">Bunu imzalamak, %s\'nin izin iptal edilene kadar istediği zaman cüzdanınızdan bu tokenin herhangi bir miktarını taşımasına izin verir. Şu anda zincirde hiçbir şey görünmüyor, bu nedenle bunun gerçekleştiğini görmezsiniz.</string>
+    <string name="WalletConnect_Permit_SignatureValid">İmza Geçerlilik Süresi</string>
 </resources>

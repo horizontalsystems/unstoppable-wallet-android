@@ -1826,4 +1826,5 @@
     <string name="WalletConnect_Permit_Expires">Разрешение истекает</string>
     <string name="WalletConnect_Permit_Unlimited_Title">Неограниченное разрешение!</string>
     <string name="WalletConnect_Permit_Unlimited">Подписав это, вы разрешите %s перемещать любое количество этого токена из вашего кошелька в любое время до отзыва разрешения. Сейчас ничего не появляется в цепи, поэтому вы не увидите, как это происходит.</string>
+    <string name="WalletConnect_Permit_SignatureValid">Подпись действительна до</string>
 </resources>

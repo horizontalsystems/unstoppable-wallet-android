@@ -1819,4 +1819,5 @@
     <string name="WalletConnect_Permit_Expires">授权过期</string>
     <string name="WalletConnect_Permit_Unlimited_Title">无限授权!</string>
     <string name="WalletConnect_Permit_Unlimited">签署此授权允许 %s 在授权被撤销前的任何时间，从您的钱包中转移该代币的任何数量。目前链上不会显示任何内容，所以您看不到这一切发生。</string>
+    <string name="WalletConnect_Permit_SignatureValid">签名有效期至</string>
 </resources>
