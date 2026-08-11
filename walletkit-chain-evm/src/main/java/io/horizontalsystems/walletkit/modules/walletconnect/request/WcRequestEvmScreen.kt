@@ -47,6 +47,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
+import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
@@ -64,6 +65,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 private val logger = AppLogger("wallet-connect request")
 
@@ -239,6 +241,34 @@ fun WCNewSignRequestScreen(
                     typedData.verifyingContract?.let {
                         TitleValueCell(stringResource(R.string.WalletConnect_TypedData_Contract), it)
                     }
+
+                    // A permit grants an allowance by signature. Nothing goes on chain now, so the
+                    // ordinary approval confirmation never runs and these are the only numbers the
+                    // user will ever be shown.
+                    typedData.permit?.let { permit ->
+                        permit.token?.let {
+                            TitleValueCell(stringResource(R.string.WalletConnect_Permit_Token), it)
+                        }
+                        permit.spender?.let {
+                            TitleValueCell(stringResource(R.string.Approve_Spender), it)
+                        }
+                        permit.amount?.let { amount ->
+                            TitleValueCell(
+                                stringResource(R.string.Approve_Allowance),
+                                if (permit.unlimited) {
+                                    stringResource(R.string.Swap_Approve_Unlimited)
+                                } else {
+                                    amount.toString()
+                                }
+                            )
+                        }
+                        permit.deadlineSeconds?.let { seconds ->
+                            TitleValueCell(
+                                stringResource(R.string.WalletConnect_Permit_Expires),
+                                DateHelper.getFullDate(Date(seconds * 1000))
+                            )
+                        }
+                    }
                 }
 
                 MessageCell(
@@ -267,6 +297,23 @@ fun WCNewSignRequestScreen(
                     type = AlertType.Critical,
                     titleCustom = stringResource(R.string.WalletConnect_TypedData_ChainMismatch_Title),
                     text = stringResource(R.string.WalletConnect_TypedData_ChainMismatch),
+                )
+            }
+
+            // An unlimited allowance is the shape most drains take, and a permit grants it without
+            // a transaction the user could later spot in their history.
+            if (sessionRequestUI.typedData?.permit?.unlimited == true) {
+                VSpacer(16.dp)
+                AlertCard(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    format = AlertFormat.Structured,
+                    type = AlertType.Critical,
+                    titleCustom = stringResource(R.string.WalletConnect_Permit_Unlimited_Title),
+                    text = stringResource(
+                        R.string.WalletConnect_Permit_Unlimited,
+                        sessionRequestUI.typedData?.permit?.spender
+                            ?: sessionRequestUI.peerUI.peerName
+                    ),
                 )
             }
 

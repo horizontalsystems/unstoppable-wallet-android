@@ -719,6 +719,10 @@
     <string name="WalletConnect_Verify_Scam_Title">Known Scam!</string>
     <string name="WalletConnect_Verify_Scam">This site is on a list of known malicious domains. Connecting is very likely to cost you funds.</string>
     <string name="WalletConnect_TypedData_Contract">Contract</string>
+    <string name="WalletConnect_Permit_Token">Token</string>
+    <string name="WalletConnect_Permit_Expires">Allowance Expires</string>
+    <string name="WalletConnect_Permit_Unlimited_Title">Unlimited Allowance!</string>
+    <string name="WalletConnect_Permit_Unlimited">Signing this lets %s move any amount of this token from your wallet, at any time until the allowance is revoked. Nothing appears on chain now, so you will not see it happen.</string>
     <string name="WalletConnect_TypedData_Type">Request Type</string>
     <string name="WalletConnect_TypedData_ChainMismatch_Title">Wrong Network!</string>
     <string name="WalletConnect_TypedData_ChainMismatch">This request is bound to a different network than the one you are connected to. Signing it would produce a signature valid somewhere you did not intend.</string>
