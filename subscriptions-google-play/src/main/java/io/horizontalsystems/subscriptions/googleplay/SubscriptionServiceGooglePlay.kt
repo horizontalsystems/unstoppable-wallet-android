@@ -291,7 +291,6 @@ class SubscriptionServiceGooglePlay(
     }
 
     private suspend fun handlePurchase(purchase: Purchase) {
-        Log.e("AAA", "handlePurchase: $purchase")
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (purchase.isAcknowledged) {
                 addAcknowledgedPurchase(purchase)
@@ -309,7 +308,6 @@ class SubscriptionServiceGooglePlay(
     }
 
     private fun addAcknowledgedPurchase(purchase: Purchase) {
-        Log.e("AAA", "addAcknowledgedPurchase $purchase")
         activeSubscriptions.addAll(
             purchase.products.mapNotNull { productId ->
                 predefinedSubscriptions

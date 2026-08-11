@@ -23,7 +23,6 @@ import io.horizontalsystems.walletkit.modules.market.TimeDuration
 import io.horizontalsystems.walletkit.modules.market.TopMarket
 import io.horizontalsystems.walletkit.modules.market.etf.EtfModule
 import io.horizontalsystems.walletkit.modules.market.favorites.WatchlistSorting
-import io.horizontalsystems.walletkit.modules.market.filters.TimePeriod
 import io.horizontalsystems.walletkit.modules.market.search.MarketSearchSection
 import io.horizontalsystems.walletkit.modules.market.tvl.TvlModule
 import io.horizontalsystems.walletkit.modules.metricchart.MetricsType
@@ -335,21 +334,6 @@ val MarketSearchSection.statSection: StatSection
         MarketSearchSection.Recent -> StatSection.Recent
         MarketSearchSection.Popular -> StatSection.Popular
         MarketSearchSection.SearchResults -> StatSection.SearchResults
-    }
-
-val TimePeriod.statPeriod: StatPeriod
-    get() = when (this) {
-        TimePeriod.TimePeriod_1D -> StatPeriod.Day1
-        TimePeriod.TimePeriod_1W -> StatPeriod.Week1
-        TimePeriod.TimePeriod_1M -> StatPeriod.Month1
-        TimePeriod.TimePeriod_2W -> TODO()
-        TimePeriod.TimePeriod_3M -> TODO()
-        TimePeriod.TimePeriod_6M -> TODO()
-        TimePeriod.TimePeriod_1Y -> TODO()
-        TimePeriod.TimePeriod_2Y -> TODO()
-        TimePeriod.TimePeriod_3Y -> TODO()
-        TimePeriod.TimePeriod_4Y -> TODO()
-        TimePeriod.TimePeriod_5Y -> TODO()
     }
 
 val FilterTransactionType.statTab: StatTab

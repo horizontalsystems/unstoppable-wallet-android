@@ -219,14 +219,12 @@ interface IRandomProvider {
 interface INetworkManager {
     suspend fun getMarkdown(host: String, path: String): String
     suspend fun getReleaseNotes(host: String, path: String): JsonObject
-    fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(
         host: String,
         path: String,
         body: Map<String, Any>
     ): Flowable<JsonObject>
 
-    fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
     suspend fun registerApp(userId: String, referralCode: String): RegisterAppResponse
     suspend fun getWCWhiteList(host: String, path: String): List<ServiceWCWhitelist.WCWhiteList>
