@@ -46,6 +46,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
+import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
@@ -132,6 +133,12 @@ fun WCSignEthereumTransactionRequestScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             VSpacer(16.dp)
+
+            // The url above is what the dApp says it is. This is the attested origin, and it is the
+            // only thing on the screen a phishing site cannot set. Unverified origins are not
+            // reported here: that was already accepted when the session was approved.
+            VerificationAlert(sessionRequestUI.verification, reportUnverified = false)
+
             TextBlock(
                 text = stringResource(R.string.WalletConnect_DappWillBeAbleToMoveToken, sessionRequestUI.peerUI.peerName),
             )

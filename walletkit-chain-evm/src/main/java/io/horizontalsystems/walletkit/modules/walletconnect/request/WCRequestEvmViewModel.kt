@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppVerification
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import org.json.JSONArray
 import kotlin.coroutines.resume
@@ -70,6 +71,7 @@ class WCRequestEvmViewModel(
                 chainAddress = chainAddress,
                 typedData = getTypedData(sessionRequest),
                 sessionChainId = chainData?.id,
+                verification = sessionRequest.verification,
                 walletName = accountManager.activeAccount?.name ?: ""
             )
         } ?: SessionRequestUI.Initial
@@ -190,6 +192,7 @@ sealed class SessionRequestUI {
         val chainAddress: String?,
         val typedData: Eip712TypedData? = null,
         val sessionChainId: Int? = null,
+        val verification: HSDAppVerification? = null,
         val walletName: String,
     ) : SessionRequestUI() {
 
