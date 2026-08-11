@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -85,6 +86,10 @@ class SwapProviderInfoManager(
 
                 localStorage.uSwapSuspensions = gson.toJson(index)
                 localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
+            } catch (e: CancellationException) {
+                // The caller's screen went away mid-request. Not a fetch failure, and swallowing
+                // it would leave its coroutine looking like it completed.
+                throw e
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to load providers", e)
             }

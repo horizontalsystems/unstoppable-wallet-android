@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProv
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -62,16 +63,16 @@ class SwapQuoteService(
         // still reads as a change rather than arriving as the collector's own first value.
         val startingSuspensions = providerInfoManager.suspensionsFlow.value
 
-        val initialQuotation = coroutineScope.launch {
+        val initialQuotation = launchGuarded("initial quotation") {
             startProviders()
             runQuotation()
         }
 
-        coroutineScope.launch {
+        launchGuarded("suspension sync") {
             providerInfoManager.sync()
         }
 
-        coroutineScope.launch {
+        launchGuarded("suspension updates") {
             // Waiting for the first quotation: re-running it before the providers have started
             // would quote against a registry that supports nothing yet and surface "no supported
             // provider" for as long as the startup takes.
@@ -86,9 +87,11 @@ class SwapQuoteService(
                 .collect {
                     try {
                         runQuotation()
+                    } catch (e: CancellationException) {
+                        throw e
                     } catch (e: Throwable) {
-                        // The collector is the only path back from a suspension change, so it has
-                        // to outlive a failed run.
+                        // Caught per emission, not just at the launch: the collector is the only
+                        // path back from a suspension change, so it has to outlive a failed run.
                         Log.e(tag, "error on re-quoting after a suspension change", e)
                     }
                 }
@@ -98,6 +101,21 @@ class SwapQuoteService(
     override fun clear() {
         coroutineScope.cancel()
     }
+
+    /**
+     * The service scope is not a supervisor, so an exception escaping any one of these coroutines
+     * would cancel the others with it — the sync collector included.
+     */
+    private fun launchGuarded(what: String, block: suspend CoroutineScope.() -> Unit) =
+        coroutineScope.launch {
+            try {
+                block()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Log.e(tag, "error on $what", e)
+            }
+        }
 
     fun restart(onRestart: () -> Unit) {
         startProvidersJob?.cancel()
