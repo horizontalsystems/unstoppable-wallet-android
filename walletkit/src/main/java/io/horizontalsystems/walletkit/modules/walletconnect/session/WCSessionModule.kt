@@ -74,7 +74,7 @@ data class WCSessionUiState(
     val hasSubscription: Boolean,
     val scamProtectionActionAllowed: Boolean,
     val closeDialog: Boolean,
-    val verification: HSDAppVerification,
+    val verification: HSDAppVerification?,
 )
 
 enum class Status(val value: Int) {

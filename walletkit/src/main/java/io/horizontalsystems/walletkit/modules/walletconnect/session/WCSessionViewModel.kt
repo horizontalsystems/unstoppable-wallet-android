@@ -72,7 +72,10 @@ class WCSessionViewModel(
     private var closeDialog = false
     private var scamProtectionEnabled = paidActionSettingsManager.isActionEnabled(ScamProtection)
     private var scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
-    private var verification: HSDAppVerification = HSDAppVerification.unknown
+    // Null while the sheet shows an already established session. The attestation describes the
+    // moment of connecting, and it is not carried on the session, so re-opening one has nothing to
+    // report — reporting "unknown" there would warn about sessions that were verified when approved.
+    private var verification: HSDAppVerification? = null
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,

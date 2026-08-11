@@ -394,7 +394,10 @@ fun IconsFromUrls(
  * way to check by reading the screen.
  */
 @Composable
-private fun VerificationAlert(verification: HSDAppVerification) {
+private fun VerificationAlert(verification: HSDAppVerification?) {
+    // Nothing to report when the sheet is showing an established session rather than a proposal.
+    if (verification == null) return
+
     val alert: Triple<AlertType, String, String>? = when {
         verification.isScam -> Triple(
             AlertType.Critical,
