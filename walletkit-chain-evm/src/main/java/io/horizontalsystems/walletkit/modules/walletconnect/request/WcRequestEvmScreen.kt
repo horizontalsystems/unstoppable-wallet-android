@@ -65,7 +65,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Date
 
 private val logger = AppLogger("wallet-connect request")
 
@@ -262,10 +261,19 @@ fun WCNewSignRequestScreen(
                                 }
                             )
                         }
-                        permit.deadlineSeconds?.let { seconds ->
+                        // Two different things, so they get two different labels: an EIP-2612
+                        // allowance outlives the deadline that gated its signature, and saying
+                        // otherwise would understate how long the spender keeps access.
+                        permit.allowanceExpires?.asTimestampOrNull()?.let {
                             TitleValueCell(
                                 stringResource(R.string.WalletConnect_Permit_Expires),
-                                DateHelper.getFullDate(Date(seconds * 1000))
+                                DateHelper.getFullDate(it)
+                            )
+                        }
+                        permit.signatureDeadline?.asTimestampOrNull()?.let {
+                            TitleValueCell(
+                                stringResource(R.string.WalletConnect_Permit_SignatureValid),
+                                DateHelper.getFullDate(it)
                             )
                         }
                     }

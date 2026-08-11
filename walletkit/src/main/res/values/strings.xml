@@ -721,6 +721,7 @@
     <string name="WalletConnect_TypedData_Contract">Contract</string>
     <string name="WalletConnect_Permit_Token">Token</string>
     <string name="WalletConnect_Permit_Expires">Allowance Expires</string>
+    <string name="WalletConnect_Permit_SignatureValid">Signature Valid Until</string>
     <string name="WalletConnect_Permit_Unlimited_Title">Unlimited Allowance!</string>
     <string name="WalletConnect_Permit_Unlimited">Signing this lets %s move any amount of this token from your wallet, at any time until the allowance is revoked. Nothing appears on chain now, so you will not see it happen.</string>
     <string name="WalletConnect_TypedData_Type">Request Type</string>

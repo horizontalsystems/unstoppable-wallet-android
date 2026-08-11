@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.math.BigInteger
+import java.util.Date
 
 /**
  * The parts of an EIP-712 payload a user needs in order to judge what they are signing.
@@ -32,20 +33,39 @@ data class Eip712Permit(
     val token: String?,
     val spender: String?,
     val amount: BigInteger?,
-    val deadlineSeconds: Long?,
-) {
     /**
-     * EIP-2612 amounts are uint256 and Permit2 amounts are uint160; both use the type's maximum to
-     * mean "no limit", so each is checked against its own ceiling.
+     * How long the signature may be submitted for: EIP-2612 `deadline`, Permit2 `sigDeadline`. It
+     * bounds the window for using the signature, not the life of the allowance it grants.
      */
-    val unlimited: Boolean
-        get() = amount != null && (amount == MAX_UINT256 || amount == MAX_UINT160)
+    val signatureDeadline: BigInteger?,
+    /**
+     * When the allowance itself lapses. Permit2 only — an EIP-2612 allowance is written by
+     * `permit()` and then persists until it is changed or revoked, so there is nothing to show.
+     */
+    val allowanceExpires: BigInteger?,
+    /**
+     * Whether [amount] is the maximum of its own type. EIP-2612 amounts are uint256 and Permit2
+     * amounts are uint160, and each uses its own ceiling to mean "no limit" — so this is decided
+     * while the shape is still known rather than by testing against both.
+     */
+    val unlimited: Boolean,
+)
 
-    companion object {
-        private val MAX_UINT256 = BigInteger.TWO.pow(256) - BigInteger.ONE
-        private val MAX_UINT160 = BigInteger.TWO.pow(160) - BigInteger.ONE
-    }
-}
+private val MAX_UINT256 = BigInteger.TWO.pow(256) - BigInteger.ONE
+private val MAX_UINT160 = BigInteger.TWO.pow(160) - BigInteger.ONE
+
+/** Beyond this a value times 1000 no longer fits in the Long that Date is built from. */
+private val MAX_DATE_SECONDS = BigInteger.valueOf(Long.MAX_VALUE / 1000)
+
+/**
+ * Reads a uint256 timestamp as a date, or null when it does not denote one.
+ *
+ * These fields are uint256, and dApps use a huge value to mean "no deadline". Anything outside the
+ * range a Date can hold is such a sentinel rather than a real time, so it is reported as absent
+ * instead of being wrapped into a nonsensical date.
+ */
+fun BigInteger.asTimestampOrNull(): Date? =
+    if (signum() > 0 && this <= MAX_DATE_SECONDS) Date(toLong() * 1000) else null
 
 object Eip712Parser {
 
@@ -93,22 +113,29 @@ object Eip712Parser {
         val message = root.get("message")?.takeIf { it.isJsonObject }?.asJsonObject ?: return null
 
         return when (primaryType) {
-            "Permit" -> Eip712Permit(
-                token = verifyingContract,
-                spender = message.get("spender").asStringOrNull(),
-                amount = message.get("value").asBigIntegerOrNull(),
-                deadlineSeconds = message.get("deadline").asLongOrNull(),
-            )
+            "Permit" -> {
+                val amount = message.get("value").asBigIntegerOrNull()
+                Eip712Permit(
+                    token = verifyingContract,
+                    spender = message.get("spender").asStringOrNull(),
+                    amount = amount,
+                    signatureDeadline = message.get("deadline").asBigIntegerOrNull(),
+                    // Nothing to show: the allowance outlives the deadline that gated the signature.
+                    allowanceExpires = null,
+                    unlimited = amount != null && amount == MAX_UINT256,
+                )
+            }
 
             "PermitSingle" -> {
                 val details = message.get("details")?.takeIf { it.isJsonObject }?.asJsonObject
+                val amount = details?.get("amount").asBigIntegerOrNull()
                 Eip712Permit(
                     token = details?.get("token").asStringOrNull(),
                     spender = message.get("spender").asStringOrNull(),
-                    amount = details?.get("amount").asBigIntegerOrNull(),
-                    // The allowance's own lifetime, not sigDeadline, which only bounds how long the
-                    // signature may be submitted.
-                    deadlineSeconds = details?.get("expiration").asLongOrNull(),
+                    amount = amount,
+                    signatureDeadline = message.get("sigDeadline").asBigIntegerOrNull(),
+                    allowanceExpires = details?.get("expiration").asBigIntegerOrNull(),
+                    unlimited = amount != null && amount == MAX_UINT160,
                 )
             }
 
@@ -122,16 +149,6 @@ object Eip712Parser {
 
         return try {
             BigInteger(primitive.asString.trim())
-        } catch (e: NumberFormatException) {
-            null
-        }
-    }
-
-    private fun JsonElement?.asLongOrNull(): Long? {
-        val primitive = this?.takeIf { it.isJsonPrimitive }?.asJsonPrimitive ?: return null
-
-        return try {
-            primitive.asString.trim().toLong()
         } catch (e: NumberFormatException) {
             null
         }

@@ -143,7 +143,9 @@ class Eip712ParserTest {
         assertEquals("0xToken", permit?.token)
         assertEquals("0xSpender", permit?.spender)
         assertEquals(BigInteger("1000000"), permit?.amount)
-        assertEquals(1799999999L, permit?.deadlineSeconds)
+        // EIP-2612 deadline gates the signature only; the allowance it writes has no expiry
+        assertEquals(BigInteger("1799999999"), permit?.signatureDeadline)
+        assertNull(permit?.allowanceExpires)
         assertFalse(permit!!.unlimited)
     }
 
@@ -175,8 +177,9 @@ class Eip712ParserTest {
 
         assertEquals("0xTokenAddr", permit?.token)
         assertEquals("0xUniversalRouter", permit?.spender)
-        // the allowance lifetime, not sigDeadline
-        assertEquals(1800000000L, permit?.deadlineSeconds)
+        // the allowance lifetime and the signature window are separate values
+        assertEquals(BigInteger("1800000000"), permit?.allowanceExpires)
+        assertEquals(BigInteger("1700000000"), permit?.signatureDeadline)
         // uint160 max is the Permit2 way of saying no limit
         assertTrue(permit!!.unlimited)
     }
@@ -226,7 +229,34 @@ class Eip712ParserTest {
         assertEquals("0xToken", permit?.token)
         assertNull(permit?.spender)
         assertNull(permit?.amount)
-        assertNull(permit?.deadlineSeconds)
+        assertNull(permit?.signatureDeadline)
         assertFalse(permit!!.unlimited)
+    }
+
+    @Test
+    fun `does not treat a uint160 sized eip-2612 amount as unlimited`() {
+        // uint160 max is only "no limit" for Permit2; for a uint256 permit it is a finite allowance
+        val permit = Eip712Parser.parse(permitJson(maxUint160))?.permit
+
+        assertEquals(BigInteger(maxUint160), permit?.amount)
+        assertFalse(permit!!.unlimited)
+    }
+
+    @Test
+    fun `reports an out of range deadline as no timestamp rather than wrapping it`() {
+        // dApps send a huge value to mean "no deadline"; it must not become a nonsensical date
+        val permit = Eip712Parser.parse(
+            permitJson("1000000").replace("\"deadline\": \"1799999999\"", "\"deadline\": \"$maxUint256\"")
+        )?.permit
+
+        assertEquals(BigInteger(maxUint256), permit?.signatureDeadline)
+        assertNull(permit?.signatureDeadline?.asTimestampOrNull())
+    }
+
+    @Test
+    fun `converts an in range deadline to a timestamp`() {
+        val permit = Eip712Parser.parse(permitJson("1000000"))?.permit
+
+        assertEquals(1799999999L * 1000, permit?.signatureDeadline?.asTimestampOrNull()?.time)
     }
 }
