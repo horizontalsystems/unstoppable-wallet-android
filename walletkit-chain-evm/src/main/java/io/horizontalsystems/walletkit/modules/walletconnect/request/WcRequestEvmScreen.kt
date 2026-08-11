@@ -341,7 +341,7 @@ fun WCNewSignRequestScreen(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    onClick = navigation.authorizedAction {
+                    onClick = {
                         logger.info("allow request")
                         scope.launch {
                             try {

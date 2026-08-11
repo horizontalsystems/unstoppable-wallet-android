@@ -199,7 +199,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     title = stringResource(R.string.Button_Approve),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    onClick = navigation.authorizedAction {
+                    onClick = {
                         coroutineScope.launch {
                             try {
                                 logger.info("click sign button")
@@ -229,7 +229,7 @@ fun WCSignEthereumTransactionRequestScreen(
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Sign),
-                onClick = navigation.authorizedAction {
+                onClick = {
                     coroutineScope.launch {
                         try {
                             logger.info("click sign button")

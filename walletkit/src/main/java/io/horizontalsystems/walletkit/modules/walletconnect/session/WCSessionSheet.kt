@@ -288,9 +288,7 @@ private fun ActionButtons(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
                     enabled = connectButtonEnabled,
-                    // Guarded first, so cancelling the passcode prompt leaves the button usable
-                    // instead of latching it disabled.
-                    onClick = navigation.authorizedAction {
+                    onClick = {
                         connectButtonEnabled = false
                         onConnectClick()
                     }

@@ -200,7 +200,7 @@ fun WCSendEthRequestScreen(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
                     enabled = !confirmAction.inProgress && uiState.sendEnabled,
-                    onClick = navigation.authorizedAction {
+                    onClick = {
                         confirmAction.run {
                             Toast.makeText(view.context, sendingMessage, Toast.LENGTH_SHORT).show()
                             try {
