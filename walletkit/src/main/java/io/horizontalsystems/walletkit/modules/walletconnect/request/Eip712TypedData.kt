@@ -51,6 +51,34 @@ data class Eip712Permit(
     val unlimited: Boolean,
 )
 
+// Permit2 is deployed at one address across chains, so a PermitSingle addressed anywhere else is
+// not Permit2 regardless of the structs it declares.
+private const val PERMIT2_CONTRACT = "0x000000000022D473030F116dDEE9F6B43aC78BA3"
+
+// EIP-2612: Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)
+private val EIP2612_PERMIT_FIELDS = listOf(
+    "owner" to "address",
+    "spender" to "address",
+    "value" to "uint256",
+    "nonce" to "uint256",
+    "deadline" to "uint256",
+)
+
+// Permit2: PermitSingle(PermitDetails details,address spender,uint256 sigDeadline)
+private val PERMIT2_SINGLE_FIELDS = listOf(
+    "details" to "PermitDetails",
+    "spender" to "address",
+    "sigDeadline" to "uint256",
+)
+
+// Permit2: PermitDetails(address token,uint160 amount,uint48 expiration,uint48 nonce)
+private val PERMIT2_DETAILS_FIELDS = listOf(
+    "token" to "address",
+    "amount" to "uint160",
+    "expiration" to "uint48",
+    "nonce" to "uint48",
+)
+
 private val MAX_UINT256 = BigInteger.TWO.pow(256) - BigInteger.ONE
 private val MAX_UINT160 = BigInteger.TWO.pow(160) - BigInteger.ONE
 
@@ -111,9 +139,15 @@ object Eip712Parser {
         verifyingContract: String?
     ): Eip712Permit? {
         val message = root.get("message")?.takeIf { it.isJsonObject }?.asJsonObject ?: return null
+        val types = root.get("types")?.takeIf { it.isJsonObject }?.asJsonObject ?: return null
 
         return when (primaryType) {
             "Permit" -> {
+                // The name alone proves nothing: a dApp may declare any struct it likes and call it
+                // Permit. Only the canonical field list makes this an EIP-2612 approval, and a
+                // friendly summary over something else would lend it credibility it has not earned.
+                if (!types.definesType("Permit", EIP2612_PERMIT_FIELDS)) return null
+
                 val amount = message.get("value").asBigIntegerOrNull()
                 Eip712Permit(
                     token = verifyingContract,
@@ -127,6 +161,12 @@ object Eip712Parser {
             }
 
             "PermitSingle" -> {
+                // Both structs must match, and the request must be addressed to Permit2 itself.
+                // Anything else declaring these shapes is a different contract wearing the name.
+                if (!types.definesType("PermitSingle", PERMIT2_SINGLE_FIELDS)) return null
+                if (!types.definesType("PermitDetails", PERMIT2_DETAILS_FIELDS)) return null
+                if (!verifyingContract.equals(PERMIT2_CONTRACT, ignoreCase = true)) return null
+
                 val details = message.get("details")?.takeIf { it.isJsonObject }?.asJsonObject
                 val amount = details?.get("amount").asBigIntegerOrNull()
                 Eip712Permit(
@@ -140,6 +180,23 @@ object Eip712Parser {
             }
 
             else -> null
+        }
+    }
+
+    /**
+     * True when `types` declares [name] with exactly [fields], in order. EIP-712 hashes the type
+     * definition along with the message, so the declaration is what the signature actually commits
+     * to — matching it is what distinguishes a real approval from a struct that merely borrows the
+     * name.
+     */
+    private fun JsonObject.definesType(name: String, fields: List<Pair<String, String>>): Boolean {
+        val declared = get(name)?.takeIf { it.isJsonArray }?.asJsonArray ?: return false
+        if (declared.size() != fields.size) return false
+
+        return fields.withIndex().all { (index, expected) ->
+            val field = declared[index]?.takeIf { it.isJsonObject }?.asJsonObject
+            field?.get("name").asStringOrNull() == expected.first &&
+                    field?.get("type").asStringOrNull() == expected.second
         }
     }
 
