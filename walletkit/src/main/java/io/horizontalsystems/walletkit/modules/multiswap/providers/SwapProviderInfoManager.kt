@@ -7,6 +7,8 @@ import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class SwapProviderInfoManager(
     appConfigProvider: IAppConfigProvider,
@@ -18,7 +20,9 @@ class SwapProviderInfoManager(
     ).create(UnstoppableAPI::class.java)
 
     private val gson = Gson()
+    private val fetchMutex = Mutex()
 
+    @Volatile
     private var cache: Map<String, UnstoppableAPI.Response.Provider>? = null
 
     private val _suspensionsFlow = MutableStateFlow(restoredSuspensions())
@@ -32,9 +36,8 @@ class SwapProviderInfoManager(
     suspend fun getInfo(providerName: String): UnstoppableAPI.Response.Provider? {
         // Contact details are needed for whatever provider the record names, so this ignores the
         // sync interval and only asks whether this process has the response in hand yet.
-        if (cache == null) {
-            fetch()
-        }
+        fetchIf { cache == null }
+
         return cache?.get(providerName.uppercase())
     }
 
@@ -42,8 +45,7 @@ class SwapProviderInfoManager(
      * Refreshes suspensions if the cached ones are stale. Cheap to call on every swap screen open.
      */
     suspend fun sync() {
-        if (isFresh()) return
-        fetch()
+        fetchIf { !isFresh() }
     }
 
     private fun isFresh(): Boolean {
@@ -54,24 +56,38 @@ class SwapProviderInfoManager(
         // hit and does not force a fetch on every launch.
         localStorage.uSwapSuspensions ?: return false
 
-        return System.currentTimeMillis() - localStorage.uSwapSuspensionsSyncTime < SYNC_INTERVAL
+        // A negative age means the stored timestamp is in the future — a clock correction, which
+        // would otherwise read as fresh until the clock caught up.
+        val age = System.currentTimeMillis() - localStorage.uSwapSuspensionsSyncTime
+        return age in 0 until SYNC_INTERVAL
     }
 
-    private suspend fun fetch() {
-        try {
-            val responses = unstoppableAPI.providers()
+    /**
+     * Fetches under a lock, re-testing [needed] once it is held: a swap screen open and a refund
+     * sheet can ask at the same time, and two responses landing concurrently would publish one
+     * index while persisting the other.
+     */
+    private suspend fun fetchIf(needed: () -> Boolean) {
+        if (!needed()) return
 
-            // Suspended providers stay in the metadata cache: a swap made before the suspension
-            // still needs its refund contacts.
-            cache = responses.associateBy { it.provider.uppercase() }
+        fetchMutex.withLock {
+            if (!needed()) return
 
-            val index = SwapSuspensionIndex.from(responses)
-            _suspensionsFlow.value = index
+            try {
+                val responses = unstoppableAPI.providers()
 
-            localStorage.uSwapSuspensions = gson.toJson(index)
-            localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
-        } catch (e: Throwable) {
-            Log.e(TAG, "Failed to load providers", e)
+                // Suspended providers stay in the metadata cache: a swap made before the
+                // suspension still needs its refund contacts.
+                cache = responses.associateBy { it.provider.uppercase() }
+
+                val index = SwapSuspensionIndex.from(responses)
+                _suspensionsFlow.value = index
+
+                localStorage.uSwapSuspensions = gson.toJson(index)
+                localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
+            } catch (e: Throwable) {
+                Log.e(TAG, "Failed to load providers", e)
+            }
         }
     }
 

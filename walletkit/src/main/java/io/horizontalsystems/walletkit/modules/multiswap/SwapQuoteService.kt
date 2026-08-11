@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.multiswap
 
 import android.util.Log
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
@@ -26,10 +27,8 @@ class SwapQuoteService(
     // can only broadcast a subset of providers) pass their own set.
     private val allProviders: List<IMultiSwapProvider> = MultiSwapProviderRegistry.allProviders,
     private val providerInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
-) {
+) : Clearable {
     private val tag = "SwapQuoteService"
-
-    private var suspensions = providerInfoManager.suspensionsFlow.value
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
@@ -69,18 +68,17 @@ class SwapQuoteService(
         }
 
         coroutineScope.launch {
-            // Dropping the current value: it already seeded `suspensions`, and re-quoting on it
-            // would cancel the quotation the launch above has just started. A sync that only
-            // changes which PAIRS a provider may serve leaves the token selection untouched, so
-            // this is the only thing that re-runs quotation for it.
+            // Dropping the current value: quotation already reads it, and re-quoting on it would
+            // cancel the quotation the launch above has just started. A sync that only changes
+            // which PAIRS a provider may serve leaves the token selection untouched, so this is
+            // the only thing that re-runs quotation for it.
             providerInfoManager.suspensionsFlow.drop(1).collect {
-                suspensions = it
                 runQuotation(silent = true)
             }
         }
     }
 
-    fun clear() {
+    override fun clear() {
         coroutineScope.cancel()
     }
 
@@ -135,6 +133,10 @@ class SwapQuoteService(
         val amountIn = amountIn
 
         if (tokenIn != null && tokenOut != null) {
+            // Read once, here: quotation runs from both the main thread and the sync collector, so
+            // the flow's own atomic read is what keeps the two from seeing different indexes.
+            val suspensions = providerInfoManager.suspensionsFlow.value
+
             val supportedProviders = allProviders.filter { provider ->
                 // Checked here, in the one place every provider passes through, rather than inside
                 // each `supports` implementation — and it is the only enforcement that exists for

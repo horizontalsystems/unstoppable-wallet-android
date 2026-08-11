@@ -218,4 +218,14 @@ class SwapSuspensionTest {
         assertTrue(restored.isSuspended("u_NEAR", btc, usdc))
         assertFalse(restored.isSuspended("u_NEAR", usdc, btc))
     }
+
+    @Test
+    fun `a cache missing both members restores to an empty index`() {
+        // Every property carries a default, so Kotlin emits a no-arg constructor and Gson fills
+        // absent members with the defaults instead of leaving the non-null collections null.
+        val restored = Gson().fromJson("{}", SwapSuspensionIndex::class.java)
+
+        assertEquals(SwapSuspensionIndex(), restored)
+        assertFalse(restored.isSuspended("u_NEAR", btc, usdc))
+    }
 }
