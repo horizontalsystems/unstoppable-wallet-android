@@ -28,7 +28,7 @@ WALLET FEATURES:
 
 - Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20, NFT tokens, etc.), and other decentralized services such as ENS (Ethereum Name Service).
 
-- Ethereum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+- Ethereum L2 Wallet >> Arbitrum, Optimism, Polygon support.
 
 - Avalanche Wallet >> Full support for Avalanche C-Chain blockchain.
 

@@ -1,45 +1,45 @@
-Wallet Unstoppable, le portefeuille de finance décentralisée intentionnellement conçu pour la gestion des crypto-monnaies.
+Unstoppable Wallet est un outil de gestion décentralisée conçu spécialement pour les crypto-monnaies.
 
-Il a été élaboré pour permettre de venir en aide aux personnes conscientes de leurs droits au respect de leur vie privée, souhaitant gérer des crypto-devises tout en investissant de manière optimale et professionnelle dans la crypto-monnaie.
+Il s'adresse aux personnes soucieuses de leur vie privée qui souhaitent gérer Bitcoin, Ethereum et d'autres crypto-monnaies, et y investir de manière souveraine et professionnelle.
 
-Unstoppable est construit avec les éléments suivants en tête :
+Unstoppable repose sur les principes suivants :
 
-- la Gestion Libre de son Capital >> Il a été élaboré dans le but de fournir aux utilisateurs une véritable solution de gestion du capital, leur permettant de choisir la gestion libre.
+- Le capital doit être libre >> Il offre aux utilisateurs un contrôle réellement indépendant sur leur capital.
 
-- Capital should Be Borderless >> Il travaille en dehors de la couche financière traditionnelle et agit comme un couteau suisse dans le monde des finances décentralisées (DeFi).
+- Le capital doit être sans frontières >> Il fonctionne en dehors de la finance traditionnelle et sert de couteau suisse dans le monde de la finance décentralisée (DeFi).
 
-- Capital Devrait être privé >> Il ne fuit pas de données privées, il n'a aucun moyen de suivre les utilisateurs, et prend des mesures supplémentaires pour garantir la confidentialité sur plusieurs couches.
+- Le capital doit être privé >> Il ne divulgue aucune donnée personnelle, n'a aucun moyen de suivre les utilisateurs et prend des mesures supplémentaires pour garantir la confidentialité à plusieurs niveaux.
 
-Si ce qui précède rime bien avec vous, alors Unstoppable est pour vous! Et nous sommes là pour nous concentrer sur vos besoins uniques et vous servir de la meilleure manière possible.
+Si cela vous parle, Unstoppable est fait pour vous ! Nous sommes là pour répondre au mieux à vos besoins.
 
-CARACTÉRISTIQUES DU WALLET :
+FONCTIONNALITÉS :
 
-- Multi-portefeuille non-Custodial >> Gérez un nombre quelconque de cryptomonnaies à travers plusieurs portefeuilles de style portefeuille de manière non dépositaire. Ce portefeuille est comme votre propre banque où vous êtes le seul client et le seul responsable. Il est conçu pour garder les actifs en sécurité et facile à restaurer même si le téléphone est volé et falsifié.
+- Multi-portefeuille non dépositaire >> Gérez autant de crypto-monnaies que vous le souhaitez dans plusieurs portefeuilles, sans dépositaire. Ce portefeuille est votre propre banque : vous en êtes le seul client et le seul responsable. Vos actifs restent sécurisés et faciles à restaurer, même si votre téléphone est volé ou altéré.
 
-- Portefeuille orienté Investissement >> Unstoppable apporte une analyse inégalée du marché des cryptomonnaies à votre appareil : triage avancé, catégorisation organisée, filtrage des recherches approfondi et fonctionnalités d'alerte basées sur des événements.
+- Portefeuille orienté investissement >> Unstoppable apporte sur votre appareil des analyses de marché inégalées : tri avancé, catégories organisées, filtres de recherche étendus et alertes basées sur des événements.
 
-- Portefeuille Universal >> Il prend en charge toutes les chaînes de blocs et est construit d'une manière conforme aux standards permettant aux utilisateurs d'utiliser une seule application de portefeuille pour tout crypto-monnaie.
+- Portefeuille universel >> Il prend en charge toutes les blockchains majeures et respecte les standards : une seule application pour toutes vos crypto-monnaies.
 
-- A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
+- Portefeuille Bitcoin >> Il réunit les fonctions Bitcoin les plus avancées : SPV, conformité BIP 44/49/84/86/69, timelocks, frais de transaction personnalisés, et plus encore.
 
-- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. En outre, la possibilité d'interagir avec n'importe quel service intelligent, alimenté par un contrat sur la blockchain via le protocole WalletConnect.
+- Portefeuille DeFi >> Prise en charge complète des échanges de jetons décentralisés sur Ethereum, Binance Smart Chain, Polygon, Avalanche, Solana et d'autres, ainsi que l'interaction avec tout service à base de contrats intelligents via le protocole WalletConnect.
 
-- Portefeuille Ethereum >> Prise en charge complète de la blockchain Ethereum, son écosystème croissant de jetons (ERC20, jetons NFT, etc.).
+- Portefeuille Ethereum >> Prise en charge complète de la blockchain Ethereum, de son écosystème de jetons (ERC20, NFT, etc.) et de services décentralisés comme ENS (Ethereum Name Service).
 
-- Portefeuille Ethereum L2 >> Artbitrum, Optimism, Support Polygonal.
+- Portefeuille Ethereum L2 >> Arbitrum, Optimism et Polygon.
 
-- Portefeuille Avalanche >> Support complet de la blockchain C-Chain Avalanche.
+- Portefeuille Avalanche >> Prise en charge complète de la blockchain Avalanche C-Chain.
 
-- Portefeuille Binance >> Prise en charge complète de Binance Chain (incluant BEP2) et de Binance Smart Chain.
+- Portefeuille Binance >> Prise en charge complète de Binance Chain (dont BEP2) et de Binance Smart Chain.
 
-- La Crypto Academy >> L'application comprend deux cours destinés à intégrer les nouveaux arrivants dans le monde des cryptomonnaies et de l'écosystème DeFi de manière facile à gérer couvrant les aspects essentiels de la sécurité des cryptomonnaies, stockage, confidentialité, transaction et échange.
+- Crypto Academy >> L'application inclut deux cours qui initient les nouveaux venus aux crypto-monnaies et à la DeFi, en abordant simplement l'essentiel : sécurité, stockage, confidentialité, transactions et échanges.
 
-- Wallet for Privacy Coins >> Comprend entièrement les pièces de monnaie majeures (ZCash, DASH) de manière SPV. L'un des rares portefeuilles capables de supporter les transactions entièrement protégées de Zcash ainsi que la capacité de privatiser les transactions Bitcoin.
+- Portefeuille pour cryptos confidentielles >> Prise en charge complète des principales cryptos confidentielles (Zcash, DASH) en mode SPV. L'un des rares portefeuilles capables de gérer des transactions Zcash entièrement blindées et de rendre privées les transactions Bitcoin.
 
-- Portefeuille décentralisé >> Conçu pour fonctionner avec la plupart des blockchains de manière décentralisée où une application ne dépend pas de certains serveurs d'un fournisseur de portefeuille pour envoyer/recevoir des transactions mais interagit directement avec les réseaux blockchain.
+- Portefeuille décentralisé >> Conçu pour fonctionner de façon décentralisée avec la plupart des grandes blockchains : l'application ne dépend d'aucun serveur d'un fournisseur pour envoyer et recevoir des transactions, elle communique directement avec les réseaux.
 
-- Protection de la vie privée >> Conçu pour permettre la protection de la vie privée, même dans les scénarios les plus violés par la vie privée. Il n'y a aucun compte utilisateur qui conserve vos dossiers, aucune vérification d'identité qui risque d'exposer vos finances au monde, et sans interaction avec les couches financières traditionnelles. The app is partially TOR enabled and VPN support is coming soon.
+- Axé sur la confidentialité >> Conçu pour préserver votre vie privée, même dans les situations les plus intrusives. Aucun compte utilisateur ne conserve vos données, aucune vérification d'identité ne risque d'exposer vos finances, aucune interaction avec la finance traditionnelle. L'application est partiellement compatible TOR et la prise en charge du VPN arrive bientôt.
 
-- Entièrement Open Source >> L'application de portefeuille la plus transparente construite à ce jour. La totalité du processus de production de 4 ans de l'application est ouvertement accessible en ligne avec 100% de son code pour quiconque peut évaluer ou réutiliser d'autres projets. Vérifié et vérifié par des tiers.
+- Entièrement open source >> L'application de portefeuille la plus transparente à ce jour. Ses quatre années de développement et 100 % de son code sont accessibles en ligne, pour que chacun puisse les évaluer ou les réutiliser. Vérifiée et auditée par des tiers.
 
-Soyez impardonnable !
+Soyez Unstoppable !

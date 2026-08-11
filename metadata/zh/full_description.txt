@@ -26,7 +26,7 @@ It is engineered to serve privacy-conscious individuals looking to manage and in
 
 - Etherum Wallet >> 完全支持Ethereum 区块链，它不断增长的代币生态系统（ERC20，NFT 代币等）。 和其他分散服务，如ENS（以英语命名服务）。
 
-- Etherum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+- Ethereum L2 Wallet >> Arbitrum, Optimism, Polygon support.
 
 - Avalanche Wallet >> 完全支持Avalanche C-Chain blockchain。
 

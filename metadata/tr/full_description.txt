@@ -8,9 +8,9 @@ Unstoppable, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
 
 - Sermaye Sınırsız Olmalı >> Geleneksel finans katmanının dışında çalışır ve merkezi olmayan finans (DeFi) dünyası için bir İsviçre bıçağı görevi görür.
 
-- Capital Özel Olmalı >> Özel verileri sızdırmaz, kullanıcıları izlemek için hiçbir aracı yoktur ve birden fazla katmanda gizliliği sağlamak için ekstra önlemler alır.
+- Sermaye Özel Olmalı >> Özel verileri sızdırmaz, kullanıcıları izlemek için hiçbir aracı yoktur ve birden fazla katmanda gizliliği sağlamak için ekstra önlemler alır.
 
-If the above rhymes well with you then Unstoppable is for you! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
+Yukarıdakiler size uygun geliyorsa Unstoppable tam size göre! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
 
 CÜZDAN ÖZELLIKLERI:
 
@@ -20,26 +20,26 @@ CÜZDAN ÖZELLIKLERI:
 
 - Evrensel Cüzdan >> Tüm ana akım blok zincirlerini destekler ve kullanıcıların tüm kriptolar için tek bir cüzdan uygulaması kullanmasını sağlayan standartlara uygun bir şekilde oluşturulmuştur.
 
-- Bir Bitcoin Cüzdanı >> Cüzdan, mevcut en gelişmiş Bitcoin özelliklerinden bazılarını barındırır: SPV etkin, BIP 44/49/84/69 uyumlu, Bitcoin zaman kilitleri, özel işlem ücretleri ve daha fazlası.
+- Bir Bitcoin Cüzdanı >> Cüzdan, mevcut en gelişmiş Bitcoin özelliklerinden bazılarını barındırır: SPV etkin, BIP 44/49/84/86/69 uyumlu, Bitcoin zaman kilitleri, özel işlem ücretleri ve daha fazlası.
 
-- Bir DeFi Cüzdanı >> Ethereum, Binance Smart Chain, Avalanche, Solana ve daha fazlasında merkezi olmayan token takasları için tam destek. Ayrıca, WalletConnect protokolü aracılığıyla blok zincirindeki herhangi bir akıllı sözleşme destekli hizmetle etkileşim kurma yeteneği.
+- Bir DeFi Cüzdanı >> Ethereum, Binance Smart Chain, Polygon, Avalanche, Solana ve daha fazlasında merkezi olmayan token takasları için tam destek. Ayrıca, WalletConnect protokolü aracılığıyla blok zincirindeki herhangi bir akıllı sözleşme destekli hizmetle etkileşim kurma yeteneği.
 
 - Ethereum Cüzdan >> Ethereum blok zinciri, büyüyen token ekosistemi (ERC20, NFT tokenleri vb.) ve ENS (Ethereum Name Service) gibi diğer merkezi olmayan hizmetler için tam destek.
 
-- Ethereum L2 Cüzdan >> Artbitrum, Optimism, Polygon desteği.
+- Ethereum L2 Cüzdan >> Arbitrum, Optimism, Polygon desteği.
 
 - Avalanche Cüzdan >> Avalanche C-Chain blok zinciri için tam destek.
 
 - Binance Cüzdan >> Orijinal Binance Zinciri (BEP2 dahil) ve Binance Akıllı Zincir için tam destek.
 
-- Crypto Academy >> Uygulama, yeni gelenleri kripto para dünyasına ve DeFi ekosistemine, kripto para güvenliği, depolama, gizlilik, işlem yapma ve takas etmenin temel yönlerini kapsayan, sindirmesi kolay bir şekilde dahil etmeyi amaçlayan iki kurs içerir.
+- Crypto Academy >> Uygulama, yeni gelenleri kripto para ve DeFi dünyasına kolay anlaşılır bir şekilde tanıtan iki kurs içerir: güvenlik, saklama, gizlilik, işlem yapma ve takas.
 
-- Gizlilik Paraları için Cüzdan >> SPV tarzında büyük gizlilik paralarını (ZCash, DASH) tamamen destekler. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
+- Gizlilik Paraları için Cüzdan >> SPV tarzında büyük gizlilik paralarını (ZCash, DASH) tamamen destekler. Tamamen korumalı Zcash işlemlerini destekleyebilen ve Bitcoin işlemlerini gizli hale getirebilen çok az cüzdandan biri.
 
-- Merkezi Olmayan Cüzdan >> Bir uygulamanın işlem göndermek/almak için bir cüzdan sağlayıcısının sunucusuna bağlı olmadığı, ancak doğrudan blok zinciri ağlarıyla etkileşime girdiği merkezi olmayan bir şekilde en büyük blok zincirleriyle çalışmak üzere tasarlanmıştır.
+- Merkezi Olmayan Cüzdan >> Çoğu büyük blok zinciriyle merkezi olmayan bir şekilde çalışmak üzere tasarlanmıştır: uygulama, işlem göndermek ve almak için bir cüzdan sağlayıcısının sunucusuna bağlı değildir, doğrudan ağlarla iletişim kurar.
 
 - Gizlilik Odaklı >> Gizliliği en çok ihlal eden senaryolarda bile gizliliğe izin verecek şekilde tasarlanmıştır. Kayıtlarınızı tutan kullanıcı hesapları, finansal bilgilerinizi dünyaya ifşa etme riski taşıyan kimlik kontrolleri ve geleneksel finans katmanlarıyla etkileşim yoktur. Uygulama kısmen TOR özellikli ve VPN desteği yakında geliyor.
 
-- Tamamen Açık Kaynak >> Bugüne kadar oluşturulmuş en şeffaf cüzdan uygulaması. Uygulamanın 4 yıllık üretim sürecinin tamamı, herkesin değerlendirebilmesi veya başka projelerde yeniden kullanabilmesi için kodunun %100'ü ile birlikte çevrimiçi olarak açık bir şekilde erişilebilir durumdadır. Üçüncü taraflarca doğrulanmış ve denetlenmiştir.
+- Tamamen Açık Kaynak >> Bugüne kadar oluşturulmuş en şeffaf cüzdan uygulaması. Uygulamanın 4 yıllık geliştirme sürecinin tamamı ve kodunun %100'ü, herkesin inceleyip başka projelerde yeniden kullanabilmesi için çevrimiçi olarak açıktır. Üçüncü taraflarca doğrulanmış ve denetlenmiştir.
 
 Durdurulamaz Ol!
