@@ -16,7 +16,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -58,7 +58,11 @@ class SwapQuoteService(
     private var startProvidersJob: Job? = null
 
     fun start() {
-        coroutineScope.launch {
+        // Read before the sync is launched, so an index landing before the collector subscribes
+        // still reads as a change rather than arriving as the collector's own first value.
+        val startingSuspensions = providerInfoManager.suspensionsFlow.value
+
+        val initialQuotation = coroutineScope.launch {
             startProviders()
             runQuotation()
         }
@@ -68,13 +72,26 @@ class SwapQuoteService(
         }
 
         coroutineScope.launch {
-            // Dropping the current value: quotation already reads it, and re-quoting on it would
-            // cancel the quotation the launch above has just started. A sync that only changes
-            // which PAIRS a provider may serve leaves the token selection untouched, so this is
-            // the only thing that re-runs quotation for it.
-            providerInfoManager.suspensionsFlow.drop(1).collect {
-                runQuotation(silent = true)
-            }
+            // Waiting for the first quotation: re-running it before the providers have started
+            // would quote against a registry that supports nothing yet and surface "no supported
+            // provider" for as long as the startup takes.
+            initialQuotation.join()
+
+            // A sync that only changes which PAIRS a provider may serve leaves the token
+            // selection untouched, so this is the only thing that re-runs quotation for it. Not
+            // silent: the visible quotes may name a provider that has just been suspended, and
+            // the index only emits when it actually changed, so the refresh is rare.
+            providerInfoManager.suspensionsFlow
+                .dropWhile { it == startingSuspensions }
+                .collect {
+                    try {
+                        runQuotation()
+                    } catch (e: Throwable) {
+                        // The collector is the only path back from a suspension change, so it has
+                        // to outlive a failed run.
+                        Log.e(tag, "error on re-quoting after a suspension change", e)
+                    }
+                }
         }
     }
 
