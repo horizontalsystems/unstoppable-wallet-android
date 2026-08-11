@@ -1,0 +1,314 @@
+[
+  {
+    "provider": "THORCHAIN",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "MAYACHAIN",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "ONEINCH",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "BARTER",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "CIRCLE",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "CCE",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "DOGE.DOGE",
+        "kind": "asset",
+        "side": "buy"
+      },
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "EXOLIX",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "ETH.0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48",
+        "kind": "asset",
+        "side": "any"
+      },
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "LETSEXCHANGE",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "NEAR",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "PEGASUS",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "QUICKEX",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "STEALTHEX",
+    "quotes": true,
+    "suspensions": [
+      {
+        "chain": "POL",
+        "kind": "chain",
+        "side": "any"
+      },
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "SWAPUZ",
+    "quotes": true,
+    "suspensions": [
+      {
+        "buyAsset": "ETH.ETH",
+        "kind": "pair",
+        "sellAsset": "BTC.BTC",
+        "side": "any"
+      },
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "JUPITER",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "LIFI",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "STELLARBROKER",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "SOROSWAP",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "AQUARIUS",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "STELLAR_DEX",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "AXELAR_ITS",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "NEAR_CONFIDENTIAL",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "LIZEX",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "BITANIA",
+    "quotes": true,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "UNISWAP_V3",
+    "quotes": false,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      },
+      {
+        "chain": "ETH",
+        "kind": "chain",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "PANCAKESWAP",
+    "quotes": false,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  },
+  {
+    "provider": "ALLBRIDGE",
+    "quotes": false,
+    "suspensions": [
+      {
+        "asset": "XMR.XMR",
+        "kind": "asset",
+        "side": "any"
+      }
+    ]
+  }
+]

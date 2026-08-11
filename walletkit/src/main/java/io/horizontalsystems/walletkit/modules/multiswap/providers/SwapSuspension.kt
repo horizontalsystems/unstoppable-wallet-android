@@ -244,11 +244,26 @@ data class SwapSuspensionIndex(
 
     companion object {
         /**
+         * Ids the two sides spell differently, and which therefore cannot be reconciled by
+         * normalizing alone. Renaming the provider instead is not an option: its id is persisted
+         * on every swap record and is what the history and refund flows look swaps up by.
+         *
+         * This mapping is load-bearing rather than cosmetic — PancakeSwap is quoted by the app
+         * itself, so an unmatched id means no suspension for it can be enforced at all.
+         */
+        private val serverIdOverrides = mapOf(
+            PANCAKE_V3_PROVIDER_ID.uppercase() to "PANCAKESWAP",
+        )
+
+        /**
          * The server names a provider bare and upper-case (`NEAR`); the app prefixes the ids it
          * routes through uswap-server (`u_NEAR`) and lower-cases the ones it implements natively
          * (`oneinch`).
          */
-        fun serverId(providerId: String) = providerId.removePrefix("u_").uppercase()
+        fun serverId(providerId: String): String {
+            val normalized = providerId.removePrefix("u_").uppercase()
+            return serverIdOverrides[normalized] ?: normalized
+        }
 
         fun from(responses: List<UnstoppableAPI.Response.Provider>) = SwapSuspensionIndex(
             suspendedProviders = responses.filter { it.suspended }.map { serverId(it.provider) }.toSet(),

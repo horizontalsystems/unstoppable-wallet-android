@@ -166,6 +166,15 @@ class SwapSuspensionTest {
     }
 
     @Test
+    fun `provider ids the server spells differently still resolve`() {
+        // PancakeSwap is quoted by the app itself, so an unmatched id would mean no suspension
+        // for it could be enforced at all.
+        assertEquals("PANCAKESWAP", SwapSuspensionIndex.serverId("pancake_v3"))
+        assertEquals("UNISWAP_V3", SwapSuspensionIndex.serverId("uniswap_v3"))
+        assertEquals("NEAR", SwapSuspensionIndex.serverId("u_NEAR"))
+    }
+
+    @Test
     fun `a suspended provider serves no pair`() {
         val suspended = SwapSuspensionIndex(suspendedProviders = setOf("ONEINCH"))
 
