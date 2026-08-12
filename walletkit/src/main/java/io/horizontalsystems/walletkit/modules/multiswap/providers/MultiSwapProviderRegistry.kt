@@ -7,7 +7,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 object MultiSwapProviderRegistry {
     val allProviders: List<IMultiSwapProvider> = listOf(
         // Cross-chain providers
-        AllBridgeProvider,
         USwapProvider(UProvider.Near),
         USwapProvider(UProvider.QuickEx),
         USwapProvider(UProvider.LetsExchange),
@@ -30,8 +29,16 @@ object MultiSwapProviderRegistry {
         ),
     ) + ChainRegistry.all.flatMap { it.swapProviders() }
 
+    /**
+     * Providers no longer offered for swapping. They stay reachable by id so swaps already made
+     * with them keep resolving their type and stage layout in history, but no quote is requested
+     * from them.
+     */
+    private val retiredProviders: List<IMultiSwapProvider>
+        get() = listOf(AllBridgeProvider)
+
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
-        allProviders.associateBy { it.id }
+        (allProviders + retiredProviders).associateBy { it.id }
     }
 
     fun isSingleTransactionSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean {

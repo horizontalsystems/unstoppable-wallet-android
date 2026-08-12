@@ -23,7 +23,6 @@ class SwapProviderIdMappingTest {
     // The registry cannot be built in a unit test — its providers reach for App at construction —
     // so the ids are listed from their declaration sites.
     private val appProviderIds = UProvider.entries.map { "u_${it.id}" } + listOf(
-        "allbridge",
         "u_STELLARBROKER",
         THORCHAIN_PROVIDER_ID,
         MAYA_PROVIDER_ID,
