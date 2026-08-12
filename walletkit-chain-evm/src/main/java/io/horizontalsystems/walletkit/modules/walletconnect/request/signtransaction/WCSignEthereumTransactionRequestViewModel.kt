@@ -30,7 +30,11 @@ class WCSignEthereumTransactionRequestViewModel(
     baseCoinService: EvmCoinService,
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     private val dAppName: String,
-    transaction: WalletConnectTransaction
+    transaction: WalletConnectTransaction,
+    // Captured at construction: WCDelegate.sessionRequestEvent is mutable and can be replaced by
+    // a newer request while this sheet is open, so the response must target the displayed request.
+    private val requestId: Long,
+    private val topic: String,
 ) : ViewModelUiState<WCSignEthereumTransactionRequestUiState>() {
 
     private val transactionData = TransactionData(
@@ -104,9 +108,7 @@ class WCSignEthereumTransactionRequestViewModel(
             nonce = nonce
         )
 
-        WCDelegate.sessionRequestEvent?.let { sessionRequest ->
-            WCDelegate.respondPendingRequest(sessionRequest.requestId, sessionRequest.topic, signature.toHexString())
-        }
+        WCDelegate.respondPendingRequest(requestId, topic, signature.toHexString())
     }
 
     fun reject(topic: String, requestId: Long) {
@@ -121,7 +123,9 @@ class WCSignEthereumTransactionRequestViewModel(
     class Factory(
         private val blockchainType: BlockchainType,
         private val transaction: WalletConnectTransaction,
-        private val peerName: String
+        private val peerName: String,
+        private val requestId: Long,
+        private val topic: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -147,7 +151,9 @@ class WCSignEthereumTransactionRequestViewModel(
                 coinServiceFactory.baseCoinService,
                 sendEvmTransactionViewItemFactory,
                 peerName,
-                transaction
+                transaction,
+                requestId,
+                topic
             ) as T
         }
     }

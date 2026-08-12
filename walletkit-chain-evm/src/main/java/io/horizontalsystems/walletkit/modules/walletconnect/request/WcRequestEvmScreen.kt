@@ -167,8 +167,12 @@ fun WCNewSignRequestScreen(
         onDismissRequest = {
             // Discard synchronously (avoids the reEmit race), then animate out before popping —
             // same reason as hideAndPop above; popping outright can leave the sheet card on screen.
-            WCDelegate.discardActiveSessionRequest()
-            hideAndPop()
+            // A confirmed sign is already responding (NonCancellable); discarding now would race
+            // the pending response, so ignore dismissal until it completes.
+            if (!confirmAction.inProgress) {
+                WCDelegate.discardActiveSessionRequest()
+                hideAndPop()
+            }
         },
         sheetState = sheetState
     ) { snackbarActions ->
@@ -334,6 +338,7 @@ fun WCNewSignRequestScreen(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
+                    enabled = !confirmAction.inProgress,
                     onClick = {
                         logger.info("decline request")
                         onDecline()

@@ -70,7 +70,9 @@ fun WCSignEthereumTransactionRequestScreen(
         factory = WCSignEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
             transaction = transaction,
-            peerName = sessionRequestUI.peerUI.peerName
+            peerName = sessionRequestUI.peerUI.peerName,
+            requestId = sessionRequestUI.requestId,
+            topic = sessionRequestUI.topic
         )
     )
     val uiState = viewModel.uiState
@@ -86,8 +88,12 @@ fun WCSignEthereumTransactionRequestScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
-            navigation.removeLastOrNull()
+            // A confirmed sign is already responding (NonCancellable); discarding or rejecting
+            // now would race the pending response, so ignore dismissal until it completes.
+            if (!signAction.inProgress) {
+                WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
+                navigation.removeLastOrNull()
+            }
         },
         sheetState = sheetState,
     ) { snackbarActions ->
@@ -191,6 +197,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
+                    enabled = !signAction.inProgress,
                     onClick = {
                         viewModel.reject(sessionRequestUI.topic, sessionRequestUI.requestId)
                         navigation.removeLastOrNull()

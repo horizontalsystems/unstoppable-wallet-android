@@ -74,7 +74,9 @@ fun WCSendEthRequestScreen(
         factory = WCSendEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
             transaction = transaction,
-            peerName = sessionRequestUI.peerUI.peerName
+            peerName = sessionRequestUI.peerUI.peerName,
+            requestId = sessionRequestUI.requestId,
+            topic = sessionRequestUI.topic
         )
     )
     val uiState = viewModel.uiState
@@ -87,8 +89,12 @@ fun WCSendEthRequestScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
-            navigation.removeLastOrNull()
+            // A confirmed send is already broadcasting (NonCancellable); discarding or rejecting
+            // now would race the pending response, so ignore dismissal until it completes.
+            if (!confirmAction.inProgress) {
+                WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
+                navigation.removeLastOrNull()
+            }
         },
         sheetState = sheetState,
     ) { snackbarActions ->
@@ -190,6 +196,7 @@ fun WCSendEthRequestScreen(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
                     modifier = Modifier.weight(1f),
+                    enabled = !confirmAction.inProgress,
                     onClick = {
                         viewModel.reject(sessionRequestUI.topic, sessionRequestUI.requestId)
                         navigation.removeLastOrNull()

@@ -27,7 +27,11 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTra
 class WCSendEthereumTransactionRequestViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     transaction: WalletConnectTransaction,
-    blockchainType: BlockchainType
+    blockchainType: BlockchainType,
+    // Captured at construction: WCDelegate.sessionRequestEvent is mutable and can be replaced by
+    // a newer request while this sheet is open, so the response must target the displayed request.
+    private val requestId: Long,
+    private val topic: String,
 ) : ViewModelUiState<WCSendEthereumTransactionRequestUiState>() {
     val sendTransactionService: SendTransactionServiceEvm
 
@@ -87,9 +91,7 @@ class WCSendEthereumTransactionRequestViewModel(
         val sendResult = sendTransactionService.sendTransaction()
         val transactionHash = sendResult.transactionHash ?: throw Exception("No transaction hash")
 
-        WCDelegate.sessionRequestEvent?.let { sessionRequest ->
-            WCDelegate.respondPendingRequest(sessionRequest.requestId, sessionRequest.topic, transactionHash)
-        }
+        WCDelegate.respondPendingRequest(requestId, topic, transactionHash)
     }
 
     fun reject(topic: String, requestId: Long) {
@@ -104,7 +106,9 @@ class WCSendEthereumTransactionRequestViewModel(
     class Factory(
         private val blockchainType: BlockchainType,
         private val transaction: WalletConnectTransaction,
-        private val peerName: String
+        private val peerName: String,
+        private val requestId: Long,
+        private val topic: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -126,7 +130,9 @@ class WCSendEthereumTransactionRequestViewModel(
             return WCSendEthereumTransactionRequestViewModel(
                 sendEvmTransactionViewItemFactory,
                 transaction,
-                blockchainType
+                blockchainType,
+                requestId,
+                topic
             ) as T
         }
     }
