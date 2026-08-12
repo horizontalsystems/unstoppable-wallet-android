@@ -22,6 +22,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransact
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
 class WCSignEthereumTransactionRequestViewModel(
@@ -86,7 +87,10 @@ class WCSignEthereumTransactionRequestViewModel(
         return items
     }
 
-    suspend fun sign() = withContext(Dispatchers.Default) {
+    // NonCancellable: the caller is a UI-scoped coroutine that dies with the composition (locking
+    // the app tears the sheet down mid-flight). The body has no suspension points today, but that
+    // atomicity is incidental — keep sign-and-respond explicitly uninterruptible once confirmed.
+    suspend fun sign() = withContext(Dispatchers.Default + NonCancellable) {
         val signer = evmKit.signer ?: throw WCSessionManager.RequestDataError.NoSigner
         val gasData = gasData ?: throw WCSessionManager.RequestDataError.InvalidGasPrice
         val nonce = nonce ?: throw WCSessionManager.RequestDataError.InvalidNonce

@@ -19,6 +19,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTransactionData
@@ -77,7 +78,12 @@ class WCSendEthereumTransactionRequestViewModel(
             sendTransactionService.decorate(transactionData)
         )
 
-    suspend fun confirm() = withContext(Dispatchers.Default) {
+    // NonCancellable: the caller is a UI-scoped coroutine that dies with the composition (locking
+    // the app tears the sheet down mid-flight). sendTransaction() suspends on the network, so a
+    // plain cancellation could land after the transaction broadcast but before the dApp response —
+    // leaving the request pending and inviting a second send. Once the user has confirmed, run the
+    // broadcast-and-respond block to completion.
+    suspend fun confirm() = withContext(Dispatchers.Default + NonCancellable) {
         val sendResult = sendTransactionService.sendTransaction()
         val transactionHash = sendResult.transactionHash ?: throw Exception("No transaction hash")
 

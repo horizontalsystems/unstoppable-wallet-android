@@ -64,6 +64,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -350,7 +351,10 @@ fun WCNewSignRequestScreen(
                             try {
                                 // Offload the signing (CPU-bound crypto) off the Main thread, but
                                 // keep hide()/removeLastOrNull() on Main — they mutate UI state.
-                                withContext(Dispatchers.Default) { onAllow() }
+                                // NonCancellable: this scope dies with the composition (locking the
+                                // app tears the sheet down), and a confirmed sign-and-respond must
+                                // not be dropped halfway.
+                                withContext(Dispatchers.Default + NonCancellable) { onAllow() }
                                 sheetState.hide()
                                 navigation.removeLastOrNull()
                             } catch (e: Throwable) {
