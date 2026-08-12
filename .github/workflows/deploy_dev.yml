@@ -7,6 +7,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    outputs:
+      commit_subject: ${{ steps.notes.outputs.subject }}
+      ci_testing_uri: ${{ steps.upload_ci.outputs.TESTING_URI }}
+      fdroid_testing_uri: ${{ steps.upload_fdroid.outputs.TESTING_URI }}
 
     steps:
       - name: Checkout repository
@@ -30,6 +34,7 @@ jobs:
           AUTHOR=$(git log -1 --pretty=format:'%an')
           MESSAGE=$(git log -1 --pretty=format:'%s')
           echo "val=Author: $AUTHOR, changes: $MESSAGE" >> $GITHUB_OUTPUT
+          echo "subject=$MESSAGE" >> $GITHUB_OUTPUT
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -40,6 +45,7 @@ jobs:
           BUILD_NUMBER: ${{ env.BUILD_NUMBER_NEW }}
 
       - name: Upload CI Debug to Firebase
+        id: upload_ci
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: 1:308085819273:android:1b039e927925b879a00358
@@ -54,6 +60,7 @@ jobs:
           BUILD_NUMBER: ${{ env.BUILD_NUMBER_NEW }}
 
       - name: Upload F-Droid CI Debug to Firebase
+        id: upload_fdroid
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: 1:308085819273:android:3c060bb15aa35d79a00358
@@ -61,3 +68,41 @@ jobs:
           groups: horsysteam
           file: app/build/outputs/apk/fdroidCi/debug/app-fdroidCi-debug.apk
           releaseNotes: "F-Droid Build - ${{ steps.notes.outputs.val }}"
+
+  # Runs in a separate job so the third-party action never shares a workspace
+  # with the checked-out repo credentials
+  notify:
+    needs: build
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    permissions: {}
+
+    steps:
+      - name: Notify Telegram on success
+        if: needs.build.result == 'success'
+        uses: appleboy/telegram-action@221e6b684967abe813051ee4a37dd61770a83ad3 # v1.0.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ✅ Firebase dev distribution succeeded
+            ${{ needs.build.outputs.commit_subject }}
+            Branch: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            Standard: ${{ needs.build.outputs.ci_testing_uri }}
+            F-Droid: ${{ needs.build.outputs.fdroid_testing_uri }}
+
+      - name: Notify Telegram on failure
+        if: needs.build.result == 'failure'
+        uses: appleboy/telegram-action@221e6b684967abe813051ee4a37dd61770a83ad3 # v1.0.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ❌ Firebase dev distribution failed
+            ${{ needs.build.outputs.commit_subject }}
+            Branch: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
