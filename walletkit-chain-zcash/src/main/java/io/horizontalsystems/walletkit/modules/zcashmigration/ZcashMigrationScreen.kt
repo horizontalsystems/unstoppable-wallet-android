@@ -41,32 +41,31 @@ fun ZcashMigrationScreen(
     val uiState = viewModel.uiState
     val sendResult = uiState.sendResult
 
-    when (sendResult) {
-        is SendResult.Sent -> {
-            HudHelper.showSuccessMessage(
-                view,
-                R.string.Send_Success,
-                SnackbarDuration.LONG
-            )
-        }
+    // Side effects live in the effect, not composition: a recomposition must not repeat the
+    // success HUD or stack another error sheet.
+    LaunchedEffect(sendResult) {
+        when (sendResult) {
+            is SendResult.Sent -> {
+                HudHelper.showSuccessMessage(
+                    view,
+                    R.string.Send_Success,
+                    SnackbarDuration.LONG
+                )
+                delay(1200)
+                navigation.removeLastUntil(entryPointDestId, true)
+            }
 
-        is SendResult.Failed -> {
-            navigation.slideFromBottom(
-                ErrorSheet(
-                    ErrorSheet.Input(
-                        sendResult.caution.getDescription() ?: sendResult.caution.getString()
+            is SendResult.Failed -> {
+                navigation.slideFromBottom(
+                    ErrorSheet(
+                        ErrorSheet.Input(
+                            sendResult.caution.getDescription() ?: sendResult.caution.getString()
+                        )
                     )
                 )
-            )
-        }
+            }
 
-        else -> Unit
-    }
-
-    LaunchedEffect(sendResult) {
-        if (sendResult is SendResult.Sent) {
-            delay(1200)
-            navigation.removeLastUntil(entryPointDestId, true)
+            else -> Unit
         }
     }
 
@@ -81,7 +80,9 @@ fun ZcashMigrationScreen(
                         .padding(horizontal = 16.dp),
                     sendResult = sendResult,
                     onClick = viewModel::onClickMigrate,
-                    enabled = uiState.error == null
+                    // The fee is set exactly when the migration proposal resolves; before that
+                    // executeIronwoodMigration() has no proposal to send.
+                    enabled = uiState.error == null && uiState.fee != null
                 )
             }
         }
