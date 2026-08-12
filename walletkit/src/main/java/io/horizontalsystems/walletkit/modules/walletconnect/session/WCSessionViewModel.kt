@@ -32,6 +32,7 @@ import io.horizontalsystems.dapp.core.HSDAppVerification
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.URL
@@ -338,6 +339,8 @@ class WCSessionViewModel(
                 reject(proposal.proposerPublicKey) {
                     sessionServiceState = Killed
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (t: Throwable) {
                 // The proposal may already be gone (RequestNotFoundError) or the relay call may
                 // fail. The user asked to dismiss either way, so close instead of crashing the
@@ -369,6 +372,8 @@ class WCSessionViewModel(
                 connected = true
                 closeDialog = true
                 emitState()
+            } catch (e: CancellationException) {
+                throw e
             } catch (t: Throwable) {
                 WCDelegate.sessionProposalEvent = null
                 // showErrorLiveEvent has no observer in the Compose sheet; surface the failure
@@ -404,7 +409,7 @@ class WCSessionViewModel(
     suspend fun approve(proposalPublicKey: String) {
         val accountNonNull = account ?: return
         return suspendCoroutine { continuation ->
-            if (DAppManager.getSessionProposals().isNotEmpty()) {
+            if (DAppManager.getSessionProposals().any { it.proposerPublicKey == proposalPublicKey }) {
                 val namespaces = wcManager.getSupportedNamespaces(accountNonNull)
                 val sessionNamespaces = DAppManager.generateApprovedNamespaces(proposalPublicKey, namespaces)
 
@@ -431,7 +436,7 @@ class WCSessionViewModel(
 
     suspend fun reject(proposalPublicKey: String, onSuccess: () -> Unit) {
         return suspendCoroutine { continuation ->
-            if (DAppManager.getSessionProposals().isNotEmpty()) {
+            if (DAppManager.getSessionProposals().any { it.proposerPublicKey == proposalPublicKey }) {
                 DAppManager.rejectSession(
                     proposerPublicKey = proposalPublicKey,
                     onSuccess = {
