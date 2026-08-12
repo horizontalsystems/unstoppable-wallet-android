@@ -1829,4 +1829,15 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Unbegrenzte Genehmigung!</string>
     <string name="WalletConnect_Permit_Unlimited">Durch das Signieren dieser Nachricht erlauben Sie %s, jede Menge dieses Tokens jederzeit aus Ihrer Wallet zu bewegen, bis die Genehmigung widerrufen wird. Jetzt erscheint nichts in der Blockchain, daher sehen Sie es nicht geschehen.</string>
     <string name="WalletConnect_Permit_SignatureValid">Signatur gültig bis</string>
+    <string name="Send_Error_NodeUnreachable">Knoten konnte nicht erreicht werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.</string>
+    <string name="Balance_Zcash_MigrationRequired">Migration erforderlich</string>
+    <string name="Balance_Zcash_Migration_Title">Migration zu Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash-Netzwerk-Upgrade:
+Verschieben Sie Ihre ZEC vom Orchard-Pool zum neuen Ironwood-Pool. Ihre Gelder sind sicher.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Migrieren</string>
+    <string name="Zcash_Migration_Confirm_Title">Migration bestätigen</string>
+    <string name="Transactions_Migrate">Migrieren</string>
+    <string name="Transactions_Migrate_ToIronwood">zu Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Öffentlich sichtbarer Betrag</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Das Verschieben von Gedern zwischen Pools erfordert, dass der migrierte Betrag öffentlich sichtbar auf der Blockchain ist. Absender, Empfänger und Ihre Adressen bleiben privat.</string>
 </resources>

@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.walletkit.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.walletkit.modules.send.zcash.shield.ShieldZcashPage
+import io.horizontalsystems.walletkit.modules.zcashmigration.ZcashMigrationPage
 import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -135,6 +136,12 @@ class ZcashChainPlugin(
         ShieldZcashPage(ShieldZcashPage.Input(wallet, entryPoint))
 
     override fun unshieldedBalanceThreshold(): BigDecimal = ZcashAdapter.minimalShieldThreshold
+
+    override fun migrationRequiredBalance(wallet: Wallet): BigDecimal? =
+        App.adapterManager.getAdapterForWallet<ZcashAdapter>(wallet)?.ironwoodMigrationRequiredBalance
+
+    override fun migrationPage(wallet: Wallet, entryPoint: KClass<out HSPage>): HSPage =
+        ZcashMigrationPage(ZcashMigrationPage.Input(wallet, entryPoint))
 
     override suspend fun swapDestinationAddress(account: Account): String =
         cachedAddress(account.id, transparentAddressCache, transparentAddressMutex) {

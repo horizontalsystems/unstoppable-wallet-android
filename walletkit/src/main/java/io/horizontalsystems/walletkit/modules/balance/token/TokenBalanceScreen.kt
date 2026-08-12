@@ -53,6 +53,7 @@ import io.horizontalsystems.walletkit.modules.balance.LockedValue
 import io.horizontalsystems.walletkit.modules.balance.StellarLockedValue
 import io.horizontalsystems.walletkit.modules.balance.ZcashLockedValue
 import io.horizontalsystems.walletkit.modules.balance.ui.BalanceActionButton
+import io.horizontalsystems.walletkit.modules.balance.ui.ZcashMigrationBottomSheet
 import io.horizontalsystems.walletkit.modules.coin.CoinPage
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -89,6 +90,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -108,6 +110,9 @@ fun TokenBalanceScreen(
     val tronBottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isTronAlertVisible by remember { mutableStateOf(false) }
+    var isMigrationSheetVisible by remember { mutableStateOf(false) }
+    val migrationSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
@@ -240,6 +245,14 @@ fun TokenBalanceScreen(
                     ChainRegistry[balanceViewItem.wallet.token.blockchainType]
                         ?.TokenBalanceExtraCells(balanceViewItem.wallet, navigation)
 
+                    uiState.zcashMigrationRequiredAmount?.let { amount ->
+                        MigrationRequiredCell(
+                            amount = amount,
+                            balanceHidden = balanceViewItem.balanceHidden,
+                            onClick = { isMigrationSheetVisible = true }
+                        )
+                    }
+
                     LockedBalanceSection(
                         balanceViewItem = balanceViewItem,
                         showBottomSheet = { content ->
@@ -334,6 +347,26 @@ fun TokenBalanceScreen(
             }
         }
 
+    }
+    if (isMigrationSheetVisible) {
+        ZcashMigrationBottomSheet(
+            sheetState = migrationSheetState,
+            onMigrateClick = {
+                coroutineScope.launch {
+                    migrationSheetState.hide()
+                    isMigrationSheetVisible = false
+                    ChainRegistry[viewModel.wallet.token.blockchainType]
+                        ?.migrationPage(viewModel.wallet, TokenBalancePage::class)
+                        ?.let { navigation.slideFromRight(it) }
+                }
+            },
+            onClose = {
+                coroutineScope.launch {
+                    migrationSheetState.hide()
+                    isMigrationSheetVisible = false
+                }
+            }
+        )
     }
     if (isTronAlertVisible) {
         val context = LocalContext.current
@@ -586,6 +619,32 @@ private fun LockedBalanceSection(
     }
 }
 
+
+@Composable
+private fun MigrationRequiredCell(
+    amount: String,
+    balanceHidden: Boolean,
+    onClick: () -> Unit
+) {
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfo(
+                    eyebrow = stringResource(R.string.Balance_Zcash_MigrationRequired).hs(color = ComposeAppTheme.colors.jacob)
+                )
+            },
+            right = {
+                CellRightInfoTextIcon(
+                    text = (if (!balanceHidden) amount else "*****").hs(color = ComposeAppTheme.colors.jacob),
+                    icon = painterResource(R.drawable.warning_filled_24),
+                    iconTint = ComposeAppTheme.colors.jacob
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = onClick
+        )
+    }
+}
 
 @Composable
 private fun BirthdayHeightCell(

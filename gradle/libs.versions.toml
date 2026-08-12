@@ -78,7 +78,7 @@ marketKit = "c045ed4"
 solanaKit = "b487161"
 tronKit = "6fc27cf"
 thorchainKit = "9950fce"
-zcashSdk = "2.5.2"
+zcashSdk = "2.7.0-rc.2"
 
 # Binance
 binanceConnector = "3.4.1"

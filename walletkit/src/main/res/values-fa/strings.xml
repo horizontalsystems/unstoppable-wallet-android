@@ -753,4 +753,15 @@
     <string name="WalletConnect_Permit_Unlimited_Title">اجازه نامحدود!</string>
     <string name="WalletConnect_Permit_Unlimited">امضای این اجازه می‌دهد %s در هر زمان تا زمان لغو اجازه، هر مقدار از این توکن را از کیف پول شما منتقل کند. هم‌اکنون هیچ چیزی در زنجیره ظاهر نمی‌شود، بنابراین شما آن را مشاهده نخواهید کرد.</string>
     <string name="WalletConnect_Permit_SignatureValid">امضا معتبر تا</string>
+    <string name="Send_Error_NodeUnreachable">نتوانستیم به گره دسترسی پیدا کنیم. لطفاً اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
+    <string name="Balance_Zcash_MigrationRequired">مهاجرت الزامی</string>
+    <string name="Balance_Zcash_Migration_Title">مهاجرت به Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">ارتقای شبکه Zcash:
+ZEC خود را از استخر Orchard به استخر جدید Ironwood منتقل کنید. صندوق‌های شما امن هستند.</string>
+    <string name="Balance_Zcash_Migration_Migrate">مهاجرت</string>
+    <string name="Zcash_Migration_Confirm_Title">تایید مهاجرت</string>
+    <string name="Transactions_Migrate">مهاجرت</string>
+    <string name="Transactions_Migrate_ToIronwood">به Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">مبلغ عمومی قابل مشاهده</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">انتقال صندوق‌ها بین استخرها نیاز دارد که مبلغ منتقل‌شده بر روی بلاکچین عمومی قابل مشاهده باشد. فرستنده، گیرنده و آدرس‌های شما خصوصی باقی می‌مانند.</string>
 </resources>

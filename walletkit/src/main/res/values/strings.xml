@@ -470,6 +470,15 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield" translatable="false">Shield</string>
     <string name="Balance_Zcash_Shielded" translatable="false">Shielded</string>
+    <string name="Balance_Zcash_MigrationRequired">Migration Required</string>
+    <string name="Balance_Zcash_Migration_Title">Migration to Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash network upgrade:\nMove your ZEC from Orchard to the new Ironwood pool. Your funds are safe.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Migrate</string>
+    <string name="Zcash_Migration_Confirm_Title">Confirm Migration</string>
+    <string name="Transactions_Migrate">Migrate</string>
+    <string name="Transactions_Migrate_ToIronwood">to Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Publicly Visible Amount</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Moving funds between pools requires the migrated amount to be publicly visible on the blockchain. The sender, recipient and your addresses remain private.</string>
     <string name="Balance_Zcash_ShieldedDescription">Use for personal and private transfers between wallets.</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Use for receiving from exchanges or services that don’t support shielded addresses.</string>
@@ -577,6 +586,8 @@
     <string name="Send_Sending">Sending</string>
     <string name="Send_UnexpectedError">Unexpected error</string>
     <string name="Send_UnexpectedError_Description">Something went wrong while sending your transaction. Please try again or copy the error code and contact support.</string>
+
+    <string name="Send_Error_NodeUnreachable">Could not reach the node. Please check your connection and try again.</string>
 
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <string name="Send_Error_LowFee">Fee Error</string>

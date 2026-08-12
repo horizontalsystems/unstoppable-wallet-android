@@ -18,7 +18,8 @@ import kotlin.math.min
 
 class ZcashTransactionsProvider(
     private val accountUuid: AccountUuid,
-    private val synchronizer: SdkSynchronizer
+    private val synchronizer: SdkSynchronizer,
+    private val isMigrationTransaction: (txHash: ByteArray) -> Boolean
 ) {
     private val mutex = Mutex()
     private var transactions = listOf<ZcashTransaction>()
@@ -41,7 +42,12 @@ class ZcashTransactionsProvider(
                             null
                         }
                         val memo = synchronizer.getMemos(it).firstOrNull()
-                        ZcashTransaction(accountUuid, it, recipients, memo)
+                        val outputs = if (it.isSentTransaction) {
+                            synchronizer.getTransactionOutputs(it)
+                        } else {
+                            emptyList()
+                        }
+                        ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs)
                     }
                     newTransactionsSubject.onNext(newZcashTransactions)
                     val notUpdatedTransactions =

@@ -1821,4 +1821,15 @@
     <string name="WalletConnect_Permit_Unlimited_Title">무제한 허용!</string>
     <string name="WalletConnect_Permit_Unlimited">이에 서명하면 %s가 허용이 취소될 때까지 언제든지 지갑에서 이 토큰의 모든 금액을 이동할 수 있습니다. 지금은 체인에 아무것도 나타나지 않으므로 이것이 발생하는 것을 보지 못할 것입니다.</string>
     <string name="WalletConnect_Permit_SignatureValid">서명 유효 기한</string>
+    <string name="Send_Error_NodeUnreachable">노드에 도달할 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
+    <string name="Balance_Zcash_MigrationRequired">마이그레이션 필요</string>
+    <string name="Balance_Zcash_Migration_Title">Ironwood로 마이그레이션</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash 네트워크 업그레이드:
+ZEC를 Orchard 풀에서 새로운 Ironwood 풀로 이동하세요. 자금은 안전합니다.</string>
+    <string name="Balance_Zcash_Migration_Migrate">마이그레이션</string>
+    <string name="Zcash_Migration_Confirm_Title">마이그레이션 확인</string>
+    <string name="Transactions_Migrate">마이그레이션</string>
+    <string name="Transactions_Migrate_ToIronwood">Ironwood로</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">공개적으로 표시되는 금액</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">풀 간 자금 이동을 위해서는 마이그레이션된 금액이 블록체인에 공개적으로 표시되어야 합니다. 발신자, 수신자 및 주소는 비공개 상태로 유지됩니다.</string>
 </resources>

@@ -166,6 +166,10 @@
     "Balance_SyncedUntil": "until %s",
     "Balance_Syncing": "Syncing…",
     "Balance_Title": "Balance",
+    "Balance_Zcash_MigrationRequired": "Migration Required",
+    "Balance_Zcash_Migration_Description": "Zcash network upgrade:\\nMove your ZEC from Orchard to the new Ironwood pool. Your funds are safe.",
+    "Balance_Zcash_Migration_Migrate": "Migrate",
+    "Balance_Zcash_Migration_Title": "Migration to Ironwood",
     "Balance_Zcash_ShieldedDescription": "Use for personal and private transfers between wallets.",
     "Balance_Zcash_Transparent": "Transparent",
     "Balance_Zcash_TransparentDescription": "Use for receiving from exchanges or services that don’t support shielded addresses.",
@@ -1085,6 +1089,7 @@
     "Send_Error_LowFee_Description": "Fee Rate is too low.",
     "Send_Error_MaximumAmount": "Max. amount %s",
     "Send_Error_MinimumAmount": "Min. amount %s",
+    "Send_Error_NodeUnreachable": "Could not reach the node. Please check your connection and try again.",
     "Send_Error_SendToSelf": "Sending %s to your own address is not allowed. Please enter a different recipient address.",
     "Send_Error_UnsupportedAddress": "Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)",
     "Send_Fee": "Fee",
@@ -1472,6 +1477,8 @@
     "Transactions_Filter_StablecoinDustAmount_Description": "Hides small-value incoming transfers (e.g. USDT below $1.5). These transactions are often used for phishing and address-poisoning attacks.",
     "Transactions_From": "from %s",
     "Transactions_Incoming": "Received",
+    "Transactions_Migrate": "Migrate",
+    "Transactions_Migrate_ToIronwood": "to Ironwood",
     "Transactions_Mint": "Minted",
     "Transactions_Multiple": "Multiple",
     "Transactions_OperationType": "Operation Type",
@@ -1590,6 +1597,9 @@
     "WidgetList_Config_Title": "Choose Type",
     "Widget_EnableAutostartWarning": "To make sure that this widget works properly, you should enable Autostart.",
     "ZanoNodeSettings_Description": "Choose the node Unstoppable app should use for synchronizing wallet(s).",
-    "ZcashEndpointSettings_Description": "Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s)."
+    "ZcashEndpointSettings_Description": "Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s).",
+    "Zcash_Migration_Confirm_Title": "Confirm Migration",
+    "Zcash_Migration_PubliclyVisible_Description": "Moving funds between pools requires the migrated amount to be publicly visible on the blockchain. The sender, recipient and your addresses remain private.",
+    "Zcash_Migration_PubliclyVisible_Title": "Publicly Visible Amount"
   }
 }

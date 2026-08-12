@@ -1821,4 +1821,15 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Sınırsız İzin!</string>
     <string name="WalletConnect_Permit_Unlimited">Bunu imzalamak, %s\'nin izin iptal edilene kadar istediği zaman cüzdanınızdan bu tokenin herhangi bir miktarını taşımasına izin verir. Şu anda zincirde hiçbir şey görünmüyor, bu nedenle bunun gerçekleştiğini görmezsiniz.</string>
     <string name="WalletConnect_Permit_SignatureValid">İmza Geçerlilik Süresi</string>
+    <string name="Send_Error_NodeUnreachable">Düğüme ulaşılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="Balance_Zcash_MigrationRequired">Geçiş gerekli</string>
+    <string name="Balance_Zcash_Migration_Title">Ironwood\'a Geçiş</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash ağı yükseltmesi:
+ZEC\'inizi Orchard havuzundan yeni Ironwood havuzuna taşıyın. Fonlarınız güvenlidir.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Geçir</string>
+    <string name="Zcash_Migration_Confirm_Title">Geçişi onaylayın</string>
+    <string name="Transactions_Migrate">Geçir</string>
+    <string name="Transactions_Migrate_ToIronwood">Ironwood\'a</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Herkese açık görünür tutar</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Havuzlar arasında para transferi, geçirilen tutarın blokzincirde herkese açık şekilde görünür olmasını gerektirir. Gönderici, alıcı ve adresleriniz özel kalır.</string>
 </resources>

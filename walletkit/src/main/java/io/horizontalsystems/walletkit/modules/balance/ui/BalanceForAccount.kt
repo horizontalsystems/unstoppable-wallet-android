@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -35,6 +36,7 @@ import io.horizontalsystems.walletkit.modules.balance.BalanceViewModel
 import io.horizontalsystems.walletkit.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsPage
+import io.horizontalsystems.walletkit.modules.nav3.EntryPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.opencryptopay.OpenCryptoPayPage
 import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
@@ -63,6 +65,9 @@ fun BalanceForAccount(
         skipPartiallyExpanded = true
     )
     var isWCInvalidUrlBottomSheetVisible by remember { mutableStateOf(false) }
+    val zcashMigrationSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     val scope = rememberCoroutineScope()
     val qrScannerLauncher =
@@ -199,6 +204,26 @@ fun BalanceForAccount(
                 }
             }
         }
+    }
+    uiState.zcashMigrationAlertWallet?.let { zcashWallet ->
+        ZcashMigrationBottomSheet(
+            sheetState = zcashMigrationSheetState,
+            onMigrateClick = {
+                scope.launch {
+                    zcashMigrationSheetState.hide()
+                    viewModel.zcashMigrationAlertHandled()
+                    ChainRegistry[zcashWallet.token.blockchainType]
+                        ?.migrationPage(zcashWallet, EntryPage::class)
+                        ?.let { navigation.slideFromRight(it) }
+                }
+            },
+            onClose = {
+                scope.launch {
+                    zcashMigrationSheetState.hide()
+                    viewModel.zcashMigrationAlertHandled()
+                }
+            }
+        )
     }
     if (isWCInvalidUrlBottomSheetVisible) {
         WCInvalidUrlBottomSheet(

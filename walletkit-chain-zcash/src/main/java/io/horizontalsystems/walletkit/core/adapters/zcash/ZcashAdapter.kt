@@ -46,6 +46,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.Bitcoi
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
+import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
@@ -81,6 +82,13 @@ class ZcashAdapter(
     private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = 1_077_550
+    private val ironwoodActivationHeight: Long = when (network) {
+        ZcashNetwork.Testnet -> 4_134_000
+        else -> 3_428_143 // NU6.3 mainnet activation
+    }
+
+    private val appContext: Context = context.applicationContext
+    private var migrationProposal: Proposal? = null
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -121,6 +129,29 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override var balanceData: BalanceData? = null
+
+    private var accountBalance: AccountBalance? = null
+
+    /**
+     * Orchard-pool balance that must be migrated to the Ironwood pool, or null while
+     * the network has not reached NU6.3 activation or there is nothing to migrate.
+     */
+    val ironwoodMigrationRequiredBalance: BigDecimal?
+        get() {
+            // Only report when fully synced: mid-sync the Orchard balance is provisional
+            // (notes spent in not-yet-scanned blocks still count), so the migration
+            // alerts would show with a wrong amount
+            if (syncState != AdapterState.Synced) return null
+            val tip = synchronizer.latestHeight?.value ?: return null
+            if (tip < ironwoodActivationHeight) return null
+            val orchard = accountBalance?.orchard ?: return null
+            // Spendable balance only, matching what proposeIronwoodMigration can sweep:
+            // the all-or-nothing proposal fails while any Orchard note is still pending,
+            // and showing pending funds here would advertise an amount the confirmation
+            // screen cannot migrate
+            if (orchard.available.value <= 0) return null
+            return orchard.available.convertZatoshiToZec(decimalCount)
+        }
 
     val statusInfo: Map<String, Any>
         get() {
@@ -188,7 +219,12 @@ class ZcashAdapter(
         zcashAccount = runBlocking { synchronizer.getAccounts().first() }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
-        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, synchronizer as SdkSynchronizer)
+        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, synchronizer as SdkSynchronizer) { txHash ->
+            // Migration txids recorded at broadcast; match both hash orientations since
+            // TransferResult.Success txid endianness is not guaranteed
+            val migrationTxIds = localStorage.zcashMigrationTransactionIds
+            migrationTxIds.contains(txHash.toRawHexString()) || migrationTxIds.contains(txHash.toReversedHex())
+        }
         synchronizer.onCriticalErrorHandler = { error ->
             Log.e("ZcashAdapter", "Critical error", error)
             true
@@ -293,6 +329,55 @@ class ZcashAdapter(
 //        }
     }
 
+    /**
+     * Proposes an immediate full-balance Orchard -> Ironwood migration and returns the
+     * net migrated amount plus the implied fee (Orchard total minus migrated amount).
+     * The proposed schedule is retained for the subsequent execution step.
+     */
+    /**
+     * Proposes the Orchard -> Ironwood migration through the SDK: a single all-or-nothing
+     * transaction sweeping the account's entire Orchard balance to its own internal
+     * receiver, with the fee computed so nothing is left in Orchard. The proposal is
+     * retained for [executeIronwoodMigration].
+     */
+    suspend fun proposeIronwoodMigration(): IronwoodMigrationProposal {
+        val orchard = accountBalance?.orchard ?: throw IllegalStateException("Orchard balance is not loaded yet")
+        val availableZatoshi = orchard.available.value
+        if (availableZatoshi <= 0) {
+            throw IllegalStateException("No spendable Orchard balance yet, wait for the wallet to finish syncing")
+        }
+
+        val proposal = synchronizer.proposeOrchardToIronwoodMigration(zcashAccount)
+        migrationProposal = proposal
+
+        val feeZatoshi = proposal.totalFeeRequired().value
+        return IronwoodMigrationProposal(
+            amount = Zatoshi((availableZatoshi - feeZatoshi).coerceAtLeast(0)).convertZatoshiToZec(decimalCount),
+            fee = Zatoshi(feeZatoshi).convertZatoshiToZec(decimalCount)
+        )
+    }
+
+    data class IronwoodMigrationProposal(
+        val amount: BigDecimal,
+        val fee: BigDecimal
+    )
+
+    /**
+     * Signs and broadcasts the self-transfer proposal retained by [proposeIronwoodMigration]
+     * through the ordinary send path, records every submitted txid for transaction-history
+     * labeling, and returns the first one.
+     */
+    suspend fun executeIronwoodMigration(): String {
+        val proposal = migrationProposal ?: throw IllegalStateException("Migration was not proposed")
+
+        val txHashes = send(proposal)
+        val txHash = txHashes.firstOrNull() ?: throw IllegalStateException("Migration send returned no transaction id")
+
+        migrationProposal = null
+        localStorage.zcashMigrationTransactionIds += txHashes.map { it.lowercase() }
+        return txHash
+    }
+
     suspend fun sendShieldProposal() {
         val shieldProposal = shieldProposal() ?: throw IllegalStateException("Couldn't create shield proposal")
         send(shieldProposal)
@@ -326,16 +411,16 @@ class ZcashAdapter(
         memo = memo
     )
 
-    private suspend fun send(proposal: Proposal): String? {
+    private suspend fun send(proposal: Proposal): List<String> {
         val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
 
         try {
             val results = synchronizer.createProposedTransactions(proposal, spendingKey).toList()
-            var firstTxHash: String? = null
+            val txHashes = mutableListOf<String>()
             results.forEach { result ->
                 when (result) {
                     is TransactionSubmitResult.Success -> {
-                        if (firstTxHash == null) firstTxHash = result.txIdString()
+                        txHashes.add(result.txIdString())
                     }
 
                     is TransactionSubmitResult.Failure -> {
@@ -354,7 +439,7 @@ class ZcashAdapter(
                     }
                 }
             }
-            return firstTxHash
+            return txHashes
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Invalid proposal: ${e.message}", e)
         } catch (e: Exception) {
@@ -371,7 +456,7 @@ class ZcashAdapter(
     }
 
     override suspend fun sendProposal(proposal: Proposal): String? {
-        return send(proposal)
+        return send(proposal).firstOrNull()
     }
 
     private fun createPaymentUri(outputs: List<TransferOutput>): String {
@@ -489,6 +574,7 @@ class ZcashAdapter(
     }
 
     private fun onBalance(balance: AccountBalance) {
+        accountBalance = balance
         val balanceAvailable = balance.available.convertZatoshiToZec(decimalCount)
         val balancePending = balance.pending.convertZatoshiToZec(decimalCount)
         val balanceUnshielded = balance.unshielded.convertZatoshiToZec(decimalCount)
@@ -564,7 +650,7 @@ class ZcashAdapter(
                     showRawTransaction = false,
                     amount = transaction.value.convertZatoshiToZec(decimalCount).negate(),
                     to = transaction.recipients?.firstOrNull()?.addressValue,
-                    sentToSelf = false,
+                    sentToSelf = transaction.sentToSelf,
                     memo = transaction.memo,
                     source = wallet.transactionSource,
                     replaceable = false
@@ -709,7 +795,7 @@ object ZcashAddressValidator {
 }
 
 val AccountBalance.available: Zatoshi
-    get() = this.sapling.available + this.orchard.available
+    get() = this.sapling.available + this.orchard.available + this.ironwood.available
 
 val AccountBalance.pending: Zatoshi
-    get() = this.sapling.pending + this.orchard.pending
+    get() = this.sapling.pending + this.orchard.pending + this.ironwood.pending

@@ -65,6 +65,8 @@ class BalanceViewModel(
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
     private var amountRoundingEnabled = localStorage.amountRoundingEnabledFlow.value
+    private var zcashMigrationAlertWallet: Wallet? = null
+    private var zcashMigrationAlertShown = false
     private var totalUiState = createTotalUiState(totalService.stateFlow.value)
 
     private val sortTypes =
@@ -92,6 +94,7 @@ class BalanceViewModel(
 
                 balanceItems = items
 
+                checkZcashMigrationRequired(items)
                 refreshViewItems()
             }
         }
@@ -196,8 +199,30 @@ class BalanceViewModel(
             it.loading
         },
         balanceHidden = balanceHidden,
-        totalUiState = totalUiState
+        totalUiState = totalUiState,
+        zcashMigrationAlertWallet = zcashMigrationAlertWallet
     )
+
+    private fun checkZcashMigrationRequired(items: List<BalanceModule.BalanceItem>?) {
+        if (zcashMigrationAlertShown) return
+        val zcashWallet = items
+            ?.firstOrNull { it.wallet.token.blockchainType == BlockchainType.Zcash }
+            ?.wallet ?: return
+        // BackupRequiredAlert fires for accounts with funds and no backup — let it win;
+        // the migration alert fires on a later emission once the account is backed up.
+        if (!zcashWallet.account.hasAnyBackup) return
+        ChainRegistry[zcashWallet.token.blockchainType]
+            ?.migrationRequiredBalance(zcashWallet) ?: return
+
+        zcashMigrationAlertShown = true
+        zcashMigrationAlertWallet = zcashWallet
+        emitState()
+    }
+
+    fun zcashMigrationAlertHandled() {
+        zcashMigrationAlertWallet = null
+        emitState()
+    }
 
     private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
@@ -439,7 +464,8 @@ data class BalanceUiState(
     val networkAvailable: Boolean,
     val loading: Boolean,
     val balanceHidden: Boolean,
-    val totalUiState: TotalUIState
+    val totalUiState: TotalUIState,
+    val zcashMigrationAlertWallet: Wallet? = null
 )
 
 data class OpenSendTokenSelect(

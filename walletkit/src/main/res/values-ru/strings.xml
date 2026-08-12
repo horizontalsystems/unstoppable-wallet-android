@@ -1827,4 +1827,15 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Неограниченное разрешение!</string>
     <string name="WalletConnect_Permit_Unlimited">Подписав это, вы разрешите %s перемещать любое количество этого токена из вашего кошелька в любое время до отзыва разрешения. Сейчас ничего не появляется в цепи, поэтому вы не увидите, как это происходит.</string>
     <string name="WalletConnect_Permit_SignatureValid">Подпись действительна до</string>
+    <string name="Send_Error_NodeUnreachable">Не удалось подключиться к узлу. Проверьте подключение и попробуйте снова.</string>
+    <string name="Balance_Zcash_MigrationRequired">Миграция обязательна</string>
+    <string name="Balance_Zcash_Migration_Title">Миграция на Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">Обновление сети Zcash:
+Перемещение ваших ZEC из пула Orchard в новый пул Ironwood. Ваши средства в безопасности.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Перенести</string>
+    <string name="Zcash_Migration_Confirm_Title">Подтвердить миграцию</string>
+    <string name="Transactions_Migrate">Перенести</string>
+    <string name="Transactions_Migrate_ToIronwood">на Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Публично видимое количество</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Перемещение средств между пулами требует, чтобы перенесённое количество было открыто видно в блокчейне. Отправитель, получатель и ваши адреса остаются приватными.</string>
 </resources>

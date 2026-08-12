@@ -1245,7 +1245,12 @@ class TransactionViewItemFactory(
         lastBlockTimestamp: Long?,
         icon: TransactionViewItem.Icon?
     ): TransactionViewItem {
-        val subtitle = Translator.getString(R.string.Transactions_Transfer)
+        val subtitle = when (record.direction) {
+            ZcashShieldingTransactionRecord.Direction.MigrateToIronwood ->
+                Translator.getString(R.string.Transactions_Migrate_ToIronwood)
+
+            else -> Translator.getString(R.string.Transactions_Transfer)
+        }
         val primaryValue = ColoredValue(getCoinString(record.value, true), ColorName.Leah)
         val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
         val lockState = record.lockState(lastBlockTimestamp)

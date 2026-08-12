@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import io.horizontalsystems.zanokit.NodeUnreachableException
 import java.net.UnknownHostException
 
 class SendZanoViewModel(
@@ -206,6 +207,7 @@ class SendZanoViewModel(
 
     private fun createCaution(error: Throwable) = when (error) {
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+        is NodeUnreachableException -> HSCaution(TranslatableString.ResString(R.string.Send_Error_NodeUnreachable))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }

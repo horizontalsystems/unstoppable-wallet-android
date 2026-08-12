@@ -80,6 +80,15 @@ interface ChainPlugin {
     /** Threshold above which an unshielded balance triggers the balance-screen alert. */
     fun unshieldedBalanceThreshold(): BigDecimal? = null
 
+    /**
+     * Balance the chain requires the user to migrate (e.g. Zcash Orchard→Ironwood after a
+     * network upgrade), or null when no migration is pending for [wallet].
+     */
+    fun migrationRequiredBalance(wallet: Wallet): BigDecimal? = null
+
+    /** Confirmation page executing the pending migration reported by [migrationRequiredBalance]. */
+    fun migrationPage(wallet: Wallet, entryPoint: KClass<out HSPage>): HSPage? = null
+
     /** Lowest accepted birthday height for the restore date picker. */
     fun minBirthdayHeight(): Long? = null
 

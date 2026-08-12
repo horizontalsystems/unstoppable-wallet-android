@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.badge
@@ -60,6 +61,7 @@ class TokenBalanceViewModel(
     private var alertUnshieldedBalance: BigDecimal? = null
     private var attentionIcon: AttentionIcon? = null
     private var showTronNotActiveAlert: Boolean? = null
+    private var zcashMigrationRequiredAmount: String? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -118,6 +120,7 @@ class TokenBalanceViewModel(
         alertUnshieldedBalance = alertUnshieldedBalance,
         attentionIcon = attentionIcon,
         showTronNotActiveAlert = showTronNotActiveAlert ?: false,
+        zcashMigrationRequiredAmount = zcashMigrationRequiredAmount,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -175,6 +178,10 @@ class TokenBalanceViewModel(
     }
 
     private fun handleZcashBalanceUpdate(balanceItem: BalanceModule.BalanceItem) {
+        zcashMigrationRequiredAmount = ChainRegistry[wallet.token.blockchainType]
+            ?.migrationRequiredBalance(wallet)
+            ?.let { App.numberFormatter.formatCoinShort(it, wallet.coin.code, wallet.decimal) }
+
         val threshold = ChainRegistry[wallet.token.blockchainType]?.unshieldedBalanceThreshold() ?: return
         if (balanceItem.state == AdapterState.Synced && balanceItem.balanceData.unshielded > threshold) {
             val unshielded = balanceItem.balanceData.unshielded

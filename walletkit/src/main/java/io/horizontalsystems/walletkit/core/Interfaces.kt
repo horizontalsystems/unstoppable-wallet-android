@@ -73,6 +73,7 @@ interface ILocalStorage {
     var uSwapSuspensions: String?
     var uSwapSuspensionsSyncTime: Long
     var zcashAccountIds: Set<String>
+    var zcashMigrationTransactionIds: Set<String>
     var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
     var amountInputType: AmountInputType?

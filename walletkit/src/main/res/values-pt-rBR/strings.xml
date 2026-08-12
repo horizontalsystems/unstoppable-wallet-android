@@ -1825,4 +1825,15 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Permissão Ilimitada!</string>
     <string name="WalletConnect_Permit_Unlimited">Assinar isto permite que %s mova qualquer quantidade deste token de sua carteira, a qualquer momento até que a permissão seja revogada. Nada aparece na blockchain agora, então você não verá isso acontecer.</string>
     <string name="WalletConnect_Permit_SignatureValid">Assinatura válida até</string>
+    <string name="Send_Error_NodeUnreachable">Não foi possível alcançar o nó. Verifique sua conexão e tente novamente.</string>
+    <string name="Balance_Zcash_MigrationRequired">Migração obrigatória</string>
+    <string name="Balance_Zcash_Migration_Title">Migração para Ironwood</string>
+    <string name="Balance_Zcash_Migration_Description">Atualização da rede Zcash:
+Mova seu ZEC do pool Orchard para o novo pool Ironwood. Seus fundos estão seguros.</string>
+    <string name="Balance_Zcash_Migration_Migrate">Migrar</string>
+    <string name="Zcash_Migration_Confirm_Title">Confirmar migração</string>
+    <string name="Transactions_Migrate">Migrar</string>
+    <string name="Transactions_Migrate_ToIronwood">para Ironwood</string>
+    <string name="Zcash_Migration_PubliclyVisible_Title">Quantidade visível publicamente</string>
+    <string name="Zcash_Migration_PubliclyVisible_Description">Mover fundos entre pools requer que o valor migrado seja visível publicamente na blockchain. O remetente, destinatário e seus endereços permanecem privados.</string>
 </resources>
