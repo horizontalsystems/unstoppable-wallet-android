@@ -8,6 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     outputs:
+      build_number: ${{ steps.build_number.outputs.value }}
       commit_subject: ${{ steps.notes.outputs.subject }}
       ci_testing_uri: ${{ steps.upload_ci.outputs.TESTING_URI }}
       fdroid_testing_uri: ${{ steps.upload_fdroid.outputs.TESTING_URI }}
@@ -23,10 +24,13 @@ jobs:
           distribution: 'temurin'
 
       - name: Set Build Number
+        id: build_number
         env:
           APPCENTER_NUMBER: 1210
         run: |
-          echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
+          NUMBER=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))
+          echo "BUILD_NUMBER_NEW=$NUMBER" >> $GITHUB_ENV
+          echo "value=$NUMBER" >> $GITHUB_OUTPUT
 
       - name: Get Release Notes
         id: notes
@@ -34,7 +38,8 @@ jobs:
           AUTHOR=$(git log -1 --pretty=format:'%an')
           MESSAGE=$(git log -1 --pretty=format:'%s')
           echo "val=Author: $AUTHOR, changes: $MESSAGE" >> $GITHUB_OUTPUT
-          echo "subject=$MESSAGE" >> $GITHUB_OUTPUT
+          # Escaped for the HTML-formatted Telegram notification
+          echo "subject=$(printf '%s' "$MESSAGE" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')" >> $GITHUB_OUTPUT
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -84,14 +89,14 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
           disable_web_page_preview: true
           message: |
-            ✅ Firebase dev distribution succeeded
-            ${{ needs.build.outputs.commit_subject }}
-            Branch: ${{ github.ref_name }}
+            ✅ Version Build (${{ needs.build.outputs.build_number }})
+
+            Title: ${{ needs.build.outputs.commit_subject }}
             Author: @${{ github.actor }}
-            Standard: ${{ needs.build.outputs.ci_testing_uri }}
-            F-Droid: ${{ needs.build.outputs.fdroid_testing_uri }}
+            <a href="${{ needs.build.outputs.ci_testing_uri }}">Standard</a> | <a href="${{ needs.build.outputs.fdroid_testing_uri }}">F-Droid</a>
 
       - name: Notify Telegram on failure
         if: needs.build.result == 'failure'
@@ -99,10 +104,11 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
           disable_web_page_preview: true
           message: |
-            ❌ Firebase dev distribution failed
-            ${{ needs.build.outputs.commit_subject }}
-            Branch: ${{ github.ref_name }}
+            ❌ Version Build (${{ needs.build.outputs.build_number }}) failed
+
+            Title: ${{ needs.build.outputs.commit_subject }}
             Author: @${{ github.actor }}
-            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Log</a>
