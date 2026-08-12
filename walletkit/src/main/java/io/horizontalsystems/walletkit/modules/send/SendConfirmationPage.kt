@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronConfirmationScreen
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -32,14 +30,12 @@ data class SendConfirmationPage(val input: Input) : HSPage() {
                 }
             }
 
+            // Legacy: moved to SendTronConfirmationPage next to the Tron send screen.
+            // A back stack persisted before the split may still restore this entry - pop it.
             Type.Tron -> {
-                val sendTronViewModel = navigation.viewModelForScreen<SendTronViewModel>(SendPage::class)
-
-                SendTronConfirmationScreen(
-                    navigation,
-                    sendTronViewModel,
-                    input.sendEntryPointDestId
-                )
+                LaunchedEffect(Unit) {
+                    navigation.removeLastOrNull()
+                }
             }
 
             // Legacy: moved to SendSolanaConfirmationPage in the Solana chain module.
