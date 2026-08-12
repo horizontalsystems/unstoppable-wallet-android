@@ -41,6 +41,12 @@ fun ZcashMigrationScreen(
     val uiState = viewModel.uiState
     val sendResult = uiState.sendResult
 
+    // Resolved during composition: caution strings are @Composable and cannot be read inside
+    // the effect coroutine
+    val failedMessage = (sendResult as? SendResult.Failed)?.caution?.let {
+        it.getDescription() ?: it.getString()
+    }
+
     // Side effects live in the effect, not composition: a recomposition must not repeat the
     // success HUD or stack another error sheet.
     LaunchedEffect(sendResult) {
@@ -56,13 +62,7 @@ fun ZcashMigrationScreen(
             }
 
             is SendResult.Failed -> {
-                navigation.slideFromBottom(
-                    ErrorSheet(
-                        ErrorSheet.Input(
-                            sendResult.caution.getDescription() ?: sendResult.caution.getString()
-                        )
-                    )
-                )
+                navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failedMessage ?: "")))
             }
 
             else -> Unit
