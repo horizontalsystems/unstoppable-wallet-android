@@ -364,7 +364,10 @@ class WCSessionViewModel(
                 emitState()
             } catch (t: Throwable) {
                 WCDelegate.sessionProposalEvent = null
-                showErrorLiveEvent.postValue(t.message)
+                // showErrorLiveEvent has no observer in the Compose sheet; surface the failure
+                // through uiState so the snackbar shows and the Connect button is re-enabled.
+                showError = t.message ?: t.javaClass.simpleName
+                emitState()
             }
         }
     }

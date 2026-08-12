@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +43,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
@@ -56,7 +56,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,8 +75,10 @@ fun WCSignEthereumTransactionRequestScreen(
     )
     val uiState = viewModel.uiState
     val view = LocalView.current
-    val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    // Shared by the sheet's Approve and the confirmation screen's Sign button: both respond to
+    // the same request, so a click on either must lock out both.
+    val signAction = rememberAsyncAction()
 
     val feeText = stringResource(id = R.string.Send_Fee)
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
@@ -199,8 +200,9 @@ fun WCSignEthereumTransactionRequestScreen(
                     title = stringResource(R.string.Button_Approve),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
+                    enabled = !signAction.inProgress,
                     onClick = {
-                        coroutineScope.launch {
+                        signAction.run {
                             try {
                                 logger.info("click sign button")
                                 viewModel.sign()
@@ -229,8 +231,9 @@ fun WCSignEthereumTransactionRequestScreen(
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Sign),
+                enabled = !signAction.inProgress,
                 onClick = {
-                    coroutineScope.launch {
+                    signAction.run {
                         try {
                             logger.info("click sign button")
                             viewModel.sign()

@@ -110,6 +110,10 @@ fun WCSessionScreen(
         }
     }
 
+    // Latched off on click so a connect attempt can't be started twice; on success the sheet
+    // closes, so the only path that must re-enable it is a failure surfacing through showError.
+    var connectButtonEnabled by remember { mutableStateOf(true) }
+
     BottomSheetContent(
         onDismissRequest = {
             // Reject the proposal on dismiss so the dApp isn't left waiting, then animate out.
@@ -120,6 +124,7 @@ fun WCSessionScreen(
     ) { snackbarActions ->
         uiState.showError?.let {
             snackbarActions.showErrorMessage(it)
+            connectButtonEnabled = true
             viewModel.errorShown()
         }
         Column(
@@ -250,7 +255,11 @@ fun WCSessionScreen(
         ActionButtons(
             navigation = navigation,
             buttonsStates = buttonsStates,
-            onConnectClick = { viewModel.connect() },
+            connectEnabled = connectButtonEnabled,
+            onConnectClick = {
+                connectButtonEnabled = false
+                viewModel.connect()
+            },
             onDisconnectClick = { viewModel.disconnect() },
             onCancelClick = {
                 viewModel.rejectProposal()
@@ -266,11 +275,11 @@ fun WCSessionScreen(
 private fun ActionButtons(
     navigation: HSNavigation,
     buttonsStates: WCSessionButtonStates?,
+    connectEnabled: Boolean,
     onConnectClick: () -> Unit,
     onDisconnectClick: () -> Unit,
     onCancelClick: () -> Unit,
 ) {
-    var connectButtonEnabled by remember { mutableStateOf(true) }
     buttonsStates?.let { buttons ->
         ButtonsGroupHorizontal {
             if (buttons.cancel.visible) {
@@ -287,11 +296,8 @@ private fun ActionButtons(
                     title = stringResource(R.string.Button_Connect),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    enabled = connectButtonEnabled,
-                    onClick = {
-                        connectButtonEnabled = false
-                        onConnectClick()
-                    }
+                    enabled = connectEnabled,
+                    onClick = onConnectClick
                 )
             }
             if (buttons.disconnect.visible || buttons.remove.visible) {

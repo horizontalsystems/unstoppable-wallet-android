@@ -43,6 +43,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.request.signtransact
 import io.horizontalsystems.walletkit.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.MessageToSign
+import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
@@ -148,6 +149,7 @@ fun WCNewSignRequestScreen(
     val view = LocalView.current
     val messageBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var messageBottomSheet by remember { mutableStateOf<String?>(null) }
+    val confirmAction = rememberAsyncAction()
 
     // Animate the bottom sheet out before popping. Removing the entry directly disposes the
     // ModalBottomSheet's window abruptly, which intermittently leaves the sheet content on screen
@@ -341,9 +343,10 @@ fun WCNewSignRequestScreen(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
+                    enabled = !confirmAction.inProgress,
                     onClick = {
                         logger.info("allow request")
-                        scope.launch {
+                        confirmAction.run {
                             try {
                                 // Offload the signing (CPU-bound crypto) off the Main thread, but
                                 // keep hide()/removeLastOrNull() on Main — they mutate UI state.
