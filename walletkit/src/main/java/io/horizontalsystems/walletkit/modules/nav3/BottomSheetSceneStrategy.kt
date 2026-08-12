@@ -5,8 +5,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.OverlayScene
 import androidx.navigation3.scene.Scene
@@ -36,7 +36,7 @@ internal class BottomSheetScene<T : Any>(
         // Default-dispatcher coroutine), so a sheet can slip onto the stack in the same frame the
         // app locks. Keep the entry on the stack but don't compose the sheet while locked: the
         // window is torn down for the whole lock, and the sheet re-enters intact on unlock.
-        val isLocked by App.pinComponent.isLockedFlow.collectAsState()
+        val isLocked by App.pinComponent.isLockedFlow.collectAsStateWithLifecycle()
         if (!isLocked) {
             ModalBottomSheet(
                 onDismissRequest = onBack,
