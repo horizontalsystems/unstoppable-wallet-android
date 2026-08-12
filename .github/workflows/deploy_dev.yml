@@ -96,6 +96,7 @@ jobs:
 
             Title: ${{ needs.build.outputs.commit_subject }}
             Author: @${{ github.actor }}
+
             <a href="${{ needs.build.outputs.ci_testing_uri }}">Standard</a> | <a href="${{ needs.build.outputs.fdroid_testing_uri }}">F-Droid</a>
 
       - name: Notify Telegram on failure
@@ -111,4 +112,5 @@ jobs:
 
             Title: ${{ needs.build.outputs.commit_subject }}
             Author: @${{ github.actor }}
+
             <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Log</a>
