@@ -366,7 +366,7 @@ class WCSessionViewModel(
                 WCDelegate.sessionProposalEvent = null
                 // showErrorLiveEvent has no observer in the Compose sheet; surface the failure
                 // through uiState so the snackbar shows and the Connect button is re-enabled.
-                showError = t.message ?: t.javaClass.simpleName
+                showError = getErrorMessage(t) ?: t.message ?: t.javaClass.simpleName
                 emitState()
             }
         }
@@ -413,6 +413,11 @@ class WCSessionViewModel(
                         WCDelegate.sessionProposalEvent = null
                     }
                 )
+            } else {
+                // Resume with an error instead of suspending forever (which would also leave the
+                // Connect button latched disabled): the proposal is gone, e.g. already handled or
+                // expired.
+                continuation.resumeWithException(RequestNotFoundError)
             }
         }
     }
@@ -432,6 +437,9 @@ class WCSessionViewModel(
                         WCDelegate.sessionProposalEvent = null
                     }
                 )
+            } else {
+                // Same as approve(): never leave the continuation suspended forever.
+                continuation.resumeWithException(RequestNotFoundError)
             }
         }
     }
@@ -500,10 +508,13 @@ class WCSessionViewModel(
     }
 
     private fun setError(state: WCSessionServiceState) {
-        showError = when {
+        when {
             state is Invalid && (state.error !is ValidationError) ->
-                state.error.message ?: state.error::class.java.simpleName
-            else -> null
+                showError = state.error.message ?: state.error::class.java.simpleName
+            // Don't clear a pending error here: sync() runs on every connectionAvailableEvent
+            // emission and would wipe an approve() failure before the sheet renders it. The
+            // error is consumed by errorShown() once displayed.
+            else -> {}
         }
     }
 
