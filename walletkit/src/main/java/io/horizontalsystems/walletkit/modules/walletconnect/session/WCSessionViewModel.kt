@@ -334,10 +334,17 @@ class WCSessionViewModel(
         }
 
         viewModelScope.launch {
-            reject(proposal.proposerPublicKey) {
-                sessionServiceState = Killed
+            try {
+                reject(proposal.proposerPublicKey) {
+                    sessionServiceState = Killed
+                }
+            } catch (t: Throwable) {
+                // The proposal may already be gone (RequestNotFoundError) or the relay call may
+                // fail. The user asked to dismiss either way, so close instead of crashing the
+                // coroutine or stranding the sheet; the dApp side times out on its own.
             }
             closeDialog = true
+            emitState()
         }
     }
 
