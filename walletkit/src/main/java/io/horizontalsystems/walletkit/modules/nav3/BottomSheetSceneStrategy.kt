@@ -5,11 +5,14 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.OverlayScene
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetSceneStrategy.Companion.bottomSheet
 
 /** An [OverlayScene] that renders an [entry] within a [ModalBottomSheet]. */
@@ -27,13 +30,22 @@ internal class BottomSheetScene<T : Any>(
     override val entries: List<NavEntry<T>> = listOf(entry)
 
     override val content: @Composable (() -> Unit) = {
-        ModalBottomSheet(
-            onDismissRequest = onBack,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded),
-            properties = modalBottomSheetProperties,
-            dragHandle = null
-        ) {
-            entry.Content()
+        // ModalBottomSheet opens its own window, composited above the activity window — and so
+        // above the PinUnlock overlay, which would leave the sheet interactable over the keypad.
+        // The lock also engages asynchronously (PinComponent collects background state on a
+        // Default-dispatcher coroutine), so a sheet can slip onto the stack in the same frame the
+        // app locks. Keep the entry on the stack but don't compose the sheet while locked: the
+        // window is torn down for the whole lock, and the sheet re-enters intact on unlock.
+        val isLocked by App.pinComponent.isLockedFlow.collectAsState()
+        if (!isLocked) {
+            ModalBottomSheet(
+                onDismissRequest = onBack,
+                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded),
+                properties = modalBottomSheetProperties,
+                dragHandle = null
+            ) {
+                entry.Content()
+            }
         }
     }
 }
