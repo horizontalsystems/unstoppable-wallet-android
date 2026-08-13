@@ -1830,8 +1830,7 @@
     <string name="Send_Error_NodeUnreachable">Не удалось подключиться к узлу. Проверьте подключение и попробуйте снова.</string>
     <string name="Balance_Zcash_MigrationRequired">Миграция обязательна</string>
     <string name="Balance_Zcash_Migration_Title">Миграция на Ironwood</string>
-    <string name="Balance_Zcash_Migration_Description">Обновление сети Zcash:
-Перемещение ваших ZEC из пула Orchard в новый пул Ironwood. Ваши средства в безопасности.</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash был обновлен до нового защищённого пула. Ваш защищённый баланс должен быть перенесён на этот новый пул, чтобы остаться полностью анонимным в будущих транзакциях.\n\nОбратите внимание, что транзакции миграции не полностью анонимны и раскрывают вовлечённые суммы.\n\nДля сохранения высокого уровня приватности рекомендуем использовать VPN или TOR при выполнении транзакций миграции.</string>
     <string name="Balance_Zcash_Migration_Migrate">Перенести</string>
     <string name="Zcash_Migration_Confirm_Title">Подтвердить миграцию</string>
     <string name="Transactions_Migrate">Перенести</string>

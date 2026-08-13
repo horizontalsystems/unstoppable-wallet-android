@@ -1823,8 +1823,7 @@
     <string name="Send_Error_NodeUnreachable">无法连接到节点。请检查您的连接并重试。</string>
     <string name="Balance_Zcash_MigrationRequired">需要迁移</string>
     <string name="Balance_Zcash_Migration_Title">迁移至 Ironwood</string>
-    <string name="Balance_Zcash_Migration_Description">Zcash 网络升级:
-将您的 ZEC 从 Orchard 池迁移至新的 Ironwood 池。您的资金是安全的。</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash已升级到新的防护池。您的防护余额必须迁移到该新池，以在将来的交易中保持完全匿名。\n\n请注意，迁移交易不是完全匿名的，并会公开涉及的金额。\n\n为了保持高级别的隐私，在进行迁移交易时，您可以考虑使用VPN或TOR。</string>
     <string name="Balance_Zcash_Migration_Migrate">迁移</string>
     <string name="Zcash_Migration_Confirm_Title">确认迁移</string>
     <string name="Transactions_Migrate">迁移</string>

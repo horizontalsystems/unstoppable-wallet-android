@@ -1832,8 +1832,7 @@
     <string name="Send_Error_NodeUnreachable">Knoten konnte nicht erreicht werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.</string>
     <string name="Balance_Zcash_MigrationRequired">Migration erforderlich</string>
     <string name="Balance_Zcash_Migration_Title">Migration zu Ironwood</string>
-    <string name="Balance_Zcash_Migration_Description">Zcash-Netzwerk-Upgrade:
-Verschieben Sie Ihre ZEC vom Orchard-Pool zum neuen Ironwood-Pool. Ihre Gelder sind sicher.</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash hat ein Upgrade auf einen neuen abgeschirmten Pool durchgeführt. Ihr abgeschirmtes Guthaben muss auf diesen neuen Pool migriert werden, um in zukünftigen Transaktionen vollständig anonym zu bleiben.\n\nBitte beachten Sie, dass Migrationstransaktionen nicht vollständig anonym sind und die beteiligten Beträge offenlegen.\n\nUm ein hohes Datenschutzniveau zu bewahren, sollten Sie die Verwendung eines VPN oder TOR bei Migrationstransaktionen in Betracht ziehen.</string>
     <string name="Balance_Zcash_Migration_Migrate">Migrieren</string>
     <string name="Zcash_Migration_Confirm_Title">Migration bestätigen</string>
     <string name="Transactions_Migrate">Migrieren</string>

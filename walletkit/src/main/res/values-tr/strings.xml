@@ -1824,8 +1824,7 @@
     <string name="Send_Error_NodeUnreachable">Düğüme ulaşılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.</string>
     <string name="Balance_Zcash_MigrationRequired">Geçiş gerekli</string>
     <string name="Balance_Zcash_Migration_Title">Ironwood\'a Geçiş</string>
-    <string name="Balance_Zcash_Migration_Description">Zcash ağı yükseltmesi:
-ZEC\'inizi Orchard havuzundan yeni Ironwood havuzuna taşıyın. Fonlarınız güvenlidir.</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash yeni bir korumalı havuza yükseltilmiştir. Korumalı bakiyeniz, gelecekteki işlemlerde tam anonimlik için bu yeni havuza taşınmalıdır.\n\nMigrasyon işlemlerinin tamamen anonim olmadığını ve ilgili tutarları açığa çıkardığını lütfen unutmayın.\n\nYüksek düzeyde gizlilik sağlamak için migrasyon işlemlerini gerçekleştirirken VPN veya TOR kullanmayı göz önünde bulundurabilirsiniz.</string>
     <string name="Balance_Zcash_Migration_Migrate">Geçir</string>
     <string name="Zcash_Migration_Confirm_Title">Geçişi onaylayın</string>
     <string name="Transactions_Migrate">Geçir</string>
