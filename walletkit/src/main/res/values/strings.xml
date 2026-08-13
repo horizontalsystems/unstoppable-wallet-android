@@ -472,7 +472,7 @@
     <string name="Balance_Zcash_Shielded" translatable="false">Shielded</string>
     <string name="Balance_Zcash_MigrationRequired">Migration Required</string>
     <string name="Balance_Zcash_Migration_Title">Migration to Ironwood</string>
-    <string name="Balance_Zcash_Migration_Description">Zcash network upgrade:\nMove your ZEC from Orchard to the new Ironwood pool. Your funds are safe.</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash has upgraded to a new shielded pool. Your shielded balance must be migrated to that new pool to remain fully anonymous in future transactions.\n\nPlease note that migration transactions aren’t fully anonymous and expose the amounts involved.\n\nTo maintain high level pf privacy you may consider using VPN or TOR when making migration transactions.</string>
     <string name="Balance_Zcash_Migration_Migrate">Migrate</string>
     <string name="Zcash_Migration_Confirm_Title">Confirm Migration</string>
     <string name="Transactions_Migrate">Migrate</string>
