@@ -17,6 +17,7 @@ package io.horizontalsystems.walletkit.modules.nav3
  */
 
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidedValue
@@ -43,6 +44,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.compose.LocalSavedStateRegistryOwner
+import io.horizontalsystems.walletkit.core.debug.ViewModelLeakWatcher
 
 /**
  * Returns a [SharedViewModelStoreNavEntryDecorator] that is remembered across recompositions.
@@ -143,12 +145,36 @@ private class EntryViewModel : ViewModel() {
     fun viewModelStoreForKey(key: Any): ViewModelStore = owners.getOrPut(key) { ViewModelStore() }
 
     fun clearViewModelStoreOwnerForKey(key: Any) {
-        owners.remove(key)?.clear()
+        // remove() returns null on a repeated call, so the same store can never be
+        // reported twice.
+        owners.remove(key)?.clearAndWatchViewModels()
     }
 
     override fun onCleared() {
-        owners.forEach { (_, store) -> store.clear() }
+        owners.values.forEach { it.clearAndWatchViewModels() }
+        owners.clear()
     }
+}
+
+/**
+ * Clears this store and reports the ViewModels it held to [ViewModelLeakWatcher].
+ *
+ * The snapshot has to be taken before [ViewModelStore.clear], which empties the store, and the
+ * report has to happen after it, so that every ViewModel has already received `onCleared()` and
+ * the store no longer references it. In release builds the report is a no-op.
+ *
+ * `keys()`/`get()` are `@RestrictTo(LIBRARY_GROUP)` but are the only public way to enumerate a
+ * store; LeakCanary itself reaches the same map by reflection.
+ */
+@SuppressLint("RestrictedApi")
+private fun ViewModelStore.clearAndWatchViewModels() {
+    if (!ViewModelLeakWatcher.isEnabled) {
+        clear()
+        return
+    }
+    val viewModels = keys().mapNotNull { key -> get(key) }
+    clear()
+    ViewModelLeakWatcher.onViewModelsCleared(viewModels)
 }
 
 

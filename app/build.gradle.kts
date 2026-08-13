@@ -250,6 +250,7 @@ dependencies {
     implementation(project(":walletkit-chain-evm"))
     implementation(libs.androidx.splashscreen) // MainActivity installs the splash screen
     debugImplementation(libs.leakcanary)
+    debugImplementation(libs.androidx.startup) // ViewModelLeakWatcherInitializer
 
     // Desugar
     coreLibraryDesugaring(libs.desugar.jdk.libs)
