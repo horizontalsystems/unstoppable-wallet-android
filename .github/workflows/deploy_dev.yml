@@ -7,9 +7,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       build_number: ${{ steps.build_number.outputs.value }}
-      commit_subject: ${{ steps.notes.outputs.subject }}
+      details: ${{ steps.notes.outputs.details }}
       ci_testing_uri: ${{ steps.upload_ci.outputs.TESTING_URI }}
       fdroid_testing_uri: ${{ steps.upload_fdroid.outputs.TESTING_URI }}
 
@@ -34,12 +37,37 @@ jobs:
 
       - name: Get Release Notes
         id: notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           AUTHOR=$(git log -1 --pretty=format:'%an')
           MESSAGE=$(git log -1 --pretty=format:'%s')
           echo "val=Author: $AUTHOR, changes: $MESSAGE" >> $GITHUB_OUTPUT
+
+          # The pull request this commit arrived with, and the issue it references
+          PULLS="$RUNNER_TEMP/pulls.json"
+          gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" > "$PULLS" || echo '[]' > "$PULLS"
+          PR=$(jq -r '.[0].number // empty' "$PULLS")
+          PR_BODY=$(jq -r '.[0].body // ""' "$PULLS")
+          ISSUE=$(printf '%s\n%s\n' "$PR_BODY" "$MESSAGE" \
+            | grep -oiE '(closes?d?|fix(es|ed)?|resolves?d?|part of|relates? to) #[0-9]+' \
+            | head -1 | grep -oE '[0-9]+' || true)
+
           # Escaped for the HTML-formatted Telegram notification
-          echo "subject=$(printf '%s' "$MESSAGE" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')" >> $GITHUB_OUTPUT
+          SUBJECT=$(printf '%s' "$MESSAGE" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
+          REPO_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          PR_LINK="—"
+          ISSUE_LINK="—"
+          if [ -n "$PR" ]; then PR_LINK="<a href=\"$REPO_URL/pull/$PR\">#$PR</a>"; fi
+          if [ -n "$ISSUE" ]; then ISSUE_LINK="<a href=\"$REPO_URL/issues/$ISSUE\">#$ISSUE</a>"; fi
+          {
+            echo "details<<TELEGRAM_EOF"
+            echo "Title: $SUBJECT"
+            echo "PR: $PR_LINK"
+            echo "Issue: $ISSUE_LINK"
+            echo "Author: $GITHUB_ACTOR"
+            echo "TELEGRAM_EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -94,8 +122,7 @@ jobs:
           message: |
             ✅ Version Build (${{ needs.build.outputs.build_number }})
 
-            Title: ${{ needs.build.outputs.commit_subject }}
-            Author: @${{ github.actor }}
+            ${{ needs.build.outputs.details }}
 
             <a href="${{ needs.build.outputs.ci_testing_uri }}">Standard</a> | <a href="${{ needs.build.outputs.fdroid_testing_uri }}">F-Droid</a>
 
@@ -110,7 +137,6 @@ jobs:
           message: |
             ❌ Version Build (${{ needs.build.outputs.build_number }}) failed
 
-            Title: ${{ needs.build.outputs.commit_subject }}
-            Author: @${{ github.actor }}
+            ${{ needs.build.outputs.details }}
 
             <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Log</a>
