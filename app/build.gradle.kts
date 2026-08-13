@@ -260,6 +260,21 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcutil-jdk18on")
     }
 
+    // com.madgag.spongycastle:prov (pulled in by reown) declares junit as a compile
+    // dependency, so JUnit ends up packaged in the app. Besides being dead weight, it
+    // makes LeakCanary silently disable itself: it treats org.junit.Test on the runtime
+    // classpath as "running in a test" and never dumps the heap. Test configurations are
+    // left alone, and instrumentation runs still load JUnit from the test APK.
+    configurations.configureEach {
+        if (name.endsWith("RuntimeClasspath") &&
+            !name.contains("UnitTest") &&
+            !name.contains("AndroidTest")
+        ) {
+            exclude(group = "junit", module = "junit")
+            exclude(group = "org.hamcrest", module = "hamcrest-core")
+        }
+    }
+
     // UI Tests
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.test.runner)
