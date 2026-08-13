@@ -756,8 +756,7 @@
     <string name="Send_Error_NodeUnreachable">نتوانستیم به گره دسترسی پیدا کنیم. لطفاً اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="Balance_Zcash_MigrationRequired">مهاجرت الزامی</string>
     <string name="Balance_Zcash_Migration_Title">مهاجرت به Ironwood</string>
-    <string name="Balance_Zcash_Migration_Description">ارتقای شبکه Zcash:
-ZEC خود را از استخر Orchard به استخر جدید Ironwood منتقل کنید. صندوق‌های شما امن هستند.</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash به یک پول محافظ شده جدید ارتقا یافته است. موجودی محافظ شده شما باید به این پول جدید مهاجرت کند تا در تراکنش های آینده کاملاً ناشناس باقی بماند.\n\nلطفاً توجه داشته باشید که تراکنش های مهاجرت کاملاً ناشناس نیستند و مبالغ درگیر را فاش می کنند.\n\nبرای حفظ سطح بالایی از حریم خصوصی، هنگام انجام تراکنش های مهاجرت می توانید از VPN یا TOR استفاده کنید.</string>
     <string name="Balance_Zcash_Migration_Migrate">مهاجرت</string>
     <string name="Zcash_Migration_Confirm_Title">تایید مهاجرت</string>
     <string name="Transactions_Migrate">مهاجرت</string>

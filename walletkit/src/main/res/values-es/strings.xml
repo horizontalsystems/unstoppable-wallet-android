@@ -1823,8 +1823,7 @@
     <string name="Send_Error_NodeUnreachable">No se pudo alcanzar el nodo. Verifique su conexión e intente de nuevo.</string>
     <string name="Balance_Zcash_MigrationRequired">Migración requerida</string>
     <string name="Balance_Zcash_Migration_Title">Migración a Ironwood</string>
-    <string name="Balance_Zcash_Migration_Description">Actualización de la red Zcash:
-Mueva su ZEC del pool Orchard al nuevo pool Ironwood. Sus fondos están seguros.</string>
+    <string name="Balance_Zcash_Migration_Description">Zcash se ha actualizado a un nuevo fondo blindado. Su saldo blindado debe migrarse a ese nuevo fondo para mantenerse completamente anónimo en futuras transacciones.\n\nTenga en cuenta que las transacciones de migración no son completamente anónimas y exponen los montos involucrados.\n\nPara mantener un alto nivel de privacidad, puede considerar usar VPN o TOR al realizar transacciones de migración.</string>
     <string name="Balance_Zcash_Migration_Migrate">Migrar</string>
     <string name="Zcash_Migration_Confirm_Title">Confirmar migración</string>
     <string name="Transactions_Migrate">Migrar</string>
