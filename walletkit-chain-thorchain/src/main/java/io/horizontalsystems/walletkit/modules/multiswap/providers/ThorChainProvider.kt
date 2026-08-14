@@ -10,4 +10,5 @@ object ThorChainProvider : BaseThorChainProvider(
     override val id = THORCHAIN_PROVIDER_ID
     override val title = "THORChain"
     override val riskLevel = RiskLevel.EXCELLENT
+    override val securedAssetsSupported = true
 }

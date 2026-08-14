@@ -24,6 +24,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.Asset as ThorAsset
 import io.horizontalsystems.thorchainkit.models.ThorchainAssetResolver
+import kotlinx.coroutines.CancellationException
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -45,6 +46,10 @@ abstract class BaseThorChainProvider(
     protected open val settlementBlockchainType: BlockchainType = BlockchainType.Thorchain
     protected open val settlementAsset: String = "THOR.RUNE"
 
+    // THORChain exposes secured assets (btc-btc, eth-eth, …) via /securedassets and makes
+    // them swappable through the standard `=:` memo. Maya has none, so it stays false.
+    protected open val securedAssetsSupported: Boolean = false
+
     // Base-unit scale the protocol uses for a quote amount. Every pool asset is quoted at 1e8,
     // regardless of its real decimals (ETH is still 1e8 here, and so are ThorChain secured assets).
     // The lone exception is the settlement asset's own native coin, quoted in its native decimals —
@@ -55,7 +60,7 @@ abstract class BaseThorChainProvider(
 
     companion object {
         // bump to invalidate cached asset maps when the mapping logic changes
-        private const val ASSETS_MAP_VERSION = 3
+        private const val ASSETS_MAP_VERSION = 4
     }
 
     protected val thornodeAPI =
@@ -152,6 +157,27 @@ abstract class BaseThorChainProvider(
             assetsMap[native] = settlementAsset
         }
 
+        // Secured assets (btc-btc, eth-eth, …) live in THORChain's x/bank, not in /pools, but are
+        // swappable via the standard `=:` memo. Map only those registered in marketkit — the rest
+        // resolve to null and stay non-swap-eligible. Fetched defensively: a /securedassets outage
+        // must not discard the pool-based map (which would disable all THORChain swaps).
+        if (securedAssetsSupported) {
+            try {
+                for (securedAsset in thornodeAPI.securedAssets()) {
+                    val denom = securedAsset.asset.lowercase()
+                    val token = App.marketKit.token(
+                        TokenQuery(settlementBlockchainType, TokenType.ThorchainAsset(denom))
+                    ) ?: continue
+                    assetsMap[token] = securedAsset.asset
+                }
+            } catch (e: CancellationException) {
+                // a cancelled refresh must propagate, not return a partial assetsMap
+                throw e
+            } catch (_: Throwable) {
+                // keep the pool-based map; secured swaps are simply unavailable until next refresh
+            }
+        }
+
         return assetsMap
     }
 
@@ -171,7 +197,16 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal
     ): SwapQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null, refundAddress = null, fromAddress = null)
+        // A secured-asset output lives on THORChain, and the node refuses to quote a swap whose
+        // destination isn't on the target asset's chain ("swap destination address is not the same
+        // chain as the target asset"). A null destination is fine for L1/RUNE outputs but fails for
+        // secured targets, so resolve the THORChain destination up front for the preview quote too.
+        val destination = if (tokenOut.type is TokenType.ThorchainAsset) {
+            resolveDestinationAddress(tokenOut)
+        } else {
+            null
+        }
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, destination, refundAddress = null, fromAddress = null)
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -387,6 +422,9 @@ interface ThornodeAPI {
     @GET("pools")
     suspend fun pools(): List<Response.Pool>
 
+    @GET("securedassets")
+    suspend fun securedAssets(): List<Response.SecuredAsset>
+
     @GET("inbound_addresses")
     suspend fun inboundAddresses(): List<Response.InboundAddress>
 
@@ -454,6 +492,12 @@ interface ThornodeAPI {
         data class Pool(
             val asset: String,
             val status: String,
+        )
+
+        // /securedassets returns a flat array; only `asset` (e.g. "BTC-BTC") is needed to
+        // resolve the token and use it as the swap `from_asset`/`to_asset`.
+        data class SecuredAsset(
+            val asset: String,
         )
 
         data class InboundAddress(
