@@ -141,6 +141,7 @@ android {
             buildConfigFieldString("HASH_DIT_BASE_URL", "https://service.hashdit.io/v2/hashdit/")
             buildConfigFieldString("HASH_DIT_API_KEY", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-dev.unstoppable.money/api/v2/")
+            buildConfigField("int", "SWAP_FEE_BPS", "25")
         }
 
         release {
@@ -173,6 +174,7 @@ android {
             buildConfigFieldString("HASH_DIT_BASE_URL", "https://service.hashdit.io/v2/hashdit/")
             buildConfigFieldString("HASH_DIT_API_KEY", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-api.unstoppable.money/v2/")
+            buildConfigField("int", "SWAP_FEE_BPS", "100")
         }
     }
 

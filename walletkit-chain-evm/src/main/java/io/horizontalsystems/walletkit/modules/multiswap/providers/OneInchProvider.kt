@@ -39,9 +39,11 @@ class OneInchProvider(
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
     private val partnerAddress: String by lazy { App.appConfigProvider.oneInchPartnerFeeAddress }
 
+    // 1inch's `fee` param is a percentage; SWAP_FEE_BPS is in basis points (100 bps = 1%).
+    private val partnerFeePercent: Float by lazy { App.appConfigProvider.swapFeeBps / 100f }
+
     companion object {
         const val ID = ONEINCH_PROVIDER_ID
-        private const val PARTNER_FEE: Float = 1F
 
         // TODO take evmCoinAddress from oneInchKit
         private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
@@ -80,7 +82,7 @@ class OneInchProvider(
             fromToken = getTokenAddress(tokenIn),
             toToken = getTokenAddress(tokenOut),
             amount = amountIn.scaleUp(tokenIn.decimals),
-            fee = PARTNER_FEE
+            fee = partnerFeePercent
         ).onErrorResumeNext {
             Single.error(it.convertedError)
         }.await()
@@ -133,7 +135,7 @@ class OneInchProvider(
             recipient = recipient?.hex?.let { Address(it) },
             gasPrice = gasPrice,
             referrer = partnerAddress,
-            fee = PARTNER_FEE,
+            fee = partnerFeePercent,
             disableEstimate = disableEstimate,
         ).await()
 
