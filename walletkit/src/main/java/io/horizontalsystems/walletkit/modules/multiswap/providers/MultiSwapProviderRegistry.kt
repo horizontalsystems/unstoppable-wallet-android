@@ -37,8 +37,18 @@ object MultiSwapProviderRegistry {
     private val retiredProviders: List<IMultiSwapProvider>
         get() = listOf(AllBridgeProvider)
 
+    /**
+     * Confidential rails, executing private sends only. Resolvable by id like the retired
+     * providers (tracking and history rendering need that), but deliberately absent from
+     * [allProviders]: the ordinary swap screen fans out over that list and must never offer
+     * a confidential provider.
+     */
+    val confidentialProviders: List<USwapProvider> = listOf(
+        USwapProvider(UProvider.NearConfidential),
+    )
+
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
-        (allProviders + retiredProviders).associateBy { it.id }
+        (allProviders + retiredProviders + confidentialProviders).associateBy { it.id }
     }
 
     fun isSingleTransactionSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean {

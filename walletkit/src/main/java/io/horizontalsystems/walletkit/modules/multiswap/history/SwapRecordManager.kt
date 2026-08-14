@@ -18,9 +18,10 @@ class SwapRecordManager(
         _recordsUpdatedFlow.tryEmit(Unit)
     }
 
-    fun save(record: SwapRecord) {
-        swapRecordDao.insert(record)
+    fun save(record: SwapRecord): Int {
+        val rowId = swapRecordDao.insert(record)
         _recordsUpdatedFlow.tryEmit(Unit)
+        return rowId.toInt()
     }
 
     fun getAll(): List<SwapRecord> {

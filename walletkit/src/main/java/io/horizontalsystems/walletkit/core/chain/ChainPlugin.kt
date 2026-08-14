@@ -262,6 +262,17 @@ interface ChainPlugin {
 
     /** Send-transaction service used by multiswap/OpenCryptoPay confirm flows. */
     fun sendTransactionService(token: Token): AbstractSendTransactionService? = null
+
+    /**
+     * A plain transfer of [amount] to [address] as SendTransactionData, for flows that build a
+     * deposit themselves (private send). Most chains are built kit-free by the caller; EVM
+     * needs the kit for ERC20 transfer calldata, so its plugin overrides this.
+     */
+    fun depositTransferData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+    ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
 }
 
 /** A row on the manage-account private/public keys screens, navigating to a chain page. */

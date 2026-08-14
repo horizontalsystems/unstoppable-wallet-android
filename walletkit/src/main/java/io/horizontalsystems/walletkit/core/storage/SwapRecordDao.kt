@@ -9,7 +9,7 @@ import io.horizontalsystems.walletkit.entities.SwapRecord
 @Dao
 interface SwapRecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(record: SwapRecord)
+    fun insert(record: SwapRecord): Long
 
     @Query("SELECT * FROM SwapRecord WHERE accountId = :accountId ORDER BY timestamp DESC")
     fun getAll(accountId: String): List<SwapRecord>

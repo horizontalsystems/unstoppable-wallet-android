@@ -32,6 +32,10 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
+import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.UtxoCell
@@ -101,6 +105,7 @@ fun SendMoneroScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
+    val privateSendViewModel = privateSendViewModel(wallet.token)
 
     val focusRequester = remember { FocusRequester() }
 
@@ -149,6 +154,7 @@ fun SendMoneroScreen(
             },
             onValueChange = {
                 viewModel.onEnterAmount(it)
+                privateSendViewModel.onEnterAmount(it)
             },
             inputType = amountInputType,
             rate = viewModel.coinRate,
@@ -164,6 +170,10 @@ fun SendMoneroScreen(
             amountInputType = amountInputType,
             rate = viewModel.coinRate
         )
+
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            PrivateSendToggleSection(privateSendViewModel)
+        }
 
         VSpacer(16.dp)
         HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
@@ -213,7 +223,7 @@ fun SendMoneroScreen(
                 )
             }
         ) {
-            openConfirm(navigation, sendEntryPointDestId)
+            openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
         }
 
         ButtonPrimaryYellow(
@@ -230,7 +240,7 @@ fun SendMoneroScreen(
                     keyboardController?.hide()
                     forResult()
                 } else {
-                    openConfirm(navigation, sendEntryPointDestId)
+                    openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
                 }
             },
             enabled = proceedEnabled
@@ -240,8 +250,26 @@ fun SendMoneroScreen(
 }
 
 private fun openConfirm(
+    viewModel: SendMoneroViewModel,
+    privateSendViewModel: PrivateSendViewModel,
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
+    if (privateSendViewModel.isEnabled) {
+        val amount = privateSendViewModel.amount ?: return
+
+        navigation.slideFromRight(
+            PrivateSendConfirmationPage(
+                PrivateSendConfirmationPage.Input(
+                    wallet = viewModel.wallet,
+                    recipient = viewModel.uiState.address.hex,
+                    amount = amount,
+                    sendEntryPointDestId = sendEntryPointDestId,
+                )
+            )
+        )
+        return
+    }
+
     navigation.slideFromRight(SendMoneroConfirmationPage(sendEntryPointDestId))
 }

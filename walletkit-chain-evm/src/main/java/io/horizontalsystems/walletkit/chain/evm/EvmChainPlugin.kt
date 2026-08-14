@@ -36,7 +36,9 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchProvide
 import io.horizontalsystems.walletkit.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTransactionData
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.opencryptopay.OcpConfirmData
@@ -54,6 +56,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.handler.WCHandlerEvm
 import io.horizontalsystems.walletkit.modules.walletconnect.request.WcRequestEvm
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -157,6 +160,17 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
 
     override fun sendTransactionService(token: Token): AbstractSendTransactionService =
         SendTransactionServiceEvm(blockchainType)
+
+    override fun depositTransferData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+    ): SendTransactionData? {
+        val adapter = App.adapterManager.getAdapterForToken<ISendEthereumAdapter>(token) ?: return null
+        val transactionData = adapter.getTransactionData(amount, EvmAddress(address))
+
+        return SendTransactionData.Evm(transactionData.toEvmTransactionData(), gasLimit = null)
+    }
 
     override fun swapProviders(): List<IMultiSwapProvider> =
         if (isFamilyAnchor) {

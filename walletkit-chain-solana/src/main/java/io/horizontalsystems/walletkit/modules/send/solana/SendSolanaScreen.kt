@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.send.solana
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -23,6 +24,10 @@ import io.horizontalsystems.walletkit.modules.amount.HSAmountInput
 import io.horizontalsystems.walletkit.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
+import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendScreen
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
@@ -54,6 +59,8 @@ fun SendSolanaScreen(
         factory = AddressParserModule.Factory(wallet.token, amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
+
+    val privateSendViewModel = privateSendViewModel(wallet.token)
 
     val focusRequester = remember { FocusRequester() }
 
@@ -90,6 +97,7 @@ fun SendSolanaScreen(
             },
             onValueChange = {
                 viewModel.onEnterAmount(it)
+                privateSendViewModel.onEnterAmount(it)
             },
             inputType = amountInputType,
             rate = viewModel.coinRate,
@@ -106,6 +114,10 @@ fun SendSolanaScreen(
             rate = viewModel.coinRate
         )
 
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            PrivateSendToggleSection(privateSendViewModel)
+        }
+
         val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
             {
                 AddressRiskySheet(
@@ -115,7 +127,7 @@ fun SendSolanaScreen(
                 )
             }
         ) {
-            openConfirm(navigation, sendEntryPointDestId)
+            openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
         }
 
         ButtonPrimaryYellow(
@@ -130,7 +142,7 @@ fun SendSolanaScreen(
                     keyboardController?.hide()
                     forResult()
                 } else {
-                    openConfirm(navigation, sendEntryPointDestId)
+                    openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
                 }
             },
             enabled = proceedEnabled
@@ -140,8 +152,26 @@ fun SendSolanaScreen(
 }
 
 private fun openConfirm(
+    viewModel: SendSolanaViewModel,
+    privateSendViewModel: PrivateSendViewModel,
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
+    if (privateSendViewModel.isEnabled) {
+        val amount = privateSendViewModel.amount ?: return
+
+        navigation.slideFromRight(
+            PrivateSendConfirmationPage(
+                PrivateSendConfirmationPage.Input(
+                    wallet = viewModel.wallet,
+                    recipient = viewModel.uiState.address.hex,
+                    amount = amount,
+                    sendEntryPointDestId = sendEntryPointDestId,
+                )
+            )
+        )
+        return
+    }
+
     navigation.slideFromRight(SendSolanaConfirmationPage(sendEntryPointDestId))
 }
