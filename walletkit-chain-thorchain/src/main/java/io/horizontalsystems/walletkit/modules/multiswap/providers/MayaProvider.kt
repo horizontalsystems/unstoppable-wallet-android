@@ -11,7 +11,7 @@ import java.math.BigDecimal
 object MayaProvider : BaseThorChainProvider(
     baseUrl = "https://mayanode.mayachain.info/mayachain/",
     affiliate = "hrz_android",
-    affiliateBps = 100,
+    affiliateBps = App.appConfigProvider.swapFeeBps,
 ) {
     override val id = MAYA_PROVIDER_ID
     override val title = "Maya Protocol"
