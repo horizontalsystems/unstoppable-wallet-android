@@ -35,7 +35,7 @@ class OneInchProvider(
     override val type = SwapProviderType.DEX
     override val isEvm = true
     override val requireTerms = false
-    override val riskLevel = RiskLevel.FAIR
+    override val riskLevel = RiskLevel.GOOD
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
     private val partnerAddress: String by lazy { App.appConfigProvider.oneInchPartnerFeeAddress }
 
