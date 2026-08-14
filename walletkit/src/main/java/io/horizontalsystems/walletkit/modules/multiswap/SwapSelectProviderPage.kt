@@ -289,14 +289,14 @@ fun formatDurationShort(totalSeconds: Long): String {
 fun formatSwapTime(estimationTime: Long, providerType: SwapProviderType): String =
     when (providerType) {
         SwapProviderType.CEX -> formatSwapTimeRange(estimationTime)
-        SwapProviderType.DEX -> formatDurationShort(estimationTime)
+        SwapProviderType.DEX -> "~${formatDurationShort(estimationTime)}"
     }
 
 fun formatSwapTimeRange(totalSeconds: Long): String {
     val minSeconds = roundSecondsToMinutes(totalSeconds * 0.75)
     val maxSeconds = roundSecondsToMinutes(totalSeconds * 1.25)
     return if (minSeconds == maxSeconds) {
-        formatDurationShort(minSeconds)
+        "~${formatDurationShort(minSeconds)}"
     } else {
         "${formatDurationShort(minSeconds)}-${formatDurationShort(maxSeconds)}"
     }
