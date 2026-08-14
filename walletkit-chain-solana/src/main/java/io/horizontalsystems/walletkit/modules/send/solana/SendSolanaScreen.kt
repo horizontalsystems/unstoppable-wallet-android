@@ -24,7 +24,6 @@ import io.horizontalsystems.walletkit.modules.amount.HSAmountInput
 import io.horizontalsystems.walletkit.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
 import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
@@ -157,19 +156,7 @@ private fun openConfirm(
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    if (privateSendViewModel.isEnabled) {
-        val amount = privateSendViewModel.amount ?: return
-
-        navigation.slideFromRight(
-            PrivateSendConfirmationPage(
-                PrivateSendConfirmationPage.Input(
-                    wallet = viewModel.wallet,
-                    recipient = viewModel.uiState.address.hex,
-                    amount = amount,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                )
-            )
-        )
+    if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
         return
     }
 

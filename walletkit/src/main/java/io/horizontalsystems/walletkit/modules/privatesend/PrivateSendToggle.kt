@@ -22,6 +22,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -31,6 +34,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 /**
  * State of the private send toggle on a send screen. Deliberately tiny: it does no quoting
@@ -81,6 +85,38 @@ class PrivateSendViewModel(
 
     fun onEnterAmount(amount: BigDecimal?) {
         this.amount = amount
+    }
+
+    /**
+     * The single Next-button branch every send screen uses: with the toggle off it does
+     * nothing and the screen proceeds to its own confirmation; with it on, it opens the
+     * private send confirmation and the screen must go no further. Centralised so the
+     * eleven call sites cannot drift in how they build the page input.
+     */
+    fun openConfirmationIfEnabled(
+        navigation: HSNavigation,
+        wallet: Wallet,
+        recipient: String,
+        sendEntryPointDestId: KClass<out HSPage>?,
+    ): Boolean {
+        if (!isEnabled) return false
+
+        // No amount can only mean the screen let Next through before its own amount
+        // validation passed; falling through to a REGULAR send here would be worse.
+        val amount = amount ?: return true
+
+        navigation.slideFromRight(
+            PrivateSendConfirmationPage(
+                PrivateSendConfirmationPage.Input(
+                    wallet = wallet,
+                    recipient = recipient,
+                    amount = amount,
+                    sendEntryPointDestId = sendEntryPointDestId,
+                )
+            )
+        )
+
+        return true
     }
 
     class Factory(private val token: Token) : ViewModelProvider.Factory {

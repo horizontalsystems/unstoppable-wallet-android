@@ -583,7 +583,9 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             accountManager.clearAccounts()
             wcSessionManager.start()
             swapSyncService.start()
-            privateSendManager.sync()
+            // Fire-and-forget like the neighbouring starts: nothing below depends on it, and
+            // awaiting it would hold the rest of startup behind a network round trip.
+            launch { privateSendManager.sync() }
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

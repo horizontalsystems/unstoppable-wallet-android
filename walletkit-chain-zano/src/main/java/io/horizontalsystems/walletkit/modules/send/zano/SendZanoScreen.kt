@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
 import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
@@ -122,9 +121,14 @@ fun SendZanoScreen(
             PrivateSendToggleSection(privateSendViewModel)
         }
 
-        VSpacer(16.dp)
-        HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
-            viewModel.onEnterMemo(it)
+        // A user memo cannot be delivered on a private send — the deposit's memo slot
+        // belongs to the provider's crediting identifier — so don't collect one the
+        // send would discard.
+        if (!privateSendViewModel.isEnabled) {
+            VSpacer(16.dp)
+            HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
+                viewModel.onEnterMemo(it)
+            }
         }
 
         VSpacer(16.dp)
@@ -182,19 +186,7 @@ private fun openConfirm(
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    if (privateSendViewModel.isEnabled) {
-        val amount = privateSendViewModel.amount ?: return
-
-        navigation.slideFromRight(
-            PrivateSendConfirmationPage(
-                PrivateSendConfirmationPage.Input(
-                    wallet = viewModel.wallet,
-                    recipient = viewModel.uiState.address.hex,
-                    amount = amount,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                )
-            )
-        )
+    if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
         return
     }
 

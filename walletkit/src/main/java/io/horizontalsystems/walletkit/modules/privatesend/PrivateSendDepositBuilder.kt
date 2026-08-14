@@ -98,20 +98,29 @@ object PrivateSendDepositBuilder {
     }
 
     /**
-     * Only a text attachment carried by a plain transfer this app builds — and only on a chain
+     * Only an attachment carried by a plain transfer this app builds — and only on a chain
      * where that memo actually reaches the deposit-address owner — may proceed. Anything else
      * must fail the send rather than be dropped: the provider matches the incoming deposit to
      * the order by this identifier, and a deposit it cannot match is typically unrecoverable.
+     *
+     * Both `text` and `destination_tag` ride the memo field, exactly as the swap deposit path
+     * treats them (see Execution.resolvedMemo): every chain built here puts a numeric tag
+     * (e.g. a Stellar memo-id) in the same memo slot, and the dedicated XRP separate-field
+     * tag is not a chain this builder supports. An unknown attachment kind still refuses.
+     *
+     * Also called by PrivateSendManager.commit right after the order is committed, so an
+     * undeliverable attachment surfaces once as an authored commit error instead of failing
+     * later on every re-entry into the deposit build.
      */
-    private fun deliverableMemo(
+    fun deliverableMemo(
         attachment: UnstoppableAPI.Response.Attachment?,
         blockchainType: BlockchainType,
     ): String? {
         attachment ?: return null
 
-        // No private-send chain carries a destination tag as a separate transaction field, and
-        // an unknown attachment kind cannot be carried at all.
-        if (attachment.type != "text") throw PrivateSendError.AttachmentUnsupported
+        if (attachment.type != "text" && attachment.type != "destination_tag") {
+            throw PrivateSendError.AttachmentUnsupported
+        }
 
         if (!blockchainType.memoDelivery.deliversAttachment) {
             throw PrivateSendError.AttachmentUnsupported

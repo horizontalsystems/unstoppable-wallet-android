@@ -12,8 +12,10 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -53,6 +55,10 @@ class PrivateSendManager(
     @Volatile
     private var confidentialServerIds: List<String> = restoredServerIds()
 
+    // Guarded by syncMutex. Tracks per-provider token-list starts so a send screen opening
+    // repeatedly doesn't re-run the provider's cache reads each time.
+    private val providerStartedAt = mutableMapOf<String, Long>()
+
     // Bumped whenever availability data changes (provider list or a token list sync), so an
     // open send screen reveals or hides the toggle without a reload.
     private val _availabilityFlow = MutableStateFlow(0L)
@@ -66,15 +72,23 @@ class PrivateSendManager(
 
     /**
      * Refreshes the confidential provider list (TTL-guarded) and each candidate's token list.
-     * Cheap to call on every send screen open.
+     * Cheap to call on every send screen open: everything runs on IO — provider.start() does
+     * blocking Room and marketKit reads — and a successfully started provider is not
+     * re-started for a whole interval.
      */
-    suspend fun sync() {
+    suspend fun sync() = withContext(Dispatchers.IO) {
         syncMutex.withLock {
             syncProviderIds()
 
             for (provider in candidates()) {
+                val startedAt = providerStartedAt[provider.serverProviderId]
+                if (startedAt != null && System.currentTimeMillis() - startedAt in 0 until SYNC_INTERVAL) {
+                    continue
+                }
+
                 try {
                     provider.start()
+                    providerStartedAt[provider.serverProviderId] = System.currentTimeMillis()
                     _availabilityFlow.value++
                 } catch (e: CancellationException) {
                     throw e
@@ -162,6 +176,11 @@ class PrivateSendManager(
             throw PrivateSendError.CommitFailed()
         }
 
+        // Attachment deliverability is decided here, not left to the deposit build: the order
+        // is already committed either way, and an undeliverable attachment must surface once
+        // as an authored commit error rather than fail on every re-entry into the build.
+        PrivateSendDepositBuilder.deliverableMemo(execution.attachment, token.blockchainType)
+
         return PrivateSendOrder(
             request = request,
             depositAmount = depositAmount,
@@ -210,8 +229,20 @@ class PrivateSendManager(
                 .map { it.provider }
 
             confidentialServerIds = providerIds
-            localStorage.privateSendProviderIds = gson.toJson(providerIds)
-            localStorage.privateSendProviderIdsSyncTime = System.currentTimeMillis()
+
+            if (providerIds.isNotEmpty()) {
+                localStorage.privateSendProviderIds = gson.toJson(providerIds)
+                localStorage.privateSendProviderIdsSyncTime = System.currentTimeMillis()
+            } else {
+                // An empty filtered list is honoured for this session but neither persisted
+                // nor timestamped: it can also mean a server that doesn't send executionType
+                // or the privacy marker yet, and locking "[]" in for the whole sync interval
+                // (and across restarts) would keep the feature dark long after the server
+                // starts sending them. Clearing storage keeps the next sync retrying.
+                localStorage.privateSendProviderIds = null
+                localStorage.privateSendProviderIdsSyncTime = 0
+            }
+
             _availabilityFlow.value++
         } catch (e: CancellationException) {
             throw e

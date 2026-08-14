@@ -130,6 +130,11 @@ private fun PrivateSendConfirmationScreen(
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
                                 navigation.removeLastUntil(closeUntilDestId, true)
+                            } catch (t: kotlinx.coroutines.CancellationException) {
+                                // A back press during the success delay cancels this scope;
+                                // showing the failure sheet then would invite a second send
+                                // of a deposit that already broadcast.
+                                throw t
                             } catch (t: Throwable) {
                                 navigation.slideFromBottom(
                                     ErrorSheet(ErrorSheet.Input(errorText(context, t)))

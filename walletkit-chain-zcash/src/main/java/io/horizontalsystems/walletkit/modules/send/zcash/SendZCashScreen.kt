@@ -24,7 +24,6 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
 import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
@@ -118,7 +117,10 @@ fun SendZCashScreen(
             PrivateSendToggleSection(privateSendViewModel)
         }
 
-        if (memoIsAllowed) {
+        // A user memo cannot be delivered on a private send — the deposit's memo slot
+        // belongs to the provider's crediting identifier — so don't collect one the
+        // send would discard.
+        if (memoIsAllowed && !privateSendViewModel.isEnabled) {
             VSpacer(16.dp)
             HSMemoInput(
                 maxLength = viewModel.memoMaxLength,
@@ -164,19 +166,7 @@ private fun openConfirm(
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    if (privateSendViewModel.isEnabled) {
-        val amount = privateSendViewModel.amount ?: return
-
-        navigation.slideFromRight(
-            PrivateSendConfirmationPage(
-                PrivateSendConfirmationPage.Input(
-                    wallet = viewModel.wallet,
-                    recipient = viewModel.uiState.address.hex,
-                    amount = amount,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                )
-            )
-        )
+    if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
         return
     }
 

@@ -37,7 +37,6 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
 import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
@@ -140,13 +139,20 @@ fun SendBitcoinScreen(
     HSScaffold(
         title = title,
         onBack = { navigation.removeLastOrNull() },
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                icon = R.drawable.manage_24,
-                onClick = { navigation.add(SendBtcAdvancedSettingsPage) }
-            ),
-        ),
+        // The advanced settings (UTXO selection, sort mode, RBF, lock time) only shape the
+        // regular send; the private deposit transfer is built on the confirmation screen and
+        // would silently discard them, so the menu goes away rather than accept dead input.
+        menuItems = if (privateSendViewModel.isEnabled) {
+            emptyList()
+        } else {
+            listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                    icon = R.drawable.manage_24,
+                    onClick = { navigation.add(SendBtcAdvancedSettingsPage) }
+                ),
+            )
+        },
     ) {
         Column(
             modifier = Modifier
@@ -179,6 +185,7 @@ fun SendBitcoinScreen(
                 },
                 onValueChange = {
                     viewModel.onEnterAmount(it)
+                    privateSendViewModel.onEnterAmount(it)
                 },
                 inputType = amountInputType,
                 rate = rate,
@@ -199,43 +206,50 @@ fun SendBitcoinScreen(
                 PrivateSendToggleSection(privateSendViewModel)
             }
 
-            VSpacer(16.dp)
-            HSMemoInput(maxLength = 120, visibility = MemoVisibility.Public) {
-                viewModel.onEnterMemo(it)
-            }
-
-            VSpacer(16.dp)
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .padding(vertical = 8.dp)
-            ) {
-                uiState.utxoData?.let { utxoData ->
-                    UtxoCell(
-                        utxoData = utxoData,
-                        onClick = {
-                            navigation.add(UtxoExpertModePage)
-                        }
-                    )
-                    HsDivider(modifier = Modifier.fillMaxWidth())
+            // These rows describe the REGULAR send only. The private path cannot carry a
+            // user memo (the deposit's memo slot belongs to the provider's crediting
+            // identifier), spends whatever UTXOs the deposit build selects, and estimates
+            // its own fee on the confirmation screen — so showing them would collect input
+            // the send discards.
+            if (!privateSendViewModel.isEnabled) {
+                VSpacer(16.dp)
+                HSMemoInput(maxLength = 120, visibility = MemoVisibility.Public) {
+                    viewModel.onEnterMemo(it)
                 }
-                HSFeeRaw(
-                    coinCode = wallet.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fee = fee,
-                    amountInputType = amountInputType,
-                    rate = rate,
-                    navigation = navigation
-                )
-            }
 
-            feeRateCaution?.let {
-                FeeRateCaution(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    feeRateCaution = feeRateCaution
-                )
+                VSpacer(16.dp)
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .padding(vertical = 8.dp)
+                ) {
+                    uiState.utxoData?.let { utxoData ->
+                        UtxoCell(
+                            utxoData = utxoData,
+                            onClick = {
+                                navigation.add(UtxoExpertModePage)
+                            }
+                        )
+                        HsDivider(modifier = Modifier.fillMaxWidth())
+                    }
+                    HSFeeRaw(
+                        coinCode = wallet.coin.code,
+                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+                        fee = fee,
+                        amountInputType = amountInputType,
+                        rate = rate,
+                        navigation = navigation
+                    )
+                }
+
+                feeRateCaution?.let {
+                    FeeRateCaution(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        feeRateCaution = feeRateCaution
+                    )
+                }
             }
 
             VSpacer(16.dp)
@@ -278,20 +292,7 @@ private fun openConfirm(
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    if (privateSendViewModel.isEnabled) {
-        val amount = viewModel.uiState.amount ?: return
-        val recipient = viewModel.uiState.address.hex
-
-        navigation.slideFromRight(
-            PrivateSendConfirmationPage(
-                PrivateSendConfirmationPage.Input(
-                    wallet = viewModel.wallet,
-                    recipient = recipient,
-                    amount = amount,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                )
-            )
-        )
+    if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
         return
     }
 

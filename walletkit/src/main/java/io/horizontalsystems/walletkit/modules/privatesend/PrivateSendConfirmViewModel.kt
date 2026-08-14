@@ -68,6 +68,10 @@ class PrivateSendConfirmViewModel(
     // deposit is never sent twice.
     private var isSending = false
 
+    // The one history row for this order. A retry after a failed broadcast reuses it
+    // instead of inserting a duplicate per attempt.
+    private var recordId: Int? = null
+
     init {
         fiatServiceAmountOut.setCurrency(currency)
         fiatServiceAmountOut.setToken(token)
@@ -247,19 +251,37 @@ class PrivateSendConfirmViewModel(
 
             // Pre-saved before broadcasting so the record survives the app dying between the
             // two: the committed order is already real server-side, and /v2/track resolves it
-            // by uuid alone even before a tx hash lands.
-            val recordId = swapRecordManager.save(swapRecord(order))
+            // by uuid alone even before a tx hash lands. A retry reuses the row (flipping a
+            // previous Failed back to Depositing) rather than inserting one per attempt.
+            val savedRecordId = recordId?.also {
+                swapRecordManager.updateStatus(it, SwapStatus.Depositing, null)
+            } ?: swapRecordManager.save(swapRecord(order)).also { recordId = it }
 
             val result = try {
                 sendTransactionService.sendTransaction()
             } catch (e: Throwable) {
                 // A failed broadcast moved no funds; the unfunded order simply expires.
-                swapRecordManager.updateStatus(recordId, SwapStatus.Failed, null)
+                swapRecordManager.updateStatus(savedRecordId, SwapStatus.Failed, null)
+
+                // Stopping the timer above silenced the expiry watchdog; a retry is only
+                // legitimate while the committed quote is still alive, so rearm it with the
+                // remaining lifetime — or dead-end the screen if the deadline already passed.
+                val remainingSeconds =
+                    (order.committedAt + QUOTE_LIFETIME_SECONDS * 1000 - System.currentTimeMillis()) / 1000
+                withContext(Dispatchers.Main) {
+                    if (remainingSeconds > 0) {
+                        timerService.start(remainingSeconds)
+                    } else {
+                        expired = true
+                        emitState()
+                    }
+                }
+
                 throw e
             }
 
             transactionHash(result)?.let {
-                swapRecordManager.updateTransactionHash(recordId, it)
+                swapRecordManager.updateTransactionHash(savedRecordId, it)
             }
 
             // The recipient is a wallet-external address worth suggesting next time.
