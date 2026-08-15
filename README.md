@@ -24,11 +24,11 @@ Devices with Android versions 8.1 and above
      height="80">](https://play.google.com/store/apps/details?id=io.horizontalsystems.bankwallet)
 [<img src="docs/images/badge_obtainium.png"
      alt="Get it on Obtainium"
-     height="80">](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/horizontalsystems/unstoppable-wallet-android)
+     height="80">](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/richbitcoinaddress/unstoppable-wallet-android)
 
 ## Source Code
 
-[https://github.com/horizontalsystems/unstoppable-wallet-android](https://github.com/horizontalsystems/unstoppable-wallet-android)
+[https://github.com/richbitcoinaddress/unstoppable-wallet-android](https://github.com/richbitcoinaddress/unstoppable-wallet-android)
 
 ## License
 
