@@ -172,7 +172,7 @@ class SpamManager(
                     val userAddress = adapter.tronKitWrapper.tronKit.address
                     adapter.getTronFullTransactionsBefore(transactionHash, OUTGOING_CONTEXT_SIZE)
                         .sortedByDescending { it.transaction.timestamp }
-                        .mapNotNull { tronExtractor.extractOutgoingInfo(it, userAddress) }
+                        .mapNotNull { tronExtractor.extractCounterpartyInfo(it, userAddress) }
                 }
                 is ISpamOutgoingContextSource -> {
                     adapter.getOutgoingContext(transactionHash, operationId, OUTGOING_CONTEXT_SIZE)

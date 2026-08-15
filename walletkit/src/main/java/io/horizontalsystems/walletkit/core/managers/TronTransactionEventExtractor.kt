@@ -17,9 +17,14 @@ import io.horizontalsystems.tronkit.models.TransferContract
 class TronTransactionEventExtractor {
 
     /**
-     * Extract outgoing transaction info from Tron FullTransaction.
+     * Extract counterparty context from a Tron FullTransaction for address-poisoning correlation.
+     *
+     * The counterparty is taken direction-agnostically: the recipient of a send OR the sender of a
+     * receive. Correlating against incoming senders (not just addresses the user sent to) is what
+     * catches the common poisoning that mimics whoever just paid the user, and it is the only
+     * context a watch/receive-only wallet has at all.
      */
-    fun extractOutgoingInfo(
+    fun extractCounterpartyInfo(
         fullTx: FullTransaction,
         userAddress: Address
     ): PoisoningScorer.OutgoingTxInfo? {
@@ -30,21 +35,24 @@ class TronTransactionEventExtractor {
         return when (val decoration = fullTx.decoration) {
             is NativeTransactionDecoration -> {
                 val contract = decoration.contract as? TransferContract ?: return null
-                if (contract.ownerAddress == userAddress) {
-                    PoisoningScorer.OutgoingTxInfo(contract.toAddress.base58, timestamp, blockHeight)
-                } else null
+                when (userAddress) {
+                    contract.ownerAddress -> PoisoningScorer.OutgoingTxInfo(contract.toAddress.base58, timestamp, blockHeight)
+                    contract.toAddress -> PoisoningScorer.OutgoingTxInfo(contract.ownerAddress.base58, timestamp, blockHeight)
+                    else -> null
+                }
             }
             is OutgoingTrc20Decoration -> {
                 PoisoningScorer.OutgoingTxInfo(decoration.to.base58, timestamp, blockHeight)
             }
             is UnknownTransactionDecoration -> {
-                if (decoration.fromAddress == userAddress) {
-                    decoration.events
-                        .mapNotNull { it as? Trc20TransferEvent }
-                        .firstOrNull { it.from == userAddress }?.let { transfer ->
-                            PoisoningScorer.OutgoingTxInfo(transfer.to.base58, timestamp, blockHeight)
-                        }
-                } else null
+                val transfers = decoration.events.mapNotNull { it as? Trc20TransferEvent }
+                val sentLeg = transfers.firstOrNull { it.from == userAddress }
+                val receivedLeg = transfers.firstOrNull { it.to == userAddress }
+                when {
+                    sentLeg != null -> PoisoningScorer.OutgoingTxInfo(sentLeg.to.base58, timestamp, blockHeight)
+                    receivedLeg != null -> PoisoningScorer.OutgoingTxInfo(receivedLeg.from.base58, timestamp, blockHeight)
+                    else -> null
+                }
             }
             else -> null
         }

@@ -24,28 +24,38 @@ import java.math.BigInteger
 class EvmTransactionEventExtractor {
 
     /**
-     * Extract outgoing transaction info from EVM FullTransaction.
+     * Extract counterparty context from an EVM FullTransaction for address-poisoning correlation.
+     *
+     * The counterparty is taken direction-agnostically: the recipient of a send OR the sender of a
+     * receive. Correlating against incoming senders (not just addresses the user sent to) is what
+     * catches the common poisoning that mimics whoever just paid the user, and it is the only
+     * context a watch/receive-only wallet has at all.
      */
-    fun extractOutgoingInfo(
+    fun extractCounterpartyInfo(
         fullTx: FullTransaction,
         userAddress: Address
     ): PoisoningScorer.OutgoingTxInfo? {
         val tx = fullTx.transaction
+        val blockHeight = tx.blockNumber?.toInt()
         return when (val decoration = fullTx.decoration) {
             is OutgoingDecoration -> {
-                PoisoningScorer.OutgoingTxInfo(decoration.to.eip55, tx.timestamp, tx.blockNumber?.toInt())
+                PoisoningScorer.OutgoingTxInfo(decoration.to.eip55, tx.timestamp, blockHeight)
             }
             is OutgoingEip20Decoration -> {
-                PoisoningScorer.OutgoingTxInfo(decoration.to.eip55, tx.timestamp, tx.blockNumber?.toInt())
+                PoisoningScorer.OutgoingTxInfo(decoration.to.eip55, tx.timestamp, blockHeight)
+            }
+            is IncomingDecoration -> {
+                PoisoningScorer.OutgoingTxInfo(decoration.from.eip55, tx.timestamp, blockHeight)
             }
             is UnknownTransactionDecoration -> {
-                if (tx.from == userAddress) {
-                    decoration.eventInstances
-                        .mapNotNull { it as? TransferEventInstance }
-                        .firstOrNull { it.from == userAddress }?.let { transfer ->
-                            PoisoningScorer.OutgoingTxInfo(transfer.to.eip55, tx.timestamp, tx.blockNumber?.toInt())
-                        }
-                } else null
+                val transfers = decoration.eventInstances.mapNotNull { it as? TransferEventInstance }
+                val sentLeg = transfers.firstOrNull { it.from == userAddress }
+                val receivedLeg = transfers.firstOrNull { it.to == userAddress }
+                when {
+                    sentLeg != null -> PoisoningScorer.OutgoingTxInfo(sentLeg.to.eip55, tx.timestamp, blockHeight)
+                    receivedLeg != null -> PoisoningScorer.OutgoingTxInfo(receivedLeg.from.eip55, tx.timestamp, blockHeight)
+                    else -> null
+                }
             }
             else -> null
         }

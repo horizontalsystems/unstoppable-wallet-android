@@ -16,23 +16,30 @@ import io.horizontalsystems.stellarkit.room.StellarAsset
 class StellarTransactionEventExtractor {
 
     /**
-     * Extract outgoing transaction info from Stellar Operation.
+     * Extract counterparty context from a Stellar Operation for address-poisoning correlation.
+     *
+     * The counterparty is taken direction-agnostically: the recipient of a send OR the sender of a
+     * receive. Correlating against incoming senders (not just addresses the user sent to) is what
+     * catches the common poisoning that mimics whoever just paid the user, and it is the only
+     * context a watch/receive-only wallet has at all.
      */
-    fun extractOutgoingInfo(
+    fun extractCounterpartyInfo(
         operation: Operation,
         selfAddress: String
     ): PoisoningScorer.OutgoingTxInfo? {
         // Check payment operations
         operation.payment?.let { payment ->
-            if (payment.from == selfAddress) {
-                return PoisoningScorer.OutgoingTxInfo(payment.to, operation.timestamp, null)
+            when (selfAddress) {
+                payment.from -> return PoisoningScorer.OutgoingTxInfo(payment.to, operation.timestamp, null)
+                payment.to -> return PoisoningScorer.OutgoingTxInfo(payment.from, operation.timestamp, null)
             }
         }
 
         // Check account creation operations
         operation.accountCreated?.let { accountCreated ->
-            if (accountCreated.funder == selfAddress) {
-                return PoisoningScorer.OutgoingTxInfo(accountCreated.account, operation.timestamp, null)
+            when (selfAddress) {
+                accountCreated.funder -> return PoisoningScorer.OutgoingTxInfo(accountCreated.account, operation.timestamp, null)
+                accountCreated.account -> return PoisoningScorer.OutgoingTxInfo(accountCreated.funder, operation.timestamp, null)
             }
         }
 

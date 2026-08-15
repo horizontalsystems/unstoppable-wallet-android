@@ -15,7 +15,7 @@ class PhishingAddressChecker(
     private val spamManager: SpamManager
 ) : AddressChecker {
 
-    private val supportedBlockchainTypes =  EvmBlockchainManager.blockchainTypes + listOf(BlockchainType.Tron, BlockchainType.Stellar)
+    private val supportedBlockchainTypes =  EvmBlockchainManager.blockchainTypes + listOf(BlockchainType.Tron, BlockchainType.Stellar, BlockchainType.Solana)
 
     override suspend fun isClear(address: Address, token: Token): Boolean {
         val spamTransaction = spamManager.findSpamByAddress(address.hex)

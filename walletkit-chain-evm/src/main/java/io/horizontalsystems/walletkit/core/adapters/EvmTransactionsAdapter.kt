@@ -41,7 +41,7 @@ class EvmTransactionsAdapter(
         val userAddress = evmKitWrapper.evmKit.receiveAddress
         return getFullTransactionsBefore(transactionHash, limit)
             .sortedByDescending { it.transaction.timestamp }
-            .mapNotNull { spamContextExtractor.extractOutgoingInfo(it, userAddress) }
+            .mapNotNull { spamContextExtractor.extractCounterpartyInfo(it, userAddress) }
     }
 
 

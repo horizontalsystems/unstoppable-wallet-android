@@ -125,6 +125,6 @@ class StellarTransactionsAdapter(
         val selfAddress = stellarKit.receiveAddress
         return stellarKit.operationsBefore(TagQuery(null, null, null), fromId = operationId, limit = limit)
             .sortedByDescending { it.timestamp }
-            .mapNotNull { spamContextExtractor.extractOutgoingInfo(it, selfAddress) }
+            .mapNotNull { spamContextExtractor.extractCounterpartyInfo(it, selfAddress) }
     }
 }

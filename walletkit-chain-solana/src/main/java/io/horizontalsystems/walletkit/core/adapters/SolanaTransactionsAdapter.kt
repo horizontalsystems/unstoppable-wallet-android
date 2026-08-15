@@ -3,7 +3,10 @@ package io.horizontalsystems.walletkit.core.adapters
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
+import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
 import io.horizontalsystems.walletkit.core.managers.SolanaKitWrapper
+import io.horizontalsystems.walletkit.core.managers.SolanaTransactionEventExtractor
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
@@ -19,9 +22,33 @@ import kotlinx.coroutines.rx2.asFlowable
 class SolanaTransactionsAdapter(
         solanaKitWrapper: SolanaKitWrapper,
         private val solanaTransactionConverter: SolanaTransactionConverter
-) : ITransactionsAdapter {
+) : ITransactionsAdapter, ISpamOutgoingContextSource {
 
     private val kit = solanaKitWrapper.solanaKit
+    private val spamContextExtractor = SolanaTransactionEventExtractor()
+
+    // Supplies the recent counterparties that SpamManager correlates incoming dust senders against
+    // for address-poisoning detection. Without this, Solana gray-zone transactions (dust, zero-value
+    // NFTs) could never accrue the prefix/suffix/time points needed to cross the spam threshold.
+    //
+    // We pull BOTH directions (incoming = null): Solana poisoning most often mimics the sender of an
+    // INCOMING payment, not an address the user sent to — and a watch/receive-only wallet has no
+    // outgoing history at all, so an outgoing-only context would always be empty. `transactionHash`
+    // is the UTF-8 encoding of the incoming tx's base58 signature (see SolanaTransactionConverter),
+    // and `getAllTransactions(fromHash = ...)` returns strictly older transactions — the correct
+    // context window. Solana carries no confirmed slot, so block correlation is unavailable; the
+    // extractor leaves blockHeight null.
+    override suspend fun getOutgoingContext(
+        transactionHash: ByteArray,
+        operationId: Long?,
+        limit: Int
+    ): List<PoisoningScorer.OutgoingTxInfo> {
+        val userAddress = kit.receiveAddress
+        val fromHash = String(transactionHash, Charsets.UTF_8)
+        return kit.getAllTransactions(incoming = null, fromHash = fromHash, limit = limit)
+            .sortedByDescending { it.transaction.timestamp }
+            .mapNotNull { spamContextExtractor.extractCounterpartyInfo(it, userAddress) }
+    }
 
     override val explorerTitle: String
         get() = "Solscan.io"

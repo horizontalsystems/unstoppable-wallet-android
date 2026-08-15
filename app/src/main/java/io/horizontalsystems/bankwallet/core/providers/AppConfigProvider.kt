@@ -142,7 +142,7 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
         "ETH" to BigDecimal("0.0005"),
         "POL" to BigDecimal("1"),
         "BNB" to BigDecimal("0.0002"),
-        "SOL" to BigDecimal("0.000001"),
+        "SOL" to BigDecimal("0.0001"),
     )
 
     override val chainalysisBaseUrl = BuildConfig.CHAINALYSIS_BASE_URL

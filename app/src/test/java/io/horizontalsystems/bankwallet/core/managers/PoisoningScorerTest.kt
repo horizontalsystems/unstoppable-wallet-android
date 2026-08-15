@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
+import io.horizontalsystems.walletkit.entities.TransactionValue
+import io.horizontalsystems.walletkit.entities.transactionrecords.evm.TransferEvent
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.math.BigInteger
 
 /**
  * Tests for PoisoningScorer - Address Poisoning Detection.
@@ -266,5 +269,60 @@ class PoisoningScorerTest {
 
         // But single factor can trigger suspicious
         assertTrue(PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH >= PoisoningScorer.SUSPICIOUS_THRESHOLD)
+    }
+
+    // ==================== Solana Address-Poisoning Regression ====================
+    //
+    // Regression coverage for a real on-chain poisoning of watch address
+    // 3VHMKeyoKzJDAaUXibFWuyyqFaNuNCJjKDS675z9LH7Q, which the filter missed. The wallet received
+    // 100 SOL from 6pRr7f…SibvF, then seconds later received 0.00001 SOL dust from 6pRrcG…wibvF —
+    // an address that mimics the *sender of the incoming payment* (prefix "6pR", suffix "bvF"),
+    // NOT the user's own address.
+    //
+    // Two things had to be true to catch it, both now fixed:
+    //  1. SolanaTransactionsAdapter must supply correlation context at all (it supplied none).
+    //  2. That context must include INCOMING counterparties, not just addresses the user sent to —
+    //     the mimicked address here only ever appeared as an incoming sender, and the wallet is
+    //     receive-only (no outgoing history).
+    // The scorer itself is direction-agnostic; these tests pin the scoring outcome, and
+    // SolanaTransactionEventExtractor.extractCounterpartyInfo feeds it the incoming sender.
+
+    private val realSender = "6pRr7fQbrfpYUXZERLmxoKCaqXrz3ix6LQJGHVxSibvF"   // sent 100 SOL
+    private val dustMimic = "6pRrcG2PQrFfUL4dmGQFfFoD6bUnBNFGQ6AyQS2wibvF"     // sent 0.00001 SOL dust
+
+    @Test
+    fun `solana dust mimic yields no correlation without counterparty context`() {
+        // Old broken behavior: empty context (no outgoing history for a receive-only wallet).
+        val events = listOf(TransferEvent(dustMimic, TransactionValue.RawValue(BigInteger.ONE)))
+
+        val result = scorer.calculateCorrelationScore(
+            events = events,
+            incomingTimestamp = 1_000L,
+            incomingBlockHeight = null,
+            recentOutgoingTxs = emptyList()
+        )
+
+        assertEquals(0, result.points)
+    }
+
+    @Test
+    fun `solana dust mimic of incoming sender reaches spam threshold`() {
+        // Fixed behavior: the incoming payer is now part of the correlation context.
+        val events = listOf(TransferEvent(dustMimic, TransactionValue.RawValue(BigInteger.ONE)))
+
+        val result = scorer.calculateCorrelationScore(
+            events = events,
+            incomingTimestamp = 1_000L,
+            incomingBlockHeight = null,
+            recentOutgoingTxs = listOf(
+                PoisoningScorer.OutgoingTxInfo(realSender, timestamp = 900L, blockHeight = null)
+            )
+        )
+
+        // prefix(4) + suffix(4) + time(3) well over threshold
+        assertTrue(
+            "mimic of incoming sender should reach spam threshold, was ${result.points}",
+            result.points >= PoisoningScorer.SPAM_THRESHOLD
+        )
     }
 }
