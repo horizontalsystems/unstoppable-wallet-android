@@ -40,6 +40,18 @@ class SolanaTransactionConverter(
         transfers.firstOrNull { (it.value as? TransactionValue.CoinValue)?.token != baseToken }
             ?: transfers.firstOrNull()
 
+    // When a side is exactly one token (non-SOL) leg plus one or more SOL legs (associated-token-
+    // account rent and/or fee that ride along an SPL transfer), the SOL legs are a network cost,
+    // not separate transfers — reduce the side to just the token leg. Any other shape is returned
+    // unchanged (a lone SOL transfer, multiple token legs, etc.).
+    private fun collapseTokenWithSolRent(transfers: List<SolanaTransactionRecord.Transfer>): List<SolanaTransactionRecord.Transfer> {
+        if (transfers.size <= 1) return transfers
+
+        val (solLegs, tokenLegs) = transfers.partition { (it.value as? TransactionValue.CoinValue)?.token == baseToken }
+
+        return if (tokenLegs.size == 1 && solLegs.isNotEmpty()) tokenLegs else transfers
+    }
+
     suspend fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
         val transaction = fullTransaction.transaction
         val incomingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
@@ -98,9 +110,17 @@ class SolanaTransactionConverter(
             )
         }
 
+        // A plain SPL send/receive also moves a little SOL for associated-token-account rent (paid
+        // when the recipient's token account has to be created), so the transaction carries a SOL
+        // leg alongside the token leg. That is one logical transfer (the token) plus a network cost
+        // — not two transfers — so collapse a "single token leg + accompanying SOL rent/fee" side to
+        // just the token leg. Without this, such sends fall through to "Unknown Transaction".
+        val effectiveIncoming = collapseTokenWithSolRent(incomingTransfers)
+        val effectiveOutgoing = collapseTokenWithSolRent(outgoingTransfers)
+
         return when {
-            (incomingTransfers.size == 1 && outgoingTransfers.isEmpty()) -> {
-                val transfer = incomingTransfers.first()
+            (effectiveIncoming.size == 1 && effectiveOutgoing.isEmpty()) -> {
+                val transfer = effectiveIncoming.first()
                 val spam = App.spamManager.isSpam(
                     transaction.hash.toByteArray(),
                     listOf(TransferEvent(transfer.address, transfer.value)),
@@ -111,8 +131,8 @@ class SolanaTransactionConverter(
                 SolanaIncomingTransactionRecord(transaction.essentials(), baseToken, source, transfer.address, transfer.value, spam)
             }
 
-            (incomingTransfers.isEmpty() && outgoingTransfers.size == 1) -> {
-                val transfer = outgoingTransfers.first()
+            (effectiveIncoming.isEmpty() && effectiveOutgoing.size == 1) -> {
+                val transfer = effectiveOutgoing.first()
                 SolanaOutgoingTransactionRecord(transaction.essentials(), baseToken, source, transfer.address, transfer.value, transfer.address == userAddress)
             }
 
