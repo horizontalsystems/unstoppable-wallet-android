@@ -97,6 +97,10 @@ class QRScannerActivity : BaseActivity() {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 App.pinComponent.isLockedFlow.collect { isLocked ->
                     if (isLocked) {
+                        // onScan() sets RESULT_OK a full second before it finishes, so overwrite
+                        // the result here: a code scanned just as the app locks must not reach the
+                        // launcher and be acted on behind the lock screen.
+                        setResult(RESULT_CANCELED)
                         finish()
                     }
                 }
@@ -116,6 +120,12 @@ class QRScannerActivity : BaseActivity() {
     }
 
     private fun onScan(address: String?) {
+        if (App.pinComponent.isLocked) {
+            setResult(RESULT_CANCELED)
+            finish()
+            return
+        }
+
         setResult(RESULT_OK, Intent().apply {
             putExtra(ModuleField.SCAN_ADDRESS, address)
         })

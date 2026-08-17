@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.session.ValidationEr
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.dapp.core.HSDAppNamespaceSession
 import io.horizontalsystems.dapp.core.HSDAppRequest
+import timber.log.Timber
 
 class WCManager(
     private val accountManager: IAccountManager,
@@ -53,7 +54,19 @@ class WCManager(
         val uri = pendingPairingUri ?: return
         pendingPairingUri = null
         if (!DAppManager.isAvailable) return
-        DAppManager.pair(uri)
+
+        // Pairing reports asynchronously through the WC delegate (which surfaces errors as an
+        // HSDAppEvent.Error hud), but an unusable SDK throws straight away. This runs from a
+        // LaunchedEffect on the main dispatcher, where an escaping exception would take the
+        // process down and skip the pending-event replay that follows it — so it stops here.
+        try {
+            DAppManager.pair(
+                uri = uri,
+                onError = { Timber.e(it, "Deferred WalletConnect pairing failed") }
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Deferred WalletConnect pairing failed")
+        }
     }
 
     fun addWcHandler(wcHandler: IWCHandler) {
