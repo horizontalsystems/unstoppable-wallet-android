@@ -763,4 +763,6 @@
     <string name="Transactions_Migrate_ToIronwood">به Ironwood</string>
     <string name="Zcash_Migration_PubliclyVisible_Title">مبلغ عمومی قابل مشاهده</string>
     <string name="Zcash_Migration_PubliclyVisible_Description">انتقال صندوق‌ها بین استخرها نیاز دارد که مبلغ منتقل‌شده بر روی بلاکچین عمومی قابل مشاهده باشد. فرستنده، گیرنده و آدرس‌های شما خصوصی باقی می‌مانند.</string>
+    <string name="WalletConnect_SignTransactionRequest_Title">امضای تراکنش</string>
+    <string name="WalletConnect_SignTransactionRequest_Description">%s تراکنش امضا شده را دریافت می کند و می تواند آن را در هر زمانی پخش کند.</string>
 </resources>

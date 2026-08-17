@@ -1568,6 +1568,8 @@
     "WalletConnect_SendTransactionRequest_ButtonSend": "Send",
     "WalletConnect_SendTransactionRequest_Title": "Send Transaction",
     "WalletConnect_SignMessageRequest_Title": "Sign Request",
+    "WalletConnect_SignTransactionRequest_Description": "%s will receive the signed transaction and can broadcast it at any time.",
+    "WalletConnect_SignTransactionRequest_Title": "Sign Transaction",
     "WalletConnect_Status": "Status",
     "WalletConnect_Status_Connecting": "Connecting…",
     "WalletConnect_Status_Offline": "Offline",

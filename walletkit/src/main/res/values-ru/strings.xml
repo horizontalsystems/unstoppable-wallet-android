@@ -1837,4 +1837,6 @@
     <string name="Transactions_Migrate_ToIronwood">на Ironwood</string>
     <string name="Zcash_Migration_PubliclyVisible_Title">Публично видимое количество</string>
     <string name="Zcash_Migration_PubliclyVisible_Description">Перемещение средств между пулами требует, чтобы перенесённое количество было открыто видно в блокчейне. Отправитель, получатель и ваши адреса остаются приватными.</string>
+    <string name="WalletConnect_SignTransactionRequest_Title">Подписать транзакцию</string>
+    <string name="WalletConnect_SignTransactionRequest_Description">%s получит подписанную транзакцию и может транслировать её в любое время.</string>
 </resources>

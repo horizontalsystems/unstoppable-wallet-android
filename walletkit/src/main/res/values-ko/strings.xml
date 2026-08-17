@@ -1831,4 +1831,6 @@
     <string name="Transactions_Migrate_ToIronwood">Ironwood로</string>
     <string name="Zcash_Migration_PubliclyVisible_Title">공개적으로 표시되는 금액</string>
     <string name="Zcash_Migration_PubliclyVisible_Description">풀 간 자금 이동을 위해서는 마이그레이션된 금액이 블록체인에 공개적으로 표시되어야 합니다. 발신자, 수신자 및 주소는 비공개 상태로 유지됩니다.</string>
+    <string name="WalletConnect_SignTransactionRequest_Title">트랜잭션 서명</string>
+    <string name="WalletConnect_SignTransactionRequest_Description">%s가 서명된 트랜잭션을 받고 언제든지 브로드캐스트할 수 있습니다.</string>
 </resources>
