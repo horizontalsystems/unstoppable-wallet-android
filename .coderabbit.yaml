@@ -3,6 +3,7 @@ reviews:
   high_level_summary: true
   poem: false
   review_status: true
+  request_changes_workflow: true
 
   auto_review:
     enabled: true
