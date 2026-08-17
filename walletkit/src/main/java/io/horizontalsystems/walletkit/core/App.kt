@@ -116,6 +116,7 @@ import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
+import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -618,7 +619,14 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 when (state) {
-                    BackgroundManagerState.EnterForeground -> UserSubscriptionManager.onResume()
+                    BackgroundManagerState.EnterForeground -> {
+                        UserSubscriptionManager.onResume()
+                        // A copied secret whose lifetime ran out while the app was away could not
+                        // be cleared from the background — only the foreground app may write to
+                        // the clipboard — so it is cleared on the way back in.
+                        TextHelper.clearSecretIfExpired()
+                    }
+
                     BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()
                 }
             }
