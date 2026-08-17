@@ -81,7 +81,7 @@ data object WCRequestSheet : HSBottomSheet() {
             WcRequestError { navigation.removeLastOrNull() }
         } else if (ChainRegistry[blockchainType]?.WcRequestSheetScreen(navigation) == true) {
             // rendered by the chain plugin
-        } else if (blockchainType is BlockchainType.Stellar) {
+        } else if (blockchainType is BlockchainType.Stellar || blockchainType is BlockchainType.Solana) {
             WcRequestPreScreen(navigation)
         } else {
             WcRequestError { navigation.removeLastOrNull() }

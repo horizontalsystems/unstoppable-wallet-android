@@ -507,6 +507,8 @@ class WCSessionViewModel(
                 if (chainParts[1] == "pubnet") BlockchainType.Stellar else null
             }
 
+            "solana" -> BlockchainType.Solana
+
             else -> null
         }
     }

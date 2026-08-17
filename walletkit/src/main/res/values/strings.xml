@@ -681,6 +681,8 @@
     <string name="WalletConnect_SendTransactionRequest_Title">Send Transaction</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Send</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_Solana_SignTransaction">Sign transaction</string>
+    <string name="WalletConnect_Solana_SignTransactionsCount">Sign %d transactions</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
     <string name="WalletConnect_Error_NeedBackup">Create a backup of your recovery phrase and the associated passphrase. These will allow you to restore your wallet if your phone is lost, stolen, or damaged.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>

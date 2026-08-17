@@ -32,6 +32,8 @@ import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.walletkit.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.walletkit.modules.solananetwork.SolanaNetworkPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
+import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
+import io.horizontalsystems.walletkit.modules.walletconnect.solana.WCHandlerSolana
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -113,6 +115,8 @@ class SolanaChainPlugin(
 
     override fun sendTransactionService(token: Token): AbstractSendTransactionService =
         SendTransactionServiceSolana(token)
+
+    override fun wcHandlers(): List<IWCHandler> = listOf(WCHandlerSolana(kitManager))
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerSolana())
 

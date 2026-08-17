@@ -32,6 +32,8 @@ class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
                 }
             }
 
+            "solana" -> BlockchainType.Solana
+
             else -> null
         }
     }
