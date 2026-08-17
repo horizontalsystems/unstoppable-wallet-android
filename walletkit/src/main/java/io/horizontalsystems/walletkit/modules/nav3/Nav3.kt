@@ -69,7 +69,9 @@ fun Nav3(entryPage: HSPage) {
 
     LaunchedEffect(isLocked) {
         if (!isLocked) {
-            // Re-show any WC request/proposal that arrived while locked
+            // Pair with any `wc:` link that arrived while locked, then re-show any WC
+            // request/proposal that arrived while locked
+            App.wcManager.flushPendingPairing()
             mainActivityViewModel.reEmitPendingWcEventIfNeeded()
         }
     }
@@ -175,7 +177,8 @@ private fun handleWalletConnectDeepLink(intent: Intent, navigation: HSNavigation
 
     when (val supportState = App.wcManager.getWalletConnectSupportState()) {
         WCManager.SupportState.Supported -> {
-            DAppManager.pair(wcUri.trim())
+            // Held until unlock while the app is locked — see WCManager.pairOrDefer.
+            App.wcManager.pairOrDefer(wcUri)
         }
 
         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {

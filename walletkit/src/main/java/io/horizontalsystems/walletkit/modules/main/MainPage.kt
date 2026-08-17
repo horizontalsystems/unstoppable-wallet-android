@@ -27,7 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.RateAppManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -81,7 +83,14 @@ private fun MainScreen(
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
-    LaunchedEffect(activityIntent) {
+    val isLocked by App.pinComponent.isLockedFlow.collectAsStateWithLifecycle()
+    // MainScreen stays composed under the unlock overlay, so without this gate a deeplink opened
+    // while the app is locked would be acted on behind the lock screen — referral registration,
+    // TonConnect links, prefilled send flows, the WalletConnect list. The intent is deliberately
+    // left unconsumed (no intentHandled() call) so this effect re-runs when isLocked flips back.
+    LaunchedEffect(activityIntent, isLocked) {
+        if (isLocked) return@LaunchedEffect
+
         activityIntent?.data?.let {
             delay(1000)
             viewModel.handleDeepLink(it)

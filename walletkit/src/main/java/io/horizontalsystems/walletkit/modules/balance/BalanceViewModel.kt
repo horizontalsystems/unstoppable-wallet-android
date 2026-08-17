@@ -418,8 +418,11 @@ class BalanceViewModel(
     }
 
     fun connectWC(uri: String) {
-        DAppManager.pair(
-            uri = uri.trim(),
+        // The QR scanner is its own activity, so it isn't covered by the unlock overlay and can
+        // still be scanning when the app locks. Deferring keeps a scanned `wc:` code from pairing
+        // behind the lock screen.
+        wCManager.pairOrDefer(
+            uri = uri,
             onSuccess = { connectionResult = null },
             onError = { connectionResult = WalletConnectListViewModel.ConnectionResult.Error }
         )

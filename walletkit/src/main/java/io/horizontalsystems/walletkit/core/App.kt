@@ -393,7 +393,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
-        wcManager = WCManager(accountManager)
+        wcManager = WCManager(accountManager, pinComponent)
         ChainRegistry.all.forEach { plugin ->
             plugin.wcHandlers().forEach(wcManager::addWcHandler)
         }
