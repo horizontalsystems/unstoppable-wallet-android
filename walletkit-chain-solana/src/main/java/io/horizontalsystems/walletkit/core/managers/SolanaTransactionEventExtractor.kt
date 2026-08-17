@@ -35,11 +35,11 @@ class SolanaTransactionEventExtractor {
 
         val counterparty = when {
             // Received: the counterparty is the sender.
-            tx.from != null && tx.from != userAddress -> tx.from
+            !tx.from.isNullOrBlank() && tx.from != userAddress -> tx.from
             // Sent: the counterparty is the recipient.
-            tx.to != null && tx.to != userAddress -> tx.to
+            !tx.to.isNullOrBlank() && tx.to != userAddress -> tx.to
             else -> null
-        }?.takeIf { it.isNotBlank() } ?: return null
+        } ?: return null
 
         return PoisoningScorer.OutgoingTxInfo(
             recipientAddress = counterparty,
