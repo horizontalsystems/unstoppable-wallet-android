@@ -239,7 +239,7 @@ fun WCSignEthereumTransactionRequestScreen(
     }
 
     ConfirmTransactionScreen(
-        title = stringResource(id = R.string.WalletConnect_SignMessageRequest_Title),
+        title = stringResource(id = R.string.WalletConnect_SignTransactionRequest_Title),
         onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
