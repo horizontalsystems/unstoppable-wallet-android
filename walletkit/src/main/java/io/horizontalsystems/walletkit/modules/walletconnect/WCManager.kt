@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.walletconnect
 
 import android.net.Uri
+import android.util.Log
 import io.horizontalsystems.walletkit.IPinComponent
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.entities.Account
@@ -11,7 +12,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.session.ValidationEr
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.dapp.core.HSDAppNamespaceSession
 import io.horizontalsystems.dapp.core.HSDAppRequest
-import timber.log.Timber
 
 class WCManager(
     private val accountManager: IAccountManager,
@@ -62,10 +62,10 @@ class WCManager(
         try {
             DAppManager.pair(
                 uri = uri,
-                onError = { Timber.e(it, "Deferred WalletConnect pairing failed") }
+                onError = { Log.e("WCManager", "Deferred WalletConnect pairing failed", it) }
             )
         } catch (e: Exception) {
-            Timber.e(e, "Deferred WalletConnect pairing failed")
+            Log.e("WCManager", "Deferred WalletConnect pairing failed", e)
         }
     }
 
