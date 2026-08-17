@@ -112,7 +112,9 @@ fun WcRequestScreen(
             }
             VSpacer(16.dp)
             headline1_leah(
-                text = stringResource(R.string.WalletConnect_SignMessageRequest_Title),
+                // The action names itself: stellar_signAndSubmitXDR broadcasts as well as signs,
+                // and calling that a sign request understates what confirming does.
+                text = uiState.title.getString(),
                 textAlign = TextAlign.Center,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -161,7 +163,7 @@ fun WcRequestScreen(
                     onClick = viewModel::reject
                 )
                 HSButton(
-                    title = stringResource(R.string.Button_Confirm),
+                    title = uiState.approveButtonTitle.getString(),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
                     enabled = uiState.runnable,

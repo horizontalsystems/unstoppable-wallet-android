@@ -715,6 +715,8 @@
     <string name="WalletConnect_TokenAllowance">Token Allowance</string>
     <string name="WalletConnect_ConfirmTransaction">Confirm Transaction</string>
     <string name="WalletConnect_DappWillBeAbleToMoveToken">%s will be able to move these tokens on your behalf.</string>
+    <string name="WalletConnect_SignTransactionRequest_Title">Sign Transaction</string>
+    <string name="WalletConnect_SignTransactionRequest_Description">%s will receive the signed transaction and can broadcast it at any time.</string>
     <string name="WalletConnect_RequestFailedDescription">Something went wrong and the request couldn’t be completed</string>
     <string name="WalletConnect_DisconnectWarning">Are you sure you want to remove this connection?</string>
     <string name="WalletConnect_DefenseMessage_Warning">You may connect to a fake site and lose funds. Turn me on to stay protected.</string>

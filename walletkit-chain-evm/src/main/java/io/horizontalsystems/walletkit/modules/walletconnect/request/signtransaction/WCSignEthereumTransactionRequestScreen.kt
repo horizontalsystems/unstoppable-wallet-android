@@ -127,7 +127,10 @@ fun WCSignEthereumTransactionRequestScreen(
             }
             VSpacer(16.dp)
             headline1_leah(
-                text = stringResource(R.string.WalletConnect_TokenAllowance),
+                // eth_signTransaction carries whatever the dApp put in it, so the screen can't
+                // claim it is an allowance. It names the request instead and leaves the contents
+                // to the decoded rows below.
+                text = stringResource(R.string.WalletConnect_SignTransactionRequest_Title),
                 textAlign = TextAlign.Center,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -147,7 +150,12 @@ fun WCSignEthereumTransactionRequestScreen(
             VerificationAlert(sessionRequestUI.verification, reportUnverified = false)
 
             TextBlock(
-                text = stringResource(R.string.WalletConnect_DappWillBeAbleToMoveToken, sessionRequestUI.peerUI.peerName),
+                // The signature goes back to the dApp rather than to the network: nothing is
+                // broadcast here, and the dApp decides when — or whether — it ever is.
+                text = stringResource(
+                    R.string.WalletConnect_SignTransactionRequest_Description,
+                    sessionRequestUI.peerUI.peerName
+                ),
             )
             VSpacer(16.dp)
             Column(
@@ -204,7 +212,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     }
                 )
                 HSButton(
-                    title = stringResource(R.string.Button_Approve),
+                    title = stringResource(R.string.Button_Sign),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
                     enabled = !signAction.inProgress,
