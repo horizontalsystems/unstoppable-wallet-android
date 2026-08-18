@@ -23,6 +23,7 @@ class WCActionSolanaSignTransaction(
     private val paramsJsonStr: String,
     private val signer: Signer,
     private val multiple: Boolean,
+    private val peerName: String?,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
@@ -69,34 +70,46 @@ class WCActionSolanaSignTransaction(
     override fun start(coroutineScope: CoroutineScope) = Unit
 
     override fun createState(): WCActionState {
-        val rows = mutableListOf<ViewItem>(
-            ViewItem.Value(
-                Translator.getString(R.string.WalletConnect_SignMessageRequest_Title),
-                if (multiple) {
-                    Translator.getString(
-                        R.string.WalletConnect_Solana_SignTransactionsCount,
-                        base64Transactions.size
+        val sections = mutableListOf<SectionViewItem>()
+
+        // Header: for a batch (`solana_signAllTransactions`) show how many transactions are signed.
+        if (multiple) {
+            sections.add(
+                SectionViewItem(
+                    listOf(
+                        ViewItem.Value(
+                            Translator.getString(R.string.WalletConnect_SignMessageRequest_Title),
+                            Translator.getString(R.string.WalletConnect_Solana_SignTransactionsCount, base64Transactions.size),
+                            ValueType.Regular
+                        )
                     )
-                } else {
-                    Translator.getString(R.string.WalletConnect_Solana_SignTransaction)
-                },
-                ValueType.Regular
+                )
             )
-        )
+        }
+
+        // Decoded summary per transaction (method, network, any directly decodable transfers).
+        // Falls back to nothing on parse failure.
+        base64Transactions.forEach { base64Transaction ->
+            sections += WCSolanaTxSummary.sections(Base64.decode(base64Transaction, Base64.NO_WRAP), peerName)
+        }
 
         App.accountManager.activeAccount?.name?.let { walletName ->
-            rows.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.Wallet_Title),
-                    walletName,
-                    ValueType.Regular
+            sections.add(
+                SectionViewItem(
+                    listOf(
+                        ViewItem.Value(
+                            Translator.getString(R.string.Wallet_Title),
+                            walletName,
+                            ValueType.Regular
+                        )
+                    )
                 )
             )
         }
 
         return WCActionState(
             runnable = true,
-            items = listOf(SectionViewItem(rows))
+            items = sections
         )
     }
 

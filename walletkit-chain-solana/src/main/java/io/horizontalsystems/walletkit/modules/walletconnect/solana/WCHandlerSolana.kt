@@ -29,16 +29,19 @@ class WCHandlerSolana(private val solanaKitManager: SolanaKitManager) : IWCHandl
                 request.params,
                 signer(),
                 multiple = false,
+                peerName = request.peerMetaData?.name,
             )
 
             "solana_signAllTransactions" -> WCActionSolanaSignTransaction(
                 request.params,
                 signer(),
                 multiple = true,
+                peerName = request.peerMetaData?.name,
             )
 
             "solana_signAndSendTransaction" -> WCActionSolanaSignAndSendTransaction(
                 request.params,
+                peerName = request.peerMetaData?.name,
             )
 
             else -> throw UnsupportedMethodException(request.method)

@@ -160,6 +160,9 @@ class SolanaTransactionConverter(
         // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").
         private val swapProgramLabels = mapOf(
             KnownPrograms.jupiterV6 to "Jupiter",
+            // A distinct aggregator (Jupiter routes some legs through it, but it is also used
+            // directly), so label it by its actual program rather than assuming Jupiter.
+            KnownPrograms.dflow to "DFlow",
             KnownPrograms.lifi to "LI.FI",
         )
     }

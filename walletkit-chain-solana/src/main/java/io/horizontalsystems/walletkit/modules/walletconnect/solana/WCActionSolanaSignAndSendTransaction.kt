@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 // Response: { signature: <base58 txid> }.
 class WCActionSolanaSignAndSendTransaction(
     private val paramsJsonStr: String,
+    private val peerName: String?,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
@@ -68,28 +69,25 @@ class WCActionSolanaSignAndSendTransaction(
     }
 
     override fun createState(): WCActionState {
-        val rows = mutableListOf<ViewItem>(
-            ViewItem.Value(
-                Translator.getString(R.string.WalletConnect_SendTransactionRequest_Title),
-                Translator.getString(R.string.WalletConnect_Solana_SignTransaction),
-                ValueType.Regular
-            )
-        )
+        // Decoded summary (method, network, any directly decodable transfers). Falls back to
+        // nothing on parse failure.
+        var sectionViewItems = WCSolanaTxSummary.sections(rawTransaction, peerName)
 
-        App.accountManager.activeAccount?.name?.let { walletName ->
-            rows.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.Wallet_Title),
-                    walletName,
-                    ValueType.Regular
-                )
-            )
-        }
-
-        var sectionViewItems = listOf(SectionViewItem(rows))
         sendTransactionState.networkFee?.let { networkFee ->
             sectionViewItems += SectionViewItem(
                 listOf(ViewItem.Fee(networkFee))
+            )
+        }
+
+        App.accountManager.activeAccount?.name?.let { walletName ->
+            sectionViewItems += SectionViewItem(
+                listOf(
+                    ViewItem.Value(
+                        Translator.getString(R.string.Wallet_Title),
+                        walletName,
+                        ValueType.Regular
+                    )
+                )
             )
         }
 
