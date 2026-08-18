@@ -62,7 +62,10 @@ qrose = "1.1.2"
 reownBom = "1.6.13"
 
 # Web3
-web3j = "5.0.2"
+# Do not upgrade above 4.9.x: web3j 4.10+ no longer supports Android and calls
+# Java 9+ APIs missing below API 33, e.g. BigInteger(int, byte[], int, int) in
+# TypeDecoder -> NoSuchMethodError when decoding transactions on Android <= 12.
+web3j = "4.9.8"
 unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
