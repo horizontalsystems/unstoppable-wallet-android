@@ -122,7 +122,8 @@ class SendSolanaViewModel(
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(
-            amount = decimalAmount,
+            // not decimalAmount: its getter asserts, which would defeat the null contract here
+            amount = amountState.amount ?: return null,
             fee = SolanaKit.fee,
             address = address,
             contact = contact,
