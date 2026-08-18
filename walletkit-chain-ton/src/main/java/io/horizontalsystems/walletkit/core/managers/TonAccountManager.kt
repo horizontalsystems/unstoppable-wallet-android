@@ -9,6 +9,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.tonkit.models.Event
 import io.horizontalsystems.tonkit.models.Jetton
+import io.horizontalsystems.tonkit.models.JettonVerificationType
 import io.horizontalsystems.tonkit.models.TagQuery
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,7 +111,14 @@ class TonAccountManager(
 
         val existingWallets = walletManager.activeWallets
         val existingTokenTypeIds = existingWallets.map { it.token.type.id }
-        val newJettons = jettons.filter { !existingTokenTypeIds.contains(it.tokenType.id) }
+        val newJettons = jettons
+            .filter { !existingTokenTypeIds.contains(it.tokenType.id) }
+            // Anyone can send dust to any address, and doing so is what puts a jetton in this
+            // list, so its metadata is attacker-chosen. Blacklisted ones are the cases the
+            // indexer has already judged, and adding them to the balance list under a name of
+            // their own choosing is how a fake "USDT" or a scam claim prompt gets in front of
+            // the user.
+            .filter { it.verification != JettonVerificationType.BLACKLIST }
 
         if (newJettons.isEmpty()) return
 
@@ -121,7 +129,11 @@ class TonAccountManager(
                 coinName = jetton.name,
                 coinCode = jetton.symbol,
                 coinDecimals = jetton.decimals,
-                coinImage = jetton.image
+                // Deliberately not jetton.image: it is a URL the sender controls, and the balance
+                // list would fetch it on every render, handing them the user's IP alongside the
+                // TON address they sent the dust to. The EVM path stores no image either;
+                // catalogued tokens still get theirs from marketKit.
+                coinImage = null
             )
         }
 
