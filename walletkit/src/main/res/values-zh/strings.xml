@@ -1837,4 +1837,5 @@
     <string name="WalletConnect_Solana_MethodTransfer">转账</string>
     <string name="WalletConnect_Solana_Network">网络</string>
     <string name="WalletConnect_Solana_Value">价值</string>
+    <string name="Error_FilePickerNotFound">未找到用于打开文件的应用程序</string>
 </resources>

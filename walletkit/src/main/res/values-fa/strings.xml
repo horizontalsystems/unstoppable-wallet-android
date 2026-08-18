@@ -770,4 +770,5 @@
     <string name="WalletConnect_Solana_MethodTransfer">انتقال</string>
     <string name="WalletConnect_Solana_Network">شبکه</string>
     <string name="WalletConnect_Solana_Value">مقدار</string>
+    <string name="Error_FilePickerNotFound">هیچ برنامه‌ای برای باز کردن فایل‌ها پیدا نشد</string>
 </resources>

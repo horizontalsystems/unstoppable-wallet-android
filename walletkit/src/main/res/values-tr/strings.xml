@@ -1838,4 +1838,5 @@
     <string name="WalletConnect_Solana_MethodTransfer">Transfer</string>
     <string name="WalletConnect_Solana_Network">Ağ</string>
     <string name="WalletConnect_Solana_Value">Değer</string>
+    <string name="Error_FilePickerNotFound">Dosyaları açmak için hiçbir uygulama bulunamadı</string>
 </resources>

@@ -1844,4 +1844,5 @@
     <string name="WalletConnect_Solana_MethodTransfer">Передача</string>
     <string name="WalletConnect_Solana_Network">Сеть</string>
     <string name="WalletConnect_Solana_Value">Значение</string>
+    <string name="Error_FilePickerNotFound">Не найдено приложение для открытия файлов</string>
 </resources>

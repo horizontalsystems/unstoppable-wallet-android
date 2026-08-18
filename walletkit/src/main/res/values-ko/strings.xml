@@ -1838,4 +1838,5 @@
     <string name="WalletConnect_Solana_MethodTransfer">전송</string>
     <string name="WalletConnect_Solana_Network">네트워크</string>
     <string name="WalletConnect_Solana_Value">값</string>
+    <string name="Error_FilePickerNotFound">파일을 열 수 있는 앱을 찾을 수 없습니다</string>
 </resources>

@@ -506,6 +506,7 @@
     "Error": "Error",
     "Error_AssetNotEnabled": "The recipient hasn\\'t enabled %s, therefore they are unable to receive it.",
     "Error_BrowserNotFound": "No app was found to open this link",
+    "Error_FilePickerNotFound": "No app was found to open files",
     "Error_NotInteger": "Wrong integer number",
     "Error_OutOfRange": "Can\\'t be less than %1$s or more than %2$s",
     "Error_ParameterNotSet": "Parameter is not set",
