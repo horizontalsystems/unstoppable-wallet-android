@@ -7,6 +7,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -145,12 +149,23 @@ fun ZcashMigrationScreen(
 }
 
 @Composable
-private fun MigrateButton(
+fun MigrateButton(
     modifier: Modifier,
     sendResult: SendResult?,
     onClick: () -> Unit,
     enabled: Boolean
 ) {
+    // The Sending/Sent branches below disable the button, but sendResult is assigned on an IO
+    // dispatcher after onClick() returns, so the button stays live for a frame or two and a double
+    // tap starts a second migration. Latch in the tap frame; a failure hands the button back.
+    var migrating by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sendResult) {
+        if (sendResult is SendResult.Failed) {
+            migrating = false
+        }
+    }
+
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(
@@ -174,8 +189,13 @@ private fun MigrateButton(
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Balance_Zcash_Migration_Migrate),
-                onClick = onClick,
-                enabled = enabled
+                onClick = {
+                    if (!migrating) {
+                        migrating = true
+                        onClick()
+                    }
+                },
+                enabled = enabled && !migrating
             )
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.horizontalsystems.walletkit.modules.send.SendButton
+import io.horizontalsystems.walletkit.modules.zcashmigration.MigrateButton
 import io.horizontalsystems.walletkit.modules.send.SendResult
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -30,6 +31,7 @@ class SendButtonDoubleTapTest {
     val composeRule = createComposeRule()
 
     private val sendTitle = "Send"
+    private val migrateTitle = "Migrate"
 
     @Test
     fun twoTapsBeforeRecompositionSendOnce() {
@@ -83,5 +85,57 @@ class SendButtonDoubleTapTest {
         composeRule.waitForIdle()
 
         assertEquals(2, sends)
+    }
+
+    @Test
+    fun migrateTwoTapsBeforeRecompositionMigratesOnce() {
+        var migrations = 0
+
+        composeRule.setContent {
+            ComposeAppTheme {
+                MigrateButton(
+                    modifier = Modifier,
+                    sendResult = null,
+                    onClick = { migrations++ },
+                    enabled = true
+                )
+            }
+        }
+
+        composeRule.mainClock.autoAdvance = false
+        composeRule.onNodeWithText(migrateTitle).performClick()
+        composeRule.onNodeWithText(migrateTitle).performClick()
+        composeRule.mainClock.autoAdvance = true
+        composeRule.waitForIdle()
+
+        assertEquals(1, migrations)
+    }
+
+    @Test
+    fun failedMigrationCanBeRetried() {
+        var migrations = 0
+        var result by mutableStateOf<SendResult?>(null)
+
+        composeRule.setContent {
+            ComposeAppTheme {
+                MigrateButton(
+                    modifier = Modifier,
+                    sendResult = result,
+                    onClick = { migrations++ },
+                    enabled = true
+                )
+            }
+        }
+
+        composeRule.onNodeWithText(migrateTitle).performClick()
+        composeRule.waitForIdle()
+
+        result = SendResult.Failed(HSCaution(TranslatableString.PlainString("nope")))
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithText(migrateTitle).performClick()
+        composeRule.waitForIdle()
+
+        assertEquals(2, migrations)
     }
 }
