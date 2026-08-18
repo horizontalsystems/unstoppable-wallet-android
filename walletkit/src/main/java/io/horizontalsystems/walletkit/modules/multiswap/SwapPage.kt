@@ -207,8 +207,25 @@ fun SwapScreen(
     ) {
         if (it.accepted) navigateToSwapConfirm()
     }
+    // startProceed() is asynchronous on both of its paths — the no-precheck path only emits on the
+    // view model scope and sets no state at all — so the Proceed button stays live after the first
+    // tap. A second tap emits a second Proceed and pushes a second confirmation page. Latch in the
+    // same frame as the tap and hand the button back on whatever outcome comes back.
+    var proceeding by remember { mutableStateOf(false) }
+
+    val startProceed = {
+        if (!proceeding) {
+            // Latch on whether the flow actually started: startProceed() bails out when there is
+            // no quote yet, and that path emits no event, so latching unconditionally would leave
+            // the button disabled with nothing to release it.
+            proceeding = viewModel.startProceed()
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.amlCheckEventFlow.collect { event ->
+            proceeding = false
+
             when (event) {
                 AmlCheckEvent.Proceed -> {
                     if (viewModel.uiState.needToAcceptTerms) {
@@ -258,7 +275,7 @@ fun SwapScreen(
             onDismiss = { showAmlErrorSheet = false },
             onRetry = {
                 showAmlErrorSheet = false
-                viewModel.startProceed()
+                startProceed()
             },
         )
     }
@@ -307,7 +324,8 @@ fun SwapScreen(
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
-        onClickNext = viewModel::startProceed,
+        onClickNext = startProceed,
+        proceedEnabled = !proceeding,
         onActionStarted = {
             viewModel.onActionStarted(uiState.quote)
         },
@@ -334,6 +352,7 @@ private fun SwapScreenInner(
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
     onClickNext: () -> Unit,
+    proceedEnabled: Boolean,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
     navigation: HSNavigation,
@@ -577,6 +596,7 @@ private fun SwapScreenInner(
                                     .padding(horizontal = 16.dp)
                                     .fillMaxWidth(),
                                 title = stringResource(R.string.Swap_Proceed),
+                                enabled = proceedEnabled,
                                 onClick = onClickNext
                             )
                         }

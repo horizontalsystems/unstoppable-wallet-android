@@ -402,14 +402,19 @@ class SwapViewModel(
     fun onActionStarted(quote: SwapProviderQuote?) = quoteService.onActionStarted(quote)
     fun onActionCompleted() = quoteService.onActionCompleted()
 
-    fun startProceed() {
-        val provider = quoteState.quote?.provider ?: return
-        val tokenIn = quoteState.tokenIn ?: return
-        val amountIn = quoteState.amountIn ?: return
+    /**
+     * Returns whether the proceed flow actually started. The caller latches its button on the
+     * result, so a call that bails out early — no quote yet, no amount — must not leave the button
+     * disabled with no event ever coming back to release it.
+     */
+    fun startProceed(): Boolean {
+        val provider = quoteState.quote?.provider ?: return false
+        val tokenIn = quoteState.tokenIn ?: return false
+        val amountIn = quoteState.amountIn ?: return false
 
         if (!provider.amlPrecheck) {
             viewModelScope.launch { amlCheckEventFlow.emit(AmlCheckEvent.Proceed) }
-            return
+            return true
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -434,6 +439,8 @@ class SwapViewModel(
                 emitState()
             }
         }
+
+        return true
     }
 
     fun getCurrentQuote() = quoteState.quote
