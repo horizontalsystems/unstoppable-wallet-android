@@ -301,6 +301,19 @@ fun SendButton(
     onClickSend: () -> Unit,
     enabled: Boolean
 ) {
+    // The Sending/Sent branches below disable the button, but they are driven by sendResult, which
+    // the view models assign on an IO dispatcher after onClickSend() returns. Between the tap and
+    // that state arriving in composition the button is still live, so a same-frame double tap
+    // launches two sends — two valid transactions on account-based chains. Latch synchronously
+    // here, in the same frame as the tap, and let a failure hand the button back.
+    var sent by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sendResult) {
+        if (sendResult is SendResult.Failed) {
+            sent = false
+        }
+    }
+
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(
@@ -324,8 +337,13 @@ fun SendButton(
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
-                onClick = onClickSend,
-                enabled = enabled
+                onClick = {
+                    if (!sent) {
+                        sent = true
+                        onClickSend()
+                    }
+                },
+                enabled = enabled && !sent
             )
         }
     }

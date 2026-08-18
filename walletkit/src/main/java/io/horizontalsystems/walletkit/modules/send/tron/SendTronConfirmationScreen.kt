@@ -206,6 +206,17 @@ private fun SendButton(
     onClickSend: () -> Unit,
     enabled: Boolean
 ) {
+    // Same single-flight guard as the shared send confirmation button: sendResult only disables
+    // this button once the view model has assigned it on an IO dispatcher, which leaves the tap
+    // live for a frame or two.
+    var sent by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sendResult) {
+        if (sendResult is SendResult.Failed) {
+            sent = false
+        }
+    }
+
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(
@@ -229,8 +240,13 @@ private fun SendButton(
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
-                onClick = onClickSend,
-                enabled = enabled
+                onClick = {
+                    if (!sent) {
+                        sent = true
+                        onClickSend()
+                    }
+                },
+                enabled = enabled && !sent
             )
         }
     }

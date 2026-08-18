@@ -264,6 +264,8 @@ dependencies {
 
     // UI Tests
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    // Supplies the ComponentActivity that Compose UI tests are hosted in
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.espresso.core)
 
