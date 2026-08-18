@@ -28,10 +28,19 @@ class WCActionSolanaSignTransaction(
 
     private val gson = GsonBuilder().create()
 
-    private val base64Transactions: List<String> = if (multiple) {
-        gson.fromJson(paramsJsonStr, MultiParams::class.java).transactions
-    } else {
-        listOf(gson.fromJson(paramsJsonStr, SingleParams::class.java).transaction)
+    // Parsed defensively: a malformed or empty request (missing/empty `transactions`, null entries)
+    // must fail here with a clear error rather than crash later on `first()` / empty access. The
+    // resulting list is guaranteed non-empty with no blank entries. Thrown during construction, this
+    // is caught by WCManager.getActionForRequest and surfaced as an error screen.
+    private val base64Transactions: List<String> = run {
+        val transactions: List<String?> = if (multiple) {
+            gson.fromJson(paramsJsonStr, MultiParams::class.java)?.transactions ?: emptyList()
+        } else {
+            listOf(gson.fromJson(paramsJsonStr, SingleParams::class.java)?.transaction)
+        }
+        val valid = transactions.filterNotNull().filter { it.isNotBlank() }
+        require(valid.isNotEmpty()) { "WalletConnect request has no transaction to sign" }
+        valid
     }
 
     override fun getTitle(): TranslatableString {
@@ -48,7 +57,10 @@ class WCActionSolanaSignTransaction(
         return if (multiple) {
             gson.toJson(mapOf("transactions" to signed.map { it.base64 }))
         } else {
-            val first = signed.first()
+            // base64Transactions is guaranteed non-empty (validated in its initializer), but guard
+            // explicitly rather than rely on that invariant from here.
+            val first = signed.firstOrNull()
+                ?: throw IllegalStateException("WalletConnect request has no transaction to sign")
             gson.toJson(
                 mapOf(
                     "signature" to first.signatureBase58,
@@ -79,7 +91,7 @@ class WCActionSolanaSignTransaction(
                     listOf(
                         ViewItem.Value(
                             Translator.getString(R.string.WalletConnect_SignMessageRequest_Title),
-                            Translator.getString(R.string.WalletConnect_Solana_SignTransactionsCount, base64Transactions.size),
+                            Translator.getQuantityString(R.plurals.WalletConnect_Solana_SignTransactionsCount, base64Transactions.size, base64Transactions.size),
                             ValueType.Regular
                         )
                     )

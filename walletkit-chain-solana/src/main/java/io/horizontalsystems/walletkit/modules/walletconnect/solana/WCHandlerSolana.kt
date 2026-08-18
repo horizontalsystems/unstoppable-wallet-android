@@ -48,11 +48,15 @@ class WCHandlerSolana(private val solanaKitManager: SolanaKitManager) : IWCHandl
         }
     }
 
-    // The kit signer is null for watch-only (AccountType.SolanaAddress) accounts, which cannot
-    // sign. In practice such accounts can't reach here — only Mnemonic/EvmPrivateKey accounts
-    // support WalletConnect (Account.supportsWalletConnect) — but guard defensively regardless.
+    // Only Mnemonic accounts can sign for Solana. Watch-only (SolanaAddress) accounts have no key,
+    // and other types (e.g. an EvmPrivateKey active account switched to after this session was
+    // approved) have no Solana key at all — for those, SolanaKitManager.getSolanaKitWrapper would
+    // throw UnsupportedAccountException. Guard the type up front so we neither spin up the kit for a
+    // non-signing account nor leak that exception; a NoSignerException here is caught by
+    // WCManager.getActionForRequest and surfaced as an error screen.
     private fun signer(): Signer {
         val account = App.accountManager.activeAccount ?: throw WCSolanaHelper.NoSignerException()
+        if (account.type !is AccountType.Mnemonic) throw WCSolanaHelper.NoSignerException()
         return solanaKitManager.getSolanaKitWrapper(account).signer ?: throw WCSolanaHelper.NoSignerException()
     }
 

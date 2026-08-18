@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.ViewItem
 import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
  * Best-effort decoder + display builder for a serialized Solana transaction (legacy or v0) shown on
@@ -90,7 +91,7 @@ object WCSolanaTxSummary {
 
     private data class Transfer(
         val isSol: Boolean,
-        val amount: Long,
+        val amount: BigInteger,
         val decimals: Int?,
         val destination: String?,
     )
@@ -151,9 +152,13 @@ object WCSolanaTxSummary {
             fun keyAt(instructionIndex: Int): String? =
                 accountIndices.getOrNull(instructionIndex)?.let { accountKeys.getOrNull(it) }
 
-            fun u64LE(from: Int): Long {
-                var value = 0L
-                for (i in 0 until 8) value = value or ((data[from + i].toLong() and 0xFF) shl (i * 8))
+            // u64 is unsigned; build a BigInteger so amounts with the high bit set (>= 2^63) stay
+            // positive instead of overflowing a signed Long and rendering as a negative amount.
+            fun u64LE(from: Int): BigInteger {
+                var value = BigInteger.ZERO
+                for (i in 0 until 8) {
+                    value = value.or(BigInteger.valueOf(data[from + i].toLong() and 0xFF).shiftLeft(i * 8))
+                }
                 return value
             }
 

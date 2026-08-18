@@ -40,16 +40,23 @@ class SolanaTransactionConverter(
         transfers.firstOrNull { (it.value as? TransactionValue.CoinValue)?.token != baseToken }
             ?: transfers.firstOrNull()
 
-    // When a side is exactly one token (non-SOL) leg plus one or more SOL legs (associated-token-
-    // account rent and/or fee that ride along an SPL transfer), the SOL legs are a network cost,
-    // not separate transfers — reduce the side to just the token leg. Any other shape is returned
+    // When a side is exactly one token (non-SOL) leg plus one or more *small* SOL legs (associated-
+    // token-account rent that rides along an SPL transfer), the SOL legs are a network cost, not
+    // separate transfers — reduce the side to just the token leg. A SOL leg large enough to be a
+    // genuine payment is NOT rent, so it is kept: collapsing it would silently hide a real SOL
+    // transfer that shares a transaction with a token transfer. Any other shape is returned
     // unchanged (a lone SOL transfer, multiple token legs, etc.).
     private fun collapseTokenWithSolRent(transfers: List<SolanaTransactionRecord.Transfer>): List<SolanaTransactionRecord.Transfer> {
         if (transfers.size <= 1) return transfers
 
         val (solLegs, tokenLegs) = transfers.partition { (it.value as? TransactionValue.CoinValue)?.token == baseToken }
 
-        return if (tokenLegs.size == 1 && solLegs.isNotEmpty()) tokenLegs else transfers
+        val solLegsAreRent = solLegs.isNotEmpty() && solLegs.all { leg ->
+            val amount = (leg.value as? TransactionValue.CoinValue)?.value?.abs()
+            amount != null && amount <= maxSolRent
+        }
+
+        return if (tokenLegs.size == 1 && solLegsAreRent) tokenLegs else transfers
     }
 
     suspend fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
@@ -156,6 +163,12 @@ class SolanaTransactionConverter(
     }
 
     companion object {
+        // Upper bound for a SOL leg that may be treated as associated-token-account rent rather than
+        // a real payment. The rent-exempt minimum for an SPL/Token-2022 account is ~0.002 SOL; even a
+        // transaction that creates a few token accounts stays well under this, while genuine SOL
+        // payments are far larger and so are preserved.
+        private val maxSolRent = BigDecimal("0.01")
+
         // Display labels for the swap programs SolanaKit recognizes (`Transaction.programIds`).
         // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").
         private val swapProgramLabels = mapOf(

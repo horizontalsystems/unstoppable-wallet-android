@@ -681,7 +681,10 @@
     <string name="WalletConnect_SendTransactionRequest_Title">Send Transaction</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Send</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
-    <string name="WalletConnect_Solana_SignTransactionsCount">Sign %d transactions</string>
+    <plurals name="WalletConnect_Solana_SignTransactionsCount">
+        <item quantity="one">Sign %d transaction</item>
+        <item quantity="other">Sign %d transactions</item>
+    </plurals>
     <string name="WalletConnect_Solana_Method">Method</string>
     <string name="WalletConnect_Solana_MethodSwap">Swap</string>
     <string name="WalletConnect_Solana_MethodTransfer">Transfer</string>

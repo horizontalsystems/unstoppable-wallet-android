@@ -17,8 +17,10 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 // Handles `solana_signAndSendTransaction`. Params: { transaction: <base64>, sendOptions? }.
 // The transaction is signed and broadcast by SolanaKit (via the raw-transaction send path).
@@ -32,23 +34,39 @@ class WCActionSolanaSignAndSendTransaction(
     private val params = gson.fromJson(paramsJsonStr, Params::class.java)
     private val rawTransaction = Base64.decode(params.transaction, Base64.NO_WRAP)
 
-    private val token = App.marketKit.token(TokenQuery(BlockchainType.Solana, TokenType.Native))!!
+    private val token = App.marketKit.token(TokenQuery(BlockchainType.Solana, TokenType.Native))
+        ?: throw IllegalStateException("Native Solana token not found")
     private val sendTransactionService = SendTransactionServiceFactory.create(token)
     private var sendTransactionState = sendTransactionService.stateFlow.value
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
-                sendTransactionState = transactionState
-
-                emitState()
+                // A failed emission must not tear down the collector or the sibling coroutine
+                // (an uncaught throw here would propagate to viewModelScope and crash the app).
+                try {
+                    sendTransactionState = transactionState
+                    emitState()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Timber.e(e, "Handling Solana send-transaction state failed")
+                }
             }
         }
 
         coroutineScope.launch {
-            sendTransactionService.setSendTransactionData(
-                SendTransactionData.Solana.WithRawTransaction(rawTransaction)
-            )
+            // estimateFee (inside setSendTransactionData) can throw on RPC/decode failure; catch it
+            // so the failure is logged rather than crashing the app via viewModelScope.
+            try {
+                sendTransactionService.setSendTransactionData(
+                    SendTransactionData.Solana.WithRawTransaction(rawTransaction)
+                )
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Timber.e(e, "Preparing Solana send-transaction data failed")
+            }
         }
     }
 

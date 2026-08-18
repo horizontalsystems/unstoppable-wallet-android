@@ -95,7 +95,17 @@ class WCManager(
 
         val handler = handlersMap[chainNamespace] ?: return null
 
-        return handler.getAction(request, chainInternalId)
+        return try {
+            handler.getAction(request, chainInternalId)
+        } catch (e: Exception) {
+            // A handler can't always build an action — e.g. the active account was switched to one
+            // that can't sign for this chain (an unsupported account type, watch-only), or the
+            // method is unsupported. Return null so the request screen shows an error state instead
+            // of crashing WCRequestPreViewModel construction (getAction() must return non-null, so it
+            // can only signal these cases by throwing).
+            Log.e("WCManager", "Building WalletConnect action failed", e)
+            null
+        }
     }
 
     // WalletConnect can arrive either as a raw `wc:` URI (QR scan / clipboard) or wrapped in the

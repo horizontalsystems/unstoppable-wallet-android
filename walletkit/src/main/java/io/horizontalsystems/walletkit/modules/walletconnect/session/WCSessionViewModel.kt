@@ -19,6 +19,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager.Req
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager.RequestDataError.RequestNotFoundError
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager.RequestDataError.UnsupportedChainId
+import io.horizontalsystems.walletkit.modules.walletconnect.solanaMainnetReferences
 import io.horizontalsystems.walletkit.modules.walletconnect.session.WCSessionServiceState.Invalid
 import io.horizontalsystems.walletkit.modules.walletconnect.session.WCSessionServiceState.Killed
 import io.horizontalsystems.walletkit.modules.walletconnect.session.WCSessionServiceState.Ready
@@ -507,7 +508,12 @@ class WCSessionViewModel(
                 if (chainParts[1] == "pubnet") BlockchainType.Stellar else null
             }
 
-            "solana" -> BlockchainType.Solana
+            "solana" -> {
+                // Only the supported mainnet-beta references (canonical genesis-hash value + the
+                // legacy CAIP-30 value some dApps still use); reject devnet/testnet or any other
+                // cluster so an unsupported Solana network is never routed/approved as Solana.
+                if (chainParts.getOrNull(1) in solanaMainnetReferences) BlockchainType.Solana else null
+            }
 
             else -> null
         }
