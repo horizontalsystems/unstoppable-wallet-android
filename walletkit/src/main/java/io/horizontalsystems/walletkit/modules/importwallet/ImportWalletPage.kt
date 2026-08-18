@@ -32,6 +32,7 @@ import androidx.credentials.exceptions.NoCredentialException
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Caution
+import io.horizontalsystems.walletkit.core.launchSafe
 import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -218,7 +219,7 @@ private fun ImportWalletScreen(
                     subtitle = stringResource(R.string.ImportWallet_BackupFile_Description).hs,
                     borderTop = true
                 ) {
-                    restoreLauncher.launch(arrayOf("application/json"))
+                    restoreLauncher.launchSafe(arrayOf("application/json"), view)
                 }
             }
         }
@@ -238,7 +239,7 @@ private fun ImportWalletScreen(
                     cautionType = Caution.Type.Warning,
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
-                        restoreLauncher.launch(arrayOf("application/json"))
+                        restoreLauncher.launchSafe(arrayOf("application/json"), view)
                         scope.launch {
                             sheetState.hide()
                             showBottomSheet = false

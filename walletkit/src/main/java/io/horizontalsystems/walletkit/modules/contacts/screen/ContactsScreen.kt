@@ -39,6 +39,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Caution
+import io.horizontalsystems.walletkit.core.launchSafe
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.contacts.ContactsModule
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
@@ -249,13 +250,13 @@ fun ContactsScreen(
                                 if (viewModel.shouldShowRestoreWarning()) {
                                     bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
                                 } else {
-                                    restoreLauncher.launch(arrayOf("application/json"))
+                                    restoreLauncher.launchSafe(arrayOf("application/json"), view)
                                 }
                             }
 
                             ContactsModule.ContactsAction.Backup -> {
                                 App.pinComponent.keepUnlocked()
-                                backupLauncher.launch(viewModel.backupFileName)
+                                backupLauncher.launchSafe(viewModel.backupFileName, view)
                             }
                         }
                     })
@@ -324,7 +325,7 @@ fun ContactsScreen(
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
                                     bottomSheetType = null
-                                    restoreLauncher.launch(arrayOf("application/json"))
+                                    restoreLauncher.launchSafe(arrayOf("application/json"), view)
                                 }
                             },
                             onClose = {

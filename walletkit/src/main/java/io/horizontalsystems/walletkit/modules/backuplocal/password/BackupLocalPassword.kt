@@ -24,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.launchSafe
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -88,7 +89,7 @@ fun LocalBackupPasswordScreen(
 
     if (uiState.backupJson != null) {
         App.pinComponent.keepUnlocked()
-        backupLauncher.launch(viewModel.backupFileName)
+        backupLauncher.launchSafe(viewModel.backupFileName, view)
     }
 
     if (uiState.closeScreen) {
