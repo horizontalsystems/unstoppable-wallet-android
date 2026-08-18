@@ -5,6 +5,8 @@ import io.horizontalsystems.walletkit.core.IEip20ApproveAdapter
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
+import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.managers.EvmKitWrapper
@@ -116,18 +118,9 @@ class Eip20Adapter(
 
     companion object {
         fun clear(walletId: String) {
-            val networkTypes = listOf(
-                Chain.Ethereum,
-                Chain.BinanceSmartChain,
-                Chain.Polygon,
-                Chain.Avalanche,
-                Chain.Optimism,
-                Chain.ArbitrumOne,
-                Chain.Gnosis,
-            )
-
-            networkTypes.forEach {
-                Erc20Kit.clear(App.instance, it, walletId)
+            // Same canonical list as EvmAdapter.clear — see the note there.
+            EvmBlockchainManager.blockchainTypes.forEach { blockchainType ->
+                Erc20Kit.clear(App.instance, EvmKitManagerRegistry.getChain(blockchainType), walletId)
             }
         }
     }
