@@ -35,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.net.URI
 
 class EvmKitManager(
@@ -48,7 +47,7 @@ class EvmKitManager(
 
     init {
         coroutineScope.launch {
-            syncSourceManager.syncSourceObservable.asFlow().collect { blockchain ->
+            syncSourceManager.syncSourceFlow.collect { blockchain ->
                 handleUpdateNetwork(blockchain)
             }
         }

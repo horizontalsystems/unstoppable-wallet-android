@@ -9,8 +9,10 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -24,7 +26,16 @@ class WalletManager(
 
     val activeWallets: List<Wallet>
         @Synchronized get() = walletsSet.toList()
-    val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
+
+    // SharedFlow, not StateFlow: equal lists are re-emitted on purpose as a
+    // "rebuild adapters" trigger (see refreshActiveWallets/reloadWallets);
+    // StateFlow's equality dedup would swallow them. DROP_OLDEST keeps tryEmit
+    // non-blocking on the main thread; collectors only need the latest list.
+    private val _activeWalletsUpdatedFlow = MutableSharedFlow<List<Wallet>>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+    val activeWalletsUpdatedFlow = _activeWalletsUpdatedFlow.asSharedFlow()
 
     private val walletsSet = mutableSetOf<Wallet>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -67,7 +78,7 @@ class WalletManager(
     }
 
     private fun notifyActiveWallets() {
-        activeWalletsUpdatedObservable.onNext(walletsSet.toList())
+        _activeWalletsUpdatedFlow.tryEmit(walletsSet.toList())
     }
 
     // Re-emit the current active wallets to (re)initialize adapters without tearing existing ones

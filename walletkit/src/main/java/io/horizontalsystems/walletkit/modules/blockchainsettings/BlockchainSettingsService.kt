@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -39,7 +38,7 @@ class BlockchainSettingsService(
 
     fun start() {
         coroutineScope.launch {
-            evmSyncSourceManager.syncSourceObservable.asFlow().collect {
+            evmSyncSourceManager.syncSourceFlow.collect {
                 syncBlockchainItems()
             }
         }

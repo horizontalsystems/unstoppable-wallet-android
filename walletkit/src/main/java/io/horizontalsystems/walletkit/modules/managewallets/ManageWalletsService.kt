@@ -54,7 +54,7 @@ class ManageWalletsService(
 
     init {
         coroutineScope.launch {
-            walletManager.activeWalletsUpdatedObservable.asFlow().collect {
+            walletManager.activeWalletsUpdatedFlow.collect {
                 handleUpdated(it)
             }
         }

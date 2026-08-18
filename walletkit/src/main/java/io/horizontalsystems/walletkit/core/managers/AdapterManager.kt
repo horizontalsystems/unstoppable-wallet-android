@@ -14,7 +14,6 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
 class AdapterManager(
@@ -35,7 +34,7 @@ class AdapterManager(
 
     override fun startAdapterManager() {
         coroutineScope.launch {
-            walletManager.activeWalletsUpdatedObservable.asFlow().collect { wallets ->
+            walletManager.activeWalletsUpdatedFlow.collect { wallets ->
                 initAdapters(wallets)
             }
         }

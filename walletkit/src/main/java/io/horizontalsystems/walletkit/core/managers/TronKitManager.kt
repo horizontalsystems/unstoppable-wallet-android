@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.net.URL
 
 class TronKitManager(
@@ -55,7 +54,7 @@ class TronKitManager(
 
     init {
         scope.launch {
-            evmSyncSourceManager.syncSourceObservable.asFlow().collect { blockchainType ->
+            evmSyncSourceManager.syncSourceFlow.collect { blockchainType ->
                 if (blockchainType == BlockchainType.Tron) {
                     handleUpdateNetwork()
                 }

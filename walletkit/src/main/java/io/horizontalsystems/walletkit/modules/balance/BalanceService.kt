@@ -59,7 +59,7 @@ class BalanceService(
 
     fun start() {
         coroutineScope.launch {
-            activeWalletRepository.itemsObservable.asFlow().collect { wallets ->
+            activeWalletRepository.itemsFlow.collect { wallets ->
                 handleWalletsUpdate(wallets)
             }
         }

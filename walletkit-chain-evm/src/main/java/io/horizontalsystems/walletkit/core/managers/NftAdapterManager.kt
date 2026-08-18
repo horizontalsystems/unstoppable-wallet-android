@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
 class NftAdapterManager(
@@ -26,7 +25,7 @@ class NftAdapterManager(
 
     init {
         coroutineScope.launch {
-            walletManager.activeWalletsUpdatedObservable.asFlow()
+            walletManager.activeWalletsUpdatedFlow
                 .collect {
                     //disable NFT adapters for now
                     //initAdapters(it)

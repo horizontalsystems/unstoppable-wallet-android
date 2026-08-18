@@ -7,8 +7,6 @@ import io.horizontalsystems.walletkit.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.walletkit.entities.EvmSyncSource
 import io.horizontalsystems.walletkit.entities.EvmSyncSourceRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -20,14 +18,21 @@ class EvmSyncSourceManager(
     private val evmSyncSourceStorage: EvmSyncSourceStorage,
 ) {
 
-    private val syncSourceSubject = PublishSubject.create<BlockchainType>()
+    // Each event names a different blockchain whose kit must restart, so a deep
+    // buffer instead of conflation: dropping an event would skip that restart.
+    // 64 matches the Channel.BUFFERED capacity the replaced Rx asFlow() bridge
+    // used, so only the overflow behavior changed (drop oldest vs block, which
+    // could ANR). tryEmit stays non-blocking; sources change one at a time in
+    // practice, so overflow is unreachable.
+    private val _syncSourceFlow = MutableSharedFlow<BlockchainType>(
+        extraBufferCapacity = 64,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+    )
+    val syncSourceFlow = _syncSourceFlow.asSharedFlow()
 
     private val _syncSourcesUpdatedFlow =
         MutableSharedFlow<BlockchainType>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val syncSourcesUpdatedFlow = _syncSourcesUpdatedFlow.asSharedFlow()
-
-    val syncSourceObservable: Observable<BlockchainType>
-        get() = syncSourceSubject
 
     fun defaultSyncSources(blockchainType: BlockchainType): List<EvmSyncSource> {
         return when (blockchainType) {
@@ -261,7 +266,7 @@ class EvmSyncSourceManager(
 
     fun save(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
         blockchainSettingsStorage.save(syncSource.uri.toString(), blockchainType)
-        syncSourceSubject.onNext(blockchainType)
+        _syncSourceFlow.tryEmit(blockchainType)
     }
 
     fun saveSyncSource(blockchainType: BlockchainType, url: String, auth: String?) {
@@ -286,7 +291,7 @@ class EvmSyncSourceManager(
         evmSyncSourceStorage.delete(blockchainType.uid, syncSource.uri.toString())
 
         if (isCurrent) {
-            syncSourceSubject.onNext(blockchainType)
+            _syncSourceFlow.tryEmit(blockchainType)
         }
 
         _syncSourcesUpdatedFlow.tryEmit(blockchainType)
