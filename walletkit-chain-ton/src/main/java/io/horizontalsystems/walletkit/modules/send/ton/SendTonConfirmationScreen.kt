@@ -1,13 +1,9 @@
 package io.horizontalsystems.walletkit.modules.send.ton
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.send.rememberConfirmationData
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationScreen
 import kotlin.reflect.KClass
 
@@ -17,18 +13,8 @@ fun SendTonConfirmationScreen(
     sendViewModel: SendTonViewModel,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
-    var refresh by remember { mutableStateOf(false) }
-
-    LifecycleResumeEffect(Unit) {
-        if (refresh) {
-            confirmationData = sendViewModel.getConfirmationData()
-        }
-
-        onPauseOrDispose {
-            refresh = true
-        }
-    }
+    val confirmationData = rememberConfirmationData(navigation) { sendViewModel.getConfirmationData() }
+        ?: return
 
     SendConfirmationScreen(
         navigation = navigation,

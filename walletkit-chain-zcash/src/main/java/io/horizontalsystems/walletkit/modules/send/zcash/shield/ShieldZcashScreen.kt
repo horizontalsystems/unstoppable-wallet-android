@@ -1,15 +1,11 @@
 package io.horizontalsystems.walletkit.modules.send.zcash.shield
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.send.rememberConfirmationData
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationScreen
 import kotlin.reflect.KClass
 
@@ -19,18 +15,8 @@ fun ShieldZcashScreen(
     viewModel: ShieldZcashViewModel,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    var confirmationData by remember { mutableStateOf(viewModel.getConfirmationData()) }
-    var refresh by remember { mutableStateOf(false) }
-
-    LifecycleResumeEffect(Unit) {
-        if (refresh) {
-            confirmationData = viewModel.getConfirmationData()
-        }
-
-        onPauseOrDispose {
-            refresh = true
-        }
-    }
+    val confirmationData = rememberConfirmationData(navigation) { viewModel.getConfirmationData() }
+        ?: return
 
     SendConfirmationScreen(
         navigation = navigation,

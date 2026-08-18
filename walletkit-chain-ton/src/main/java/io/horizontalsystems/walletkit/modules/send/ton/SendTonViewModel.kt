@@ -108,15 +108,22 @@ class SendTonViewModel(
         amountService.setAmount(amount)
     }
 
-    fun getConfirmationData(): SendConfirmationData {
-        val address = addressState.address!!
+    /**
+     * Confirmation data for the current input, or null when it isn't available.
+     *
+     * The pieces are filled in asynchronously and none of them survive process death, so a
+     * confirmation screen restored from the saved back stack sees empty state. Reporting that as
+     * null lets the caller send the user back to the form instead of crashing on composition.
+     */
+    fun getConfirmationData(): SendConfirmationData? {
+        val address = addressState.address ?: return null
         val contact = contactsRepo.getContactsFiltered(
             blockchainType,
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(
-            amount = amountState.amount!!,
-            fee = feeState.fee!!,
+            amount = amountState.amount ?: return null,
+            fee = feeState.fee ?: return null,
             address = address,
             contact = contact,
             token = wallet.token,

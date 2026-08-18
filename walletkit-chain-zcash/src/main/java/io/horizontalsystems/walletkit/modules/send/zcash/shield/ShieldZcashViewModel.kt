@@ -52,8 +52,15 @@ class ShieldZcashViewModel(
         }
     }
 
-    fun getConfirmationData(): SendConfirmationData {
-        val unshielded = adapter.balanceData?.unshielded ?: throw IllegalStateException()
+    /**
+     * Confirmation data for the current input, or null when it isn't available.
+     *
+     * The pieces are filled in asynchronously and none of them survive process death, so a
+     * confirmation screen restored from the saved back stack sees empty state. Reporting that as
+     * null lets the caller send the user back to the form instead of crashing on composition.
+     */
+    fun getConfirmationData(): SendConfirmationData? {
+        val unshielded = adapter.balanceData?.unshielded ?: return null
 
         return SendConfirmationData(
             amount = unshielded,

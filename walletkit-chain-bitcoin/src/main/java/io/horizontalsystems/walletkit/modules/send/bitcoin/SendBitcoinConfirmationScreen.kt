@@ -1,17 +1,13 @@
 package io.horizontalsystems.walletkit.modules.send.bitcoin
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stringResId
 import io.horizontalsystems.walletkit.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.send.rememberConfirmationData
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationScreen
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
@@ -23,18 +19,8 @@ fun SendBitcoinConfirmationScreen(
     sendViewModel: SendBitcoinViewModel,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
-    var refresh by remember { mutableStateOf(false) }
-
-    LifecycleResumeEffect(Unit) {
-        if (refresh) {
-            confirmationData = sendViewModel.getConfirmationData()
-        }
-
-        onPauseOrDispose {
-            refresh = true
-        }
-    }
+    val confirmationData = rememberConfirmationData(navigation) { sendViewModel.getConfirmationData() }
+        ?: return
 
     SendConfirmationScreen(
         navigation = navigation,
