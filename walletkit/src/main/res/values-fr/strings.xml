@@ -1834,7 +1834,6 @@
     <string name="Zcash_Migration_PubliclyVisible_Description">Le déplacement de fonds entre les pools nécessite que le montant migré soit visible publiquement sur la blockchain. L\'expéditeur, le destinataire et vos adresses restent privés.</string>
     <string name="WalletConnect_SignTransactionRequest_Title">Signer la Transaction</string>
     <string name="WalletConnect_SignTransactionRequest_Description">%s recevra la transaction signée et pourra la diffuser à tout moment.</string>
-    <string name="WalletConnect_Solana_SignTransactionsCount">Signer %d transactions</string>
     <string name="WalletConnect_Solana_Method">Méthode</string>
     <string name="WalletConnect_Solana_MethodSwap">Échange</string>
     <string name="WalletConnect_Solana_MethodTransfer">Transfert</string>

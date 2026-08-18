@@ -1574,7 +1574,6 @@
     "WalletConnect_Solana_MethodSwap": "Swap",
     "WalletConnect_Solana_MethodTransfer": "Transfer",
     "WalletConnect_Solana_Network": "Network",
-    "WalletConnect_Solana_SignTransactionsCount": "Sign %d transactions",
     "WalletConnect_Solana_Value": "Value",
     "WalletConnect_Status": "Status",
     "WalletConnect_Status_Connecting": "Connecting…",

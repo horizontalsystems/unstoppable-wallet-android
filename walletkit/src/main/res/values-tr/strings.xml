@@ -1833,7 +1833,6 @@
     <string name="Zcash_Migration_PubliclyVisible_Description">Havuzlar arasında para transferi, geçirilen tutarın blokzincirde herkese açık şekilde görünür olmasını gerektirir. Gönderici, alıcı ve adresleriniz özel kalır.</string>
     <string name="WalletConnect_SignTransactionRequest_Title">İşlemi İmzala</string>
     <string name="WalletConnect_SignTransactionRequest_Description">%s imzalanan işlemi alacak ve bunu istediği zaman yayınlayabilir.</string>
-    <string name="WalletConnect_Solana_SignTransactionsCount">%d işlemi imzala</string>
     <string name="WalletConnect_Solana_Method">Yöntem</string>
     <string name="WalletConnect_Solana_MethodSwap">Takas</string>
     <string name="WalletConnect_Solana_MethodTransfer">Transfer</string>
