@@ -62,6 +62,9 @@ class TronKitManager(
         }
     }
 
+    // See EvmKitManager: stopping off the sync-source subscription has to share the monitor
+    // with the getter, or a caller can be handed a wrapper that is being torn down.
+    @Synchronized
     private fun handleUpdateNetwork() {
         stop()
         tronKitStoppedSubject.onNext(Unit)
@@ -189,6 +192,7 @@ class TronKitManager(
         }
     }
 
+    @Synchronized
     private fun stop() {
         tronKitWrapper?.tronKit?.stop()
         job?.cancel()

@@ -53,6 +53,11 @@ class EvmKitManager(
         }
     }
 
+    // Runs off the sync-source subscription while getEvmKitWrapper()/unlink() may be inside the
+    // monitor. Without it, the wrapper can be nulled between that getter's null check and its !!,
+    // and the blockchainType read below is a check-then-act on the same field. Callers already
+    // holding the monitor re-enter it — Zano's manager has had this since it was written.
+    @Synchronized
     private fun handleUpdateNetwork(blockchainType: BlockchainType) {
         if (blockchainType != evmKitWrapper?.blockchainType) return
 
@@ -231,6 +236,7 @@ class EvmKitManager(
         }
     }
 
+    @Synchronized
     private fun stopEvmKit() {
         job?.cancel()
         evmKitWrapper?.evmKit?.stop()

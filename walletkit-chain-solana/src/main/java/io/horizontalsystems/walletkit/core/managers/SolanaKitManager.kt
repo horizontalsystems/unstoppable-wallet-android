@@ -43,6 +43,9 @@ class SolanaKitManager(
     val statusInfo: Map<String, Any>?
         get() = solanaKitWrapper?.solanaKit?.statusInfo()
 
+    // See EvmKitManager: stopping off the sync-source subscription has to share the monitor
+    // with the getter, or a caller can be handed a wrapper that is being torn down.
+    @Synchronized
     private fun handleUpdateNetwork() {
         try {
             stopKit()
@@ -125,6 +128,7 @@ class SolanaKitManager(
         }
     }
 
+    @Synchronized
     private fun stopKit() {
         try {
             solanaKitWrapper?.solanaKit?.stop()
