@@ -87,8 +87,10 @@ fun ContactsScreen(
     val restoreLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let {
-                context.contentResolver.openInputStream(it)?.use { inputStream ->
-                    try {
+                // openInputStream itself can throw (picked file deleted, cloud
+                // provider failed to stream) — keep it inside the try.
+                try {
+                    context.contentResolver.openInputStream(it)?.use { inputStream ->
                         inputStream.bufferedReader().use { br ->
                             viewModel.restore(br.readText())
 
@@ -98,9 +100,9 @@ fun ContactsScreen(
                                 SnackbarDuration.SHORT
                             )
                         }
-                    } catch (e: Throwable) {
-                        HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                     }
+                } catch (e: Throwable) {
+                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                 }
             }
         }
@@ -108,8 +110,8 @@ fun ContactsScreen(
     val backupLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
             uri?.let {
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    try {
+                try {
+                    context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                         outputStream.bufferedWriter().use { bw ->
                             bw.write(viewModel.backupJson)
                             bw.flush()
@@ -120,9 +122,9 @@ fun ContactsScreen(
                                 SnackbarDuration.SHORT
                             )
                         }
-                    } catch (e: Throwable) {
-                        HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                     }
+                } catch (e: Throwable) {
+                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                 }
             }
         }

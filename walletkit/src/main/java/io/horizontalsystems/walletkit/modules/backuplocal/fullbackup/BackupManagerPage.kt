@@ -103,8 +103,10 @@ private fun BackupManagerScreen(
     val restoreLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let { uriNonNull ->
-                context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
-                    try {
+                // openInputStream itself can throw (picked file deleted, cloud
+                // provider failed to stream) — keep it inside the try.
+                try {
+                    context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
                         inputStream.bufferedReader().use { br ->
                             val jsonString = br.readText()
                             //validate json format
@@ -113,12 +115,12 @@ private fun BackupManagerScreen(
                             val fileName = context.getFileName(uriNonNull)
                             onRestoreBackup(jsonString, fileName)
                         }
-                    } catch (e: Throwable) {
-                        //show json parsing error
-                        scope.launch {
-                            delay(300)
-                            showBottomSheet = true
-                        }
+                    }
+                } catch (e: Throwable) {
+                    //show json parsing error
+                    scope.launch {
+                        delay(300)
+                        showBottomSheet = true
                     }
                 }
             }

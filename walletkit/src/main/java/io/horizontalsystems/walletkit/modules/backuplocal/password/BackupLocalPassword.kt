@@ -54,9 +54,11 @@ fun LocalBackupPasswordScreen(
     val backupLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
             uri?.let {
-                context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    uiState.backupJson?.let { backupJson ->
-                        try {
+                uiState.backupJson?.let { backupJson ->
+                    // openOutputStream itself can throw (target deleted, cloud
+                    // provider failure) — keep it inside the try.
+                    try {
+                        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
                             outputStream.bufferedWriter().use { bw ->
                                 bw.write(backupJson)
                                 bw.flush()
@@ -71,9 +73,9 @@ fun LocalBackupPasswordScreen(
 
                                 viewModel.backupFinished()
                             }
-                        } catch (e: Throwable) {
-                            HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                         }
+                    } catch (e: Throwable) {
+                        HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
                     }
                 }
             } ?: run {

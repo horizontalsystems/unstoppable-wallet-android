@@ -91,8 +91,10 @@ private fun ImportWalletScreen(
 
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let { uriNonNull ->
-            context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
-                try {
+            // openInputStream itself can throw (picked file deleted, cloud
+            // provider failed to stream) — keep it inside the try.
+            try {
+                context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
                     inputStream.bufferedReader().use { br ->
                         val jsonString = br.readText()
                         //validate json format
@@ -114,13 +116,13 @@ private fun ImportWalletScreen(
                             statPageTo = StatPage.ImportWalletFromFiles
                         )
                     }
-                } catch (e: Throwable) {
-                    Log.e("TAG", "ImportWalletScreen: ", e)
-                    //show json parsing error
-                    scope.launch {
-                        delay(300)
-                        showBottomSheet = true
-                    }
+                }
+            } catch (e: Throwable) {
+                Log.e("TAG", "ImportWalletScreen: ", e)
+                //show json parsing error
+                scope.launch {
+                    delay(300)
+                    showBottomSheet = true
                 }
             }
         }
