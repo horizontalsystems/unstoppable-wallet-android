@@ -90,7 +90,7 @@ fun ContactsScreen(
                 // openInputStream itself can throw (picked file deleted, cloud
                 // provider failed to stream) — keep it inside the try.
                 try {
-                    context.contentResolver.openInputStream(it)?.use { inputStream ->
+                    (context.contentResolver.openInputStream(it) ?: error("Unable to open file")).use { inputStream ->
                         inputStream.bufferedReader().use { br ->
                             viewModel.restore(br.readText())
 
@@ -111,7 +111,7 @@ fun ContactsScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
             uri?.let {
                 try {
-                    context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    (context.contentResolver.openOutputStream(uri) ?: error("Unable to open file")).use { outputStream ->
                         outputStream.bufferedWriter().use { bw ->
                             bw.write(viewModel.backupJson)
                             bw.flush()

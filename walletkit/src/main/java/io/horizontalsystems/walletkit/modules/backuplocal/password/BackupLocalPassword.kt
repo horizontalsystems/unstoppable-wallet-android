@@ -58,7 +58,7 @@ fun LocalBackupPasswordScreen(
                     // openOutputStream itself can throw (target deleted, cloud
                     // provider failure) — keep it inside the try.
                     try {
-                        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        (context.contentResolver.openOutputStream(uri) ?: error("Unable to open file")).use { outputStream ->
                             outputStream.bufferedWriter().use { bw ->
                                 bw.write(backupJson)
                                 bw.flush()

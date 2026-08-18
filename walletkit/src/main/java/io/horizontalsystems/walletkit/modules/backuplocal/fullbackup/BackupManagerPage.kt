@@ -106,7 +106,7 @@ private fun BackupManagerScreen(
                 // openInputStream itself can throw (picked file deleted, cloud
                 // provider failed to stream) — keep it inside the try.
                 try {
-                    context.contentResolver.openInputStream(uriNonNull)?.use { inputStream ->
+                    (context.contentResolver.openInputStream(uriNonNull) ?: error("Unable to open file")).use { inputStream ->
                         inputStream.bufferedReader().use { br ->
                             val jsonString = br.readText()
                             //validate json format
