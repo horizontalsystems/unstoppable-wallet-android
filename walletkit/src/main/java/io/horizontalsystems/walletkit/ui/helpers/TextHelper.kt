@@ -4,16 +4,17 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.PersistableBundle
-import android.os.SystemClock
+import android.util.Log
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IClipboardManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 
 object TextHelper : IClipboardManager {
 
@@ -21,19 +22,28 @@ object TextHelper : IClipboardManager {
     // clipboards honour the same key on earlier releases, so it is set by name for every version.
     private const val EXTRA_IS_SENSITIVE = "android.content.extra.IS_SENSITIVE"
 
+    // When the copied secret is due to be dropped. It rides along in the clip's own metadata
+    // rather than living in this process: the clipboard outlives us, so if Android kills the app
+    // while it is in the background a restarted process can still tell that a secret is pending
+    // and finish the job. It is a wall-clock deadline and carries nothing secret.
+    private const val EXTRA_SECRET_EXPIRES_AT = "io.horizontalsystems.walletkit.SECRET_EXPIRES_AT"
+
     // Android never expires a clip on its own, so a copied recovery phrase would otherwise sit in
     // the clipboard until something overwrote it — readable the whole time by whatever app is in
     // the foreground, the keyboard included. Long enough to paste into a password manager, short
     // enough not to outlive the reason it was copied.
     private const val SECRET_TTL_MS = 60_000L
+    private const val CLEAR_RETRY_MS = 5_000L
+
+    // On a cold start the foreground callback runs before the window takes focus, and Android only
+    // lets the focused app read the clipboard — so the first look after launch comes back empty
+    // even when a secret is sitting there. Look again a few times before concluding there is
+    // nothing pending.
+    private const val UNREADABLE_RETRY_MS = 1_000L
+    private const val UNREADABLE_ATTEMPTS = 5
 
     private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
     private var clearJob: Job? = null
-
-    // The digest, not the text: this outlives the screen that copied it, and there is no reason to
-    // keep a second plaintext copy of a seed phrase alive in a long-lived static.
-    private var copiedSecretDigest: ByteArray? = null
-    private var clearAt = 0L
 
     override val hasPrimaryClip: Boolean
         get() = clipboard?.hasPrimaryClip() ?: false
@@ -49,62 +59,105 @@ object TextHelper : IClipboardManager {
         val clip = ClipData.newPlainText("", text).apply {
             description.extras = PersistableBundle().apply {
                 putBoolean(EXTRA_IS_SENSITIVE, true)
+                putLong(EXTRA_SECRET_EXPIRES_AT, System.currentTimeMillis() + SECRET_TTL_MS)
             }
         }
         clipboard?.setPrimaryClip(clip)
-
-        copiedSecretDigest = digestOf(text)
-        clearAt = SystemClock.elapsedRealtime() + SECRET_TTL_MS
-        scheduleClear(SECRET_TTL_MS)
+        startClearWorker()
     }
 
     /**
-     * Drops a previously copied secret from the clipboard once its lifetime has run out.
+     * Drops a copied secret from the clipboard once its lifetime has run out.
      *
-     * Also called when the app returns to the foreground: since Android 10 only the foreground app
-     * and the active keyboard may touch the clipboard, so a timer that fires while the app is in
-     * the background cannot do the clearing itself and leaves it to the next resume.
+     * Called when the app returns to the foreground, including on a cold start after the process
+     * was killed: since Android 10 only the foreground app and the active keyboard may touch the
+     * clipboard, so a deadline that passes while the app is away is settled on the way back in.
      */
     fun clearSecretIfExpired() {
-        val digest = copiedSecretDigest ?: return
+        startClearWorker()
+    }
 
-        val remaining = clearAt - SystemClock.elapsedRealtime()
-        if (remaining > 0) {
-            scheduleClear(remaining)
-            return
-        }
+    /**
+     * What the clipboard currently holds, from this app's point of view.
+     *
+     * [Unreadable] is not the same as holding nothing: on a cold start the foreground callback runs
+     * before the window takes focus, and Android only lets the focused app read the clipboard, so
+     * an early look comes back blank even when a secret is sitting there.
+     */
+    private sealed interface ClipboardState {
+        data object Unreadable : ClipboardState
+        data object NotOurs : ClipboardState
+        data class Secret(val expiresAt: Long) : ClipboardState
+    }
 
-        when (val current = getCopiedText()) {
-            // Unreadable rather than absent — the clipboard is off limits from here. Keep the
-            // pending state so the next resume can finish the job.
-            null -> return
+    /**
+     * A clip the user copied since replaces the description along with the text, so the absence of
+     * the deadline is also what keeps someone else's clip from being wiped.
+     */
+    private fun clipboardState(): ClipboardState {
+        val description = clipboard?.primaryClipDescription ?: return ClipboardState.Unreadable
+        val expiresAt = description.extras?.getLong(EXTRA_SECRET_EXPIRES_AT, 0L) ?: 0L
 
-            // The user has copied something else since; that clip is theirs, not ours to wipe.
-            else -> if (digestOf(current).contentEquals(digest)) {
-                clipboard?.clearPrimaryClip()
+        return if (expiresAt > 0L) ClipboardState.Secret(expiresAt) else ClipboardState.NotOurs
+    }
+
+    @Synchronized
+    private fun startClearWorker() {
+        if (clearJob?.isActive == true) return
+
+        clearJob = scope.launch {
+            // The clipboard is the authority on what is pending, so the deadline is re-read every
+            // pass. A secret copied while an older timer is still waiting is picked up here rather
+            // than needing the timer to be torn down and replaced.
+            var unreadableLooks = 0
+
+            // The clipboard is the authority on what is pending, so it is re-read every pass. A
+            // secret copied while an older timer is still waiting is picked up here rather than
+            // needing the timer to be torn down and replaced.
+            while (isActive) {
+                val state = try {
+                    clipboardState()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Log.e("TextHelper", "Could not read the clipboard", e)
+                    delay(CLEAR_RETRY_MS)
+                    continue
+                }
+
+                when (state) {
+                    ClipboardState.NotOurs -> break
+
+                    ClipboardState.Unreadable -> {
+                        if (++unreadableLooks >= UNREADABLE_ATTEMPTS) break
+                        delay(UNREADABLE_RETRY_MS)
+                    }
+
+                    is ClipboardState.Secret -> {
+                        unreadableLooks = 0
+
+                        val remaining = state.expiresAt - System.currentTimeMillis()
+                        if (remaining > 0) {
+                            delay(remaining)
+                            continue
+                        }
+
+                        try {
+                            clipboard?.clearPrimaryClip()
+                            break
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            // Keep the deadline and try again rather than dropping the timer and
+                            // leaving the secret sitting there until the next foreground event.
+                            Log.e("TextHelper", "Could not clear the copied secret", e)
+                            delay(CLEAR_RETRY_MS)
+                        }
+                    }
+                }
             }
         }
-
-        forgetSecret()
     }
-
-    private fun scheduleClear(delayMs: Long) {
-        clearJob?.cancel()
-        clearJob = scope.launch {
-            delay(delayMs)
-            clearSecretIfExpired()
-        }
-    }
-
-    private fun forgetSecret() {
-        clearJob?.cancel()
-        clearJob = null
-        copiedSecretDigest = null
-        clearAt = 0L
-    }
-
-    private fun digestOf(text: String): ByteArray =
-        MessageDigest.getInstance("SHA-256").digest(text.toByteArray())
 
     override fun getCopiedText(): String? {
         return clipboard?.primaryClip?.itemCount?.let { count ->
