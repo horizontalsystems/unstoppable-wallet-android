@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -112,6 +113,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.Serializable
@@ -226,23 +228,32 @@ fun SwapScreen(
         viewModel.amlCheckEventFlow.collect { event ->
             proceeding = false
 
-            when (event) {
-                AmlCheckEvent.Proceed -> {
-                    if (viewModel.uiState.needToAcceptTerms) {
-                        forResultSwapTerms()
-                    } else {
-                        navigateToSwapConfirm()
+            // A throw here would end the collect and take the whole flow down with it: no later
+            // AML result would be handled, and since the latch is only released here, the next tap
+            // would disable Proceed for good. Keep the collector alive instead.
+            try {
+                when (event) {
+                    AmlCheckEvent.Proceed -> {
+                        if (viewModel.uiState.needToAcceptTerms) {
+                            forResultSwapTerms()
+                        } else {
+                            navigateToSwapConfirm()
+                        }
+                    }
+                    AmlCheckEvent.RiskDetected -> {
+                        showAmlRiskSheet = true
+                    }
+                    is AmlCheckEvent.Error -> {
+                        showAmlErrorSheet = true
+                    }
+                    AmlCheckEvent.RiskUnknown -> {
+                        showAmlUnknownSheet = true
                     }
                 }
-                AmlCheckEvent.RiskDetected -> {
-                    showAmlRiskSheet = true
-                }
-                is AmlCheckEvent.Error -> {
-                    showAmlErrorSheet = true
-                }
-                AmlCheckEvent.RiskUnknown -> {
-                    showAmlUnknownSheet = true
-                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Log.e("SwapPage", "Handling AML check event failed", e)
             }
         }
     }
