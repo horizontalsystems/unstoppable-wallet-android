@@ -1,5 +1,7 @@
 package io.horizontalsystems.dapp.core
 
+import android.util.Log
+
 object DAppManager {
     private var service: DAppService = DAppServiceEmpty()
 
@@ -11,7 +13,16 @@ object DAppManager {
     }
 
     fun initialize(params: DAppInitParams, callback: DAppServiceCallback) {
-        service.initialize(params, callback)
+        try {
+            service.initialize(params, callback)
+        } catch (e: Throwable) {
+            // The dApp engine can fail to start on some devices (e.g. WalletConnect's
+            // CoreClient reports init failure only via callback and setDelegate then
+            // throws). Initialize runs in Application.onCreate, so a throw here is a
+            // startup crash loop — degrade to no dApp support instead.
+            Log.e("DAppManager", "dApp service initialization failed", e)
+            service = DAppServiceEmpty()
+        }
     }
 
     fun getPairings(): List<HSDAppPairing> = service.getPairings()
