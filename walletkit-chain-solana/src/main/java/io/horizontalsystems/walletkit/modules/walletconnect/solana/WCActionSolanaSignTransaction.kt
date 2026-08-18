@@ -13,6 +13,8 @@ import io.horizontalsystems.walletkit.modules.walletconnect.request.WCActionStat
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.solanakit.Signer
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 // Handles `solana_signTransaction` (single) and `solana_signAllTransactions` (array).
 // Signs offline (via the Solana kit, which supports both legacy and versioned/V0 transactions)
@@ -52,7 +54,10 @@ class WCActionSolanaSignTransaction(
     }
 
     override suspend fun performAction(): String {
-        val signed = base64Transactions.map { signAndReserialize(it) }
+        // Signing is a cryptographic operation and a batch (solana_signAllTransactions) can sign
+        // many transactions, so run it off the caller's dispatcher (approve() uses
+        // Dispatchers.Default) on Dispatchers.IO per the crypto-on-IO coding guideline.
+        val signed = withContext(Dispatchers.IO) { base64Transactions.map { signAndReserialize(it) } }
 
         return if (multiple) {
             gson.toJson(mapOf("transactions" to signed.map { it.base64 }))

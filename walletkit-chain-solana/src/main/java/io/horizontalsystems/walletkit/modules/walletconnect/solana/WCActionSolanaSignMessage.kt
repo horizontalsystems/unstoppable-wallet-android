@@ -12,6 +12,8 @@ import io.horizontalsystems.walletkit.modules.walletconnect.request.WCActionStat
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.solanakit.Signer
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 // Handles `solana_signMessage`. Params: { message: <base58>, pubkey: <base58> }.
 // Response: { signature: <base58> }.
@@ -34,7 +36,9 @@ class WCActionSolanaSignMessage(
     }
 
     override suspend fun performAction(): String {
-        val signature = signer.signMessage(messageBytes)
+        // Signing is a cryptographic operation; run it off the caller's dispatcher (approve() uses
+        // Dispatchers.Default) on Dispatchers.IO per the crypto-on-IO coding guideline.
+        val signature = withContext(Dispatchers.IO) { signer.signMessage(messageBytes) }
         return gson.toJson(mapOf("signature" to WCSolanaHelper.base58Encode(signature)))
     }
 
