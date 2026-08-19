@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.launchSafe
 import io.horizontalsystems.walletkit.helpers.HudHelper
+import kotlin.coroutines.cancellation.CancellationException
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
@@ -95,8 +96,16 @@ fun LocalBackupPasswordScreen(
     // the state must be reset here or the screen stays stuck.
     LaunchedEffect(uiState.backupJson) {
         if (uiState.backupJson != null) {
-            App.pinComponent.keepUnlocked()
-            if (!backupLauncher.launchSafe(viewModel.backupFileName, view)) {
+            try {
+                App.pinComponent.keepUnlocked()
+                if (!backupLauncher.launchSafe(viewModel.backupFileName, view)) {
+                    viewModel.backupCanceled()
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                // Any failure before the picker opens means the result callback
+                // will never fire — reset, or the screen stays stuck.
                 viewModel.backupCanceled()
             }
         }
