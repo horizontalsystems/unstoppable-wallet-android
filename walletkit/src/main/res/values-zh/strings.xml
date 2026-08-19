@@ -1838,4 +1838,9 @@
     <string name="WalletConnect_Solana_Network">网络</string>
     <string name="WalletConnect_Solana_Value">价值</string>
     <string name="Error_FilePickerNotFound">未找到用于打开文件的应用程序</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">警告</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">此请求要求您签署实际上伪装成消息的交易。签署它可能会授权转移您的资金。出于您的安全考虑已被阻止。</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">此消息签名请求适用于与您的活跃钱包不同的账户。已被阻止。</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">不可读交易</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">此交易的详细信息无法解码，因此您无法查看它的功能——收款人、金额和程序已隐藏。仅当您完全信任此应用程序时才继续。</string>
 </resources>

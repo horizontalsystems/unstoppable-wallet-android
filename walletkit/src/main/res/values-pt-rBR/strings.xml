@@ -1843,4 +1843,9 @@
     <string name="WalletConnect_Solana_Network">Rede</string>
     <string name="WalletConnect_Solana_Value">Valor</string>
     <string name="Error_FilePickerNotFound">Nenhum aplicativo foi encontrado para abrir arquivos</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">Aviso</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">Esta solicitação pede que você assine o que é na verdade uma transação disfarçada de mensagem. Assiná-la poderia autorizar a movimentação de seus fundos. Foi bloqueada para sua segurança.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Esta solicitação de assinatura de mensagem é para uma conta diferente da sua carteira ativa. Foi bloqueada.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">Transação ilegível</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">Os detalhes desta transação não puderam ser decodificados, então você não consegue ver o que ela faz — o destinatário, o valor e os programas estão ocultos. Continue apenas se confiar completamente neste aplicativo.</string>
 </resources>

@@ -1845,4 +1845,9 @@
     <string name="WalletConnect_Solana_Network">Сеть</string>
     <string name="WalletConnect_Solana_Value">Значение</string>
     <string name="Error_FilePickerNotFound">Не найдено приложение для открытия файлов</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">Предупреждение</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">Этот запрос просит вас подписать то, что на самом деле является транзакцией, замаскированной под сообщение. Подпись может разрешить перевод ваших средств. Он был заблокирован для вашей безопасности.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Этот запрос на подпись сообщения предназначен для другого счета, чем ваш активный кошелек. Он был заблокирован.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">Нечитаемая транзакция</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">Детали этой транзакции не удалось декодировать, поэтому вы не можете видеть, что она делает — получатель, сумма и программы скрыты. Продолжайте только если вы полностью доверяете этому приложению.</string>
 </resources>

@@ -1838,4 +1838,9 @@
     <string name="WalletConnect_Solana_Network">Red</string>
     <string name="WalletConnect_Solana_Value">Valor</string>
     <string name="Error_FilePickerNotFound">No se encontró ninguna aplicación para abrir archivos</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">Advertencia</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">Esta solicitud le pide que firme lo que es en realidad una transacción disfrazada de mensaje. Firmarla podría autorizar el movimiento de sus fondos. Fue bloqueada por su seguridad.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Esta solicitud de firma de mensaje es para una cuenta diferente a su wallet activa. Fue bloqueada.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">Transacción ilegible</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">Los detalles de esta transacción no pudieron decodificarse, por lo que no puede ver qué hace — el destinatario, el monto y los programas están ocultos. Solo continúe si confía completamente en esta aplicación.</string>
 </resources>

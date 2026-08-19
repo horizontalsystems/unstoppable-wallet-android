@@ -1839,4 +1839,9 @@
     <string name="WalletConnect_Solana_Network">Ağ</string>
     <string name="WalletConnect_Solana_Value">Değer</string>
     <string name="Error_FilePickerNotFound">Dosyaları açmak için hiçbir uygulama bulunamadı</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">Uyarı</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">Bu istek, aslında bir mesaj olarak gizlenmiş bir işleme imza atmanızı talep ediyor. Bunu imzalamak, fonlarınızın taşınmasını yetkilendirmek olabilir. Güvenliğiniz için engellendi.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Bu mesaj imzalama isteği, aktif cüzdanınızdan farklı bir hesap içindir. Engellendi.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">Okunamayan işlem</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">Bu işlemin ayrıntıları çözülemedi, bu nedenle ne yaptığını göremezsiniz — alıcı, miktar ve programlar gizlidir. Yalnızca bu uygulamaya tamamen güveniyorsanız devam edin.</string>
 </resources>

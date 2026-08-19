@@ -1839,4 +1839,9 @@
     <string name="WalletConnect_Solana_Network">네트워크</string>
     <string name="WalletConnect_Solana_Value">값</string>
     <string name="Error_FilePickerNotFound">파일을 열 수 있는 앱을 찾을 수 없습니다</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">경고</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">이 요청은 실제로는 메시지로 위장한 거래에 서명하도록 요청합니다. 서명하면 자금 이동이 승인될 수 있습니다. 안전을 위해 차단되었습니다.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">이 메시지 서명 요청은 활성 지갑과 다른 계정을 위한 것입니다. 차단되었습니다.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">읽을 수 없는 거래</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">이 거래의 세부 정보를 디코딩할 수 없어서 어떤 작업을 하는지 볼 수 없습니다 — 수신자, 금액 및 프로그램이 숨겨져 있습니다. 이 앱을 완전히 신뢰하는 경우에만 계속하세요.</string>
 </resources>
