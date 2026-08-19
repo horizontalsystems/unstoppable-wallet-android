@@ -53,6 +53,13 @@ fun DataBlock(
                     secondaryValue = item.networkFee.secondary?.getFormatted(),
                     onInfoClick = onInfoClick
                 )
+                is ViewItem.Alert -> AlertCard(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                    format = AlertFormat.Structured,
+                    type = if (item.critical) AlertType.Critical else AlertType.Caution,
+                    text = item.text,
+                    titleCustom = item.title
+                )
                 else -> {
                     // do nothing
                 }

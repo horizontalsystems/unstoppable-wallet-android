@@ -23,6 +23,7 @@ class WCHandlerSolana(private val solanaKitManager: SolanaKitManager) : IWCHandl
             "solana_signMessage" -> WCActionSolanaSignMessage(
                 request.params,
                 signer(),
+                expectedPubkey = activeSolanaAddress(),
             )
 
             "solana_signTransaction" -> WCActionSolanaSignTransaction(
@@ -58,6 +59,18 @@ class WCHandlerSolana(private val solanaKitManager: SolanaKitManager) : IWCHandl
         val account = App.accountManager.activeAccount ?: throw WCSolanaHelper.NoSignerException()
         if (account.type !is AccountType.Mnemonic) throw WCSolanaHelper.NoSignerException()
         return solanaKitManager.getSolanaKitWrapper(account).signer ?: throw WCSolanaHelper.NoSignerException()
+    }
+
+    // Base58 address of the active account, so solana_signMessage can reject a request whose
+    // `pubkey` names a different account. Best-effort: returns null (skip the check) rather than
+    // throw, since signer() has already established the account can sign by the time this runs.
+    private fun activeSolanaAddress(): String? {
+        val accountType = App.accountManager.activeAccount?.type ?: return null
+        return try {
+            solanaKitManager.getAddress(accountType)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     override fun getAccountAddresses(account: Account): List<String> {

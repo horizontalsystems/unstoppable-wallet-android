@@ -42,6 +42,10 @@ sealed class ViewItem {
     class Input(val title: String, val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
     class Fee(val networkFee: SendModule.AmountData) : ViewItem()
+
+    // A prominent alert banner (as opposed to a title/value row). `critical` picks red vs amber.
+    // Used e.g. to warn that a Solana transaction couldn't be decoded (blind signing).
+    class Alert(val title: String, val text: String, val critical: Boolean) : ViewItem()
 }
 
 enum class ValueType {
