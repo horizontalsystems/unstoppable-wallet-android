@@ -245,8 +245,7 @@ class CoinViewFactory(
         return when (linkType) {
             LinkType.Guide -> Translator.getString(R.string.CoinPage_Guide)
             LinkType.Website -> {
-                link?.let { URI(it).host.replaceFirst("www.", "") }
-                    ?: Translator.getString(R.string.CoinPage_Website)
+                link?.let { websiteHost(it) } ?: Translator.getString(R.string.CoinPage_Website)
             }
             LinkType.Whitepaper -> Translator.getString(R.string.CoinPage_Whitepaper)
             LinkType.Twitter -> {
@@ -265,3 +264,14 @@ class CoinViewFactory(
     }
 
 }
+
+/**
+ * Host of a website link as shown on the coin page, or null when there isn't one.
+ *
+ * The link is whatever the market API returned. URI.host is null for anything without an
+ * authority — a bare word, a mailto: — and URI itself throws on malformed input, so neither is
+ * allowed to reach the caller: an uncaught throw here takes the process down, since the coin page
+ * builds this off a coroutine and the project installs no CoroutineExceptionHandler.
+ */
+internal fun websiteHost(link: String): String? =
+    runCatching { URI(link).host }.getOrNull()?.replaceFirst("www.", "")

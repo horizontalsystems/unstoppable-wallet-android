@@ -193,7 +193,7 @@ class CoinAnalyticsViewModel(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_ProjectTvl,
                     info = AnalyticInfo.TvlInfo,
-                    value = getFormattedValue(data.points.last().tvl, currency),
+                    value = getFormattedValue(data.points.lastOrNull()?.tvl ?: return@let, currency),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.Tvl),
                     footerItems = footerItems,
@@ -247,7 +247,7 @@ class CoinAnalyticsViewModel(
                 BlockViewItem(
                     title = R.string.CoinAnalytics_DexLiquidity,
                     info = AnalyticInfo.DexLiquidityInfo,
-                    value = getFormattedValue(data.points.last().volume, currency),
+                    value = getFormattedValue(data.points.lastOrNull()?.volume ?: return@let, currency),
                     valuePeriod = getValuePeriod(true),
                     analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.DexLiquidity),
                     footerItems = footerItems,
@@ -256,7 +256,9 @@ class CoinAnalyticsViewModel(
             )
         }
         analytics.addresses?.let { data ->
-            val chartValue = formatNumberShort(data.points.last().count.toBigDecimal())
+            val chartValue = formatNumberShort(
+                (data.points.lastOrNull()?.count ?: return@let).toBigDecimal()
+            )
             val footerItems = mutableListOf<FooterItem>()
             data.rating?.let { rating ->
                 getRatingFooterItem(rating, ScoreCategory.AddressesScoreCategory)?.let {
@@ -323,6 +325,9 @@ class CoinAnalyticsViewModel(
         analytics.holders?.let { data ->
             val blockchains = service.blockchains(data.map { it.blockchainUid })
             val total = data.sumOf { it.holdersCount }
+            // Every share is 0/0 when the API reports no holders anywhere; BigDecimal.divide
+            // throws on a zero divisor rather than yielding a meaningless percentage.
+            if (total <= BigDecimal.ZERO) return@let
             val footerItems = mutableListOf<FooterItem>()
             val chartSlices = mutableListOf<StackBarSlice>()
             analytics.holdersRating?.let { holdersRating ->
