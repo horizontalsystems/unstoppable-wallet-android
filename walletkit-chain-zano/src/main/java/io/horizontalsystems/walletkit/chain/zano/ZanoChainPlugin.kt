@@ -78,6 +78,13 @@ class ZanoChainPlugin(
 
     override suspend fun estimateBlockHeightFromDate(date: Date): Long = ZanoKit.restoreHeightForDate(date)
 
+    // Not implemented: zano-kit exposes no clear API, unlike bitcoin-kit and ethereum-kit which
+    // provide Kit.clear(context, network, walletId). Deleting the store from here would mean
+    // hardcoding the kit's internal database name, which silently stops working the moment the
+    // kit renames it. So Zano account data currently outlives the account — history and
+    // addresses, not keys. Needs a clear() in zano-kit; see #9452.
+    override fun clearAccountData(accountId: String) = Unit
+
     override val walletReloadTrigger: Flow<*>
         get() = zanoNodeManager().currentNodeUpdatedFlow
 

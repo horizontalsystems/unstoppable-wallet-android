@@ -147,8 +147,14 @@ interface ChainPlugin {
     /** Startup work after core managers are ready (e.g. Monero fastest-node auto-select). */
     suspend fun onAppStart() = Unit
 
-    /** Deletes the chain's locally stored data for a removed account. */
-    fun clearAccountData(accountId: String) = Unit
+    /**
+     * Deletes the chain's locally stored data for a removed account.
+     *
+     * Deliberately without a default: this used to be a no-op that plugins inherited silently, and
+     * five of them did, so deleting an account left their databases behind. A chain with nothing
+     * to delete should say so with an empty body rather than by omission.
+     */
+    fun clearAccountData(accountId: String)
 
     /** Dedicated transactions adapter, or null when the balance adapter serves both roles. */
     fun createTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? = null

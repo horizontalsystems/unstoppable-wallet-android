@@ -134,7 +134,11 @@ class BitcoinCashAdapter(
         }
 
         fun clear(walletId: String) {
-            BitcoinCashKit.clear(App.instance, getNetworkType(), walletId)
+            // Both derivations, not just the default: a wallet on the Type0 derivation keeps its
+            // own database, and clearing with the default Type145 left it behind entirely.
+            MainNetBitcoinCash.CoinType.values().forEach { coinType ->
+                BitcoinCashKit.clear(App.instance, getNetworkType(coinType), walletId)
+            }
         }
 
         private fun getNetworkType(kitCoinType: MainNetBitcoinCash.CoinType = MainNetBitcoinCash.CoinType.Type145) =

@@ -74,6 +74,10 @@ class MayachainChainPlugin : ChainPlugin {
             else -> null
         }
 
+    // Mayachain keeps no per-account store of its own — balances and history come from the API on
+    // demand — so there is nothing to delete when an account is removed.
+    override fun clearAccountData(accountId: String) = Unit
+
     override fun createTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val baseToken = App.coinManager.getToken(TokenQuery(BlockchainType.Mayachain, TokenType.Native)) ?: return null
         val thorchainKitWrapper = kitManager.getThorchainKitWrapper(source.account)

@@ -72,6 +72,13 @@ class StellarChainPlugin : ChainPlugin {
             else -> null
         }
 
+    // Not implemented: stellar-kit exposes no clear API, unlike bitcoin-kit and ethereum-kit which
+    // provide Kit.clear(context, network, walletId). Deleting the store from here would mean
+    // hardcoding the kit's internal database name, which silently stops working the moment the
+    // kit renames it. So Stellar account data currently outlives the account — history and
+    // addresses, not keys. Needs a clear() in stellar-kit; see #9452.
+    override fun clearAccountData(accountId: String) = Unit
+
     override fun createTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val stellarKitWrapper = kitManager.getStellarKitWrapper(source.account)
         val baseToken = App.coinManager.getToken(TokenQuery(BlockchainType.Stellar, TokenType.Native)) ?: return null
