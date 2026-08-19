@@ -53,6 +53,12 @@ class SolanaTransactionConverter(
     //            [maxSolRent] so a real payment bundled with a create isn't hidden);
     //   false -> no account was created, so the SOL leg is a real transfer -> keep it;
     //   null  -> unknown (a row synced before this was tracked) -> fall back to the amount bound.
+    //
+    // Caveat: `createdTokenAccount` is transaction-level and the SOL side is a single NET balance
+    // change, so we can't attribute exactly how many lamports were rent. [maxSolRent] is therefore
+    // kept to ~one account's rent, which bounds any hidden bundled payment to sub-cent dust; a SOL
+    // side larger than that (a real payment, or several created accounts) is kept as a composite
+    // transfer — showing more, never hiding. Exact per-leg attribution would need SolanaKit support.
     private fun collapseTokenWithSolRent(
         transfers: List<SolanaTransactionRecord.Transfer>,
         createdTokenAccount: Boolean?
@@ -182,20 +188,16 @@ class SolanaTransactionConverter(
 
     companion object {
         // Upper bound for a SOL leg that may be treated as associated-token-account rent rather than
-        // a real payment. The rent-exempt minimum for a single SPL/Token-2022 associated token
-        // account is ~0.00204 SOL (≤ ~0.00208 for a Token-2022 account with the immutable-owner
-        // extension), which is the common case for an SPL send that creates the recipient's account.
-        // The ceiling sits just above that with modest headroom, deliberately BELOW typical real
-        // payments: a larger SOL leg (e.g. a genuine 0.005 SOL transfer riding along an SPL transfer)
-        // is NOT collapsed, so it stays visible as a composite transaction instead of being hidden.
-        // (A rarer transaction that creates two+ token accounts exceeds this and renders as a
-        // composite transfer too — showing more, never hiding.)
-        //
-        // Rent is now identified STRUCTURALLY via Transaction.createdTokenAccount (see
-        // collapseTokenWithSolRent); this ceiling remains the amount bound that keeps a real SOL
-        // payment bundled alongside a create-ATA from being hidden, and the sole signal for legacy
-        // rows synced before the flag was tracked.
-        private val maxSolRent = BigDecimal("0.003")
+        // a real payment. Set to ~one account's rent: the rent-exempt minimum for a single
+        // SPL/Token-2022 associated token account is ~0.00204 SOL (≤ ~0.00208 for a Token-2022
+        // account with the immutable-owner extension), the common case for an SPL send that creates
+        // the recipient's account. Kept this tight on purpose so that — since `createdTokenAccount`
+        // is transaction-level and the SOL side is a single NET amount we can't split into rent vs.
+        // payment — a real payment bundled with a create pushes the net past this bound and is shown
+        // as a composite transfer; only sub-cent dust could ever fold into the rent. A larger SOL
+        // leg (a genuine payment, or several created accounts) is likewise kept — showing more,
+        // never hiding. See collapseTokenWithSolRent; exact per-leg attribution would need SolanaKit.
+        private val maxSolRent = BigDecimal("0.0021")
 
         // Display labels for the swap programs SolanaKit recognizes (`Transaction.programIds`).
         // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").

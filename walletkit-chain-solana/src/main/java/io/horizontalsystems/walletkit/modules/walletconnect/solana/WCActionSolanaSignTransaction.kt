@@ -30,12 +30,14 @@ class WCActionSolanaSignTransaction(
 
     private val gson = GsonBuilder().create()
 
-    // Parsed defensively: a malformed, empty, or oversized request (missing/empty `transactions`,
-    // null entries, too many/too-large transactions) must fail here with a clear error rather than
-    // crash later on `first()` / empty access or exhaust CPU/heap. The resulting list is guaranteed
-    // non-empty, with no blank entries, bounded in count and per-item size. Thrown during
-    // construction, this is caught by WCManager.getActionForRequest and surfaced as an error screen.
-    private val base64Transactions: List<String> = run {
+    // Parsed AND base64-decoded defensively, all during construction: a malformed, empty, oversized,
+    // or non-base64 request must fail HERE with a clear error rather than crash later. Decoding here
+    // (not in createState()/performAction()) matters because createState() is first evaluated when
+    // the ViewModel reads stateFlow.value — outside WCManager.getActionForRequest()'s try/catch — so
+    // a decode throw there would crash instead of surfacing an error screen. Anything thrown during
+    // construction IS caught by getActionForRequest. The result is guaranteed non-empty, bounded in
+    // count and per-item size, and already decoded.
+    private val rawTransactions: List<ByteArray> = run {
         // Bound the raw JSON before parsing so a giant array can't exhaust the heap in gson.
         require(paramsJsonStr.length <= WCSolanaHelper.maxParamsJsonLength) {
             "WalletConnect request is too large"
@@ -54,7 +56,8 @@ class WCActionSolanaSignTransaction(
         require(valid.all { it.length <= WCSolanaHelper.maxTransactionBase64Length }) {
             "WalletConnect transaction is too large"
         }
-        valid
+        // Base64.decode throws IllegalArgumentException on invalid input; caught by getActionForRequest.
+        valid.map { Base64.decode(it, Base64.NO_WRAP) }
     }
 
     override fun getTitle(): TranslatableString {
@@ -69,12 +72,12 @@ class WCActionSolanaSignTransaction(
         // Signing is a cryptographic operation and a batch (solana_signAllTransactions) can sign
         // many transactions, so run it off the caller's dispatcher (approve() uses
         // Dispatchers.Default) on Dispatchers.IO per the crypto-on-IO coding guideline.
-        val signed = withContext(Dispatchers.IO) { base64Transactions.map { signAndReserialize(it) } }
+        val signed = withContext(Dispatchers.IO) { rawTransactions.map { signAndReserialize(it) } }
 
         return if (multiple) {
             gson.toJson(mapOf("transactions" to signed.map { it.base64 }))
         } else {
-            // base64Transactions is guaranteed non-empty (validated in its initializer), but guard
+            // rawTransactions is guaranteed non-empty (validated in its initializer), but guard
             // explicitly rather than rely on that invariant from here.
             val first = signed.firstOrNull()
                 ?: throw IllegalStateException("WalletConnect request has no transaction to sign")
@@ -87,8 +90,8 @@ class WCActionSolanaSignTransaction(
         }
     }
 
-    private fun signAndReserialize(base64Transaction: String): SignedTransaction {
-        val signed = signer.signTransaction(Base64.decode(base64Transaction, Base64.NO_WRAP))
+    private fun signAndReserialize(rawTransaction: ByteArray): SignedTransaction {
+        val signed = signer.signTransaction(rawTransaction)
 
         return SignedTransaction(
             base64 = Base64.encodeToString(signed.serializedTransaction, Base64.NO_WRAP),
@@ -108,7 +111,7 @@ class WCActionSolanaSignTransaction(
                     listOf(
                         ViewItem.Value(
                             Translator.getString(R.string.WalletConnect_SignMessageRequest_Title),
-                            Translator.getQuantityString(R.plurals.WalletConnect_Solana_SignTransactionsCount, base64Transactions.size, base64Transactions.size),
+                            Translator.getQuantityString(R.plurals.WalletConnect_Solana_SignTransactionsCount, rawTransactions.size, rawTransactions.size),
                             ValueType.Regular
                         )
                     )
@@ -117,9 +120,10 @@ class WCActionSolanaSignTransaction(
         }
 
         // Decoded summary per transaction (method, network, any directly decodable transfers).
-        // Falls back to nothing on parse failure.
-        val summaries = base64Transactions.map { base64Transaction ->
-            WCSolanaTxSummary.summary(Base64.decode(base64Transaction, Base64.NO_WRAP), peerName)
+        // Falls back to nothing on parse failure. Bytes were already base64-decoded in the
+        // initializer, so this can't throw on malformed base64 here.
+        val summaries = rawTransactions.map { rawTransaction ->
+            WCSolanaTxSummary.summary(rawTransaction, peerName)
         }
 
         // If ANY transaction in the (possibly batched) request could not be decoded to a material

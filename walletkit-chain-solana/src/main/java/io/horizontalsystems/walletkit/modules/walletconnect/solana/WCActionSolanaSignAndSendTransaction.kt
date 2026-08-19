@@ -31,16 +31,23 @@ class WCActionSolanaSignAndSendTransaction(
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
+
+    // Bound the raw JSON BEFORE gson parses it, so a giant payload can't exhaust the heap during
+    // deserialization. This init block runs before the `params` initializer below (Kotlin runs
+    // initializers top-to-bottom). Thrown here, it is caught by WCManager.getActionForRequest.
+    init {
+        require(paramsJsonStr.length <= WCSolanaHelper.maxParamsJsonLength) {
+            "WalletConnect request is too large"
+        }
+    }
+
     private val params = gson.fromJson(paramsJsonStr, Params::class.java)
 
-    // Bound the untrusted payload before decoding: a Solana transaction is at most ~1644 base64
+    // Bound the untrusted transaction before decoding: a Solana transaction is at most ~1644 base64
     // chars, so anything larger is rejected up front rather than driving a large decode/send (a
     // malicious dApp otherwise could exhaust CPU/heap). Thrown here, this is caught by
     // WCManager.getActionForRequest and surfaced as an error screen.
     private val rawTransaction = run {
-        require(paramsJsonStr.length <= WCSolanaHelper.maxParamsJsonLength) {
-            "WalletConnect request is too large"
-        }
         require(params.transaction.length <= WCSolanaHelper.maxTransactionBase64Length) {
             "WalletConnect transaction is too large"
         }
