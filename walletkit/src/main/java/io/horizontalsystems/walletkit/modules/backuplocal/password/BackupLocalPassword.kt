@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -89,9 +90,16 @@ fun LocalBackupPasswordScreen(
         viewModel.accountErrorIsShown()
     }
 
-    if (uiState.backupJson != null) {
-        App.pinComponent.keepUnlocked()
-        backupLauncher.launchSafe(viewModel.backupFileName, view)
+    // One-shot per backup attempt: launching from composition would re-fire on
+    // recomposition, and a failed launch never invokes the result callback, so
+    // the state must be reset here or the screen stays stuck.
+    LaunchedEffect(uiState.backupJson) {
+        if (uiState.backupJson != null) {
+            App.pinComponent.keepUnlocked()
+            if (!backupLauncher.launchSafe(viewModel.backupFileName, view)) {
+                viewModel.backupCanceled()
+            }
+        }
     }
 
     if (uiState.closeScreen) {
