@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -91,7 +92,11 @@ fun RoiSelectCoinsScreen(navigation: HSNavigation) {
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
-        var dialog: PeriodSelectorDialog? by rememberSaveable { mutableStateOf(null) }
+        // remember, not rememberSaveable: PeriodSelectorDialog is not Bundleable, so saving it
+        // threw IllegalStateException on every backgrounding while the picker was open. The state
+        // is a transient picker that is cleared on select or dismiss and read nowhere else, so
+        // letting it close when the process goes away is the behaviour we want anyway.
+        var dialog: PeriodSelectorDialog? by remember { mutableStateOf(null) }
 
         Column(
             modifier = Modifier.padding(it),
