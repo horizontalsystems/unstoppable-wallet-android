@@ -32,6 +32,16 @@ val Token.isCustom: Boolean
 val Coin.isCustom: Boolean
     get() = uid.startsWith(TokenQuery.customCoinPrefix)
 
+// Synthetic coins (e.g. thorchain-secured-* "Bitcoin (THORChain)", zano-bridged-*)
+// duplicate an original coin on another blockchain. The server marks them with a
+// coinGeckoId pointing at the original (coinGeckoId != uid). They must be hidden from
+// market lists but kept in Coin manager / Receive / Swap for enabling-disabling.
+val Coin.isSynthetic: Boolean
+    get() {
+        val coinGeckoId = coinGeckoId ?: return false
+        return coinGeckoId != uid
+    }
+
 val Token.isSupported: Boolean
     get() = tokenQuery.isSupported
 

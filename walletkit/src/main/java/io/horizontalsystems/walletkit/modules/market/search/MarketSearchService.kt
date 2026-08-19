@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.market.search
 
+import io.horizontalsystems.walletkit.core.isSynthetic
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +41,7 @@ class MarketSearchService(private val marketKit: MarketKitWrapper) {
         results = if (query.isBlank()) {
             listOf()
         } else {
-            marketKit.fullCoins(query)
+            marketKit.fullCoins(query).filter { !it.coin.isSynthetic }
         }
     }
 

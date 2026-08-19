@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.market.search
 
 import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.isSynthetic
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -31,7 +32,9 @@ class MarketDiscoveryService(
             .sortedBy {
                 localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
             }
-        popularCoins = marketKit.fullCoins("")
+        // Safety net: hide synthetic coins in case they ever get a market-cap rank.
+        // Recent list is intentionally left untouched.
+        popularCoins = marketKit.fullCoins("").filter { !it.coin.isSynthetic }
 
         emitState()
     }
