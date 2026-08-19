@@ -34,14 +34,25 @@ class WCActionSolanaSignMessage(
     private val paramsJsonStr: String,
     private val signer: Signer,
     // Base58 address of the active (signing) wallet, used to reject requests whose `pubkey` names a
-    // different account. Null when it can't be resolved, in which case the pubkey check is skipped.
+    // different account. Null when it can't be resolved; a request that DOES supply a `pubkey` is
+    // then failed closed (refused), since we can't verify it matches this wallet.
     private val expectedPubkey: String?,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
+
+    // Bound the raw JSON BEFORE gson parses it, so a giant payload can't exhaust the heap during
+    // deserialization. Runs before the `params` initializer below (Kotlin runs initializers
+    // top-to-bottom). Thrown here, it is caught by WCManager.getActionForRequest.
+    init {
+        require(paramsJsonStr.length <= WCSolanaHelper.maxParamsJsonLength) {
+            "WalletConnect request is too large"
+        }
+    }
+
     private val params = gson.fromJson(paramsJsonStr, Params::class.java)
 
-    // Bound the untrusted payload before base58-decoding it (and before the transaction-message
+    // Bound the untrusted message before base58-decoding it (and before the transaction-message
     // probe deserializes it): a malicious dApp must not be able to hand us a huge string and drive a
     // large decode/parse. Off-chain messages are small; this ceiling is very generous. Thrown here,
     // it is caught by WCManager.getActionForRequest and surfaced as an error screen.
@@ -63,11 +74,12 @@ class WCActionSolanaSignMessage(
     }
 
     // A supplied `pubkey` that doesn't match the active wallet is a request meant for another
-    // account; refuse it. Missing pubkey (dApps often omit it) or unknown expected address -> allow.
+    // account; refuse it. If the dApp omits `pubkey` there is nothing to check (allow). But if it
+    // DOES supply one and we couldn't resolve the active address (expectedPubkey == null), fail
+    // closed and refuse rather than sign for a pubkey we can't verify.
     private fun pubkeyMismatch(): Boolean {
         val requested = params.pubkey ?: return false
-        val expected = expectedPubkey ?: return false
-        return requested != expected
+        return requested != expectedPubkey
     }
 
     override fun getTitle(): TranslatableString {
