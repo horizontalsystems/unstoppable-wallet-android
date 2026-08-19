@@ -32,7 +32,20 @@ class WCActionSolanaSignAndSendTransaction(
 
     private val gson = GsonBuilder().create()
     private val params = gson.fromJson(paramsJsonStr, Params::class.java)
-    private val rawTransaction = Base64.decode(params.transaction, Base64.NO_WRAP)
+
+    // Bound the untrusted payload before decoding: a Solana transaction is at most ~1644 base64
+    // chars, so anything larger is rejected up front rather than driving a large decode/send (a
+    // malicious dApp otherwise could exhaust CPU/heap). Thrown here, this is caught by
+    // WCManager.getActionForRequest and surfaced as an error screen.
+    private val rawTransaction = run {
+        require(paramsJsonStr.length <= WCSolanaHelper.maxParamsJsonLength) {
+            "WalletConnect request is too large"
+        }
+        require(params.transaction.length <= WCSolanaHelper.maxTransactionBase64Length) {
+            "WalletConnect transaction is too large"
+        }
+        Base64.decode(params.transaction, Base64.NO_WRAP)
+    }
 
     private val token = App.marketKit.token(TokenQuery(BlockchainType.Solana, TokenType.Native))
         ?: throw IllegalStateException("Native Solana token not found")
@@ -89,7 +102,17 @@ class WCActionSolanaSignAndSendTransaction(
     override fun createState(): WCActionState {
         // Decoded summary (method, network, any directly decodable transfers). Falls back to
         // nothing on parse failure.
-        var sectionViewItems = WCSolanaTxSummary.sections(rawTransaction, peerName)
+        val summary = WCSolanaTxSummary.summary(rawTransaction, peerName)
+
+        // When nothing material could be decoded the user is blind-broadcasting; warn prominently.
+        // We do not hard-block: many legitimate transactions (arbitrary programs, v0/lookup-table)
+        // are simply beyond this best-effort decoder, and sendability is still gated by fee
+        // estimation below.
+        var sectionViewItems = if (summary.opaque) {
+            listOf(WCSolanaTxSummary.opaqueWarningSection()) + summary.sections
+        } else {
+            summary.sections
+        }
 
         sendTransactionState.networkFee?.let { networkFee ->
             sectionViewItems += SectionViewItem(

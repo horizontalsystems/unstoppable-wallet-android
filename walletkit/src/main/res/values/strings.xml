@@ -691,6 +691,11 @@
     <string name="WalletConnect_Solana_MethodTransfer">Transfer</string>
     <string name="WalletConnect_Solana_Network">Network</string>
     <string name="WalletConnect_Solana_Value">Value</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">Warning</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">This request asks you to sign what is actually a transaction disguised as a message. Signing it could authorize moving your funds. It was blocked for your safety.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">This message-signing request is for a different account than your active wallet. It was blocked.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">Unreadable transaction</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">This transaction\'s details could not be decoded, so you cannot see what it does — the recipient, amount and programs are hidden. Only continue if you fully trust this app.</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
     <string name="WalletConnect_Error_NeedBackup">Create a backup of your recovery phrase and the associated passphrase. These will allow you to restore your wallet if your phone is lost, stolen, or damaged.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>

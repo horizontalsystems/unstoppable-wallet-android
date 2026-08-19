@@ -30,11 +30,17 @@ class WCActionSolanaSignTransaction(
 
     private val gson = GsonBuilder().create()
 
-    // Parsed defensively: a malformed or empty request (missing/empty `transactions`, null entries)
-    // must fail here with a clear error rather than crash later on `first()` / empty access. The
-    // resulting list is guaranteed non-empty with no blank entries. Thrown during construction, this
-    // is caught by WCManager.getActionForRequest and surfaced as an error screen.
+    // Parsed defensively: a malformed, empty, or oversized request (missing/empty `transactions`,
+    // null entries, too many/too-large transactions) must fail here with a clear error rather than
+    // crash later on `first()` / empty access or exhaust CPU/heap. The resulting list is guaranteed
+    // non-empty, with no blank entries, bounded in count and per-item size. Thrown during
+    // construction, this is caught by WCManager.getActionForRequest and surfaced as an error screen.
     private val base64Transactions: List<String> = run {
+        // Bound the raw JSON before parsing so a giant array can't exhaust the heap in gson.
+        require(paramsJsonStr.length <= WCSolanaHelper.maxParamsJsonLength) {
+            "WalletConnect request is too large"
+        }
+
         val transactions: List<String?> = if (multiple) {
             gson.fromJson(paramsJsonStr, MultiParams::class.java)?.transactions ?: emptyList()
         } else {
@@ -42,6 +48,12 @@ class WCActionSolanaSignTransaction(
         }
         val valid = transactions.filterNotNull().filter { it.isNotBlank() }
         require(valid.isNotEmpty()) { "WalletConnect request has no transaction to sign" }
+        require(valid.size <= WCSolanaHelper.maxTransactionsPerRequest) {
+            "WalletConnect request has too many transactions"
+        }
+        require(valid.all { it.length <= WCSolanaHelper.maxTransactionBase64Length }) {
+            "WalletConnect transaction is too large"
+        }
         valid
     }
 
@@ -106,9 +118,17 @@ class WCActionSolanaSignTransaction(
 
         // Decoded summary per transaction (method, network, any directly decodable transfers).
         // Falls back to nothing on parse failure.
-        base64Transactions.forEach { base64Transaction ->
-            sections += WCSolanaTxSummary.sections(Base64.decode(base64Transaction, Base64.NO_WRAP), peerName)
+        val summaries = base64Transactions.map { base64Transaction ->
+            WCSolanaTxSummary.summary(Base64.decode(base64Transaction, Base64.NO_WRAP), peerName)
         }
+
+        // If ANY transaction in the (possibly batched) request could not be decoded to a material
+        // action, warn that the user is blind-signing before showing whatever did decode.
+        if (summaries.any { it.opaque }) {
+            sections.add(WCSolanaTxSummary.opaqueWarningSection())
+        }
+
+        summaries.forEach { sections += it.sections }
 
         App.accountManager.activeAccount?.name?.let { walletName ->
             sections.add(
@@ -125,6 +145,9 @@ class WCActionSolanaSignTransaction(
         }
 
         return WCActionState(
+            // Signing offline is always technically possible; an opaque transaction is surfaced with
+            // the caution banner above rather than by disabling approve, since blocking every
+            // transaction this best-effort decoder can't read would break legitimate dApp signing.
             runnable = true,
             items = sections
         )

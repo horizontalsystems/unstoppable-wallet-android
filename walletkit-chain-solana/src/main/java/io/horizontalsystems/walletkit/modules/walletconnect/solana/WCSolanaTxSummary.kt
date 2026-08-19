@@ -38,18 +38,30 @@ object WCSolanaTxSummary {
     private enum class Method { SWAP, TRANSFER }
 
     /**
+     * The decoded display for a transaction: [sections] are the rows (Method, Value, To, Network),
+     * and [opaque] is true when NOTHING material could be decoded — either the parse failed, or it
+     * yielded no method and no transfers. An opaque summary means the user would be blind-signing,
+     * so callers must warn (see [opaqueWarningSection]). A recognized swap or a decodable transfer
+     * counts as material even if amounts / lookup-table destinations stay hidden.
+     */
+    data class Summary(
+        val sections: List<SectionViewItem>,
+        val opaque: Boolean,
+    )
+
+    /**
      * Display rows for [serializedTransaction], in order: Method, Value, To (per directly-decodable
-     * transfer), Network. Best-effort: returns an empty list on any parse failure, so the caller can
-     * still show its generic header. Wallet and Fee (when available) are added by the caller.
+     * transfer), Network, plus an [Summary.opaque] flag. Best-effort: on any parse failure the rows
+     * are empty and opaque is true. Wallet and Fee (when available) are added by the caller.
      *
      * [peerName] is accepted for parity with the request but not rendered (the dApp row was dropped
      * from this layout).
      */
-    fun sections(serializedTransaction: ByteArray, peerName: String?): List<SectionViewItem> {
+    fun summary(serializedTransaction: ByteArray, peerName: String?): Summary {
         val decoded = try {
             decode(serializedTransaction)
         } catch (e: Throwable) {
-            return emptyList()
+            return Summary(sections = emptyList(), opaque = true)
         }
 
         val rows = mutableListOf<ViewItem>()
@@ -81,8 +93,28 @@ object WCSolanaTxSummary {
 
         rows.add(ViewItem.Value(Translator.getString(R.string.WalletConnect_Solana_Network), "Solana", ValueType.Regular))
 
-        return listOf(SectionViewItem(rows))
+        // Opaque when we surfaced no material action: no method (not a known swap) and no
+        // directly-decodable transfer. The lone Network row alone tells the user nothing about what
+        // they are authorizing.
+        val opaque = decoded.method == null && decoded.transfers.isEmpty()
+
+        return Summary(sections = listOf(SectionViewItem(rows)), opaque = opaque)
     }
+
+    /**
+     * A prominent caution banner for an opaque transaction (see [Summary.opaque]). Callers prepend
+     * it to their rows so the user is warned they are signing/broadcasting without seeing the
+     * transaction's recipient, amount or programs.
+     */
+    fun opaqueWarningSection(): SectionViewItem = SectionViewItem(
+        listOf(
+            ViewItem.Alert(
+                title = Translator.getString(R.string.WalletConnect_Solana_UnreadableTransaction_Title),
+                text = Translator.getString(R.string.WalletConnect_Solana_UnreadableTransaction),
+                critical = false
+            )
+        )
+    )
 
     private data class Decoded(
         val method: Method?,
@@ -109,9 +141,16 @@ object WCSolanaTxSummary {
             while (true) {
                 val byte = readByte()
                 length = length or ((byte and 0x7F) shl shift)
-                if (byte and 0x80 == 0) return length
+                if (byte and 0x80 == 0) break
                 shift += 7
+                // A compact-u16 is at most 3 bytes (u16 max 65535); a longer run is malformed.
+                require(shift < 21) { "shortvec length malformed" }
             }
+            // A length can never exceed the bytes left to read (each element consumes >= 1 byte), so
+            // reject an over-large count BEFORE it drives a List/IntArray/ByteArray allocation
+            // (untrusted input must not be able to request a huge allocation and OOM the wallet).
+            require(length in 0..bytes.size) { "shortvec length out of range" }
+            return length
         }
 
         val signatureCount = readLength()

@@ -60,6 +60,9 @@ fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: S
                     item.networkFee.primary.getFormattedPlain() ?: "---",
                     item.networkFee.secondary?.getFormattedPlain() ?: "---"
                 )
+                // Alert is only produced in the WalletConnect request flow (rendered by DataBlock);
+                // it does not appear in these EVM section views.
+                is ViewItem.Alert -> {}
             }
         }
         if (viewItems.size == 2) {
