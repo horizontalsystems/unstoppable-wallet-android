@@ -274,4 +274,4 @@ class CoinViewFactory(
  * builds this off a coroutine and the project installs no CoroutineExceptionHandler.
  */
 internal fun websiteHost(link: String): String? =
-    runCatching { URI(link).host }.getOrNull()?.replaceFirst("www.", "")
+    runCatching { URI(link).host }.getOrNull()?.removePrefix("www.")

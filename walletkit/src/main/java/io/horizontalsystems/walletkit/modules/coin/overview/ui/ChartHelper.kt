@@ -345,19 +345,29 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             }
         }
 
-        if (hasVolumes) {
-            val volumeByTimestamp = target.volumeByTimestamp()
-            if (volumeByTimestamp.isNotEmpty()) {
-                val volumeMin = volumeByTimestamp.minOf { it.value }
-                val volumeMax = volumeByTimestamp.maxOf { it.value }
-                volumeBars?.setValues(
-                    volumeByTimestamp,
-                    minKey,
-                    maxKey,
-                    volumeMin,
-                    volumeMax
-                )
-            }
+        val volumeByTimestamp = if (hasVolumes) target.volumeByTimestamp() else linkedMapOf()
+        when {
+            // Dropping the bars matters as much as creating them: a response without volumes must
+            // not leave the previous chart's bars on screen.
+            volumeByTimestamp.isEmpty() -> volumeBars = null
+
+            // The first response can legitimately carry no volumes, which leaves no animator to
+            // update, so a later populated response has to be able to create one.
+            volumeBars == null -> volumeBars = CurveAnimatorBars(
+                volumeByTimestamp,
+                minKey,
+                maxKey,
+                volumeByTimestamp.minOf { it.value },
+                volumeByTimestamp.maxOf { it.value }
+            )
+
+            else -> volumeBars?.setValues(
+                volumeByTimestamp,
+                minKey,
+                maxKey,
+                volumeByTimestamp.minOf { it.value },
+                volumeByTimestamp.maxOf { it.value }
+            )
         }
 
         defineColors()

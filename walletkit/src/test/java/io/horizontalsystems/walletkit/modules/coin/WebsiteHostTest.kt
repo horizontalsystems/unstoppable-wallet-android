@@ -21,6 +21,12 @@ class WebsiteHostTest {
     }
 
     @Test
+    fun stripsOnlyLeadingWww() {
+        // "www." appearing later in the host is part of the name, not a prefix to drop.
+        assertEquals("docs.www.example.com", websiteHost("https://docs.www.example.com"))
+    }
+
+    @Test
     fun hostlessLinkIsNull() {
         // No authority, so URI.host is null — this is the NPE the crash came from.
         assertNull(websiteHost("not a url"))
