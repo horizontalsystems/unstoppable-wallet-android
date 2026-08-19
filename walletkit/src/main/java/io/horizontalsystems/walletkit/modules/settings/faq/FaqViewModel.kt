@@ -52,6 +52,7 @@ class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
 
     private fun didFetchFaqSections(faqSections: List<FaqSection>) {
         sections = faqSections
-        onSelectSection(faqSections.first())
+        // See GuidesViewModel: an empty but successful index used to crash the process here.
+        faqSections.firstOrNull()?.let { onSelectSection(it) }
     }
 }

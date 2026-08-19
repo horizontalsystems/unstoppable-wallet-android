@@ -59,7 +59,11 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiSta
 
     private fun didFetchGuideCategories(guideCategories: List<GuideCategory>) {
         categories = guideCategories
-        selectedCategory = guideCategories.first()
+        // A successful fetch can carry an empty index — the content is served, not built in — and
+        // first() on it threw out of a coroutine, taking the process down every time the screen
+        // was opened until the content was fixed. Nothing to select is a state the screen already
+        // handles.
+        selectedCategory = guideCategories.firstOrNull()
 
         emitState()
     }
