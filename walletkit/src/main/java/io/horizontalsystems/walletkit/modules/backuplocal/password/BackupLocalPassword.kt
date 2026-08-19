@@ -103,7 +103,7 @@ fun LocalBackupPasswordScreen(
                 }
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
                 // Any failure before the picker opens means the result callback
                 // will never fire — reset, or the screen stays stuck.
                 viewModel.backupCanceled()
