@@ -771,4 +771,9 @@
     <string name="WalletConnect_Solana_Network">شبکه</string>
     <string name="WalletConnect_Solana_Value">مقدار</string>
     <string name="Error_FilePickerNotFound">هیچ برنامه‌ای برای باز کردن فایل‌ها پیدا نشد</string>
+    <string name="WalletConnect_Solana_SignMessage_Warning">هشدار</string>
+    <string name="WalletConnect_Solana_SignMessage_LooksLikeTransaction">این درخواست از شما می‌خواهد تا چیزی را امضا کنید که در واقع یک تراکنش نقاب‌زده‌شده به صورت پیام است. امضای آن ممکن است انتقال وجوه شما را مجاز کند. برای ایمنی شما مسدود شد.</string>
+    <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">این درخواست امضای پیام برای حسابی متفاوت از کیف‌پول فعال شما است. مسدود شد.</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction_Title">تراکنش غیرقابل‌خواندگی</string>
+    <string name="WalletConnect_Solana_UnreadableTransaction">جزئیات این تراکنش نتوانست رمزگشایی شود، بنابراین شما نمی‌توانید ببینید چه کاری انجام می‌دهد — گیرنده، مقدار و برنامه‌ها پنهان هستند. تنها اگر کاملاً به این برنامه اعتماد دارید، ادامه دهید.</string>
 </resources>
