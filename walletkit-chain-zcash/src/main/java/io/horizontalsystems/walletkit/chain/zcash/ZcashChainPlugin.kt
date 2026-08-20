@@ -62,14 +62,32 @@ class ZcashChainPlugin(
     private val unifiedAddressCache = ConcurrentHashMap<String, String>()
     private val unifiedAddressMutex = Mutex()
 
-    override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter =
-        ZcashAdapter(
+    override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter? {
+        val manager = endpointManager()
+        if (manager.isResolvingFastestEndpoint) {
+            // Defer creation until startup Auto-Select picks the fastest endpoint, so the
+            // adapter connects once to it instead of reconnecting. reloadWallets(Zcash)
+            // recreates the adapter when resolution finishes.
+            return null
+        }
+        return ZcashAdapter(
             context(),
             wallet,
             restoreSettings,
             localStorage(),
-            endpointManager().currentEndpoint.toLightWalletEndpoint(),
+            manager.currentEndpoint.toLightWalletEndpoint(),
         )
+    }
+
+    override suspend fun onAppStart() {
+        val manager = endpointManager()
+        manager.endpointPinger = { urls ->
+            ZcashEndpointPinger.ping(context(), urls) { url ->
+                ZcashLightWalletEndpointManager.ZcashEndpoint(url, url).toLightWalletEndpoint()
+            }
+        }
+        manager.autoSelectFastestEndpointOnStartup()
+    }
 
     override fun clearAccountData(accountId: String) {
         ZcashAdapter.clear(accountId)

@@ -15,6 +15,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyMoneroAutoSelect: String = "monero-auto-select"
         const val keyZanoNode: String = "zano-node"
         const val keyZcashEndpoint: String = "zcash-endpoint"
+        const val keyZcashAutoSelect: String = "zcash-auto-select"
     }
 
     private val dao by lazy { appDatabase.blockchainSettingDao() }
@@ -116,6 +117,20 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 blockchainUid = BlockchainType.Zcash.uid,
                 key = keyZcashEndpoint,
                 value = url
+            )
+        )
+    }
+
+    fun zcashAutoSelect(): Boolean {
+        return dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashAutoSelect)?.value?.toBoolean() ?: false
+    }
+
+    fun saveZcashAutoSelect(enabled: Boolean) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = BlockchainType.Zcash.uid,
+                key = keyZcashAutoSelect,
+                value = enabled.toString()
             )
         )
     }

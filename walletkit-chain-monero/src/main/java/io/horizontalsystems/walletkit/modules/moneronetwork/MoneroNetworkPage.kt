@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -53,14 +52,11 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.ui.compose.components.PingBadge
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
-import io.horizontalsystems.walletkit.ui.compose.components.caption_jacob
-import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
-import io.horizontalsystems.walletkit.ui.compose.components.caption_remus
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -349,7 +345,7 @@ private fun AutoSelectCell(
         listOf {
             RowUniversal(modifier = Modifier.padding(horizontal = 16.dp)) {
                 Column(modifier = Modifier.weight(1f)) {
-                    body_leah(text = stringResource(id = R.string.MoneroNodeSettings_AutoSelect))
+                    body_leah(text = stringResource(id = R.string.NetworkSettings_AutoSelect))
                     Spacer(Modifier.height(1.dp))
                     subhead2_grey(text = stringResource(id = R.string.MoneroNodeSettings_AutoSelectDescription))
                 }
@@ -395,32 +391,6 @@ private fun MoneroNodeRow(
                 tint = ComposeAppTheme.colors.jacob,
                 contentDescription = null
             )
-        }
-    }
-}
-
-@Composable
-private fun PingBadge(ping: MoneroNetworkViewModel.PingState) {
-    when (ping) {
-        MoneroNetworkViewModel.PingState.Loading -> {
-            CircularProgressIndicator(
-                modifier = Modifier.size(16.dp),
-                color = ComposeAppTheme.colors.grey,
-                strokeWidth = 2.dp
-            )
-        }
-
-        MoneroNetworkViewModel.PingState.Unreachable -> {
-            caption_lucian(text = stringResource(id = R.string.MoneroNodeSettings_Unreachable))
-        }
-
-        is MoneroNetworkViewModel.PingState.Reachable -> {
-            val text = stringResource(id = R.string.MoneroNodeSettings_Latency, ping.responseTimeMs)
-            when (ping.level) {
-                MoneroNetworkViewModel.PingState.Level.Good -> caption_remus(text = text)
-                MoneroNetworkViewModel.PingState.Level.Medium -> caption_jacob(text = text)
-                MoneroNetworkViewModel.PingState.Level.Slow -> caption_grey(text = text)
-            }
         }
     }
 }

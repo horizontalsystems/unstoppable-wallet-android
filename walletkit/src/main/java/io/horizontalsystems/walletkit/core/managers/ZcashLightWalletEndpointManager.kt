@@ -5,9 +5,12 @@ import io.horizontalsystems.walletkit.core.storage.ZcashEndpointStorage
 import io.horizontalsystems.walletkit.entities.ZcashEndpointRecord
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
 class ZcashLightWalletEndpointManager(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
@@ -28,8 +31,6 @@ class ZcashLightWalletEndpointManager(
         ZcashEndpoint("https://ap.zec.rocks:443", "ap.zec.rocks"),
         ZcashEndpoint("https://us.zec.stardust.rest:443", "us.zec.stardust.rest"),
         ZcashEndpoint("https://eu.zec.stardust.rest:443", "eu.zec.stardust.rest"),
-        ZcashEndpoint("https://eu2.zec.stardust.rest:443", "eu2.zec.stardust.rest"),
-        ZcashEndpoint("https://jp.zec.stardust.rest:443", "jp.zec.stardust.rest"),
     )
 
     val defaultEndpoints: List<ZcashEndpoint> get() = defaultEndpointsInitial
@@ -51,12 +52,79 @@ class ZcashLightWalletEndpointManager(
             return allEndpoints.firstOrNull { it.url == url } ?: defaultEndpoints.first()
         }
 
+    var autoSelectEnabled: Boolean
+        get() = blockchainSettingsStorage.zcashAutoSelect()
+        set(value) {
+            blockchainSettingsStorage.saveZcashAutoSelect(value)
+        }
+
+    // True while the startup ping is choosing the fastest endpoint. The Zcash adapter creation is
+    // deferred while this is set, so the wallet connects once to the fastest server instead of
+    // connecting to the stored one and then reconnecting. Set at construction (before adapters
+    // are initialized) to avoid a race.
+    @Volatile
+    var isResolvingFastestEndpoint: Boolean = autoSelectEnabled
+        private set
+
+    /**
+     * Pings lightwalletd endpoints and reports reachability/latency. Supplied by the Zcash chain
+     * plugin (the implementation lives in walletkit-chain-zcash); null while the module is absent.
+     */
+    @Volatile
+    var endpointPinger: (suspend (urls: List<String>) -> List<EndpointPingResult>)? = null
+
+    suspend fun pingEndpoints(urls: List<String>): List<EndpointPingResult> =
+        endpointPinger?.invoke(urls) ?: emptyList()
+
+    suspend fun autoSelectFastestEndpointOnStartup() {
+        if (!autoSelectEnabled || endpointPinger == null) {
+            isResolvingFastestEndpoint = false
+            return
+        }
+
+        var target = currentEndpoint
+        try {
+            val endpoints = allEndpoints
+            // Adapter creation is blocked until this returns, so cap the whole probe: a gRPC/TLS
+            // handshake per endpoint is slower than a plain HTTP ping and must not stall startup.
+            withTimeoutOrNull(STARTUP_PING_TIMEOUT) {
+                val results = pingEndpoints(endpoints.map { it.url }).associateBy { it.url }
+
+                val fastest = endpoints
+                    .mapNotNull { endpoint ->
+                        results[endpoint.url]
+                            ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
+                            ?.let { endpoint to it.responseTime }
+                    }
+                    .minByOrNull { it.second }
+                    ?.first
+
+                if (fastest != null) target = fastest
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // keep the stored endpoint on any ping failure
+        } finally {
+            // Persist WITHOUT emitting currentEndpointUpdatedFlow: emitting would replay (replay=1)
+            // into WalletManager's late collector and trigger reloadWallets(Zcash) -> adapter
+            // teardown/reconnect churn. The adapter is (re)created once by the normal wallet
+            // activation / WalletManager.refreshActiveWallets() with this endpoint already current.
+            persist(target)
+            isResolvingFastestEndpoint = false
+        }
+    }
+
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(BlockchainType.Zcash.uid)
 
     fun save(endpoint: ZcashEndpoint) {
-        blockchainSettingsStorage.saveZcashEndpoint(endpoint.url)
+        persist(endpoint)
         _currentEndpointUpdatedFlow.tryEmit(endpoint.url)
+    }
+
+    private fun persist(endpoint: ZcashEndpoint) {
+        blockchainSettingsStorage.saveZcashEndpoint(endpoint.url)
     }
 
     fun addCustomEndpoint(url: String) {
@@ -74,6 +142,16 @@ class ZcashLightWalletEndpointManager(
         _endpointsUpdatedFlow.tryEmit(endpoint.url)
     }
 
+    data class EndpointPingResult(
+        val url: String,
+        val isValid: Boolean,
+        val responseTime: Double,
+    )
+
     data class ZcashEndpoint(val url: String, val name: String) {
+    }
+
+    companion object {
+        private val STARTUP_PING_TIMEOUT = 8.seconds
     }
 }

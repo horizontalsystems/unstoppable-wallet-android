@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.NodePingResult
+import io.horizontalsystems.walletkit.ui.compose.components.PingState
 import io.horizontalsystems.monerokit.NodePingResult as KitNodePingResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -120,14 +121,6 @@ class MoneroNetworkViewModel(
             else -> PingState.Level.Slow
         }
         return PingState.Reachable(result.responseTime.toInt(), level)
-    }
-
-    sealed interface PingState {
-        object Loading : PingState
-        object Unreachable : PingState
-        data class Reachable(val responseTimeMs: Int, val level: Level) : PingState
-
-        enum class Level { Good, Medium, Slow }
     }
 
     data class ViewItem(

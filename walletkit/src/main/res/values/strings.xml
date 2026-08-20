@@ -1340,6 +1340,11 @@
     <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
 
 
+    <!--Node/server selection, shared by the per-chain network settings screens-->
+    <string name="NetworkSettings_AutoSelect">Auto-Select</string>
+    <string name="NetworkSettings_Unreachable">Unreachable</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">Add Node</string>
     <string name="AddZanoNode_AddNode">Add Node</string>
@@ -1358,13 +1363,11 @@
         \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
     <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
-    <string name="MoneroNodeSettings_AutoSelect">Auto-Select</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">Automatically use the fastest node</string>
-    <string name="MoneroNodeSettings_Unreachable">Unreachable</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="ZanoNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
     <!--Zcash Endpoint Settings-->
     <string name="ZcashEndpointSettings_Description">Choose the lightwallet server Unstoppable app should use for synchronizing Zcash wallet(s).</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">Automatically use the fastest server</string>
     <string name="AddZcashEndpoint_AddEndpoint">Add Endpoint</string>
     <string name="AddZcashEndpoint_EndpointUrl">Endpoint URL</string>
     <string name="AddZcashEndpoint_Warning_UrlExists">Endpoint with this URL already exists</string>
