@@ -43,7 +43,7 @@ object TransactionViewItemFactoryHelper {
     private val evmLabelManager = App.evmLabelManager
 
     fun getMemoItem(memo: String) =
-        TransactionInfoViewItem.Value(Translator.getString(R.string.TransactionInfo_Memo), memo)
+        TransactionInfoViewItem.Value(Translator.getString(R.string.TransactionInfo_Memo), memo, copyable = true)
 
     private fun getFeeAmountString(
         rate: CurrencyValue?,

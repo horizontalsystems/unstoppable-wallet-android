@@ -31,7 +31,7 @@ sealed class TransactionInfoViewItem {
         val badge: String?,
     ) : TransactionInfoViewItem()
 
-    class Value(val title: String, val value: String) : TransactionInfoViewItem()
+    class Value(val title: String, val value: String, val copyable: Boolean = false) : TransactionInfoViewItem()
 
     class PriceWithToggle(val title: String, val valueOne: String, val valueTwo: String) : TransactionInfoViewItem()
 

@@ -203,13 +203,33 @@ fun TransactionAmountCell(
 fun TitleAndValueCell(
     title: String,
     value: String,
+    copyable: Boolean = false,
 ) {
+    val view = LocalView.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
-        Spacer(Modifier.weight(1f))
-        subhead1_leah(text = value, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        if (!copyable) {
+            Spacer(Modifier.weight(1f))
+        }
+        subhead1_leah(
+            text = value,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.End,
+            modifier = if (copyable) Modifier.weight(1f) else Modifier,
+        )
+        if (copyable) {
+            HSpacer(16.dp)
+            ButtonSecondaryCircle(
+                icon = R.drawable.ic_copy_20,
+                onClick = {
+                    TextHelper.copyText(value)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                }
+            )
+        }
     }
 }
 
