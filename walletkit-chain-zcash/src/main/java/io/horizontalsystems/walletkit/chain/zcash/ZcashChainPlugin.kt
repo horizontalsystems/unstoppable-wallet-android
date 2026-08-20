@@ -32,12 +32,16 @@ import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.Date
@@ -50,6 +54,8 @@ class ZcashChainPlugin(
     private val endpointManager: () -> ZcashLightWalletEndpointManager,
     private val localStorage: () -> ILocalStorage,
 ) : ChainPlugin {
+
+    private val reselectScope = CoroutineScope(Dispatchers.Default)
 
     override val blockchainType: BlockchainType = BlockchainType.Zcash
 
@@ -87,6 +93,35 @@ class ZcashChainPlugin(
             }
         }
         manager.autoSelectFastestEndpointOnStartup()
+    }
+
+    override suspend fun onEnterForeground() = reselectFastestIfUnsynced()
+
+    override suspend fun refreshKit() = reselectFastestIfUnsynced()
+
+    /**
+     * Switches to the fastest reachable endpoint when the current one has stopped working.
+     *
+     * Gated on an unsynced wallet so a healthy connection is never churned, and on connectivity
+     * so a dead phone network is not mistaken for a dead server.
+     */
+    private fun reselectFastestIfUnsynced() {
+        if (!App.connectivityManager.isConnected) return
+        if (!hasUnsyncedWallet()) return
+
+        // Launched rather than awaited: the probe can take seconds and both callers are latency
+        // sensitive — refreshKit() is awaited by the balance pull-to-refresh spinner, and the
+        // foreground hook runs plugins one after another. The switch lands asynchronously through
+        // walletReloadTrigger. The manager guards with a mutex, so overlapping calls collapse.
+        reselectScope.launch {
+            try {
+                endpointManager().reselectFastestEndpoint()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Timber.e(e, "Zcash endpoint reselect failed")
+            }
+        }
     }
 
     override fun clearAccountData(accountId: String) {

@@ -641,6 +641,18 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                         // be cleared from the background — only the foreground app may write to
                         // the clipboard — so it is cleared on the way back in.
                         TextHelper.clearSecretIfExpired()
+
+                        // A node can die while the app is away; give each chain a chance to
+                        // recover (Monero/Zcash Auto-Select re-pick a reachable node here).
+                        ChainRegistry.all.forEach { plugin ->
+                            try {
+                                plugin.onEnterForeground()
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Throwable) {
+                                Timber.e(e, "Chain plugin %s onEnterForeground failed", plugin.blockchainType.uid)
+                            }
+                        }
                     }
 
                     BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()

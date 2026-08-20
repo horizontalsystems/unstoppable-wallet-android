@@ -3,6 +3,8 @@ package io.horizontalsystems.walletkit.core.chain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.walletkit.core.AdapterState
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule
@@ -146,6 +148,24 @@ interface ChainPlugin {
 
     /** Startup work after core managers are ready (e.g. Monero fastest-node auto-select). */
     suspend fun onAppStart() = Unit
+
+    /**
+     * Work when the app returns to the foreground. Runs on every foreground transition,
+     * including the first one after launch, so implementations must be idempotent and cheap
+     * when there is nothing to do (e.g. Auto-Select only re-picks a node when one has died).
+     */
+    suspend fun onEnterForeground() = Unit
+
+    /**
+     * True when an active wallet of this chain has an adapter reporting [AdapterState.NotSynced].
+     *
+     * Deliberately narrower than "not Synced": Syncing/Connecting are healthy progress, and a
+     * chain with no adapter yet (creation deferred, wallet disabled) reports false.
+     */
+    fun hasUnsyncedWallet(): Boolean =
+        App.walletManager.activeWallets
+            .filter { it.token.blockchainType == blockchainType }
+            .any { App.adapterManager.getBalanceAdapterForWallet(it)?.balanceState is AdapterState.NotSynced }
 
     /**
      * Deletes the chain's locally stored data for a removed account.

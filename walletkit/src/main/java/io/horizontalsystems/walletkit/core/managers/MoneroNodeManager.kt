@@ -10,6 +10,8 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.sync.Mutex
 import java.util.Objects
 
 class MoneroNodeManager(
@@ -18,6 +20,8 @@ class MoneroNodeManager(
     private val marketKitWrapper: MarketKitWrapper
 ) {
     private val blockchainType = BlockchainType.Monero
+
+    private val reselectMutex = Mutex()
 
     private val _currentNodeUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val currentNodeUpdatedFlow = _currentNodeUpdatedFlow.asSharedFlow()
@@ -111,19 +115,9 @@ class MoneroNodeManager(
 
         var target = currentNode
         try {
-            val nodes = allNodes
-            val results = pingNodes(nodes.map { it.serialized }).associateBy { it.serialized }
-
-            val fastest = nodes
-                .mapNotNull { node ->
-                    results[node.serialized]
-                        ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
-                        ?.let { node to it.responseTime }
-                }
-                .minByOrNull { it.second }
-                ?.first
-
-            if (fastest != null) target = fastest
+            pickFastest()?.let { target = it }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             // keep the stored node on any ping failure
         } finally {
@@ -134,6 +128,44 @@ class MoneroNodeManager(
             persist(target)
             isResolvingFastestNode = false
         }
+    }
+
+    /**
+     * Re-runs the ping and switches to the fastest reachable node, for when the current one has
+     * died while the app was running. Unlike the startup path this emits, so the adapter is
+     * rebuilt on the new node.
+     *
+     * @return true when the node actually changed.
+     */
+    suspend fun reselectFastestNode(): Boolean {
+        if (!autoSelectEnabled || nodePinger == null) return false
+        if (!reselectMutex.tryLock()) return false // a ping is already in flight
+
+        return try {
+            // Every node failing means the device has no usable network, not that the current one
+            // is bad — pickFastest returns null there, so nothing is switched.
+            val fastest = pickFastest() ?: return false
+            if (fastest.host == currentNode.host) return false
+            save(fastest)
+            true
+        } finally {
+            reselectMutex.unlock()
+        }
+    }
+
+    /** Pings every node and returns the fastest valid one, or null if none responded. */
+    private suspend fun pickFastest(): MoneroNode? {
+        val nodes = allNodes
+        val results = pingNodes(nodes.map { it.serialized }).associateBy { it.serialized }
+
+        return nodes
+            .mapNotNull { node ->
+                results[node.serialized]
+                    ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
+                    ?.let { node to it.responseTime }
+            }
+            .minByOrNull { it.second }
+            ?.first
     }
 
     fun save(node: MoneroNode) {

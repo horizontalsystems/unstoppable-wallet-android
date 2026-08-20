@@ -9,6 +9,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.seconds
 
@@ -17,6 +18,8 @@ class ZcashLightWalletEndpointManager(
     private val endpointStorage: ZcashEndpointStorage,
     private val marketKitWrapper: MarketKitWrapper,
 ) {
+    private val reselectMutex = Mutex()
+
     private val _currentEndpointUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val currentEndpointUpdatedFlow = _currentEndpointUpdatedFlow.asSharedFlow()
 
@@ -84,22 +87,10 @@ class ZcashLightWalletEndpointManager(
 
         var target = currentEndpoint
         try {
-            val endpoints = allEndpoints
             // Adapter creation is blocked until this returns, so cap the whole probe: a gRPC/TLS
             // handshake per endpoint is slower than a plain HTTP ping and must not stall startup.
             withTimeoutOrNull(STARTUP_PING_TIMEOUT) {
-                val results = pingEndpoints(endpoints.map { it.url }).associateBy { it.url }
-
-                val fastest = endpoints
-                    .mapNotNull { endpoint ->
-                        results[endpoint.url]
-                            ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
-                            ?.let { endpoint to it.responseTime }
-                    }
-                    .minByOrNull { it.second }
-                    ?.first
-
-                if (fastest != null) target = fastest
+                pickFastest()?.let { target = it }
             }
         } catch (e: CancellationException) {
             throw e
@@ -113,6 +104,44 @@ class ZcashLightWalletEndpointManager(
             persist(target)
             isResolvingFastestEndpoint = false
         }
+    }
+
+    /**
+     * Re-runs the probe and switches to the fastest reachable endpoint, for when the current one
+     * has died while the app was running. Unlike the startup path this emits, so the adapter is
+     * rebuilt on the new endpoint.
+     *
+     * @return true when the endpoint actually changed.
+     */
+    suspend fun reselectFastestEndpoint(): Boolean {
+        if (!autoSelectEnabled || endpointPinger == null) return false
+        if (!reselectMutex.tryLock()) return false // a probe is already in flight
+
+        return try {
+            val fastest = withTimeoutOrNull(STARTUP_PING_TIMEOUT) { pickFastest() } ?: return false
+            // Every endpoint failing means the device has no usable network, not that the current
+            // one is bad — pickFastest returns null there, so nothing is switched.
+            if (fastest.url == currentEndpoint.url) return false
+            save(fastest)
+            true
+        } finally {
+            reselectMutex.unlock()
+        }
+    }
+
+    /** Pings every endpoint and returns the fastest valid one, or null if none responded. */
+    private suspend fun pickFastest(): ZcashEndpoint? {
+        val endpoints = allEndpoints
+        val results = pingEndpoints(endpoints.map { it.url }).associateBy { it.url }
+
+        return endpoints
+            .mapNotNull { endpoint ->
+                results[endpoint.url]
+                    ?.takeIf { it.isValid && it.responseTime < Double.MAX_VALUE }
+                    ?.let { endpoint to it.responseTime }
+            }
+            .minByOrNull { it.second }
+            ?.first
     }
 
     val blockchain: Blockchain?
