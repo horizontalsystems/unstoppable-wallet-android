@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.walletconnect
 
+import android.util.Log
+import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.dapp.core.DAppServiceCallback
@@ -53,6 +55,22 @@ object WCDelegate : DAppServiceCallback {
     }
 
     override fun onError(throwable: Throwable) {
+        // The WC/Reown relay reports transient reconnect failures (e.g. "Batch subscribe
+        // connectivity error. Check your internet connection") through this global delegate,
+        // typically when the WebSocket re-subscribes to session topics on app resume before the
+        // network is ready. These recover on their own, so swallow them here instead of surfacing
+        // an alarming red HUD. Errors from user-initiated actions are emitted elsewhere (see the
+        // per-action HSDAppEvent.Error emissions in this file) and are unaffected.
+        if (isTransientWcConnectivityError(throwable)) {
+            // Attach the throwable only in debug builds; release logs keep just the fixed message
+            // so no callback-provided details land in production logs.
+            if (BuildConfig.DEBUG) {
+                Log.w("WCDelegate", "Ignoring transient WC connectivity error", throwable)
+            } else {
+                Log.w("WCDelegate", "Ignoring transient WC connectivity error")
+            }
+            return
+        }
         scope.launch { _walletEvents.emit(HSDAppEvent.Error(throwable)) }
     }
 
@@ -204,4 +222,20 @@ object WCDelegate : DAppServiceCallback {
     }
 
     // endregion
+}
+
+// Best-effort classification of transient relay/connectivity errors delivered through the WC/Reown
+// global error delegate. The SDK exposes no typed error code — it wraps everything in a plain
+// Throwable(message) (see RelayJsonRpcInteractor) — so we match on specific, complete phrases rather
+// than the whole message, whose exact wording varies by SDK version. Matched errors recover on their
+// own via the SDK's backoff/resubscribe strategy, so surfacing them as a HUD is only noise:
+//   - "Batch subscribe error: ..." — resubscription is an SDK-internal op, never user-triggered
+//   - "No connection available"    — NoRelayConnectionException on reconnect
+//   - "...check your internet connection" — NoInternetConnectionException
+// Kept internal (not private) so it is unit-testable from the module's test source set.
+internal fun isTransientWcConnectivityError(throwable: Throwable): Boolean {
+    val message = throwable.message?.lowercase() ?: return false
+    return message.contains("batch subscribe") ||
+            message.contains("no connection available") ||
+            message.contains("check your internet connection")
 }
