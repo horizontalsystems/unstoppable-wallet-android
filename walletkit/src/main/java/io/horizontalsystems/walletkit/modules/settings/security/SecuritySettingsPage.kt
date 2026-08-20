@@ -245,6 +245,7 @@ private fun SecurityCenterScreen(
                                     style = ButtonStyle.Solid,
                                     size = ButtonSize.Small,
                                     icon = painterResource(R.drawable.ic_edit_24),
+                                    contentDescription = stringResource(R.string.EditDuressPin_Title),
                                     onClick = onClick
                                 )
 
@@ -253,6 +254,7 @@ private fun SecurityCenterScreen(
                                     style = ButtonStyle.Solid,
                                     size = ButtonSize.Small,
                                     icon = painterResource(R.drawable.trash_24),
+                                    contentDescription = stringResource(R.string.Button_Delete),
                                     onClick = navigation.authorizedAction {
                                         securitySettingsViewModel.disableDuressPin()
                                     }
