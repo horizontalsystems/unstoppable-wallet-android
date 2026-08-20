@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.send.zcash
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -24,9 +23,6 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
-import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendScreen
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
@@ -58,8 +54,6 @@ fun SendZCashScreen(
         factory = AddressParserModule.Factory(wallet.token, amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
-
-    val privateSendViewModel = privateSendViewModel(wallet.token)
 
     val focusRequester = remember { FocusRequester() }
 
@@ -96,7 +90,6 @@ fun SendZCashScreen(
             },
             onValueChange = {
                 viewModel.onEnterAmount(it)
-                privateSendViewModel.onEnterAmount(it)
             },
             inputType = amountInputType,
             rate = viewModel.coinRate,
@@ -113,14 +106,7 @@ fun SendZCashScreen(
             rate = viewModel.coinRate
         )
 
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            PrivateSendToggleSection(privateSendViewModel)
-        }
-
-        // A user memo cannot be delivered on a private send — the deposit's memo slot
-        // belongs to the provider's crediting identifier — so don't collect one the
-        // send would discard.
-        if (memoIsAllowed && !privateSendViewModel.isEnabled) {
+        if (memoIsAllowed) {
             VSpacer(16.dp)
             HSMemoInput(
                 maxLength = viewModel.memoMaxLength,
@@ -139,7 +125,7 @@ fun SendZCashScreen(
                 )
             }
         ) {
-            openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
+            openConfirm(navigation, sendEntryPointDestId)
         }
 
         ButtonPrimaryYellow(
@@ -152,7 +138,7 @@ fun SendZCashScreen(
                     keyboardController?.hide()
                     forResult()
                 } else {
-                    openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
+                    openConfirm(navigation, sendEntryPointDestId)
                 }
             },
             enabled = proceedEnabled
@@ -161,14 +147,8 @@ fun SendZCashScreen(
 }
 
 private fun openConfirm(
-    viewModel: SendZCashViewModel,
-    privateSendViewModel: PrivateSendViewModel,
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
-        return
-    }
-
     navigation.slideFromRight(SendZcashConfirmationPage(sendEntryPointDestId))
 }

@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProvi
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +69,8 @@ class PrivateSendManager(
      * Pure in-memory lookup over already-synced state. Called from the render path: it must
      * never trigger a fetch, block, or become suspend.
      */
-    fun isSupported(token: Token): Boolean = candidates().any { it.supportsPrivateSend(token) }
+    fun isSupported(token: Token): Boolean =
+        token.blockchainType !in privateChains && candidates().any { it.supportsPrivateSend(token) }
 
     /**
      * Refreshes the confidential provider list (TTL-guarded) and each candidate's token list.
@@ -109,6 +111,9 @@ class PrivateSendManager(
      */
     suspend fun commit(request: PrivateSendRequest): PrivateSendOrder {
         val token = request.token
+
+        if (token.blockchainType in privateChains) throw PrivateSendError.TokenUnsupported
+
         val providers = candidates().filter { it.supportsPrivateSend(token) }
 
         if (providers.isEmpty()) throw PrivateSendError.TokenUnsupported
@@ -358,5 +363,17 @@ class PrivateSendManager(
         private const val TAG = "PrivateSendManager"
         private const val SYNC_INTERVAL = 6 * 60 * 60 * 1000L // 6 hours
         private val FALLBACK_SERVER_IDS = listOf("NEAR_CONFIDENTIAL")
+
+        // Chains whose own transactions already hide the sender: Monero and Zano by
+        // protocol, Zcash when spending from the shielded pool (a shielded-input send to
+        // any recipient reveals no source address). Routing them through a swap rail adds
+        // a counterparty who learns the refund address and the recipient — strictly less
+        // private than a plain send — so the server token list is never allowed to light
+        // the toggle here, whatever it starts serving.
+        private val privateChains = setOf(
+            BlockchainType.Zcash,
+            BlockchainType.Monero,
+            BlockchainType.Zano,
+        )
     }
 }

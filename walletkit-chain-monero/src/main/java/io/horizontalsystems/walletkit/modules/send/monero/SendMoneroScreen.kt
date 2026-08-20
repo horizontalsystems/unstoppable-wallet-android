@@ -32,9 +32,6 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
-import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
-import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.UtxoCell
@@ -104,7 +101,6 @@ fun SendMoneroScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
-    val privateSendViewModel = privateSendViewModel(wallet.token)
 
     val focusRequester = remember { FocusRequester() }
 
@@ -115,20 +111,13 @@ fun SendMoneroScreen(
     HSScaffold(
         title = title,
         onBack = { navigation.removeLastOrNull() },
-        // The advanced settings (UTXO selection, priority) only shape the regular send;
-        // the private deposit transfer is built on the confirmation screen and would
-        // silently discard them, so the menu goes away rather than accept dead input.
-        menuItems = if (privateSendViewModel.isEnabled) {
-            emptyList()
-        } else {
-            listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                    icon = R.drawable.manage_24,
-                    onClick = { navigation.add(SendMoneroAdvancedSettingsPage) }
-                ),
-            )
-        },
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                icon = R.drawable.manage_24,
+                onClick = { navigation.add(SendMoneroAdvancedSettingsPage) }
+            ),
+        ),
     ) {
         Column(
             modifier = Modifier
@@ -160,7 +149,6 @@ fun SendMoneroScreen(
             },
             onValueChange = {
                 viewModel.onEnterAmount(it)
-                privateSendViewModel.onEnterAmount(it)
             },
             inputType = amountInputType,
             rate = viewModel.coinRate,
@@ -177,54 +165,43 @@ fun SendMoneroScreen(
             rate = viewModel.coinRate
         )
 
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            PrivateSendToggleSection(privateSendViewModel)
+        VSpacer(16.dp)
+        HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
+            viewModel.onEnterMemo(it)
         }
 
-        // These rows describe the REGULAR send only. The private path cannot carry a
-        // user memo (the deposit's memo slot belongs to the provider's crediting
-        // identifier), spends whatever UTXOs the deposit build selects, and estimates
-        // its own fee on the confirmation screen — so showing them would collect input
-        // the send discards.
-        if (!privateSendViewModel.isEnabled) {
-            VSpacer(16.dp)
-            HSMemoInput(maxLength = 120, memo = memo, visibility = MemoVisibility.Offchain) {
-                viewModel.onEnterMemo(it)
-            }
-
-            VSpacer(16.dp)
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .padding(vertical = 8.dp)
-            ) {
-                uiState.utxoData?.let { utxoData ->
-                    UtxoCell(
-                        utxoData = utxoData,
-                        onClick = {
-                            navigation.add(MoneroUtxoExpertModePage)
-                        }
-                    )
-                    HsDivider(modifier = Modifier.fillMaxWidth())
-                }
-                HSFeeRaw(
-                    coinCode = viewModel.feeToken.coin.code,
-                    coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
-                    fee = fee,
-                    amountInputType = amountInputType,
-                    rate = viewModel.feeCoinRate,
-                    navigation = navigation,
+        VSpacer(16.dp)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .padding(vertical = 8.dp)
+        ) {
+            uiState.utxoData?.let { utxoData ->
+                UtxoCell(
+                    utxoData = utxoData,
+                    onClick = {
+                        navigation.add(MoneroUtxoExpertModePage)
+                    }
                 )
+                HsDivider(modifier = Modifier.fillMaxWidth())
             }
+            HSFeeRaw(
+                coinCode = viewModel.feeToken.coin.code,
+                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
+                fee = fee,
+                amountInputType = amountInputType,
+                rate = viewModel.feeCoinRate,
+                navigation = navigation,
+            )
+        }
 
-            uiState.feeCaution?.let { caution ->
-                FeeRateCaution(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    feeRateCaution = caution
-                )
-            }
+        uiState.feeCaution?.let { caution ->
+            FeeRateCaution(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                feeRateCaution = caution
+            )
         }
 
         val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
@@ -236,7 +213,7 @@ fun SendMoneroScreen(
                 )
             }
         ) {
-            openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
+            openConfirm(navigation, sendEntryPointDestId)
         }
 
         ButtonPrimaryYellow(
@@ -253,7 +230,7 @@ fun SendMoneroScreen(
                     keyboardController?.hide()
                     forResult()
                 } else {
-                    openConfirm(viewModel, privateSendViewModel, navigation, sendEntryPointDestId)
+                    openConfirm(navigation, sendEntryPointDestId)
                 }
             },
             enabled = proceedEnabled
@@ -263,14 +240,8 @@ fun SendMoneroScreen(
 }
 
 private fun openConfirm(
-    viewModel: SendMoneroViewModel,
-    privateSendViewModel: PrivateSendViewModel,
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
-    if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
-        return
-    }
-
     navigation.slideFromRight(SendMoneroConfirmationPage(sendEntryPointDestId))
 }

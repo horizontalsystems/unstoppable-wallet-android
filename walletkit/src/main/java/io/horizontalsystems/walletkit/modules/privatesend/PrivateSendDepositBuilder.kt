@@ -67,23 +67,8 @@ object PrivateSendDepositBuilder {
                 memo = memo,
             )
 
-            BlockchainType.Zcash -> SendTransactionData.Zcash.Regular(
-                address = address,
-                amount = amount,
-                memo = memo.orEmpty(),
-            )
-
-            BlockchainType.Monero -> SendTransactionData.Monero(
-                address = address,
-                amount = amount,
-                memo = memo,
-            )
-
-            BlockchainType.Zano -> SendTransactionData.Zano(
-                address = address,
-                amount = amount,
-                memo = memo,
-            )
+            // No Zcash/Monero/Zano branches: those chains' own transactions already hide the
+            // sender, so PrivateSendManager excludes them outright — see its privateChains.
 
             BlockchainType.Thorchain,
             BlockchainType.Mayachain,
