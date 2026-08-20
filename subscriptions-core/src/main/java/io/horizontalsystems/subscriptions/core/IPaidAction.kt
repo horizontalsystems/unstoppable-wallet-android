@@ -7,8 +7,6 @@ object AdvancedSearch : IPaidAction
 
 object TradeSignals : IPaidAction
 
-object RobberyProtection : IPaidAction
-
 object SecureSend : IPaidAction
 
 object ScamProtection : IPaidAction

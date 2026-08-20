@@ -23,10 +23,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.stats.StatEvent
-import io.horizontalsystems.walletkit.core.stats.StatPage
-import io.horizontalsystems.walletkit.core.stats.StatPremiumTrigger
-import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.pin.EditDuressPinPage
@@ -57,7 +53,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
-import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
@@ -205,73 +200,75 @@ private fun SecurityCenterScreen(
                     }
                 }
 
-                BoxBordered(top = true) {
-                    val authorizedActionDuressPin = navigation.authorizedAction {
-                        if (uiState.duressPinEnabled) {
-                            navigation.slideFromRight(EditDuressPinPage)
-                        } else {
-                            navigation.slideFromRight(SetDuressPinIntroPage)
-                        }
-                    }
+            }
 
-                    val setDuressPinFlow = navigation.ensurePinSet(R.string.PinSet_ForDuress) {
+            VSpacer(height = 24.dp)
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
+                val authorizedActionDuressPin = navigation.authorizedAction {
+                    if (uiState.duressPinEnabled) {
+                        navigation.slideFromRight(EditDuressPinPage)
+                    } else {
                         navigation.slideFromRight(SetDuressPinIntroPage)
                     }
+                }
 
-                    CellPrimary(
-                        middle = {
-                            CellMiddleInfo(
-                                title = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection).hs,
-                                subtitle = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection_Description).hs
-                            )
-                        },
-                        right = {
-                            val onClick = {
-                                navigation.paidAction(RobberyProtection) {
-                                    if (uiState.pinEnabled) {
-                                        authorizedActionDuressPin()
-                                    } else {
-                                        setDuressPinFlow()
-                                    }
-                                }
-                                stat(
-                                    page = StatPage.Security,
-                                    event = StatEvent.OpenPremium(StatPremiumTrigger.DuressMode)
-                                )
-                            }
+                val setDuressPinFlow = navigation.ensurePinSet(R.string.PinSet_ForDuress) {
+                    navigation.slideFromRight(SetDuressPinIntroPage)
+                }
 
-                            if (uiState.duressPinEnabled) {
-                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    HSIconButton(
-                                        variant = ButtonVariant.Secondary,
-                                        style = ButtonStyle.Solid,
-                                        size = ButtonSize.Small,
-                                        icon = painterResource(R.drawable.ic_edit_24),
-                                        onClick = onClick
-                                    )
-
-                                    HSIconButton(
-                                        variant = ButtonVariant.Secondary,
-                                        style = ButtonStyle.Solid,
-                                        size = ButtonSize.Small,
-                                        icon = painterResource(R.drawable.trash_24),
-                                        onClick = navigation.authorizedAction {
-                                            securitySettingsViewModel.disableDuressPin()
-                                        }
-                                    )
-                                }
+                CellPrimary(
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection).hs,
+                            subtitle = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection_Description).hs
+                        )
+                    },
+                    right = {
+                        val onClick = {
+                            if (uiState.pinEnabled) {
+                                authorizedActionDuressPin()
                             } else {
-                                HSButton(
+                                setDuressPinFlow()
+                            }
+                        }
+
+                        if (uiState.duressPinEnabled) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                HSIconButton(
                                     variant = ButtonVariant.Secondary,
                                     style = ButtonStyle.Solid,
                                     size = ButtonSize.Small,
-                                    title = stringResource(R.string.Button_Add),
+                                    icon = painterResource(R.drawable.ic_edit_24),
                                     onClick = onClick
                                 )
+
+                                HSIconButton(
+                                    variant = ButtonVariant.Secondary,
+                                    style = ButtonStyle.Solid,
+                                    size = ButtonSize.Small,
+                                    icon = painterResource(R.drawable.trash_24),
+                                    onClick = navigation.authorizedAction {
+                                        securitySettingsViewModel.disableDuressPin()
+                                    }
+                                )
                             }
+                        } else {
+                            HSButton(
+                                variant = ButtonVariant.Secondary,
+                                style = ButtonStyle.Solid,
+                                size = ButtonSize.Small,
+                                title = stringResource(R.string.Button_Add),
+                                onClick = onClick
+                            )
                         }
-                    )
-                }
+                    }
+                )
             }
 
             VSpacer(height = 32.dp)

@@ -7,7 +7,6 @@ import io.horizontalsystems.subscriptions.core.BasePlan
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.PrioritySupport
-import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
@@ -22,7 +21,6 @@ object BuySubscriptionModel {
         get() = when (this) {
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals
-            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection
             SecureSend -> R.string.Premium_UpgradeFeature_SecureSend
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport
@@ -34,7 +32,6 @@ object BuySubscriptionModel {
         get() = when (this) {
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_Description
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_Description
-            RobberyProtection -> R.string.Premium_UpgradeFeature_RobberyProtection_Description
             SecureSend -> R.string.Premium_UpgradeFeature_SecureSend_Description
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection_Description
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport_Description
@@ -46,7 +43,6 @@ object BuySubscriptionModel {
         get() = when (this) {
             AdvancedSearch -> R.drawable.prem_search_24
             TradeSignals -> R.drawable.prem_bell_24
-            RobberyProtection -> R.drawable.prem_fraud_24
             SecureSend -> R.drawable.prem_wallet_in_24
             ScamProtection -> R.drawable.prem_radar_24
             PrioritySupport -> R.drawable.prem_message_24

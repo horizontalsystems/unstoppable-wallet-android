@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PrioritySupport
-import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.Subscription
@@ -18,7 +17,7 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     private var subscription: Subscription? = null
     private var hasFreeTrial = false
     private val defenseSystemFeatures = listOf(
-        SecureSend, ScamProtection, SwapProtection, RobberyProtection,
+        SecureSend, ScamProtection, SwapProtection,
     )
 
     private val advancedControlsFeatures = listOf(PrioritySupport)
