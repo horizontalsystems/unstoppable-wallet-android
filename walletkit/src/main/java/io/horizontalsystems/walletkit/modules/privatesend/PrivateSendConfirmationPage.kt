@@ -206,7 +206,6 @@ private fun PrivateSendConfirmationScreen(
                                 SwapInfoSheet.Input(
                                     context.getString(R.string.PrivateSend_Fee),
                                     context.getString(R.string.PrivateSend_Fee_Info),
-                                    R.drawable.ic_incognito_24,
                                 )
                             )
                         )
