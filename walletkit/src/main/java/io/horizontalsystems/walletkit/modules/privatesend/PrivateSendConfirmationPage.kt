@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.CoinValue
+import io.horizontalsystems.walletkit.entities.CurrencyValue
+import io.horizontalsystems.walletkit.modules.multiswap.FeeRow
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.walletkit.modules.confirm.ErrorSheet
@@ -197,9 +199,13 @@ private fun PrivateSendConfirmationScreen(
                 )
             }
             uiState.privateFee?.let { fee ->
-                QuoteInfoRow(
+                // Same value behavior as the network fee row: tapping switches token/fiat.
+                FeeRow(
                     title = stringResource(R.string.PrivateSend_Fee),
-                    value = "~${CoinValue(uiState.token, fee).getFormattedFull()}".hs(ComposeAppTheme.colors.leah),
+                    valueFiat = viewModel.coinRate?.let {
+                        "~${CurrencyValue(it.currency, it.value * fee).getFormattedFull()}"
+                    },
+                    valueToken = "~${CoinValue(uiState.token, fee).getFormattedFull()}",
                     onInfoClick = {
                         navigation.slideFromBottom(
                             SwapInfoSheet(
@@ -213,9 +219,12 @@ private fun PrivateSendConfirmationScreen(
                 )
             }
             uiState.reservedAmount?.let { reserved ->
-                QuoteInfoRow(
+                FeeRow(
                     title = stringResource(R.string.PrivateSend_ReservedAmount),
-                    value = "~${CoinValue(uiState.token, reserved).getFormattedFull()}".hs(ComposeAppTheme.colors.leah),
+                    valueFiat = viewModel.coinRate?.let {
+                        "~${CurrencyValue(it.currency, it.value * reserved).getFormattedFull()}"
+                    },
+                    valueToken = "~${CoinValue(uiState.token, reserved).getFormattedFull()}",
                     onInfoClick = {
                         navigation.slideFromBottom(
                             SwapInfoSheet(
