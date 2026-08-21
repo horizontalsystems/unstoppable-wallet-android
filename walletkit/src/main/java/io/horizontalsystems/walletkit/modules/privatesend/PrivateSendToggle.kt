@@ -1,21 +1,14 @@
 package io.horizontalsystems.walletkit.modules.privatesend
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -32,10 +25,11 @@ import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_leah
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
+import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -162,48 +156,38 @@ fun PrivateSendToggleSection(viewModel: PrivateSendViewModel, navigation: HSNavi
     val infoText = stringResource(R.string.PrivateSend_Toggle_Subtitle)
 
     VSpacer(12.dp)
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = { viewModel.onToggle(!viewModel.isEnabled) }
-            ),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        HSpacer(16.dp)
-        Icon(
-            painter = painterResource(R.drawable.ic_incognito_24),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.leah,
-            modifier = Modifier.size(24.dp),
-        )
-        HSpacer(16.dp)
-        body_leah(text = infoTitle)
-        HSpacer(8.dp)
-        Icon(
-            painter = painterResource(R.drawable.ic_info_filled_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey,
-            modifier = Modifier
-                .size(20.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = {
+        CellPrimary(
+            left = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_incognito_24),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey,
+                    modifier = Modifier.size(24.dp),
+                )
+            },
+            middle = {
+                CellMiddleInfoTextIcon(
+                    text = infoTitle.hs(color = ComposeAppTheme.colors.grey),
+                    icon = painterResource(R.drawable.ic_info_filled_20),
+                    iconTint = ComposeAppTheme.colors.grey,
+                    onIconClick = {
                         navigation.slideFromBottom(SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText)))
                     }
-                ),
+                )
+            },
+            right = {
+                CellRightControlsSwitcher(
+                    checked = viewModel.isEnabled,
+                    onCheckedChange = { viewModel.onToggle(it) }
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = { viewModel.onToggle(!viewModel.isEnabled) },
         )
-        Spacer(modifier = Modifier.weight(1f))
-        HsSwitch(
-            checked = viewModel.isEnabled,
-            onCheckedChange = { viewModel.onToggle(it) }
-        )
-        HSpacer(16.dp)
     }
 }
