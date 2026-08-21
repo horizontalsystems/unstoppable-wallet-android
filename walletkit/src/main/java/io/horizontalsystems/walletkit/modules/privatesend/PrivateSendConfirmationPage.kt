@@ -203,9 +203,9 @@ private fun PrivateSendConfirmationScreen(
                 FeeRow(
                     title = stringResource(R.string.PrivateSend_Fee),
                     valueFiat = viewModel.coinRate?.let {
-                        "~${CurrencyValue(it.currency, it.value * fee).getFormattedFull()}"
+                        CurrencyValue(it.currency, it.value * fee).getFormattedFull()
                     },
-                    valueToken = "~${CoinValue(uiState.token, fee).getFormattedFull()}",
+                    valueToken = CoinValue(uiState.token, fee).getFormattedFull(),
                     onInfoClick = {
                         navigation.slideFromBottom(
                             SwapInfoSheet(
@@ -222,9 +222,9 @@ private fun PrivateSendConfirmationScreen(
                 FeeRow(
                     title = stringResource(R.string.PrivateSend_ReservedAmount),
                     valueFiat = viewModel.coinRate?.let {
-                        "~${CurrencyValue(it.currency, it.value * reserved).getFormattedFull()}"
+                        CurrencyValue(it.currency, it.value * reserved).getFormattedFull()
                     },
-                    valueToken = "~${CoinValue(uiState.token, reserved).getFormattedFull()}",
+                    valueToken = CoinValue(uiState.token, reserved).getFormattedFull(),
                     onInfoClick = {
                         navigation.slideFromBottom(
                             SwapInfoSheet(
