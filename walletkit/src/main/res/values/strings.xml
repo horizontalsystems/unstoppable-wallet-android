@@ -603,8 +603,9 @@
     <string name="PrivateSend_Info_Description">Private Send routes your transaction through a confidential intermediary, hiding the public link between your address and the recipient. Both transactions remain visible on chain, but they are not directly connected to each other.</string>
     <string name="PrivateSend_Unavailable">Private send unavailable</string>
     <string name="PrivateSend_Fee">Private send fee</string>
-    <string name="PrivateSend_MaxDeposit">Maximum deposit</string>
-    <string name="PrivateSend_Refundable">Refunded if unused</string>
+    <string name="PrivateSend_Fee_Info">The fee charged by the confidential intermediary for routing your transfer. It is already included in the amount that leaves your wallet.</string>
+    <string name="PrivateSend_ReservedAmount">Reserved amount</string>
+    <string name="PrivateSend_ReservedAmount_Info">An additional amount is temporarily reserved to cover possible price changes while your transaction is processed. Any unused part is returned to your wallet in a separate transaction after the send completes.</string>
     <string name="PrivateSend_EstimatedTime">Estimated arrival</string>
     <string name="PrivateSend_QuoteExpired">Quote expired — go back and re-enter</string>
     <string name="PrivateSend_CommitFailed">Couldn\'t set up the private send. Try again.</string>

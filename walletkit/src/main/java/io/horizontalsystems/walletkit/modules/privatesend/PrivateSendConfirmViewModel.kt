@@ -10,8 +10,8 @@ import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
-import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
+import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
@@ -44,9 +44,6 @@ class PrivateSendConfirmViewModel(
     private val manager: PrivateSendManager,
     val sendTransactionService: AbstractSendTransactionService,
     currencyManager: CurrencyManager,
-    private val fiatServiceAmountOut: FiatService,
-    private val fiatServiceFee: FiatService,
-    private val fiatServiceDeposit: FiatService,
     private val timerService: TimerService,
     private val swapRecordManager: SwapRecordManager,
 ) : ViewModelUiState<PrivateSendConfirmUiState>() {
@@ -54,14 +51,17 @@ class PrivateSendConfirmViewModel(
     private val token = request.token
     private val currency = currencyManager.baseCurrency
 
+    // Same sources the per-chain confirmations use for the shared top section.
+    val coinRate = XRateService(App.marketKit, currency).getRate(token.coin.uid)
+    val contact = App.contactsRepository
+        .getContactsFiltered(token.blockchainType, addressQuery = request.recipient)
+        .firstOrNull()
+
     private var order: PrivateSendOrder? = null
     private var depositData: SendTransactionData? = null
     private var error: Throwable? = null
     private var initialLoading = true
     private var expired = false
-    private var fiatAmountOut: BigDecimal? = null
-    private var fiatFee: BigDecimal? = null
-    private var fiatDeposit: BigDecimal? = null
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var timerState = timerService.stateFlow.value
 
@@ -74,37 +74,6 @@ class PrivateSendConfirmViewModel(
     private var recordId: Int? = null
 
     init {
-        fiatServiceAmountOut.setCurrency(currency)
-        fiatServiceAmountOut.setToken(token)
-        fiatServiceAmountOut.setAmount(request.amountOut)
-
-        fiatServiceFee.setCurrency(currency)
-        fiatServiceFee.setToken(token)
-
-        fiatServiceDeposit.setCurrency(currency)
-        fiatServiceDeposit.setToken(token)
-
-        viewModelScope.launch {
-            fiatServiceAmountOut.stateFlow.collect {
-                fiatAmountOut = it.fiatAmount
-                emitState()
-            }
-        }
-
-        viewModelScope.launch {
-            fiatServiceFee.stateFlow.collect {
-                fiatFee = it.fiatAmount
-                emitState()
-            }
-        }
-
-        viewModelScope.launch {
-            fiatServiceDeposit.stateFlow.collect {
-                fiatDeposit = it.fiatAmount
-                emitState()
-            }
-        }
-
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect {
                 sendTransactionState = it
@@ -148,12 +117,8 @@ class PrivateSendConfirmViewModel(
             token = token,
             recipient = request.recipient,
             amountOut = order?.amountOut ?: request.amountOut,
-            fiatAmountOut = fiatAmountOut,
             privateFee = order?.privateFee,
-            fiatPrivateFee = fiatFee,
-            depositAmount = order?.depositAmount,
-            fiatDepositAmount = fiatDeposit,
-            refundableBuffer = order?.refundableBuffer?.takeIf { it > BigDecimal.ZERO },
+            reservedAmount = order?.refundableBuffer?.takeIf { it > BigDecimal.ZERO },
             bufferUnknown = order != null && order.minSellAmount == null,
             estimatedTime = order?.estimatedTime,
             currency = currency,
@@ -211,9 +176,6 @@ class PrivateSendConfirmViewModel(
                 ensureActive()
 
                 this@PrivateSendConfirmViewModel.order = order
-                fiatServiceAmountOut.setAmount(order.amountOut)
-                fiatServiceFee.setAmount(order.privateFee)
-                fiatServiceDeposit.setAmount(order.depositAmount)
                 emitState()
 
                 val data = PrivateSendDepositBuilder.build(order, btcParams)
@@ -356,9 +318,6 @@ class PrivateSendConfirmViewModel(
                 manager = App.privateSendManager,
                 sendTransactionService = SendTransactionServiceFactory.create(request.token),
                 currencyManager = App.currencyManager,
-                fiatServiceAmountOut = FiatService(App.marketKit),
-                fiatServiceFee = FiatService(App.marketKit),
-                fiatServiceDeposit = FiatService(App.marketKit),
                 timerService = TimerService(),
                 swapRecordManager = App.swapRecordManager,
             )
@@ -372,12 +331,9 @@ data class PrivateSendConfirmUiState(
     val token: Token,
     val recipient: String,
     val amountOut: BigDecimal,
-    val fiatAmountOut: BigDecimal?,
     val privateFee: BigDecimal?,
-    val fiatPrivateFee: BigDecimal?,
-    val depositAmount: BigDecimal?,
-    val fiatDepositAmount: BigDecimal?,
-    val refundableBuffer: BigDecimal?,
+    // The refundable slippage buffer — shown as "Reserved amount", per the design.
+    val reservedAmount: BigDecimal?,
     val bufferUnknown: Boolean,
     val estimatedTime: Long?,
     val currency: Currency,

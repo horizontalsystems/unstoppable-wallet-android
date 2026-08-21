@@ -20,10 +20,12 @@ import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.walletkit.modules.confirm.ErrorSheet
 import io.horizontalsystems.walletkit.modules.evmfee.Cautions
+import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.multiswap.QuoteInfoRow
-import io.horizontalsystems.walletkit.modules.multiswap.TokenRow
+import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.multiswap.formatDuration
-import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.walletkit.modules.send.ConfirmationTopSection
+import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
@@ -102,7 +104,7 @@ private fun PrivateSendConfirmationScreen(
     }
 
     ConfirmTransactionScreen(
-        title = stringResource(R.string.PrivateSend_Toggle_Title),
+        title = stringResource(R.string.Send_Confirmation_Title),
         initialLoading = uiState.initialLoading,
         onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = if (uiState.hasSettings) {
@@ -155,20 +157,17 @@ private fun PrivateSendConfirmationScreen(
             }
         }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
-        ) {
-            // What the recipient receives — the value the user entered, and contractual.
-            TokenRow(
-                token = uiState.token,
-                amount = uiState.amountOut,
-                fiatAmount = uiState.fiatAmountOut,
-                currency = uiState.currency,
-            )
-        }
+        // The same top section every regular send confirmation renders: what the recipient
+        // receives — the value the user entered, and contractual — then the real recipient.
+        // The deposit address is never shown: it would confuse and it leaks the rail.
+        ConfirmationTopSection(
+            token = uiState.token,
+            amount = uiState.amountOut,
+            coinMaxAllowedDecimals = uiState.token.decimals.coerceAtMost(8),
+            rate = viewModel.coinRate,
+            address = Address(uiState.recipient),
+            contact = viewModel.contact,
+        )
         VSpacer(height = 16.dp)
         Column(
             modifier = Modifier
@@ -177,47 +176,65 @@ private fun PrivateSendConfirmationScreen(
                 .background(ComposeAppTheme.colors.lawrence)
                 .padding(vertical = 8.dp)
         ) {
-            // The real recipient. The deposit address is never shown: it would confuse and
-            // it leaks the rail.
-            QuoteInfoRow(
-                title = stringResource(R.string.Swap_Recipient),
-                value = uiState.recipient.hs(ComposeAppTheme.colors.leah),
-                onCellClick = {
-                    TextHelper.copyText(uiState.recipient)
-                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                },
-            )
-            uiState.privateFee?.let { fee ->
-                QuoteInfoRow(
-                    title = stringResource(R.string.PrivateSend_Fee),
-                    value = CoinValue(uiState.token, fee).getFormattedFull().hs(ComposeAppTheme.colors.leah),
-                )
-            }
-            uiState.depositAmount?.let { deposit ->
-                QuoteInfoRow(
-                    title = stringResource(R.string.PrivateSend_MaxDeposit),
-                    value = CoinValue(uiState.token, deposit).getFormattedFull().hs(ComposeAppTheme.colors.leah),
-                )
-            }
-            uiState.refundableBuffer?.let { buffer ->
-                QuoteInfoRow(
-                    title = stringResource(R.string.PrivateSend_Refundable),
-                    value = CoinValue(uiState.token, buffer).getFormattedFull().hs(ComposeAppTheme.colors.leah),
-                )
+            uiState.transactionFields.forEach {
+                it.GetContent(navigation)
             }
             uiState.estimatedTime?.let { estimatedTime ->
                 QuoteInfoRow(
                     title = stringResource(R.string.PrivateSend_EstimatedTime),
-                    value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
+                    value = formatDuration(estimatedTime).hs(ComposeAppTheme.colors.leah),
+                    onInfoClick = {
+                        navigation.slideFromBottom(
+                            SwapInfoSheet(
+                                SwapInfoSheet.Input(
+                                    context.getString(R.string.PrivateSend_EstimatedTime),
+                                    context.getString(R.string.Swap_EstimatedTimeDescription),
+                                    R.drawable.ic_circle_clock_24,
+                                )
+                            )
+                        )
+                    },
                 )
             }
-            uiState.transactionFields.forEach {
-                it.GetContent(navigation)
+            uiState.privateFee?.let { fee ->
+                QuoteInfoRow(
+                    title = stringResource(R.string.PrivateSend_Fee),
+                    value = "~${CoinValue(uiState.token, fee).getFormattedFull()}".hs(ComposeAppTheme.colors.leah),
+                    onInfoClick = {
+                        navigation.slideFromBottom(
+                            SwapInfoSheet(
+                                SwapInfoSheet.Input(
+                                    context.getString(R.string.PrivateSend_Fee),
+                                    context.getString(R.string.PrivateSend_Fee_Info),
+                                    R.drawable.ic_incognito_24,
+                                )
+                            )
+                        )
+                    },
+                )
             }
-            DataFieldFee(
-                navigation,
-                uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+            uiState.reservedAmount?.let { reserved ->
+                QuoteInfoRow(
+                    title = stringResource(R.string.PrivateSend_ReservedAmount),
+                    value = "~${CoinValue(uiState.token, reserved).getFormattedFull()}".hs(ComposeAppTheme.colors.leah),
+                    onInfoClick = {
+                        navigation.slideFromBottom(
+                            SwapInfoSheet(
+                                SwapInfoSheet.Input(
+                                    context.getString(R.string.PrivateSend_ReservedAmount),
+                                    context.getString(R.string.PrivateSend_ReservedAmount_Info),
+                                )
+                            )
+                        )
+                    },
+                )
+            }
+            DataFieldFeeTemplate(
+                navigation = navigation,
+                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+                secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
+                title = stringResource(R.string.FeeSettings_NetworkFee),
+                infoText = stringResource(R.string.FeeSettings_NetworkFee_Info),
             )
         }
 
