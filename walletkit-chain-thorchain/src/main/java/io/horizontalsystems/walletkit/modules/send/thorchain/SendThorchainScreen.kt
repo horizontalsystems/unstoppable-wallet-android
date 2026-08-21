@@ -116,7 +116,7 @@ fun SendThorchainScreen(
         )
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            PrivateSendToggleSection(privateSendViewModel)
+            PrivateSendToggleSection(privateSendViewModel, navigation)
         }
 
         VSpacer(16.dp)

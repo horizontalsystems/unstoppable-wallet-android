@@ -116,7 +116,7 @@ fun SendTronScreen(
         )
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-            PrivateSendToggleSection(privateSendViewModel)
+            PrivateSendToggleSection(privateSendViewModel, navigation)
         }
 
         val forResult = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(

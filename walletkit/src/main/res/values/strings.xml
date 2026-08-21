@@ -599,7 +599,7 @@
 
     <!-- Private Send -->
 
-    <string name="PrivateSend_Toggle_Title">Private send</string>
+    <string name="PrivateSend_Toggle_Title">Private Send</string>
     <string name="PrivateSend_Toggle_Subtitle">The recipient can\'t be linked to you on-chain</string>
     <string name="PrivateSend_Unavailable">Private send unavailable</string>
     <string name="PrivateSend_Fee">Private send fee</string>

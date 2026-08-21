@@ -3,17 +3,22 @@ package io.horizontalsystems.walletkit.modules.privatesend
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -23,14 +28,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
-import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -144,37 +149,61 @@ fun privateSendViewModel(token: Token): PrivateSendViewModel =
     viewModel(factory = PrivateSendViewModel.Factory(token))
 
 /**
- * The toggle card, rendered on a send screen between the balance row and the memo/button
- * area. Not rendered at all for an unsupported token, not merely disabled. With the toggle
- * on, the amount field means "the amount the recipient receives".
+ * The toggle row, rendered on a send screen between the balance row and the memo/button
+ * area. Not rendered at all for an unsupported token, not merely disabled. Matches the
+ * Figma "Private Send" row: incognito icon, label, info button (opens the explanation
+ * sheet — the row itself carries no subtitle), switch.
  */
 @Composable
-fun PrivateSendToggleSection(viewModel: PrivateSendViewModel) {
+fun PrivateSendToggleSection(viewModel: PrivateSendViewModel, navigation: HSNavigation) {
     if (!viewModel.isSupported) return
 
+    val infoTitle = stringResource(R.string.PrivateSend_Toggle_Title)
+    val infoText = stringResource(R.string.PrivateSend_Toggle_Subtitle)
+
     VSpacer(12.dp)
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .height(64.dp)
+            .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
-    ) {
-        RowUniversal(
-            modifier = Modifier.clickable(
+            .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = { viewModel.onToggle(!viewModel.isEnabled) }
             ),
-        ) {
-            Column(modifier = Modifier.padding(horizontal = 16.dp).weight(1f)) {
-                body_leah(text = stringResource(R.string.PrivateSend_Toggle_Title))
-                subhead2_grey(text = stringResource(R.string.PrivateSend_Toggle_Subtitle))
-            }
-            HsSwitch(
-                modifier = Modifier.padding(end = 16.dp),
-                checked = viewModel.isEnabled,
-                onCheckedChange = { viewModel.onToggle(it) }
-            )
-        }
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        HSpacer(16.dp)
+        Icon(
+            painter = painterResource(R.drawable.ic_incognito_24),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.leah,
+            modifier = Modifier.size(24.dp),
+        )
+        HSpacer(16.dp)
+        body_leah(text = infoTitle)
+        HSpacer(8.dp)
+        Icon(
+            painter = painterResource(R.drawable.ic_info_filled_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey,
+            modifier = Modifier
+                .size(20.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {
+                        navigation.slideFromBottom(SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText)))
+                    }
+                ),
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        HsSwitch(
+            checked = viewModel.isEnabled,
+            onCheckedChange = { viewModel.onToggle(it) }
+        )
+        HSpacer(16.dp)
     }
 }
