@@ -33,30 +33,38 @@ fun HSMemoInput(
     maxLength: Int,
     memo: String? = null,
     visibility: MemoVisibility = MemoVisibility.Public,
+    enabled: Boolean = true,
+    // Rendered as the input's (red) caution while [enabled] is false — the flow's
+    // explanation of why a memo is not accepted right now. Any already-typed text stays
+    // visible, greyed, and comes back editable when the input is re-enabled.
+    disabledCaution: String? = null,
     onValueChange: (String) -> Unit
 ) {
-    val state = when (visibility) {
-        MemoVisibility.Public -> DataState.Error(
+    val state = when {
+        !enabled -> disabledCaution?.let { DataState.Error(Exception(it)) }
+
+        visibility == MemoVisibility.Public -> DataState.Error(
             FormsInputStateWarning(stringResource(R.string.Send_Memo_PublicWarning))
         )
 
-        MemoVisibility.Encrypted,
-        MemoVisibility.Offchain -> null
+        else -> null
     }
 
-    val infoText = when (visibility) {
-        MemoVisibility.Public -> null
-        MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
-        MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
+    val infoText = when {
+        !enabled -> null
+        visibility == MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
+        visibility == MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
+        else -> null
     }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         FormsInput(
             hint = stringResource(R.string.Send_DialogMemoHint),
             initial = memo,
+            enabled = enabled,
             hintColor = ComposeAppTheme.colors.andy,
             hintStyle = ComposeAppTheme.typography.bodyItalic,
-            textColor = ComposeAppTheme.colors.leah,
+            textColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy,
             textStyle = ComposeAppTheme.typography.bodyItalic,
             pasteEnabled = false,
             singleLine = true,

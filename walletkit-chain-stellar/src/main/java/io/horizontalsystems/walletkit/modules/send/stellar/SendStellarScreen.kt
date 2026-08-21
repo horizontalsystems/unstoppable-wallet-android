@@ -118,14 +118,16 @@ fun SendStellarScreen(
             PrivateSendToggleSection(privateSendViewModel)
         }
 
-        // A user memo cannot be delivered on a private send — the deposit's memo slot
-        // belongs to the provider's crediting identifier — so don't collect one the
-        // send would discard.
-        if (!privateSendViewModel.isEnabled) {
-            VSpacer(16.dp)
-            HSMemoInput(maxLength = 120, visibility = MemoVisibility.Public) {
-                viewModel.onEnterMemo(it)
-            }
+        VSpacer(16.dp)
+        // Stays visible but refuses input under Private send: the deposit's memo slot
+        // belongs to the provider's crediting identifier, so a user memo cannot travel.
+        HSMemoInput(
+            maxLength = 120,
+            visibility = MemoVisibility.Public,
+            enabled = !privateSendViewModel.isEnabled,
+            disabledCaution = stringResource(R.string.PrivateSend_MemoNotAvailable),
+        ) {
+            viewModel.onEnterMemo(it)
         }
 
         VSpacer(16.dp)

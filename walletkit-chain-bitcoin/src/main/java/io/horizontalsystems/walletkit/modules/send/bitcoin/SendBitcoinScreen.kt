@@ -139,20 +139,13 @@ fun SendBitcoinScreen(
     HSScaffold(
         title = title,
         onBack = { navigation.removeLastOrNull() },
-        // The advanced settings (UTXO selection, sort mode, RBF, lock time) only shape the
-        // regular send; the private deposit transfer is built on the confirmation screen and
-        // would silently discard them, so the menu goes away rather than accept dead input.
-        menuItems = if (privateSendViewModel.isEnabled) {
-            emptyList()
-        } else {
-            listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                    icon = R.drawable.manage_24,
-                    onClick = { navigation.add(SendBtcAdvancedSettingsPage) }
-                ),
-            )
-        },
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                icon = R.drawable.manage_24,
+                onClick = { navigation.add(SendBtcAdvancedSettingsPage) }
+            ),
+        ),
     ) {
         Column(
             modifier = Modifier
@@ -206,50 +199,50 @@ fun SendBitcoinScreen(
                 PrivateSendToggleSection(privateSendViewModel)
             }
 
-            // These rows describe the REGULAR send only. The private path cannot carry a
-            // user memo (the deposit's memo slot belongs to the provider's crediting
-            // identifier), spends whatever UTXOs the deposit build selects, and estimates
-            // its own fee on the confirmation screen — so showing them would collect input
-            // the send discards.
-            if (!privateSendViewModel.isEnabled) {
-                VSpacer(16.dp)
-                HSMemoInput(maxLength = 120, visibility = MemoVisibility.Public) {
-                    viewModel.onEnterMemo(it)
-                }
+            VSpacer(16.dp)
+            // Stays visible but refuses input under Private send: the deposit's memo slot
+            // belongs to the provider's crediting identifier, so a user memo cannot travel.
+            HSMemoInput(
+                maxLength = 120,
+                visibility = MemoVisibility.Public,
+                enabled = !privateSendViewModel.isEnabled,
+                disabledCaution = stringResource(R.string.PrivateSend_MemoNotAvailable),
+            ) {
+                viewModel.onEnterMemo(it)
+            }
 
-                VSpacer(16.dp)
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(ComposeAppTheme.colors.lawrence)
-                        .padding(vertical = 8.dp)
-                ) {
-                    uiState.utxoData?.let { utxoData ->
-                        UtxoCell(
-                            utxoData = utxoData,
-                            onClick = {
-                                navigation.add(UtxoExpertModePage)
-                            }
-                        )
-                        HsDivider(modifier = Modifier.fillMaxWidth())
-                    }
-                    HSFeeRaw(
-                        coinCode = wallet.coin.code,
-                        coinDecimal = viewModel.coinMaxAllowedDecimals,
-                        fee = fee,
-                        amountInputType = amountInputType,
-                        rate = rate,
-                        navigation = navigation
+            VSpacer(16.dp)
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .padding(vertical = 8.dp)
+            ) {
+                uiState.utxoData?.let { utxoData ->
+                    UtxoCell(
+                        utxoData = utxoData,
+                        onClick = {
+                            navigation.add(UtxoExpertModePage)
+                        }
                     )
+                    HsDivider(modifier = Modifier.fillMaxWidth())
                 }
+                HSFeeRaw(
+                    coinCode = wallet.coin.code,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    fee = fee,
+                    amountInputType = amountInputType,
+                    rate = rate,
+                    navigation = navigation
+                )
+            }
 
-                feeRateCaution?.let {
-                    FeeRateCaution(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                        feeRateCaution = feeRateCaution
-                    )
-                }
+            feeRateCaution?.let {
+                FeeRateCaution(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                    feeRateCaution = feeRateCaution
+                )
             }
 
             VSpacer(16.dp)
