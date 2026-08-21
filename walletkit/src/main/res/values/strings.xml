@@ -600,7 +600,7 @@
     <!-- Private Send -->
 
     <string name="PrivateSend_Toggle_Title">Private Send</string>
-    <string name="PrivateSend_Toggle_Subtitle">The recipient can\'t be linked to you on-chain</string>
+    <string name="PrivateSend_Info_Description">Private Send routes your transaction through a confidential intermediary, hiding the public link between your address and the recipient. Both transactions remain visible on chain, but they are not directly connected to each other.</string>
     <string name="PrivateSend_Unavailable">Private send unavailable</string>
     <string name="PrivateSend_Fee">Private send fee</string>
     <string name="PrivateSend_MaxDeposit">Maximum deposit</string>

@@ -153,7 +153,7 @@ fun PrivateSendToggleSection(viewModel: PrivateSendViewModel, navigation: HSNavi
     if (!viewModel.isSupported) return
 
     val infoTitle = stringResource(R.string.PrivateSend_Toggle_Title)
-    val infoText = stringResource(R.string.PrivateSend_Toggle_Subtitle)
+    val infoText = stringResource(R.string.PrivateSend_Info_Description)
 
     VSpacer(12.dp)
     Column(
@@ -176,7 +176,9 @@ fun PrivateSendToggleSection(viewModel: PrivateSendViewModel, navigation: HSNavi
                     icon = painterResource(R.drawable.ic_info_filled_20),
                     iconTint = ComposeAppTheme.colors.grey,
                     onIconClick = {
-                        navigation.slideFromBottom(SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText)))
+                        navigation.slideFromBottom(
+                            SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_incognito_24))
+                        )
                     }
                 )
             },
