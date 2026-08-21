@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +34,7 @@ import io.horizontalsystems.hodler.LockTimeInterval
 fun HSHodlerInput(
     lockTimeIntervals: List<LockTimeInterval?>,
     lockTimeInterval: LockTimeInterval?,
+    enabled: Boolean = true,
     onSelect: (LockTimeInterval?) -> Unit
 ) {
     var showSelectorDialog by remember { mutableStateOf(false) }
@@ -52,11 +54,14 @@ fun HSHodlerInput(
     }
 
     RowUniversal(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = { showSelectorDialog = true }
-        ),
+        modifier = Modifier
+            .alpha(if (enabled) 1f else 0.5f)
+            .clickable(
+                enabled = enabled,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { showSelectorDialog = true }
+            ),
     ) {
         body_leah(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -65,7 +70,7 @@ fun HSHodlerInput(
         Spacer(modifier = Modifier.weight(1f))
         ButtonSecondaryWithIcon(
             modifier = Modifier.height(28.dp),
-            onClick = { showSelectorDialog = true },
+            onClick = { if (enabled) showSelectorDialog = true },
             title = stringResource(lockTimeInterval.stringResId()),
             iconRight = painterResource(R.drawable.ic_down_arrow_20),
         )
@@ -101,7 +106,7 @@ private fun Preview_HSHodlerInput() {
         HSHodlerInput(
             listOf(LockTimeInterval.hour, LockTimeInterval.halfYear),
             LockTimeInterval.halfYear,
-            {}
+            onSelect = {}
         )
     }
 }

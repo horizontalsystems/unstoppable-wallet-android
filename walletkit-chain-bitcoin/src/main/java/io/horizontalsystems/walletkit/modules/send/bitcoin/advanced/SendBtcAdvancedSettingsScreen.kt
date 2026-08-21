@@ -64,6 +64,7 @@ fun SendBtcAdvancedSettingsScreen(
     navigation: HSNavigation,
     sendBitcoinViewModel: SendBitcoinViewModel,
     amountInputType: AmountInputType,
+    timeLockActive: Boolean = true,
 ) {
 
     val wallet = sendBitcoinViewModel.wallet
@@ -155,6 +156,7 @@ fun SendBtcAdvancedSettingsScreen(
                         HSHodlerInput(
                             lockTimeIntervals = lockTimeIntervals,
                             lockTimeInterval = lockTimeInterval,
+                            enabled = timeLockActive,
                             onSelect = {
                                 sendBitcoinViewModel.onEnterLockTimeInterval(it)
                             }
@@ -162,7 +164,11 @@ fun SendBtcAdvancedSettingsScreen(
                     }
                 )
                 InfoText(
-                    text = stringResource(R.string.Send_Hodler_Description),
+                    text = if (timeLockActive) {
+                        stringResource(R.string.Send_Hodler_Description)
+                    } else {
+                        stringResource(R.string.PrivateSend_NotAvailable)
+                    },
                 )
             }
 

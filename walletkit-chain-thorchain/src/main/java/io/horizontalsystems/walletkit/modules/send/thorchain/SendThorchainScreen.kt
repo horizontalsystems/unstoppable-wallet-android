@@ -127,7 +127,7 @@ fun SendThorchainScreen(
             memo = memo,
             visibility = MemoVisibility.Public,
             enabled = !privateSendViewModel.isEnabled,
-            disabledCaution = stringResource(R.string.PrivateSend_MemoNotAvailable),
+            disabledCaution = stringResource(R.string.PrivateSend_NotAvailable),
         ) {
             viewModel.onEnterMemo(it)
         }

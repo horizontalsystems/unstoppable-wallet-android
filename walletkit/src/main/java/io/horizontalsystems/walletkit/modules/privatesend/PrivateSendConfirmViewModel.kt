@@ -40,6 +40,7 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 class PrivateSendConfirmViewModel(
     private val request: PrivateSendRequest,
+    private val btcParams: PrivateSendBtcParams?,
     private val manager: PrivateSendManager,
     val sendTransactionService: AbstractSendTransactionService,
     currencyManager: CurrencyManager,
@@ -215,7 +216,7 @@ class PrivateSendConfirmViewModel(
                 fiatServiceDeposit.setAmount(order.depositAmount)
                 emitState()
 
-                val data = PrivateSendDepositBuilder.build(order)
+                val data = PrivateSendDepositBuilder.build(order, btcParams)
                 depositData = data
                 sendTransactionService.setSendTransactionData(data)
 
@@ -345,9 +346,13 @@ class PrivateSendConfirmViewModel(
         // authorizes.
         const val QUOTE_LIFETIME_SECONDS = 60L
 
-        fun init(request: PrivateSendRequest): CreationExtras.() -> PrivateSendConfirmViewModel = {
+        fun init(
+            request: PrivateSendRequest,
+            btcParams: PrivateSendBtcParams?,
+        ): CreationExtras.() -> PrivateSendConfirmViewModel = {
             PrivateSendConfirmViewModel(
                 request = request,
+                btcParams = btcParams,
                 manager = App.privateSendManager,
                 sendTransactionService = SendTransactionServiceFactory.create(request.token),
                 currencyManager = App.currencyManager,

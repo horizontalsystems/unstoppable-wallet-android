@@ -52,13 +52,22 @@ data class PrivateSendConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
+        // The same toggle ViewModel the send screen filled in, resolved from the SendPage
+        // store. The factory only matters after process death, where a fresh instance
+        // carries no deposit params and the build degrades to service defaults — safe.
+        val toggleViewModel = viewModel<PrivateSendViewModel>(
+            viewModelStoreOwner = io.horizontalsystems.walletkit.modules.nav3.rememberChildViewModelStoreOwner(SendPage::class.simpleName!!),
+            factory = PrivateSendViewModel.Factory(input.wallet.token),
+        )
+
         val viewModel = viewModel<PrivateSendConfirmViewModel>(
             initializer = PrivateSendConfirmViewModel.init(
                 PrivateSendRequest(
                     token = input.wallet.token,
                     recipient = input.recipient,
                     amountOut = input.amount,
-                )
+                ),
+                toggleViewModel.btcParams,
             )
         )
 

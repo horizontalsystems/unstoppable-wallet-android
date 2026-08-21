@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.privatesend
 
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -53,6 +55,22 @@ data class PrivateSendOrder(
     val refundableBuffer: BigDecimal?
         get() = minSellAmount?.let { (depositAmount - it).max(BigDecimal.ZERO) }
 }
+
+/**
+ * The bitcoin send screen's settings, carried into the deposit transfer so a private send
+ * honours the user's coin control and transaction shaping. A timelock is deliberately NOT
+ * carried: the deposit must be spendable by the provider immediately, so the timelock
+ * setting is disabled while the toggle is on.
+ *
+ * Held in memory on [PrivateSendViewModel] rather than serialized with the confirmation
+ * page: after process death the confirmation restores with service defaults, which is safe.
+ */
+data class PrivateSendBtcParams(
+    val feeRate: Int?,
+    val unspentOutputs: List<UnspentOutputInfo>?,
+    val transactionSorting: TransactionDataSortMode?,
+    val rbfEnabled: Boolean,
+)
 
 /**
  * Authored reasons a private send cannot be set up. Every case maps to a localized string on

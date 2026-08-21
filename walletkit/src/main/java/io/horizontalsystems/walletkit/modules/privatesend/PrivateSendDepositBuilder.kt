@@ -15,7 +15,7 @@ import io.horizontalsystems.marketkit.models.Token
  */
 object PrivateSendDepositBuilder {
 
-    fun build(order: PrivateSendOrder): SendTransactionData {
+    fun build(order: PrivateSendOrder, btcParams: PrivateSendBtcParams? = null): SendTransactionData {
         val token = order.request.token
         val memo = deliverableMemo(order.attachment, token.blockchainType)
 
@@ -38,10 +38,16 @@ object PrivateSendDepositBuilder {
                 address = address,
                 memo = memo,
                 amount = amount,
-                recommendedGasRate = null,
+                // The send screen's settings, so a private send honours the user's coin
+                // control, fee rate, sorting and RBF choice. No timelock: the deposit must
+                // be spendable by the provider immediately.
+                recommendedGasRate = btcParams?.feeRate,
                 minimumSendAmount = null,
                 changeToFirstInput = false,
                 utxoFilters = UtxoFilters(),
+                unspentOutputs = btcParams?.unspentOutputs,
+                transactionSorting = btcParams?.transactionSorting,
+                rbfEnabled = btcParams?.rbfEnabled ?: false,
             )
 
             BlockchainType.Tron -> {

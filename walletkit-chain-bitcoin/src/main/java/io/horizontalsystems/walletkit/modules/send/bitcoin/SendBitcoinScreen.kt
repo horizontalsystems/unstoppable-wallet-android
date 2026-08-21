@@ -37,9 +37,12 @@ import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendBtcParams
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendToggleSection
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendViewModel
 import io.horizontalsystems.walletkit.modules.privatesend.privateSendViewModel
+import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule.rbfSupported
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.SendPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
@@ -67,10 +70,14 @@ data object SendBtcAdvancedSettingsPage : HSPage() {
     override fun GetContent(navigation: HSNavigation) {
         val viewModel = navigation.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
         val amountInputModeViewModel = navigation.viewModelForScreen<AmountInputModeViewModel>(SendPage::class)
+        val privateSendViewModel = navigation.viewModelForScreen<PrivateSendViewModel>(SendPage::class)
         SendBtcAdvancedSettingsScreen(
             navigation = navigation,
             sendBitcoinViewModel = viewModel,
             amountInputType = amountInputModeViewModel.inputType,
+            // A timelock cannot apply to a private send: the deposit must be spendable by
+            // the provider immediately.
+            timeLockActive = !privateSendViewModel.isEnabled,
         )
     }
 }
@@ -206,7 +213,7 @@ fun SendBitcoinScreen(
                 maxLength = 120,
                 visibility = MemoVisibility.Public,
                 enabled = !privateSendViewModel.isEnabled,
-                disabledCaution = stringResource(R.string.PrivateSend_MemoNotAvailable),
+                disabledCaution = stringResource(R.string.PrivateSend_NotAvailable),
             ) {
                 viewModel.onEnterMemo(it)
             }
@@ -285,6 +292,18 @@ private fun openConfirm(
     navigation: HSNavigation,
     sendEntryPointDestId: KClass<out HSPage>
 ) {
+    // The send screen's settings travel with the deposit build. Timelock is deliberately
+    // absent: the deposit must be spendable by the provider immediately, so that setting is
+    // disabled while the toggle is on.
+    privateSendViewModel.setBtcDepositParams(
+        PrivateSendBtcParams(
+            feeRate = viewModel.uiState.feeRate,
+            unspentOutputs = viewModel.customUnspentOutputs,
+            transactionSorting = App.btcBlockchainManager.transactionSortMode(viewModel.blockchainType),
+            rbfEnabled = viewModel.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
+        )
+    )
+
     if (privateSendViewModel.openConfirmationIfEnabled(navigation, viewModel.wallet, viewModel.uiState.address.hex, sendEntryPointDestId)) {
         return
     }

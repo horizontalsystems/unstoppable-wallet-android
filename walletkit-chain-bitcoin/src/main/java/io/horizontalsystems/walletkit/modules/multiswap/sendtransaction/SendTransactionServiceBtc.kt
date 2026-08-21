@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -20,6 +21,7 @@ import io.horizontalsystems.walletkit.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.CoinValue
+import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
 import io.horizontalsystems.walletkit.modules.amount.AmountInputType
 import io.horizontalsystems.walletkit.modules.amount.AmountValidator
 import io.horizontalsystems.walletkit.modules.evmfee.EvmSettingsInput
@@ -61,6 +63,9 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     private var memo: String? = null
     private var changeToFirstInput: Boolean = false
     private var utxoFilters: UtxoFilters = UtxoFilters()
+    private var unspentOutputs: List<UnspentOutputInfo>? = null
+    private var transactionSorting: TransactionDataSortMode? = null
+    private var rbfEnabled: Boolean = false
     private var networkFee: SendModule.AmountData? = null
 
     private var fields = listOf<DataField>()
@@ -158,6 +163,9 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
         memo = data.memo
         changeToFirstInput = data.changeToFirstInput
+        unspentOutputs = data.unspentOutputs
+        transactionSorting = data.transactionSorting
+        rbfEnabled = data.rbfEnabled
 
         data.recommendedGasRate?.let {
             feeRateService.setRecommendedAndMin(it, it)
@@ -167,11 +175,13 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         feeService.setChangeToFirstInput(changeToFirstInput)
         utxoFilters = data.utxoFilters
         feeService.setUtxoFilters(utxoFilters)
+        feeService.setCustomUnspentOutputs(unspentOutputs)
 
         amountService.setMemo(memo)
         amountService.setUserMinimumSendAmount(data.minimumSendAmount)
         amountService.setChangeToFirstInput(changeToFirstInput)
         amountService.setUtxoFilters(utxoFilters)
+        amountService.setCustomUnspentOutputs(unspentOutputs)
         amountService.setAmount(data.amount)
 
         addressService.setAddress(Address(data.address))
@@ -197,7 +207,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
             address = addressState.validAddress?.hex!!,
             memo = memo,
             feeRate = feeRateState.feeRate!!,
-            unspentOutputs = null,
+            unspentOutputs = unspentOutputs,
             utxoFilters = utxoFilters,
         )
     }
@@ -208,10 +218,12 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
             address = addressState.validAddress?.hex!!,
             memo = memo,
             feeRate = feeRateState.feeRate!!,
-            unspentOutputs = null,
+            unspentOutputs = unspentOutputs,
+            // Deliberately no pluginData: a timelock cannot apply to these transfers (the
+            // private send deposit must be spendable by the provider immediately).
             pluginData = null,
-            transactionSorting = null,
-            rbfEnabled = false,
+            transactionSorting = transactionSorting,
+            rbfEnabled = rbfEnabled,
             changeToFirstInput = changeToFirstInput,
             utxoFilters = utxoFilters
         )

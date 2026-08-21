@@ -1,8 +1,10 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
 import org.json.JSONObject
 import java.math.BigDecimal
 
@@ -20,6 +22,11 @@ sealed class SendTransactionData {
         val minimumSendAmount: Int?,
         val changeToFirstInput: Boolean,
         val utxoFilters: UtxoFilters,
+        // Caller-chosen coin control and transaction shaping (private send carries the send
+        // screen's settings through these). Null/false leave the service's defaults.
+        val unspentOutputs: List<UnspentOutputInfo>? = null,
+        val transactionSorting: TransactionDataSortMode? = null,
+        val rbfEnabled: Boolean = false,
     ) : SendTransactionData()
 
     sealed class Tron : SendTransactionData() {

@@ -57,6 +57,16 @@ class PrivateSendViewModel(
     var amount by mutableStateOf<BigDecimal?>(null)
         private set
 
+    // Bitcoin-family only: the send screen's settings, set right before opening the
+    // confirmation, which resolves this same ViewModel from the SendPage store to build the
+    // deposit with them. Plain memory — lost on process death, which degrades to defaults.
+    var btcParams: PrivateSendBtcParams? = null
+        private set
+
+    fun setBtcDepositParams(params: PrivateSendBtcParams) {
+        btcParams = params
+    }
+
     init {
         viewModelScope.launch {
             // TTL-guarded and cheap; a first token-list sync landing while this screen is
@@ -127,9 +137,11 @@ class PrivateSendViewModel(
     }
 }
 
+// Default-keyed on purpose: the confirmation page looks this instance up from the SendPage
+// store by class, and a SendPage hosts exactly one token, so no custom key is needed.
 @Composable
 fun privateSendViewModel(token: Token): PrivateSendViewModel =
-    viewModel(key = "private_send_${token.tokenQuery.id}", factory = PrivateSendViewModel.Factory(token))
+    viewModel(factory = PrivateSendViewModel.Factory(token))
 
 /**
  * The toggle card, rendered on a send screen between the balance row and the memo/button
