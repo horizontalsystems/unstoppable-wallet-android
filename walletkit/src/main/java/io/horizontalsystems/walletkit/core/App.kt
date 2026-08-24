@@ -164,6 +164,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var backupManager: IBackupManager
 
         lateinit var connectivityManager: ConnectivityManager
+        lateinit var stalledSyncWatcher: StalledSyncWatcher
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
@@ -358,6 +359,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         numberFormatter = NumberFormatter(languageManager)
 
         connectivityManager = ConnectivityManager(backgroundManager)
+        stalledSyncWatcher = StalledSyncWatcher(coroutineScope)
 
         evmLabelManager = EvmLabelManager(
             EvmLabelProvider(),
@@ -622,7 +624,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         // A node can also die mid-session, foreground or background; watch for a sync that
         // stays stalled and let the chain re-pick. Started independently of onAppStart below:
         // its first tick is 30s out and chains still resolving have no adapters to report.
-        StalledSyncWatcher(coroutineScope).start()
+        stalledSyncWatcher.start()
 
         coroutineScope.launch {
             // If Auto-Select is enabled, pick the fastest reachable node at startup so the wallet
