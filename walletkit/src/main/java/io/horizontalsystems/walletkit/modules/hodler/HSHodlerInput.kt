@@ -70,7 +70,8 @@ fun HSHodlerInput(
         Spacer(modifier = Modifier.weight(1f))
         ButtonSecondaryWithIcon(
             modifier = Modifier.height(28.dp),
-            onClick = { if (enabled) showSelectorDialog = true },
+            onClick = { showSelectorDialog = true },
+            enabled = enabled,
             title = stringResource(lockTimeInterval.stringResId()),
             iconRight = painterResource(R.drawable.ic_down_arrow_20),
         )

@@ -117,6 +117,11 @@ object PrivateSendDepositBuilder {
             throw PrivateSendError.AttachmentUnsupported
         }
 
+        // A blank identifier is as unmatchable as a dropped one.
+        if (attachment.value.isBlank()) {
+            throw PrivateSendError.AttachmentUnsupported
+        }
+
         return attachment.value
     }
 }

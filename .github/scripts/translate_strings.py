@@ -133,7 +133,7 @@ def response_schema(keys) -> dict:
 
 
 # The response schema names every key for every language, and the API caps the
-# compiled size of a constrained-decoding grammar — a large PR (21 strings × 9
+# compiled size of a constrained-decoding grammar — a large PR (21 strings x 9
 # languages) exceeded it. Batching bounds the schema (and the output size) no
 # matter how many strings change at once.
 TRANSLATION_BATCH_SIZE = 6

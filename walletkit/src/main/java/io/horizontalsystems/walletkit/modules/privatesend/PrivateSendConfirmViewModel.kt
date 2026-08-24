@@ -87,10 +87,19 @@ class PrivateSendConfirmViewModel(
 
         viewModelScope.launch {
             // A fee-settings change re-estimates the SAME deposit — the committed order and
-            // its sellAmount ceiling are never silently replaced.
+            // its sellAmount ceiling are never silently replaced. Guarded in the body (a
+            // downstream throw would kill viewModelScope and freeze the screen; Flow.catch
+            // only sees upstream failures) so the collector survives for later changes.
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 val data = depositData ?: return@collect
-                sendTransactionService.setSendTransactionData(data)
+                try {
+                    sendTransactionService.setSendTransactionData(data)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    error = e
+                    emitState()
+                }
             }
         }
 

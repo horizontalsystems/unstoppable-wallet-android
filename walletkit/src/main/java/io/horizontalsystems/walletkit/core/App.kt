@@ -584,8 +584,18 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             wcSessionManager.start()
             swapSyncService.start()
             // Fire-and-forget like the neighbouring starts: nothing below depends on it, and
-            // awaiting it would hold the rest of startup behind a network round trip.
-            launch { privateSendManager.sync() }
+            // awaiting it would hold the rest of startup behind a network round trip. Guarded
+            // because this scope has no SupervisorJob — a failure here would cancel the
+            // remaining startup work.
+            launch {
+                try {
+                    privateSendManager.sync()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Timber.e(e, "Private send sync failed")
+                }
+            }
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

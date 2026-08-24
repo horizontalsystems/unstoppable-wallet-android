@@ -266,6 +266,9 @@ private fun PrivateSendConfirmationScreen(
 @Composable
 private fun PrivateSendConfirmationError(navigation: HSNavigation, error: Throwable) {
     val context = androidx.compose.ui.platform.LocalContext.current
+    // Copy shares the SAME sanitized text the screen renders: the raw message can carry
+    // host/route detail, and the clipboard is readable beyond this app.
+    val message = errorText(context, error)
 
     ConfirmTransactionScreen(
         title = stringResource(R.string.PrivateSend_Toggle_Title),
@@ -285,14 +288,14 @@ private fun PrivateSendConfirmationError(navigation: HSNavigation, error: Throwa
                 .padding(horizontal = 64.dp, vertical = 32.dp),
             icon = painterResource(R.drawable.ic_warning_filled_24),
             iconTint = ComposeAppTheme.colors.grey,
-            text = errorText(context, error),
+            text = message,
             button4config = ButtonConfig(
                 variant = ButtonVariant.Primary,
                 style = ButtonStyle.Transparent,
                 size = ButtonSize.Small,
                 title = stringResource(R.string.Button_CopyError),
                 onClick = {
-                    TextHelper.copyText(error.message ?: error.javaClass.simpleName)
+                    TextHelper.copyText(message)
                 }
             )
         )
