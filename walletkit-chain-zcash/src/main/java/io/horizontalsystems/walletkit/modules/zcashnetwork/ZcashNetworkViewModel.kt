@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager.EndpointPingResult
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager.ZcashEndpoint
-import io.horizontalsystems.walletkit.ui.compose.components.PingState
+import io.horizontalsystems.walletkit.uiv3.components.PingState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

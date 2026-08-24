@@ -1,4 +1,4 @@
-package io.horizontalsystems.walletkit.ui.compose.components
+package io.horizontalsystems.walletkit.uiv3.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
@@ -8,6 +8,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
+import io.horizontalsystems.walletkit.ui.compose.components.caption_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
+import io.horizontalsystems.walletkit.ui.compose.components.caption_remus
 
 /**
  * Reachability of a single node/server, as measured by a chain's node ping.

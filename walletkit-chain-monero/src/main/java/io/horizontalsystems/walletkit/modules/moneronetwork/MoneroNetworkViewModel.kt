@@ -5,7 +5,7 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.NodePingResult
-import io.horizontalsystems.walletkit.ui.compose.components.PingState
+import io.horizontalsystems.walletkit.uiv3.components.PingState
 import io.horizontalsystems.monerokit.NodePingResult as KitNodePingResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
