@@ -149,9 +149,12 @@ class MoneroNodeManager(
         if (!reselectMutex.tryLock()) return false // a ping is already in flight
 
         return try {
+            // Capped like the startup probe: the kit's internal per-node timeout is
+            // thread-interrupt based, which OkHttp calls do not reliably honor, and a probe that
+            // never returned would hold reselectMutex forever, permanently blocking recovery.
             // Every node failing means the device has no usable network, not that the current one
             // is bad — pickFastest returns null there, so nothing is switched.
-            val fastest = pickFastest() ?: return false
+            val fastest = withTimeoutOrNull(STARTUP_PING_TIMEOUT) { pickFastest() } ?: return false
             if (fastest.host == currentNode.host) return false
             save(fastest)
             true
