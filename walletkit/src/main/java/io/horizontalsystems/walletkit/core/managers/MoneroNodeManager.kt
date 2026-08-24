@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 import java.util.Objects
 
 class MoneroNodeManager(
@@ -115,7 +117,12 @@ class MoneroNodeManager(
 
         var target = currentNode
         try {
-            pickFastest()?.let { target = it }
+            // Adapter creation is blocked until this returns, and the kit's internal per-node
+            // timeout is thread-interrupt based, which OkHttp calls do not reliably honor — so
+            // cap the whole probe here, mirroring the Zcash startup path.
+            withTimeoutOrNull(STARTUP_PING_TIMEOUT) {
+                pickFastest()?.let { target = it }
+            }
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
@@ -230,6 +237,10 @@ class MoneroNodeManager(
         }
 
         _nodesUpdatedFlow.tryEmit(node.host)
+    }
+
+    companion object {
+        private val STARTUP_PING_TIMEOUT = 8.seconds
     }
 
     data class NodePingResult(

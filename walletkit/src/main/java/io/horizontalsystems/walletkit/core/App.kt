@@ -123,6 +123,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.async
 import kotlinx.coroutines.CancellationException
 import timber.log.Timber
 import java.security.MessageDigest
@@ -616,25 +619,32 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appIconService.validateAndFixCurrentIcon()
         }
 
+        // A node can also die mid-session, foreground or background; watch for a sync that
+        // stays stalled and let the chain re-pick. Started independently of onAppStart below:
+        // its first tick is 30s out and chains still resolving have no adapters to report.
+        StalledSyncWatcher(coroutineScope).start()
+
         coroutineScope.launch {
-            // If Monero Auto-Select is enabled, pick the fastest reachable node at startup so the
-            // wallet syncs through it without opening the node screen. The Monero adapter creation
-            // is deferred (MoneroNodeManager.isResolvingFastestNode) until this completes; then a
-            // single non-churning re-init creates it once with the fastest node already selected.
-            ChainRegistry.all.forEach { plugin ->
-                try {
-                    plugin.onAppStart()
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Throwable) {
-                    Timber.e(e, "Chain plugin %s onAppStart failed", plugin.blockchainType.uid)
-                }
+            // If Auto-Select is enabled, pick the fastest reachable node at startup so the wallet
+            // syncs through it without opening the node screen. Adapter creation is deferred per
+            // chain (e.g. MoneroNodeManager.isResolvingFastestNode) until its probe completes;
+            // the refreshActiveWallets below then creates each adapter once with the fastest node
+            // already selected. Hooks run concurrently so one chain's probe cannot delay
+            // another's, and each probe caps itself, bounding this whole gate.
+            supervisorScope {
+                ChainRegistry.all.map { plugin ->
+                    async {
+                        try {
+                            plugin.onAppStart()
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            Timber.e(e, "Chain plugin %s onAppStart failed", plugin.blockchainType.uid)
+                        }
+                    }
+                }.awaitAll()
             }
             walletManager.refreshActiveWallets()
-
-            // A node can also die mid-session, foreground or background; watch for a sync that
-            // stays stalled and let the chain re-pick.
-            StalledSyncWatcher(coroutineScope).start()
         }
 
         coroutineScope.launch {
