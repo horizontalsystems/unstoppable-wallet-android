@@ -269,6 +269,7 @@ dependencies {
 
     // Unit Tests
     testImplementation(libs.junit)
+    testImplementation(libs.classgraph)
     testImplementation(libs.arch.core.testing)
     testImplementation(libs.mockito)
     testImplementation(libs.mockito.kotlin)
