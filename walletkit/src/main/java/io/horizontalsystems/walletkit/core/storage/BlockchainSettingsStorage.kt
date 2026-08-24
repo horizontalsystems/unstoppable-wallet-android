@@ -82,7 +82,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
     }
 
     fun moneroAutoSelect(): Boolean {
-        return dao.getBlockchainSetting(BlockchainType.Monero.uid, keyMoneroAutoSelect)?.value?.toBoolean() ?: false
+        return dao.getBlockchainSetting(BlockchainType.Monero.uid, keyMoneroAutoSelect)?.value?.toBoolean() ?: true
     }
 
     fun saveMoneroAutoSelect(enabled: Boolean) {
@@ -122,7 +122,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
     }
 
     fun zcashAutoSelect(): Boolean {
-        return dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashAutoSelect)?.value?.toBoolean() ?: false
+        return dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashAutoSelect)?.value?.toBoolean() ?: true
     }
 
     fun saveZcashAutoSelect(enabled: Boolean) {

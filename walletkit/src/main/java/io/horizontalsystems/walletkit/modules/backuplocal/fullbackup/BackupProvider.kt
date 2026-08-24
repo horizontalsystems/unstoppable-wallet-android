@@ -308,6 +308,10 @@ class BackupProvider(
                 blockchainSettingsStorage.saveMoneroNode(node.url)
             }
 
+            settings.moneroNodes?.autoSelect?.let {
+                blockchainSettingsStorage.saveMoneroAutoSelect(it)
+            }
+
             settings.zanoNodes?.custom?.forEach { node ->
                 zanoNodeStorage.save(ZanoNodeRecord(node.url))
             }
@@ -322,6 +326,10 @@ class BackupProvider(
 
             settings.zcashEndpoints?.selected?.forEach { endpoint ->
                 blockchainSettingsStorage.saveZcashEndpoint(endpoint.url)
+            }
+
+            settings.zcashEndpoints?.autoSelect?.let {
+                blockchainSettingsStorage.saveZcashAutoSelect(it)
             }
         }
     }
@@ -573,7 +581,7 @@ class BackupProvider(
         } else {
             listOf()
         }
-        val moneroNodes = MoneroNodes(listOf(selectedMoneroNode), customMoneroNodes)
+        val moneroNodes = MoneroNodes(listOf(selectedMoneroNode), customMoneroNodes, moneroNodeManager.autoSelectEnabled)
 
         val selectedZanoNode = ZanoNodeBackup(BlockchainType.Zano.uid, zanoNodeManager.currentNode.host)
         val customZanoNodes = if (BackupSection.CustomRpc in sections) {
@@ -589,7 +597,7 @@ class BackupProvider(
         } else {
             listOf()
         }
-        val zcashEndpoints = ZcashEndpoints(listOf(selectedZcashEndpoint), customZcashEndpoints)
+        val zcashEndpoints = ZcashEndpoints(listOf(selectedZcashEndpoint), customZcashEndpoints, zcashEndpointManager.autoSelectEnabled)
 
         val chartIndicators = chartIndicators()
 
@@ -829,7 +837,11 @@ data class MoneroNodeBackup(
 
 data class MoneroNodes(
     val selected: List<MoneroNodeBackup>,
-    val custom: List<MoneroNodeBackup>
+    val custom: List<MoneroNodeBackup>,
+    // Nullable: absent in backups made before Auto-Select was included, which must not
+    // override the device's current setting on restore.
+    @SerializedName("auto_select")
+    val autoSelect: Boolean? = null,
 )
 
 data class ZanoNodeBackup(
@@ -852,6 +864,8 @@ data class ZcashEndpointBackup(
 data class ZcashEndpoints(
     val selected: List<ZcashEndpointBackup>,
     val custom: List<ZcashEndpointBackup>,
+    @SerializedName("auto_select")
+    val autoSelect: Boolean? = null,
 )
 
 data class RsiBackup(
