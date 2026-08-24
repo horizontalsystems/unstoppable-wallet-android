@@ -41,7 +41,6 @@ class TransactionsViewModel(
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<TransactionsUiState>() {
 
-    var tmpTransactionRecordToShow: TransactionRecord? = null
 
     val filterResetEnabled = MutableLiveData<Boolean>()
     val filterTokensLiveData = MutableLiveData<List<Filter<FilterToken?>>>()

@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.nav3
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.walletkit.core.App
@@ -59,14 +60,24 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
     }
 
     @Composable
-    inline fun <reified VM : ViewModel> viewModelForScreen(klass: KClass<out HSPage>) : VM {
-        return viewModelForScreen(klass.simpleName ?: "HSScreen")
+    inline fun <reified VM : ViewModel> viewModelForScreen(
+        klass: KClass<out HSPage>,
+        factory: ViewModelProvider.Factory? = null,
+    ) : VM {
+        return viewModelForScreen(klass.simpleName ?: "HSScreen", factory)
     }
 
     @Composable
-    inline fun <reified VM : ViewModel> viewModelForScreen(contentKey: String) : VM {
+    // The factory makes the lookup restore-safe: after process death the shared
+    // store is empty, and without a factory the default one instantiates the
+    // ViewModel reflectively and crashes on constructor parameters.
+    inline fun <reified VM : ViewModel> viewModelForScreen(
+        contentKey: String,
+        factory: ViewModelProvider.Factory? = null,
+    ) : VM {
         return viewModel(
             viewModelStoreOwner = rememberChildViewModelStoreOwner(contentKey),
+            factory = factory,
         )
     }
 

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.remember
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEntity
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -15,10 +16,8 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.coin.CoinPage
-import io.horizontalsystems.walletkit.modules.nav3.EntryPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.DescriptionCell
@@ -49,9 +48,7 @@ data object TransactionInfoPage : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        val viewModelTxs = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
-
-        val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
+        val transactionRecord = remember { TransactionInfoPayload.record }
         if (transactionRecord == null) {
             navigation.removeLastUntil(TransactionInfoPage::class, true)
             return

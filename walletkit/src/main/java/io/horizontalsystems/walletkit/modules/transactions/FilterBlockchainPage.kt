@@ -39,7 +39,7 @@ data object FilterBlockchainPage : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class, TransactionsModule.Factory())
 
         FilterBlockchainScreen(navigation, viewModel)
     }

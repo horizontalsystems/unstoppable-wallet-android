@@ -43,7 +43,7 @@ data object FilterCoinPage : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class, TransactionsModule.Factory())
         FilterCoinScreen(navigation, viewModel)
     }
 

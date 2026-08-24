@@ -49,6 +49,7 @@ import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.balance.BalanceScreenState
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
+import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HSCircularProgressIndicator
@@ -196,7 +197,7 @@ private fun onTransactionClick(
 ) {
     val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
 
-    viewModel.tmpTransactionRecordToShow = transactionItem.record
+    TransactionInfoPayload.record = transactionItem.record
 
     navigation.slideFromBottom(TransactionInfoPage)
 
