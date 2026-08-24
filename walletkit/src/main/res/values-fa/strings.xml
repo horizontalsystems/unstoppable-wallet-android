@@ -776,4 +776,25 @@
     <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">این درخواست امضای پیام برای حسابی متفاوت از کیف‌پول فعال شما است. مسدود شد.</string>
     <string name="WalletConnect_Solana_UnreadableTransaction_Title">تراکنش غیرقابل‌خواندگی</string>
     <string name="WalletConnect_Solana_UnreadableTransaction">جزئیات این تراکنش نتوانست رمزگشایی شود، بنابراین شما نمی‌توانید ببینید چه کاری انجام می‌دهد — گیرنده، مقدار و برنامه‌ها پنهان هستند. تنها اگر کاملاً به این برنامه اعتماد دارید، ادامه دهید.</string>
+    <string name="PrivateSend_Toggle_Title">ارسال خصوصی</string>
+    <string name="PrivateSend_Info_Description">ارسال خصوصی تراکنش شما را از طریق یک واسطه محرمانه هدایت می‌کند و پیوند عمومی بین آدرس شما و گیرنده را پنهان می‌کند. هر دو تراکنش در بلاک چین قابل مشاهده هستند، اما مستقیماً با یکدیگر متصل نیستند.</string>
+    <string name="PrivateSend_Unavailable">ارسال خصوصی در دسترس نیست</string>
+    <string name="PrivateSend_Fee">هزینه ارسال خصوصی</string>
+    <string name="PrivateSend_Fee_Info">این هزینه هزینه پردازش تراکنش شما به صورت خصوصی را پوشش می‌دهد. این هزینه علاوه بر هزینه شبکه کسر می‌شود و به میزان ارسالی شما بستگی دارد.</string>
+    <string name="PrivateSend_ReservedAmount">مبلغ رزرو شده</string>
+    <string name="PrivateSend_ReservedAmount_Info">یک مبلغ اضافی به طور موقت رزرو شده است تا تغییرات احتمالی قیمت را در حین پردازش تراکنش شما پوشش دهد. هر بخش استفاده نشده پس از تکمیل ارسال در یک تراکنش جداگانه به کیف پول شما برگردانده می‌شود.</string>
+    <string name="PrivateSend_EstimatedTime">زمان تخمینی رسیدن</string>
+    <string name="PrivateSend_CommitFailed">نتوانست ارسال خصوصی را تنظیم کند. دوباره تلاش کنید.</string>
+    <string name="PrivateSend_Caution_Title">ارسال خصوصی</string>
+    <string name="PrivateSend_Caution_BelowMinimum">ارسال خصوصی مستلزم دریافت حداقل %s توسط گیرنده است.</string>
+    <string name="PrivateSend_Caution_AboveMaximum">ارسال خصوصی حداکثر %s را پشتیبانی می‌کند.</string>
+    <string name="PrivateSend_Caution_InsufficientBalance">این ارسال خصوصی به %s در کیف پول شما نیاز دارد، شامل کارمزد.</string>
+    <string name="PrivateSend_Caution_NoRoute">در حال حاضر هیچ مسیر خصوصی برای این توکن و مقدار در دسترس نیست.</string>
+    <string name="PrivateSend_Caution_ExactOutputUnsupported">این مسیر نمی‌تواند مقدار دقیق دریافتی را تضمین کند.</string>
+    <string name="PrivateSend_Caution_ProviderSuspended">فراهم‌کننده ارسال خصوصی به طور موقت در دسترس نیست.</string>
+    <string name="PrivateSend_Caution_NetworkError">نتوانست به فراهم‌کننده ارسال خصوصی دسترسی پیدا کند. اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
+    <string name="PrivateSend_Caution_TokenUnsupported">ارسال خصوصی دیگر برای این توکن در دسترس نیست.</string>
+    <string name="PrivateSend_Caution_AttachmentUnsupported">این مسیر خصوصی به برچسب تراکنشی نیاز دارد که این کیف پول نمی‌تواند آن را ضمیمه کند. Private Send برای این توکن در دسترس نیست.</string>
+    <string name="PrivateSend_Caution_BufferUnknown">کارمزد نمایش‌داده شده تخمین بالایی است؛ هزینه نهایی می‌تواند کمتر باشد.</string>
+    <string name="PrivateSend_NotAvailable">وقتی Private Send روشن است در دسترس نیست.</string>
 </resources>

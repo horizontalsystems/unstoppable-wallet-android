@@ -1843,4 +1843,25 @@
     <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">此消息签名请求适用于与您的活跃钱包不同的账户。已被阻止。</string>
     <string name="WalletConnect_Solana_UnreadableTransaction_Title">不可读交易</string>
     <string name="WalletConnect_Solana_UnreadableTransaction">此交易的详细信息无法解码，因此您无法查看它的功能——收款人、金额和程序已隐藏。仅当您完全信任此应用程序时才继续。</string>
+    <string name="PrivateSend_Toggle_Title">隐私发送</string>
+    <string name="PrivateSend_Info_Description">隐私发送通过机密中介将您的交易进行路由，隐藏您的地址与接收方之间的公开联系。两笔交易在区块链上都保持可见，但它们之间没有直接关联。</string>
+    <string name="PrivateSend_Unavailable">隐私发送不可用</string>
+    <string name="PrivateSend_Fee">隐私发送费用</string>
+    <string name="PrivateSend_Fee_Info">此费用涵盖了私下处理您交易的成本。除了网络费用外还需支付，费用金额取决于您发送的金额。</string>
+    <string name="PrivateSend_ReservedAmount">预留金额</string>
+    <string name="PrivateSend_ReservedAmount_Info">在处理您的交易时，会暂时预留额外的金额以覆盖可能的价格变化。任何未使用的部分将在发送完成后通过单独的交易退回到您的钱包。</string>
+    <string name="PrivateSend_EstimatedTime">预计到达时间</string>
+    <string name="PrivateSend_CommitFailed">无法设置私密发送。请重试。</string>
+    <string name="PrivateSend_Caution_Title">私密发送</string>
+    <string name="PrivateSend_Caution_BelowMinimum">私密发送要求接收者至少收到 %s。</string>
+    <string name="PrivateSend_Caution_AboveMaximum">私密发送最多支持 %s。</string>
+    <string name="PrivateSend_Caution_InsufficientBalance">此私密发送需要钱包中有 %s，包括手续费。</string>
+    <string name="PrivateSend_Caution_NoRoute">目前没有可用的私密路由来处理此代币和金额。</string>
+    <string name="PrivateSend_Caution_ExactOutputUnsupported">此路由无法保证确切的接收金额。</string>
+    <string name="PrivateSend_Caution_ProviderSuspended">私密发送提供商暂时不可用。</string>
+    <string name="PrivateSend_Caution_NetworkError">无法连接到私密发送提供商。请检查您的连接并重试。</string>
+    <string name="PrivateSend_Caution_TokenUnsupported">此代币不再支持私密发送。</string>
+    <string name="PrivateSend_Caution_AttachmentUnsupported">此私人路由需要此钱包无法附加的交易标签。此代币不支持 Private Send。</string>
+    <string name="PrivateSend_Caution_BufferUnknown">显示的费用是上限估算;最终成本可能更低。</string>
+    <string name="PrivateSend_NotAvailable">启用 Private Send 时不可用。</string>
 </resources>

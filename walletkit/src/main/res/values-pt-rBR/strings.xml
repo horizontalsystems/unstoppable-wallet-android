@@ -1848,4 +1848,25 @@
     <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Esta solicitação de assinatura de mensagem é para uma conta diferente da sua carteira ativa. Foi bloqueada.</string>
     <string name="WalletConnect_Solana_UnreadableTransaction_Title">Transação ilegível</string>
     <string name="WalletConnect_Solana_UnreadableTransaction">Os detalhes desta transação não puderam ser decodificados, então você não consegue ver o que ela faz — o destinatário, o valor e os programas estão ocultos. Continue apenas se confiar completamente neste aplicativo.</string>
+    <string name="PrivateSend_Toggle_Title">Envio Privado</string>
+    <string name="PrivateSend_Info_Description">Envio Privado roteia sua transação através de um intermediário confidencial, ocultando o vínculo público entre seu endereço e o destinatário. Ambas as transações permanecem visíveis na blockchain, mas não estão diretamente conectadas uma à outra.</string>
+    <string name="PrivateSend_Unavailable">Envio privado indisponível</string>
+    <string name="PrivateSend_Fee">Taxa de envio privado</string>
+    <string name="PrivateSend_Fee_Info">Esta taxa cobre o custo do processamento privado de sua transação. É cobrada além da taxa de rede e depende da quantidade que você envia.</string>
+    <string name="PrivateSend_ReservedAmount">Quantia reservada</string>
+    <string name="PrivateSend_ReservedAmount_Info">Um valor adicional é temporariamente reservado para cobrir possíveis mudanças de preço enquanto sua transação é processada. Qualquer parte não utilizada é devolvida à sua carteira em uma transação separada após a conclusão do envio.</string>
+    <string name="PrivateSend_EstimatedTime">Chegada estimada</string>
+    <string name="PrivateSend_CommitFailed">Não foi possível configurar o envio privado. Tente novamente.</string>
+    <string name="PrivateSend_Caution_Title">Envio privado</string>
+    <string name="PrivateSend_Caution_BelowMinimum">O envio privado requer que o destinatário receba pelo menos %s.</string>
+    <string name="PrivateSend_Caution_AboveMaximum">O envio privado suporta no máximo %s.</string>
+    <string name="PrivateSend_Caution_InsufficientBalance">Este envio privado precisa de %s em sua carteira, incluindo taxas.</string>
+    <string name="PrivateSend_Caution_NoRoute">Nenhuma rota privada está disponível para este token e valor no momento.</string>
+    <string name="PrivateSend_Caution_ExactOutputUnsupported">Esta rota não pode garantir um valor exato recebido.</string>
+    <string name="PrivateSend_Caution_ProviderSuspended">O provedor de envio privado está temporariamente indisponível.</string>
+    <string name="PrivateSend_Caution_NetworkError">Não foi possível alcançar o provedor de envio privado. Verifique sua conexão e tente novamente.</string>
+    <string name="PrivateSend_Caution_TokenUnsupported">O envio privado não está mais disponível para este token.</string>
+    <string name="PrivateSend_Caution_AttachmentUnsupported">Esta rota privada requer uma tag de transação que esta carteira não consegue anexar. Private Send não está disponível para este token.</string>
+    <string name="PrivateSend_Caution_BufferUnknown">A taxa exibida é uma estimativa superior; o custo final pode ser menor.</string>
+    <string name="PrivateSend_NotAvailable">Não disponível quando Private Send está ativado.</string>
 </resources>

@@ -1850,4 +1850,25 @@
     <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Этот запрос на подпись сообщения предназначен для другого счета, чем ваш активный кошелек. Он был заблокирован.</string>
     <string name="WalletConnect_Solana_UnreadableTransaction_Title">Нечитаемая транзакция</string>
     <string name="WalletConnect_Solana_UnreadableTransaction">Детали этой транзакции не удалось декодировать, поэтому вы не можете видеть, что она делает — получатель, сумма и программы скрыты. Продолжайте только если вы полностью доверяете этому приложению.</string>
+    <string name="PrivateSend_Toggle_Title">Приватная отправка</string>
+    <string name="PrivateSend_Info_Description">Приватная отправка маршрутизирует вашу транзакцию через конфиденциального посредника, скрывая публичную связь между вашим адресом и получателем. Обе транзакции остаются видны в блокчейне, но они не напрямую связаны друг с другом.</string>
+    <string name="PrivateSend_Unavailable">Приватная отправка недоступна</string>
+    <string name="PrivateSend_Fee">Комиссия приватной отправки</string>
+    <string name="PrivateSend_Fee_Info">Эта комиссия покрывает стоимость приватной обработки вашей транзакции. Она взимается в дополнение к комиссии сети и зависит от суммы, которую вы отправляете.</string>
+    <string name="PrivateSend_ReservedAmount">Зарезервированная сумма</string>
+    <string name="PrivateSend_ReservedAmount_Info">Дополнительная сумма временно зарезервирована для покрытия возможных колебаний цены во время обработки вашей транзакции. Неиспользованная часть возвращается в ваш кошелек в отдельной транзакции после завершения отправки.</string>
+    <string name="PrivateSend_EstimatedTime">Предполагаемое время прибытия</string>
+    <string name="PrivateSend_CommitFailed">Не удалось настроить приватную отправку. Попробуйте еще раз.</string>
+    <string name="PrivateSend_Caution_Title">Приватная отправка</string>
+    <string name="PrivateSend_Caution_BelowMinimum">Приватная отправка требует, чтобы получатель получил не менее %s.</string>
+    <string name="PrivateSend_Caution_AboveMaximum">Приватная отправка поддерживает максимум %s.</string>
+    <string name="PrivateSend_Caution_InsufficientBalance">Для этого приватного перевода необходимо %s в вашем кошельке, включая комиссии.</string>
+    <string name="PrivateSend_Caution_NoRoute">На данный момент нет доступного приватного маршрута для этого токена и суммы.</string>
+    <string name="PrivateSend_Caution_ExactOutputUnsupported">Этот маршрут не может гарантировать точную сумму получения.</string>
+    <string name="PrivateSend_Caution_ProviderSuspended">Поставщик приватных переводов временно недоступен.</string>
+    <string name="PrivateSend_Caution_NetworkError">Не удалось подключиться к поставщику приватных переводов. Проверьте ваше соединение и повторите попытку.</string>
+    <string name="PrivateSend_Caution_TokenUnsupported">Приватный перевод больше не доступен для этого токена.</string>
+    <string name="PrivateSend_Caution_AttachmentUnsupported">Этот приватный маршрут требует тег транзакции, который это хранилище не может присоединить. Private Send недоступен для этого токена.</string>
+    <string name="PrivateSend_Caution_BufferUnknown">Показанная комиссия является верхней оценкой; финальная стоимость может быть ниже.</string>
+    <string name="PrivateSend_NotAvailable">Недоступно при включенном Private Send.</string>
 </resources>

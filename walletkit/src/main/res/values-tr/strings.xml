@@ -1844,4 +1844,25 @@
     <string name="WalletConnect_Solana_SignMessage_ForeignPubkey">Bu mesaj imzalama isteği, aktif cüzdanınızdan farklı bir hesap içindir. Engellendi.</string>
     <string name="WalletConnect_Solana_UnreadableTransaction_Title">Okunamayan işlem</string>
     <string name="WalletConnect_Solana_UnreadableTransaction">Bu işlemin ayrıntıları çözülemedi, bu nedenle ne yaptığını göremezsiniz — alıcı, miktar ve programlar gizlidir. Yalnızca bu uygulamaya tamamen güveniyorsanız devam edin.</string>
+    <string name="PrivateSend_Toggle_Title">Özel Gönderme</string>
+    <string name="PrivateSend_Info_Description">Özel Gönderme, işleminizi gizli bir aracı aracılığıyla yönlendirerek, adresiniz ile alıcı arasındaki genel bağlantıyı gizler. Her iki işlem de blok zincirinde görünür kalır, ancak doğrudan birbirine bağlı değillerdir.</string>
+    <string name="PrivateSend_Unavailable">Özel gönderme kullanılamıyor</string>
+    <string name="PrivateSend_Fee">Özel gönderme ücreti</string>
+    <string name="PrivateSend_Fee_Info">Bu ücret, işleminizi özel olarak işleme almanın maliyetini kapsar. Ağ ücretinin yanına eklenir ve gönderdiğiniz tutara bağlıdır.</string>
+    <string name="PrivateSend_ReservedAmount">Ayrılan miktar</string>
+    <string name="PrivateSend_ReservedAmount_Info">İşleminiz işlenirken olası fiyat değişikliklerini karşılamak için ek bir miktar geçici olarak ayrılır. Kullanılmayan kısım, gönderim tamamlandıktan sonra ayrı bir işlemde cüzdanınıza iade edilir.</string>
+    <string name="PrivateSend_EstimatedTime">Tahmini varış zamanı</string>
+    <string name="PrivateSend_CommitFailed">Özel gönderim ayarlanamadı. Tekrar deneyin.</string>
+    <string name="PrivateSend_Caution_Title">Özel gönderim</string>
+    <string name="PrivateSend_Caution_BelowMinimum">Özel gönderim, alıcının en az %s almasını gerektirir.</string>
+    <string name="PrivateSend_Caution_AboveMaximum">Özel gönderim en fazla %s destekler.</string>
+    <string name="PrivateSend_Caution_InsufficientBalance">Bu özel gönderim, ücretler dahil olmak üzere cüzdanınızda %s gerektirir.</string>
+    <string name="PrivateSend_Caution_NoRoute">Şu anda bu token ve tutar için kullanılabilir özel bir rota yok.</string>
+    <string name="PrivateSend_Caution_ExactOutputUnsupported">Bu rota tam alınan tutarı garanti edemez.</string>
+    <string name="PrivateSend_Caution_ProviderSuspended">Özel gönderim sağlayıcısı geçici olarak kullanılamaz.</string>
+    <string name="PrivateSend_Caution_NetworkError">Özel gönderim sağlayıcısına ulaşılamadı. Bağlantınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="PrivateSend_Caution_TokenUnsupported">Özel gönderim artık bu token için kullanılamaz.</string>
+    <string name="PrivateSend_Caution_AttachmentUnsupported">Bu özel rota, bu cüzdanın ekleyemediği bir işlem etiketi gerektirir. Private Send bu token için kullanılamaz.</string>
+    <string name="PrivateSend_Caution_BufferUnknown">Gösterilen ücret bir üst tahmindir; nihai maliyet daha düşük olabilir.</string>
+    <string name="PrivateSend_NotAvailable">Private Send açıkken kullanılamaz.</string>
 </resources>
