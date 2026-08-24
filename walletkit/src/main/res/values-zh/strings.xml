@@ -1782,10 +1782,7 @@
     <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum、Arbitrum、Optimism…</string>
     <string name="CoinPage_Buy">购买</string>
     <string name="CoinPage_Sell">出售</string>
-    <string name="MoneroNodeSettings_AutoSelect">自动选择</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">自动使用最快的节点</string>
-    <string name="MoneroNodeSettings_Unreachable">无法访问</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">此备忘录将在区块链上公开。</string>
     <string name="Send_Memo_EncryptedInfo">此备忘录已加密，只有您和收款人可以看到。</string>
     <string name="Send_Memo_OffchainInfo">仅存储在此设备上 — 不在区块链上。</string>
@@ -1864,4 +1861,8 @@
     <string name="PrivateSend_Caution_AttachmentUnsupported">此私人路由需要此钱包无法附加的交易标签。此代币不支持 Private Send。</string>
     <string name="PrivateSend_Caution_BufferUnknown">显示的费用是上限估算;最终成本可能更低。</string>
     <string name="PrivateSend_NotAvailable">启用 Private Send 时不可用。</string>
+    <string name="NetworkSettings_AutoSelect">自动选择</string>
+    <string name="NetworkSettings_Unreachable">无法访问</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">自动使用最快的服务器</string>
 </resources>

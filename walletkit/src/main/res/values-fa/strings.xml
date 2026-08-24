@@ -714,10 +714,7 @@
     <string name="PasskeyTerms_Responsibility_Description">مسئولیت دسترسی به دستگاهتان بر عهده شماست. در صورت از دست رفتن دسترسی، Unstoppable نمی‌تواند این کیف‌پول را بازیابی کند.</string>
     <string name="CoinPage_Buy">خریدن</string>
     <string name="CoinPage_Sell">فروختن</string>
-    <string name="MoneroNodeSettings_AutoSelect">انتخاب خودکار</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">استفاده خودکار از سریع‌ترین گره</string>
-    <string name="MoneroNodeSettings_Unreachable">غیرقابل دسترس</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">این یادداشت در بلاک چین عمومی خواهد بود.</string>
     <string name="Send_Memo_EncryptedInfo">این یادداشت رمزگذاری شده است و تنها برای شما و گیرنده قابل مشاهده است.</string>
     <string name="Send_Memo_OffchainInfo">فقط در این دستگاه ذخیره شده است — در بلاک‌چین نیست.</string>
@@ -797,4 +794,8 @@
     <string name="PrivateSend_Caution_AttachmentUnsupported">این مسیر خصوصی به برچسب تراکنشی نیاز دارد که این کیف پول نمی‌تواند آن را ضمیمه کند. Private Send برای این توکن در دسترس نیست.</string>
     <string name="PrivateSend_Caution_BufferUnknown">کارمزد نمایش‌داده شده تخمین بالایی است؛ هزینه نهایی می‌تواند کمتر باشد.</string>
     <string name="PrivateSend_NotAvailable">وقتی Private Send روشن است در دسترس نیست.</string>
+    <string name="NetworkSettings_AutoSelect">انتخاب خودکار</string>
+    <string name="NetworkSettings_Unreachable">غیرقابل دسترس</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">استفاده خودکار از سریع‌ترین سرور</string>
 </resources>

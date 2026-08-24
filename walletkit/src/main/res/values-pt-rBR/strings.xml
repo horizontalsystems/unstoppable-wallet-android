@@ -1787,10 +1787,7 @@
     <string name="PasskeyTerms_Responsibility_Description">Você é responsável pelo acesso ao seu dispositivo. A Unstoppable não pode recuperar esta carteira se o acesso for perdido.</string>
     <string name="CoinPage_Buy">Comprar</string>
     <string name="CoinPage_Sell">Vender</string>
-    <string name="MoneroNodeSettings_AutoSelect">Seleção automática</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">Usar automaticamente o nó mais rápido</string>
-    <string name="MoneroNodeSettings_Unreachable">Inacessível</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">Este memorando será público na blockchain.</string>
     <string name="Send_Memo_EncryptedInfo">Este memorando está criptografado e é visível apenas para você e o destinatário.</string>
     <string name="Send_Memo_OffchainInfo">Armazenado apenas neste dispositivo — não na blockchain.</string>
@@ -1869,4 +1866,8 @@
     <string name="PrivateSend_Caution_AttachmentUnsupported">Esta rota privada requer uma tag de transação que esta carteira não consegue anexar. Private Send não está disponível para este token.</string>
     <string name="PrivateSend_Caution_BufferUnknown">A taxa exibida é uma estimativa superior; o custo final pode ser menor.</string>
     <string name="PrivateSend_NotAvailable">Não disponível quando Private Send está ativado.</string>
+    <string name="NetworkSettings_AutoSelect">Seleção automática</string>
+    <string name="NetworkSettings_Unreachable">Inacessível</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">Usar automaticamente o servidor mais rápido</string>
 </resources>

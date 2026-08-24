@@ -1783,10 +1783,7 @@
     <string name="Watch_Monero_Warning">Monero 워치 지갑은 입금 거래만 표시합니다. 표시된 잔액이 정확하지 않을 수 있습니다.</string>
     <string name="CoinPage_Buy">구매</string>
     <string name="CoinPage_Sell">판매</string>
-    <string name="MoneroNodeSettings_AutoSelect">자동 선택</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">가장 빠른 노드를 자동으로 사용</string>
-    <string name="MoneroNodeSettings_Unreachable">연결할 수 없음</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">이 메모는 블록체인에 공개됩니다.</string>
     <string name="Send_Memo_EncryptedInfo">이 메모는 암호화되어 있으며 귀하와 수신자에게만 표시됩니다.</string>
     <string name="Send_Memo_OffchainInfo">이 기기에만 저장됨 — 블록체인에 기록되지 않음.</string>
@@ -1865,4 +1862,8 @@
     <string name="PrivateSend_Caution_AttachmentUnsupported">이 프라이빗 경로는 이 지갑이 첨부할 수 없는 거래 태그가 필요합니다. Private Send는 이 토큰에 대해 사용할 수 없습니다.</string>
     <string name="PrivateSend_Caution_BufferUnknown">표시된 수수료는 상한 추정치입니다. 최종 비용은 더 낮을 수 있습니다.</string>
     <string name="PrivateSend_NotAvailable">Private Send가 켜져 있을 때는 사용할 수 없습니다.</string>
+    <string name="NetworkSettings_AutoSelect">자동 선택</string>
+    <string name="NetworkSettings_Unreachable">연결 불가</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">가장 빠른 서버를 자동으로 사용</string>
 </resources>

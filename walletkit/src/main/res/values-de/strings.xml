@@ -1791,10 +1791,7 @@
     <string name="PasskeyTerms_Responsibility_Description">Sie sind für den Zugriff auf Ihr Gerät verantwortlich. Unstoppable kann dieses Wallet nicht wiederherstellen, wenn der Zugriff verloren geht.</string>
     <string name="CoinPage_Buy">Kaufen</string>
     <string name="CoinPage_Sell">Verkaufen</string>
-    <string name="MoneroNodeSettings_AutoSelect">Automatische Auswahl</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">Verwendet automatisch den schnellsten Node</string>
-    <string name="MoneroNodeSettings_Unreachable">Nicht erreichbar</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">Diese Notiz wird öffentlich auf der Blockchain gespeichert.</string>
     <string name="Send_Memo_EncryptedInfo">Diese Notiz ist verschlüsselt und nur für Sie und den Empfänger sichtbar.</string>
     <string name="Send_Memo_OffchainInfo">Nur auf diesem Gerät gespeichert — nicht in der Blockchain.</string>
@@ -1873,4 +1870,8 @@
     <string name="PrivateSend_Caution_AttachmentUnsupported">Diese private Route erfordert ein Transaktions-Tag, das dieses Wallet nicht anhängen kann. Private Send ist für diesen Token nicht verfügbar.</string>
     <string name="PrivateSend_Caution_BufferUnknown">Die angezeigte Gebühr ist eine Obergrenze; die endgültigen Kosten können niedriger sein.</string>
     <string name="PrivateSend_NotAvailable">Nicht verfügbar, wenn Private Send aktiviert ist.</string>
+    <string name="NetworkSettings_AutoSelect">Automatische Auswahl</string>
+    <string name="NetworkSettings_Unreachable">Nicht erreichbar</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">Verwenden Sie automatisch den schnellsten Server</string>
 </resources>

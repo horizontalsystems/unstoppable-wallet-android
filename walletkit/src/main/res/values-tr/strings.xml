@@ -1783,10 +1783,7 @@
     <string name="Watch_Monero_Warning">Monero izleme cüzdanı yalnızca gelen işlemleri gösterir. Görüntülenen bakiye yanlış olabilir.</string>
     <string name="CoinPage_Buy">Satın Al</string>
     <string name="CoinPage_Sell">Sat</string>
-    <string name="MoneroNodeSettings_AutoSelect">Otomatik seçim</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">En hızlı düğümü otomatik olarak kullan</string>
-    <string name="MoneroNodeSettings_Unreachable">Ulaşılamaz</string>
-    <string name="MoneroNodeSettings_Latency">%d ms</string>
     <string name="Send_Memo_PublicWarning">Bu not blockchain üzerinde herkese açık olacaktır.</string>
     <string name="Send_Memo_EncryptedInfo">Bu not şifrelenir ve yalnızca sizin ve alıcının tarafından görülür.</string>
     <string name="Send_Memo_OffchainInfo">Yalnızca bu cihazda depolanır — zincir üzerinde değildir.</string>
@@ -1865,4 +1862,8 @@
     <string name="PrivateSend_Caution_AttachmentUnsupported">Bu özel rota, bu cüzdanın ekleyemediği bir işlem etiketi gerektirir. Private Send bu token için kullanılamaz.</string>
     <string name="PrivateSend_Caution_BufferUnknown">Gösterilen ücret bir üst tahmindir; nihai maliyet daha düşük olabilir.</string>
     <string name="PrivateSend_NotAvailable">Private Send açıkken kullanılamaz.</string>
+    <string name="NetworkSettings_AutoSelect">Otomatik Seç</string>
+    <string name="NetworkSettings_Unreachable">Erişilemiyor</string>
+    <string name="NetworkSettings_Latency">%d ms</string>
+    <string name="ZcashEndpointSettings_AutoSelectDescription">En hızlı sunucuyu otomatik olarak kullan</string>
 </resources>
