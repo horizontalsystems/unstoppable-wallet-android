@@ -61,14 +61,6 @@ class ZcashLightWalletEndpointManager(
             blockchainSettingsStorage.saveZcashAutoSelect(value)
         }
 
-    // True while the startup ping is choosing the fastest endpoint. The Zcash adapter creation is
-    // deferred while this is set, so the wallet connects once to the fastest server instead of
-    // connecting to the stored one and then reconnecting. Set at construction (before adapters
-    // are initialized) to avoid a race.
-    @Volatile
-    var isResolvingFastestEndpoint: Boolean = autoSelectEnabled
-        private set
-
     /**
      * Pings lightwalletd endpoints and reports reachability/latency. Supplied by the Zcash chain
      * plugin (the implementation lives in walletkit-chain-zcash); null while the module is absent.
@@ -80,29 +72,23 @@ class ZcashLightWalletEndpointManager(
         endpointPinger?.invoke(urls) ?: emptyList()
 
     suspend fun autoSelectFastestEndpointOnStartup() {
-        if (!autoSelectEnabled || endpointPinger == null) {
-            isResolvingFastestEndpoint = false
-            return
-        }
+        if (!autoSelectEnabled || endpointPinger == null) return
 
-        var target = currentEndpoint
         try {
-            // Adapter creation is blocked until this returns, so cap the whole probe: a gRPC/TLS
-            // handshake per endpoint is slower than a plain HTTP ping and must not stall startup.
+            // The adapter starts on the stored endpoint right away — deferring its creation until
+            // the probe finished left wallet rows interactive with no adapter behind them, which
+            // crashed the send/shield/migration screens. Capped so a slow gRPC/TLS handshake
+            // cannot stall the startup gate.
             withTimeoutOrNull(STARTUP_PING_TIMEOUT) {
-                pickFastest()?.let { target = it }
+                val fastest = pickFastest() ?: return@withTimeoutOrNull
+                // save() emits, so a change rebuilds the adapter once onto the winner; when the
+                // stored endpoint is still the fastest nothing is emitted and nothing reconnects.
+                if (fastest.url != currentEndpoint.url) save(fastest)
             }
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
             // keep the stored endpoint on any ping failure
-        } finally {
-            // Persist WITHOUT emitting currentEndpointUpdatedFlow: emitting would replay (replay=1)
-            // into WalletManager's late collector and trigger reloadWallets(Zcash) -> adapter
-            // teardown/reconnect churn. The adapter is (re)created once by the normal wallet
-            // activation / WalletManager.refreshActiveWallets() with this endpoint already current.
-            persist(target)
-            isResolvingFastestEndpoint = false
         }
     }
 

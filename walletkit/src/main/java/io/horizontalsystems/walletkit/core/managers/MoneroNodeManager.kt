@@ -88,14 +88,6 @@ class MoneroNodeManager(
             blockchainSettingsStorage.saveMoneroAutoSelect(value)
         }
 
-    // True while the startup ping is choosing the fastest node. The Monero adapter creation is
-    // deferred while this is set, so the wallet connects once to the fastest node instead of
-    // connecting to the stored node and then reconnecting. Set at construction (before adapters
-    // are initialized) to avoid a race.
-    @Volatile
-    var isResolvingFastestNode: Boolean = autoSelectEnabled
-        private set
-
     val blockchain: Blockchain?
         get() = marketKitWrapper.blockchain(blockchainType.uid)
 
@@ -110,30 +102,23 @@ class MoneroNodeManager(
         nodePinger?.invoke(serialized) ?: emptyList()
 
     suspend fun autoSelectFastestNodeOnStartup() {
-        if (!autoSelectEnabled || nodePinger == null) {
-            isResolvingFastestNode = false
-            return
-        }
+        if (!autoSelectEnabled || nodePinger == null) return
 
-        var target = currentNode
         try {
-            // Adapter creation is blocked until this returns, and the kit's internal per-node
-            // timeout is thread-interrupt based, which OkHttp calls do not reliably honor — so
-            // cap the whole probe here, mirroring the Zcash startup path.
+            // The adapter starts on the stored node right away — deferring its creation until the
+            // probe finished left wallet rows interactive with no adapter behind them, which
+            // crashed the send screen. Capped because the kit's internal per-node timeout is
+            // thread-interrupt based, which OkHttp calls do not reliably honor.
             withTimeoutOrNull(STARTUP_PING_TIMEOUT) {
-                pickFastest()?.let { target = it }
+                val fastest = pickFastest() ?: return@withTimeoutOrNull
+                // save() emits, so a change rebuilds the adapter once onto the winner; when the
+                // stored node is still the fastest nothing is emitted and nothing reconnects.
+                if (fastest.host != currentNode.host) save(fastest)
             }
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
             // keep the stored node on any ping failure
-        } finally {
-            // Persist WITHOUT emitting currentNodeUpdatedFlow: emitting would replay (replay=1)
-            // into WalletManager's late collector and trigger reloadWallets(Monero) → adapter
-            // teardown/reconnect churn. The adapter is (re)created once by the normal wallet
-            // activation / WalletManager.refreshActiveWallets() with this node already current.
-            persist(target)
-            isResolvingFastestNode = false
         }
     }
 

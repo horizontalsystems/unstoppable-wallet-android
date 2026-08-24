@@ -59,21 +59,13 @@ class MoneroChainPlugin(
 
     private val birthdayProvider by lazy { MoneroBirthdayProvider() }
 
-    override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter? {
-        val nodeManager = moneroNodeManager()
-        if (nodeManager.isResolvingFastestNode) {
-            // Defer creation until startup Auto-Select picks the fastest node, so the
-            // adapter connects once to it instead of reconnecting. reloadWallets(Monero)
-            // recreates the adapter when resolution finishes.
-            return null
-        }
-        return MoneroAdapter.create(
+    override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter =
+        MoneroAdapter.create(
             context = context(),
             wallet = wallet,
             restoreSettings = restoreSettings,
-            node = nodeManager.currentNode,
+            node = moneroNodeManager().currentNode,
         )
-    }
 
     override fun clearAccountData(accountId: String) {
         MoneroAdapter.clear(accountId)

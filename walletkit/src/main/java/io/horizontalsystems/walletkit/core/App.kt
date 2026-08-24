@@ -628,11 +628,10 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         coroutineScope.launch {
             // If Auto-Select is enabled, pick the fastest reachable node at startup so the wallet
-            // syncs through it without opening the node screen. Adapter creation is deferred per
-            // chain (e.g. MoneroNodeManager.isResolvingFastestNode) until its probe completes;
-            // the refreshActiveWallets below then creates each adapter once with the fastest node
-            // already selected. Hooks run concurrently so one chain's probe cannot delay
-            // another's, and each probe caps itself, bounding this whole gate.
+            // syncs through it without opening the node screen. Adapters start on the stored node
+            // right away; a probe that finds a faster one saves it, which rebuilds that chain's
+            // adapter once through walletReloadTrigger. Hooks run concurrently so one chain's
+            // probe cannot delay another's, and each probe caps itself.
             supervisorScope {
                 ChainRegistry.all.map { plugin ->
                     async {
@@ -646,7 +645,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                     }
                 }.awaitAll()
             }
-            walletManager.refreshActiveWallets()
         }
 
         coroutineScope.launch {
