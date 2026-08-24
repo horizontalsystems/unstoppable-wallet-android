@@ -181,6 +181,12 @@ class PrivateSendManager(
             throw PrivateSendError.CommitFailed()
         }
 
+        // Exact output: the route must deliver precisely what the user entered — a re-priced
+        // amount would silently pay the recipient something else.
+        if (amountOut.compareTo(request.amountOut) != 0) {
+            throw PrivateSendError.CommitFailed()
+        }
+
         // Attachment deliverability is decided here, not left to the deposit build: the order
         // is already committed either way, and an undeliverable attachment must surface once
         // as an authored commit error rather than fail on every re-entry into the build.

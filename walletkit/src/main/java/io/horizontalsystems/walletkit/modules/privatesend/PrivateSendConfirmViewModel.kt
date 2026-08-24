@@ -22,6 +22,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,6 +74,11 @@ class PrivateSendConfirmViewModel(
     // The one history row for this order. A retry after a failed broadcast reuses it
     // instead of inserting a duplicate per attempt.
     private var recordId: Int? = null
+
+    // The in-flight commit. A new commit cancels the previous one: without this a double
+    // tap on Refresh starts two commits whose `order`/`depositData` writes interleave —
+    // the deposit could fund one order while the screen and history describe the other.
+    private var commitJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -198,7 +204,8 @@ class PrivateSendConfirmViewModel(
     }
 
     private fun commit() {
-        viewModelScope.launch(Dispatchers.Default) {
+        commitJob?.cancel()
+        commitJob = viewModelScope.launch(Dispatchers.Default) {
             try {
                 error = null
 
