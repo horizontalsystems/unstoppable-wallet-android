@@ -237,7 +237,7 @@ class ZcashAdapter(
 
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onProcessorErrorResolved = {
-            lastProcessorError = null
+            synchronized(syncStateLock) { lastProcessorError = null }
             Log.e("ZcashAdapter", "Processor error resolved")
         }
         synchronizer.onChainErrorHandler = ::onChainError
@@ -524,7 +524,9 @@ class ZcashAdapter(
 
     private fun onProcessorError(error: Throwable?): Boolean {
         Log.e("ZcashAdapter", "Processor error", error)
-        lastProcessorError = error
+        // Under the lock so a concurrent STOPPED status publishes this error rather than
+        // racing past it to the generic fallback message.
+        synchronized(syncStateLock) { lastProcessorError = error }
         return true
     }
 

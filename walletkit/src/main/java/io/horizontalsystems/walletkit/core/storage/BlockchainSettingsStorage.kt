@@ -82,7 +82,9 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
     }
 
     fun moneroAutoSelect(): Boolean {
-        return dao.getBlockchainSetting(BlockchainType.Monero.uid, keyMoneroAutoSelect)?.value?.toBoolean() ?: true
+        // Only an explicit "false" disables it: toBoolean() would read any malformed stored
+        // value as false, silently turning the default-on feature off.
+        return !dao.getBlockchainSetting(BlockchainType.Monero.uid, keyMoneroAutoSelect)?.value.equals("false", ignoreCase = true)
     }
 
     fun saveMoneroAutoSelect(enabled: Boolean) {
@@ -122,7 +124,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
     }
 
     fun zcashAutoSelect(): Boolean {
-        return dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashAutoSelect)?.value?.toBoolean() ?: true
+        return !dao.getBlockchainSetting(BlockchainType.Zcash.uid, keyZcashAutoSelect)?.value.equals("false", ignoreCase = true)
     }
 
     fun saveZcashAutoSelect(enabled: Boolean) {
