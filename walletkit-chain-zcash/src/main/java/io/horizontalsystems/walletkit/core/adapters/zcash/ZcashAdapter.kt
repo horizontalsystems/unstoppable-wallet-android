@@ -535,7 +535,11 @@ class ZcashAdapter(
 
     private fun onStatus(status: Synchronizer.Status) {
         syncState = when (status) {
-            Synchronizer.Status.STOPPED -> AdapterState.Syncing()
+            // STOPPED is terminal: the CompactBlockProcessor loop has exited (5 consecutive
+            // block-processing failures land here). Mapping it to Syncing showed an endless
+            // spinner and hid the stall from the failover gate; only an adapter rebuild (fresh
+            // synchronizer) recovers, which reporting NotSynced lets the stall watcher trigger.
+            Synchronizer.Status.STOPPED -> AdapterState.NotSynced(lastProcessorError ?: Exception("Sync stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(lastProcessorError ?: Exception("Disconnected"))
             Synchronizer.Status.SYNCING -> AdapterState.Syncing()
             Synchronizer.Status.SYNCED -> {

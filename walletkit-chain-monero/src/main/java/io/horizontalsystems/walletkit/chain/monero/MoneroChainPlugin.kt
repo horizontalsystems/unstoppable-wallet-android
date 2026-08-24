@@ -89,11 +89,15 @@ class MoneroChainPlugin(
         nodeManager.autoSelectFastestNodeOnStartup()
     }
 
-    override suspend fun onEnterForeground() = reselectFastestIfUnsynced()
+    override suspend fun onEnterForeground() = reselectFastestIfUnsynced(retryIfNoSwitch = false)
 
-    override suspend fun refreshKit() = reselectFastestIfUnsynced()
+    override suspend fun refreshKit() = reselectFastestIfUnsynced(retryIfNoSwitch = false)
 
-    override suspend fun onSyncStalled() = reselectFastestIfUnsynced()
+    // The watcher's two-strike gate means the stall is persistent, so when no better node
+    // exists the adapter is rebuilt on the current one — a terminally stopped sync only
+    // recovers with a fresh start. Foreground/refresh skip that: they can fire on a
+    // transient blip where a forced rebuild would churn.
+    override suspend fun onSyncStalled() = reselectFastestIfUnsynced(retryIfNoSwitch = true)
 
     /**
      * Switches to the fastest reachable node when the current one has stopped working.
@@ -101,7 +105,7 @@ class MoneroChainPlugin(
      * Gated on an unsynced wallet so a healthy connection is never churned, and on connectivity
      * so a dead phone network is not mistaken for a dead node.
      */
-    private fun reselectFastestIfUnsynced() {
+    private fun reselectFastestIfUnsynced(retryIfNoSwitch: Boolean) {
         if (!App.connectivityManager.isConnected) return
         if (!hasUnsyncedWallet()) return
 
@@ -111,7 +115,10 @@ class MoneroChainPlugin(
         // walletReloadTrigger. The manager guards with a mutex, so overlapping calls collapse.
         reselectScope.launch {
             try {
-                moneroNodeManager().reselectFastestNode()
+                val switched = moneroNodeManager().reselectFastestNode()
+                if (!switched && retryIfNoSwitch && hasUnsyncedWallet()) {
+                    moneroNodeManager().retryCurrentNode()
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {

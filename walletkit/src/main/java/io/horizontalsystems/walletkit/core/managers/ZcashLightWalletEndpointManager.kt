@@ -129,6 +129,16 @@ class ZcashLightWalletEndpointManager(
         }
     }
 
+    /**
+     * Re-emits the current endpoint so the wallet reload rebuilds the adapter on it. For a stalled
+     * sync where reselection found nothing better — the current server may answer pings yet fail
+     * block downloads, leaving the synchronizer terminally STOPPED — a fresh synchronizer is the
+     * only recovery.
+     */
+    fun retryCurrentEndpoint() {
+        _currentEndpointUpdatedFlow.tryEmit(currentEndpoint.url)
+    }
+
     /** Pings every endpoint and returns the fastest valid one, or null if none responded. */
     private suspend fun pickFastest(): ZcashEndpoint? {
         val endpoints = allEndpoints

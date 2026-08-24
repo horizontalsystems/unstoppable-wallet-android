@@ -163,6 +163,14 @@ class MoneroNodeManager(
         }
     }
 
+    /**
+     * Re-emits the current node so the wallet reload rebuilds the adapter on it. For a stalled
+     * sync where reselection found nothing better, a kit restart is the recovery.
+     */
+    fun retryCurrentNode() {
+        _currentNodeUpdatedFlow.tryEmit(currentNode.host)
+    }
+
     /** Pings every node and returns the fastest valid one, or null if none responded. */
     private suspend fun pickFastest(): MoneroNode? {
         val nodes = allNodes
