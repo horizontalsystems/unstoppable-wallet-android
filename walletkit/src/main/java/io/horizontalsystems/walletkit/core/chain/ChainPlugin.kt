@@ -157,6 +157,13 @@ interface ChainPlugin {
     suspend fun onEnterForeground() = Unit
 
     /**
+     * Work when this chain's sync has been stalled for a while, foreground or background.
+     * Called on a backoff by StalledSyncWatcher, so implementations need not rate-limit
+     * themselves, but must tolerate being called while a previous attempt is still running.
+     */
+    suspend fun onSyncStalled() = Unit
+
+    /**
      * True when an active wallet of this chain has an adapter reporting [AdapterState.NotSynced].
      *
      * Deliberately narrower than "not Synced": Syncing/Connecting are healthy progress, and a

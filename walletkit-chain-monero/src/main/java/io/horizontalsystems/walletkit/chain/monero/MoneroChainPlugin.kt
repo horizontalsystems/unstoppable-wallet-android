@@ -93,6 +93,8 @@ class MoneroChainPlugin(
 
     override suspend fun refreshKit() = reselectFastestIfUnsynced()
 
+    override suspend fun onSyncStalled() = reselectFastestIfUnsynced()
+
     /**
      * Switches to the fastest reachable node when the current one has stopped working.
      *

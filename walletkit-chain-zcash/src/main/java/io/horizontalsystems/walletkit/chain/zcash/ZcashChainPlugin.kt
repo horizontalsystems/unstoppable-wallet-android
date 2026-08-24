@@ -99,6 +99,8 @@ class ZcashChainPlugin(
 
     override suspend fun refreshKit() = reselectFastestIfUnsynced()
 
+    override suspend fun onSyncStalled() = reselectFastestIfUnsynced()
+
     /**
      * Switches to the fastest reachable endpoint when the current one has stopped working.
      *

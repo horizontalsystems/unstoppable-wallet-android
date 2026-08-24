@@ -69,6 +69,7 @@ import io.horizontalsystems.walletkit.core.managers.WalletStorage
 import io.horizontalsystems.walletkit.core.managers.WordsManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
+import io.horizontalsystems.walletkit.core.managers.StalledSyncWatcher
 import io.horizontalsystems.walletkit.core.providers.EvmLabelProvider
 import io.horizontalsystems.walletkit.core.providers.FeeTokenProvider
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
@@ -630,6 +631,10 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 }
             }
             walletManager.refreshActiveWallets()
+
+            // A node can also die mid-session, foreground or background; watch for a sync that
+            // stays stalled and let the chain re-pick.
+            StalledSyncWatcher(coroutineScope).start()
         }
 
         coroutineScope.launch {
