@@ -607,7 +607,6 @@
     <string name="PrivateSend_ReservedAmount">Reserved amount</string>
     <string name="PrivateSend_ReservedAmount_Info">An additional amount is temporarily reserved to cover possible price changes while your transaction is processed. Any unused part is returned to your wallet in a separate transaction after the send completes.</string>
     <string name="PrivateSend_EstimatedTime">Estimated arrival</string>
-    <string name="PrivateSend_QuoteExpired">Quote expired — go back and re-enter</string>
     <string name="PrivateSend_CommitFailed">Couldn\'t set up the private send. Try again.</string>
     <string name="PrivateSend_Caution_Title">Private send</string>
     <string name="PrivateSend_Caution_BelowMinimum">Private send requires the recipient to receive at least %s.</string>

@@ -121,13 +121,12 @@ private fun PrivateSendConfirmationScreen(
         },
         buttonsSlot = {
             if (uiState.expired) {
-                // The committed order is not honoured past its lifetime, and it must not be
-                // silently replaced under a live send button — the only way forward is a
-                // fresh amount entry.
+                // The committed order is not honoured past its lifetime; Refresh commits a
+                // fresh order in place — the same recovery the swap confirmation offers.
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.PrivateSend_QuoteExpired),
-                    onClick = navigation::removeLastOrNull,
+                    title = stringResource(R.string.Button_Refresh),
+                    onClick = viewModel::refresh,
                 )
             } else {
                 val sendAction = rememberAsyncAction()

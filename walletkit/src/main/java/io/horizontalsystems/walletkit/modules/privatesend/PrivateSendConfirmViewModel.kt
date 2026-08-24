@@ -33,10 +33,11 @@ import kotlin.coroutines.cancellation.CancellationException
  * builds and estimates the deposit transfer through the chain's own send-transaction service.
  * This ViewModel never builds a transaction itself.
  *
- * Committing happens exactly once for the screen's lifetime, and that is mandatory rather
- * than an optimisation: every /v2/swap creates a REAL order. Fee-settings changes re-estimate
- * the same deposit; they never re-commit. Past [QUOTE_LIFETIME_SECONDS] the screen dead-ends
- * ("go back and re-enter") instead of silently swapping the order under the send button.
+ * Committing happens once per user-visible order, and that is mandatory rather than an
+ * optimisation: every /v2/swap creates a REAL order. Fee-settings changes re-estimate the
+ * same deposit; they never re-commit. Past [QUOTE_LIFETIME_SECONDS] the send button is
+ * replaced by Refresh — an order is only ever replaced by that explicit tap, never silently
+ * under a live send button. The expired order was never funded and simply lapses server-side.
  */
 class PrivateSendConfirmViewModel(
     private val request: PrivateSendRequest,
@@ -164,6 +165,27 @@ class PrivateSendConfirmViewModel(
             ?: return false
 
         return order.depositAmount > available
+    }
+
+    /**
+     * The expired-state action: commits a brand-new order in place. The screen returns to
+     * the exact just-opened state — old order, deposit data and history-row binding are
+     * dropped first, so a stale order can never sit under a live send button and the new
+     * order gets its own history row (a Failed row from the old order's broadcast stays).
+     */
+    fun refresh() {
+        synchronized(this) {
+            if (isSending) return
+        }
+
+        expired = false
+        order = null
+        depositData = null
+        recordId = null
+        initialLoading = true
+        emitState()
+
+        commit()
     }
 
     private fun commit() {
