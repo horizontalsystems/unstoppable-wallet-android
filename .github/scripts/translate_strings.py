@@ -132,8 +132,28 @@ def response_schema(keys) -> dict:
     }
 
 
+# The response schema names every key for every language, and the API caps the
+# compiled size of a constrained-decoding grammar — a large PR (21 strings × 9
+# languages) exceeded it. Batching bounds the schema (and the output size) no
+# matter how many strings change at once.
+TRANSLATION_BATCH_SIZE = 6
+
+
 def translate_new_strings(new_strings: dict[str, str]) -> dict[str, dict[str, str]]:
-    """Call Claude API. Returns {lang_code: {key: translated_value}} as plain text."""
+    """Translate in batches. Returns {lang_code: {key: translated_value}} as plain text."""
+    merged: dict[str, dict[str, str]] = {lang: {} for lang in LANGUAGES}
+    items = list(new_strings.items())
+    for start in range(0, len(items), TRANSLATION_BATCH_SIZE):
+        batch = dict(items[start:start + TRANSLATION_BATCH_SIZE])
+        if len(items) > TRANSLATION_BATCH_SIZE:
+            print(f"    batch {start // TRANSLATION_BATCH_SIZE + 1}: {len(batch)} strings")
+        for lang, entries in translate_batch(batch).items():
+            merged[lang].update(entries)
+    return merged
+
+
+def translate_batch(new_strings: dict[str, str]) -> dict[str, dict[str, str]]:
+    """Call Claude API for one batch. Returns {lang_code: {key: translated_value}}."""
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
     strings_block = "\n".join(
