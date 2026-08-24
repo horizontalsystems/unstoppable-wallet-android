@@ -39,7 +39,12 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
     }
 
     fun removeLastOrNull() {
-        backStack.removeLastOrNull()
+        // Never pop the root entry: NavDisplay requires a non-empty backstack,
+        // and rapid double back events (toolbar arrow double-tap or system back
+        // during the pop animation) can otherwise drain the stack and crash.
+        if (backStack.size > 1) {
+            backStack.removeLastOrNull()
+        }
     }
 
     fun navigateWithTermsAccepted(
@@ -92,7 +97,8 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
             for (i in backStack.lastIndex downTo (index + 1)) {
                 backStack.removeAt(i)
             }
-            if (inclusive) {
+            // index 0 is the root entry; removing it would empty the backstack.
+            if (inclusive && index > 0) {
                 backStack.removeAt(index)
             }
         }
