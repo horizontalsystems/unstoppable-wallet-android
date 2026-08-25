@@ -27,8 +27,12 @@ class TronChainPluginTest {
 
     @Test
     fun signByteIsStrippedFrom33ByteKeys() {
-        val key = BigInteger(1, ByteArray(32) { 0xff.toByte() })
-        assertEquals("f".repeat(64), privateKeyHex(key))
+        // largest valid key; its high bit forces a sign byte in BigInteger.toByteArray()
+        val key = secp256k1Order.subtract(BigInteger.ONE)
+        assertEquals(
+            "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140",
+            privateKeyHex(key)
+        )
     }
 
     @Test
@@ -53,5 +57,18 @@ class TronChainPluginTest {
     @Test
     fun negativeKeyRendersNoAddressRow() {
         assertTrue(publicKeyRows(BigInteger.ONE.negate()).isEmpty())
+    }
+
+    private val secp256k1Order = BigInteger(
+        "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+        16
+    )
+
+    @Test
+    fun keysOutsideScalarRangeRenderNoRows() {
+        for (key in listOf(BigInteger.ZERO, secp256k1Order, secp256k1Order.plus(BigInteger.ONE))) {
+            assertTrue(privateKeyRows(key).isEmpty())
+            assertTrue(publicKeyRows(key).isEmpty())
+        }
     }
 }

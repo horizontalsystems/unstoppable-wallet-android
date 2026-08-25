@@ -273,17 +273,23 @@ class TronChainPlugin : ChainPlugin {
     /** Renders a private key as its canonical 64-char hex form, or null for values no 32-byte key can produce. */
     private fun privateKeyHex(key: BigInteger): String? = normalizedKeyBytes(key)?.toRawHexString()
 
-    // BigInteger.toByteArray() drops leading zero bytes and may prepend a sign byte, so the
-    // value is normalized to exactly 32 bytes. A value no 32-byte key can produce (negative,
-    // or still wider than 32 bytes after the sign byte) yields null — the key screens omit
-    // their row rather than showing a key or address the account does not hold.
+    // A value outside the valid secp256k1 scalar range [1, n-1] yields null — the key
+    // screens omit their row rather than showing a key or address the account does not
+    // hold (the signer would silently reduce such a value modulo the curve order). Same
+    // range the restore flow accepts in RestorePrivateKeyViewModel.getValidPrivateKey.
+    // BigInteger.toByteArray() drops leading zero bytes and may prepend a sign byte, so
+    // valid values are normalized to exactly 32 bytes.
     private fun normalizedKeyBytes(key: BigInteger): ByteArray? {
-        if (key.signum() < 0) return null
+        if (key <= BigInteger.ZERO || key >= secp256k1Order) return null
         val bytes = key.toByteArray()
         val stripped = if (bytes.size == 33 && bytes[0] == 0.toByte()) bytes.copyOfRange(1, 33) else bytes
-        if (stripped.size > 32) return null
         return if (stripped.size < 32) ByteArray(32 - stripped.size) + stripped else stripped
     }
+
+    private val secp256k1Order = BigInteger(
+        "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+        16
+    )
 }
 
 private class Trc20BlacklistAddressChecker(
