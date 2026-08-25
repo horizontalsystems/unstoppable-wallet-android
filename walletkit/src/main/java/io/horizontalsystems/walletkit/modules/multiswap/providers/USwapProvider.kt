@@ -319,20 +319,9 @@ class USwapProvider(
 
         val approvalAddress = bestRoute.approvalSpenderOrExecution
         val actionRequired = approvalAddress?.let { approvalAddress ->
-            when {
-                tokenIn.blockchainType.isEvm -> {
-                    val plugin = ChainRegistry[tokenIn.blockchainType]
-                    val allowance = plugin?.eip20Allowance(tokenIn, approvalAddress)
-                    plugin?.eip20ApproveAction(allowance, amountIn, approvalAddress, tokenIn)
-                }
-
-                tokenIn.blockchainType == BlockchainType.Tron -> {
-                    val allowance = SwapHelper.getAllowanceTrc20(tokenIn, approvalAddress)
-                    SwapHelper.actionApproveTrc20(allowance, amountIn, approvalAddress, tokenIn)
-                }
-
-                else -> null
-            }
+            val plugin = ChainRegistry[tokenIn.blockchainType]
+            val allowance = plugin?.eip20Allowance(tokenIn, approvalAddress)
+            plugin?.eip20ApproveAction(allowance, amountIn, approvalAddress, tokenIn)
         }
 
         return SwapQuote(

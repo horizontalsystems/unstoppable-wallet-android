@@ -45,19 +45,6 @@ fun ManageAccountScreen(navigation: HSNavigation, account: Account) {
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-            viewModel.viewState.tronAddress?.let { tronAddress ->
-                KeyActionItem(
-                    title = stringResource(id = R.string.PublicKeys_TronAddress),
-                    description = stringResource(R.string.PublicKeys_TronAddress_Description)
-                ) {
-                    navigation.slideFromRight(
-                        AddressPage(AddressPage.Input(tronAddress, AddressPage.Type.Tron))
-                    )
-
-                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.TronAddress))
-                }
-            }
-
             viewModel.viewState.chainKeyRows.forEach { row ->
                 KeyActionItem(
                     title = stringResource(id = row.titleRes),

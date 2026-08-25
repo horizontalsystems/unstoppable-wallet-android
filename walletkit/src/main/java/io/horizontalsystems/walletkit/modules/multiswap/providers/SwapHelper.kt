@@ -2,14 +2,10 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
-import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.NoActiveAccount
 import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.AccountType
-import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronApproveTransactionRecord
-import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
-import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -30,13 +26,6 @@ object SwapHelper {
     fun isTokenReceivableByAccount(token: Token): Boolean {
         val accountType = App.accountManager.activeAccount?.type ?: return true
         return token.supports(accountType) && token.blockchainType.supports(accountType)
-    }
-
-    suspend fun getAllowanceTrc20(token: Token, spenderAddress: String): BigDecimal? {
-        if (token.type !is TokenType.Eip20) return null
-
-        val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token) ?: return null
-        return trc20Adapter.allowance(spenderAddress)
     }
 
     fun getSendingAddressForToken(token: Token): String? {
@@ -90,61 +79,11 @@ object SwapHelper {
 
         val account = accountManager.activeAccount ?: throw NoActiveAccount()
 
-        return when (blockchainType) {
-            BlockchainType.Tron -> {
-                App.tronKitManager.getAddress(account)
-            }
-
-            else -> ChainRegistry[token.blockchainType]?.swapDestinationAddress(account, token)
-                ?: throw SwapError.NoDestinationAddress()
-        }
+        return ChainRegistry[blockchainType]?.swapDestinationAddress(account, token)
+            ?: throw SwapError.NoDestinationAddress()
     }
 
 
 
-    suspend fun actionApproveTrc20(
-        allowance: BigDecimal?,
-        amountIn: BigDecimal,
-        routerAddress: String,
-        token: Token,
-    ): ISwapProviderAction? {
-        if (allowance == null || allowance >= amountIn) return null
-        val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token) ?: return null
-
-        val approveTransaction = trc20Adapter.getPendingTransactions()
-            .filterIsInstance<TronApproveTransactionRecord>()
-            .filter { it.spender.equals(routerAddress, true) }
-            .maxByOrNull { it.timestamp }
-
-        val revoke = allowance > BigDecimal.ZERO && isUsdt(token)
-
-        return if (revoke) {
-            val revokeInProgress = approveTransaction != null && approveTransaction.value.zeroValue
-            ActionRevoke(
-                token,
-                routerAddress,
-                revokeInProgress,
-                allowance
-            )
-        } else {
-            val approveInProgress =
-                approveTransaction != null && !approveTransaction.value.zeroValue
-
-            return ActionApprove(
-                amountIn,
-                routerAddress,
-                token,
-                approveInProgress
-            )
-        }
-    }
-
-    private fun isUsdt(token: Token): Boolean {
-        val tokenType = token.type
-
-        return token.blockchainType is BlockchainType.Tron
-                && tokenType is TokenType.Eip20
-                && tokenType.address.lowercase() == "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t".lowercase()
-    }
 
 }

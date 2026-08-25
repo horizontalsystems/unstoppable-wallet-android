@@ -79,15 +79,9 @@ class BlockchainSettingsService(
             BlockchainItem.Evm(blockchain, syncSource)
         }
 
-        val tronBlockchainItems = mutableListOf<BlockchainItem>()
-        marketKit.blockchain(BlockchainType.Tron.uid)?.let { blockchain ->
-            val syncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
-            tronBlockchainItems.add(BlockchainItem.Evm(blockchain, syncSource))
-        }
-
         val chainBlockchainItems = ChainRegistry.all.mapNotNull { it.blockchainSettingsItem() }
 
-        blockchainItems = (evmBlockchainItems + tronBlockchainItems + chainBlockchainItems).sortedBy { it.order }
+        blockchainItems = (evmBlockchainItems + chainBlockchainItems).sortedBy { it.order }
     }
 
 }

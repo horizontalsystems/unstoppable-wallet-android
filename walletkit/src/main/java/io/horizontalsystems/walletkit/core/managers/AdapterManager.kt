@@ -20,7 +20,6 @@ class AdapterManager(
     private val walletManager: WalletManager,
     private val adapterFactory: AdapterFactory,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val tronKitManager: TronKitManager,
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -44,7 +43,6 @@ class AdapterManager(
         adaptersMap.values.forEach { it.refresh() }
 
         ChainRegistry.all.forEach { it.refreshKit() }
-        tronKitManager.tronKitWrapper?.tronKit?.refresh()
     }
 
     @Synchronized

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
@@ -124,6 +125,9 @@ interface ChainPlugin {
     /** Kit status details for the App Status debug screen. */
     fun statusInfo(): Map<String, Any>? = null
 
+    /** Chain-specific warning for a wallet's balance row (e.g. inactive Tron account). */
+    suspend fun balanceWarning(wallet: Wallet): BalanceModule.BalanceWarning? = null
+
     /** Refreshes the chain's kit on user-initiated refresh, if one is running. */
     suspend fun refreshKit() = Unit
 
@@ -135,7 +139,7 @@ interface ChainPlugin {
     fun SendScreen(args: ChainSendScreenArgs) = Unit
 
     /** Row shown in Settings > Blockchain Settings, or null to omit the chain there. */
-    fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? = null
+    fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem? = null
 
     /**
      * Derives the account's receive address for swap destinations without requiring an
@@ -259,7 +263,7 @@ interface ChainPlugin {
     suspend fun eip20Allowance(token: Token, spenderAddress: String): BigDecimal? = null
 
     /** Approve/revoke action required before swapping, or null when none is needed. */
-    fun eip20ApproveAction(
+    suspend fun eip20ApproveAction(
         allowance: BigDecimal?,
         amountIn: BigDecimal,
         spenderAddress: String,

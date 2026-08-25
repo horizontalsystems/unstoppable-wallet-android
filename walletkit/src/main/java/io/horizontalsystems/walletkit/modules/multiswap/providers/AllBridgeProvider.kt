@@ -195,11 +195,10 @@ object AllBridgeProvider : IMultiSwapProvider {
             val plugin = ChainRegistry[tokenIn.blockchainType]
             val allowance = plugin?.eip20Allowance(tokenIn, finalAddress)
             actionRequired = plugin?.eip20ApproveAction(allowance, amountIn, finalAddress, tokenIn)
-        } else if (tokenIn.blockchainType == BlockchainType.Tron) {
-            val allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
-            actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
         } else {
-            actionRequired = null
+            val plugin = ChainRegistry[tokenIn.blockchainType]
+            val allowance = plugin?.eip20Allowance(tokenIn, bridgeAddress)
+            actionRequired = plugin?.eip20ApproveAction(allowance, amountIn, bridgeAddress, tokenIn)
         }
 
         val crosschain = tokenIn.blockchainType != tokenOut.blockchainType

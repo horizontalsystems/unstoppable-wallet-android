@@ -23,7 +23,6 @@ class AddressCheckManager(
                 evmBlockchainManager
             ),
             ChainRegistry.all.mapNotNull { it.blacklistAddressChecker() },
-            Trc20AddressValidator()
         ),
         AddressCheckType.Sanction to SanctionAddressChecker(
             ChainalysisAddressValidator(

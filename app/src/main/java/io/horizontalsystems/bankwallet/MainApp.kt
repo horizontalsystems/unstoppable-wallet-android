@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet
 
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.walletkit.chain.evm.EvmChainPlugin
+import io.horizontalsystems.walletkit.chain.tron.TronChainPlugin
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinCashChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinChainPlugin
@@ -34,6 +35,8 @@ class MainApp : App() {
         EvmBlockchainManager.blockchainTypes.forEach { blockchainType ->
             ChainRegistry.register(EvmChainPlugin(blockchainType))
         }
+        // Tron right after the EVM chains keeps its pre-plugin position in BlockchainType.supported.
+        ChainRegistry.register(TronChainPlugin())
         ChainRegistry.register(BitcoinChainPlugin())
         ChainRegistry.register(BitcoinCashChainPlugin())
         ChainRegistry.register(ECashChainPlugin())

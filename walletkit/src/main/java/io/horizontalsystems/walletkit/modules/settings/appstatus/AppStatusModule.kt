@@ -17,7 +17,6 @@ object AppStatusModule {
                 App.adapterManager,
                 App.marketKit,
                 App.evmBlockchainManager,
-                App.tronKitManager,
                 App.btcBlockchainManager,
             )
             return viewModel as T

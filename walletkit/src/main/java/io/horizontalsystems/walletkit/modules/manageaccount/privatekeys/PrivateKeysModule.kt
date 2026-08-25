@@ -16,7 +16,6 @@ object PrivateKeysModule {
     }
 
     data class ViewState(
-        val tronPrivateKey: String? = null,
         val chainKeyRows: List<ChainKeyRow> = emptyList()
     )
 }

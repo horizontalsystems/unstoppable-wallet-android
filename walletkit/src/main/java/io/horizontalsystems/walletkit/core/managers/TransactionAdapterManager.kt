@@ -50,13 +50,8 @@ class TransactionAdapterManager(
 
             var txAdapter = currentAdapters.remove(source)
             if (txAdapter == null) {
-                txAdapter = when (val blockchainType = source.blockchain.type) {
-                    BlockchainType.Tron -> {
-                        adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
-                    }
-                    else -> ChainRegistry[blockchainType]?.createTransactionsAdapter(wallet.transactionSource)
-                        ?: adapter as? ITransactionsAdapter
-                }
+                txAdapter = (ChainRegistry[source.blockchain.type]?.createTransactionsAdapter(wallet.transactionSource)
+                        ?: adapter as? ITransactionsAdapter)
                     // decorate only freshly created adapters — reused entries from
                     // adaptersMap are already decorated, wrapping again would stack
                     ?.let { raw ->

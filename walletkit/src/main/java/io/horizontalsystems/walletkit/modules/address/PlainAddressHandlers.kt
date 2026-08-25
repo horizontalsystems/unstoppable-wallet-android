@@ -20,7 +20,5 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne -> listOf(AddressHandlerEvm(blockchainType))
 
-        BlockchainType.Tron -> listOf(AddressHandlerTron())
-
         else -> ChainRegistry[blockchainType]?.addressHandlers().orEmpty()
     }

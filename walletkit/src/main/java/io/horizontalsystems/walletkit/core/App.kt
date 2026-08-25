@@ -60,8 +60,6 @@ import io.horizontalsystems.walletkit.core.managers.TermsManager
 import io.horizontalsystems.walletkit.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.walletkit.core.managers.TorManager
 import io.horizontalsystems.walletkit.core.managers.TransactionAdapterManager
-import io.horizontalsystems.walletkit.core.managers.TronAccountManager
-import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.managers.UserManager
 import io.horizontalsystems.walletkit.core.managers.WalletActivator
 import io.horizontalsystems.walletkit.core.managers.WalletManager
@@ -168,7 +166,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var tronKitManager: TronKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
@@ -307,7 +304,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         coinManager = CoinManager(marketKit, walletManager)
 
 
-        tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -339,14 +335,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         privateSendManager = PrivateSendManager(appConfigProvider, localStorage)
         evmBlockchainManager = EvmBlockchainManager(marketKit)
 
-        val tronAccountManager = TronAccountManager(
-            accountManager,
-            walletManager,
-            marketKit,
-            tronKitManager,
-            tokenAutoEnableManager
-        )
-        tronAccountManager.start()
 
 
 
@@ -372,7 +360,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             context = instance,
             evmBlockchainManager = evmBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
-            tronKitManager = tronKitManager,
             backgroundManager = backgroundManager,
             restoreSettingsManager = restoreSettingsManager,
             coinManager = coinManager,
@@ -383,7 +370,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             walletManager,
             adapterFactory,
             evmBlockchainManager,
-            tronKitManager,
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
         spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)
@@ -581,7 +567,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     private fun startTasks() {
         coroutineScope.launch {
-            walletManager.start(restoreSettingsManager, btcBlockchainManager, evmBlockchainManager, tronKitManager)
+            walletManager.start(restoreSettingsManager, btcBlockchainManager, evmBlockchainManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()

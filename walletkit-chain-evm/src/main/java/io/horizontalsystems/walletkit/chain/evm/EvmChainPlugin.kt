@@ -151,7 +151,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
     override suspend fun eip20Allowance(token: Token, spenderAddress: String): BigDecimal? =
         EvmSwapHelper.getAllowance(token, spenderAddress)
 
-    override fun eip20ApproveAction(
+    override suspend fun eip20ApproveAction(
         allowance: BigDecimal?,
         amountIn: BigDecimal,
         spenderAddress: String,

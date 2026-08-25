@@ -9,14 +9,10 @@ import io.horizontalsystems.walletkit.modules.amount.AmountInputModeModule
 import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronModule
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -48,46 +44,20 @@ data class SendPage(val input: Input) : HSPage() {
             factory = AmountInputModeModule.Factory(wallet.coin.uid)
         )
 
-        when (wallet.token.blockchainType) {
-
-
-
-
-
-            BlockchainType.Tron -> {
-                val factory = SendTronModule.Factory(wallet, address, hideAddress)
-                val sendTronViewModel = viewModel<SendTronViewModel>(factory = factory)
-                SendTronScreen(
-                    title = title,
-                    navigation = navigation,
-                    viewModel = sendTronViewModel,
-                    amountInputModeViewModel = amountInputModeViewModel,
-                    sendEntryPointDestId = sendEntryPointDestId,
-                    amount = amount,
-                    riskyAddress = riskyAddress
-                )
-            }
-
-
-
-
-            else -> {
-                ChainRegistry[wallet.token.blockchainType]?.SendScreen(
-                    ChainSendScreenArgs(
-                        wallet = wallet,
-                        title = title,
-                        navigation = navigation,
-                        amountInputModeViewModel = amountInputModeViewModel,
-                        sendEntryPointDestId = sendEntryPointDestId,
-                        address = address,
-                        amount = amount,
-                        memo = memo,
-                        hideAddress = hideAddress,
-                        riskyAddress = riskyAddress,
-                    )
-                )
-            }
-        }
+        ChainRegistry[wallet.token.blockchainType]?.SendScreen(
+            ChainSendScreenArgs(
+                wallet = wallet,
+                title = title,
+                navigation = navigation,
+                amountInputModeViewModel = amountInputModeViewModel,
+                sendEntryPointDestId = sendEntryPointDestId,
+                address = address,
+                amount = amount,
+                memo = memo,
+                hideAddress = hideAddress,
+                riskyAddress = riskyAddress,
+            )
+        )
     }
 
     @Serializable

@@ -16,6 +16,7 @@ import io.horizontalsystems.walletkit.chain.stellar.StellarChainPlugin
 import io.horizontalsystems.walletkit.chain.thorchain.MayachainChainPlugin
 import io.horizontalsystems.walletkit.chain.thorchain.ThorchainChainPlugin
 import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
+import io.horizontalsystems.walletkit.chain.tron.TronChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.chain.zcash.ZcashChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -62,6 +63,7 @@ class ChainBehaviorParityTest {
     fun registerChainPlugins() {
         // Mirrors the registration in App.onCreate. Runtime managers are never touched by
         // the pure hooks this test exercises.
+        ChainRegistry.register(TronChainPlugin())
         ChainRegistry.register(BitcoinChainPlugin())
         ChainRegistry.register(BitcoinCashChainPlugin())
         ChainRegistry.register(ECashChainPlugin())

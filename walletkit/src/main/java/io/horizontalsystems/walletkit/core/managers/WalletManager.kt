@@ -112,7 +112,6 @@ class WalletManager(
         restoreSettingsManager: RestoreSettingsManager,
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
-        tronKitManager: TronKitManager,
     ) {
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
@@ -137,11 +136,6 @@ class WalletManager(
         coroutineScope.launch {
             btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect { blockchainType ->
                 reloadWallets(blockchainType)
-            }
-        }
-        coroutineScope.launch {
-            tronKitManager.kitStoppedObservable.asFlow().collect {
-                reloadWallets(BlockchainType.Tron)
             }
         }
     }

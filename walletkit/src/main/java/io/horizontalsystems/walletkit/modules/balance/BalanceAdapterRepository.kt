@@ -4,10 +4,9 @@ import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.IAdapterManager
-import io.horizontalsystems.walletkit.core.adapters.BaseTronAdapter
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule.BalanceWarning
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -109,12 +108,7 @@ class BalanceAdapterRepository(
 
     suspend fun warning(wallet: Wallet): BalanceWarning? {
         try {
-            if (wallet.token.blockchainType is BlockchainType.Tron) {
-                adapterManager.getAdapterForWallet<BaseTronAdapter>(wallet)?.let { adapter ->
-                    if (!adapter.tronKit.accountActive)
-                        return BalanceWarning.TronInactiveAccountWarning
-                }
-            }
+            return ChainRegistry[wallet.token.blockchainType]?.balanceWarning(wallet)
         } catch (e: Exception) {
             e.printStackTrace()
         }

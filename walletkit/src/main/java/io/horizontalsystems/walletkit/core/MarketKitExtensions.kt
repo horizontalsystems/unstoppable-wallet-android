@@ -660,7 +660,6 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
-        BlockchainType.Tron,
     ) + ChainRegistry.all.map { it.blockchainType }
 
 val CoinPrice.diff: BigDecimal?

@@ -11,7 +11,6 @@ import io.horizontalsystems.walletkit.core.adapters.IStatusInfoAdapter
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
-import io.horizontalsystems.walletkit.core.managers.TronKitManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.title
@@ -32,7 +31,6 @@ class AppStatusViewModel(
     private val adapterManager: IAdapterManager,
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val tronKitManager: TronKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
 
@@ -190,10 +188,6 @@ class AppStatusViewModel(
             }
         }
 
-        tronKitManager.statusInfo?.let { statusInfo ->
-            blockchainStatus["Tron"] = statusInfo
-        }
-
 
 
 
@@ -239,12 +233,6 @@ class AppStatusViewModel(
                 val block = getBlockchainInfoBlock(title, plugin.blockchainType.title, statusInfo)
                 blocks.add(block)
             }
-        }
-
-        tronKitManager.statusInfo?.let { statusInfo ->
-            val title = if (blocks.isEmpty()) "Blockchain Status" else null
-            val block = getBlockchainInfoBlock(title, "Tron", statusInfo)
-            blocks.add(block)
         }
 
         return blocks
