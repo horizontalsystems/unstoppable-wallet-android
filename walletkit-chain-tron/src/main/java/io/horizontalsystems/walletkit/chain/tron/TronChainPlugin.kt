@@ -226,8 +226,8 @@ class TronChainPlugin : ChainPlugin {
 
     override fun privateKeyRows(account: Account): List<ChainKeyRow> {
         val privateKey = when (val accountType = account.type) {
-            is AccountType.Mnemonic -> toHexString(TronSigner.privateKey(accountType.seed, Network.Mainnet))
-            is AccountType.TronPrivateKey -> toHexString(accountType.key)
+            is AccountType.Mnemonic -> privateKeyHex(TronSigner.privateKey(accountType.seed, Network.Mainnet))
+            is AccountType.TronPrivateKey -> privateKeyHex(accountType.key)
             else -> null
         } ?: return emptyList()
 
@@ -263,9 +263,10 @@ class TronChainPlugin : ChainPlugin {
         )
     }
 
-    // BigInteger.toByteArray() drops leading zero bytes and may prepend a sign byte;
-    // a private key must always render as exactly 64 hex chars.
-    private fun toHexString(key: BigInteger): String {
+    // Renders a private key as its canonical 64-char hex form: BigInteger.toByteArray()
+    // drops leading zero bytes and may prepend a sign byte, so the value is normalized
+    // to exactly 32 bytes first.
+    private fun privateKeyHex(key: BigInteger): String {
         val bytes = key.toByteArray()
         val normalized = when {
             bytes.size > 32 -> bytes.copyOfRange(bytes.size - 32, bytes.size)
