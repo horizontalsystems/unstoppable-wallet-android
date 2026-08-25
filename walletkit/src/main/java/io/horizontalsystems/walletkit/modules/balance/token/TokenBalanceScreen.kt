@@ -62,7 +62,7 @@ import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionViewItem
-import io.horizontalsystems.walletkit.modules.transactions.TransactionsViewModel
+import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
 import io.horizontalsystems.walletkit.modules.transactions.transactionList
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -99,7 +99,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
-    transactionsViewModel: TransactionsViewModel,
     navigation: HSNavigation
 ) {
     val uiState = viewModel.uiState
@@ -285,7 +284,6 @@ fun TokenBalanceScreen(
                         onTransactionClick(
                             it,
                             viewModel,
-                            transactionsViewModel,
                             navigation
                         )
                     },
@@ -447,11 +445,10 @@ private fun openSyncErrorDialog(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     tokenBalanceViewModel: TokenBalanceViewModel,
-    transactionsViewModel: TransactionsViewModel,
     navigation: HSNavigation
 ) {
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
-    transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
+    TransactionInfoPayload.record = transactionItem.record
 
     navigation.slideFromBottom(TransactionInfoPage)
 

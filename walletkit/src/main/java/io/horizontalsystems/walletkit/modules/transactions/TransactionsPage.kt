@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 data object TransactionsPage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
+        val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class, TransactionsModule.Factory())
         TransactionsScreen(navigation, viewModel)
     }
 }

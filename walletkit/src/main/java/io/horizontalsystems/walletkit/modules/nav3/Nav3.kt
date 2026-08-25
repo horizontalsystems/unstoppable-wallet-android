@@ -89,6 +89,9 @@ fun Nav3(entryPage: HSPage) {
                 eventBusNavEntryDecorator,
             ),
             backStack = backStack,
+            // Guarded pop: NavDisplay's default onBack removes entries without
+            // protecting the root, so a racing back event can empty the stack.
+            onBack = hsNavigation::removeLastOrNull,
             sceneStrategies = listOf(bottomSheetStrategy),
             entryProvider = { screen ->
                 eventBusNavEntryDecorator.setResultKey(screen.resultKey)

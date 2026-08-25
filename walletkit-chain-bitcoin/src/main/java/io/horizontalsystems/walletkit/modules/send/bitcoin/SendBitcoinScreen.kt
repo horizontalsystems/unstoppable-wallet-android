@@ -82,6 +82,7 @@ data object SendBtcAdvancedSettingsPage : HSPage() {
     }
 }
 
+@Serializable
 data object TransactionInputsSortInfoPage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -89,6 +90,7 @@ data object TransactionInputsSortInfoPage : HSPage() {
     }
 }
 
+@Serializable
 data object UtxoExpertModePage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {

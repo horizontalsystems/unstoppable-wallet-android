@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.modules.address.AddressParserModule
@@ -47,6 +48,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
+@Serializable
 data object SendMoneroAdvancedSettingsPage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -56,6 +58,7 @@ data object SendMoneroAdvancedSettingsPage : HSPage() {
     }
 }
 
+@Serializable
 data object MoneroUtxoExpertModePage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {

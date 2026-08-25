@@ -81,6 +81,7 @@ data object BchAddressFormatPage : HSPage() {
     }
 }
 
+@Serializable
 data object DerivationSelectPage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -105,6 +106,7 @@ data object DerivationSelectPage : HSPage() {
     }
 }
 
+@Serializable
 data object NetworkSelectPage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {

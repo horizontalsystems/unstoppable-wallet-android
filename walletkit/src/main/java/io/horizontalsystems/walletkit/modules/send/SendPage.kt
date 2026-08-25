@@ -35,6 +35,15 @@ data class SendPage(val input: Input) : HSPage() {
         val amount = input.amount
         val memo = input.memo
 
+        // Every chain branch below builds a factory that throws when the wallet
+        // has no adapter. After process death this page can compose before
+        // AdapterManager has recreated adapters — leave the restored flow
+        // instead of crashing.
+        if (App.adapterManager.getAdapterForWallet<Any>(wallet) == null) {
+            navigation.removeLastOrNull()
+            return
+        }
+
         val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(
             factory = AmountInputModeModule.Factory(wallet.coin.uid)
         )
