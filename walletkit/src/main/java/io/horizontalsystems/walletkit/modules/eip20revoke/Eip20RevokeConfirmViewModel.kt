@@ -7,7 +7,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.IEip20ApproveAdapter
-import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -94,13 +93,9 @@ class Eip20RevokeConfirmViewModel(
     }
 
     private fun prepareTronRevokeTransaction() {
-        val trc20Adapter = adapterManager.getAdapterForToken<Trc20Adapter>(token)
-            ?: throw IllegalStateException("Trc20Adapter not found for token")
         viewModelScope.launch {
-            val triggerSmartContract =
-                trc20Adapter.approveTrc20TriggerSmartContract(spenderAddress, BigDecimal.ZERO)
             sendTransactionService.setSendTransactionData(
-                SendTransactionData.Tron.WithContract(triggerSmartContract)
+                SendTransactionData.Tron.Trc20Approve(spenderAddress, BigDecimal.ZERO)
             )
         }
     }

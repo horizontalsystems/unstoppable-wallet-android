@@ -7,7 +7,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.IEip20ApproveAdapter
-import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -120,19 +119,12 @@ class Eip20ApproveViewModel(
     }
 
     private suspend fun freezeTron() {
-        val trc20Adapter = adapterManager.getAdapterForToken<Trc20Adapter>(token)
-        checkNotNull(trc20Adapter)
-
-        val triggerSmartContract = when (allowanceMode) {
-            OnlyRequired -> trc20Adapter.approveTrc20TriggerSmartContract(
-                spenderAddress,
-                requiredAllowance
-            )
-
-            Unlimited -> trc20Adapter.approveTrc20TriggerSmartContractUnlim(spenderAddress)
+        val amount = when (allowanceMode) {
+            OnlyRequired -> requiredAllowance
+            Unlimited -> null
         }
 
-        sendTransactionService.setSendTransactionData(SendTransactionData.Tron.WithContract(triggerSmartContract))
+        sendTransactionService.setSendTransactionData(SendTransactionData.Tron.Trc20Approve(spenderAddress, amount))
     }
 
     suspend fun approve() = withContext(Dispatchers.Default) {

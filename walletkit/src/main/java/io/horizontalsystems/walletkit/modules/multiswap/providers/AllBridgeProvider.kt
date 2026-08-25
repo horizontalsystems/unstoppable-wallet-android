@@ -19,8 +19,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.tronkit.hexStringToByteArray
-import io.horizontalsystems.tronkit.network.CreatedTransaction
+import io.horizontalsystems.walletkit.core.hexStringToByteArray
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -384,12 +383,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
 
             tokenIn.blockchainType == BlockchainType.Tron -> {
-                val rawTransaction = APIClient.gson.fromJson(
-                    rawTransactionStr,
-                    CreatedTransaction::class.java
-                )
-
-                SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
+                SendTransactionData.Tron.WithCreateTransaction(rawTransactionStr)
             }
 
             tokenIn.blockchainType == BlockchainType.Stellar -> {

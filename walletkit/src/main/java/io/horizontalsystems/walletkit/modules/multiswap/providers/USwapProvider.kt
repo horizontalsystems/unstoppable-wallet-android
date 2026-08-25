@@ -21,8 +21,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.tronkit.hexStringToByteArray
-import io.horizontalsystems.tronkit.network.CreatedTransaction
+import io.horizontalsystems.walletkit.core.hexStringToByteArray
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
@@ -696,8 +695,7 @@ class USwapProvider(
                     throw IllegalStateException("No tron tx found")
                 }
 
-                val rawTransaction = APIClient.gson.fromJson(tx, CreatedTransaction::class.java)
-                return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
+                return SendTransactionData.Tron.WithCreateTransaction(tx.toString())
             }
 
             BlockchainType.Stellar -> {

@@ -2,8 +2,6 @@ package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
-import io.horizontalsystems.tronkit.models.Contract
-import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -30,8 +28,10 @@ sealed class SendTransactionData {
     ) : SendTransactionData()
 
     sealed class Tron : SendTransactionData() {
-        data class WithContract(val contract: Contract) : Tron()
-        data class WithCreateTransaction(val transaction: CreatedTransaction) : Tron()
+        /** TRC20 approve/revoke: rebuilt into a TriggerSmartContract by the Tron send service. Null amount = unlimited, zero = revoke. */
+        data class Trc20Approve(val spenderAddress: String, val amount: BigDecimal?) : Tron()
+        /** Raw server-built transaction JSON (TronGrid createtransaction shape), parsed by the Tron send service. */
+        data class WithCreateTransaction(val rawTransaction: String) : Tron()
         data class Simple(val address: String, val amount: BigDecimal) : Tron()
     }
 

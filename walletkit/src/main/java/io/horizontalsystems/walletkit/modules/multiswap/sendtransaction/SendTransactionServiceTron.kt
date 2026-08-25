@@ -1,7 +1,9 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
+import com.google.gson.Gson
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.adapters.Trc20Adapter
 import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.HSCaution.Type
@@ -32,8 +34,9 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
-class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(false, false) {
+class SendTransactionServiceTron(private val token: Token) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
+    private val gson = Gson()
     private val adapter = App.adapterManager.getAdapterForToken<ISendTronAdapter>(token)!!
     private val nativeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -55,6 +58,10 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
     private var sendTransactionData: SendTransactionData.Tron? = null
     private var loading = true
     private var nativeTokenAmount: BigDecimal? = null
+
+    // Kit-side forms of the kit-free payloads in sendTransactionData, built in setSendTransactionData.
+    private var builtContract: Contract? = null
+    private var createdTransaction: CreatedTransaction? = null
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
@@ -126,13 +133,21 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
         sendTransactionData = data
 
         when (data) {
-            is SendTransactionData.Tron.WithContract -> {
-                feeService.setContract(data.contract)
-                nativeTokenAmount = extractTrxSun(data.contract)?.toBigDecimal(nativeToken.decimals)
+            is SendTransactionData.Tron.Trc20Approve -> {
+                val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token)
+                checkNotNull(trc20Adapter)
+                val contract = data.amount?.let {
+                    trc20Adapter.approveTrc20TriggerSmartContract(data.spenderAddress, it)
+                } ?: trc20Adapter.approveTrc20TriggerSmartContractUnlim(data.spenderAddress)
+                builtContract = contract
+                feeService.setContract(contract)
+                nativeTokenAmount = extractTrxSun(contract)?.toBigDecimal(nativeToken.decimals)
             }
             is SendTransactionData.Tron.WithCreateTransaction -> {
-                feeService.setCreatedTransaction(data.transaction)
-                nativeTokenAmount = extractTrxSun(data.transaction).toBigDecimal(nativeToken.decimals)
+                val transaction = gson.fromJson(data.rawTransaction, CreatedTransaction::class.java)
+                createdTransaction = transaction
+                feeService.setCreatedTransaction(transaction)
+                nativeTokenAmount = extractTrxSun(transaction).toBigDecimal(nativeToken.decimals)
             }
             is SendTransactionData.Tron.Simple -> {
                 nativeTokenAmount = data.amount
@@ -146,8 +161,14 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val txHash = when (val d = sendTransactionData) {
-            is SendTransactionData.Tron.WithContract -> adapter.send(d.contract, feeState.feeLimit)
-            is SendTransactionData.Tron.WithCreateTransaction -> adapter.send(d.transaction)
+            is SendTransactionData.Tron.Trc20Approve -> {
+                val contract = builtContract ?: throw IllegalStateException("Approve contract is not built")
+                adapter.send(contract, feeState.feeLimit)
+            }
+            is SendTransactionData.Tron.WithCreateTransaction -> {
+                val transaction = createdTransaction ?: throw IllegalStateException("Transaction is not parsed")
+                adapter.send(transaction)
+            }
             is SendTransactionData.Tron.Simple -> adapter.send(d.amount, TronAddress.fromBase58(d.address), feeState.feeLimit)
             null -> throw IllegalStateException("Not supported")
         }
