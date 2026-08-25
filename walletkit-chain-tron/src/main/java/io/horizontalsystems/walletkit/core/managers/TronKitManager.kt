@@ -13,13 +13,13 @@ import io.horizontalsystems.tronkit.models.RpcSource
 import io.horizontalsystems.tronkit.models.TransactionSource
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.transaction.Signer
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,9 +35,8 @@ class TronKitManager(
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
 
-    private val tronKitStoppedSubject = PublishSubject.create<Unit>()
-    val kitStoppedObservable: Observable<Unit>
-        get() = tronKitStoppedSubject
+    private val _kitStoppedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val kitStoppedFlow: SharedFlow<Unit> = _kitStoppedFlow
 
     var tronKitWrapper: TronKitWrapper? = null
         private set(value) {
@@ -67,7 +66,7 @@ class TronKitManager(
     @Synchronized
     private fun handleUpdateNetwork() {
         stop()
-        tronKitStoppedSubject.onNext(Unit)
+        _kitStoppedFlow.tryEmit(Unit)
     }
 
     private fun tronRpcSource(): RpcSource {
