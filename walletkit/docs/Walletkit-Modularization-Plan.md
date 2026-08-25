@@ -71,7 +71,7 @@ market) — continues in issue #9475.
 
 ---
 
-## Part 1 — The dispatch map
+## Part 1 — The dispatch map (historical: the pre-refactor state this plan converted)
 
 ### 1.0 The structural constraint
 
@@ -149,7 +149,7 @@ chain knowledge in the codebase), `nativeTokenQueries`, `defaultTokenQuery`, `ba
 
 ---
 
-## Part 2 — Target architecture
+## Part 2 — Target architecture (historical: superseded where the Status section says so)
 
 ### 2.1 Module layout
 
@@ -157,7 +157,7 @@ chain knowledge in the codebase), `nativeTokenQueries`, `defaultTokenQuery`, `ba
 :walletkit-core        ← market-kit, storage/Room, accounts, ChainRegistry + ChainPlugin SPI,
                           shared UI (nav3, compose components, TransactionInfoViewItem vocabulary),
                           generic screens (balance list, transactions list, settings hub, backup engine)
-:walletkit-chain-btc   ← bitcoin/bch/dash/ecash/litecoin kits + adapters + send/receive/settings UI
+:walletkit-chain-bitcoin   ← bitcoin/bch/dash/ecash/litecoin kits + adapters + send/receive/settings UI
 :walletkit-chain-evm   ← ethereum/erc20/uniswap/oneinch/nft kits, web3j
 :walletkit-chain-tron
 :walletkit-chain-solana
@@ -276,7 +276,7 @@ capability sub-interfaces) rather than SPI hooks.
 
 ---
 
-## Part 3 — Phased plan
+## Part 3 — Phased plan (historical: all chain phases executed; feature modules moved to #9475)
 
 ### Phase 0 — Prep & dedup (small PRs, zero behavior change)
 
@@ -343,7 +343,7 @@ Deliverable of this phase: a written "how to extract a chain" checklist derived 
 
 ---
 
-## Verification strategy (applies to every phase)
+## Verification strategy (historical: superseded — the parity fixture and exclusion proofs shipped instead of the startup assertion)
 
 - Startup assertion: registry completeness vs. app's declared chain set.
 - Backup fixture round-trip test (created in Phase 0) must pass unmodified.
