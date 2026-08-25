@@ -248,7 +248,14 @@ class TronChainPlugin : ChainPlugin {
                 TronSigner.address(privateKey, Network.Mainnet).base58
             }
 
-            is AccountType.TronPrivateKey -> TronSigner.address(accountType.key, Network.Mainnet).base58
+            is AccountType.TronPrivateKey ->
+                // Same validity rule as privateKeyRows — an out-of-range key must not be
+                // silently reduced modulo the curve order into a foreign address.
+                if (normalizedKeyBytes(accountType.key) != null) {
+                    TronSigner.address(accountType.key, Network.Mainnet).base58
+                } else {
+                    null
+                }
 
             else -> null
         } ?: return emptyList()
@@ -263,18 +270,19 @@ class TronChainPlugin : ChainPlugin {
         )
     }
 
-    // Renders a private key as its canonical 64-char hex form: BigInteger.toByteArray()
-    // drops leading zero bytes and may prepend a sign byte, so the value is normalized
-    // to exactly 32 bytes first. A value no 32-byte key can produce (negative, or still
-    // wider than 32 bytes after the sign byte) renders as no key at all rather than as
-    // a different key.
-    private fun privateKeyHex(key: BigInteger): String? {
+    /** Renders a private key as its canonical 64-char hex form, or null for values no 32-byte key can produce. */
+    private fun privateKeyHex(key: BigInteger): String? = normalizedKeyBytes(key)?.toRawHexString()
+
+    // BigInteger.toByteArray() drops leading zero bytes and may prepend a sign byte, so the
+    // value is normalized to exactly 32 bytes. A value no 32-byte key can produce (negative,
+    // or still wider than 32 bytes after the sign byte) yields null — the key screens omit
+    // their row rather than showing a key or address the account does not hold.
+    private fun normalizedKeyBytes(key: BigInteger): ByteArray? {
         if (key.signum() < 0) return null
         val bytes = key.toByteArray()
         val stripped = if (bytes.size == 33 && bytes[0] == 0.toByte()) bytes.copyOfRange(1, 33) else bytes
         if (stripped.size > 32) return null
-        val padded = if (stripped.size < 32) ByteArray(32 - stripped.size) + stripped else stripped
-        return padded.toRawHexString()
+        return if (stripped.size < 32) ByteArray(32 - stripped.size) + stripped else stripped
     }
 }
 

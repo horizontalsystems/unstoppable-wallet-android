@@ -40,4 +40,18 @@ class TronChainPluginTest {
     fun negativeKeyRendersNoRowInsteadOfReinterpreting() {
         assertTrue(privateKeyRows(BigInteger.ONE.negate()).isEmpty())
     }
+
+    private fun publicKeyRows(key: BigInteger) = TronChainPlugin().publicKeyRows(
+        Account("", "test", AccountType.TronPrivateKey(key), AccountOrigin.Restored, 0)
+    )
+
+    @Test
+    fun overWideKeyRendersNoAddressRow() {
+        assertTrue(publicKeyRows(BigInteger.ONE.shiftLeft(256)).isEmpty())
+    }
+
+    @Test
+    fun negativeKeyRendersNoAddressRow() {
+        assertTrue(publicKeyRows(BigInteger.ONE.negate()).isEmpty())
+    }
 }
