@@ -62,7 +62,15 @@ fun SendTronConfirmationScreen(
     sendEntryPointDestId: KClass<out HSPage>?
 ) {
     val closeUntilDestId = sendEntryPointDestId ?: SendPage::class
-    val confirmationData = sendViewModel.confirmationData ?: return
+    // Unlike the static confirmation data of other chains, this one keeps updating as the
+    // fee estimate lands, so it is read directly instead of via rememberConfirmationData.
+    // A null here means the view model was restored empty after process death — return to
+    // the send form instead of leaving a blank screen.
+    val confirmationData = sendViewModel.confirmationData
+    if (confirmationData == null) {
+        LaunchedEffect(Unit) { navigation.removeLastOrNull() }
+        return
+    }
 
     val uiState = sendViewModel.uiState
     val sendEnabled = uiState.sendEnabled
