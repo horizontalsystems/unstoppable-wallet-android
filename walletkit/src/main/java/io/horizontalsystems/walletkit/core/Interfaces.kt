@@ -301,11 +301,6 @@ interface ITransactionsAdapter {
         fromTransactionId: String?
     ): List<TransactionRecord> = emptyList()
 
-    suspend fun getTronFullTransactionsBefore(
-        fromTransactionHash: ByteArray?,
-        limit: Int
-    ): List<io.horizontalsystems.tronkit.models.FullTransaction> = emptyList()
-
     fun getRawTransaction(transactionHash: String): String? = null
 
     fun getTransactionRecordsFlow(

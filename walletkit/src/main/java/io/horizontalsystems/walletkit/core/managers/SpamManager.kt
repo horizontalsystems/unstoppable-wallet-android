@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.core.managers
 import android.util.Log
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ILocalStorage
-import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.walletkit.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.walletkit.entities.ScannedTransaction
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.TransferEvent
@@ -28,10 +27,6 @@ class SpamManager(
 ) {
     private val poisoningScorer = PoisoningScorer()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-    // Transaction event extractors for each blockchain
-    val tronExtractor = TronTransactionEventExtractor()
-
 
     // Cache for trusted addresses from contacts (blockchainType:address -> true)
     // Key format: "blockchainTypeUid:lowercaseAddress" for fast lookup
@@ -168,12 +163,6 @@ class SpamManager(
 
         return try {
             when (adapter) {
-                is TronTransactionsAdapter -> {
-                    val userAddress = adapter.tronKitWrapper.tronKit.address
-                    adapter.getTronFullTransactionsBefore(transactionHash, OUTGOING_CONTEXT_SIZE)
-                        .sortedByDescending { it.transaction.timestamp }
-                        .mapNotNull { tronExtractor.extractCounterpartyInfo(it, userAddress) }
-                }
                 is ISpamOutgoingContextSource -> {
                     adapter.getOutgoingContext(transactionHash, operationId, OUTGOING_CONTEXT_SIZE)
                 }

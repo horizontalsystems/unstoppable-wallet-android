@@ -2,7 +2,10 @@ package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
+import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
 import io.horizontalsystems.walletkit.core.managers.TronKitWrapper
+import io.horizontalsystems.walletkit.core.managers.TronTransactionEventExtractor
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
@@ -22,9 +25,10 @@ import kotlinx.coroutines.rx2.asFlowable
 class TronTransactionsAdapter(
     val tronKitWrapper: TronKitWrapper,
     private val transactionConverter: TronTransactionConverter
-) : ITransactionsAdapter {
+) : ITransactionsAdapter, ISpamOutgoingContextSource {
 
     private val tronKit = tronKitWrapper.tronKit
+    private val spamContextExtractor = TronTransactionEventExtractor()
 
     override val explorerTitle: String
         get() = "Tronscan"
@@ -81,11 +85,15 @@ class TronTransactionsAdapter(
             }
     }
 
-    override suspend fun getTronFullTransactionsBefore(
-        fromTransactionHash: ByteArray?,
+    override suspend fun getOutgoingContext(
+        transactionHash: ByteArray,
+        operationId: Long?,
         limit: Int
-    ): List<io.horizontalsystems.tronkit.models.FullTransaction> {
-        return tronKit.getFullTransactionsBefore(listOf(), fromTransactionHash, limit)
+    ): List<PoisoningScorer.OutgoingTxInfo> {
+        val userAddress = tronKit.address
+        return tronKit.getFullTransactionsBefore(listOf(), transactionHash, limit)
+            .sortedByDescending { it.transaction.timestamp }
+            .mapNotNull { spamContextExtractor.extractCounterpartyInfo(it, userAddress) }
     }
 
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =
