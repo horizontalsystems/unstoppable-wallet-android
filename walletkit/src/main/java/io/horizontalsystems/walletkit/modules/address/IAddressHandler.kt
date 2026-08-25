@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.address.EvmAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
@@ -186,23 +185,6 @@ class AddressHandlerEvm(override val blockchainType: BlockchainType) : IAddressH
 
 
 
-class AddressHandlerTron : IAddressHandler {
-    override val blockchainType = BlockchainType.Tron
-
-    override fun isSupported(value: String) = try {
-        io.horizontalsystems.tronkit.models.Address.fromBase58(value)
-        true
-    } catch (e: AddressHandler.AddressValidationException) {
-        false
-    } catch (e: IllegalArgumentException) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        val tronAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(value)
-        return Address(tronAddress.base58, blockchainType = blockchainType)
-    }
-}
 
 
 

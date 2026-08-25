@@ -41,9 +41,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.tronkit.models.Contract
-import io.horizontalsystems.tronkit.network.CreatedTransaction
-import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
@@ -51,7 +48,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.util.Date
-import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
@@ -452,20 +448,6 @@ interface ISendZanoAdapter {
     val nativeAvailableBalance: BigDecimal
     suspend fun send(amount: BigDecimal, address: String, memo: String?): String
     suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
-}
-
-interface ISendTronAdapter {
-    val balanceData: BalanceData
-    val trxBalanceData: BalanceData
-
-    suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
-    suspend fun estimateFee(transaction: CreatedTransaction): List<Fee>
-    suspend fun estimateFee(contract: Contract): List<Fee>
-    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?): String
-    suspend fun send(contract: Contract, feeLimit: Long?): String
-    suspend fun send(createdTransaction: CreatedTransaction): String
-    suspend fun isAddressActive(address: TronAddress): Boolean
-    fun isOwnAddress(address: TronAddress): Boolean
 }
 
 interface IAccountsStorage {

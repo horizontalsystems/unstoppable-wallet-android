@@ -6,7 +6,7 @@ import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
 import io.horizontalsystems.walletkit.toHexString
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.hdwalletkit.Base58
-import io.horizontalsystems.tronkit.toBigInteger
+import java.math.BigInteger
 
 object BackupLocalModule {
     private const val MNEMONIC = "mnemonic"
@@ -102,8 +102,8 @@ object BackupLocalModule {
                 AccountType.Mnemonic(words, passphrase)
             }
 
-            PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toBigInteger())
-            TRON_PRIVATE_KEY -> AccountType.TronPrivateKey(data.toBigInteger())
+            PRIVATE_KEY -> AccountType.EvmPrivateKey(data.toUnsignedBigInteger())
+            TRON_PRIVATE_KEY -> AccountType.TronPrivateKey(data.toUnsignedBigInteger())
             SECRET_KEY -> AccountType.StellarSecretKey(String(data, Charsets.UTF_8))
             ADDRESS -> AccountType.EvmAddress(String(data, Charsets.UTF_8))
             SOLANA_ADDRESS -> AccountType.SolanaAddress(String(data, Charsets.UTF_8))
@@ -166,4 +166,7 @@ object BackupLocalModule {
         r = 8,
         salt = EncryptDecryptManager.generateRandomBytes(16).toHexString()
     )
+
+    private fun ByteArray.toUnsignedBigInteger(): BigInteger =
+        if (isEmpty()) BigInteger.ZERO else BigInteger(1, this)
 }

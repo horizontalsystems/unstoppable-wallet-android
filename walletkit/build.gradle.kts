@@ -178,7 +178,6 @@ dependencies {
     api(libs.kit.hd.wallet)
     api(libs.kit.bitcoin.core)
     api(libs.kit.hodler)
-    api(libs.kit.tron)
 
     // BouncyCastle
     api(libs.bouncycastle)

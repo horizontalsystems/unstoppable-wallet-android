@@ -247,6 +247,7 @@ dependencies {
     implementation(project(":walletkit-chain-solana"))
     implementation(project(":walletkit-chain-stellar"))
     implementation(project(":walletkit-chain-ton"))
+    implementation(project(":walletkit-chain-tron"))
     implementation(project(":walletkit-chain-thorchain"))
     implementation(project(":walletkit-chain-bitcoin"))
     implementation(project(":walletkit-chain-evm"))
