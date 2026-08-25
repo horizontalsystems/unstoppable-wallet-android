@@ -53,7 +53,6 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.rx2.asFlow
 import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
 
 class TronChainPlugin : ChainPlugin {
@@ -119,7 +118,7 @@ class TronChainPlugin : ChainPlugin {
     }
 
     override val walletReloadTrigger: Flow<*>
-        get() = kitManager.kitStoppedObservable.asFlow()
+        get() = kitManager.kitStoppedFlow
 
     override suspend fun swapDestinationAddress(account: Account): String? =
         kitManager.getAddress(account)
@@ -264,14 +263,16 @@ class TronChainPlugin : ChainPlugin {
         )
     }
 
+    // BigInteger.toByteArray() drops leading zero bytes and may prepend a sign byte;
+    // a private key must always render as exactly 64 hex chars.
     private fun toHexString(key: BigInteger): String {
-        return key.toByteArray().let {
-            if (it.size > 32) {
-                it.copyOfRange(1, it.size)
-            } else {
-                it
-            }.toRawHexString()
+        val bytes = key.toByteArray()
+        val normalized = when {
+            bytes.size > 32 -> bytes.copyOfRange(bytes.size - 32, bytes.size)
+            bytes.size < 32 -> ByteArray(32 - bytes.size) + bytes
+            else -> bytes
         }
+        return normalized.toRawHexString()
     }
 }
 
