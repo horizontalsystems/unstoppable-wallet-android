@@ -9,6 +9,68 @@ All paths are relative to `walletkit/src/main/java/io/horizontalsystems/walletki
 
 ---
 
+## Status (2026-08) — chain extractions complete
+
+Parts 1–3 below are the original plan, kept as the map of what was converted and why.
+Where reality diverged, this section wins.
+
+**Every chain is extracted.** Nine chains shipped through issue #9440
+(`walletkit-chain-{bitcoin,evm,monero,solana,stellar,thorchain,ton,zano,zcash}`;
+Mayachain lives in `walletkit-chain-thorchain`, which also depends on
+`walletkit-chain-evm` — the one inter-module edge). Tron — deferred during #9440
+because Seya keeps it, so it carried no APK-size win — followed as the last
+extraction via issue #9566 / PR #9567. Walletkit no longer depends on any
+blockchain SDK.
+
+Divergences from the plan:
+
+- **No `:walletkit-core` / umbrella split.** `:walletkit` itself became the shared
+  core; consumers depend on it plus their chain modules directly. Unstoppable
+  registers everything in `MainApp.registerChainPlugins()`; Seya registers
+  EVM + Tron (the first — and so far only — included-module consumer path,
+  proven by its `core-lib` bump `e536a5c`).
+- **The SPI outgrew §2.2's sketch.** `core/chain/ChainPlugin.kt` is authoritative
+  (~60 hooks, added one dispatch point at a time). Notably there are no
+  `listViewItem`/`infoSections`/`fee` hooks: transaction records stayed in core as
+  **kit-free projections** (e.g. `TronTransactionInfo`, Ton's event info) with the
+  record dispatch still in the view-item factories — type surgery on the records,
+  not rendering hooks, resolved F4/F5.
+- **No startup assertion, no per-plugin `SerializersModule`.** Registry honesty is
+  enforced by the `ChainBehaviorParityTest` golden fixture
+  (`app/src/test/resources/chain-behavior-parity.txt`) plus a per-extraction
+  exclusion proof (app compiles without the module; the chain's SDK disappears
+  from the runtime classpath). Nav pages need only `@Serializable` — reflection-based
+  serializer lookup plus the `NavPagesSerializableTest` classpath scan replaced
+  polymorphic registration.
+- **`BlockchainType.supported`** = hardcoded EVM prefix + `ChainRegistry` insertion
+  order, so registration order is part of each app's chain configuration.
+
+### Tron extraction notes (#9566)
+
+- Registered immediately after the EVM plugins so `supported` keeps its
+  pre-plugin order — the parity fixture stayed byte-identical, no regeneration.
+- SPI deltas it introduced: new `balanceWarning(wallet)` hook (replaces the
+  `BaseTronAdapter` cast for the inactive-account warning); `eip20ApproveAction`
+  became `suspend` (TRC20 pending-tx lookup); `blockchainSettingsItem()` widened
+  to `BlockchainItem?` so Tron can return its `BlockchainItem.Evm` row.
+- Deliberately kept in core: the backup wire format (Tron's sync source still
+  rides `evm_sync_sources` with `blockchain_type_id: "tron"` — §2.3.5's
+  compatibility contract), `EvmSyncSourceManager`'s Tron default-node list,
+  `AccountType.TronAddress`/`TronPrivateKey` and the watch/restore branches, and
+  the six kit-free Tron transaction records with their factory dispatch.
+- Hardening that landed with it: the key screens validate the secp256k1 scalar
+  range before rendering (an out-of-range stored key shows no row rather than a
+  truncated key or a curve-order-reduced address), and the restored Tron send
+  confirmation pops back to the form instead of a blank screen (the one send flow
+  the nine-screen recovery audit missed — it cannot reuse
+  `rememberConfirmationData` because its confirmation data keeps updating as the
+  fee estimate lands).
+
+**Remaining work** — the optional feature modules (Tor, coin page + charts,
+market) — continues in issue #9475.
+
+---
+
 ## Part 1 — The dispatch map
 
 ### 1.0 The structural constraint
@@ -266,7 +328,7 @@ Deliverable of this phase: a written "how to extract a chain" checklist derived 
 
 ### Phase 3 — Remaining chains, in dependency order
 
-1. **Tron** — first chain Seya *keeps*: proves the included-module path end-to-end (TRC20, account activation warning, multiswap Tron service).
+1. **Tron** — first chain Seya *keeps*: proves the included-module path end-to-end (TRC20, account activation warning, multiswap Tron service). *In practice extracted last (#9566), after #9440 closed — see the Status section.*
 2. **Zcash** (shield flow, address types, unshielded balance — type surgery on `BalanceData`).
 3. **Bitcoin family** as one module (fee rates, UTXO expert mode, RBF/resend, plugins/hodler).
 4. **Solana / Ton / Stellar** (each moves its token auto-enable AccountManager; Ton brings tonconnect coupling, Stellar brings trustline/locked-value types).
