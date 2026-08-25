@@ -5,10 +5,9 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.evm.EvmTransac
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.tronkit.models.Transaction
 
 class TronExternalContractCallTransactionRecord(
-    transaction: Transaction,
+    transaction: TronTransactionInfo,
     baseToken: Token,
     source: TransactionSource,
     val incomingEvents: List<TransferEvent>,

@@ -422,7 +422,7 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(
                     listOf(
                         Transaction(
-                            transaction.transaction.contract?.label
+                            transaction.transaction.contractLabel
                                 ?: Translator.getString(R.string.Transactions_ContractCall),
                             "",
                             TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes

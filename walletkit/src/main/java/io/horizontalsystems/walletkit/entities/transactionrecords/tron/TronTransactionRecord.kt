@@ -1,15 +1,24 @@
 package io.horizontalsystems.walletkit.entities.transactionrecords.tron
 
-import io.horizontalsystems.walletkit.core.adapters.BaseTronAdapter
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.tronkit.models.Transaction
+
+/** Kit-free projection of tron-kit's Transaction — the fields records and UI consume. */
+data class TronTransactionInfo(
+    val hashString: String,
+    val blockNumber: Long?,
+    val timestamp: Long,
+    val isFailed: Boolean,
+    val confirmed: Boolean,
+    val fee: Long?,
+    val contractLabel: String?,
+)
 
 open class TronTransactionRecord(
-    val transaction: Transaction,
+    val transaction: TronTransactionInfo,
     baseToken: Token,
     source: TransactionSource,
     val foreignTransaction: Boolean = false,
@@ -20,7 +29,7 @@ open class TronTransactionRecord(
         transactionHash = transaction.hashString,
         transactionIndex = 0,
         blockHeight = transaction.blockNumber?.toInt(),
-        confirmationsThreshold = BaseTronAdapter.confirmationsThreshold,
+        confirmationsThreshold = CONFIRMATIONS_THRESHOLD,
         timestamp = transaction.timestamp / 1000,
         failed = transaction.isFailed,
         spam = spam,
@@ -64,6 +73,10 @@ open class TronTransactionRecord(
 
             else -> return TransactionStatus.Pending
         }
+    }
+
+    companion object {
+        const val CONFIRMATIONS_THRESHOLD: Int = 19
     }
 
 }

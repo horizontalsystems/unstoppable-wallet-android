@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronContr
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronExternalContractCallTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionInfo
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -45,6 +46,15 @@ class TronTransactionConverter(
 
     suspend fun transactionRecord(fullTransaction: FullTransaction): TronTransactionRecord {
         val transaction = fullTransaction.transaction
+        val info = TronTransactionInfo(
+            hashString = transaction.hashString,
+            blockNumber = transaction.blockNumber,
+            timestamp = transaction.timestamp,
+            isFailed = transaction.isFailed,
+            confirmed = transaction.confirmed,
+            fee = transaction.fee,
+            contractLabel = transaction.contract?.label,
+        )
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
             is NativeTransactionDecoration -> {
@@ -61,7 +71,7 @@ class TronTransactionConverter(
                                 transaction.blockNumber?.toInt()
                             )
                             TronIncomingTransactionRecord(
-                                transaction = transaction,
+                                transaction = info,
                                 baseToken = baseToken,
                                 source = source,
                                 from = fromAddress,
@@ -71,7 +81,7 @@ class TronTransactionConverter(
                         } else {
                             val toAddress = contract.toAddress.base58
                             TronOutgoingTransactionRecord(
-                                transaction = transaction,
+                                transaction = info,
                                 baseToken = baseToken,
                                 source = source,
                                 to = toAddress,
@@ -88,7 +98,7 @@ class TronTransactionConverter(
             is OutgoingTrc20Decoration -> {
                 val toAddress = decoration.to.base58
                 TronOutgoingTransactionRecord(
-                    transaction = transaction,
+                    transaction = info,
                     baseToken = baseToken,
                     source = source,
                     to = toAddress,
@@ -99,7 +109,7 @@ class TronTransactionConverter(
 
             is ApproveTrc20Decoration -> {
                 TronApproveTransactionRecord(
-                    transaction,
+                    info,
                     baseToken,
                     source,
                     decoration.spender.base58,
@@ -124,7 +134,7 @@ class TronTransactionConverter(
                 when {
                     decoration.fromAddress == address && contractAddress != null -> {
                         TronContractCallTransactionRecord(
-                            transaction, baseToken, source,
+                            info, baseToken, source,
                             contractAddress.base58,
                             decoration.data?.hexStringToByteArrayOrNull()?.let { evmLabelManager.methodLabel(it) },
                             incomingEvents,
@@ -143,7 +153,7 @@ class TronTransactionConverter(
                         )
 
                         TronExternalContractCallTransactionRecord(
-                            transaction, baseToken, source,
+                            info, baseToken, source,
                             incomingEvents,
                             outgoingEvents,
                             spam
@@ -158,7 +168,7 @@ class TronTransactionConverter(
         }
 
         return transactionRecord ?: TronTransactionRecord(
-            transaction = transaction,
+            transaction = info,
             baseToken = baseToken,
             source = source
         )

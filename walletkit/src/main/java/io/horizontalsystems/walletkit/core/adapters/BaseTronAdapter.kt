@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendTronAdapter
 import io.horizontalsystems.walletkit.core.managers.TronKitWrapper
+import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
@@ -83,7 +84,7 @@ abstract class BaseTronAdapter(
     }
 
     companion object {
-        const val confirmationsThreshold: Int = 19
+        const val confirmationsThreshold: Int = TronTransactionRecord.CONFIRMATIONS_THRESHOLD
     }
 
 }

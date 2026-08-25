@@ -47,7 +47,6 @@ import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColorName
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.tronkit.models.Contract
 import java.math.BigDecimal
 import java.util.Date
 
@@ -433,7 +432,7 @@ class TransactionViewItemFactory(
                 createViewItemFromTronTransactionRecord(
                     uid = record.uid,
                     timestamp = record.timestamp,
-                    contract = record.transaction.contract,
+                    contractLabel = record.transaction.contractLabel,
                     progress = progress,
                     spam = record.spam,
                     icon = icon
@@ -886,7 +885,7 @@ class TransactionViewItemFactory(
     private fun createViewItemFromTronTransactionRecord(
         uid: String,
         timestamp: Long,
-        contract: Contract?,
+        contractLabel: String?,
         progress: Float?,
         spam: Boolean,
         icon: TransactionViewItem.Icon?
@@ -894,7 +893,7 @@ class TransactionViewItemFactory(
         return TransactionViewItem(
             uid = uid,
             progress = progress,
-            title = contract?.label ?: Translator.getString(R.string.Transactions_Unknown),
+            title = contractLabel ?: Translator.getString(R.string.Transactions_Unknown),
             subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
             primaryValue = null,
             secondaryValue = null,
