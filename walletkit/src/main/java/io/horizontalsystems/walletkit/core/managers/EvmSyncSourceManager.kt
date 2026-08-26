@@ -142,6 +142,14 @@ class EvmSyncSourceManager(
                 )
             )
 
+            BlockchainType.RobinhoodChain -> listOf(
+                evmSyncSource(
+                    blockchainType,
+                    "Robinhood Chain",
+                    listOf(URI("https://rpc.mainnet.chain.robinhood.com"))
+                )
+            )
+
             BlockchainType.ArbitrumOne -> listOf(
                 evmSyncSource(
                     blockchainType,

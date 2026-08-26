@@ -152,6 +152,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             BlockchainType.Optimism,
             BlockchainType.Base,
             BlockchainType.ZkSync,
+            BlockchainType.RobinhoodChain,
             BlockchainType.ArbitrumOne -> uniswapV3Kit.etherToken(chain)
 
             else -> throw Exception("Invalid coin for swap: $token")

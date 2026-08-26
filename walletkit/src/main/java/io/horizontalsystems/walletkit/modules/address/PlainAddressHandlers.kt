@@ -16,6 +16,7 @@ fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> 
         BlockchainType.Optimism,
         BlockchainType.Base,
         BlockchainType.ZkSync,
+        BlockchainType.RobinhoodChain,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne -> listOf(AddressHandlerEvm(blockchainType))

@@ -25,6 +25,7 @@ class EvmBlockchainManager(
         BlockchainType.Optimism -> 10
         BlockchainType.Base -> 8453
         BlockchainType.ZkSync -> 324
+        BlockchainType.RobinhoodChain -> 4663
         BlockchainType.ArbitrumOne -> 42161
         BlockchainType.Gnosis -> 100
         BlockchainType.Fantom -> 250
@@ -55,6 +56,7 @@ class EvmBlockchainManager(
             BlockchainType.Fantom,
             BlockchainType.Base,
             BlockchainType.ZkSync,
+            BlockchainType.RobinhoodChain,
         )
     }
 }
