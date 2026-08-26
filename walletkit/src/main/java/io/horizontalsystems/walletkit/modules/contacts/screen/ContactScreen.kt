@@ -30,6 +30,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
@@ -363,7 +365,8 @@ private fun ContactAddress(
         Image(
             modifier = Modifier
                 .padding(end = 16.dp)
-                .size(32.dp),
+                .size(32.dp)
+                .clip(RoundedCornerShape(8.dp)),
             painter = rememberAsyncImagePainter(
                 model = addressViewItem.blockchain.type.imageUrl,
                 error = painterResource(R.drawable.ic_platform_placeholder_32)

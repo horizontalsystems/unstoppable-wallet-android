@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -83,6 +85,7 @@ private fun BtcBlockchainSettingsScreen(
                         modifier = Modifier
                             .padding(start = 14.dp)
                             .size(24.dp)
+                            .clip(RoundedCornerShape(8.dp))
                     )
                 },
                 menuItems = listOf(

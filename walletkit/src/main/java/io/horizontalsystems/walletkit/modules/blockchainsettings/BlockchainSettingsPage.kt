@@ -12,6 +12,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -128,7 +130,8 @@ private fun BlockchainSettingCell(
         Image(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .size(32.dp),
+                .size(32.dp)
+                .clip(RoundedCornerShape(8.dp)),
             painter = rememberAsyncImagePainter(
                 model = item.imageUrl,
                 error = painterResource(R.drawable.ic_platform_placeholder_32)

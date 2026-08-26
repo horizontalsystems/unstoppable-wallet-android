@@ -14,6 +14,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
@@ -101,7 +103,9 @@ private fun DonateAddress(
             }
         ) {
             Image(
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
                 painter = rememberAsyncImagePainter(
                     model = coinImageUrl,
                     error = painterResource(R.drawable.ic_platform_placeholder_32)
