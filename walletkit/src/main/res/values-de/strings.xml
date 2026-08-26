@@ -1869,7 +1869,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">Private Send ist für diesen Token nicht mehr verfügbar.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">Diese private Route erfordert ein Transaktions-Tag, das dieses Wallet nicht anhängen kann. Private Send ist für diesen Token nicht verfügbar.</string>
     <string name="PrivateSend_Caution_BufferUnknown">Die angezeigte Gebühr ist eine Obergrenze; die endgültigen Kosten können niedriger sein.</string>
-    <string name="PrivateSend_NotAvailable">Notiz ist nicht verfügbar, wenn Private Send aktiviert ist.</string>
+    <string name="PrivateSend_NotAvailable">Memo ist nicht verfügbar, wenn Private Send aktiviert ist.</string>
     <string name="NetworkSettings_AutoSelect">Automatische Auswahl</string>
     <string name="NetworkSettings_Unreachable">Nicht erreichbar</string>
     <string name="NetworkSettings_Latency">%d ms</string>

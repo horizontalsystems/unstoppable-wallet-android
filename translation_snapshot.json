@@ -980,7 +980,7 @@
     "PrivateSend_Fee": "Private send fee",
     "PrivateSend_Fee_Info": "This fee covers the cost of processing your transaction privately. It is charged in addition to the network fee and depends on the amount you send.",
     "PrivateSend_Info_Description": "Private Send routes your transaction through a confidential intermediary, hiding the public link between your address and the recipient. Both transactions remain visible on chain, but they are not directly connected to each other.",
-    "PrivateSend_NotAvailable": "Not available when Private Send is on.",
+    "PrivateSend_NotAvailable": "Memo is not available when Private Send is on.",
     "PrivateSend_ReservedAmount": "Reserved amount",
     "PrivateSend_ReservedAmount_Info": "An additional amount is temporarily reserved to cover possible price changes while your transaction is processed. Any unused part is returned to your wallet in a separate transaction after the send completes.",
     "PrivateSend_Toggle_Title": "Private Send",

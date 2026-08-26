@@ -1867,7 +1867,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">Приватный перевод больше не доступен для этого токена.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">Этот приватный маршрут требует тег транзакции, который это хранилище не может присоединить. Private Send недоступен для этого токена.</string>
     <string name="PrivateSend_Caution_BufferUnknown">Показанная комиссия является верхней оценкой; финальная стоимость может быть ниже.</string>
-    <string name="PrivateSend_NotAvailable">Меморандум недоступен при включенном Private Send.</string>
+    <string name="PrivateSend_NotAvailable">Заметка недоступна, когда включена функция Private Send.</string>
     <string name="NetworkSettings_AutoSelect">Автоматический выбор</string>
     <string name="NetworkSettings_Unreachable">Недоступно</string>
     <string name="NetworkSettings_Latency">%d ms</string>

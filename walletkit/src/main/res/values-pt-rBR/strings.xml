@@ -1865,7 +1865,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">O envio privado não está mais disponível para este token.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">Esta rota privada requer uma tag de transação que esta carteira não consegue anexar. Private Send não está disponível para este token.</string>
     <string name="PrivateSend_Caution_BufferUnknown">A taxa exibida é uma estimativa superior; o custo final pode ser menor.</string>
-    <string name="PrivateSend_NotAvailable">O memorando não está disponível quando Private Send está ativado.</string>
+    <string name="PrivateSend_NotAvailable">Memorando não está disponível quando Private Send está ativado.</string>
     <string name="NetworkSettings_AutoSelect">Seleção automática</string>
     <string name="NetworkSettings_Unreachable">Inacessível</string>
     <string name="NetworkSettings_Latency">%d ms</string>

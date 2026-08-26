@@ -1860,7 +1860,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">El envío privado ya no está disponible para este token.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">Esta ruta privada requiere una etiqueta de transacción que esta billetera no puede adjuntar. Private Send no está disponible para este token.</string>
     <string name="PrivateSend_Caution_BufferUnknown">La tarifa mostrada es una estimación superior; el costo final puede ser menor.</string>
-    <string name="PrivateSend_NotAvailable">El memo no está disponible cuando Private Send está activado.</string>
+    <string name="PrivateSend_NotAvailable">La nota no está disponible cuando Private Send está activado.</string>
     <string name="NetworkSettings_AutoSelect">Selección automática</string>
     <string name="NetworkSettings_Unreachable">No disponible</string>
     <string name="NetworkSettings_Latency">%d ms</string>
