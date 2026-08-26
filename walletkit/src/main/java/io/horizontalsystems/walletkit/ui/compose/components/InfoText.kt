@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,23 @@ fun InfoText(
     subhead_grey(
         modifier = modifier.padding(start = paddingStart, top = paddingTop, end = paddingEnd, bottom = paddingBottom),
         text = text
+    )
+}
+
+@Composable
+fun InfoText(
+    text: AnnotatedString,
+    modifier: Modifier = Modifier,
+    paddingStart: Dp = 32.dp,
+    paddingEnd: Dp = 32.dp,
+    paddingTop: Dp = 12.dp,
+    paddingBottom: Dp = 12.dp,
+) {
+    Text(
+        modifier = modifier.padding(start = paddingStart, top = paddingTop, end = paddingEnd, bottom = paddingBottom),
+        text = text,
+        style = ComposeAppTheme.typography.subhead,
+        color = ComposeAppTheme.colors.grey,
     )
 }
 
