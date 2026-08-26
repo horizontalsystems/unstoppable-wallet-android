@@ -197,6 +197,25 @@ private fun PrivateSendConfirmationScreen(
                     },
                 )
             }
+            uiState.reservedAmount?.let { reserved ->
+                FeeRow(
+                    title = stringResource(R.string.PrivateSend_ReservedAmount),
+                    valueFiat = viewModel.coinRate?.let {
+                        CurrencyValue(it.currency, it.value * reserved).getFormattedFull()
+                    },
+                    valueToken = CoinValue(uiState.token, reserved).getFormattedFull(),
+                    onInfoClick = {
+                        navigation.slideFromBottom(
+                            SwapInfoSheet(
+                                SwapInfoSheet.Input(
+                                    context.getString(R.string.PrivateSend_ReservedAmount),
+                                    context.getString(R.string.PrivateSend_ReservedAmount_Info),
+                                )
+                            )
+                        )
+                    },
+                )
+            }
             uiState.privateFee?.let { fee ->
                 // Same value behavior as the network fee row: tapping switches token/fiat.
                 FeeRow(
@@ -211,25 +230,6 @@ private fun PrivateSendConfirmationScreen(
                                 SwapInfoSheet.Input(
                                     context.getString(R.string.PrivateSend_Fee),
                                     context.getString(R.string.PrivateSend_Fee_Info),
-                                )
-                            )
-                        )
-                    },
-                )
-            }
-            uiState.reservedAmount?.let { reserved ->
-                FeeRow(
-                    title = stringResource(R.string.PrivateSend_ReservedAmount),
-                    valueFiat = viewModel.coinRate?.let {
-                        CurrencyValue(it.currency, it.value * reserved).getFormattedFull()
-                    },
-                    valueToken = CoinValue(uiState.token, reserved).getFormattedFull(),
-                    onInfoClick = {
-                        navigation.slideFromBottom(
-                            SwapInfoSheet(
-                                SwapInfoSheet.Input(
-                                    context.getString(R.string.PrivateSend_ReservedAmount),
-                                    context.getString(R.string.PrivateSend_ReservedAmount_Info),
                                 )
                             )
                         )
