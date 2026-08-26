@@ -158,6 +158,7 @@ val BlockchainType.blockTime : Long?
         BlockchainType.Fantom,
         BlockchainType.Base,
         BlockchainType.ZkSync,
+        BlockchainType.RobinhoodChain,
             -> 2
 
         BlockchainType.Gnosis,

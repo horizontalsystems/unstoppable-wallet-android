@@ -34,6 +34,7 @@ class AddTokenService(
         BlockchainType.Optimism,
         BlockchainType.Base,
         BlockchainType.ZkSync,
+        BlockchainType.RobinhoodChain,
     ) + ChainRegistry.all.filter { it.supportsCustomTokens }.map { it.blockchainType }
 
     val blockchains = marketKit
