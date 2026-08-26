@@ -40,21 +40,17 @@ fun HSMemoInput(
     disabledCaution: String? = null,
     onValueChange: (String) -> Unit
 ) {
-    val state = when {
-        !enabled -> disabledCaution?.let { DataState.Error(Exception(it)) }
+    val state = if (!enabled) disabledCaution?.let { DataState.Error(Exception(it)) }
+    else null
 
-        visibility == MemoVisibility.Public -> DataState.Error(
-            FormsInputStateWarning(stringResource(R.string.Send_Memo_PublicWarning))
-        )
-
-        else -> null
-    }
-
-    val infoText = when {
-        !enabled -> null
-        visibility == MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
-        visibility == MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
-        else -> null
+    val infoText = if (enabled) {
+        when (visibility) {
+            MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
+            MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
+            MemoVisibility.Public -> stringResource(R.string.Send_Memo_PublicWarning)
+        }
+    } else {
+        null
     }
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
