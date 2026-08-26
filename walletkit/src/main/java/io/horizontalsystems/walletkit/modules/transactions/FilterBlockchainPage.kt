@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
@@ -94,7 +96,8 @@ private fun BlockchainCell(
                     ),
                     modifier = Modifier
                         .padding(end = 16.dp)
-                        .size(32.dp),
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp)),
                     contentDescription = null
                 )
                 body_leah(
