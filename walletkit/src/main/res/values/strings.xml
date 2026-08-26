@@ -619,7 +619,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">Private send is no longer available for this token.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">This private route requires a transaction tag this wallet can\'t attach. Private send is unavailable for this token.</string>
     <string name="PrivateSend_Caution_BufferUnknown">The fee shown is an upper estimate; the final cost may be lower.</string>
-    <string name="PrivateSend_NotAvailable">Not available when Private Send is on.</string>
+    <string name="PrivateSend_NotAvailable">Memo is not available when Private Send is on.</string>
 
     <!-- Send Evm Settings -->
 

@@ -1862,7 +1862,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">L\'envoi privé n\'est plus disponible pour ce token.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">Cette route privée nécessite une étiquette de transaction que ce portefeuille ne peut pas joindre. Private Send n\'est pas disponible pour ce token.</string>
     <string name="PrivateSend_Caution_BufferUnknown">Les frais affichés sont une estimation supérieure; le coût final peut être inférieur.</string>
-    <string name="PrivateSend_NotAvailable">Non disponible lorsque Private Send est activé.</string>
+    <string name="PrivateSend_NotAvailable">Le mémo n\'est pas disponible lorsque Private Send est activé.</string>
     <string name="NetworkSettings_AutoSelect">Sélection automatique</string>
     <string name="NetworkSettings_Unreachable">Inaccessible</string>
     <string name="NetworkSettings_Latency">%d ms</string>

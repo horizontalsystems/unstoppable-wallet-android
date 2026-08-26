@@ -3,6 +3,10 @@ package io.horizontalsystems.walletkit.modules.memo
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,17 +37,20 @@ fun HSMemoInput(
     maxLength: Int,
     memo: String? = null,
     visibility: MemoVisibility = MemoVisibility.Public,
-    enabled: Boolean = true,
-    // Rendered as the input's (red) caution while [enabled] is false — the flow's
-    // explanation of why a memo is not accepted right now. Any already-typed text stays
-    // visible, greyed, and comes back editable when the input is re-enabled.
-    disabledCaution: String? = null,
+    // Rendered as the input's (yellow) warning while there is typed text — the flow's
+    // explanation of why the memo will not be attached to the transaction right now.
+    warningCaution: String? = null,
     onValueChange: (String) -> Unit
 ) {
-    val state = if (!enabled) disabledCaution?.let { DataState.Error(Exception(it)) }
-    else null
+    var text by remember { mutableStateOf(memo ?: "") }
 
-    val infoText = if (enabled) {
+    val state = if (warningCaution != null && text.isNotEmpty()) {
+        DataState.Error(FormsInputStateWarning(warningCaution))
+    } else {
+        null
+    }
+
+    val infoText = if (state == null) {
         when (visibility) {
             MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
             MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
@@ -57,16 +64,18 @@ fun HSMemoInput(
         FormsInput(
             hint = stringResource(R.string.Send_DialogMemoHint),
             initial = memo,
-            enabled = enabled,
             hintColor = ComposeAppTheme.colors.andy,
             hintStyle = ComposeAppTheme.typography.bodyItalic,
-            textColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy,
+            textColor = ComposeAppTheme.colors.leah,
             textStyle = ComposeAppTheme.typography.bodyItalic,
             pasteEnabled = false,
             singleLine = true,
             maxLength = maxLength,
             state = state,
-            onValueChange = onValueChange
+            onValueChange = {
+                text = it
+                onValueChange(it)
+            }
         )
 
         infoText?.let {

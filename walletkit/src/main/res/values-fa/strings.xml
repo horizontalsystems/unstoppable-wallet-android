@@ -793,7 +793,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">ارسال خصوصی دیگر برای این توکن در دسترس نیست.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">این مسیر خصوصی به برچسب تراکنشی نیاز دارد که این کیف پول نمی‌تواند آن را ضمیمه کند. Private Send برای این توکن در دسترس نیست.</string>
     <string name="PrivateSend_Caution_BufferUnknown">کارمزد نمایش‌داده شده تخمین بالایی است؛ هزینه نهایی می‌تواند کمتر باشد.</string>
-    <string name="PrivateSend_NotAvailable">وقتی Private Send روشن است در دسترس نیست.</string>
+    <string name="PrivateSend_NotAvailable">وقتی Private Send روشن است، یادداشت در دسترس نیست.</string>
     <string name="NetworkSettings_AutoSelect">انتخاب خودکار</string>
     <string name="NetworkSettings_Unreachable">غیرقابل دسترس</string>
     <string name="NetworkSettings_Latency">%d ms</string>

@@ -1861,7 +1861,7 @@
     <string name="PrivateSend_Caution_TokenUnsupported">Özel gönderim artık bu token için kullanılamaz.</string>
     <string name="PrivateSend_Caution_AttachmentUnsupported">Bu özel rota, bu cüzdanın ekleyemediği bir işlem etiketi gerektirir. Private Send bu token için kullanılamaz.</string>
     <string name="PrivateSend_Caution_BufferUnknown">Gösterilen ücret bir üst tahmindir; nihai maliyet daha düşük olabilir.</string>
-    <string name="PrivateSend_NotAvailable">Private Send açıkken kullanılamaz.</string>
+    <string name="PrivateSend_NotAvailable">Private Send açıkken not kullanılamaz.</string>
     <string name="NetworkSettings_AutoSelect">Otomatik Seç</string>
     <string name="NetworkSettings_Unreachable">Erişilemiyor</string>
     <string name="NetworkSettings_Latency">%d ms</string>

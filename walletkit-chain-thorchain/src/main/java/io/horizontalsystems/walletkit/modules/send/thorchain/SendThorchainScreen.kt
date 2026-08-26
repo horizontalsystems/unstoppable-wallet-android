@@ -120,14 +120,17 @@ fun SendThorchainScreen(
         }
 
         VSpacer(16.dp)
-        // Stays visible but refuses input under Private send: the deposit's memo slot
-        // belongs to the provider's crediting identifier, so a user memo cannot travel.
+        // Stays editable under Private send but warns that the memo cannot travel:
+        // the deposit's memo slot belongs to the provider's crediting identifier.
         HSMemoInput(
             maxLength = 250,
             memo = memo,
             visibility = MemoVisibility.Public,
-            enabled = !privateSendViewModel.isEnabled,
-            disabledCaution = stringResource(R.string.PrivateSend_NotAvailable),
+            warningCaution = if (privateSendViewModel.isEnabled) {
+                stringResource(R.string.PrivateSend_NotAvailable)
+            } else {
+                null
+            },
         ) {
             viewModel.onEnterMemo(it)
         }
