@@ -99,6 +99,12 @@ class EvmFeeService(
         val warnings = gasPriceInfo.warnings
         val errors = gasPriceInfo.errors
 
+        // Estimating a transfer that already exceeds the balance only earns an RPC refusal,
+        // whose wording decides whether the user sees a real reason or a raw node message.
+        if (transactionData.value > evmBalance) {
+            return Single.error(FeeSettingsError.InsufficientBalance)
+        }
+
         return if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
             gasDataSingle(gasPrice, gasPriceDefault, BigInteger.ONE, transactionData).map { gasData ->
                 val adjustedValue = transactionData.value - gasData.fee
