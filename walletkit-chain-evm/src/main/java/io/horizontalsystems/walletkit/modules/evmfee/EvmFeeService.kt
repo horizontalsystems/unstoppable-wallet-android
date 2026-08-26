@@ -34,6 +34,11 @@ class EvmFeeService(
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
 
+    // Null until the account state lands. A missing balance is not a zero balance, so a check
+    // that would reject the transfer has to read it through this and stand down while it is null.
+    private val knownEvmBalance: BigInteger?
+        get() = evmKit.accountState?.balance
+
     private val _transactionStatusFlow: MutableSharedFlow<DataState<Transaction>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val transactionStatusFlow = _transactionStatusFlow.asSharedFlow()
@@ -100,9 +105,13 @@ class EvmFeeService(
         val errors = gasPriceInfo.errors
 
         // Estimating a transfer that already exceeds the balance only earns an RPC refusal,
-        // whose wording decides whether the user sees a real reason or a raw node message.
-        if (transactionData.value > evmBalance) {
-            return Single.error(FeeSettingsError.InsufficientBalance)
+        // whose wording decides whether the user sees a real reason or a raw node message. Only
+        // a balance that has actually loaded can refuse it: before that the estimate goes ahead,
+        // exactly as it did before this shortcut existed.
+        knownEvmBalance?.let { balance ->
+            if (transactionData.value > balance) {
+                return Single.error(FeeSettingsError.InsufficientBalance)
+            }
         }
 
         return if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
