@@ -243,7 +243,7 @@ fun FormsInput(
 
         state?.errorOrNull?.localizedMessage?.let {
             Text(
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
+                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
                 text = it,
                 color = cautionColor,
                 style = ComposeAppTheme.typography.caption
