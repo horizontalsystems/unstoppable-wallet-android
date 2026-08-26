@@ -378,7 +378,7 @@
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Advanced">Доп. настройки</string>
-    <string name="Send_Hodler_Description">TimeLock работает только для отправки на BIP44 адреса (начиная с 1)</string>
+    <string name="Send_Hodler_Description">TimeLock работает только при отправке на адреса BIP44 (начинающиеся с 1).</string>
     <string name="Send_UtxoExpertMode">Режим эксперта UTxO</string>
     <string name="Send_Utxo_Description">Вручную выбрать UTxO для траты средств на баланс</string>
     <string name="Send_Rbf">Изменить комиссию</string>
@@ -462,7 +462,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Использованый Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Выполненная транзакция с таким nonce уже существует.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Комиссия</string>
+    <string name="FeeSettings_NetworkFee">Сетевая комиссия</string>
     <string name="FeeSettings_NetworkFee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
     <string name="FeeSettings_GasLimit_Info">Сложность транзакций измеряется в единицах под названием \"газ\" и варьируется в зависимости от выполняемого смарт-контракта. Предельный газ - это предполагаемый максимальный газ, необходимый для его исполнения. Используемый газ обычно меньше.</string>
     <string name="FeeSettings_GasPrice_Info">Комиссия за транзакцию по сети измеряется в газовых единицах. Газовая цена – это сумма, которую пользователь готов потратить за единицу газа. Когда сеть занята, высокие цены на газ и низкие во время простоя. Недостаточная цена на газ зачастую является основанием для того, чтобы сделка оставалась в ожидании продленного периода.</string>
@@ -1872,4 +1872,5 @@
     <string name="NetworkSettings_Unreachable">Недоступно</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">Автоматически использовать самый быстрый сервер</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">Недоступно, когда включена функция Private Send.</string>
 </resources>

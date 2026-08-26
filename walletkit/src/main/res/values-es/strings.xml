@@ -377,7 +377,7 @@
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Advanced">Avanzado</string>
-    <string name="Send_Hodler_Description">TimeLock sólo funciona para enviar a direcciones BIP44 (comenzando con 1)</string>
+    <string name="Send_Hodler_Description">TimeLock solo funciona para envíos a direcciones BIP44 (que comienzan con 1).</string>
     <string name="Send_UtxoExpertMode">Modo experto UTxO</string>
     <string name="Send_Utxo_Description">Seleccione manualmente UTxO para gastar los fondos en el saldo</string>
     <string name="Send_Rbf">Reemplazar por tarifa</string>
@@ -461,7 +461,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Una transacción ejecutada con este nonce ya existe.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Comisión</string>
+    <string name="FeeSettings_NetworkFee">Tarifa de Red</string>
     <string name="FeeSettings_NetworkFee_Info">El coste estimado del envío de una transacción en la red.</string>
     <string name="FeeSettings_GasLimit_Info">La complejidad de la transacción se mide en unidades llamadas \"gas\". El límite de gas es el máximo estimado de gas necesario para ejecutarlo. El gas utilizado será normalmente más bajo.</string>
     <string name="FeeSettings_GasPrice_Info">La tarifa por transacción en la red se mide en unidades de gas. El precio del gas es la cantidad que un usuario está dispuesto a gastar por unidad de gas. Cuando la red se encuentra ocupada, los precios del gas son altos y bajos cuando está inactiva. Un precio insuficiente del gas es a menudo una razón para que una transacción permanezca pendiente durante un período prolongado.</string>
@@ -1865,4 +1865,5 @@
     <string name="NetworkSettings_Unreachable">No disponible</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">Usar automáticamente el servidor más rápido</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">No disponible cuando Private Send está activado.</string>
 </resources>

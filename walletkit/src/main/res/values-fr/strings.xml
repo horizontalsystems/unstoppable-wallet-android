@@ -377,7 +377,7 @@
     <string name="Send_Button_Paste">Coller</string>
     <string name="Send_Button_Max">Max.</string>
     <string name="Send_Advanced">Avancé</string>
-    <string name="Send_Hodler_Description">TimeLock ne fonctionne que pour l\'envoi aux adresses BIP44 (à partir de 1)</string>
+    <string name="Send_Hodler_Description">TimeLock ne fonctionne que pour l\'envoi aux adresses BIP44 (commençant par 1).</string>
     <string name="Send_UtxoExpertMode">Mode Expert UTxO</string>
     <string name="Send_Utxo_Description">Sélectionnez manuellement UTxO pour dépenser les fonds dans la balance</string>
     <string name="Send_Rbf">Remplacer par frais</string>
@@ -461,7 +461,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Nonce utilisé</string>
     <string name="SendEvmSettings_Error_NonceUsed">Une transaction exécutée avec ce nonce existe déjà.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Frais</string>
+    <string name="FeeSettings_NetworkFee">Frais Réseau</string>
     <string name="FeeSettings_NetworkFee_Info">Le coût estimé de l\'envoi d\'une transaction donnée sur le réseau.</string>
     <string name="FeeSettings_GasLimit_Info">La complexité de la transaction est mesurée en unités appelées \"gaz\". Elle varie selon le contrat intelligent en cours d\'exécution. La limite de gaz est le gaz maximal estimé nécessaire pour l\'exécuter, le gaz utilisé sera normalement plus faible.</string>
     <string name="FeeSettings_GasPrice_Info">Les frais de transaction sur le réseau sont mesurés en unités de gaz. Le prix du gaz est le montant qu\'un utilisateur est prêt à dépenser par unité de gaz. Quand le réseau est occupé, les prix du gaz sont élevés et bas quand il est inactif. Un prix du gaz insuffisant est souvent la raison pour laquelle une transaction reste en attente pour une période prolongée.</string>
@@ -1867,4 +1867,5 @@
     <string name="NetworkSettings_Unreachable">Inaccessible</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">Utiliser automatiquement le serveur le plus rapide</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">Non disponible lorsque Private Send est activé.</string>
 </resources>

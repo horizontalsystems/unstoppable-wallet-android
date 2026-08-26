@@ -152,7 +152,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_SlippageTolerance">تحمل لغزش</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">هزينه</string>
+    <string name="FeeSettings_NetworkFee">هزینه شبکه</string>
     <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">پرمخاطره</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">پرمخاطره</string>
@@ -798,4 +798,6 @@
     <string name="NetworkSettings_Unreachable">غیرقابل دسترس</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">استفاده خودکار از سریع‌ترین سرور</string>
+    <string name="Send_Hodler_Description">TimeLock فقط برای ارسال به آدرس‌های BIP44 (شروع‌شده با 1) کار می‌کند.</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">در دسترس نیست هنگامی که Private Send فعال است.</string>
 </resources>

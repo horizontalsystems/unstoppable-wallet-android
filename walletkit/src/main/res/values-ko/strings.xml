@@ -358,7 +358,7 @@
     <string name="Send_Button_Paste">붙여넣기</string>
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
-    <string name="Send_Hodler_Description">TimeLock은 BIP44 주소(1부터 시작)로 전송하는 경우에만 작동합니다.</string>
+    <string name="Send_Hodler_Description">TimeLock은 BIP44 주소(1로 시작)로 전송할 때만 작동합니다.</string>
     <string name="Send_UtxoExpertMode">UTxO 전문가 모드</string>
     <string name="Send_Utxo_Description">잔액에서 자금을 사용하기 위해 수동으로 UTxO를 선택하세요.</string>
     <string name="Send_Rbf">수수료로 대체</string>
@@ -423,7 +423,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">수수료</string>
+    <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
     <string name="FeeSettings_NetworkFee_Info">네트워크에서 주어진 거래를 보내는 데 예상되는 비용.</string>
     <string name="FeeSettings_GasLimit_Info">거래 복잡성은 \'가스\'라고 불리는 단위로 측정됩니다. 이는 실행되는 스마트 계약에 따라 다릅니다. 가스 한도는 해당 거래를 실행하는 데 필요한 최대 가스를 예상한 값입니다. 실제로 사용된 가스는 일반적으로 더 낮을 것입니다.</string>
     <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
@@ -1866,4 +1866,5 @@
     <string name="NetworkSettings_Unreachable">연결 불가</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">가장 빠른 서버를 자동으로 사용</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">Private Send가 켜져 있을 때는 사용할 수 없습니다.</string>
 </resources>

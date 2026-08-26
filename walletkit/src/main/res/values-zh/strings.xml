@@ -376,7 +376,7 @@
     <string name="Send_Button_Paste">粘帖</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Advanced">高级</string>
-    <string name="Send_Hodler_Description">时间锁（TimeLock）只适用于发送到BIP44地址（从1开始)</string>
+    <string name="Send_Hodler_Description">TimeLock仅适用于发送到BIP44地址(以1开头)。</string>
     <string name="Send_UtxoExpertMode">UTxO 专家模式</string>
     <string name="Send_Utxo_Description">手动选择 UTxO 将资金花在余额中</string>
     <string name="Send_Rbf">替换交易</string>
@@ -460,7 +460,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">已用nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">使用此nonce执行的交易已存在。</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">费用</string>
+    <string name="FeeSettings_NetworkFee">网络费用</string>
     <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
     <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
     <string name="FeeSettings_GasPrice_Info">网上交易费用将按燃料单位计量。燃料价格是用户愿意按单位消费的金额。 当网络忙碌时，燃料价格就高，空闲时价格就低。 燃料价格不足常常是交易被长期搁置的一个原因。</string>
@@ -1865,4 +1865,5 @@
     <string name="NetworkSettings_Unreachable">无法访问</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">自动使用最快的服务器</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">启用Private Send时不可用。</string>
 </resources>

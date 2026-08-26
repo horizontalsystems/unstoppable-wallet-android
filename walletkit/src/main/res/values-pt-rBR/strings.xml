@@ -377,7 +377,7 @@
     <string name="Send_Button_Paste">Colar</string>
     <string name="Send_Button_Max">Máximo</string>
     <string name="Send_Advanced">Avançado</string>
-    <string name="Send_Hodler_Description">TimeLock funciona apenas para enviar para endereços BIP44 (começando com 1)</string>
+    <string name="Send_Hodler_Description">TimeLock funciona apenas para envios para endereços BIP44 (começando com 1).</string>
     <string name="Send_UtxoExpertMode">Modo Especialista UTxO</string>
     <string name="Send_Utxo_Description">Selecionar manualmente UTxO para gastar os fundos no saldo</string>
     <string name="Send_Rbf">Substituir pela taxa</string>
@@ -461,7 +461,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada agora.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Taxa</string>
+    <string name="FeeSettings_NetworkFee">Taxa de Rede</string>
     <string name="FeeSettings_NetworkFee_Info">O custo estimado do envio de determinada transação na rede.</string>
     <string name="FeeSettings_GasLimit_Info">A complexidade da transação é medida em unidades chamadas \"gas\". Ela varia dependendo do contrato inteligente ser executado. O Limite de Gas é estimado o gas máximo necessário para o executar. O gas real utilizado normalmente será mais baixo.</string>
     <string name="FeeSettings_GasPrice_Info">A taxa para transação na rede é medida em unidades de gás. O preço do gás é a quantidade que um usuário está disposto a gastar por unidade de gás. Quando a rede está ocupada, os preços do gás são altos e baixos quando está inativa. Um preço de gás insuficiente é frequentemente uma razão para que uma transação permaneça pendente por um período prolongado.</string>
@@ -1870,4 +1870,5 @@
     <string name="NetworkSettings_Unreachable">Inacessível</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">Usar automaticamente o servidor mais rápido</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">Não disponível quando Private Send está ativado.</string>
 </resources>

@@ -275,7 +275,7 @@
     <string name="Send_Button_Paste">Yapıştır</string>
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Advanced">İleri düzey</string>
-    <string name="Send_Hodler_Description">TimeLock yalnızca BIP44 adreslerine (1 ile başlar) göndermek için çalışır</string>
+    <string name="Send_Hodler_Description">TimeLock, yalnızca BIP44 adreslerine gönderme için çalışır (1 ile başlayanlar).</string>
     <string name="Send_UtxoExpertMode">UTxO Uzman Modu</string>
     <string name="Send_Utxo_Description">Bakiyedeki fonları harcamak için UTxO\'yu manuel olarak seçin</string>
     <string name="Send_Rbf">Ücretle Değiştir</string>
@@ -336,7 +336,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Bu nonce ile gerçekleştirilen bir işlem zaten var.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Masraf</string>
+    <string name="FeeSettings_NetworkFee">Ağ Ücreti</string>
     <string name="FeeSettings_NetworkFee_Info">Ağda belirli bir işlemi göndermenin tahmini maliyeti.</string>
     <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
@@ -1866,4 +1866,5 @@
     <string name="NetworkSettings_Unreachable">Erişilemiyor</string>
     <string name="NetworkSettings_Latency">%d ms</string>
     <string name="ZcashEndpointSettings_AutoSelectDescription">En hızlı sunucuyu otomatik olarak kullan</string>
+    <string name="Send_Hodler_PrivateSendUnavailable">Private Send açık olduğunda kullanılamaz.</string>
 </resources>
