@@ -150,14 +150,13 @@ class PrivateSendConfirmViewModel(
     }
 
     private fun cautions(): List<CautionViewItem> {
-        val cautions = sendTransactionState.cautions.toMutableList()
-
-        // The service's own rejection names no amount, and under exact output the figure the
-        // user needs is the DEPOSIT plus its network fee, not what they entered — without
-        // this the refusal is baffling (MAX always fails here by design).
+        // Replaces the service's own rejection instead of adding to it: the service names no
+        // amount, and under exact output the figure the user needs is the DEPOSIT plus its
+        // network fee, not what they entered — without this the refusal is baffling (MAX always
+        // fails here by design). Two messages for one shortfall read as two problems.
         order?.let { order ->
             if (insufficientBalance(order)) {
-                cautions.add(
+                return listOf(
                     CautionViewItem(
                         title = App.instance.getString(io.horizontalsystems.walletkit.R.string.PrivateSend_Caution_Title),
                         text = App.instance.getString(
@@ -170,7 +169,7 @@ class PrivateSendConfirmViewModel(
             }
         }
 
-        return cautions
+        return sendTransactionState.cautions
     }
 
     private fun insufficientBalance(order: PrivateSendOrder): Boolean {
