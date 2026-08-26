@@ -344,7 +344,7 @@ class PrivateSendConfirmViewModel(
         // A committed quote is only honoured for this long. Past it the screen dead-ends
         // rather than pretending to be current — the deposit ceiling is what the send button
         // authorizes.
-        const val QUOTE_LIFETIME_SECONDS = 60L
+        const val QUOTE_LIFETIME_SECONDS = 15L
 
         fun init(
             request: PrivateSendRequest,
