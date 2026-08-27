@@ -8,18 +8,4 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
  * both [AddressHandlerFactory] and [AddressInputModule].
  */
 fun plainAddressHandlers(blockchainType: BlockchainType): List<IAddressHandler> =
-    when (blockchainType) {
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.RobinhoodChain,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne -> listOf(AddressHandlerEvm(blockchainType))
-
-        else -> ChainRegistry[blockchainType]?.addressHandlers().orEmpty()
-    }
+    ChainRegistry[blockchainType]?.addressHandlers().orEmpty()

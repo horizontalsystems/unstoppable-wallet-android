@@ -27,6 +27,8 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.entities.evmAddress
 import io.horizontalsystems.walletkit.modules.addtoken.AddEvmTokenBlockchainService
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule
+import io.horizontalsystems.walletkit.modules.address.AddressHandlerEvm
+import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.manageaccount.evmaddress.AddressPage
 import io.horizontalsystems.walletkit.modules.manageaccount.evmprivatekey.PrivateKeyPage
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
@@ -192,6 +194,8 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         WcRequestEvm(navigation)
         return true
     }
+
+    override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerEvm(blockchainType))
 
     override fun addressValidator(token: Token): EnterAddressValidator = EvmAddressValidator()
 
