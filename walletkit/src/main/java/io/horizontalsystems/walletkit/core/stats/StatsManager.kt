@@ -54,7 +54,7 @@ class StatsManager(
     private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
-    private var uiStatsEnabled = localStorage.uiStatsEnabled ?: !io.horizontalsystems.walletkit.core.App.appConfigProvider.fdroidBuild
+    private var uiStatsEnabled = localStorage.uiStatsEnabled ?: false
 
     private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
     val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
