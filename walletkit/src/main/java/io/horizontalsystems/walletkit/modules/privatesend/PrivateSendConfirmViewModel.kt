@@ -199,6 +199,12 @@ class PrivateSendConfirmViewModel(
         initialLoading = true
         emitState()
 
+        // `initialLoading` only clears when the service's StateFlow emits after the new order
+        // is set, and StateFlow drops a value equal to the current one. A re-estimate of a
+        // like-for-like deposit (same amount, fee and fields) lands on an identical state, so
+        // without a fresh uuid nothing is emitted and the screen spins forever.
+        sendTransactionService.refreshUuid()
+
         commit()
     }
 
