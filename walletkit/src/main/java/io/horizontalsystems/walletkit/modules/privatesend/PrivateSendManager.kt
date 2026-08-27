@@ -164,8 +164,16 @@ class PrivateSendManager(
             throw PrivateSendError.CommitFailed()
         }
 
-        val depositAddress = execution.depositAddress ?: throw PrivateSendError.CommitFailed()
+        // Blank is as unusable as absent: it reaches the deposit build and dies there on address
+        // parsing, with a real order already standing behind it.
+        val depositAddress = execution.depositAddress
+        if (depositAddress.isNullOrBlank()) throw PrivateSendError.CommitFailed()
+
         val depositAmount = execution.amount?.toBigDecimalOrNull() ?: throw PrivateSendError.CommitFailed()
+
+        // The floor check below only sees this when the provider stated one, so a transfer of
+        // nothing has to be refused on its own terms.
+        if (depositAmount <= BigDecimal.ZERO) throw PrivateSendError.CommitFailed()
 
         val minSellAmount = route.minSellAmount
 
