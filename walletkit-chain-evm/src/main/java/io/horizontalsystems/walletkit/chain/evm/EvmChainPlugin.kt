@@ -43,6 +43,8 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.opencryptopay.OcpConfirmData
 import io.horizontalsystems.walletkit.modules.opencryptopay.OpenCryptoPayEvmConfirmationPage
+import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
+import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
@@ -190,6 +192,8 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         WcRequestEvm(navigation)
         return true
     }
+
+    override fun addressValidator(token: Token): EnterAddressValidator = EvmAddressValidator()
 
     override fun blacklistAddressChecker(): AddressChecker? =
         if (isFamilyAnchor) Eip20BlacklistAddressChecker(Eip20AddressValidator(App.evmSyncSourceManager)) else null
