@@ -36,6 +36,7 @@ class BalanceXRateRepository(
         }
 
     private fun subscribeForBaseCurrencyUpdate() {
+        baseCurrencyJob?.cancel()
         baseCurrencyJob = coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedFlow.collect {
                 unsubscribeFromLatestRateUpdates()
@@ -64,6 +65,7 @@ class BalanceXRateRepository(
     }
 
     private fun subscribeForLatestRateUpdates() {
+        latestRateJob?.cancel()
         latestRateJob = coroutineScope.launch {
             marketKit.coinPriceMapObservable(tag, coinUids, baseCurrency.code).collect {
                 itemFlow.emit(it)
