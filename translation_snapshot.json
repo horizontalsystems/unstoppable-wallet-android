@@ -969,7 +969,6 @@
     "PrivateSend_Caution_BelowMinimum": "Private send requires the recipient to receive at least %s.",
     "PrivateSend_Caution_BufferUnknown": "The fee shown is an upper estimate; the final cost may be lower.",
     "PrivateSend_Caution_ExactOutputUnsupported": "This route can\\'t guarantee an exact received amount.",
-    "PrivateSend_Caution_InsufficientBalance": "This private send needs %s in your wallet, including fees.",
     "PrivateSend_Caution_NetworkError": "Couldn\\'t reach the private send provider. Check your connection and try again.",
     "PrivateSend_Caution_NoRoute": "No private route is available for this token and amount right now.",
     "PrivateSend_Caution_ProviderSuspended": "The private send provider is temporarily unavailable.",
