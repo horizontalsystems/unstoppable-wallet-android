@@ -53,14 +53,13 @@ import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class SendTransactionServiceEvm(
@@ -82,7 +81,7 @@ class SendTransactionServiceEvm(
             val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
             Eip1559GasPriceService(
                 gasProvider = gasPriceProvider,
-                refreshSignalFlowable = Flowable.empty(),
+                refreshSignalFlow = emptyFlow(),
                 minGasPrice = minGasPrice as? GasPrice.Eip1559,
                 initialGasPrice = initialGasPrice as? GasPrice.Eip1559
             )
@@ -229,12 +228,12 @@ class SendTransactionServiceEvm(
     suspend fun signTransaction(): EvmKitManager.SignedTx {
         val tx = transaction ?: throw Exception("Transaction not ready")
         if (tx.errors.isNotEmpty()) throw Exception("Transaction has errors")
-        return evmKitWrapper.signSingle(
+        return evmKitWrapper.sign(
             tx.transactionData,
             tx.gasData.gasPrice,
             tx.gasData.gasLimit,
             tx.nonce,
-        ).await()
+        )
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
@@ -247,7 +246,7 @@ class SendTransactionServiceEvm(
         val nonce = transaction.nonce
 
         val fullTransaction = evmKitWrapper
-            .sendSingle(transactionData, gasPrice, gasLimit, nonce, mevProtectionEnabled).await()
+            .send(transactionData, gasPrice, gasLimit, nonce, mevProtectionEnabled)
         return SendTransactionResult.Evm(fullTransaction.transaction.hash.toHexString())
     }
 

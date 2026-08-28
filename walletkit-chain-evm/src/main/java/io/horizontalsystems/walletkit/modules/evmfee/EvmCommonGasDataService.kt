@@ -5,7 +5,7 @@ import io.horizontalsystems.ethereumkit.core.rollup.L1FeeProvider
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Single
+import kotlinx.coroutines.CancellationException
 import java.math.BigInteger
 
 open class EvmCommonGasDataService(
@@ -13,9 +13,9 @@ open class EvmCommonGasDataService(
     protected val predefinedGasLimit: Long? = null
 ) {
 
-    open fun estimatedGasDataAsync(gasPrice: GasPrice, transactionData: TransactionData, stubAmount: BigInteger? = null): Single<GasData> {
+    open suspend fun estimatedGasData(gasPrice: GasPrice, transactionData: TransactionData, stubAmount: BigInteger? = null): GasData {
         if (predefinedGasLimit != null) {
-            return Single.just(GasData(gasLimit = predefinedGasLimit, gasPrice = gasPrice))
+            return GasData(gasLimit = predefinedGasLimit, gasPrice = gasPrice)
         }
 
         val surchargeRequired = transactionData.input.isNotEmpty()
@@ -26,19 +26,21 @@ open class EvmCommonGasDataService(
             transactionData
         }
 
-        return evmKit.estimateGas(stubTransactionData, gasPrice)
-            .onErrorResumeNext {
-                evmKit.estimateGas(stubTransactionData)
-            }
-            .map { estimatedGasLimit ->
-                val gasLimit =
-                    if (surchargeRequired) EvmFeeModule.surcharged(estimatedGasLimit) else estimatedGasLimit
-                GasData(
-                    gasLimit = gasLimit,
-                    estimatedGasLimit = estimatedGasLimit,
-                    gasPrice = gasPrice
-                )
-            }
+        val estimatedGasLimit = try {
+            evmKit.estimateGas(stubTransactionData, gasPrice)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            evmKit.estimateGas(stubTransactionData)
+        }
+
+        val gasLimit =
+            if (surchargeRequired) EvmFeeModule.surcharged(estimatedGasLimit) else estimatedGasLimit
+        return GasData(
+            gasLimit = gasLimit,
+            estimatedGasLimit = estimatedGasLimit,
+            gasPrice = gasPrice
+        )
     }
 
     companion object {

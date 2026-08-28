@@ -19,8 +19,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.OneInchKit
-import io.reactivex.Single
-import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.CancellationException
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTransactionData
 
@@ -77,15 +76,19 @@ class OneInchProvider(
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
-        val quote = oneInchKit.getQuoteAsync(
-            chain = evmBlockchainHelper.chain,
-            fromToken = getTokenAddress(tokenIn),
-            toToken = getTokenAddress(tokenOut),
-            amount = amountIn.scaleUp(tokenIn.decimals),
-            fee = partnerFeePercent
-        ).onErrorResumeNext {
-            Single.error(it.convertedError)
-        }.await()
+        val quote = try {
+            oneInchKit.getQuoteAsync(
+                chain = evmBlockchainHelper.chain,
+                fromToken = getTokenAddress(tokenIn),
+                toToken = getTokenAddress(tokenOut),
+                amount = amountIn.scaleUp(tokenIn.decimals),
+                fee = partnerFeePercent
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw e.convertedError
+        }
 
         val routerAddress = OneInchKit.routerAddress(evmBlockchainHelper.chain)
         val allowance = EvmSwapHelper.getAllowance(tokenIn, routerAddress)
@@ -137,7 +140,7 @@ class OneInchProvider(
             referrer = partnerAddress,
             fee = partnerFeePercent,
             disableEstimate = disableEstimate,
-        ).await()
+        )
 
         val swapTx = swap.transaction
 

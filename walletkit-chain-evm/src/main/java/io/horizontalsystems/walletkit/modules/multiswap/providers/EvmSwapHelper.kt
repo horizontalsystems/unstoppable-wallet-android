@@ -11,7 +11,6 @@ import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 object EvmSwapHelper {
@@ -31,7 +30,7 @@ object EvmSwapHelper {
 
         val eip20Adapter = App.adapterManager.getAdapterForToken<Eip20Adapter>(token) ?: return null
 
-        return eip20Adapter.allowance(spenderAddress, DefaultBlockParameter.Latest).await()
+        return eip20Adapter.allowance(spenderAddress, DefaultBlockParameter.Latest)
     }
 
     fun actionApprove(

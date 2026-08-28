@@ -17,7 +17,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTransactionData
 
@@ -133,7 +132,7 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
             chain,
             uniswapToken(tokenIn, chain),
             uniswapToken(tokenOut, chain)
-        ).await()
+        )
 
         val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions)
 

@@ -13,7 +13,6 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import kotlinx.coroutines.rx2.await
 
 class AddEvmTokenBlockchainService(
     private val blockchain: Blockchain,
@@ -34,7 +33,7 @@ class AddEvmTokenBlockchainService(
     }
 
     override suspend fun token(reference: String): Token {
-        val tokenInfo = eip20Provider.getTokenInfo(Address(reference)).await()
+        val tokenInfo = eip20Provider.getTokenInfo(Address(reference))
         val tokenQuery = tokenQuery(reference)
         return Token(
             coin = Coin(
