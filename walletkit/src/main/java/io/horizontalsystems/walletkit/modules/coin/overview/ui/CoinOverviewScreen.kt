@@ -175,6 +175,7 @@ fun CoinOverviewScreen(
                                             if (chartIndicatorsState.hasActiveSubscription) {
                                                 if (chartIndicatorsState.enabled) {
                                                     ButtonSecondaryDefault(
+                                                        modifier = Modifier.height(28.dp),
                                                         title = stringResource(id = R.string.Button_Hide),
                                                         onClick = {
                                                             viewModel.disableChartIndicators()
