@@ -17,7 +17,6 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.rx2.await
 
 class CoinAnalyticsService(
     val fullCoin: FullCoin,
@@ -55,10 +54,8 @@ class CoinAnalyticsService(
         _stateFlow.emit(DataState.Loading)
 
         try {
-            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code).await()
-                .let {
-                    _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
-                }
+            val analytics = marketKit.analyticsSingle(fullCoin.coin.uid, currency.code)
+            _stateFlow.emit(DataState.Success(AnalyticData(analytics = analytics)))
         } catch (error: Throwable) {
             handleError(error)
         }
@@ -88,10 +85,8 @@ class CoinAnalyticsService(
         )
 
         try {
-            marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses).await()
-                .let {
-                    _stateFlow.emit(DataState.Success(AnalyticData(analyticsPreview = it)))
-                }
+            val preview = marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses)
+            _stateFlow.emit(DataState.Success(AnalyticData(analyticsPreview = preview)))
         } catch (error: Throwable) {
             _stateFlow.emit(DataState.Error(error))
         }

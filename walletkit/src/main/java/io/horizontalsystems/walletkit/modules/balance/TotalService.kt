@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class TotalService(
@@ -42,7 +41,7 @@ class TotalService(
 
     fun start() {
         coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 handleUpdatedCurrency(currencyManager.baseCurrency)
             }
         }
@@ -105,7 +104,6 @@ class TotalService(
         baseToken?.let { platformCoin ->
             coinPriceUpdatesJob = coroutineScope.launch {
                 marketKit.coinPriceObservable("total", platformCoin.coin.uid, currency.code)
-                    .asFlow()
                     .collect {
                         coinPrice = it
 

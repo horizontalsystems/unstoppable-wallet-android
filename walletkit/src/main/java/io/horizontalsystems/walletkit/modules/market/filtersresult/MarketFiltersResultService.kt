@@ -17,7 +17,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 
 class MarketFiltersResultService(
     private val fetcher: IMarketListFetcher,
@@ -91,11 +90,10 @@ class MarketFiltersResultService(
 
         fetchJob = coroutineScope.launch {
             try {
-                marketItems = fetcher.fetchAsync().await()
+                marketItems = fetcher.fetchAsync()
                 if (showSignals) {
                     signals = marketKitWrapper
                         .getCoinSignalsSingle(marketItems.map { it.fullCoin.coin.uid })
-                        .await()
                 }
                 syncItems()
             } catch (e: Throwable) {

@@ -17,7 +17,6 @@ import io.horizontalsystems.walletkit.modules.market.favorites.WatchlistSorting
 import io.horizontalsystems.walletkit.modules.market.favorites.period
 import io.horizontalsystems.walletkit.modules.market.sort
 import io.horizontalsystems.walletkit.modules.market.topplatforms.TopPlatformsRepository
-import kotlinx.coroutines.rx2.await
 
 class MarketWidgetRepository(
     private val marketKit: MarketKitWrapper,
@@ -84,7 +83,6 @@ class MarketWidgetRepository(
 
     private suspend fun getTopGainers(): List<MarketWidgetItem> {
         val marketItems = marketKit.marketInfosSingle(topGainers, currency.code, false)
-            .await()
             .map { MarketItem.createFromCoinMarket(it, currency) }
 
         val sortedMarketItems = marketItems
@@ -106,7 +104,6 @@ class MarketWidgetRepository(
         if (favoriteCoins.isNotEmpty()) {
             val favoriteCoinUids = favoriteCoins.map { it.coinUid }
             marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code)
-                .await()
                 .map { marketInfo ->
                     MarketItem.createFromCoinMarket(marketInfo, currency, timeDuration.period)
                 }

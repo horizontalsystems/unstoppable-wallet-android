@@ -38,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
@@ -112,7 +113,9 @@ class StatsManager(
                 if (stats.isNotEmpty()) {
                     val statsArray = "[${stats.joinToString { it.json }}]"
 //                    Log.e("e", "send $statsArray")
-                    marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId).blockingGet()
+                    runBlocking {
+                        marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId)
+                    }
 
                     stats.chunked(sqliteMaxVariableNumber).forEach { chunk ->
                         statsDao.delete(chunk.map { it.id })

@@ -14,7 +14,6 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketTicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class CoinMarketsViewModel(
     private val fullCoin: FullCoin,
@@ -50,7 +49,7 @@ class CoinMarketsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val tickers =
-                    marketKit.marketTickersSingle(fullCoin.coin.uid, baseCurrency.code).await()
+                    marketKit.marketTickersSingle(fullCoin.coin.uid, baseCurrency.code)
                 marketTickers = tickers.sortedByDescending { it.volume }
                 filterMarketTickers()
                 viewState = ViewState.Success

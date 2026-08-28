@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -60,7 +59,7 @@ class TopPairsViewModel(
     private suspend fun fetchItems() = withContext(Dispatchers.Default) {
         try {
             val topPairs =
-                marketKit.topPairsSingle(currencyManager.baseCurrency.code, 1, 100).await()
+                marketKit.topPairsSingle(currencyManager.baseCurrency.code, 1, 100)
             val pairs = topPairs.map {
                 TopPairViewItem.createFromTopPair(it, currencyManager.baseCurrency.symbol)
             }

@@ -18,7 +18,6 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.Date
 
 open class ChartViewModel(
@@ -37,7 +36,7 @@ open class ChartViewModel(
         emitState()
 
         viewModelScope.launch {
-            service.chartTypeObservable.asFlow().collect { chartType ->
+            service.chartTypeObservable.collect { chartType ->
                 val tabItems = service.chartIntervals.map {
                     val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
                     TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
@@ -49,7 +48,7 @@ open class ChartViewModel(
         }
 
         viewModelScope.launch {
-            service.chartPointsWrapperObservable.asFlow().collect { chartItemsDataState ->
+            service.chartPointsWrapperObservable.collect { chartItemsDataState ->
                 chartItemsDataState.viewState?.let {
                     viewState = it
                 }

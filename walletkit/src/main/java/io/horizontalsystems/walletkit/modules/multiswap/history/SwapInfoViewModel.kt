@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.swapTimeStatus
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -162,8 +161,8 @@ class SwapInfoViewModel(
     private suspend fun fetchHistoricalPrice(coinUid: String, currencyCode: String, timestampSeconds: Long): BigDecimal? {
         return try {
             marketKit.coinHistoricalPrice(coinUid, currencyCode, timestampSeconds)?.let { return it }
-            val rate = marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestampSeconds).await()
-            if (rate.compareTo(BigDecimal.ZERO) != 0) rate else null
+            val rate = marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestampSeconds)
+            if (rate != null && rate.compareTo(BigDecimal.ZERO) != 0) rate else null
         } catch (_: Throwable) {
             null
         }

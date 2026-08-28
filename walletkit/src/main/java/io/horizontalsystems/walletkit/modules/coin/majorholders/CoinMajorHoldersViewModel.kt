@@ -17,7 +17,6 @@ import io.horizontalsystems.marketkit.models.TokenHolders
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
@@ -84,7 +83,7 @@ class CoinMajorHoldersViewModel(
     }
 
     private suspend fun getTokenHolders(coinUid: String, blockchainUid: String): TokenHolders = withContext(Dispatchers.IO) {
-        marketKit.tokenHoldersSingle(coinUid, blockchainUid).await()
+        marketKit.tokenHoldersSingle(coinUid, blockchainUid)
     }
 
     private fun getChartData(top10ShareFloat: Float, blockchain: Blockchain): List<StackBarSlice> {

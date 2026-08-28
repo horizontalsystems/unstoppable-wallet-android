@@ -20,7 +20,6 @@ import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import kotlin.enums.EnumEntries
 import kotlin.math.min
 
@@ -120,7 +119,7 @@ class MarketTopCoinsViewModel(
     }
 
     private suspend fun fetchMarketInfoList() {
-        marketInfoList = marketKit.topCoinsMarketInfosSingle(500, baseCurrency.code).await()
+        marketInfoList = marketKit.topCoinsMarketInfosSingle(500, baseCurrency.code)
     }
 
     private fun refreshMarketItemList() {

@@ -47,12 +47,12 @@ class TransactionsService(
             }
         }
         coroutineScope.launch {
-            rateRepository.dataExpiredObservable.asFlow().collect {
+            rateRepository.dataExpiredObservable.collect {
                 handleUpdatedHistoricalRates()
             }
         }
         coroutineScope.launch {
-            rateRepository.historicalRateObservable.asFlow().collect {
+            rateRepository.historicalRateObservable.collect {
                 handleUpdatedHistoricalRate(it.first, it.second)
             }
         }

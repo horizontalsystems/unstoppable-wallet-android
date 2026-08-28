@@ -10,8 +10,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.Single
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 
@@ -69,15 +67,12 @@ class MarketFiltersService(
     var sp500PriceChanges: Stock? = null
     var goldPriceChanges: Stock? = null
 
-    override fun fetchAsync(): Single<List<MarketItem>> {
-        return getTopMarketList()
-            .map { coinMarkets ->
-                coinMarkets.map {
-                    val coinMarket = it.value
+    override suspend fun fetchAsync(): List<MarketItem> {
+        return getTopMarketList().map {
+            val coinMarket = it.value
 
-                    MarketItem.createFromCoinMarket(coinMarket, baseCurrency, filterPeriod)
-                }
-            }
+            MarketItem.createFromCoinMarket(coinMarket, baseCurrency, filterPeriod)
+        }
     }
 
     fun clearCache() {
@@ -85,39 +80,33 @@ class MarketFiltersService(
     }
 
     suspend fun fetchNumberOfItems(): Int {
-        return getTopMarketList().await().size
+        return getTopMarketList().size
     }
 
     suspend fun getSectors(): List<SectorItem> {
-        return marketKit.categoriesSingle().blockingGet().map { coinCategory ->
+        return marketKit.categoriesSingle().map { coinCategory ->
             SectorItem(coinCategory.id, coinCategory.name)
         }
     }
 
     suspend fun setStockPriceChanges() {
-        val stocks = marketKit.getStocks(currencyCode).blockingGet()
+        val stocks = marketKit.getStocks(currencyCode)
         sp500PriceChanges = stocks.first { it.uid == "snp" }
         goldPriceChanges = stocks.first { it.uid == "tether-gold" }
     }
 
-    private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
-        val topMarketListAsync = if (cache != null) {
-            Single.just(cache)
-        } else {
-            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
-                .doOnSuccess {
-                    cache = it
-                }
-        }
-
-        return topMarketListAsync
-            .map {
-                it.mapIndexed { index, coinMarket ->
-                    index to coinMarket
-                }.filter {
-                    filterCoinMarket(it.second)
-                }.toMap()
+    private suspend fun getTopMarketList(): Map<Int, MarketInfo> {
+        val topMarketList = cache
+            ?: marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code).also {
+                cache = it
             }
+
+        return topMarketList
+            .mapIndexed { index, coinMarket ->
+                index to coinMarket
+            }.filter {
+                filterCoinMarket(it.second)
+            }.toMap()
     }
 
     private fun filterCoinMarket(marketInfo: MarketInfo): Boolean {

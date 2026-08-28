@@ -23,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -147,7 +146,7 @@ class MarketEarnViewModel(
 
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val newVaults = marketKit.vaults(currencyManager.baseCurrency.code).await()
+                val newVaults = marketKit.vaults(currencyManager.baseCurrency.code)
                 cache = newVaults
                 updateVaultChains()
                 invalidateCache() // New data requires recalculation

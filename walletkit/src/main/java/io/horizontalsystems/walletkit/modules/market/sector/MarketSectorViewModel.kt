@@ -21,7 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 
 class MarketSectorViewModel(
     private val marketCategoryRepository: MarketSectorRepository,
@@ -96,7 +95,6 @@ class MarketSectorViewModel(
                         currencyManager.baseCurrency,
                         forceRefresh
                     )
-                    .await()
                 viewItems = getMarketViewItems(marketItems)
                 viewState = ViewState.Success
                 emitState()

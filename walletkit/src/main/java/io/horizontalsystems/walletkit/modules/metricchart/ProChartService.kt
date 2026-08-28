@@ -13,7 +13,6 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.chart.AbstractChartService
 import io.horizontalsystems.walletkit.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Single
 
 class ProChartService(
     override val currencyManager: CurrencyManager,
@@ -64,79 +63,67 @@ class ProChartService(
         stat(chartType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
-        val chartDataSingle: Single<List<ChartPoint>> = when (chartType) {
+    ): ChartPointsWrapper {
+        val chartData: List<ChartPoint> = when (chartType) {
             ProChartModule.ChartType.CexVolume ->
                 marketKit.cexVolumesSingle(coinUid, currency.code, chartInterval)
-                    .map { response ->
-                        response.map { chartPoint ->
-                            ChartPoint(
-                                value = chartPoint.value.toFloat(),
-                                timestamp = chartPoint.timestamp,
-                                chartVolume = chartPoint.volume?.toFloat()?.let { ChartVolume(it) }
-                            )
-                        }
+                    .map { chartPoint ->
+                        ChartPoint(
+                            value = chartPoint.value.toFloat(),
+                            timestamp = chartPoint.timestamp,
+                            chartVolume = chartPoint.volume?.toFloat()?.let { ChartVolume(it) }
+                        )
                     }
 
 
             ProChartModule.ChartType.DexVolume ->
                 marketKit.dexVolumesSingle(coinUid, currency.code, chartInterval)
-                    .map { response ->
-                        response.map { chartPoint ->
-                            ChartPoint(
-                                value = chartPoint.volume.toFloat(),
-                                timestamp = chartPoint.timestamp,
-                            )
-                        }
+                    .map { chartPoint ->
+                        ChartPoint(
+                            value = chartPoint.volume.toFloat(),
+                            timestamp = chartPoint.timestamp,
+                        )
                     }
 
             ProChartModule.ChartType.DexLiquidity ->
                 marketKit.dexLiquiditySingle(coinUid, currency.code, chartInterval)
-                    .map { response ->
-                        response.map { chartPoint ->
-                            ChartPoint(
-                                value = chartPoint.volume.toFloat(),
-                                timestamp = chartPoint.timestamp,
-                            )
-                        }
+                    .map { chartPoint ->
+                        ChartPoint(
+                            value = chartPoint.volume.toFloat(),
+                            timestamp = chartPoint.timestamp,
+                        )
                     }
 
             ProChartModule.ChartType.TxCount ->
                 marketKit.transactionDataSingle(coinUid, chartInterval, null)
-                    .map { response ->
-                        response.map { chartPoint ->
-                            ChartPoint(
-                                value = chartPoint.count.toFloat(),
-                                timestamp = chartPoint.timestamp,
-                                chartVolume = ChartVolume(chartPoint.volume.toFloat()),
-                            )
-                        }
+                    .map { chartPoint ->
+                        ChartPoint(
+                            value = chartPoint.count.toFloat(),
+                            timestamp = chartPoint.timestamp,
+                            chartVolume = ChartVolume(chartPoint.volume.toFloat()),
+                        )
                     }
 
             ProChartModule.ChartType.AddressesCount ->
                 marketKit.activeAddressesSingle(coinUid, chartInterval)
-                    .map { response ->
-                        response.map { chartPoint ->
-                            ChartPoint(
-                                value = chartPoint.count.toFloat(),
-                                timestamp = chartPoint.timestamp,
-                            )
-                        }
+                    .map { chartPoint ->
+                        ChartPoint(
+                            value = chartPoint.count.toFloat(),
+                            timestamp = chartPoint.timestamp,
+                        )
                     }
 
             ProChartModule.ChartType.Tvl ->
                 marketKit.marketInfoTvlSingle(coinUid, currency.code, chartInterval)
-                    .map { response ->
-                        response.map { chartPoint ->
-                            ChartPoint(
-                                value = chartPoint.value.toFloat(),
-                                timestamp = chartPoint.timestamp,
-                                chartVolume = chartPoint.volume?.toFloat()?.let { ChartVolume(it) },
-                            )
-                        }
+                    .map { chartPoint ->
+                        ChartPoint(
+                            value = chartPoint.value.toFloat(),
+                            timestamp = chartPoint.timestamp,
+                            chartVolume = chartPoint.volume?.toFloat()?.let { ChartVolume(it) },
+                        )
                     }
         }
 
@@ -149,6 +136,6 @@ class ProChartService(
             ProChartModule.ChartType.TxCount -> false
         }
 
-        return chartDataSingle.map { ChartPointsWrapper(it, isMovementChart) }
+        return ChartPointsWrapper(chartData, isMovementChart)
     }
 }

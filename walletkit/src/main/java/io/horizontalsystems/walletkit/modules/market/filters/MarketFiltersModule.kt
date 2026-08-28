@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.reactivex.Single
 
 object MarketFiltersModule {
     class Factory : ViewModelProvider.Factory {
@@ -254,5 +253,5 @@ class FilterViewItemWrapper<T>(val title: String?, val item: T) {
 }
 
 interface IMarketListFetcher {
-    fun fetchAsync(): Single<List<MarketItem>>
+    suspend fun fetchAsync(): List<MarketItem>
 }

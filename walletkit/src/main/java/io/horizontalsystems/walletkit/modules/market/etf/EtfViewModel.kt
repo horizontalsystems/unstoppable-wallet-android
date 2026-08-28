@@ -23,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class EtfViewModel(
@@ -88,8 +87,7 @@ class EtfViewModel(
                     tabKey,
                     currencyManager.baseCurrency.code,
                     currentChartPeriod?.value ?: "all"
-                ).await()
-                    .sortedBy { it.date }
+                ).sortedBy { it.date }
                 chartDataLoading = false
 
                 emitState()
@@ -113,7 +111,7 @@ class EtfViewModel(
         marketDataJob?.cancel()
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                cachedEtfs = marketKit.etfs(tabKey, currencyManager.baseCurrency.code).await()
+                cachedEtfs = marketKit.etfs(tabKey, currencyManager.baseCurrency.code)
                     .sortedByDescending { it.totalAssets }
                     .mapIndexed { index, etf -> RankedEtf(etf, index + 1) }
                 updateViewItems()

@@ -7,14 +7,15 @@ import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.modules.roi.RoiManager
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.net.URL
 
 class CoinOverviewService(
@@ -28,9 +29,11 @@ class CoinOverviewService(
     val currency get() = currencyManager.baseCurrency
 
     private var job: Job? = null
-    private val coinOverviewSubject = BehaviorSubject.create<DataState<CoinOverviewItem>>()
-    val coinOverviewObservable: Observable<DataState<CoinOverviewItem>>
-        get() = coinOverviewSubject
+    private val _coinOverviewObservable = MutableSharedFlow<DataState<CoinOverviewItem>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val coinOverviewObservable: SharedFlow<DataState<CoinOverviewItem>> = _coinOverviewObservable.asSharedFlow()
 
     private val guideUrls = mapOf(
         "bitcoin" to "guides/token_guides/en/bitcoin.md",
@@ -73,8 +76,8 @@ class CoinOverviewService(
                     languageManager.currentLanguage,
                     roiManager.getSelectedCoins().map { it.uid },
                     roiManager.getSelectedPeriods()
-                ).await()
-                coinOverviewSubject.onNext(
+                )
+                _coinOverviewObservable.tryEmit(
                     DataState.Success(
                         CoinOverviewItem(
                             fullCoin.coin.code,
@@ -84,7 +87,7 @@ class CoinOverviewService(
                     )
                 )
             } catch (e: Throwable) {
-                coinOverviewSubject.onNext(DataState.Error(e))
+                _coinOverviewObservable.tryEmit(DataState.Error(e))
             }
         }
     }

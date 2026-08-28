@@ -53,7 +53,7 @@ class TokenBalanceService(
             )
         }
         coroutineScope.launch {
-            xRateRepository.itemObservable.asFlow().collect {
+            xRateRepository.itemObservable.collect {
                 handleXRateUpdate(it)
             }
         }

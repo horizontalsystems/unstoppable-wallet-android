@@ -3,13 +3,14 @@ package io.horizontalsystems.walletkit.modules.balance
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class BalanceXRateRepository(
     private val tag: String,
@@ -23,22 +24,22 @@ class BalanceXRateRepository(
     private var latestRateJob: Job? = null
     private var baseCurrencyJob: Job? = null
 
-    private val itemSubject = PublishSubject.create<Map<String, CoinPrice?>>()
-    val itemObservable: Observable<Map<String, CoinPrice?>> get() = itemSubject
-        .doOnSubscribe {
+    private val itemFlow = MutableSharedFlow<Map<String, CoinPrice?>>()
+    val itemObservable: Flow<Map<String, CoinPrice?>> get() = itemFlow
+        .onStart {
             subscribeForBaseCurrencyUpdate()
             subscribeForLatestRateUpdates()
         }
-        .doFinally {
+        .onCompletion {
             unsubscribeFromBaseCurrencyUpdate()
             unsubscribeFromLatestRateUpdates()
         }
 
     private fun subscribeForBaseCurrencyUpdate() {
         baseCurrencyJob = coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 unsubscribeFromLatestRateUpdates()
-                itemSubject.onNext(getLatestRates())
+                itemFlow.emit(getLatestRates())
                 subscribeForLatestRateUpdates()
             }
         }
@@ -64,8 +65,8 @@ class BalanceXRateRepository(
 
     private fun subscribeForLatestRateUpdates() {
         latestRateJob = coroutineScope.launch {
-            marketKit.coinPriceMapObservable(tag, coinUids, baseCurrency.code).asFlow().collect {
-                itemSubject.onNext(it)
+            marketKit.coinPriceMapObservable(tag, coinUids, baseCurrency.code).collect {
+                itemFlow.emit(it)
             }
         }
     }

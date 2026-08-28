@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class MarketPostService(
     private val marketKit: MarketKitWrapper,
@@ -29,7 +28,7 @@ class MarketPostService(
         job?.cancel()
         job = coroutineScope.launch {
             try {
-                val posts = marketKit.postsSingle().await()
+                val posts = marketKit.postsSingle()
                 stateSubject.onNext(DataState.Success(posts))
             } catch (e: Throwable) {
                 stateSubject.onNext(DataState.Error(e))

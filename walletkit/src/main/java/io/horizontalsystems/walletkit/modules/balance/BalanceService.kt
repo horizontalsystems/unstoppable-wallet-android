@@ -64,7 +64,7 @@ class BalanceService(
             }
         }
         coroutineScope.launch {
-            xRateRepository.itemObservable.asFlow().collect { latestRates ->
+            xRateRepository.itemObservable.collect { latestRates ->
                 handleXRateUpdate(latestRates)
             }
         }

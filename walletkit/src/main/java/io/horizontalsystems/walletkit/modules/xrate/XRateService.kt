@@ -7,7 +7,6 @@ import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlow
 
 class XRateService(
     private val marketKit: MarketKitWrapper,
@@ -23,13 +22,13 @@ class XRateService(
     fun getCoinPrice(coinUid: String) = marketKit.coinPrice(coinUid, currency.code)
 
     fun getRateFlow(coinUid: String): Flow<CurrencyValue> {
-        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code).asFlow()
+        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code)
             .map {
                 CurrencyValue(currency, it.value)
             }
     }
 
     fun getCoinPriceFlow(coinUid: String): Flow<CoinPrice> {
-        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code).asFlow()
+        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code)
     }
 }

@@ -7,7 +7,6 @@ import io.horizontalsystems.walletkit.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.walletkit.modules.market.sortedByNullLast
 import io.horizontalsystems.marketkit.models.TopPlatform
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
 class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
@@ -23,7 +22,7 @@ class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
-            marketKit.topPlatformsSingle(currencyCode).await()
+            marketKit.topPlatformsSingle(currencyCode)
         } else {
             currentCache
         }

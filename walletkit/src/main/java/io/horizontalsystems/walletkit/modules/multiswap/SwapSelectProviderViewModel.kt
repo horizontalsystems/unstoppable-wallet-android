@@ -8,7 +8,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class SwapSelectProviderViewModel(
@@ -30,7 +29,6 @@ class SwapSelectProviderViewModel(
     init {
         viewModelScope.launch {
             marketKit.coinPriceObservable("swap-providers", tokenIn.coin.uid, currency.code)
-                .asFlow()
                 .collect {
                     rateTokenIn = it.value
                     quoteViewItems = getViewItems(quotes.sorted())
@@ -39,7 +37,6 @@ class SwapSelectProviderViewModel(
         }
         viewModelScope.launch {
             marketKit.coinPriceObservable("swap-providers", tokenOut.coin.uid, currency.code)
-                .asFlow()
                 .collect {
                     rateTokenOut = it.value
                     quoteViewItems = getViewItems(quotes.sorted())

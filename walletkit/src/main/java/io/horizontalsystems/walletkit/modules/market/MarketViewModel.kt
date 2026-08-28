@@ -12,7 +12,6 @@ import io.horizontalsystems.walletkit.modules.market.MarketModule.Tab
 import io.horizontalsystems.marketkit.models.MarketGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class MarketViewModel(
     private val marketStorage: IMarketStorage,
@@ -37,7 +36,7 @@ class MarketViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                marketGlobal = marketKit.marketGlobalSingle(currency.code).await()
+                marketGlobal = marketKit.marketGlobalSingle(currency.code)
                 emitState()
             } catch (e: Throwable) {
                 Log.e("TAG", "updateMarketOverview: ", e)

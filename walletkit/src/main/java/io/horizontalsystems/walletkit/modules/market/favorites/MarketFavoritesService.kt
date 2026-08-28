@@ -21,7 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 
 val TimeDuration.period: TimePeriod
     get() {
@@ -116,7 +115,7 @@ class MarketFavoritesService(
         val uids = marketItems.map { it.fullCoin.coin.uid }
         coroutineScope.launch {
             try {
-                signals = repository.getSignals(uids).await()
+                signals = repository.getSignals(uids)
                 updateItems()
             } catch (e: Throwable) {
                 marketItemsSubject.onNext(DataState.Error(e))

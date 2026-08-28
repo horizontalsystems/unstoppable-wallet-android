@@ -3,13 +3,14 @@ package io.horizontalsystems.walletkit.modules.coin.reports
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.marketkit.models.CoinReport
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class CoinReportsService(
     private val coinUid: String,
@@ -17,17 +18,19 @@ class CoinReportsService(
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val stateSubject = BehaviorSubject.create<DataState<List<CoinReport>>>()
-    val stateObservable: Observable<DataState<List<CoinReport>>>
-        get() = stateSubject
+    private val _stateObservable = MutableSharedFlow<DataState<List<CoinReport>>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val stateObservable: SharedFlow<DataState<List<CoinReport>>> = _stateObservable.asSharedFlow()
 
     private fun fetch() {
         coroutineScope.launch {
             try {
-                val reports = marketKit.coinReportsSingle(coinUid).await()
-                stateSubject.onNext(DataState.Success(reports))
+                val reports = marketKit.coinReportsSingle(coinUid)
+                _stateObservable.tryEmit(DataState.Success(reports))
             } catch (e: Throwable) {
-                stateSubject.onNext(DataState.Error(e))
+                _stateObservable.tryEmit(DataState.Error(e))
             }
         }
     }

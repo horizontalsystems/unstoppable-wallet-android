@@ -8,7 +8,8 @@ import io.horizontalsystems.walletkit.modules.market.TimeDuration
 import io.horizontalsystems.walletkit.modules.market.favorites.period
 import io.horizontalsystems.walletkit.modules.market.sort
 import io.horizontalsystems.marketkit.models.MarketInfo
-import io.reactivex.Single
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.math.min
 
 class MarketSectorRepository(
@@ -21,10 +22,11 @@ class MarketSectorRepository(
     private var cacheTimestamp: Long = 0
     private val cacheValidPeriodInMillis = 5_000 // 5 seconds
 
-    @Synchronized
-    private fun getMarketItems(coinCategoryUid: String, forceRefresh: Boolean, baseCurrency: Currency): List<MarketInfo> =
+    private val mutex = Mutex()
+
+    private suspend fun getMarketItems(coinCategoryUid: String, forceRefresh: Boolean, baseCurrency: Currency): List<MarketInfo> = mutex.withLock {
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
-            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code).blockingGet()
+            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code)
 
             cache = marketInfoList
             cacheTimestamp = System.currentTimeMillis()
@@ -33,8 +35,9 @@ class MarketSectorRepository(
         } else {
             cache
         }
+    }
 
-    fun get(
+    suspend fun get(
         coinCategoryUid: String,
         size: Int,
         sortingField: SortingField,
@@ -42,22 +45,14 @@ class MarketSectorRepository(
         limit: Int,
         baseCurrency: Currency,
         forceRefresh: Boolean
-    ): Single<List<MarketItem>> =
-        Single.create { emitter ->
-
-            try {
-                val marketInfoItems= getMarketItems(coinCategoryUid, forceRefresh, baseCurrency)
-                val marketItems = marketInfoItems.map { marketInfo ->
-                    MarketItem.createFromCoinMarket(marketInfo, baseCurrency, timePeriod.period)
-                }
-                val sortedMarketItems = marketItems
-                    .subList(0, min(marketItems.size, size))
-                    .sort(sortingField)
-                    .subList(0, min(marketItems.size, limit))
-
-                emitter.onSuccess(sortedMarketItems)
-            } catch (error: Throwable) {
-                emitter.onError(error)
-            }
+    ): List<MarketItem> {
+        val marketInfoItems = getMarketItems(coinCategoryUid, forceRefresh, baseCurrency)
+        val marketItems = marketInfoItems.map { marketInfo ->
+            MarketItem.createFromCoinMarket(marketInfo, baseCurrency, timePeriod.period)
         }
+        return marketItems
+            .subList(0, min(marketItems.size, size))
+            .sort(sortingField)
+            .subList(0, min(marketItems.size, limit))
+    }
 }
