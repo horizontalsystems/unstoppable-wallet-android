@@ -128,7 +128,7 @@ class SwapViewModel(
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
-                hasRateOut = it.coinPrice != null
+                hasRateOut = it.coinPrice != null && !it.coinPrice.expired
 
                 priceImpactService.setAmountOut(fiatAmountOut)
 
