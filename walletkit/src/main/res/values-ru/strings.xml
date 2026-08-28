@@ -1859,7 +1859,6 @@
     <string name="PrivateSend_Caution_Title">Приватная отправка</string>
     <string name="PrivateSend_Caution_BelowMinimum">Приватная отправка требует, чтобы получатель получил не менее %s.</string>
     <string name="PrivateSend_Caution_AboveMaximum">Приватная отправка поддерживает максимум %s.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">Для этого приватного перевода необходимо %s в вашем кошельке, включая комиссии.</string>
     <string name="PrivateSend_Caution_NoRoute">На данный момент нет доступного приватного маршрута для этого токена и суммы.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">Этот маршрут не может гарантировать точную сумму получения.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">Поставщик приватных переводов временно недоступен.</string>

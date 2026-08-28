@@ -1853,7 +1853,6 @@
     <string name="PrivateSend_Caution_Title">Özel gönderim</string>
     <string name="PrivateSend_Caution_BelowMinimum">Özel gönderim, alıcının en az %s almasını gerektirir.</string>
     <string name="PrivateSend_Caution_AboveMaximum">Özel gönderim en fazla %s destekler.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">Bu özel gönderim, ücretler dahil olmak üzere cüzdanınızda %s gerektirir.</string>
     <string name="PrivateSend_Caution_NoRoute">Şu anda bu token ve tutar için kullanılabilir özel bir rota yok.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">Bu rota tam alınan tutarı garanti edemez.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">Özel gönderim sağlayıcısı geçici olarak kullanılamaz.</string>

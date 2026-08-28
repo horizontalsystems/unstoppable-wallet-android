@@ -1853,7 +1853,6 @@
     <string name="PrivateSend_Caution_Title">개인 전송</string>
     <string name="PrivateSend_Caution_BelowMinimum">개인 전송을 위해서는 수신자가 최소 %s를 받아야 합니다.</string>
     <string name="PrivateSend_Caution_AboveMaximum">개인 전송은 최대 %s를 지원합니다.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">이 프라이빗 송금은 수수료를 포함하여 지갑에 %s가 필요합니다.</string>
     <string name="PrivateSend_Caution_NoRoute">현재 이 토큰과 금액에 대한 프라이빗 경로가 없습니다.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">이 경로는 정확한 수취 금액을 보장할 수 없습니다.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">프라이빗 송금 제공자를 일시적으로 사용할 수 없습니다.</string>

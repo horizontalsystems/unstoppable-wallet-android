@@ -1852,7 +1852,6 @@
     <string name="PrivateSend_Caution_Title">私密发送</string>
     <string name="PrivateSend_Caution_BelowMinimum">私密发送要求接收者至少收到 %s。</string>
     <string name="PrivateSend_Caution_AboveMaximum">私密发送最多支持 %s。</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">此私密发送需要钱包中有 %s，包括手续费。</string>
     <string name="PrivateSend_Caution_NoRoute">目前没有可用的私密路由来处理此代币和金额。</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">此路由无法保证确切的接收金额。</string>
     <string name="PrivateSend_Caution_ProviderSuspended">私密发送提供商暂时不可用。</string>

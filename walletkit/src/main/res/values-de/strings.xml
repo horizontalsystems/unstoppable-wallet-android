@@ -1861,7 +1861,6 @@
     <string name="PrivateSend_Caution_Title">Privater Versand</string>
     <string name="PrivateSend_Caution_BelowMinimum">Der private Versand erfordert, dass der Empfänger mindestens %s erhält.</string>
     <string name="PrivateSend_Caution_AboveMaximum">Der private Versand unterstützt maximal %s.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">Diese private Überweisung benötigt %s in deiner Wallet, einschließlich Gebühren.</string>
     <string name="PrivateSend_Caution_NoRoute">Es ist derzeit keine private Route für diesen Token und Betrag verfügbar.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">Diese Route kann keinen exakten Empfangsbetrag garantieren.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">Der Private-Send-Anbieter ist vorübergehend nicht verfügbar.</string>

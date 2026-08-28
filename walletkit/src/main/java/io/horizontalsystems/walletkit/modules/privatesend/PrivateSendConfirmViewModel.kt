@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.privatesend
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
@@ -139,7 +138,7 @@ class PrivateSendConfirmViewModel(
             estimatedTime = order?.estimatedTime,
             currency = currency,
             networkFee = sendTransactionState.networkFee,
-            cautions = cautions(),
+            cautions = sendTransactionState.cautions,
             transactionFields = sendTransactionState.fields,
             canSend = order != null && sendTransactionState.sendable && !expired && error == null,
             expired = expired,
@@ -147,38 +146,6 @@ class PrivateSendConfirmViewModel(
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             error = error,
         )
-    }
-
-    private fun cautions(): List<CautionViewItem> {
-        // Replaces the service's own rejection instead of adding to it: the service names no
-        // amount, and under exact output the figure the user needs is the DEPOSIT plus its
-        // network fee, not what they entered — without this the refusal is baffling (MAX always
-        // fails here by design). Two messages for one shortfall read as two problems.
-        order?.let { order ->
-            if (insufficientBalance(order)) {
-                return listOf(
-                    CautionViewItem(
-                        title = App.instance.getString(io.horizontalsystems.walletkit.R.string.PrivateSend_Caution_Title),
-                        text = App.instance.getString(
-                            io.horizontalsystems.walletkit.R.string.PrivateSend_Caution_InsufficientBalance,
-                            io.horizontalsystems.walletkit.entities.CoinValue(token, order.depositAmount).getFormattedFull(),
-                        ),
-                        type = CautionViewItem.Type.Error,
-                    )
-                )
-            }
-        }
-
-        return sendTransactionState.cautions
-    }
-
-    private fun insufficientBalance(order: PrivateSendOrder): Boolean {
-        val available = App.adapterManager
-            .getAdapterForToken<IBalanceAdapter>(token)
-            ?.balanceData?.available
-            ?: return false
-
-        return order.depositAmount > available
     }
 
     /**

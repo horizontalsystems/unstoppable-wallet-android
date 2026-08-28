@@ -785,7 +785,6 @@
     <string name="PrivateSend_Caution_Title">ارسال خصوصی</string>
     <string name="PrivateSend_Caution_BelowMinimum">ارسال خصوصی مستلزم دریافت حداقل %s توسط گیرنده است.</string>
     <string name="PrivateSend_Caution_AboveMaximum">ارسال خصوصی حداکثر %s را پشتیبانی می‌کند.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">این ارسال خصوصی به %s در کیف پول شما نیاز دارد، شامل کارمزد.</string>
     <string name="PrivateSend_Caution_NoRoute">در حال حاضر هیچ مسیر خصوصی برای این توکن و مقدار در دسترس نیست.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">این مسیر نمی‌تواند مقدار دقیق دریافتی را تضمین کند.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">فراهم‌کننده ارسال خصوصی به طور موقت در دسترس نیست.</string>

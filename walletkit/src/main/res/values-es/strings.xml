@@ -1852,7 +1852,6 @@
     <string name="PrivateSend_Caution_Title">Envío privado</string>
     <string name="PrivateSend_Caution_BelowMinimum">El envío privado requiere que el destinatario reciba al menos %s.</string>
     <string name="PrivateSend_Caution_AboveMaximum">El envío privado admite como máximo %s.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">Este envío privado necesita %s en tu billetera, incluidas las comisiones.</string>
     <string name="PrivateSend_Caution_NoRoute">No hay una ruta privada disponible para este token y cantidad en este momento.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">Esta ruta no puede garantizar una cantidad exacta recibida.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">El proveedor de envío privado no está disponible temporalmente.</string>

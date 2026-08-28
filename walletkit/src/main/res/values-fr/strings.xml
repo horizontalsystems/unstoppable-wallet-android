@@ -1854,7 +1854,6 @@
     <string name="PrivateSend_Caution_Title">Envoi privé</string>
     <string name="PrivateSend_Caution_BelowMinimum">L\'envoi privé exige que le destinataire reçoive au moins %s.</string>
     <string name="PrivateSend_Caution_AboveMaximum">L\'envoi privé prend en charge au maximum %s.</string>
-    <string name="PrivateSend_Caution_InsufficientBalance">Cet envoi privé nécessite %s dans votre portefeuille, frais inclus.</string>
     <string name="PrivateSend_Caution_NoRoute">Aucune route privée n\'est actuellement disponible pour ce token et ce montant.</string>
     <string name="PrivateSend_Caution_ExactOutputUnsupported">Cette route ne peut pas garantir un montant exact reçu.</string>
     <string name="PrivateSend_Caution_ProviderSuspended">Le fournisseur d\'envoi privé est temporairement indisponible.</string>
