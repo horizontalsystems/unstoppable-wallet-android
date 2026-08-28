@@ -436,6 +436,7 @@ private fun SwapScreenInner(
                     switchPairsEnabled = !uiState.externalRecipientRequired,
                     amountOut = quote?.amountOut,
                     fiatAmountOut = uiState.fiatAmountOut,
+                    hasRateOut = uiState.hasRateOut,
                     fiatPriceImpact = uiState.fiatPriceImpact,
                     fiatPriceImpactLevel = uiState.fiatPriceImpactLevel,
                     onValueChange = onEnterAmount,
@@ -852,6 +853,7 @@ private fun SwapInput(
     switchPairsEnabled: Boolean,
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
+    hasRateOut: Boolean,
     fiatPriceImpact: BigDecimal?,
     fiatPriceImpactLevel: PriceImpactLevel?,
     onValueChange: (BigDecimal?) -> Unit,
@@ -883,6 +885,7 @@ private fun SwapInput(
             SwapCoinInputTo(
                 coinAmount = amountOut,
                 fiatAmount = fiatAmountOut,
+                hasRate = hasRateOut,
                 fiatPriceImpact = fiatPriceImpact,
                 fiatPriceImpactLevel = fiatPriceImpactLevel,
                 currency = currency,
@@ -931,13 +934,15 @@ private fun SwapCoinInputIn(
                 onValueChange = onValueChange,
                 focusRequester = focusRequester
             )
-            VSpacer(height = 3.dp)
-            FiatAmountInput(
-                value = fiatAmount,
-                currency = currency,
-                onValueChange = onFiatValueChange,
-                enabled = fiatAmountInputEnabled
-            )
+            if (fiatAmountInputEnabled || fiatAmount != null) {
+                VSpacer(height = 3.dp)
+                FiatAmountInput(
+                    value = fiatAmount,
+                    currency = currency,
+                    onValueChange = onFiatValueChange,
+                    enabled = fiatAmountInputEnabled
+                )
+            }
         }
     }
 }
@@ -946,6 +951,7 @@ private fun SwapCoinInputIn(
 private fun SwapCoinInputTo(
     coinAmount: BigDecimal?,
     fiatAmount: BigDecimal?,
+    hasRate: Boolean,
     fiatPriceImpact: BigDecimal?,
     fiatPriceImpactLevel: PriceImpactLevel?,
     currency: Currency,
@@ -972,10 +978,11 @@ private fun SwapCoinInputTo(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            VSpacer(height = 3.dp)
-            if (fiatAmount == null) {
+            if (hasRate && fiatAmount == null) {
+                VSpacer(height = 3.dp)
                 body_grey(text = "${currency.symbol}0")
-            } else {
+            } else if (fiatAmount != null) {
+                VSpacer(height = 3.dp)
                 Row {
                     body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
                     fiatPriceImpact?.let { diff ->

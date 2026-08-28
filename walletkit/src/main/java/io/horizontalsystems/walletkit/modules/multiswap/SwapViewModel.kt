@@ -70,6 +70,7 @@ class SwapViewModel(
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
+    private var hasRateOut = false
     private var currency = currencyManager.baseCurrency
     private var requoteOnTimeout = true
     private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
@@ -127,6 +128,7 @@ class SwapViewModel(
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
+                hasRateOut = it.coinPrice != null
 
                 priceImpactService.setAmountOut(fiatAmountOut)
 
@@ -272,6 +274,7 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
+        hasRateOut = hasRateOut,
         needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true,
         amlChecking = amlChecking,
         initialShowRegularPrice = initialShowRegularPrice,
@@ -509,6 +512,7 @@ data class SwapUiState(
     val fiatPriceImpact: BigDecimal?,
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
+    val hasRateOut: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
     val needToAcceptTerms: Boolean,
     val amlChecking: Boolean,
