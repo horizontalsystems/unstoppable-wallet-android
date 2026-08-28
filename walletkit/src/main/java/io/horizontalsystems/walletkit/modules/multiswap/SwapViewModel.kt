@@ -284,7 +284,23 @@ class SwapViewModel(
         ),
         allowanceActionSuppressed = allowanceActionSuppressed(),
         externalRecipientRequired = externalRecipientRequired(quoteState.tokenOut),
+        percentOptions = percentOptions(quoteState.tokenIn),
     )
+
+    // The network fee is only estimated on the confirmation screen, so 100% of an asset
+    // that also pays its own fee always ends in an insufficient balance error. Offer it
+    // only for tokens whose fee is paid with a separate native asset.
+    private fun percentOptions(tokenIn: Token?): List<Int> {
+        val feePaidFromAsset = when (tokenIn?.type) {
+            null,
+            TokenType.Native,
+            is TokenType.Derived,
+            is TokenType.AddressTyped,
+            is TokenType.Unsupported -> true
+            else -> false
+        }
+        return if (feePaidFromAsset) listOf(25, 50, 75) else listOf(25, 50, 75, 100)
+    }
 
     // tokenOut the account can't hold: the swap is deliverable only to an external
     // address, which the user is asked for before the confirmation screen
@@ -520,6 +536,7 @@ data class SwapUiState(
     val swapTimeStatus: SwapTimeStatus,
     val allowanceActionSuppressed: Boolean = false,
     val externalRecipientRequired: Boolean = false,
+    val percentOptions: List<Int> = listOf(25, 50, 75, 100),
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
