@@ -30,7 +30,6 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class CoinOverviewViewModel(
     private val service: CoinOverviewService,
@@ -67,7 +66,7 @@ class CoinOverviewViewModel(
 
     init {
         viewModelScope.launch {
-            service.coinOverviewObservable.asFlow().collect { coinOverview ->
+            service.coinOverviewObservable.collect { coinOverview ->
                 isRefreshingLiveData.postValue(false)
 
                 coinOverview.dataOrNull?.let {

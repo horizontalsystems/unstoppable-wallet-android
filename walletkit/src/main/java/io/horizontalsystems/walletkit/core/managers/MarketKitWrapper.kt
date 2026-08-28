@@ -17,8 +17,10 @@ import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.Vault
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import retrofit2.Response
 import java.math.BigDecimal
@@ -40,24 +42,24 @@ class MarketKitWrapper(
         )
     }
 
-    private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
-        userSubscriptionManager.authToken?.let { authToken ->
-            f.invoke(authToken).onErrorResumeNext { error ->
-                if (error is HttpException && (error.code() == 401 || error.code() == 403)) {
-                    userSubscriptionManager.authToken = null
-
-                    Single.error(InvalidAuthTokenException())
-                } else {
-                    Single.error(error)
-                }
+    private suspend fun <T> requestWithAuthToken(f: suspend (String) -> T): T {
+        val authToken = userSubscriptionManager.authToken ?: throw NoAuthTokenException()
+        try {
+            return f.invoke(authToken)
+        } catch (error: HttpException) {
+            if (error.code() == 401 || error.code() == 403) {
+                userSubscriptionManager.authToken = null
+                throw InvalidAuthTokenException()
             }
-        } ?: run {
-            Single.error(NoAuthTokenException())
+            throw error
         }
+    }
+
+    private fun <T> neverFlow(): Flow<T> = flow { awaitCancellation() }
 
     // Coins
 
-    val fullCoinsUpdatedObservable: Observable<Unit>
+    val fullCoinsUpdatedObservable: SharedFlow<Unit>
         get() = marketKit.fullCoinsUpdatedObservable
 
     fun topFullCoins(limit: Int = 20) = marketKit.topFullCoins(limit)
@@ -84,18 +86,18 @@ class MarketKitWrapper(
 
     fun blockchain(uid: String) = marketKit.blockchain(uid)
 
-    fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean) = marketKit.marketInfosSingle(top, currencyCode, defi)
+    suspend fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean) = marketKit.marketInfosSingle(top, currencyCode, defi)
 
-    fun categoriesSingle() = marketKit.categoriesSingle()
+    suspend fun categoriesSingle() = marketKit.categoriesSingle()
 
-    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
+    suspend fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
-    fun marketInfosSingle(coinUids: List<String>, currencyCode: String): Single<List<MarketInfo>> =
+    suspend fun marketInfosSingle(coinUids: List<String>, currencyCode: String): List<MarketInfo> =
         marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode)
 
-    fun marketInfosSingle(categoryUid: String, currencyCode: String) = marketKit.marketInfosSingle(categoryUid, currencyCode)
+    suspend fun marketInfosSingle(categoryUid: String, currencyCode: String) = marketKit.marketInfosSingle(categoryUid, currencyCode)
 
-    fun marketInfoOverviewSingle(
+    suspend fun marketInfoOverviewSingle(
         coinUid: String,
         currencyCode: String,
         language: String,
@@ -103,24 +105,24 @@ class MarketKitWrapper(
         roiPeriods: List<HsTimePeriod>
     ) = marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language, roiUids, roiPeriods)
 
-    fun analyticsSingle(coinUid: String, currencyCode: String) =
+    suspend fun analyticsSingle(coinUid: String, currencyCode: String) =
         requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode) }
 
-    fun analyticsPreviewSingle(coinUid: String, addresses: List<String>) = marketKit.analyticsPreviewSingle(coinUid, addresses)
+    suspend fun analyticsPreviewSingle(coinUid: String, addresses: List<String>) = marketKit.analyticsPreviewSingle(coinUid, addresses)
 
-    fun marketInfoTvlSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+    suspend fun marketInfoTvlSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
 
-    fun marketInfoGlobalTvlSingle(chain: String, currencyCode: String, timePeriod: HsTimePeriod) =
+    suspend fun marketInfoGlobalTvlSingle(chain: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, timePeriod)
 
-    fun defiMarketInfosSingle(currencyCode: String) = marketKit.defiMarketInfosSingle(currencyCode)
+    suspend fun defiMarketInfosSingle(currencyCode: String) = marketKit.defiMarketInfosSingle(currencyCode)
 
     // Categories
 
-    fun coinCategoriesSingle(currencyCode: String) = marketKit.coinCategoriesSingle(currencyCode)
+    suspend fun coinCategoriesSingle(currencyCode: String) = marketKit.coinCategoriesSingle(currencyCode)
 
-    fun coinCategoryMarketPointsSingle(categoryUid: String, interval: HsTimePeriod, currencyCode: String) =
+    suspend fun coinCategoryMarketPointsSingle(categoryUid: String, interval: HsTimePeriod, currencyCode: String) =
         marketKit.coinCategoryMarketPointsSingle(categoryUid, interval, currencyCode)
 
     fun sync() = marketKit.sync()
@@ -145,141 +147,141 @@ class MarketKitWrapper(
         }
     }
 
-    fun coinPriceObservable(tag: String, coinUid: String, currencyCode: String): Observable<CoinPrice> =
-        if (coinUid.isCustomCoin) Observable.never() else marketKit.coinPriceObservable(tag, coinUid, currencyCode)
+    fun coinPriceObservable(tag: String, coinUid: String, currencyCode: String): Flow<CoinPrice> =
+        if (coinUid.isCustomCoin) neverFlow() else marketKit.coinPriceObservable(tag, coinUid, currencyCode)
 
-    fun coinPriceMapObservable(tag: String, coinUids: List<String>, currencyCode: String): Observable<Map<String, CoinPrice>> {
+    fun coinPriceMapObservable(tag: String, coinUids: List<String>, currencyCode: String): Flow<Map<String, CoinPrice>> {
         val coinUidsNoCustom = coinUids.removeCustomCoins()
         return when {
-            coinUidsNoCustom.isEmpty() -> Observable.never()
+            coinUidsNoCustom.isEmpty() -> neverFlow()
             else -> marketKit.coinPriceMapObservable(tag, coinUidsNoCustom, currencyCode)
         }
     }
 
     // Coin Historical Price
 
-    fun coinHistoricalPriceSingle(coinUid: String, currencyCode: String, timestamp: Long): Single<BigDecimal> =
-        if (coinUid.isCustomCoin) Single.never() else marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestamp)
+    suspend fun coinHistoricalPriceSingle(coinUid: String, currencyCode: String, timestamp: Long): BigDecimal? =
+        if (coinUid.isCustomCoin) null else marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestamp)
 
     fun coinHistoricalPrice(coinUid: String, currencyCode: String, timestamp: Long) =
         if (coinUid.isCustomCoin) null else marketKit.coinHistoricalPrice(coinUid, currencyCode, timestamp)
 
     // Posts
 
-    fun postsSingle() = marketKit.postsSingle()
+    suspend fun postsSingle() = marketKit.postsSingle()
 
     // Market Tickers
 
-    fun marketTickersSingle(coinUid: String, currencyCode: String) = marketKit.marketTickersSingle(coinUid, currencyCode)
+    suspend fun marketTickersSingle(coinUid: String, currencyCode: String) = marketKit.marketTickersSingle(coinUid, currencyCode)
 
     // Details
 
-    fun tokenHoldersSingle(coinUid: String, blockchainUid: String) =
+    suspend fun tokenHoldersSingle(coinUid: String, blockchainUid: String) =
         requestWithAuthToken { marketKit.tokenHoldersSingle(it, coinUid, blockchainUid) }
 
-    fun treasuriesSingle(coinUid: String, currencyCode: String) = marketKit.treasuriesSingle(coinUid, currencyCode)
+    suspend fun treasuriesSingle(coinUid: String, currencyCode: String) = marketKit.treasuriesSingle(coinUid, currencyCode)
 
-    fun investmentsSingle(coinUid: String) = marketKit.investmentsSingle(coinUid)
+    suspend fun investmentsSingle(coinUid: String) = marketKit.investmentsSingle(coinUid)
 
-    fun coinReportsSingle(coinUid: String) = marketKit.coinReportsSingle(coinUid)
+    suspend fun coinReportsSingle(coinUid: String) = marketKit.coinReportsSingle(coinUid)
 
     // Pro Details
 
-    fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+    suspend fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.cexVolumesSingle(coinUid, currencyCode, timePeriod)
 
-    fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+    suspend fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         requestWithAuthToken { marketKit.dexLiquiditySingle(it, coinUid, currencyCode, timePeriod) }
 
-    fun dexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+    suspend fun dexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         requestWithAuthToken { marketKit.dexVolumesSingle(it, coinUid, currencyCode, timePeriod) }
 
-    fun transactionDataSingle(coinUid: String, timePeriod: HsTimePeriod, platform: String?) =
+    suspend fun transactionDataSingle(coinUid: String, timePeriod: HsTimePeriod, platform: String?) =
         requestWithAuthToken { marketKit.transactionDataSingle(it, coinUid, timePeriod, platform) }
 
-    fun activeAddressesSingle(coinUid: String, timePeriod: HsTimePeriod) =
+    suspend fun activeAddressesSingle(coinUid: String, timePeriod: HsTimePeriod) =
         requestWithAuthToken { marketKit.activeAddressesSingle(it, coinUid, timePeriod) }
 
-    fun cexVolumeRanksSingle(currencyCode: String) =
+    suspend fun cexVolumeRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.cexVolumeRanksSingle(it, currencyCode) }
 
-    fun dexVolumeRanksSingle(currencyCode: String) =
+    suspend fun dexVolumeRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.dexVolumeRanksSingle(it, currencyCode) }
 
-    fun dexLiquidityRanksSingle(currencyCode: String) =
+    suspend fun dexLiquidityRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.dexLiquidityRanksSingle(it, currencyCode) }
 
-    fun activeAddressRanksSingle(currencyCode: String) =
+    suspend fun activeAddressRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.activeAddressRanksSingle(it, currencyCode) }
 
-    fun transactionCountsRanksSingle(currencyCode: String) =
+    suspend fun transactionCountsRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.transactionCountsRanksSingle(it, currencyCode) }
 
-    fun revenueRanksSingle(currencyCode: String) =
+    suspend fun revenueRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.revenueRanksSingle(it, currencyCode) }
 
-    fun feeRanksSingle(currencyCode: String) =
+    suspend fun feeRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.feeRanksSingle(it, currencyCode) }
 
-    fun holdersRanksSingle(currencyCode: String) =
+    suspend fun holdersRanksSingle(currencyCode: String) =
         requestWithAuthToken { marketKit.holderRanksSingle(it, currencyCode) }
 
     // Overview
 
-    fun marketOverviewSingle(currencyCode: String) = marketKit.marketOverviewSingle(currencyCode)
+    suspend fun marketOverviewSingle(currencyCode: String) = marketKit.marketOverviewSingle(currencyCode)
 
-    fun marketGlobalSingle(currencyCode: String) = marketKit.marketGlobalSingle(currencyCode)
+    suspend fun marketGlobalSingle(currencyCode: String) = marketKit.marketGlobalSingle(currencyCode)
 
-    fun topPairsSingle(currencyCode: String, page: Int, limit: Int) = marketKit.topPairsSingle(currencyCode, page, limit)
+    suspend fun topPairsSingle(currencyCode: String, page: Int, limit: Int) = marketKit.topPairsSingle(currencyCode, page, limit)
 
-    fun topMoversSingle(currencyCode: String) = marketKit.topMoversSingle(currencyCode)
+    suspend fun topMoversSingle(currencyCode: String) = marketKit.topMoversSingle(currencyCode)
 
-    fun topCoinsMarketInfosSingle(top: Int, currencyCode: String) = marketKit.topCoinsMarketInfosSingle(top, currencyCode)
+    suspend fun topCoinsMarketInfosSingle(top: Int, currencyCode: String) = marketKit.topCoinsMarketInfosSingle(top, currencyCode)
 
     // Chart Info
 
-    fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
+    suspend fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
 
-    fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
+    suspend fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
         marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
 
-    fun chartPointsSingle(coinUid: String, currencyCode: String, period: HsPointTimePeriod, pointCount: Int) =
+    suspend fun chartPointsSingle(coinUid: String, currencyCode: String, period: HsPointTimePeriod, pointCount: Int) =
         marketKit.chartPointsSingle(coinUid, currencyCode, period, pointCount)
 
     // Global Market Info
 
-    fun globalMarketPointsSingle(currencyCode: String, timePeriod: HsTimePeriod) =
+    suspend fun globalMarketPointsSingle(currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.globalMarketPointsSingle(currencyCode, timePeriod)
 
-    fun topPlatformsSingle(currencyCode: String) =
+    suspend fun topPlatformsSingle(currencyCode: String) =
         marketKit.topPlatformsSingle(currencyCode)
 
-    fun topPlatformMarketCapStartTimeSingle(platform: String) =
+    suspend fun topPlatformMarketCapStartTimeSingle(platform: String) =
         marketKit.topPlatformMarketCapStartTimeSingle(platform)
 
-    fun topPlatformMarketCapPointsSingle(
+    suspend fun topPlatformMarketCapPointsSingle(
         chain: String,
         currencyCode: String,
         periodType: HsPeriodType
     ) = marketKit.topPlatformMarketCapPointsSingle(chain, currencyCode, periodType)
 
-    fun topPlatformCoinListSingle(chain: String, currencyCode: String) =
+    suspend fun topPlatformCoinListSingle(chain: String, currencyCode: String) =
         marketKit.topPlatformMarketInfosSingle(chain, currencyCode)
 
-    fun getCoinSignalsSingle(coinUids: List<String>) = marketKit.coinsSignalsSingle(coinUids)
+    suspend fun getCoinSignalsSingle(coinUids: List<String>) = marketKit.coinsSignalsSingle(coinUids)
 
     // NFT
 
     suspend fun nftCollections(): List<NftTopCollection> =
         marketKit.nftTopCollections()
 
-    fun subscriptionsSingle(addresses: List<String>) =
+    suspend fun subscriptionsSingle(addresses: List<String>) =
         marketKit.subscriptionsSingle(addresses)
 
-    fun authGetSignMessage(address: String) =
+    suspend fun authGetSignMessage(address: String) =
         marketKit.authGetSignMessage(address)
 
-    fun authenticate(signature: String, address: String) =
+    suspend fun authenticate(signature: String, address: String) =
         marketKit.authenticate(signature, address)
 
     // Misc
@@ -288,33 +290,33 @@ class MarketKitWrapper(
         return marketKit.syncInfo()
     }
 
-    fun requestPersonalSupport(username: String): Single<Response<Void>> =
+    suspend fun requestPersonalSupport(username: String): Response<Void> =
         requestWithAuthToken { marketKit.requestPersonalSupport(it, username) }
 
-    fun requestVipSupport(subscriptionId: String): Single<Map<String, String>> =
+    suspend fun requestVipSupport(subscriptionId: String): Map<String, String> =
         requestWithAuthToken { marketKit.requestVipSupport(it, subscriptionId) }
 
-    fun getStocks(currencyCode: String): Single<List<Stock>> = marketKit.getStocks(currencyCode)
+    suspend fun getStocks(currencyCode: String): List<Stock> = marketKit.getStocks(currencyCode)
 
     // Stats
 
-    fun sendStats(stats: String, appVersion: String, appId: String?): Single<Unit> {
+    suspend fun sendStats(stats: String, appVersion: String, appId: String?): Unit {
         return marketKit.sendStats(stats, appVersion, appId)
     }
 
     // Etf
 
-    fun etfs(category: String, currencyCode: String) = marketKit.etfSingle(category, currencyCode)
+    suspend fun etfs(category: String, currencyCode: String) = marketKit.etfSingle(category, currencyCode)
 
-    fun etfPoints(category: String, currencyCode: String, period: String) = marketKit.etfPointSingle(category, currencyCode, period)
+    suspend fun etfPoints(category: String, currencyCode: String, period: String) = marketKit.etfPointSingle(category, currencyCode, period)
 
     // Vaults
 
-    fun vaults(currencyCode: String): Single<List<Vault>> {
+    suspend fun vaults(currencyCode: String): List<Vault> {
         return requestWithAuthToken { marketKit.vaultsSingle(currencyCode) }
     }
 
-    fun vault(address: String, currencyCode: String, periodType: HsTimePeriod): Single<Vault> {
+    suspend fun vault(address: String, currencyCode: String, periodType: HsTimePeriod): Vault {
         return requestWithAuthToken { marketKit.vaultSingle(address, currencyCode, periodType) }
     }
 

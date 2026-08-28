@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -65,7 +64,6 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
         token?.let { platformCoin ->
             coinPriceUpdatesJob = coroutineScope.launch {
                 marketKit.coinPriceObservable("swap", platformCoin.coin.uid, currency.code)
-                    .asFlow()
                     .collect {
                         coinPrice = it
 

@@ -23,13 +23,11 @@ import io.horizontalsystems.walletkit.modules.market.priceChangeValue
 import io.horizontalsystems.walletkit.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.walletkit.modules.market.sortedByNullLast
 import io.horizontalsystems.walletkit.modules.metricchart.MetricsType
-import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class MetricsPageViewModel(
@@ -100,11 +98,11 @@ class MetricsPageViewModel(
         marketDataJob?.cancel()
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                viewItems = getMarketItemsSingle(
+                viewItems = getMarketItems(
                     currencyManager.baseCurrency,
                     sortDescending,
                     metricsType
-                ).await()
+                )
                 viewState = ViewState.Success
             } catch (e: Throwable) {
                 viewState = ViewState.Error(e)
@@ -113,52 +111,50 @@ class MetricsPageViewModel(
         }
     }
 
-    private fun getMarketItemsSingle(
+    private suspend fun getMarketItems(
         currency: Currency,
         sortDescending: Boolean,
         metricsType: MetricsType,
         period: TimePeriod = TimePeriod.TimePeriod_1D
-    ): Single<List<CoinViewItem>> {
-        return marketKit.marketInfosSingle(
+    ): List<CoinViewItem> {
+        val coinMarkets = marketKit.marketInfosSingle(
             250,
             currency.code,
             defi = false
         )
-            .map { coinMarkets ->
-                val marketItems = coinMarkets.map { marketInfo ->
-                    val subtitle = when (metricsType) {
-                        MetricsType.Volume24h -> CurrencyValue(
-                            currency,
-                            marketInfo.totalVolume ?: BigDecimal.ZERO
-                        ).getFormattedShort()
+        val marketItems = coinMarkets.map { marketInfo ->
+            val subtitle = when (metricsType) {
+                MetricsType.Volume24h -> CurrencyValue(
+                    currency,
+                    marketInfo.totalVolume ?: BigDecimal.ZERO
+                ).getFormattedShort()
 
-                        MetricsType.TotalMarketCap -> CurrencyValue(
-                            currency,
-                            marketInfo.marketCap ?: BigDecimal.ZERO
-                        ).getFormattedShort()
+                MetricsType.TotalMarketCap -> CurrencyValue(
+                    currency,
+                    marketInfo.marketCap ?: BigDecimal.ZERO
+                ).getFormattedShort()
 
-                        else -> marketInfo.fullCoin.coin.name
-                    }
-                    CoinViewItem(
-                        fullCoin = marketInfo.fullCoin,
-                        subtitle = subtitle,
-                        coinRate = CurrencyValue(
-                            currency,
-                            marketInfo.price ?: BigDecimal.ZERO
-                        ).getFormattedFull(),
-                        marketDataValue = marketInfo.priceChangeValue(period)?.let {
-                            MarketDataValue.Diff(Value.Percent(it))
-                        },
-                        rank = marketInfo.marketCapRank?.toString(),
-                        sortField = when (metricsType) {
-                            MetricsType.Volume24h -> marketInfo.totalVolume
-                            MetricsType.TotalMarketCap -> marketInfo.marketCap
-                            else -> null
-                        }
-                    )
-                }
-                sortItems(marketItems, sortDescending)
+                else -> marketInfo.fullCoin.coin.name
             }
+            CoinViewItem(
+                fullCoin = marketInfo.fullCoin,
+                subtitle = subtitle,
+                coinRate = CurrencyValue(
+                    currency,
+                    marketInfo.price ?: BigDecimal.ZERO
+                ).getFormattedFull(),
+                marketDataValue = marketInfo.priceChangeValue(period)?.let {
+                    MarketDataValue.Diff(Value.Percent(it))
+                },
+                rank = marketInfo.marketCapRank?.toString(),
+                sortField = when (metricsType) {
+                    MetricsType.Volume24h -> marketInfo.totalVolume
+                    MetricsType.TotalMarketCap -> marketInfo.marketCap
+                    else -> null
+                }
+            )
+        }
+        return sortItems(marketItems, sortDescending)
     }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {

@@ -14,7 +14,6 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.chart.AbstractChartService
 import io.horizontalsystems.walletkit.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Single
 import java.math.BigDecimal
 
 class VaultChartService(
@@ -34,14 +33,14 @@ class VaultChartService(
     )
     override val chartViewType = ChartViewType.Line
 
-    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
+    override suspend fun getAllItems(currency: Currency): ChartPointsWrapper {
         return getChartPointsWrapper(initialChartInterval)
     }
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         return getChartPointsWrapper(chartInterval)
     }
 
@@ -73,23 +72,17 @@ class VaultChartService(
         }
     }
 
-    private fun getChartPointsWrapper(
+    private suspend fun getChartPointsWrapper(
         periodType: HsTimePeriod,
-    ): Single<ChartPointsWrapper> {
-        return try {
-            marketKit.vault(vaultAddress, currencyManager.baseCurrency.code, periodType)
-                .map { vault ->
-                    vault.chart.map { point ->
-                        ChartPoint(
-                            value = point.apy.toFloat(),
-                            timestamp = point.timestamp.toLong(),
-                            chartVolume = ChartVolume(point.tvl.toFloat(), ChartVolumeType.Tvl),
-                        )
-                    }
-                }
-                .map { ChartPointsWrapper(it) }
-        } catch (e: Exception) {
-            Single.error(e)
+    ): ChartPointsWrapper {
+        val vault = marketKit.vault(vaultAddress, currencyManager.baseCurrency.code, periodType)
+        val points = vault.chart.map { point ->
+            ChartPoint(
+                value = point.apy.toFloat(),
+                timestamp = point.timestamp.toLong(),
+                chartVolume = ChartVolume(point.tvl.toFloat(), ChartVolumeType.Tvl),
+            )
         }
+        return ChartPointsWrapper(points)
     }
 }

@@ -16,11 +16,8 @@ import io.horizontalsystems.walletkit.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.walletkit.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Single
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import retrofit2.HttpException
 import java.io.IOException
 import io.horizontalsystems.marketkit.models.ChartPoint as MarketKitChartPoint
@@ -47,7 +44,7 @@ class CoinOverviewChartService(
 
     override suspend fun start() {
         try {
-            chartStartTime = marketKit.chartStartTimeSingle(coinUid).await()
+            chartStartTime = marketKit.chartStartTimeSingle(coinUid)
         } catch (e: IOException) {
             Log.e("CoinOverviewChartService", "start error: ", e)
         } catch (e: HttpException) {
@@ -78,7 +75,7 @@ class CoinOverviewChartService(
         super.start()
     }
 
-    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
+    override suspend fun getAllItems(currency: Currency): ChartPointsWrapper {
         return getItemsByPeriodType(
             currency = currency,
             periodType = HsPeriodType.ByStartTime(chartStartTime),
@@ -86,10 +83,10 @@ class CoinOverviewChartService(
         )
     }
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         val periodType = if (indicatorsEnabled) {
             HsPeriodType.ByCustomPoints(chartInterval, chartIndicatorManager.getPointsCount())
         } else {
@@ -112,43 +109,37 @@ class CoinOverviewChartService(
         )
     }
 
-    private fun getItemsByPeriodType(
+    private suspend fun getItemsByPeriodType(
         currency: Currency,
         periodType: HsPeriodType,
         chartInterval: HsTimePeriod?
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         val newKey = currency.code
         if (newKey != updatesSubscriptionKey) {
             subscribeForUpdates(currency)
             updatesSubscriptionKey = newKey
         }
 
-        return chartInfoCached(currency, periodType)
-            .map { (startTimestamp, points) ->
-                doGetItems(startTimestamp, points, chartInterval)
-            }
+        val (startTimestamp, points) = chartInfoCached(currency, periodType)
+        return doGetItems(startTimestamp, points, chartInterval)
     }
 
-    private fun chartInfoCached(
+    private suspend fun chartInfoCached(
         currency: Currency,
         periodType: HsPeriodType
-    ): Single<Pair<Long, List<MarketKitChartPoint>>> {
+    ): Pair<Long, List<MarketKitChartPoint>> {
         val cacheKey = currency.code + periodType.serialize()
-        val cached = cache[cacheKey]
-        return if (cached != null) {
-            Single.just(cached)
-        } else {
-            marketKit.chartPointsSingle(coinUid, currency.code, periodType)
-                .doOnSuccess {
-                    cache[cacheKey] = it
-                }
+        cache[cacheKey]?.let { return it }
+
+        return marketKit.chartPointsSingle(coinUid, currency.code, periodType).also {
+            cache[cacheKey] = it
         }
     }
 
     private fun subscribeForUpdates(currency: Currency) {
         updatesJob?.cancel()
         updatesJob = coroutineScope.launch {
-            marketKit.coinPriceObservable("coin-overview-chart-service", coinUid, currency.code).asFlow().collect {
+            marketKit.coinPriceObservable("coin-overview-chart-service", coinUid, currency.code).collect {
                 dataInvalidated()
             }
         }

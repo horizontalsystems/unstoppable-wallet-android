@@ -15,7 +15,7 @@ class TopSectorsRepository(
     suspend fun get(baseCurrency: Currency, forceRefresh: Boolean): List<CoinCategoryWithTopCoins> =
         withContext(Dispatchers.IO) {
             if (forceRefresh || itemsCache == null) {
-                val coinCategories = marketKit.coinCategoriesSingle(baseCurrency.code).blockingGet()
+                val coinCategories = marketKit.coinCategoriesSingle(baseCurrency.code)
                 itemsCache = coinCategories.map { coinCategory ->
                     val topCoins = marketKit
                         .fullCoins(coinUids = coinCategory.topCoins)

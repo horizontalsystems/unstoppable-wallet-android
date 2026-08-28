@@ -11,7 +11,6 @@ import io.horizontalsystems.walletkit.modules.market.sort
 import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -33,7 +32,6 @@ class MarketPlatformCoinsRepository(
         val items = if (forceRefresh || currentCache == null) {
             val currency = currencyManager.baseCurrency
             marketKit.topPlatformCoinListSingle(platform.uid, currency.code)
-                .await()
         } else {
             currentCache
         }

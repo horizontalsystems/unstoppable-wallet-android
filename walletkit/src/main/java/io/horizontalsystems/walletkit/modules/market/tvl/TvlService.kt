@@ -10,7 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 
 class TvlService(
     private val currencyManager: CurrencyManager,
@@ -58,7 +57,7 @@ class TvlService(
                     chartInterval,
                     sortDescending,
                     forceRefresh
-                ).await()
+                )
                 marketTvlItemsObservable.onNext(DataState.Success(items))
             } catch (e: Throwable) {
                 marketTvlItemsObservable.onNext(DataState.Error(e))

@@ -12,7 +12,6 @@ import io.horizontalsystems.walletkit.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.walletkit.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.walletkit.modules.metricchart.MetricsType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Single
 
 class MetricsPageChartService(
     override val currencyManager: CurrencyManager,
@@ -35,17 +34,15 @@ class MetricsPageChartService(
 
     override val chartViewType = ChartViewType.Line
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         return globalMarketRepository.getGlobalMarketPoints(
             currency.code,
             chartInterval,
             metricsType
-        ).map {
-            ChartPointsWrapper(it)
-        }
+        ).let { ChartPointsWrapper(it) }
     }
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {

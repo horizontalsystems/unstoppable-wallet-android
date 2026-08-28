@@ -11,7 +11,6 @@ import io.horizontalsystems.marketkit.models.CoinReport
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class CoinReportsViewModel(private val service: CoinReportsService) : ViewModel() {
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
@@ -20,7 +19,7 @@ class CoinReportsViewModel(private val service: CoinReportsService) : ViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateObservable.asFlow()
+            service.stateObservable
                 .catch {
                     viewStateLiveData.postValue(ViewState.Error(it))
                 }

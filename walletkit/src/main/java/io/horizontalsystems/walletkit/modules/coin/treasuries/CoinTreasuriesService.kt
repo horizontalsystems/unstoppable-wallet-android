@@ -6,13 +6,14 @@ import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.modules.coin.treasuries.CoinTreasuriesModule.TreasuryTypeFilter
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinTreasury
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class CoinTreasuriesService(
     val coin: Coin,
@@ -21,9 +22,11 @@ class CoinTreasuriesService(
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val stateSubject = BehaviorSubject.create<DataState<List<CoinTreasury>>>()
-    val stateObservable: Observable<DataState<List<CoinTreasury>>>
-        get() = stateSubject
+    private val _stateObservable = MutableSharedFlow<DataState<List<CoinTreasury>>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val stateObservable: SharedFlow<DataState<List<CoinTreasury>>> = _stateObservable.asSharedFlow()
 
     val currency: Currency
         get() = currencyManager.baseCurrency
@@ -52,10 +55,10 @@ class CoinTreasuriesService(
     private fun fetch(forceRefresh: Boolean) {
         coroutineScope.launch {
             try {
-                val coinTreasuries = repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh).await()
-                stateSubject.onNext(DataState.Success(coinTreasuries))
+                val coinTreasuries = repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh)
+                _stateObservable.tryEmit(DataState.Success(coinTreasuries))
             } catch (e: Throwable) {
-                stateSubject.onNext(DataState.Error(e))
+                _stateObservable.tryEmit(DataState.Error(e))
             }
         }
     }

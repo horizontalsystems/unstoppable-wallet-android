@@ -15,8 +15,6 @@ import io.horizontalsystems.walletkit.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Single
-import kotlinx.coroutines.rx2.await
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -34,7 +32,7 @@ class PlatformChartService(
 
     override suspend fun start() {
         try {
-            chartStartTime = marketKit.topPlatformMarketCapStartTimeSingle(platform.uid).await()
+            chartStartTime = marketKit.topPlatformMarketCapStartTimeSingle(platform.uid)
         } catch (e: IOException) {
             Log.e("PlatformChartService", "start error: ", e)
         } catch (e: HttpException) {
@@ -51,14 +49,14 @@ class PlatformChartService(
         super.start()
     }
 
-    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
+    override suspend fun getAllItems(currency: Currency): ChartPointsWrapper {
         return getChartPointsWrapper(currency, HsPeriodType.ByStartTime(chartStartTime))
     }
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         return getChartPointsWrapper(currency, HsPeriodType.ByPeriod(chartInterval))
     }
 
@@ -71,16 +69,12 @@ class PlatformChartService(
         )
     }
 
-    private fun getChartPointsWrapper(
+    private suspend fun getChartPointsWrapper(
         currency: Currency,
         periodType: HsPeriodType,
-    ): Single<ChartPointsWrapper> {
-        return try {
-            marketKit.topPlatformMarketCapPointsSingle(platform.uid, currency.code, periodType)
-                .map { info -> info.map { ChartPoint(it.marketCap.toFloat(), it.timestamp) } }
-                .map { ChartPointsWrapper(it) }
-        } catch (e: Exception) {
-            Single.error(e)
-        }
+    ): ChartPointsWrapper {
+        val points = marketKit.topPlatformMarketCapPointsSingle(platform.uid, currency.code, periodType)
+            .map { ChartPoint(it.marketCap.toFloat(), it.timestamp) }
+        return ChartPointsWrapper(points)
     }
 }

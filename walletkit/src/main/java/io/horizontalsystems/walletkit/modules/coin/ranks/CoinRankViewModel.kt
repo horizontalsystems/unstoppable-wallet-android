@@ -19,7 +19,6 @@ import io.horizontalsystems.marketkit.models.RankMultiValue
 import io.horizontalsystems.marketkit.models.RankValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -144,14 +143,14 @@ class CoinRankViewModel(
 
     private suspend fun getRank(rankType: RankType, currencyCode: String) = withContext(Dispatchers.IO) {
         when (rankType) {
-            RankType.CexVolumeRank -> marketKit.cexVolumeRanksSingle(currencyCode).await()
-            RankType.DexVolumeRank -> marketKit.dexVolumeRanksSingle(currencyCode).await()
-            RankType.DexLiquidityRank -> marketKit.dexLiquidityRanksSingle(currencyCode).await()
-            RankType.AddressesRank -> marketKit.activeAddressRanksSingle(currencyCode).await()
-            RankType.TransactionCountRank -> marketKit.transactionCountsRanksSingle(currencyCode).await()
-            RankType.RevenueRank -> marketKit.revenueRanksSingle(currencyCode).await()
-            RankType.FeeRank -> marketKit.feeRanksSingle(currencyCode).await()
-            RankType.HoldersRank -> marketKit.holdersRanksSingle(currencyCode).await()
+            RankType.CexVolumeRank -> marketKit.cexVolumeRanksSingle(currencyCode)
+            RankType.DexVolumeRank -> marketKit.dexVolumeRanksSingle(currencyCode)
+            RankType.DexLiquidityRank -> marketKit.dexLiquidityRanksSingle(currencyCode)
+            RankType.AddressesRank -> marketKit.activeAddressRanksSingle(currencyCode)
+            RankType.TransactionCountRank -> marketKit.transactionCountsRanksSingle(currencyCode)
+            RankType.RevenueRank -> marketKit.revenueRanksSingle(currencyCode)
+            RankType.FeeRank -> marketKit.feeRanksSingle(currencyCode)
+            RankType.HoldersRank -> marketKit.holdersRanksSingle(currencyCode)
         }
     }
 

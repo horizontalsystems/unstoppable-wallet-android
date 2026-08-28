@@ -7,7 +7,6 @@ import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.modules.metricchart.MetricsType
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.Single
 import java.math.BigDecimal
 
 class GlobalMarketRepository(
@@ -16,60 +15,48 @@ class GlobalMarketRepository(
 
     private var cache: List<DefiMarketInfo> = listOf()
 
-    fun getGlobalMarketPoints(
+    suspend fun getGlobalMarketPoints(
         currencyCode: String,
         chartInterval: HsTimePeriod,
         metricsType: MetricsType
-    ): Single<List<ChartPoint>> {
+    ): List<ChartPoint> {
         return marketKit.globalMarketPointsSingle(currencyCode, chartInterval)
-            .map { list ->
-                list.map { point ->
-                    val value = when (metricsType) {
-                        MetricsType.TotalMarketCap -> point.marketCap
-                        MetricsType.Volume24h -> point.volume24h
-                        MetricsType.Etf -> point.defiMarketCap
-                        MetricsType.TvlInDefi -> point.tvl
-                    }
-
-                    val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance.toFloat() else null
-                    ChartPoint(value = value.toFloat(), timestamp = point.timestamp, dominance = dominance)
+            .map { point ->
+                val value = when (metricsType) {
+                    MetricsType.TotalMarketCap -> point.marketCap
+                    MetricsType.Volume24h -> point.volume24h
+                    MetricsType.Etf -> point.defiMarketCap
+                    MetricsType.TvlInDefi -> point.tvl
                 }
+
+                val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance.toFloat() else null
+                ChartPoint(value = value.toFloat(), timestamp = point.timestamp, dominance = dominance)
             }
     }
 
-    fun getTvlGlobalMarketPoints(
+    suspend fun getTvlGlobalMarketPoints(
         chain: String,
         currencyCode: String,
         chartInterval: HsTimePeriod,
-    ): Single<List<ChartPoint>> {
+    ): List<ChartPoint> {
         return marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, chartInterval)
-            .map { list ->
-                list.map { point ->
-                      ChartPoint(point.value.toFloat(), point.timestamp)
-                }
-            }
+            .map { point -> ChartPoint(point.value.toFloat(), point.timestamp) }
     }
 
-    fun getMarketTvlItems(
+    suspend fun getMarketTvlItems(
         currency: Currency,
         chain: TvlModule.Chain,
         chartInterval: HsTimePeriod?,
         sortDescending: Boolean,
         forceRefresh: Boolean
-    ): Single<List<TvlModule.MarketTvlItem>> =
-        Single.create { emitter ->
-            try {
-                val defiMarketInfos = defiMarketInfos(currency.code, forceRefresh)
-                val marketTvlItems = getMarketTvlItems(defiMarketInfos, currency, chain, chartInterval, sortDescending)
-                emitter.onSuccess(marketTvlItems)
-            } catch (error: Throwable) {
-                emitter.onError(error)
-            }
-        }
+    ): List<TvlModule.MarketTvlItem> {
+        val defiMarketInfos = defiMarketInfos(currency.code, forceRefresh)
+        return getMarketTvlItems(defiMarketInfos, currency, chain, chartInterval, sortDescending)
+    }
 
-    private fun defiMarketInfos(currencyCode: String, forceRefresh: Boolean): List<DefiMarketInfo> =
+    private suspend fun defiMarketInfos(currencyCode: String, forceRefresh: Boolean): List<DefiMarketInfo> =
         if (forceRefresh || cache.isEmpty()) {
-            val defiMarketInfo = marketKit.defiMarketInfosSingle(currencyCode).blockingGet()
+            val defiMarketInfo = marketKit.defiMarketInfosSingle(currencyCode)
 
             cache = defiMarketInfo
 
