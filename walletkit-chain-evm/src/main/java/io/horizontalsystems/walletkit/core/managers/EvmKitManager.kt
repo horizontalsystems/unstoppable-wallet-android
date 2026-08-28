@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URI
 
 class EvmKitManager(
@@ -268,14 +269,14 @@ class EvmKitWrapper(
         gasLimit: Long,
         nonce: Long?,
         mevProtectionEnabled: Boolean
-    ): FullTransaction {
+    ): FullTransaction = withContext(Dispatchers.IO) {
         if (signer == null) throw Exception()
         if (mevProtectionEnabled && merkleTransactionAdapter == null) throw Exception()
 
         val rawTransaction = evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
         val signature = signer.signature(rawTransaction)
 
-        return if (mevProtectionEnabled && merkleTransactionAdapter != null) {
+        if (mevProtectionEnabled && merkleTransactionAdapter != null) {
             merkleTransactionAdapter.send(rawTransaction, signature)
         } else {
             evmKit.send(rawTransaction, signature)
@@ -287,12 +288,12 @@ class EvmKitWrapper(
         gasPrice: GasPrice,
         gasLimit: Long,
         nonce: Long?,
-    ): EvmKitManager.SignedTx {
+    ): EvmKitManager.SignedTx = withContext(Dispatchers.IO) {
         if (signer == null) throw IllegalStateException("Signer not available")
         val rawTransaction = evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
         val signature = signer.signature(rawTransaction)
         val encoded = TransactionBuilder.encode(rawTransaction, signature, evmKit.chain.id)
-        return EvmKitManager.SignedTx(hex = encoded.toHexString(), txHash = CryptoUtils.sha3(encoded).toHexString())
+        EvmKitManager.SignedTx(hex = encoded.toHexString(), txHash = CryptoUtils.sha3(encoded).toHexString())
     }
 }
 

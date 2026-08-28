@@ -74,6 +74,9 @@ class EvmAccountManager(
         val evmKitWrapper = evmKitManager.evmKitWrapper ?: return
         val account = accountManager.activeAccount ?: return
 
+        // kitStartedFlow is a StateFlow and may conflate a rapid false -> true, so the
+        // collector for the previous wrapper has to be dropped here, not only on `false`.
+        transactionSubscriptionJob?.cancel()
         transactionSubscriptionJob = coroutineScope.launch {
             evmKitWrapper.evmKit.allTransactionsFlow
                 .collect { (fullTransactions, initial) ->
