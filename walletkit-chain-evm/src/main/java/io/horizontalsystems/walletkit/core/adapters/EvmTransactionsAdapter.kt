@@ -24,8 +24,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.rx2.asFlowable
 
 class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
@@ -67,13 +66,13 @@ class EvmTransactionsAdapter(
         get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.lastBlockHeightFlowable.map { }
+        get() = evmKit.lastBlockHeightFlow.map { }.asFlowable()
 
     override val transactionsState: AdapterState
         get() = convertToAdapterState(evmKit.transactionsSyncState)
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.transactionsSyncStateFlowable.map {}
+        get() = evmKit.transactionsSyncStateFlow.map { }.asFlowable()
 
     override val additionalTokenQueries: List<TokenQuery>
         get() = evmKit.getTagTokenContractAddresses().map { address ->
@@ -92,14 +91,14 @@ class EvmTransactionsAdapter(
                 getFilters(token, transactionType, address?.lowercase()),
                 from?.transactionHash?.hexStringToByteArray(),
                 limit
-            ).await(),
+            ),
             token
         )
     }
 
     override suspend fun getTransactionsAfter(fromTransactionId: String?): List<TransactionRecord> {
         return records(
-            evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull()).await(),
+            evmKit.getFullTransactionsAfter(fromTransactionId?.hexStringToByteArrayOrNull()),
             null
         )
     }
@@ -112,7 +111,7 @@ class EvmTransactionsAdapter(
             emptyList(),
             fromTransactionHash,
             limit
-        ).await()
+        )
     }
 
     override fun getTransactionRecordsFlow(
@@ -120,8 +119,7 @@ class EvmTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): Flow<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address))
-            .asFlow()
+        return evmKit.getFullTransactionsFlow(getFilters(token, transactionType, address))
             .map { records(it, token) }
     }
 

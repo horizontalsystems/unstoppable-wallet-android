@@ -67,7 +67,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.reflect.KClass
@@ -128,7 +127,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
     }
 
     override val walletReloadTrigger: Flow<*>
-        get() = evmKitManager.evmKitUpdatedObservable.asFlow()
+        get() = evmKitManager.evmKitUpdatedFlow
 
     override suspend fun refreshKit() {
         evmKitManager.evmKitWrapper?.evmKit?.refresh()

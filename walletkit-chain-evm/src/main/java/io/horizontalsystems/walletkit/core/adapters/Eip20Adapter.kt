@@ -21,8 +21,9 @@ import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -74,13 +75,13 @@ class Eip20Adapter(
         get() = convertToAdapterState(eip20Kit.syncState)
 
     override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.syncStateFlowable.map { }
+        get() = eip20Kit.syncStateFlow.map { }.asFlowable()
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(eip20Kit.balance, decimal))
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.balanceFlowable.map { Unit }
+        get() = eip20Kit.balanceFlow.map { }.asFlowable()
 
     // ISendEthereumAdapter
 
@@ -95,11 +96,9 @@ class Eip20Adapter(
         is SyncState.Syncing -> AdapterState.Syncing()
     }
 
-    fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
-        return eip20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
-                .map {
-                    scaleDown(it.toBigDecimal())
-                }
+    suspend fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): BigDecimal {
+        val allowance = eip20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
+        return scaleDown(allowance.toBigDecimal())
     }
 
     fun buildRevokeTransactionData(spenderAddress: Address): TransactionData {

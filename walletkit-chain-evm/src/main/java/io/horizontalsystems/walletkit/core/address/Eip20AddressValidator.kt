@@ -8,7 +8,6 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import kotlinx.coroutines.rx2.await
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
 class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
@@ -50,7 +49,6 @@ class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
                 validContractAddress,
                 method.contractMethod(evmAddress).encodedABI()
             )
-                .await()
 
         return !response.contains(1.toByte())
     }

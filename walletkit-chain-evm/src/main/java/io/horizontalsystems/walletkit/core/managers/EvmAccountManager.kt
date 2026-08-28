@@ -26,11 +26,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.util.concurrent.Executors
@@ -51,8 +47,7 @@ class EvmAccountManager(
 
     init {
         singleDispatcherCoroutineScope.launch {
-            evmKitManager.kitStartedObservable
-                .asFlow()
+            evmKitManager.kitStartedFlow
                 .collect { started ->
                     handleStarted(started)
                 }
@@ -80,7 +75,7 @@ class EvmAccountManager(
         val account = accountManager.activeAccount ?: return
 
         transactionSubscriptionJob = coroutineScope.launch {
-            evmKitWrapper.evmKit.allTransactionsFlowable.asFlow().cancellable()
+            evmKitWrapper.evmKit.allTransactionsFlow
                 .collect { (fullTransactions, initial) ->
                     handle(fullTransactions, account, evmKitWrapper, initial)
                 }
@@ -263,7 +258,7 @@ class EvmAccountManager(
             async {
                 if (contractAddress != null) {
                     val balance = try {
-                        dataProvider.getBalance(contractAddress, userAddress).await()
+                        dataProvider.getBalance(contractAddress, userAddress)
                     } catch (error: Throwable) {
                         null
                     }

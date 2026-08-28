@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class LegacyGasPriceService(
@@ -43,7 +42,7 @@ class LegacyGasPriceService(
             return it
         }
 
-        val gasPrice = gasPriceProvider.gasPriceSingle().await()
+        val gasPrice = gasPriceProvider.gasPrice()
         val adjustedGasPrice = gasPrice.coerceAtLeast(minRecommendedGasPrice ?: 0)
 
         recommendedGasPrice = adjustedGasPrice

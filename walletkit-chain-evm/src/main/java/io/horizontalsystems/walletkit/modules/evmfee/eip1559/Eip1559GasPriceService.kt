@@ -11,19 +11,17 @@ import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
 
 class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
-    private val refreshSignalFlowable: Flowable<Long>,
+    private val refreshSignalFlow: Flow<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
     private val initialGasPrice: GasPrice.Eip1559? = null
 ) : IEvmGasPriceService() {
@@ -61,7 +59,7 @@ class Eip1559GasPriceService(
         }
 
         coroutineScope.launch {
-            refreshSignalFlowable.asFlow().collect {
+            refreshSignalFlow.collect {
                 syncRecommended()
             }
         }
@@ -142,7 +140,7 @@ class Eip1559GasPriceService(
 
     private suspend fun syncRecommended() {
         try {
-            val feeHistory = gasProvider.feeHistorySingle(blocksCount, DefaultBlockParameter.Latest, rewardPercentile).await()
+            val feeHistory = gasProvider.feeHistory(blocksCount, DefaultBlockParameter.Latest, rewardPercentile)
             handle(feeHistory)
         } catch (error: Throwable) {
             handle(error)

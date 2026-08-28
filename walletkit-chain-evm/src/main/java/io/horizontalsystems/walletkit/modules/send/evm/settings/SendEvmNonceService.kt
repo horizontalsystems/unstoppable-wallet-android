@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
 class SendEvmNonceService(
@@ -30,7 +29,7 @@ class SendEvmNonceService(
 
     suspend fun start() {
         try {
-            latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+            latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest)
         } catch (e: Throwable) {
             e.printStackTrace()
         }
@@ -91,7 +90,7 @@ class SendEvmNonceService(
 
     private suspend fun setRecommended() = withContext(Dispatchers.IO) {
         try {
-            val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
+            val nonce = evmKit.getNonce(DefaultBlockParameter.Pending)
             sync(nonce, default = true)
         } catch (e: Throwable) {
             state = DataState.Error(e)
