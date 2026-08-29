@@ -91,7 +91,7 @@ import java.math.BigDecimal
 import kotlin.math.abs
 
 @Serializable
-data object EtfPage : HSPage() {
+data object EtfPage : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

@@ -49,7 +49,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MetricsPage(val metricsType: MetricsType) : HSPage() {
+data class MetricsPage(val metricsType: MetricsType) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

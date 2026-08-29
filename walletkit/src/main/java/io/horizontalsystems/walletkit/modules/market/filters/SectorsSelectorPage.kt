@@ -36,7 +36,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SectorsSelectorPage : HSPage() {
+data object SectorsSelectorPage : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

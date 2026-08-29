@@ -37,7 +37,7 @@ import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketSignalsPage : HSPage() {
+data object MarketSignalsPage : HSPage(accessibleWhileLocked = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         MarketSignalsScreen(navigation)

@@ -61,7 +61,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinRankPage(val type: RankType) : HSPage() {
+data class CoinRankPage(val type: RankType) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

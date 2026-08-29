@@ -33,7 +33,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VaultBlockchainsSelectorPage(val input: Input) : HSPage() {
+data class VaultBlockchainsSelectorPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

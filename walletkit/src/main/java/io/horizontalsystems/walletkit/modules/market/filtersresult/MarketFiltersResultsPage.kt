@@ -42,7 +42,7 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketFiltersResultsPage : HSPage() {
+data object MarketFiltersResultsPage : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

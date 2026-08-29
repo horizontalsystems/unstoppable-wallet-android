@@ -42,7 +42,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinTreasuriesPage(val input: Coin) : HSPage() {
+data class CoinTreasuriesPage(val input: Coin) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

@@ -36,8 +36,10 @@ internal class BottomSheetScene<T : Any>(
         // Default-dispatcher coroutine), so a sheet can slip onto the stack in the same frame the
         // app locks. Keep the entry on the stack but don't compose the sheet while locked: the
         // window is torn down for the whole lock, and the sheet re-enters intact on unlock.
-        val isLocked by App.pinComponent.isLockedFlow.collectAsStateWithLifecycle()
-        if (!isLocked) {
+        // Keyed on the keypad's visibility, not the raw lock: market sheets (filters, etc.) stay
+        // usable while browsing the Market tab locked.
+        val showUnlock by App.lockGate.showUnlockFlow.collectAsStateWithLifecycle()
+        if (!showUnlock) {
             ModalBottomSheet(
                 onDismissRequest = onBack,
                 sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded),

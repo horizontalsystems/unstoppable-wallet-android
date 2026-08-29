@@ -50,7 +50,7 @@ import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTopType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DetectorsPage(val input: Input) : HSPage() {
+data class DetectorsPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

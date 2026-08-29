@@ -9,7 +9,7 @@ import io.horizontalsystems.walletkit.modules.intro.IntroScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EntryPage : HSPage() {
+data object EntryPage : HSPage(accessibleWhileLocked = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val mainShowedOnce by

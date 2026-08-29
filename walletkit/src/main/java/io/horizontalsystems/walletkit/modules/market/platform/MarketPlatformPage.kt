@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MarketPlatformPage(val platform: Platform) : HSPage() {
+data class MarketPlatformPage(val platform: Platform) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

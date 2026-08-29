@@ -65,7 +65,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TvlPage : HSPage() {
+data object TvlPage : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
