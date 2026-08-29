@@ -95,6 +95,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIn
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
 import io.horizontalsystems.walletkit.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.walletkit.modules.pin.PinComponent
+import io.horizontalsystems.walletkit.modules.pin.core.LockGate
 import io.horizontalsystems.walletkit.modules.pin.core.PinDbStorage
 import io.horizontalsystems.walletkit.modules.roi.RoiManager
 import io.horizontalsystems.walletkit.modules.settings.appearance.AppIconService
@@ -119,6 +120,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -173,6 +175,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var coinManager: ICoinManager
         lateinit var wcSessionManager: WCSessionManager
         lateinit var wcManager: WCManager
+        lateinit var lockGate: LockGate
         var wcWalletRequestHandler: IWCWalletRequestHandler? = null
         lateinit var termsManager: ITermsManager
         lateinit var swapTermsManager: SwapTermsManager
@@ -383,6 +386,13 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinDbStorage = PinDbStorage(appDatabase.pinDao()),
             backgroundManager = backgroundManager,
             localStorage = localStorage
+        )
+
+        lockGate = LockGate(
+            isLockedFlow = pinComponent.isLockedFlow,
+            marketsTabEnabledFlow = localStorage.marketsTabEnabledFlow,
+            // Main.immediate: the held navigation action touches the nav back stack.
+            scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
         )
 
         statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider, backgroundManager)

@@ -29,7 +29,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object IndicatorsPage : HSPage() {
+data object IndicatorsPage : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

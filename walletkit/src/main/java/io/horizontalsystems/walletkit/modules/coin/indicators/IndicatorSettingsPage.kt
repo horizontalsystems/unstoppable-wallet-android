@@ -11,7 +11,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IndicatorSettingsPage(val input: Input) : HSPage() {
+data class IndicatorSettingsPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

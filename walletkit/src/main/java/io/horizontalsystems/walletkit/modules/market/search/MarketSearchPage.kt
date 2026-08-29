@@ -67,7 +67,7 @@ import kotlinx.serialization.Serializable
 import java.util.Optional
 
 @Serializable
-data object MarketSearchPage : HSPage() {
+data object MarketSearchPage : HSPage(accessibleWhileLocked = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<MarketSearchViewModel>(

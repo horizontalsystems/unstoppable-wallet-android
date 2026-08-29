@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.pin.ConfirmPinPage
 import io.horizontalsystems.walletkit.modules.pin.SetPinPage
+import io.horizontalsystems.walletkit.modules.pin.core.LockGate
 import io.horizontalsystems.walletkit.modules.settings.terms.TermsPage
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.subscriptions.core.IPaidAction
@@ -23,7 +24,10 @@ import kotlinx.serialization.serializerOrNull
 import java.util.UUID
 import kotlin.reflect.KClass
 
-class HSNavigation(val backStack: NavBackStack<HSPage>) {
+class HSNavigation(
+    val backStack: NavBackStack<HSPage>,
+    private val lockGate: LockGate = App.lockGate,
+) {
 
     fun slideFromRight(screen: HSPage) {
         screen.navType = NavigationType.SlideFromRight
@@ -95,6 +99,12 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
 
     private fun push(screen: HSPage): Boolean {
         verifyPageSerializable(screen)
+        // While the app is locked only read-only market pages open directly; anything else
+        // shows the keypad first and is pushed once the PIN is entered.
+        if (!screen.accessibleWhileLocked && lockGate.isLocked) {
+            lockGate.requireUnlocked { backStack.add(screen) }
+            return false
+        }
         return backStack.add(screen)
     }
 

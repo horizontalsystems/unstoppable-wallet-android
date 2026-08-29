@@ -43,7 +43,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VaultPage(val input: Input) : HSPage() {
+data class VaultPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

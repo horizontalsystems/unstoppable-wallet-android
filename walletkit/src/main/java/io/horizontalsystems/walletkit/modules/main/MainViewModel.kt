@@ -31,6 +31,7 @@ import io.horizontalsystems.walletkit.modules.coin.CoinPage
 import io.horizontalsystems.walletkit.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.walletkit.modules.market.platform.MarketPlatformPage
 import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
+import io.horizontalsystems.walletkit.modules.pin.core.LockGate
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WCListPage
@@ -53,7 +54,8 @@ class MainViewModel(
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
     private val networkManager: INetworkManager,
-    private val actionCompletedDelegate: ActionCompletedDelegate
+    private val actionCompletedDelegate: ActionCompletedDelegate,
+    private val lockGate: LockGate,
 ) : ViewModelUiState<MainModule.UiState>() {
 
     private var wcPendingRequestsCount = 0
@@ -106,7 +108,18 @@ class MainViewModel(
     private var torEnabled = localStorage.torEnabled
     private var openSendTokenSelect: OpenSendTokenSelect? = null
 
+    // App locked while a public screen was showing: fall back to the Market tab so the user
+    // keeps browsing instead of getting the keypad. The stored launch tab is left untouched.
+    private val restrictedLockListener: () -> Unit = {
+        if (items.contains(MainNavigation.Market)) {
+            selectTab(MainNavigation.Market)
+        }
+    }
+
     init {
+        reportSelectedTab()
+        lockGate.addRestrictedLockListener(restrictedLockListener)
+
         viewModelScope.launch {
             localStorage.marketsTabEnabledFlow.collect { enabled ->
                 marketsTabEnabled = enabled
@@ -172,6 +185,15 @@ class MainViewModel(
         updateTransactionsTabEnabled()
     }
 
+    override fun onCleared() {
+        lockGate.removeRestrictedLockListener(restrictedLockListener)
+        super.onCleared()
+    }
+
+    private fun reportSelectedTab() {
+        lockGate.selectedTab = selectedTabItem
+    }
+
     override fun createState() = MainModule.UiState(
         deeplinkPage = deeplinkPage,
         mainNavItems = mainNavItems,
@@ -212,18 +234,34 @@ class MainViewModel(
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
-        val newIndex = items.indexOf(mainNavItem)
-
-        if (newIndex == selectedTabIndex) {
+        if (items.indexOf(mainNavItem) == selectedTabIndex) {
             return
         }
 
+        if (lockGate.isLocked && !lockGate.isTabAccessibleWhileLocked(mainNavItem)) {
+            // Wallet tab tapped while browsing Market locked: ask for the PIN, then switch.
+            lockGate.requireUnlocked { select(mainNavItem) }
+            return
+        }
+
+        select(mainNavItem)
+    }
+
+    private fun select(mainNavItem: MainNavigation) {
         if (mainNavItem != MainNavigation.Settings) {
             currentMainTab = mainNavItem
         }
+        selectTab(mainNavItem)
+    }
 
+    private fun selectTab(mainNavItem: MainNavigation) {
+        val newIndex = items.indexOf(mainNavItem)
+        if (newIndex < 0 || newIndex == selectedTabIndex) {
+            return
+        }
         updateSelectedTab(selectedTabIndex, newIndex)
         selectedTabIndex = newIndex
+        reportSelectedTab()
         emitState()
     }
 
@@ -309,6 +347,9 @@ class MainViewModel(
             !marketsTabEnabled -> {
                 MainNavigation.Balance
             }
+
+            // Cold start while locked: open the public Market tab instead of the keypad.
+            lockGate.isRestricted -> MainNavigation.Market
 
             else -> getLaunchTab()
         }
@@ -417,6 +458,7 @@ class MainViewModel(
 
         if (structureChanged) {
             mainNavItems = newNavItems
+            reportSelectedTab()
             emitState()
         }
     }
@@ -521,6 +563,7 @@ class MainViewModel(
         updateSelectedTab(selectedTabIndex, newTabIndex)
         selectedTabIndex = newTabIndex
         syncNavigation()
+        reportSelectedTab()
         emitState()
     }
 

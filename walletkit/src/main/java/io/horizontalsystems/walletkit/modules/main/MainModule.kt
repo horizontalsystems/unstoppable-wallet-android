@@ -30,7 +30,8 @@ object MainModule {
                 App.wcSessionManager,
                 App.wcManager,
                 App.networkManager,
-                ActionCompletedDelegate
+                ActionCompletedDelegate,
+                App.lockGate,
             ) as T
         }
     }

@@ -23,6 +23,9 @@ abstract class HSPage(
     // for tall sheet content that would otherwise show partially
     val expandedBottomSheet: Boolean = false,
     val screenshotEnabled: Boolean = true,
+    // May be shown while the app is PIN-locked (read-only market content). Pushing a page
+    // without this while locked shows the keypad first — see LockGate.
+    val accessibleWhileLocked: Boolean = false,
     var resultKey: String? = null,
     val uuid: String = UUID.randomUUID().toString(),
     var navType: NavigationType = NavigationType.SlideFromRight,

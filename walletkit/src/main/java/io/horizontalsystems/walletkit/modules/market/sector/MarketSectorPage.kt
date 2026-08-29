@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MarketSectorPage(val input: CoinCategory) : HSPage() {
+data class MarketSectorPage(val input: CoinCategory) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

@@ -31,7 +31,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversa
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BlockchainsSelectorPage : HSPage() {
+data object BlockchainsSelectorPage : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {

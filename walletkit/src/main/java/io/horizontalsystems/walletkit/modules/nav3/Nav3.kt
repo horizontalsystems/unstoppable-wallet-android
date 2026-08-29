@@ -52,6 +52,9 @@ import io.horizontalsystems.dapp.core.HSDAppEvent
 fun Nav3(entryPage: HSPage) {
     val mainActivityViewModel = viewModel<MainActivityViewModel>(factory = Factory())
     val isLocked by App.pinComponent.isLockedFlow.collectAsState()
+    // The keypad covers only screens that need the wallet; the Market tab and its read-only
+    // pages stay browsable while locked (see LockGate).
+    val showUnlock by App.lockGate.showUnlockFlow.collectAsState()
 
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
@@ -65,7 +68,8 @@ fun Nav3(entryPage: HSPage) {
     IntentEffect(mainActivityViewModel, hsNavigation)
     Validate(mainActivityViewModel)
     HandleWcEvent(mainActivityViewModel, hsNavigation)
-    ToggleScreenshot(hsNavigation, isLocked)
+    ToggleScreenshot(hsNavigation, showUnlock)
+    ReportCurrentPageToLockGate(hsNavigation)
 
     LaunchedEffect(isLocked) {
         if (!isLocked) {
@@ -106,19 +110,24 @@ fun Nav3(entryPage: HSPage) {
         )
 
         AnimatedVisibility(
-            visible = isLocked,
+            visible = showUnlock,
             enter = fadeIn(),
             // Leaves immediately rather than fading. The secure flag is cleared as soon as the app
             // unlocks, so an exit animation would keep the keypad composited on a surface that is
             // capturable again. Entering is unaffected: the flag is set before the fade in starts.
             exit = ExitTransition.None
         ) {
-            PinUnlock(isLocked = isLocked)
+            PinUnlock(isLocked = showUnlock)
         }
     }
 
-    BackHandler(enabled = isLocked) {
-        activity?.moveTaskToBack(true)
+    BackHandler(enabled = showUnlock) {
+        if (App.lockGate.unlockRequested) {
+            // Keypad was opened for a wallet action from a public screen: back just dismisses it.
+            App.lockGate.cancelUnlockRequest()
+        } else {
+            activity?.moveTaskToBack(true)
+        }
     }
 }
 
@@ -260,17 +269,25 @@ private fun HandleWcEvent(
 }
 
 @Composable
-private fun ToggleScreenshot(navigation: HSNavigation, isLocked: Boolean) {
+private fun ReportCurrentPageToLockGate(navigation: HSNavigation) {
+    val currentScreen = navigation.lastOrNull()
+    LaunchedEffect(currentScreen) {
+        App.lockGate.currentPageAccessibleWhileLocked = currentScreen?.accessibleWhileLocked ?: false
+    }
+}
+
+@Composable
+private fun ToggleScreenshot(navigation: HSNavigation, showUnlock: Boolean) {
     val activity = LocalActivity.current
     val currentScreen = navigation.lastOrNull()
-    LaunchedEffect(currentScreen, isLocked) {
+    LaunchedEffect(currentScreen, showUnlock) {
         if (activity != null) {
             activity.currentFocus?.hideKeyboard(activity)
             // The unlock keypad is drawn as an overlay rather than pushed as a page, so it has no
             // screenshotEnabled of its own. Without the lock state here the flag stays however the
             // page underneath left it, and locking over an ordinary screen leaves passcode entry
             // recordable.
-            if (isLocked || currentScreen?.screenshotEnabled == false) {
+            if (showUnlock || currentScreen?.screenshotEnabled == false) {
                 activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
             } else {
                 activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
