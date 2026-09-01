@@ -385,7 +385,7 @@ class MainViewModel(
                 }
             }
 
-            deeplinkString.startsWith("$deeplinkScheme:") -> {
+            MarketDeepLinks.isMarketDeepLink(deeplinkString, deeplinkScheme) -> {
                 val uid = deepLink.getQueryParameter("uid")
                 when {
                     deeplinkString.contains("coin-page") -> {
@@ -488,6 +488,13 @@ class MainViewModel(
         }
         syncNavigation()
     }
+
+    /** Deeplink that resolves to Market content only (widget taps); safe to open while locked. */
+    fun isPublicDeepLink(uri: Uri): Boolean =
+        lockGate.isRestricted && MarketDeepLinks.isMarketDeepLink(
+            uri.toString(),
+            Translator.getString(R.string.DeeplinkScheme)
+        )
 
     fun deeplinkPageHandled() {
         deeplinkPage = null

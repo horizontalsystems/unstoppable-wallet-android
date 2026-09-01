@@ -14,6 +14,16 @@ data class MarketWidgetState(
     val error: String? = null,
     val updateTimestampMillis: Long = System.currentTimeMillis()
 ) {
+    /**
+     * State to show after a refresh attempt failed. Cached rows stay on screen (a stale price
+     * beats an error screen, e.g. during Doze when the network is cut); the error takes over the
+     * widget only when there is nothing cached yet.
+     */
+    fun afterRefreshFailure(errorText: String): MarketWidgetState = copy(
+        loading = false,
+        error = if (items.isEmpty()) errorText else null
+    )
+
     override fun toString(): String {
         return "{ widgetId: $widgetId, " +
                 "type: ${type.id}, " +

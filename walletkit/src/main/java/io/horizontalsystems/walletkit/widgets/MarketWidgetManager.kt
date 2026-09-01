@@ -11,18 +11,21 @@ import coil.request.ErrorResult
 import coil.request.ImageRequest
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.net.UnknownHostException
 
 class MarketWidgetManager {
 
-    private var coroutineScope: CoroutineScope? = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     fun updateWatchListWidgets() {
-        coroutineScope?.launch {
+        coroutineScope.launch {
             val context = App.instance
             val manager = GlanceAppWidgetManager(context)
             val glanceIds = manager.getGlanceIds(MarketWidget::class.java)
@@ -36,25 +39,46 @@ class MarketWidgetManager {
         }
     }
 
-    fun refresh(glanceId: GlanceId) {
-        coroutineScope?.launch {
-            val context = App.instance
-            try {
-                executeWithRetry {
-                    updateData(glanceId)
-                }
-            } catch (exception: Exception) {
-                var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
+    /**
+     * Fire-and-forget refresh for callers that cannot suspend. Prefer [refresh] from a worker or
+     * an action callback: the process may be killed as soon as those return, and a refresh left
+     * running on a detached scope would die with it.
+     */
+    fun refreshInBackground(glanceId: GlanceId) {
+        coroutineScope.launch { refresh(glanceId) }
+    }
 
-                val errorText = if (exception is UnknownHostException)
-                    context.getString(R.string.Hud_Text_NoInternet)
-                else {
-                    context.getString(R.string.SyncError) + "\n\n\n" + "[ ${state.error} ]"
-                }
-
-                state = state.copy(loading = false, error = errorText)
-                setWidgetState(context, glanceId, state)
+    /**
+     * Fetches fresh data for the widget and re-renders it.
+     *
+     * @return true when the data was updated, false when every attempt failed. On failure the
+     * previously shown items are kept; the error is only shown when there is nothing to show.
+     */
+    suspend fun refresh(glanceId: GlanceId): Boolean {
+        val context = App.instance
+        return try {
+            executeWithRetry {
+                updateData(glanceId)
             }
+            true
+        } catch (exception: CancellationException) {
+            throw exception
+        } catch (exception: Exception) {
+            Timber.e(exception, "Market widget refresh failed")
+            var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
+
+            val errorText = if (exception is UnknownHostException) {
+                context.getString(R.string.Hud_Text_NoInternet)
+            } else {
+                context.getString(R.string.SyncError) + "\n\n\n" + "[ ${exception.message} ]"
+            }
+
+            state = state.afterRefreshFailure(errorText)
+            setWidgetState(context, glanceId, state)
+            // Doze or airplane mode: sync as soon as connectivity is back rather than waiting
+            // for the next periodic slot.
+            MarketWidgetWorker.enqueueSyncWhenOnline(context)
+            false
         }
     }
 
@@ -70,9 +94,15 @@ class MarketWidgetManager {
         var marketItems = marketRepository.getMarketItems(state.type)
         marketItems = marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
 
-        state = state.copy(items = marketItems, loading = false, error = null)
+        state = state.copy(
+            items = marketItems,
+            loading = false,
+            error = null,
+            updateTimestampMillis = System.currentTimeMillis()
+        )
         setWidgetState(context, glanceId, state)
 
+        // Icons are best effort: a missing image must not fail the rates update.
         marketItems = marketItems.map { item ->
             item.copy(
                 imageLocalPath = item.imageLocalPath ?: getImage(
@@ -83,12 +113,10 @@ class MarketWidgetManager {
             )
         }
 
-        state =
-            state.copy(
-                items = marketItems,
-                updateTimestampMillis = System.currentTimeMillis()
-            )
-        setWidgetState(context, glanceId, state)
+        if (marketItems != state.items) {
+            state = state.copy(items = marketItems)
+            setWidgetState(context, glanceId, state)
+        }
     }
 
     @OptIn(ExperimentalCoilApi::class)
@@ -130,24 +158,29 @@ class MarketWidgetManager {
         MarketWidget().update(context, glanceId)
     }
 
-    private val MAX_RETRIES = 5
-
     private suspend inline fun executeWithRetry(call: () -> Unit) {
         for (i in 0..MAX_RETRIES) {
             try {
                 call.invoke()
                 break
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: UnknownHostException) {
+                // No network: retrying in-process is pointless, the online sync job handles it.
+                throw e
             } catch (e: Exception) {
-                delay(2000)
-
                 if (i == MAX_RETRIES) {
                     throw e
                 }
+                delay(RETRY_DELAY_MILLIS)
             }
         }
     }
 
     companion object {
+        private const val MAX_RETRIES = 5
+        private const val RETRY_DELAY_MILLIS = 2000L
+
         fun getMarketWidgetTypes(): List<MarketWidgetType> {
             val types = MarketWidgetType.values().toMutableList()
             if (!App.localStorage.marketsTabEnabled) {
