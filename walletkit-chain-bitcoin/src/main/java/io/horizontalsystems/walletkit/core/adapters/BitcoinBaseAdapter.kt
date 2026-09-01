@@ -51,7 +51,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import java.util.Date
 
@@ -203,7 +202,6 @@ abstract class BitcoinBaseAdapter(
     ): List<TransactionRecord> {
         return try {
             kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit)
-                .await()
                 .map { tx -> transactionRecord(tx) }
         } catch (e: UnsupportedFilterException) {
             listOf()
@@ -313,9 +311,6 @@ abstract class BitcoinBaseAdapter(
         )
 
         val transaction = kit.getTransaction(fullTransaction.header.hash.toReversedHex())
-
-//        val list = kit.transactions(limit = 1).blockingGet()
-//        val transaction = list.first()
 
         return transaction?.let { transactionRecord(it) }
     }
