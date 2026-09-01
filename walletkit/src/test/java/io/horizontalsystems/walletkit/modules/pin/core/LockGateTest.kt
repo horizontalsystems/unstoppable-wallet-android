@@ -232,6 +232,42 @@ class LockGateTest {
     }
 
     @Test
+    fun `throwing pending action does not break the gate`() {
+        gate.selectedTab = MainNavigation.Market
+
+        gate.requireUnlocked { throw RuntimeException("boom") }
+        isLocked.value = false // must not propagate
+
+        // Collector must still be alive: later transitions keep updating the state.
+        isLocked.value = true
+        gate.selectedTab = MainNavigation.Balance
+        assertTrue(gate.showUnlock)
+
+        var runs = 0
+        gate.requireUnlocked { runs++ }
+        isLocked.value = false
+        assertEquals(1, runs)
+        assertFalse(gate.showUnlock)
+    }
+
+    @Test
+    fun `throwing listener does not break the gate or other listeners`() {
+        isLocked.value = false
+        gate.selectedTab = MainNavigation.Balance
+        var notified = 0
+        gate.addRestrictedLockListener { throw RuntimeException("boom") }
+        gate.addRestrictedLockListener { notified++ }
+
+        isLocked.value = true // must not propagate
+
+        assertEquals(1, notified)
+        assertTrue(gate.showUnlock)
+
+        isLocked.value = false
+        assertFalse(gate.showUnlock)
+    }
+
+    @Test
     fun `listener switching tab to market keeps keypad hidden`() {
         isLocked.value = false
         gate.selectedTab = MainNavigation.Balance
