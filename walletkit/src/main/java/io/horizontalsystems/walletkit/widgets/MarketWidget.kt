@@ -324,6 +324,8 @@ class UpdateMarketAction : ActionCallback {
         }
         MarketWidget().update(context, glanceId)
 
+        // Awaited on purpose: the callback's receiver is finished as soon as this returns and
+        // a detached refresh may not survive that.
         MarketWidgetManager().refresh(glanceId)
     }
 }

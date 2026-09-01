@@ -125,11 +125,13 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
         scope.launch {
             glanceId?.let {
                 updateAppWidgetState(context, MarketWidgetStateDefinition, glanceId) {
-                    it.copy(widgetId = appWidgetId, type = selectedType)
+                    // Reconfiguring: drop the previous type's rows and show the spinner
+                    // until the new data arrives.
+                    it.copy(widgetId = appWidgetId, type = selectedType, items = emptyList(), loading = true, error = null)
                 }
                 MarketWidget().update(context, glanceId)
-                MarketWidgetManager().refresh(glanceId)
                 MarketWidgetWorker.enqueueWork(App.instance)
+                App.marketWidgetManager.refreshInBackground(glanceId)
             }
 
             val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)

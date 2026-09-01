@@ -88,10 +88,13 @@ private fun MainScreen(
     // while the app is locked would be acted on behind the lock screen — referral registration,
     // TonConnect links, prefilled send flows, the WalletConnect list. The intent is deliberately
     // left unconsumed (no intentHandled() call) so this effect re-runs when isLocked flips back.
+    // Market deeplinks (widget taps) only open pages that are browsable while locked, so they
+    // go through right away.
     LaunchedEffect(activityIntent, isLocked) {
-        if (isLocked) return@LaunchedEffect
+        val uri = activityIntent?.data
+        if (isLocked && !(uri != null && viewModel.isPublicDeepLink(uri))) return@LaunchedEffect
 
-        activityIntent?.data?.let {
+        uri?.let {
             delay(1000)
             viewModel.handleDeepLink(it)
             mainActivityViewModel.intentHandled()
