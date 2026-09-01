@@ -450,14 +450,25 @@ class USwapProvider(
         token: Token,
         amountOut: BigDecimal,
         slippage: BigDecimal,
+    ): UnstoppableAPI.Response.Rate = exactOutputRate(token, token, amountOut, slippage)
+
+    // /v2/rate in exact-output mode across assets (the CrossPay shape): buyAmount = what the
+    // recipient must receive in tokenOut, sellAmount comes back as the answer. Returns the
+    // whole response so the caller can read providerErrors when no route comes back.
+    suspend fun exactOutputRate(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountOut: BigDecimal,
+        slippage: BigDecimal,
     ): UnstoppableAPI.Response.Rate {
-        val asset = assetsMap[token] ?: deriveIdentifier(token) ?: throw IllegalStateException("No identifier for token")
-        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[token.blockchainType] else null
+        val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
         return unstoppableAPI.rate(
             UnstoppableAPI.Request.Rate(
-                sellAsset = asset,
-                buyAsset = asset,
+                sellAsset = sellAsset,
+                buyAsset = buyAsset,
                 slippage = slippage,
                 providers = setOf(provider.id),
                 chainId = chainId,
@@ -476,14 +487,28 @@ class USwapProvider(
         destinationAddress: String,
         refundAddress: String,
         slippage: BigDecimal,
+    ): UnstoppableAPI.Response.Route =
+        exactOutputCommit(token, token, amountOut, destinationAddress, refundAddress, slippage)
+
+    // /v2/swap in exact-output mode across assets (the CrossPay shape). `sourceAddress` is
+    // never sent: every exact-output route executes as a plain transfer the app builds
+    // itself, so the server has no tx to build and no need for the sender's address.
+    suspend fun exactOutputCommit(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountOut: BigDecimal,
+        destinationAddress: String,
+        refundAddress: String,
+        slippage: BigDecimal,
     ): UnstoppableAPI.Response.Route {
-        val asset = assetsMap[token] ?: deriveIdentifier(token) ?: throw IllegalStateException("No identifier for token")
-        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[token.blockchainType] else null
+        val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
         val route = unstoppableAPI.swap(
             UnstoppableAPI.Request.Swap(
-                sellAsset = asset,
-                buyAsset = asset,
+                sellAsset = sellAsset,
+                buyAsset = buyAsset,
                 slippage = slippage,
                 provider = provider.id,
                 destinationAddress = destinationAddress,
@@ -499,6 +524,18 @@ class USwapProvider(
 
         return route
     }
+
+    /**
+     * The deposit transfer for a route committed in exact-output mode: exactly
+     * [depositAmount] (the route's execution.amount) to its deposit address, in the same
+     * per-chain shapes the swap confirmation uses — including the attachment
+     * deliverability rules.
+     */
+    fun depositTransactionData(
+        tokenIn: Token,
+        depositAmount: BigDecimal,
+        route: UnstoppableAPI.Response.Route,
+    ): SendTransactionData = getSendTransactionData(tokenIn, depositAmount, route)
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -530,7 +567,12 @@ class USwapProvider(
         } else {
             null
         }
-        val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+        val refundAddress = if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenIn)
+                ?: SwapHelper.getReceiveAddressForToken(tokenIn)
+        } else {
+            SwapHelper.getReceiveAddressForToken(tokenIn)
+        }
 
         val bestRoute = commitSwap(
             tokenIn,

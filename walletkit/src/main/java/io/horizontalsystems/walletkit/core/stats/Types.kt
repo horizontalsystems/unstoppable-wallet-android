@@ -58,6 +58,7 @@ enum class StatPage(val key: String) {
     Contacts("contacts"),
     ContactAddToExisting("contact_add_to_existing"),
     ContactNew("contact_new"),
+    CrossPay("cross_pay"),
     ContactUs("contact_us"),
     Donate("donate"),
     DonateAddressList("donate_address_list"),

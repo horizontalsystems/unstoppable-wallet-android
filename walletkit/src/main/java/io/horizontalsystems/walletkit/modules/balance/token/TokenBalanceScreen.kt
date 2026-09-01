@@ -55,6 +55,7 @@ import io.horizontalsystems.walletkit.modules.balance.ZcashLockedValue
 import io.horizontalsystems.walletkit.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.walletkit.modules.balance.ui.ZcashMigrationBottomSheet
 import io.horizontalsystems.walletkit.modules.coin.CoinPage
+import io.horizontalsystems.walletkit.modules.crosspay.CrossPayPage
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.receive.ReceivePage
@@ -892,6 +893,18 @@ private fun ButtonsRow(
                 )
             },
         )
+        if (viewItem.swapVisible && viewItem.wallet.token.blockchainType == BlockchainType.Zcash) {
+            BalanceActionButton(
+                variant = ButtonVariant.Secondary,
+                icon = R.drawable.arrow_m_right_24,
+                title = stringResource(R.string.Balance_Pay),
+                onClick = {
+                    navigation.slideFromRight(CrossPayPage(CrossPayPage.Input(viewItem.wallet)))
+
+                    stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.CrossPay))
+                },
+            )
+        }
         if (viewItem.swapVisible) {
             BalanceActionButton(
                 variant = ButtonVariant.Secondary,
