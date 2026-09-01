@@ -102,7 +102,11 @@ object MainModule {
         val torEnabled: Boolean,
         val wcSupportState: WCManager.SupportState?,
         val openSend: OpenSendTokenSelect?,
-        val selectedTabItem: MainNavigation
+        val selectedTabItem: MainNavigation,
+        // Render this tab change without animation. Travels in the same state emission as
+        // selectedTabItem so the decision cannot race the lock state: a crossfade after the
+        // lock fallback would keep the outgoing wallet tab composed while locked.
+        val snapTabSwitch: Boolean = false,
     )
 }
 
