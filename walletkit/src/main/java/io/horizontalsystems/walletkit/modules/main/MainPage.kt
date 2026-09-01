@@ -94,9 +94,17 @@ private fun MainScreen(
     // go through right away.
     LaunchedEffect(activityIntent, isLocked) {
         val uri = activityIntent?.data
-        if (isLocked && !(uri != null && viewModel.isPublicDeepLink(uri))) return@LaunchedEffect
+        val publicWhileLocked = isLocked && uri != null && viewModel.isPublicDeepLink(uri)
+        if (isLocked && !publicWhileLocked) return@LaunchedEffect
 
         uri?.let {
+            if (publicWhileLocked) {
+                // The app may be sitting on the keypad because of a pending unlock request
+                // (e.g. a wallet tab was tapped earlier). The user now asked for public
+                // content, so drop that request — otherwise the keypad would keep covering
+                // the page this deeplink opens.
+                viewModel.cancelPendingUnlockRequest()
+            }
             delay(1000)
             viewModel.handleDeepLink(it)
             mainActivityViewModel.intentHandled()
