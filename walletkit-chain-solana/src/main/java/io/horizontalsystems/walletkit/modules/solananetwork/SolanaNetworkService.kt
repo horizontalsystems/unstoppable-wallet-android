@@ -3,22 +3,19 @@ package io.horizontalsystems.walletkit.modules.solananetwork
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.solanakit.models.RpcSource
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class SolanaNetworkService(
         private val rpcSourceManager: SolanaRpcSourceManager,
 ) : Clearable {
-    private val disposables = CompositeDisposable()
 
-    private val itemsSubject = BehaviorSubject.create<List<Item>>()
-    var items = listOf<Item>()
-        private set(value) {
-            field = value
+    private val _itemsFlow = MutableStateFlow<List<Item>>(listOf())
+    val itemsFlow: StateFlow<List<Item>> = _itemsFlow.asStateFlow()
 
-            itemsSubject.onNext(value)
-        }
+    val items: List<Item>
+        get() = _itemsFlow.value
 
     private val currentRpcSource: RpcSource
         get() = rpcSourceManager.rpcSource
@@ -30,13 +27,10 @@ class SolanaNetworkService(
     private fun syncItems() {
         val currentRpcSourceName = currentRpcSource.name
 
-        items = rpcSourceManager.allRpcSources.map { rpcSource ->
+        _itemsFlow.value = rpcSourceManager.allRpcSources.map { rpcSource ->
             Item(rpcSource, rpcSource.name == currentRpcSourceName)
         }
     }
-
-    val itemsObservable: Observable<List<Item>>
-        get() = itemsSubject
 
     fun setCurrentSource(name: String) {
         if (currentRpcSource.name == name) return
@@ -46,9 +40,7 @@ class SolanaNetworkService(
         rpcSourceManager.save(rpcSource)
     }
 
-    override fun clear() {
-        disposables.clear()
-    }
+    override fun clear() = Unit
 
     data class Item(val rpcSource: RpcSource, val selected: Boolean)
 

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewModel() {
 
@@ -22,7 +21,7 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
 
     init {
         viewModelScope.launch {
-            service.itemsObservable.asFlow().collect {
+            service.itemsFlow.collect {
                 sync(it)
             }
         }
