@@ -489,6 +489,11 @@ class MainViewModel(
         syncNavigation()
     }
 
+    /** Dismisses a keypad shown for a deferred action and drops that action. */
+    fun cancelPendingUnlockRequest() {
+        lockGate.cancelUnlockRequest()
+    }
+
     /** Deeplink that resolves to Market content only (widget taps); safe to open while locked. */
     fun isPublicDeepLink(uri: Uri): Boolean =
         lockGate.isRestricted && MarketDeepLinks.isMarketDeepLink(
