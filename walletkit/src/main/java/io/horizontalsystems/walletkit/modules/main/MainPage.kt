@@ -173,10 +173,11 @@ private fun MainScreen(
         Column {
             Crossfade(
                 targetState = uiState.selectedTabItem,
-                // Snap while locked: after the lock fallback switches to Market, a crossfade
-                // would keep the outgoing wallet tab composed and visible (and capturable,
-                // FLAG_SECURE is already cleared) for the animation's duration.
-                animationSpec = if (isLocked) snap() else tween()
+                // snapTabSwitch arrives in the same UiState emission as the tab itself, so a
+                // locked-time switch (lock fallback, widget deeplink) can never start animating
+                // before the lock state reaches this composition. isLocked stays as
+                // belt-and-braces: snapping while locked is always safe.
+                animationSpec = if (uiState.snapTabSwitch || isLocked) snap() else tween()
             ) { navItem ->
                 when (navItem) {
                     MainNavigation.Market -> MarketScreen(navigation)
