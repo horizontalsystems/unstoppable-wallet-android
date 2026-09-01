@@ -25,7 +25,7 @@ class MarketWidgetManager {
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     fun updateWatchListWidgets() {
-        coroutineScope.launch {
+        launchContained {
             val context = App.instance
             val manager = GlanceAppWidgetManager(context)
             val glanceIds = manager.getGlanceIds(MarketWidget::class.java)
@@ -45,7 +45,22 @@ class MarketWidgetManager {
      * running on a detached scope would die with it.
      */
     fun refreshInBackground(glanceId: GlanceId) {
-        coroutineScope.launch { refresh(glanceId) }
+        launchContained { refresh(glanceId) }
+    }
+
+    // refresh() catches fetch errors itself, but its failure path (widget state IO, work
+    // scheduling) can throw too; nothing above this scope handles that, so it would crash
+    // the app. Contain everything except cancellation.
+    private fun launchContained(block: suspend () -> Unit) {
+        coroutineScope.launch {
+            try {
+                block()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Timber.e(e, "Market widget update failed")
+            }
+        }
     }
 
     /**

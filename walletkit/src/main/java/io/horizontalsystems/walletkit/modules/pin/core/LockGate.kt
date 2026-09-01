@@ -1,11 +1,13 @@
 package io.horizontalsystems.walletkit.modules.pin.core
 
 import io.horizontalsystems.walletkit.modules.main.MainModule.MainNavigation
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Decides when the PIN keypad has to cover the screen.
@@ -71,12 +73,12 @@ class LockGate(
                     pendingAction = null
                     _unlockRequestedFlow.value = false
                     recompute()
-                    action?.invoke()
+                    action?.let { runDeferred(it) }
                 } else {
                     if (!wasLocked && marketsTabEnabledFlow.value && currentPageAccessibleWhileLocked) {
                         // Locked while browsing something public: let the main screen fall back
                         // to the Market tab so the user is not faced with the keypad.
-                        restrictedLockListeners.toList().forEach { it.invoke() }
+                        restrictedLockListeners.toList().forEach { runDeferred(it) }
                     }
                     recompute()
                 }
@@ -121,6 +123,18 @@ class LockGate(
 
     fun removeRestrictedLockListener(listener: () -> Unit) {
         restrictedLockListeners.remove(listener)
+    }
+
+    // A throwing callback must not cancel the isLockedFlow collector: the gate would stop
+    // recomputing and showUnlockFlow would go stale on every later lock transition.
+    private fun runDeferred(block: () -> Unit) {
+        try {
+            block.invoke()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Timber.e(e, "LockGate callback failed")
+        }
     }
 
     private fun currentScreenAccessible(): Boolean {

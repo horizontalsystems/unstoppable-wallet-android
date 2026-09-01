@@ -1,6 +1,8 @@
 package io.horizontalsystems.walletkit.modules.main
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -161,7 +163,13 @@ private fun MainScreen(
         }
     ) { paddingValues ->
         Column {
-            Crossfade(uiState.selectedTabItem) { navItem ->
+            Crossfade(
+                targetState = uiState.selectedTabItem,
+                // Snap while locked: after the lock fallback switches to Market, a crossfade
+                // would keep the outgoing wallet tab composed and visible (and capturable,
+                // FLAG_SECURE is already cleared) for the animation's duration.
+                animationSpec = if (isLocked) snap() else tween()
+            ) { navItem ->
                 when (navItem) {
                     MainNavigation.Market -> MarketScreen(navigation)
                     MainNavigation.Balance -> BalanceScreen(navigation)
