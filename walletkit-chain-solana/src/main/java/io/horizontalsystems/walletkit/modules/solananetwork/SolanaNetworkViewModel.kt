@@ -21,8 +21,8 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
 
     init {
         viewModelScope.launch {
-            service.itemsFlow.collect {
-                sync(it)
+            service.stateFlow.collect {
+                sync(it.items)
             }
         }
     }
