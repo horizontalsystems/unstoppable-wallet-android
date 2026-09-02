@@ -104,15 +104,21 @@ class SolanaTransactionConverter(
             val query = TokenQuery(BlockchainType.Solana, TokenType.Spl(tokenTransfer.mintAddress))
             val token = coinManager.getToken(query)
 
+            // SolanaKit stores transfer amounts unsigned (direction lives in `incoming`), but the
+            // transactions list derives the displayed +/- from the value's sign — negate outgoing
+            // amounts, matching the SOL leg above. NFT values stay unsigned: NFT rendering passes
+            // direction explicitly and shows the count.
+            val amount = if (tokenTransfer.incoming) tokenTransfer.amount else tokenTransfer.amount.negate()
+
             val transactionValue = when {
-                token != null -> TransactionValue.CoinValue(token, tokenTransfer.amount.movePointLeft(token.decimals))
+                token != null -> TransactionValue.CoinValue(token, amount.movePointLeft(token.decimals))
                 mintAccount.isNft -> TransactionValue.NftValue(
                     NftUid.Solana(mintAccount.address),
                     tokenTransfer.amount,
                     mintAccount.name,
                     mintAccount.symbol
                 )
-                else -> TransactionValue.RawValue(value = tokenTransfer.amount.toBigInteger())
+                else -> TransactionValue.RawValue(value = amount.toBigInteger())
             }
 
             if (tokenTransfer.incoming) {
@@ -188,16 +194,20 @@ class SolanaTransactionConverter(
 
     companion object {
         // Upper bound for a SOL leg that may be treated as associated-token-account rent rather than
-        // a real payment. Set to ~one account's rent: the rent-exempt minimum for a single
-        // SPL/Token-2022 associated token account is ~0.00204 SOL (≤ ~0.00208 for a Token-2022
-        // account with the immutable-owner extension), the common case for an SPL send that creates
-        // the recipient's account. Kept this tight on purpose so that — since `createdTokenAccount`
-        // is transaction-level and the SOL side is a single NET amount we can't split into rent vs.
-        // payment — a real payment bundled with a create pushes the net past this bound and is shown
-        // as a composite transfer; only sub-cent dust could ever fold into the rent. A larger SOL
-        // leg (a genuine payment, or several created accounts) is likewise kept — showing more,
-        // never hiding. See collapseTokenWithSolRent; exact per-leg attribution would need SolanaKit.
-        private val maxSolRent = BigDecimal("0.0021")
+        // a real payment. Set to ~one account's rent: the rent-exempt minimum for a classic SPL
+        // associated token account (165 bytes) is ~0.00204 SOL, but a Token-2022 account also
+        // carries extension data — immutable-owner plus the mint-required account extensions
+        // (transfer-fee amount, transfer-hook flag, …) — observed on mainnet at 0.00207–0.00220 SOL
+        // (e.g. 0.00210888 for a Pump.fun ATA). The bound must sit ABOVE that range: at 0.0021 a
+        // Token-2022 send that created the recipient's account kept its rent leg and fell through
+        // to "Unknown Transaction". Kept tight beyond that headroom on purpose — since
+        // `createdTokenAccount` is transaction-level and the SOL side is a single NET amount we
+        // can't split into rent vs. payment, a real payment bundled with a create pushes the net
+        // past this bound and is shown as a composite transfer; only sub-cent dust could ever fold
+        // into the rent. A larger SOL leg (a genuine payment, or several created accounts) is
+        // likewise kept — showing more, never hiding. See collapseTokenWithSolRent; exact per-leg
+        // attribution would need SolanaKit support.
+        private val maxSolRent = BigDecimal("0.0023")
 
         // Display labels for the swap programs SolanaKit recognizes (`Transaction.programIds`).
         // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").
