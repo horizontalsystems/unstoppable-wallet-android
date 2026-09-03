@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.toLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Clearable
@@ -14,9 +14,7 @@ import io.horizontalsystems.walletkit.core.description
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.reactivex.BackpressureStrategy
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class RestoreBlockchainsViewModel(
     private val service: RestoreBlockchainsService,
@@ -28,17 +26,17 @@ class RestoreBlockchainsViewModel(
     var restored by mutableStateOf(false)
         private set
     val restoreEnabledLiveData: LiveData<Boolean>
-        get() = service.canRestore.toFlowable(BackpressureStrategy.DROP).toLiveData()
+        get() = service.canRestore.asLiveData()
 
     init {
         viewModelScope.launch {
-            service.itemsObservable.asFlow().collect {
+            service.itemsFlow.collect {
                 sync(it)
             }
         }
 
         viewModelScope.launch {
-            service.cancelEnableBlockchainObservable.asFlow().collect {
+            service.cancelEnableBlockchainFlow.collect {
                 disableBlockchainLiveData.postValue(it.uid)
             }
         }

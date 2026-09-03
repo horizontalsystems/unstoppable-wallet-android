@@ -3,11 +3,13 @@ package io.horizontalsystems.walletkit.modules.market.tvl
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class TvlService(
@@ -19,8 +21,8 @@ class TvlService(
 
     val currency by currencyManager::baseCurrency
 
-    val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
-        BehaviorSubject.create()
+    private val _marketTvlItemsFlow = MutableSharedFlow<DataState<List<TvlModule.MarketTvlItem>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val marketTvlItemsFlow: Flow<DataState<List<TvlModule.MarketTvlItem>>> = _marketTvlItemsFlow
 
     private var chartInterval: HsTimePeriod? = HsTimePeriod.Day1
         set(value) {
@@ -57,9 +59,9 @@ class TvlService(
                     sortDescending,
                     forceRefresh
                 )
-                marketTvlItemsObservable.onNext(DataState.Success(items))
+                marketTvlItemsFlow.tryEmit(DataState.Success(items))
             } catch (e: Throwable) {
-                marketTvlItemsObservable.onNext(DataState.Error(e))
+                marketTvlItemsFlow.tryEmit(DataState.Error(e))
             }
         }
     }

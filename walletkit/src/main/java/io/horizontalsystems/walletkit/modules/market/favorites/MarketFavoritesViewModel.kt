@@ -13,7 +13,6 @@ import io.horizontalsystems.walletkit.modules.market.TimeDuration
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
@@ -40,7 +39,7 @@ class MarketFavoritesViewModel(
 
     init {
         viewModelScope.launch {
-            service.marketItemsObservable.asFlow().collect { state ->
+            service.marketItemsFlow.collect { state ->
                 when (state) {
                     is DataState.Success -> {
                         viewState = ViewState.Success

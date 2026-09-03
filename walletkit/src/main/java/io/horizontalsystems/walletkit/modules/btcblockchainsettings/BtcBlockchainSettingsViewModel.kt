@@ -12,7 +12,6 @@ import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class BtcBlockchainSettingsViewModel(
     private val service: BtcBlockchainSettingsService
@@ -32,7 +31,7 @@ class BtcBlockchainSettingsViewModel(
 
     init {
         viewModelScope.launch {
-            service.hasChangesObservable.asFlow().collect {
+            service.hasChangesFlow.collect {
                 saveButtonEnabled = it
                 syncRestoreModeState()
             }

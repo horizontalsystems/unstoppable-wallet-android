@@ -36,7 +36,7 @@ open class ChartViewModel(
         emitState()
 
         viewModelScope.launch {
-            service.chartTypeObservable.collect { chartType ->
+            service.chartTypeFlow.collect { chartType ->
                 val tabItems = service.chartIntervals.map {
                     val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
                     TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
@@ -48,7 +48,7 @@ open class ChartViewModel(
         }
 
         viewModelScope.launch {
-            service.chartPointsWrapperObservable.collect { chartItemsDataState ->
+            service.chartPointsWrapperFlow.collect { chartItemsDataState ->
                 chartItemsDataState.viewState?.let {
                     viewState = it
                 }

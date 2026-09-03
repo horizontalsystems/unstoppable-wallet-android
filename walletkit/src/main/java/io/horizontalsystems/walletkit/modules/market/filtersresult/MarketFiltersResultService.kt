@@ -10,11 +10,13 @@ import io.horizontalsystems.walletkit.modules.market.favorites.MarketItemWrapper
 import io.horizontalsystems.walletkit.modules.market.filters.IMarketListFetcher
 import io.horizontalsystems.walletkit.modules.market.sort
 import io.horizontalsystems.marketkit.models.Analytics
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 class MarketFiltersResultService(
@@ -25,8 +27,8 @@ class MarketFiltersResultService(
 ) {
     val showSignals: Boolean
         get() = signalsControlManager.showSignals
-    val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
-        BehaviorSubject.create()
+    private val _stateFlow = MutableSharedFlow<DataState<List<MarketItemWrapper>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val stateFlow: Flow<DataState<List<MarketItemWrapper>>> = _stateFlow
 
     var marketItems: List<MarketItem> = listOf()
     var signals: Map<String, Analytics.TechnicalAdvice.Advice> = mapOf()
@@ -96,7 +98,7 @@ class MarketFiltersResultService(
                 }
                 syncItems()
             } catch (e: Throwable) {
-                stateObservable.onNext(DataState.Error(e))
+                stateFlow.tryEmit(DataState.Error(e))
             }
         }
     }
@@ -114,7 +116,7 @@ class MarketFiltersResultService(
                 )
             }
 
-        stateObservable.onNext(DataState.Success(items))
+        stateFlow.tryEmit(DataState.Success(items))
     }
 
 }

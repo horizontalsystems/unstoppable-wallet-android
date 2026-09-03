@@ -19,7 +19,7 @@ class CoinReportsViewModel(private val service: CoinReportsService) : ViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateObservable
+            service.stateFlow
                 .catch {
                     viewStateLiveData.postValue(ViewState.Error(it))
                 }

@@ -8,7 +8,6 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class MarketPostsViewModel(private val service: MarketPostService) : ViewModel() {
 
@@ -34,7 +33,7 @@ class MarketPostsViewModel(private val service: MarketPostService) : ViewModel()
 
     init {
         viewModelScope.launch {
-            service.stateObservable.asFlow().collect { state ->
+            service.stateFlow.collect { state ->
                 isRefreshingLiveData.postValue(false)
 
                 state.dataOrNull?.let { posts ->

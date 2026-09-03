@@ -9,7 +9,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlinx.coroutines.rx2.asFlow
 
 class ThorchainNetworkViewModel(private val service: ThorchainNetworkService) : ViewModel() {
 
@@ -24,7 +23,7 @@ class ThorchainNetworkViewModel(private val service: ThorchainNetworkService) : 
 
     init {
         viewModelScope.launch {
-            service.itemsObservable.asFlow()
+            service.itemsFlow
                 .catch { Timber.e(it, "Thorchain network items collection failed") }
                 .collect {
                     sync(it)

@@ -12,13 +12,14 @@ import io.horizontalsystems.walletkit.modules.market.TimeDuration
 import io.horizontalsystems.walletkit.modules.market.filters.TimePeriod
 import io.horizontalsystems.walletkit.modules.market.sort
 import io.horizontalsystems.marketkit.models.Analytics
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
 val TimeDuration.period: TimePeriod
@@ -44,10 +45,9 @@ class MarketFavoritesService(
     private var marketItems: List<MarketItem> = listOf()
     private var signals: Map<String, Analytics.TechnicalAdvice.Advice> = mapOf()
 
-    private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
-        BehaviorSubject.create()
-    val marketItemsObservable: Observable<DataState<List<MarketItemWrapper>>>
-        get() = marketItemsSubject
+    private val _marketItemsFlow = MutableSharedFlow<DataState<List<MarketItemWrapper>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val marketItemsFlow: Flow<DataState<List<MarketItemWrapper>>>
+        get() = _marketItemsFlow
 
     val showSignals: Boolean
         get() = signalsControlManager.showSignals
@@ -78,7 +78,7 @@ class MarketFavoritesService(
             } catch (e: CancellationException) {
                 // no-op
             } catch (e: Throwable) {
-                marketItemsSubject.onNext(DataState.Error(e))
+                _marketItemsFlow.tryEmit(DataState.Error(e))
             }
         }
     }
@@ -107,7 +107,7 @@ class MarketFavoritesService(
                 signal = if (signalsControlManager.showSignals) signals[it.fullCoin.coin.uid] else null
             )
         }
-        marketItemsSubject.onNext(DataState.Success(wrapperItems))
+        _marketItemsFlow.tryEmit(DataState.Success(wrapperItems))
     }
 
     private fun syncSignals() {
@@ -117,7 +117,7 @@ class MarketFavoritesService(
                 signals = repository.getSignals(uids)
                 updateItems()
             } catch (e: Throwable) {
-                marketItemsSubject.onNext(DataState.Error(e))
+                _marketItemsFlow.tryEmit(DataState.Error(e))
             }
         }
     }

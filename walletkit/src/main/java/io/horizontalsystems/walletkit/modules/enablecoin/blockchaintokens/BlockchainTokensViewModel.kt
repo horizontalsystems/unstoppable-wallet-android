@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.core.title
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetSelectorViewItem
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainTokensViewModel(
     private val service: BlockchainTokensService
@@ -25,7 +24,7 @@ class BlockchainTokensViewModel(
 
     init {
         viewModelScope.launch {
-            service.requestObservable.asFlow().collect {
+            service.requestFlow.collect {
                 handle(it)
             }
         }

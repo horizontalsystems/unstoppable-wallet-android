@@ -25,13 +25,15 @@ import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.Restore
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
 
 class RestoreBlockchainsService(
@@ -55,34 +57,38 @@ class RestoreBlockchainsService(
 
     private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
 
-    val cancelEnableBlockchainObservable = PublishSubject.create<Blockchain>()
-    val canRestore = BehaviorSubject.createDefault(false)
+    private val _cancelEnableBlockchainFlow = MutableSharedFlow<Blockchain>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val cancelEnableBlockchainFlow: Flow<Blockchain> = _cancelEnableBlockchainFlow
 
-    val itemsObservable = BehaviorSubject.create<List<Item>>()
+    private val _canRestore = MutableStateFlow(false)
+    val canRestore: StateFlow<Boolean> = _canRestore
+
+    private val _itemsFlow = MutableSharedFlow<List<Item>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val itemsFlow: Flow<List<Item>> = _itemsFlow
     var items: List<Item> = listOf()
         private set(value) {
             field = value
-            itemsObservable.onNext(value)
+            itemsFlow.tryEmit(value)
         }
 
     init {
         coroutineScope.launch {
-            blockchainTokensService.approveTokensObservable.asFlow().collect {
+            blockchainTokensService.approveTokensFlow.collect {
                 handleApproveTokens(it.blockchain, it.tokens)
             }
         }
         coroutineScope.launch {
-            blockchainTokensService.rejectApproveTokensObservable.asFlow().collect {
+            blockchainTokensService.rejectApproveTokensFlow.collect {
                 handleCancelEnable(it)
             }
         }
         coroutineScope.launch {
-            restoreSettingsService.approveSettingsObservable.asFlow().collect {
+            restoreSettingsService.approveSettingsFlow.collect {
                 handleApproveRestoreSettings(it.token, it.settings)
             }
         }
         coroutineScope.launch {
-            restoreSettingsService.rejectApproveSettingsObservable.asFlow().collect {
+            restoreSettingsService.rejectApproveSettingsFlow.collect {
                 handleCancelEnable(it.blockchain)
             }
         }
@@ -130,7 +136,7 @@ class RestoreBlockchainsService(
 
     private fun handleCancelEnable(blockchain: Blockchain) {
         if (!isEnabled(blockchain)) {
-            cancelEnableBlockchainObservable.onNext(blockchain)
+            cancelEnableBlockchainFlow.tryEmit(blockchain)
         }
     }
 
@@ -154,7 +160,7 @@ class RestoreBlockchainsService(
     }
 
     private fun syncCanRestore() {
-        canRestore.onNext(enabledTokens.isNotEmpty())
+        canRestore.tryEmit(enabledTokens.isNotEmpty())
     }
 
     fun enable(blockchain: Blockchain) {

@@ -15,9 +15,7 @@ import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPopularTokens
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.withContext
 
 class CoinViewModel(
@@ -62,8 +60,7 @@ class CoinViewModel(
         }
 
         viewModelScope.launch {
-            val isFavoriteFlow: Flow<Boolean> = service.isFavorite.asFlow()
-            isFavoriteFlow.collect {
+            service.isFavorite.collect {
                 isFavorite = it
             }
         }

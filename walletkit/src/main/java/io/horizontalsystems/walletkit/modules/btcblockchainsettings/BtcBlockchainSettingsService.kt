@@ -6,17 +6,18 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class BtcBlockchainSettingsService(
     val blockchain: Blockchain,
     private val btcBlockchainManager: BtcBlockchainManager
 ) {
 
-    private val hasChangesSubject = BehaviorSubject.create<Boolean>()
-    val hasChangesObservable: Observable<Boolean>
-        get() = hasChangesSubject
+    private val _hasChangesFlow = MutableSharedFlow<Boolean>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val hasChangesFlow: Flow<Boolean>
+        get() = _hasChangesFlow
 
     var restoreMode: BtcRestoreMode = btcBlockchainManager.restoreMode(blockchain.type)
         private set
@@ -42,6 +43,6 @@ class BtcBlockchainSettingsService(
 
     private fun syncHasChanges() {
         val initialRestoreMode = btcBlockchainManager.restoreMode(blockchain.type)
-        hasChangesSubject.onNext(restoreMode != initialRestoreMode)
+        _hasChangesFlow.tryEmit(restoreMode != initialRestoreMode)
     }
 }

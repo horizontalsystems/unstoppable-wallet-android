@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class ManageWalletsService(
     private val walletManager: WalletManager,
@@ -59,7 +58,7 @@ class ManageWalletsService(
             }
         }
         coroutineScope.launch {
-            restoreSettingsService.approveSettingsObservable.asFlow().collect {
+            restoreSettingsService.approveSettingsFlow.collect {
                 enable(it.token, it.settings)
             }
         }

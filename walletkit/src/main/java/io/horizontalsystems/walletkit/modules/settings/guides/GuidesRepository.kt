@@ -8,11 +8,11 @@ import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.entities.GuideCategory
 import io.horizontalsystems.walletkit.entities.GuideCategoryMultiLang
 import io.horizontalsystems.walletkit.entities.GuideSection
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 
@@ -22,11 +22,11 @@ class GuidesRepository(
         private val languageManager: LanguageManager
         ) {
 
-    val guideCategories: Observable<DataState<List<GuideCategory>>>
-        get() = guideCategoriesSubject
+    val guideCategories: StateFlow<DataState<List<GuideCategory>>>
+        get() = _guideCategories
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val guideCategoriesSubject = BehaviorSubject.create<DataState<List<GuideCategory>>>()
+    private val _guideCategories = MutableStateFlow<DataState<List<GuideCategory>>>(DataState.Loading)
     private val retryLimit = 3
 
     init {
@@ -34,7 +34,7 @@ class GuidesRepository(
 
         coroutineScope.launch {
             connectivityManager.networkAvailabilityFlow.collect {
-                if (connectivityManager.isConnected && guideCategoriesSubject.value is DataState.Error) {
+                if (connectivityManager.isConnected && _guideCategories.value is DataState.Error) {
                     fetch()
                 }
             }
@@ -46,7 +46,7 @@ class GuidesRepository(
     }
 
     private fun fetch() {
-        guideCategoriesSubject.onNext(DataState.Loading)
+        _guideCategories.tryEmit(DataState.Loading)
 
         coroutineScope.launch {
             try {
@@ -58,9 +58,9 @@ class GuidesRepository(
                 }
 
                 val categories = getCategoriesByLocalLanguage(guideCategories, languageManager.currentLocale.language, languageManager.fallbackLocale.language)
-                guideCategoriesSubject.onNext(DataState.Success(categories))
+                _guideCategories.tryEmit(DataState.Success(categories))
             } catch (e: Throwable) {
-                guideCategoriesSubject.onNext(DataState.Error(e))
+                _guideCategories.tryEmit(DataState.Error(e))
             }
         }
     }

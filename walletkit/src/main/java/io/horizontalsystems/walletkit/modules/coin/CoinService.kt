@@ -3,28 +3,23 @@ package io.horizontalsystems.walletkit.modules.coin
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.managers.MarketFavoritesManager
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class CoinService(
     val fullCoin: FullCoin,
     private val marketFavoritesManager: MarketFavoritesManager,
 ) : Clearable {
 
-    private val _isFavorite = BehaviorSubject.create<Boolean>()
-    val isFavorite: Observable<Boolean>
+    private val _isFavorite = MutableStateFlow(false)
+    val isFavorite: StateFlow<Boolean>
         get() = _isFavorite
-
-    private val disposables = CompositeDisposable()
 
     init {
         emitIsFavorite()
     }
 
-    override fun clear() {
-        disposables.clear()
-    }
+    override fun clear() = Unit
 
     fun favorite() {
         marketFavoritesManager.add(fullCoin.coin.uid)
@@ -39,6 +34,6 @@ class CoinService(
     }
 
     private fun emitIsFavorite() {
-        _isFavorite.onNext(marketFavoritesManager.isCoinInFavorites(fullCoin.coin.uid))
+        _isFavorite.value = marketFavoritesManager.isCoinInFavorites(fullCoin.coin.uid)
     }
 }

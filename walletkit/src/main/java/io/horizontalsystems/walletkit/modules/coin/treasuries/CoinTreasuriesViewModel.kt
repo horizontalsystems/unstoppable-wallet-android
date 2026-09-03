@@ -28,7 +28,7 @@ class CoinTreasuriesViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateObservable
+            service.stateFlow
                 .catch {
                     viewStateLiveData.postValue(ViewState.Error(it))
                 }

@@ -9,7 +9,6 @@ import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.core.providers.Translator
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainSettingsViewModel(
     private val service: BlockchainSettingsService
@@ -23,7 +22,7 @@ class BlockchainSettingsViewModel(
 
     init {
         viewModelScope.launch {
-            service.blockchainItemsObservable.asFlow().collect {
+            service.blockchainItemsFlow.collect {
                 sync(it)
             }
         }

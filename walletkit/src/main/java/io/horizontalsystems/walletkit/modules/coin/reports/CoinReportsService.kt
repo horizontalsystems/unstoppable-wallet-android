@@ -18,19 +18,19 @@ class CoinReportsService(
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val _stateObservable = MutableSharedFlow<DataState<List<CoinReport>>>(
+    private val _stateFlow = MutableSharedFlow<DataState<List<CoinReport>>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val stateObservable: SharedFlow<DataState<List<CoinReport>>> = _stateObservable.asSharedFlow()
+    val stateFlow: SharedFlow<DataState<List<CoinReport>>> = _stateFlow.asSharedFlow()
 
     private fun fetch() {
         coroutineScope.launch {
             try {
                 val reports = marketKit.coinReportsSingle(coinUid)
-                _stateObservable.tryEmit(DataState.Success(reports))
+                _stateFlow.tryEmit(DataState.Success(reports))
             } catch (e: Throwable) {
-                _stateObservable.tryEmit(DataState.Error(e))
+                _stateFlow.tryEmit(DataState.Error(e))
             }
         }
     }

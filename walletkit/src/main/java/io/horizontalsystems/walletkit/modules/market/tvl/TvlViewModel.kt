@@ -18,7 +18,6 @@ import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class TvlViewModel(
     private val service: TvlService,
@@ -46,7 +45,7 @@ class TvlViewModel(
 
     init {
         viewModelScope.launch {
-            service.marketTvlItemsObservable.asFlow().collect { tvlItemsDataState ->
+            service.marketTvlItemsFlow.collect { tvlItemsDataState ->
                 tvlItemsDataState.viewState?.let {
                     viewStateLiveData.postValue(it)
                 }

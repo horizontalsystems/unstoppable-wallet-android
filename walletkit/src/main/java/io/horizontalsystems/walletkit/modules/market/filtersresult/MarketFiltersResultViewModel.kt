@@ -8,7 +8,6 @@ import io.horizontalsystems.walletkit.modules.market.SortingField
 import io.horizontalsystems.walletkit.modules.market.favorites.MarketItemWrapper
 import io.horizontalsystems.walletkit.ui.compose.Select
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class MarketFiltersResultViewModel(
     private val service: MarketFiltersResultService,
@@ -20,7 +19,7 @@ class MarketFiltersResultViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateObservable.asFlow().collect { state ->
+            service.stateFlow.collect { state ->
                 state.viewState?.let {
                     viewState = it
                     emitState()

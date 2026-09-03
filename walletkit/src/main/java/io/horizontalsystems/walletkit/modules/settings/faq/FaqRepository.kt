@@ -7,11 +7,11 @@ import io.horizontalsystems.walletkit.core.retryWhen
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.entities.FaqMap
 import io.horizontalsystems.walletkit.entities.FaqSection
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 
@@ -21,10 +21,10 @@ class FaqRepository(
     private val languageManager: LanguageManager
 ) {
 
-    val faqList: Observable<DataState<List<FaqSection>>>
-        get() = faqListSubject
+    private val _faqList = MutableStateFlow<DataState<List<FaqSection>>>(DataState.Loading)
 
-    private val faqListSubject = BehaviorSubject.create<DataState<List<FaqSection>>>()
+    val faqList: StateFlow<DataState<List<FaqSection>>>
+        get() = _faqList
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val retryLimit = 3
 
@@ -33,7 +33,7 @@ class FaqRepository(
 
         coroutineScope.launch {
             connectivityManager.networkAvailabilityFlow.collect {
-                if (connectivityManager.isConnected && faqListSubject.value is DataState.Error) {
+                if (connectivityManager.isConnected && _faqList.value is DataState.Error) {
                     fetch()
                 }
             }
@@ -45,7 +45,7 @@ class FaqRepository(
     }
 
     private fun fetch() {
-        faqListSubject.onNext(DataState.Loading)
+        _faqList.tryEmit(DataState.Loading)
 
         coroutineScope.launch {
             try {
@@ -61,9 +61,9 @@ class FaqRepository(
                     languageManager.currentLocale.language,
                     languageManager.fallbackLocale.language
                 )
-                faqListSubject.onNext(DataState.Success(faqSections))
+                _faqList.tryEmit(DataState.Success(faqSections))
             } catch (e: Throwable) {
-                faqListSubject.onNext(DataState.Error(e))
+                _faqList.tryEmit(DataState.Error(e))
             }
         }
     }

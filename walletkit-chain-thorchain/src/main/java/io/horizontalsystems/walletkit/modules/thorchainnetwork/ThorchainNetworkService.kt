@@ -3,21 +3,19 @@ package io.horizontalsystems.walletkit.modules.thorchainnetwork
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSource
 import io.horizontalsystems.walletkit.core.managers.ThorchainRpcSourceManager
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class ThorchainNetworkService(
     private val rpcSourceManager: ThorchainRpcSourceManager,
 ) : Clearable {
-    private val disposables = CompositeDisposable()
-
-    private val itemsSubject = BehaviorSubject.create<List<Item>>()
+    private val _itemsFlow = MutableSharedFlow<List<Item>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     var items = listOf<Item>()
         private set(value) {
             field = value
 
-            itemsSubject.onNext(value)
+            _itemsFlow.tryEmit(value)
         }
 
     private val currentRpcSource: ThorchainRpcSource
@@ -35,8 +33,8 @@ class ThorchainNetworkService(
         }
     }
 
-    val itemsObservable: Observable<List<Item>>
-        get() = itemsSubject
+    val itemsFlow: Flow<List<Item>>
+        get() = _itemsFlow
 
     fun setCurrentSource(name: String) {
         if (currentRpcSource.name == name) return
@@ -46,9 +44,7 @@ class ThorchainNetworkService(
         rpcSourceManager.save(rpcSource)
     }
 
-    override fun clear() {
-        disposables.clear()
-    }
+    override fun clear() = Unit
 
     data class Item(val rpcSource: ThorchainRpcSource, val selected: Boolean)
 

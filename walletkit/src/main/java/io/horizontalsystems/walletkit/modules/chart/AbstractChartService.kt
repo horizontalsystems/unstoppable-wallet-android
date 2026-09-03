@@ -34,23 +34,23 @@ abstract class AbstractChartService {
     protected var chartInterval: HsTimePeriod? = null
         set(value) {
             field = value
-            _chartTypeObservable.tryEmit(Optional.ofNullable(value))
+            _chartTypeFlow.tryEmit(Optional.ofNullable(value))
         }
 
     val currency: Currency
         get() = currencyManager.baseCurrency
 
-    private val _chartTypeObservable = MutableSharedFlow<Optional<HsTimePeriod>>(
+    private val _chartTypeFlow = MutableSharedFlow<Optional<HsTimePeriod>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val chartTypeObservable: SharedFlow<Optional<HsTimePeriod>> = _chartTypeObservable.asSharedFlow()
+    val chartTypeFlow: SharedFlow<Optional<HsTimePeriod>> = _chartTypeFlow.asSharedFlow()
 
-    private val _chartPointsWrapperObservable = MutableSharedFlow<Result<ChartPointsWrapper>>(
+    private val _chartPointsWrapperFlow = MutableSharedFlow<Result<ChartPointsWrapper>>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
-    val chartPointsWrapperObservable: SharedFlow<Result<ChartPointsWrapper>> = _chartPointsWrapperObservable.asSharedFlow()
+    val chartPointsWrapperFlow: SharedFlow<Result<ChartPointsWrapper>> = _chartPointsWrapperFlow.asSharedFlow()
 
     protected val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var fetchItemsJob: Job? = null
@@ -115,11 +115,11 @@ abstract class AbstractChartService {
                     tmpChartInterval == null -> getAllItems(currency)
                     else -> getItems(tmpChartInterval, currency)
                 }
-                _chartPointsWrapperObservable.tryEmit(Result.success(chartPointsWrapper))
+                _chartPointsWrapperFlow.tryEmit(Result.success(chartPointsWrapper))
             } catch (e: CancellationException) {
                 // Do nothing
             } catch (e: Throwable) {
-                _chartPointsWrapperObservable.tryEmit(Result.failure(e))
+                _chartPointsWrapperFlow.tryEmit(Result.failure(e))
             }
         }
     }
