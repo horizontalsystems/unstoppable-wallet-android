@@ -7,3 +7,6 @@
 /local.properties
 .externalNativeBuild
 /.claude/settings.local.json
+
+.kotlin/
+gradle/gradle-daemon-jvm.properties
