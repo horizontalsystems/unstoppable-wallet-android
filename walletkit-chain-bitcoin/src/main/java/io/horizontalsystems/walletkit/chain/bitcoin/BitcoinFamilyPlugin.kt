@@ -55,7 +55,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 abstract class BitcoinFamilyPlugin : ChainPlugin {
@@ -90,8 +89,8 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
     // also reload wallets via WalletManager (which still owns that collector in core).
     override val settingsRefreshTrigger: Flow<*>
         get() = merge(
-            btcBlockchainManager.restoreModeUpdatedObservable.asFlow(),
-            btcBlockchainManager.transactionSortModeUpdatedObservable.asFlow(),
+            btcBlockchainManager.restoreModeUpdatedFlow,
+            btcBlockchainManager.transactionSortModeUpdatedFlow,
         ).filter { it == blockchainType }
 
     override fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? {

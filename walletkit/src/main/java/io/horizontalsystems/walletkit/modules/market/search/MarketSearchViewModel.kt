@@ -11,7 +11,6 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class MarketSearchViewModel(
     private val marketFavoritesManager: MarketFavoritesManager,
@@ -40,7 +39,7 @@ class MarketSearchViewModel(
             }
         }
         viewModelScope.launch {
-            marketFavoritesManager.dataUpdatedAsync.asFlow().collect {
+            marketFavoritesManager.dataUpdatedFlow.collect {
                 syncState()
             }
         }

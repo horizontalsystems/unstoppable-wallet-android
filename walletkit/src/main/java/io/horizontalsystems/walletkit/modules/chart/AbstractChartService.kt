@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 import java.util.Optional
 
@@ -58,7 +57,7 @@ abstract class AbstractChartService {
 
     open suspend fun start() {
         coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 fetchItems()
             }
         }

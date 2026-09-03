@@ -8,7 +8,6 @@ import android.net.NetworkRequest
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.BackgroundManagerState
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -29,7 +28,6 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
     val networkAvailabilityFlow = _networkAvailabilityFlow.asSharedFlow()
 
     var isConnected = getInitialConnectionStatus()
-    val networkAvailabilitySignal = PublishSubject.create<Unit>()
 
     private var callback = ConnectionStatusCallback()
     private var hasValidInternet = false
@@ -72,7 +70,6 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
         hasConnection = false
         hasValidInternet = false
         isConnected = getInitialConnectionStatus()
-        networkAvailabilitySignal.onNext(Unit)
         _networkAvailabilityFlow.tryEmit(isConnected)
     }
 
@@ -121,8 +118,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
         val oldValue = isConnected
         isConnected = hasConnection && hasValidInternet
         if (oldValue != isConnected) {
-            networkAvailabilitySignal.onNext(Unit)
-            _networkAvailabilityFlow.tryEmit(isConnected)
+                _networkAvailabilityFlow.tryEmit(isConnected)
         }
     }
 

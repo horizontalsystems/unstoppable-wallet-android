@@ -24,7 +24,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -56,7 +55,7 @@ class TopSectorsViewModel(
 
     init {
         viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 fetchItems()
                 emitState()
             }

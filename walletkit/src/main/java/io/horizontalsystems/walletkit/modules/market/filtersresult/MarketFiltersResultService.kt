@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class MarketFiltersResultService(
     private val fetcher: IMarketListFetcher,
@@ -46,7 +45,7 @@ class MarketFiltersResultService(
 
     fun start() {
         coroutineScope.launch {
-            favoritesManager.dataUpdatedAsync.asFlow().collect {
+            favoritesManager.dataUpdatedFlow.collect {
                 syncItems()
             }
         }

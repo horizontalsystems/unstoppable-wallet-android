@@ -10,7 +10,7 @@ class MarketFavoritesRepository(
     private val marketKit: MarketKitWrapper,
     private val manager: MarketFavoritesManager
 ) {
-    val dataUpdatedObservable by manager::dataUpdatedAsync
+    val dataUpdatedFlow by manager::dataUpdatedFlow
 
     private suspend fun getFavorites(
         currency: Currency,

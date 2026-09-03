@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class MarketSectorViewModel(
     private val marketCategoryRepository: MarketSectorRepository,
@@ -62,7 +61,7 @@ class MarketSectorViewModel(
 
     init {
         viewModelScope.launch {
-            favoritesManager.dataUpdatedAsync.asFlow().collect {
+            favoritesManager.dataUpdatedFlow.collect {
                 viewItems = getMarketViewItems(marketItems)
                 emitState()
             }

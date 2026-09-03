@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class TvlService(
     private val currencyManager: CurrencyManager,
@@ -67,7 +66,7 @@ class TvlService(
 
     fun start() {
         coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 forceRefresh()
             }
         }

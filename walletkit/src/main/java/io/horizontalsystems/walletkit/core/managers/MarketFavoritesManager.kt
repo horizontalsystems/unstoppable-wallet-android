@@ -5,18 +5,18 @@ import io.horizontalsystems.walletkit.core.storage.AppDatabase
 import io.horizontalsystems.walletkit.core.storage.FavoriteCoin
 import io.horizontalsystems.walletkit.core.storage.MarketFavoritesDao
 import io.horizontalsystems.walletkit.widgets.MarketWidgetManager
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class MarketFavoritesManager(
     appDatabase: AppDatabase,
     private val localStorage: ILocalStorage,
     private val marketWidgetManager: MarketWidgetManager
 ) {
-    val dataUpdatedAsync: Observable<Unit>
-        get() = dataUpdatedSubject
-
-    private val dataUpdatedSubject = PublishSubject.create<Unit>()
+    private val _dataUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val dataUpdatedFlow: Flow<Unit>
+        get() = _dataUpdatedFlow
 
     private val dao: MarketFavoritesDao by lazy {
         appDatabase.marketFavoritesDao()
@@ -28,13 +28,13 @@ class MarketFavoritesManager(
                 add(coinUid)
             }
         dao.insert(FavoriteCoin(coinUid))
-        dataUpdatedSubject.onNext(Unit)
+        _dataUpdatedFlow.tryEmit(Unit)
         marketWidgetManager.updateWatchListWidgets()
     }
 
     fun addAll(coinUids: List<String>) {
         dao.insertAll(coinUids.map { FavoriteCoin(it) })
-        dataUpdatedSubject.onNext(Unit)
+        _dataUpdatedFlow.tryEmit(Unit)
         marketWidgetManager.updateWatchListWidgets()
     }
 
@@ -44,7 +44,7 @@ class MarketFavoritesManager(
                 remove(coinUid)
             }
         dao.delete(coinUid)
-        dataUpdatedSubject.onNext(Unit)
+        _dataUpdatedFlow.tryEmit(Unit)
         marketWidgetManager.updateWatchListWidgets()
     }
 

@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlin.coroutines.cancellation.CancellationException
 
 class WalletManager(
@@ -134,7 +133,7 @@ class WalletManager(
             }
         }
         coroutineScope.launch {
-            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect { blockchainType ->
+            btcBlockchainManager.restoreModeUpdatedFlow.collect { blockchainType ->
                 reloadWallets(blockchainType)
             }
         }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 
 class GuidesRepository(
@@ -34,7 +33,7 @@ class GuidesRepository(
         fetch()
 
         coroutineScope.launch {
-            connectivityManager.networkAvailabilitySignal.asFlow().collect {
+            connectivityManager.networkAvailabilityFlow.collect {
                 if (connectivityManager.isConnected && guideCategoriesSubject.value is DataState.Error) {
                     fetch()
                 }

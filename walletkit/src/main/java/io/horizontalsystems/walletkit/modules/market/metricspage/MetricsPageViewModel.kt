@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class MetricsPageViewModel(
@@ -86,7 +85,7 @@ class MetricsPageViewModel(
 
     init {
         viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 syncMarketItems()
             }
         }

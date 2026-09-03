@@ -19,7 +19,6 @@ import io.horizontalsystems.walletkit.modules.market.sort
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlin.enums.EnumEntries
 import kotlin.math.min
 
@@ -82,7 +81,7 @@ class MarketTopCoinsViewModel(
         }
 
         viewModelScope.launch(Dispatchers.Default) {
-            favoritesManager.dataUpdatedAsync.asFlow().collect {
+            favoritesManager.dataUpdatedFlow.collect {
                 refreshFavoriteCoinUids()
                 refreshViewItems()
 

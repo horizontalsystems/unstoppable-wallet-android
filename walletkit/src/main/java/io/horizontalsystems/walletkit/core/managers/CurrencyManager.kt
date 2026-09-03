@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.core.managers
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.Currency
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,7 +22,6 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
             field = value
 
             localStorage.baseCurrencyCode = value.code
-            baseCurrencyUpdatedSignal.onNext(Unit)
             scope.launch {
                 _baseCurrencyUpdatedFlow.emit(Unit)
             }
@@ -39,8 +37,6 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
     }
 
     val currencies: List<Currency> = appConfigProvider.currencies
-
-    val baseCurrencyUpdatedSignal = PublishSubject.create<Unit>()
 
     fun setBaseCurrencyCode(baseCurrencyCode: String) {
         val newCurrency = appConfigProvider.currencies.find { it.code == baseCurrencyCode }

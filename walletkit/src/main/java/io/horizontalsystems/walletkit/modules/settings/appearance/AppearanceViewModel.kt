@@ -16,7 +16,6 @@ import io.horizontalsystems.walletkit.modules.theme.ThemeService
 import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.ui.compose.Select
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class AppearanceViewModel(
     private val launchScreenService: LaunchScreenService,
@@ -69,7 +68,7 @@ class AppearanceViewModel(
                 }
         }
         viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
                 emitState()
             }
         }

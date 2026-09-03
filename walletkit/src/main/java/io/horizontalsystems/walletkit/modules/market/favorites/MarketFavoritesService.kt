@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 val TimeDuration.period: TimePeriod
     get() {
@@ -144,13 +143,7 @@ class MarketFavoritesService(
         }
 
         coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-                fetch()
-            }
-        }
-
-        coroutineScope.launch {
-            repository.dataUpdatedObservable.asFlow().collect {
+            repository.dataUpdatedFlow.collect {
                 fetch()
             }
         }
