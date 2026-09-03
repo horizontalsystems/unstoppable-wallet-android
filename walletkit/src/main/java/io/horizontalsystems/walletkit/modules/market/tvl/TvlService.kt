@@ -59,9 +59,9 @@ class TvlService(
                     sortDescending,
                     forceRefresh
                 )
-                marketTvlItemsFlow.tryEmit(DataState.Success(items))
+                _marketTvlItemsFlow.tryEmit(DataState.Success(items))
             } catch (e: Throwable) {
-                marketTvlItemsFlow.tryEmit(DataState.Error(e))
+                _marketTvlItemsFlow.tryEmit(DataState.Error(e))
             }
         }
     }

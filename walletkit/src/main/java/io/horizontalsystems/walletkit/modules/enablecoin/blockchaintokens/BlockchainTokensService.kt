@@ -17,15 +17,15 @@ class BlockchainTokensService {
     val requestFlow: Flow<Request> = _requestFlow
 
     fun approveTokens(blockchain: Blockchain, tokens: List<Token>, enabledTokens: List<Token>, allowEmpty: Boolean = false) {
-        requestFlow.tryEmit(Request(blockchain, tokens, enabledTokens, allowEmpty))
+        _requestFlow.tryEmit(Request(blockchain, tokens, enabledTokens, allowEmpty))
     }
 
     fun select(tokens: List<Token>, blockchain: Blockchain) {
-        approveTokensFlow.tryEmit(BlockchainWithTokens(blockchain, tokens))
+        _approveTokensFlow.tryEmit(BlockchainWithTokens(blockchain, tokens))
     }
 
     fun cancel(blockchain: Blockchain) {
-        rejectApproveTokensFlow.tryEmit(blockchain)
+        _rejectApproveTokensFlow.tryEmit(blockchain)
     }
 
     data class BlockchainWithTokens(val blockchain: Blockchain, val tokens: List<Token>)

@@ -22,7 +22,7 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiSta
 
     init {
         viewModelScope.launch {
-            repository.guideCategories.asFlow().collect { dataState ->
+            repository.guideCategories.collect { dataState ->
                 viewModelScope.launch {
                     dataState.viewState?.let {
                         viewState = it

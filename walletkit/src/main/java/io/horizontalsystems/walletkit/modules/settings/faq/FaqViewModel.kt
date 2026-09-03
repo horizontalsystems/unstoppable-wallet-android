@@ -24,7 +24,7 @@ class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            repository.faqList.asFlow().collect { dataState ->
+            repository.faqList.collect { dataState ->
                 viewModelScope.launch {
                     dataState.viewState?.let {
                         viewState = it

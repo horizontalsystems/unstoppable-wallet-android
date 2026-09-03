@@ -37,7 +37,7 @@ class RestoreSettingsService(
                     settings[settingType] = it
                 }
             }
-            approveSettingsFlow.tryEmit(TokenWithSettings(token, settings))
+            _approveSettingsFlow.tryEmit(TokenWithSettings(token, settings))
             return
         }
 
@@ -46,11 +46,11 @@ class RestoreSettingsService(
         if (blockchainType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
             && existingSettings.birthdayHeight == null
         ) {
-            requestFlow.tryEmit(Request(token, RequestType.BirthdayHeight))
+            _requestFlow.tryEmit(Request(token, RequestType.BirthdayHeight))
             return
         }
 
-        approveSettingsFlow.tryEmit(TokenWithSettings(token, RestoreSettings()))
+        _approveSettingsFlow.tryEmit(TokenWithSettings(token, RestoreSettings()))
     }
 
     fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType, reload: Boolean = true) {
@@ -70,11 +70,11 @@ class RestoreSettingsService(
         }
 
         val tokenWithSettings = TokenWithSettings(token, settings)
-        approveSettingsFlow.tryEmit(tokenWithSettings)
+        _approveSettingsFlow.tryEmit(tokenWithSettings)
     }
 
     fun cancel(token: Token) {
-        rejectApproveSettingsFlow.tryEmit(token)
+        _rejectApproveSettingsFlow.tryEmit(token)
     }
 
     override fun clear() = Unit

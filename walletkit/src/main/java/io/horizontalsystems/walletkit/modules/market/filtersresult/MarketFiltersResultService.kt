@@ -98,7 +98,7 @@ class MarketFiltersResultService(
                 }
                 syncItems()
             } catch (e: Throwable) {
-                stateFlow.tryEmit(DataState.Error(e))
+                _stateFlow.tryEmit(DataState.Error(e))
             }
         }
     }
@@ -116,7 +116,7 @@ class MarketFiltersResultService(
                 )
             }
 
-        stateFlow.tryEmit(DataState.Success(items))
+        _stateFlow.tryEmit(DataState.Success(items))
     }
 
 }

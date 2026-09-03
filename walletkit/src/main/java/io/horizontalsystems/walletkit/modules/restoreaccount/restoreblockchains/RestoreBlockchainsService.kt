@@ -68,7 +68,7 @@ class RestoreBlockchainsService(
     var items: List<Item> = listOf()
         private set(value) {
             field = value
-            itemsFlow.tryEmit(value)
+            _itemsFlow.tryEmit(value)
         }
 
     init {
@@ -136,7 +136,7 @@ class RestoreBlockchainsService(
 
     private fun handleCancelEnable(blockchain: Blockchain) {
         if (!isEnabled(blockchain)) {
-            cancelEnableBlockchainFlow.tryEmit(blockchain)
+            _cancelEnableBlockchainFlow.tryEmit(blockchain)
         }
     }
 
@@ -160,7 +160,7 @@ class RestoreBlockchainsService(
     }
 
     private fun syncCanRestore() {
-        canRestore.tryEmit(enabledTokens.isNotEmpty())
+        _canRestore.value = enabledTokens.isNotEmpty()
     }
 
     fun enable(blockchain: Blockchain) {
