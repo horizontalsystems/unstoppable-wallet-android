@@ -272,6 +272,7 @@ private fun HandleWcEvent(
 private fun ReportCurrentPageToLockGate(navigation: HSNavigation) {
     val currentScreen = navigation.lastOrNull()
     LaunchedEffect(currentScreen) {
+        App.lockGate.mainPageOnTop = currentScreen is EntryPage
         App.lockGate.currentPageAccessibleWhileLocked = currentScreen?.accessibleWhileLocked ?: false
     }
 }

@@ -353,9 +353,6 @@ class MainViewModel(
                 MainNavigation.Balance
             }
 
-            // Cold start while locked: open the public Market tab instead of the keypad.
-            lockGate.isRestricted -> MainNavigation.Market
-
             else -> getLaunchTab()
         }
 

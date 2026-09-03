@@ -170,10 +170,38 @@ class LockGateTest {
     }
 
     @Test
-    fun `locking on a public screen notifies listeners`() {
+    fun `locking on the market tab notifies listeners`() {
+        isLocked.value = false
+        gate.selectedTab = MainNavigation.Market
+        gate.currentPageAccessibleWhileLocked = true
+        var notified = 0
+        gate.addRestrictedLockListener { notified++ }
+
+        isLocked.value = true
+
+        assertEquals(1, notified)
+    }
+
+    @Test
+    fun `locking on a wallet tab shows keypad and keeps the tab`() {
         isLocked.value = false
         gate.selectedTab = MainNavigation.Balance
         gate.currentPageAccessibleWhileLocked = true
+        var notified = 0
+        gate.addRestrictedLockListener { notified++ }
+
+        isLocked.value = true
+
+        assertEquals(0, notified)
+        assertTrue(gate.showUnlock)
+    }
+
+    @Test
+    fun `locking on a public sub-page over a wallet tab notifies listeners`() {
+        isLocked.value = false
+        gate.selectedTab = MainNavigation.Balance
+        gate.currentPageAccessibleWhileLocked = true
+        gate.mainPageOnTop = false
         var notified = 0
         gate.addRestrictedLockListener { notified++ }
 
@@ -254,6 +282,7 @@ class LockGateTest {
     fun `throwing listener does not break the gate or other listeners`() {
         isLocked.value = false
         gate.selectedTab = MainNavigation.Balance
+        gate.mainPageOnTop = false // public sub-page over a wallet tab
         var notified = 0
         gate.addRestrictedLockListener { throw RuntimeException("boom") }
         gate.addRestrictedLockListener { notified++ }
@@ -271,6 +300,7 @@ class LockGateTest {
     fun `listener switching tab to market keeps keypad hidden`() {
         isLocked.value = false
         gate.selectedTab = MainNavigation.Balance
+        gate.mainPageOnTop = false // public sub-page over a wallet tab
         gate.addRestrictedLockListener { gate.selectedTab = MainNavigation.Market }
 
         isLocked.value = true

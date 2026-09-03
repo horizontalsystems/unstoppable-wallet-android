@@ -64,6 +64,13 @@ class LockGate(
             recompute()
         }
 
+    /**
+     * Whether the main (tab) page is on top of the nav back stack. When it is, what the user
+     * actually sees is the selected tab's content, so [currentPageAccessibleWhileLocked] alone
+     * (true for the main page) does not tell whether the visible screen is public.
+     */
+    var mainPageOnTop: Boolean = true
+
     init {
         scope.launch {
             var wasLocked = isLockedFlow.value
@@ -75,9 +82,11 @@ class LockGate(
                     recompute()
                     action?.let { runDeferred(it) }
                 } else {
-                    if (!wasLocked && marketsTabEnabledFlow.value && currentPageAccessibleWhileLocked) {
+                    if (!wasLocked && marketsTabEnabledFlow.value && visibleScreenAccessibleWhileLocked()) {
                         // Locked while browsing something public: let the main screen fall back
-                        // to the Market tab so the user is not faced with the keypad.
+                        // to the Market tab so the user is not faced with the keypad. A wallet
+                        // tab on screen is not public, so it keeps its keypad and stays the
+                        // selected tab for after the unlock.
                         restrictedLockListeners.toList().forEach { runDeferred(it) }
                     }
                     recompute()
@@ -135,6 +144,17 @@ class LockGate(
         } catch (e: Exception) {
             Timber.e(e, "LockGate callback failed")
         }
+    }
+
+    /**
+     * Whether the screen the user is actually looking at may stay visible while locked:
+     * the selected tab's content when the main page is on top, otherwise the pushed page.
+     */
+    private fun visibleScreenAccessibleWhileLocked(): Boolean {
+        if (!currentPageAccessibleWhileLocked) return false
+        if (!mainPageOnTop) return true
+        val tab = selectedTab
+        return tab == null || isTabAccessibleWhileLocked(tab)
     }
 
     private fun currentScreenAccessible(): Boolean {
