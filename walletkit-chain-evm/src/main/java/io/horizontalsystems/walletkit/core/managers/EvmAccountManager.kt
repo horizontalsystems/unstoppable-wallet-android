@@ -85,6 +85,16 @@ class EvmAccountManager(
         }
     }
 
+    // ZkSync reports plain ETH movements as ERC-20 transfers of the L2 ETH system
+    // contract. It is not a real ERC-20 (every eth_call on it reverts since protocol
+    // upgrade v24), so auto-enabling it creates a permanently unsyncable duplicate of
+    // the native ETH wallet.
+    private fun isBlockedTokenType(tokenType: TokenType): Boolean {
+        if (blockchainType != BlockchainType.ZkSync) return false
+        val address = (tokenType as? TokenType.Eip20)?.address ?: return false
+        return address.equals(ZKSYNC_L2_ETH_ADDRESS, ignoreCase = true)
+    }
+
     private fun handle(fullTransactions: List<FullTransaction>, account: Account, evmKitWrapper: EvmKitWrapper, initial: Boolean) {
         val shouldAutoEnableTokens = tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
 
@@ -154,8 +164,8 @@ class EvmAccountManager(
         }
 
         handle(
-            foundTokens = foundTokens.toList(),
-            suspiciousTokenTypes = suspiciousTokenTypes.minus(foundTokens.map { it.tokenType }.toSet()).toList(),
+            foundTokens = foundTokens.filterNot { isBlockedTokenType(it.tokenType) },
+            suspiciousTokenTypes = suspiciousTokenTypes.minus(foundTokens.map { it.tokenType }.toSet()).filterNot(::isBlockedTokenType),
             account = account,
             evmKit = evmKitWrapper.evmKit
         )
@@ -291,6 +301,10 @@ class EvmAccountManager(
         if (enabledWallets.isNotEmpty()) {
             walletManager.saveEnabledWallets(enabledWallets)
         }
+    }
+
+    companion object {
+        private const val ZKSYNC_L2_ETH_ADDRESS = "0x000000000000000000000000000000000000800a"
     }
 
     data class TokenInfo(
