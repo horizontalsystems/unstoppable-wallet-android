@@ -4,12 +4,13 @@ import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -19,8 +20,8 @@ class TransactionAdapterWrapper(
     private var transactionType: FilterTransactionType,
     private var contact: Contact?
 ) : Clearable {
-    private val updatedSubject = PublishSubject.create<Unit>()
-    val updatedObservable: Observable<Unit> get() = updatedSubject
+    private val _updatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val updatedFlow: Flow<Unit> get() = _updatedFlow
 
     private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
     private var allLoaded = false
@@ -68,7 +69,7 @@ class TransactionAdapterWrapper(
                 .collect {
                     transactionRecords.clear()
                     allLoaded = false
-                    updatedSubject.onNext(Unit)
+                    _updatedFlow.tryEmit(Unit)
                 }
         }
     }

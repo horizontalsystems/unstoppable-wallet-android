@@ -32,7 +32,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class TokenBalanceViewModel(
@@ -83,7 +82,7 @@ class TokenBalanceViewModel(
         }
 
         viewModelScope.launch {
-            transactionsService.itemsObservable.asFlow().collect {
+            transactionsService.itemsFlow.collect {
                 updateTransactions(it)
             }
         }

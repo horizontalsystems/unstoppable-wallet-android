@@ -20,14 +20,14 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSyncStateRepository
 import io.horizontalsystems.walletkit.modules.transactions.TransactionWallet
 import io.horizontalsystems.walletkit.modules.transactions.TransactionsRateRepository
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
@@ -44,12 +44,12 @@ class TokenTransactionsService(
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
-    val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
+    private val _itemsFlow = MutableSharedFlow<List<TransactionItem>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val itemsFlow: Flow<List<TransactionItem>> get() = _itemsFlow
 
     fun start() {
         coroutineScope.launch {
-            transactionRecordRepository.itemsObservable.asFlow().collect {
+            transactionRecordRepository.itemsFlow.collect {
                 handleUpdatedRecords(it)
             }
         }
@@ -64,7 +64,7 @@ class TokenTransactionsService(
             }
         }
         coroutineScope.launch {
-            transactionSyncStateRepository.lastBlockInfoObservable.asFlow()
+            transactionSyncStateRepository.lastBlockInfoFlow
                 .collect { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
@@ -117,7 +117,7 @@ class TokenTransactionsService(
         transactionItems.clear()
         transactionItems.addAll(tmpList)
 
-        itemsSubject.onNext(transactionItems)
+        _itemsFlow.tryEmit(transactionItems)
     }
 
     @Synchronized
@@ -135,7 +135,7 @@ class TokenTransactionsService(
         }
 
         if (updated) {
-            itemsSubject.onNext(transactionItems)
+            _itemsFlow.tryEmit(transactionItems)
         }
     }
 
@@ -150,7 +150,7 @@ class TokenTransactionsService(
         }
 
         if (updated) {
-            itemsSubject.onNext(transactionItems)
+            _itemsFlow.tryEmit(transactionItems)
         }
     }
 
@@ -173,7 +173,7 @@ class TokenTransactionsService(
         }
 
         if (updated) {
-            itemsSubject.onNext(transactionItems)
+            _itemsFlow.tryEmit(transactionItems)
         }
     }
 
@@ -186,7 +186,7 @@ class TokenTransactionsService(
             transactionItems[i] = item.copy(currencyValue = currencyValue)
         }
 
-        itemsSubject.onNext(transactionItems)
+        _itemsFlow.tryEmit(transactionItems)
     }
 
     @Synchronized
@@ -229,7 +229,7 @@ class TokenTransactionsService(
         } else {
             transactionItems.clear()
             transactionItems.addAll(tmpList)
-            itemsSubject.onNext(transactionItems)
+            _itemsFlow.tryEmit(transactionItems)
         }
     }
 
@@ -244,7 +244,7 @@ class TokenTransactionsService(
     private val executorService = Executors.newCachedThreadPool()
 
     fun refreshList() {
-        itemsSubject.onNext(transactionItems)
+        _itemsFlow.tryEmit(transactionItems)
     }
 
     fun loadNext() {

@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.Calendar
 import java.util.Date
 
@@ -118,7 +117,7 @@ class TransactionsViewModel(
         }
 
         viewModelScope.launch {
-            service.syncingObservable.asFlow().collect {
+            service.syncingFlow.collect {
                 syncing = it
                 emitState()
             }

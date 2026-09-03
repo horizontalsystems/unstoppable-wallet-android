@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
@@ -34,7 +33,7 @@ class TransactionsService(
     private val _itemsFlow = MutableStateFlow<List<TransactionItem>>(listOf())
     val itemsFlow get() = _itemsFlow.asStateFlow()
 
-    val syncingObservable get() = transactionSyncStateRepository.syncingObservable
+    val syncingFlow get() = transactionSyncStateRepository.syncingFlow
 
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
 
@@ -42,7 +41,7 @@ class TransactionsService(
 
     fun start() {
         coroutineScope.launch {
-            transactionRecordRepository.itemsObservable.asFlow().collect {
+            transactionRecordRepository.itemsFlow.collect {
                 handleUpdatedRecords(it)
             }
         }
@@ -57,7 +56,7 @@ class TransactionsService(
             }
         }
         coroutineScope.launch {
-            transactionSyncStateRepository.lastBlockInfoObservable.asFlow()
+            transactionSyncStateRepository.lastBlockInfoFlow
                 .collect { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }

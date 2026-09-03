@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceService(
     private val wallet: Wallet,
@@ -58,12 +57,12 @@ class TokenBalanceService(
             }
         }
         coroutineScope.launch {
-            balanceAdapterRepository.readyObservable.asFlow().collect {
+            balanceAdapterRepository.readyFlow.collect {
                 handleAdapterUpdate()
             }
         }
         coroutineScope.launch {
-            balanceAdapterRepository.updatesObservable.asFlow().collect {
+            balanceAdapterRepository.updatesFlow.collect {
                 handleAdapterUpdate()
             }
         }

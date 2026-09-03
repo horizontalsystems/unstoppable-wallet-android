@@ -4,10 +4,10 @@ import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 
 interface ITransactionRecordRepository : Clearable {
-    val itemsObservable: Observable<List<TransactionRecord>>
+    val itemsFlow: Flow<List<TransactionRecord>>
 
     fun set(
         transactionWallets: List<TransactionWallet>,

@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
@@ -69,12 +68,12 @@ class BalanceService(
             }
         }
         coroutineScope.launch {
-            adapterRepository.readyObservable.asFlow().collect {
+            adapterRepository.readyFlow.collect {
                 handleAdaptersReady()
             }
         }
         coroutineScope.launch {
-            adapterRepository.updatesObservable.asFlow().collect {
+            adapterRepository.updatesFlow.collect {
                 handleAdapterUpdate(it)
             }
         }
