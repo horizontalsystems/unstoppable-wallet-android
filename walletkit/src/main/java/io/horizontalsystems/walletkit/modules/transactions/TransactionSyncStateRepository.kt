@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 
 class TransactionSyncStateRepository(
     private val adapterManager: TransactionAdapterManager
@@ -44,7 +43,7 @@ class TransactionSyncStateRepository(
 
         adapters.forEach { (source, adapter) ->
             coroutineScope.launch {
-                adapter.lastBlockUpdatedFlowable.asFlow().collect {
+                adapter.lastBlockUpdatedFlow.collect {
                     adapter.lastBlockInfo?.let { lastBlockInfo ->
                         lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
                     }
@@ -52,7 +51,7 @@ class TransactionSyncStateRepository(
             }
 
             coroutineScope.launch {
-                adapter.transactionsStateUpdatedFlowable.asFlow().collect {
+                adapter.transactionsStateUpdatedFlow.collect {
                     emitSyncing()
                 }
             }

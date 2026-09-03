@@ -33,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -123,8 +122,8 @@ class SendMoneroViewModel(
         }
         viewModelScope.launch(Dispatchers.Default) {
             merge(
-                balanceAdapter.balanceStateUpdatedFlowable.asFlow(),
-                balanceAdapter.balanceUpdatedFlowable.asFlow()
+                balanceAdapter.balanceStateUpdatedFlow,
+                balanceAdapter.balanceUpdatedFlow
             )
                 .catch { logger.warning("balance updates flow failed", it) }
                 .collect {

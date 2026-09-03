@@ -46,7 +46,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -224,7 +223,7 @@ class TransactionInfoService(
         }
 
         launch {
-            adapter.lastBlockUpdatedFlowable.asFlow()
+            adapter.lastBlockUpdatedFlow
                 .collect {
                     handleLastBlockUpdate()
                 }

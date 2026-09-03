@@ -13,11 +13,9 @@ import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 
 class SolanaTransactionsAdapter(
         solanaKitWrapper: SolanaKitWrapper,
@@ -59,14 +57,14 @@ class SolanaTransactionsAdapter(
     override val lastBlockInfo: LastBlockInfo?
         get() = kit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = kit.lastBlockHeightFlow.map {}.asFlowable()
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = kit.lastBlockHeightFlow.map {}
 
     override val transactionsState: AdapterState
         get() = convertToAdapterState(kit.transactionsSyncState)
 
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = kit.transactionsSyncStateFlow.map {}.asFlowable()
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = kit.transactionsSyncStateFlow.map {}
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

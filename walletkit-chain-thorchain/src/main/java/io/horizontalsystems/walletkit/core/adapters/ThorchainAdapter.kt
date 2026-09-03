@@ -15,12 +15,12 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.models.Address
 import io.horizontalsystems.thorchainkit.models.Asset
 import io.horizontalsystems.thorchainkit.transaction.Signer
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -45,24 +45,24 @@ class ThorchainAdapter(
         }
     }
 
-    // BehaviorSubject, not PublishSubject: the balance screen (re)subscribes to these
-    // flowables asynchronously, after the item list is built. The kit's state burst on
+    // replay = 1, unlike the other adapters: the balance screen (re)subscribes to these
+    // flows asynchronously, after the item list is built. The kit's state burst on
     // start can fire entirely inside that gap, and a lost event leaves the row frozen
     // on a stale snapshot forever — re-syncing an unchanged state emits nothing.
     // Replaying the last event makes every (re)subscription re-read the live state.
-    private val balanceUpdatedSubject: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
-    private val balanceStateUpdatedSubject: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
+    private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply { tryEmit(Unit) }
+    private val _balanceStateUpdatedFlow = MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply { tryEmit(Unit) }
 
     override var balanceState: AdapterState = thorchainKit.syncState.toAdapterState()
 
     override val balanceData: BalanceData
         get() = BalanceData(availableBalance)
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = _balanceUpdatedFlow
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = _balanceStateUpdatedFlow
 
     override val receiveAddress: String
         get() = thorchainKit.receiveAddress
@@ -73,7 +73,7 @@ class ThorchainAdapter(
         coroutineScope.launch {
             try {
                 thorchainKit.getDenomBalanceFlow(denom).collect {
-                    balanceUpdatedSubject.onNext(Unit)
+                    _balanceUpdatedFlow.tryEmit(Unit)
                 }
             } catch (_: Throwable) {
             }
@@ -82,7 +82,7 @@ class ThorchainAdapter(
             try {
                 thorchainKit.syncStateFlow.collect {
                     balanceState = it.toAdapterState()
-                    balanceStateUpdatedSubject.onNext(Unit)
+                    _balanceStateUpdatedFlow.tryEmit(Unit)
                 }
             } catch (_: Throwable) {
             }

@@ -49,11 +49,11 @@ class LitecoinAdapter(
         "https://blockchair.com/litecoin/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
-        balanceUpdatedSubject.onNext(Unit)
+        _balanceUpdatedFlow.tryEmit(Unit)
     }
 
     override fun onLastBlockInfoUpdate(blockInfo: BlockInfo) {
-        lastBlockUpdatedSubject.onNext(Unit)
+        _lastBlockUpdatedFlow.tryEmit(Unit)
     }
 
     override fun onKitStateUpdate(state: BitcoinCore.KitState) {
@@ -71,7 +71,7 @@ class LitecoinAdapter(
             records.add(transactionRecord(info))
         }
 
-        transactionRecordsSubject.onNext(records)
+        _transactionRecordsFlow.tryEmit(records)
     }
 
     override fun onTransactionsDelete(hashes: List<String>) {

@@ -40,17 +40,16 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.util.Date
 
@@ -73,7 +72,7 @@ abstract class BitcoinBaseAdapter(
         set(value) {
             if (value != field) {
                 field = value
-                adapterStateUpdatedSubject.onNext(Unit)
+                _adapterStateUpdatedFlow.tryEmit(Unit)
             }
         }
 
@@ -91,22 +90,22 @@ abstract class BitcoinBaseAdapter(
 
     override val isMainNet: Boolean = true
 
-    protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
+    protected val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    protected val _lastBlockUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    protected val _adapterStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    protected val _transactionRecordsFlow = MutableSharedFlow<List<TransactionRecord>>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = _balanceUpdatedFlow
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = _lastBlockUpdatedFlow
 
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = _adapterStateUpdatedFlow
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = _adapterStateUpdatedFlow
 
     final override val unspentOutputs: List<UnspentOutputInfo>
         get() = kit.getUnspentOutputs(UtxoFilters())
@@ -120,40 +119,35 @@ abstract class BitcoinBaseAdapter(
         else -> emptyFlow()
     }
 
-    private fun getTransactionRecordsFlow(transactionType: FilterTransactionType): Flow<List<TransactionRecord>> {
-        val observable: Observable<List<TransactionRecord>> = when (transactionType) {
-            FilterTransactionType.All -> {
-                transactionRecordsSubject
-            }
-            FilterTransactionType.Incoming -> {
-                transactionRecordsSubject
-                    .map { records ->
-                        records.filter {
-                            it is BitcoinIncomingTransactionRecord ||
-                                    (it is BitcoinOutgoingTransactionRecord && it.sentToSelf)
-                        }
-                    }
-                    .filter {
-                        it.isNotEmpty()
-                    }
-            }
-            FilterTransactionType.Outgoing -> {
-                transactionRecordsSubject
-                    .map { records ->
-                        records.filter { it is BitcoinOutgoingTransactionRecord }
-                    }
-                    .filter {
-                        it.isNotEmpty()
-                    }
-
-            }
-            FilterTransactionType.Swap,
-            FilterTransactionType.Approve -> {
-                Observable.empty()
-            }
+    private fun getTransactionRecordsFlow(transactionType: FilterTransactionType): Flow<List<TransactionRecord>> = when (transactionType) {
+        FilterTransactionType.All -> {
+            _transactionRecordsFlow
         }
-
-        return observable.toFlowable(BackpressureStrategy.BUFFER).asFlow()
+        FilterTransactionType.Incoming -> {
+            _transactionRecordsFlow
+                .map { records ->
+                    records.filter {
+                        it is BitcoinIncomingTransactionRecord ||
+                                (it is BitcoinOutgoingTransactionRecord && it.sentToSelf)
+                    }
+                }
+                .filter {
+                    it.isNotEmpty()
+                }
+        }
+        FilterTransactionType.Outgoing -> {
+            _transactionRecordsFlow
+                .map { records ->
+                    records.filter { it is BitcoinOutgoingTransactionRecord }
+                }
+                .filter {
+                    it.isNotEmpty()
+                }
+        }
+        FilterTransactionType.Swap,
+        FilterTransactionType.Approve -> {
+            emptyFlow()
+        }
     }
 
     override val debugInfo: String = ""

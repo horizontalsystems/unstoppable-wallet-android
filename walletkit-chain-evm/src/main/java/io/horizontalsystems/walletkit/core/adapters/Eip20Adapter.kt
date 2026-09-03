@@ -20,10 +20,9 @@ import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -74,14 +73,14 @@ class Eip20Adapter(
     override val balanceState: AdapterState
         get() = convertToAdapterState(eip20Kit.syncState)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.syncStateFlow.map { }.asFlowable()
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = eip20Kit.syncStateFlow.map { }
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(eip20Kit.balance, decimal))
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.balanceFlow.map { }.asFlowable()
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = eip20Kit.balanceFlow.map { }
 
     // ISendEthereumAdapter
 

@@ -6,12 +6,12 @@ import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toAdapterState
 import io.horizontalsystems.stellarkit.StellarKit
 import io.horizontalsystems.stellarkit.room.StellarAsset
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -25,19 +25,19 @@ class StellarAssetAdapter(
     private val stellarAsset = StellarAsset.Asset(code, issuer)
     private var assetBalance: BigDecimal? = null
 
-    private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _balanceStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     private val balance: BigDecimal
         get() = assetBalance ?: BigDecimal.ZERO
 
     override var balanceState: AdapterState = AdapterState.Syncing()
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = _balanceStateUpdatedFlow
     override val balanceData: BalanceData
         get() = BalanceData(balance)
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = _balanceUpdatedFlow
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -47,13 +47,13 @@ class StellarAssetAdapter(
         coroutineScope.launch {
             stellarKit.getBalanceFlow(stellarAsset).collect { balance ->
                 assetBalance = balance?.balance
-                balanceUpdatedSubject.onNext(Unit)
+                _balanceUpdatedFlow.tryEmit(Unit)
             }
         }
         coroutineScope.launch {
             stellarKit.syncStateFlow.collect {
                 balanceState = it.toAdapterState()
-                balanceStateUpdatedSubject.onNext(Unit)
+                _balanceStateUpdatedFlow.tryEmit(Unit)
             }
         }
     }

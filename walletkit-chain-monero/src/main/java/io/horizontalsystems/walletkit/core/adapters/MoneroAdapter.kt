@@ -26,11 +26,11 @@ import io.horizontalsystems.monerokit.Seed
 import io.horizontalsystems.monerokit.SyncState
 import io.horizontalsystems.monerokit.data.MoneroAccount
 import io.horizontalsystems.monerokit.data.Subaddress
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,19 +58,19 @@ class MoneroAdapter(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _balanceStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     override var balanceState: AdapterState = kit.syncStateFlow.value.toAdapterState()
 
     override val balanceData: BalanceData
         get() = activeAccountBalanceData
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = _balanceUpdatedFlow
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = _balanceStateUpdatedFlow
 
     override val receiveAddress: String
         get() = kit.receiveAddress(activeAccount)
@@ -83,7 +83,7 @@ class MoneroAdapter(
             _activeAccountFlow.value = value
             localStorage.setMoneroActiveAccount(walletAccountId, value)
             // poke balance collectors so screens re-read account-scoped data
-            balanceUpdatedSubject.onNext(Unit)
+            _balanceUpdatedFlow.tryEmit(Unit)
         }
 
     override val accountsFlow: StateFlow<List<MoneroAccountInfo>> = kit.accountsFlow
@@ -118,7 +118,7 @@ class MoneroAdapter(
                     activeAccount = 0
                 }
 
-                balanceUpdatedSubject.onNext(Unit)
+                _balanceUpdatedFlow.tryEmit(Unit)
             }
         }
 
@@ -126,7 +126,7 @@ class MoneroAdapter(
             kit.syncStateFlow.collect {
                 balanceState = it.toAdapterState()
 
-                balanceStateUpdatedSubject.onNext(Unit)
+                _balanceStateUpdatedFlow.tryEmit(Unit)
             }
         }
 

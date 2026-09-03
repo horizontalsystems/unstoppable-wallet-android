@@ -13,20 +13,20 @@ import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tonkit.core.TonKit.SendAmount
 import io.horizontalsystems.tonkit.models.Account
 import io.horizontalsystems.tonkit.models.Event
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import kotlin.math.absoluteValue
 
 class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9) {
 
-    private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
-    private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _balanceStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -36,13 +36,13 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
         coroutineScope.launch {
             tonKit.accountFlow.collect { account ->
                 balance = getBalanceFromAccount(account)
-                balanceUpdatedSubject.onNext(Unit)
+                _balanceUpdatedFlow.tryEmit(Unit)
             }
         }
         coroutineScope.launch {
             tonKit.syncStateFlow.collect {
                 balanceState = it.toAdapterState()
-                balanceStateUpdatedSubject.onNext(Unit)
+                _balanceStateUpdatedFlow.tryEmit(Unit)
             }
         }
     }
@@ -62,12 +62,12 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
         get() = ""
 
     override var balanceState: AdapterState = AdapterState.Syncing()
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = balanceStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = _balanceStateUpdatedFlow
     override val balanceData: BalanceData
         get() = BalanceData(balance)
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = _balanceUpdatedFlow
 
     override val availableBalance: BigDecimal
         get() = balance

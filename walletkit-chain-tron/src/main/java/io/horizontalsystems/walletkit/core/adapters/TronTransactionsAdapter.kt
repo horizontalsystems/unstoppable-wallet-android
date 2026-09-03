@@ -17,10 +17,8 @@ import io.horizontalsystems.tronkit.hexStringToByteArray
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.TransactionTag
 import io.horizontalsystems.tronkit.network.Network
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 
 class TronTransactionsAdapter(
     val tronKitWrapper: TronKitWrapper,
@@ -42,14 +40,14 @@ class TronTransactionsAdapter(
     override val lastBlockInfo: LastBlockInfo
         get() = tronKit.lastBlockHeight.toInt().let { LastBlockInfo(it) }
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = tronKit.lastBlockHeightFlow.asFlowable().map { }
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = tronKit.lastBlockHeightFlow.map { }
 
     override val transactionsState: AdapterState
         get() = convertToAdapterState(tronKit.transactionsSyncState)
 
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = (tronKit.transactionsSyncStateFlow ?: tronKit.syncStateFlow).asFlowable().map {}
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = (tronKit.transactionsSyncStateFlow ?: tronKit.syncStateFlow).map {}
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

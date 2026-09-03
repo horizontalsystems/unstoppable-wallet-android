@@ -21,10 +21,8 @@ import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 
 class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
@@ -65,14 +63,14 @@ class EvmTransactionsAdapter(
     override val lastBlockInfo: LastBlockInfo?
         get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.lastBlockHeightFlow.map { }.asFlowable()
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = evmKit.lastBlockHeightFlow.map { }
 
     override val transactionsState: AdapterState
         get() = convertToAdapterState(evmKit.transactionsSyncState)
 
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.transactionsSyncStateFlow.map { }.asFlowable()
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = evmKit.transactionsSyncStateFlow.map { }
 
     override val additionalTokenQueries: List<TokenQuery>
         get() = evmKit.getTagTokenContractAddresses().map { address ->

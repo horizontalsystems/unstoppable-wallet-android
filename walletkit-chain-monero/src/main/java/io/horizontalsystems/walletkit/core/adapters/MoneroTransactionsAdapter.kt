@@ -13,12 +13,10 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
-import kotlinx.coroutines.rx2.asFlowable
 
 class MoneroTransactionsAdapter(
     private val kit: MoneroKit,
@@ -31,14 +29,14 @@ class MoneroTransactionsAdapter(
     override val transactionsState: AdapterState
         get() = kit.syncStateFlow.value.toAdapterState()
 
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = kit.syncStateFlow.asFlowable().map { }
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = kit.syncStateFlow.map { }
 
     override val lastBlockInfo: LastBlockInfo?
         get() = kit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = kit.lastBlockUpdatedFlow.asFlowable()
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = kit.lastBlockUpdatedFlow
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

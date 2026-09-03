@@ -11,10 +11,8 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.Thor
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.thorchainkit.network.Network
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 
 class ThorchainTransactionsAdapter(
     thorchainKitWrapper: ThorchainKitWrapper,
@@ -29,14 +27,14 @@ class ThorchainTransactionsAdapter(
     override val transactionsState: AdapterState
         get() = thorchainKit.transactionsSyncState.toAdapterState()
 
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = thorchainKit.transactionsSyncStateFlow.asFlowable().map {}
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = thorchainKit.transactionsSyncStateFlow.map {}
 
     override val lastBlockInfo: LastBlockInfo?
         get() = thorchainKit.lastBlockHeight.takeIf { it > 0 }?.let { LastBlockInfo(it.toInt()) }
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = thorchainKit.lastBlockHeightFlow.asFlowable().map {}
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = thorchainKit.lastBlockHeightFlow.map {}
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

@@ -279,10 +279,10 @@ sealed class AdapterState {
 interface ITransactionsAdapter {
     val explorerTitle: String
     val transactionsState: AdapterState
-    val transactionsStateUpdatedFlowable: Flowable<Unit>
+    val transactionsStateUpdatedFlow: Flow<Unit>
 
     val lastBlockInfo: LastBlockInfo?
-    val lastBlockUpdatedFlowable: Flowable<Unit>
+    val lastBlockUpdatedFlow: Flow<Unit>
     val additionalTokenQueries: List<TokenQuery> get() = listOf()
 
     suspend fun getTransactions(
@@ -312,10 +312,10 @@ class UnsupportedFilterException : Exception()
 
 interface IBalanceAdapter {
     val balanceState: AdapterState
-    val balanceStateUpdatedFlowable: Flowable<Unit>
+    val balanceStateUpdatedFlow: Flow<Unit>
 
     val balanceData: BalanceData?
-    val balanceUpdatedFlowable: Flowable<Unit>
+    val balanceUpdatedFlow: Flow<Unit>
 }
 
 data class StellarAssetBalance(val code: String)

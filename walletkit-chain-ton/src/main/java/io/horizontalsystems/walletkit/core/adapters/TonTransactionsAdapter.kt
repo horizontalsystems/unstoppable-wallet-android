@@ -17,11 +17,9 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.Tag
 import io.horizontalsystems.tonkit.models.TagQuery
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 
 class TonTransactionsAdapter(
     tonKitWrapper: TonKitWrapper,
@@ -33,12 +31,12 @@ class TonTransactionsAdapter(
     override val explorerTitle = "tonviewer.com"
     override val transactionsState: AdapterState
         get() = tonKit.eventSyncStateFlow.value.toAdapterState()
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = tonKit.eventSyncStateFlow.asFlowable().map {}
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = tonKit.eventSyncStateFlow.map {}
     override val lastBlockInfo: LastBlockInfo?
         get() = null
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = Flowable.empty()
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = emptyFlow()
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

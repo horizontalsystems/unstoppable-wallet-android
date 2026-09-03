@@ -21,11 +21,9 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.TagQuery
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.stellarkit.room.Tag
-import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 
 class StellarTransactionsAdapter(
     val stellarKitWrapper: StellarKitWrapper,
@@ -37,12 +35,12 @@ class StellarTransactionsAdapter(
     override val explorerTitle = "Stellar Expert"
     override val transactionsState: AdapterState
         get() = stellarKit.operationsSyncStateFlow.value.toAdapterState()
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = stellarKit.operationsSyncStateFlow.asFlowable().map {}
+    override val transactionsStateUpdatedFlow: Flow<Unit>
+        get() = stellarKit.operationsSyncStateFlow.map {}
     override val lastBlockInfo: LastBlockInfo?
         get() = null
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = Flowable.empty()
+    override val lastBlockUpdatedFlow: Flow<Unit>
+        get() = emptyFlow()
 
     override suspend fun getTransactions(
         from: TransactionRecord?,
