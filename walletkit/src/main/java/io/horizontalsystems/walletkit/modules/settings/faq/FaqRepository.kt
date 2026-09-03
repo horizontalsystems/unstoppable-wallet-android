@@ -13,7 +13,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class FaqRepository(
     private val faqManager: FaqManager,
@@ -53,7 +52,7 @@ class FaqRepository(
                     times = retryLimit,
                     predicate = { it is AssertionError }
                 ) {
-                    faqManager.getFaqList().await()
+                    faqManager.getFaqList()
                 }
 
                 val faqSections = getByLocalLanguage(

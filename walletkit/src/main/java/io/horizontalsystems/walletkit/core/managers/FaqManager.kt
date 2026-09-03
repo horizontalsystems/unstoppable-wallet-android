@@ -11,7 +11,8 @@ import io.horizontalsystems.walletkit.entities.Faq
 import io.horizontalsystems.walletkit.entities.FaqMap
 import io.horizontalsystems.walletkit.modules.markdown.MarkdownPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.reflect.Type
@@ -41,20 +42,18 @@ object FaqManager {
         )
     }
 
-    fun getFaqList(): Single<List<FaqMap>> {
-        return Single.fromCallable {
-            val request = Request.Builder()
-                .url(faqListUrl)
-                .build()
+    suspend fun getFaqList(): List<FaqMap> = withContext(Dispatchers.IO) {
+        val request = Request.Builder()
+            .url(faqListUrl)
+            .build()
 
-            val response = OkHttpClient().newCall(request).execute()
+        val response = OkHttpClient().newCall(request).execute()
 
-            val listType = object : TypeToken<List<FaqMap>>() {}.type
-            val list: List<FaqMap> = gson.fromJson(response.body?.charStream(), listType)
-            response.close()
+        val listType = object : TypeToken<List<FaqMap>>() {}.type
+        val list: List<FaqMap> = gson.fromJson(response.body?.charStream(), listType)
+        response.close()
 
-            list
-        }
+        list
     }
 
     class FaqDeserializer(faqUrl: String) : JsonDeserializer<Faq> {

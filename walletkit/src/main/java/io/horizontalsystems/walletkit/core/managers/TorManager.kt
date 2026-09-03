@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.core.tor.torcore.TorConstants
 import io.horizontalsystems.walletkit.core.tor.torcore.TorOperator
 import io.horizontalsystems.walletkit.core.tor.torutils.TorConnectionManager
 import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
-import io.reactivex.Single
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.Executors
@@ -39,7 +38,7 @@ class TorManager(context: Context, val localStorage: ILocalStorage) : ITorManage
         }
     }
 
-    override fun stop(): Single<Boolean> {
+    override suspend fun stop(): Boolean {
         disableProxy()
         return torOperator.stop()
     }

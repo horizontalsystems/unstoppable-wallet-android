@@ -8,7 +8,8 @@ import com.google.gson.JsonElement
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Guide
 import io.horizontalsystems.walletkit.entities.GuideCategoryMultiLang
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.reflect.Type
@@ -24,18 +25,16 @@ object GuidesManager {
             .registerTypeAdapter(Guide::class.java, GuideDeserializer(eduUrl))
             .create()
 
-    fun getGuideCategories(): Single<Array<GuideCategoryMultiLang>> {
-        return Single.fromCallable {
-            val request = Request.Builder()
-                    .url(eduUrl)
-                    .build()
+    suspend fun getGuideCategories(): Array<GuideCategoryMultiLang> = withContext(Dispatchers.IO) {
+        val request = Request.Builder()
+                .url(eduUrl)
+                .build()
 
-            val response = OkHttpClient().newCall(request).execute()
-            val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategoryMultiLang>::class.java)
-            response.close()
+        val response = OkHttpClient().newCall(request).execute()
+        val categories = gson.fromJson(response.body?.charStream(), Array<GuideCategoryMultiLang>::class.java)
+        response.close()
 
-            categories
-        }
+        categories
     }
 
     class GuideDeserializer(guidesUrl: String) : JsonDeserializer<Guide> {

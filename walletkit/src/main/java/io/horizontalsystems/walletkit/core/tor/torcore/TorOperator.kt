@@ -5,11 +5,10 @@ import io.horizontalsystems.walletkit.core.tor.ConnectionStatus
 import io.horizontalsystems.walletkit.core.tor.EntityStatus
 import io.horizontalsystems.walletkit.core.tor.Tor
 import io.horizontalsystems.walletkit.core.tor.torutils.ProcessUtils
-import io.reactivex.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.logging.Level
@@ -66,7 +65,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
                     torControl?.let { it ->
                         coroutineScope.launch {
                             try {
-                                it.initConnection(4).asFlow().collect { torConnection ->
+                                it.initConnection(4).collect { torConnection ->
                                     torInfo.connection = torConnection
                                 }
                             } catch (e: Throwable) {
@@ -94,7 +93,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
         listener.statusUpdate(torInfo)
     }
 
-    fun stop(): Single<Boolean> {
+    suspend fun stop(): Boolean {
         return killAllDaemons()
     }
 
@@ -115,26 +114,21 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
     }
 
     @Throws(java.lang.Exception::class)
-    private fun killAllDaemons(): Single<Boolean> {
+    private suspend fun killAllDaemons(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            var result = torControl?.shutdownTor() ?: false
 
-        return Single.create { emitter ->
-
-            try {
-                var result = torControl?.shutdownTor() ?: false
-
-                if (!result) {
-                    result = killTorProcess()
-                }
-
-                torInfo.status = EntityStatus.STOPPED
-
-                eventMonitor(torInfo, Level.INFO, "Tor stopped")
-                emitter.onSuccess(result)
-
-            } catch (e: java.lang.Exception) {
-                eventMonitor(torInfo, Level.SEVERE, "Tor stopped, but with errors:${e.localizedMessage}")
-                emitter.onError(e)
+            if (!result) {
+                result = killTorProcess()
             }
+
+            torInfo.status = EntityStatus.STOPPED
+
+            eventMonitor(torInfo, Level.INFO, "Tor stopped")
+            result
+        } catch (e: java.lang.Exception) {
+            eventMonitor(torInfo, Level.SEVERE, "Tor stopped, but with errors:${e.localizedMessage}")
+            throw e
         }
     }
 

@@ -14,7 +14,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.await
 
 class GuidesRepository(
         private val guidesManager: GuidesManager,
@@ -54,7 +53,7 @@ class GuidesRepository(
                     times = retryLimit,
                     predicate = { it is AssertionError }
                 ) {
-                    guidesManager.getGuideCategories().await()
+                    guidesManager.getGuideCategories()
                 }
 
                 val categories = getCategoriesByLocalLanguage(guideCategories, languageManager.currentLocale.language, languageManager.fallbackLocale.language)

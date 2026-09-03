@@ -41,8 +41,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.reactivex.Flowable
-import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -218,13 +216,6 @@ interface IRandomProvider {
 interface INetworkManager {
     suspend fun getMarkdown(host: String, path: String): String
     suspend fun getReleaseNotes(host: String, path: String): JsonObject
-    fun getTransactionWithPost(
-        host: String,
-        path: String,
-        body: Map<String, Any>
-    ): Flowable<JsonObject>
-
-    fun getEvmInfo(host: String, path: String): Single<JsonObject>
     suspend fun registerApp(userId: String, referralCode: String): RegisterAppResponse
     suspend fun getWCWhiteList(host: String, path: String): List<ServiceWCWhitelist.WCWhiteList>
 }
@@ -524,7 +515,7 @@ interface IAccountCleaner {
 
 interface ITorManager {
     fun start()
-    fun stop(): Single<Boolean>
+    suspend fun stop(): Boolean
     fun setTorAsEnabled()
     fun setTorAsDisabled()
     val isTorEnabled: Boolean

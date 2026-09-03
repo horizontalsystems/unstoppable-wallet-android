@@ -6,7 +6,6 @@ import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.entities.GuideCategory
 import io.horizontalsystems.walletkit.entities.ViewState
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiState<GuidesUiState>() {
     private var viewState: ViewState = ViewState.Loading

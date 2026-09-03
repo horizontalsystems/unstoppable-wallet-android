@@ -4,19 +4,14 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.Strictness
 import io.horizontalsystems.walletkit.core.INetworkManager
-import io.reactivex.Flowable
-import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.Url
 import timber.log.Timber
@@ -32,15 +27,6 @@ class NetworkManager : INetworkManager {
         return ServiceChangeLogs.service(host).getReleaseNotes(path)
     }
 
-    override fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject> {
-        return ServiceFullTransaction.service(host)
-            .getFullTransactionWithPost(path, body.mapValues { it.value.toString() })
-    }
-
-    override fun getEvmInfo(host: String, path: String): Single<JsonObject> {
-        return ServiceEvmContractInfo.service(host).getTokenInfo(path)
-    }
-
     override suspend fun registerApp(userId: String, referralCode: String)
             : MiniAppRegisterService.RegisterAppResponse {
         return MiniAppRegisterService.service().registerApp(userId, referralCode)
@@ -52,38 +38,6 @@ class NetworkManager : INetworkManager {
     ): List<ServiceWCWhitelist.WCWhiteList> {
         return ServiceWCWhitelist.service(host).getWhiteList(path)
     }
-}
-
-object ServiceFullTransaction {
-    fun service(apiURL: String): FullTransactionAPI {
-        return APIClient.retrofit(apiURL, 60)
-            .create(FullTransactionAPI::class.java)
-    }
-
-    interface FullTransactionAPI {
-        @GET
-        @Headers("Content-Type: application/json")
-        fun getFullTransaction(@Url path: String): Flowable<JsonObject>
-
-        @POST
-        @Headers("Content-Type: application/json")
-        fun getFullTransactionWithPost(@Url path: String, @Body body: Map<String, String>): Flowable<JsonObject>
-    }
-
-}
-
-object ServiceEvmContractInfo {
-    fun service(apiURL: String): EvmContractInfoAPI {
-        return APIClient.retrofit(apiURL, 60)
-            .create(EvmContractInfoAPI::class.java)
-    }
-
-    interface EvmContractInfoAPI {
-        @GET
-        @Headers("Content-Type: application/json")
-        fun getTokenInfo(@Url path: String): Single<JsonObject>
-    }
-
 }
 
 object ServiceGuide {
@@ -180,7 +134,6 @@ object APIClient {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(client)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(
                 GsonConverterFactory
                     .create(GsonBuilder().setStrictness(Strictness.LENIENT).create())
@@ -206,7 +159,6 @@ object APIClient {
 
         return Retrofit.Builder()
             .baseUrl(apiURL)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(httpClient.build())

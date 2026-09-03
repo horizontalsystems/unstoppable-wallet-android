@@ -3,7 +3,11 @@ package io.horizontalsystems.walletkit.core.tor.torcore
 import android.text.TextUtils
 import io.horizontalsystems.walletkit.core.tor.ConnectionStatus
 import io.horizontalsystems.walletkit.core.tor.Tor
-import io.reactivex.Observable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import net.freehaven.tor.control.EventHandler
 import net.freehaven.tor.control.TorControlConnection
 import java.io.BufferedReader
@@ -65,7 +69,7 @@ class TorControl(
         return controlConn != null
     }
 
-    fun initConnection(maxTries: Int): Observable<Tor.Connection> {
+    fun initConnection(maxTries: Int): Flow<Tor.Connection> {
 
         torInfo.connection.status = ConnectionStatus.CONNECTING
         eventMonitor(torInfo)
@@ -73,14 +77,14 @@ class TorControl(
         return createControlConn(maxTries)
             .map {
                 configConnection(it, torInfo)
-            }.onErrorReturn {
-                Tor.Connection(-1)
+            }.catch {
+                emit(Tor.Connection(-1))
             }
     }
 
-    private fun createControlConn(maxTries: Int): Observable<TorControlConnection> {
+    private fun createControlConn(maxTries: Int): Flow<TorControlConnection> {
 
-        return Observable.create { emitter ->
+        return flow {
             var attempt = 0
 
             while (controlConn == null && attempt++ < maxTries) {
@@ -100,7 +104,7 @@ class TorControl(
                         controlConn = conn
 
                         eventMonitor(msg = "SUCCESS connected to Tor control port.")
-                        emitter.onNext(conn)
+                        emit(conn)
                     }
                 } catch (e: Exception) {
                     controlConn = null
@@ -108,13 +112,11 @@ class TorControl(
                     torInfo.connection.status = ConnectionStatus.FAILED
 
                     eventMonitor(torInfo, msg = "Error connecting to Tor local control port: " + e.localizedMessage)
-                    emitter.tryOnError(e)
+                    throw e
                 }
 
-                // Wait for control file creation -> Replace this implementation with RX.
-                //-----------------------------
-                Thread.sleep(300)
-                //-----------------------------
+                // Wait for control file creation
+                delay(300)
             }
         }
     }

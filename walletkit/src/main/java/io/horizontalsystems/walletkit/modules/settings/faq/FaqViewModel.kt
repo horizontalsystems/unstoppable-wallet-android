@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.entities.Faq
 import io.horizontalsystems.walletkit.entities.FaqSection
 import io.horizontalsystems.walletkit.entities.ViewState
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 
 class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
 
