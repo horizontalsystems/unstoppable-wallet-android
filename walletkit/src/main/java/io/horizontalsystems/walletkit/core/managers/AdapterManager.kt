@@ -8,9 +8,9 @@ import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.factories.AdapterFactory
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,13 +23,12 @@ class AdapterManager(
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
+    private val _adaptersReadyFlow = MutableSharedFlow<Map<Wallet, IAdapter>>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     @Volatile
     private var adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
-    override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
-        adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val adaptersReadyFlow: Flow<Map<Wallet, IAdapter>> = _adaptersReadyFlow
 
     override fun startAdapterManager() {
         coroutineScope.launch {
@@ -72,7 +71,7 @@ class AdapterManager(
 
         adaptersMap = newAdaptersMap
 
-        adaptersReadySubject.onNext(adaptersMap)
+        _adaptersReadyFlow.tryEmit(adaptersMap)
 
         currentAdapters.forEach { (wallet, adapter) ->
             adapter.stop()

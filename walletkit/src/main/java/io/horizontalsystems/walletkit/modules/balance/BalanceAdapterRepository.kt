@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class BalanceAdapterRepository(
@@ -35,7 +34,7 @@ class BalanceAdapterRepository(
 
     init {
         coroutineScope.launch {
-            adapterManager.adaptersReadyObservable.asFlow().collect {
+            adapterManager.adaptersReadyFlow.collect {
                 unsubscribeFromAdapterUpdates()
                 readySubject.onNext(Unit)
 

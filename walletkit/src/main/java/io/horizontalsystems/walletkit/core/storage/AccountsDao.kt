@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import io.horizontalsystems.walletkit.entities.ActiveAccount
-import io.reactivex.Flowable
 
 @Dao
 interface AccountsDao {
@@ -31,9 +30,6 @@ interface AccountsDao {
 
     @Query("SELECT id FROM AccountRecord WHERE deleted = 1")
     fun getDeletedIds(): List<String>
-
-    @Query("SELECT COUNT(*) FROM AccountRecord WHERE isBackedUp = 0 AND deleted = 0")
-    fun getNonBackedUpCount(): Flowable<Int>
 
     @Query("SELECT COUNT(*) FROM AccountRecord WHERE deleted = 0")
     fun getTotalCount(): Int

@@ -50,7 +50,7 @@ import java.math.BigDecimal
 import java.util.Date
 
 interface IAdapterManager {
-    val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
+    val adaptersReadyFlow: Flow<Map<Wallet, IAdapter>>
     fun startAdapterManager()
     suspend fun refresh()
     fun <T> getAdapterForWallet(wallet: Wallet): T?
@@ -168,8 +168,8 @@ interface IAccountManager {
     val activeAccountStateFlow: Flow<ActiveAccountState>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
-    val accountsFlowable: Flowable<List<Account>>
-    val accountsDeletedFlowable: Flowable<Unit>
+    val accountsFlow: Flow<List<Account>>
+    val accountsDeletedFlow: Flow<Unit>
 
     fun setActiveAccountId(activeAccountId: String?)
     fun account(id: String): Account?
@@ -187,7 +187,7 @@ interface IAccountManager {
 
 interface IBackupManager {
     val allBackedUp: Boolean
-    val allBackedUpFlowable: Flowable<Boolean>
+    val allBackedUpFlow: Flow<Boolean>
 }
 
 interface IAccountFactory {
@@ -459,7 +459,6 @@ interface IAccountsStorage {
     fun save(account: Account)
     fun update(account: Account)
     fun delete(id: String)
-    fun getNonBackedUpCount(): Flowable<Int>
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()

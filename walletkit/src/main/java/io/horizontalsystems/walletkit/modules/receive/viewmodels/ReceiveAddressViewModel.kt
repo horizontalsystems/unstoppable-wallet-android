@@ -17,7 +17,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
@@ -42,7 +41,7 @@ class ReceiveAddressViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            adapterManager.adaptersReadyObservable.asFlow()
+            adapterManager.adaptersReadyFlow
                 .collect {
                     setData()
                 }

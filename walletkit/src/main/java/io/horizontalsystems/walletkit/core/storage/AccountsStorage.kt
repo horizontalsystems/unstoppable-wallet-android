@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.ActiveAccount
-import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
@@ -108,10 +107,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
     override fun delete(id: String) {
         dao.delete(id)
-    }
-
-    override fun getNonBackedUpCount(): Flowable<Int> {
-        return dao.getNonBackedUpCount()
     }
 
     override fun clear() {

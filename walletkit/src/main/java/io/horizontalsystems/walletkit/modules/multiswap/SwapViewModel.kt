@@ -31,7 +31,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -153,7 +152,7 @@ class SwapViewModel(
         }
 
         viewModelScope.launch {
-            adapterManager.adaptersReadyObservable.asFlow().collect {
+            adapterManager.adaptersReadyFlow.collect {
                 balanceService.refresh()
             }
         }

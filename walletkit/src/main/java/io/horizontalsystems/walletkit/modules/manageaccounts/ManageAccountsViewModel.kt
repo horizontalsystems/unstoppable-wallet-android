@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountsViewModel(
     private val accountManager: IAccountManager,
@@ -27,7 +26,7 @@ class ManageAccountsViewModel(
 
     init {
         viewModelScope.launch {
-            accountManager.accountsFlowable.asFlow()
+            accountManager.accountsFlow
                 .collect {
                     activeAccount = accountManager.activeAccount
                     accounts = it

@@ -6,9 +6,9 @@ import io.horizontalsystems.walletkit.core.IAccountCleaner
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IAccountsStorage
 import io.horizontalsystems.walletkit.entities.Account
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -22,8 +22,8 @@ class AccountManager(
 ) : IAccountManager {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var accountsCache = mutableMapOf<String, Account>()
-    private val accountsSubject = PublishSubject.create<List<Account>>()
-    private val accountsDeletedSubject = PublishSubject.create<Unit>()
+    private val _accountsFlow = MutableSharedFlow<List<Account>>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _accountsDeletedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _activeAccountStateFlow = MutableStateFlow<ActiveAccountState>(ActiveAccountState.NotLoaded)
     private var currentLevel = Int.MAX_VALUE
 
@@ -40,11 +40,11 @@ class AccountManager(
     override val accounts: List<Account>
         get() = accountsCache.map { it.value }
 
-    override val accountsFlowable: Flowable<List<Account>>
-        get() = accountsSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val accountsFlow: Flow<List<Account>>
+        get() = _accountsFlow
 
-    override val accountsDeletedFlowable: Flowable<Unit>
-        get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val accountsDeletedFlow: Flow<Unit>
+        get() = _accountsDeletedFlow
 
     private fun updateCache(account: Account) {
         accountsCache[account.id] = account
@@ -68,7 +68,7 @@ class AccountManager(
         storage.save(account)
 
         updateCache(account)
-        accountsSubject.onNext(accounts)
+        _accountsFlow.tryEmit(accounts)
 
         setActiveAccountId(account.id)
     }
@@ -79,7 +79,7 @@ class AccountManager(
             updateCache(account)
         }
 
-        accountsSubject.onNext(accounts)
+        _accountsFlow.tryEmit(accounts)
 
         if (activeAccount == null) {
             accounts.minByOrNull { it.name.lowercase() }?.let { account ->
@@ -100,7 +100,7 @@ class AccountManager(
         storage.update(account)
 
         updateCache(account)
-        accountsSubject.onNext(accounts)
+        _accountsFlow.tryEmit(accounts)
 
         activeAccount?.id?.let {
             if (account.id == it) {
@@ -114,8 +114,8 @@ class AccountManager(
         accountsCache.remove(id)
         storage.delete(id)
 
-        accountsSubject.onNext(accounts)
-        accountsDeletedSubject.onNext(Unit)
+        _accountsFlow.tryEmit(accounts)
+        _accountsDeletedFlow.tryEmit(Unit)
 
         if (id == activeAccount?.id) {
             setActiveAccountId(accounts.firstOrNull()?.id)
@@ -125,8 +125,8 @@ class AccountManager(
     override fun clear() {
         storage.clear()
         accountsCache.clear()
-        accountsSubject.onNext(listOf())
-        accountsDeletedSubject.onNext(Unit)
+        _accountsFlow.tryEmit(listOf())
+        _accountsDeletedFlow.tryEmit(Unit)
         setActiveAccountId(null)
     }
 
@@ -143,7 +143,7 @@ class AccountManager(
             }
         }
 
-        accountsSubject.onNext(accounts)
+        _accountsFlow.tryEmit(accounts)
     }
 
     override fun clearAccounts() {

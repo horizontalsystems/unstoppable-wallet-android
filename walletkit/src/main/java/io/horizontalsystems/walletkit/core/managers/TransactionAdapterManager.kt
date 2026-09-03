@@ -14,7 +14,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
 class TransactionAdapterManager(
@@ -34,7 +33,7 @@ class TransactionAdapterManager(
 
     init {
         coroutineScope.launch {
-            adapterManager.adaptersReadyObservable.asFlow().collect(::initAdapters)
+            adapterManager.adaptersReadyFlow.collect(::initAdapters)
         }
     }
 

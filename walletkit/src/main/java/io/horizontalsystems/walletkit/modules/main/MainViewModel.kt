@@ -38,7 +38,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import timber.log.Timber
 
 class MainViewModel(
@@ -148,7 +147,7 @@ class MainViewModel(
         }
 
         viewModelScope.launch {
-            backupManager.allBackedUpFlowable.asFlow().collect {
+            backupManager.allBackedUpFlow.collect {
                 updateSettingsBadge()
             }
         }
@@ -158,7 +157,7 @@ class MainViewModel(
             }
         }
         viewModelScope.launch {
-            accountManager.accountsFlowable.asFlow().collect {
+            accountManager.accountsFlow.collect {
                 updateTransactionsTabEnabled()
                 updateSettingsBadge()
             }
