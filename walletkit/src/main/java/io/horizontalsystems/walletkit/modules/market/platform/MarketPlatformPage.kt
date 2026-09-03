@@ -71,6 +71,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MarketPlatformPage(val platform: Platform) : HSPage(accessibleWhileLocked = true) {
 
+    override fun contentKey() = "${super.contentKey()}-${platform.uid}"
+
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val factory = MarketPlatformModule.Factory(platform)

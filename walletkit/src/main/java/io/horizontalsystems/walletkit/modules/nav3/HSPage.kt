@@ -31,7 +31,11 @@ abstract class HSPage(
     var navType: NavigationType = NavigationType.SlideFromRight,
 ) : NavKey {
 
-    fun contentKey() = this::class.simpleName ?: "HSScreen"
+    // Identifies the entry's content: NavDisplay, the saveable state holder and the per-entry
+    // ViewModel store are all keyed by it. Pages that can be replaced by another instance of
+    // the same class in one frame (e.g. a coin page by a widget tap) must include what makes
+    // the instance distinct, or the old content and its ViewModel stay on screen.
+    open fun contentKey(): String = this::class.simpleName ?: "HSScreen"
 
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata() = buildMap {

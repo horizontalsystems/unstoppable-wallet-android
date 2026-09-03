@@ -15,6 +15,7 @@ import io.horizontalsystems.walletkit.core.managers.UserManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.security.KeyStoreValidationError
 import io.horizontalsystems.dapp.core.HSDAppEvent
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -45,7 +46,10 @@ class MainActivityViewModel(
         }
 
         viewModelScope.launch {
-            userManager.currentUserLevelFlow.collect {
+            // Only a change of user level sends the app back to the main screen. The StateFlow's
+            // current value replays on every activity start and would pop a page opened on
+            // launch (a widget deeplink, or a restored back stack).
+            userManager.currentUserLevelFlow.drop(1).collect {
                 navigateToMainLiveData.postValue(UUID.randomUUID().toString())
             }
         }

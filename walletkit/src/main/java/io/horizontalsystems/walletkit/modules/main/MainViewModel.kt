@@ -30,7 +30,6 @@ import io.horizontalsystems.walletkit.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.walletkit.modules.coin.CoinPage
 import io.horizontalsystems.walletkit.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.walletkit.modules.market.platform.MarketPlatformPage
-import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
 import io.horizontalsystems.walletkit.modules.pin.core.LockGate
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
@@ -388,28 +387,21 @@ class MainViewModel(
             }
 
             MarketDeepLinks.isMarketDeepLink(deeplinkString, deeplinkScheme) -> {
-                val uid = deepLink.getQueryParameter("uid")
-                when {
-                    deeplinkString.contains("coin-page") -> {
-                        uid?.let {
-                            deeplinkPage = DeeplinkPage(CoinPage(CoinPage.Input(it)))
+                // The page itself is opened at the navigation root (see Nav3) so it shows
+                // right away; only the tab behind it is switched here, so going back lands on
+                // Market and the page stays browsable while locked.
+                when (val page = MarketDeepLinks.page(deepLink, deeplinkScheme)) {
+                    is CoinPage -> stat(page = StatPage.Widget, event = StatEvent.OpenCoin(page.input.coinUid))
+                    is MarketPlatformPage -> stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatform))
+                    else -> {}
+                }
 
-                            stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
-                        }
-                    }
-
-                    deeplinkString.contains("top-platforms") -> {
-                        val title = deepLink.getQueryParameter("title")
-                        if (title != null && uid != null) {
-                            val platform = Platform(uid, title)
-                            deeplinkPage = DeeplinkPage(MarketPlatformPage(platform))
-
-                            stat(
-                                page = StatPage.Widget,
-                                event = StatEvent.Open(StatPage.TopPlatform)
-                            )
-                        }
-                    }
+                if (lockGate.isLocked) {
+                    // The app may be sitting on the keypad because of a pending unlock request
+                    // (e.g. a wallet tab was tapped earlier). The user now asked for public
+                    // content, so drop that request — otherwise the keypad would keep covering
+                    // the page this deeplink opens.
+                    lockGate.cancelUnlockRequest()
                 }
 
                 tab = MainNavigation.Market
@@ -492,17 +484,6 @@ class MainViewModel(
     }
 
     /** Dismisses a keypad shown for a deferred action and drops that action. */
-    fun cancelPendingUnlockRequest() {
-        lockGate.cancelUnlockRequest()
-    }
-
-    /** Deeplink that resolves to Market content only (widget taps); safe to open while locked. */
-    fun isPublicDeepLink(uri: Uri): Boolean =
-        lockGate.isRestricted && MarketDeepLinks.isMarketDeepLink(
-            uri.toString(),
-            Translator.getString(R.string.DeeplinkScheme)
-        )
-
     fun deeplinkPageHandled() {
         deeplinkPage = null
         emitState()

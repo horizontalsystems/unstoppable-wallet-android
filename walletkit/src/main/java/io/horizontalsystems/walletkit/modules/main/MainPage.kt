@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.main
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -82,7 +84,9 @@ private fun MainScreen(
     transactionsViewModel: TransactionsViewModel,
     navigation: HSNavigation,
     parentScreenContentKey: String,
-    viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
+    // Activity-scoped so the navigation root (Nav3) can reach it for widget deeplinks
+    // before this screen is composed. EntryPage is never popped, so the lifetime is the same.
+    viewModel: MainViewModel = MainModule.viewModel(LocalActivity.current as ComponentActivity)
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     val isLocked by App.pinComponent.isLockedFlow.collectAsStateWithLifecycle()
@@ -90,21 +94,11 @@ private fun MainScreen(
     // while the app is locked would be acted on behind the lock screen — referral registration,
     // TonConnect links, prefilled send flows, the WalletConnect list. The intent is deliberately
     // left unconsumed (no intentHandled() call) so this effect re-runs when isLocked flips back.
-    // Market deeplinks (widget taps) only open pages that are browsable while locked, so they
-    // go through right away.
+    // Market deeplinks (widget taps) never get here: Nav3 opens them at the navigation root.
     LaunchedEffect(activityIntent, isLocked) {
-        val uri = activityIntent?.data
-        val publicWhileLocked = isLocked && uri != null && viewModel.isPublicDeepLink(uri)
-        if (isLocked && !publicWhileLocked) return@LaunchedEffect
+        if (isLocked) return@LaunchedEffect
 
-        uri?.let {
-            if (publicWhileLocked) {
-                // The app may be sitting on the keypad because of a pending unlock request
-                // (e.g. a wallet tab was tapped earlier). The user now asked for public
-                // content, so drop that request — otherwise the keypad would keep covering
-                // the page this deeplink opens.
-                viewModel.cancelPendingUnlockRequest()
-            }
+        activityIntent?.data?.let {
             delay(1000)
             viewModel.handleDeepLink(it)
             mainActivityViewModel.intentHandled()

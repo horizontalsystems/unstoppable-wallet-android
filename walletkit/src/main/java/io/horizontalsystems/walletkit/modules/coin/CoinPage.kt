@@ -23,6 +23,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CoinPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
+    override fun contentKey() = "${super.contentKey()}-${input.coinUid}"
+
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         CoinScreen(
