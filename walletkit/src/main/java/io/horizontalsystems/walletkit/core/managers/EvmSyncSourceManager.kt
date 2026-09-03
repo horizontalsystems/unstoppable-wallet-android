@@ -85,8 +85,8 @@ class EvmSyncSourceManager(
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "LlamaNodes",
-                    listOf(URI("https://polygon.llamarpc.com"))
+                    "PublicNode",
+                    listOf(URI("https://polygon-bor-rpc.publicnode.com"))
                 )
             )
 
@@ -99,7 +99,7 @@ class EvmSyncSourceManager(
                 evmSyncSource(
                     blockchainType,
                     "PublicNode",
-                    listOf(URI("https://avalanche-evm.publicnode.com"))
+                    listOf(URI("https://avalanche-c-chain-rpc.publicnode.com"))
                 )
             )
 
@@ -111,8 +111,8 @@ class EvmSyncSourceManager(
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "Omnia",
-                    listOf(URI("https://endpoints.omniatech.io/v1/op/mainnet/public"))
+                    "PublicNode",
+                    listOf(URI("https://optimism-rpc.publicnode.com"))
                 )
             )
 
@@ -139,6 +139,11 @@ class EvmSyncSourceManager(
                     blockchainType,
                     "ZKsync",
                     listOf(URI("https://mainnet.era.zksync.io"))
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "dRPC",
+                    listOf(URI("https://zksync.drpc.org"))
                 )
             )
 
@@ -158,8 +163,8 @@ class EvmSyncSourceManager(
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "Omnia",
-                    listOf(URI("https://endpoints.omniatech.io/v1/arbitrum/one/public"))
+                    "PublicNode",
+                    listOf(URI("https://arbitrum-one-rpc.publicnode.com"))
                 )
             )
 
@@ -171,8 +176,8 @@ class EvmSyncSourceManager(
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "Ankr",
-                    listOf(URI("https://rpc.ankr.com/gnosis"))
+                    "dRPC",
+                    listOf(URI("https://gnosis.drpc.org"))
                 )
             )
 
@@ -189,8 +194,8 @@ class EvmSyncSourceManager(
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "Ankr",
-                    listOf(URI("https://rpc.ankr.com/fantom"))
+                    "dRPC",
+                    listOf(URI("https://fantom.drpc.org"))
                 )
             )
 
