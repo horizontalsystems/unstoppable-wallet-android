@@ -113,12 +113,10 @@ dependencies {
     // Room
     api(libs.androidx.room.runtime)
     api(libs.androidx.room.ktx)
-    api(libs.androidx.room.rxjava2)
     ksp(libs.androidx.room.compiler)
 
     // WorkManager
     api(libs.androidx.work.runtime.ktx)
-    api(libs.androidx.work.rxjava2)
 
     // Compose
     api(libs.androidx.activity.compose)
@@ -139,19 +137,13 @@ dependencies {
 
     // Networking
     api(libs.retrofit)
-    api(libs.retrofit.adapter.rxjava2)
     api(libs.retrofit.converter.gson)
     api(libs.retrofit.converter.scalars)
     api(libs.okhttp.logging)
     api(libs.gson)
 
-    // Rx
-    api(libs.rxjava)
-    api(libs.rxandroid)
-
     // Coroutines
     api(libs.kotlinx.coroutines.android)
-    api(libs.kotlinx.coroutines.rx2)
 
     // Image loading
     api(libs.coil.compose)

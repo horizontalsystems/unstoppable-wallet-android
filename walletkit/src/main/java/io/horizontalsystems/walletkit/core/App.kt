@@ -240,6 +240,8 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             Logger.getLogger("").level = Level.SEVERE
         }
 
+        // The app code no longer uses RxJava, but WalletConnect's Scarlet still ships it
+        // transitively; without a global handler an undeliverable Rx error crashes the app.
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.w("RxJava ErrorHandler", e)
         }

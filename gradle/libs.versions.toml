@@ -37,8 +37,6 @@ retrofit = "3.0.0"
 okhttp = "5.3.2"
 
 # Rx
-rxjava = "2.2.21"
-rxandroid = "2.1.1"
 
 # Coroutines
 coroutines = "1.11.0"
@@ -172,12 +170,10 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 # Room
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 # WorkManager
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
-androidx-work-rxjava2 = { module = "androidx.work:work-rxjava2", version.ref = "work" }
 
 # Compose
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -199,19 +195,15 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 
 # Networking
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit" }
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 # Rx
-rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
-rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
 
 # Coroutines
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-kotlinx-coroutines-rx2 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2", version.ref = "coroutines" }
 
 # Image loading
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
