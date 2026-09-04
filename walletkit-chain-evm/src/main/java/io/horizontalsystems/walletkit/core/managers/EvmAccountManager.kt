@@ -246,6 +246,7 @@ class EvmAccountManager(
     }
 
     private suspend fun handle(tokenInfos: List<TokenInfo>, account: Account, evmKit: EthereumKit) = withContext(Dispatchers.IO) {
+        if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return@withContext
 //        Log.e("AAA", "handle tokens ${tokenInfos.size} \n ${tokenInfos.joinToString(separator = " ") { it.type.id }}")
 
         val existingWallets = walletManager.activeWallets

@@ -191,6 +191,7 @@ class TronAccountManager(
     }
 
     private suspend fun handle(tokenInfos: List<TokenInfo>, account: Account, tronKit: TronKit) = withContext(Dispatchers.IO) {
+        if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return@withContext
         val existingWallets = walletManager.activeWallets
         val existingTokenTypeIds = existingWallets.map { it.token.type.id }
         val newTokenInfos = tokenInfos.filter { !existingTokenTypeIds.contains(it.type.id) }

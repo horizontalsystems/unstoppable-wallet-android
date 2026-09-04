@@ -99,6 +99,7 @@ class ThorchainAccountManager(
         val existingTokenTypeIds = walletManager.activeWallets.map { it.token.type.id }
         val newQueries = queries.filter { !existingTokenTypeIds.contains(it.tokenType.id) }
         if (newQueries.isEmpty()) return
+        if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
 
         // Only tokens known to marketkit get enabled — resolves proper name/code/decimals/image.
         val tokens = marketKit.tokens(newQueries)

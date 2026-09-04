@@ -55,7 +55,7 @@ class SolanaChainPlugin(
     val kitManager by lazy {
         SolanaKitManager(
             rpcSourceManager,
-            SolanaWalletManager(App.walletManager, App.accountManager, App.marketKit),
+            SolanaWalletManager(App.walletManager, App.accountManager, App.marketKit, App.tokenAutoEnableManager),
             App.backgroundManager,
         )
     }

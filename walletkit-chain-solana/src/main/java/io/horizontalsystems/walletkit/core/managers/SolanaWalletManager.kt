@@ -10,11 +10,13 @@ import io.horizontalsystems.solanakit.models.FullTokenAccount
 class SolanaWalletManager(
         private val walletManager: WalletManager,
         private val accountManager: IAccountManager,
-        private val marketKit: MarketKitWrapper
+        private val marketKit: MarketKitWrapper,
+        private val tokenAutoEnableManager: TokenAutoEnableManager,
 ) {
 
     @Synchronized
     fun add(tokenAccounts: List<FullTokenAccount>) {
+        if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
         val account = accountManager.activeAccount ?: return
         val queries = tokenAccounts
                 .filter { !it.mintAccount.isNft }

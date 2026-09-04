@@ -100,6 +100,7 @@ class StellarAccountManager(
         val newAssets = assets.filter { !existingTokenTypeIds.contains(it.tokenType.id) }
 
         if (newAssets.isEmpty()) return
+        if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
 
         val enabledWallets = newAssets.map { asset ->
             val tokenQuery = TokenQuery(BlockchainType.Stellar, asset.tokenType)

@@ -121,6 +121,7 @@ class TonAccountManager(
             .filter { it.verification != JettonVerificationType.BLACKLIST }
 
         if (newJettons.isEmpty()) return
+        if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
 
         val enabledWallets = newJettons.map { jetton ->
             EnabledWallet(

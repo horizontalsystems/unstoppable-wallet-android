@@ -6,7 +6,9 @@ import io.horizontalsystems.walletkit.entities.TokenAutoEnabledBlockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class TokenAutoEnableManager(
-    private val tokenAutoEnabledBlockchainDao: TokenAutoEnabledBlockchainDao
+    private val tokenAutoEnabledBlockchainDao: TokenAutoEnabledBlockchainDao,
+    // Global switch over every chain's on-receive auto-enable path.
+    val autoEnableTokensOnReceive: Boolean = true,
 ) {
     fun markAutoEnable(account: Account, blockchainType: BlockchainType) {
         tokenAutoEnabledBlockchainDao.insert(TokenAutoEnabledBlockchain(account.id, blockchainType))
