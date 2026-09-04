@@ -202,13 +202,13 @@ suspend fun <T> Flow<T>.collectSafely(action: suspend (T) -> Unit) {
                 action(value)
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
                 Timber.e(e, "collectSafely: update handler failed")
             }
         }
     } catch (e: CancellationException) {
         throw e
-    } catch (e: Throwable) {
+    } catch (e: Exception) {
         Timber.e(e, "collectSafely: upstream flow failed")
     }
 }
