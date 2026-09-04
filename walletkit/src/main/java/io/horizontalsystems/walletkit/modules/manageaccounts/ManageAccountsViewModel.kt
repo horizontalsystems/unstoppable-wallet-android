@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.IAccountManager
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule.AccountViewItem
@@ -27,7 +28,7 @@ class ManageAccountsViewModel(
     init {
         viewModelScope.launch {
             accountManager.accountsFlow
-                .collect {
+                .collectSafely {
                     activeAccount = accountManager.activeAccount
                     accounts = it
                     updateViewItems()
@@ -36,7 +37,7 @@ class ManageAccountsViewModel(
 
         viewModelScope.launch {
             accountManager.activeAccountStateFlow
-                .collect { activeAccountState ->
+                .collectSafely { activeAccountState ->
                     if (activeAccountState is ActiveAccountState.ActiveAccount) {
                         activeAccount = activeAccountState.account
                         accounts = accountManager.accounts

@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
@@ -17,13 +18,16 @@ class RestoreSettingsService(
     private val restoreSettingsManager: RestoreSettingsManager
 ) : Clearable {
 
-    private val _approveSettingsFlow = MutableSharedFlow<TokenWithSettings>(extraBufferCapacity = Int.MAX_VALUE)
+    // Bounded at 64 with newest-wins overflow: these events are user-driven and sparse
+    // (at most a handful per screen session), so the buffer is effectively lossless while
+    // still capping memory if a collector ever stalls.
+    private val _approveSettingsFlow = MutableSharedFlow<TokenWithSettings>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val approveSettingsFlow: Flow<TokenWithSettings> = _approveSettingsFlow
 
-    private val _rejectApproveSettingsFlow = MutableSharedFlow<Token>(extraBufferCapacity = Int.MAX_VALUE)
+    private val _rejectApproveSettingsFlow = MutableSharedFlow<Token>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val rejectApproveSettingsFlow: Flow<Token> = _rejectApproveSettingsFlow
 
-    private val _requestFlow = MutableSharedFlow<Request>(extraBufferCapacity = Int.MAX_VALUE)
+    private val _requestFlow = MutableSharedFlow<Request>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val requestFlow: Flow<Request> = _requestFlow
 
     fun approveSettings(token: Token, account: Account? = null) {

@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
@@ -152,7 +153,7 @@ class SwapViewModel(
         }
 
         viewModelScope.launch {
-            adapterManager.adaptersReadyFlow.collect {
+            adapterManager.adaptersReadyFlow.collectSafely {
                 balanceService.refresh()
             }
         }

@@ -190,17 +190,25 @@ val BlockchainType.blockTime : Long?
     }
 
 /**
- * Collects the flow, containing non-cancellation failures thrown by [action] so one bad
- * update cannot kill the collector (or cancel sibling coroutines in a shared scope).
+ * Collects the flow, containing non-cancellation failures from both the upstream flow and
+ * the [action] handler, so one bad update or a failing source cannot cancel sibling
+ * coroutines in a shared scope. A handler failure keeps the collector alive; an upstream
+ * failure ends this collector only.
  */
 suspend fun <T> Flow<T>.collectSafely(action: suspend (T) -> Unit) {
-    collect { value ->
-        try {
-            action(value)
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Throwable) {
-            Timber.e(e, "collectSafely: update handler failed")
+    try {
+        collect { value ->
+            try {
+                action(value)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Timber.e(e, "collectSafely: update handler failed")
+            }
         }
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Throwable) {
+        Timber.e(e, "collectSafely: upstream flow failed")
     }
 }

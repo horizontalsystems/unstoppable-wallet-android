@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.IAccountManager
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.modules.balance.headerNote
@@ -39,7 +40,7 @@ class ManageAccountViewModel(
     init {
         viewModelScope.launch {
             accountManager.accountsFlow
-                .collect { handleUpdatedAccounts(it) }
+                .collectSafely { handleUpdatedAccounts(it) }
         }
     }
 

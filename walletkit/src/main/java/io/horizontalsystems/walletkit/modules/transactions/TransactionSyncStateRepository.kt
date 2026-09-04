@@ -24,9 +24,11 @@ class TransactionSyncStateRepository(
     private val _syncingFlow = MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val syncingFlow: Flow<Boolean> get() = _syncingFlow.distinctUntilChanged()
 
-    // Unbounded, matching the Rx BUFFER strategy this replaced: each event names a
-    // source whose last-block info changed, so no event may be dropped.
-    private val _lastBlockInfoFlow = MutableSharedFlow<Pair<TransactionSource, LastBlockInfo>>(extraBufferCapacity = Int.MAX_VALUE)
+    // Bounded at 64 with newest-wins overflow. Last-block events are self-healing: every
+    // source re-emits on each new block, so an event dropped under a burst is superseded by
+    // that source's next update, while the bound prevents an unbounded backlog if the
+    // collector stalls.
+    private val _lastBlockInfoFlow = MutableSharedFlow<Pair<TransactionSource, LastBlockInfo>>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val lastBlockInfoFlow: Flow<Pair<TransactionSource, LastBlockInfo>> get() = _lastBlockInfoFlow
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
