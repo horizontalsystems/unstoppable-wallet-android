@@ -5,7 +5,7 @@ minSdk = "28"
 
 # Kotlin & Compose
 kotlin = "2.3.21"
-ksp = "2.3.5"
+ksp = "2.3.6"
 compose = "1.11.2"
 composeMaterial3 = "1.4.0"
 
@@ -124,7 +124,7 @@ espresso = "3.7.0"
 testRunner = "1.7.0"
 
 # AGP
-agp = "9.2.1"
+agp = "9.4.0"
 
 # Nav 3
 nav3Core = "1.1.2"
