@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.balance
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AdapterState
+import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.core.diff
@@ -78,6 +79,9 @@ data class StellarAssetLockedValue(val title: String, val value: String)
 @Immutable
 data class BalanceViewItem2(
     val wallet: Wallet,
+    // The raw balance the formatted values were derived from, for callers that filter or
+    // compute rather than display.
+    val balanceData: BalanceData,
     val primaryValue: DeemedValue<String>?,
     val exchangeValue: DeemedValue<String>?,
     val diff: DeemedValue<BigDecimal>?,
@@ -438,6 +442,7 @@ class BalanceViewItemFactory {
 
         return BalanceViewItem2(
             wallet = item.wallet,
+            balanceData = item.balanceData,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             exchangeValue = latestRate?.let { BalanceViewHelper.rateValue(it, currency) },
