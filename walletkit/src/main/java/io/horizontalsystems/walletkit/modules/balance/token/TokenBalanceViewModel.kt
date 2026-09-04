@@ -60,6 +60,7 @@ class TokenBalanceViewModel(
     private var alertUnshieldedBalance: BigDecimal? = null
     private var attentionIcon: AttentionIcon? = null
     private var showTronNotActiveAlert: Boolean? = null
+    private var showSyncErrorAlert: Boolean? = null
     private var zcashMigrationRequiredAmount: String? = null
 
     init {
@@ -119,6 +120,7 @@ class TokenBalanceViewModel(
         alertUnshieldedBalance = alertUnshieldedBalance,
         attentionIcon = attentionIcon,
         showTronNotActiveAlert = showTronNotActiveAlert ?: false,
+        showSyncErrorAlert = showSyncErrorAlert ?: false,
         zcashMigrationRequiredAmount = zcashMigrationRequiredAmount,
     )
 
@@ -170,6 +172,10 @@ class TokenBalanceViewModel(
 
         if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive && showTronNotActiveAlert == null) {
             showTronNotActiveAlert = true
+        }
+
+        if (balanceViewItem.attentionIcon?.type == AttentionIconType.SyncError && showSyncErrorAlert == null) {
+            showSyncErrorAlert = true
         }
 
         updateErrorState()
@@ -259,6 +265,11 @@ class TokenBalanceViewModel(
 
     fun hideTronNotActiveAlert() {
         showTronNotActiveAlert = false
+        emitState()
+    }
+
+    fun hideSyncErrorAlert() {
+        showSyncErrorAlert = false
         emitState()
     }
 

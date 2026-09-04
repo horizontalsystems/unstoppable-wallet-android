@@ -19,7 +19,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,18 +32,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.isCustom
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
-import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.balance.AttentionIconType
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem
@@ -61,8 +58,8 @@ import io.horizontalsystems.walletkit.modules.receive.ReceivePage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
-import io.horizontalsystems.walletkit.modules.transactions.TransactionViewItem
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
+import io.horizontalsystems.walletkit.modules.transactions.TransactionViewItem
 import io.horizontalsystems.walletkit.modules.transactions.transactionList
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -89,8 +86,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -115,15 +110,14 @@ fun TokenBalanceScreen(
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
-    LifecycleResumeEffect(uiState.attentionIcon?.type) {
-        if (uiState.attentionIcon?.type == AttentionIconType.SyncError) {
+    LaunchedEffect(uiState.showSyncErrorAlert) {
+        if (uiState.showSyncErrorAlert) {
             coroutineScope.launch {
                 delay(300)
                 openSyncErrorDialog(uiState, navigation)
+                viewModel.hideSyncErrorAlert()
             }
         }
-
-        onPauseOrDispose { }
     }
 
     LaunchedEffect(uiState.showTronNotActiveAlert) {

@@ -68,6 +68,7 @@ class TokenBalanceModule {
         val alertUnshieldedBalance: BigDecimal?,
         val attentionIcon: AttentionIcon?,
         val showTronNotActiveAlert: Boolean,
+        val showSyncErrorAlert: Boolean,
         val zcashMigrationRequiredAmount: String? = null,
     )
 
