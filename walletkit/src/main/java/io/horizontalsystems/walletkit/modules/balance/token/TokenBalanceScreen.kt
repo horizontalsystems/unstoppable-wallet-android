@@ -112,10 +112,10 @@ fun TokenBalanceScreen(
 
     LaunchedEffect(uiState.showSyncErrorAlert) {
         if (uiState.showSyncErrorAlert) {
+            viewModel.hideSyncErrorAlert()
             coroutineScope.launch {
                 delay(300)
                 openSyncErrorDialog(uiState, navigation)
-                viewModel.hideSyncErrorAlert()
             }
         }
     }
