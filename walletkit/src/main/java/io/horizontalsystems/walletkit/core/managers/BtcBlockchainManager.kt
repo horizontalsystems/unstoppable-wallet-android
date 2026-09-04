@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.BtcRestoreMode
 import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
@@ -14,14 +13,14 @@ class BtcBlockchainManager(
     marketKit: MarketKitWrapper,
 ) {
 
-    // Each event names a blockchain whose setting changed, so a deep buffer
-    // instead of conflation: dropping an event would skip that kit's restart.
+    // Unbounded, matching the Rx BUFFER strategy this replaced: each event names a
+    // blockchain whose setting changed, so no event may be dropped.
     private val _restoreModeUpdatedFlow =
-        MutableSharedFlow<BlockchainType>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<BlockchainType>(extraBufferCapacity = Int.MAX_VALUE)
     val restoreModeUpdatedFlow: Flow<BlockchainType> = _restoreModeUpdatedFlow
 
     private val _transactionSortModeUpdatedFlow =
-        MutableSharedFlow<BlockchainType>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<BlockchainType>(extraBufferCapacity = Int.MAX_VALUE)
     val transactionSortModeUpdatedFlow: Flow<BlockchainType> = _transactionSortModeUpdatedFlow
 
     private val blockchairSyncEnabledBlockchains = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash, BlockchainType.Litecoin)

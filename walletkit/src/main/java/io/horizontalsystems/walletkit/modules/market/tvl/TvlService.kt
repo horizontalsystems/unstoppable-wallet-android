@@ -10,6 +10,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class TvlService(
@@ -22,7 +23,7 @@ class TvlService(
     val currency by currencyManager::baseCurrency
 
     private val _marketTvlItemsFlow = MutableSharedFlow<DataState<List<TvlModule.MarketTvlItem>>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    val marketTvlItemsFlow: Flow<DataState<List<TvlModule.MarketTvlItem>>> = _marketTvlItemsFlow
+    val marketTvlItemsFlow: Flow<DataState<List<TvlModule.MarketTvlItem>>> = _marketTvlItemsFlow.asSharedFlow()
 
     private var chartInterval: HsTimePeriod? = HsTimePeriod.Day1
         set(value) {

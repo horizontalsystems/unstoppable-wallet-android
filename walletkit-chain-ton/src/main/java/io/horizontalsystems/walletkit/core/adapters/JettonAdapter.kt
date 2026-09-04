@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.BalanceData
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.TonKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toAdapterState
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -44,13 +45,13 @@ class JettonAdapter(
 
     override fun start() {
         coroutineScope.launch {
-            tonKit.jettonBalanceMapFlow.collect { jettonBalanceMap ->
+            tonKit.jettonBalanceMapFlow.collectSafely { jettonBalanceMap ->
                 jettonBalance = jettonBalanceMap[address]
                 _balanceUpdatedFlow.tryEmit(Unit)
             }
         }
         coroutineScope.launch {
-            tonKit.jettonSyncStateFlow.collect {
+            tonKit.jettonSyncStateFlow.collectSafely {
                 balanceState = it.toAdapterState()
                 _balanceStateUpdatedFlow.tryEmit(Unit)
             }

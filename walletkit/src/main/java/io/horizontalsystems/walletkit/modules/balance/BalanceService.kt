@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.isNative
 import io.horizontalsystems.walletkit.core.managers.ConnectivityManager
 import io.horizontalsystems.walletkit.entities.Account
@@ -58,22 +59,22 @@ class BalanceService(
 
     fun start() {
         coroutineScope.launch {
-            activeWalletRepository.itemsFlow.collect { wallets ->
+            activeWalletRepository.itemsFlow.collectSafely { wallets ->
                 handleWalletsUpdate(wallets)
             }
         }
         coroutineScope.launch {
-            xRateRepository.itemObservable.collect { latestRates ->
+            xRateRepository.itemObservable.collectSafely { latestRates ->
                 handleXRateUpdate(latestRates)
             }
         }
         coroutineScope.launch {
-            adapterRepository.readyFlow.collect {
+            adapterRepository.readyFlow.collectSafely {
                 handleAdaptersReady()
             }
         }
         coroutineScope.launch {
-            adapterRepository.updatesFlow.collect {
+            adapterRepository.updatesFlow.collectSafely {
                 handleAdapterUpdate(it)
             }
         }

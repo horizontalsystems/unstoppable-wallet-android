@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.collectSafely
 import kotlinx.coroutines.launch
 
 class RestoreSettingsViewModel(
@@ -21,7 +22,7 @@ class RestoreSettingsViewModel(
 
     init {
         viewModelScope.launch {
-            service.requestFlow.collect {
+            service.requestFlow.collectSafely {
                 handleRequest(it)
             }
         }

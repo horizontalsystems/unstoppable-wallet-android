@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.transactions
 
 import io.horizontalsystems.walletkit.core.Clearable
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
@@ -41,33 +42,33 @@ class TransactionsService(
 
     fun start() {
         coroutineScope.launch {
-            transactionRecordRepository.itemsFlow.collect {
+            transactionRecordRepository.itemsFlow.collectSafely {
                 handleUpdatedRecords(it)
             }
         }
         coroutineScope.launch {
-            rateRepository.dataExpiredObservable.collect {
+            rateRepository.dataExpiredObservable.collectSafely {
                 handleUpdatedHistoricalRates()
             }
         }
         coroutineScope.launch {
-            rateRepository.historicalRateObservable.collect {
+            rateRepository.historicalRateObservable.collectSafely {
                 handleUpdatedHistoricalRate(it.first, it.second)
             }
         }
         coroutineScope.launch {
             transactionSyncStateRepository.lastBlockInfoFlow
-                .collect { (source, lastBlockInfo) ->
+                .collectSafely { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
         }
         coroutineScope.launch {
-            nftMetadataService.assetsBriefMetadataFlow.collect {
+            nftMetadataService.assetsBriefMetadataFlow.collectSafely {
                 handle(it)
             }
         }
         coroutineScope.launch {
-            contactsRepository.contactsFlow.collect {
+            contactsRepository.contactsFlow.collectSafely {
                 handleContactsUpdate()
             }
         }

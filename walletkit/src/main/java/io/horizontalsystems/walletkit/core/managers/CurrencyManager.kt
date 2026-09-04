@@ -3,18 +3,14 @@ package io.horizontalsystems.walletkit.core.managers
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.Currency
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 
 class CurrencyManager(private val localStorage: ILocalStorage, private val appConfigProvider: IAppConfigProvider) {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
-
-    private val _baseCurrencyUpdatedFlow: MutableSharedFlow<Unit> = MutableSharedFlow()
+    private val _baseCurrencyUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val baseCurrencyUpdatedFlow: SharedFlow<Unit> = _baseCurrencyUpdatedFlow.asSharedFlow()
 
     var baseCurrency = getInitialCurrency()
@@ -22,9 +18,7 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
             field = value
 
             localStorage.baseCurrencyCode = value.code
-            scope.launch {
-                _baseCurrencyUpdatedFlow.emit(Unit)
-            }
+            _baseCurrencyUpdatedFlow.tryEmit(Unit)
         }
 
     private val defaultCurrency: Currency

@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.transactions
 
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.TransactionAdapterManager
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
@@ -209,7 +210,7 @@ class TransactionRecordRepository(
             activeAdapters
                 .map { it.updatedFlow }
                 .merge()
-                .collect {
+                .collectSafely {
                     handleUpdates()
                 }
         }

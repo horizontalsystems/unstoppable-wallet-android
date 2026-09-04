@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.market.filtersresult
 
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.MarketFavoritesManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.SignalsControlManager
@@ -47,7 +48,7 @@ class MarketFiltersResultService(
 
     fun start() {
         coroutineScope.launch {
-            favoritesManager.dataUpdatedFlow.collect {
+            favoritesManager.dataUpdatedFlow.collectSafely {
                 syncItems()
             }
         }

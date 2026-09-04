@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.market.filtersresult
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.modules.market.MarketViewItem
 import io.horizontalsystems.walletkit.modules.market.SortingField
@@ -19,7 +20,7 @@ class MarketFiltersResultViewModel(
 
     init {
         viewModelScope.launch {
-            service.stateFlow.collect { state ->
+            service.stateFlow.collectSafely { state ->
                 state.viewState?.let {
                     viewState = it
                     emitState()

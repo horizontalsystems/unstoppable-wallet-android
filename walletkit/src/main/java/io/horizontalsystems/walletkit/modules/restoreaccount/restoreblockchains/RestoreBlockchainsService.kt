@@ -57,7 +57,7 @@ class RestoreBlockchainsService(
 
     private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
 
-    private val _cancelEnableBlockchainFlow = MutableSharedFlow<Blockchain>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _cancelEnableBlockchainFlow = MutableSharedFlow<Blockchain>(extraBufferCapacity = Int.MAX_VALUE)
     val cancelEnableBlockchainFlow: Flow<Blockchain> = _cancelEnableBlockchainFlow
 
     private val _canRestore = MutableStateFlow(false)

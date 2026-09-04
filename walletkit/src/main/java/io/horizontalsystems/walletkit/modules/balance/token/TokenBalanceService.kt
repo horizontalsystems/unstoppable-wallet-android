@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.balance.token
 
 import io.horizontalsystems.walletkit.core.Clearable
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.balance.BalanceAdapterRepository
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
@@ -52,17 +53,17 @@ class TokenBalanceService(
             )
         }
         coroutineScope.launch {
-            xRateRepository.itemObservable.collect {
+            xRateRepository.itemObservable.collectSafely {
                 handleXRateUpdate(it)
             }
         }
         coroutineScope.launch {
-            balanceAdapterRepository.readyFlow.collect {
+            balanceAdapterRepository.readyFlow.collectSafely {
                 handleAdapterUpdate()
             }
         }
         coroutineScope.launch {
-            balanceAdapterRepository.updatesFlow.collect {
+            balanceAdapterRepository.updatesFlow.collectSafely {
                 handleAdapterUpdate()
             }
         }

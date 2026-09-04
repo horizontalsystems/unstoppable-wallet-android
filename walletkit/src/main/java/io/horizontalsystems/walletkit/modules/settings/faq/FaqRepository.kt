@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class FaqRepository(
@@ -23,7 +24,7 @@ class FaqRepository(
     private val _faqList = MutableStateFlow<DataState<List<FaqSection>>>(DataState.Loading)
 
     val faqList: StateFlow<DataState<List<FaqSection>>>
-        get() = _faqList
+        get() = _faqList.asStateFlow()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val retryLimit = 3
 

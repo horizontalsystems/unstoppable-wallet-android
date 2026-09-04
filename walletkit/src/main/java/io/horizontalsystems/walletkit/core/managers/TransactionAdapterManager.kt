@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.factories.AdapterFactory
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -33,7 +34,7 @@ class TransactionAdapterManager(
 
     init {
         coroutineScope.launch {
-            adapterManager.adaptersReadyFlow.collect(::initAdapters)
+            adapterManager.adaptersReadyFlow.collectSafely { initAdapters(it) }
         }
     }
 

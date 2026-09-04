@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.core.adapters
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.StellarAssetBalance
 import io.horizontalsystems.walletkit.core.BalanceData
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toAdapterState
 import io.horizontalsystems.stellarkit.StellarKit
@@ -43,20 +44,20 @@ class StellarAdapter(
 
     override fun start() {
         coroutineScope.launch {
-            stellarKit.getBalanceFlow(StellarAsset.Native).collect { balance ->
+            stellarKit.getBalanceFlow(StellarAsset.Native).collectSafely { balance ->
                 totalBalance = balance?.balance
                 minimumBalance = balance?.minBalance ?: BigDecimal.ZERO
                 _balanceUpdatedFlow.tryEmit(Unit)
             }
         }
         coroutineScope.launch {
-            stellarKit.syncStateFlow.collect {
+            stellarKit.syncStateFlow.collectSafely {
                 balanceState = it.toAdapterState()
                 _balanceStateUpdatedFlow.tryEmit(Unit)
             }
         }
         coroutineScope.launch {
-            stellarKit.assetBalanceMapFlow.collect {
+            stellarKit.assetBalanceMapFlow.collectSafely {
                 assets = it.keys.filterIsInstance<StellarAsset.Asset>()
                 _balanceUpdatedFlow.tryEmit(Unit)
             }

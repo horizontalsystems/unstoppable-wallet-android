@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.description
 import io.horizontalsystems.walletkit.core.title
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetSelectorMultipleDialog
@@ -24,7 +25,7 @@ class BlockchainTokensViewModel(
 
     init {
         viewModelScope.launch {
-            service.requestFlow.collect {
+            service.requestFlow.collectSafely {
                 handle(it)
             }
         }

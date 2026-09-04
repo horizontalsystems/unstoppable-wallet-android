@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
@@ -18,13 +17,13 @@ class RestoreSettingsService(
     private val restoreSettingsManager: RestoreSettingsManager
 ) : Clearable {
 
-    private val _approveSettingsFlow = MutableSharedFlow<TokenWithSettings>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _approveSettingsFlow = MutableSharedFlow<TokenWithSettings>(extraBufferCapacity = Int.MAX_VALUE)
     val approveSettingsFlow: Flow<TokenWithSettings> = _approveSettingsFlow
 
-    private val _rejectApproveSettingsFlow = MutableSharedFlow<Token>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _rejectApproveSettingsFlow = MutableSharedFlow<Token>(extraBufferCapacity = Int.MAX_VALUE)
     val rejectApproveSettingsFlow: Flow<Token> = _rejectApproveSettingsFlow
 
-    private val _requestFlow = MutableSharedFlow<Request>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _requestFlow = MutableSharedFlow<Request>(extraBufferCapacity = Int.MAX_VALUE)
     val requestFlow: Flow<Request> = _requestFlow
 
     fun approveSettings(token: Token, account: Account? = null) {

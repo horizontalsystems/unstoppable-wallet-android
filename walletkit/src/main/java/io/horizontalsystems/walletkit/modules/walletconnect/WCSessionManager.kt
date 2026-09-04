@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.walletconnect
 
 import io.horizontalsystems.walletkit.core.IAccountManager
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WalletConnectV2Session
@@ -54,7 +55,7 @@ class WCSessionManager(
         }
 
         coroutineScope.launch {
-            accountManager.accountsDeletedFlow.collect {
+            accountManager.accountsDeletedFlow.collectSafely {
                 handleDeletedAccount()
             }
         }

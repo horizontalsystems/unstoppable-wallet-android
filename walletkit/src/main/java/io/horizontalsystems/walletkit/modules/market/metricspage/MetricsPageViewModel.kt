@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.market.metricspage
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -85,7 +86,7 @@ class MetricsPageViewModel(
 
     init {
         viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedFlow.collect {
+            currencyManager.baseCurrencyUpdatedFlow.collectSafely {
                 syncMarketItems()
             }
         }

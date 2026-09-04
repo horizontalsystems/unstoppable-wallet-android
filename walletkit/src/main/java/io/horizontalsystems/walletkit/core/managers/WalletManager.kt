@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.managers
 
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IWalletStorage
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.EnabledWallet
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -133,7 +134,7 @@ class WalletManager(
             }
         }
         coroutineScope.launch {
-            btcBlockchainManager.restoreModeUpdatedFlow.collect { blockchainType ->
+            btcBlockchainManager.restoreModeUpdatedFlow.collectSafely { blockchainType ->
                 reloadWallets(blockchainType)
             }
         }

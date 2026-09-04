@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.badge
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.BalanceHiddenManager
 import io.horizontalsystems.walletkit.core.managers.TransactionAdapterManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
@@ -117,7 +118,7 @@ class TransactionsViewModel(
         }
 
         viewModelScope.launch {
-            service.syncingFlow.collect {
+            service.syncingFlow.collectSafely {
                 syncing = it
                 emitState()
             }

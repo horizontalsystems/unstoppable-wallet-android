@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule.BalanceWarning
 import kotlinx.coroutines.CoroutineScope
@@ -30,14 +31,14 @@ class BalanceAdapterRepository(
     private val _readyFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val readyFlow: Flow<Unit> get() = _readyFlow
 
-    // Each event names a wallet whose row must re-read its data, so a deep buffer
-    // instead of conflation: dropping an event would leave that row stale.
-    private val _updatesFlow = MutableSharedFlow<Wallet>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    // Unbounded, matching the Rx BUFFER strategy this replaced: each event names a
+    // wallet whose row must re-read its data, so no event may be dropped.
+    private val _updatesFlow = MutableSharedFlow<Wallet>(extraBufferCapacity = Int.MAX_VALUE)
     val updatesFlow: Flow<Wallet> get() = _updatesFlow
 
     init {
         coroutineScope.launch {
-            adapterManager.adaptersReadyFlow.collect {
+            adapterManager.adaptersReadyFlow.collectSafely {
                 unsubscribeFromAdapterUpdates()
                 _readyFlow.tryEmit(Unit)
 
@@ -79,13 +80,13 @@ class BalanceAdapterRepository(
         wallets.forEach { wallet ->
             adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
                 balanceStateUpdatedJobs += coroutineScope.launch {
-                    adapter.balanceStateUpdatedFlow.collect {
+                    adapter.balanceStateUpdatedFlow.collectSafely {
                         _updatesFlow.tryEmit(wallet)
                     }
                 }
 
                 balanceUpdatedJobs += coroutineScope.launch {
-                    adapter.balanceUpdatedFlow.collect {
+                    adapter.balanceUpdatedFlow.collectSafely {
                         _updatesFlow.tryEmit(wallet)
 
                         adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.let {
