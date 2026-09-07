@@ -3,8 +3,10 @@ package io.horizontalsystems.walletkit.modules.nav3
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavEntry
@@ -14,6 +16,9 @@ import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetSceneStrategy.Companion.bottomSheet
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
 
 /** An [OverlayScene] that renders an [entry] within a [ModalBottomSheet]. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,6 +34,10 @@ internal class BottomSheetScene<T : Any>(
 
     override val entries: List<NavEntry<T>> = listOf(entry)
 
+    // The state of the sheet currently on screen, so onRemove can animate it out. Null while the
+    // sheet is not composed (see the lock gate below).
+    private var sheetState: SheetState? = null
+
     override val content: @Composable (() -> Unit) = {
         // ModalBottomSheet opens its own window, composited above the activity window — and so
         // above the PinUnlock overlay, which would leave the sheet interactable over the keypad.
@@ -40,15 +49,62 @@ internal class BottomSheetScene<T : Any>(
         // usable while browsing the Market tab locked.
         val showUnlock by App.lockGate.showUnlockFlow.collectAsStateWithLifecycle()
         if (!showUnlock) {
+            val state = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
+            DisposableEffect(state) {
+                sheetState = state
+                onDispose {
+                    if (sheetState === state) sheetState = null
+                }
+            }
             ModalBottomSheet(
                 onDismissRequest = onBack,
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded),
+                sheetState = state,
                 properties = modalBottomSheetProperties,
                 dragHandle = null
             ) {
                 entry.Content()
             }
         }
+    }
+
+    // NavDisplay keeps a popped overlay scene composed until this returns, so the sheet and its
+    // scrim animate out on every pop, not only on the swipe/scrim-tap paths the sheet drives
+    // itself. A pop that follows one of those finds the sheet already hidden and returns at once.
+    override suspend fun onRemove() {
+        val state = sheetState ?: return
+        try {
+            state.hide()
+        } catch (e: CancellationException) {
+            // A drag or another sheet animation interrupted the hide; the scene still has to go.
+            if (!currentCoroutineContext().isActive) throw e
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+
+        other as BottomSheetScene<*>
+
+        return key == other.key &&
+            previousEntries == other.previousEntries &&
+            overlaidEntries == other.overlaidEntries &&
+            entry == other.entry &&
+            modalBottomSheetProperties == other.modalBottomSheetProperties &&
+            skipPartiallyExpanded == other.skipPartiallyExpanded
+    }
+
+    override fun hashCode(): Int {
+        return key.hashCode() * 31 +
+            previousEntries.hashCode() * 31 +
+            overlaidEntries.hashCode() * 31 +
+            entry.hashCode() * 31 +
+            modalBottomSheetProperties.hashCode() * 31 +
+            skipPartiallyExpanded.hashCode()
+    }
+
+    override fun toString(): String {
+        return "BottomSheetScene(key=$key, entry=$entry, previousEntries=$previousEntries, overlaidEntries=$overlaidEntries)"
     }
 }
 
