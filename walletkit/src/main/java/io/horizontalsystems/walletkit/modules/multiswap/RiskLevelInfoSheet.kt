@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +28,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
@@ -41,7 +39,7 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RiskLevelInfoSheet : HSBottomSheet() {
+data object RiskLevelInfoSheet : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -49,12 +47,9 @@ data object RiskLevelInfoSheet : HSBottomSheet() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RiskLevelInfoScreen(navigation: HSNavigation) {
-    BottomSheetContent(
-        onDismissRequest = navigation::removeLastOrNull,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.Button_Close),
@@ -84,7 +79,7 @@ fun RiskLevelInfoScreen(navigation: HSNavigation) {
             ) {
                 RiskLevelList()
             }
-        }
+        },
     )
 }
 

@@ -1,7 +1,5 @@
 package io.horizontalsystems.walletkit.modules.main
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.stats.StatEntity
@@ -11,29 +9,23 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.ui.extensions.WalletSwitchBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WalletSwitchSheet : HSBottomSheet() {
+data object WalletSwitchSheet : HSBottomSheet(expanded = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         WalletSwitchScreen(navigation)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WalletSwitchScreen(navigation: HSNavigation) {
     val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
     val uiState = viewModel.uiState
 
-    BottomSheetContent(
-        onDismissRequest = {
-            navigation.removeLastOrNull()
-        },
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ) {
+    BottomSheetBody {
         WalletSwitchBottomSheet(
             wallets = uiState.wallets,
             watchingAddresses = uiState.watchWallets,

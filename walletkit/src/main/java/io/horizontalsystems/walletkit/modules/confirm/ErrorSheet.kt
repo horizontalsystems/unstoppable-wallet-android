@@ -1,8 +1,6 @@
 package io.horizontalsystems.walletkit.modules.confirm
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -13,7 +11,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
@@ -21,7 +19,7 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ErrorSheet(val input: Input) : HSBottomSheet() {
+data class ErrorSheet(val input: Input) : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -32,15 +30,12 @@ data class ErrorSheet(val input: Input) : HSBottomSheet() {
     data class Input(val error: String)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ErrorBottomSheetScreen(
     navigation: HSNavigation,
     error: String
 ) {
-    BottomSheetContent(
-        onDismissRequest = navigation::removeLastOrNull,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.Button_CopyError),
@@ -59,7 +54,7 @@ fun ErrorBottomSheetScreen(
                 title = stringResource(R.string.Send_UnexpectedError)
             )
             TextBlock(text = stringResource(R.string.Send_UnexpectedError_Description), textAlign = TextAlign.Center)
-        }
+        },
     )
 }
 

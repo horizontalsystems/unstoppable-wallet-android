@@ -40,8 +40,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_remus
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.SnackbarActions
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.HSString
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
@@ -53,27 +55,44 @@ import io.horizontalsystems.subscriptions.core.numberOfDays
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectPlanSheet : HSBottomSheet() {
+data object SelectPlanSheet : HSBottomSheet(expanded = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        SelectPlanBottomSheet(
-            onDismiss = { navigation.removeLastOrNull() },
-            onPurchase = {
-                navigation.removeLastOrNull()
-                navigation.slideFromBottom(PremiumSubscribedSheet)
-            },
-        )
+        BottomSheetBody { snackbarActions ->
+            SelectPlanContent(
+                onDismiss = { navigation.removeLastOrNull() },
+                onPurchase = {
+                    navigation.removeLastOrNull()
+                    navigation.slideFromBottom(PremiumSubscribedSheet)
+                },
+                snackbarActions = snackbarActions,
+            )
+        }
     }
 }
 
+/** [SelectPlanContent] as a modal sheet over a page. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectPlanBottomSheet(
     onDismiss: () -> Unit,
     onPurchase: () -> Unit,
+) {
+    BottomSheetContent(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    ) { snackbarActions ->
+        SelectPlanContent(onDismiss, onPurchase, snackbarActions)
+    }
+}
+
+@Composable
+private fun SelectPlanContent(
+    onDismiss: () -> Unit,
+    onPurchase: () -> Unit,
+    snackbarActions: SnackbarActions,
     viewModel: BuySubscriptionChoosePlanViewModel = viewModel(),
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val uiState = viewModel.uiState
     val activity = LocalActivity.current
 
@@ -91,113 +110,108 @@ fun SelectPlanBottomSheet(
     val freeTrialPeriodDays = uiState.freeTrialPeriod?.let {
         stringResource(R.string.Period_Days, it.numberOfDays())
     }
-    BottomSheetContent(
-        onDismissRequest = onDismiss,
-        sheetState = sheetState
-    ) { snackbarActions ->
-        uiState.error?.let {
-            snackbarActions.showErrorMessage(it.message ?: "Error")
-            viewModel.onErrorHandled()
-        }
+    uiState.error?.let {
+        snackbarActions.showErrorMessage(it.message ?: "Error")
+        viewModel.onErrorHandled()
+    }
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        BottomSheetHeaderV3(
+            title = stringResource(R.string.Premium_SelectSubscription),
+            onCloseClick = onDismiss
+        )
+
+        VSpacer(12.dp)
+
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .border(0.5.dp, ComposeAppTheme.colors.blade, shape = RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp))
         ) {
-
-            BottomSheetHeaderV3(
-                title = stringResource(R.string.Premium_SelectSubscription),
-                onCloseClick = onDismiss
-            )
-
-            VSpacer(12.dp)
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .border(0.5.dp, ComposeAppTheme.colors.blade, shape = RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp))
-            ) {
-                uiState.basePlans.forEachIndexed { index, basePlan ->
-                    if (index > 0) {
-                        HsDivider()
-                    }
-                    SubscriptionOption(
-                        title = basePlan.title(),
-                        price = basePlan.stringRepresentation(),
-                        isSelected = selectedItemIndex == index,
-                        badgeText = basePlan.badge(),
-                        gradientBadge = basePlan.gradientBadge,
-                        noteAmount = basePlan.noteAmount,
-                        noteText = basePlan.noteText,
-                        onClick = {
-                            viewModel.select(index)
-                        }
-                    )
+            uiState.basePlans.forEachIndexed { index, basePlan ->
+                if (index > 0) {
+                    HsDivider()
                 }
-            }
-
-            val bottomText = if (freeTrialPeriodDays != null) {
-                buildAnnotatedString {
-                    withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
-                        append(
-                            text = stringResource(
-                                R.string.Premium_EnjoyFreePeriod,
-                                freeTrialPeriodDays
-                            )
-                        )
-                    }
-                    append(" ")
-                    withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
-                        append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
-                    }
-                }
-            } else {
-                buildAnnotatedString {
-                    withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
-                        append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
-                    }
-                }
-            }
-
-
-            VSpacer(12.dp)
-            Text(
-                text = bottomText,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subheadR,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
-            )
-            VSpacer(12.dp)
-
-            val buttonTitle = if (freeTrialPeriodDays != null) {
-                stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
-            } else {
-                stringResource(R.string.Premium_Subscribe)
-            }
-
-            ButtonsGroupHorizontal {
-                HSButton(
-                    title = buttonTitle,
-                    size = ButtonSize.Medium,
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                SubscriptionOption(
+                    title = basePlan.title(),
+                    price = basePlan.stringRepresentation(),
+                    isSelected = selectedItemIndex == index,
+                    badgeText = basePlan.badge(),
+                    gradientBadge = basePlan.gradientBadge,
+                    noteAmount = basePlan.noteAmount,
+                    noteText = basePlan.noteText,
                     onClick = {
-                        activity?.let { activity ->
-                            uiState.subscriptionId?.let { subscriptionId ->
-                                viewModel.launchPurchaseFlow(
-                                    subscriptionId = subscriptionId,
-                                    offerToken = uiState.basePlans[selectedItemIndex].offerToken,
-                                    activity = activity
-                                )
-                            }
-                        }
+                        viewModel.select(index)
                     }
                 )
             }
-            VSpacer(8.dp)
         }
+
+        val bottomText = if (freeTrialPeriodDays != null) {
+            buildAnnotatedString {
+                withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
+                    append(
+                        text = stringResource(
+                            R.string.Premium_EnjoyFreePeriod,
+                            freeTrialPeriodDays
+                        )
+                    )
+                }
+                append(" ")
+                withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
+                    append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                }
+            }
+        } else {
+            buildAnnotatedString {
+                withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
+                    append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                }
+            }
+        }
+
+
+        VSpacer(12.dp)
+        Text(
+            text = bottomText,
+            color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.subheadR,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
+        )
+        VSpacer(12.dp)
+
+        val buttonTitle = if (freeTrialPeriodDays != null) {
+            stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
+        } else {
+            stringResource(R.string.Premium_Subscribe)
+        }
+
+        ButtonsGroupHorizontal {
+            HSButton(
+                title = buttonTitle,
+                size = ButtonSize.Medium,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = {
+                    activity?.let { activity ->
+                        uiState.subscriptionId?.let { subscriptionId ->
+                            viewModel.launchPurchaseFlow(
+                                subscriptionId = subscriptionId,
+                                offerToken = uiState.basePlans[selectedItemIndex].offerToken,
+                                activity = activity
+                            )
+                        }
+                    }
+                }
+            )
+        }
+        VSpacer(8.dp)
     }
 }
 

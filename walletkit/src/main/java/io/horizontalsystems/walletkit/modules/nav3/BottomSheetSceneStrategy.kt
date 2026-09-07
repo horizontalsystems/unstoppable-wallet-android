@@ -6,8 +6,10 @@ import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.OverlayScene
@@ -16,6 +18,7 @@ import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetSceneStrategy.Companion.bottomSheet
+import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
@@ -56,13 +59,20 @@ internal class BottomSheetScene<T : Any>(
                     if (sheetState === state) sheetState = null
                 }
             }
+            val dismissRegistry = remember { BottomSheetDismissRegistry() }
             ModalBottomSheet(
-                onDismissRequest = onBack,
+                onDismissRequest = {
+                    val handler = dismissRegistry.handler
+                    if (handler != null) handler() else onBack()
+                },
                 sheetState = state,
+                containerColor = ComposeAppTheme.colors.lawrence,
                 properties = modalBottomSheetProperties,
                 dragHandle = null
             ) {
-                entry.Content()
+                CompositionLocalProvider(LocalBottomSheetDismissRegistry provides dismissRegistry) {
+                    entry.Content()
+                }
             }
         }
     }

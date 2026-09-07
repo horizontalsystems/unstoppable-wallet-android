@@ -18,13 +18,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +37,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
 import io.horizontalsystems.walletkit.core.imageUrl
+import io.horizontalsystems.walletkit.modules.nav3.BottomSheetDismissHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -54,7 +53,7 @@ import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
@@ -65,11 +64,10 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WCSessionSheet(val input: WCSessionModule.Input?) : HSBottomSheet() {
+data class WCSessionSheet(val input: WCSessionModule.Input?) : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -86,19 +84,8 @@ fun WCSessionScreen(
     navigation: HSNavigation,
     viewModel: WCSessionViewModel,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
     val uiState = viewModel.uiState
     val buttonsStates = uiState.buttonStates
-
-    // Animate the sheet out before popping; removing the entry outright can leave the card on screen.
-    val hideAndPop = {
-        scope.launch {
-            sheetState.hide()
-            navigation.removeLastOrNull()
-        }
-        Unit
-    }
 
     val connectionTitleRes =
         if (uiState.connected) R.string.WalletConnect_ConnectedTo else R.string.WalletConnect_ConnectTo
@@ -114,14 +101,12 @@ fun WCSessionScreen(
     // closes, so the only path that must re-enable it is a failure surfacing through showError.
     var connectButtonEnabled by remember { mutableStateOf(true) }
 
-    BottomSheetContent(
-        onDismissRequest = {
-            // Reject the proposal on dismiss so the dApp isn't left waiting, then animate out.
-            viewModel.rejectProposal()
-            hideAndPop()
-        },
-        sheetState = sheetState,
-    ) { snackbarActions ->
+    // Reject the proposal on dismiss so the dApp isn't left waiting.
+    BottomSheetDismissHandler {
+        viewModel.rejectProposal()
+        navigation.removeLastOrNull()
+    }
+    BottomSheetBody { snackbarActions ->
         uiState.showError?.let {
             snackbarActions.showErrorMessage(it)
             connectButtonEnabled = true

@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +28,7 @@ import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsInfoSheet
+import io.horizontalsystems.walletkit.modules.nav3.BottomSheetDismissHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.ViewItem
@@ -47,7 +46,7 @@ import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsButtonText
@@ -60,7 +59,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSendEthRequestScreen(
     navigation: HSNavigation,
@@ -69,7 +67,6 @@ fun WCSendEthRequestScreen(
     transaction: WalletConnectTransaction,
     sessionRequestUI: SessionRequestUI.Content,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
         factory = WCSendEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
@@ -87,17 +84,15 @@ fun WCSendEthRequestScreen(
     val feeText = stringResource(id = R.string.Send_Fee)
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
 
-    BottomSheetContent(
-        onDismissRequest = {
-            // A confirmed send is already broadcasting (NonCancellable); discarding or rejecting
-            // now would race the pending response, so ignore dismissal until it completes.
-            if (!confirmAction.inProgress) {
-                WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
-                navigation.removeLastOrNull()
-            }
-        },
-        sheetState = sheetState,
-    ) { snackbarActions ->
+    BottomSheetDismissHandler {
+        // A confirmed send is already broadcasting (NonCancellable); discarding or rejecting
+        // now would race the pending response, so ignore dismissal until it completes.
+        if (!confirmAction.inProgress) {
+            WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
+            navigation.removeLastOrNull()
+        }
+    }
+    BottomSheetBody { snackbarActions ->
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally

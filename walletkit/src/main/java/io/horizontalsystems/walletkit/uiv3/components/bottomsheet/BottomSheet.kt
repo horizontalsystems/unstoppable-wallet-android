@@ -162,13 +162,6 @@ fun BottomSheetContent(
     buttons: (@Composable ColumnScope.() -> Unit)? = null,
     content: @Composable (snackbarActions: SnackbarActions) -> Unit,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    val snackbarActions = remember(snackbarHostState, scope) {
-        SnackbarActionsImpl(snackbarHostState, scope)
-    }
-
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
@@ -179,40 +172,63 @@ fun BottomSheetContent(
         ),
         dragHandle = { }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                content(snackbarActions)
+        BottomSheetBody(buttons = buttons, content = content)
+    }
+}
 
-                buttons?.let {
-                    ButtonsStack {
-                        buttons()
-                    }
+/**
+ * The inside of a sheet: the content column, an optional [buttons] stack and a snackbar host.
+ *
+ * For sheets on the nav3 back stack ([io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet]),
+ * whose [ModalBottomSheet] is provided by the bottom-sheet scene. A second [ModalBottomSheet]
+ * inside it would open another window with its own scrim, doubling the dimming and leaving the
+ * two layers to animate out separately. Sheets shown from a page use [BottomSheetContent].
+ */
+@Composable
+fun BottomSheetBody(
+    buttons: (@Composable ColumnScope.() -> Unit)? = null,
+    content: @Composable (snackbarActions: SnackbarActions) -> Unit,
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val snackbarActions = remember(snackbarHostState, scope) {
+        SnackbarActionsImpl(snackbarHostState, scope)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .navigationBarsPadding()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            content(snackbarActions)
+
+            buttons?.let {
+                ButtonsStack {
+                    buttons()
                 }
             }
-
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
-                snackbar = { snackbarData: SnackbarData ->
-                    val actionLabel = snackbarData.visuals.actionLabel
-                    Snackbar(
-                        modifier = Modifier,
-                        containerColor = if (actionLabel == SnackbarActionsImpl.ACTION_ERROR) ComposeAppTheme.colors.redD else ComposeAppTheme.colors.greenD,
-                        contentColor = ComposeAppTheme.colors.white,
-                    ) {
-                        Text(snackbarData.visuals.message)
-                    }
-                }
-            )
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
+            snackbar = { snackbarData: SnackbarData ->
+                val actionLabel = snackbarData.visuals.actionLabel
+                Snackbar(
+                    modifier = Modifier,
+                    containerColor = if (actionLabel == SnackbarActionsImpl.ACTION_ERROR) ComposeAppTheme.colors.redD else ComposeAppTheme.colors.greenD,
+                    contentColor = ComposeAppTheme.colors.white,
+                ) {
+                    Text(snackbarData.visuals.message)
+                }
+            }
+        )
     }
 }
 

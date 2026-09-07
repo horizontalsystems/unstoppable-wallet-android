@@ -13,13 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +33,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.helpers.HudHelper
+import io.horizontalsystems.walletkit.modules.nav3.BottomSheetDismissHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -48,7 +46,7 @@ import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsButtonText
@@ -60,14 +58,13 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 private val logger = AppLogger("wallet-connect request")
 
 @Serializable
-data object WCRequestSheet : HSBottomSheet() {
+data object WCRequestSheet : HSBottomSheet(expanded = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val wcRequestRouterViewModel =
@@ -96,20 +93,12 @@ data object WCRequestSheet : HSBottomSheet() {
 fun WcRequestError(
     onDismiss: () -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
     val dismiss = {
-        // Discard synchronously, then animate the sheet out before popping (see WCNewSignRequestScreen).
         WCDelegate.discardActiveSessionRequest()
-        scope.launch {
-            sheetState.hide()
-            onDismiss()
-        }
-        Unit
+        onDismiss()
     }
-    BottomSheetContent(
-        onDismissRequest = dismiss,
-        sheetState = sheetState,
+    BottomSheetDismissHandler(dismiss)
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.Button_Close),

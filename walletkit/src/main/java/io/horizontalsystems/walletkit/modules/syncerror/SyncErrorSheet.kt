@@ -1,8 +1,6 @@
 package io.horizontalsystems.walletkit.modules.syncerror
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,7 +14,7 @@ import io.horizontalsystems.walletkit.modules.evmnetwork.EvmNetworkPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
@@ -25,7 +23,7 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SyncErrorSheet(val input: Input) : HSBottomSheet() {
+data class SyncErrorSheet(val input: Input) : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -36,7 +34,6 @@ data class SyncErrorSheet(val input: Input) : HSBottomSheet() {
     data class Input(val wallet: Wallet, val errorMessage: String?)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
@@ -46,11 +43,7 @@ private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
         stringResource(R.string.BalanceSyncError_ErrorText)
     }
 
-    BottomSheetContent(
-        onDismissRequest = {
-            navigation.removeLastOrNull()
-        },
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.BalanceSyncError_ButtonRetry),
@@ -104,7 +97,7 @@ private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
                 text = text,
                 textAlign = TextAlign.Center
             )
-        }
+        },
     )
 }
 

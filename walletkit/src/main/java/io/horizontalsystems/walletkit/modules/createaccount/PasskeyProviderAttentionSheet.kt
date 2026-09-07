@@ -1,8 +1,6 @@
 package io.horizontalsystems.walletkit.modules.createaccount
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -13,7 +11,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.ButtonsStack
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
@@ -29,7 +27,7 @@ import kotlinx.serialization.Serializable
  * lock — gets its own concrete steps.
  */
 @Serializable
-data class PasskeyProviderAttentionSheet(val gpmPassphrase: Boolean) : HSBottomSheet() {
+data class PasskeyProviderAttentionSheet(val gpmPassphrase: Boolean) : HSBottomSheet(expanded = true) {
 
     companion object {
         // Play services' passphrase/key-retrieval error family: 11000
@@ -52,13 +50,9 @@ data class PasskeyProviderAttentionSheet(val gpmPassphrase: Boolean) : HSBottomS
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasskeyProviderAttentionScreen(navigation: HSNavigation, gpmPassphrase: Boolean) {
-    BottomSheetContent(
-        onDismissRequest = navigation::removeLastOrNull,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ) {
+    BottomSheetBody {
         BottomSheetHeaderV3(
             image72 = painterResource(R.drawable.warning_filled_24),
             imageTint = ComposeAppTheme.colors.jacob,

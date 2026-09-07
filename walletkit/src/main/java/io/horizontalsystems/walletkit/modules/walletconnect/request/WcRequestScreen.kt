@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -28,6 +26,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsInfoSheet
+import io.horizontalsystems.walletkit.modules.nav3.BottomSheetDismissHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransaction.DataBlock
@@ -38,13 +37,12 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.dapp.core.HSDAppRequest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WcRequestScreen(
     navigation: HSNavigation,
@@ -72,17 +70,14 @@ fun WcRequestScreen(
         }
     }
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val feeText = stringResource(id = R.string.Send_Fee)
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
 
-    BottomSheetContent(
-        onDismissRequest = {
-            WCDelegate.discardActiveSessionRequest(sessionRequest.requestId)
-            navigation.removeLastOrNull()
-        },
-        sheetState = sheetState
-    ) { snackbarActions ->
+    BottomSheetDismissHandler {
+        WCDelegate.discardActiveSessionRequest(sessionRequest.requestId)
+        navigation.removeLastOrNull()
+    }
+    BottomSheetBody { snackbarActions ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

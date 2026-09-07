@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +25,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
@@ -39,14 +37,13 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UnlinkAccountSheet(val account: Account) : HSBottomSheet() {
+data class UnlinkAccountSheet(val account: Account) : HSBottomSheet(expanded = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         UnlinkAccountScreen(navigation, account)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UnlinkAccountScreen(navigation: HSNavigation, account: Account) {
     val viewModel =
@@ -59,11 +56,7 @@ private fun UnlinkAccountScreen(navigation: HSNavigation, account: Account) {
     val view = LocalView.current
     val doneConfirmationMessage = stringResource(R.string.Hud_Text_Done)
 
-    BottomSheetContent(
-        onDismissRequest = {
-            navigation.removeLastOrNull()
-        },
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(viewModel.deleteButtonText),
@@ -122,6 +115,6 @@ private fun UnlinkAccountScreen(navigation: HSNavigation, account: Account) {
                     }
                 }
             }
-        }
+        },
     )
 }

@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,7 +21,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetTextBlock
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellGroup
@@ -36,7 +34,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
+data class BackupRequiredSheet(val input: Input) : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -47,12 +45,9 @@ data class BackupRequiredSheet(val input: Input) : HSBottomSheet() {
     data class Input(val account: Account)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
-    BottomSheetContent(
-        onDismissRequest = navigation::removeLastOrNull,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.BackupRequired_RemindLater),
@@ -125,6 +120,6 @@ fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
                 )
             }
             VSpacer(16.dp)
-        }
+        },
     )
 }

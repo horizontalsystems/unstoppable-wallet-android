@@ -7,8 +7,6 @@ import android.net.Uri
 import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,7 +26,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellGroup
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftImage
@@ -45,7 +43,7 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-class RequestRefundSheet(val input: Input) : HSBottomSheet() {
+class RequestRefundSheet(val input: Input) : HSBottomSheet(expanded = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         RequestRefundScreen(navigation, input.data)
@@ -55,17 +53,12 @@ class RequestRefundSheet(val input: Input) : HSBottomSheet() {
     data class Input(val data: RequestRefundData)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RequestRefundScreen(navigation: HSNavigation, data: RequestRefundData) {
     val context = LocalContext.current
     val view = LocalView.current
 
-    BottomSheetContent(
-        onDismissRequest = {
-            navigation.removeLastOrNull()
-        },
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 modifier = Modifier.fillMaxWidth(),

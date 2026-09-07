@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +29,7 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.walletkit.modules.evmfee.FeeSettingsInfoSheet
+import io.horizontalsystems.walletkit.modules.nav3.BottomSheetDismissHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
@@ -49,7 +48,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
@@ -57,7 +56,6 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSignEthereumTransactionRequestScreen(
     navigation: HSNavigation,
@@ -77,7 +75,6 @@ fun WCSignEthereumTransactionRequestScreen(
     )
     val uiState = viewModel.uiState
     val view = LocalView.current
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     // Shared by the sheet's Approve and the confirmation screen's Sign button: both respond to
     // the same request, so a click on either must lock out both.
     val signAction = rememberAsyncAction()
@@ -86,17 +83,15 @@ fun WCSignEthereumTransactionRequestScreen(
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
     val doneMessage = stringResource(R.string.Hud_Text_Done)
 
-    BottomSheetContent(
-        onDismissRequest = {
-            // A confirmed sign is already responding (NonCancellable); discarding or rejecting
-            // now would race the pending response, so ignore dismissal until it completes.
-            if (!signAction.inProgress) {
-                WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
-                navigation.removeLastOrNull()
-            }
-        },
-        sheetState = sheetState,
-    ) { snackbarActions ->
+    BottomSheetDismissHandler {
+        // A confirmed sign is already responding (NonCancellable); discarding or rejecting
+        // now would race the pending response, so ignore dismissal until it completes.
+        if (!signAction.inProgress) {
+            WCDelegate.discardActiveSessionRequest(sessionRequestUI.requestId)
+            navigation.removeLastOrNull()
+        }
+    }
+    BottomSheetBody { snackbarActions ->
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally

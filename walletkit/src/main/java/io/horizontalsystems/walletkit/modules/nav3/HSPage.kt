@@ -9,6 +9,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
@@ -40,7 +41,12 @@ abstract class HSPage(
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata() = buildMap {
         if (bottomSheet) {
-            putAll(BottomSheetSceneStrategy.bottomSheet(skipPartiallyExpanded = expandedBottomSheet))
+            putAll(
+                BottomSheetSceneStrategy.bottomSheet(
+                    modalBottomSheetProperties = bottomSheetProperties,
+                    skipPartiallyExpanded = expandedBottomSheet,
+                )
+            )
         }
 
         putAll(getAnimationMetadata())
@@ -88,4 +94,13 @@ abstract class HSPage(
 
     @Composable
     abstract fun GetContent(navigation: HSNavigation)
+
+    companion object {
+        // Light system bar icons over the sheet's scrim in both themes.
+        @OptIn(ExperimentalMaterial3Api::class)
+        private val bottomSheetProperties = ModalBottomSheetProperties(
+            isAppearanceLightStatusBars = false,
+            isAppearanceLightNavigationBars = false,
+        )
+    }
 }

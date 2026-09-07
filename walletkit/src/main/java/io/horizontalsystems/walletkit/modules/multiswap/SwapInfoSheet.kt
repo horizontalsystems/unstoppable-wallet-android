@@ -1,8 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -11,7 +9,7 @@ import androidx.compose.ui.text.style.TextAlign
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
@@ -19,7 +17,7 @@ import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SwapInfoSheet(val input: Input) : HSBottomSheet() {
+data class SwapInfoSheet(val input: Input) : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
@@ -30,12 +28,9 @@ data class SwapInfoSheet(val input: Input) : HSBottomSheet() {
     data class Input(val title: String, val text: String, val icon: Int? = null)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwapInfoView(title: String, text: String, icon: Int? = null, onCloseClick: () -> Unit) {
-    BottomSheetContent(
-        onDismissRequest = onCloseClick,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.Button_Understand),
@@ -43,7 +38,7 @@ fun SwapInfoView(title: String, text: String, icon: Int? = null, onCloseClick: (
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onCloseClick
             )
-        }
+        },
     ) {
         BottomSheetHeaderV3(
             image72 = painterResource(icon ?: R.drawable.book_24),

@@ -2,8 +2,6 @@ package io.horizontalsystems.walletkit.modules.settings.security.securesend
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -14,7 +12,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetTextBlock
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellGroup
@@ -27,24 +25,19 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SecureSendConfigSheet : HSBottomSheet() {
+data object SecureSendConfigSheet : HSBottomSheet(expanded = true) {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         SecureSendConfigScreen(navigation)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SecureSendConfigScreen(navigation: HSNavigation) {
     val viewModel = viewModel<SecureSendConfigViewModel>(factory = SecureSendConfigModule.Factory())
     val uiState = viewModel.uiState
 
-    BottomSheetContent(
-        onDismissRequest = {
-            navigation.removeLastOrNull()
-        },
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    BottomSheetBody(
         buttons = {
             HSButton(
                 title = stringResource(R.string.Button_Done),
@@ -110,6 +103,6 @@ private fun SecureSendConfigScreen(navigation: HSNavigation) {
                 )
             }
             VSpacer(24.dp)
-        }
+        },
     )
 }
