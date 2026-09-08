@@ -58,6 +58,8 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
@@ -225,7 +227,7 @@ class ZcashAdapter(
             )
         }
 
-        zcashAccount = runBlocking { synchronizer.getAccounts().first() }
+        zcashAccount = runBlocking { awaitFirstAccount(synchronizer) }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
         transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, adapterScope, synchronizer) { txHash ->
@@ -526,6 +528,14 @@ class ZcashAdapter(
         scope.launch {
             synchronizer.processorInfo.collect(::onProcessorInfo)
         }
+        scope.launch {
+            // Slipstream defers preparation to a background job, so its failures never reach
+            // onSetupErrorHandler; they are latched on this StateFlow instead
+            synchronizer.setupError.filterNotNull().collect { error ->
+                Log.e("ZcashAdapter", "Deferred setup error", error)
+                onProcessorError(error)
+            }
+        }
     }
 
     private fun onProcessorError(error: Throwable?): Boolean {
@@ -693,13 +703,27 @@ class ZcashAdapter(
 
         suspend fun getTransparentAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String =
             withTemporarySynchronizer(account, lightWalletEndpoint) { synchronizer ->
-                synchronizer.getTransparentAddress(synchronizer.getAccounts().first())
+                synchronizer.getTransparentAddress(awaitFirstAccount(synchronizer))
             }
 
         suspend fun getUnifiedAddress(account: WalletAccount, lightWalletEndpoint: LightWalletEndpoint): String =
             withTemporarySynchronizer(account, lightWalletEndpoint) { synchronizer ->
-                synchronizer.getUnifiedAddress(synchronizer.getAccounts().first())
+                synchronizer.getUnifiedAddress(awaitFirstAccount(synchronizer))
             }
+
+        /**
+         * The Slipstream synchronizer's new() returns before its background preparation has
+         * created the wallet database and account, so on a fresh wallet getAccounts() is
+         * legitimately empty for a while. accountsFlow emits a non-null list only once
+         * accounts exist or account creation is no longer pending; a preparation failure
+         * completes the flow, which is surfaced through setupError.
+         */
+        private suspend fun awaitFirstAccount(synchronizer: Synchronizer): Account {
+            val accounts = synchronizer.accountsFlow.filterNotNull().firstOrNull { it.isNotEmpty() }
+            return accounts?.first()
+                ?: throw (synchronizer.setupError.value
+                    ?: IllegalStateException("Zcash wallet preparation finished without accounts"))
+        }
 
         private suspend fun <T> withTemporarySynchronizer(
             account: WalletAccount,
