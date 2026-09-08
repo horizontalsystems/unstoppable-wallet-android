@@ -33,6 +33,7 @@ dependencies {
 
     api(libs.zcash.android.sdk)
     implementation(libs.zcash.android.backend)
+    implementation(libs.zcash.android.slipstream)
 
     testImplementation(libs.junit)
 }

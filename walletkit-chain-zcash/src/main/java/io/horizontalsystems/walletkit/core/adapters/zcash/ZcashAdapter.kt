@@ -25,6 +25,7 @@ import cash.z.ecc.android.sdk.model.Zip32AccountIndex
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
+import com.zodl.slipstream.SlipstreamSynchronizer
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
@@ -49,6 +50,10 @@ import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -90,6 +95,10 @@ class ZcashAdapter(
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
+
+    // The Slipstream synchronizer exposes no coroutine scope of its own; collectors and the
+    // transactions provider run on this scope, cancelled together with the synchronizer in stop()
+    private val adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val _adapterStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _lastBlockUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
@@ -202,22 +211,24 @@ class ZcashAdapter(
 
         accountBirthday = birthday?.value
 
-        synchronizer = Synchronizer.newBlocking(
-            context = context,
-            zcashNetwork = network,
-            alias = getValidAliasFromAccountId(wallet.account.id),
-            lightWalletEndpoint = lightWalletEndpoint,
-            setup = AccountCreateSetup(accountName = wallet.account.name, keySource = null, seed = FirstClassByteArray(seed)),
-            birthday = birthday,
-            walletInitMode = walletInitMode,
-            isTorEnabled = false,
-            isExchangeRateEnabled = false
-        )
+        synchronizer = runBlocking {
+            SlipstreamSynchronizer.new(
+                alias = getValidAliasFromAccountId(wallet.account.id),
+                birthday = birthday,
+                context = context,
+                lightWalletEndpoint = lightWalletEndpoint,
+                setup = AccountCreateSetup(accountName = wallet.account.name, keySource = null, seed = FirstClassByteArray(seed)),
+                walletInitMode = walletInitMode,
+                zcashNetwork = network,
+                isTorEnabled = false,
+                isExchangeRateEnabled = false
+            )
+        }
 
         zcashAccount = runBlocking { synchronizer.getAccounts().first() }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
-        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, synchronizer as SdkSynchronizer) { txHash ->
+        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, adapterScope, synchronizer) { txHash ->
             // Migration txids recorded at broadcast; match both hash orientations since
             // TransferResult.Success txid endianness is not guaranteed
             val migrationTxIds = localStorage.zcashMigrationTransactionIds
@@ -243,13 +254,14 @@ class ZcashAdapter(
     }
 
     override fun start() {
-        subscribe(synchronizer as SdkSynchronizer)
+        subscribe(synchronizer)
         if (!existingWallet) {
             localStorage.zcashAccountIds += wallet.account.id
         }
     }
 
     override fun stop() {
+        adapterScope.cancel()
         synchronizer.close()
     }
 
@@ -492,16 +504,13 @@ class ZcashAdapter(
         val memo: String = ""
     )
 
-    // Subscribe to a synchronizer on its own scope and begin responding to events
-    private fun subscribe(synchronizer: SdkSynchronizer) {
+    // Subscribe to a synchronizer on the adapter scope and begin responding to events
+    private fun subscribe(synchronizer: Synchronizer) {
         // Note: If any of these callback functions directly touch the UI, then the scope used here
         //       should not live longer than that UI or else the context and view tree will be
-        //       invalid and lead to crashes. For now, we use a scope that is cancelled whenever
-        //       synchronizer.stop is called.
-        //       If the scope of the view is required for one of these, then consider using the
-        //       related viewModelScope instead of the synchronizer's scope.
-        //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
-        val scope = synchronizer.coroutineScope
+        //       invalid and lead to crashes. adapterScope is cancelled in stop(), together with
+        //       the synchronizer itself.
+        val scope = adapterScope
         scope.launch {
             synchronizer.allTransactions.collect(transactionsProvider::onTransactions)
         }
@@ -675,7 +684,10 @@ class ZcashAdapter(
 
         fun clear(accountId: String) {
             runBlocking {
-                Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
+                val alias = getValidAliasFromAccountId(accountId)
+                SlipstreamSynchronizer.erase(App.instance, ZcashNetwork.Mainnet, alias)
+                // Accounts created before the Slipstream migration still have a classic-engine database
+                Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, alias)
             }
         }
 
@@ -724,18 +736,18 @@ class ZcashAdapter(
                     }
             }
 
-            val synchronizer = Synchronizer.newBlocking(
-                context = context,
-                zcashNetwork = network,
+            val synchronizer = SlipstreamSynchronizer.new(
                 alias = alias,
+                birthday = birthday,
+                context = context,
                 lightWalletEndpoint = lightWalletEndpoint,
                 setup = AccountCreateSetup(
                     accountName = account.name,
                     keySource = null,
                     seed = FirstClassByteArray(seed)
                 ),
-                birthday = birthday,
                 walletInitMode = walletInitMode,
+                zcashNetwork = network,
                 isTorEnabled = false,
                 isExchangeRateEnabled = false
             )

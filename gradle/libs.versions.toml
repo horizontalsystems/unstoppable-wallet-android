@@ -81,7 +81,7 @@ marketKit = "46c3360"
 solanaKit = "f46029e"
 tronKit = "4033245"
 thorchainKit = "9de6579"
-zcashSdk = "2.7.0-rc.4"
+zcashSdk = "3.1.1-hs.1"
 
 # Binance
 binanceConnector = "3.4.1"
@@ -246,10 +246,12 @@ kit-market = { module = "com.github.horizontalsystems:market-kit-android", versi
 kit-solana = { module = "com.github.horizontalsystems:solana-kit-android", version.ref = "solanaKit" }
 kit-tron = { module = "com.github.horizontalsystems:tron-kit-android", version.ref = "tronKit" }
 kit-thorchain = { module = "com.github.horizontalsystems:thorchain-kit-android", version.ref = "thorchainKit" }
-zcash-android-sdk = { module = "cash.z.ecc.android:zcash-android-sdk", version.ref = "zcashSdk" }
+zcash-android-sdk = { module = "com.zodl.android:zcash-android-sdk", version.ref = "zcashSdk" }
 # rust backend of the sdk (transitive implementation dep) — needed at compile time for
 # synchronizer-free address validation (RustBackend.isValid*Addr)
-zcash-android-backend = { module = "cash.z.ecc.android:zcash-android-backend", version.ref = "zcashSdk" }
+zcash-android-backend = { module = "com.zodl.android:zcash-android-backend", version.ref = "zcashSdk" }
+# Slipstream sync engine — version-locked sibling of zcash-android-sdk, must always match zcashSdk
+zcash-android-slipstream = { module = "com.zodl.android:zcash-android-sdk-slipstream", version.ref = "zcashSdk" }
 
 # Binance
 binance-connector = { module = "io.github.binance:binance-connector-java", version.ref = "binanceConnector" }

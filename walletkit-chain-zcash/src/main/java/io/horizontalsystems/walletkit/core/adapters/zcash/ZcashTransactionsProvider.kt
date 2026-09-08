@@ -1,10 +1,11 @@
 package io.horizontalsystems.walletkit.core.adapters.zcash
 
-import cash.z.ecc.android.sdk.SdkSynchronizer
+import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionRecipient
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,7 +21,8 @@ import kotlin.math.min
 
 class ZcashTransactionsProvider(
     private val accountUuid: AccountUuid,
-    private val synchronizer: SdkSynchronizer,
+    private val scope: CoroutineScope,
+    private val synchronizer: Synchronizer,
     private val isMigrationTransaction: (txHash: ByteArray) -> Boolean
 ) {
     private val mutex = Mutex()
@@ -28,7 +30,7 @@ class ZcashTransactionsProvider(
     private val newTransactionsFlow = MutableSharedFlow<List<ZcashTransaction>>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
-        synchronizer.coroutineScope.launch {
+        scope.launch {
             mutex.withLock {
                 val newTransactions = transactionOverviews.filter { tx ->
                     transactions.none { it.transactionHash.contentEquals(tx.txId.value.byteArray) && it.minedHeight == tx.minedHeight?.value }
