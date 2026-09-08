@@ -76,6 +76,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
+import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.BalanceButtonsGroup
@@ -171,6 +172,14 @@ fun BalanceItems(
     val context = LocalContext.current
     val view = LocalView.current
     var revealedCardId by remember { mutableStateOf<Int?>(null) }
+    val listState = rememberSaveable(
+        accountViewItem.id,
+        uiState.sortType,
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+    ConcealOnScroll(listState) { revealedCardId = null }
 
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
@@ -207,13 +216,7 @@ fun BalanceItems(
             modifier = Modifier
                 .fillMaxSize()
                 .background(ComposeAppTheme.colors.lawrence),
-            state = rememberSaveable(
-                accountViewItem.id,
-                uiState.sortType,
-                saver = LazyListState.Saver
-            ) {
-                LazyListState()
-            },
+            state = listState,
             contentPadding = PaddingValues(bottom = 32.dp)
         ) {
             item {

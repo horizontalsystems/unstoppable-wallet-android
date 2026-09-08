@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,11 +35,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.ActionsRow
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
+import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
@@ -53,6 +54,8 @@ fun TonConnectSessionList(
     onDelete: (DAppEntity) -> Unit
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }
+    val listState = rememberLazyListState()
+    ConcealOnScroll(listState) { revealedCardId = null }
 
 //    uiState.error?.let { message ->
 //        val view = LocalView.current
@@ -60,7 +63,7 @@ fun TonConnectSessionList(
 //        viewModel.errorShown()
 //    }
 
-    LazyColumn(contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
+    LazyColumn(state = listState, contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
         dapps.forEach { (groupTitle, list) ->
             item {
                 HeaderText(text = groupTitle.uppercase())
@@ -98,42 +101,33 @@ private fun LazyListScope.TCSection(
     itemsIndexed(dapps, key = { _, item -> item.uniqueId }) { index, dapp ->
         val showDivider = showDivider(dapps.size, index)
         val shape = getShape(dapps.size, index)
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            ActionsRow(
-                content = {
-                    HsIconButton(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(88.dp),
-                        onClick = { onDelete(dapp) },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                                tint = ComposeAppTheme.colors.grey,
-                                contentDescription = "delete",
-                            )
-                        }
-                    )
-                },
-            )
-            DraggableCardSimple(
-                key = dapp.manifest.name,
-                isRevealed = revealedCardId == dapp.uniqueId,
-                cardOffset = 72f,
-                onReveal = { onReveal(dapp.uniqueId) },
-                onConceal = onConceal,
-                content = {
-                    TCSessionCell(
-                        shape = shape,
-                        showDivider = showDivider,
-                        dapp = dapp,
-                    )
-                }
-            )
-        }
+        HSSwipeToReveal(
+            revealed = revealedCardId == dapp.uniqueId,
+            onReveal = { onReveal(dapp.uniqueId) },
+            onConceal = onConceal,
+            actions = {
+                HsIconButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(88.dp),
+                    onClick = { onDelete(dapp) },
+                    content = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                            tint = ComposeAppTheme.colors.grey,
+                            contentDescription = "delete",
+                        )
+                    }
+                )
+            },
+            content = {
+                TCSessionCell(
+                    shape = shape,
+                    showDivider = showDivider,
+                    dapp = dapp,
+                )
+            }
+        )
     }
 }
 

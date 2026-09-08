@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
@@ -36,11 +37,11 @@ import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointMana
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.ActionsRow
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
+import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
@@ -78,6 +79,8 @@ private fun ZcashNetworkScreen(
 ) {
     val viewModel = viewModel<ZcashNetworkViewModel>(factory = ZcashNetworkModule.Factory())
     var revealedCardId by remember { mutableStateOf<String?>(null) }
+    val listState = rememberLazyListState()
+    ConcealOnScroll(listState) { revealedCardId = null }
     val view = LocalView.current
 
     HSScaffold(
@@ -91,7 +94,7 @@ private fun ZcashNetworkScreen(
             )
         ),
     ) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        LazyColumn(modifier = Modifier.fillMaxWidth(), state = listState) {
 
             val autoSelect = viewModel.uiState.autoSelectEnabled
 
@@ -155,33 +158,27 @@ private fun LazyListScope.customEndpointListSection(
     itemsIndexed(items, key = { _, item -> item.id }) { index, item ->
         val showDivider = showDivider(items.size, index)
         val shape = getShape(items.size, index)
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            ActionsRow(
-                content = {
-                    HsIconButton(
-                        modifier = Modifier.fillMaxHeight().width(88.dp),
-                        onClick = { onDelete(item.endpoint) },
-                        content = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_circle_minus_24),
-                                tint = ComposeAppTheme.colors.grey,
-                                contentDescription = "delete",
-                            )
-                        }
-                    )
-                }
-            )
-            DraggableCardSimple(
-                key = item.id,
-                isRevealed = revealedCardId == item.id,
-                cardOffset = 72f,
-                onReveal = { onReveal(item.id) },
-                onConceal = onConceal,
-                content = {
-                    ZcashEndpointCell(shape, showDivider, item) { onClick(item.endpoint) }
-                }
-            )
-        }
+        HSSwipeToReveal(
+            revealed = revealedCardId == item.id,
+            onReveal = { onReveal(item.id) },
+            onConceal = onConceal,
+            actions = {
+                HsIconButton(
+                    modifier = Modifier.fillMaxHeight().width(88.dp),
+                    onClick = { onDelete(item.endpoint) },
+                    content = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_circle_minus_24),
+                            tint = ComposeAppTheme.colors.grey,
+                            contentDescription = "delete",
+                        )
+                    }
+                )
+            },
+            content = {
+                ZcashEndpointCell(shape, showDivider, item) { onClick(item.endpoint) }
+            }
+        )
     }
 }
 

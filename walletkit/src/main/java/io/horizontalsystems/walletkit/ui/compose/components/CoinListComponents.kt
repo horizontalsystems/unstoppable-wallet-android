@@ -14,7 +14,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,9 +62,10 @@ import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.market.ImageSource
 import io.horizontalsystems.walletkit.modules.market.MarketViewItem
 import io.horizontalsystems.walletkit.modules.market.search.MarketSearchModule.DiscoveryItem
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
+import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
@@ -90,6 +90,7 @@ fun CoinListSlidable(
 ) {
     val coroutineScope = rememberCoroutineScope()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
+    ConcealOnScroll(listState) { revealedCardId = null }
 
     LazyColumn(
         state = listState,
@@ -97,32 +98,16 @@ fun CoinListSlidable(
     ) {
         preItems.invoke(this)
         itemsIndexed(items, key = { _, item -> item.coinUid }) { _, item ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max)
-            ) {
-                HSCellButton(
-                    modifier = Modifier.align(Alignment.CenterEnd),
-                    icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
-                    iconTint = ComposeAppTheme.colors.blade,
-                    backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
-                ) {
-                    if (item.favorited) {
-                        onRemoveFavorite(item.coinUid)
-                    } else {
-                        onAddFavorite(item.coinUid)
-                    }
-                    coroutineScope.launch {
-                        delay(200)
-                        revealedCardId = null
-                    }
+            val toggleFavorite = {
+                if (item.favorited) {
+                    onRemoveFavorite(item.coinUid)
+                } else {
+                    onAddFavorite(item.coinUid)
                 }
-
-                DraggableCardSimple(
-                    key = item.coinUid,
-                    isRevealed = revealedCardId == item.coinUid,
-                    cardOffset = 100f,
+            }
+            Box {
+                HSSwipeToReveal(
+                    revealed = revealedCardId == item.coinUid,
                     onReveal = {
                         if (revealedCardId != item.coinUid) {
                             revealedCardId = item.coinUid
@@ -130,6 +115,20 @@ fun CoinListSlidable(
                     },
                     onConceal = {
                         revealedCardId = null
+                    },
+                    onFullSwipe = toggleFavorite,
+                    actions = {
+                        HSCellButton(
+                            icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                            iconTint = ComposeAppTheme.colors.blade,
+                            backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
+                        ) {
+                            toggleFavorite()
+                            coroutineScope.launch {
+                                delay(200)
+                                revealedCardId = null
+                            }
+                        }
                     },
                     content = {
                         MarketCoin(

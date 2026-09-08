@@ -1,10 +1,6 @@
 package io.horizontalsystems.walletkit.ui.compose.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -18,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
@@ -26,9 +21,10 @@ import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.market.MarketViewItem
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
+import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSCellButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,6 +47,7 @@ fun CoinListOrderable(
     val listState = rememberLazyListState()
 
     var revealedCardId by remember { mutableStateOf<String?>(null) }
+    ConcealOnScroll(listState) { revealedCardId = null }
 
     LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
         preItems.invoke(this)
@@ -92,60 +89,57 @@ fun CoinListOrderable(
                         )
                     }
                 } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(IntrinsicSize.Max)
-                    ) {
-                        HSCellButton(
-                            modifier = Modifier.align(Alignment.CenterEnd),
-                            icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
-                            iconTint = ComposeAppTheme.colors.blade,
-                            backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
-                        ) {
-                            if (item.favorited) {
-                                onRemoveFavorite(item.coinUid)
-                            } else {
-                                onAddFavorite(item.coinUid)
-                            }
-                            coroutineScope.launch {
-                                delay(200)
-                                revealedCardId = null
-                            }
+                    val toggleFavorite = {
+                        if (item.favorited) {
+                            onRemoveFavorite(item.coinUid)
+                        } else {
+                            onAddFavorite(item.coinUid)
                         }
-                        DraggableCardSimple(
-                            key = item.coinUid,
-                            isRevealed = revealedCardId == item.coinUid,
-                            cardOffset = 100f,
-                            onReveal = {
-                                if (revealedCardId != item.coinUid) {
-                                    revealedCardId = item.coinUid
-                                }
-                            },
-                            onConceal = {
-                                revealedCardId = null
-                            },
-                            content = {
-                                MarketCoin(
-                                    title = item.fullCoin.coin.code,
-                                    subtitle = item.subtitle,
-                                    coinIconUrl = item.fullCoin.coin.imageUrl,
-                                    alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
-                                    coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                                    value = item.value,
-                                    marketDataValue = item.marketDataValue,
-                                    label = item.rank,
-                                    advice = item.signal,
-                                    onClick = { onCoinClick.invoke(item.fullCoin.coin.uid) },
-                                    onLongClick = {
-                                        if (canReorder) {
-                                            enableManualOrder()
-                                        }
-                                    }
-                                )
-                            }
-                        )
                     }
+                    HSSwipeToReveal(
+                        revealed = revealedCardId == item.coinUid,
+                        onReveal = {
+                            if (revealedCardId != item.coinUid) {
+                                revealedCardId = item.coinUid
+                            }
+                        },
+                        onConceal = {
+                            revealedCardId = null
+                        },
+                        onFullSwipe = toggleFavorite,
+                        actions = {
+                            HSCellButton(
+                                icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                                iconTint = ComposeAppTheme.colors.blade,
+                                backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
+                            ) {
+                                toggleFavorite()
+                                coroutineScope.launch {
+                                    delay(200)
+                                    revealedCardId = null
+                                }
+                            }
+                        },
+                        content = {
+                            MarketCoin(
+                                title = item.fullCoin.coin.code,
+                                subtitle = item.subtitle,
+                                coinIconUrl = item.fullCoin.coin.imageUrl,
+                                alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
+                                coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                                value = item.value,
+                                marketDataValue = item.marketDataValue,
+                                label = item.rank,
+                                advice = item.signal,
+                                onClick = { onCoinClick.invoke(item.fullCoin.coin.uid) },
+                                onLongClick = {
+                                    if (canReorder) {
+                                        enableManualOrder()
+                                    }
+                                }
+                            )
+                        }
+                    )
                 }
             }
         }

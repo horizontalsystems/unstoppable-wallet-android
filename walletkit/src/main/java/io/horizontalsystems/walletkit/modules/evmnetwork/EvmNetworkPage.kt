@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
@@ -46,11 +47,11 @@ import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BlockchainSe
 import io.horizontalsystems.walletkit.modules.evmnetwork.addrpc.AddRpcScreen
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.ActionsRow
-import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
+import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.AppBar
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
@@ -103,6 +104,8 @@ private fun EvmNetworkScreen(
         factory = EvmNetworkModule.Factory(blockchain)
     )
     var revealedCardId by remember { mutableStateOf<String?>(null) }
+    val listState = rememberLazyListState()
+    ConcealOnScroll(listState) { revealedCardId = null }
     val view = LocalView.current
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -135,6 +138,7 @@ private fun EvmNetworkScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
+                state = listState,
             ) {
 
                 item {
@@ -223,43 +227,34 @@ private fun LazyListScope.CustomRpcListSection(
     itemsIndexed(items, key = { _, item -> item.id }) { index, item ->
         val showDivider = showDivider(items.size, index)
         val shape = getShape(items.size, index)
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            ActionsRow(
-                content = {
-                    HsIconButton(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(88.dp),
-                        onClick = { onDelete(item.syncSource) },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_circle_minus_24),
-                                tint = ComposeAppTheme.colors.grey,
-                                contentDescription = "delete",
-                            )
-                        }
-                    )
-                },
-            )
-            DraggableCardSimple(
-                key = item.id,
-                isRevealed = revealedCardId == item.id,
-                cardOffset = 72f,
-                onReveal = { onReveal(item.id) },
-                onConceal = onConceal,
-                content = {
-                    RpcCell(
-                        shape = shape,
-                        showDivider = showDivider,
-                        item = item,
-                        onItemClick = onClick
-                    )
-                }
-            )
-        }
+        HSSwipeToReveal(
+            revealed = revealedCardId == item.id,
+            onReveal = { onReveal(item.id) },
+            onConceal = onConceal,
+            actions = {
+                HsIconButton(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(88.dp),
+                    onClick = { onDelete(item.syncSource) },
+                    content = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_circle_minus_24),
+                            tint = ComposeAppTheme.colors.grey,
+                            contentDescription = "delete",
+                        )
+                    }
+                )
+            },
+            content = {
+                RpcCell(
+                    shape = shape,
+                    showDivider = showDivider,
+                    item = item,
+                    onItemClick = onClick
+                )
+            }
+        )
     }
 }
 

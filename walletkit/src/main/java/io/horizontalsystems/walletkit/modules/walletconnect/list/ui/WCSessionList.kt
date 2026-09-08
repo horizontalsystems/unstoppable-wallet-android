@@ -90,43 +90,6 @@ private fun LazyListScope.WCSection(
             onDeleteClick = onDelete,
             onRequestsClick = onRequestClick
         )
-//        Box(
-//            modifier = Modifier.fillMaxWidth(),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            ActionsRow(
-//                content = {
-//                    HsIconButton(
-//                        modifier = Modifier
-//                            .fillMaxHeight()
-//                            .width(88.dp),
-//                        onClick = { onDelete(item.sessionTopic) },
-//                        content = {
-//                            Icon(
-//                                painter = painterResource(id = R.drawable.ic_circle_minus_24),
-//                                tint = ComposeAppTheme.colors.grey,
-//                                contentDescription = "delete",
-//                            )
-//                        }
-//                    )
-//                },
-//            )
-//            DraggableCardSimple(
-//                key = item.sessionTopic,
-//                isRevealed = revealedCardId == item.sessionTopic,
-//                cardOffset = 72f,
-//                onReveal = { onReveal(item.sessionTopic) },
-//                onConceal = onConceal,
-//                content = {
-//                    WCSessionCell(
-//                        shape = shape,
-//                        showDivider = showDivider,
-//                        session = item,
-//                        navigation = navigation
-//                    )
-//                }
-//            )
-//        }
     }
 }
 
