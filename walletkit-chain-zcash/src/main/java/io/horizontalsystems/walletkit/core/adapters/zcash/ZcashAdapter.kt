@@ -100,7 +100,7 @@ class ZcashAdapter(
 
     // The Slipstream synchronizer exposes no coroutine scope of its own; collectors and the
     // transactions provider run on this scope, cancelled together with the synchronizer in stop()
-    private val adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val _adapterStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _lastBlockUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
