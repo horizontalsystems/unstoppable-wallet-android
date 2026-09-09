@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -29,6 +30,7 @@ data class SendUiState(
     val tab: SendTab,
     val amount: BigDecimal?,
     val fiatAmount: BigDecimal?,
+    val fiatAmountInputEnabled: Boolean,
     val currency: Currency,
     val availableBalance: BigDecimal?,
     val address: Address?,
@@ -39,18 +41,21 @@ data class SendUiState(
 
 /**
  * Input state of the send screen for any blockchain: the selected tab, amount, recipient and
- * memo, plus the wallet's spendable balance. Fee and validation are not wired yet; the
- * confirmation step will own the transaction itself.
+ * memo, plus the wallet's spendable balance and the amount's fiat equivalent. Fee and
+ * validation are not wired yet; the confirmation step will own the transaction itself.
  */
 class SendViewModel(
     val wallet: Wallet,
-    currencyManager: CurrencyManager,
+    private val currencyManager: CurrencyManager,
     private val adapterManager: IAdapterManager,
+    private val fiatService: FiatService,
 ) : ViewModelUiState<SendUiState>() {
 
-    private val currency = currencyManager.baseCurrency
+    private var currency = currencyManager.baseCurrency
     private var tab = SendTab.Standard
     private var amount: BigDecimal? = null
+    private var fiatAmount: BigDecimal? = null
+    private var fiatAmountInputEnabled = false
     private var address: Address? = null
     private var riskyAddress = false
     private var memo: String? = null
@@ -58,6 +63,25 @@ class SendViewModel(
     private var balanceJob: Job? = null
 
     init {
+        fiatService.setCurrency(currency)
+        fiatService.setToken(wallet.token)
+        // The service converts in both directions, so the coin amount is taken from it too:
+        // typing a fiat value updates the coin amount and vice versa.
+        viewModelScope.launch {
+            fiatService.stateFlow.collect {
+                amount = it.amount
+                fiatAmount = it.fiatAmount
+                fiatAmountInputEnabled = it.coinPrice != null && !it.coinPrice.expired
+                emitState()
+            }
+        }
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                currency = currencyManager.baseCurrency
+                fiatService.setCurrency(currency)
+                emitState()
+            }
+        }
         observeBalance()
         // Adapters are recreated on account or network changes; re-resolve the adapter then.
         viewModelScope.launch {
@@ -86,7 +110,8 @@ class SendViewModel(
         wallet = wallet,
         tab = tab,
         amount = amount,
-        fiatAmount = null,
+        fiatAmount = fiatAmount,
+        fiatAmountInputEnabled = fiatAmountInputEnabled,
         currency = currency,
         availableBalance = availableBalance,
         address = address,
@@ -112,8 +137,11 @@ class SendViewModel(
     }
 
     fun onEnterAmount(amount: BigDecimal?) {
-        this.amount = amount
-        emitState()
+        fiatService.setAmount(amount)
+    }
+
+    fun onEnterFiatAmount(fiatAmount: BigDecimal?) {
+        fiatService.setFiatAmount(fiatAmount)
     }
 
     fun onSelectAddress(address: Address, risky: Boolean) {
@@ -130,7 +158,12 @@ class SendViewModel(
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SendViewModel(wallet, App.currencyManager, App.adapterManager) as T
+            return SendViewModel(
+                wallet,
+                App.currencyManager,
+                App.adapterManager,
+                FiatService(App.marketKit),
+            ) as T
         }
     }
 }
