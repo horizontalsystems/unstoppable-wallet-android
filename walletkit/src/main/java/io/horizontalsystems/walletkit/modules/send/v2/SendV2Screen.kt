@@ -35,6 +35,10 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
+import io.horizontalsystems.walletkit.modules.multiswap.SwapError
+import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
+import io.horizontalsystems.walletkit.modules.multiswap.WalletNotSynced
+import io.horizontalsystems.walletkit.modules.multiswap.WalletSyncing
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -152,6 +156,14 @@ fun SendV2Screen(
                     is SendStep.InputRequired -> when (step.inputType) {
                         SendInputType.Amount -> stringResource(R.string.Send_EnterAmount)
                         SendInputType.Address -> stringResource(R.string.Send_EnterAddress)
+                    }
+
+                    is SendStep.Error -> when (step.error) {
+                        SwapError.InsufficientBalanceFrom -> stringResource(R.string.Swap_ErrorInsufficientBalance)
+                        is TokenNotEnabled -> stringResource(R.string.Swap_ErrorTokenNotEnabled)
+                        is WalletSyncing -> stringResource(R.string.Swap_ErrorWalletSyncing)
+                        is WalletNotSynced -> stringResource(R.string.Swap_ErrorWalletNotSynced)
+                        else -> step.error.message ?: step.error.javaClass.simpleName
                     }
 
                     SendStep.Proceed -> stringResource(R.string.Button_Next)
