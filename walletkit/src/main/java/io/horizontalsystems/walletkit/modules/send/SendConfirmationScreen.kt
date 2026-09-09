@@ -34,6 +34,7 @@ import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
+import io.horizontalsystems.walletkit.ui.compose.components.IMenuItem
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -88,6 +89,9 @@ fun SendConfirmationScreen(
     sendEntryPointDestId: KClass<out HSPage>?,
     title: String? = null,
     error: Throwable? = null,
+    menuItems: List<IMenuItem> = listOf(),
+    cautions: List<CautionViewItem> = listOf(),
+    sendEnabled: Boolean = true,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val closeUntilDestId = sendEntryPointDestId ?: SendPage::class
@@ -130,6 +134,7 @@ fun SendConfirmationScreen(
     HSScaffold(
         title = title ?: stringResource(R.string.Send_Confirmation_Title),
         onBack = navigation::removeLastOrNull,
+        menuItems = menuItems,
         bottomBar = {
             ButtonsGroupWithShade {
                 SendButton(
@@ -142,7 +147,7 @@ fun SendConfirmationScreen(
 
                         stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
                     },
-                    enabled = error == null
+                    enabled = error == null && sendEnabled
                 )
             }
         }
@@ -174,6 +179,9 @@ fun SendConfirmationScreen(
 
             error?.let {
                 Cautions(listOf(CautionViewItem.fromThrowable(it)))
+            }
+            if (cautions.isNotEmpty()) {
+                Cautions(cautions)
             }
         }
     }

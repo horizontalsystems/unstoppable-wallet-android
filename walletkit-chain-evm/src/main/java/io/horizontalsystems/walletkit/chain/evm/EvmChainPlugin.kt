@@ -79,6 +79,14 @@ import kotlin.reflect.KClass
  */
 class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin {
 
+    // EVM transfers carry no memo; the calldata comes from the kit via depositTransferData.
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = depositTransferData(token, amount, address)
+
     private val isFamilyAnchor get() = blockchainType == BlockchainType.Ethereum
 
     private val evmKitManager get() = EvmKitManagerRegistry.getEvmKitManager(blockchainType)

@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarAdapter
@@ -50,6 +52,13 @@ import io.horizontalsystems.stellarkit.StellarKit
 import kotlin.reflect.KClass
 
 class StellarChainPlugin : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Stellar.Regular(address, memo.orEmpty(), amount)
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
         SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Public)

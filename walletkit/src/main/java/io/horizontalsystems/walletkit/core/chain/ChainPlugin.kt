@@ -302,6 +302,18 @@ interface ChainPlugin {
     suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? = null
 
     /**
+     * A plain transfer of [amount] to [address] carrying [memo] as SendTransactionData for the
+     * chain's send-transaction service, or null when the chain cannot build one. Chain settings
+     * the user has not been asked about (fee rate, coin control) take the service's defaults.
+     */
+    fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
+
+    /**
      * A plain transfer of [amount] to [address] as SendTransactionData, for flows that build a
      * deposit themselves (private send). Most chains are built kit-free by the caller; EVM
      * needs the kit for ERC20 transfer calldata, so its plugin overrides this.

@@ -2,6 +2,8 @@ package io.horizontalsystems.walletkit.chain.thorchain
 
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.ThorchainAdapter
@@ -45,6 +47,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class ThorchainChainPlugin : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Thorchain.Send(address, amount, memo.orEmpty())
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
         SendMemoSupport(maxLength = 250, visibility = MemoVisibility.Public)
