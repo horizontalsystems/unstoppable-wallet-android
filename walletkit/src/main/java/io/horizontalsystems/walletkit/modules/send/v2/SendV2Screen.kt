@@ -17,10 +17,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +40,7 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
+import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
 import io.horizontalsystems.walletkit.modules.multiswap.WalletNotSynced
@@ -42,6 +48,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.WalletSyncing
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.ui.compose.Keyboard
+import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
@@ -64,6 +72,9 @@ fun SendV2Screen(
 ) {
     val uiState = viewModel.uiState
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val keyboardState by observeKeyboardState()
+    var amountInputHasFocus by remember { mutableStateOf(false) }
 
     // Confirmation is not built yet; proceeding only closes the risky-address sheet when it
     // was shown on the way here.
@@ -133,6 +144,7 @@ fun SendV2Screen(
                         focusRequester = focusRequester,
                         onValueChange = viewModel::onEnterAmount,
                         onFiatValueChange = viewModel::onEnterFiatAmount,
+                        onFocusChanged = { amountInputHasFocus = it },
                     )
                     SectionArrow()
                     AddressRow(
@@ -183,7 +195,23 @@ fun SendV2Screen(
                         }
                     },
                 )
-                VSpacer(16.dp)
+                if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
+                    val hasNonZeroBalance =
+                        uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
+                    VSpacer(16.dp)
+                    SuggestionsBar(
+                        percents = uiState.percentOptions,
+                        onDelete = { viewModel.onEnterAmount(null) },
+                        onSelect = {
+                            focusManager.clearFocus()
+                            viewModel.onEnterAmountPercentage(it)
+                        },
+                        selectEnabled = hasNonZeroBalance,
+                        deleteEnabled = uiState.amount != null,
+                    )
+                } else {
+                    VSpacer(16.dp)
+                }
             }
         }
     }
@@ -212,8 +240,13 @@ private fun AmountSection(
     focusRequester: FocusRequester,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
+    onFocusChanged: (Boolean) -> Unit,
 ) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+    Column(
+        modifier = Modifier
+            .onFocusChanged { onFocusChanged(it.hasFocus) }
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             availableBalance?.let {
                 Text(
