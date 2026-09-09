@@ -42,12 +42,17 @@ import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.walletkit.modules.walletconnect.stellar.WCHandlerStellar
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
 import kotlin.reflect.KClass
 
 class StellarChainPlugin : ChainPlugin {
+
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Public)
 
     override val blockchainType: BlockchainType = BlockchainType.Stellar
 

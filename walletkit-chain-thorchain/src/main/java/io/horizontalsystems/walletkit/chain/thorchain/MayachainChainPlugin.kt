@@ -30,12 +30,17 @@ import io.horizontalsystems.walletkit.modules.send.thorchain.SendThorchainViewMo
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.thorchainkit.network.Network
 import kotlinx.coroutines.flow.Flow
 
 class MayachainChainPlugin : ChainPlugin {
+
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxLength = 250, visibility = MemoVisibility.Public)
 
     override val blockchainType: BlockchainType = BlockchainType.Mayachain
 

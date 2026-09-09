@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAdapter
@@ -31,6 +32,8 @@ import io.horizontalsystems.walletkit.modules.zcashmigration.ZcashMigrationPage
 import io.horizontalsystems.walletkit.modules.zcashnetwork.ZcashNetworkPage
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +57,24 @@ class ZcashChainPlugin(
     private val endpointManager: () -> ZcashLightWalletEndpointManager,
     private val localStorage: () -> ILocalStorage,
 ) : ChainPlugin {
+
+    // Encrypted memos travel only to destinations with a shielded receiver: Sapling and
+    // unified addresses. Transparent (including Tex) destinations have no memo field.
+    override suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? {
+        val support = SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Encrypted)
+        address ?: return support
+        val adapter = App.adapterManager.getAdapterForToken<ISendZcashAdapter>(token) ?: return null
+        val addressType = try {
+            adapter.validate(address)
+        } catch (e: Throwable) {
+            return null
+        }
+        return when (addressType) {
+            ZcashAdapter.ZCashAddressType.Shielded,
+            ZcashAdapter.ZCashAddressType.Unified -> support
+            ZcashAdapter.ZCashAddressType.Transparent -> null
+        }
+    }
 
     private val reselectScope = CoroutineScope(Dispatchers.Default)
 

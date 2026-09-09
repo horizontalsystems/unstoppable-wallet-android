@@ -31,6 +31,8 @@ import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.zanokit.ZanoKit
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
@@ -44,6 +46,9 @@ class ZanoChainPlugin(
     private val zanoNodeManager: () -> ZanoNodeManager,
     private val backgroundManager: () -> BackgroundManager,
 ) : ChainPlugin {
+
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Offchain)
 
     // Created on first use: before any Zano wallet exists the kit manager's node/background
     // subscriptions are no-ops, so lazy construction preserves startup behavior.

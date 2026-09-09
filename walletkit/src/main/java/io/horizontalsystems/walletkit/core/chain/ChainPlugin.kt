@@ -295,6 +295,13 @@ interface ChainPlugin {
     fun sendTransactionService(token: Token): AbstractSendTransactionService? = null
 
     /**
+     * Memo the chain can attach to a plain transfer of [token], or null when it has no memo
+     * field. [address] is the chosen recipient, or null while none is chosen yet; chains whose
+     * memo depends on the destination answer for the optimistic case then.
+     */
+    suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? = null
+
+    /**
      * A plain transfer of [amount] to [address] as SendTransactionData, for flows that build a
      * deposit themselves (private send). Most chains are built kit-free by the caller; EVM
      * needs the kit for ERC20 transfer calldata, so its plugin overrides this.
@@ -305,6 +312,12 @@ interface ChainPlugin {
         address: String,
     ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
 }
+
+/** How a chain's send memo is limited and who can read it once sent. */
+data class SendMemoSupport(
+    val maxLength: Int,
+    val visibility: io.horizontalsystems.walletkit.modules.memo.MemoVisibility,
+)
 
 /** A row on the manage-account private/public keys screens, navigating to a chain page. */
 class ChainKeyRow(

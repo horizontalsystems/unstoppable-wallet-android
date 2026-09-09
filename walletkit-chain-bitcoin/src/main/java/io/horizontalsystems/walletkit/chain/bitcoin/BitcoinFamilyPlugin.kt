@@ -51,6 +51,8 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -58,6 +60,9 @@ import kotlinx.coroutines.flow.merge
 import java.math.BigDecimal
 
 abstract class BitcoinFamilyPlugin : ChainPlugin {
+
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Public)
 
     protected val btcBlockchainManager get() = App.btcBlockchainManager
 
