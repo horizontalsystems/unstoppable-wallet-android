@@ -9,11 +9,13 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
+import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -24,6 +26,7 @@ enum class SendInputType { Amount, Address }
 
 sealed class SendStep {
     data class InputRequired(val inputType: SendInputType) : SendStep()
+    data class Error(val error: Throwable) : SendStep()
     data object Proceed : SendStep()
 }
 
@@ -45,14 +48,16 @@ data class SendUiState(
 /**
  * Input state of the send screen for any blockchain: the selected tab, amount, recipient and
  * memo, plus the wallet's spendable balance, the amount's fiat equivalent and whether the
- * chain accepts a memo for the chosen recipient. Fee and validation are not wired yet; the
- * confirmation step will own the transaction itself.
+ * chain accepts a memo for the chosen recipient. The amount is checked against the balance
+ * the same way swap does it; fee-dependent checks belong to the confirmation step, which
+ * owns the transaction itself.
  */
 class SendViewModel(
     val wallet: Wallet,
     private val currencyManager: CurrencyManager,
     private val adapterManager: IAdapterManager,
     private val fiatService: FiatService,
+    private val balanceService: TokenBalanceService,
 ) : ViewModelUiState<SendUiState>() {
 
     private var currency = currencyManager.baseCurrency
@@ -65,7 +70,7 @@ class SendViewModel(
     private var memo: String? = null
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
-    private var availableBalance: BigDecimal? = null
+    private var balanceState = balanceService.stateFlow.value
     private var balanceJob: Job? = null
     private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
 
@@ -79,6 +84,14 @@ class SendViewModel(
                 amount = it.amount
                 fiatAmount = it.fiatAmount
                 fiatAmountInputEnabled = it.coinPrice != null && !it.coinPrice.expired
+                balanceService.setAmount(amount)
+                emitState()
+            }
+        }
+        balanceService.setToken(wallet.token)
+        viewModelScope.launch {
+            balanceService.stateFlow.collect {
+                balanceState = it
                 emitState()
             }
         }
@@ -89,27 +102,26 @@ class SendViewModel(
                 emitState()
             }
         }
-        observeBalance()
+        observeBalanceUpdates()
         refreshMemoSupport()
         // Adapters are recreated on account or network changes; re-resolve the adapter then.
         viewModelScope.launch {
-            adapterManager.adaptersReadyFlow.collect {
-                observeBalance()
+            adapterManager.adaptersReadyFlow.collectSafely {
+                observeBalanceUpdates()
             }
         }
     }
 
-    private fun observeBalance() {
+    // The balance service reads the adapter on demand; follow the adapter's own updates so
+    // the balance and its validation stay current while the wallet syncs.
+    private fun observeBalanceUpdates() {
         balanceJob?.cancel()
-        val adapter = adapterManager.getAdapterForWallet<IBalanceAdapter>(wallet)
-        availableBalance = adapter?.balanceData?.available
-        emitState()
+        balanceService.refresh()
 
-        adapter ?: return
+        val adapter = adapterManager.getAdapterForWallet<IBalanceAdapter>(wallet) ?: return
         balanceJob = viewModelScope.launch {
-            adapter.balanceUpdatedFlow.collect {
-                availableBalance = adapter.balanceData?.available
-                emitState()
+            adapter.balanceUpdatedFlow.collectSafely {
+                balanceService.refresh()
             }
         }
     }
@@ -134,7 +146,7 @@ class SendViewModel(
         fiatAmount = fiatAmount,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
         currency = currency,
-        availableBalance = availableBalance,
+        availableBalance = balanceState.balance,
         address = address,
         riskyAddress = riskyAddress,
         memo = memo,
@@ -143,6 +155,7 @@ class SendViewModel(
     )
 
     private fun step(): SendStep {
+        balanceState.error?.let { return SendStep.Error(it) }
         val amount = amount
         if (amount == null || amount <= BigDecimal.ZERO) {
             return SendStep.InputRequired(SendInputType.Amount)
@@ -186,6 +199,7 @@ class SendViewModel(
                 App.currencyManager,
                 App.adapterManager,
                 FiatService(App.marketKit),
+                TokenBalanceService(App.adapterManager),
             ) as T
         }
     }
