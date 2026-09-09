@@ -490,6 +490,12 @@
     <!--Send-->
 
     <string name="Send_EnterAddress">Enter Address</string>
+    <string name="Send_EnterAmount">Enter Amount</string>
+    <string name="Send_ToAddress">To Address</string>
+    <string name="Send_Available">Available: %s</string>
+    <string name="Send_Tab_Standard">Standard</string>
+    <string name="Send_Tab_Private">Private</string>
+    <string name="Send_Tab_CrossPay" translatable="false">CrossPay</string>
     <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_Address">Address or Domain</string>

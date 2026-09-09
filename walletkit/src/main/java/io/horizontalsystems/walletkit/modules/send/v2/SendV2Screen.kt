@@ -1,0 +1,264 @@
+package io.horizontalsystems.walletkit.modules.send.v2
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.badge
+import io.horizontalsystems.walletkit.entities.Address
+import io.horizontalsystems.walletkit.entities.Currency
+import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
+import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
+import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.ui.compose.TranslatableString
+import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
+import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
+import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
+import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.body_grey
+import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
+import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
+import io.horizontalsystems.marketkit.models.Token
+import java.math.BigDecimal
+
+@Composable
+fun SendV2Screen(
+    navigation: HSNavigation,
+    viewModel: SendViewModel,
+) {
+    val uiState = viewModel.uiState
+
+    val openAddress = navigation.slideFromRightForResult<SendAddressPage.Result>(
+        { SendAddressPage(uiState.wallet, uiState.address?.hex) }
+    ) {
+        viewModel.onSelectAddress(it.address, it.risky)
+    }
+
+    HSScaffold(
+        title = stringResource(R.string.Balance_Send),
+        onBack = { navigation.removeLastOrNull() },
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                icon = R.drawable.manage_24,
+                onClick = { },
+            ),
+        ),
+    ) {
+        val tabs = SendTab.entries
+        val focusRequester = remember { FocusRequester() }
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            TabsFolder(
+                tabs = tabs.map { it.tabItem() },
+                selectedIndex = tabs.indexOf(uiState.tab),
+                onSelect = { viewModel.onSelectTab(tabs[it]) },
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .imePadding()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    AmountSection(
+                        token = uiState.wallet.token,
+                        amount = uiState.amount,
+                        fiatAmount = uiState.fiatAmount,
+                        currency = uiState.currency,
+                        availableBalance = uiState.availableBalance,
+                        focusRequester = focusRequester,
+                        onValueChange = viewModel::onEnterAmount,
+                    )
+                    SectionArrow()
+                    AddressRow(
+                        address = uiState.address,
+                        onClick = openAddress,
+                    )
+                    HsDivider(modifier = Modifier.fillMaxWidth())
+                    VSpacer(16.dp)
+                    HSMemoInput(
+                        maxLength = 120,
+                        memo = uiState.memo,
+                        onValueChange = viewModel::onEnterMemo,
+                    )
+                    VSpacer(32.dp)
+                }
+
+                val buttonTitle = when (val step = uiState.step) {
+                    is SendStep.InputRequired -> when (step.inputType) {
+                        SendInputType.Amount -> stringResource(R.string.Send_EnterAmount)
+                        SendInputType.Address -> stringResource(R.string.Send_EnterAddress)
+                    }
+
+                    SendStep.Proceed -> stringResource(R.string.Button_Next)
+                }
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = buttonTitle,
+                    enabled = uiState.step is SendStep.Proceed,
+                    onClick = { },
+                )
+                VSpacer(16.dp)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SendTab.tabItem() = when (this) {
+    SendTab.Standard -> TabFolderItem(stringResource(R.string.Send_Tab_Standard))
+    SendTab.Private -> TabFolderItem(
+        title = stringResource(R.string.Send_Tab_Private),
+        icon = R.drawable.ic_incognito_24,
+        badge = true,
+    )
+
+    SendTab.CrossPay -> TabFolderItem(stringResource(R.string.Send_Tab_CrossPay))
+}
+
+@Composable
+private fun AmountSection(
+    token: Token,
+    amount: BigDecimal?,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
+    availableBalance: BigDecimal?,
+    focusRequester: FocusRequester,
+    onValueChange: (BigDecimal?) -> Unit,
+) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            availableBalance?.let {
+                Text(
+                    text = stringResource(
+                        R.string.Send_Available,
+                        "${it.toPlainString()} ${token.coin.code}"
+                    ),
+                    style = ComposeAppTheme.typography.caption,
+                    color = ComposeAppTheme.colors.ocean,
+                )
+            }
+        }
+        VSpacer(8.dp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CoinImage(
+                token = token,
+                modifier = Modifier.size(40.dp)
+            )
+            HSpacer(16.dp)
+            Column {
+                headline2_leah(text = token.coin.code)
+                VSpacer(5.dp)
+                BadgeText(
+                    text = token.badge ?: stringResource(R.string.CoinPlatforms_Native),
+                    background = ComposeAppTheme.colors.blade,
+                    textColor = ComposeAppTheme.colors.leah,
+                )
+            }
+            HSpacer(8.dp)
+            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+                AmountInput(
+                    value = amount,
+                    onValueChange = onValueChange,
+                    focusRequester = focusRequester,
+                )
+                VSpacer(3.dp)
+                body_grey(text = "${currency.symbol}${fiatAmount?.toPlainString() ?: "0"}")
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectionArrow() {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        HsDivider(modifier = Modifier.align(Alignment.Center))
+        Icon(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .background(ComposeAppTheme.colors.lawrence)
+                .padding(horizontal = 8.dp)
+                .size(20.dp),
+            painter = painterResource(R.drawable.ic_arrow_down_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey,
+        )
+    }
+}
+
+@Composable
+private fun AddressRow(
+    address: Address?,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick,
+            )
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(R.drawable.wallet_24),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey,
+            )
+        }
+        HSpacer(16.dp)
+        headline2_leah(
+            modifier = Modifier.weight(1f, fill = false),
+            text = address?.title ?: stringResource(R.string.Send_ToAddress),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        HSpacer(8.dp)
+        Icon(
+            painter = painterResource(R.drawable.arrow_s_down_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.leah,
+        )
+    }
+}

@@ -36,7 +36,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.isCustom
-import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -55,7 +54,7 @@ import io.horizontalsystems.walletkit.modules.coin.CoinPage
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.receive.ReceivePage
-import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
+import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
@@ -873,16 +872,7 @@ private fun ButtonsRow(
             icon = R.drawable.ic_arrow_up_24,
             title = stringResource(R.string.Balance_Send),
             onClick = {
-                val sendTitle = Translator.getString(
-                    R.string.Send_Title,
-                    viewItem.wallet.token.fullCoin.coin.code
-                )
-                navigation.slideFromRight(
-                    EnterAddressPage(EnterAddressPage.Input(
-                        wallet = viewItem.wallet,
-                        title = sendTitle
-                    ))
-                )
+                navigation.slideFromRight(SendV2Page(viewItem.wallet))
 
                 stat(
                     page = StatPage.TokenPage,

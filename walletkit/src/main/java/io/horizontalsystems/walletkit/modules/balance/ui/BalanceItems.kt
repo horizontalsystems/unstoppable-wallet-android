@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.FaqManager
-import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -64,7 +63,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.rateapp.RateAppModule
 import io.horizontalsystems.walletkit.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.walletkit.modules.receive.ReceiveChooseCoinPage
-import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
+import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.sendtokenselect.SendTokenSelectPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
@@ -504,16 +503,7 @@ private fun handleContextMenuClick(
 ) {
     when (menuItem) {
         BalanceContextMenuItem.Send -> {
-            val sendTitle = Translator.getString(
-                R.string.Send_Title,
-                balanceViewItem.wallet.token.fullCoin.coin.code
-            )
-            navigation.slideFromRight(
-                EnterAddressPage(EnterAddressPage.Input(
-                    wallet = balanceViewItem.wallet,
-                    title = sendTitle
-                ))
-            )
+            navigation.slideFromRight(SendV2Page(balanceViewItem.wallet))
 
             stat(
                 page = StatPage.Balance,
