@@ -76,6 +76,38 @@ class PoisoningScorerBehaviorTest {
 
     // ==================== Value scoring: auto-spam classes ====================
 
+    // ---- XRP: production limit 0.001 XRP, so payments under 0.0001 XRP (100 drops) are auto-spam ----
+
+    private val xrpLimits = mapOf("XRP" to BigDecimal("0.001"))
+
+    private fun xrp(amount: String): TransactionValue.CoinValue {
+        val token = Token(
+            coin = Coin(uid = "ripple", name = "XRP", code = "XRP"),
+            blockchain = Blockchain(BlockchainType.Xrp, "XRP Ledger", null),
+            type = TokenType.Native,
+            decimals = 6
+        )
+        return TransactionValue.CoinValue(token, BigDecimal(amount))
+    }
+
+    private fun xrpValueScore(amount: String): Int =
+        scorer.calculateValueScore(listOf(TransferEvent("rPq4Ko4ockCSHLbFeuRbMx9kT7rxDefTTC", xrp(amount))), xrpLimits).score
+
+    @Test
+    fun `XRP dust payments of a few drops are auto-spam`() {
+        assertTrue(xrpValueScore("0.000001") >= PoisoningScorer.SPAM_THRESHOLD)   // 1 drop
+        assertTrue(xrpValueScore("0.00001") >= PoisoningScorer.SPAM_THRESHOLD)    // 10 drops
+        assertTrue(xrpValueScore("0.000099") >= PoisoningScorer.SPAM_THRESHOLD)
+    }
+
+    @Test
+    fun `XRP payments from the dust band up need correlation and normal amounts score zero`() {
+        assertTrue(xrpValueScore("0.0001") < PoisoningScorer.SPAM_THRESHOLD)
+        assertTrue(xrpValueScore("0.0005") in 1..<PoisoningScorer.SPAM_THRESHOLD)
+        assertEquals(0, xrpValueScore("1.8"))
+    }
+
+
     @Test
     fun `unknown token (RawValue) is auto-spam`() {
         assertEquals(PoisoningScorer.POINTS_AUTO_SPAM, valueScore(TransactionValue.RawValue(BigInteger.TEN)))

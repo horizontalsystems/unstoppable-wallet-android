@@ -134,6 +134,8 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
     override val spamCoinValueLimits: Map<String, BigDecimal> = mapOf(
         "XLM" to BigDecimal("0.1"),
+        // XRPL dust spam is sent in single drops; anything under 0.0001 XRP (limit / 10) is auto-spam
+        "XRP" to BigDecimal("0.001"),
         "USDT" to BigDecimal("1"),
         "USDC" to BigDecimal("1"),
         "USDD" to BigDecimal("1"),
