@@ -1,0 +1,6 @@
+UN-STOMP-A-BULL
+updates:
+  - package-ecosystem: "" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
