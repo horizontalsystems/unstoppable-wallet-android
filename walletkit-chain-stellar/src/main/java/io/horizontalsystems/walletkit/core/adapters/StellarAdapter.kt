@@ -1,7 +1,10 @@
 package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
-import io.horizontalsystems.walletkit.core.StellarAssetBalance
+import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.ReserveInfo
+import io.horizontalsystems.walletkit.core.ReserveItem
+import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
@@ -31,8 +34,16 @@ class StellarAdapter(
         get() = BalanceData(
             availableBalance,
             minimumBalance = minimumBalance,
-            stellarAssets = assets.map { StellarAssetBalance(it.code) }
+            reserve = reserveInfo(),
         )
+
+    private fun reserveInfo(): ReserveInfo {
+        val items = mutableListOf(
+            ReserveItem(Translator.getString(R.string.Info_Reserved_WalletAction), "1 XLM")
+        )
+        assets.forEach { items.add(ReserveItem(it.code, "0.5 XLM")) }
+        return ReserveInfo(items, Translator.getString(R.string.Info_Reserved_Description))
+    }
 
     private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _balanceStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)

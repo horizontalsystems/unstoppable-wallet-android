@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.TokenActivationInfo
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.activatetoken.ActivateTokenPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -40,9 +41,18 @@ import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
+/**
+ * Receive screen for a token the account has to activate first (Stellar trustline, XRPL trust
+ * line). Shows the address as usual, plus an activation prompt while the token is not active.
+ */
 @Composable
-fun ReceiveStellarAssetScreen(navigation: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
-    val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
+fun ReceiveActivatableTokenScreen(
+    navigation: HSNavigation,
+    wallet: Wallet,
+    receiveEntryPointDestId: KClass<out HSPage>?,
+    activationInfo: TokenActivationInfo,
+) {
+    val viewModel = viewModel<ReceiveActivatableTokenViewModel>(factory = ReceiveActivatableTokenViewModel.Factory(wallet))
     val uiState = viewModel.uiState
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -72,14 +82,12 @@ fun ReceiveStellarAssetScreen(navigation: HSNavigation, wallet: Wallet, receiveE
                 iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
                 title = stringResource(R.string.ActivationRequired_DialogTitle),
                 onCloseClick = {
-                    scope.launch {
-                        sheetState.hide()
-                    }
+                    scope.launch { sheetState.hide() }
                 }
             ) {
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(R.string.ActivationRequired_DialogDescription, uiState.coinCode, uiState.coinCode)
+                    text = stringResource(activationInfo.dialogDescriptionRes, uiState.coinCode, uiState.coinCode)
                 )
                 VSpacer(12.dp)
                 ButtonPrimaryYellow(
@@ -96,9 +104,7 @@ fun ReceiveStellarAssetScreen(navigation: HSNavigation, wallet: Wallet, receiveE
                         .padding(horizontal = 24.dp),
                     title = stringResource(R.string.Button_Later),
                     onClick = {
-                        scope.launch {
-                            sheetState.hide()
-                        }
+                        scope.launch { sheetState.hide() }
                     }
                 )
                 VSpacer(32.dp)
@@ -111,12 +117,11 @@ fun ReceiveStellarAssetScreen(navigation: HSNavigation, wallet: Wallet, receiveE
             setAmount = viewModel::setAmount,
             onErrorClick = viewModel::onErrorClick,
             slot1 = {
-                if (uiState.trustlineEstablished == false) {
+                if (uiState.activated == false) {
                     HsDivider(modifier = Modifier.fillMaxWidth())
                     RowUniversal(modifier = Modifier.height(48.dp)) {
                         subhead2_grey(
-                            modifier = Modifier
-                                .padding(start = 16.dp),
+                            modifier = Modifier.padding(start = 16.dp),
                             text = stringResource(R.string.Balance_Receive_Trustline),
                         )
 
@@ -124,9 +129,7 @@ fun ReceiveStellarAssetScreen(navigation: HSNavigation, wallet: Wallet, receiveE
                         HsIconButton(
                             modifier = Modifier.size(20.dp),
                             onClick = {
-                                scope.launch {
-                                    sheetState.show()
-                                }
+                                scope.launch { sheetState.show() }
                             }
                         ) {
                             Image(

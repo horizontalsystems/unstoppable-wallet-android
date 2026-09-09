@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.transactionInfo
 
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.adapters.XrpTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.isCustom
@@ -672,6 +673,10 @@ object TransactionViewItemFactoryHelper {
                 transaction.fee?.let { fee ->
                     items.add(getFeeItem(fee, rates[fee.coinUid], status))
                 }
+            }
+
+            is XrpTransactionRecord -> {
+                items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
             }
 
             is BitcoinOutgoingTransactionRecord ->

@@ -31,7 +31,8 @@ import io.horizontalsystems.walletkit.modules.address.AddressHandlerStellar
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.ReceiveScreen
-import io.horizontalsystems.walletkit.modules.receive.ReceiveStellarAssetScreen
+import io.horizontalsystems.walletkit.modules.receive.ReceiveActivatableTokenScreen
+import io.horizontalsystems.walletkit.core.TokenActivationInfo
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.StellarAddressValidator
 import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarModule
@@ -146,10 +147,18 @@ class StellarChainPlugin : ChainPlugin {
 
     override val hasReceiveScreen: Boolean get() = true
 
+    private val stellarActivationInfo = TokenActivationInfo(
+        dialogDescriptionRes = R.string.ActivationRequired_DialogDescription,
+        insufficientBalanceDescriptionRes = R.string.Activate_InsufficientBalance_Description,
+    )
+
+    override fun tokenActivationInfo(wallet: Wallet): TokenActivationInfo? =
+        if (wallet.token.type is TokenType.Asset) stellarActivationInfo else null
+
     @Composable
     override fun ReceiveScreen(navigation: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
         if (wallet.token.type is TokenType.Asset) {
-            ReceiveStellarAssetScreen(navigation, wallet, receiveEntryPointDestId)
+            ReceiveActivatableTokenScreen(navigation, wallet, receiveEntryPointDestId, stellarActivationInfo)
         } else {
             ReceiveScreen(navigation, wallet, receiveEntryPointDestId, false)
         }

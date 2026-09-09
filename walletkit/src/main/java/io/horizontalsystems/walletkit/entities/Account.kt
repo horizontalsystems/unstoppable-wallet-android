@@ -133,6 +133,9 @@ sealed class AccountType {
     data class StellarAddress(val address: String) : AccountType()
 
     @Serializable
+    data class XrpAddress(val address: String) : AccountType()
+
+    @Serializable
     data class BitcoinAddress(
         val address: String,
         val blockchainType: BlockchainType,
@@ -341,6 +344,7 @@ sealed class AccountType {
             is TronAddress -> "Tron Address"
             is TonAddress -> "Ton Address"
             is StellarAddress -> "Stellar Address"
+            is XrpAddress -> "XRP Address"
             is EvmPrivateKey -> "EVM Private Key"
             is TronPrivateKey -> "TRON Private Key"
             is Passkey -> "Passkey"
@@ -382,6 +386,7 @@ sealed class AccountType {
             is TronAddress -> this.address.shorten()
             is TonAddress -> this.address.shorten()
             is StellarAddress -> this.address.shorten()
+            is XrpAddress -> this.address.shorten()
             is BitcoinAddress -> this.address.shorten()
             is MoneroWatchAccount -> this.address.shorten()
             else -> this.description
@@ -406,6 +411,7 @@ sealed class AccountType {
             is TronAddress -> true
             is TonAddress -> true
             is StellarAddress -> true
+            is XrpAddress -> true
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             is MoneroWatchAccount -> true
@@ -419,6 +425,7 @@ sealed class AccountType {
             is TronAddress -> address
             is TonAddress -> address
             is StellarAddress -> address
+            is XrpAddress -> address
             is BitcoinAddress -> address
             is HdExtendedKey -> keySerialized
             is MoneroWatchAccount -> address

@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.IActivatableTokenAdapter
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.receive.viewmodels.AddressUriService
@@ -14,10 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class ReceiveStellarAssetViewModel(
+/** Receive state for a token that needs activation (a trust line) before it can be received. */
+class ReceiveActivatableTokenViewModel(
     private val wallet: Wallet,
-    val adapterManager: IAdapterManager,
-) : ViewModelUiState<ReceiveStellarAssetUiState>() {
+    private val adapterManager: IAdapterManager,
+) : ViewModelUiState<ReceiveActivatableTokenUiState>() {
     private val watchAccount = wallet.account.isWatchAccount
     private val blockchainName = wallet.token.blockchain.name
     private var address: String = ""
@@ -26,44 +27,36 @@ class ReceiveStellarAssetViewModel(
     private var viewState: ViewState = ViewState.Loading
 
     private val addressUriService = AddressUriService(wallet.token)
-    private var trustlineEstablished: Boolean? = null
-
+    private var activated: Boolean? = null
     private var addressUriState = addressUriService.stateFlow.value
 
     init {
         viewModelScope.launch {
             addressUriService.stateFlow.collect {
-                handleUpdatedAddressUriState(it)
+                addressUriState = it
+                emitState()
             }
         }
-
         viewModelScope.launch(Dispatchers.Default) {
             fetchAddress()
-
             emitState()
         }
     }
 
     private suspend fun fetchAddress() {
         try {
-            val adapter = adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet) ?: throw ReceiveStellarAssetError.NoAdapter
+            val adapter = adapterManager.getAdapterForWallet<IActivatableTokenAdapter>(wallet) ?: throw NoAdapter()
             mainNet = adapter.isMainNet
-            trustlineEstablished = adapter.isTrustlineEstablished()
-
+            activated = adapter.isActivated()
             viewState = ViewState.Success
-            setAddress(adapter.receiveAddress)
+            address = adapter.receiveAddress
+            addressUriService.setAddress(address)
         } catch (e: Throwable) {
             viewState = ViewState.Error(e)
         }
     }
 
-    private fun handleUpdatedAddressUriState(state: AddressUriService.State) {
-        addressUriState = state
-
-        emitState()
-    }
-
-    override fun createState() = ReceiveStellarAssetUiState(
+    override fun createState() = ReceiveActivatableTokenUiState(
         viewState = viewState,
         uri = addressUriState.uri,
         address = address,
@@ -72,57 +65,43 @@ class ReceiveStellarAssetViewModel(
         watchAccount = watchAccount,
         amount = amount,
         amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
-        activationRequired = trustlineEstablished == false,
+        activationRequired = activated == false,
         coinCode = wallet.coin.code,
-        trustlineEstablished = trustlineEstablished,
+        activated = activated,
     )
 
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
-
         addressUriService.setAmount(amount)
-
         emitState()
     }
 
     fun onErrorClick() {
         viewModelScope.launch(Dispatchers.Default) {
             fetchAddress()
-
             emitState()
         }
     }
 
+    fun onActivationResult(activated: Boolean) {
+        if (!activated) return
+        viewModelScope.launch(Dispatchers.Default) {
+            fetchAddress()
+            emitState()
+        }
+    }
+
+    class NoAdapter : Exception()
+
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveStellarAssetViewModel(wallet, App.adapterManager) as T
+            return ReceiveActivatableTokenViewModel(wallet, App.adapterManager) as T
         }
-    }
-
-    private fun setAddress(receiveAddress: String) {
-        address = receiveAddress
-
-        addressUriService.setAddress(address)
-    }
-
-    fun onActivationResult(activated: Boolean) {
-        viewModelScope.launch(Dispatchers.Default) {
-            if (activated) {
-                fetchAddress()
-
-                emitState()
-            }
-        }
-
     }
 }
 
-sealed class ReceiveStellarAssetError : Throwable() {
-    object NoAdapter : ReceiveStellarAssetError()
-}
-
-data class ReceiveStellarAssetUiState(
+data class ReceiveActivatableTokenUiState(
     override val viewState: ViewState,
     override val uri: String,
     override val address: String,
@@ -133,7 +112,8 @@ data class ReceiveStellarAssetUiState(
     override val amountString: String?,
     val activationRequired: Boolean,
     val coinCode: String,
-    val trustlineEstablished: Boolean?,
+    /** Null until the adapter has answered. */
+    val activated: Boolean?,
 ) : ReceiveModule.AbstractUiState() {
     override val addressFormat = null
     override val addressType = null

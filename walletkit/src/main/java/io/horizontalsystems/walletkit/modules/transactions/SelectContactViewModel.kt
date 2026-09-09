@@ -49,7 +49,8 @@ class SelectContactViewModel(
                     BlockchainType.Zcash +
                     BlockchainType.Tron +
                     BlockchainType.Ton +
-                    BlockchainType.Stellar
+                    BlockchainType.Stellar +
+                    BlockchainType.Xrp
 
         fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
             SelectContactViewModel(App.contactsRepository, selected, blockchainType)

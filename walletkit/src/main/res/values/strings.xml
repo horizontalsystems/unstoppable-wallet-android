@@ -1072,6 +1072,8 @@
     <string name="Transactions_OperationType_CreateAccount">Create Account</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
     <string name="Transactions_StellarTransaction">Stellar Transaction</string>
+    <string name="Transactions_XrpTransaction">XRP Ledger Transaction</string>
+    <string name="Transactions_TrustSet">Trust Line</string>
     <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
     <string name="Transactions_Multiple">Multiple</string>
     <string name="Transactions_Filter">Filter</string>
@@ -1147,6 +1149,17 @@
     <string name="Info_Reserved_Title">Locked Balance</string>
     <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
     <string name="Info_Reserved_WalletAction">Wallet activation</string>
+    <string name="Info_Reserved_Xrp_Description">The XRP Ledger locks 1 XRP to activate the wallet and 0.2 XRP as a reserve for each trust line or other object owned by your wallet. The reserve is released when the object is removed.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">Other objects (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">This account is not activated yet. The first deposit must be at least 1 XRP; smaller payments are rejected by the network.</string>
+    <string name="Send_DestinationTag">Destination Tag</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">To receive %1$s, you need to activate the token. The XRP Ledger requires a trust line for each token, which locks 0.2 XRP of your balance while it exists. Without it, your wallet cannot receive %2$s — the transaction will be rejected and the funds will not be delivered.</string>
+    <string name="Activate_Xrp_ReserveNote">Activating locks %1$s as a reserve in your wallet. It is released if the trust line is removed later.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">You don\'t have enough spendable XRP to cover the trust line reserve and the network fee.</string>
+    <string name="Send_DestinationTag_Hint">Destination tag (optional)</string>
+    <string name="Send_DestinationTag_Info">Exchanges and some services require a destination tag to credit your deposit. The tag is public on the ledger.</string>
+    <string name="Send_DestinationTag_Required">This address requires a destination tag. Payments without one are rejected.</string>
+    <string name="Send_DestinationTag_Invalid">Destination tag must be a whole number from 0 to 4294967295.</string>
 
     <string name="Info_NotRelayed_Title">Broadcast</string>
     <string name="Info_NotRelayed_Description">The transaction holding this amount is broadcasted but not yet accepted by the network.</string>
@@ -1608,7 +1621,7 @@
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
     <string name="WatchWallet">Watch Wallet</string>
-    <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) or XPUB</string>
+    <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) or XPUB</string>
     <string name="Watch_ViewKey">Private View Key</string><![CDATA[">
     ">
     ]]>

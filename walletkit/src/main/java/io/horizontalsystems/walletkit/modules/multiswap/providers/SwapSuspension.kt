@@ -195,6 +195,8 @@ object CanonicalAssetId {
             // id as THORChain — which is where the asset actually lives.
             is TokenType.ThorchainAsset -> type.denom.uppercase()
 
+            // No swap provider lists XRPL issued tokens yet.
+            is TokenType.XrpAsset,
             is TokenType.ZanoAsset,
             is TokenType.Unsupported,
                 -> null

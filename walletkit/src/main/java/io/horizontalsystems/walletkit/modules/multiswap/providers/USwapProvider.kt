@@ -235,6 +235,10 @@ class USwapProvider(
                     }
                 }
 
+                // XRP is not routed through this provider yet (needs server support and
+                // destination-tag delivery); see the XRP integration plan.
+                BlockchainType.Xrp -> Unit
+
                 is BlockchainType.Unsupported -> Unit
             }
         }

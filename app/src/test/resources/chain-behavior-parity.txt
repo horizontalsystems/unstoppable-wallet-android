@@ -1,4 +1,4 @@
-supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,dash,monero,zano,zcash,solana,stellar,the-open-network,thorchain,mayachain
+supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,robinhood,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,dash,monero,zano,zcash,solana,stellar,xrp,the-open-network,thorchain,mayachain
 
 chain ethereum
   title=Ethereum
@@ -66,7 +66,7 @@ chain polygon-pos
 chain avalanche
   title=Avalanche
   description=AVAX, ERC20 tokens
-  order=18
+  order=19
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -129,7 +129,7 @@ chain base
 chain zksync
   title=ZKsync
   description=L2 chain
-  order=21
+  order=22
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -145,6 +145,27 @@ chain zksync
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=ZKsync
   protocolType[Eip20]=ZKsync
+  supports=Mnemonic,EvmAddress,EvmPrivateKey
+
+chain robinhood
+  title=Robinhood Chain
+  description=L2 chain
+  order=23
+  isEvm=true
+  blockTime=2
+  uriScheme=ethereum
+  removeScheme=true
+  chainId=4663
+  brandColor=ff00c80500000000
+  feePriceScale=Gwei
+  tokenIconPlaceholder=robinhood_chain
+  restoreSettingTypes=
+  nativeTokenQueries=robinhood|native
+  defaultTokenQuery=robinhood|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,Eip20
+  protocolType[Native]=Robinhood
+  protocolType[Eip20]=Robinhood
   supports=Mnemonic,EvmAddress,EvmPrivateKey
 
 chain arbitrum-one
@@ -171,7 +192,7 @@ chain arbitrum-one
 chain gnosis
   title=Gnosis
   description=xDAI, ERC20 tokens
-  order=22
+  order=24
   isEvm=true
   blockTime=5
   uriScheme=ethereum
@@ -192,7 +213,7 @@ chain gnosis
 chain fantom
   title=Fantom
   description=FTM, ERC20 tokens
-  order=23
+  order=25
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -255,7 +276,7 @@ chain bitcoin
 chain bitcoin-cash
   title=Bitcoin Cash
   description=BCH (Legacy, CashAddress)
-  order=17
+  order=18
   isEvm=false
   blockTime=600
   uriScheme=bitcoincash
@@ -276,7 +297,7 @@ chain bitcoin-cash
 chain ecash
   title=Ecash
   description=XEC
-  order=20
+  order=21
   isEvm=false
   blockTime=600
   uriScheme=ecash
@@ -297,7 +318,7 @@ chain ecash
 chain litecoin
   title=Litecoin
   description=LTC (BIP44, BIP49, BIP84, BIP86)
-  order=16
+  order=17
   isEvm=false
   blockTime=150
   uriScheme=litecoin
@@ -318,7 +339,7 @@ chain litecoin
 chain dash
   title=Dash
   description=DASH
-  order=15
+  order=16
   isEvm=false
   blockTime=150
   uriScheme=dash
@@ -441,10 +462,31 @@ chain stellar
   protocolType[Eip20]=Stellar
   supports=Mnemonic,StellarAddress,StellarSecretKey
 
+chain xrp
+  title=XRP Ledger
+  description=XRP, XRPL tokens
+  order=13
+  isEvm=false
+  blockTime=4
+  uriScheme=xrp
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=xrp_asset
+  restoreSettingTypes=
+  nativeTokenQueries=xrp|native
+  defaultTokenQuery=xrp|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,XrpAsset
+  protocolType[Native]=XRP Ledger
+  protocolType[Eip20]=XRP Ledger
+  supports=Mnemonic,XrpAddress
+
 chain the-open-network
   title=Ton
   description=TON
-  order=19
+  order=20
   isEvm=false
   blockTime=5
   uriScheme=toncoin
@@ -465,7 +507,7 @@ chain the-open-network
 chain thorchain
   title=THORChain
   description=RUNE, THORChain assets
-  order=13
+  order=14
   isEvm=false
   blockTime=null
   uriScheme=null
@@ -486,7 +528,7 @@ chain thorchain
 chain mayachain
   title=MayaChain
   description=CACAO, MayaChain assets
-  order=14
+  order=15
   isEvm=false
   blockTime=null
   uriScheme=null

@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.transactionInfo
 
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.adapters.XrpTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.managers.TonHelper
@@ -149,6 +150,64 @@ class TransactionInfoViewItemFactory(
                     }
                 }
 
+                addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is XrpTransactionRecord -> {
+                when (val transactionType = transaction.type) {
+                    is XrpTransactionRecord.Type.Receive -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transactionType.value,
+                                fromAddress = transactionType.from,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+
+                    is XrpTransactionRecord.Type.Send -> {
+                        sentToSelf = transactionType.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transactionType.value,
+                                toAddress = transactionType.to,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transactionType.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                    }
+
+                    is XrpTransactionRecord.Type.TrustSet -> {
+                        itemSections.add(
+                            listOf(
+                                Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    Translator.getString(R.string.Transactions_TrustSet)
+                                )
+                            )
+                        )
+                    }
+
+                    is XrpTransactionRecord.Type.Unsupported -> {
+                        itemSections.add(
+                            listOf(
+                                Value(
+                                    Translator.getString(R.string.Transactions_OperationType),
+                                    transactionType.type
+                                )
+                            )
+                        )
+                    }
+                }
+
+                transaction.destinationTag?.let { tag ->
+                    miscItemsSection.add(Value(Translator.getString(R.string.Send_DestinationTag), tag.toString()))
+                }
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 

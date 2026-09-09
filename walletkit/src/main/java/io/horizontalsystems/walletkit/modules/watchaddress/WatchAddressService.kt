@@ -74,6 +74,12 @@ class WatchAddressService(
                     }
                 }
 
+                is AccountType.XrpAddress -> {
+                    if (BlockchainType.Xrp.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Xrp, TokenType.Native))
+                    }
+                }
+
                 is AccountType.HdExtendedKey -> {
                     if (BlockchainType.Bitcoin.supports(accountType)) {
                         accountType.hdExtendedKey.purposes.forEach { purpose ->

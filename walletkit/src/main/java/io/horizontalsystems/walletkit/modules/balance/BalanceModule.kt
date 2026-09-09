@@ -60,12 +60,17 @@ object BalanceModule {
 
     sealed class BalanceWarning : Warning() {
         data object TronInactiveAccountWarning : BalanceWarning()
+        data object XrpInactiveAccountWarning : BalanceWarning()
     }
 
     val BalanceWarning.warningText: WarningText
         get() = when (this) {
             BalanceWarning.TronInactiveAccountWarning -> WarningText(
                 text = TranslatableString.ResString(R.string.Tron_TokenPage_TransactionWillAppearAfterActivation),
+                icon = R.drawable.outgoingraw__24
+            )
+            BalanceWarning.XrpInactiveAccountWarning -> WarningText(
+                text = TranslatableString.ResString(R.string.Xrp_TokenPage_AccountNotActivated),
                 icon = R.drawable.outgoingraw__24
             )
         }

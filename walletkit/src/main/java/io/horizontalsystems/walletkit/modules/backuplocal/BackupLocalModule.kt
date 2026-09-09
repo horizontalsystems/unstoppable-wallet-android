@@ -18,6 +18,7 @@ object BackupLocalModule {
     private const val TRON_ADDRESS = "tron_address"
     private const val TON_ADDRESS = "ton_address"
     private const val STELLAR_ADDRESS = "stellar_address"
+    private const val XRP_ADDRESS = "xrp_address"
     private const val BITCOIN_ADDRESS = "bitcoin_address"
     private const val HD_EXTENDED_LEY = "hd_extended_key"
     private const val MONERO_WATCH_ACCOUNT = "monero_watch_account"
@@ -82,6 +83,7 @@ object BackupLocalModule {
         is AccountType.TronAddress -> TRON_ADDRESS
         is AccountType.TonAddress -> TON_ADDRESS
         is AccountType.StellarAddress -> STELLAR_ADDRESS
+        is AccountType.XrpAddress -> XRP_ADDRESS
         is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
         is AccountType.HdExtendedKey -> HD_EXTENDED_LEY
         is AccountType.MoneroWatchAccount -> MONERO_WATCH_ACCOUNT
@@ -110,6 +112,7 @@ object BackupLocalModule {
             TRON_ADDRESS -> AccountType.TronAddress(String(data, Charsets.UTF_8))
             TON_ADDRESS -> AccountType.TonAddress(String(data, Charsets.UTF_8))
             STELLAR_ADDRESS -> AccountType.StellarAddress(String(data, Charsets.UTF_8))
+            XRP_ADDRESS -> AccountType.XrpAddress(String(data, Charsets.UTF_8))
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
             MONERO_WATCH_ACCOUNT -> AccountType.MoneroWatchAccount.fromSerialized(String(data, Charsets.UTF_8))
@@ -143,6 +146,7 @@ object BackupLocalModule {
         is AccountType.TronAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.TonAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.StellarAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.XrpAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)
         is AccountType.HdExtendedKey -> Base58.decode(accountType.keySerialized)
         is AccountType.MoneroWatchAccount -> accountType.serialized.toByteArray(Charsets.UTF_8)

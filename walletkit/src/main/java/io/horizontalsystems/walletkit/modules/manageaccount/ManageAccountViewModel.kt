@@ -121,6 +121,7 @@ class ManageAccountViewModel(
             is AccountType.TronAddress -> listOf()
             is AccountType.TonAddress -> listOf()
             is AccountType.StellarAddress -> listOf()
+            is AccountType.XrpAddress -> listOf()
             is AccountType.BitcoinAddress -> listOf()
             is AccountType.HdExtendedKey -> {
                 if (account.type.hdExtendedKey.isPublic) {

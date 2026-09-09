@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.transactionInfo
 
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.adapters.XrpTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -84,6 +85,7 @@ class TransactionInfoService(
 
             val txCoinTypes = when (val tx = transactionRecord) {
                 is StellarTransactionRecord -> listOf(tx.mainValue?.coinUid, tx.fee?.coinUid)
+                is XrpTransactionRecord -> listOf(tx.mainValue?.coinUid, tx.fee.coinUid)
                 is TonTransactionRecord -> buildList {
                     add(tx.mainValue?.coinUid)
                     add(tx.fee.coinUid)

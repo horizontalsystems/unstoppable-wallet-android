@@ -206,6 +206,13 @@ interface ChainPlugin {
     @Composable
     fun ReceiveScreen(navigation: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) = Unit
 
+    /**
+     * Wording for the shared token-activation flow (trust lines), for a wallet whose adapter is an
+     * [io.horizontalsystems.walletkit.core.IActivatableTokenAdapter]. Null when the chain has no
+     * such tokens.
+     */
+    fun tokenActivationInfo(wallet: Wallet): io.horizontalsystems.walletkit.core.TokenActivationInfo? = null
+
     /** Extra cells on the token balance screen (e.g. Monero account picker). */
     @Composable
     fun TokenBalanceExtraCells(wallet: Wallet, navigation: HSNavigation) = Unit

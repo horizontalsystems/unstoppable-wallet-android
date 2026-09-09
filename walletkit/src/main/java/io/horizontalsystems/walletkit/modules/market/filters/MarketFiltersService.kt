@@ -35,6 +35,7 @@ class MarketFiltersService(
         BlockchainType.RobinhoodChain,
         BlockchainType.Polygon,
         BlockchainType.Stellar,
+        BlockchainType.Xrp,
         BlockchainType.Unsupported("solana"),
         BlockchainType.Unsupported("sora"),
         BlockchainType.Unsupported("tomochain"),

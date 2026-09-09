@@ -125,6 +125,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Stellar -> {
             tokenType is TokenType.Native || tokenType is TokenType.Asset
         }
+        BlockchainType.Xrp -> {
+            tokenType is TokenType.Native || tokenType is TokenType.XrpAsset
+        }
         BlockchainType.Thorchain -> {
             tokenType is TokenType.Native || tokenType is TokenType.ThorchainAsset
         }
@@ -163,6 +166,7 @@ val Blockchain.description: String
         BlockchainType.Tron -> "TRX, TRC20 tokens"
         BlockchainType.Ton -> "TON"
         BlockchainType.Stellar -> "XLM, Stellar assets"
+        BlockchainType.Xrp -> "XRP, XRPL tokens"
         BlockchainType.Thorchain -> "RUNE, THORChain assets"
         BlockchainType.Mayachain -> "CACAO, MayaChain assets"
         BlockchainType.Monero -> "XMR"
@@ -173,6 +177,25 @@ val Blockchain.description: String
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
 fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
+/** XRPL issued-token page on xrpscan, keyed by display code and issuer. */
+fun Blockchain.xrpAssetUrl(tokenType: TokenType.XrpAsset): String =
+    "https://xrpscan.com/token/${tokenType.displayCode}.${tokenType.issuer}"
+
+/**
+ * Human-readable XRPL currency code: 40-hex codes that spell printable ASCII (RLUSD, USDC) are
+ * decoded; 3-character codes and opaque hex are returned as is. Mirrors xrpkit's CurrencyCodec.
+ */
+val TokenType.XrpAsset.displayCode: String
+    get() {
+        if (currency.length != 40 || !currency.all { it.isDigit() || it.uppercaseChar() in 'A'..'F' }) return currency
+        val bytes = currency.chunked(2).map { it.toInt(16) }
+        val end = bytes.indexOfFirst { it == 0 }.let { if (it < 0) bytes.size else it }
+        if (end == 0) return currency
+        val printable = bytes.take(end).all { it in 0x21..0x7E }
+        val padded = bytes.drop(end).all { it == 0 }
+        return if (printable && padded) String(bytes.take(end).map { it.toChar() }.toCharArray()) else currency
+    }
+
 fun Blockchain.assetUrl(code: String, issuer: String) = "https://stellar.expert/explorer/public/asset/$code-$issuer"
 
 val BlockchainType.imageUrl: String
@@ -202,6 +225,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
         BlockchainType.Stellar,
+        BlockchainType.Xrp,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
         BlockchainType.Dash,
@@ -239,6 +263,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Tron -> R.drawable.tron_trc20
         BlockchainType.Ton -> R.drawable.the_open_network_jetton
         BlockchainType.Stellar -> R.drawable.stellar_asset
+        BlockchainType.Xrp -> R.drawable.xrp_asset
         else -> R.drawable.coin_placeholder
     }
 
@@ -265,6 +290,7 @@ val BlockchainType.title: String
     BlockchainType.Tron -> "Tron"
     BlockchainType.Ton -> "Ton"
     BlockchainType.Stellar -> "Stellar"
+    BlockchainType.Xrp -> "XRP Ledger"
     BlockchainType.Thorchain -> "THORChain"
     BlockchainType.Mayachain -> "MayaChain"
     BlockchainType.Monero -> "Monero"
@@ -337,6 +363,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Litecoin,
         BlockchainType.Solana,
         BlockchainType.Stellar,
+        BlockchainType.Xrp,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
         BlockchainType.Ton,
@@ -370,6 +397,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 BlockchainType.Polygon,
                 BlockchainType.Solana,
                 BlockchainType.Stellar,
+                BlockchainType.Xrp,
                 BlockchainType.Thorchain,
                 BlockchainType.Mayachain,
                 BlockchainType.Ton,
@@ -438,6 +466,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.StellarSecretKey ->
             this == BlockchainType.Stellar
+
+        is AccountType.XrpAddress ->
+            this == BlockchainType.Xrp
 
         is AccountType.MoneroWatchAccount ->
             this == BlockchainType.Monero

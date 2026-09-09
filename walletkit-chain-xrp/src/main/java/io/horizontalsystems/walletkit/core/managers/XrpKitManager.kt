@@ -1,0 +1,127 @@
+package io.horizontalsystems.walletkit.core.managers
+
+import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.xrpkit.XrpKit
+import io.horizontalsystems.xrpkit.XrpWallet
+import io.horizontalsystems.xrpkit.network.Network
+import io.horizontalsystems.walletkit.core.AdapterState
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.BackgroundManager
+import io.horizontalsystems.walletkit.core.BackgroundManagerState
+import io.horizontalsystems.walletkit.core.UnsupportedAccountException
+import io.horizontalsystems.walletkit.entities.Account
+import io.horizontalsystems.walletkit.entities.AccountType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+/** One XrpKit per active account, shared by every wallet of that account, refreshed on foreground. */
+class XrpKitManager(
+    private val backgroundManager: BackgroundManager,
+) {
+    private val scope = CoroutineScope(Dispatchers.Default)
+    private var job: Job? = null
+    private val _kitStartedFlow = MutableStateFlow(false)
+    val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
+
+    var kitWrapper: XrpKitWrapper? = null
+        private set(value) {
+            field = value
+            _kitStartedFlow.update { value != null }
+        }
+
+    private var useCount = 0
+    var currentAccount: Account? = null
+        private set
+
+    val statusInfo: Map<String, Any>?
+        get() = kitWrapper?.kit?.statusInfo()
+
+    @Synchronized
+    fun getKitWrapper(account: Account): XrpKitWrapper {
+        if (this.kitWrapper != null && currentAccount != account) {
+            stop()
+        }
+
+        if (this.kitWrapper == null) {
+            val accountType = account.type
+            this.kitWrapper = when (accountType) {
+                is AccountType.Mnemonic,
+                is AccountType.XrpAddress -> createKitInstance(accountType, account)
+
+                else -> throw UnsupportedAccountException()
+            }
+            scope.launch {
+                start()
+            }
+            useCount = 0
+            currentAccount = account
+        }
+
+        useCount++
+        return this.kitWrapper!!
+    }
+
+    private fun createKitInstance(accountType: AccountType, account: Account): XrpKitWrapper {
+        val kit = XrpKit.getInstance(App.instance, accountType.toXrpWallet(), Network.MainNet, account.id)
+        return XrpKitWrapper(kit)
+    }
+
+    @Synchronized
+    fun unlink(account: Account) {
+        if (account == currentAccount) {
+            useCount -= 1
+
+            if (useCount < 1) {
+                stop()
+            }
+        }
+    }
+
+    private fun stop() {
+        kitWrapper?.kit?.stop()
+        job?.cancel()
+        kitWrapper = null
+        currentAccount = null
+    }
+
+    private fun start() {
+        kitWrapper?.kit?.start()
+        job = scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    kitWrapper?.kit?.let { kit ->
+                        delay(1000)
+                        kit.refresh()
+                    }
+                }
+            }
+        }
+    }
+
+    fun getAddress(accountType: AccountType): String {
+        return XrpKit.getAddress(accountType.toXrpWallet())
+    }
+}
+
+class XrpKitWrapper(val kit: XrpKit)
+
+fun XrpKit.SyncState.toAdapterState(): AdapterState = when (this) {
+    is XrpKit.SyncState.NotSynced -> AdapterState.NotSynced(error)
+    is XrpKit.SyncState.Synced -> AdapterState.Synced
+    is XrpKit.SyncState.Syncing -> AdapterState.Syncing()
+}
+
+fun AccountType.toXrpWallet(): XrpWallet = when (this) {
+    is AccountType.Mnemonic -> XrpWallet.Seed(seed)
+    is AccountType.XrpAddress -> XrpWallet.WatchOnly(address)
+    else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to XrpWallet")
+}
+
+val TokenType.XrpAsset.displayCode: String
+    get() = XrpKit.displayCurrencyCode(currency)

@@ -11,6 +11,8 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.accountTypeDerivation
 import io.horizontalsystems.walletkit.core.assetUrl
+import io.horizontalsystems.walletkit.core.displayCode
+import io.horizontalsystems.walletkit.core.xrpAssetUrl
 import io.horizontalsystems.walletkit.core.bitcoinCashCoinType
 import io.horizontalsystems.walletkit.core.eip20TokenUrl
 import io.horizontalsystems.walletkit.core.imageUrl
@@ -165,6 +167,24 @@ class CoinOverviewViewModel(
                                 copyValue = id,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = token.blockchain.assetUrl(tokenType.code, tokenType.issuer),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
+                    is TokenType.XrpAsset -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        val id = "${tokenType.displayCode}.${tokenType.issuer}"
+
+                        items.add(
+                            TokenVariant(
+                                value = id.shorten(),
+                                copyValue = id,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.xrpAssetUrl(tokenType),
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,

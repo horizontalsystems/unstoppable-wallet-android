@@ -37,6 +37,7 @@ class SelectBlockchainsViewModel(
             is AccountType.BitcoinAddress,
             is AccountType.TonAddress,
             is AccountType.StellarAddress,
+            is AccountType.XrpAddress,
             is AccountType.Mnemonic,
             is AccountType.MoneroMnemonic,
             is AccountType.EvmPrivateKey,

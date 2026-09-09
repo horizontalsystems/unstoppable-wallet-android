@@ -169,6 +169,9 @@ val BlockchainType.blockTime : Long?
         BlockchainType.Ton,
             -> 5
 
+        // XRPL ledgers close every 3-5 seconds
+        BlockchainType.Xrp -> 4
+
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
         BlockchainType.ECash,

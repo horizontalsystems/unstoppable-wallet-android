@@ -96,6 +96,7 @@ class TransactionRecordRepository(
                 BlockchainType.Solana,
                 BlockchainType.Tron,
                 BlockchainType.Stellar,
+                BlockchainType.Xrp,
                 BlockchainType.Thorchain,
                 BlockchainType.Mayachain,
                 BlockchainType.Monero,

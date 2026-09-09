@@ -20,6 +20,7 @@ val BlockchainType.uriScheme: String?
             BlockchainType.Ton -> "toncoin"
             BlockchainType.Tron -> "tron"
             BlockchainType.Stellar -> "stellar"
+            BlockchainType.Xrp -> "xrp"
             BlockchainType.Monero -> "monero"
             BlockchainType.Zano -> "zano"
             BlockchainType.Solana -> "solana"
@@ -42,6 +43,7 @@ val BlockchainType.removeScheme: Boolean
             BlockchainType.Ton,
             BlockchainType.Tron,
             BlockchainType.Stellar,
+            BlockchainType.Xrp,
             BlockchainType.Solana,
             BlockchainType.Monero,
             BlockchainType.Zano -> true

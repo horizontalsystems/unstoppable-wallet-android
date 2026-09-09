@@ -51,6 +51,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Tron,
         BlockchainType.Ton,
         BlockchainType.Stellar,
+        BlockchainType.Xrp,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
         BlockchainType.Monero,

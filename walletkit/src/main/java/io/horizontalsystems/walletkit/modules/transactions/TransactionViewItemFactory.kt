@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.transactions
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ILocalStorage
+import io.horizontalsystems.walletkit.core.adapters.XrpTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
@@ -413,6 +414,15 @@ class TransactionViewItemFactory(
                 )
             }
 
+            is XrpTransactionRecord -> {
+                createViewItemFromXrpTransactionRecord(
+                    icon = icon,
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                )
+            }
+
             is ZcashShieldingTransactionRecord -> {
                 createViewItemFromZcashShieldingTransactionRecord(
                     record,
@@ -479,6 +489,69 @@ class TransactionViewItemFactory(
 
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
+    }
+
+    private fun createViewItemFromXrpTransactionRecord(
+        icon: TransactionViewItem.Icon.Failed?,
+        record: XrpTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+    ): TransactionViewItem {
+        val iconX: TransactionViewItem.Icon
+        val title: String
+        val subtitle: String
+        val primaryValue: ColoredValue?
+        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+        var sentToSelf = false
+
+        when (val recordType = record.type) {
+            is XrpTransactionRecord.Type.Send -> {
+                title = Translator.getString(R.string.Transactions_Send)
+                subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
+                sentToSelf = recordType.sentToSelf
+                primaryValue = if (sentToSelf) {
+                    ColoredValue(getCoinString(recordType.value, true), ColorName.Grey)
+                } else {
+                    getColoredValue(recordType.value, getAmountColorForSend(icon))
+                }
+                iconX = singleValueIconType(recordType.value)
+            }
+
+            is XrpTransactionRecord.Type.Receive -> {
+                title = Translator.getString(R.string.Transactions_Receive)
+                subtitle = Translator.getString(R.string.Transactions_From, mapped(recordType.from, record.blockchainType))
+                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
+                iconX = singleValueIconType(recordType.value)
+            }
+
+            is XrpTransactionRecord.Type.TrustSet -> {
+                title = Translator.getString(R.string.Transactions_TrustSet)
+                subtitle = recordType.issuer.shorten()
+                primaryValue = getColoredValue(recordType.value, ColorName.Leah, true)
+                iconX = singleValueIconType(recordType.value)
+            }
+
+            is XrpTransactionRecord.Type.Unsupported -> {
+                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                title = Translator.getString(R.string.Transactions_XrpTransaction)
+                subtitle = recordType.type
+                primaryValue = null
+            }
+        }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = title,
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            sentToSelf = sentToSelf,
+            date = Date(record.timestamp * 1000),
+            icon = icon ?: iconX,
+            spam = record.spam
+        )
     }
 
     private fun createViewItemFromStellarTransactionRecord(

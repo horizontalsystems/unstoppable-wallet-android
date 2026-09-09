@@ -311,7 +311,11 @@ interface IBalanceAdapter {
     val balanceUpdatedFlow: Flow<Unit>
 }
 
-data class StellarAssetBalance(val code: String)
+/** One line of the locked-balance breakdown, e.g. "Wallet activation" / "1 XRP". */
+data class ReserveItem(val title: String, val value: String)
+
+/** Chain-specific explanation of a reserve-style minimum balance (Stellar, XRP Ledger). */
+data class ReserveInfo(val items: List<ReserveItem>, val description: String)
 
 data class BalanceData(
     val available: BigDecimal,
@@ -319,15 +323,15 @@ data class BalanceData(
     val notRelayed: BigDecimal = BigDecimal.ZERO,
     val pending: BigDecimal = BigDecimal.ZERO,
     val minimumBalance: BigDecimal = BigDecimal.ZERO,
-    val stellarAssets: List<StellarAssetBalance> = listOf(),
+    val reserve: ReserveInfo? = null,
     val unshielded: BigDecimal = BigDecimal.ZERO
 ) {
     val total: BigDecimal
         get() = available + timeLocked + notRelayed + pending + minimumBalance + unshielded
 
     fun serialize(gson: Gson): String {
-        // no need to cache stellarAssets in cache, so we exclude it
-        return gson.toJson(this.copy(stellarAssets = listOf()))
+        // the reserve breakdown is presentation state rebuilt by the adapter; not cached
+        return gson.toJson(this.copy(reserve = null))
     }
 
     companion object {
@@ -393,6 +397,19 @@ interface ISendStellarAdapter {
     suspend fun getMinimumSendAmount(address: String) : BigDecimal?
     suspend fun send(amount: BigDecimal, address: String, memo: String?)
     suspend fun send(transactionEnvelope: String)
+}
+
+interface ISendXrpAdapter {
+    val maxSendableBalance: BigDecimal
+    val fee: BigDecimal
+    /** False until the account has received its first payment of at least the base reserve. */
+    val isAccountActivated: Boolean
+    fun validate(address: String)
+    /** Base reserve when [address] does not exist yet (the first payment must create it), else null. */
+    suspend fun getMinimumSendAmount(address: String): BigDecimal?
+    /** True when [address] has the RequireDestTag flag: an untagged payment would be rejected. */
+    suspend fun requiresDestinationTag(address: String): Boolean
+    suspend fun send(amount: BigDecimal, address: String, destinationTag: Long?, memo: String?): String
 }
 
 interface ISendThorchainAdapter {

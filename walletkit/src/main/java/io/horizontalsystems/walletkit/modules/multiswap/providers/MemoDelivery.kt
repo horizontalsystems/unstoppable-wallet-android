@@ -49,6 +49,7 @@ val BlockchainType.memoDelivery: MemoDelivery
         // readable on-chain.
         BlockchainType.Ton,
         BlockchainType.Stellar,
+        BlockchainType.Xrp,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
             -> MemoDelivery.OnChainPublic

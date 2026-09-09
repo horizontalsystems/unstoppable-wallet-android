@@ -2,6 +2,9 @@ package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.BalanceData
+import io.horizontalsystems.walletkit.core.IActivatableTokenAdapter
+import io.horizontalsystems.walletkit.core.TokenActivationError
+import io.horizontalsystems.stellarkit.EnablingAssetError
 import io.horizontalsystems.walletkit.core.managers.StellarKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toAdapterState
 import io.horizontalsystems.stellarkit.StellarKit
@@ -20,7 +23,7 @@ class StellarAssetAdapter(
     stellarKitWrapper: StellarKitWrapper,
     code: String,
     issuer: String
-) : BaseStellarAdapter(stellarKitWrapper) {
+) : BaseStellarAdapter(stellarKitWrapper), IActivatableTokenAdapter {
 
     private val stellarAsset = StellarAsset.Asset(code, issuer)
     private var assetBalance: BigDecimal? = null
@@ -41,7 +44,7 @@ class StellarAssetAdapter(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    val activationFee = stellarKit.sendFee
+    override val activationFee: BigDecimal get() = stellarKit.sendFee
 
     override fun start() {
         coroutineScope.launch {
@@ -89,12 +92,20 @@ class StellarAssetAdapter(
         assetBalance != null || stellarKit.isAssetEnabled(stellarAsset)
     }
 
-    fun activate() {
+    // IActivatableTokenAdapter
+
+    override suspend fun isActivated(): Boolean = isTrustlineEstablished()
+
+    override suspend fun activate() = withContext(Dispatchers.Default) {
         stellarKit.enableAsset(stellarAsset.id, null)
     }
 
-    fun validateActivation() {
-        stellarKit.validateEnablingAsset()
+    override fun validateActivation() {
+        try {
+            stellarKit.validateEnablingAsset()
+        } catch (e: EnablingAssetError.InsufficientBalance) {
+            throw TokenActivationError.InsufficientBalance()
+        }
     }
 
 }
