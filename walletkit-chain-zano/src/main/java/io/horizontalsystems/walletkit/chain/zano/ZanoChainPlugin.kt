@@ -8,6 +8,8 @@ import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import java.math.BigDecimal
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -46,6 +48,13 @@ class ZanoChainPlugin(
     private val zanoNodeManager: () -> ZanoNodeManager,
     private val backgroundManager: () -> BackgroundManager,
 ) : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Zano(address, amount, memo)
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
         SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Offchain)

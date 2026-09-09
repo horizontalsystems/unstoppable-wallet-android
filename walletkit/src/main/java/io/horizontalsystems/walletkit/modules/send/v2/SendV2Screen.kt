@@ -76,11 +76,22 @@ fun SendV2Screen(
     val keyboardState by observeKeyboardState()
     var amountInputHasFocus by remember { mutableStateOf(false) }
 
-    // Confirmation is not built yet; proceeding only closes the risky-address sheet when it
-    // was shown on the way here.
+    // Opens over the risky-address sheet when that was shown; both are popped once the
+    // transaction is sent.
     val proceed = {
-        if (navigation.lastOrNull() is AddressRiskySheet) {
-            navigation.removeLastOrNull()
+        val address = uiState.address
+        val amount = uiState.amount
+        if (address != null && amount != null) {
+            navigation.slideFromRight(
+                SendV2ConfirmPage(
+                    SendV2ConfirmPage.Input(
+                        wallet = uiState.wallet,
+                        amount = amount,
+                        address = address,
+                        memo = uiState.memo,
+                    )
+                )
+            )
         }
     }
     val confirmRiskyAddress = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(

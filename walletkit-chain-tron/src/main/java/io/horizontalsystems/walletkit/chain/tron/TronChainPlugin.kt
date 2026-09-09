@@ -10,6 +10,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.address.AddressChecker
@@ -56,6 +57,13 @@ import kotlinx.coroutines.flow.Flow
 import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
 
 class TronChainPlugin : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Tron.Simple(address, amount)
 
     override val blockchainType = BlockchainType.Tron
 

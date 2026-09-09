@@ -3,6 +3,9 @@ package io.horizontalsystems.walletkit.chain.bitcoin
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule.rbfSupported
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.BitcoinAdapter
@@ -60,6 +63,25 @@ import kotlinx.coroutines.flow.merge
 import java.math.BigDecimal
 
 abstract class BitcoinFamilyPlugin : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Btc(
+        address = address,
+        memo = memo,
+        amount = amount,
+        // No fee rate here: the send service fetches the recommended rate and lets the user
+        // adjust it in its settings.
+        recommendedGasRate = null,
+        minimumSendAmount = null,
+        changeToFirstInput = false,
+        utxoFilters = UtxoFilters(),
+        transactionSorting = App.btcBlockchainManager.transactionSortMode(token.blockchainType),
+        rbfEnabled = token.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
+    )
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
         SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Public)

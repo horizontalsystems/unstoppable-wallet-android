@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ILocalStorage
@@ -57,6 +58,13 @@ class ZcashChainPlugin(
     private val endpointManager: () -> ZcashLightWalletEndpointManager,
     private val localStorage: () -> ILocalStorage,
 ) : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Zcash.Regular(address, amount, memo.orEmpty())
 
     // Encrypted memos travel only to destinations with a shielded receiver: Sapling and
     // unified addresses. Transparent (including Tex) destinations have no memo field.

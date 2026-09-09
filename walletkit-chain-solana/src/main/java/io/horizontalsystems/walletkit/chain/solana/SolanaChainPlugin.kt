@@ -3,6 +3,8 @@ package io.horizontalsystems.walletkit.chain.solana
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
+import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.SolanaAdapter
@@ -45,6 +47,13 @@ class SolanaChainPlugin(
     private val alchemyApiKey: () -> String,
     private val jupiterApiKey: () -> String,
 ) : ChainPlugin {
+
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+    ) = SendTransactionData.Solana.Simple(address, amount)
 
     override val blockchainType: BlockchainType = BlockchainType.Solana
 
