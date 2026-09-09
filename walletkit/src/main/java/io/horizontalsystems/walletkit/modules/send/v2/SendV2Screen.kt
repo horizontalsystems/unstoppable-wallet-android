@@ -32,6 +32,7 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
+import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -42,7 +43,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
@@ -100,10 +100,12 @@ fun SendV2Screen(
                         token = uiState.wallet.token,
                         amount = uiState.amount,
                         fiatAmount = uiState.fiatAmount,
+                        fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                         currency = uiState.currency,
                         availableBalance = uiState.availableBalance,
                         focusRequester = focusRequester,
                         onValueChange = viewModel::onEnterAmount,
+                        onFiatValueChange = viewModel::onEnterFiatAmount,
                     )
                     SectionArrow()
                     AddressRow(
@@ -159,10 +161,12 @@ private fun AmountSection(
     token: Token,
     amount: BigDecimal?,
     fiatAmount: BigDecimal?,
+    fiatAmountInputEnabled: Boolean,
     currency: Currency,
     availableBalance: BigDecimal?,
     focusRequester: FocusRequester,
     onValueChange: (BigDecimal?) -> Unit,
+    onFiatValueChange: (BigDecimal?) -> Unit,
 ) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
@@ -200,8 +204,15 @@ private fun AmountSection(
                     onValueChange = onValueChange,
                     focusRequester = focusRequester,
                 )
-                VSpacer(3.dp)
-                body_grey(text = "${currency.symbol}${fiatAmount?.toPlainString() ?: "0"}")
+                if (fiatAmountInputEnabled || fiatAmount != null) {
+                    VSpacer(3.dp)
+                    FiatAmountInput(
+                        value = fiatAmount,
+                        currency = currency,
+                        onValueChange = onFiatValueChange,
+                        enabled = fiatAmountInputEnabled,
+                    )
+                }
             }
         }
     }
