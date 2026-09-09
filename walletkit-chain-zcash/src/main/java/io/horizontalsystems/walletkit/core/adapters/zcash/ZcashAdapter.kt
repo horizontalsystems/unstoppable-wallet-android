@@ -57,6 +57,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
@@ -227,7 +228,16 @@ class ZcashAdapter(
             )
         }
 
-        zcashAccount = runBlocking { awaitFirstAccount(synchronizer) }
+        zcashAccount = runBlocking {
+            try {
+                awaitFirstAccount(synchronizer)
+            } catch (e: Throwable) {
+                // Without close() the Slipstream InstanceGuard keeps holding this alias and
+                // every retry of adapter creation would fail on the single-instance check
+                synchronizer.close()
+                throw e
+            }
+        }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
         transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, adapterScope, synchronizer) { txHash ->
@@ -686,6 +696,8 @@ class ZcashAdapter(
     companion object {
         val minimalShieldThreshold = BigDecimal("0.0004") // minimal transparent balance to shielding
 
+        private const val ACCOUNT_WAIT_TIMEOUT_MS = 120_000L
+
         private const val ALIAS_PREFIX = "zcash_"
 
         private fun getValidAliasFromAccountId(accountId: String): String {
@@ -719,10 +731,16 @@ class ZcashAdapter(
          * completes the flow, which is surfaced through setupError.
          */
         private suspend fun awaitFirstAccount(synchronizer: Synchronizer): Account {
-            val accounts = synchronizer.accountsFlow.filterNotNull().firstOrNull { it.isNotEmpty() }
+            // A preparation failure completes accountsFlow (surfaced through setupError), so
+            // the timeout only guards against a pathological stall of the preparation job.
+            // Generous on purpose: on first launch after the engine switch this wait also
+            // covers Slipstream's grafting migrations over a large existing wallet database.
+            val accounts = withTimeoutOrNull(ACCOUNT_WAIT_TIMEOUT_MS) {
+                synchronizer.accountsFlow.filterNotNull().firstOrNull { it.isNotEmpty() }
+            }
             return accounts?.first()
                 ?: throw (synchronizer.setupError.value
-                    ?: IllegalStateException("Zcash wallet preparation finished without accounts"))
+                    ?: IllegalStateException("Zcash wallet preparation failed or timed out without accounts"))
         }
 
         private suspend fun <T> withTemporarySynchronizer(
