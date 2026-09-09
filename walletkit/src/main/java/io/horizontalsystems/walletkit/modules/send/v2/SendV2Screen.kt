@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
@@ -169,7 +170,7 @@ private fun AmountSection(
                 Text(
                     text = stringResource(
                         R.string.Send_Available,
-                        "${it.toPlainString()} ${token.coin.code}"
+                        App.numberFormatter.formatCoinFull(it, token.coin.code, token.decimals)
                     ),
                     style = ComposeAppTheme.typography.caption,
                     color = ComposeAppTheme.colors.ocean,
