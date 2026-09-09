@@ -10,6 +10,9 @@
               with ./gradlew and the write-verification-metadata sha256 option plus the help
               task, then drop the stale versions and restore this comment. -->
          <trust group="(?!com[.]zodl[.]android$).*" regex="true"/>
+         <!-- Android Studio downloads sources/javadoc jars during sync; they carry no
+              executable code, so they are trusted instead of checksummed. -->
+         <trust group="com[.]zodl[.]android" file=".*-(sources|javadoc)[.]jar" regex="true"/>
       </trusted-artifacts>
    </configuration>
    <components>
