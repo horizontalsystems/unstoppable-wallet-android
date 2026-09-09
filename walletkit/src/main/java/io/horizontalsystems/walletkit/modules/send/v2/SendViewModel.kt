@@ -7,6 +7,8 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
@@ -36,13 +38,15 @@ data class SendUiState(
     val address: Address?,
     val riskyAddress: Boolean,
     val memo: String?,
+    val memoSupport: SendMemoSupport?,
     val step: SendStep,
 )
 
 /**
  * Input state of the send screen for any blockchain: the selected tab, amount, recipient and
- * memo, plus the wallet's spendable balance and the amount's fiat equivalent. Fee and
- * validation are not wired yet; the confirmation step will own the transaction itself.
+ * memo, plus the wallet's spendable balance, the amount's fiat equivalent and whether the
+ * chain accepts a memo for the chosen recipient. Fee and validation are not wired yet; the
+ * confirmation step will own the transaction itself.
  */
 class SendViewModel(
     val wallet: Wallet,
@@ -59,8 +63,11 @@ class SendViewModel(
     private var address: Address? = null
     private var riskyAddress = false
     private var memo: String? = null
+    private var memoSupport: SendMemoSupport? = null
+    private var memoSupportJob: Job? = null
     private var availableBalance: BigDecimal? = null
     private var balanceJob: Job? = null
+    private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
 
     init {
         fiatService.setCurrency(currency)
@@ -83,6 +90,7 @@ class SendViewModel(
             }
         }
         observeBalance()
+        refreshMemoSupport()
         // Adapters are recreated on account or network changes; re-resolve the adapter then.
         viewModelScope.launch {
             adapterManager.adaptersReadyFlow.collect {
@@ -106,6 +114,19 @@ class SendViewModel(
         }
     }
 
+    private fun refreshMemoSupport() {
+        memoSupportJob?.cancel()
+        memoSupportJob = viewModelScope.launch {
+            memoSupport = chainPlugin?.sendMemoSupport(wallet.token, address?.hex)
+            // A memo typed before the recipient turned out to have no memo field must not
+            // linger in the state, or it would silently go nowhere.
+            if (memoSupport == null) {
+                memo = null
+            }
+            emitState()
+        }
+    }
+
     override fun createState() = SendUiState(
         wallet = wallet,
         tab = tab,
@@ -117,6 +138,7 @@ class SendViewModel(
         address = address,
         riskyAddress = riskyAddress,
         memo = memo,
+        memoSupport = memoSupport,
         step = step(),
     )
 
@@ -148,6 +170,7 @@ class SendViewModel(
         this.address = address
         this.riskyAddress = risky
         emitState()
+        refreshMemoSupport()
     }
 
     fun onEnterMemo(memo: String) {

@@ -136,12 +136,15 @@ fun SendV2Screen(
                         onClick = openAddress,
                     )
                     HsDivider(modifier = Modifier.fillMaxWidth())
-                    VSpacer(16.dp)
-                    HSMemoInput(
-                        maxLength = 120,
-                        memo = uiState.memo,
-                        onValueChange = viewModel::onEnterMemo,
-                    )
+                    uiState.memoSupport?.let { memoSupport ->
+                        VSpacer(16.dp)
+                        HSMemoInput(
+                            maxLength = memoSupport.maxLength,
+                            memo = uiState.memo,
+                            visibility = memoSupport.visibility,
+                            onValueChange = viewModel::onEnterMemo,
+                        )
+                    }
                     VSpacer(32.dp)
                 }
 

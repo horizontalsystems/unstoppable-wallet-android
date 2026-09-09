@@ -35,6 +35,8 @@ import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
+import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.MoneroMnemonic
 import kotlinx.coroutines.CancellationException
@@ -52,6 +54,9 @@ class MoneroChainPlugin(
     private val context: () -> Context,
     private val moneroNodeManager: () -> MoneroNodeManager,
 ) : ChainPlugin {
+
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Offchain)
 
     private val reselectScope = CoroutineScope(Dispatchers.Default)
 
