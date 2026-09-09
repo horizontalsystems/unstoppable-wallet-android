@@ -16,7 +16,6 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -44,7 +43,6 @@ data class SendUiState(
     val riskyAddress: Boolean,
     val memo: String?,
     val memoSupport: SendMemoSupport?,
-    val percentOptions: List<Int>,
     val step: SendStep,
 )
 
@@ -154,23 +152,8 @@ class SendViewModel(
         riskyAddress = riskyAddress,
         memo = memo,
         memoSupport = memoSupport,
-        percentOptions = percentOptions(),
         step = step(),
     )
-
-    // The network fee is only estimated on the confirmation screen, so 100% of an asset
-    // that also pays its own fee always ends in an insufficient balance error. Offer it
-    // only for tokens whose fee is paid with a separate native asset.
-    private fun percentOptions(): List<Int> {
-        val feePaidFromAsset = when (wallet.token.type) {
-            TokenType.Native,
-            is TokenType.Derived,
-            is TokenType.AddressTyped,
-            is TokenType.Unsupported -> true
-            else -> false
-        }
-        return if (feePaidFromAsset) listOf(25, 50, 75) else listOf(25, 50, 75, 100)
-    }
 
     private fun step(): SendStep {
         balanceState.error?.let { return SendStep.Error(it) }

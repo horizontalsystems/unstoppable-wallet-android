@@ -618,7 +618,7 @@ private fun SwapScreenInner(
                             uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
                         VSpacer(height = 16.dp)
                         SuggestionsBar(
-                            percents = uiState.percentOptions,
+                            disabledPercents = uiState.disabledPercents,
                             onDelete = {
                                 onEnterAmount.invoke(null)
                             },

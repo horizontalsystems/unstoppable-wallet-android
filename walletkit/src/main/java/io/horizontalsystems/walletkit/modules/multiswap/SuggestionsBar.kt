@@ -18,6 +18,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircl
 fun SuggestionsBar(
     modifier: Modifier = Modifier,
     percents: List<Int> = listOf(25, 50, 75, 100),
+    disabledPercents: Set<Int> = emptySet(),
     onDelete: () -> Unit,
     onSelect: (Int) -> Unit,
     selectEnabled: Boolean,
@@ -31,15 +32,16 @@ fun SuggestionsBar(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 percents.forEach { percent ->
+                    val enabled = selectEnabled && percent !in disabledPercents
                     ButtonSecondary(
-                        enabled = selectEnabled,
+                        enabled = enabled,
                         onClick = { onSelect.invoke(percent) }
                     ) {
                         Text(
                             text = "$percent%",
                             modifier = modifier,
                             style = ComposeAppTheme.typography.captionSB,
-                            color = if (selectEnabled) {
+                            color = if (enabled) {
                                 ComposeAppTheme.colors.leah
                             } else {
                                 ComposeAppTheme.colors.andy
