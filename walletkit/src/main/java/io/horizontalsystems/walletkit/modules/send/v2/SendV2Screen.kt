@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,12 +29,14 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
+import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
@@ -56,6 +59,26 @@ fun SendV2Screen(
     viewModel: SendViewModel,
 ) {
     val uiState = viewModel.uiState
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Confirmation is not built yet; proceeding only closes the risky-address sheet when it
+    // was shown on the way here.
+    val proceed = {
+        if (navigation.lastOrNull() is AddressRiskySheet) {
+            navigation.removeLastOrNull()
+        }
+    }
+    val confirmRiskyAddress = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
+        {
+            AddressRiskySheet(
+                AddressRiskySheet.Input(
+                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                )
+            )
+        }
+    ) {
+        proceed()
+    }
 
     val openAddress = navigation.slideFromRightForResult<SendAddressPage.Result>(
         { SendAddressPage(uiState.wallet, uiState.address?.hex) }
@@ -136,7 +159,14 @@ fun SendV2Screen(
                         .fillMaxWidth(),
                     title = buttonTitle,
                     enabled = uiState.step is SendStep.Proceed,
-                    onClick = { },
+                    onClick = {
+                        if (uiState.riskyAddress) {
+                            keyboardController?.hide()
+                            confirmRiskyAddress()
+                        } else {
+                            proceed()
+                        }
+                    },
                 )
                 VSpacer(16.dp)
             }
