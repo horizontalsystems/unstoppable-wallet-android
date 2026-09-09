@@ -13,9 +13,11 @@ dependencyResolutionManagement {
         mavenCentral()
         mavenLocal()
         maven { url = uri("https://jitpack.io") }
-        // horizontalsystems build of the Zodl Zcash SDK (branch hs/3.1.x, Slipstream enabled)
+        // horizontalsystems build of the Zodl Zcash SDK (branch hs/3.1.x, Slipstream enabled).
+        // Pinned to the commit of the fork's `maven` branch that published the current
+        // zcashSdk version, so the source is immutable; bump the commit together with the version.
         maven {
-            url = uri("https://raw.githubusercontent.com/horizontalsystems/zodl-android-wallet-sdk/maven/")
+            url = uri("https://raw.githubusercontent.com/horizontalsystems/zodl-android-wallet-sdk/8f6c8661321543317cb3c7d09d57d4e2bdddad52/")
             content { includeGroup("com.zodl.android") }
         }
     }
