@@ -8,11 +8,14 @@ import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
 import io.horizontalsystems.walletkit.core.managers.SolanaKitWrapper
 import io.horizontalsystems.walletkit.core.managers.SolanaTransactionEventExtractor
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
+import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
+import io.horizontalsystems.solanakit.models.FullTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
@@ -90,14 +93,44 @@ class SolanaTransactionsAdapter(
             else -> return listOf()
         }
 
-        val transactions = when {
-            token == null -> kit.getAllTransactions(incoming, from?.transactionHash, limit)
-            token.type is TokenType.Native -> kit.getSolTransactions(incoming, from?.transactionHash, limit)
-            token.type is TokenType.Spl -> kit.getSplTransactions((token.type as TokenType.Spl).address, incoming, from?.transactionHash, limit)
-            else -> listOf()
+        // The caller reads a short page as "nothing older" (TransactionAdapterWrapper.allLoaded), so
+        // when `movesToken` drops records the page is refilled from older transactions until it is
+        // full or the kit runs out.
+        val records = mutableListOf<TransactionRecord>()
+        var fromHash = from?.transactionHash
+        while (records.size < limit) {
+            val page = when {
+                token == null -> kit.getAllTransactions(incoming, fromHash, limit)
+                token.type is TokenType.Native -> kit.getSolTransactions(incoming, fromHash, limit)
+                token.type is TokenType.Spl -> kit.getSplTransactions((token.type as TokenType.Spl).address, incoming, fromHash, limit)
+                else -> listOf()
+            }
+            records.addAll(convert(page, token))
+            if (page.size < limit) break
+            fromHash = page.last().transaction.hash
         }
 
-        return transactions.map { solanaTransactionConverter.transactionRecord(it) }
+        return records.take(limit)
+    }
+
+    private suspend fun convert(transactions: List<FullTransaction>, token: Token?): List<TransactionRecord> =
+        transactions
+            .map { solanaTransactionConverter.transactionRecord(it) }
+            .filter { token == null || movesToken(it, token) }
+
+    // Whether a record belongs on [token]'s page. The kit lists a transaction under SOL whenever the
+    // wallet's SOL balance changed, but a swap moves SOL for fees, token-account rent or escrow rent
+    // without SOL being a side of the swap — a token-to-token swap, or either half of a 1inch
+    // Fusion swap (the order-create moves only the sold token, the fill only the bought one). The
+    // converter already sets such legs aside as a network cost (`primaryTransfer`), so a swap is
+    // shown on a token's page only when the token is one of the sides it actually moved; a
+    // pending swap has no legs yet and is kept wherever the kit listed it. Non-swap records are
+    // listed by their transfers and stay as the kit returned them.
+    private fun movesToken(record: TransactionRecord, token: Token): Boolean {
+        if (record !is SolanaSwapTransactionRecord) return true
+        val sides = listOfNotNull(record.valueIn, record.valueOut)
+        if (sides.isEmpty()) return true
+        return sides.any { (it as? TransactionValue.CoinValue)?.token == token }
     }
 
     override fun getTransactionRecordsFlow(
@@ -124,9 +157,7 @@ class SolanaTransactionsAdapter(
             else -> emptyFlow()
         }
 
-        return transactionsFlow.map { txList ->
-            txList.map { solanaTransactionConverter.transactionRecord(it) }
-        }
+        return transactionsFlow.map { txList -> convert(txList, token) }
     }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState =
