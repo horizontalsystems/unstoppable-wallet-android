@@ -88,6 +88,12 @@ class SolanaTransactionConverter(
         return if (solIsRent) tokenLegs else transfers
     }
 
+    // The wallet token for a mint named by a swap instruction. Swap programs express native SOL
+    // as the wrapped-SOL mint, which maps to the native token here: the user holds and sees SOL.
+    private fun tokenForMint(mint: String): Token? =
+        if (mint == wrappedSolMint) baseToken
+        else coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Spl(mint)))
+
     suspend fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
         val transaction = fullTransaction.transaction
         val incomingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
@@ -140,15 +146,23 @@ class SolanaTransactionConverter(
         // confirmation) — all are swaps. A side can carry a spurious SOL leg next to the real SPL one
         // (tx fee / token-account rent), so each side prefers its non-SOL leg via `primaryTransfer`
         // (`valueIn`/`valueOut` are null when that side has no leg).
+        //
+        // The pair's tokens come from the legs when present; otherwise from the mints the swap
+        // instruction itself names (1inch Fusion, whose two transactions each move one side), so a
+        // one-legged Fusion row can still show both tokens.
         val exchangeName = swapExchangeName(transaction)
         if (exchangeName != null) {
+            val valueIn = primaryTransfer(outgoingTransfers)?.value
+            val valueOut = primaryTransfer(incomingTransfers)?.value
             return SolanaSwapTransactionRecord(
                 transaction = transaction.essentials(),
                 baseToken = baseToken,
                 source = source,
                 exchangeName = exchangeName,
-                valueIn = primaryTransfer(outgoingTransfers)?.value,
-                valueOut = primaryTransfer(incomingTransfers)?.value
+                valueIn = valueIn,
+                valueOut = valueOut,
+                tokenIn = (valueIn as? TransactionValue.CoinValue)?.token ?: transaction.swapSrcMint?.let { tokenForMint(it) },
+                tokenOut = (valueOut as? TransactionValue.CoinValue)?.token ?: transaction.swapDstMint?.let { tokenForMint(it) }
             )
         }
 
@@ -213,6 +227,8 @@ class SolanaTransactionConverter(
         // likewise kept — showing more, never hiding. See collapseTokenWithSolRent; exact per-leg
         // attribution would need SolanaKit support.
         private val maxSolRent = BigDecimal("0.0023")
+
+        private const val wrappedSolMint = "So11111111111111111111111111111111111111112"
 
         // Display labels for the swap programs SolanaKit recognizes (`Transaction.programIds`).
         // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").
