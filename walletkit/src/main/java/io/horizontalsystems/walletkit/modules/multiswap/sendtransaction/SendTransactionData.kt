@@ -106,6 +106,8 @@ sealed class SendTransactionData {
         val address: String,
         val amount: BigDecimal,
         val memo: String?,
+        /** Key images of the outputs to spend, or null for the wallet's own selection. */
+        val selectedOutputs: List<String>? = null,
     ) : SendTransactionData()
 
     data class Zano(
