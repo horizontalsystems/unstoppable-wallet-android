@@ -26,6 +26,12 @@ class WCSolanaTxSummaryTest {
     private val victim = "GQyV7SEJdaxZaAZKj3DorTzR2Zg9yiu2WnVduzi7Ks6a"
 
     private val systemProgram = ByteArray(32)
+
+    private companion object {
+        const val TOKEN_PROGRAM = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        const val COMPUTE_BUDGET = "ComputeBudget111111111111111111111111111111"
+        const val ATA_PROGRAM = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+    }
     private val fromKey = ByteArray(32) { 0x11 }
     private val toKey = ByteArray(32) { 0x22 }
 
@@ -120,6 +126,91 @@ class WCSolanaTxSummaryTest {
 
         assertNull(decoded.method)
         assertTrue(decoded.transfers.isEmpty())
+        assertTrue(decoded.hasUnknownInstructions)
+    }
+
+    @Test
+    fun transferNextToUnknownProgram_isFlaggedAsPartiallyDisplayed() {
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram, ByteArray(32) { 0x33 }),
+            instructions = listOf(
+                solTransfer(programIndex = 2, from = 0, to = 1, lamports = 1L),
+                Instruction(programIndex = 3, accounts = intArrayOf(0), data = byteArrayOf(9, 9, 9)),
+            ),
+        )
+
+        val decoded = WCSolanaTxSummary.decode(bytes)
+
+        assertEquals(1, decoded.transfers.size)
+        assertTrue(decoded.hasUnknownInstructions)
+    }
+
+    @Test
+    fun tokenApproveNextToTransfer_isFlagged() {
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram, Base58.decode(TOKEN_PROGRAM)),
+            instructions = listOf(
+                solTransfer(programIndex = 2, from = 0, to = 1, lamports = 1L),
+                // SPL Token Approve (4): [source, delegate, owner], u64 amount
+                Instruction(programIndex = 3, accounts = intArrayOf(0, 1, 0), data = ByteArray(9).also { it[0] = 4 }),
+            ),
+        )
+
+        assertTrue(WCSolanaTxSummary.decode(bytes).hasUnknownInstructions)
+    }
+
+    @Test
+    fun computeBudgetAndAtaCreation_areNotFlagged() {
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram, Base58.decode(COMPUTE_BUDGET), Base58.decode(ATA_PROGRAM)),
+            instructions = listOf(
+                Instruction(programIndex = 3, accounts = intArrayOf(), data = byteArrayOf(2, 0, 0, 0, 0)), // setComputeUnitLimit
+                Instruction(programIndex = 4, accounts = intArrayOf(0, 1, 0), data = byteArrayOf(1)),     // createIdempotent
+                solTransfer(programIndex = 2, from = 0, to = 1, lamports = 1L),
+            ),
+        )
+
+        val decoded = WCSolanaTxSummary.decode(bytes)
+
+        assertEquals(1, decoded.transfers.size)
+        assertFalse(decoded.hasUnknownInstructions)
+    }
+
+    @Test
+    fun unsupportedMessageVersion_isRejected() {
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram),
+            instructions = listOf(solTransfer(programIndex = 2, from = 0, to = 1, lamports = 1L)),
+        )
+        // Insert a version prefix of 1 (0x81) where a v0 message would carry 0x80.
+        val v1 = bytes.copyOfRange(0, 65) + byteArrayOf(0x81.toByte()) + bytes.copyOfRange(65, bytes.size)
+
+        assertThrows(IllegalArgumentException::class.java) { WCSolanaTxSummary.decode(v1) }
+    }
+
+    @Test
+    fun warningsSortMostSevereFirst() {
+        // A batch shows its warnings in this order, so a hidden recipient in one transaction is
+        // never masked by an unreadable sibling.
+        val mixed = listOf(
+            WCSolanaTxSummary.Warning.UnknownInstructions,
+            WCSolanaTxSummary.Warning.Unreadable,
+            WCSolanaTxSummary.Warning.HiddenRecipient,
+        )
+
+        assertEquals(
+            listOf(
+                WCSolanaTxSummary.Warning.HiddenRecipient,
+                WCSolanaTxSummary.Warning.Unreadable,
+                WCSolanaTxSummary.Warning.UnknownInstructions,
+            ),
+            mixed.sorted()
+        )
+        assertEquals(WCSolanaTxSummary.Warning.HiddenRecipient, mixed.minOrNull())
     }
 
     // --- minimal wire-format builder -------------------------------------------------------------

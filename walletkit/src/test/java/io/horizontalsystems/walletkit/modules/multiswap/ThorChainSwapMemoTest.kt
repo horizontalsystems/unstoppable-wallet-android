@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.marketkit.models.BlockchainType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
@@ -26,24 +27,46 @@ class ThorChainSwapMemoTest {
     }
 
     @Test
-    fun requireDestination_acceptsMatchIgnoringCase() {
+    fun requireDestination_evmAcceptsLowercasedEcho() {
         ThorChainSwapMemo.requireDestination(
             "=:ETH.ETH:0xd8da6bf26964af9d7eed9e03e53415d37aa96045:0/1/0",
-            "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+            BlockchainType.Ethereum
         )
+    }
+
+    @Test
+    fun requireDestination_exactMatchOnNonEvm() {
+        ThorChainSwapMemo.requireDestination("=:BTC.BTC:$recipient:0/1/0", recipient, BlockchainType.Bitcoin)
+    }
+
+    @Test
+    fun requireDestination_rejectsCaseAlteredBase58() {
+        // Base58 is case-sensitive: a case change is a different (or invalid) address.
+        val solana = "4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi"
+        assertThrows(IllegalStateException::class.java) {
+            ThorChainSwapMemo.requireDestination("=:SOL.SOL:${solana.lowercase()}:0/1/0", solana, BlockchainType.Solana)
+        }
+    }
+
+    @Test
+    fun requireDestination_rejectsCaseAlteredBitcoinAddress() {
+        assertThrows(IllegalStateException::class.java) {
+            ThorChainSwapMemo.requireDestination("=:BTC.BTC:${recipient.uppercase()}:0/1/0", recipient, BlockchainType.Bitcoin)
+        }
     }
 
     @Test
     fun requireDestination_rejectsOtherAddress() {
         assertThrows(IllegalStateException::class.java) {
-            ThorChainSwapMemo.requireDestination("=:BTC.BTC:bc1qattacker:0/1/0", recipient)
+            ThorChainSwapMemo.requireDestination("=:BTC.BTC:bc1qattacker:0/1/0", recipient, BlockchainType.Bitcoin)
         }
     }
 
     @Test
     fun requireDestination_rejectsMemoWithoutDestination() {
         assertThrows(IllegalStateException::class.java) {
-            ThorChainSwapMemo.requireDestination("=:BTC.BTC", recipient)
+            ThorChainSwapMemo.requireDestination("=:BTC.BTC", recipient, BlockchainType.Bitcoin)
         }
     }
 }

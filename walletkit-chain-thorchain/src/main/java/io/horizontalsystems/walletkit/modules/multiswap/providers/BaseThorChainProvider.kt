@@ -288,7 +288,7 @@ abstract class BaseThorChainProvider(
         // The memo is taken from the quote verbatim and is what routes the outbound leg. Refuse a
         // memo whose destination is not the recipient shown to the user, so a compromised node or
         // gateway cannot redirect the swap output.
-        ThorChainSwapMemo.requireDestination(quoteSwap.memo, destination)
+        ThorChainSwapMemo.requireDestination(quoteSwap.memo, destination, tokenOut.blockchainType)
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(protocolDecimals(tokenOut))
 

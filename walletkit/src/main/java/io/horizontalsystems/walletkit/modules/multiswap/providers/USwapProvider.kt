@@ -545,10 +545,12 @@ class USwapProvider(
             selectedRoute?.buyAsset
         )
 
-        // A THORChain-style deposit memo is what routes the outbound leg; refuse one whose
-        // destination is not the recipient shown to the user.
-        bestRoute.execution?.takeIf { it.method == "thorchain_deposit" }?.memo?.let { memo ->
-            ThorChainSwapMemo.requireDestination(memo, destination)
+        // A THORChain-style deposit memo is what routes the outbound leg: a route without one
+        // cannot be delivered, and one whose destination is not the recipient shown to the user
+        // must not be signed.
+        bestRoute.execution?.takeIf { it.method == "thorchain_deposit" }?.let { execution ->
+            val memo = execution.memo ?: throw IllegalStateException("No THORChain deposit memo")
+            ThorChainSwapMemo.requireDestination(memo, destination, tokenOut.blockchainType)
         }
 
         val amountOut = bestRoute.expectedBuyAmountOrZero

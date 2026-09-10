@@ -15,18 +15,19 @@ class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
     private fun determineBlockchainType(): BlockchainType? {
         val chainParts = sessionRequest?.chainId?.split(":") ?: return null
         val first = chainParts[0]
+        // A request's chainId is untrusted; without a reference it is simply unsupported.
+        val reference = chainParts.getOrNull(1) ?: return null
 
         return when (first) {
             "eip155" -> {
-                val chainId = chainParts[1].toIntOrNull()
+                val chainId = reference.toIntOrNull()
                 chainId?.let {
                     App.evmBlockchainManager.getBlockchain(it)
                 }?.type
             }
 
             "stellar" -> {
-                val s = chainParts[1]
-                if (s == "pubnet") {
+                if (reference == "pubnet") {
                     BlockchainType.Stellar
                 } else {
                     null
@@ -37,7 +38,7 @@ class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
                 // Only the supported mainnet-beta references (canonical genesis-hash value + the
                 // legacy CAIP-30 value some dApps still use); reject devnet/testnet or any other
                 // cluster so an unsupported Solana network is never routed as Solana.
-                if (chainParts.getOrNull(1) in solanaMainnetReferences) BlockchainType.Solana else null
+                if (reference in solanaMainnetReferences) BlockchainType.Solana else null
             }
 
             else -> null

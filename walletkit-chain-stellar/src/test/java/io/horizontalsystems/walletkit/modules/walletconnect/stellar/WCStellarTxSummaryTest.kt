@@ -12,6 +12,7 @@ import org.stellar.sdk.AssetTypeNative
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.Memo
 import org.stellar.sdk.Network
+import org.stellar.sdk.SignerKey
 import org.stellar.sdk.Transaction
 import org.stellar.sdk.TransactionBuilder
 import org.stellar.sdk.operations.AccountMergeOperation
@@ -78,10 +79,36 @@ class WCStellarTxSummaryTest {
     }
 
     @Test
-    fun setOptions_isFlagged() {
-        val tx = transaction(SetOptionsOperation.builder().masterKeyWeight(0).build())
+    fun setOptions_carriesEveryFieldItChanges() {
+        val newSigner = KeyPair.random().accountId
+        val tx = transaction(
+            SetOptionsOperation.builder()
+                .signer(SignerKey.fromEd25519PublicKey(newSigner))
+                .signerWeight(1)
+                .masterKeyWeight(0)
+                .lowThreshold(1)
+                .mediumThreshold(1)
+                .highThreshold(1)
+                .homeDomain("example.com")
+                .build()
+        )
 
-        assertTrue(WCStellarTxSummary.decode(tx).operations.single() is Op.SetOptions)
+        assertEquals(
+            Op.SetOptions(
+                signer = newSigner,
+                signerWeight = 1,
+                masterKeyWeight = 0,
+                lowThreshold = 1,
+                mediumThreshold = 1,
+                highThreshold = 1,
+                setFlags = null,
+                clearFlags = null,
+                homeDomain = "example.com",
+                inflationDestination = null,
+                sourceAccount = null,
+            ),
+            WCStellarTxSummary.decode(tx).operations.single()
+        )
     }
 
     @Test

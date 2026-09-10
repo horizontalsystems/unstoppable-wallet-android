@@ -72,8 +72,24 @@ object WCStellarTxSummary {
             override val sourceAccount: String?,
         ) : Op()
 
-        /** Changes signers / thresholds / flags — can hand control of the account to someone else. */
-        data class SetOptions(override val sourceAccount: String?) : Op()
+        /**
+         * Changes signers / thresholds / flags — can hand control of the account to someone else.
+         * Every field the operation sets is carried so the screen can show exactly what changes;
+         * a null field is left untouched by the operation.
+         */
+        data class SetOptions(
+            val signer: String?,
+            val signerWeight: Int?,
+            val masterKeyWeight: Int?,
+            val lowThreshold: Int?,
+            val mediumThreshold: Int?,
+            val highThreshold: Int?,
+            val setFlags: Int?,
+            val clearFlags: Int?,
+            val homeDomain: String?,
+            val inflationDestination: String?,
+            override val sourceAccount: String?,
+        ) : Op()
 
         data class Unknown(val typeName: String, override val sourceAccount: String?) : Op()
     }
@@ -110,7 +126,19 @@ object WCStellarTxSummary {
             is ManageBuyOfferOperation -> Op.ManageOffer(
                 true, asset(operation.selling), asset(operation.buying), operation.amount, price(operation.price.numerator, operation.price.denominator), source
             )
-            is SetOptionsOperation -> Op.SetOptions(source)
+            is SetOptionsOperation -> Op.SetOptions(
+                signer = operation.signer?.encodedSignerKey,
+                signerWeight = operation.signerWeight,
+                masterKeyWeight = operation.masterKeyWeight,
+                lowThreshold = operation.lowThreshold,
+                mediumThreshold = operation.mediumThreshold,
+                highThreshold = operation.highThreshold,
+                setFlags = operation.setFlags,
+                clearFlags = operation.clearFlags,
+                homeDomain = operation.homeDomain,
+                inflationDestination = operation.inflationDestination,
+                sourceAccount = source,
+            )
             else -> Op.Unknown(operation.javaClass.simpleName.removeSuffix("Operation"), source)
         }
     }

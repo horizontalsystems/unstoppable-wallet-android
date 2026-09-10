@@ -723,6 +723,8 @@
     <string name="WalletConnect_Solana_UnknownRecipient">Unknown (address lookup table)</string>
     <string name="WalletConnect_Solana_HiddenRecipient_Title">Hidden recipient</string>
     <string name="WalletConnect_Solana_HiddenRecipient">This transaction sends funds to an address loaded from an on-chain lookup table, which this wallet cannot resolve, so you cannot verify who receives them. Only continue if you fully trust this app.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">Undisplayed actions</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">Besides what is shown, this transaction calls programs whose effect this wallet cannot display. They may move or delegate your funds. Only continue if you fully trust this app.</string>
     <string name="WalletConnect_Stellar_Operation">Operation</string>
     <string name="WalletConnect_Stellar_Op_Payment">Payment</string>
     <string name="WalletConnect_Stellar_Op_CreateAccount">Create account</string>
@@ -743,6 +745,16 @@
     <string name="WalletConnect_Stellar_Buying">Buying</string>
     <string name="WalletConnect_Stellar_Price">Price</string>
     <string name="WalletConnect_Stellar_SourceAccount">Source account</string>
+    <string name="WalletConnect_Stellar_Signer">Signer</string>
+    <string name="WalletConnect_Stellar_SignerWeight">Signer weight</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">Master key weight</string>
+    <string name="WalletConnect_Stellar_LowThreshold">Low threshold</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">Medium threshold</string>
+    <string name="WalletConnect_Stellar_HighThreshold">High threshold</string>
+    <string name="WalletConnect_Stellar_SetFlags">Set flags</string>
+    <string name="WalletConnect_Stellar_ClearFlags">Clear flags</string>
+    <string name="WalletConnect_Stellar_HomeDomain">Home domain</string>
+    <string name="WalletConnect_Stellar_InflationDestination">Inflation destination</string>
     <string name="WalletConnect_Stellar_UnreadableOperation_Title">Unreadable operation</string>
     <string name="WalletConnect_Stellar_UnreadableOperation">This request contains an operation (%s) whose effect this wallet cannot display. Only continue if you fully trust this app.</string>
     <string name="WalletConnect_Stellar_SetOptions_Title">Account control change</string>

@@ -146,7 +146,22 @@ object WCStellarHelper {
                 value(R.string.WalletConnect_Stellar_Price, op.price.stripTrailingZeros().toPlainString())
             }
 
-            is Op.SetOptions -> operation(R.string.WalletConnect_Stellar_Op_SetOptions)
+            is Op.SetOptions -> {
+                operation(R.string.WalletConnect_Stellar_Op_SetOptions)
+                // A signer being added (weight > 0) is the account-takeover shape; show it red.
+                op.signer?.let { signer ->
+                    add(ViewItem.Value(Translator.getString(R.string.WalletConnect_Stellar_Signer), signer, ValueType.Warning))
+                }
+                op.signerWeight?.let { value(R.string.WalletConnect_Stellar_SignerWeight, it.toString(), ValueType.Warning) }
+                op.masterKeyWeight?.let { value(R.string.WalletConnect_Stellar_MasterKeyWeight, it.toString(), ValueType.Warning) }
+                op.lowThreshold?.let { value(R.string.WalletConnect_Stellar_LowThreshold, it.toString(), ValueType.Warning) }
+                op.mediumThreshold?.let { value(R.string.WalletConnect_Stellar_MediumThreshold, it.toString(), ValueType.Warning) }
+                op.highThreshold?.let { value(R.string.WalletConnect_Stellar_HighThreshold, it.toString(), ValueType.Warning) }
+                op.setFlags?.let { value(R.string.WalletConnect_Stellar_SetFlags, it.toString()) }
+                op.clearFlags?.let { value(R.string.WalletConnect_Stellar_ClearFlags, it.toString()) }
+                op.homeDomain?.let { value(R.string.WalletConnect_Stellar_HomeDomain, it) }
+                op.inflationDestination?.let { add(ViewItem.Address(Translator.getString(R.string.WalletConnect_Stellar_InflationDestination), it)) }
+            }
 
             is Op.Unknown -> value(R.string.WalletConnect_Stellar_Operation, op.typeName, ValueType.Warning)
         }

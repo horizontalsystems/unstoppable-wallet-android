@@ -127,9 +127,11 @@ class WCActionSolanaSignTransaction(
         }
 
         // If ANY transaction in the (possibly batched) request could not be decoded to a material
-        // action, or hides a transfer's recipient in a lookup table, warn that the user is
-        // blind-signing before showing whatever did decode. The most severe warning wins.
-        summaries.mapNotNull { it.warning }.minOrNull()?.let { warning ->
+        // action, hides a transfer's recipient in a lookup table, or carries undisplayed
+        // instructions, warn before showing whatever did decode. Every distinct warning is shown,
+        // most severe first (Warning is declared in severity order), so a hidden recipient in one
+        // transaction is never masked by an unreadable sibling.
+        summaries.mapNotNull { it.warning }.distinct().sorted().forEach { warning ->
             sections.add(WCSolanaTxSummary.warningSection(warning))
         }
 

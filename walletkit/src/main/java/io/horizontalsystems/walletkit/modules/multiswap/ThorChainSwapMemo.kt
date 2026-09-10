@@ -1,5 +1,8 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.marketkit.models.BlockchainType
+
 /**
  * THORChain / Maya swap memo: `=:ASSET:DESTINATION[/REFUND]:LIMIT/INTERVAL/QUANTITY:AFFILIATE:FEE`
  * (`SWAP` and `s` are accepted aliases of `=`). The memo is what the network uses to route the
@@ -15,12 +18,16 @@ object ThorChainSwapMemo {
             ?.takeIf { it.isNotBlank() }
 
     /**
-     * Throws when [memo] does not deliver to [expectedDestination]. Address case is ignored: nodes
-     * may echo EVM addresses lowercased.
+     * Throws when [memo] does not deliver to [expectedDestination] on [destinationChain].
+     *
+     * Only EVM addresses are compared ignoring case: hex is case-insensitive and nodes echo it
+     * lowercased. Every other format (Base58, bech32 as issued, Zcash) is compared exactly — a
+     * case-altered Base58 address decodes to different bytes, so it is a different destination.
      */
-    fun requireDestination(memo: String, expectedDestination: String) {
+    fun requireDestination(memo: String, expectedDestination: String, destinationChain: BlockchainType) {
         val actual = destination(memo)
-        if (actual == null || !actual.equals(expectedDestination, ignoreCase = true)) {
+        val matches = actual != null && actual.equals(expectedDestination, ignoreCase = destinationChain.isEvm)
+        if (!matches) {
             throw IllegalStateException("Swap memo destination does not match the recipient address")
         }
     }

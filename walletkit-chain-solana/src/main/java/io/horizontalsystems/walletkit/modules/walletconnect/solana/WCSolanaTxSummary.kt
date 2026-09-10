@@ -33,6 +33,24 @@ object WCSolanaTxSummary {
     private const val TOKEN_PROGRAM = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
     private const val TOKEN_2022_PROGRAM = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
 
+    // Programs whose instructions never move or delegate funds on their own; they accompany almost
+    // every dApp transaction (priority fees, memos, creating the recipient's token account) and so
+    // do not count as undisplayed actions.
+    private val BENIGN_PROGRAMS = setOf(
+        "ComputeBudget111111111111111111111111111111",
+        "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr", // Memo v2
+        "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo", // Memo v1
+        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL", // Associated Token Account
+    )
+
+    // System instructions that only create accounts (wSOL wrapping, ATA rent) — displayed as
+    // nothing, but not material. Everything else (assign, nonce ops...) is treated as unknown.
+    private val BENIGN_SYSTEM_INSTRUCTIONS = setOf(0, 3) // createAccount, createAccountWithSeed
+
+    // Token instructions swaps use around a transfer (wrap/unwrap SOL) that cannot delegate or
+    // move a balance elsewhere. Approve (4), SetAuthority (6), Burn (8) etc. are NOT here.
+    private val BENIGN_TOKEN_INSTRUCTIONS = setOf(1, 9, 17, 18) // initAccount, closeAccount, syncNative, initAccount3
+
     // Swap aggregators — their presence means the transaction is a swap (Jupiter routes some legs
     // through DFlow).
     private val SWAP_PROGRAMS = setOf(
@@ -45,15 +63,18 @@ object WCSolanaTxSummary {
     internal enum class Method { SWAP, TRANSFER }
 
     /**
-     * Why the user must be warned before approving. Ordered by severity so a batch can surface the
-     * most severe one.
+     * Why the user must be warned before approving. Declared most severe FIRST, so natural ordering
+     * (`sorted()`, `minOrNull()`) yields the most severe warning of a batch.
      */
     enum class Warning {
+        /** A transfer was decoded but its recipient lives in an address lookup table and can't be shown. */
+        HiddenRecipient,
+
         /** Nothing material could be decoded — parse failure, or no known swap and no transfer. */
         Unreadable,
 
-        /** A transfer was decoded but its recipient lives in an address lookup table and can't be shown. */
-        HiddenRecipient,
+        /** Something was decoded, but the transaction also invokes programs whose effect isn't shown. */
+        UnknownInstructions,
     }
 
     /**
@@ -133,10 +154,13 @@ object WCSolanaTxSummary {
         rows.add(ViewItem.Value(Translator.getString(R.string.WalletConnect_Solana_Network), "Solana", ValueType.Regular))
 
         val warning = when {
+            hiddenRecipient -> Warning.HiddenRecipient
             // No material action surfaced: no method (not a known swap) and no directly-decodable
             // transfer. The lone Network row alone tells the user nothing about what they authorize.
             decoded.method == null && decoded.transfers.isEmpty() -> Warning.Unreadable
-            hiddenRecipient -> Warning.HiddenRecipient
+            // A decoded transfer must not vouch for the instructions next to it: a token Approve
+            // or an unknown program call alongside a dust transfer would otherwise pass unremarked.
+            decoded.hasUnknownInstructions -> Warning.UnknownInstructions
             else -> null
         }
 
@@ -163,6 +187,12 @@ object WCSolanaTxSummary {
                     text = Translator.getString(R.string.WalletConnect_Solana_HiddenRecipient),
                     critical = true
                 )
+
+                Warning.UnknownInstructions -> ViewItem.Alert(
+                    title = Translator.getString(R.string.WalletConnect_Solana_UnknownInstructions_Title),
+                    text = Translator.getString(R.string.WalletConnect_Solana_UnknownInstructions),
+                    critical = false
+                )
             }
         )
     )
@@ -181,6 +211,8 @@ object WCSolanaTxSummary {
         val transfers: List<Transfer>,
         /** True for a v0 message that loads accounts from at least one lookup table. */
         val usesLookupTables: Boolean,
+        /** True when an instruction invokes a program, or a program instruction, this decoder does not display. */
+        val hasUnknownInstructions: Boolean,
     )
 
     internal data class Transfer(
@@ -224,9 +256,14 @@ object WCSolanaTxSummary {
         val signatureCount = readLength()
         offset += signatureCount * 64
 
-        // V0 messages are marked by the high bit of the first message byte; legacy has none.
+        // Versioned messages are marked by the high bit of the first message byte, with the version
+        // in the low seven bits; legacy has no prefix. Only v0 exists today and only its layout is
+        // known here, so any other version is rejected rather than parsed as if it were v0.
         val versioned = offset < bytes.size && bytes[offset].toInt() and 0x80 != 0
-        if (versioned) offset++
+        if (versioned) {
+            val version = readByte() and 0x7F
+            require(version == 0) { "unsupported message version $version" }
+        }
 
         readByte() // numRequiredSignatures
         offset += 2 // numReadonlySignedAccounts, numReadonlyUnsignedAccounts
@@ -278,9 +315,16 @@ object WCSolanaTxSummary {
 
         val transfers = mutableListOf<Transfer>()
         var isSwap = false
+        var hasUnknownInstructions = false
 
         instructions.forEach { instruction ->
-            val programId = instruction.programId ?: return@forEach
+            // An index that names no static key cannot be a program (programs are never loaded
+            // from lookup tables) — the instruction is undisplayable rather than ignorable.
+            val programId = instruction.programId
+            if (programId == null) {
+                hasUnknownInstructions = true
+                return@forEach
+            }
             if (programId in SWAP_PROGRAMS) isSwap = true
 
             val data = instruction.data
@@ -304,26 +348,47 @@ object WCSolanaTxSummary {
             }
 
             when (programId) {
-                // System `transfer`: u32 discriminator 2, then u64 lamports; accounts [from, to].
-                SYSTEM_PROGRAM ->
-                    if (data.size >= 12 && data[0].toInt() == 2 && data[1].toInt() == 0 &&
-                        data[2].toInt() == 0 && data[3].toInt() == 0
-                    ) {
-                        transfers.add(
-                            Transfer(isSol = true, amount = u64LE(4), decimals = null, payer = accountAt(0), destination = accountAt(1))
-                        )
+                // System instructions carry a u32 LE discriminator.
+                SYSTEM_PROGRAM -> {
+                    val discriminator = if (data.size >= 4 && data[1].toInt() == 0 && data[2].toInt() == 0 && data[3].toInt() == 0) {
+                        data[0].toInt() and 0xFF
+                    } else {
+                        -1
+                    }
+                    when {
+                        // `transfer` (2): u64 lamports; accounts [from, to].
+                        discriminator == 2 && data.size >= 12 ->
+                            transfers.add(
+                                Transfer(isSol = true, amount = u64LE(4), decimals = null, payer = accountAt(0), destination = accountAt(1))
+                            )
+
+                        discriminator in BENIGN_SYSTEM_INSTRUCTIONS -> Unit
+                        else -> hasUnknownInstructions = true
+                    }
+                }
+
+                // SPL Token instructions carry a u8 discriminator.
+                TOKEN_PROGRAM, TOKEN_2022_PROGRAM ->
+                    when (val discriminator = data.firstOrNull()?.toInt()?.and(0xFF)) {
+                        // `Transfer` (3): accounts [source, dest, owner]
+                        3 -> if (data.size >= 9) {
+                            transfers.add(Transfer(false, u64LE(1), null, payer = accountAt(2), destination = accountAt(1)))
+                        } else {
+                            hasUnknownInstructions = true
+                        }
+                        // `TransferChecked` (12): accounts [source, mint, dest, owner]
+                        12 -> if (data.size >= 10) {
+                            transfers.add(Transfer(false, u64LE(1), data[9].toInt() and 0xFF, payer = accountAt(3), destination = accountAt(2)))
+                        } else {
+                            hasUnknownInstructions = true
+                        }
+
+                        in BENIGN_TOKEN_INSTRUCTIONS -> Unit
+                        else -> hasUnknownInstructions = true
                     }
 
-                // SPL Token `Transfer` (3) / `TransferChecked` (12).
-                TOKEN_PROGRAM, TOKEN_2022_PROGRAM ->
-                    when (data.firstOrNull()?.toInt()?.and(0xFF)) {
-                        // accounts [source, dest, owner]
-                        3 -> if (data.size >= 9)
-                            transfers.add(Transfer(false, u64LE(1), null, payer = accountAt(2), destination = accountAt(1)))
-                        // accounts [source, mint, dest, owner]
-                        12 -> if (data.size >= 10)
-                            transfers.add(Transfer(false, u64LE(1), data[9].toInt() and 0xFF, payer = accountAt(3), destination = accountAt(2)))
-                    }
+                in SWAP_PROGRAMS, in BENIGN_PROGRAMS -> Unit
+                else -> hasUnknownInstructions = true
             }
         }
 
@@ -333,6 +398,11 @@ object WCSolanaTxSummary {
             else -> null
         }
 
-        return Decoded(method, transfers, usesLookupTables = loadedAccountCount > 0)
+        return Decoded(
+            method,
+            transfers,
+            usesLookupTables = loadedAccountCount > 0,
+            hasUnknownInstructions = hasUnknownInstructions,
+        )
     }
 }
