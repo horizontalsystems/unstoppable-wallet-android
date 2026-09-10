@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroAdvancedSettingsPage
+import io.horizontalsystems.walletkit.modules.send.monero.v2.MoneroSendSettings
+import io.horizontalsystems.walletkit.modules.send.monero.v2.SendMoneroSettingsPage
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
@@ -59,7 +60,12 @@ class MoneroChainPlugin(
     private val moneroNodeManager: () -> MoneroNodeManager,
 ) : ChainPlugin {
 
-    override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage = SendMoneroAdvancedSettingsPage
+    override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage = SendMoneroSettingsPage(wallet)
+
+    override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? {
+        val outputs = (settings as? MoneroSendSettings)?.unspentOutputs ?: return null
+        return outputs.sumOf { it.amount }
+    }
 
     override fun sendTransactionData(
         token: Token,
@@ -67,7 +73,12 @@ class MoneroChainPlugin(
         address: String,
         memo: String?,
         settings: SendChainSettings?,
-    ) = SendTransactionData.Monero(address, amount, memo)
+    ) = SendTransactionData.Monero(
+        address = address,
+        amount = amount,
+        memo = memo,
+        selectedOutputs = (settings as? MoneroSendSettings)?.unspentOutputs?.map { it.keyImage },
+    )
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
         SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Offchain)
