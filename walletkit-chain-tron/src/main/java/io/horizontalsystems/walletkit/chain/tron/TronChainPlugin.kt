@@ -10,6 +10,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
@@ -63,6 +64,7 @@ class TronChainPlugin : ChainPlugin {
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ) = SendTransactionData.Tron.Simple(address, amount)
 
     override val blockchainType = BlockchainType.Tron

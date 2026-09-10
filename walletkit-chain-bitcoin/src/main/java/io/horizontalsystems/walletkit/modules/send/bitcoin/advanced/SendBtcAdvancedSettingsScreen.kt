@@ -279,7 +279,7 @@ fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
 }
 
 @Composable
-private fun BottomSheetTransactionOrderSelector(
+internal fun BottomSheetTransactionOrderSelector(
     items: List<SendBtcAdvancedSettingsModule.SortModeViewItem>,
     onSelect: (TransactionDataSortMode) -> Unit,
     onCloseClick: () -> Unit
@@ -324,7 +324,7 @@ private fun BottomSheetTransactionOrderSelector(
 }
 
 @Composable
-private fun TransactionDataSortSettings(
+internal fun TransactionDataSortSettings(
     navigation: HSNavigation,
     coinCode: String,
     valueTitle: String,

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
@@ -71,6 +72,9 @@ fun SendV2Screen(
     viewModel: SendViewModel,
 ) {
     val uiState = viewModel.uiState
+    val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
+    val chainSettings = navigation.viewModelForScreen<SendChainSettingsViewModel>(SendV2Page::class)
+    val settingsPage = remember { chainPlugin?.sendSettingsPage(uiState.wallet) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val keyboardState by observeKeyboardState()
@@ -115,12 +119,14 @@ fun SendV2Screen(
     HSScaffold(
         title = stringResource(R.string.Balance_Send),
         onBack = { navigation.removeLastOrNull() },
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                icon = R.drawable.manage_24,
-                onClick = { },
-            ),
+        menuItems = listOfNotNull(
+            settingsPage?.let { page ->
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                    icon = R.drawable.manage_24,
+                    onClick = { navigation.slideFromRight(page) },
+                )
+            },
         ),
     ) {
         val tabs = SendTab.entries
@@ -172,6 +178,7 @@ fun SendV2Screen(
                             onValueChange = viewModel::onEnterMemo,
                         )
                     }
+                    chainPlugin?.SendScreenExtras(navigation, uiState.wallet, chainSettings)
                     VSpacer(32.dp)
                 }
 

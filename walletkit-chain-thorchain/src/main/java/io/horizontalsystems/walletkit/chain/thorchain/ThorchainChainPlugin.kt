@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.chain.thorchain
 
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -53,6 +54,7 @@ class ThorchainChainPlugin : ChainPlugin {
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ) = SendTransactionData.Thorchain.Send(address, amount, memo.orEmpty())
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =

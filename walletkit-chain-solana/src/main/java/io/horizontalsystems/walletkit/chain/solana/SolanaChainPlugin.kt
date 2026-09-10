@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.chain.solana
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -53,6 +54,7 @@ class SolanaChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ) = SendTransactionData.Solana.Simple(address, amount)
 
     override val blockchainType: BlockchainType = BlockchainType.Solana

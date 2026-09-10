@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroAdvancedSettingsPage
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -57,11 +59,14 @@ class MoneroChainPlugin(
     private val moneroNodeManager: () -> MoneroNodeManager,
 ) : ChainPlugin {
 
+    override fun sendSettingsPage(wallet: Wallet): HSPage = SendMoneroAdvancedSettingsPage
+
     override fun sendTransactionData(
         token: Token,
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ) = SendTransactionData.Monero(address, amount, memo)
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =

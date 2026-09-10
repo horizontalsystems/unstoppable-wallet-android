@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
 import io.horizontalsystems.walletkit.entities.Address
@@ -63,6 +64,7 @@ class SendV2ConfirmViewModel(
     private val amount: BigDecimal,
     private val address: Address,
     private val memo: String?,
+    private val chainSettings: SendChainSettings?,
     val sendTransactionService: AbstractSendTransactionService,
     private val xRateService: XRateService,
     private val contactsRepository: ContactsRepository,
@@ -104,7 +106,7 @@ class SendV2ConfirmViewModel(
         viewModelScope.launch {
             try {
                 val data = ChainRegistry[token.blockchainType]
-                    ?.sendTransactionData(token, amount, address.hex, memo)
+                    ?.sendTransactionData(token, amount, address.hex, memo, chainSettings)
                     ?: throw UnsupportedOperationException(token.blockchainType.uid)
                 sendTransactionService.setSendTransactionData(data)
             } catch (e: Throwable) {
@@ -180,7 +182,10 @@ class SendV2ConfirmViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: error.javaClass.simpleName))
     }
 
-    class Factory(private val input: SendV2ConfirmPage.Input) : ViewModelProvider.Factory {
+    class Factory(
+        private val input: SendV2ConfirmPage.Input,
+        private val chainSettings: SendChainSettings?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SendV2ConfirmViewModel(
@@ -188,6 +193,7 @@ class SendV2ConfirmViewModel(
                 amount = input.amount,
                 address = input.address,
                 memo = input.memo,
+                chainSettings = chainSettings,
                 sendTransactionService = SendTransactionServiceFactory.create(input.wallet.token),
                 xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 contactsRepository = App.contactsRepository,
