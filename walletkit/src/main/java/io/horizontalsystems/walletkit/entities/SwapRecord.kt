@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
 
 @Entity
 data class SwapRecord(
@@ -39,6 +40,9 @@ data class SwapRecord(
     val toAsset: String?,
     val depositAddress: String?,
     val status: String,
+    // SwapOperation.name — which user-facing operation produced this record (plain swap,
+    // private send, CrossPay). Same rail can serve several; history renders each differently.
+    val operation: String = SwapOperation.Swap.name,
     val pauseReason: String? = null,
     // opaque handle linking the record to an external settlement mechanism
     // (e.g. a smart-account userOp hash) until the real transactionHash is known

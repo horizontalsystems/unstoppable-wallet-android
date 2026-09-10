@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
+import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
@@ -298,6 +299,7 @@ class PrivateSendConfirmViewModel(
         toAsset = null,
         depositAddress = order.depositAddress,
         status = SwapStatus.Depositing.name,
+        operation = SwapOperation.PrivateSend.name,
         estimatedTime = order.estimatedTime,
     )
 
