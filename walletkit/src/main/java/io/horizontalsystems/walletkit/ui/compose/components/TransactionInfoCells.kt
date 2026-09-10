@@ -551,9 +551,11 @@ fun TransactionInfoExplorerCell(
         body_leah(
             text = title,
             maxLines = 1,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp)
         )
-        Spacer(Modifier.weight(1f))
         Image(
             modifier = Modifier.size(20.dp),
             painter = painterResource(id = R.drawable.ic_arrow_right),
