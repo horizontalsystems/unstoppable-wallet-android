@@ -34,7 +34,8 @@ class SendTransactionServiceMonero(
         fee = adapter.estimateFee(data.amount, data.address, data.memo)
 
         val feeValue = fee ?: BigDecimal.ZERO
-        val available = adapter.balanceData.available
+        // With coin control only the chosen outputs can fund the transaction.
+        val available = data.selectedOutputs?.sumOf { it.amount } ?: adapter.balanceData.available
         cautions = if (data.amount + feeValue > available) {
             listOf(
                 CautionViewItem(
@@ -52,7 +53,7 @@ class SendTransactionServiceMonero(
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val data = sendData!!
-        val txHash = adapter.send(data.amount, data.address, data.memo, data.selectedOutputs)
+        val txHash = adapter.send(data.amount, data.address, data.memo, data.selectedOutputs?.map { it.keyImage })
         return SendTransactionResult.Monero(txHash = txHash)
     }
 

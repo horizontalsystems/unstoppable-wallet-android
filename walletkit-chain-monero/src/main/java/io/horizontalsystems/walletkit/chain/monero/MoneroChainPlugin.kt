@@ -77,7 +77,7 @@ class MoneroChainPlugin(
         address = address,
         amount = amount,
         memo = memo,
-        selectedOutputs = (settings as? MoneroSendSettings)?.unspentOutputs?.map { it.keyImage },
+        selectedOutputs = (settings as? MoneroSendSettings)?.unspentOutputs,
     )
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
