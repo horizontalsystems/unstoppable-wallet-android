@@ -8,13 +8,13 @@ import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.helpers.DateHelper
-import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoExpertModeModule
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Date
+import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoExpertModeModule
 
 class MoneroUtxoExpertModeViewModel(
     adapter: ISendMoneroAdapter,

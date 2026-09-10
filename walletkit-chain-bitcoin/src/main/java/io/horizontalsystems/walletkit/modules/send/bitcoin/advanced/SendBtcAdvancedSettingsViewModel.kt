@@ -5,9 +5,9 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule.rbfSupported
-import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
+import io.horizontalsystems.walletkit.modules.send.bitcoin.rbfSupported
 
 class SendBtcAdvancedSettingsViewModel(
     val blockchainType: BlockchainType,

@@ -20,7 +20,6 @@ import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.monero.utxoexpert.MoneroUtxoExpertModeScreen
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -33,6 +32,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.modules.send.monero.utxoexpert.MoneroUtxoExpertModeScreen
 
 /**
  * Settings behind the unified send screen's icon for Monero: coin control only. The wallet

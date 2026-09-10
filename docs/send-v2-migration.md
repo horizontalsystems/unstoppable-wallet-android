@@ -49,5 +49,5 @@ they land.
 
 ## Cleanup
 
-- [ ] Delete per-chain send screens and view models, `EnterAddressPage`, `SendPage`,
-      `ChainPlugin.SendScreen` / `ChainSendScreenArgs`. They have no callers.
+- [x] Delete per-chain send screens and view models, `EnterAddressPage`, `SendPage`,
+      `ChainPlugin.SendScreen` / `ChainSendScreenArgs`.

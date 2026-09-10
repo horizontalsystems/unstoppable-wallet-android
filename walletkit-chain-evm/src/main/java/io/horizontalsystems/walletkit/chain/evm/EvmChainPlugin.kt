@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.chain.evm
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
@@ -16,7 +15,6 @@ import io.horizontalsystems.walletkit.core.address.AddressChecker
 import io.horizontalsystems.walletkit.core.address.Eip20AddressValidator
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.managers.evmTransactionSource
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -48,9 +46,6 @@ import io.horizontalsystems.walletkit.modules.opencryptopay.OcpConfirmData
 import io.horizontalsystems.walletkit.modules.opencryptopay.OpenCryptoPayEvmConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EvmAddressValidator
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmModule
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmScreen
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.TransactionSpeedUpCancelPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -307,28 +302,6 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         )
     }
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val adapter = App.adapterManager.getAdapterForWallet<ISendEthereumAdapter>(args.wallet)
-            ?: throw IllegalArgumentException("SendEthereumAdapter is null")
-
-        val sendEvmViewModel = viewModel<SendEvmViewModel>(
-            factory = SendEvmModule.Factory(args.wallet, args.address, args.hideAddress, adapter)
-        )
-
-        SendEvmScreen(
-            title = args.title,
-            navigation = args.navigation,
-            amountInputModeViewModel = args.amountInputModeViewModel,
-            viewModel = sendEvmViewModel,
-            address = args.address,
-            wallet = args.wallet,
-            amount = args.amount,
-            hideAddress = args.hideAddress,
-            riskyAddress = args.riskyAddress,
-            sendEntryPointDestId = args.sendEntryPointDestId,
-        )
-    }
 
     override fun clearAccountData(accountId: String) {
         if (isFamilyAnchor) {

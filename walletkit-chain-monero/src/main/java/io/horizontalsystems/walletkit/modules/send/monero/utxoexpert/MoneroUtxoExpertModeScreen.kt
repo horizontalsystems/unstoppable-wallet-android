@@ -20,13 +20,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
-import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoInfoCell
-import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoList
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoList
+import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoInfoCell
 
 @Composable
 fun MoneroUtxoExpertModeScreen(

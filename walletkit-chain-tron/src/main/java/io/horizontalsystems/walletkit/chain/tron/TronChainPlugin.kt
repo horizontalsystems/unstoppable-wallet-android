@@ -1,7 +1,5 @@
 package io.horizontalsystems.walletkit.chain.tron
 
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -22,7 +20,6 @@ import io.horizontalsystems.walletkit.core.adapters.TronTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.TronAccountManager
 import io.horizontalsystems.walletkit.core.managers.TronKitManager
@@ -48,9 +45,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.Abstract
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceTron
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TronAddressValidator
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronModule
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronScreen
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -169,20 +163,6 @@ class TronChainPlugin : ChainPlugin {
     override fun sendTransactionService(token: Token): AbstractSendTransactionService =
         SendTransactionServiceTron(token)
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendTronModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendTronViewModel = viewModel<SendTronViewModel>(factory = factory)
-        SendTronScreen(
-            title = args.title,
-            navigation = args.navigation,
-            viewModel = sendTronViewModel,
-            amountInputModeViewModel = args.amountInputModeViewModel,
-            sendEntryPointDestId = args.sendEntryPointDestId,
-            amount = args.amount,
-            riskyAddress = args.riskyAddress
-        )
-    }
 
     override suspend fun eip20Allowance(token: Token, spenderAddress: String): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
