@@ -18,22 +18,34 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
     override val supportedEvents = listOf<String>()
 
     override fun getAction(request: HSDAppRequest, chainInternalId: String?): AbstractWCAction {
-        val stellarKit = getStellarKit(App.accountManager.activeAccount!!)
+        val account = App.accountManager.activeAccount!!
+        val stellarKit = getStellarKit(account)
+        val walletAddress = activeStellarAddress(account)
 
         return when (request.method) {
             "stellar_signAndSubmitXDR" -> WCActionStellarSignAndSubmitXdr(
                 request.params,
-                stellarKit
+                stellarKit,
+                walletAddress,
             )
 
             "stellar_signXDR" -> WCActionStellarSignXdr(
                 request.params,
                 request.peerMetaData?.name ?: "",
-                stellarKit
+                stellarKit,
+                walletAddress,
             )
 
             else -> throw UnsupportedMethodException(request.method)
         }
+    }
+
+    // Address of the active account, so the sign screen can flag a transaction (or operation)
+    // sourced from some other account. Best-effort: null skips the check rather than failing.
+    private fun activeStellarAddress(account: Account): String? = try {
+        stellarKitManager.getAddress(account.type)
+    } catch (e: Exception) {
+        null
     }
 
     private fun getStellarKit(account: Account): StellarKit {

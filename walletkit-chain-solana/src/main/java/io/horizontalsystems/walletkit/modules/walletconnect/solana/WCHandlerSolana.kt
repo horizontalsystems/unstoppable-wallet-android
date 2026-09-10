@@ -30,19 +30,19 @@ class WCHandlerSolana(private val solanaKitManager: SolanaKitManager) : IWCHandl
                 request.params,
                 signer(),
                 multiple = false,
-                peerName = request.peerMetaData?.name,
+                walletAddress = activeSolanaAddress(),
             )
 
             "solana_signAllTransactions" -> WCActionSolanaSignTransaction(
                 request.params,
                 signer(),
                 multiple = true,
-                peerName = request.peerMetaData?.name,
+                walletAddress = activeSolanaAddress(),
             )
 
             "solana_signAndSendTransaction" -> WCActionSolanaSignAndSendTransaction(
                 request.params,
-                peerName = request.peerMetaData?.name,
+                walletAddress = activeSolanaAddress(),
             )
 
             else -> throw UnsupportedMethodException(request.method)
@@ -62,8 +62,8 @@ class WCHandlerSolana(private val solanaKitManager: SolanaKitManager) : IWCHandl
     }
 
     // Base58 address of the active account, so solana_signMessage can reject a request whose
-    // `pubkey` names a different account. Best-effort: returns null (skip the check) rather than
-    // throw, since signer() has already established the account can sign by the time this runs.
+    // `pubkey` names a different account and the transaction summary can flag transfers paid by
+    // some other account. Best-effort: returns null (skip the check) rather than throw.
     private fun activeSolanaAddress(): String? {
         val accountType = App.accountManager.activeAccount?.type ?: return null
         return try {

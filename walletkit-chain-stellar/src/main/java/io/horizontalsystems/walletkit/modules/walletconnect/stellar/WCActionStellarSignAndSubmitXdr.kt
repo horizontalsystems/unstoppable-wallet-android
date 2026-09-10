@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 class WCActionStellarSignAndSubmitXdr(
     private val paramsJsonStr: String,
     private val stellarKit: StellarKit,
+    private val walletAddress: String?,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
@@ -66,7 +67,7 @@ class WCActionStellarSignAndSubmitXdr(
     override fun createState(): WCActionState {
         val transaction = stellarKit.getTransaction(xdr)
 
-        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr)
+        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr, walletAddress)
         accountManager.activeAccount?.name?.let { walletName ->
             sectionViewItems += SectionViewItem(
                 listOf(ViewItem.Value(

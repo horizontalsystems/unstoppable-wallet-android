@@ -27,6 +27,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
+import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDepositAddress
+import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDepositMemo
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -295,12 +297,18 @@ class SwapConfirmViewModel(
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 estimatedTime = finalQuote.estimatedTime
-                quoteFields = finalQuote.fields
                 slippage = finalQuote.slippage
                 providerSwapId = finalQuote.providerSwapId
                 fromAsset = finalQuote.fromAsset
                 toAsset = finalQuote.toAsset
                 depositAddress = finalQuote.depositAddress
+                // The deposit target comes from the provider's server and is what the signed
+                // transaction actually pays; it must be on screen next to the recipient so a
+                // compromised or spoofed provider response cannot redirect funds unseen.
+                quoteFields = finalQuote.fields + listOfNotNull(
+                    finalQuote.depositAddress?.let { DataFieldDepositAddress(it) },
+                    finalQuote.depositMemo?.let { DataFieldDepositMemo(it) },
+                )
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)

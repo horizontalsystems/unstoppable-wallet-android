@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
+import io.horizontalsystems.walletkit.modules.multiswap.ThorChainSwapMemo
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -543,6 +544,12 @@ class USwapProvider(
             selectedRoute?.sellAsset,
             selectedRoute?.buyAsset
         )
+
+        // A THORChain-style deposit memo is what routes the outbound leg; refuse one whose
+        // destination is not the recipient shown to the user.
+        bestRoute.execution?.takeIf { it.method == "thorchain_deposit" }?.memo?.let { memo ->
+            ThorChainSwapMemo.requireDestination(memo, destination)
+        }
 
         val amountOut = bestRoute.expectedBuyAmountOrZero
 

@@ -227,11 +227,14 @@ class WCSessionViewModel(
                     account?.name,
                 )
 
-                blockchainTypes = sessionProposal.optionalNamespaces.flatMap {
-                    it.value.chains?.mapNotNull { chain ->
-                        determineBlockchainType(chain)
-                    } ?: emptyList()
-                }
+                // Approving settles the session for every supported chain the dApp asked for, in
+                // BOTH requiredNamespaces and optionalNamespaces (see approve()). The sheet must
+                // list that same union: showing only the optional set would let a dApp hide, say,
+                // Ethereum mainnet in the required set behind a harmless-looking optional testnet.
+                blockchainTypes = (sessionProposal.requiredNamespaces.values + sessionProposal.optionalNamespaces.values)
+                    .flatMap { it.chains ?: emptyList() }
+                    .mapNotNull { chain -> determineBlockchainType(chain) }
+                    .distinct()
 
                 proposal = sessionProposal
                 verification = sessionProposal.verification

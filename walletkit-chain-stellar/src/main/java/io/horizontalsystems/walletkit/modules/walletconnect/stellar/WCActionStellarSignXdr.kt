@@ -17,6 +17,7 @@ class WCActionStellarSignXdr(
     private val paramsJsonStr: String,
     private val peerName: String,
     private val stellarKit: StellarKit,
+    private val walletAddress: String?,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
@@ -39,7 +40,7 @@ class WCActionStellarSignXdr(
 
     override fun createState(): WCActionState {
         val transaction = stellarKit.getTransaction(xdr)
-        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr)
+        var sectionViewItems = WCStellarHelper.getTransactionViewItems(transaction, xdr, walletAddress)
         App.accountManager.activeAccount?.name?.let { walletName ->
             sectionViewItems += SectionViewItem(
                 listOf(ViewItem.Value(
@@ -52,7 +53,7 @@ class WCActionStellarSignXdr(
 
         return WCActionState(
             runnable = true,
-            items = WCStellarHelper.getTransactionViewItems(transaction, xdr) + sectionViewItems
+            items = sectionViewItems
         )
     }
 

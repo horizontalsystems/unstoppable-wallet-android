@@ -27,7 +27,7 @@ import timber.log.Timber
 // Response: { signature: <base58 txid> }.
 class WCActionSolanaSignAndSendTransaction(
     private val paramsJsonStr: String,
-    private val peerName: String?,
+    private val walletAddress: String?,
 ) : AbstractWCAction() {
 
     private val gson = GsonBuilder().create()
@@ -109,17 +109,16 @@ class WCActionSolanaSignAndSendTransaction(
     override fun createState(): WCActionState {
         // Decoded summary (method, network, any directly decodable transfers). Falls back to
         // nothing on parse failure.
-        val summary = WCSolanaTxSummary.summary(rawTransaction, peerName)
+        val summary = WCSolanaTxSummary.summary(rawTransaction, walletAddress)
 
-        // When nothing material could be decoded the user is blind-broadcasting; warn prominently.
-        // We do not hard-block: many legitimate transactions (arbitrary programs, v0/lookup-table)
-        // are simply beyond this best-effort decoder, and sendability is still gated by fee
+        // When nothing material could be decoded — or a transfer's recipient is hidden in an
+        // address lookup table — the user is blind-broadcasting; warn prominently. We do not
+        // hard-block: many legitimate transactions (arbitrary programs, v0/lookup-table) are
+        // simply beyond this best-effort decoder, and sendability is still gated by fee
         // estimation below.
-        var sectionViewItems = if (summary.opaque) {
-            listOf(WCSolanaTxSummary.opaqueWarningSection()) + summary.sections
-        } else {
-            summary.sections
-        }
+        var sectionViewItems = summary.warning?.let { warning ->
+            listOf(WCSolanaTxSummary.warningSection(warning)) + summary.sections
+        } ?: summary.sections
 
         sendTransactionState.networkFee?.let { networkFee ->
             sectionViewItems += SectionViewItem(

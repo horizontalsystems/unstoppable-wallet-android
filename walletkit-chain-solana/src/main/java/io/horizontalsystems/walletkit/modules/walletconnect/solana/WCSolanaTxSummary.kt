@@ -18,8 +18,14 @@ import java.math.BigInteger
  *
  * Swap amounts are intentionally NOT shown: for a Jupiter swap they happen inside CPI/inner
  * instructions and via address lookup tables, neither of which is visible by parsing the outer
- * transaction. Accounts loaded from a v0 lookup table cannot be resolved to an address either, so a
- * transfer that references one is reported without a destination.
+ * transaction.
+ *
+ * A v0 message may load extra accounts from on-chain address lookup tables; those addresses are not
+ * in the message and cannot be resolved offline. A transfer whose recipient is one of them is
+ * reported as [AccountRef.LookupTable] and the display MUST make that visible (an explicit "unknown
+ * recipient" row plus the [Warning.HiddenRecipient] banner) — silently omitting the recipient of a
+ * transfer whose amount IS shown would let a malicious dApp drain funds behind a normal-looking
+ * "Transfer / 12.5 SOL" screen.
  */
 object WCSolanaTxSummary {
 
@@ -36,36 +42,49 @@ object WCSolanaTxSummary {
         "HNarfxC3kYMMhFkxUFeYb8wHVdPzY5t9pupqW5fL2meM", // 1inch Fusion Swap
     )
 
-    private enum class Method { SWAP, TRANSFER }
+    internal enum class Method { SWAP, TRANSFER }
 
     /**
-     * The decoded display for a transaction: [sections] are the rows (Method, Value, To, Network),
-     * and [opaque] is true when NOTHING material could be decoded — either the parse failed, or it
-     * yielded no method and no transfers. An opaque summary means the user would be blind-signing,
-     * so callers must warn (see [opaqueWarningSection]). A recognized swap or a decodable transfer
-     * counts as material even if amounts / lookup-table destinations stay hidden.
+     * Why the user must be warned before approving. Ordered by severity so a batch can surface the
+     * most severe one.
+     */
+    enum class Warning {
+        /** Nothing material could be decoded — parse failure, or no known swap and no transfer. */
+        Unreadable,
+
+        /** A transfer was decoded but its recipient lives in an address lookup table and can't be shown. */
+        HiddenRecipient,
+    }
+
+    /**
+     * The decoded display for a transaction: [sections] are the rows (Method, Value, From, To,
+     * Network), and [warning] is non-null when the user would be blind-signing — either nothing
+     * material could be decoded, or a transfer's recipient is hidden in a lookup table. Callers
+     * must prepend [warningSection] for a non-null warning.
      */
     data class Summary(
         val sections: List<SectionViewItem>,
-        val opaque: Boolean,
+        val warning: Warning?,
     )
 
     /**
-     * Display rows for [serializedTransaction], in order: Method, Value, To (per directly-decodable
-     * transfer), Network, plus an [Summary.opaque] flag. Best-effort: on any parse failure the rows
-     * are empty and opaque is true. Wallet and Fee (when available) are added by the caller.
+     * Display rows for [serializedTransaction], in order: Method, Value, From (when the paying
+     * account is not [walletAddress]), To (per directly-decodable transfer), Network, plus a
+     * [Summary.warning]. Best-effort: on any parse failure the rows are empty and the warning is
+     * [Warning.Unreadable]. Wallet and Fee (when available) are added by the caller.
      *
-     * [peerName] is accepted for parity with the request but not rendered (the dApp row was dropped
-     * from this layout).
+     * [walletAddress] is the connected account's base58 address, when known; it is used to flag
+     * transfers that are paid by some other account rather than the wallet.
      */
-    fun summary(serializedTransaction: ByteArray, peerName: String?): Summary {
+    fun summary(serializedTransaction: ByteArray, walletAddress: String?): Summary {
         val decoded = try {
             decode(serializedTransaction)
         } catch (e: Throwable) {
-            return Summary(sections = emptyList(), opaque = true)
+            return Summary(sections = emptyList(), warning = Warning.Unreadable)
         }
 
         val rows = mutableListOf<ViewItem>()
+        var hiddenRecipient = false
 
         decoded.method?.let { method ->
             val value = when (method) {
@@ -87,51 +106,99 @@ object WCSolanaTxSummary {
             }
             rows.add(ViewItem.Value(Translator.getString(R.string.WalletConnect_Solana_Value), amount, ValueType.Outgoing))
 
-            transfer.destination?.let {
-                rows.add(ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), it))
+            // The account whose authority moves the funds. When it is a known address other than
+            // the connected wallet, say so — the wallet's signature is then not what pays.
+            val payer = transfer.payer
+            if (payer is AccountRef.Static && walletAddress != null && payer.address != walletAddress) {
+                rows.add(ViewItem.Address(Translator.getString(R.string.TransactionInfo_From), payer.address))
+            }
+
+            when (val destination = transfer.destination) {
+                is AccountRef.Static ->
+                    rows.add(ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), destination.address))
+
+                AccountRef.LookupTable -> {
+                    hiddenRecipient = true
+                    rows.add(
+                        ViewItem.Value(
+                            Translator.getString(R.string.Send_Confirmation_To),
+                            Translator.getString(R.string.WalletConnect_Solana_UnknownRecipient),
+                            ValueType.Warning
+                        )
+                    )
+                }
             }
         }
 
         rows.add(ViewItem.Value(Translator.getString(R.string.WalletConnect_Solana_Network), "Solana", ValueType.Regular))
 
-        // Opaque when we surfaced no material action: no method (not a known swap) and no
-        // directly-decodable transfer. The lone Network row alone tells the user nothing about what
-        // they are authorizing.
-        val opaque = decoded.method == null && decoded.transfers.isEmpty()
+        val warning = when {
+            // No material action surfaced: no method (not a known swap) and no directly-decodable
+            // transfer. The lone Network row alone tells the user nothing about what they authorize.
+            decoded.method == null && decoded.transfers.isEmpty() -> Warning.Unreadable
+            hiddenRecipient -> Warning.HiddenRecipient
+            else -> null
+        }
 
-        return Summary(sections = listOf(SectionViewItem(rows)), opaque = opaque)
+        return Summary(sections = listOf(SectionViewItem(rows)), warning = warning)
     }
 
     /**
-     * A prominent caution banner for an opaque transaction (see [Summary.opaque]). Callers prepend
-     * it to their rows so the user is warned they are signing/broadcasting without seeing the
-     * transaction's recipient, amount or programs.
+     * A prominent caution banner for [warning] (see [Summary.warning]). Callers prepend it to
+     * their rows so the user is warned they are signing/broadcasting without seeing where the
+     * funds go.
      */
-    fun opaqueWarningSection(): SectionViewItem = SectionViewItem(
+    fun warningSection(warning: Warning): SectionViewItem = SectionViewItem(
         listOf(
-            ViewItem.Alert(
-                title = Translator.getString(R.string.WalletConnect_Solana_UnreadableTransaction_Title),
-                text = Translator.getString(R.string.WalletConnect_Solana_UnreadableTransaction),
-                critical = false
-            )
+            when (warning) {
+                Warning.Unreadable -> ViewItem.Alert(
+                    title = Translator.getString(R.string.WalletConnect_Solana_UnreadableTransaction_Title),
+                    text = Translator.getString(R.string.WalletConnect_Solana_UnreadableTransaction),
+                    critical = false
+                )
+
+                // Funds provably leave an account, to an address the user cannot see: red.
+                Warning.HiddenRecipient -> ViewItem.Alert(
+                    title = Translator.getString(R.string.WalletConnect_Solana_HiddenRecipient_Title),
+                    text = Translator.getString(R.string.WalletConnect_Solana_HiddenRecipient),
+                    critical = true
+                )
+            }
         )
     )
 
-    private data class Decoded(
+    /** An account referenced by an instruction. */
+    internal sealed class AccountRef {
+        /** A key present in the message's static account list. */
+        data class Static(val address: String) : AccountRef()
+
+        /** A key loaded from an on-chain address lookup table; not resolvable offline. */
+        object LookupTable : AccountRef()
+    }
+
+    internal data class Decoded(
         val method: Method?,
         val transfers: List<Transfer>,
+        /** True for a v0 message that loads accounts from at least one lookup table. */
+        val usesLookupTables: Boolean,
     )
 
-    private data class Transfer(
+    internal data class Transfer(
         val isSol: Boolean,
         val amount: BigInteger,
         val decimals: Int?,
-        val destination: String?,
+        /** SOL: the `from` account. SPL: the token-account `owner` (the signing authority). */
+        val payer: AccountRef,
+        val destination: AccountRef,
     )
 
+    private class RawInstruction(val programId: String?, val accountIndices: IntArray, val data: ByteArray)
+
     // Manual wire-format walk (compact-u16 "shortvec" lengths, 32-byte account keys). Mirrors the
-    // kit's RawTransactionParser, extended to capture each top-level instruction's accounts + data.
-    private fun decode(bytes: ByteArray): Decoded {
+    // kit's RawTransactionParser, extended to capture each top-level instruction's accounts + data
+    // and the v0 address-table-lookup section, so an account index can be classified as static,
+    // lookup-table-loaded, or out of range (malformed).
+    internal fun decode(bytes: ByteArray): Decoded {
         var offset = 0
 
         fun readByte(): Int = bytes[offset++].toInt() and 0xFF
@@ -158,7 +225,8 @@ object WCSolanaTxSummary {
         offset += signatureCount * 64
 
         // V0 messages are marked by the high bit of the first message byte; legacy has none.
-        if (offset < bytes.size && bytes[offset].toInt() and 0x80 != 0) offset++
+        val versioned = offset < bytes.size && bytes[offset].toInt() and 0x80 != 0
+        if (versioned) offset++
 
         readByte() // numRequiredSignatures
         offset += 2 // numReadonlySignedAccounts, numReadonlyUnsignedAccounts
@@ -173,24 +241,57 @@ object WCSolanaTxSummary {
         offset += 32 // recent blockhash
 
         val instructionCount = readLength()
-        val transfers = mutableListOf<Transfer>()
-        var isSwap = false
-
-        repeat(instructionCount) {
+        val instructions = List(instructionCount) {
+            // Program ids are always static keys (the runtime forbids loading programs from lookup
+            // tables); an unknown one just makes the instruction unrecognized.
             val programId = accountKeys.getOrNull(readByte())
-
             val instructionAccountCount = readLength()
             val accountIndices = IntArray(instructionAccountCount) { readByte() }
-
             val dataLength = readLength()
             val data = bytes.copyOfRange(offset, offset + dataLength)
             offset += dataLength
+            RawInstruction(programId, accountIndices, data)
+        }
 
-            if (programId == null) return@repeat
+        // v0 only: the address table lookups that follow the instructions. Each is a 32-byte table
+        // key plus shortvec lists of writable and readonly indexes into that table. The loaded
+        // accounts are appended after the static keys (all writable first, then all readonly), so
+        // only their COUNT matters for classifying an account index.
+        var loadedAccountCount = 0
+        if (versioned) {
+            repeat(readLength()) {
+                offset += 32
+                val writable = readLength()
+                offset += writable
+                val readonly = readLength()
+                offset += readonly
+                loadedAccountCount += writable + readonly
+            }
+        }
+        require(offset <= bytes.size) { "transaction truncated" }
+
+        fun resolve(index: Int): AccountRef = when {
+            index < accountKeys.size -> AccountRef.Static(accountKeys[index])
+            index < accountKeys.size + loadedAccountCount -> AccountRef.LookupTable
+            else -> throw IllegalArgumentException("account index out of range")
+        }
+
+        val transfers = mutableListOf<Transfer>()
+        var isSwap = false
+
+        instructions.forEach { instruction ->
+            val programId = instruction.programId ?: return@forEach
             if (programId in SWAP_PROGRAMS) isSwap = true
 
-            fun keyAt(instructionIndex: Int): String? =
-                accountIndices.getOrNull(instructionIndex)?.let { accountKeys.getOrNull(it) }
+            val data = instruction.data
+
+            // An instruction that names fewer accounts than its layout needs is malformed — refuse
+            // to guess rather than render a partial transfer.
+            fun accountAt(position: Int): AccountRef {
+                val index = instruction.accountIndices.getOrNull(position)
+                    ?: throw IllegalArgumentException("instruction is missing account $position")
+                return resolve(index)
+            }
 
             // u64 is unsigned; build a BigInteger so amounts with the high bit set (>= 2^63) stay
             // positive instead of overflowing a signed Long and rendering as a negative amount.
@@ -208,16 +309,20 @@ object WCSolanaTxSummary {
                     if (data.size >= 12 && data[0].toInt() == 2 && data[1].toInt() == 0 &&
                         data[2].toInt() == 0 && data[3].toInt() == 0
                     ) {
-                        transfers.add(Transfer(isSol = true, amount = u64LE(4), decimals = null, destination = keyAt(1)))
+                        transfers.add(
+                            Transfer(isSol = true, amount = u64LE(4), decimals = null, payer = accountAt(0), destination = accountAt(1))
+                        )
                     }
 
                 // SPL Token `Transfer` (3) / `TransferChecked` (12).
                 TOKEN_PROGRAM, TOKEN_2022_PROGRAM ->
                     when (data.firstOrNull()?.toInt()?.and(0xFF)) {
+                        // accounts [source, dest, owner]
                         3 -> if (data.size >= 9)
-                            transfers.add(Transfer(false, u64LE(1), null, keyAt(1))) // [source, dest, owner]
+                            transfers.add(Transfer(false, u64LE(1), null, payer = accountAt(2), destination = accountAt(1)))
+                        // accounts [source, mint, dest, owner]
                         12 -> if (data.size >= 10)
-                            transfers.add(Transfer(false, u64LE(1), data[9].toInt() and 0xFF, keyAt(2))) // [source, mint, dest, owner]
+                            transfers.add(Transfer(false, u64LE(1), data[9].toInt() and 0xFF, payer = accountAt(3), destination = accountAt(2)))
                     }
             }
         }
@@ -228,6 +333,6 @@ object WCSolanaTxSummary {
             else -> null
         }
 
-        return Decoded(method, transfers)
+        return Decoded(method, transfers, usesLookupTables = loadedAccountCount > 0)
     }
 }

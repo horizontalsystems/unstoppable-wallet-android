@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
+import io.horizontalsystems.walletkit.modules.multiswap.ThorChainSwapMemo
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ThornodeAPI.Response
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.toEvmTransactionData
@@ -283,6 +284,11 @@ abstract class BaseThorChainProvider(
     ): SwapFinalQuote {
         val destination = recipient?.hex ?: resolveDestinationAddress(tokenOut)
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, destination, getRefundAddress(tokenIn), getFromAddress(tokenIn))
+
+        // The memo is taken from the quote verbatim and is what routes the outbound leg. Refuse a
+        // memo whose destination is not the recipient shown to the user, so a compromised node or
+        // gateway cannot redirect the swap output.
+        ThorChainSwapMemo.requireDestination(quoteSwap.memo, destination)
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(protocolDecimals(tokenOut))
 
