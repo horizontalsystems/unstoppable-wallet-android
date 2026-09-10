@@ -48,10 +48,21 @@ data class SendMoneroSettingsPage(val wallet: Wallet) : HSPage() {
         val settings = sendViewModel.uiState.chainSettings as? MoneroSendSettings ?: MoneroSendSettings()
         val adapter = remember(wallet) { App.adapterManager.getAdapterForWallet<ISendMoneroAdapter>(wallet) }
 
-        // Reading the outputs takes the wallet lock, so it runs off the main thread.
+        // Reading the outputs takes the wallet lock, so it runs off the main thread. While the
+        // wallet scans, outputs appear and disappear; a selection that references an output
+        // no longer spendable is trimmed here so the balance and the count stay truthful.
         var total by remember { mutableStateOf<Int?>(null) }
         LaunchedEffect(adapter) {
-            total = adapter?.getUnspentOutputs()?.size
+            val outputs = adapter?.getUnspentOutputs() ?: return@LaunchedEffect
+            total = outputs.size
+
+            val selection = (sendViewModel.uiState.chainSettings as? MoneroSendSettings)?.unspentOutputs
+                ?: return@LaunchedEffect
+            val spendable = outputs.map { it.keyImage }.toSet()
+            val pruned = selection.filter { it.keyImage in spendable }
+            if (pruned.size != selection.size) {
+                sendViewModel.onChangeChainSettings(MoneroSendSettings(pruned.ifEmpty { null }))
+            }
         }
 
         val modified = settings.unspentOutputs != null
