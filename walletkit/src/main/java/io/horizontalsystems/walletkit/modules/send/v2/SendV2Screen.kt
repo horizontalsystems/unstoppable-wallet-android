@@ -19,9 +19,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,6 +79,8 @@ fun SendV2Screen(
     navigation: HSNavigation,
     viewModel: SendViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
+    prefillAddress: String? = null,
+    title: String? = null,
 ) {
     val uiState = viewModel.uiState
     val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
@@ -129,13 +133,23 @@ fun SendV2Screen(
     }
 
     val openAddress = navigation.slideFromRightForResult<SendAddressPage.Result>(
-        { SendAddressPage(uiState.wallet, uiState.address?.hex) }
+        { SendAddressPage(uiState.wallet, uiState.address?.hex ?: prefillAddress) }
     ) {
         viewModel.onSelectAddress(it.address, it.risky)
     }
 
+    // A prefilled address is confirmed once through the address screen, so it gets the same
+    // validation and checks as a typed one; the user can still change it afterwards.
+    var prefillAddressOffered by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (prefillAddress != null && !prefillAddressOffered && uiState.address == null) {
+            prefillAddressOffered = true
+            openAddress()
+        }
+    }
+
     HSScaffold(
-        title = stringResource(R.string.Balance_Send),
+        title = title ?: stringResource(R.string.Balance_Send),
         onBack = { navigation.removeLastOrNull() },
         menuItems = if (hasSettings) {
             listOf(
@@ -186,11 +200,13 @@ fun SendV2Screen(
                         onFiatValueChange = viewModel::onEnterFiatAmount,
                         onFocusChanged = { amountInputHasFocus = it },
                     )
-                    SectionArrow()
-                    AddressRow(
-                        address = uiState.address,
-                        onClick = openAddress,
-                    )
+                    if (!uiState.hideAddress) {
+                        SectionArrow()
+                        AddressRow(
+                            address = uiState.address,
+                            onClick = openAddress,
+                        )
+                    }
                     HsDivider(modifier = Modifier.fillMaxWidth())
                     // A memo cannot travel with a private send deposit (its memo slot belongs
                     // to the provider's identifier), so the field is not offered on that tab.

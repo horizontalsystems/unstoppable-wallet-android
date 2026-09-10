@@ -48,6 +48,7 @@ data class SendUiState(
     val memoSupport: SendMemoSupport?,
     val chainSettings: SendChainSettings?,
     val privateSendSupported: Boolean,
+    val hideAddress: Boolean,
     val step: SendStep,
 ) {
     val isPrivateSend: Boolean
@@ -69,6 +70,7 @@ class SendViewModel(
     private val fiatService: FiatService,
     private val balanceService: TokenBalanceService,
     private val privateSendManager: PrivateSendManager,
+    prefill: SendV2Page.Prefill?,
 ) : ViewModelUiState<SendUiState>() {
 
     private var currency = currencyManager.baseCurrency
@@ -79,6 +81,7 @@ class SendViewModel(
     private var address: Address? = null
     private var riskyAddress = false
     private var memo: String? = null
+    private val hideAddress = prefill?.hideAddress == true
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
     private var chainSettings: SendChainSettings? = null
@@ -90,8 +93,16 @@ class SendViewModel(
     private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
 
     init {
+        // A hidden destination is the app's own choice and needs no confirmation; a visible
+        // prefilled address is confirmed through the address screen, which sets it here.
+        if (hideAddress) {
+            address = prefill?.address?.let { Address(it) }
+        }
+        memo = prefill?.memo?.ifBlank { null }
+
         fiatService.setCurrency(currency)
         fiatService.setToken(wallet.token)
+        fiatService.setAmount(prefill?.amount)
         // The service converts in both directions, so the coin amount is taken from it too:
         // typing a fiat value updates the coin amount and vice versa.
         viewModelScope.launch {
@@ -211,6 +222,7 @@ class SendViewModel(
         memoSupport = memoSupport,
         chainSettings = chainSettings,
         privateSendSupported = privateSendSupported,
+        hideAddress = hideAddress,
         step = step(),
     )
 
@@ -269,7 +281,10 @@ class SendViewModel(
         emitState()
     }
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val prefill: SendV2Page.Prefill? = null,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SendViewModel(
@@ -279,6 +294,7 @@ class SendViewModel(
                 FiatService(App.marketKit),
                 TokenBalanceService(App.adapterManager),
                 App.privateSendManager,
+                prefill,
             ) as T
         }
     }

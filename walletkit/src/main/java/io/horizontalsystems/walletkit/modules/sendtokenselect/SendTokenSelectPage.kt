@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.AddressUri
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectViewModel
@@ -26,28 +24,22 @@ data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
         TokenSelectScreen(
             navigation = navigation,
             title = stringResource(R.string.Balance_Send),
-            onClickItem = {
-                // A plain pick from the balance screen goes to the unified send screen. A
-                // deep link carries address, amount and memo the unified screen cannot take
-                // yet, so it still goes through the per-chain flow.
-                if (input == null) {
-                    navigation.slideFromRight(SendV2Page(it.wallet, SendTokenSelectPage::class))
-                    return@TokenSelectScreen
-                }
-
+            onClickItem = { item ->
                 // base-unit amounts (eip-681 `value`/`uint256`) can only be converted to a
                 // readable amount here, where the selected token's decimals are known
-                val amount = input.amount?.humanReadable(it.wallet.token.decimals)
-                val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+                val prefill = input?.let {
+                    SendV2Page.Prefill(
+                        address = it.address,
+                        amount = it.amount?.humanReadable(item.wallet.token.decimals),
+                        memo = it.memo,
+                    )
+                }
                 navigation.slideFromRight(
-                    EnterAddressPage(EnterAddressPage.Input(
-                        wallet = it.wallet,
-                        title = sendTitle,
+                    SendV2Page(
+                        wallet = item.wallet,
                         sendEntryPointDestId = SendTokenSelectPage::class,
-                        address = input.address,
-                        amount = amount,
-                        memo = input.memo,
-                    ))
+                        prefill = prefill,
+                    )
                 )
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
