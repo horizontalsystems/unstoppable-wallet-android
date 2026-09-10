@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 /**
  * Send screen for every blockchain type. After a successful send the flow pops back to and
  * including [sendEntryPointDestId], or this page when none is given. [prefill] seeds the
- * form from a payment link or a fixed destination. [title] replaces the plain "Send" header
+ * form from a payment link or a fixed destination. [title] replaces the "Send <coin>" header
  * when the flow has a more specific purpose (a donation).
  */
 @Serializable
