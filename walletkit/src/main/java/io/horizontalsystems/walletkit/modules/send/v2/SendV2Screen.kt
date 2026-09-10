@@ -50,6 +50,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
 import io.horizontalsystems.walletkit.modules.multiswap.WalletNotSynced
 import io.horizontalsystems.walletkit.modules.multiswap.WalletSyncing
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -69,11 +70,13 @@ import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendV2Screen(
     navigation: HSNavigation,
     viewModel: SendViewModel,
+    sendEntryPointDestId: KClass<out HSPage>,
 ) {
     val uiState = viewModel.uiState
     val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
@@ -96,7 +99,7 @@ fun SendV2Screen(
                         wallet = uiState.wallet,
                         recipient = address.hex,
                         amount = amount,
-                        sendEntryPointDestId = SendV2Page::class,
+                        sendEntryPointDestId = sendEntryPointDestId,
                     )
                 )
             } else {
@@ -106,6 +109,7 @@ fun SendV2Screen(
                         amount = amount,
                         address = address,
                         memo = uiState.memo,
+                        sendEntryPointDestId = sendEntryPointDestId,
                     )
                 )
             }
