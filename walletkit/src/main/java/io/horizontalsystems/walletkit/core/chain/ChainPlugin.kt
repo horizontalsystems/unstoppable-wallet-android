@@ -303,15 +303,31 @@ interface ChainPlugin {
 
     /**
      * A plain transfer of [amount] to [address] carrying [memo] as SendTransactionData for the
-     * chain's send-transaction service, or null when the chain cannot build one. Chain settings
-     * the user has not been asked about (fee rate, coin control) take the service's defaults.
+     * chain's send-transaction service, or null when the chain cannot build one. [settings]
+     * are the per-send choices made on the send screen (see [SendScreenExtras]), if any; what
+     * the user was not asked about (fee rate) takes the service's defaults.
      */
     fun sendTransactionData(
         token: Token,
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
+
+    /** Page behind the send screen's settings icon, or null when the chain has none. */
+    fun sendSettingsPage(wallet: Wallet): HSPage? = null
+
+    /**
+     * Chain-specific rows on the send screen below the memo (e.g. coin control). Choices that
+     * must reach the confirmation go into [settings].
+     */
+    @Composable
+    fun SendScreenExtras(
+        navigation: HSNavigation,
+        wallet: Wallet,
+        settings: io.horizontalsystems.walletkit.modules.send.v2.SendChainSettingsViewModel,
+    ) = Unit
 
     /**
      * A plain transfer of [amount] to [address] as SendTransactionData, for flows that build a
@@ -324,6 +340,9 @@ interface ChainPlugin {
         address: String,
     ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
 }
+
+/** Per-send, chain-specific choices made on the send screen and carried to confirmation. */
+interface SendChainSettings
 
 /** How a chain's send memo is limited and who can read it once sent. */
 data class SendMemoSupport(

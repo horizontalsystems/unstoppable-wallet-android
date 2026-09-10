@@ -21,9 +21,10 @@ data class SendV2ConfirmPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
+        val chainSettings = navigation.viewModelForScreen<SendChainSettingsViewModel>(SendV2Page::class)
         val viewModel = navigation.viewModelForScreen<SendV2ConfirmViewModel>(
             contentKey(),
-            SendV2ConfirmViewModel.Factory(input),
+            SendV2ConfirmViewModel.Factory(input, chainSettings.settings),
         )
         SendV2ConfirmScreen(navigation, viewModel, contentKey())
     }

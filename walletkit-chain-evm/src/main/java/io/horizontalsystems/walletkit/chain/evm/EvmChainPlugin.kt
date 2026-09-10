@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ISendEthereumAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
@@ -85,6 +86,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ) = depositTransferData(token, amount, address)
 
     private val isFamilyAnchor get() = blockchainType == BlockchainType.Ethereum

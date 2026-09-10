@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.core.adapters.zcash.ISendZcashAdapter
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -64,6 +65,7 @@ class ZcashChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        settings: SendChainSettings?,
     ) = SendTransactionData.Zcash.Regular(address, amount, memo.orEmpty())
 
     // Encrypted memos travel only to destinations with a shielded receiver: Sapling and
