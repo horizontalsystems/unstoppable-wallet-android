@@ -149,7 +149,7 @@ fun SendV2Screen(
     }
 
     HSScaffold(
-        title = title ?: stringResource(R.string.Balance_Send),
+        title = title ?: stringResource(R.string.Send_Title, uiState.wallet.coin.code),
         onBack = { navigation.removeLastOrNull() },
         menuItems = if (hasSettings) {
             listOf(
