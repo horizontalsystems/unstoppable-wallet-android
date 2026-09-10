@@ -496,6 +496,21 @@
     <string name="Send_Tab_Standard">Standard</string>
     <string name="Send_Tab_Private">Private</string>
     <string name="Send_Tab_CrossPay" translatable="false">CrossPay</string>
+    <string name="CrossPay_YouWillPay">You will Pay</string>
+    <string name="CrossPay_ChooseCoin">Choose coin</string>
+    <string name="CrossPay_Info_Title" translatable="false">CrossPay</string>
+    <string name="CrossPay_Info_Description">CrossPay lets you send one asset while paying with another. Your %s is automatically converted into the asset the recipient receives.</string>
+    <string name="CrossPay_InsufficientBalance">Insufficient Balance</string>
+    <string name="CrossPay_TokenNotSupported">Token not supported</string>
+    <string name="CrossPay_NoRoute">No route available</string>
+    <string name="CrossPay_BelowMinimum">Minimum amount is %s</string>
+    <string name="CrossPay_AboveMaximum">Maximum amount is %s</string>
+    <string name="CrossPay_NetworkError">Quote failed. Check connection.</string>
+    <string name="CrossPay_Caution_Title" translatable="false">CrossPay</string>
+    <string name="CrossPay_Caution_InsufficientBalance">This payment needs %s in your wallet, including fees.</string>
+    <string name="CrossPay_CommitFailed">The payment could not be set up. Please try again later.</string>
+    <string name="CrossPay_ProviderSuspended">The payment provider is temporarily unavailable. Please try again later.</string>
+    <string name="CrossPay_YouWillPay_Info">The amount taken from your wallet to fund this payment, including the provider\'s fee and a refundable reserve. The network fee is charged separately.</string>
     <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_Address">Address or Domain</string>

@@ -15,10 +15,13 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.crosspay.CrossPayManager
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -36,6 +39,7 @@ sealed class SendStep {
 
 data class SendUiState(
     val wallet: Wallet,
+    val tabs: List<SendTab>,
     val tab: SendTab,
     val amount: BigDecimal?,
     val fiatAmount: BigDecimal?,
@@ -92,6 +96,10 @@ class SendViewModel(
     private var balanceJob: Job? = null
     private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
 
+    // CrossPay needs the exact-output provider to be able to SELL this wallet's token; the
+    // tab only appears once that is confirmed (the provider's token map is a cached sync).
+    private var crossPayAvailable = false
+
     init {
         // A hidden destination is the app's own choice and needs no confirmation; a visible
         // prefilled address is confirmed through the address screen, which sets it here.
@@ -132,6 +140,19 @@ class SendViewModel(
         observeBalanceUpdates()
         refreshMemoSupport()
         observePrivateSendSupport()
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                CrossPayManager.resolveProvider()?.let {
+                    it.start()
+                    crossPayAvailable = it.supportsTokenIn(wallet.token)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                // No provider data — the tab simply stays hidden this session.
+            }
+            emitState()
+        }
         // Adapters are recreated on account or network changes; re-resolve the adapter then.
         viewModelScope.launch {
             adapterManager.adaptersReadyFlow.collectSafely {
@@ -210,6 +231,11 @@ class SendViewModel(
 
     override fun createState() = SendUiState(
         wallet = wallet,
+        tabs = buildList {
+            add(SendTab.Standard)
+            add(SendTab.Private)
+            if (crossPayAvailable) add(SendTab.CrossPay)
+        },
         tab = tab,
         amount = amount,
         fiatAmount = fiatAmount,

@@ -36,7 +36,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabBody
+import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabViewModel
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -166,15 +169,34 @@ fun SendV2Screen(
             listOf()
         },
     ) {
-        val tabs = SendTab.entries.filter { it != SendTab.Private || uiState.privateSendSupported }
+        val tabs = uiState.tabs.filter { it != SendTab.Private || uiState.privateSendSupported }
         val focusRequester = remember { FocusRequester() }
 
         Column(modifier = Modifier.fillMaxSize()) {
             TabsFolder(
                 tabs = tabs.map { it.tabItem() },
-                selectedIndex = tabs.indexOf(uiState.tab),
+                selectedIndex = tabs.indexOf(uiState.tab).coerceAtLeast(0),
                 onSelect = { viewModel.onSelectTab(tabs[it]) },
             )
+            if (uiState.tab == SendTab.CrossPay) {
+                val crossPayViewModel = viewModel<CrossPayTabViewModel>(
+                    factory = CrossPayTabViewModel.Factory(uiState.wallet)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .imePadding()
+                ) {
+                    CrossPayTabBody(
+                        navigation = navigation,
+                        viewModel = crossPayViewModel,
+                        keyboardState = keyboardState,
+                    )
+                }
+                return@Column
+            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -392,7 +414,7 @@ private fun PrivateSendInfoCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun SectionArrow() {
+internal fun SectionArrow() {
     Box(modifier = Modifier.fillMaxWidth()) {
         HsDivider(modifier = Modifier.align(Alignment.Center))
         Icon(
@@ -409,7 +431,7 @@ private fun SectionArrow() {
 }
 
 @Composable
-private fun AddressRow(
+internal fun AddressRow(
     address: Address?,
     onClick: () -> Unit,
 ) {
