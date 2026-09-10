@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -458,10 +462,15 @@ fun MessageBottomSheet(
                 modifier = Modifier.fillMaxWidth()
             )
             VSpacer(8.dp)
+            // A typed-data payload is far taller than the screen. Cap the box so the Back button
+            // stays reachable and let the payload scroll inside it.
+            val maxHeight = LocalConfiguration.current.screenHeightDp.dp * 0.6f
             Column(
                 modifier = Modifier
                     .padding(16.dp)
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
+                    .heightIn(max = maxHeight)
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
                 MessageToSign(

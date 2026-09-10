@@ -6,6 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 
@@ -30,25 +34,38 @@ fun MessageToSign(
     )
 }
 
-private fun formatJson(text: String): String {
-    val json = StringBuilder()
-    var indentString = ""
-    for (element in text) {
-        when (element) {
-            '{', '[' -> {
-                json.append("\n$indentString$element\n")
-                indentString += "\t"
-                json.append(indentString)
-            }
+// Pretty-prints a JSON payload (typed data, a transaction object) so every key sits on the same
+// line as its value. The previous character-by-character formatter put "types": / "domain": /
+// "message": alone on a line with the object opening below, which read as a row of empty fields.
+// Non-JSON text (a personal_sign message) is shown as is.
+private val prettyJson: Gson = GsonBuilder()
+    .setPrettyPrinting()
+    .disableHtmlEscaping() // keep "<", "&", "=" readable instead of \u003c
+    .serializeNulls()      // a null the dApp sent is part of what is signed; do not hide it
+    .create()
 
-            '}', ']' -> {
-                indentString = indentString.replaceFirst("\t".toRegex(), "")
-                json.append("\n$indentString$element")
-            }
-
-            ',' -> json.append("$element\n$indentString")
-            else -> json.append(element)
-        }
+private fun formatJson(text: String): String = try {
+    val element = JsonParser.parseString(text)
+    when {
+        element.isJsonObject -> prettyJson.toJson(withTypedDataValuesFirst(element.asJsonObject))
+        element.isJsonArray -> prettyJson.toJson(element)
+        else -> text
     }
-    return json.toString()
+} catch (e: Exception) {
+    text
+}
+
+// EIP-712 payloads as dApps build them start with `types`: a long list of field names paired
+// with Solidity types and no values, which is what the user first sees and reads as empty fields.
+// The values they are signing (`message`) and what binds the signature (`domain`) come after —
+// put them first and keep `types` last. Key order does not affect what is signed.
+private val typedDataKeyOrder = listOf("primaryType", "message", "domain", "types")
+
+private fun withTypedDataValuesFirst(json: JsonObject): JsonObject {
+    if (!json.has("types") || !json.has("message")) return json
+
+    val reordered = JsonObject()
+    typedDataKeyOrder.forEach { key -> json.get(key)?.let { reordered.add(key, it) } }
+    json.entrySet().forEach { (key, value) -> if (!reordered.has(key)) reordered.add(key, value) }
+    return reordered
 }

@@ -41,7 +41,7 @@ class WCHandlerEvm : IWCHandler {
 
         val title = when (method) {
             "personal_sign" -> "Personal Sign Request"
-            "eth_signTypedData" -> "Typed Sign Request"
+            "eth_signTypedData", "eth_signTypedData_v4" -> "Typed Sign Request"
             "eth_sendTransaction" -> "Approve Transaction"
             "eth_signTransaction" -> "Sign Transaction"
             else -> method
@@ -49,7 +49,7 @@ class WCHandlerEvm : IWCHandler {
 
         val shortTitle = when (method) {
             "personal_sign" -> "Sign"
-            "eth_signTypedData" -> "Sign"
+            "eth_signTypedData", "eth_signTypedData_v4" -> "Sign"
             "eth_sendTransaction" -> "Approve"
             "eth_signTransaction" -> "Sign"
             else -> method

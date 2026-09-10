@@ -2,7 +2,6 @@ package io.horizontalsystems.walletkit.modules.walletconnect.request
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.JsonParser
 import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
@@ -15,8 +14,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.dapp.core.HSDAppVerification
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import org.json.JSONArray
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -88,33 +85,17 @@ class WCRequestEvmViewModel(
     private fun getParam(sessionRequest: HSDAppRequest) =
         when (sessionRequest.method) {
             PERSONAL_SIGN_METHOD -> {
-                extractMessageParamFromPersonalSign(sessionRequest.params)
+                WCEvmRequestParams.personalSignMessage(sessionRequest.params)
             }
 
             TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
-                val params = JsonParser.parseString(sessionRequest.params).asJsonArray
-                params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
-                    ?: throw Exception("Invalid Data")
+                WCEvmRequestParams.jsonObjectParam(sessionRequest.params)
             }
 
             else -> {
                 sessionRequest.params
             }
         }
-
-    private fun extractMessageParamFromPersonalSign(input: String): String {
-        val jsonArray = JSONArray(input)
-        return if (jsonArray.length() > 0) {
-            val message = jsonArray.getString(0)
-            try {
-                String(message.hexStringToByteArray())
-            } catch (_: Throwable) {
-                message
-            }
-        } else {
-            throw IllegalArgumentException()
-        }
-    }
 
     private fun getEthereumKitWrapper(): EvmKitWrapper? {
         val blockchainType = blockchainType ?: return null
