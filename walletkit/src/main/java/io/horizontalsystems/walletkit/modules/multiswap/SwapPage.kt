@@ -1120,7 +1120,8 @@ private fun Selector(
 fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
-    focusRequester: FocusRequester = FocusRequester()
+    focusRequester: FocusRequester = FocusRequester(),
+    textColor: Color = ComposeAppTheme.colors.leah,
 ) {
     var amount by rememberSaveable {
         mutableStateOf(value)
@@ -1176,7 +1177,7 @@ fun AmountInput(
             }
         },
         textStyle = ColoredTextStyle(
-            color = ComposeAppTheme.colors.leah,
+            color = textColor,
             textStyle = ComposeAppTheme.typography.headline1,
             textAlign = TextAlign.End
         ),
@@ -1184,7 +1185,7 @@ fun AmountInput(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Decimal
         ),
-        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
+        cursorBrush = SolidColor(textColor),
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
