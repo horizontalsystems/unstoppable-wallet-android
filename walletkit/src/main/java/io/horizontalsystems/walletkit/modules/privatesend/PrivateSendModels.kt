@@ -60,10 +60,11 @@ data class PrivateSendOrder(
  * The bitcoin send screen's settings, carried into the deposit transfer so a private send
  * honours the user's coin control and transaction shaping. A timelock is deliberately NOT
  * carried: the deposit must be spendable by the provider immediately, so the timelock
- * setting is disabled while the toggle is on.
+ * setting is disabled under the Private tab.
  *
- * Held in memory on [PrivateSendViewModel] rather than serialized with the confirmation
- * page: after process death the confirmation restores with service defaults, which is safe.
+ * Derived from the send view model's chain settings rather than serialized with the
+ * confirmation page: after process death the confirmation restores with service defaults,
+ * which is safe.
  */
 data class PrivateSendBtcParams(
     val feeRate: Int?,

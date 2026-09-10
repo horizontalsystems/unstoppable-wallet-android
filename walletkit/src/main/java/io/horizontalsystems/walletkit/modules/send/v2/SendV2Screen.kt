@@ -97,7 +97,6 @@ fun SendV2Screen(
                         recipient = address.hex,
                         amount = amount,
                         sendEntryPointDestId = SendV2Page::class,
-                        fromSendV2 = true,
                     )
                 )
             } else {

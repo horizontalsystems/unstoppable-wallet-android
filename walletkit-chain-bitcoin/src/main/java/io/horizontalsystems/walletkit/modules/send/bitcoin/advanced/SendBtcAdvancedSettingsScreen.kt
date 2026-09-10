@@ -25,10 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
@@ -68,7 +64,6 @@ fun SendBtcAdvancedSettingsScreen(
     navigation: HSNavigation,
     sendBitcoinViewModel: SendBitcoinViewModel,
     amountInputType: AmountInputType,
-    timeLockActive: Boolean = true,
 ) {
 
     val wallet = sendBitcoinViewModel.wallet
@@ -160,16 +155,13 @@ fun SendBtcAdvancedSettingsScreen(
                         HSHodlerInput(
                             lockTimeIntervals = lockTimeIntervals,
                             lockTimeInterval = lockTimeInterval,
-                            enabled = timeLockActive,
                             onSelect = {
                                 sendBitcoinViewModel.onEnterLockTimeInterval(it)
                             }
                         )
                     }
                 )
-                // The description always applies; under Private send the row is disabled and
-                // the reason is appended to it, so the user is not left guessing.
-                InfoText(text = timeLockDescription(privateSendUnavailable = !timeLockActive))
+                InfoText(text = stringResource(R.string.Send_Hodler_Description))
             }
 
             VSpacer(32.dp)
@@ -241,19 +233,6 @@ fun SendBtcAdvancedSettingsScreen(
     }
 }
 
-
-@Composable
-private fun timeLockDescription(privateSendUnavailable: Boolean): AnnotatedString =
-    buildAnnotatedString {
-        append(stringResource(R.string.Send_Hodler_Description))
-
-        if (privateSendUnavailable) {
-            append(" ")
-            withStyle(SpanStyle(color = ComposeAppTheme.colors.jacob)) {
-                append(stringResource(R.string.Send_Hodler_PrivateSendUnavailable))
-            }
-        }
-    }
 
 @Composable
 fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
