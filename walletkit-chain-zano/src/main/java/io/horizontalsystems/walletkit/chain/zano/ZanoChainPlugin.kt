@@ -19,16 +19,10 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.statusInfo
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoModule
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoScreen
-import io.horizontalsystems.walletkit.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.zanonetwork.ZanoNetworkPage
@@ -133,19 +127,4 @@ class ZanoChainPlugin(
         return SendTransactionServiceZano(adapter)
     }
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendZanoModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendZanoViewModel = viewModel<SendZanoViewModel>(factory = factory)
-        SendZanoScreen(
-            args.title,
-            args.navigation,
-            sendZanoViewModel,
-            args.amountInputModeViewModel,
-            args.sendEntryPointDestId,
-            args.amount,
-            args.memo,
-            riskyAddress = args.riskyAddress,
-        )
-    }
 }

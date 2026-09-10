@@ -17,7 +17,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
-import io.horizontalsystems.walletkit.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
@@ -133,10 +132,6 @@ interface ChainPlugin {
 
     /** The chain's network/node settings page, opened from sync errors and settings. */
     fun networkSettingsPage(): HSPage? = null
-
-    /** The chain's send screen. Default renders nothing (matches the previous silent else). */
-    @Composable
-    fun SendScreen(args: ChainSendScreenArgs) = Unit
 
     /** Row shown in Settings > Blockchain Settings, or null to omit the chain there. */
     fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem? = null
@@ -368,16 +363,3 @@ class ChainKeyRow(
     val statPage: io.horizontalsystems.walletkit.core.stats.StatPage,
 )
 
-/** Everything SendPage provides to a chain's send screen. */
-class ChainSendScreenArgs(
-    val wallet: Wallet,
-    val title: String,
-    val navigation: HSNavigation,
-    val amountInputModeViewModel: AmountInputModeViewModel,
-    val sendEntryPointDestId: KClass<out HSPage>,
-    val address: Address,
-    val amount: BigDecimal?,
-    val memo: String?,
-    val hideAddress: Boolean,
-    val riskyAddress: Boolean,
-)

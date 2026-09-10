@@ -37,7 +37,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.ConfirmAmountCell
 import io.horizontalsystems.walletkit.modules.send.SendResult
-import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
@@ -51,6 +50,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
 
 @Serializable
 data class ResendBitcoinPage(val input: Input) : HSPage() {

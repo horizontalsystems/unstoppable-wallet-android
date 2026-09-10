@@ -2,11 +2,8 @@ package io.horizontalsystems.walletkit.chain.monero
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.modules.send.monero.v2.MoneroSendSettings
-import io.horizontalsystems.walletkit.modules.send.monero.v2.SendMoneroSettingsPage
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
@@ -15,7 +12,6 @@ import io.horizontalsystems.walletkit.core.adapters.MoneroAdapter
 import io.horizontalsystems.walletkit.core.adapters.toMoneroSeed
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -35,9 +31,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.monero.ReceiveMoneroScreen
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroModule
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroScreen
-import io.horizontalsystems.walletkit.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
@@ -54,6 +47,8 @@ import timber.log.Timber
 import java.time.LocalDate
 import java.util.Date
 import kotlin.reflect.KClass
+import io.horizontalsystems.walletkit.modules.send.monero.v2.SendMoneroSettingsPage
+import io.horizontalsystems.walletkit.modules.send.monero.v2.MoneroSendSettings
 
 class MoneroChainPlugin(
     private val context: () -> Context,
@@ -195,21 +190,6 @@ class MoneroChainPlugin(
         return SendTransactionServiceMonero(adapter)
     }
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendMoneroModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendMoneroViewModel = viewModel<SendMoneroViewModel>(factory = factory)
-        SendMoneroScreen(
-            args.title,
-            args.navigation,
-            sendMoneroViewModel,
-            args.amountInputModeViewModel,
-            args.sendEntryPointDestId,
-            args.amount,
-            args.memo,
-            riskyAddress = args.riskyAddress,
-        )
-    }
 
     override val hasReceiveScreen: Boolean get() = true
 

@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.chain.stellar
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
@@ -14,7 +13,6 @@ import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.factories.StellarTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.StellarAccountManager
@@ -37,9 +35,6 @@ import io.horizontalsystems.walletkit.modules.receive.ReceiveScreen
 import io.horizontalsystems.walletkit.modules.receive.ReceiveStellarAssetScreen
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.StellarAddressValidator
-import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarModule
-import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarScreen
-import io.horizontalsystems.walletkit.modules.send.stellar.SendStellarViewModel
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.walletkit.modules.walletconnect.stellar.WCHandlerStellar
@@ -171,18 +166,4 @@ class StellarChainPlugin : ChainPlugin {
         }
     }
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendStellarModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendStellarViewModel = viewModel<SendStellarViewModel>(factory = factory)
-        SendStellarScreen(
-            args.title,
-            args.navigation,
-            sendStellarViewModel,
-            args.amountInputModeViewModel,
-            args.sendEntryPointDestId,
-            args.amount,
-            riskyAddress = args.riskyAddress,
-        )
-    }
 }

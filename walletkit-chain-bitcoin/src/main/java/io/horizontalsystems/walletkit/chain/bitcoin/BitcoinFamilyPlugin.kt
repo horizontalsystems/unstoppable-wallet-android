@@ -1,15 +1,10 @@
 package io.horizontalsystems.walletkit.chain.bitcoin
 
-import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendBtcParams
-import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.BtcSendSettings
-import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.SendBtcSettingsPage
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule.rbfSupported
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
 import io.horizontalsystems.walletkit.core.adapters.BitcoinAdapter
@@ -19,7 +14,6 @@ import io.horizontalsystems.walletkit.core.adapters.ECashAdapter
 import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.syncMode
@@ -43,9 +37,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.BitcoinAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinModule
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinScreen
-import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.walletkit.modules.transactionInfo.resendbitcoin.ResendBitcoinPage
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
@@ -65,6 +56,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.merge
 import java.math.BigDecimal
+import io.horizontalsystems.walletkit.modules.send.bitcoin.rbfSupported
+import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.SendBtcSettingsPage
+import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.BtcSendSettings
 
 abstract class BitcoinFamilyPlugin : ChainPlugin {
 
@@ -187,20 +181,6 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
     override fun resendTransactionPage(type: SpeedUpCancelType, transactionHash: String): HSPage =
         ResendBitcoinPage(ResendBitcoinPage.Input(type))
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendBitcoinModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>(factory = factory)
-        SendBitcoinScreen(
-            args.title,
-            args.navigation,
-            sendBitcoinViewModel,
-            args.amountInputModeViewModel,
-            args.sendEntryPointDestId,
-            args.amount,
-            riskyAddress = args.riskyAddress,
-        )
-    }
 }
 
 class BitcoinChainPlugin : BitcoinFamilyPlugin() {

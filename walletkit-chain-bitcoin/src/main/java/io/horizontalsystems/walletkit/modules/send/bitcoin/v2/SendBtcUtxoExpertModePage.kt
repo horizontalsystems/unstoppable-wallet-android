@@ -8,10 +8,10 @@ import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 
 /** Manual output selection for [SendBtcSettingsPage]; the choice is kept in the send view model. */
 @Serializable

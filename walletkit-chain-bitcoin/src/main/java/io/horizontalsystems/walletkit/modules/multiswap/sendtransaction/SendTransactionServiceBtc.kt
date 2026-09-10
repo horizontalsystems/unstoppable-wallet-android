@@ -34,7 +34,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinAddressSer
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinAmountService
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinFeeRateService
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinFeeService
-import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.walletkit.modules.send.bitcoin.settings.SendBtcSettingsViewModel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -47,6 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
 
 class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false), ISignOnlySendTransactionService {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!

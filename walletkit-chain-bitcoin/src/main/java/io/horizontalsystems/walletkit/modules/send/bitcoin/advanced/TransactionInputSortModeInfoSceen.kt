@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import kotlinx.serialization.Serializable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
@@ -39,5 +42,13 @@ fun BtcTransactionInputSortInfoScreen(
             InfoBody(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription)
             Spacer(Modifier.height(20.dp))
         }
+    }
+}
+
+@Serializable
+data object TransactionInputsSortInfoPage : HSPage() {
+    @Composable
+    override fun GetContent(navigation: HSNavigation) {
+        BtcTransactionInputSortInfoScreen { navigation.removeLastOrNull() }
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
@@ -22,7 +21,6 @@ import io.horizontalsystems.walletkit.core.adapters.TonTransactionConverter
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionsAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.TonAccountManager
 import io.horizontalsystems.walletkit.core.managers.TonConnectManager
@@ -39,9 +37,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.ResultEffect
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.TonAddressValidator
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonModule
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonScreen
-import io.horizontalsystems.walletkit.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.walletkit.modules.tonconnect.TonConnectNewPage
 import io.horizontalsystems.walletkit.modules.tonconnect.TonConnectSendRequestPage
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -193,18 +188,4 @@ class TonChainPlugin(
         }
     }
 
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendTonModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendTonViewModel = viewModel<SendTonViewModel>(factory = factory)
-        SendTonScreen(
-            args.title,
-            args.navigation,
-            sendTonViewModel,
-            args.amountInputModeViewModel,
-            args.sendEntryPointDestId,
-            args.amount,
-            riskyAddress = args.riskyAddress,
-        )
-    }
 }
