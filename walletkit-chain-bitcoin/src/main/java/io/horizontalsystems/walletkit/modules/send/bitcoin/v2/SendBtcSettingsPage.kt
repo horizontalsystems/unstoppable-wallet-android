@@ -29,7 +29,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.BottomSheetTransactionOrderSelector
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsViewModel
-import io.horizontalsystems.walletkit.modules.send.v2.SendChainSettingsViewModel
+import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -66,8 +66,8 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
             factory = SendBtcAdvancedSettingsModule.Factory(blockchainType)
         )
         val uiState = viewModel.uiState
-        val chainSettings = navigation.viewModelForScreen<SendChainSettingsViewModel>(SendV2Page::class)
-        val settings = chainSettings.settings as? BtcSendSettings ?: BtcSendSettings()
+        val sendViewModel = navigation.viewModelForScreen<SendViewModel>(SendV2Page::class, SendViewModel.Factory(wallet))
+        val settings = sendViewModel.uiState.chainSettings as? BtcSendSettings ?: BtcSendSettings()
         val adapter = remember(wallet) { App.adapterManager.getAdapterForWallet<ISendBitcoinAdapter>(wallet) }
 
         val scope = rememberCoroutineScope()
@@ -92,7 +92,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                     tint = ComposeAppTheme.colors.jacob,
                     onClick = {
                         viewModel.reset()
-                        chainSettings.settings = null
+                        sendViewModel.onChangeChainSettings(null)
                     },
                 )
             )
@@ -176,7 +176,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                     },
                     onDismissRequest = { showLockTimeMenu = false },
                     onSelectItem = {
-                        chainSettings.settings = settings.copy(lockTimeInterval = it)
+                        sendViewModel.onChangeChainSettings(settings.copy(lockTimeInterval = it))
                         showLockTimeMenu = false
                     }
                 )

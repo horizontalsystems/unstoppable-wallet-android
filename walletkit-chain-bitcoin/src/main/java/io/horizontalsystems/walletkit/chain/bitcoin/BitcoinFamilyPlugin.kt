@@ -70,6 +70,11 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
     override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage =
         SendBtcSettingsPage(wallet, address)
 
+    override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? {
+        val outputs = (settings as? BtcSendSettings)?.unspentOutputs ?: return null
+        return outputs.sumOf { it.value }.toBigDecimal().movePointLeft(token.decimals)
+    }
+
     override fun sendTransactionData(
         token: Token,
         amount: BigDecimal,
