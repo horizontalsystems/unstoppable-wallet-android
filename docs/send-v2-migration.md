@@ -10,8 +10,10 @@ they land.
       balance, percent bar, risky-address sheet.
 - [x] One confirmation page on the chain send-transaction service (fee, fee/nonce settings,
       cautions, send).
-- [x] Chain settings hook: Bitcoin (UTxOs, Inputs/Outputs, Time Lock, RBF) and Monero.
-- [x] Balance narrowed to manually selected Bitcoin outputs.
+- [x] Chain settings hook: Bitcoin (UTxOs, Inputs/Outputs, Time Lock, RBF) and Monero
+      (UTxOs, with stale selections trimmed after a rescan).
+- [x] Balance narrowed to manually selected Bitcoin and Monero outputs, and the
+      confirmation validates against the selection.
 - [x] Private tab on the existing private send confirmation.
 - [x] All entry points open the new page: balance header, token page, context menu, deep
       links, donate. Prefill (address, amount, memo, hidden destination) and custom title.
@@ -27,8 +29,6 @@ they land.
 
 ## Per-chain features
 
-- [ ] Monero coin control: the expert-mode switch does nothing; no output selection page,
-      and `SendTransactionData.Monero` has no outputs field.
 - [ ] Tron: activation fee and bandwidth/energy rows on confirmation, max native amount
       reduced by fee, zero-TRX rule. The Tron service exposes no fields.
 - [ ] TON fee estimation on the send page (Next was gated on it).
