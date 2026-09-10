@@ -31,7 +31,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
-import io.horizontalsystems.walletkit.modules.send.SendPage
 import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -59,24 +58,15 @@ data class PrivateSendConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        // Bitcoin deposit parameters come from whichever send screen opened this page. After
-        // process death either source is a fresh instance carrying no params, and the build
-        // degrades to service defaults — safe.
-        val btcParams = if (input.fromSendV2) {
-            val sendViewModel = navigation.viewModelForScreen<SendViewModel>(
-                SendV2Page::class,
-                SendViewModel.Factory(input.wallet),
-            )
-            ChainRegistry[input.wallet.token.blockchainType]
-                ?.privateSendBtcParams(input.wallet.token, sendViewModel.uiState.chainSettings)
-        } else {
-            // The toggle ViewModel the legacy send screen filled in, from the SendPage store.
-            val toggleViewModel = viewModel<PrivateSendViewModel>(
-                viewModelStoreOwner = io.horizontalsystems.walletkit.modules.nav3.rememberChildViewModelStoreOwner(SendPage::class.simpleName!!),
-                factory = PrivateSendViewModel.Factory(input.wallet.token),
-            )
-            toggleViewModel.btcParams
-        }
+        // Bitcoin deposit parameters come from the send screen's settings. After process
+        // death that is a fresh instance carrying none, and the build degrades to service
+        // defaults — safe.
+        val sendViewModel = navigation.viewModelForScreen<SendViewModel>(
+            SendV2Page::class,
+            SendViewModel.Factory(input.wallet),
+        )
+        val btcParams = ChainRegistry[input.wallet.token.blockchainType]
+            ?.privateSendBtcParams(input.wallet.token, sendViewModel.uiState.chainSettings)
 
         val viewModel = viewModel<PrivateSendConfirmViewModel>(
             initializer = PrivateSendConfirmViewModel.init(
@@ -98,9 +88,6 @@ data class PrivateSendConfirmationPage(val input: Input) : HSPage() {
         val recipient: String,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal,
         @Serializable(with = HSScreenKClassSerializer::class) val sendEntryPointDestId: KClass<out HSPage>?,
-        // Opened from the unified send screen, whose settings replace the legacy toggle's
-        // deposit params. Goes away with the legacy send screens.
-        val fromSendV2: Boolean = false,
     )
 }
 
@@ -114,7 +101,7 @@ private fun PrivateSendConfirmationScreen(
     val uiState = viewModel.uiState
     val view = LocalView.current
     val context = androidx.compose.ui.platform.LocalContext.current
-    val closeUntilDestId = sendEntryPointDestId ?: SendPage::class
+    val closeUntilDestId = sendEntryPointDestId ?: SendV2Page::class
 
     val error = uiState.error
     if (error != null) {
