@@ -8,6 +8,7 @@ import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -15,6 +16,7 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
+import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -43,14 +45,16 @@ data class SendUiState(
     val riskyAddress: Boolean,
     val memo: String?,
     val memoSupport: SendMemoSupport?,
+    val chainSettings: SendChainSettings?,
     val step: SendStep,
 )
 
 /**
  * Input state of the send screen for any blockchain: the selected tab, amount, recipient and
- * memo, plus the wallet's spendable balance, the amount's fiat equivalent and whether the
- * chain accepts a memo for the chosen recipient. The amount is checked against the balance
- * the same way swap does it; fee-dependent checks belong to the confirmation step, which
+ * memo and the chain's own settings (coin control), plus the available balance, the amount's
+ * fiat equivalent and whether the chain accepts a memo for the chosen recipient. The amount
+ * is checked against the balance the same way swap does it, unless the chain narrows the
+ * balance through its settings; fee-dependent checks belong to the confirmation step, which
  * owns the transaction itself.
  */
 class SendViewModel(
@@ -71,6 +75,9 @@ class SendViewModel(
     private var memo: String? = null
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
+    private var chainSettings: SendChainSettings? = null
+    // Balance narrowed by the chain settings (selected outputs), or null for the wallet's.
+    private var chainBalance: BigDecimal? = null
     private var balanceState = balanceService.stateFlow.value
     private var balanceJob: Job? = null
     private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
@@ -93,6 +100,7 @@ class SendViewModel(
         viewModelScope.launch {
             balanceService.stateFlow.collect {
                 balanceState = it
+                refreshChainBalance()
                 emitState()
             }
         }
@@ -127,6 +135,23 @@ class SendViewModel(
         }
     }
 
+    private fun refreshChainBalance() {
+        chainBalance = chainPlugin?.sendAvailableBalance(wallet.token, chainSettings)
+    }
+
+    private fun availableBalance(): BigDecimal? = chainBalance ?: balanceState.balance
+
+    // The balance service validates against the wallet's balance; when the chain narrows it,
+    // the insufficient-balance check is redone here against the narrowed value. Sync-state
+    // errors still come from the service.
+    private fun balanceError(): Throwable? {
+        val chainBalance = chainBalance ?: return balanceState.error
+        val serviceError = balanceState.error
+        if (serviceError != null && serviceError !is SwapError.InsufficientBalanceFrom) return serviceError
+        val amount = amount ?: return null
+        return if (amount > chainBalance) SwapError.InsufficientBalanceFrom else null
+    }
+
     private fun refreshMemoSupport() {
         memoSupportJob?.cancel()
         memoSupportJob = viewModelScope.launch {
@@ -147,16 +172,17 @@ class SendViewModel(
         fiatAmount = fiatAmount,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
         currency = currency,
-        availableBalance = balanceState.balance,
+        availableBalance = availableBalance(),
         address = address,
         riskyAddress = riskyAddress,
         memo = memo,
         memoSupport = memoSupport,
+        chainSettings = chainSettings,
         step = step(),
     )
 
     private fun step(): SendStep {
-        balanceState.error?.let { return SendStep.Error(it) }
+        balanceError()?.let { return SendStep.Error(it) }
         val amount = amount
         if (amount == null || amount <= BigDecimal.ZERO) {
             return SendStep.InputRequired(SendInputType.Amount)
@@ -181,7 +207,7 @@ class SendViewModel(
     }
 
     fun onEnterAmountPercentage(percentage: Int) {
-        val availableBalance = balanceState.balance ?: return
+        val availableBalance = availableBalance() ?: return
 
         val amount = availableBalance
             .times(BigDecimal(percentage / 100.0))
@@ -200,6 +226,12 @@ class SendViewModel(
 
     fun onEnterMemo(memo: String) {
         this.memo = memo.ifBlank { null }
+        emitState()
+    }
+
+    fun onChangeChainSettings(settings: SendChainSettings?) {
+        chainSettings = settings
+        refreshChainBalance()
         emitState()
     }
 

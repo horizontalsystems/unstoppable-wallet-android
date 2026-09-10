@@ -316,6 +316,13 @@ interface ChainPlugin {
     ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
 
     /**
+     * The balance the send screen should offer for [token] under [settings], or null to use
+     * the wallet's spendable balance. Bitcoin answers with the sum of manually selected
+     * outputs, so the amount can only be taken from what will actually be spent.
+     */
+    fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? = null
+
+    /**
      * Page behind the send screen's settings icon, or null when the chain has none. [address]
      * is the chosen recipient, or null while none is chosen; settings that depend on it (a
      * Bitcoin timelock) are offered accordingly.
