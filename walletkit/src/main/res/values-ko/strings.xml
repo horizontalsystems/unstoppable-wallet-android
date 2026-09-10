@@ -1900,4 +1900,16 @@
     <string name="Swap_DepositAddress_Description">이 스왑을 위해 자금이 전송되는 제공자의 주소입니다. 스왑 제공자가 제공하며, 스왑된 자금은 수취인에게 전달됩니다.</string>
     <string name="Swap_DepositMemo">입금 메모</string>
     <string name="Swap_DepositMemo_Description">입금에 첨부된 메모로, 공급자가 이를 이 스왑과 매칭할 수 있습니다. 스왑 공급자가 제공합니다.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">표시되지 않은 작업</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">표시된 내용 외에도 이 거래는 이 지갑이 효과를 표시할 수 없는 프로그램을 호출합니다. 자금을 이동하거나 위임할 수 있습니다. 이 앱을 완전히 신뢰할 때만 계속하세요.</string>
+    <string name="WalletConnect_Stellar_Signer">서명자</string>
+    <string name="WalletConnect_Stellar_SignerWeight">서명자 가중치</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">마스터 키 가중치</string>
+    <string name="WalletConnect_Stellar_LowThreshold">낮은 임계값</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">중간 임계값</string>
+    <string name="WalletConnect_Stellar_HighThreshold">높음 임계값</string>
+    <string name="WalletConnect_Stellar_SetFlags">플래그 설정</string>
+    <string name="WalletConnect_Stellar_ClearFlags">플래그 제거</string>
+    <string name="WalletConnect_Stellar_HomeDomain">홈 도메인</string>
+    <string name="WalletConnect_Stellar_InflationDestination">인플레이션 대상</string>
 </resources>

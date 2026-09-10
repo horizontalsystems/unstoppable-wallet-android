@@ -833,4 +833,16 @@
     <string name="Swap_DepositAddress_Description">آدرس ارائه‌دهنده که وجوه شما برای این تبدیل به آن ارسال می‌شوند. توسط ارائه‌دهنده تبدیل فراهم می‌شود؛ وجوه تبدیل شده سپس به گیرنده تحویل داده می‌شوند.</string>
     <string name="Swap_DepositMemo">یادداشت سپرده</string>
     <string name="Swap_DepositMemo_Description">یادداشتی که به سپرده پیوست شده است تا ارائه‌دهنده بتواند آن را با این تبدیل مطابقت دهد. این یادداشت توسط ارائه‌دهنده تبدیل تامین می‌شود.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">اقدامات نمایش داده نشده</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">علاوه بر آنچه نشان داده شده است، این تراکنش برنامه هایی را فراخوانی می کند که این کیف پول نمی تواند اثر آنها را نشان دهد. آنها ممکن است وجوه شما را منتقل یا تفویض کنند. فقط در صورتی ادامه دهید که به این برنامه کاملاً اعتماد داشته باشید.</string>
+    <string name="WalletConnect_Stellar_Signer">امضاکننده</string>
+    <string name="WalletConnect_Stellar_SignerWeight">وزن امضاکننده</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">وزن کلید اصلی</string>
+    <string name="WalletConnect_Stellar_LowThreshold">حد پایین</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">آستانه متوسط</string>
+    <string name="WalletConnect_Stellar_HighThreshold">آستانه بالا</string>
+    <string name="WalletConnect_Stellar_SetFlags">تنظیم پرچم‌ها</string>
+    <string name="WalletConnect_Stellar_ClearFlags">پاک کردن پرچم‌ها</string>
+    <string name="WalletConnect_Stellar_HomeDomain">دامنه خانگی</string>
+    <string name="WalletConnect_Stellar_InflationDestination">مقصد تورم</string>
 </resources>

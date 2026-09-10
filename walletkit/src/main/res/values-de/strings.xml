@@ -1908,4 +1908,16 @@
     <string name="Swap_DepositAddress_Description">Die Adresse des Anbieters, an die Ihre Gelder für diesen Swap gesendet werden. Sie wird vom Swap-Anbieter bereitgestellt; die getauschten Gelder werden dann an den Empfänger geliefert.</string>
     <string name="Swap_DepositMemo">Einzahlungs-Memo</string>
     <string name="Swap_DepositMemo_Description">Das Memo, das der Einzahlung beigefügt ist, damit der Anbieter sie diesem Swap zuordnen kann. Es wird vom Swap-Anbieter bereitgestellt.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">Nicht angezeigte Aktionen</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">Neben dem Angezeigten ruft diese Transaktion Programme auf, deren Auswirkungen dieses Wallet nicht anzeigen kann. Sie könnten Ihre Gelder verschieben oder delegieren. Fahren Sie nur fort, wenn Sie dieser App vollständig vertrauen.</string>
+    <string name="WalletConnect_Stellar_Signer">Unterzeichner</string>
+    <string name="WalletConnect_Stellar_SignerWeight">Unterzeichnergewicht</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">Hauptschlüsselgewicht</string>
+    <string name="WalletConnect_Stellar_LowThreshold">Niedriger Schwellenwert</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">Mittlerer Schwellenwert</string>
+    <string name="WalletConnect_Stellar_HighThreshold">Hoher Schwellenwert</string>
+    <string name="WalletConnect_Stellar_SetFlags">Flags setzen</string>
+    <string name="WalletConnect_Stellar_ClearFlags">Flags löschen</string>
+    <string name="WalletConnect_Stellar_HomeDomain">Home Domain</string>
+    <string name="WalletConnect_Stellar_InflationDestination">Inflationsziel</string>
 </resources>

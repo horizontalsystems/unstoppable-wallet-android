@@ -1904,4 +1904,16 @@
     <string name="Swap_DepositAddress_Description">O endereço do provedor para o qual seus fundos são enviados para este swap. É fornecido pelo provedor de swap; os fundos trocados são então entregues ao destinatário.</string>
     <string name="Swap_DepositMemo">Memorando de Depósito</string>
     <string name="Swap_DepositMemo_Description">O memorando anexado ao depósito para que o provedor possa associá-lo a este swap. É fornecido pelo provedor de swap.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">Ações não exibidas</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">Além do que é mostrado, esta transação chama programas cujo efeito esta carteira não pode exibir. Eles podem mover ou delegar seus fundos. Apenas continue se você confiar completamente neste aplicativo.</string>
+    <string name="WalletConnect_Stellar_Signer">Signatário</string>
+    <string name="WalletConnect_Stellar_SignerWeight">Peso do signatário</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">Peso da chave mestra</string>
+    <string name="WalletConnect_Stellar_LowThreshold">Limite baixo</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">Limite médio</string>
+    <string name="WalletConnect_Stellar_HighThreshold">Limite alto</string>
+    <string name="WalletConnect_Stellar_SetFlags">Definir flags</string>
+    <string name="WalletConnect_Stellar_ClearFlags">Limpar flags</string>
+    <string name="WalletConnect_Stellar_HomeDomain">Domínio principal</string>
+    <string name="WalletConnect_Stellar_InflationDestination">Destino de inflação</string>
 </resources>

@@ -1899,4 +1899,16 @@
     <string name="Swap_DepositAddress_Description">La dirección del proveedor a la que se envían sus fondos para este intercambio. Es proporcionada por el proveedor de intercambio; los fondos canjeados se entregan al destinatario.</string>
     <string name="Swap_DepositMemo">Memo de Depósito</string>
     <string name="Swap_DepositMemo_Description">El memo adjunto al depósito para que el proveedor pueda asociarlo a este swap. Es proporcionado por el proveedor de swap.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">Acciones no mostradas</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">Además de lo que se muestra, esta transacción llama a programas cuyo efecto esta billetera no puede mostrar. Podrían mover o delegar sus fondos. Solo continúe si confía completamente en esta aplicación.</string>
+    <string name="WalletConnect_Stellar_Signer">Firmante</string>
+    <string name="WalletConnect_Stellar_SignerWeight">Peso del firmante</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">Peso de la clave maestra</string>
+    <string name="WalletConnect_Stellar_LowThreshold">Umbral bajo</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">Umbral medio</string>
+    <string name="WalletConnect_Stellar_HighThreshold">Umbral alto</string>
+    <string name="WalletConnect_Stellar_SetFlags">Establecer flags</string>
+    <string name="WalletConnect_Stellar_ClearFlags">Borrar flags</string>
+    <string name="WalletConnect_Stellar_HomeDomain">Dominio principal</string>
+    <string name="WalletConnect_Stellar_InflationDestination">Destino de inflación</string>
 </resources>

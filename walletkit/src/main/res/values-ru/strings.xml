@@ -1906,4 +1906,16 @@
     <string name="Swap_DepositAddress_Description">Адрес поставщика, на который отправляются ваши средства для этого свопа. Он предоставляется поставщиком свопа; замененные средства затем доставляются получателю.</string>
     <string name="Swap_DepositMemo">Заметка о депозите</string>
     <string name="Swap_DepositMemo_Description">Заметка, прикрепленная к депозиту, чтобы поставщик мог сопоставить ее с этим своппом. Она предоставляется поставщиком своппа.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">Невыводимые действия</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">Кроме того, что показано, эта транзакция вызывает программы, эффект которых этот кошелек не может отобразить. Они могут перемещать или делегировать ваши средства. Продолжайте только если вы полностью доверяете этому приложению.</string>
+    <string name="WalletConnect_Stellar_Signer">Подписант</string>
+    <string name="WalletConnect_Stellar_SignerWeight">Вес подписанта</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">Вес главного ключа</string>
+    <string name="WalletConnect_Stellar_LowThreshold">Низкий порог</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">Средний порог</string>
+    <string name="WalletConnect_Stellar_HighThreshold">Высокий порог</string>
+    <string name="WalletConnect_Stellar_SetFlags">Установить флаги</string>
+    <string name="WalletConnect_Stellar_ClearFlags">Очистить флаги</string>
+    <string name="WalletConnect_Stellar_HomeDomain">Домен-хозяин</string>
+    <string name="WalletConnect_Stellar_InflationDestination">Направление инфляции</string>
 </resources>

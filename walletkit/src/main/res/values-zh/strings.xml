@@ -1899,4 +1899,16 @@
     <string name="Swap_DepositAddress_Description">交换提供商的地址，您的资金被发送到该地址以进行此交换。它由交换提供商提供；交换后的资金然后交付给收款人。</string>
     <string name="Swap_DepositMemo">存款备忘录</string>
     <string name="Swap_DepositMemo_Description">附加到存款上的备忘录，以便提供商可以将其与此交换进行匹配。由交换提供商提供。</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">未显示的操作</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">除了显示的内容外，此交易还调用该钱包无法显示其效果的程序。它们可能会移动或委托您的资金。仅在您完全信任此应用时才继续。</string>
+    <string name="WalletConnect_Stellar_Signer">签署者</string>
+    <string name="WalletConnect_Stellar_SignerWeight">签署者权重</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">主密钥权重</string>
+    <string name="WalletConnect_Stellar_LowThreshold">低阈值</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">中等阈值</string>
+    <string name="WalletConnect_Stellar_HighThreshold">高阈值</string>
+    <string name="WalletConnect_Stellar_SetFlags">设置标志</string>
+    <string name="WalletConnect_Stellar_ClearFlags">清除标志</string>
+    <string name="WalletConnect_Stellar_HomeDomain">主域</string>
+    <string name="WalletConnect_Stellar_InflationDestination">通胀目的地</string>
 </resources>

@@ -1900,4 +1900,16 @@
     <string name="Swap_DepositAddress_Description">Bu takas için fonlarınızın gönderildiği sağlayıcının adresi. Takas sağlayıcısı tarafından sağlanır; değiştirilen fonlar daha sonra alıcıya teslim edilir.</string>
     <string name="Swap_DepositMemo">Yatırım Notu</string>
     <string name="Swap_DepositMemo_Description">Sağlayıcının bunu bu swap ile eşleştirebilmesi için yatırıma eklenen not. Swap sağlayıcısı tarafından sağlanır.</string>
+    <string name="WalletConnect_Solana_UnknownInstructions_Title">Görüntülenmeyen işlemler</string>
+    <string name="WalletConnect_Solana_UnknownInstructions">Gösterilenlerin yanı sıra, bu işlem bu cüzdanın etkisini gösteremediği programları çağırır. Fonlarınızı taşıyabilir veya devredebilir. Yalnızca bu uygulamaya tamamen güveniyorsanız devam edin.</string>
+    <string name="WalletConnect_Stellar_Signer">İmzalayan</string>
+    <string name="WalletConnect_Stellar_SignerWeight">İmzalayan ağırlığı</string>
+    <string name="WalletConnect_Stellar_MasterKeyWeight">Ana anahtar ağırlığı</string>
+    <string name="WalletConnect_Stellar_LowThreshold">Düşük eşik</string>
+    <string name="WalletConnect_Stellar_MediumThreshold">Orta eşik</string>
+    <string name="WalletConnect_Stellar_HighThreshold">Yüksek eşik</string>
+    <string name="WalletConnect_Stellar_SetFlags">Bayrakları ayarla</string>
+    <string name="WalletConnect_Stellar_ClearFlags">Bayrakları temizle</string>
+    <string name="WalletConnect_Stellar_HomeDomain">Ana alan adı</string>
+    <string name="WalletConnect_Stellar_InflationDestination">Enflasyon hedefi</string>
 </resources>
