@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.send.v2
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -29,6 +31,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
@@ -47,6 +50,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
 import io.horizontalsystems.walletkit.modules.multiswap.WalletNotSynced
 import io.horizontalsystems.walletkit.modules.multiswap.WalletSyncing
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
@@ -80,12 +84,23 @@ fun SendV2Screen(
     var amountInputHasFocus by remember { mutableStateOf(false) }
 
     // Opens over the risky-address sheet when that was shown; both are popped once the
-    // transaction is sent.
+    // transaction is sent. The Private tab confirms through the provider order flow, which
+    // has its own page; the memo cannot travel with a deposit and is not passed.
     val proceed = {
         val address = uiState.address
         val amount = uiState.amount
         if (address != null && amount != null) {
-            navigation.slideFromRight(
+            val page = if (uiState.isPrivateSend) {
+                PrivateSendConfirmationPage(
+                    PrivateSendConfirmationPage.Input(
+                        wallet = uiState.wallet,
+                        recipient = address.hex,
+                        amount = amount,
+                        sendEntryPointDestId = SendV2Page::class,
+                        fromSendV2 = true,
+                    )
+                )
+            } else {
                 SendV2ConfirmPage(
                     SendV2ConfirmPage.Input(
                         wallet = uiState.wallet,
@@ -94,7 +109,8 @@ fun SendV2Screen(
                         memo = uiState.memo,
                     )
                 )
-            )
+            }
+            navigation.slideFromRight(page)
         }
     }
     val confirmRiskyAddress = navigation.slideFromBottomForResult<AddressRiskySheet.Result>(
@@ -133,7 +149,7 @@ fun SendV2Screen(
             listOf()
         },
     ) {
-        val tabs = SendTab.entries
+        val tabs = SendTab.entries.filter { it != SendTab.Private || uiState.privateSendSupported }
         val focusRequester = remember { FocusRequester() }
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -173,7 +189,10 @@ fun SendV2Screen(
                         onClick = openAddress,
                     )
                     HsDivider(modifier = Modifier.fillMaxWidth())
-                    uiState.memoSupport?.let { memoSupport ->
+                    // A memo cannot travel with a private send deposit (its memo slot belongs
+                    // to the provider's identifier), so the field is not offered on that tab.
+                    val memoSupport = uiState.memoSupport?.takeIf { !uiState.isPrivateSend }
+                    if (memoSupport != null) {
                         VSpacer(16.dp)
                         HSMemoInput(
                             maxLength = memoSupport.maxLength,
@@ -183,6 +202,11 @@ fun SendV2Screen(
                         )
                     }
                     VSpacer(32.dp)
+                }
+
+                if (uiState.isPrivateSend) {
+                    PrivateSendInfoCard(modifier = Modifier.padding(horizontal = 16.dp))
+                    VSpacer(48.dp)
                 }
 
                 val buttonTitle = when (val step = uiState.step) {
@@ -243,7 +267,6 @@ private fun SendTab.tabItem() = when (this) {
     SendTab.Private -> TabFolderItem(
         title = stringResource(R.string.Send_Tab_Private),
         icon = R.drawable.ic_incognito_24,
-        badge = true,
     )
 
     SendTab.CrossPay -> TabFolderItem(stringResource(R.string.Send_Tab_CrossPay))
@@ -313,6 +336,39 @@ private fun AmountSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PrivateSendInfoCard(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(R.drawable.info_filled_24),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey,
+            )
+            HSpacer(8.dp)
+            Text(
+                text = stringResource(R.string.PrivateSend_Toggle_Title),
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.grey,
+            )
+        }
+        VSpacer(8.dp)
+        Text(
+            text = stringResource(R.string.PrivateSend_Tab_Description),
+            style = ComposeAppTheme.typography.subhead,
+            color = ComposeAppTheme.colors.andy,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.chain.bitcoin
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendBtcParams
 import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.BtcSendSettings
 import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.SendBtcSettingsPage
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
@@ -69,6 +70,14 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
 
     override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage =
         SendBtcSettingsPage(wallet, address)
+
+    override fun privateSendBtcParams(token: Token, settings: SendChainSettings?) = PrivateSendBtcParams(
+        // The send service fetches the recommended rate and offers it in its settings.
+        feeRate = null,
+        unspentOutputs = (settings as? BtcSendSettings)?.unspentOutputs,
+        transactionSorting = App.btcBlockchainManager.transactionSortMode(token.blockchainType),
+        rbfEnabled = token.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
+    )
 
     override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? {
         val outputs = (settings as? BtcSendSettings)?.unspentOutputs ?: return null

@@ -18,6 +18,7 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -46,8 +47,12 @@ data class SendUiState(
     val memo: String?,
     val memoSupport: SendMemoSupport?,
     val chainSettings: SendChainSettings?,
+    val privateSendSupported: Boolean,
     val step: SendStep,
-)
+) {
+    val isPrivateSend: Boolean
+        get() = tab == SendTab.Private
+}
 
 /**
  * Input state of the send screen for any blockchain: the selected tab, amount, recipient and
@@ -63,6 +68,7 @@ class SendViewModel(
     private val adapterManager: IAdapterManager,
     private val fiatService: FiatService,
     private val balanceService: TokenBalanceService,
+    private val privateSendManager: PrivateSendManager,
 ) : ViewModelUiState<SendUiState>() {
 
     private var currency = currencyManager.baseCurrency
@@ -76,6 +82,7 @@ class SendViewModel(
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
     private var chainSettings: SendChainSettings? = null
+    private var privateSendSupported = privateSendManager.isSupported(wallet.token)
     // Balance narrowed by the chain settings (selected outputs), or null for the wallet's.
     private var chainBalance: BigDecimal? = null
     private var balanceState = balanceService.stateFlow.value
@@ -113,6 +120,7 @@ class SendViewModel(
         }
         observeBalanceUpdates()
         refreshMemoSupport()
+        observePrivateSendSupport()
         // Adapters are recreated on account or network changes; re-resolve the adapter then.
         viewModelScope.launch {
             adapterManager.adaptersReadyFlow.collectSafely {
@@ -131,6 +139,30 @@ class SendViewModel(
         balanceJob = viewModelScope.launch {
             adapter.balanceUpdatedFlow.collectSafely {
                 balanceService.refresh()
+            }
+        }
+    }
+
+    // Support is a lookup over synced provider lists; the sync makes a first open show the
+    // Private tab without a reload, and the tab is left as soon as support is withdrawn.
+    private fun observePrivateSendSupport() {
+        viewModelScope.launch {
+            try {
+                privateSendManager.sync()
+            } catch (e: Throwable) {
+                // The availability flow still reports what could be synced.
+            }
+        }
+        viewModelScope.launch {
+            privateSendManager.availabilityFlow.collectSafely {
+                val supported = privateSendManager.isSupported(wallet.token)
+                if (supported != privateSendSupported) {
+                    privateSendSupported = supported
+                    if (!supported && tab == SendTab.Private) {
+                        tab = SendTab.Standard
+                    }
+                    emitState()
+                }
             }
         }
     }
@@ -178,6 +210,7 @@ class SendViewModel(
         memo = memo,
         memoSupport = memoSupport,
         chainSettings = chainSettings,
+        privateSendSupported = privateSendSupported,
         step = step(),
     )
 
@@ -194,6 +227,7 @@ class SendViewModel(
     }
 
     fun onSelectTab(tab: SendTab) {
+        if (tab == SendTab.Private && !privateSendSupported) return
         this.tab = tab
         emitState()
     }
@@ -244,6 +278,7 @@ class SendViewModel(
                 App.adapterManager,
                 FiatService(App.marketKit),
                 TokenBalanceService(App.adapterManager),
+                App.privateSendManager,
             ) as T
         }
     }

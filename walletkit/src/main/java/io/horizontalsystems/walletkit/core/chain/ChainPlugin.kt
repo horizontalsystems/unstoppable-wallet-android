@@ -323,6 +323,16 @@ interface ChainPlugin {
     fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? = null
 
     /**
+     * Bitcoin-family parameters a private send deposit inherits from the send screen's
+     * [settings], or null for other chains. A timelock is never part of them: the deposit
+     * must be spendable by the provider immediately.
+     */
+    fun privateSendBtcParams(
+        token: Token,
+        settings: SendChainSettings?,
+    ): io.horizontalsystems.walletkit.modules.privatesend.PrivateSendBtcParams? = null
+
+    /**
      * Page behind the send screen's settings icon, or null when the chain has none. [address]
      * is the chosen recipient, or null while none is chosen; settings that depend on it (a
      * Bitcoin timelock) are offered accordingly.

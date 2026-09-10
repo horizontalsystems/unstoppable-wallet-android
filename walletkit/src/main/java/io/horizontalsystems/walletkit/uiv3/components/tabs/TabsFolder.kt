@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -36,14 +34,10 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
-/**
- * A tab in [TabsFolder]. [badge] draws a small dot at the top-right corner of the title,
- * e.g. to mark a paid feature.
- */
+/** A tab in [TabsFolder]: a title with an optional leading icon. */
 data class TabFolderItem(
     val title: String,
     @DrawableRes val icon: Int? = null,
-    val badge: Boolean = false,
 )
 
 /**
@@ -85,7 +79,6 @@ private fun FolderTab(
     val fill = ComposeAppTheme.colors.lawrence
     val contentColor = if (selected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
     val textStyle = if (selected) ComposeAppTheme.typography.subheadSB else ComposeAppTheme.typography.subhead
-    val badgeColor = ComposeAppTheme.colors.remus
 
     Row(
         modifier = Modifier
@@ -119,23 +112,12 @@ private fun FolderTab(
                 tint = contentColor,
             )
         }
-        Box {
-            Text(
-                text = item.title,
-                color = contentColor,
-                style = textStyle,
-                maxLines = 1,
-            )
-            if (item.badge) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .offset(x = 8.dp, y = (-6).dp)
-                        .size(6.dp)
-                        .background(badgeColor, CircleShape)
-                )
-            }
-        }
+        Text(
+            text = item.title,
+            color = contentColor,
+            style = textStyle,
+            maxLines = 1,
+        )
     }
 }
 
@@ -173,7 +155,7 @@ private fun Preview_TabsFolder() {
             TabsFolder(
                 tabs = listOf(
                     TabFolderItem("Standard"),
-                    TabFolderItem("Private", icon = R.drawable.ic_incognito_24, badge = true),
+                    TabFolderItem("Private", icon = R.drawable.ic_incognito_24),
                     TabFolderItem("CrossPay"),
                 ),
                 selectedIndex = selected,
