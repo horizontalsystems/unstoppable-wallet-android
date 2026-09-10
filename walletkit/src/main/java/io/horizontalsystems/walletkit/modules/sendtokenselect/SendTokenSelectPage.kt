@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.entities.AddressUri
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressPage
+import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -26,18 +27,26 @@ data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
             navigation = navigation,
             title = stringResource(R.string.Balance_Send),
             onClickItem = {
+                // A plain pick from the balance screen goes to the unified send screen. A
+                // deep link carries address, amount and memo the unified screen cannot take
+                // yet, so it still goes through the per-chain flow.
+                if (input == null) {
+                    navigation.slideFromRight(SendV2Page(it.wallet, SendTokenSelectPage::class))
+                    return@TokenSelectScreen
+                }
+
                 // base-unit amounts (eip-681 `value`/`uint256`) can only be converted to a
                 // readable amount here, where the selected token's decimals are known
-                val amount = input?.amount?.humanReadable(it.wallet.token.decimals)
+                val amount = input.amount?.humanReadable(it.wallet.token.decimals)
                 val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                 navigation.slideFromRight(
                     EnterAddressPage(EnterAddressPage.Input(
                         wallet = it.wallet,
                         title = sendTitle,
                         sendEntryPointDestId = SendTokenSelectPage::class,
-                        address = input?.address,
+                        address = input.address,
                         amount = amount,
-                        memo = input?.memo,
+                        memo = input.memo,
                     ))
                 )
             },

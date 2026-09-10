@@ -9,11 +9,13 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.SendConfirmationScreen
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
+import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItemDropdown
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 /** Confirmation step of [SendV2Page], one page for every blockchain type. */
 @Serializable
@@ -29,7 +31,7 @@ data class SendV2ConfirmPage(val input: Input) : HSPage() {
             contentKey(),
             SendV2ConfirmViewModel.Factory(input, sendViewModel.uiState.chainSettings),
         )
-        SendV2ConfirmScreen(navigation, viewModel, contentKey())
+        SendV2ConfirmScreen(navigation, viewModel, contentKey(), input.sendEntryPointDestId)
     }
 
     @Serializable
@@ -38,6 +40,7 @@ data class SendV2ConfirmPage(val input: Input) : HSPage() {
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal,
         val address: Address,
         val memo: String?,
+        @Serializable(with = HSScreenKClassSerializer::class) val sendEntryPointDestId: KClass<out HSPage>,
     )
 }
 
@@ -46,6 +49,7 @@ private fun SendV2ConfirmScreen(
     navigation: HSNavigation,
     viewModel: SendV2ConfirmViewModel,
     screenContentKey: String,
+    sendEntryPointDestId: KClass<out HSPage>,
 ) {
     val uiState = viewModel.uiState
     val token = uiState.wallet.token
@@ -95,7 +99,7 @@ private fun SendV2ConfirmScreen(
         fee = uiState.fee,
         memo = uiState.memo,
         onClickSend = viewModel::onClickSend,
-        sendEntryPointDestId = SendV2Page::class,
+        sendEntryPointDestId = sendEntryPointDestId,
         error = uiState.error,
         menuItems = menuItems,
         cautions = uiState.cautions,
