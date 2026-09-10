@@ -75,8 +75,10 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
         var showSortSheet by remember { mutableStateOf(false) }
         var showLockTimeMenu by remember { mutableStateOf(false) }
 
+        val privateSend = sendViewModel.uiState.isPrivateSend
         val timeLockSupported = BtcSendSettings.timeLockSupported(blockchainType)
-        val timeLockAvailable = BtcSendSettings.timeLockAvailable(blockchainType, address)
+        // A private send deposit must stay immediately spendable, so no lock under that tab.
+        val timeLockAvailable = BtcSendSettings.timeLockAvailable(blockchainType, address) && !privateSend
         val modified = uiState.transactionSortOptions.any { it.selected && it.mode != TransactionDataSortMode.Shuffle } ||
                 !uiState.rbfEnabled ||
                 settings.unspentOutputs != null ||
@@ -124,6 +126,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                         SettingsRow(
                             title = stringResource(R.string.Send_TimeLock),
                             subtitle = stringResource(R.string.Send_Hodler_Description),
+                            warning = if (privateSend) stringResource(R.string.Send_Hodler_PrivateSendUnavailable) else null,
                             value = stringResource(interval.stringResId()),
                             enabled = timeLockAvailable,
                             onClick = { showLockTimeMenu = true },
@@ -192,6 +195,7 @@ private fun SettingsRow(
     value: String,
     enabled: Boolean,
     onClick: () -> Unit,
+    warning: String? = null,
 ) {
     val valueColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
     CellPrimary(
@@ -199,6 +203,7 @@ private fun SettingsRow(
             CellMiddleInfo(
                 title = title.hs,
                 subtitle = subtitle.hs,
+                description = warning?.hs(color = ComposeAppTheme.colors.jacob),
             )
         },
         right = {
