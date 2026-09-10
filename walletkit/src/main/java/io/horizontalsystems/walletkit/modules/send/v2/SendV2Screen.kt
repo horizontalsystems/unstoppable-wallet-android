@@ -73,8 +73,7 @@ fun SendV2Screen(
 ) {
     val uiState = viewModel.uiState
     val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
-    val chainSettings = navigation.viewModelForScreen<SendChainSettingsViewModel>(SendV2Page::class)
-    val settingsPage = remember { chainPlugin?.sendSettingsPage(uiState.wallet) }
+    val hasSettings = remember { chainPlugin?.sendSettingsPage(uiState.wallet, null) != null }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val keyboardState by observeKeyboardState()
@@ -119,15 +118,20 @@ fun SendV2Screen(
     HSScaffold(
         title = stringResource(R.string.Balance_Send),
         onBack = { navigation.removeLastOrNull() },
-        menuItems = listOfNotNull(
-            settingsPage?.let { page ->
+        menuItems = if (hasSettings) {
+            listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
                     icon = R.drawable.manage_24,
-                    onClick = { navigation.slideFromRight(page) },
+                    onClick = {
+                        chainPlugin?.sendSettingsPage(uiState.wallet, uiState.address?.hex)
+                            ?.let { navigation.slideFromRight(it) }
+                    },
                 )
-            },
-        ),
+            )
+        } else {
+            listOf()
+        },
     ) {
         val tabs = SendTab.entries
         val focusRequester = remember { FocusRequester() }
@@ -178,7 +182,6 @@ fun SendV2Screen(
                             onValueChange = viewModel::onEnterMemo,
                         )
                     }
-                    chainPlugin?.SendScreenExtras(navigation, uiState.wallet, chainSettings)
                     VSpacer(32.dp)
                 }
 
