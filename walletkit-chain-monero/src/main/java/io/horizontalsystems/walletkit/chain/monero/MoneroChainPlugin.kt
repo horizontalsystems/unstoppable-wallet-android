@@ -59,7 +59,7 @@ class MoneroChainPlugin(
     private val moneroNodeManager: () -> MoneroNodeManager,
 ) : ChainPlugin {
 
-    override fun sendSettingsPage(wallet: Wallet): HSPage = SendMoneroAdvancedSettingsPage
+    override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage = SendMoneroAdvancedSettingsPage
 
     override fun sendTransactionData(
         token: Token,

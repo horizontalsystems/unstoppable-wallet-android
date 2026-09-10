@@ -3,11 +3,8 @@ package io.horizontalsystems.walletkit.chain.bitcoin
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.BtcSendSettings
-import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.SendBtcScreenExtras
 import io.horizontalsystems.walletkit.modules.send.bitcoin.v2.SendBtcSettingsPage
-import io.horizontalsystems.walletkit.modules.send.v2.SendChainSettingsViewModel
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -70,14 +67,8 @@ import java.math.BigDecimal
 
 abstract class BitcoinFamilyPlugin : ChainPlugin {
 
-    override fun sendSettingsPage(wallet: Wallet): HSPage = SendBtcSettingsPage(wallet)
-
-    @Composable
-    override fun SendScreenExtras(
-        navigation: HSNavigation,
-        wallet: Wallet,
-        settings: SendChainSettingsViewModel,
-    ) = SendBtcScreenExtras(navigation, wallet, settings)
+    override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage =
+        SendBtcSettingsPage(wallet, address)
 
     override fun sendTransactionData(
         token: Token,
@@ -96,6 +87,7 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
         changeToFirstInput = false,
         utxoFilters = UtxoFilters(),
         unspentOutputs = (settings as? BtcSendSettings)?.unspentOutputs,
+        pluginData = (settings as? BtcSendSettings)?.pluginData(token.blockchainType, address),
         transactionSorting = App.btcBlockchainManager.transactionSortMode(token.blockchainType),
         rbfEnabled = token.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
     )

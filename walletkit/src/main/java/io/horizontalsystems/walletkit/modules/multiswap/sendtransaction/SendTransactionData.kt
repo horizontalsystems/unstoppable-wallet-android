@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
 import org.json.JSONObject
@@ -25,6 +26,7 @@ sealed class SendTransactionData {
         val unspentOutputs: List<UnspentOutputInfo>? = null,
         val transactionSorting: TransactionDataSortMode? = null,
         val rbfEnabled: Boolean = false,
+        val pluginData: Map<Byte, IPluginData>? = null,
     ) : SendTransactionData()
 
     sealed class Tron : SendTransactionData() {

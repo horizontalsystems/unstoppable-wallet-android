@@ -304,8 +304,8 @@ interface ChainPlugin {
     /**
      * A plain transfer of [amount] to [address] carrying [memo] as SendTransactionData for the
      * chain's send-transaction service, or null when the chain cannot build one. [settings]
-     * are the per-send choices made on the send screen (see [SendScreenExtras]), if any; what
-     * the user was not asked about (fee rate) takes the service's defaults.
+     * are the per-send choices made on the chain's settings page (see [sendSettingsPage]),
+     * if any; what the user was not asked about (fee rate) takes the service's defaults.
      */
     fun sendTransactionData(
         token: Token,
@@ -315,19 +315,12 @@ interface ChainPlugin {
         settings: SendChainSettings?,
     ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
 
-    /** Page behind the send screen's settings icon, or null when the chain has none. */
-    fun sendSettingsPage(wallet: Wallet): HSPage? = null
-
     /**
-     * Chain-specific rows on the send screen below the memo (e.g. coin control). Choices that
-     * must reach the confirmation go into [settings].
+     * Page behind the send screen's settings icon, or null when the chain has none. [address]
+     * is the chosen recipient, or null while none is chosen; settings that depend on it (a
+     * Bitcoin timelock) are offered accordingly.
      */
-    @Composable
-    fun SendScreenExtras(
-        navigation: HSNavigation,
-        wallet: Wallet,
-        settings: io.horizontalsystems.walletkit.modules.send.v2.SendChainSettingsViewModel,
-    ) = Unit
+    fun sendSettingsPage(wallet: Wallet, address: String?): HSPage? = null
 
     /**
      * A plain transfer of [amount] to [address] as SendTransactionData, for flows that build a
