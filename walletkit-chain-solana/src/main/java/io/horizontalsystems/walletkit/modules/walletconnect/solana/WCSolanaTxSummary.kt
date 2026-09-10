@@ -33,6 +33,7 @@ object WCSolanaTxSummary {
         "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", // Jupiter v6
         "DF1ow4tspfHX9JwWJsAb9epbkA8hmpSEAtxXy1V27QBH", // DFlow
         "3i5JeuZuUxeKtVysUnwQNGerJP2bSMX9fTFfS4Nxe3Br", // LI.FI
+        "HNarfxC3kYMMhFkxUFeYb8wHVdPzY5t9pupqW5fL2meM", // 1inch Fusion Swap
     )
 
     private enum class Method { SWAP, TRANSFER }

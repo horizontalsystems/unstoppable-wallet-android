@@ -30,9 +30,14 @@ class SolanaTransactionConverter(
 ) {
     private val userAddress = solanaKitWrapper.solanaKit.receiveAddress
 
-    // The display label of the first recognized swap program this transaction invoked, or null.
-    private fun swapExchangeName(transaction: Transaction): String? =
-        transaction.programIds?.split(" ")?.firstNotNullOfOrNull { swapProgramLabels[it] }
+    // The display label of the recognized swap program this transaction invoked, or null. When
+    // several are present the label is chosen by `swapProgramLabels` order (the user-facing
+    // aggregator first), not instruction order: a 1inch Fusion fill routes through Jupiter, and
+    // Jupiter's instruction comes before the Fusion one, but the user swapped on 1inch.
+    private fun swapExchangeName(transaction: Transaction): String? {
+        val invoked = transaction.programIds?.split(" ")?.toSet() ?: return null
+        return swapProgramLabels.entries.firstOrNull { it.key in invoked }?.value
+    }
 
     // The swap-relevant leg of one side: the SPL transfer when a native-SOL leg rides along
     // (token-account rent), otherwise the single/first leg (a genuinely-SOL swap side).
@@ -211,7 +216,11 @@ class SolanaTransactionConverter(
 
         // Display labels for the swap programs SolanaKit recognizes (`Transaction.programIds`).
         // Mirrors the EVM flow, where the exchange contract address maps to a label ("1inch v5").
-        private val swapProgramLabels = mapOf(
+        // Ordered by priority for `swapExchangeName`: intent/entry-point aggregators that route
+        // through other recognized programs come before the programs they route through.
+        private val swapProgramLabels = linkedMapOf(
+            // Fusion order-create (only this program) and its resolver fill (this + e.g. Jupiter).
+            KnownPrograms.oneInchFusion to "1inch",
             KnownPrograms.jupiterV6 to "Jupiter",
             // A distinct aggregator (Jupiter routes some legs through it, but it is also used
             // directly), so label it by its actual program rather than assuming Jupiter.
