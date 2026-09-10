@@ -11,6 +11,19 @@ import io.horizontalsystems.marketkit.models.BlockchainType
  */
 object ThorChainSwapMemo {
 
+    // Chains whose addresses may be bech32 (BIP-173) or CashAddr: both encodings define an
+    // all-uppercase form as the same address as the all-lowercase one, while a mixed-case string is
+    // invalid. Their legacy Base58 forms are mixed-case by construction, so single-case folding
+    // never touches them.
+    private val caseInsensitiveEncodingChains = setOf(
+        BlockchainType.Bitcoin,
+        BlockchainType.Litecoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Thorchain,
+        BlockchainType.Mayachain,
+    )
+
     /** The destination address named by [memo], or null when the memo has none. */
     fun destination(memo: String): String? =
         memo.split(":").getOrNull(2)
@@ -20,15 +33,25 @@ object ThorChainSwapMemo {
     /**
      * Throws when [memo] does not deliver to [expectedDestination] on [destinationChain].
      *
-     * Only EVM addresses are compared ignoring case: hex is case-insensitive and nodes echo it
-     * lowercased. Every other format (Base58, bech32 as issued, Zcash) is compared exactly — a
-     * case-altered Base58 address decodes to different bytes, so it is a different destination.
+     * Addresses are compared in the canonical form of their encoding: EVM hex ignoring case, and
+     * single-case bech32 / CashAddr folded to lowercase. Everything else — Base58 (Solana, Tron,
+     * legacy Bitcoin), Zcash, and any mixed-case string — is compared exactly, because a case
+     * change there yields a different or invalid address.
      */
     fun requireDestination(memo: String, expectedDestination: String, destinationChain: BlockchainType) {
         val actual = destination(memo)
-        val matches = actual != null && actual.equals(expectedDestination, ignoreCase = destinationChain.isEvm)
+        val matches = actual != null &&
+                canonical(actual, destinationChain) == canonical(expectedDestination, destinationChain)
         if (!matches) {
             throw IllegalStateException("Swap memo destination does not match the recipient address")
         }
     }
+
+    private fun canonical(address: String, chain: BlockchainType): String = when {
+        chain.isEvm -> address.lowercase()
+        chain in caseInsensitiveEncodingChains && address.isSingleCase() -> address.lowercase()
+        else -> address
+    }
+
+    private fun String.isSingleCase(): Boolean = this == lowercase() || this == uppercase()
 }

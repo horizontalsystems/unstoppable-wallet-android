@@ -50,9 +50,26 @@ class ThorChainSwapMemoTest {
     }
 
     @Test
-    fun requireDestination_rejectsCaseAlteredBitcoinAddress() {
+    fun requireDestination_acceptsUppercaseBech32() {
+        // BIP-173: the all-uppercase form is the same address.
+        ThorChainSwapMemo.requireDestination("=:BTC.BTC:${recipient.uppercase()}:0/1/0", recipient, BlockchainType.Bitcoin)
+        ThorChainSwapMemo.requireDestination("=:THOR.RUNE:THOR1GM00VWSFCP48ENM4UV9E5DHM37JTD0YE27WRX0:0/1/0", "thor1gm00vwsfcp48enm4uv9e5dhm37jtd0ye27wrx0", BlockchainType.Thorchain)
+    }
+
+    @Test
+    fun requireDestination_rejectsMixedCaseBech32() {
+        val mixed = recipient.replaceFirst("q", "Q")
         assertThrows(IllegalStateException::class.java) {
-            ThorChainSwapMemo.requireDestination("=:BTC.BTC:${recipient.uppercase()}:0/1/0", recipient, BlockchainType.Bitcoin)
+            ThorChainSwapMemo.requireDestination("=:BTC.BTC:$mixed:0/1/0", recipient, BlockchainType.Bitcoin)
+        }
+    }
+
+    @Test
+    fun requireDestination_rejectsCaseAlteredLegacyBitcoinAddress() {
+        // Base58 legacy addresses are case-sensitive; folding must not apply to them.
+        val legacy = "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2"
+        assertThrows(IllegalStateException::class.java) {
+            ThorChainSwapMemo.requireDestination("=:BTC.BTC:${legacy.lowercase()}:0/1/0", legacy, BlockchainType.Bitcoin)
         }
     }
 

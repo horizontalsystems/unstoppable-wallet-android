@@ -180,6 +180,73 @@ class WCSolanaTxSummaryTest {
     }
 
     @Test
+    fun closeAccountToOwner_isNotFlagged() {
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram, Base58.decode(TOKEN_PROGRAM)),
+            instructions = listOf(
+                solTransfer(programIndex = 2, from = 0, to = 1, lamports = 1L),
+                // CloseAccount (9): [account, destination, owner] — destination is the owner (unwrap)
+                Instruction(programIndex = 3, accounts = intArrayOf(1, 0, 0), data = byteArrayOf(9)),
+            ),
+        )
+
+        assertFalse(WCSolanaTxSummary.decode(bytes).hasUnknownInstructions)
+    }
+
+    @Test
+    fun closeAccountToForeignDestination_isFlaggedNextToTransfer() {
+        val attacker = ByteArray(32) { 0x55 }
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram, Base58.decode(TOKEN_PROGRAM), attacker),
+            instructions = listOf(
+                solTransfer(programIndex = 2, from = 0, to = 1, lamports = 1L),
+                // CloseAccount sweeping the (wSOL) account's lamports to the attacker
+                Instruction(programIndex = 3, accounts = intArrayOf(1, 4, 0), data = byteArrayOf(9)),
+            ),
+        )
+
+        val decoded = WCSolanaTxSummary.decode(bytes)
+
+        assertEquals(1, decoded.transfers.size)
+        assertTrue(decoded.hasUnknownInstructions)
+    }
+
+    @Test
+    fun createAccount_isShownAsSolTransferToTheNewAccount() {
+        val data = ByteArray(52)
+        for (i in 0 until 8) data[4 + i] = (2_000_000_000L ushr (8 * i)).toByte() // lamports
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram),
+            // createAccount (0): [funder, new]
+            instructions = listOf(Instruction(programIndex = 2, accounts = intArrayOf(0, 1), data = data)),
+        )
+
+        val decoded = WCSolanaTxSummary.decode(bytes)
+
+        assertFalse(decoded.hasUnknownInstructions)
+        val transfer = decoded.transfers.single()
+        assertEquals(BigInteger.valueOf(2_000_000_000L), transfer.amount)
+        assertEquals(WCSolanaTxSummary.AccountRef.Static(Base58.encode(toKey)), transfer.destination)
+    }
+
+    @Test
+    fun createAccountWithSeedAndAtaRecoverNested_areFlagged() {
+        val bytes = transaction(
+            versioned = false,
+            keys = listOf(fromKey, toKey, systemProgram, Base58.decode(ATA_PROGRAM)),
+            instructions = listOf(
+                Instruction(programIndex = 2, accounts = intArrayOf(0, 1, 0), data = byteArrayOf(3, 0, 0, 0)), // createAccountWithSeed
+                Instruction(programIndex = 3, accounts = intArrayOf(0, 1, 0), data = byteArrayOf(2)),          // RecoverNested
+            ),
+        )
+
+        assertTrue(WCSolanaTxSummary.decode(bytes).hasUnknownInstructions)
+    }
+
+    @Test
     fun unsupportedMessageVersion_isRejected() {
         val bytes = transaction(
             versioned = false,

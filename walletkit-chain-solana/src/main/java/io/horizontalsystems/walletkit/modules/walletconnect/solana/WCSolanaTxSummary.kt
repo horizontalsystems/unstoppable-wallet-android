@@ -33,23 +33,27 @@ object WCSolanaTxSummary {
     private const val TOKEN_PROGRAM = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
     private const val TOKEN_2022_PROGRAM = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
 
-    // Programs whose instructions never move or delegate funds on their own; they accompany almost
-    // every dApp transaction (priority fees, memos, creating the recipient's token account) and so
-    // do not count as undisplayed actions.
+    private const val ASSOCIATED_TOKEN_PROGRAM = "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+
+    // Programs whose instructions never move or delegate funds; they accompany almost every dApp
+    // transaction (priority fees, memos) and so do not count as undisplayed actions.
     private val BENIGN_PROGRAMS = setOf(
         "ComputeBudget111111111111111111111111111111",
         "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr", // Memo v2
         "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo", // Memo v1
-        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL", // Associated Token Account
     )
 
-    // System instructions that only create accounts (wSOL wrapping, ATA rent) — displayed as
-    // nothing, but not material. Everything else (assign, nonce ops...) is treated as unknown.
-    private val BENIGN_SYSTEM_INSTRUCTIONS = setOf(0, 3) // createAccount, createAccountWithSeed
+    // Associated Token Account `Create` (0, or empty data) / `CreateIdempotent` (1): the payer is
+    // debited the rent-exempt minimum, but the created account's address is derived from
+    // (owner, mint) and cannot be chosen by the dApp, so nothing goes anywhere unexpected.
+    // `RecoverNested` (2) and anything else is unknown.
+    private val BENIGN_ATA_INSTRUCTIONS = setOf(0, 1)
 
-    // Token instructions swaps use around a transfer (wrap/unwrap SOL) that cannot delegate or
-    // move a balance elsewhere. Approve (4), SetAuthority (6), Burn (8) etc. are NOT here.
-    private val BENIGN_TOKEN_INSTRUCTIONS = setOf(1, 9, 17, 18) // initAccount, closeAccount, syncNative, initAccount3
+    // Token instructions used around a transfer (wSOL wrapping) that cannot move a balance
+    // anywhere: initialize (1, 18) and syncNative (17). `CloseAccount` (9) is handled explicitly
+    // because it sweeps the account's lamports to a destination; Approve (4), SetAuthority (6),
+    // Burn (8) etc. are unknown.
+    private val BENIGN_TOKEN_INSTRUCTIONS = setOf(1, 17, 18)
 
     // Swap aggregators — their presence means the transaction is a swap (Jupiter routes some legs
     // through DFlow).
@@ -362,10 +366,23 @@ object WCSolanaTxSummary {
                                 Transfer(isSol = true, amount = u64LE(4), decimals = null, payer = accountAt(0), destination = accountAt(1))
                             )
 
-                        discriminator in BENIGN_SYSTEM_INSTRUCTIONS -> Unit
+                        // `createAccount` (0): u64 lamports, u64 space, owner; accounts [funder, new].
+                        // The funder is debited `lamports` into the new account, whose key the dApp
+                        // may control (it co-signs), so show it as the SOL transfer it is.
+                        discriminator == 0 && data.size >= 52 ->
+                            transfers.add(
+                                Transfer(isSol = true, amount = u64LE(4), decimals = null, payer = accountAt(0), destination = accountAt(1))
+                            )
+
+                        // createAccountWithSeed (3), assign, nonce ops... are not displayed.
                         else -> hasUnknownInstructions = true
                     }
                 }
+
+                ASSOCIATED_TOKEN_PROGRAM ->
+                    if ((data.firstOrNull()?.toInt()?.and(0xFF) ?: 0) !in BENIGN_ATA_INSTRUCTIONS) {
+                        hasUnknownInstructions = true
+                    }
 
                 // SPL Token instructions carry a u8 discriminator.
                 TOKEN_PROGRAM, TOKEN_2022_PROGRAM ->
@@ -381,6 +398,15 @@ object WCSolanaTxSummary {
                             transfers.add(Transfer(false, u64LE(1), data[9].toInt() and 0xFF, payer = accountAt(3), destination = accountAt(2)))
                         } else {
                             hasUnknownInstructions = true
+                        }
+
+                        // `CloseAccount` (9): accounts [account, destination, owner]. Sweeps every
+                        // lamport in the token account (a wSOL balance included) to `destination`,
+                        // so it is only harmless when that is the owner itself (unwrapping SOL).
+                        9 -> {
+                            val destination = accountAt(1)
+                            val owner = accountAt(2)
+                            if (destination !is AccountRef.Static || destination != owner) hasUnknownInstructions = true
                         }
 
                         in BENIGN_TOKEN_INSTRUCTIONS -> Unit
