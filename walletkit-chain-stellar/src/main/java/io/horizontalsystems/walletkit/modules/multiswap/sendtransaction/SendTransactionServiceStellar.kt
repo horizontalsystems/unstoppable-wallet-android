@@ -14,7 +14,9 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
 
 class SendTransactionServiceStellar(
     private val stellarKit: StellarKit,
@@ -59,8 +61,11 @@ class SendTransactionServiceStellar(
             emitState()
 
             minimumAmountCaution = try {
-                val minimum = App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)
-                    ?.getMinimumSendAmount(data.address)
+                // Horizon lookup, blocking.
+                val minimum = withContext(Dispatchers.IO) {
+                    App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)
+                        ?.getMinimumSendAmount(data.address)
+                }
                 if (minimum != null && data.amount < minimum) {
                     SendErrorMinimumSendAmount(minimum, token.coin.code).toCautionViewItem()
                 } else {
