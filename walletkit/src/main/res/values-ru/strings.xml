@@ -487,6 +487,11 @@
     <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
     <string name="FeeInfo_Fast">Быстро</string>
     <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
+    <string name="FeeInfo_TronFee_Description">Ориентировочные затраты на отправку данной транзакции по сети (без учёта energy, Bandwidth и комиссии за активацию) предполагаются</string>
+    <string name="FeeInfo_TronActivationFee_Title">Комиссия за активацию</string>
+    <string name="FeeInfo_TronActivationFee_Description">Этот адрес не активен. Перевод TRX или токенов TRC-10 на неактивный адрес активирует аккаунт.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <string name="Tron_TokenPage_AddressNotActivated">Не активирован</string>

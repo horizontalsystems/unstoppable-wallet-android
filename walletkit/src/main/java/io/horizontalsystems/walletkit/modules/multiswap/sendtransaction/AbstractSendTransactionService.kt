@@ -16,6 +16,8 @@ import java.util.UUID
 
 abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasNonceSettings: Boolean): ServiceState<SendTransactionServiceState>() {
     open val supportsMevProtection: Boolean = false
+    /** Explanation shown for the network fee row, or null for the generic one. */
+    open val networkFeeInfoRes: Int? = null
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
     protected var uuid = UUID.randomUUID().toString()
 

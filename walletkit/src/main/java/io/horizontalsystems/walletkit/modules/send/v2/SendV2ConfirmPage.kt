@@ -104,6 +104,7 @@ private fun SendV2ConfirmScreen(
         menuItems = menuItems,
         cautions = uiState.cautions,
         sendEnabled = uiState.sendable && !uiState.loading,
+        feeInfoText = uiState.networkFeeInfoRes?.let { stringResource(it) },
     ) {
         uiState.fields.forEach { it.GetContent(navigation) }
     }

@@ -29,8 +29,8 @@ they land.
 
 ## Per-chain features
 
-- [ ] Tron: activation fee and bandwidth/energy rows on confirmation, max native amount
-      reduced by fee, zero-TRX rule. The Tron service exposes no fields.
+- [x] Tron: activation fee and bandwidth/energy rows on confirmation.
+- [ ] Tron: max native amount reduced by fee, zero-TRX rule.
 - [ ] TON fee estimation on the send page (Next was gated on it).
 - [ ] Zcash send-to-self rejection: verify the entry-screen validator covers it.
 - [ ] Bitcoin UTxOs row shows total/total in auto mode (auto-selected count is only known

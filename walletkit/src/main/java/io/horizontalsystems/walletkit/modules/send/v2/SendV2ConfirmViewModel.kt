@@ -51,6 +51,7 @@ data class SendV2ConfirmUiState(
     val loading: Boolean,
     val hasSettings: Boolean,
     val hasNonceSettings: Boolean,
+    val networkFeeInfoRes: Int?,
     val error: Throwable?,
 )
 
@@ -143,6 +144,7 @@ class SendV2ConfirmViewModel(
         loading = serviceState.loading,
         hasSettings = sendTransactionService.hasSettings,
         hasNonceSettings = sendTransactionService.hasNonceSettings,
+        networkFeeInfoRes = sendTransactionService.networkFeeInfoRes,
         error = error,
     )
 

@@ -93,6 +93,7 @@ fun SendConfirmationScreen(
     menuItems: List<IMenuItem> = listOf(),
     cautions: List<CautionViewItem> = listOf(),
     sendEnabled: Boolean = true,
+    feeInfoText: String? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val closeUntilDestId = sendEntryPointDestId ?: SendV2Page::class
@@ -175,6 +176,7 @@ fun SendConfirmationScreen(
                 feeCoinRate = feeCoinRate,
                 navigation = navigation,
                 memo = memo,
+                customFeeInfo = feeInfoText,
                 additionalFields = additionalFields
             )
 
