@@ -113,14 +113,12 @@ class EvmFeeService(
         }
 
         return if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
+            // The node refuses to estimate a transfer of the whole balance (value plus gas
+            // exceeds it), so estimate with a stub value. The amount is left as requested:
+            // sync() reports the shortfall, and a flow that wants to send the maximum reduces
+            // the amount by this fee and asks again.
             val gasData = gasData(gasPrice, gasPriceDefault, BigInteger.ONE, transactionData)
-            val adjustedValue = transactionData.value - gasData.fee
-            if (adjustedValue <= BigInteger.ZERO) {
-                throw FeeSettingsError.InsufficientBalance
-            } else {
-                val transactionDataAdjusted = TransactionData(transactionData.to, adjustedValue, byteArrayOf())
-                Transaction(transactionDataAdjusted, gasData, default, warnings, errors)
-            }
+            Transaction(transactionData, gasData, default, warnings, errors)
         } else {
             val gasData = gasData(gasPrice, gasPriceDefault, null, transactionData)
             Transaction(transactionData, gasData, default, warnings, errors)

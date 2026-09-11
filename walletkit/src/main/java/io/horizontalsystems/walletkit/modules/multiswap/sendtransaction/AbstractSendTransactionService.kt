@@ -19,6 +19,13 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     open val supportsMevProtection: Boolean = false
     /** Explanation shown for the network fee row, or null for the generic one. */
     open val networkFeeInfoRes: Int? = null
+
+    /**
+     * The most of the token this service can send under its current fee estimate, for chains
+     * where "requested amount minus fee" is not the answer (input selection, rent reserves).
+     * Null means that plain rule applies. Read after the state has settled.
+     */
+    open fun maxSendableAmount(): BigDecimal? = null
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
     protected var uuid = UUID.randomUUID().toString()
 
@@ -59,8 +66,6 @@ data class SendTransactionServiceState(
     val sendable: Boolean,
     val loading: Boolean,
     val fields: List<DataField>,
-    /** Amount the service will actually send when it differs from the requested one (a max send net of fee). */
-    val adjustedAmount: BigDecimal? = null,
 )
 
 /** Kit-free projection of a signed raw transaction for flows that submit externally. */

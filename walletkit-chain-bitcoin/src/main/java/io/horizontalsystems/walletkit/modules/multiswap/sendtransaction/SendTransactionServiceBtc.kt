@@ -141,6 +141,10 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         emitState()
     }
 
+    // Fee-inclusive: computed by the adapter from the fee rate, recipient, memo and the
+    // selected outputs, so it is the exact amount a whole-balance send can carry.
+    override fun maxSendableAmount(): BigDecimal? = amountState.availableBalance
+
     override fun createState(): SendTransactionServiceState {
         val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend
 
