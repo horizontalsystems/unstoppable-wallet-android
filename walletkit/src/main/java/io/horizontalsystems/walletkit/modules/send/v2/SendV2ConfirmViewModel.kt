@@ -134,7 +134,9 @@ class SendV2ConfirmViewModel(
         viewModelScope.launch { submit(amount) }
     }
 
-    private suspend fun submit(value: BigDecimal) {
+    // Services may reach the network while taking the transfer (fee estimates, account
+    // lookups), so this never runs on the main thread.
+    private suspend fun submit(value: BigDecimal) = withContext(Dispatchers.Default) {
         try {
             val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, chainSettings)
                 ?: throw UnsupportedOperationException(token.blockchainType.uid)
