@@ -75,6 +75,7 @@ import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import java.net.UnknownHostException
 import kotlin.reflect.KClass
 
 @Composable
@@ -257,6 +258,7 @@ fun SendV2Screen(
                     }
 
                     is SendStep.Error -> when (step.error) {
+                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
                         SwapError.InsufficientBalanceFrom -> stringResource(R.string.Swap_ErrorInsufficientBalance)
                         is TokenNotEnabled -> stringResource(R.string.Swap_ErrorTokenNotEnabled)
                         is WalletSyncing -> stringResource(R.string.Swap_ErrorWalletSyncing)
