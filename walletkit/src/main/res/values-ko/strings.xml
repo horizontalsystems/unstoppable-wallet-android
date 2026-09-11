@@ -361,6 +361,7 @@
     <string name="Send_UtxoExpertMode">UTxO 전문가 모드</string>
     <string name="Send_Rbf">수수료로 대체</string>
     <string name="Send_Rbf_Description">이 옵션을 통해 거래가 멈춘 상태에서 수수료를 증가시켜 거래를 다시 보낼 수 있습니다.</string>
+    <string name="Send_RbfDisabled">비활성화됨</string>
     <string name="Send_Utxo_AvailableBalance">사용 가능한 잔액</string>
     <string name="Send_Utxo_UnselectAll">전체 선택 해제</string>
     <string name="Send_Utxo_SelectAll">전체 선택</string>

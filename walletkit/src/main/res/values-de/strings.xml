@@ -380,6 +380,7 @@
     <string name="Send_UtxoExpertMode">UTxO-Experten-Modus</string>
     <string name="Send_Rbf">Ersetzen durch Gebühr</string>
     <string name="Send_Rbf_Description">Mit dieser Option können Sie eine festgefahrene Transaktion erneut senden, indem Sie den Betrag der Gebühr erhöhen.</string>
+    <string name="Send_RbfDisabled">Deaktiviert</string>
     <string name="Send_Utxo_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Send_Utxo_UnselectAll">Alle abwählen</string>
     <string name="Send_Utxo_SelectAll">Alle ausblenden</string>

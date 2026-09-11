@@ -380,6 +380,7 @@
     <string name="Send_UtxoExpertMode">Mode Expert UTxO</string>
     <string name="Send_Rbf">Remplacer par frais</string>
     <string name="Send_Rbf_Description">Cette option vous permet de renvoyer une transaction bloquée en augmentant le montant des frais.</string>
+    <string name="Send_RbfDisabled">Désactivé</string>
     <string name="Send_Utxo_AvailableBalance">Solde disponible</string>
     <string name="Send_Utxo_UnselectAll">Tout désintéresser</string>
     <string name="Send_Utxo_SelectAll">Tout Sellect</string>

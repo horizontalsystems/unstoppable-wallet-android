@@ -28,6 +28,9 @@ import io.horizontalsystems.walletkit.modules.amount.AmountValidator
 import io.horizontalsystems.walletkit.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.walletkit.modules.fee.HSFee
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
+import io.horizontalsystems.walletkit.modules.send.bitcoin.rbfSupported
+import io.horizontalsystems.hodler.HodlerPlugin
+import io.horizontalsystems.hodler.HodlerData
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinAddressService
@@ -126,6 +129,17 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         emitState()
     }
 
+    // Only settings that differ from their defaults are worth a row: a timelock is off unless
+    // chosen, and replace-by-fee is on unless switched off.
+    private fun refreshFields() {
+        val lockTime = (pluginData?.get(HodlerPlugin.id) as? HodlerData)?.lockTimeInterval
+
+        fields = listOfNotNull(
+            lockTime?.let { DataFieldBtcTimeLock(it) },
+            if (token.blockchainType.rbfSupported && !rbfEnabled) DataFieldBtcRbfDisabled else null,
+        )
+    }
+
     private fun refreshNetworkFee() {
         networkFee = bitcoinFeeInfo?.fee?.let { fee ->
             getAmountData(CoinValue(token, fee))
@@ -195,6 +209,8 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
         addressService.setPluginData(pluginData)
         addressService.setAddress(Address(data.address))
+
+        refreshFields()
     }
 
     @Composable
