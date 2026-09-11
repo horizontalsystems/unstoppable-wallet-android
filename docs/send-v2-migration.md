@@ -52,8 +52,10 @@ they land.
 
 ## Cosmetic
 
-- [ ] Coin/fiat primary input mode is no longer persisted (both fields shown at once).
-- [ ] Amount field: shake on invalid input, clear button, MAX button (percent bar covers max).
+- [x] Coin/fiat primary input mode: obsolete, the amount and its fiat value are both
+      editable at once, so there is no mode to remember.
+- [x] Amount field affordances: the percent bar above the keyboard covers clear and max;
+      the shake on invalid input is dropped.
 - [x] Memo max lengths follow the networks: Stellar 28, Bitcoin 80, Thorchain 250; the
       rest are within their chains' limits. The field counts characters, not bytes.
 
