@@ -20,8 +20,8 @@ they land.
 
 ## Send-page validation
 
-- [ ] Minimum / maximum amount: Bitcoin dust, Stellar per-destination minimum. Currently
-      only surfaced as confirmation cautions.
+- [x] Minimum amount: Bitcoin dust and Stellar's create-account minimum are checked on
+      confirmation, with a title and description caution.
 - [x] Sending the whole balance of a coin that pays its own fee: the confirmation reduces
       the amount by the fee for every chain (Bitcoin via its input selection, Solana net of
       the rent reserve). Zcash and Monero cannot estimate a fee for the full balance and
