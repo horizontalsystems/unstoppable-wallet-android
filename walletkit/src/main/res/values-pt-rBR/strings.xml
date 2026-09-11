@@ -486,6 +486,11 @@
     <string name="FeeInfo_AverageDescription">Normalmente, o valor de taxa recomendado deve ser suficiente para que uma transação seja processada em minutos ou uma hora para Bitcoin e em minutos para o Ethereum.</string>
     <string name="FeeInfo_Fast">Alto</string>
     <string name="FeeInfo_FastDescription">Para as operações em que a prioridade é importante, recomendamos a utilização do alto valor de taxa. É esperado que seja suficiente para concluir uma transação dentro de 10 minutos para o Bitcoin e dentro de 1 – 2 minutos para o Ethereum.</string>
+    <string name="FeeInfo_TronFee_Description">O custo estimado de envio de determinada transação na rede. (Sem excluir Eneregy, Bandwidth e Taxa de Ativação)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Taxa de ativação</string>
+    <string name="FeeInfo_TronActivationFee_Description">Este endereço não está ativo. A transferência de tokens TRX ou TRC-10 para um endereço de conta inativo irá ativar a conta.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">A bandwidth é a unidade que mede o tamanho dos bytes de transação armazenados no banco de dados blockchain. Quanto maior a transação, mais recursos de largura de banda serão consumidos.\n\nEnergy é a unidade que mede a quantidade de computação necessária pela máquina virtual TRON para realizar operações específicas na rede TRON.\n\nComo as transações de contrato inteligente exigem recursos de computação para executar, cada transação de contrato inteligente requer o pagamento da taxa de energy.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Não é possível transferir TRX para si mesmo</string>
     <string name="Tron_TokenPage_AddressNotActivated">Não ativado</string>

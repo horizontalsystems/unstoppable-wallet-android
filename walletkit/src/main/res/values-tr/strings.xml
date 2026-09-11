@@ -358,6 +358,11 @@
     <string name="FeeInfo_AverageDescription">Genellikle bu ücret, işlemin Bitcoin için dakikalar/saatler içinde ve Ethereum için dakikalar içinde işleme alınması için yeterli olacaktır.</string>
     <string name="FeeInfo_Fast">Hızlı</string>
     <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
+    <string name="FeeInfo_TronFee_Description">Ağda belirli bir işlemi göndermenin tahmini maliyeti. (Enerji, Bant Genişliği ve Aktivasyon Ücreti hariç)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Aktivasyon ücreti</string>
+    <string name="FeeInfo_TronActivationFee_Description">Bu adres aktif değil. TRX veya TRC-10 jetonlarını aktif olmayan bir hesap adresine transfer etmek, hesabı aktif hale getirecektir.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">TRX kendinize aktarılamıyor</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Hesap aktif değil</string>
