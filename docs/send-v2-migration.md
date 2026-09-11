@@ -39,8 +39,9 @@ they land.
       is retried and then shown as a caution.
 - [x] Zcash send-to-self rejection: the address entry screen's Zcash validator refuses the
       wallet's own address, so it never reaches confirmation.
-- [ ] Bitcoin UTxOs row shows total/total in auto mode (auto-selected count is only known
-      after the fee estimate).
+- [x] Bitcoin and Monero UTxOs rows read "total / total" until outputs are picked by hand;
+      an automatic selection is only made when the transaction is built, so no earlier
+      count exists.
 
 ## Confirmation
 
