@@ -28,7 +28,8 @@ they land.
       still end in an insufficient-balance caution.
 - [x] Bitcoin fee-rate cautions moved to the confirmation with the fee rate itself; the send
       page never sets a rate.
-- [ ] Inline caution under the amount field. Errors show only in the button title.
+- [x] Inline caution under the amount field: not needed, the button title carries the
+      error as on the swap screen.
 
 ## Per-chain features
 
