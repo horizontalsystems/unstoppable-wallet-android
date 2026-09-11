@@ -356,15 +356,11 @@
     <string name="Send_Fee">수수료</string>
     <string name="Send_Fee_Info">네트워크에서 주어진 거래를 보내는 데 예상되는 비용.</string>
     <string name="Send_Button_Paste">붙여넣기</string>
-    <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
     <string name="Send_Hodler_Description">TimeLock은 BIP44 주소(1로 시작)로 전송할 때만 작동합니다.</string>
     <string name="Send_UtxoExpertMode">UTxO 전문가 모드</string>
-    <string name="Send_Utxo_Description">잔액에서 자금을 사용하기 위해 수동으로 UTxO를 선택하세요.</string>
     <string name="Send_Rbf">수수료로 대체</string>
     <string name="Send_Rbf_Description">이 옵션을 통해 거래가 멈춘 상태에서 수수료를 증가시켜 거래를 다시 보낼 수 있습니다.</string>
-    <string name="Send_RbfEnabled">활성화</string>
-    <string name="Send_RbfDisabled">비활성화됨</string>
     <string name="Send_Utxo_AvailableBalance">사용 가능한 잔액</string>
     <string name="Send_Utxo_UnselectAll">전체 선택 해제</string>
     <string name="Send_Utxo_SelectAll">전체 선택</string>
@@ -401,7 +397,6 @@
     <string name="Send_Error_MinimumAmount">최소 %s 금액</string>
     <string name="Send_Error_MaximumAmount">최대 %s 금액</string>
     <string name="Send_Error_SendToSelf">자체로 전송이 지원되지 않음</string>
-    <string name="Send_DialogAvailableBalance">사용 가능한 잔액</string>
     <string name="Send_DialogSpeed">거래 속도</string>
     <string name="Send_LockTime_Off">끄기</string>
     <string name="Send_LockTime_Hour">1시간</string>
@@ -451,14 +446,8 @@
     <string name="FeeInfo_AverageDescription">일반적으로 권장 수수료 값은 비트코인의 경우 분/시간 이내, 이더리움의 경우 몇 분 이내로 거래를 처리하기에 충분해야 합니다.</string>
     <string name="FeeInfo_Fast">빠르게</string>
     <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 값을 사용하는 것이 좋습니다. 비트코인의 경우 10분 이내, 이더리움의 경우 1~2분 이내에 거래가 완료될 것으로 예상됩니다.</string>
-    <string name="FeeInfo_TronFee_Description">네트워크에서 거래하는 데 드는 예상 비용입니다. (energy, bandwidth 및 활성화 수수료 제외)</string>
-    <string name="FeeInfo_TronActivationFee_Title">활성화 수수료</string>
-    <string name="FeeInfo_TronActivationFee_Description">이 주소는 활성화되지 않았습니다. 비활성화된 계정 주소로 TRX 또는 TRC-10 토큰을 전송하면 계정이 활성화됩니다</string>
-    <string name="FeeInfo_TronResourcesConsumed_Title">소모된 자원</string>
-    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 은 블록체인 데이터베이스에 저장된 트랜잭션 바이트 크기를 측정하는 단위입니다. 거래가 클수록 대역폭 자원이 더 많이 사용됩니다.\n\nEnergy 는 TRON 가상 머신이 TRON 네트워크에서 특정 작업을 수행하기 위해 필요한 계산 양을 측정하는 단위입니다. \n\n스마트 계약 트랜잭션은 실행에 계산 자원이 필요하기 때문에 각 스마트 계약 트랜잭션에는 energy 수수료를 지불해야합니다.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">TRX를 자신에게 전송할 수 없습니다</string>
-    <string name="Tron_ZeroAmountTrxNotAllowed">0 %s을(를) 전송할 수 없습니다.</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">계정이 활성화되지 않음</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">새로운 TRON 지갑은 활성화되기 위해 최소 1 TRX의 입금이 필요합니다. 비활성 지갑은 토큰을 보유하고 받을 수는 있지만, 활성화될 때까지 잔액이 정확히 표시되지 않습니다.</string>
     <!--TonConnect-->
@@ -1818,7 +1807,6 @@
     <string name="WalletConnect_Permit_Unlimited_Title">무제한 허용!</string>
     <string name="WalletConnect_Permit_Unlimited">이에 서명하면 %s가 허용이 취소될 때까지 언제든지 지갑에서 이 토큰의 모든 금액을 이동할 수 있습니다. 지금은 체인에 아무것도 나타나지 않으므로 이것이 발생하는 것을 보지 못할 것입니다.</string>
     <string name="WalletConnect_Permit_SignatureValid">서명 유효 기한</string>
-    <string name="Send_Error_NodeUnreachable">노드에 도달할 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
     <string name="Balance_Zcash_MigrationRequired">마이그레이션 필요</string>
     <string name="Balance_Zcash_Migration_Title">Ironwood로 마이그레이션</string>
     <string name="Balance_Zcash_Migration_Description">Zcash가 새로운 보호된 풀로 업그레이드되었습니다. 향후 거래에서 완전히 익명으로 유지하려면 보호된 잔액을 새 풀로 마이그레이션해야 합니다.\n\n마이그레이션 거래는 완전히 익명이 아니며 관련 금액을 노출한다는 점을 유의하시기 바랍니다.\n\n높은 수준의 개인정보 보호를 유지하기 위해 마이그레이션 거래 수행 시 VPN 또는 TOR 사용을 고려할 수 있습니다.</string>

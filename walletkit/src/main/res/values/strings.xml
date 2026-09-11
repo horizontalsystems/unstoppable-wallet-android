@@ -503,7 +503,6 @@
     <string name="Send_Fee">Fee</string>
     <string name="Send_Fee_Info">The estimated cost of processing this transaction on the blockchain.</string>
     <string name="Send_Button_Paste">Paste</string>
-    <string name="Send_Button_Max">Max</string>
     <string name="Send_Advanced">Advanced</string>
     <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1).</string>
     <string name="Send_Hodler_PrivateSendUnavailable">Not available when Private Send is on.</string>
@@ -512,7 +511,6 @@
     <string name="Send_InputsOutputs_Description">Changes how transaction inputs and outputs are structured.</string>
     <string name="Send_TimeLock">Time Lock</string>
     <string name="Send_UtxoExpertMode">UTxO Expert Mode</string>
-    <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
     <string name="Monero_Account">Account</string>
     <string name="Monero_Accounts">Accounts</string>
     <string name="Monero_NewAccount">New Account</string>
@@ -521,8 +519,6 @@
     <string name="Monero_Accounts_Description">Accounts are separate compartments of the same Monero wallet. Balance, transactions, receiving and sending all apply to the selected account. Moving funds between accounts is a regular on-chain transaction with a network fee.</string>
     <string name="Send_Rbf">Replace by Fee</string>
     <string name="Send_Rbf_Description">This option allows you to resend a stuck transaction by increasing the amount of the fee.</string>
-    <string name="Send_RbfEnabled">Enabled</string>
-    <string name="Send_RbfDisabled">Disabled</string>
     <string name="Send_Utxo_AvailableBalance">Available Balance</string>
     <string name="Send_Utxo_UnselectAll">Unsellect All</string>
     <string name="Send_Utxo_SelectAll">Sellect All</string>
@@ -582,7 +578,6 @@
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_SendToSelf">Sending %s to your own address is not allowed. Please enter a different recipient address.</string>
 
-    <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_Memo_PublicWarning">This memo will be public on the blockchain.</string>
@@ -598,7 +593,6 @@
     <string name="Send_UnexpectedError">Unexpected error</string>
     <string name="Send_UnexpectedError_Description">Something went wrong while sending your transaction. Please try again or copy the error code and contact support.</string>
 
-    <string name="Send_Error_NodeUnreachable">Could not reach the node. Please check your connection and try again.</string>
 
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <string name="Send_Error_LowFee">Fee Error</string>
@@ -680,15 +674,9 @@
     <string name="FeeInfo_AverageDescription">Typically, the recommended fee value should be sufficient for a transaction to be processed within minutes or an hour for Bitcoin and within minutes for Ethereum.</string>
     <string name="FeeInfo_Fast">High</string>
     <string name="FeeInfo_FastDescription">For transactions where priority is important, we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
-    <string name="FeeInfo_TronFee_Description">The estimated cost of sending given transaction on the network. (Without excluding Energy, Bandwidth and Activating Fee)</string>
-    <string name="FeeInfo_TronActivationFee_Title">Activation Fee</string>
-    <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
-    <string name="FeeInfo_TronResourcesConsumed_Title">Resources Consumed</string>
-    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth is the unit that measures the size of the transaction bytes stored in the blockchain database. The larger the transaction, the more bandwidth resources will be consumed.\n\nEnergy is the unit that measures the amount of computation required by the TRON virtual machine to perform specific operations on the TRON network.\n\nSince smart contract transactions require computing resources to execute, each smart contract transaction requires to pay for the energy fee.</string>
 
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
-    <string name="Tron_ZeroAmountTrxNotAllowed">Cannot transfer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Not Activated</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON Not Activated</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Transactions will appear after activation</string>

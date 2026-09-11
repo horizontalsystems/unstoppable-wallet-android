@@ -374,15 +374,11 @@
     <string name="Send_Fee">费用</string>
     <string name="Send_Fee_Info">区块链上处理此交易的估计成本。</string>
     <string name="Send_Button_Paste">粘帖</string>
-    <string name="Send_Button_Max">最多</string>
     <string name="Send_Advanced">高级</string>
     <string name="Send_Hodler_Description">TimeLock仅适用于发送到BIP44地址(以1开头)。</string>
     <string name="Send_UtxoExpertMode">UTxO 专家模式</string>
-    <string name="Send_Utxo_Description">手动选择 UTxO 将资金花在余额中</string>
     <string name="Send_Rbf">替换交易</string>
     <string name="Send_Rbf_Description">此选项允许您通过增加手续费金额来重新发送卡住的交易。</string>
-    <string name="Send_RbfEnabled">已启用</string>
-    <string name="Send_RbfDisabled">已禁用</string>
     <string name="Send_Utxo_AvailableBalance">可用余额</string>
     <string name="Send_Utxo_UnselectAll">取消全选</string>
     <string name="Send_Utxo_SelectAll">全选</string>
@@ -433,7 +429,6 @@
     <string name="Send_Error_MinimumAmount">最小金额 %s</string>
     <string name="Send_Error_MaximumAmount">最大金额 %s</string>
     <string name="Send_Error_SendToSelf">不支持发送给自己</string>
-    <string name="Send_DialogAvailableBalance">可用余额</string>
     <string name="Send_DialogSpeed">交易速度</string>
     <string name="Send_LockTime_Off">关</string>
     <string name="Send_LockTime_Hour">1 小时</string>
@@ -490,14 +485,8 @@
     <string name="FeeInfo_AverageDescription">通常，此费用范围应足以使比特币（Bitcoin）交易在数分钟/小时、以太币（Ethereum）在数分钟内得到处理。</string>
     <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">对于优先级重要的交易，我们建议使用高收费值。预计这将足以在10分钟内完成比特币交易，1-2分钟以内完成Ethereum交易。</string>
-    <string name="FeeInfo_TronFee_Description">估算在网络上发送特定交易所需的成本，包括能源、带宽和激活费</string>
-    <string name="FeeInfo_TronActivationFee_Title">激活费</string>
-    <string name="FeeInfo_TronActivationFee_Description">此地址未激活。传输TRX或 TRC-10代币到非活动帐户地址将激活该帐户。</string>
-    <string name="FeeInfo_TronResourcesConsumed_Title">消耗的资源</string>
-    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 是衡量存储在区块链数据库中的交易字节大小的单位。 交易越大，消耗的带宽资源就越多。\n\nEnergy 是衡量波场虚拟机在波场网络上执行特定操作所需计算量的单位。\n\n自智能合约 交易需要计算资源来执行，每笔智能合约交易都需要支付 energy费用。</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">无法将 TRX 转移给自己</string>
-    <string name="Tron_ZeroAmountTrxNotAllowed">无法传输 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">未激活</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">帐户未激活</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">激活后交易将显示</string>
@@ -1817,7 +1806,6 @@
     <string name="WalletConnect_Permit_Unlimited_Title">无限授权!</string>
     <string name="WalletConnect_Permit_Unlimited">签署此授权允许 %s 在授权被撤销前的任何时间，从您的钱包中转移该代币的任何数量。目前链上不会显示任何内容，所以您看不到这一切发生。</string>
     <string name="WalletConnect_Permit_SignatureValid">签名有效期至</string>
-    <string name="Send_Error_NodeUnreachable">无法连接到节点。请检查您的连接并重试。</string>
     <string name="Balance_Zcash_MigrationRequired">需要迁移</string>
     <string name="Balance_Zcash_Migration_Title">迁移至 Ironwood</string>
     <string name="Balance_Zcash_Migration_Description">Zcash已升级到新的防护池。您的防护余额必须迁移到该新池，以在将来的交易中保持完全匿名。\n\n请注意，迁移交易不是完全匿名的，并会公开涉及的金额。\n\n为了保持高级别的隐私，在进行迁移交易时，您可以考虑使用VPN或TOR。</string>
