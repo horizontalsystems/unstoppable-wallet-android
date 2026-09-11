@@ -493,6 +493,7 @@
     <string name="FeeInfo_TronResourcesConsumed_Description">El bandwidth es la unidad que mide el tamaño de los bytes de transacción almacenados en la base de datos de la cadena de bloques. Cuanto más grande sea la transacción, más recursos de ancho de banda se consumirán.\n\nEnerge es la unidad que mide la cantidad de computación requerida por la máquina virtual TRON para realizar operaciones específicas en la red TRON.\n\nDado que las transacciones de contratos inteligentes requieren recursos informáticos para ejecutarse, cada transacción de contrato inteligente debe pagar la tarifa de energy.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">No se puede transferir TRX a ti mismo</string>
+    <string name="Tron_ZeroAmountTrxNotAllowed">No se puede transferir 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">No activado</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Cuenta No Activa</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Las transacciones aparecerán después de la activación</string>

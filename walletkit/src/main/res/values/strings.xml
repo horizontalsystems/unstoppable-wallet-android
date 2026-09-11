@@ -697,6 +697,7 @@
 
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
+    <string name="Tron_ZeroAmountTrxNotAllowed">Cannot transfer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Not Activated</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON Not Activated</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Transactions will appear after activation</string>

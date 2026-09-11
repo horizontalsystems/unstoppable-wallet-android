@@ -493,6 +493,7 @@
     <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer TRX à vous-même</string>
+    <string name="Tron_ZeroAmountTrxNotAllowed">Impossible de transférer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Non activé</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON non activé</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Les transactions apparaîtront après l\'activation</string>

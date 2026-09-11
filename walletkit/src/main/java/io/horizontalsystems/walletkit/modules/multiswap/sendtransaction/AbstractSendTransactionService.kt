@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import java.math.BigDecimal
 import java.util.UUID
 
 abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasNonceSettings: Boolean): ServiceState<SendTransactionServiceState>() {
@@ -58,6 +59,8 @@ data class SendTransactionServiceState(
     val sendable: Boolean,
     val loading: Boolean,
     val fields: List<DataField>,
+    /** Amount the service will actually send when it differs from the requested one (a max send net of fee). */
+    val adjustedAmount: BigDecimal? = null,
 )
 
 /** Kit-free projection of a signed raw transaction for flows that submit externally. */

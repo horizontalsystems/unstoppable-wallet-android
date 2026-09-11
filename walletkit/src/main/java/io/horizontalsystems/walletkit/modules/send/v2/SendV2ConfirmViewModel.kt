@@ -129,7 +129,7 @@ class SendV2ConfirmViewModel(
 
     override fun createState() = SendV2ConfirmUiState(
         wallet = wallet,
-        amount = amount,
+        amount = serviceState.adjustedAmount ?: amount,
         address = address,
         contact = contact,
         memo = memo,
