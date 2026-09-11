@@ -589,7 +589,8 @@
     <string name="ScanQr_QrDetected">QR code detected</string>
 
     <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
-    <string name="Send_Error_MinimumAmount">Min. amount %s</string>
+    <string name="Send_Error_MinimumAmount_Title">Minimum amount</string>
+    <string name="Send_Error_MinimumAmount_Description">Minimum amount must be %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_SendToSelf">Sending %s to your own address is not allowed. Please enter a different recipient address.</string>
 

@@ -92,8 +92,13 @@ class SendErrorInsufficientBalance(coinCode: Any) : HSCaution(
     )
 )
 
-class SendErrorMinimumSendAmount(amount: Any) : HSCaution(
-    TranslatableString.ResString(R.string.Send_Error_MinimumAmount, amount)
+class SendErrorMinimumSendAmount(amount: BigDecimal, coinCode: String) : HSCaution(
+    TranslatableString.ResString(R.string.Send_Error_MinimumAmount_Title),
+    Type.Error,
+    TranslatableString.ResString(
+        R.string.Send_Error_MinimumAmount_Description,
+        App.numberFormatter.formatCoinFull(amount, coinCode, amount.scale().coerceAtLeast(0))
+    )
 )
 
 class SendErrorMaximumSendAmount(amount: Any): HSCaution(

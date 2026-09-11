@@ -427,7 +427,6 @@
     <string name="ScanQr_NoQrFound">Código QR no encontrado</string>
     <string name="ScanQr_QrDetected">Código QR detectado</string>
     <string name="Send_Error_UnsupportedAddress">El bloqueo del tiempo solo funciona con direcciones P2PKH (a partir de 1)</string>
-    <string name="Send_Error_MinimumAmount">Monto mínimo %s</string>
     <string name="Send_Error_MaximumAmount">Monto máximo %s</string>
     <string name="Send_Error_SendToSelf">Enviarte a vos mismo no está soportado</string>
     <string name="Send_DialogSpeed">Velocidad de transacción</string>

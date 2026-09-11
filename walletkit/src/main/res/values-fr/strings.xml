@@ -427,7 +427,6 @@
     <string name="ScanQr_NoQrFound">Aucun code QR trouvé</string>
     <string name="ScanQr_QrDetected">QR code détecté</string>
     <string name="Send_Error_UnsupportedAddress">Le verrouillage du temps ne fonctionne que lors de l\'envoi aux adresses de paiement commençant par 1... (alias adresses BIP44)</string>
-    <string name="Send_Error_MinimumAmount">Montant minimum %s</string>
     <string name="Send_Error_MaximumAmount">Montant maximum %s</string>
     <string name="Send_Error_SendToSelf">L\'envoi de %s à votre propre adresse n\'est pas autorisé. Veuillez entrer une autre adresse de destinataire.</string>
     <string name="Send_DialogSpeed">Vitesse de la transaction</string>

@@ -24,7 +24,7 @@ class AmountValidator {
             SendErrorInsufficientBalance(coinCode)
         }
         minimumSendAmount != null && coinAmount < minimumSendAmount -> {
-            SendErrorMinimumSendAmount(minimumSendAmount)
+            SendErrorMinimumSendAmount(minimumSendAmount, coinCode)
         }
         maximumSendAmount != null && coinAmount > maximumSendAmount -> {
             SendErrorMaximumSendAmount(maximumSendAmount)

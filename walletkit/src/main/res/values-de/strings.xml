@@ -427,7 +427,6 @@
     <string name="ScanQr_NoQrFound">Kein QR-Code gefunden</string>
     <string name="ScanQr_QrDetected">QR-Code erkannt</string>
     <string name="Send_Error_UnsupportedAddress">Zeitsperren funktioniert nur, wenn Sie an Zahlungsadressen ab 1 senden... (aka BIP44 Adressen)</string>
-    <string name="Send_Error_MinimumAmount">Min. Betrag %s</string>
     <string name="Send_Error_MaximumAmount">Max. Betrag %s</string>
     <string name="Send_Error_SendToSelf">Senden von %s an Ihre eigene Adresse ist nicht zulässig. Bitte geben Sie eine andere Empfängeradresse ein.</string>
     <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit</string>
