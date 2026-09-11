@@ -100,7 +100,6 @@ class SendV2ConfirmViewModel(
     private var submittedAmount: BigDecimal? = null
     private var adjustedAmount: BigDecimal? = null
     private var adjusting = sendMax
-    private var adjustmentTarget: BigDecimal? = null
     private var adjustmentRounds = 0
     private var maxSendCaution: CautionViewItem? = null
     private var rate = xRateService.getRate(token.coin.uid)
@@ -155,7 +154,13 @@ class SendV2ConfirmViewModel(
         if (serviceState.loading) return
 
         val fee = feeCoinValue()?.takeIf { it.coin.uid == token.coin.uid }?.value
-        val target = sendTransactionService.maxSendableAmount() ?: fee?.let { amount - it } ?: return
+        val target = sendTransactionService.maxSendableAmount() ?: fee?.let { amount - it }
+        if (target == null) {
+            // The service settled without a fee (estimate failed, or the full amount cannot
+            // be built): nothing to adjust to, and its own cautions must show.
+            adjusting = false
+            return
+        }
 
         if (target <= BigDecimal.ZERO) {
             maxSendCaution = CautionViewItem(
@@ -175,13 +180,9 @@ class SendV2ConfirmViewModel(
             return
         }
 
-        // A fee that depends on the amount could chase itself; a few rounds settle any
-        // realistic case, after which the last estimate stands.
-        if (adjustmentTarget?.compareTo(target) != 0) {
-            adjustmentTarget = target
-            adjustmentRounds = 0
-        }
-        if (adjustmentRounds >= 3) {
+        // A fee that depends on the amount could chase itself between two values; the
+        // budget counts every resubmission, so the last estimate stands after a few rounds.
+        if (adjustmentRounds >= MAX_ADJUSTMENT_ROUNDS) {
             adjusting = false
             return
         }
@@ -263,6 +264,10 @@ class SendV2ConfirmViewModel(
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: error.javaClass.simpleName))
+    }
+
+    private companion object {
+        const val MAX_ADJUSTMENT_ROUNDS = 3
     }
 
     class Factory(

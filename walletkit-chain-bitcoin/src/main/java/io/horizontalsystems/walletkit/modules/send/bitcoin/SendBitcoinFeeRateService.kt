@@ -41,6 +41,12 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
             }
         } catch (error: Throwable) {
             Log.e("SendBitcoinFeeRateService", "feeRateProvider.getFeeRates()", error )
+            // No rate at all: report it instead of staying silent, so the confirmation can
+            // show the failure and offer the settings page to enter a rate by hand.
+            if (feeRate == null) {
+                validateFeeRate()
+                emitState()
+            }
         }
     }
 

@@ -100,6 +100,15 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
 
         cautions = buildList {
             val total = trxAmount + (fee ?: BigDecimal.ZERO)
+            feeState.error?.let { error ->
+                add(
+                    HSCaution(
+                        s = TranslatableString.ResString(R.string.FeeSettings_Error_FeeEstimateFailed),
+                        type = Type.Error,
+                        description = TranslatableString.PlainString(error.message ?: error.javaClass.simpleName),
+                    ).toCautionViewItem()
+                )
+            }
             if (adapter.trxBalanceData.available < total) {
                 add(
                     HSCaution(
