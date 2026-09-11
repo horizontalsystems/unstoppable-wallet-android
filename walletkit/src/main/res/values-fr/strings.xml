@@ -375,15 +375,11 @@
     <string name="Send_Fee">Frais</string>
     <string name="Send_Fee_Info">Le coût estimé du traitement de cette transaction sur la blockchain.</string>
     <string name="Send_Button_Paste">Coller</string>
-    <string name="Send_Button_Max">Max.</string>
     <string name="Send_Advanced">Avancé</string>
     <string name="Send_Hodler_Description">TimeLock ne fonctionne que pour l\'envoi aux adresses BIP44 (commençant par 1).</string>
     <string name="Send_UtxoExpertMode">Mode Expert UTxO</string>
-    <string name="Send_Utxo_Description">Sélectionnez manuellement UTxO pour dépenser les fonds dans la balance</string>
     <string name="Send_Rbf">Remplacer par frais</string>
     <string name="Send_Rbf_Description">Cette option vous permet de renvoyer une transaction bloquée en augmentant le montant des frais.</string>
-    <string name="Send_RbfEnabled">Activé</string>
-    <string name="Send_RbfDisabled">Désactivé</string>
     <string name="Send_Utxo_AvailableBalance">Solde disponible</string>
     <string name="Send_Utxo_UnselectAll">Tout désintéresser</string>
     <string name="Send_Utxo_SelectAll">Tout Sellect</string>
@@ -434,7 +430,6 @@
     <string name="Send_Error_MinimumAmount">Montant minimum %s</string>
     <string name="Send_Error_MaximumAmount">Montant maximum %s</string>
     <string name="Send_Error_SendToSelf">L\'envoi de %s à votre propre adresse n\'est pas autorisé. Veuillez entrer une autre adresse de destinataire.</string>
-    <string name="Send_DialogAvailableBalance">Solde disponible</string>
     <string name="Send_DialogSpeed">Vitesse de la transaction</string>
     <string name="Send_LockTime_Off">Désactivé</string>
     <string name="Send_LockTime_Hour">1 heure</string>
@@ -491,14 +486,8 @@
     <string name="FeeInfo_AverageDescription">Généralement, la valeur des frais recommandée devrait être suffisante pour qu\'une transaction soit traitée en quelques minutes ou en une heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Élevé</string>
     <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous vous recommandons d\'utiliser la valeur élevée des frais. Cela devrait suffire pour qu\'une transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les 1-2 minutes pour Ethereum.</string>
-    <string name="FeeInfo_TronFee_Description">Le coût estimé de l\'envoi d\'une transaction donnée sur le réseau. (Sans exclure l\'énergie, la bande passante et les frais d\'activation)</string>
-    <string name="FeeInfo_TronActivationFee_Title">Frais d\'activation</string>
-    <string name="FeeInfo_TronActivationFee_Description">Cette adresse n\'est pas active. Le transfert de jetons TRX ou TRC-10 vers une adresse de compte inactive activera le compte.</string>
-    <string name="FeeInfo_TronResourcesConsumed_Title">Ressources consommées</string>
-    <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer TRX à vous-même</string>
-    <string name="Tron_ZeroAmountTrxNotAllowed">Impossible de transférer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Non activé</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON non activé</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Les transactions apparaîtront après l\'activation</string>
@@ -1819,7 +1808,6 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Approbation Illimitée!</string>
     <string name="WalletConnect_Permit_Unlimited">Signer ceci permet à %s de déplacer n\'importe quelle quantité de ce token de votre portefeuille, à tout moment jusqu\'à ce que l\'approbation soit révoquée. Rien n\'apparaît sur la chaîne maintenant, vous ne verrez donc pas cela se produire.</string>
     <string name="WalletConnect_Permit_SignatureValid">Signature valide jusqu\'au</string>
-    <string name="Send_Error_NodeUnreachable">Impossible de joindre le nœud. Veuillez vérifier votre connexion et réessayer.</string>
     <string name="Balance_Zcash_MigrationRequired">Migration requise</string>
     <string name="Balance_Zcash_Migration_Title">Migration vers Ironwood</string>
     <string name="Balance_Zcash_Migration_Description">Zcash a été mis à niveau vers un nouveau pool blindé. Votre solde blindé doit être migré vers ce nouveau pool pour rester complètement anonyme dans les transactions futures.\n\nVeuillez noter que les transactions de migration ne sont pas complètement anonymes et exposent les montants impliqués.\n\nPour maintenir un haut niveau de confidentialité, vous pouvez envisager d\'utiliser un VPN ou TOR lors de l\'exécution de transactions de migration.</string>

@@ -273,15 +273,11 @@
     <string name="Send_Hint_Address">Adres veya Domain</string>
     <string name="Send_Fee">Masraf</string>
     <string name="Send_Button_Paste">Yapıştır</string>
-    <string name="Send_Button_Max">Azami</string>
     <string name="Send_Advanced">İleri düzey</string>
     <string name="Send_Hodler_Description">TimeLock, yalnızca BIP44 adreslerine gönderme için çalışır (1 ile başlayanlar).</string>
     <string name="Send_UtxoExpertMode">UTxO Uzman Modu</string>
-    <string name="Send_Utxo_Description">Bakiyedeki fonları harcamak için UTxO\'yu manuel olarak seçin</string>
     <string name="Send_Rbf">Ücretle Değiştir</string>
     <string name="Send_Rbf_Description">Bu seçenek, takılı kalmış bir işlemi ücret miktarını artırarak yeniden göndermenizi sağlar.</string>
-    <string name="Send_RbfEnabled">Etkinleştirildi</string>
-    <string name="Send_RbfDisabled">Etkisizleştirildi</string>
     <string name="Send_Utxo_AvailableBalance">Mevcut Bakiye</string>
     <string name="Send_Utxo_UnselectAll">Tümünü Kaldır</string>
     <string name="Send_Utxo_SelectAll">Tümünü Seç</string>
@@ -314,7 +310,6 @@
     <string name="Send_Error_MinimumAmount">Minimum miktar %s</string>
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
     <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
-    <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
     <string name="Send_LockTime_Off">Kapat</string>
     <string name="Send_LockTime_Hour">1 saat</string>
@@ -363,14 +358,8 @@
     <string name="FeeInfo_AverageDescription">Genellikle bu ücret, işlemin Bitcoin için dakikalar/saatler içinde ve Ethereum için dakikalar içinde işleme alınması için yeterli olacaktır.</string>
     <string name="FeeInfo_Fast">Hızlı</string>
     <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
-    <string name="FeeInfo_TronFee_Description">Ağda belirli bir işlemi göndermenin tahmini maliyeti. (Enerji, Bant Genişliği ve Aktivasyon Ücreti hariç)</string>
-    <string name="FeeInfo_TronActivationFee_Title">Aktivasyon ücreti</string>
-    <string name="FeeInfo_TronActivationFee_Description">Bu adres aktif değil. TRX veya TRC-10 jetonlarını aktif olmayan bir hesap adresine transfer etmek, hesabı aktif hale getirecektir.</string>
-    <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
-    <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">TRX kendinize aktarılamıyor</string>
-    <string name="Tron_ZeroAmountTrxNotAllowed">0 %s aktarılamıyor</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Hesap aktif değil</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Yeni TRON cüzdanları aktif hale gelmek için en az 1 TRX yatırılmasını gerektirir. Aktif olmayan cüzdanlar, tokenları alabilir ve saklayabilir, ancak etkinleştirilene kadar bakiyeleri güncellemez.</string>
     <!--TonConnect-->
@@ -1818,7 +1807,6 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Sınırsız İzin!</string>
     <string name="WalletConnect_Permit_Unlimited">Bunu imzalamak, %s\'nin izin iptal edilene kadar istediği zaman cüzdanınızdan bu tokenin herhangi bir miktarını taşımasına izin verir. Şu anda zincirde hiçbir şey görünmüyor, bu nedenle bunun gerçekleştiğini görmezsiniz.</string>
     <string name="WalletConnect_Permit_SignatureValid">İmza Geçerlilik Süresi</string>
-    <string name="Send_Error_NodeUnreachable">Düğüme ulaşılamadı. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.</string>
     <string name="Balance_Zcash_MigrationRequired">Geçiş gerekli</string>
     <string name="Balance_Zcash_Migration_Title">Ironwood\'a Geçiş</string>
     <string name="Balance_Zcash_Migration_Description">Zcash yeni bir korumalı havuza yükseltilmiştir. Korumalı bakiyeniz, gelecekteki işlemlerde tam anonimlik için bu yeni havuza taşınmalıdır.\n\nMigrasyon işlemlerinin tamamen anonim olmadığını ve ilgili tutarları açığa çıkardığını lütfen unutmayın.\n\nYüksek düzeyde gizlilik sağlamak için migrasyon işlemlerini gerçekleştirirken VPN veya TOR kullanmayı göz önünde bulundurabilirsiniz.</string>

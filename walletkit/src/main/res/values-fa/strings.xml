@@ -124,7 +124,6 @@
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
     <string name="Send_Fee">هزينه</string>
     <string name="Send_Button_Paste">چسباندن</string>
-    <string name="Send_Button_Max">حداکثر</string>
     <string name="Send_Utxo_AvailableBalance">موجودی در دسترس</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
@@ -139,7 +138,6 @@
     <string name="Send_Error_MinimumAmount">حداقل مقدار %s</string>
     <string name="Send_Error_MaximumAmount">حداقل مقدار %s</string>
     <string name="Send_Error_SendToSelf">ارسال به خود پشتیبانی نشده است</string>
-    <string name="Send_DialogAvailableBalance">موجودی در دسترس</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
     <string name="Send_LockTime_Off">خاموش</string>
     <string name="Send_LockTime_Hour">۱ ساعت</string>
@@ -750,7 +748,6 @@
     <string name="WalletConnect_Permit_Unlimited_Title">اجازه نامحدود!</string>
     <string name="WalletConnect_Permit_Unlimited">امضای این اجازه می‌دهد %s در هر زمان تا زمان لغو اجازه، هر مقدار از این توکن را از کیف پول شما منتقل کند. هم‌اکنون هیچ چیزی در زنجیره ظاهر نمی‌شود، بنابراین شما آن را مشاهده نخواهید کرد.</string>
     <string name="WalletConnect_Permit_SignatureValid">امضا معتبر تا</string>
-    <string name="Send_Error_NodeUnreachable">نتوانستیم به گره دسترسی پیدا کنیم. لطفاً اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="Balance_Zcash_MigrationRequired">مهاجرت الزامی</string>
     <string name="Balance_Zcash_Migration_Title">مهاجرت به Ironwood</string>
     <string name="Balance_Zcash_Migration_Description">Zcash به یک پول محافظ شده جدید ارتقا یافته است. موجودی محافظ شده شما باید به این پول جدید مهاجرت کند تا در تراکنش های آینده کاملاً ناشناس باقی بماند.\n\nلطفاً توجه داشته باشید که تراکنش های مهاجرت کاملاً ناشناس نیستند و مبالغ درگیر را فاش می کنند.\n\nبرای حفظ سطح بالایی از حریم خصوصی، هنگام انجام تراکنش های مهاجرت می توانید از VPN یا TOR استفاده کنید.</string>

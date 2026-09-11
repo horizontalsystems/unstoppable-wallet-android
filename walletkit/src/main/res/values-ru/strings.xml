@@ -376,15 +376,11 @@
     <string name="Send_Fee">Комиссия</string>
     <string name="Send_Fee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
     <string name="Send_Button_Paste">Вставить</string>
-    <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Advanced">Доп. настройки</string>
     <string name="Send_Hodler_Description">TimeLock работает только при отправке на адреса BIP44 (начинающиеся с 1).</string>
     <string name="Send_UtxoExpertMode">Режим эксперта UTxO</string>
-    <string name="Send_Utxo_Description">Вручную выбрать UTxO для траты средств на баланс</string>
     <string name="Send_Rbf">Изменить комиссию</string>
     <string name="Send_Rbf_Description">Эта опция позволяет повторно отправить застрявшую транзакцию, увеличивая сумму комиссии.</string>
-    <string name="Send_RbfEnabled">Вкл.</string>
-    <string name="Send_RbfDisabled">Выкл.</string>
     <string name="Send_Utxo_AvailableBalance">Доступный баланс</string>
     <string name="Send_Utxo_UnselectAll">Отменить выбор</string>
     <string name="Send_Utxo_SelectAll">Выбрать всё</string>
@@ -435,7 +431,6 @@
     <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
     <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
     <string name="Send_Error_SendToSelf">Отправка %s на собственный адрес не разрешена. Пожалуйста, введите другой адрес получателя.</string>
-    <string name="Send_DialogAvailableBalance">Доступный баланс</string>
     <string name="Send_DialogSpeed">Скорость транзакции</string>
     <string name="Send_LockTime_Off">Выкл.</string>
     <string name="Send_LockTime_Hour">1 час</string>
@@ -492,14 +487,8 @@
     <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
     <string name="FeeInfo_Fast">Быстро</string>
     <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
-    <string name="FeeInfo_TronFee_Description">Ориентировочные затраты на отправку данной транзакции по сети (без учёта energy, Bandwidth и комиссии за активацию) предполагаются</string>
-    <string name="FeeInfo_TronActivationFee_Title">Комиссия за активацию</string>
-    <string name="FeeInfo_TronActivationFee_Description">Этот адрес не активен. Перевод TRX или токенов TRC-10 на неактивный адрес активирует аккаунт.</string>
-    <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
-    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
-    <string name="Tron_ZeroAmountTrxNotAllowed">Невозможно отправить 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Не активирован</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON не активирован</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Транзакции появятся после активации</string>
@@ -1824,7 +1813,6 @@
     <string name="WalletConnect_Permit_Unlimited_Title">Неограниченное разрешение!</string>
     <string name="WalletConnect_Permit_Unlimited">Подписав это, вы разрешите %s перемещать любое количество этого токена из вашего кошелька в любое время до отзыва разрешения. Сейчас ничего не появляется в цепи, поэтому вы не увидите, как это происходит.</string>
     <string name="WalletConnect_Permit_SignatureValid">Подпись действительна до</string>
-    <string name="Send_Error_NodeUnreachable">Не удалось подключиться к узлу. Проверьте подключение и попробуйте снова.</string>
     <string name="Balance_Zcash_MigrationRequired">Миграция обязательна</string>
     <string name="Balance_Zcash_Migration_Title">Миграция на Ironwood</string>
     <string name="Balance_Zcash_Migration_Description">Zcash был обновлен до нового защищённого пула. Ваш защищённый баланс должен быть перенесён на этот новый пул, чтобы остаться полностью анонимным в будущих транзакциях.\n\nОбратите внимание, что транзакции миграции не полностью анонимны и раскрывают вовлечённые суммы.\n\nДля сохранения высокого уровня приватности рекомендуем использовать VPN или TOR при выполнении транзакций миграции.</string>
