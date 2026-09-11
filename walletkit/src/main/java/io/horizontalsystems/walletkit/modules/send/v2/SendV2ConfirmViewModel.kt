@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.IAdapterManager
+import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -15,6 +17,7 @@ import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.RecentAddressManager
+import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -28,6 +31,7 @@ import io.horizontalsystems.walletkit.modules.send.SendResult
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,8 +61,14 @@ data class SendV2ConfirmUiState(
 
 /**
  * Confirmation of a plain transfer for any blockchain type. The chain's send-transaction
- * service owns the fee, its settings, cautions and the send itself; this view model only
- * feeds it the transfer and presents its state.
+ * service owns the fee, its settings, cautions and the send itself; this view model feeds
+ * it the transfer and presents its state.
+ *
+ * It is also the one place that handles sending the whole balance of a coin that pays its
+ * own fee: the requested amount is submitted first to learn the fee, then reduced so that
+ * amount plus fee fits the balance, and resubmitted. Services report the fee for the
+ * requested amount; only those whose maximum is not "amount minus fee" answer
+ * [AbstractSendTransactionService.maxSendableAmount].
  */
 class SendV2ConfirmViewModel(
     private val wallet: Wallet,
@@ -70,13 +80,29 @@ class SendV2ConfirmViewModel(
     private val xRateService: XRateService,
     private val contactsRepository: ContactsRepository,
     private val recentAddressManager: RecentAddressManager,
+    adapterManager: IAdapterManager,
 ) : ViewModelUiState<SendV2ConfirmUiState>() {
 
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
     private val token = wallet.token
+    private val chainPlugin = ChainRegistry[token.blockchainType]
     private var serviceState = sendTransactionService.stateFlow.value
+
+    // Sending everything: the fee has to come out of the amount, since the balance cannot
+    // cover both. Detected from the amount alone, so a typed full balance counts as well.
+    private val sendMax = feePaidFromAsset(token.type) && run {
+        val available = chainPlugin?.sendAvailableBalance(token, chainSettings)
+            ?: adapterManager.getAdapterForWallet<IBalanceAdapter>(wallet)?.balanceData?.available
+        available != null && amount.compareTo(available) == 0
+    }
+    private var submittedAmount: BigDecimal? = null
+    private var adjustedAmount: BigDecimal? = null
+    private var adjusting = sendMax
+    private var adjustmentTarget: BigDecimal? = null
+    private var adjustmentRounds = 0
+    private var maxSendCaution: CautionViewItem? = null
     private var rate = xRateService.getRate(token.coin.uid)
     private var feeCoinRate: CurrencyValue? = null
     private var error: Throwable? = null
@@ -97,6 +123,7 @@ class SendV2ConfirmViewModel(
             sendTransactionService.stateFlow.collect {
                 serviceState = it
                 refreshFeeCoinRate()
+                if (sendMax) reconcileMaxSend()
                 emitState()
             }
         }
@@ -104,17 +131,69 @@ class SendV2ConfirmViewModel(
         refreshFeeCoinRate()
         sendTransactionService.start(viewModelScope)
 
-        viewModelScope.launch {
-            try {
-                val data = ChainRegistry[token.blockchainType]
-                    ?.sendTransactionData(token, amount, address.hex, memo, chainSettings)
-                    ?: throw UnsupportedOperationException(token.blockchainType.uid)
-                sendTransactionService.setSendTransactionData(data)
-            } catch (e: Throwable) {
-                error = e
-                emitState()
-            }
+        viewModelScope.launch { submit(amount) }
+    }
+
+    private suspend fun submit(value: BigDecimal) {
+        try {
+            val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, chainSettings)
+                ?: throw UnsupportedOperationException(token.blockchainType.uid)
+            submittedAmount = value
+            sendTransactionService.setSendTransactionData(data)
+        } catch (e: Throwable) {
+            error = e
+            emitState()
         }
+    }
+
+    // Runs on every service update while sending the maximum. The service's own cautions
+    // are hidden until the submitted amount matches the target: the first, full-amount round
+    // legitimately reports a shortfall that the reduced amount then clears.
+    private fun reconcileMaxSend() {
+        if (serviceState.loading) return
+
+        val fee = feeCoinValue()?.takeIf { it.coin.uid == token.coin.uid }?.value
+        val target = sendTransactionService.maxSendableAmount() ?: fee?.let { amount - it } ?: return
+
+        if (target <= BigDecimal.ZERO) {
+            maxSendCaution = CautionViewItem(
+                title = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
+                text = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, token.coin.code),
+                type = CautionViewItem.Type.Error,
+            )
+            adjustedAmount = null
+            adjusting = false
+            return
+        }
+        maxSendCaution = null
+
+        if (submittedAmount?.compareTo(target) == 0) {
+            adjustedAmount = target
+            adjusting = false
+            return
+        }
+
+        // A fee that depends on the amount could chase itself; a few rounds settle any
+        // realistic case, after which the last estimate stands.
+        if (adjustmentTarget?.compareTo(target) != 0) {
+            adjustmentTarget = target
+            adjustmentRounds = 0
+        }
+        if (adjustmentRounds >= 3) {
+            adjusting = false
+            return
+        }
+        adjustmentRounds++
+        adjusting = true
+        adjustedAmount = target
+        viewModelScope.launch { submit(target) }
+    }
+
+    private fun feePaidFromAsset(type: TokenType) = when (type) {
+        TokenType.Native,
+        is TokenType.Derived,
+        is TokenType.AddressTyped -> true
+        else -> false
     }
 
     private fun feeCoinValue() = serviceState.networkFee?.primary?.coinValue
@@ -129,7 +208,7 @@ class SendV2ConfirmViewModel(
 
     override fun createState() = SendV2ConfirmUiState(
         wallet = wallet,
-        amount = serviceState.adjustedAmount ?: amount,
+        amount = adjustedAmount ?: amount,
         address = address,
         contact = contact,
         memo = memo,
@@ -139,9 +218,9 @@ class SendV2ConfirmViewModel(
         feeCoinDecimals = feeCoinValue()?.decimal ?: token.decimals,
         feeCoinRate = feeCoinRate,
         fields = serviceState.fields,
-        cautions = serviceState.cautions,
-        sendable = serviceState.sendable,
-        loading = serviceState.loading,
+        cautions = if (adjusting) listOf() else listOfNotNull(maxSendCaution) + serviceState.cautions,
+        sendable = serviceState.sendable && !adjusting && maxSendCaution == null,
+        loading = serviceState.loading || adjusting,
         hasSettings = sendTransactionService.hasSettings,
         hasNonceSettings = sendTransactionService.hasNonceSettings,
         networkFeeInfoRes = sendTransactionService.networkFeeInfoRes,
@@ -200,6 +279,7 @@ class SendV2ConfirmViewModel(
                 xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 contactsRepository = App.contactsRepository,
                 recentAddressManager = App.recentAddressManager,
+                adapterManager = App.adapterManager,
             ) as T
         }
     }

@@ -108,6 +108,9 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
         return SendTransactionResult.Solana(txHash = fullTransaction.transaction.hash)
     }
 
+    override fun maxSendableAmount(): BigDecimal? =
+        if (token.type == TokenType.Native) (solBalance - fee).max(BigDecimal.ZERO) else null
+
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,
         networkFee = getAmountData(CoinValue(solToken, fee)),
