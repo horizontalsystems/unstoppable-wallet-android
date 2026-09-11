@@ -33,7 +33,8 @@ they land.
 
 - [x] Tron: activation fee and bandwidth/energy rows on confirmation.
 - [x] Tron: max native amount reduced by fee, zero-TRX rule.
-- [ ] TON fee estimation on the send page (Next was gated on it).
+- [x] TON fee estimation happens on confirmation, like every other chain; a failed estimate
+      is retried and then shown as a caution.
 - [x] Zcash send-to-self rejection: the address entry screen's Zcash validator refuses the
       wallet's own address, so it never reaches confirmation.
 - [ ] Bitcoin UTxOs row shows total/total in auto mode (auto-selected count is only known
