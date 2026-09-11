@@ -224,15 +224,15 @@ fun ConfirmationBottomSection(
             MemoCell(memo)
         }
 
-        formattedFee?.let { formattedFee ->
-            DataFieldFeeTemplate(
-                navigation = navigation,
-                primary = formattedFee.primary,
-                secondary = formattedFee.secondary,
-                title = stringResource(id = R.string.FeeSettings_NetworkFee),
-                infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-            )
-        }
+        // The row stays in place while no fee is known (still estimating, or the amount
+        // cannot be sent), so the layout does not jump and the user sees the fee is pending.
+        DataFieldFeeTemplate(
+            navigation = navigation,
+            primary = formattedFee?.primary ?: stringResource(R.string.NotAvailable),
+            secondary = formattedFee?.secondary,
+            title = stringResource(id = R.string.FeeSettings_NetworkFee),
+            infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+        )
     }
 }
 
