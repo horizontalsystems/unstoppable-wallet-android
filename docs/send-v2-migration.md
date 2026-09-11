@@ -46,7 +46,8 @@ they land.
 
 - [x] Bitcoin rows: timelock when set, replace-by-fee when switched off. Defaults are not
       shown, and the UTXO count stays on the settings page.
-- [ ] Pre-proceed no-internet check (old EVM, Solana, Tron screens showed a HUD).
+- [x] Offline: the Next button reads "No Internet" and is disabled while the device has no
+      network, for every chain.
 
 ## Cosmetic
 
