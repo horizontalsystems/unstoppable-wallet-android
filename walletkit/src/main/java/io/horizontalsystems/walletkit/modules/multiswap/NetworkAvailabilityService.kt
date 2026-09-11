@@ -11,7 +11,9 @@ class NetworkAvailabilityService(
 ) : ServiceState<NetworkAvailabilityService.State>() {
 
     private var networkAvailable = connectivityManager.isConnected
-    private var error: UnknownHostException? = null
+    // Derived from the initial status as well: the availability flow replays nothing, so a
+    // screen opened while already offline would otherwise never learn it.
+    private var error: UnknownHostException? = if (networkAvailable) null else UnknownHostException()
 
     override fun createState() = State(
         networkAvailable = networkAvailable,
