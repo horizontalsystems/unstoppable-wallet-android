@@ -26,7 +26,8 @@ they land.
       the amount by the fee for every chain (Bitcoin via its input selection, Solana net of
       the rent reserve). Zcash and Monero cannot estimate a fee for the full balance and
       still end in an insufficient-balance caution.
-- [ ] Bitcoin fee-rate warnings (low fee, risk of getting stuck) on the send page.
+- [x] Bitcoin fee-rate cautions moved to the confirmation with the fee rate itself; the send
+      page never sets a rate.
 - [ ] Inline caution under the amount field. Errors show only in the button title.
 
 ## Per-chain features

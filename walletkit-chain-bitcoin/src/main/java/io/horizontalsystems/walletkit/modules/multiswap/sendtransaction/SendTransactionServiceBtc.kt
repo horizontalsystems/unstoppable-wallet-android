@@ -163,7 +163,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend
 
         val hasError = amountState.amountCaution?.isError() == true ||
-                feeRateState.feeRateCaution?.isError() == true &&
+                feeRateState.feeRateCaution?.isError() == true ||
                 addressState.addressError != null
 
         val loading = !sendable && !hasError
