@@ -22,8 +22,10 @@ they land.
 
 - [ ] Minimum / maximum amount: Bitcoin dust, Stellar per-destination minimum. Currently
       only surfaced as confirmation cautions.
-- [ ] Bitcoin fee-inclusive available balance and the "leave coin for fee" warning at max.
-      Sending the full BTC balance fails on confirmation. (EVM service adjusts automatically.)
+- [x] Sending the whole balance of a coin that pays its own fee: the confirmation reduces
+      the amount by the fee for every chain (Bitcoin via its input selection, Solana net of
+      the rent reserve). Zcash and Monero cannot estimate a fee for the full balance and
+      still end in an insufficient-balance caution.
 - [ ] Bitcoin fee-rate warnings (low fee, risk of getting stuck) on the send page.
 - [ ] Inline caution under the amount field. Errors show only in the button title.
 

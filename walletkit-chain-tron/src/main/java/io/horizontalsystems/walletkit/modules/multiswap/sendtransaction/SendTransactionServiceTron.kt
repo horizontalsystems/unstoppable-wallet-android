@@ -60,10 +60,6 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     private var sendTransactionData: SendTransactionData.Tron? = null
     private var loading = true
     private var nativeTokenAmount: BigDecimal? = null
-    // A plain TRX send of the whole balance: the fee is taken out of the amount, as the
-    // balance cannot cover both.
-    private var sendMax = false
-    private var adjustedAmount: BigDecimal? = null
 
     // Kit-side forms of the kit-free payloads in sendTransactionData, built in setSendTransactionData.
     private var builtContract: Contract? = null
@@ -100,8 +96,7 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
         )
 
         val fee = feeState.fee
-        adjustedAmount = if (sendMax && fee != null) nativeTokenAmount?.minus(fee) else null
-        val trxAmount = adjustedAmount ?: nativeTokenAmount ?: BigDecimal.ZERO
+        val trxAmount = nativeTokenAmount ?: BigDecimal.ZERO
 
         cautions = buildList {
             val total = trxAmount + (fee ?: BigDecimal.ZERO)
@@ -119,8 +114,7 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
                     ).toCautionViewItem()
                 )
             } else if (token.type.isNative && sendTransactionData is SendTransactionData.Tron.Simple && trxAmount <= BigDecimal.ZERO) {
-                // The network rejects a zero-value TRX transfer; a max send whose fee eats
-                // the whole balance ends here too.
+                // The network rejects a zero-value TRX transfer.
                 add(
                     HSCaution(
                         s = TranslatableString.PlainString(Translator.getString(R.string.Error)),
@@ -178,7 +172,6 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
             }
             is SendTransactionData.Tron.Simple -> {
                 nativeTokenAmount = if (token.type.isNative) data.amount else BigDecimal.ZERO
-                sendMax = token.type.isNative && data.amount.compareTo(adapter.trxBalanceData.available) == 0
                 feeService.setAmount(data.amount)
                 feeService.setTronAddress(TronAddress.fromBase58(data.address))
             }
@@ -197,7 +190,7 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
                 val transaction = createdTransaction ?: throw IllegalStateException("Transaction is not parsed")
                 adapter.send(transaction)
             }
-            is SendTransactionData.Tron.Simple -> adapter.send(adjustedAmount ?: d.amount, TronAddress.fromBase58(d.address), feeState.feeLimit)
+            is SendTransactionData.Tron.Simple -> adapter.send(d.amount, TronAddress.fromBase58(d.address), feeState.feeLimit)
             null -> throw IllegalStateException("Not supported")
         }
         return SendTransactionResult.Tron(txHash = txHash)
@@ -212,7 +205,6 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
         },
         loading = loading,
         fields = fields,
-        adjustedAmount = adjustedAmount,
     )
 
     // The total already includes bandwidth, energy and any activation fee.
