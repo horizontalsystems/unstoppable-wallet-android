@@ -17,6 +17,7 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.crosspay.CrossPayManager
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
+import io.horizontalsystems.walletkit.modules.multiswap.NetworkAvailabilityService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
@@ -74,6 +75,7 @@ class SendViewModel(
     private val fiatService: FiatService,
     private val balanceService: TokenBalanceService,
     private val privateSendManager: PrivateSendManager,
+    private val networkAvailabilityService: NetworkAvailabilityService,
     prefill: SendV2Page.Prefill?,
 ) : ViewModelUiState<SendUiState>() {
 
@@ -89,6 +91,7 @@ class SendViewModel(
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
     private var chainSettings: SendChainSettings? = null
+    private var networkState = networkAvailabilityService.stateFlow.value
     private var privateSendSupported = privateSendManager.isSupported(wallet.token)
     // Balance narrowed by the chain settings (selected outputs), or null for the wallet's.
     private var chainBalance: BigDecimal? = null
@@ -140,6 +143,15 @@ class SendViewModel(
         observeBalanceUpdates()
         refreshMemoSupport()
         observePrivateSendSupport()
+
+        // Every chain needs the network on confirmation; say so before opening it.
+        viewModelScope.launch {
+            networkAvailabilityService.stateFlow.collect {
+                networkState = it
+                emitState()
+            }
+        }
+        networkAvailabilityService.start(viewModelScope)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 CrossPayManager.resolveProvider()?.let {
@@ -253,6 +265,7 @@ class SendViewModel(
     )
 
     private fun step(): SendStep {
+        networkState.error?.let { return SendStep.Error(it) }
         balanceError()?.let { return SendStep.Error(it) }
         val amount = amount
         if (amount == null || amount <= BigDecimal.ZERO) {
@@ -320,6 +333,7 @@ class SendViewModel(
                 FiatService(App.marketKit),
                 TokenBalanceService(App.adapterManager),
                 App.privateSendManager,
+                NetworkAvailabilityService(App.connectivityManager),
                 prefill,
             ) as T
         }
