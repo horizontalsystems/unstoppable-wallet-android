@@ -427,7 +427,6 @@
     <string name="ScanQr_NoQrFound">Nenhum código QR encontrado</string>
     <string name="ScanQr_QrDetected">Código QR detectado</string>
     <string name="Send_Error_UnsupportedAddress">O bloqueio de tempo funciona apenas ao enviar para endereços de pagamento começando com 1... (também conhecidos como endereços BIP44)</string>
-    <string name="Send_Error_MinimumAmount">Valor mínimo: %s</string>
     <string name="Send_Error_MaximumAmount">Valor máximo: %s</string>
     <string name="Send_Error_SendToSelf">Não é possível enviar para você mesmo</string>
     <string name="Send_DialogSpeed">Velocidade da Transação</string>
