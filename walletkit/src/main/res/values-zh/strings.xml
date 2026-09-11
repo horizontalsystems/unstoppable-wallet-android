@@ -426,7 +426,6 @@
     <string name="ScanQr_NoQrFound">未找到二维码</string>
     <string name="ScanQr_QrDetected">检测到二维码</string>
     <string name="Send_Error_UnsupportedAddress">时间锁定只能和P2PKH地址（以1开头）一起使用</string>
-    <string name="Send_Error_MinimumAmount">最小金额 %s</string>
     <string name="Send_Error_MaximumAmount">最大金额 %s</string>
     <string name="Send_Error_SendToSelf">不支持发送给自己</string>
     <string name="Send_DialogSpeed">交易速度</string>

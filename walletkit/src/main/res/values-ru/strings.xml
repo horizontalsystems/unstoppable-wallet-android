@@ -428,7 +428,6 @@
     <string name="ScanQr_NoQrFound">QR-код не найден</string>
     <string name="ScanQr_QrDetected">Обнаружен QR-код</string>
     <string name="Send_Error_UnsupportedAddress">TimeLock работает только при отправке на платёжные адреса, начинающиеся с 1... (также известных как BIP44 адреса)</string>
-    <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
     <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
     <string name="Send_Error_SendToSelf">Отправка %s на собственный адрес не разрешена. Пожалуйста, введите другой адрес получателя.</string>
     <string name="Send_DialogSpeed">Скорость транзакции</string>

@@ -135,7 +135,6 @@
     <string name="ScanQr_CameraPermission_Title">مجوز دوربین</string>
     <string name="ScanQr_PleaseGrantCameraPermission">لطفا مجوز دسترسی به دوربین را تایید کنید</string>
     <string name="ScanQr_GoToSettings">برو به تنظیمات</string>
-    <string name="Send_Error_MinimumAmount">حداقل مقدار %s</string>
     <string name="Send_Error_MaximumAmount">حداقل مقدار %s</string>
     <string name="Send_Error_SendToSelf">ارسال به خود پشتیبانی نشده است</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
