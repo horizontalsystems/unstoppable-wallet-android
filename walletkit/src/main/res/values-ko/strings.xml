@@ -446,6 +446,11 @@
     <string name="FeeInfo_AverageDescription">일반적으로 권장 수수료 값은 비트코인의 경우 분/시간 이내, 이더리움의 경우 몇 분 이내로 거래를 처리하기에 충분해야 합니다.</string>
     <string name="FeeInfo_Fast">빠르게</string>
     <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 값을 사용하는 것이 좋습니다. 비트코인의 경우 10분 이내, 이더리움의 경우 1~2분 이내에 거래가 완료될 것으로 예상됩니다.</string>
+    <string name="FeeInfo_TronFee_Description">네트워크에서 거래하는 데 드는 예상 비용입니다. (energy, bandwidth 및 활성화 수수료 제외)</string>
+    <string name="FeeInfo_TronActivationFee_Title">활성화 수수료</string>
+    <string name="FeeInfo_TronActivationFee_Description">이 주소는 활성화되지 않았습니다. 비활성화된 계정 주소로 TRX 또는 TRC-10 토큰을 전송하면 계정이 활성화됩니다</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">소모된 자원</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 은 블록체인 데이터베이스에 저장된 트랜잭션 바이트 크기를 측정하는 단위입니다. 거래가 클수록 대역폭 자원이 더 많이 사용됩니다.\n\nEnergy 는 TRON 가상 머신이 TRON 네트워크에서 특정 작업을 수행하기 위해 필요한 계산 양을 측정하는 단위입니다. \n\n스마트 계약 트랜잭션은 실행에 계산 자원이 필요하기 때문에 각 스마트 계약 트랜잭션에는 energy 수수료를 지불해야합니다.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">TRX를 자신에게 전송할 수 없습니다</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">계정이 활성화되지 않음</string>

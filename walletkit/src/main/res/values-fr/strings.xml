@@ -486,6 +486,11 @@
     <string name="FeeInfo_AverageDescription">Généralement, la valeur des frais recommandée devrait être suffisante pour qu\'une transaction soit traitée en quelques minutes ou en une heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Élevé</string>
     <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous vous recommandons d\'utiliser la valeur élevée des frais. Cela devrait suffire pour qu\'une transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les 1-2 minutes pour Ethereum.</string>
+    <string name="FeeInfo_TronFee_Description">Le coût estimé de l\'envoi d\'une transaction donnée sur le réseau. (Sans exclure l\'énergie, la bande passante et les frais d\'activation)</string>
+    <string name="FeeInfo_TronActivationFee_Title">Frais d\'activation</string>
+    <string name="FeeInfo_TronActivationFee_Description">Cette adresse n\'est pas active. Le transfert de jetons TRX ou TRC-10 vers une adresse de compte inactive activera le compte.</string>
+    <string name="FeeInfo_TronResourcesConsumed_Title">Ressources consommées</string>
+    <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Impossible de transférer TRX à vous-même</string>
     <string name="Tron_TokenPage_AddressNotActivated">Non activé</string>

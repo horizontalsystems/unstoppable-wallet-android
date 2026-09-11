@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.amount.AmountValidator
 import io.horizontalsystems.walletkit.modules.amount.SendAmountService
+import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronAddressService
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronFeeService
@@ -54,6 +55,7 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     private var feeState = feeService.stateFlow.value
 
     private var networkFee: SendModule.AmountData? = null
+    private var fields: List<DataField> = listOf()
     private var cautions: List<CautionViewItem> = listOf()
     private var sendTransactionData: SendTransactionData.Tron? = null
     private var loading = true
@@ -87,6 +89,11 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
         networkFee = feeState.fee?.let {
             getAmountData(CoinValue(nativeToken, it))
         }
+
+        fields = listOfNotNull(
+            feeState.resourcesConsumed?.let { DataFieldTronResources(it) },
+            feeState.activationFee?.let { DataFieldTronActivationFee(getAmountData(CoinValue(nativeToken, it))) },
+        )
 
         cautions = buildList {
             val total = (nativeTokenAmount ?: BigDecimal.ZERO) + (feeState.fee ?: BigDecimal.ZERO)
@@ -183,8 +190,11 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
             it.type == CautionViewItem.Type.Error
         },
         loading = loading,
-        fields = listOf(),
+        fields = fields,
     )
+
+    // The total already includes bandwidth, energy and any activation fee.
+    override val networkFeeInfoRes = R.string.FeeInfo_TronFee_Description
 
     fun extractTrxSun(contract: Contract) = when (contract) {
         is TransferContract -> contract.amount
