@@ -40,7 +40,8 @@ they land.
 
 ## Confirmation
 
-- [ ] Bitcoin rows: UTXO count, timelock, RBF. Every service returns an empty field list.
+- [x] Bitcoin rows: timelock when set, replace-by-fee when switched off. Defaults are not
+      shown, and the UTXO count stays on the settings page.
 - [ ] Pre-proceed no-internet check (old EVM, Solana, Tron screens showed a HUD).
 
 ## Cosmetic

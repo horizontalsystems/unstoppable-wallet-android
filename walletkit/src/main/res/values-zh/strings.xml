@@ -379,6 +379,7 @@
     <string name="Send_UtxoExpertMode">UTxO 专家模式</string>
     <string name="Send_Rbf">替换交易</string>
     <string name="Send_Rbf_Description">此选项允许您通过增加手续费金额来重新发送卡住的交易。</string>
+    <string name="Send_RbfDisabled">已禁用</string>
     <string name="Send_Utxo_AvailableBalance">可用余额</string>
     <string name="Send_Utxo_UnselectAll">取消全选</string>
     <string name="Send_Utxo_SelectAll">全选</string>

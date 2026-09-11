@@ -380,6 +380,7 @@
     <string name="Send_UtxoExpertMode">Modo Especialista UTxO</string>
     <string name="Send_Rbf">Substituir pela taxa</string>
     <string name="Send_Rbf_Description">Essa opção permite que você reenvie uma transação travada aumentando o valor da taxa.</string>
+    <string name="Send_RbfDisabled">Desativado</string>
     <string name="Send_Utxo_AvailableBalance">Saldo Disponível</string>
     <string name="Send_Utxo_UnselectAll">Desmarcar Tudo</string>
     <string name="Send_Utxo_SelectAll">Marcar tudo</string>

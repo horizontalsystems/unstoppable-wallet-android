@@ -381,6 +381,7 @@
     <string name="Send_UtxoExpertMode">Режим эксперта UTxO</string>
     <string name="Send_Rbf">Изменить комиссию</string>
     <string name="Send_Rbf_Description">Эта опция позволяет повторно отправить застрявшую транзакцию, увеличивая сумму комиссии.</string>
+    <string name="Send_RbfDisabled">Выкл.</string>
     <string name="Send_Utxo_AvailableBalance">Доступный баланс</string>
     <string name="Send_Utxo_UnselectAll">Отменить выбор</string>
     <string name="Send_Utxo_SelectAll">Выбрать всё</string>

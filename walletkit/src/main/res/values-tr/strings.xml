@@ -278,6 +278,7 @@
     <string name="Send_UtxoExpertMode">UTxO Uzman Modu</string>
     <string name="Send_Rbf">Ücretle Değiştir</string>
     <string name="Send_Rbf_Description">Bu seçenek, takılı kalmış bir işlemi ücret miktarını artırarak yeniden göndermenizi sağlar.</string>
+    <string name="Send_RbfDisabled">Etkisizleştirildi</string>
     <string name="Send_Utxo_AvailableBalance">Mevcut Bakiye</string>
     <string name="Send_Utxo_UnselectAll">Tümünü Kaldır</string>
     <string name="Send_Utxo_SelectAll">Tümünü Seç</string>
