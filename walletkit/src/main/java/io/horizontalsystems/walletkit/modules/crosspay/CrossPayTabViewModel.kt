@@ -24,6 +24,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 /**
  * The CrossPay tab of the unified send screen: pay an EXACT amount of any provider-supported
@@ -178,7 +179,32 @@ class CrossPayTabViewModel(
 
     fun onEnterFiatAmount(amount: BigDecimal?) = fiatService.setFiatAmount(amount)
 
-    fun onSelectQuickAmount(amount: Int) = fiatService.setAmount(BigDecimal(amount))
+    /**
+     * A share of the SOURCE balance, expressed in the recipient's token: the entered figure
+     * is what the recipient gets, so the share crosses the pair's fiat rates. An estimate by
+     * design — the live quote then prices the exact deposit, and the offered shares (100% is
+     * not one of them) leave more than enough headroom for the difference.
+     */
+    fun onEnterAmountPercentage(percentage: Int) {
+        val tokenOut = tokenOut ?: return
+        val balance = availableBalance ?: return
+        if (balance <= BigDecimal.ZERO) return
+
+        val priceIn = App.marketKit.coinPrice(tokenIn.coin.uid, currency.code)
+            ?.takeIf { !it.expired }?.value ?: return
+        val priceOut = App.marketKit.coinPrice(tokenOut.coin.uid, currency.code)
+            ?.takeIf { !it.expired }?.value ?: return
+
+        val amount = balance
+            .multiply(BigDecimal(percentage))
+            .multiply(priceIn)
+            .divide(priceOut.multiply(BigDecimal(100)), tokenOut.decimals, RoundingMode.DOWN)
+            .stripTrailingZeros()
+
+        if (amount > BigDecimal.ZERO) {
+            fiatService.setAmount(amount)
+        }
+    }
 
     fun onSelectAddress(address: Address, risky: Boolean) {
         this.address = address
@@ -286,8 +312,6 @@ class CrossPayTabViewModel(
 
     companion object {
         private const val QUOTE_DEBOUNCE_MS = 500L
-
-        val QUICK_AMOUNTS = listOf(100, 200, 500, 1000)
     }
 }
 

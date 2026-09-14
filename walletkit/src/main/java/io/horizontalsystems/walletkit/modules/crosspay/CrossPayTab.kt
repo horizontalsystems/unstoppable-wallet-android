@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +39,7 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
+import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
@@ -46,10 +48,7 @@ import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
-import io.horizontalsystems.walletkit.ui.compose.components.BoxTyler44
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondary
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
@@ -73,6 +72,7 @@ fun CrossPayTabBody(
 ) {
     val uiState = viewModel.uiState
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     var amountInputHasFocus by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
@@ -192,11 +192,20 @@ fun CrossPayTabBody(
             },
         )
         if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
+            val hasNonZeroBalance =
+                uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
             VSpacer(16.dp)
-            QuickAmountsBar(
-                onSelect = viewModel::onSelectQuickAmount,
+            SuggestionsBar(
                 onDelete = { viewModel.onEnterAmount(null) },
+                onSelect = {
+                    focusManager.clearFocus()
+                    viewModel.onEnterAmountPercentage(it)
+                },
+                selectEnabled = hasNonZeroBalance,
                 deleteEnabled = uiState.amountOut != null,
+                // 100% of the source balance cannot survive the exact-output buffer and
+                // fees — it would land on "insufficient" every time.
+                disabledPercents = setOf(100),
             )
         } else {
             VSpacer(16.dp)
@@ -367,41 +376,6 @@ private fun CrossPayInfoCard(tokenIn: Token) {
             text = stringResource(R.string.CrossPay_Info_Description, tokenIn.coin.code),
             textAlign = TextAlign.Center,
         )
-    }
-}
-
-@Composable
-private fun QuickAmountsBar(
-    onSelect: (Int) -> Unit,
-    onDelete: () -> Unit,
-    deleteEnabled: Boolean,
-) {
-    BoxTyler44(borderTop = true) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-        ) {
-            CrossPayTabViewModel.QUICK_AMOUNTS.forEach { amount ->
-                ButtonSecondary(onClick = { onSelect(amount) }) {
-                    Text(
-                        text = amount.toString(),
-                        style = ComposeAppTheme.typography.captionSB,
-                        color = ComposeAppTheme.colors.leah,
-                    )
-                }
-            }
-            ButtonSecondaryCircle(
-                icon = R.drawable.ic_delete_20,
-                enabled = deleteEnabled,
-                tint = if (deleteEnabled) {
-                    ComposeAppTheme.colors.leah
-                } else {
-                    ComposeAppTheme.colors.andy
-                },
-                onClick = onDelete,
-            )
-        }
     }
 }
 
