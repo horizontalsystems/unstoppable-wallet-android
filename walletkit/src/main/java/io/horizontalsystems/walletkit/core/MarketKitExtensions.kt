@@ -706,7 +706,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
-    ) + ChainRegistry.all.map { it.blockchainType }
+    ).plus(ChainRegistry.all.map { it.blockchainType }).distinct()
 
 val CoinPrice.diff: BigDecimal?
     get() = when (App.priceManager.priceChangeInterval) {
