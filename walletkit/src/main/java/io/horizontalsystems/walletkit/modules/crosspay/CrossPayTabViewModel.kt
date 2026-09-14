@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.crosspay
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -20,6 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.math.BigDecimal
 
 /**
@@ -36,6 +38,7 @@ class CrossPayTabViewModel(
     private val currency = App.currencyManager.baseCurrency
     private val fiatService = FiatService(App.marketKit)
     private val provider = CrossPayManager.resolveProvider()
+    private val gson = Gson()
 
     private var providerReady = false
     private var tokenOut: Token? = null
@@ -216,7 +219,7 @@ class CrossPayTabViewModel(
                             amountOut = amountOut,
                             slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
                         )
-                        val sellAmount = rate.routes.mapNotNull { it.sellAmount }.minOrNull()
+                        val sellAmount = rate.routes.orEmpty().mapNotNull { it.sellAmount }.minOrNull()
                         if (sellAmount != null) {
                             CrossPayQuoteState.Success(sellAmount)
                         } else {
@@ -227,13 +230,35 @@ class CrossPayTabViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {
-                CrossPayQuoteState.Error(CrossPayQuoteState.ErrorKind.Network)
+                refusalOrNetworkError(e)
             }
 
             ensureActive()
             quote = newQuote
             emitState()
         }
+    }
+
+    // A refused rate is not always a 200: the dev server answers the same
+    // { providerErrors } envelope with a 404, which Retrofit surfaces as HttpException
+    // before the body is ever parsed. Read the refusal out of the error body so a named
+    // reason never degrades into "check connection"; anything unparseable stays Network.
+    private fun refusalOrNetworkError(e: Throwable): CrossPayQuoteState.Error {
+        if (e is HttpException) {
+            val parsed = try {
+                gson.fromJson(
+                    e.response()?.errorBody()?.string(),
+                    UnstoppableAPI.Response.Rate::class.java,
+                )
+            } catch (parseError: Throwable) {
+                null
+            }
+            val providerErrors = parsed?.providerErrors.orEmpty()
+            if (providerErrors.isNotEmpty()) {
+                return errorState(providerErrors)
+            }
+        }
+        return CrossPayQuoteState.Error(CrossPayQuoteState.ErrorKind.Network)
     }
 
     private fun errorState(providerErrors: List<UnstoppableAPI.Response.ProviderError>): CrossPayQuoteState.Error {

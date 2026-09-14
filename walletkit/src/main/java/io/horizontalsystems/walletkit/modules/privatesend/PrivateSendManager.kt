@@ -280,7 +280,7 @@ class PrivateSendManager(
             async {
                 try {
                     val rate = provider.privateSendRate(token, amountOut, IMultiSwapProvider.DEFAULT_SLIPPAGE)
-                    val sellAmount = rate.routes.mapNotNull { it.sellAmount }.minOrNull()
+                    val sellAmount = rate.routes.orEmpty().mapNotNull { it.sellAmount }.minOrNull()
                     Triple(provider, sellAmount, rate.providerErrors.orEmpty())
                 } catch (e: CancellationException) {
                     throw e
