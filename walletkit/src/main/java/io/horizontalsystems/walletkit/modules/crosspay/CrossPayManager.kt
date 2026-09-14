@@ -15,8 +15,9 @@ import java.math.BigDecimal
 
 /**
  * Committing a CrossPay order: /v2/swap in cross-asset exact-output mode against the one
- * exact-output-capable provider. Execution is a plain transfer to a deposit address, so the
- * multiswap send-transaction machinery does the actual work.
+ * exact-output-capable provider. Execution follows the swap screen's contract — a
+ * server-built tx on the chains that consume one (EVM & co), a locally built deposit
+ * transfer elsewhere — and the multiswap send-transaction machinery does the actual work.
  *
  * Committing is mandatory per user-visible order — every /v2/swap creates a REAL order —
  * and the entry screen's rate is display-only for the same reason.
@@ -58,6 +59,10 @@ class CrossPayManager {
                 destinationAddress = request.recipient,
                 refundAddress = refundAddress,
                 slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                // CrossPay is an ordinary swap in a payment-shaped UI: the swap screen's
+                // build-signal contract applies, so tx-consuming chains (EVM & co) get the
+                // server-built deposit tx.
+                includeSourceAddress = true,
             )
         } catch (e: CancellationException) {
             throw e
