@@ -94,6 +94,7 @@ class SendTransactionServiceStellar(
     override fun maxSendableAmount(): BigDecimal? =
         if (token.type == TokenType.Native) {
             App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)?.maxSendableBalance
+                ?.coerceAtLeast(BigDecimal.ZERO)
         } else {
             null
         }

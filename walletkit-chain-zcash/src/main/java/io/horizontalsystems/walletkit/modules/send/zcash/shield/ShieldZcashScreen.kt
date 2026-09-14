@@ -34,7 +34,8 @@ fun ShieldZcashScreen(
         memo = confirmationData.memo,
         onClickSend = viewModel::onClickSend,
         sendEntryPointDestId = sendEntryPointDestId,
-        title = stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield)
+        title = stringResource(R.string.Balance_Zcash_UnshieldedBalance_Shield),
+        onFailureShown = viewModel::onFailureShown,
     )
 
 }
