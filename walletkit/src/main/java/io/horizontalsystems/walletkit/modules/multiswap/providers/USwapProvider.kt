@@ -505,9 +505,12 @@ class USwapProvider(
     ): UnstoppableAPI.Response.Route =
         exactOutputCommit(token, token, amountOut, destinationAddress, refundAddress, slippage)
 
-    // /v2/swap in exact-output mode across assets (the CrossPay shape). `sourceAddress` is
-    // never sent: every exact-output route executes as a plain transfer the app builds
-    // itself, so the server has no tx to build and no need for the sender's address.
+    // /v2/swap in exact-output mode across assets (the CrossPay shape). With
+    // [includeSourceAddress] the swap screen's build-signal contract applies verbatim:
+    // chains whose server-built tx the app consumes (EVM/Tron/TON/Solana by default) send
+    // the sender's address and get a ready-to-sign tx back, the rest omit it and build the
+    // deposit transfer locally. Private send keeps it off entirely — handing the provider
+    // the sender's address defeats that feature's point.
     suspend fun exactOutputCommit(
         tokenIn: Token,
         tokenOut: Token,
@@ -515,10 +518,17 @@ class USwapProvider(
         destinationAddress: String,
         refundAddress: String,
         slippage: BigDecimal,
+        includeSourceAddress: Boolean = false,
     ): UnstoppableAPI.Response.Route {
         val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
         val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
         val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
+
+        val sourceAddress = if (includeSourceAddress && shouldIncludeSourceAddress(tokenIn)) {
+            SwapHelper.getSendingAddressForToken(tokenIn)
+        } else {
+            null
+        }
 
         val route = unstoppableAPI.swap(
             UnstoppableAPI.Request.Swap(
@@ -528,6 +538,7 @@ class USwapProvider(
                 provider = provider.id,
                 destinationAddress = destinationAddress,
                 refundAddress = refundAddress,
+                sourceAddress = sourceAddress,
                 chainId = chainId,
                 buyAmount = amountOut.toPlainString(),
             )
@@ -544,7 +555,8 @@ class USwapProvider(
      * The deposit transfer for a route committed in exact-output mode: exactly
      * [depositAmount] (the route's execution.amount) to its deposit address, in the same
      * per-chain shapes the swap confirmation uses — including the attachment
-     * deliverability rules.
+     * deliverability rules. Chains that consume a server-built tx must have committed with
+     * the source address included, exactly as the swap flow does.
      */
     fun depositTransactionData(
         tokenIn: Token,
