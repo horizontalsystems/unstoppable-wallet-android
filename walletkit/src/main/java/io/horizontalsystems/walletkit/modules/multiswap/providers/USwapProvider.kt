@@ -281,11 +281,6 @@ class USwapProvider(
         }
     }
 
-    // The destination universe for a given source: every mapped token the pair supports.
-    // The source itself is excluded — a same-asset pair is a send, not a payment.
-    fun supportedTokensOut(tokenIn: Token): List<Token> =
-        assetsMap.keys.filter { it != tokenIn && supports(tokenIn, it) }
-
     // Raw asset encoding for providers that sync no token list from the server (the
     // /tokens response carries only supportedChainIds), so assets are encoded as raw
     // chain addresses instead of resolved through the asset map.

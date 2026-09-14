@@ -38,6 +38,7 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
+import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.v2.AddressRow
@@ -104,8 +105,20 @@ fun CrossPayTabBody(
         proceed()
     }
 
-    val openCoinSelect = navigation.slideFromRightForResult<Token>(
-        { CrossPayCoinPage(viewModel.tokenIn) }
+    // The same picker the swap screen opens for its "You Get" side, so both flows offer an
+    // identical token universe. A pick the provider cannot route surfaces on the quote row
+    // as "Token not supported" instead of being filtered out up front.
+    val selectTokenTitle = stringResource(R.string.CrossPay_ChooseCoin)
+    val openCoinSelect = navigation.slideFromBottomForResult<Token>(
+        {
+            SwapSelectCoinPage(
+                SwapSelectCoinPage.Input(
+                    viewModel.tokenIn,
+                    selectTokenTitle,
+                    allowExternalReceive = true,
+                )
+            )
+        }
     ) {
         viewModel.onSelectTokenOut(it)
     }

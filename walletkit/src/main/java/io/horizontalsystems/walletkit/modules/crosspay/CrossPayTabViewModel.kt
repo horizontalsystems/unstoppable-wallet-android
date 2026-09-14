@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
+import io.horizontalsystems.walletkit.modules.multiswap.SwapPopularTokens
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.Token
@@ -68,6 +69,12 @@ class CrossPayTabViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
+            // The default pick needs no provider data — fill the chip before the network
+            // round-trip so the tab never opens on an empty selector.
+            if (tokenOut == null) {
+                defaultTokenOut()?.let { selectTokenOut(it) }
+                emitState()
+            }
             try {
                 // Populates the provider's token map (server-side sync, cached); until it
                 // lands any pending quote request waits via the re-schedule below.
@@ -78,9 +85,6 @@ class CrossPayTabViewModel(
                 // Quoting reports the failure per attempt; the tab itself stays usable.
             }
             providerReady = true
-            if (tokenOut == null) {
-                defaultTokenOut()?.let { selectTokenOut(it) }
-            }
             emitState()
             scheduleQuote()
         }
@@ -101,14 +105,12 @@ class CrossPayTabViewModel(
         .getAdapterForToken<IBalanceAdapter>(tokenIn)
         ?.balanceData?.available
 
-    // The stablecoin people actually get paid in, else the biggest supported coin. Only a
-    // convenience preselection — the user can always change it.
-    private fun defaultTokenOut(): Token? {
-        val supported = provider?.supportedTokensOut(tokenIn) ?: return null
-        return supported.firstOrNull { it.coin.code == "USDT" }
-            ?: supported.firstOrNull { it.coin.code == "USDC" }
-            ?: supported.minByOrNull { it.coin.marketCapRank ?: Int.MAX_VALUE }
-    }
+    // The swap screen's auto-pick, verbatim: the top entry of the context-aware Popular
+    // Tokens list (native source → its chain's USDT, else USDT-ETH; token source → its
+    // chain's native coin). Keeps CrossPay and swap presenting one behavior; a popular
+    // token the provider cannot route just shows "not supported" on the quote row.
+    private fun defaultTokenOut(): Token? =
+        SwapPopularTokens.build(App.marketKit, tokenIn).firstOrNull()
 
     override fun createState() = CrossPayTabUiState(
         tokenIn = tokenIn,
