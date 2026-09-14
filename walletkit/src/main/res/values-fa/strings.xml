@@ -845,4 +845,18 @@
     <string name="WalletConnect_Stellar_ClearFlags">پاک کردن پرچم‌ها</string>
     <string name="WalletConnect_Stellar_HomeDomain">دامنه خانگی</string>
     <string name="WalletConnect_Stellar_InflationDestination">مقصد تورم</string>
+    <string name="Transactions_XrpTransaction">تراکنش دفتر XRP</string>
+    <string name="Transactions_TrustSet">خط اعتماد</string>
+    <string name="Info_Reserved_Xrp_Description">دفتر XRP برای فعال‌سازی کیف پول 1 XRP و برای هر خط اعتماد یا سایر اشیاء متعلق به کیف پول خود 0.2 XRP را به عنوان ذخیره قفل می‌کند. ذخیره در زمان حذف شی آزاد می‌شود.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">اشیاء دیگر (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">این حساب هنوز فعال نشده است. اولین سپرده باید حداقل 1 XRP باشد؛ شبکه پرداخت‌های کوچک‌تر را رد می‌کند.</string>
+    <string name="Send_DestinationTag">برچسب مقصد</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">برای دریافت %1$s، باید توکن را فعال کنید. دفتر XRP نیاز به خط اعتماد برای هر توکن دارد، که 0.2 XRP از موجودی شما را قفل می کند. بدون آن، کیف پول شما نمی تواند %2$s را دریافت کند – تراکنش رد می شود و وجوه ارسال نخواهند شد.</string>
+    <string name="Activate_Xrp_ReserveNote">فعال کردن %1$s را به عنوان ذخیره در کیف پول شما قفل می کند. اگر خط اعتماد بعداً حذف شود، آزاد می شود.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">شما XRP قابل خرج کافی برای پوشش ذخیره خط اعتماد و هزینه شبکه ندارید.</string>
+    <string name="Send_DestinationTag_Hint">برچسب مقصد (اختیاری)</string>
+    <string name="Send_DestinationTag_Info">صرافی ها و برخی خدمات برای اعتباری کردن سپرده خود به برچسب مقصد نیاز دارند. برچسب در دفتر عمومی است.</string>
+    <string name="Send_DestinationTag_Required">این آدرس به برچسب مقصد نیاز دارد. پرداخت های بدون آن رد می شوند.</string>
+    <string name="Send_DestinationTag_Invalid">برچسب مقصد باید یک عدد صحیح از 0 تا 4294967295 باشد.</string>
+    <string name="Watch_Address_Hint">آدرس خود را وارد کنید (EVM، Tron، TON، Stellar، XRP، Monero، BTC، LTC، BCH، Dash) یا XPUB</string>
 </resources>

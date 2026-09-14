@@ -926,7 +926,7 @@
     <string name="ImportBackupFile_EnterPassword_Description">백업 비밀번호를 입력하면 지갑을 가져올 수 있습니다.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">유효하지 않은 암호</string>
     <string name="ImportBackupFile_BackupPassword">백업 비밀번호</string>
-    <string name="Watch_Address_Hint">공개 주소 또는 XPUB를 붙여넣으세요</string>
+    <string name="Watch_Address_Hint">주소(EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) 또는 XPUB를 붙여넣으세요</string>
     <string name="Watch_ViewKey">개인 조회 키</string>
     <string name="Watch_Select_Blockchains">블록체인 선택</string>
     <string name="Watch_Select_Coins">코인 선택하기</string>
@@ -1912,4 +1912,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">플래그 제거</string>
     <string name="WalletConnect_Stellar_HomeDomain">홈 도메인</string>
     <string name="WalletConnect_Stellar_InflationDestination">인플레이션 대상</string>
+    <string name="Transactions_XrpTransaction">XRP 원장 거래</string>
+    <string name="Transactions_TrustSet">신뢰선</string>
+    <string name="Info_Reserved_Xrp_Description">XRP 원장은 지갑 활성화를 위해 1 XRP를 잠그고 지갑이 소유한 각 신뢰선 또는 기타 객체에 대해 0.2 XRP를 예비금으로 잠급니다. 객체를 제거하면 예비금이 해제됩니다.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">기타 객체 (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">이 계정은 아직 활성화되지 않았습니다. 첫 입금은 최소 1 XRP 이상이어야 하며, 더 작은 금액은 네트워크에서 거부됩니다.</string>
+    <string name="Send_DestinationTag">수신인 태그</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">%1$s을(를) 받으려면 토큰을 활성화해야 합니다. XRP 레져는 각 토큰에 대한 신뢰선이 필요하며, 이는 존재하는 동안 잔액의 0.2 XRP를 잠급니다. 신뢰선이 없으면 지갑이 %2$s을(를) 받을 수 없습니다. 트랜잭션이 거부되고 자금이 전달되지 않습니다.</string>
+    <string name="Activate_Xrp_ReserveNote">활성화하면 %1$s이(가) 지갑의 예비금으로 잠깁니다. 신뢰선을 나중에 제거하면 해제됩니다.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">신뢰선 예비금과 네트워크 수수료를 충당할 수 있는 충분한 사용 가능한 XRP가 없습니다.</string>
+    <string name="Send_DestinationTag_Hint">대상 태그(선택사항)</string>
+    <string name="Send_DestinationTag_Info">거래소 및 일부 서비스에서는 입금을 송금하기 위해 대상 태그가 필요합니다. 태그는 원장에 공개됩니다.</string>
+    <string name="Send_DestinationTag_Required">이 주소에는 대상 태그가 필요합니다. 태그 없는 결제는 거부됩니다.</string>
+    <string name="Send_DestinationTag_Invalid">대상 태그는 0부터 4294967295까지의 정수여야 합니다.</string>
 </resources>

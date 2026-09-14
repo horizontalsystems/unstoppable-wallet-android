@@ -1121,7 +1121,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
     <string name="WatchWallet">观看钱包</string>
-    <string name="Watch_Address_Hint">粘贴您的地址 (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) 或 XPUB</string>
+    <string name="Watch_Address_Hint">粘贴您的地址（EVM、Tron、TON、Stellar、XRP、Monero、BTC、LTC、BCH、Dash）或XPUB</string>
     <string name="Watch_ViewKey">私人视图密钥</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
@@ -1911,4 +1911,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">清除标志</string>
     <string name="WalletConnect_Stellar_HomeDomain">主域</string>
     <string name="WalletConnect_Stellar_InflationDestination">通胀目的地</string>
+    <string name="Transactions_XrpTransaction">XRP账本交易</string>
+    <string name="Transactions_TrustSet">信任线</string>
+    <string name="Info_Reserved_Xrp_Description">XRP账本锁定1 XRP以激活钱包，并为您的钱包拥有的每条信任线或其他对象锁定0.2 XRP作为储备。删除对象时，储备将被释放。</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">其他对象 (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">此账户尚未激活。首次存款必须至少为1 XRP；网络会拒绝更小的付款。</string>
+    <string name="Send_DestinationTag">目标标签</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">要接收 %1$s，您需要激活代币。XRP Ledger 要求每个代币都有一条信任线，它会在存在期间锁定您余额中的 0.2 个 XRP。没有信任线，您的钱包无法接收 %2$s – 交易将被拒绝，资金将不会被交付。</string>
+    <string name="Activate_Xrp_ReserveNote">激活会将 %1$s 锁定为您钱包中的准备金。如果稍后删除信任线，将释放准备金。</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">您没有足够的可用 XRP 来支付信任线准备金和网络费用。</string>
+    <string name="Send_DestinationTag_Hint">目标标签（可选）</string>
+    <string name="Send_DestinationTag_Info">交易所和某些服务需要目标标签来记入您的存款。该标签在账本上是公开的。</string>
+    <string name="Send_DestinationTag_Required">此地址需要目标标签。没有标签的付款会被拒绝。</string>
+    <string name="Send_DestinationTag_Invalid">目标标签必须是0到4294967295之间的整数。</string>
 </resources>

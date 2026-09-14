@@ -1122,7 +1122,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Contraseña no válida</string>
     <string name="ImportBackupFile_BackupPassword">Copiar contraseña</string>
     <string name="WatchWallet">Ver billetera</string>
-    <string name="Watch_Address_Hint">Pegue su dirección (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) o XPUB</string>
+    <string name="Watch_Address_Hint">Pegue su dirección (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) o XPUB</string>
     <string name="Watch_ViewKey">Clave de vista privada</string>
     <string name="Watch_Select_Blockchains">Elegir Blockchain</string>
     <string name="Watch_Select_Coins">Elegir monedas</string>
@@ -1911,4 +1911,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">Borrar flags</string>
     <string name="WalletConnect_Stellar_HomeDomain">Dominio principal</string>
     <string name="WalletConnect_Stellar_InflationDestination">Destino de inflación</string>
+    <string name="Transactions_XrpTransaction">Transacción de XRP Ledger</string>
+    <string name="Transactions_TrustSet">Línea de Confianza</string>
+    <string name="Info_Reserved_Xrp_Description">XRP Ledger bloquea 1 XRP para activar la billetera y 0,2 XRP como reserva para cada línea de confianza u otro objeto que sea propiedad de tu billetera. La reserva se libera cuando se elimina el objeto.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">Otros objetos (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">Esta cuenta aún no está activada. El primer depósito debe ser de al menos 1 XRP; la red rechaza pagos más pequeños.</string>
+    <string name="Send_DestinationTag">Etiqueta de Destino</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">Para recibir %1$s, necesita activar el token. XRP Ledger requiere una línea de confianza para cada token, que bloquea 0,2 XRP de su saldo mientras exista. Sin ella, su billetera no puede recibir %2$s – la transacción será rechazada y los fondos no se entregarán.</string>
+    <string name="Activate_Xrp_ReserveNote">La activación bloquea %1$s como reserva en su billetera. Se libera si la línea de confianza se elimina más tarde.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">No tiene suficiente XRP disponible para cubrir la reserva de línea de confianza y la tarifa de red.</string>
+    <string name="Send_DestinationTag_Hint">Etiqueta de destino (opcional)</string>
+    <string name="Send_DestinationTag_Info">Los intercambios y algunos servicios requieren una etiqueta de destino para acreditar su depósito. La etiqueta es pública en el libro mayor.</string>
+    <string name="Send_DestinationTag_Required">Esta dirección requiere una etiqueta de destino. Los pagos sin una son rechazados.</string>
+    <string name="Send_DestinationTag_Invalid">La etiqueta de destino debe ser un número entero de 0 a 4294967295.</string>
 </resources>

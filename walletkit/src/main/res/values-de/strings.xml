@@ -1131,7 +1131,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
     <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
     <string name="WatchWallet">Wallet ansehen</string>
-    <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) oder XPUB</string>
+    <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) oder XPUB</string>
     <string name="Watch_ViewKey">Privater Ansichtsschlüssel</string>
     <string name="Watch_Select_Blockchains">Blockchains auswählen</string>
     <string name="Watch_Select_Coins">Münzen auswählen</string>
@@ -1920,4 +1920,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">Flags löschen</string>
     <string name="WalletConnect_Stellar_HomeDomain">Home Domain</string>
     <string name="WalletConnect_Stellar_InflationDestination">Inflationsziel</string>
+    <string name="Transactions_XrpTransaction">XRP Ledger-Transaktion</string>
+    <string name="Transactions_TrustSet">Vertrauenslinie</string>
+    <string name="Info_Reserved_Xrp_Description">Das XRP Ledger sperrt 1 XRP zur Aktivierung des Wallets und 0,2 XRP als Reserve für jede Vertrauenslinie oder jedes andere Objekt, das sich in Ihrem Wallet befindet. Die Reserve wird freigegeben, wenn das Objekt entfernt wird.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">Andere Objekte (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">Dieses Konto ist noch nicht aktiviert. Die erste Einzahlung muss mindestens 1 XRP betragen; kleinere Zahlungen werden vom Netzwerk abgelehnt.</string>
+    <string name="Send_DestinationTag">Ziel-Tag</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">Um %1$s zu empfangen, müssen Sie das Token aktivieren. Das XRP Ledger erfordert eine Vertrauenslinie für jedes Token, die 0,2 XRP Ihres Guthabens sperrt, solange sie existiert. Ohne diese kann Ihr Wallet %2$s nicht empfangen – die Transaktion wird abgelehnt und die Gelder werden nicht übermittelt.</string>
+    <string name="Activate_Xrp_ReserveNote">Die Aktivierung sperrt %1$s als Reserve in Ihrem Wallet. Sie wird freigegeben, wenn die Vertrauenslinie später entfernt wird.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">Sie haben nicht genug verfügbare XRP, um die Vertrauenslinie-Reserve und die Netzwerkgebühr zu decken.</string>
+    <string name="Send_DestinationTag_Hint">Ziel-Tag (optional)</string>
+    <string name="Send_DestinationTag_Info">Börsen und einige Dienste erfordern ein Ziel-Tag, um Ihre Einzahlung gutzuschreiben. Das Tag ist öffentlich im Ledger.</string>
+    <string name="Send_DestinationTag_Required">Diese Adresse erfordert ein Ziel-Tag. Zahlungen ohne eines werden abgelehnt.</string>
+    <string name="Send_DestinationTag_Invalid">Destination Tag muss eine ganze Zahl von 0 bis 4294967295 sein.</string>
 </resources>

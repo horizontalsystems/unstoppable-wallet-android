@@ -1129,7 +1129,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
     <string name="WatchWallet">Смотреть кошелек</string>
-    <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
+    <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
     <string name="Watch_ViewKey">Приватный ключ просмотра</string>
     <string name="Watch_Select_Blockchains">Выберите блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
@@ -1918,4 +1918,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">Очистить флаги</string>
     <string name="WalletConnect_Stellar_HomeDomain">Домен-хозяин</string>
     <string name="WalletConnect_Stellar_InflationDestination">Направление инфляции</string>
+    <string name="Transactions_XrpTransaction">Транзакция XRP Ledger</string>
+    <string name="Transactions_TrustSet">Доверительная линия</string>
+    <string name="Info_Reserved_Xrp_Description">XRP Ledger блокирует 1 XRP для активации кошелька и 0,2 XRP в качестве резерва для каждой доверительной линии или другого объекта, принадлежащего вашему кошельку. Резерв освобождается при удалении объекта.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">Другие объекты (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">Этот счёт ещё не активирован. Первый депозит должен быть не менее 1 XRP; сеть отклоняет меньшие платежи.</string>
+    <string name="Send_DestinationTag">Тег назначения</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">Чтобы получить %1$s, необходимо активировать токен. XRP Ledger требует доверительную линию для каждого токена, которая блокирует 0,2 XRP вашего баланса, пока она существует. Без неё ваш кошелёк не сможет получить %2$s – транзакция будет отклонена и средства не будут доставлены.</string>
+    <string name="Activate_Xrp_ReserveNote">Активация блокирует %1$s в качестве резерва в вашем кошельке. Резерв освобождается, если доверительная линия удаляется позже.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">У вас недостаточно доступного XRP для покрытия резерва доверительной линии и комиссии сети.</string>
+    <string name="Send_DestinationTag_Hint">Тег назначения (необязательно)</string>
+    <string name="Send_DestinationTag_Info">Биржи и некоторые сервисы требуют тег назначения для зачисления вашего депозита. Тег является открытым в реестре.</string>
+    <string name="Send_DestinationTag_Required">Этот адрес требует тег назначения. Платежи без тега отклоняются.</string>
+    <string name="Send_DestinationTag_Invalid">Тег назначения должен быть целым числом от 0 до 4294967295.</string>
 </resources>

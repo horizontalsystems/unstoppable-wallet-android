@@ -1615,7 +1615,7 @@
     <string name="WalletConnect_SendTransactionRequest_Title">İşlem Gönder</string>
     <string name="WalletConnect_Value">Değer</string>
     <string name="WatchWallet">Cüzdan İzle</string>
-    <string name="Watch_Address_Hint">Genel adresinizi veya XPUB anahtarınızı yapıştırın</string>
+    <string name="Watch_Address_Hint">Adresinizi yapıştırın (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) veya XPUB</string>
     <string name="Watch_ViewKey">Özel Görüntüleme Anahtarı</string>
     <string name="CreateNewWallet_Button_CreateStandardWallet">Standart Cüzdan Oluştur</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Bu cihaz Passkey cüzdanlarını desteklemiyor. Bunun yerine standart bir cüzdan oluşturabilirsiniz.</string>
@@ -1912,4 +1912,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">Bayrakları temizle</string>
     <string name="WalletConnect_Stellar_HomeDomain">Ana alan adı</string>
     <string name="WalletConnect_Stellar_InflationDestination">Enflasyon hedefi</string>
+    <string name="Transactions_XrpTransaction">XRP Ledger İşlemi</string>
+    <string name="Transactions_TrustSet">Güven Satırı</string>
+    <string name="Info_Reserved_Xrp_Description">XRP Ledger, cüzdanı etkinleştirmek için 1 XRP\'yi ve cüzdanınıza ait her güven satırı veya diğer nesne için 0,2 XRP\'yi rezerv olarak kilitler. Nesne kaldırıldığında rezerv serbest bırakılır.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">Diğer nesneler (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">Bu hesap henüz etkinleştirilmedi. İlk para yatırma en az 1 XRP olmalıdır; ağ daha küçük ödemeleri reddeder.</string>
+    <string name="Send_DestinationTag">Hedef Etiketi</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">%1$s almak için tokeni etkinleştirmeniz gerekir. XRP Ledger her token için bir güven çizgisi gerektirir ve bu da bakiyenizin 0,2 XRP\'sini varlığı süresince kilitler. Bunu olmadan, cüzdanınız %2$s alamaz – işlem reddedilir ve fonlar iletilmez.</string>
+    <string name="Activate_Xrp_ReserveNote">Etkinleştirme, %1$s\'i cüzdanınızda rezerv olarak kilitler. Güven çizgisi daha sonra kaldırılırsa serbest bırakılır.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">Güven çizgisi rezervini ve ağ ücretini karşılamak için yeterli harcayabileceğiniz XRP\'niz yok.</string>
+    <string name="Send_DestinationTag_Hint">Hedef etiketi (isteğe bağlı)</string>
+    <string name="Send_DestinationTag_Info">Borsalar ve bazı hizmetler, paranızı yatırmak için bir hedef etiketi gerektirir. Etiket defter üzerinde halka açıktır.</string>
+    <string name="Send_DestinationTag_Required">Bu adres bir hedef etiketi gerektirir. Etiketsiz ödemeler reddedilir.</string>
+    <string name="Send_DestinationTag_Invalid">Hedef etiketi 0 ile 4294967295 arasında bir tam sayı olmalıdır.</string>
 </resources>

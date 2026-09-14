@@ -1124,7 +1124,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
     <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
     <string name="WatchWallet">Regarder le portefeuille</string>
-    <string name="Watch_Address_Hint">Collez votre adresse (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
+    <string name="Watch_Address_Hint">Collez votre adresse (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
     <string name="Watch_ViewKey">Clé privée</string>
     <string name="Watch_Select_Blockchains">Choisir les Blockchains</string>
     <string name="Watch_Select_Coins">Crypto Monnaie</string>
@@ -1913,4 +1913,17 @@
     <string name="WalletConnect_Stellar_ClearFlags">Effacer les flags</string>
     <string name="WalletConnect_Stellar_HomeDomain">Domaine principal</string>
     <string name="WalletConnect_Stellar_InflationDestination">Destination d\'inflation</string>
+    <string name="Transactions_XrpTransaction">Transaction XRP Ledger</string>
+    <string name="Transactions_TrustSet">Ligne de Confiance</string>
+    <string name="Info_Reserved_Xrp_Description">XRP Ledger bloque 1 XRP pour activer le portefeuille et 0,2 XRP en tant que réserve pour chaque ligne de confiance ou autre objet appartenant à votre portefeuille. La réserve est libérée lorsque l\'objet est supprimé.</string>
+    <string name="Info_Reserved_Xrp_OtherObjects">Autres objets (%1$d)</string>
+    <string name="Xrp_TokenPage_AccountNotActivated">Ce compte n\'est pas encore activé. Le premier dépôt doit être d\'au moins 1 XRP; les paiements plus petits sont rejetés par le réseau.</string>
+    <string name="Send_DestinationTag">Balise de Destination</string>
+    <string name="ActivationRequired_Xrp_DialogDescription">Pour recevoir %1$s, vous devez activer le token. Le ledger XRP nécessite une ligne de confiance pour chaque token, qui bloque 0,2 XRP de votre solde tant qu\'elle existe. Sans elle, votre portefeuille ne peut pas recevoir %2$s – la transaction sera rejetée et les fonds ne seront pas livrés.</string>
+    <string name="Activate_Xrp_ReserveNote">L\'activation verrouille %1$s comme réserve dans votre portefeuille. Il est libéré si la ligne de confiance est supprimée ultérieurement.</string>
+    <string name="Activate_Xrp_InsufficientBalance_Description">Vous n\'avez pas assez de XRP dépensable pour couvrir la réserve de ligne de confiance et les frais de réseau.</string>
+    <string name="Send_DestinationTag_Hint">Balise de destination (optionnel)</string>
+    <string name="Send_DestinationTag_Info">Les bourses et certains services nécessitent une balise de destination pour créditer votre dépôt. La balise est publique sur le ledger.</string>
+    <string name="Send_DestinationTag_Required">Cette adresse nécessite une balise de destination. Les paiements sans un sont rejetés.</string>
+    <string name="Send_DestinationTag_Invalid">La balise de destination doit être un nombre entier de 0 à 4294967295.</string>
 </resources>
