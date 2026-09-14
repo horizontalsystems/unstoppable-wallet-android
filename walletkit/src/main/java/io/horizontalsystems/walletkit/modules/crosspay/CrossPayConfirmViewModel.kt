@@ -2,14 +2,11 @@ package io.horizontalsystems.walletkit.modules.crosspay
 
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
-import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
@@ -144,7 +141,7 @@ class CrossPayConfirmViewModel(
             estimatedTime = order?.estimatedTime,
             currency = currency,
             networkFee = sendTransactionState.networkFee,
-            cautions = cautions(),
+            cautions = sendTransactionState.cautions,
             transactionFields = sendTransactionState.fields,
             canSend = order != null && sendTransactionState.sendable && !expired && error == null,
             expired = expired,
@@ -152,38 +149,6 @@ class CrossPayConfirmViewModel(
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             error = error,
         )
-    }
-
-    private fun cautions(): List<CautionViewItem> {
-        // Replaces the service's own rejection instead of adding to it: the service names no
-        // amount, and under exact output the figure the user needs is the DEPOSIT plus its
-        // network fee, not what they entered — without this the refusal is baffling. Two
-        // messages for one shortfall read as two problems.
-        order?.let { order ->
-            if (insufficientBalance(order)) {
-                return listOf(
-                    CautionViewItem(
-                        title = App.instance.getString(R.string.CrossPay_Caution_Title),
-                        text = App.instance.getString(
-                            R.string.CrossPay_Caution_InsufficientBalance,
-                            CoinValue(tokenIn, order.depositAmount).getFormattedFull(),
-                        ),
-                        type = CautionViewItem.Type.Error,
-                    )
-                )
-            }
-        }
-
-        return sendTransactionState.cautions
-    }
-
-    private fun insufficientBalance(order: CrossPayOrder): Boolean {
-        val available = App.adapterManager
-            .getAdapterForToken<IBalanceAdapter>(tokenIn)
-            ?.balanceData?.available
-            ?: return false
-
-        return order.depositAmount > available
     }
 
     /**
@@ -203,6 +168,12 @@ class CrossPayConfirmViewModel(
         recordId = null
         initialLoading = true
         emitState()
+
+        // `initialLoading` only clears when the service's StateFlow emits after the new order
+        // is set, and StateFlow drops a value equal to the current one. A re-estimate of a
+        // like-for-like deposit (same amount, fee and fields) lands on an identical state, so
+        // without a fresh uuid nothing is emitted and the screen spins forever.
+        sendTransactionService.refreshUuid()
 
         commit()
     }
