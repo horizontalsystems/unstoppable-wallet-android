@@ -133,6 +133,7 @@ object CanonicalAssetId {
         BlockchainType.Solana to "SOL",
         BlockchainType.Ton to "TON",
         BlockchainType.Stellar to "XLM",
+        BlockchainType.Xrp to "XRP",
         BlockchainType.Thorchain to "THOR",
     )
 
@@ -161,6 +162,7 @@ object CanonicalAssetId {
         BlockchainType.Solana to "SOL",
         BlockchainType.Ton to "TON",
         BlockchainType.Stellar to "XLM",
+        BlockchainType.Xrp to "XRP",
         BlockchainType.Thorchain to "RUNE",
     )
 

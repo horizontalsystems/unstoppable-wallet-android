@@ -100,6 +100,17 @@ sealed class SendTransactionData {
         ) : Thorchain()
     }
 
+    /**
+     * An XRP Payment. The counterparty's crediting identifier rides in [destinationTag] — a
+     * separate 32-bit unsigned field of the transaction — not in a memo, which is why this
+     * shape carries a tag and no memo string.
+     */
+    data class Xrp(
+        val address: String,
+        val amount: BigDecimal,
+        val destinationTag: Long?,
+    ) : SendTransactionData()
+
     data class Monero(
         val address: String,
         val amount: BigDecimal,

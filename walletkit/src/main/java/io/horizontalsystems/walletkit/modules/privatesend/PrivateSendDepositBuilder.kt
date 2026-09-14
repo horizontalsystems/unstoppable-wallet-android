@@ -1,12 +1,14 @@
 package io.horizontalsystems.walletkit.modules.privatesend
 
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
+import io.horizontalsystems.walletkit.modules.multiswap.providers.XrpDestinationTag
 import io.horizontalsystems.walletkit.modules.multiswap.providers.memoDelivery
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendDepositBuilder.deliverableDestinationTag
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendDepositBuilder.deliverableMemo
 
 /**
  * Builds the deposit transfer for a committed private send order: exactly
@@ -73,6 +75,15 @@ object PrivateSendDepositBuilder {
                 memo = memo,
             )
 
+            // XRP carries the identifier in the Payment's DestinationTag field, not a memo, so
+            // a `text` attachment has nowhere to ride here and must refuse — see
+            // [deliverableDestinationTag].
+            BlockchainType.Xrp -> SendTransactionData.Xrp(
+                address = address,
+                amount = amount,
+                destinationTag = deliverableDestinationTag(order.attachment),
+            )
+
             // No Zcash/Monero/Zano branches: those chains' own transactions already hide the
             // sender, so PrivateSendManager excludes them outright — see its privateChains.
 
@@ -95,9 +106,10 @@ object PrivateSendDepositBuilder {
      * the order by this identifier, and a deposit it cannot match is typically unrecoverable.
      *
      * Both `text` and `destination_tag` ride the memo field, exactly as the swap deposit path
-     * treats them (see Execution.resolvedMemo): every chain built here puts a numeric tag
-     * (e.g. a Stellar memo-id) in the same memo slot, and the dedicated XRP separate-field
-     * tag is not a chain this builder supports. An unknown attachment kind still refuses.
+     * treats them (see Execution.resolvedMemo): every memo-carrying chain built here puts a
+     * numeric tag (e.g. a Stellar memo-id) in the same memo slot. XRP is the exception — its
+     * tag is a separate transaction field, read by [deliverableDestinationTag] instead — and
+     * an unknown attachment kind still refuses.
      *
      * Also called by PrivateSendManager.commit right after the order is committed, so an
      * undeliverable attachment surfaces once as an authored commit error instead of failing
@@ -122,6 +134,29 @@ object PrivateSendDepositBuilder {
             throw PrivateSendError.AttachmentUnsupported
         }
 
+        // XRP's identifier is a separate transaction field, so deliverability there is a
+        // narrower question than "does a memo reach the owner". Asking it here keeps the
+        // commit-time gate honest for XRP instead of letting it fail in the build.
+        if (blockchainType == BlockchainType.Xrp) {
+            deliverableDestinationTag(attachment)
+        }
+
         return attachment.value
+    }
+
+    /**
+     * The XRPL destination tag for an order's attachment, or null when it carries none.
+     *
+     * Deliberately stricter than [deliverableMemo]: the tag is a 32-bit unsigned field of the
+     * Payment, so a `text` attachment cannot be delivered there at all (XRPL memos are not what
+     * providers read), and a value outside the field's range would be truncated into somebody
+     * else's order. Both refuse the send instead.
+     */
+    private fun deliverableDestinationTag(attachment: UnstoppableAPI.Response.Attachment?): Long? {
+        attachment ?: return null
+
+        if (attachment.type != "destination_tag") throw PrivateSendError.AttachmentUnsupported
+
+        return XrpDestinationTag.parse(attachment.value) ?: throw PrivateSendError.AttachmentUnsupported
     }
 }

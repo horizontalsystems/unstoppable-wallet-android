@@ -235,9 +235,16 @@ class USwapProvider(
                     }
                 }
 
-                // XRP is not routed through this provider yet (needs server support and
-                // destination-tag delivery); see the XRP integration plan.
-                BlockchainType.Xrp -> Unit
+                BlockchainType.Xrp -> {
+                    // Native XRP only: the server lists no XRPL issued token (`address` is
+                    // always null), and CanonicalAssetId maps TokenType.XrpAsset to no id, so
+                    // a trust-line asset would be unsuspendable even if one appeared.
+                    if (token.address.isNullOrBlank()) {
+                        App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
+                            assetsMap[it] = token.identifier
+                        }
+                    }
+                }
 
                 is BlockchainType.Unsupported -> Unit
             }
@@ -594,7 +601,11 @@ class USwapProvider(
             fromAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
             toAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
             depositAddress = bestRoute.execution?.resolvedDepositAddress(),
-            depositMemo = bestRoute.execution?.resolvedMemo(),
+            // XRP's identifier is a destination tag, not a memo — the XRP send service shows it
+            // under its own label, so showing it here again as a "deposit memo" would misname it.
+            depositMemo = bestRoute.execution
+                ?.takeIf { tokenIn.blockchainType != BlockchainType.Xrp }
+                ?.resolvedMemo(),
             approvalSpender = bestRoute.approvalSpenderOrExecution,
         )
     }
@@ -728,6 +739,17 @@ class USwapProvider(
                 return SendTransactionData.Ton.SendRequest(JSONObject(tx.toString()))
             }
 
+            BlockchainType.Xrp -> {
+                // The identifier travels in the Payment's DestinationTag field rather than a
+                // memo, so this builds the transfer from the tag — see [resolvedDestinationTag],
+                // which refuses any attachment XRP cannot carry there.
+                return SendTransactionData.Xrp(
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
+                    amount = amountIn,
+                    destinationTag = execution.resolvedDestinationTag(),
+                )
+            }
+
             BlockchainType.Zcash -> {
                 if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple ZEC tx providers are supported")
@@ -800,6 +822,7 @@ class USwapProvider(
             "bitcoincash" to BlockchainType.BitcoinCash,
             "litecoin" to BlockchainType.Litecoin,
             "stellar" to BlockchainType.Stellar,
+            "ripple" to BlockchainType.Xrp,
             "ton" to BlockchainType.Ton,
             "dash" to BlockchainType.Dash,
             "ecash" to BlockchainType.ECash,
@@ -1137,12 +1160,32 @@ interface UnstoppableAPI {
             // Every chain we build a transfer for here (Stellar/Zcash/Monero/Zano/UTXO) puts
             // it in the memo field, whether the server typed it `text` (RUNE/GAIA/TON/NEAR)
             // or `destination_tag` (a numeric tag, e.g. a Stellar memo-id), so accept both.
-            // The dedicated XRP destination-tag path (where the tag is a separate tx field,
-            // not a memo) is not built by this provider, so this can't misroute one.
+            // XRP is the one chain where a tag is NOT a memo — it reads the same attachment
+            // through [resolvedDestinationTag] instead, and never through this.
             fun resolvedMemo(): String? = when (method) {
                 "thorchain_deposit" -> memo
                 "transfer" -> attachment?.value
                 else -> null
+            }
+
+            /**
+             * The binding identifier for an XRP transfer, as the Payment's DestinationTag.
+             *
+             * Only a numeric `destination_tag` fits that field: a `text` attachment would have
+             * to ride an XRPL memo, which providers do not read, so it fails the route instead
+             * of being silently dropped — an unmatched deposit is typically unrecoverable.
+             * No attachment at all is a route the provider credits by deposit address alone.
+             */
+            fun resolvedDestinationTag(): Long? {
+                if (method != "transfer") return null
+                val attachment = attachment ?: return null
+
+                if (attachment.type != "destination_tag") {
+                    throw IllegalStateException("XRP cannot deliver a `${attachment.type}` attachment")
+                }
+
+                return XrpDestinationTag.parse(attachment.value)
+                    ?: throw IllegalStateException("Destination tag out of range")
             }
 
             val approvalSpender: String?

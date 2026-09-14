@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.ISendXrpAdapter
 import io.horizontalsystems.walletkit.core.ServiceState
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
+import io.horizontalsystems.walletkit.modules.multiswap.providers.XrpDestinationTag
 import java.math.BigDecimal
 
 /**
@@ -85,6 +86,6 @@ class SendXrpDestinationService(
     )
 
     companion object {
-        const val MAX_TAG = 4294967295L
+        const val MAX_TAG = XrpDestinationTag.MAX
     }
 }

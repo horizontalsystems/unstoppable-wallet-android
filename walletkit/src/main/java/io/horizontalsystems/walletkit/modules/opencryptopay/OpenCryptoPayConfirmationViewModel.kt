@@ -200,6 +200,7 @@ class OpenCryptoPayConfirmationViewModel(
     private fun extractTxHash(result: SendTransactionResult): String? = when (result) {
         is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
         is SendTransactionResult.Tron -> result.txHash
+        is SendTransactionResult.Xrp -> result.txHash
         is SendTransactionResult.Solana -> result.txHash
         is SendTransactionResult.Monero -> result.txHash
         is SendTransactionResult.Zano -> result.txHash

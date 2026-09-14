@@ -53,6 +53,7 @@ object SwapHelper {
             || blockchainType == BlockchainType.Tron
             || blockchainType == BlockchainType.Ton
             || blockchainType == BlockchainType.Stellar
+            || blockchainType == BlockchainType.Xrp
             || blockchainType == BlockchainType.Zcash
             || blockchainType == BlockchainType.Monero
             || blockchainType == BlockchainType.Zano

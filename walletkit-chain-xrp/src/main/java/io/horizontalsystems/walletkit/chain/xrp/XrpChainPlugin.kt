@@ -28,6 +28,8 @@ import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerXrp
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceXrp
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.ReceiveActivatableTokenScreen
@@ -116,6 +118,9 @@ class XrpChainPlugin : ChainPlugin {
 
     override suspend fun swapDestinationAddress(account: Account): String =
         kitManager.getAddress(account.type)
+
+    override fun sendTransactionService(token: Token): AbstractSendTransactionService =
+        SendTransactionServiceXrp(token)
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerXrp())
 

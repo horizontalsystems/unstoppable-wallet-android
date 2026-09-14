@@ -7,6 +7,7 @@ sealed class SendTransactionResult {
     data class Btc(val transactionRecord: BitcoinTransactionRecord?) : SendTransactionResult()
     data class Tron(val txHash: String? = null) : SendTransactionResult()
     data class Stellar(val txHash: String? = null) : SendTransactionResult()
+    data class Xrp(val txHash: String? = null) : SendTransactionResult()
     data class Solana(val txHash: String? = null) : SendTransactionResult()
     object Ton : SendTransactionResult()
     data class Zcash(val transactionHash: String?) : SendTransactionResult()
