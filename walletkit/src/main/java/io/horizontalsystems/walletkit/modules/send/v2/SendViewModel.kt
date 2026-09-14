@@ -21,6 +21,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.NetworkAvailabilityServi
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -264,8 +265,9 @@ class SendViewModel(
         privateSendSupported = privateSendSupported,
         hideAddress = hideAddress,
         // A private send commits a provider order for the entered amount as is; nothing
-        // later takes the fee out of it, so the whole balance can never be sent that way.
-        disabledPercents = if (tab == SendTab.Private) setOf(100) else emptySet(),
+        // later takes the fee out of it, so a coin that pays its own fee cannot send its
+        // whole balance that way. A token whose fee is paid in the chain's coin can.
+        disabledPercents = if (tab == SendTab.Private && feePaidFromAsset(wallet.token.type)) setOf(100) else emptySet(),
         step = step(),
     )
 
@@ -280,6 +282,13 @@ class SendViewModel(
             return SendStep.InputRequired(SendInputType.Address)
         }
         return SendStep.Proceed
+    }
+
+    private fun feePaidFromAsset(type: TokenType) = when (type) {
+        TokenType.Native,
+        is TokenType.Derived,
+        is TokenType.AddressTyped -> true
+        else -> false
     }
 
     fun onSelectTab(tab: SendTab) {
