@@ -447,7 +447,8 @@ class BalanceViewItemFactory {
             badge = wallet.badge,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
-            notActivated = item.warning is BalanceModule.BalanceWarning.TronInactiveAccountWarning,
+            notActivated = item.warning is BalanceModule.BalanceWarning.TronInactiveAccountWarning ||
+                    item.warning is BalanceModule.BalanceWarning.XrpInactiveAccountWarning,
             loading = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         )
     }

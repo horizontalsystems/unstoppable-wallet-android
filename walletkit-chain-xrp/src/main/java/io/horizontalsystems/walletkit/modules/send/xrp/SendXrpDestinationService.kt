@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.ServiceState
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.multiswap.providers.XrpDestinationTag
+import kotlinx.coroutines.CancellationException
 import java.math.BigDecimal
 
 /**
@@ -15,6 +16,9 @@ import java.math.BigDecimal
 class SendXrpDestinationService(
     private val adapter: ISendXrpAdapter,
 ) : ServiceState<SendXrpDestinationService.State>() {
+
+    // setValidAddress runs on the address collector while tag input arrives from the UI
+    private val lock = Any()
 
     private var minimumAmount: BigDecimal? = null
     private var tagRequired = false
@@ -30,21 +34,30 @@ class SendXrpDestinationService(
     )
 
     suspend fun setValidAddress(address: Address?) {
-        lookupError = null
+        var newMinimumAmount: BigDecimal? = null
+        var newTagRequired = false
+        var newLookupError: Throwable? = null
         try {
-            minimumAmount = address?.let { adapter.getMinimumSendAmount(it.hex) }
-            tagRequired = address?.let { adapter.requiresDestinationTag(it.hex) } ?: false
+            newMinimumAmount = address?.let { adapter.getMinimumSendAmount(it.hex) }
+            newTagRequired = address?.let { adapter.requiresDestinationTag(it.hex) } ?: false
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
-            minimumAmount = null
-            tagRequired = false
-            lookupError = e
+            newMinimumAmount = null
+            newTagRequired = false
+            newLookupError = e
         }
-        validateTag()
-        emitState()
+        synchronized(lock) {
+            minimumAmount = newMinimumAmount
+            tagRequired = newTagRequired
+            lookupError = newLookupError
+            validateTag()
+            emitState()
+        }
     }
 
     /** [input] is the raw text of the tag field; blank means no tag. */
-    fun setTagInput(input: String) {
+    fun setTagInput(input: String) = synchronized(lock) {
         val text = input.trim()
         tag = null
         tagError = null
@@ -61,7 +74,7 @@ class SendXrpDestinationService(
     }
 
     /** A tag carried by an X-address replaces whatever was typed. */
-    fun setFixedTag(fixed: Long?) {
+    fun setFixedTag(fixed: Long?) = synchronized(lock) {
         if (fixed != null) {
             tag = fixed
             tagError = null

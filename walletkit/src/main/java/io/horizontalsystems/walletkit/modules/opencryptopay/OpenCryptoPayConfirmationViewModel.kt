@@ -227,6 +227,7 @@ class OpenCryptoPayConfirmationViewModel(
 
             BlockchainType.Solana -> SendTransactionData.Solana.Simple(address, amount)
             BlockchainType.Tron -> SendTransactionData.Tron.Simple(address, amount)
+            BlockchainType.Xrp -> SendTransactionData.Xrp(address, amount, null)
             BlockchainType.Monero -> SendTransactionData.Monero(address, amount, null)
             BlockchainType.Zano -> SendTransactionData.Zano(address, amount, null)
             else -> throw IllegalStateException("Unsupported chain: ${wallet.token.blockchainType}")

@@ -44,7 +44,14 @@ class XrpTransactionsAdapter(
 
         // The kit keeps the full (capped) history locally, newest first; paging happens here.
         val all = kit.getAllTransactions().filter(filter)
-        val start = from?.let { record -> all.indexOfFirst { it.hash == record.transactionHash } + 1 } ?: 0
+        val start = if (from == null) {
+            0
+        } else {
+            // an anchor no longer in the capped history means there is nothing older to page to
+            val index = all.indexOfFirst { it.hash == from.transactionHash }
+            if (index < 0) return emptyList()
+            index + 1
+        }
         return all.drop(start).take(limit).map { converter.convert(it) }
     }
 

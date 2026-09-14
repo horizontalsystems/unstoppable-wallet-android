@@ -96,7 +96,7 @@ class StellarAssetAdapter(
 
     override suspend fun isActivated(): Boolean = isTrustlineEstablished()
 
-    override suspend fun activate() = withContext(Dispatchers.Default) {
+    override suspend fun activate() = withContext(Dispatchers.IO) {
         stellarKit.enableAsset(stellarAsset.id, null)
     }
 

@@ -11,8 +11,11 @@ import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDestinationTag
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
 
 /**
  * Sends the deposit leg of a swap (or an OpenCryptoPay payment) on the XRP Ledger.
@@ -41,8 +44,10 @@ class SendTransactionServiceXrp(
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Xrp)
 
+        // build first, then publish both together so state never pairs new data with old cautions
+        val newCautions = buildCautions(data)
         sendData = data
-        cautions = buildCautions(data)
+        cautions = newCautions
 
         emitState()
     }
@@ -62,17 +67,29 @@ class SendTransactionServiceXrp(
 
         // An untagged payment to an address flagged RequireDestTag is rejected by the ledger,
         // and the route would have to be rebuilt anyway — so refuse before the fee is burned.
-        val tagMissing = data.destinationTag == null &&
-                runCatching { adapter.requiresDestinationTag(data.address) }.getOrDefault(false)
-
-        if (tagMissing) {
-            result.add(
-                CautionViewItem(
-                    title = Translator.getString(R.string.Send_DestinationTag),
-                    text = Translator.getString(R.string.Send_DestinationTag_Required),
-                    type = CautionViewItem.Type.Error
+        // A failed lookup blocks the send too: an unknown flag is not the same as no flag.
+        if (data.destinationTag == null) {
+            try {
+                if (adapter.requiresDestinationTag(data.address)) {
+                    result.add(
+                        CautionViewItem(
+                            title = Translator.getString(R.string.Send_DestinationTag),
+                            text = Translator.getString(R.string.Send_DestinationTag_Required),
+                            type = CautionViewItem.Type.Error
+                        )
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                result.add(
+                    CautionViewItem(
+                        title = Translator.getString(R.string.Send_DestinationTag),
+                        text = e.message ?: Translator.getString(R.string.SyncError),
+                        type = CautionViewItem.Type.Error
+                    )
                 )
-            )
+            }
         }
 
         return result
@@ -81,7 +98,9 @@ class SendTransactionServiceXrp(
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val data = sendData ?: throw IllegalStateException("Send data not set")
 
-        val txHash = adapter.send(data.amount, data.address, data.destinationTag, null)
+        val txHash = withContext(Dispatchers.IO) {
+            adapter.send(data.amount, data.address, data.destinationTag, null)
+        }
 
         return SendTransactionResult.Xrp(txHash)
     }

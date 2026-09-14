@@ -53,6 +53,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversa
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -179,6 +180,13 @@ fun ActivateTokenScreen(
                     ),
                     icon = R.drawable.ic_attention_20
                 )
+
+                is ActivateTokenError.Failed -> TextImportantError(
+                    modifier = modifier,
+                    title = stringResource(R.string.Error),
+                    text = error.message,
+                    icon = R.drawable.ic_attention_20
+                )
             }
         }
     }
@@ -199,29 +207,36 @@ class ActivateTokenViewModel(
     private var feeFiatValue: CurrencyValue? = null
 
     init {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             val tmpAdapter = adapter
 
-            if (tmpAdapter == null) {
-                activateEnabled = false
-                error = ActivateTokenError.NullAdapter()
-            } else if (tmpAdapter.isActivated()) {
-                activateEnabled = false
-                error = ActivateTokenError.AlreadyActive()
-            } else try {
-                tmpAdapter.validateActivation()
-                activateEnabled = true
-                error = null
-            } catch (e: TokenActivationError.InsufficientBalance) {
-                activateEnabled = false
-                error = ActivateTokenError.InsufficientBalance()
-            }
-
-            tmpAdapter?.activationFee?.let { feeAmount ->
-                feeCoinValue = CoinValue(feeToken, feeAmount)
-                feeFiatValue = xRateService.getRate(feeToken.coin.uid)?.let { rate ->
-                    rate.copy(value = rate.value * feeAmount)
+            try {
+                if (tmpAdapter == null) {
+                    activateEnabled = false
+                    error = ActivateTokenError.NullAdapter()
+                } else if (tmpAdapter.isActivated()) {
+                    activateEnabled = false
+                    error = ActivateTokenError.AlreadyActive()
+                } else try {
+                    tmpAdapter.validateActivation()
+                    activateEnabled = true
+                    error = null
+                } catch (e: TokenActivationError.InsufficientBalance) {
+                    activateEnabled = false
+                    error = ActivateTokenError.InsufficientBalance()
                 }
+
+                tmpAdapter?.activationFee?.let { feeAmount ->
+                    feeCoinValue = CoinValue(feeToken, feeAmount)
+                    feeFiatValue = xRateService.getRate(feeToken.coin.uid)?.let { rate ->
+                        rate.copy(value = rate.value * feeAmount)
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                activateEnabled = false
+                error = ActivateTokenError.Failed(e.message ?: e.javaClass.simpleName)
             }
 
             emitState()
@@ -238,7 +253,7 @@ class ActivateTokenViewModel(
         activationInfo = activationInfo,
     )
 
-    suspend fun activate() = withContext(Dispatchers.Default) {
+    suspend fun activate() = withContext(Dispatchers.IO) {
         adapter?.activate()
     }
 
@@ -257,6 +272,7 @@ sealed class ActivateTokenError : Throwable() {
     class NullAdapter : ActivateTokenError()
     class AlreadyActive : ActivateTokenError()
     class InsufficientBalance : ActivateTokenError()
+    class Failed(override val message: String) : ActivateTokenError()
 }
 
 data class ActivateTokenUiState(
