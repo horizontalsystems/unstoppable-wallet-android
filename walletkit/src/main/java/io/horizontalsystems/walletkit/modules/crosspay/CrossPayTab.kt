@@ -221,7 +221,7 @@ private fun AmountOutSection(
                         App.numberFormatter.formatCoinFull(it, tokenIn.coin.code, tokenIn.decimals)
                     ),
                     style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.ocean,
+                    color = ComposeAppTheme.colors.andy,
                 )
             }
         }
