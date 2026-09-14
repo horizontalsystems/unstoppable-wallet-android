@@ -98,32 +98,24 @@ fun SendConfirmationScreen(
 ) {
     val closeUntilDestId = sendEntryPointDestId ?: SendV2Page::class
     val view = LocalView.current
-    when (sendResult) {
-        is SendResult.Sent -> {
-            HudHelper.showSuccessMessage(
-                view,
-                R.string.Send_Success,
-                SnackbarDuration.LONG
-            )
-        }
-
-        is SendResult.Failed -> {
-            navigation.slideFromBottom(
-                ErrorSheet(
-                    ErrorSheet.Input(
-                        sendResult.caution.getDescription() ?: sendResult.caution.getString()
-                    )
-                )
-            )
-        }
-
-        else -> Unit
+    val failureText = (sendResult as? SendResult.Failed)?.let {
+        it.caution.getDescription() ?: it.caution.getString()
     }
 
+    // Keyed on the result so each outcome is announced once, not on every recomposition.
     LaunchedEffect(sendResult) {
-        if (sendResult is SendResult.Sent) {
-            delay(1200)
-            navigation.removeLastUntil(closeUntilDestId, true)
+        when (sendResult) {
+            is SendResult.Sent -> {
+                HudHelper.showSuccessMessage(view, R.string.Send_Success, SnackbarDuration.LONG)
+                delay(1200)
+                navigation.removeLastUntil(closeUntilDestId, true)
+            }
+
+            is SendResult.Failed -> {
+                navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failureText.orEmpty())))
+            }
+
+            else -> Unit
         }
     }
 

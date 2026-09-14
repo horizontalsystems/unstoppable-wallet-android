@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.send.v2
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -100,7 +101,9 @@ class SendV2ConfirmViewModel(
     private var submittedAmount: BigDecimal? = null
     private var adjustedAmount: BigDecimal? = null
     private var adjusting = sendMax
-    private var adjustmentRounds = 0
+    // Targets already submitted in this session. A fee-settings edit yields a new target and
+    // is followed; a fee that alternates between amounts revisits one and is stopped there.
+    private val triedTargets = mutableSetOf<BigDecimal>()
     private var maxSendCaution: CautionViewItem? = null
     private var rate = xRateService.getRate(token.coin.uid)
     private var feeCoinRate: CurrencyValue? = null
@@ -136,6 +139,11 @@ class SendV2ConfirmViewModel(
     // Services may reach the network while taking the transfer (fee estimates, account
     // lookups), so this never runs on the main thread.
     private suspend fun submit(value: BigDecimal) = withContext(Dispatchers.Default) {
+        // A previous attempt may have failed (node error); this one starts clean.
+        if (error != null) {
+            error = null
+            emitState()
+        }
         try {
             val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, chainSettings)
                 ?: throw UnsupportedOperationException(token.blockchainType.uid)
@@ -180,13 +188,13 @@ class SendV2ConfirmViewModel(
             return
         }
 
-        // A fee that depends on the amount could chase itself between two values; the
-        // budget counts every resubmission, so the last estimate stands after a few rounds.
-        if (adjustmentRounds >= MAX_ADJUSTMENT_ROUNDS) {
+        val key = target.stripTrailingZeros()
+        if (key in triedTargets || triedTargets.size >= MAX_ADJUSTMENT_ROUNDS) {
+            // Chasing itself; the last submitted estimate stands.
             adjusting = false
             return
         }
-        adjustmentRounds++
+        triedTargets.add(key)
         adjusting = true
         adjustedAmount = target
         viewModelScope.launch { submit(target) }
@@ -238,12 +246,19 @@ class SendV2ConfirmViewModel(
 
     private suspend fun send() = withContext(Dispatchers.IO) {
         sendResult = SendResult.Sending
-        try {
-            val result = sendTransactionService.sendTransaction()
-            sendResult = SendResult.Sent(txHash = txHash(result))
-            recentAddressManager.setRecentAddress(address, token.blockchainType)
+        val result = try {
+            sendTransactionService.sendTransaction()
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
+            return@withContext
+        }
+        sendResult = SendResult.Sent(txHash = txHash(result))
+
+        // Bookkeeping after a broadcast transaction; its failure is not the send's.
+        try {
+            recentAddressManager.setRecentAddress(address, token.blockchainType)
+        } catch (e: Throwable) {
+            Log.w("SendV2ConfirmViewModel", "recent address not saved", e)
         }
     }
 
@@ -268,7 +283,9 @@ class SendV2ConfirmViewModel(
     }
 
     private companion object {
-        const val MAX_ADJUSTMENT_ROUNDS = 3
+        // Every entry is a real resubmission and estimate; fee edits are the only realistic
+        // way to accumulate them, and this is far more than a user makes in one sitting.
+        const val MAX_ADJUSTMENT_ROUNDS = 20
     }
 
     class Factory(

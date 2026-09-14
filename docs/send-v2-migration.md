@@ -24,8 +24,9 @@ they land.
       confirmation, with a title and description caution.
 - [x] Sending the whole balance of a coin that pays its own fee: the confirmation reduces
       the amount by the fee for every chain (Bitcoin via its input selection, Solana net of
-      the rent reserve). Zcash and Monero cannot estimate a fee for the full balance and
-      still end in an insufficient-balance caution.
+      the rent reserve, Monero through the kit's sweep-all when the amount equals the
+      unlocked balance). Zcash cannot estimate a fee for the full balance and still ends
+      in an insufficient-balance caution.
 - [x] Bitcoin fee-rate cautions moved to the confirmation with the fee rate itself; the send
       page never sets a rate.
 - [x] Inline caution under the amount field: not needed, the button title carries the

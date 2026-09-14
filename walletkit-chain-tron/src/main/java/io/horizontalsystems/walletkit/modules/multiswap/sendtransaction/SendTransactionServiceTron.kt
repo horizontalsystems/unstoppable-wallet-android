@@ -209,7 +209,9 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
         uuid = uuid,
         networkFee = networkFee,
         cautions = cautions,
-        sendable = feeState.canBeSend && cautions.none {
+        // The fee service reports "nothing to estimate" as no error while the transfer is
+        // still being fed to it; a fee is what proves the estimate ran.
+        sendable = feeState.canBeSend && feeState.fee != null && cautions.none {
             it.type == CautionViewItem.Type.Error
         },
         loading = loading,
