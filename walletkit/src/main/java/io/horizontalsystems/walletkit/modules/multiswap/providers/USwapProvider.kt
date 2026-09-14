@@ -270,17 +270,6 @@ class USwapProvider(
         }
     }
 
-    // Sell-side support alone — decides CrossPay tab visibility before any destination is
-    // chosen. Valid only after [start] has populated the token map.
-    fun supportsTokenIn(token: Token): Boolean {
-        if (!supportsSourceToken(token)) return false
-        return if (assetsMap.isNotEmpty()) {
-            assetsMap.contains(token)
-        } else {
-            token.blockchainType in supportedBlockchainTypes && deriveIdentifier(token) != null
-        }
-    }
-
     // Raw asset encoding for providers that sync no token list from the server (the
     // /tokens response carries only supportedChainIds), so assets are encoded as raw
     // chain addresses instead of resolved through the asset map.
