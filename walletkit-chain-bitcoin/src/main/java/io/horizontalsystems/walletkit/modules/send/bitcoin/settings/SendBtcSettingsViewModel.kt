@@ -45,10 +45,11 @@ class SendBtcSettingsViewModel(
         }
     }
 
+    // The rate is only read here. Propagating it into the fee service is the owning
+    // send-transaction service's job, on its own thread; doing it from this view model too
+    // would run the kit's input selection twice, on two threads, over the same objects.
     private fun handleFeeRateState(state: SendBitcoinFeeRateService.State) {
         feeRateState = state
-
-        feeService.setFeeRate(feeRateState.feeRate)
 
         emitState()
     }

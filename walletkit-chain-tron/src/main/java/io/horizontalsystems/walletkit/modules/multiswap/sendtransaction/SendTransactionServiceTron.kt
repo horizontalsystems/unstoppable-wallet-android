@@ -158,6 +158,10 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Tron)
 
+        // Estimating hops threads, so the service's own collector can emit mid-way; until
+        // the estimate lands the state must read as loading, on resubmissions too.
+        loading = true
+
         sendTransactionData = data
 
         when (data) {

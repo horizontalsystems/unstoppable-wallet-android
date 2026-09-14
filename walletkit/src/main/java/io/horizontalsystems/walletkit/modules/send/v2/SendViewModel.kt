@@ -54,6 +54,8 @@ data class SendUiState(
     val chainSettings: SendChainSettings?,
     val privateSendSupported: Boolean,
     val hideAddress: Boolean,
+    /** Percent buttons offered greyed out. */
+    val disabledPercents: Set<Int>,
     val step: SendStep,
 ) {
     val isPrivateSend: Boolean
@@ -261,6 +263,9 @@ class SendViewModel(
         chainSettings = chainSettings,
         privateSendSupported = privateSendSupported,
         hideAddress = hideAddress,
+        // A private send commits a provider order for the entered amount as is; nothing
+        // later takes the fee out of it, so the whole balance can never be sent that way.
+        disabledPercents = if (tab == SendTab.Private) setOf(100) else emptySet(),
         step = step(),
     )
 

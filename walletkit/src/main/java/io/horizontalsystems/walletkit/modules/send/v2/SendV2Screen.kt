@@ -288,6 +288,7 @@ fun SendV2Screen(
                         uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
                     VSpacer(16.dp)
                     SuggestionsBar(
+                        disabledPercents = uiState.disabledPercents,
                         onDelete = { viewModel.onEnterAmount(null) },
                         onSelect = {
                             focusManager.clearFocus()

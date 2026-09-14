@@ -21,7 +21,9 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -80,6 +82,12 @@ class PrivateSendConfirmViewModel(
     // the deposit could fund one order while the screen and history describe the other.
     private var commitJob: Job? = null
 
+    // The chain service and its sub-services are plain objects; their collectors and every
+    // deposit fed to them run on this one confined thread so their state stays consistent.
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val serviceDispatcher = Dispatchers.Default.limitedParallelism(1)
+    private val serviceScope = CoroutineScope(viewModelScope.coroutineContext + serviceDispatcher)
+
     init {
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect {
@@ -99,7 +107,9 @@ class PrivateSendConfirmViewModel(
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 val data = depositData ?: return@collect
                 try {
-                    sendTransactionService.setSendTransactionData(data)
+                    withContext(serviceDispatcher) {
+                        sendTransactionService.setSendTransactionData(data)
+                    }
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Throwable) {
@@ -119,7 +129,7 @@ class PrivateSendConfirmViewModel(
             }
         }
 
-        sendTransactionService.start(viewModelScope)
+        sendTransactionService.start(serviceScope)
 
         commit()
     }
@@ -178,7 +188,7 @@ class PrivateSendConfirmViewModel(
 
     private fun commit() {
         commitJob?.cancel()
-        commitJob = viewModelScope.launch(Dispatchers.Default) {
+        commitJob = viewModelScope.launch(serviceDispatcher) {
             try {
                 error = null
 
@@ -212,7 +222,7 @@ class PrivateSendConfirmViewModel(
         timerService.stop()
     }
 
-    suspend fun send(): SendTransactionResult = withContext(Dispatchers.Default) {
+    suspend fun send(): SendTransactionResult = withContext(serviceDispatcher) {
         val order = order ?: throw PrivateSendError.CommitFailed()
 
         synchronized(this@PrivateSendConfirmViewModel) {

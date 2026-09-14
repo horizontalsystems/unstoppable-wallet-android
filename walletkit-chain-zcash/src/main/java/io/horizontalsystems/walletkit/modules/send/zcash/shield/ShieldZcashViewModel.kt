@@ -37,6 +37,13 @@ class ShieldZcashViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
+    /** The failure has been shown; a later recomposition must not show it again. */
+    fun onFailureShown() {
+        if (sendResult is SendResult.Failed) {
+            sendResult = null
+        }
+    }
+
     var fee by mutableStateOf<BigDecimal?>(null)
         private set
 

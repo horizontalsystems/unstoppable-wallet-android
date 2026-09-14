@@ -268,13 +268,19 @@ class SendV2ConfirmViewModel(
         }
     }
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
+    // The service's fields are read while broadcasting, so this takes the same confined
+    // thread and lock as the submissions that write them.
+    private suspend fun send() = withContext(serviceDispatcher) {
+        submitMutex.withLock { broadcast() }
+    }
+
+    private suspend fun broadcast() {
         sendResult = SendResult.Sending
         val result = try {
             sendTransactionService.sendTransaction()
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
-            return@withContext
+            return
         }
         sendResult = SendResult.Sent(txHash = txHash(result))
 
