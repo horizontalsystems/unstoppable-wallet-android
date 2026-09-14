@@ -33,6 +33,7 @@ import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -163,6 +164,8 @@ class SendV2ConfirmViewModel(
                     ?: throw UnsupportedOperationException(token.blockchainType.uid)
                 submittedAmount = value
                 sendTransactionService.setSendTransactionData(data)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Throwable) {
                 error = e
                 // Nothing will settle the adjustment now; let the screen show the failure.

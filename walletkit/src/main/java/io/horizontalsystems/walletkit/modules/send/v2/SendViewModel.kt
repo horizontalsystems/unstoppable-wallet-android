@@ -196,6 +196,8 @@ class SendViewModel(
         viewModelScope.launch {
             try {
                 privateSendManager.sync()
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Throwable) {
                 // The availability flow still reports what could be synced.
             }

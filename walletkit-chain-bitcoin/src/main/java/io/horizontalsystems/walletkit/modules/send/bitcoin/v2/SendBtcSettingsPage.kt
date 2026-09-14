@@ -7,6 +7,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,9 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsViewModel
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule
@@ -69,6 +72,12 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
         val sendViewModel = navigation.viewModelForScreen<SendViewModel>(SendV2Page::class, SendViewModel.Factory(wallet))
         val settings = sendViewModel.uiState.chainSettings as? BtcSendSettings ?: BtcSendSettings()
         val adapter = remember(wallet) { App.adapterManager.getAdapterForWallet<ISendBitcoinAdapter>(wallet) }
+
+        // Counting the outputs queries the kit's storage, so it runs once, off the main thread.
+        var total by remember { mutableStateOf<Int?>(null) }
+        LaunchedEffect(adapter) {
+            total = adapter?.let { withContext(Dispatchers.IO) { it.unspentOutputs.size } }
+        }
 
         val scope = rememberCoroutineScope()
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -101,13 +110,12 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
         ) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 CellGroup(paddingValues = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 32.dp)) {
-                    val total = adapter?.unspentOutputs?.size ?: 0
                     val used = settings.unspentOutputs?.size ?: total
                     SettingsRow(
                         title = stringResource(R.string.Send_Utxos),
                         subtitle = stringResource(R.string.Send_Utxos_Description),
-                        value = "$used / $total",
-                        enabled = adapter != null,
+                        value = if (total != null) "$used / $total" else "",
+                        enabled = adapter != null && total != null,
                         onClick = { navigation.slideFromRight(SendBtcUtxoExpertModePage(wallet)) },
                     )
 
