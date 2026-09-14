@@ -120,6 +120,15 @@ class SendTransactionServiceTon(
         return SendTransactionResult.Ton
     }
 
+    // The adapter sends a request for the whole balance in the kit's carry-all mode, which
+    // leaves no dust and needs no fee deduction; keep that path by answering the requested
+    // amount as the maximum instead of "amount minus fee".
+    override fun maxSendableAmount(): BigDecimal? {
+        val regular = transactionType as? TransactionType.Regular ?: return null
+        if (token.type != TokenType.Native) return null
+        return regular.amount.takeIf { it.compareTo(adapter.availableBalance) == 0 }
+    }
+
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,
         networkFee = fee?.let {
