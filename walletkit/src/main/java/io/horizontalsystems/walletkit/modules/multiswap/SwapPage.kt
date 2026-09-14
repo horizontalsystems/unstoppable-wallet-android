@@ -1122,6 +1122,7 @@ fun AmountInput(
     onValueChange: (BigDecimal?) -> Unit,
     focusRequester: FocusRequester = FocusRequester(),
     textColor: Color = ComposeAppTheme.colors.leah,
+    placeholderColor: Color = ComposeAppTheme.colors.grey,
 ) {
     var amount by rememberSaveable {
         mutableStateOf(value)
@@ -1189,7 +1190,11 @@ fun AmountInput(
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                    headline1_grey(text = "0")
+                    Text(
+                        text = "0",
+                        style = ComposeAppTheme.typography.headline1,
+                        color = placeholderColor,
+                    )
                 }
             }
             innerTextField()

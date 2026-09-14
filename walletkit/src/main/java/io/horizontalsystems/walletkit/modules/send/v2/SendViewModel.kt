@@ -15,6 +15,7 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.NetworkAvailabilityService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
@@ -46,6 +47,8 @@ data class SendUiState(
     val currency: Currency,
     val availableBalance: BigDecimal?,
     val address: Address?,
+    /** Name of the contact the recipient belongs to, if any. */
+    val contactName: String?,
     val riskyAddress: Boolean,
     val memo: String?,
     val memoSupport: SendMemoSupport?,
@@ -76,6 +79,7 @@ class SendViewModel(
     private val balanceService: TokenBalanceService,
     private val privateSendManager: PrivateSendManager,
     private val networkAvailabilityService: NetworkAvailabilityService,
+    private val contactsRepository: ContactsRepository,
     prefill: SendV2Page.Prefill?,
 ) : ViewModelUiState<SendUiState>() {
 
@@ -85,6 +89,7 @@ class SendViewModel(
     private var fiatAmount: BigDecimal? = null
     private var fiatAmountInputEnabled = false
     private var address: Address? = null
+    private var contactName: String? = null
     private var riskyAddress = false
     private var memo: String? = null
     private val hideAddress = prefill?.hideAddress == true
@@ -235,6 +240,7 @@ class SendViewModel(
         currency = currency,
         availableBalance = availableBalance(),
         address = address,
+        contactName = contactName,
         riskyAddress = riskyAddress,
         memo = memo,
         memoSupport = memoSupport,
@@ -296,6 +302,10 @@ class SendViewModel(
     fun onSelectAddress(address: Address, risky: Boolean) {
         this.address = address
         this.riskyAddress = risky
+        contactName = contactsRepository
+            .getContactsFiltered(wallet.token.blockchainType, addressQuery = address.hex)
+            .firstOrNull()
+            ?.name
         emitState()
         refreshMemoSupport()
     }
@@ -325,6 +335,7 @@ class SendViewModel(
                 TokenBalanceService(App.adapterManager),
                 App.privateSendManager,
                 NetworkAvailabilityService(App.connectivityManager),
+                App.contactsRepository,
                 prefill,
             ) as T
         }
