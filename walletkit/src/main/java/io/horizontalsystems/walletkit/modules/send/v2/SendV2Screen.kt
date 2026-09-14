@@ -170,7 +170,7 @@ fun SendV2Screen(
             listOf()
         },
     ) {
-        val tabs = uiState.tabs.filter { it != SendTab.Private || uiState.privateSendSupported }
+        val tabs = SendTab.entries.filter { it != SendTab.Private || uiState.privateSendSupported }
         val focusRequester = remember { FocusRequester() }
 
         Column(modifier = Modifier.fillMaxSize()) {
