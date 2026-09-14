@@ -33,8 +33,12 @@ import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -108,6 +112,15 @@ class SendV2ConfirmViewModel(
     private var rate = xRateService.getRate(token.coin.uid)
     private var feeCoinRate: CurrencyValue? = null
     private var error: Throwable? = null
+
+    // The chain service and its sub-services are plain objects that both their own
+    // collectors and each submitted transfer mutate. One confined thread for all of that
+    // keeps their state consistent, and the mutex keeps submissions from interleaving.
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val serviceDispatcher = Dispatchers.Default.limitedParallelism(1)
+    private val serviceScope = CoroutineScope(viewModelScope.coroutineContext + serviceDispatcher)
+    private val submitMutex = Mutex()
+
     private val contact = contactsRepository.getContactsFiltered(
         token.blockchainType,
         addressQuery = address.hex
@@ -131,27 +144,31 @@ class SendV2ConfirmViewModel(
         }
 
         refreshFeeCoinRate()
-        sendTransactionService.start(viewModelScope)
+        sendTransactionService.start(serviceScope)
 
         viewModelScope.launch { submit(amount) }
     }
 
     // Services may reach the network while taking the transfer (fee estimates, account
-    // lookups), so this never runs on the main thread.
-    private suspend fun submit(value: BigDecimal) = withContext(Dispatchers.Default) {
-        // A previous attempt may have failed (node error); this one starts clean.
-        if (error != null) {
-            error = null
-            emitState()
-        }
-        try {
-            val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, chainSettings)
-                ?: throw UnsupportedOperationException(token.blockchainType.uid)
-            submittedAmount = value
-            sendTransactionService.setSendTransactionData(data)
-        } catch (e: Throwable) {
-            error = e
-            emitState()
+    // lookups), so this never runs on the main thread; see serviceDispatcher.
+    private suspend fun submit(value: BigDecimal) = withContext(serviceDispatcher) {
+        submitMutex.withLock {
+            // A previous attempt may have failed (node error); this one starts clean.
+            if (error != null) {
+                error = null
+                emitState()
+            }
+            try {
+                val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, chainSettings)
+                    ?: throw UnsupportedOperationException(token.blockchainType.uid)
+                submittedAmount = value
+                sendTransactionService.setSendTransactionData(data)
+            } catch (e: Throwable) {
+                error = e
+                // Nothing will settle the adjustment now; let the screen show the failure.
+                adjusting = false
+                emitState()
+            }
         }
     }
 
@@ -241,6 +258,13 @@ class SendV2ConfirmViewModel(
     fun onClickSend() {
         viewModelScope.launch(Dispatchers.IO) {
             send()
+        }
+    }
+
+    /** The failure has been shown; a later recomposition must not show it again. */
+    fun onFailureShown() {
+        if (sendResult is SendResult.Failed) {
+            sendResult = null
         }
     }
 

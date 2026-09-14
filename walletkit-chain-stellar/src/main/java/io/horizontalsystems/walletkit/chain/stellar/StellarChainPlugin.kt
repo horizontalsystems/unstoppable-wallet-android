@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.chain.stellar
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.ISendStellarAdapter
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
@@ -49,6 +50,15 @@ import io.horizontalsystems.stellarkit.StellarKit
 import kotlin.reflect.KClass
 
 class StellarChainPlugin : ChainPlugin {
+
+    // Native XLM: the reserve-aware balance net of the flat network fee, which is what a
+    // whole-balance payment can carry. Assets pay their fee in XLM and keep their own figure.
+    override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? =
+        if (token.type == TokenType.Native) {
+            App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)?.maxSendableBalance
+        } else {
+            null
+        }
 
     override fun sendTransactionData(
         token: Token,
