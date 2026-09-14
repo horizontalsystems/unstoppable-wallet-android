@@ -191,7 +191,7 @@ class StellarSwapProvider : IMultiSwapProvider {
                 providers = providers.toSet(),
                 chainId = CHAIN_ID,
             )
-        ).routes
+        ).routes.orEmpty()
 
         // Only reachable while stellarBrokerEnabled — SB is otherwise never requested, so
         // the server never returns it. Kept live for the flag flip (see stellarBrokerEnabled).

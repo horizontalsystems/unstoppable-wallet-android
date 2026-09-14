@@ -387,7 +387,8 @@ class USwapProvider(
             providers = setOf(provider.id),
             chainId = chainId,
         )
-        var bestRoute = unstoppableAPI.rate(request).routes.maxBy { it.expectedBuyAmountOrZero }
+        var bestRoute = unstoppableAPI.rate(request).routes?.maxByOrNull { it.expectedBuyAmountOrZero }
+            ?: throw NoSuchElementException("No routes")
 
         if (provider == UProvider.Exolix) {
             val requestAlternate = when {
@@ -404,8 +405,10 @@ class USwapProvider(
 
             if (requestAlternate != null) {
                 try {
-                    val bestRouteAlternate = unstoppableAPI.rate(requestAlternate).routes.maxBy { it.expectedBuyAmountOrZero }
-                    if (bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero) {
+                    val bestRouteAlternate = unstoppableAPI.rate(requestAlternate).routes?.maxByOrNull { it.expectedBuyAmountOrZero }
+                    if (bestRouteAlternate != null &&
+                        bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero
+                    ) {
                         bestRoute = bestRouteAlternate
                     }
                 } catch (e: CancellationException) {
@@ -1091,7 +1094,10 @@ interface UnstoppableAPI {
         // only (no execution, no uuid — those appear after committing with /v2/swap).
         // A provider that declined to route lands in providerErrors instead of routes.
         data class Rate(
-            val routes: List<Route>,
+            // Absent entirely (not just empty) when every provider refuses — the response
+            // then carries only providerErrors. Nullable so Gson's missing-field null is an
+            // honest type instead of a latent NPE.
+            val routes: List<Route>? = null,
             val providerErrors: List<ProviderError>? = null,
         )
 
