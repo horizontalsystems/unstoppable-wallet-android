@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,6 +43,7 @@ import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabBody
 import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabViewModel
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
+import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
@@ -49,7 +51,6 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
-import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
 import io.horizontalsystems.walletkit.modules.multiswap.WalletNotSynced
@@ -64,13 +65,20 @@ import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
+import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import io.horizontalsystems.marketkit.models.Token
@@ -211,9 +219,11 @@ fun SendV2Screen(
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
                 ) {
+                    val step = uiState.step
                     AmountSection(
                         token = uiState.wallet.token,
                         amount = uiState.amount,
+                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
                         fiatAmount = uiState.fiatAmount,
                         fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                         currency = uiState.currency,
@@ -227,6 +237,7 @@ fun SendV2Screen(
                         SectionArrow()
                         AddressRow(
                             address = uiState.address,
+                            contactName = uiState.contactName,
                             onClick = openAddress,
                         )
                     }
@@ -235,7 +246,6 @@ fun SendV2Screen(
                     // to the provider's identifier), so the field is not offered on that tab.
                     val memoSupport = uiState.memoSupport?.takeIf { !uiState.isPrivateSend }
                     if (memoSupport != null) {
-                        VSpacer(16.dp)
                         HSMemoInput(
                             maxLength = memoSupport.maxLength,
                             memo = uiState.memo,
@@ -270,7 +280,7 @@ fun SendV2Screen(
                 }
                 ButtonPrimaryYellow(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 24.dp)
                         .fillMaxWidth(),
                     title = buttonTitle,
                     enabled = uiState.step is SendStep.Proceed,
@@ -287,7 +297,7 @@ fun SendV2Screen(
                     val hasNonZeroBalance =
                         uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
                     VSpacer(16.dp)
-                    SuggestionsBar(
+                    AmountSuggestionsBar(
                         disabledPercents = uiState.disabledPercents,
                         onDelete = { viewModel.onEnterAmount(null) },
                         onSelect = {
@@ -320,6 +330,7 @@ private fun SendTab.tabItem() = when (this) {
 private fun AmountSection(
     token: Token,
     amount: BigDecimal?,
+    amountExceedsBalance: Boolean,
     fiatAmount: BigDecimal?,
     fiatAmountInputEnabled: Boolean,
     currency: Currency,
@@ -332,7 +343,7 @@ private fun AmountSection(
     Column(
         modifier = Modifier
             .onFocusChanged { onFocusChanged(it.hasFocus) }
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             availableBalance?.let {
@@ -346,16 +357,16 @@ private fun AmountSection(
                 )
             }
         }
-        VSpacer(8.dp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        VSpacer(12.dp)
+        Row(verticalAlignment = Alignment.Top) {
             CoinImage(
                 token = token,
                 modifier = Modifier.size(40.dp)
             )
             HSpacer(16.dp)
             Column {
-                headline2_leah(text = token.coin.code)
-                VSpacer(5.dp)
+                headline1_leah(text = token.coin.code)
+                VSpacer(4.dp)
                 BadgeText(
                     text = token.badge ?: stringResource(R.string.CoinPlatforms_Native),
                     background = ComposeAppTheme.colors.blade,
@@ -368,6 +379,8 @@ private fun AmountSection(
                     value = amount,
                     onValueChange = onValueChange,
                     focusRequester = focusRequester,
+                    textColor = if (amountExceedsBalance) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                    placeholderColor = ComposeAppTheme.colors.leah,
                 )
                 if (fiatAmountInputEnabled || fiatAmount != null) {
                     VSpacer(3.dp)
@@ -433,14 +446,21 @@ internal fun SectionArrow() {
     }
 }
 
+/**
+ * The recipient row: a placeholder until an address is chosen, then the address in full, or
+ * the contact or domain name over the shortened address when the recipient has one.
+ */
 @Composable
 internal fun AddressRow(
     address: Address?,
     onClick: () -> Unit,
+    contactName: String? = null,
 ) {
+    val name = contactName ?: address?.domain
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .heightIn(min = 97.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -452,18 +472,23 @@ internal fun AddressRow(
         Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
             Icon(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(R.drawable.wallet_24),
+                painter = painterResource(if (contactName != null) R.drawable.user_24 else R.drawable.wallet_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
             )
         }
         HSpacer(16.dp)
-        headline2_leah(
-            modifier = Modifier.weight(1f, fill = false),
-            text = address?.title ?: stringResource(R.string.Send_ToAddress),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column(modifier = Modifier.weight(1f, fill = false)) {
+            when {
+                address == null -> headline1_leah(text = stringResource(R.string.Send_ToAddress))
+                name != null -> {
+                    headline1_leah(text = name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    body_grey(text = address.hex.shorten())
+                }
+
+                else -> headline1_leah(text = address.hex)
+            }
+        }
         HSpacer(8.dp)
         Icon(
             painter = painterResource(R.drawable.arrow_s_down_20),
@@ -471,4 +496,42 @@ internal fun AddressRow(
             tint = ComposeAppTheme.colors.leah,
         )
     }
+}
+
+/**
+ * Percent shortcuts shown above the keyboard while the amount is edited, with a clear
+ * button at the end; the last shortcut sends the whole balance.
+ */
+@Composable
+private fun AmountSuggestionsBar(
+    disabledPercents: Set<Int>,
+    onDelete: () -> Unit,
+    onSelect: (Int) -> Unit,
+    selectEnabled: Boolean,
+    deleteEnabled: Boolean,
+) {
+    TabsSectionButtons(
+        left = {
+            listOf(25, 50, 75, 100).forEach { percent ->
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Solid,
+                    size = ButtonSize.Small,
+                    title = if (percent == 100) stringResource(R.string.Send_Button_Max) else "$percent%",
+                    enabled = selectEnabled && percent !in disabledPercents,
+                    onClick = { onSelect(percent) },
+                )
+            }
+        },
+        right = {
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Solid,
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.ic_delete_20),
+                enabled = deleteEnabled,
+                onClick = onDelete,
+            )
+        },
+    )
 }
