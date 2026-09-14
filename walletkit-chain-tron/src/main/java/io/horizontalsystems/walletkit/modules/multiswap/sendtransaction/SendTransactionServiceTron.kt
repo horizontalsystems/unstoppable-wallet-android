@@ -159,11 +159,24 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
         check(data is SendTransactionData.Tron)
 
         // Estimating hops threads, so the service's own collector can emit mid-way; until
-        // the estimate lands the state must read as loading, on resubmissions too.
+        // the estimate lands the state must read as loading, on resubmissions too. Published
+        // at once: an equal fee state would not re-emit it.
         loading = true
+        emitState()
 
         sendTransactionData = data
 
+        try {
+            applySendTransactionData(data)
+        } finally {
+            // Whether the estimate ran or the transfer could not be taken, the state settles;
+            // a throw is reported by the caller.
+            loading = false
+            emitState()
+        }
+    }
+
+    private suspend fun applySendTransactionData(data: SendTransactionData.Tron) {
         when (data) {
             is SendTransactionData.Tron.Trc20Approve -> {
                 val trc20Adapter = App.adapterManager.getAdapterForToken<Trc20Adapter>(token)
@@ -187,11 +200,6 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
                 feeService.setTronAddress(TronAddress.fromBase58(data.address))
             }
         }
-
-        // The fee service has run its first estimate (or failed) by now; before that the
-        // state must read as loading, or a shortfall for the unreduced amount would flash.
-        loading = false
-        emitState()
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {

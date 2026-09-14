@@ -13,6 +13,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import java.math.BigDecimal
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +73,8 @@ class SendTransactionServiceStellar(
                 } else {
                     null
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Throwable) {
                 // Without knowing whether the destination exists the payment may fail on
                 // broadcast; surface the lookup failure rather than guess.
