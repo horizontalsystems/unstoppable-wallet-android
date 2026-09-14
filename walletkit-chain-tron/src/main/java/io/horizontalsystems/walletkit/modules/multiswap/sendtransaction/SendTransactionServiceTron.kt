@@ -156,8 +156,6 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     }
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
-        loading = false
-
         check(data is SendTransactionData.Tron)
 
         sendTransactionData = data
@@ -186,6 +184,9 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
             }
         }
 
+        // The fee service has run its first estimate (or failed) by now; before that the
+        // state must read as loading, or a shortfall for the unreduced amount would flash.
+        loading = false
         emitState()
     }
 

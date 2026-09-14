@@ -105,6 +105,7 @@ private fun SendV2ConfirmScreen(
         cautions = uiState.cautions,
         sendEnabled = uiState.sendable && !uiState.loading,
         feeInfoText = uiState.networkFeeInfoRes?.let { stringResource(it) },
+        onFailureShown = viewModel::onFailureShown,
     ) {
         uiState.fields.forEach { it.GetContent(navigation) }
     }

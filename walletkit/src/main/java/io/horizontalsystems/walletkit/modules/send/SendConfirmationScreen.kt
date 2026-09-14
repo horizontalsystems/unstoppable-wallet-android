@@ -94,6 +94,9 @@ fun SendConfirmationScreen(
     cautions: List<CautionViewItem> = listOf(),
     sendEnabled: Boolean = true,
     feeInfoText: String? = null,
+    // Called once the failure sheet is up, so the caller can clear the result and a later
+    // recomposition of this screen does not show the sheet again.
+    onFailureShown: (() -> Unit)? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val closeUntilDestId = sendEntryPointDestId ?: SendV2Page::class
@@ -113,6 +116,7 @@ fun SendConfirmationScreen(
 
             is SendResult.Failed -> {
                 navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(failureText.orEmpty())))
+                onFailureShown?.invoke()
             }
 
             else -> Unit

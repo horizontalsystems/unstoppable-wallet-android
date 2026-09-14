@@ -13,7 +13,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
-import io.horizontalsystems.walletkit.modules.sendtokenselect.SendTokenSelectPage
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -38,7 +37,7 @@ data object DonateTokenSelectPage : HSPage() {
                     navigation.slideFromRight(
                         SendV2Page(
                             wallet = viewItem.wallet,
-                            sendEntryPointDestId = SendTokenSelectPage::class,
+                            sendEntryPointDestId = DonateTokenSelectPage::class,
                             prefill = SendV2Page.Prefill(address = donateAddress, hideAddress = true),
                             title = Translator.getString(
                                 R.string.Settings_DonateToken,

@@ -14,6 +14,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
+import java.math.BigDecimal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -87,6 +88,15 @@ class SendTransactionServiceStellar(
 
         return SendTransactionResult.Stellar(txHash)
     }
+
+    // The send screen already offers the balance net of the fee for XLM, so the maximum is
+    // that figure itself; subtracting the fee again would leave one fee behind.
+    override fun maxSendableAmount(): BigDecimal? =
+        if (token.type == TokenType.Native) {
+            App.adapterManager.getAdapterForToken<ISendStellarAdapter>(token)?.maxSendableBalance
+        } else {
+            null
+        }
 
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,

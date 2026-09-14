@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.chain.solana
 
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.ISendSolanaAdapter
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import java.math.BigDecimal
@@ -42,6 +43,11 @@ class SolanaChainPlugin(
     private val alchemyApiKey: () -> String,
     private val jupiterApiKey: () -> String,
 ) : ChainPlugin {
+
+    // The raw SOL balance overstates what a transfer can carry: the network fee and the
+    // rent-exempt reserve stay behind. The adapter's figure already accounts for both.
+    override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? =
+        App.adapterManager.getAdapterForToken<ISendSolanaAdapter>(token)?.availableBalance
 
     override fun sendTransactionData(
         token: Token,
