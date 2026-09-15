@@ -954,9 +954,9 @@
     <string name="RiskLevel_Excellent_Description">Direct on-chain execution. No route checks or freezes. Automatic refunds if swap fails.</string>
     <string name="RiskLevel_Good_Description">Route checks transactions automatically before completion. If issues are detected, the swap is rejected and funds are refunded.</string>
     <string name="RiskLevel_Fair_Description">Additional verification may be required for some transactions. If issues are detected, funds are usually refunded automatically.</string>
-    <string name="RiskLevel_Excellent" translatable="false">Excellent</string>
-    <string name="RiskLevel_Good" translatable="false">Good</string>
-    <string name="RiskLevel_Fair" translatable="false">Fair</string>
+    <string name="RiskLevel_Excellent">Excellent</string>
+    <string name="RiskLevel_Good">Good</string>
+    <string name="RiskLevel_Fair">Fair</string>
 
 
     <string name="PasskeyTerms_DeviceDependency">Device Dependency</string>
