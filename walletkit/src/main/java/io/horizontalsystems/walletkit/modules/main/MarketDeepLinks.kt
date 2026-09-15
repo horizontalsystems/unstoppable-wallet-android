@@ -17,8 +17,11 @@ object MarketDeepLinks {
 
     /** Page a market deeplink opens, or null when it is not one or lacks its parameters. */
     fun page(uri: Uri, scheme: String): HSPage? {
+        val path = path(uri.toString(), scheme)?.takeIf { it in paths } ?: return null
+        // getQueryParameter throws on opaque URIs (e.g. `wc:...`, `bitcoin:...`, `unstoppable:coin-page?...`)
+        if (!uri.isHierarchical) return null
         val uid = uri.getQueryParameter("uid") ?: return null
-        return when (path(uri.toString(), scheme)) {
+        return when (path) {
             COIN_PAGE -> CoinPage(CoinPage.Input(uid))
             TOP_PLATFORMS -> uri.getQueryParameter("title")?.let { MarketPlatformPage(Platform(uid, it)) }
             else -> null
