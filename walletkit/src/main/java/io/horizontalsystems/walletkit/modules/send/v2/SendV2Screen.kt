@@ -150,7 +150,7 @@ fun SendV2Screen(
     }
 
     val openAddress = navigation.slideFromBottomForResult<SendAddressPage.Result>(
-        { SendAddressPage(uiState.wallet, uiState.address?.hex ?: prefillAddress) }
+        { SendAddressPage(uiState.wallet.token, uiState.address?.hex ?: prefillAddress) }
     ) {
         viewModel.onSelectAddress(it.address, it.risky)
     }

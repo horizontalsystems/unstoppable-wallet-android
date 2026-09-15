@@ -58,6 +58,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
 import java.math.BigDecimal
 
 /**
@@ -123,8 +124,8 @@ fun CrossPayTabBody(
         viewModel.onSelectTokenOut(it)
     }
 
-    val openAddress = navigation.slideFromBottomForResult<CrossPayAddressPage.Result>(
-        { CrossPayAddressPage(uiState.tokenOut!!, uiState.address?.hex) }
+    val openAddress = navigation.slideFromBottomForResult<SendAddressPage.Result>(
+        { SendAddressPage(uiState.tokenOut!!, uiState.address?.hex) }
     ) {
         viewModel.onSelectAddress(it.address, it.risky)
     }
