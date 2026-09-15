@@ -29,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
@@ -263,7 +264,11 @@ fun SendV2Screen(
                 }
 
                 if (uiState.isPrivateSend) {
-                    PrivateSendInfoCard(modifier = Modifier.padding(horizontal = 16.dp))
+                    InfoCard(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        title = stringResource(R.string.PrivateSend_Toggle_Title),
+                        text = stringResource(R.string.PrivateSend_Tab_Description)
+                    )
                     VSpacer(48.dp)
                 }
 
@@ -437,34 +442,38 @@ internal fun AmountSection(
 }
 
 @Composable
-private fun PrivateSendInfoCard(modifier: Modifier = Modifier) {
+internal fun InfoCard(
+    modifier: Modifier,
+    title: String,
+    text: String
+) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
             .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-            .padding(horizontal = 16.dp, vertical = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(R.drawable.info_filled_24),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey,
+                tint = ComposeAppTheme.colors.grey
             )
             HSpacer(8.dp)
             Text(
-                text = stringResource(R.string.PrivateSend_Toggle_Title),
-                style = ComposeAppTheme.typography.body,
+                text = title,
+                style = ComposeAppTheme.typography.headline2,
                 color = ComposeAppTheme.colors.grey,
             )
         }
         VSpacer(8.dp)
         Text(
-            text = stringResource(R.string.PrivateSend_Tab_Description),
-            style = ComposeAppTheme.typography.subhead,
+            text = text,
+            style = ComposeAppTheme.typography.subheadR,
             color = ComposeAppTheme.colors.andy,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
     }
 }
