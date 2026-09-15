@@ -17,6 +17,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -93,7 +94,7 @@ class XrpKitManager(
     private fun start() {
         kitWrapper?.kit?.start()
         job = scope.launch {
-            backgroundManager.stateFlow.collect { state ->
+            backgroundManager.stateFlow.collectLatest { state ->
                 when (state) {
                     BackgroundManagerState.EnterForeground -> {
                         kitWrapper?.kit?.let { kit ->
