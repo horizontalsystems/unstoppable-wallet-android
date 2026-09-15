@@ -227,6 +227,7 @@ fun SendV2Screen(
                     val step = uiState.step
                     AmountSection(
                         token = uiState.wallet.token,
+                        balanceToken = uiState.wallet.token,
                         amount = uiState.amount,
                         amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
                         fiatAmount = uiState.fiatAmount,
@@ -331,9 +332,16 @@ private fun SendTab.tabItem() = when (this) {
     SendTab.CrossPay -> TabFolderItem(stringResource(R.string.Send_Tab_CrossPay))
 }
 
+/**
+ * The amount block: the available balance, the token with its badge, and the amount with
+ * its fiat value. [token] is what the amount is in and may be unchosen; [balanceToken] is
+ * what funds it and formats [availableBalance]. An [onTokenClick] makes the token a
+ * selector with a drop-down arrow.
+ */
 @Composable
-private fun AmountSection(
-    token: Token,
+internal fun AmountSection(
+    token: Token?,
+    balanceToken: Token,
     amount: BigDecimal?,
     amountExceedsBalance: Boolean,
     fiatAmount: BigDecimal?,
@@ -344,6 +352,8 @@ private fun AmountSection(
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
+    onTokenClick: (() -> Unit)? = null,
+    greyedOutAvailableBalance: Boolean = false,
 ) {
     Column(
         modifier = Modifier
@@ -355,28 +365,53 @@ private fun AmountSection(
                 Text(
                     text = stringResource(
                         R.string.Send_Available,
-                        App.numberFormatter.formatCoinFull(it, token.coin.code, token.decimals)
+                        App.numberFormatter.formatCoinFull(it, balanceToken.coin.code, balanceToken.decimals)
                     ),
                     style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.ocean,
+                    color = if (greyedOutAvailableBalance) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.ocean,
                 )
             }
         }
         VSpacer(8.dp)
         Row(verticalAlignment = Alignment.CenterVertically) {
-            CoinImage(
-                token = token,
-                modifier = Modifier.size(40.dp)
-            )
-            HSpacer(16.dp)
-            Column {
-                headline1_leah(text = token.coin.code)
-                VSpacer(5.dp)
-                BadgeText(
-                    text = token.badge ?: stringResource(R.string.CoinPlatforms_Native),
-                    background = ComposeAppTheme.colors.blade,
-                    textColor = ComposeAppTheme.colors.leah,
+            Row(
+                modifier = if (onTokenClick != null) {
+                    Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onTokenClick,
+                    )
+                } else {
+                    Modifier
+                },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                CoinImage(
+                    token = token,
+                    modifier = Modifier.size(40.dp)
                 )
+                HSpacer(16.dp)
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        headline1_leah(text = token?.coin?.code ?: stringResource(R.string.CrossPay_ChooseCoin))
+                        if (onTokenClick != null) {
+                            HSpacer(4.dp)
+                            Icon(
+                                painter = painterResource(R.drawable.arrow_s_down_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.leah,
+                            )
+                        }
+                    }
+                    token?.let {
+                        VSpacer(5.dp)
+                        BadgeText(
+                            text = it.badge ?: stringResource(R.string.CoinPlatforms_Native),
+                            background = ComposeAppTheme.colors.blade,
+                            textColor = ComposeAppTheme.colors.leah,
+                        )
+                    }
+                }
             }
             HSpacer(8.dp)
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
