@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,8 +35,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
@@ -486,7 +491,7 @@ internal fun AddressRow(
                     body_grey(text = address.hex.shorten())
                 }
 
-                else -> headline1_leah(text = address.hex)
+                else -> AddressText(address.hex)
             }
         }
         HSpacer(8.dp)
@@ -534,4 +539,59 @@ private fun AmountSuggestionsBar(
             )
         },
     )
+}
+
+
+private const val ADDRESS_MAX_LINES = 2
+
+/**
+ * A full address on up to two lines. One that needs more is shortened instead: cut in the
+ * middle to fit a single line.
+ */
+@Composable
+private fun AddressText(address: String) {
+    BoxWithConstraints {
+        val textMeasurer = rememberTextMeasurer()
+        val style = ComposeAppTheme.typography.headline1
+        val text = remember(address, constraints.maxWidth, style) {
+            if (fits(address, textMeasurer, style, constraints.maxWidth, ADDRESS_MAX_LINES)) {
+                address
+            } else {
+                middleEllipsized(address, textMeasurer, style, constraints.maxWidth)
+            }
+        }
+        headline1_leah(text = text, maxLines = ADDRESS_MAX_LINES)
+    }
+}
+
+private fun fits(text: String, textMeasurer: TextMeasurer, style: TextStyle, maxWidth: Int, maxLines: Int) =
+    !textMeasurer.measure(
+        text = text,
+        style = style,
+        maxLines = maxLines,
+        constraints = Constraints(maxWidth = maxWidth),
+    ).hasVisualOverflow
+
+/**
+ * The longest head + "..." + tail of [text] that fits [maxWidth] on one line, found by
+ * bisecting the number of kept characters.
+ */
+private fun middleEllipsized(
+    text: String,
+    textMeasurer: TextMeasurer,
+    style: TextStyle,
+    maxWidth: Int,
+): String {
+    fun cut(kept: Int): String {
+        val head = (kept + 1) / 2
+        return text.take(head) + "..." + text.takeLast(kept - head)
+    }
+
+    var low = 0
+    var high = text.length - 1
+    while (low < high) {
+        val mid = (low + high + 1) / 2
+        if (fits(cut(mid), textMeasurer, style, maxWidth, maxLines = 1)) low = mid else high = mid - 1
+    }
+    return cut(low)
 }
