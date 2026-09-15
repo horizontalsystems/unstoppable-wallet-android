@@ -34,6 +34,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
 import kotlin.reflect.KClass
 
 @Serializable
@@ -57,7 +58,7 @@ data class OpenCryptoPayEvmConfirmationPage(val input: Input) : HSPage() {
         val merchant: String?,
         val expirationIso: String,
         val minFee: Double?,
-        val sendEntryPointDestId: KClass<out HSPage>,
+        @Serializable(with = HSScreenKClassSerializer::class) val sendEntryPointDestId: KClass<out HSPage>,
     )
 }
 

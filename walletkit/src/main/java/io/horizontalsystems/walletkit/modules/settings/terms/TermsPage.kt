@@ -23,6 +23,7 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.nav3.HSPageSerializer
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
@@ -57,6 +58,7 @@ data class TermsPage(val input: Input? = null) : HSPage() {
 
     @Serializable
     data class Input(
+        @Serializable(with = HSPageSerializer::class)
         val screen: HSPage,
         val statPageFrom: StatPage,
         val statPageTo: StatPage,

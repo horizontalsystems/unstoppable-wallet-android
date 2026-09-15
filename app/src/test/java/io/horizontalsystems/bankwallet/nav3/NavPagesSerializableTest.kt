@@ -1,7 +1,11 @@
 package io.horizontalsystems.bankwallet.nav3
 
 import io.github.classgraph.ClassGraph
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.descriptors.PolymorphicKind
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.elementDescriptors
 import kotlinx.serialization.serializerOrNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -12,7 +16,9 @@ import org.junit.Test
  * the moment it is backgrounded with that page on the stack. This scans all
  * modules on the app classpath and verifies the exact lookup NavKeySerializer
  * performs, which also catches serializable pages with unserializable
- * property types.
+ * property types, and flags properties whose serializer needs a
+ * SerializersModule (e.g. a bare `HSPage` field), since the backstack is
+ * saved without one.
  */
 class NavPagesSerializableTest {
 
@@ -36,8 +42,8 @@ class NavPagesSerializableTest {
                         if (serializer == null) {
                             "missing @Serializable"
                         } else {
-                            serializer.descriptor // force child serializer resolution
-                            null
+                            unresolvableAtRuntime(serializer.descriptor)
+                                ?.let { "property needs a SerializersModule: $it" }
                         }
                     } catch (e: Throwable) {
                         e.message ?: e.javaClass.simpleName
@@ -53,5 +59,19 @@ class NavPagesSerializableTest {
                 problems.joinToString("\n"),
             problems.isEmpty()
         )
+    }
+
+    // An open polymorphic serializer resolves its descriptor fine but throws on encode, as no
+    // SerializersModule is configured for the backstack. Sealed ones carry their subclasses.
+    @OptIn(ExperimentalSerializationApi::class)
+    private fun unresolvableAtRuntime(
+        descriptor: SerialDescriptor,
+        visited: MutableSet<String> = mutableSetOf(),
+    ): String? {
+        if (!visited.add(descriptor.serialName)) return null
+        if (descriptor.kind == PolymorphicKind.OPEN) {
+            return descriptor.serialName
+        }
+        return descriptor.elementDescriptors.firstNotNullOfOrNull { unresolvableAtRuntime(it, visited) }
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.walletkit.core.NavigationType
 import kotlinx.serialization.Serializable
@@ -89,3 +90,8 @@ abstract class HSPage(
     @Composable
     abstract fun GetContent(navigation: HSNavigation)
 }
+
+// For HSPage-typed properties of a page: the plugin's default for an abstract type is a
+// polymorphic serializer with no registered subclasses, which throws when the backstack is
+// saved. This writes the concrete class name and its own serializer, like the backstack does.
+object HSPageSerializer : NavKeySerializer<HSPage>()
