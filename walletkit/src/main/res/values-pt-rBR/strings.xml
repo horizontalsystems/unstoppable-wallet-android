@@ -1929,4 +1929,7 @@
     <string name="Send_DestinationTag_Info">Exchanges e alguns serviços exigem uma etiqueta de destino para creditar seu depósito. A etiqueta é pública no livro razão.</string>
     <string name="Send_DestinationTag_Required">Este endereço requer uma etiqueta de destino. Pagamentos sem uma são rejeitados.</string>
     <string name="Send_DestinationTag_Invalid">A tag de destino deve ser um número inteiro de 0 a 4294967295.</string>
+    <string name="RiskLevel_Excellent">Excelente</string>
+    <string name="RiskLevel_Good">Bom</string>
+    <string name="RiskLevel_Fair">Razoável</string>
 </resources>

@@ -1925,4 +1925,7 @@
     <string name="Send_DestinationTag_Info">거래소 및 일부 서비스에서는 입금을 송금하기 위해 대상 태그가 필요합니다. 태그는 원장에 공개됩니다.</string>
     <string name="Send_DestinationTag_Required">이 주소에는 대상 태그가 필요합니다. 태그 없는 결제는 거부됩니다.</string>
     <string name="Send_DestinationTag_Invalid">대상 태그는 0부터 4294967295까지의 정수여야 합니다.</string>
+    <string name="RiskLevel_Excellent">우수</string>
+    <string name="RiskLevel_Good">좋음</string>
+    <string name="RiskLevel_Fair">보통</string>
 </resources>

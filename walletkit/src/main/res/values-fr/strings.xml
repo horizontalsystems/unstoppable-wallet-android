@@ -1926,4 +1926,7 @@
     <string name="Send_DestinationTag_Info">Les bourses et certains services nécessitent une balise de destination pour créditer votre dépôt. La balise est publique sur le ledger.</string>
     <string name="Send_DestinationTag_Required">Cette adresse nécessite une balise de destination. Les paiements sans un sont rejetés.</string>
     <string name="Send_DestinationTag_Invalid">La balise de destination doit être un nombre entier de 0 à 4294967295.</string>
+    <string name="RiskLevel_Excellent">Excellent</string>
+    <string name="RiskLevel_Good">Bon</string>
+    <string name="RiskLevel_Fair">Acceptable</string>
 </resources>

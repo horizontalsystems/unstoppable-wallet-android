@@ -1924,4 +1924,7 @@
     <string name="Send_DestinationTag_Info">Los intercambios y algunos servicios requieren una etiqueta de destino para acreditar su depósito. La etiqueta es pública en el libro mayor.</string>
     <string name="Send_DestinationTag_Required">Esta dirección requiere una etiqueta de destino. Los pagos sin una son rechazados.</string>
     <string name="Send_DestinationTag_Invalid">La etiqueta de destino debe ser un número entero de 0 a 4294967295.</string>
+    <string name="RiskLevel_Excellent">Excelente</string>
+    <string name="RiskLevel_Good">Bueno</string>
+    <string name="RiskLevel_Fair">Regular</string>
 </resources>

@@ -1933,4 +1933,7 @@
     <string name="Send_DestinationTag_Info">Börsen und einige Dienste erfordern ein Ziel-Tag, um Ihre Einzahlung gutzuschreiben. Das Tag ist öffentlich im Ledger.</string>
     <string name="Send_DestinationTag_Required">Diese Adresse erfordert ein Ziel-Tag. Zahlungen ohne eines werden abgelehnt.</string>
     <string name="Send_DestinationTag_Invalid">Destination Tag muss eine ganze Zahl von 0 bis 4294967295 sein.</string>
+    <string name="RiskLevel_Excellent">Ausgezeichnet</string>
+    <string name="RiskLevel_Good">Gut</string>
+    <string name="RiskLevel_Fair">Befriedigend</string>
 </resources>

@@ -859,4 +859,7 @@
     <string name="Send_DestinationTag_Required">این آدرس به برچسب مقصد نیاز دارد. پرداخت های بدون آن رد می شوند.</string>
     <string name="Send_DestinationTag_Invalid">برچسب مقصد باید یک عدد صحیح از 0 تا 4294967295 باشد.</string>
     <string name="Watch_Address_Hint">آدرس خود را وارد کنید (EVM، Tron، TON، Stellar، XRP، Monero، BTC، LTC، BCH، Dash) یا XPUB</string>
+    <string name="RiskLevel_Excellent">عالی</string>
+    <string name="RiskLevel_Good">خوب</string>
+    <string name="RiskLevel_Fair">متوسط</string>
 </resources>

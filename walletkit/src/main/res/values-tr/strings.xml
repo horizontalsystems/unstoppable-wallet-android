@@ -1925,4 +1925,7 @@
     <string name="Send_DestinationTag_Info">Borsalar ve bazı hizmetler, paranızı yatırmak için bir hedef etiketi gerektirir. Etiket defter üzerinde halka açıktır.</string>
     <string name="Send_DestinationTag_Required">Bu adres bir hedef etiketi gerektirir. Etiketsiz ödemeler reddedilir.</string>
     <string name="Send_DestinationTag_Invalid">Hedef etiketi 0 ile 4294967295 arasında bir tam sayı olmalıdır.</string>
+    <string name="RiskLevel_Excellent">Mükemmel</string>
+    <string name="RiskLevel_Good">İyi</string>
+    <string name="RiskLevel_Fair">Orta</string>
 </resources>

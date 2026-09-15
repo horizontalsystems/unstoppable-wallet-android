@@ -1924,4 +1924,7 @@
     <string name="Send_DestinationTag_Info">交易所和某些服务需要目标标签来记入您的存款。该标签在账本上是公开的。</string>
     <string name="Send_DestinationTag_Required">此地址需要目标标签。没有标签的付款会被拒绝。</string>
     <string name="Send_DestinationTag_Invalid">目标标签必须是0到4294967295之间的整数。</string>
+    <string name="RiskLevel_Excellent">优秀</string>
+    <string name="RiskLevel_Good">良好</string>
+    <string name="RiskLevel_Fair">一般</string>
 </resources>

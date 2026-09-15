@@ -1931,4 +1931,7 @@
     <string name="Send_DestinationTag_Info">Биржи и некоторые сервисы требуют тег назначения для зачисления вашего депозита. Тег является открытым в реестре.</string>
     <string name="Send_DestinationTag_Required">Этот адрес требует тег назначения. Платежи без тега отклоняются.</string>
     <string name="Send_DestinationTag_Invalid">Тег назначения должен быть целым числом от 0 до 4294967295.</string>
+    <string name="RiskLevel_Excellent">Отличный</string>
+    <string name="RiskLevel_Good">Хороший</string>
+    <string name="RiskLevel_Fair">Удовлетворительный</string>
 </resources>
