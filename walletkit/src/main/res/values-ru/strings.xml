@@ -1933,5 +1933,5 @@
     <string name="Send_DestinationTag_Invalid">Тег назначения должен быть целым числом от 0 до 4294967295.</string>
     <string name="RiskLevel_Excellent">Отличный</string>
     <string name="RiskLevel_Good">Хороший</string>
-    <string name="RiskLevel_Fair">Удовлетворительный</string>
+    <string name="RiskLevel_Fair">Приемлемо</string>
 </resources>
