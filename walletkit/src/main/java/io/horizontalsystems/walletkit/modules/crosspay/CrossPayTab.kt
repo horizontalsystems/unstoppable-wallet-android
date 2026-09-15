@@ -123,7 +123,7 @@ fun CrossPayTabBody(
         viewModel.onSelectTokenOut(it)
     }
 
-    val openAddress = navigation.slideFromRightForResult<CrossPayAddressPage.Result>(
+    val openAddress = navigation.slideFromBottomForResult<CrossPayAddressPage.Result>(
         { CrossPayAddressPage(uiState.tokenOut!!, uiState.address?.hex) }
     ) {
         viewModel.onSelectAddress(it.address, it.risky)

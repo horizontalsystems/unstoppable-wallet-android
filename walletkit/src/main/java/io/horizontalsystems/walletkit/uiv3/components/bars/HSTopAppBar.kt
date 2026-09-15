@@ -52,6 +52,7 @@ fun HSTopAppBar(
     title: String,
     menuItems: List<IMenuItem>,
     onBack: (() -> Unit)?,
+    backIcon: Int?
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -83,7 +84,7 @@ fun HSTopAppBar(
                                 ),
                                 onClick = onBack
                             ),
-                        painter = painterResource(id = R.drawable.arrow_m_left_24),
+                        painter = painterResource(id = backIcon ?: R.drawable.arrow_m_left_24),
                         contentDescription = stringResource(Button_Back),
                         tint = ComposeAppTheme.colors.grey
                     )
@@ -276,7 +277,8 @@ fun Preview_HSTopAppBar() {
                 ),
                 MenuItemLoading,
             ),
-            onBack = { }
+            onBack = { },
+            backIcon = null
         )
     }
 }
