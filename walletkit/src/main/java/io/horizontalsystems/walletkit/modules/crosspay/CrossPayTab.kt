@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.crosspay
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,10 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
@@ -37,18 +33,16 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.v2.AddressRow
 import io.horizontalsystems.walletkit.modules.send.v2.AmountSection
+import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
 import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
+import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
 import java.math.BigDecimal
 
 /**
@@ -136,7 +130,7 @@ fun CrossPayTabBody(
                 token = uiState.tokenOut,
                 balanceToken = uiState.tokenIn,
                 amount = uiState.amountOut,
-                amountExceedsBalance = uiState.step is CrossPayStep. InsufficientBalance,
+                amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
                 fiatAmount = uiState.fiatAmountOut,
                 fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                 currency = uiState.currency,
@@ -157,9 +151,12 @@ fun CrossPayTabBody(
             YouWillPayRow(uiState)
             VSpacer(32.dp)
         }
-
-        CrossPayInfoCard(uiState.tokenIn)
-        VSpacer(16.dp)
+        InfoCard(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            title = stringResource(R.string.CrossPay_Info_Title),
+            text = stringResource(R.string.CrossPay_Info_Description, uiState.tokenIn.coin.code)
+        )
+        VSpacer(48.dp)
 
         val buttonTitle = when (val step = uiState.step) {
             CrossPayStep.EnterAmount -> stringResource(R.string.Send_EnterAmount)
@@ -171,7 +168,7 @@ fun CrossPayTabBody(
         }
         ButtonPrimaryYellow(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 24.dp)
                 .fillMaxWidth(),
             title = buttonTitle,
             enabled = uiState.step is CrossPayStep.Proceed,
@@ -243,34 +240,6 @@ private fun YouWillPayRow(uiState: CrossPayTabUiState) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun CrossPayInfoCard(tokenIn: Token) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(R.drawable.ic_info_filled_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey,
-                modifier = Modifier.size(20.dp),
-            )
-            HSpacer(8.dp)
-            subhead1_grey(text = stringResource(R.string.CrossPay_Info_Title))
-        }
-        VSpacer(8.dp)
-        caption_grey(
-            text = stringResource(R.string.CrossPay_Info_Description, tokenIn.coin.code),
-            textAlign = TextAlign.Center,
-        )
     }
 }
 
