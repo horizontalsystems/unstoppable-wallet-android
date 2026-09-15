@@ -26,6 +26,7 @@ data class SendAddressPage(val wallet: Wallet, val address: String? = null) : HS
             buttonTitle = stringResource(R.string.Button_Next),
             allowNull = false,
             initialAddress = address,
+            backIcon = R.drawable.close_24
         ) { result, risky ->
             result?.let {
                 resultEventBus.sendResult(Result(it, risky))

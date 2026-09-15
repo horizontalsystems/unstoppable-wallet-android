@@ -69,6 +69,7 @@ fun EnterAddressScreen(
     buttonTitleEmpty: String? = null,
     allowOwnAddress: Boolean = false,
     zcashTransparentOnly: Boolean = false,
+    backIcon: Int? = null,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
@@ -89,6 +90,7 @@ fun EnterAddressScreen(
     HSScaffold(
         title = title,
         onBack = navigation::removeLastOrNull,
+        backIcon = backIcon
     ) {
         Column(
             modifier = Modifier.windowInsetsPadding(WindowInsets.ime)

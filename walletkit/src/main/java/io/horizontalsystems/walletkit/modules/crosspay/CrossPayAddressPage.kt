@@ -30,6 +30,7 @@ data class CrossPayAddressPage(val token: Token, val address: String? = null) : 
             buttonTitle = stringResource(R.string.Button_Next),
             allowNull = false,
             initialAddress = address,
+            backIcon = R.drawable.close_24
         ) { result, risky ->
             result?.let {
                 resultEventBus.sendResult(Result(it, risky))
