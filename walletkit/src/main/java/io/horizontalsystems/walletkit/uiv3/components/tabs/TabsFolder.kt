@@ -106,7 +106,7 @@ private fun FolderTab(
     ) {
         item.icon?.let { icon ->
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(16.dp),
                 painter = painterResource(icon),
                 contentDescription = null,
                 tint = contentColor,

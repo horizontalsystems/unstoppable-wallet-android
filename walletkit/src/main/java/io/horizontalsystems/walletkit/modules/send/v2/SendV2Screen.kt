@@ -357,8 +357,8 @@ private fun AmountSection(
                 )
             }
         }
-        VSpacer(12.dp)
-        Row(verticalAlignment = Alignment.Top) {
+        VSpacer(8.dp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
             CoinImage(
                 token = token,
                 modifier = Modifier.size(40.dp)
@@ -366,7 +366,7 @@ private fun AmountSection(
             HSpacer(16.dp)
             Column {
                 headline1_leah(text = token.coin.code)
-                VSpacer(4.dp)
+                VSpacer(5.dp)
                 BadgeText(
                     text = token.badge ?: stringResource(R.string.CoinPlatforms_Native),
                     background = ComposeAppTheme.colors.blade,
@@ -471,8 +471,8 @@ internal fun AddressRow(
     ) {
         Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
             Icon(
-                modifier = Modifier.size(24.dp),
-                painter = painterResource(if (contactName != null) R.drawable.user_24 else R.drawable.wallet_24),
+                modifier = Modifier.size(32.dp),
+                painter = painterResource(if (contactName != null) R.drawable.user_filled_24 else R.drawable.wallet_filled_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey,
             )
