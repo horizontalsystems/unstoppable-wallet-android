@@ -1,9 +1,6 @@
 package io.horizontalsystems.walletkit.modules.crosspay
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -33,28 +29,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
-import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
-import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.v2.AddressRow
+import io.horizontalsystems.walletkit.modules.send.v2.AmountSection
 import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
-import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
@@ -141,20 +131,22 @@ fun CrossPayTabBody(
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
-            AmountOutSection(
-                tokenIn = uiState.tokenIn,
-                tokenOut = uiState.tokenOut,
+            // The balance shown is the SOURCE token's — what funds the payment.
+            AmountSection(
+                token = uiState.tokenOut,
+                balanceToken = uiState.tokenIn,
                 amount = uiState.amountOut,
+                amountExceedsBalance = uiState.step is CrossPayStep. InsufficientBalance,
                 fiatAmount = uiState.fiatAmountOut,
                 fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                 currency = uiState.currency,
                 availableBalance = uiState.availableBalance,
-                insufficient = uiState.step is CrossPayStep.InsufficientBalance,
                 focusRequester = focusRequester,
                 onValueChange = viewModel::onEnterAmount,
                 onFiatValueChange = viewModel::onEnterFiatAmount,
                 onFocusChanged = { amountInputHasFocus = it },
-                onClickToken = openCoinSelect,
+                onTokenClick = openCoinSelect,
+                greyedOutAvailableBalance = true,
             )
             SectionArrow()
             AddressRow(
@@ -210,104 +202,6 @@ fun CrossPayTabBody(
             )
         } else {
             VSpacer(16.dp)
-        }
-    }
-}
-
-@Composable
-private fun AmountOutSection(
-    tokenIn: Token,
-    tokenOut: Token?,
-    amount: BigDecimal?,
-    fiatAmount: BigDecimal?,
-    fiatAmountInputEnabled: Boolean,
-    currency: io.horizontalsystems.walletkit.entities.Currency,
-    availableBalance: BigDecimal?,
-    insufficient: Boolean,
-    focusRequester: FocusRequester,
-    onValueChange: (BigDecimal?) -> Unit,
-    onFiatValueChange: (BigDecimal?) -> Unit,
-    onFocusChanged: (Boolean) -> Unit,
-    onClickToken: () -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .onFocusChanged { onFocusChanged(it.hasFocus) }
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-    ) {
-        // The balance shown is the SOURCE token's — what funds the payment.
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            availableBalance?.let {
-                Text(
-                    text = stringResource(
-                        R.string.Send_Available,
-                        App.numberFormatter.formatCoinFull(it, tokenIn.coin.code, tokenIn.decimals)
-                    ),
-                    style = ComposeAppTheme.typography.caption,
-                    color = ComposeAppTheme.colors.andy,
-                )
-            }
-        }
-        VSpacer(8.dp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(
-                modifier = Modifier.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClickToken,
-                ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                CoinImage(
-                    token = tokenOut,
-                    modifier = Modifier.size(40.dp)
-                )
-                HSpacer(16.dp)
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        headline2_leah(
-                            text = tokenOut?.coin?.code
-                                ?: stringResource(R.string.CrossPay_ChooseCoin)
-                        )
-                        HSpacer(4.dp)
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_s_down_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.leah,
-                        )
-                    }
-                    tokenOut?.let {
-                        VSpacer(5.dp)
-                        BadgeText(
-                            text = it.badge ?: stringResource(R.string.CoinPlatforms_Native),
-                            background = ComposeAppTheme.colors.blade,
-                            textColor = ComposeAppTheme.colors.leah,
-                        )
-                    }
-                }
-            }
-            HSpacer(8.dp)
-            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                AmountInput(
-                    value = amount,
-                    onValueChange = onValueChange,
-                    focusRequester = focusRequester,
-                    textColor = if (insufficient) {
-                        ComposeAppTheme.colors.lucian
-                    } else {
-                        ComposeAppTheme.colors.leah
-                    },
-                )
-                if (fiatAmountInputEnabled || fiatAmount != null) {
-                    VSpacer(3.dp)
-                    FiatAmountInput(
-                        value = fiatAmount,
-                        currency = currency,
-                        onValueChange = onFiatValueChange,
-                        enabled = fiatAmountInputEnabled,
-                    )
-                }
-            }
         }
     }
 }
