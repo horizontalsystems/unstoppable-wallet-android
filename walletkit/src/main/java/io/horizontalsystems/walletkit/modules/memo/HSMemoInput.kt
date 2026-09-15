@@ -22,7 +22,6 @@ import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
-import io.horizontalsystems.walletkit.ui.compose.components.caption_jacob
 
 /**
  * Describes where a memo ends up once the transaction is sent, so the UI can
@@ -51,7 +50,6 @@ fun HSMemoInput(
     visibility: MemoVisibility = MemoVisibility.Public,
     // Shown as the caption while there is typed text — the flow's explanation of why the
     // memo will not be attached to the transaction right now.
-    warningCaution: String? = null,
     onValueChange: (String) -> Unit
 ) {
     var text by rememberSaveable { mutableStateOf(memo ?: "") }
@@ -93,16 +91,11 @@ fun HSMemoInput(
         }
         HsDivider(modifier = Modifier.fillMaxWidth())
 
-        val captionModifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)
-        if (warningCaution != null && text.isNotEmpty()) {
-            caption_jacob(modifier = captionModifier, text = warningCaution)
-        } else {
-            val infoText = when (visibility) {
-                MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
-                MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
-                MemoVisibility.Public -> stringResource(R.string.Send_Memo_PublicWarning)
-            }
-            caption_grey(modifier = captionModifier, text = infoText)
+        val infoText = when (visibility) {
+            MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
+            MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)
+            MemoVisibility.Public -> stringResource(R.string.Send_Memo_PublicWarning)
         }
+        caption_grey(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp), text = infoText)
     }
 }
