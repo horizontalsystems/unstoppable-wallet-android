@@ -94,10 +94,16 @@ class XrpKitManager(
         kitWrapper?.kit?.start()
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    kitWrapper?.kit?.let { kit ->
-                        delay(1000)
-                        kit.refresh()
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        kitWrapper?.kit?.let { kit ->
+                            kit.resume()
+                            delay(1000)
+                            kit.refresh()
+                        }
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        kitWrapper?.kit?.pause()
                     }
                 }
             }
