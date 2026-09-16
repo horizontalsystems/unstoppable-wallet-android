@@ -150,13 +150,13 @@ fun CrossPayTabBody(
             HsDivider(modifier = Modifier.fillMaxWidth())
             YouWillPayRow(uiState)
             VSpacer(32.dp)
+            InfoCard(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.CrossPay_Info_Title),
+                text = stringResource(R.string.CrossPay_Info_Description, uiState.tokenIn.coin.code)
+            )
+            VSpacer(48.dp)
         }
-        InfoCard(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            title = stringResource(R.string.CrossPay_Info_Title),
-            text = stringResource(R.string.CrossPay_Info_Description, uiState.tokenIn.coin.code)
-        )
-        VSpacer(48.dp)
 
         val buttonTitle = when (val step = uiState.step) {
             CrossPayStep.EnterAmount -> stringResource(R.string.Send_EnterAmount)
