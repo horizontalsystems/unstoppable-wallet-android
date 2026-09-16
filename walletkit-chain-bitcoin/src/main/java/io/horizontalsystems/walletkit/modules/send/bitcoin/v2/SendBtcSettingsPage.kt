@@ -1,20 +1,15 @@
 package io.horizontalsystems.walletkit.modules.send.bitcoin.v2
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,27 +23,24 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
+import io.horizontalsystems.walletkit.modules.send.v2.SendSettingsCard
+import io.horizontalsystems.walletkit.modules.send.v2.SendSettingsRow
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellGroup
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsViewModel
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule
-import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.BottomSheetTransactionOrderSelector
 
 /**
  * Settings behind the unified send screen's icon for the Bitcoin family: coin control,
@@ -61,7 +53,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.BottomSheetT
 @Serializable
 data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPage() {
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val blockchainType = wallet.token.blockchainType
@@ -79,9 +70,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
             total = adapter?.let { withContext(Dispatchers.IO) { it.unspentOutputs.size } }
         }
 
-        val scope = rememberCoroutineScope()
-        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        var showSortSheet by remember { mutableStateOf(false) }
+        var showSortMenu by remember { mutableStateOf(false) }
         var showLockTimeMenu by remember { mutableStateOf(false) }
 
         val privateSend = sendViewModel.uiState.isPrivateSend
@@ -109,29 +98,33 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
             )
         ) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                CellGroup(paddingValues = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 32.dp)) {
+                // The rows are gathered first so hairlines only appear between shown rows.
+                val rows = mutableListOf<@Composable () -> Unit>()
+                rows += {
                     val used = settings.unspentOutputs?.size ?: total
-                    SettingsRow(
+                    SendSettingsRow(
                         title = stringResource(R.string.Send_Utxos),
                         subtitle = stringResource(R.string.Send_Utxos_Description),
-                        value = if (total != null) "$used / $total" else "",
+                        value = if (total != null) "$used/$total" else "",
                         enabled = adapter != null && total != null,
                         onClick = { navigation.slideFromRight(SendBtcUtxoExpertModePage(wallet)) },
                     )
-
-                    if (uiState.transactionSortingSupported) {
-                        SettingsRow(
+                }
+                if (uiState.transactionSortingSupported) {
+                    rows += {
+                        SendSettingsRow(
                             title = stringResource(R.string.BtcBlockchainSettings_InputsOutputs),
                             subtitle = stringResource(R.string.Send_InputsOutputs_Description),
                             value = uiState.transactionSortTitle,
                             enabled = true,
-                            onClick = { showSortSheet = true },
+                            onClick = { showSortMenu = true },
                         )
                     }
-
-                    if (timeLockSupported) {
+                }
+                if (timeLockSupported) {
+                    rows += {
                         val interval = settings.lockTimeInterval.takeIf { timeLockAvailable }
-                        SettingsRow(
+                        SendSettingsRow(
                             title = stringResource(R.string.Send_TimeLock),
                             subtitle = stringResource(R.string.Send_Hodler_Description),
                             warning = if (privateSend) stringResource(R.string.Send_Hodler_PrivateSendUnavailable) else null,
@@ -140,8 +133,9 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                             onClick = { showLockTimeMenu = true },
                         )
                     }
-
-                    if (uiState.rbfVisible) {
+                }
+                if (uiState.rbfVisible) {
+                    rows += {
                         CellPrimary(
                             middle = {
                                 CellMiddleInfo(
@@ -158,24 +152,19 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                         )
                     }
                 }
+
+                SendSettingsCard(rows)
             }
 
-            if (showSortSheet) {
-                BottomSheetContent(
-                    onDismissRequest = { showSortSheet = false },
-                    sheetState = sheetState
-                ) {
-                    BottomSheetTransactionOrderSelector(
-                        items = uiState.transactionSortOptions,
-                        onSelect = { viewModel.setTransactionMode(it) },
-                        onCloseClick = {
-                            scope.launch {
-                                sheetState.hide()
-                                showSortSheet = false
-                            }
-                        }
-                    )
-                }
+            if (showSortMenu) {
+                MenuGroup(
+                    title = stringResource(R.string.BtcBlockchainSettings_InputsOutputs),
+                    items = uiState.transactionSortOptions.map {
+                        MenuItemX(stringResource(it.mode.titleShort), it.selected, it.mode)
+                    },
+                    onDismissRequest = { showSortMenu = false },
+                    onSelectItem = { viewModel.setTransactionMode(it) }
+                )
             }
 
             if (showLockTimeMenu) {
@@ -194,33 +183,4 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
             }
         }
     }
-}
-
-@Composable
-private fun SettingsRow(
-    title: String,
-    subtitle: String,
-    value: String,
-    enabled: Boolean,
-    onClick: () -> Unit,
-    warning: String? = null,
-) {
-    val valueColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
-    CellPrimary(
-        middle = {
-            CellMiddleInfo(
-                title = title.hs,
-                subtitle = subtitle.hs,
-                description = warning?.hs(color = ComposeAppTheme.colors.jacob),
-            )
-        },
-        right = {
-            CellRightSelectors(
-                subtitle = value.hs(color = valueColor),
-                icon = painterResource(R.drawable.arrow_s_down_20),
-                iconTint = valueColor,
-            )
-        },
-        onClick = if (enabled) onClick else null,
-    )
 }
