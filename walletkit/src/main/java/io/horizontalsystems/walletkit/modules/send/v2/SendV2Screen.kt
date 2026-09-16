@@ -256,15 +256,14 @@ fun SendV2Screen(
                         )
                     }
                     VSpacer(32.dp)
-                }
-
-                if (uiState.isPrivateSend) {
-                    InfoCard(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        title = stringResource(R.string.PrivateSend_Toggle_Title),
-                        text = stringResource(R.string.PrivateSend_Tab_Description)
-                    )
-                    VSpacer(48.dp)
+                    if (uiState.isPrivateSend) {
+                        InfoCard(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            title = stringResource(R.string.PrivateSend_Toggle_Title),
+                            text = stringResource(R.string.PrivateSend_Tab_Description)
+                        )
+                        VSpacer(48.dp)
+                    }
                 }
 
                 val buttonTitle = when (val step = uiState.step) {
