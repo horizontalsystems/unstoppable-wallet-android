@@ -343,7 +343,6 @@
     <!--Add RPC Source-->
     <!--Add Monero Node-->
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">با تغییر در نحوه ساخت تراکنش ها، ردیابی تراکنش های BTC, LTC, BCH را دشوارتر کنید.</string>
     <!--Info screen-->
     <string name="Info_Title">اطلاعات</string>
     <!--Setting_Security-->
