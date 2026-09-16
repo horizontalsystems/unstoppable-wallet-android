@@ -79,15 +79,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
-import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import java.math.BigDecimal
 import java.net.UnknownHostException
 import kotlin.reflect.KClass
@@ -308,7 +303,7 @@ fun SendV2Screen(
                     val hasNonZeroBalance =
                         uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
                     VSpacer(16.dp)
-                    AmountSuggestionsBar(
+                    SuggestionsBar(
                         disabledPercents = uiState.disabledPercents,
                         onDelete = { viewModel.onEnterAmount(null) },
                         onSelect = {
@@ -546,45 +541,6 @@ internal fun AddressRow(
         )
     }
 }
-
-/**
- * Percent shortcuts shown above the keyboard while the amount is edited, with a clear
- * button at the end; the last shortcut sends the whole balance.
- */
-@Composable
-private fun AmountSuggestionsBar(
-    disabledPercents: Set<Int>,
-    onDelete: () -> Unit,
-    onSelect: (Int) -> Unit,
-    selectEnabled: Boolean,
-    deleteEnabled: Boolean,
-) {
-    TabsSectionButtons(
-        left = {
-            listOf(25, 50, 75, 100).forEach { percent ->
-                HSButton(
-                    variant = ButtonVariant.Secondary,
-                    style = ButtonStyle.Solid,
-                    size = ButtonSize.Small,
-                    title = if (percent == 100) stringResource(R.string.Send_Button_Max) else "$percent%",
-                    enabled = selectEnabled && percent !in disabledPercents,
-                    onClick = { onSelect(percent) },
-                )
-            }
-        },
-        right = {
-            HSIconButton(
-                variant = ButtonVariant.Secondary,
-                style = ButtonStyle.Solid,
-                size = ButtonSize.Small,
-                icon = painterResource(R.drawable.ic_delete_20),
-                enabled = deleteEnabled,
-                onClick = onDelete,
-            )
-        },
-    )
-}
-
 
 private const val ADDRESS_MAX_LINES = 2
 
