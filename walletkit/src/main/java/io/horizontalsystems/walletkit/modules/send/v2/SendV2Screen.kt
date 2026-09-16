@@ -186,7 +186,13 @@ fun SendV2Screen(
             TabsFolder(
                 tabs = tabs.map { it.tabItem() },
                 selectedIndex = tabs.indexOf(uiState.tab).coerceAtLeast(0),
-                onSelect = { viewModel.onSelectTab(tabs[it]) },
+                onSelect = {
+                    // The amount field keeps its focus across Standard and Private, so the
+                    // keyboard would otherwise stay up; a tab switch always closes it.
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                    viewModel.onSelectTab(tabs[it])
+                },
             )
             if (uiState.tab == SendTab.CrossPay) {
                 val crossPayViewModel = viewModel<CrossPayTabViewModel>(
