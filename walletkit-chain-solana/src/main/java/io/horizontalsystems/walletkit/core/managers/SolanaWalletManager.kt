@@ -6,6 +6,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.models.FullTokenAccount
+import java.math.BigDecimal
 
 class SolanaWalletManager(
         private val walletManager: WalletManager,
@@ -18,9 +19,11 @@ class SolanaWalletManager(
     fun add(tokenAccounts: List<FullTokenAccount>) {
         if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
         val account = accountManager.activeAccount ?: return
-        val queries = tokenAccounts
-                .filter { !it.mintAccount.isNft }
-                .map { TokenQuery(BlockchainType.Solana, TokenType.Spl(it.mintAccount.address)) }
+        // Enable only tokens the wallet currently holds; an emptied account would just show
+        // a zero balance. A later deposit announces it again.
+        val held = tokenAccounts.filter { !it.mintAccount.isNft && it.tokenAccount.balance > BigDecimal.ZERO }
+        if (held.isEmpty()) return
+        val queries = held.map { TokenQuery(BlockchainType.Solana, TokenType.Spl(it.mintAccount.address)) }
         val existingWallets = walletManager.activeWallets
         val existingTokenTypeIds = existingWallets.map { it.token.type.id }
         val newTokenQueries = queries.filter { !existingTokenTypeIds.contains(it.tokenType.id) }
