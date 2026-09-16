@@ -56,12 +56,7 @@ class ZnsResolver(
      */
     fun resolve(name: String): String? {
         val registration = fetch(name) ?: return null
-
-        if (!verify(registration, adminPubkey)) {
-            throw InvalidSignature(name)
-        }
-
-        return registration.address
+        return validate(name, registration, adminPubkey)
     }
 
     private fun fetch(name: String): Registration? {
@@ -143,14 +138,34 @@ class ZnsResolver(
         }
 
         /**
-         * How far below the reported nonce [verify] searches for the nonce an UPDATE or DELIST
-         * was actually signed with (see the note on [verify]).
+         * How far below the reported nonce [verify] searches for the nonce an UPDATE was
+         * actually signed with (see the note on [verify]).
          */
         private const val NONCE_SEARCH_DEPTH = 64L
 
         /**
+         * Checks that [registration] answers the query for [name] and carries a valid
+         * registrar signature over its address, and returns that address.
+         *
+         * @throws RpcError when the registration is for a different name
+         * @throws InvalidSignature when the signature does not authenticate the address
+         */
+        fun validate(name: String, registration: Registration, adminPubkey: String): String {
+            if (registration.name != name) {
+                throw RpcError("Registration name \"${registration.name}\" does not match query \"$name\"")
+            }
+            if (!verify(registration, adminPubkey)) {
+                throw InvalidSignature(name)
+            }
+            return registration.address
+        }
+
+        /**
          * The ASCII pre-image the registrar signed, selected by `last_action`.
-         * Returns null for actions that never appear on a registration.
+         *
+         * Only actions whose pre-image covers the address are accepted. A DELIST pre-image
+         * is `DELIST:{name}:{nonce}`, so a DELIST signature says nothing about the address the
+         * indexer attaches to it; LIST and RELEASE never appear on a registration.
          */
         fun preImage(registration: Registration, nonce: Long = registration.nonce): String? =
             with(registration) {
@@ -158,35 +173,34 @@ class ZnsResolver(
                     "CLAIM" -> "CLAIM:$name:$address"
                     "BUY" -> "BUY:$name:$address"
                     "UPDATE" -> "UPDATE:$name:$address:$nonce"
-                    "DELIST" -> "DELIST:$name:$nonce"
                     else -> null
                 }
             }
 
         /**
-         * Verifies the registration's Ed25519 signature.
+         * Verifies that the registrar's Ed25519 signature binds the registration's name to
+         * its address.
          *
-         * Admin-signed registrations (no `pubkey`) verify against [adminPubkey]. Sovereign
-         * registrations carry the owner's key in `pubkey` and verify against it; that only
-         * proves the response is self-consistent, since the key comes from the same response.
+         * Only admin-signed registrations are accepted. A sovereign registration carries the
+         * owner's key in `pubkey`, but nothing signed by the registrar vouches for that key,
+         * so verifying against it would only prove the response is self-consistent.
          *
          * Nonce caveat: the `nonce` a registration reports is the registry's current value,
          * and a later LIST bumps it without changing `last_action` or `signature`. So for
-         * UPDATE and DELIST the signed nonce can be lower than the reported one, and the
-         * indexer exposes no way to recover it. The pre-image is therefore tried with the
-         * reported nonce first and then with each lower value down to zero, bounded by
-         * [NONCE_SEARCH_DEPTH]. Any match still proves the registrar signed this exact
-         * name-to-address binding.
+         * UPDATE the signed nonce can be lower than the reported one, and the indexer exposes
+         * no way to recover it. The pre-image is therefore tried with the reported nonce first
+         * and then with each lower value down to zero, bounded by [NONCE_SEARCH_DEPTH]. Any
+         * match still proves the registrar signed this exact name-to-address binding.
          */
         fun verify(registration: Registration, adminPubkey: String): Boolean {
             val signature = registration.signature ?: return false
-            val pubkey = registration.pubkey ?: adminPubkey
+            if (registration.pubkey != null) return false
 
             val signatureBytes: ByteArray
             val pubkeyBytes: ByteArray
             try {
                 signatureBytes = Base64.getDecoder().decode(signature)
-                pubkeyBytes = Base64.getDecoder().decode(pubkey)
+                pubkeyBytes = Base64.getDecoder().decode(adminPubkey)
             } catch (e: IllegalArgumentException) {
                 return false
             }
@@ -194,7 +208,7 @@ class ZnsResolver(
                 return false
             }
 
-            val usesNonce = registration.lastAction == "UPDATE" || registration.lastAction == "DELIST"
+            val usesNonce = registration.lastAction == "UPDATE"
             val lowestNonce = if (usesNonce) maxOf(0L, registration.nonce - NONCE_SEARCH_DEPTH) else registration.nonce
 
             for (nonce in registration.nonce downTo lowestNonce) {

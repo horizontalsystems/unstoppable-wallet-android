@@ -104,9 +104,33 @@ class ZnsTest {
         assertEquals("CLAIM:alice:u1example", ZnsResolver.preImage(base))
         assertEquals("BUY:alice:u1example", ZnsResolver.preImage(base.copy(lastAction = "BUY")))
         assertEquals("UPDATE:alice:u1example:2", ZnsResolver.preImage(base.copy(lastAction = "UPDATE")))
-        assertEquals("DELIST:alice:2", ZnsResolver.preImage(base.copy(lastAction = "DELIST")))
+        // DELIST:{name}:{nonce} does not cover the address, so it cannot authenticate one.
+        assertNull(ZnsResolver.preImage(base.copy(lastAction = "DELIST")))
         assertNull(ZnsResolver.preImage(base.copy(lastAction = "LIST")))
         assertNull(ZnsResolver.preImage(base.copy(lastAction = "RELEASE")))
+    }
+
+    @Test
+    fun validate_returnsAddressForMatchingVerifiedRegistration() {
+        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
+        assertEquals(CHILDISH_ADDRESS, ZnsResolver.validate("childish", registration, ZnsResolver.ADMIN_PUBKEY))
+    }
+
+    @Test
+    fun validate_rejectsRegistrationForAnotherName() {
+        // A replayed registration for a different name is validly signed but must not answer this query.
+        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
+        assertThrows(ZnsResolver.RpcError::class.java) {
+            ZnsResolver.validate("alice", registration, ZnsResolver.ADMIN_PUBKEY)
+        }
+    }
+
+    @Test
+    fun validate_rejectsInvalidSignature() {
+        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
+        assertThrows(ZnsResolver.InvalidSignature::class.java) {
+            ZnsResolver.validate("childish", registration.copy(nonce = 5, lastAction = "UPDATE"), ZnsResolver.ADMIN_PUBKEY)
+        }
     }
 
     @Test
@@ -165,17 +189,20 @@ class ZnsTest {
     }
 
     @Test
-    fun verify_rejectsMissingSignatureAndUnknownAction() {
+    fun verify_rejectsMissingSignatureAndActionsThatDoNotCoverTheAddress() {
         val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
         assertFalse(ZnsResolver.verify(registration.copy(signature = null), ZnsResolver.ADMIN_PUBKEY))
+        assertFalse(ZnsResolver.verify(registration.copy(lastAction = "DELIST"), ZnsResolver.ADMIN_PUBKEY))
         assertFalse(ZnsResolver.verify(registration.copy(lastAction = "RELEASE"), ZnsResolver.ADMIN_PUBKEY))
         assertFalse(ZnsResolver.verify(registration.copy(signature = "not base64!"), ZnsResolver.ADMIN_PUBKEY))
     }
 
     @Test
-    fun verify_sovereignRegistrationUsesAttachedKey() {
-        // An admin-signed row with a foreign pubkey attached must fail: the attached key wins.
+    fun verify_rejectsSovereignRegistrations() {
+        // The attached key is unauthenticated (it comes from the same response), so a
+        // registration carrying one is never accepted, even with a valid admin signature.
         val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
+        assertFalse(ZnsResolver.verify(registration.copy(pubkey = ZnsResolver.ADMIN_PUBKEY), ZnsResolver.ADMIN_PUBKEY))
         val otherKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
         assertFalse(ZnsResolver.verify(registration.copy(pubkey = otherKey), ZnsResolver.ADMIN_PUBKEY))
     }
