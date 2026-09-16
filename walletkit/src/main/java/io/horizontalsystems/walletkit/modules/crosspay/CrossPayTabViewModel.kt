@@ -56,6 +56,11 @@ class CrossPayTabViewModel(
     init {
         fiatService.setCurrency(currency)
 
+        // Picked synchronously, exactly like the swap screen's auto-pick: `uiState` is lazy,
+        // so the selector is already filled on the first composed frame instead of flickering
+        // in from a coroutine.
+        defaultTokenOut()?.let { selectTokenOut(it) }
+
         viewModelScope.launch {
             fiatService.stateFlow.collect {
                 val amountChanged = amountOut != it.amount
@@ -70,12 +75,6 @@ class CrossPayTabViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            // The default pick needs no provider data — fill the chip before the network
-            // round-trip so the tab never opens on an empty selector.
-            if (tokenOut == null) {
-                defaultTokenOut()?.let { selectTokenOut(it) }
-                emitState()
-            }
             try {
                 // Populates the provider's token map (server-side sync, cached); until it
                 // lands any pending quote request waits via the re-schedule below.
