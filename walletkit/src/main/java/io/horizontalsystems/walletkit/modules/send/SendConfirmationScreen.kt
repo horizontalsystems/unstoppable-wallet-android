@@ -275,7 +275,8 @@ fun ConfirmationTopSection(
                 HsDivider()
                 AddressCell(
                     address = it.hex,
-                    contact = contact?.name
+                    contact = contact?.name,
+                    domain = it.domain,
                 )
             }
         }

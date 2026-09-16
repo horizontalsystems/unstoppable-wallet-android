@@ -303,8 +303,12 @@ class EnterAddressViewModel(
             val ensHandler = AddressHandlerEns(blockchainType, EnsResolverHolder.resolver)
             val udnHandler =
                 AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
-            val domainHandlers = mutableListOf(ensHandler, udnHandler)
+            // Chain-specific name services go first: they reject foreign input without a network
+            // call, whereas ENS and UDN attempt a remote lookup for any dotted name.
+            val domainHandlers = mutableListOf<IAddressHandler>()
             domainHandlers.addAll(ChainRegistry[blockchainType]?.domainAddressHandlers().orEmpty())
+            domainHandlers.add(ensHandler)
+            domainHandlers.add(udnHandler)
             val addressParserChain = AddressParserChain(domainHandlers = domainHandlers)
             val addressUriParser = AddressUriParser(token.blockchainType, token.type)
             val recentAddressManager =

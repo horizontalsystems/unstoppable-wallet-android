@@ -57,6 +57,9 @@ class ZcashChainPlugin(
 
     private val reselectScope = CoroutineScope(Dispatchers.Default)
 
+    // One resolver per plugin: its HTTP client is created lazily on the first lookup.
+    private val znsResolver = ZnsResolver()
+
     override val blockchainType: BlockchainType = BlockchainType.Zcash
 
     private val birthdayProvider by lazy { ZcashBirthdayProvider(context()) }
@@ -138,6 +141,8 @@ class ZcashChainPlugin(
     }
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerZcash())
+
+    override fun domainAddressHandlers(): List<IAddressHandler> = listOf(AddressHandlerZns(znsResolver))
 
     override fun addressValidator(token: Token): EnterAddressValidator =
         ZcashAddressValidator(token, App.adapterManager)

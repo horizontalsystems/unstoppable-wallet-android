@@ -69,7 +69,7 @@ fun SendZCashScreen(
         if (uiState.showAddressInput) {
             HSAddressCell(
                 title = stringResource(R.string.Send_Confirmation_To),
-                value = uiState.address.hex,
+                value = uiState.address.title,
                 riskyAddress = riskyAddress
             ) {
                 navigation.removeLastOrNull()

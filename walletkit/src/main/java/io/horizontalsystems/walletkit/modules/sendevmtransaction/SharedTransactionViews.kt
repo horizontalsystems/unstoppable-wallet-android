@@ -84,9 +84,11 @@ fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: S
 fun AddressCell(
     address: String,
     contact: String?,
+    domain: String? = null,
 ) {
     val image = if (contact != null) R.drawable.user_wrapped_32 else R.drawable.wallet_wrapped_32
-    val description = if (contact != null) address else null
+    val label = contact ?: domain
+    val description = if (label != null) address else null
     CellPrimary(
         left = {
             Image(
@@ -97,7 +99,7 @@ fun AddressCell(
         },
         middle = {
             CellMiddleInfo(
-                eyebrow = (contact ?: address).hs(color = ComposeAppTheme.colors.leah),
+                eyebrow = (label ?: address).hs(color = ComposeAppTheme.colors.leah),
                 subtitle = description?.hs
             )
         },
