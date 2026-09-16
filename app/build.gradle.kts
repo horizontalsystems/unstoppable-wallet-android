@@ -146,8 +146,9 @@ android {
 
         release {
             isDebuggable = false
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             buildConfigFieldString("APP_LINKS_HOST", "unstoppable.money")
             manifestPlaceholders["appLinksHost"] = "unstoppable.money"
             buildConfigFieldString("TWITTER_BEARER_TOKEN", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
