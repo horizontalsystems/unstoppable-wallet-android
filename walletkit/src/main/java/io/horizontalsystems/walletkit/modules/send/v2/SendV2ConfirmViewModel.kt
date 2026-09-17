@@ -117,9 +117,10 @@ class SendV2ConfirmViewModel(
 
     // The chain service and its sub-services are plain objects that both their own
     // collectors and each submitted transfer mutate. One confined thread for all of that
-    // keeps their state consistent, and the mutex keeps submissions from interleaving.
+    // keeps their state consistent, and the mutex keeps submissions from interleaving. It is
+    // an IO thread: signing and broadcasting block on it.
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val serviceDispatcher = Dispatchers.Default.limitedParallelism(1)
+    private val serviceDispatcher = Dispatchers.IO.limitedParallelism(1)
     private val serviceScope = CoroutineScope(viewModelScope.coroutineContext + serviceDispatcher)
     private val submitMutex = Mutex()
 

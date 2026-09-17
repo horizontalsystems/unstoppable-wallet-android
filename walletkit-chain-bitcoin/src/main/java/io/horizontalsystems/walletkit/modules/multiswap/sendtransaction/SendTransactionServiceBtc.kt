@@ -211,6 +211,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         addressService.setAddress(Address(data.address))
 
         refreshFields()
+        emitState()
     }
 
     @Composable

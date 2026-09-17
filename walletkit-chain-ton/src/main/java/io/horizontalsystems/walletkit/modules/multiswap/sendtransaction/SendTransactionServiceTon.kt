@@ -17,6 +17,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -37,9 +39,13 @@ class SendTransactionServiceTon(
     // is kept and the failure shown, rather than the whole confirmation failing.
     private var feeCaution: CautionViewItem? = null
 
+    // The estimate suspends after the transaction is replaced; a second transfer arriving
+    // meanwhile must wait, or its fee could come from the first one.
+    private val mutex = Mutex()
+
     override fun start(coroutineScope: CoroutineScope) = Unit
 
-    override suspend fun setSendTransactionData(data: SendTransactionData) {
+    override suspend fun setSendTransactionData(data: SendTransactionData) = mutex.withLock {
         check(data is SendTransactionData.Ton)
 
         fee = null
@@ -105,7 +111,7 @@ class SendTransactionServiceTon(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
-        val transactionType = transactionType ?: throw IllegalStateException("Send data not set")
+        val transactionType = mutex.withLock { transactionType } ?: throw IllegalStateException("Send data not set")
 
         when (transactionType) {
             is TransactionType.Boc -> {

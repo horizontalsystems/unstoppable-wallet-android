@@ -84,8 +84,9 @@ class PrivateSendConfirmViewModel(
 
     // The chain service and its sub-services are plain objects; their collectors and every
     // deposit fed to them run on this one confined thread so their state stays consistent.
+    // It is an IO thread: signing and broadcasting block on it.
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val serviceDispatcher = Dispatchers.Default.limitedParallelism(1)
+    private val serviceDispatcher = Dispatchers.IO.limitedParallelism(1)
     private val serviceScope = CoroutineScope(viewModelScope.coroutineContext + serviceDispatcher)
 
     init {

@@ -236,8 +236,9 @@ class SendViewModel(
                 memo = null
             }
             extraInput = chainPlugin?.sendExtraInput(wallet.token, address?.hex)
-            // A value the address itself carries replaces whatever was typed.
-            extraInput?.fixedValue?.let { setExtraInputValue(it) }
+            // The field describes the recipient, so a new recipient starts it over: with the
+            // value the address itself carries, or empty.
+            setExtraInputValue(extraInput?.fixedValue.orEmpty())
             emitState()
         }
     }
