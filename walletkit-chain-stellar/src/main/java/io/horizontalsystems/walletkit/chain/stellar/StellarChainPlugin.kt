@@ -66,6 +66,7 @@ class StellarChainPlugin : ChainPlugin {
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Stellar.Regular(address, memo.orEmpty(), amount)
 

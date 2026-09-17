@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.chain.xrp
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.KeyboardType
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -17,6 +18,9 @@ import io.horizontalsystems.walletkit.core.adapters.XrpTransactionsAdapter
 import io.horizontalsystems.walletkit.core.ISendXrpAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import io.horizontalsystems.walletkit.core.chain.SendExtraInput
+import io.horizontalsystems.walletkit.modules.multiswap.providers.XrpDestinationTag
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.core.factories.XrpTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.XrpAccountManager
@@ -29,7 +33,6 @@ import io.horizontalsystems.walletkit.modules.address.AddressHandlerXrp
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
-import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceXrp
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -42,6 +45,9 @@ import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.XrpAddressValidator
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import java.math.BigDecimal
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.reflect.KClass
 
 class XrpChainPlugin : ChainPlugin {
@@ -143,17 +149,51 @@ class XrpChainPlugin : ChainPlugin {
             null
         }
 
-    // An X-address packs the destination tag with the account, so the tag travels with the
-    // address; a classic address carries none. XRP takes no memo on the unified send screen.
+    // An X-address packs the destination tag with the account and overrides the field.
     override fun sendTransactionData(
         token: Token,
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Xrp(
         address = address,
         amount = amount,
-        destinationTag = XrpKit.decodeXAddress(address)?.second,
+        destinationTag = XrpKit.decodeXAddress(address)?.second ?: extraInput?.let(XrpDestinationTag::parse),
     )
+
+    /**
+     * The destination tag: exchanges and custodians credit deposits by it. An X-address fixes
+     * it; a classic address flagged RequireDestTag makes it required. The flag lookup failing
+     * leaves the field optional here — the send service refuses the transfer in that case.
+     */
+    override suspend fun sendExtraInput(token: Token, address: String?): SendExtraInput {
+        val fixed = address?.let { XrpKit.decodeXAddress(it)?.second }
+        val required = if (address != null && fixed == null) {
+            try {
+                withContext(Dispatchers.IO) {
+                    App.adapterManager.getAdapterForToken<ISendXrpAdapter>(token)?.requiresDestinationTag(address)
+                } ?: false
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                false
+            }
+        } else {
+            false
+        }
+        return SendExtraInput(
+            title = Translator.getString(R.string.Send_DestinationTag_Title),
+            info = Translator.getString(R.string.Send_DestinationTag_Info),
+            required = required,
+            fixedValue = fixed?.toString(),
+            keyboardType = KeyboardType.Number,
+            maxLength = XrpDestinationTag.MAX.toString().length,
+            validate = { value ->
+                if (XrpDestinationTag.parse(value) == null) Translator.getString(R.string.Send_DestinationTag_Invalid) else null
+            },
+        )
+    }
+
 }

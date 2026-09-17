@@ -81,6 +81,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = depositTransferData(token, amount, address)
 

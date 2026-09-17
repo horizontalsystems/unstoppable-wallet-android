@@ -59,6 +59,7 @@ class ZcashChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Zcash.Regular(address, amount, memo.orEmpty())
 

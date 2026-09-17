@@ -58,6 +58,7 @@ class TronChainPlugin : ChainPlugin {
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Tron.Simple(address, amount)
 

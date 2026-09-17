@@ -1911,7 +1911,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">%1$s almak için tokeni etkinleştirmeniz gerekir. XRP Ledger her token için bir güven çizgisi gerektirir ve bu da bakiyenizin 0,2 XRP\'sini varlığı süresince kilitler. Bunu olmadan, cüzdanınız %2$s alamaz – işlem reddedilir ve fonlar iletilmez.</string>
     <string name="Activate_Xrp_ReserveNote">Etkinleştirme, %1$s\'i cüzdanınızda rezerv olarak kilitler. Güven çizgisi daha sonra kaldırılırsa serbest bırakılır.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">Güven çizgisi rezervini ve ağ ücretini karşılamak için yeterli harcayabileceğiniz XRP\'niz yok.</string>
-    <string name="Send_DestinationTag_Hint">Hedef etiketi (isteğe bağlı)</string>
     <string name="Send_DestinationTag_Info">Borsalar ve bazı hizmetler, paranızı yatırmak için bir hedef etiketi gerektirir. Etiket defter üzerinde halka açıktır.</string>
     <string name="Send_DestinationTag_Required">Bu adres bir hedef etiketi gerektirir. Etiketsiz ödemeler reddedilir.</string>
     <string name="Send_DestinationTag_Invalid">Hedef etiketi 0 ile 4294967295 arasında bir tam sayı olmalıdır.</string>

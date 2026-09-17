@@ -6,12 +6,13 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
+import java.math.BigDecimal
+import io.horizontalsystems.walletkit.modules.send.SendErrorMinimumSendAmount
 import io.horizontalsystems.walletkit.core.ISendXrpAdapter
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDestinationTag
-import io.horizontalsystems.walletkit.modules.send.SendErrorMinimumSendAmount
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,9 +74,7 @@ class SendTransactionServiceXrp(
             try {
                 val minimum = adapter.getMinimumSendAmount(data.address)
                 if (minimum != null && data.amount < minimum) {
-                    result.add(
-                        SendErrorMinimumSendAmount("${minimum.toPlainString()} ${token.coin.code}").toCautionViewItem()
-                    )
+                    result.add(SendErrorMinimumSendAmount(minimum, token.coin.code).toCautionViewItem())
                 }
             } catch (e: CancellationException) {
                 throw e
@@ -123,6 +122,11 @@ class SendTransactionServiceXrp(
 
         return SendTransactionResult.Xrp(txHash)
     }
+
+    // The send screen already offers the balance net of the fee and reserve for XRP, so the
+    // maximum is that figure itself.
+    override fun maxSendableAmount(): BigDecimal? =
+        if (token.type == TokenType.Native) adapter.maxSendableBalance.coerceAtLeast(BigDecimal.ZERO) else null
 
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,

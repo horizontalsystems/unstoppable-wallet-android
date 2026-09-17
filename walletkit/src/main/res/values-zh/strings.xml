@@ -1910,7 +1910,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">要接收 %1$s，您需要激活代币。XRP Ledger 要求每个代币都有一条信任线，它会在存在期间锁定您余额中的 0.2 个 XRP。没有信任线，您的钱包无法接收 %2$s – 交易将被拒绝，资金将不会被交付。</string>
     <string name="Activate_Xrp_ReserveNote">激活会将 %1$s 锁定为您钱包中的准备金。如果稍后删除信任线，将释放准备金。</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">您没有足够的可用 XRP 来支付信任线准备金和网络费用。</string>
-    <string name="Send_DestinationTag_Hint">目标标签（可选）</string>
     <string name="Send_DestinationTag_Info">交易所和某些服务需要目标标签来记入您的存款。该标签在账本上是公开的。</string>
     <string name="Send_DestinationTag_Required">此地址需要目标标签。没有标签的付款会被拒绝。</string>
     <string name="Send_DestinationTag_Invalid">目标标签必须是0到4294967295之间的整数。</string>

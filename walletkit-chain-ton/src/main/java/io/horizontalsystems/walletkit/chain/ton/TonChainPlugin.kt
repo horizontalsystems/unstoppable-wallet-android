@@ -59,6 +59,7 @@ class TonChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Ton.Regular(address, amount, memo)
 

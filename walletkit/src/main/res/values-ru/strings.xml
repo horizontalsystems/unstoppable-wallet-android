@@ -1917,7 +1917,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">Чтобы получить %1$s, необходимо активировать токен. XRP Ledger требует доверительную линию для каждого токена, которая блокирует 0,2 XRP вашего баланса, пока она существует. Без неё ваш кошелёк не сможет получить %2$s – транзакция будет отклонена и средства не будут доставлены.</string>
     <string name="Activate_Xrp_ReserveNote">Активация блокирует %1$s в качестве резерва в вашем кошельке. Резерв освобождается, если доверительная линия удаляется позже.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">У вас недостаточно доступного XRP для покрытия резерва доверительной линии и комиссии сети.</string>
-    <string name="Send_DestinationTag_Hint">Тег назначения (необязательно)</string>
     <string name="Send_DestinationTag_Info">Биржи и некоторые сервисы требуют тег назначения для зачисления вашего депозита. Тег является открытым в реестре.</string>
     <string name="Send_DestinationTag_Required">Этот адрес требует тег назначения. Платежи без тега отклоняются.</string>
     <string name="Send_DestinationTag_Invalid">Тег назначения должен быть целым числом от 0 до 4294967295.</string>

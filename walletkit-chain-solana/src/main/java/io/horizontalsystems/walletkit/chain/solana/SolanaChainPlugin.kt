@@ -54,6 +54,7 @@ class SolanaChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Solana.Simple(address, amount)
 

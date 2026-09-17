@@ -83,6 +83,7 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Btc(
         address = address,

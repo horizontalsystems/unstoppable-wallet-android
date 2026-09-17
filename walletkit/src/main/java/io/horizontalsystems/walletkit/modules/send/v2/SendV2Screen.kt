@@ -126,6 +126,7 @@ fun SendV2Screen(
                         amount = amount,
                         address = address,
                         memo = uiState.memo,
+                        extraInput = uiState.extraInputValue,
                         sendEntryPointDestId = sendEntryPointDestId,
                     )
                 )
@@ -259,9 +260,32 @@ fun SendV2Screen(
                         )
                     }
                     HsDivider(modifier = Modifier.fillMaxWidth())
-                    // A memo cannot travel with a private send deposit (its memo slot belongs
-                    // to the provider's identifier), so the field is not offered on that tab.
+                    // Neither the chain's own field nor a memo can travel with a private send
+                    // deposit (its memo slot belongs to the provider's identifier), so they
+                    // are not offered on that tab.
+                    val extraInput = uiState.extraInput?.takeIf { !uiState.isPrivateSend }
                     val memoSupport = uiState.memoSupport?.takeIf { !uiState.isPrivateSend }
+                    if (extraInput != null) {
+                        val error = uiState.extraInputError
+                        SendInputCell(
+                            value = uiState.extraInputValue,
+                            hint = extraInput.title,
+                            enabled = extraInput.fixedValue == null,
+                            keyboardType = extraInput.keyboardType,
+                            maxLength = extraInput.maxLength,
+                            caption = error ?: extraInput.info,
+                            captionColor = when {
+                                error != null -> ComposeAppTheme.colors.lucian
+                                extraInput.required -> ComposeAppTheme.colors.jacob
+                                else -> ComposeAppTheme.colors.grey
+                            },
+                            onValueChange = viewModel::onEnterExtraInput,
+                        )
+                        if (memoSupport != null) {
+                            VSpacer(8.dp)
+                            HsDivider(modifier = Modifier.fillMaxWidth())
+                        }
+                    }
                     if (memoSupport != null) {
                         HSMemoInput(
                             maxLength = memoSupport.maxLength,
@@ -285,6 +309,7 @@ fun SendV2Screen(
                     is SendStep.InputRequired -> when (step.inputType) {
                         SendInputType.Amount -> stringResource(R.string.Send_EnterAmount)
                         SendInputType.Address -> stringResource(R.string.Send_EnterAddress)
+                        SendInputType.Extra -> stringResource(R.string.Send_EnterField, uiState.extraInput?.title.orEmpty())
                     }
 
                     is SendStep.Error -> when (step.error) {

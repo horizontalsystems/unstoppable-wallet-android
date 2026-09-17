@@ -81,6 +81,7 @@ class SendV2ConfirmViewModel(
     private val amount: BigDecimal,
     private val address: Address,
     private val memo: String?,
+    private val extraInput: String?,
     private val chainSettings: SendChainSettings?,
     val sendTransactionService: AbstractSendTransactionService,
     private val xRateService: XRateService,
@@ -160,7 +161,7 @@ class SendV2ConfirmViewModel(
                 emitState()
             }
             try {
-                val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, chainSettings)
+                val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, extraInput, chainSettings)
                     ?: throw UnsupportedOperationException(token.blockchainType.uid)
                 submittedAmount = value
                 sendTransactionService.setSendTransactionData(data)
@@ -332,6 +333,7 @@ class SendV2ConfirmViewModel(
                 amount = input.amount,
                 address = input.address,
                 memo = input.memo,
+                extraInput = input.extraInput,
                 chainSettings = chainSettings,
                 sendTransactionService = SendTransactionServiceFactory.create(input.wallet.token),
                 xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),

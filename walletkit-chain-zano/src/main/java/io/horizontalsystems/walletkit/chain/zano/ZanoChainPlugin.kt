@@ -49,6 +49,7 @@ class ZanoChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Zano(address, amount, memo)
 

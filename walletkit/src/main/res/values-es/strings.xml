@@ -1910,7 +1910,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">Para recibir %1$s, necesita activar el token. XRP Ledger requiere una línea de confianza para cada token, que bloquea 0,2 XRP de su saldo mientras exista. Sin ella, su billetera no puede recibir %2$s – la transacción será rechazada y los fondos no se entregarán.</string>
     <string name="Activate_Xrp_ReserveNote">La activación bloquea %1$s como reserva en su billetera. Se libera si la línea de confianza se elimina más tarde.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">No tiene suficiente XRP disponible para cubrir la reserva de línea de confianza y la tarifa de red.</string>
-    <string name="Send_DestinationTag_Hint">Etiqueta de destino (opcional)</string>
     <string name="Send_DestinationTag_Info">Los intercambios y algunos servicios requieren una etiqueta de destino para acreditar su depósito. La etiqueta es pública en el libro mayor.</string>
     <string name="Send_DestinationTag_Required">Esta dirección requiere una etiqueta de destino. Los pagos sin una son rechazados.</string>
     <string name="Send_DestinationTag_Invalid">La etiqueta de destino debe ser un número entero de 0 a 4294967295.</string>

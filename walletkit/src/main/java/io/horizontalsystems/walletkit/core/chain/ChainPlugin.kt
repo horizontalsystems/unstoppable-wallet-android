@@ -304,16 +304,26 @@ interface ChainPlugin {
     suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? = null
 
     /**
+     * A chain-specific field on the send screen above the memo (the XRP destination tag), or
+     * null when the chain has none. [address] is the chosen recipient, or null while none is
+     * chosen yet; whether the field is required and whether the address fixes its value
+     * depend on it.
+     */
+    suspend fun sendExtraInput(token: Token, address: String?): SendExtraInput? = null
+
+    /**
      * A plain transfer of [amount] to [address] carrying [memo] as SendTransactionData for the
-     * chain's send-transaction service, or null when the chain cannot build one. [settings]
-     * are the per-send choices made on the chain's settings page (see [sendSettingsPage]),
-     * if any; what the user was not asked about (fee rate) takes the service's defaults.
+     * chain's send-transaction service, or null when the chain cannot build one. [extraInput]
+     * is what was typed into the chain's [sendExtraInput] field, if any. [settings] are the
+     * per-send choices made on the chain's settings page (see [sendSettingsPage]), if any;
+     * what the user was not asked about (fee rate) takes the service's defaults.
      */
     fun sendTransactionData(
         token: Token,
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData? = null
 
@@ -360,6 +370,22 @@ interface SendChainSettings
 data class SendMemoSupport(
     val maxLength: Int,
     val visibility: io.horizontalsystems.walletkit.modules.memo.MemoVisibility,
+)
+
+/**
+ * A chain-specific text field on the send screen. [fixedValue] is a value the recipient
+ * address itself carries, which locks the field; [required] says the recipient will not
+ * accept a transfer without one. [validate] answers the error for a typed value, or null
+ * when it is acceptable.
+ */
+data class SendExtraInput(
+    val title: String,
+    val info: String,
+    val required: Boolean,
+    val fixedValue: String?,
+    val keyboardType: androidx.compose.ui.text.input.KeyboardType,
+    val maxLength: Int,
+    val validate: (String) -> String?,
 )
 
 /** A row on the manage-account private/public keys screens, navigating to a chain page. */
