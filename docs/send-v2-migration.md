@@ -67,3 +67,18 @@ they land.
 
 - [x] Delete per-chain send screens and view models, `EnterAddressPage`, `SendPage`,
       `ChainPlugin.SendScreen` / `ChainSendScreenArgs`.
+
+## Pending
+
+Known gaps left open on purpose, to be worked on after the flow has landed:
+
+- [ ] The fee, nonce and private send settings pages look up their confirmation view model
+      without a factory; after process death the lookup cannot recreate it and the app
+      crashes on restore. Give the pages the confirmation input and pass the factory.
+- [ ] Per-send chain settings (Bitcoin coin control and time lock, Monero outputs) are lost
+      after process death on confirmation, and the send form underneath restores empty.
+- [ ] `FiatService` has no cleanup, so its price collector outlives the send view model.
+- [ ] The EVM fee and gas-price service scopes are not cancelled when the confirmation
+      view model clears.
+- [ ] The memo field counts characters, not bytes; Stellar's limit is 28 bytes.
+- [ ] Drop the CodeRabbit path filters for the removed send screen directories.
