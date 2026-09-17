@@ -20,7 +20,9 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -81,6 +83,13 @@ class CrossPayConfirmViewModel(
     // the deposit could fund one order while the screen and history describe the other.
     private var commitJob: Job? = null
 
+    // The chain service and its sub-services are plain objects; their collectors and every
+    // deposit fed to them run on this one confined thread so their state stays consistent.
+    // It is an IO thread: signing and broadcasting block on it.
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val serviceDispatcher = Dispatchers.IO.limitedParallelism(1)
+    private val serviceScope = CoroutineScope(viewModelScope.coroutineContext + serviceDispatcher)
+
     init {
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect {
@@ -100,7 +109,9 @@ class CrossPayConfirmViewModel(
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 val data = depositData ?: return@collect
                 try {
-                    sendTransactionService.setSendTransactionData(data)
+                    withContext(serviceDispatcher) {
+                        sendTransactionService.setSendTransactionData(data)
+                    }
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Throwable) {
@@ -120,7 +131,7 @@ class CrossPayConfirmViewModel(
             }
         }
 
-        sendTransactionService.start(viewModelScope)
+        sendTransactionService.start(serviceScope)
 
         commit()
     }
@@ -180,7 +191,7 @@ class CrossPayConfirmViewModel(
 
     private fun commit() {
         commitJob?.cancel()
-        commitJob = viewModelScope.launch(Dispatchers.Default) {
+        commitJob = viewModelScope.launch(serviceDispatcher) {
             try {
                 error = null
 
@@ -197,7 +208,7 @@ class CrossPayConfirmViewModel(
                 sendTransactionService.setSendTransactionData(data)
 
                 // CountDownTimer binds to the current thread's Looper, so the expiry timer
-                // must start on Main — this coroutine runs on Default.
+                // must start on Main — this coroutine runs on the service thread.
                 withContext(Dispatchers.Main) {
                     timerService.start(QUOTE_LIFETIME_SECONDS)
                 }
@@ -215,7 +226,7 @@ class CrossPayConfirmViewModel(
         timerService.stop()
     }
 
-    suspend fun send(): SendTransactionResult = withContext(Dispatchers.Default) {
+    suspend fun send(): SendTransactionResult = withContext(serviceDispatcher) {
         val order = order ?: throw CrossPayError.CommitFailed()
 
         synchronized(this@CrossPayConfirmViewModel) {

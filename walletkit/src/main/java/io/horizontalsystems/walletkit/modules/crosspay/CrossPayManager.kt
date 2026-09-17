@@ -86,8 +86,11 @@ class CrossPayManager {
             throw CrossPayError.CommitFailed()
         }
 
-        val depositAddress = execution.depositAddress ?: throw CrossPayError.CommitFailed()
+        val depositAddress = execution.depositAddress
+        if (depositAddress.isNullOrBlank()) throw CrossPayError.CommitFailed()
         val depositAmount = execution.amount?.toBigDecimalOrNull() ?: throw CrossPayError.CommitFailed()
+        // A deposit of nothing funds nothing, whatever floor the provider states.
+        if (depositAmount <= BigDecimal.ZERO) throw CrossPayError.CommitFailed()
 
         val minSellAmount = route.minSellAmount
 
