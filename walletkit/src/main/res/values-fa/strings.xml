@@ -862,4 +862,13 @@
     <string name="RiskLevel_Excellent">عالی</string>
     <string name="RiskLevel_Good">خوب</string>
     <string name="RiskLevel_Fair">متوسط</string>
+    <string name="Send_EnterAmount">وارد کردن مقدار</string>
+    <string name="Send_ToAddress">آدرس دریافت کننده</string>
+    <string name="Send_Available">موجود: %s</string>
+    <string name="Send_Tab_Standard">استاندارد</string>
+    <string name="Send_Tab_Private">خصوصی</string>
+    <string name="Send_Utxos_Description">سکه‌هایی را که می‌خواهید در تراکنش خرج کنید را به صورت دستی انتخاب کنید.</string>
+    <string name="Send_InputsOutputs_Description">نحوه ساختار شدن ورودی‌ها و خروجی‌های تراکنش را تغییر می‌دهد.</string>
+    <string name="Send_TimeLock">قفل زمانی</string>
+    <string name="PrivateSend_Tab_Description">ارسال خصوصی پیوند مستقیم زنجیری بین آدرس شما و گیرنده را از طریق یک واسطه محرمانه پنهان می‌کند.</string>
 </resources>

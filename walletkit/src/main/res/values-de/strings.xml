@@ -1936,4 +1936,13 @@
     <string name="RiskLevel_Excellent">Ausgezeichnet</string>
     <string name="RiskLevel_Good">Gut</string>
     <string name="RiskLevel_Fair">Befriedigend</string>
+    <string name="Send_EnterAmount">Betrag eingeben</string>
+    <string name="Send_ToAddress">Empfängeradresse</string>
+    <string name="Send_Available">Verfügbar: %s</string>
+    <string name="Send_Tab_Standard">Standard</string>
+    <string name="Send_Tab_Private">Privat</string>
+    <string name="Send_Utxos_Description">Wählen Sie manuell aus, welche Coins in der Transaktion ausgegeben werden sollen.</string>
+    <string name="Send_InputsOutputs_Description">Ändert die Struktur von Transaktionseingaben und -ausgaben.</string>
+    <string name="Send_TimeLock">Zeitsperre</string>
+    <string name="PrivateSend_Tab_Description">Private Send verbirgt die direkte On-Chain-Verbindung zwischen Ihrer Adresse und dem Empfänger durch einen vertraulichen Vermittler.</string>
 </resources>

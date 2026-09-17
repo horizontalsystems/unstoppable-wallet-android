@@ -1934,4 +1934,13 @@
     <string name="RiskLevel_Excellent">Отличный</string>
     <string name="RiskLevel_Good">Хороший</string>
     <string name="RiskLevel_Fair">Приемлемо</string>
+    <string name="Send_EnterAmount">Введите сумму</string>
+    <string name="Send_ToAddress">Адрес получателя</string>
+    <string name="Send_Available">Доступно: %s</string>
+    <string name="Send_Tab_Standard">Стандартный</string>
+    <string name="Send_Tab_Private">Приватный</string>
+    <string name="Send_Utxos_Description">Вручную выберите, какие монеты потратить в этой транзакции.</string>
+    <string name="Send_InputsOutputs_Description">Изменяет способ структурирования входов и выходов транзакции.</string>
+    <string name="Send_TimeLock">Временная блокировка</string>
+    <string name="PrivateSend_Tab_Description">Private Send скрывает прямую связь в блокчейне между вашим адресом и получателем через конфиденциального посредника.</string>
 </resources>

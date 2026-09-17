@@ -1928,4 +1928,13 @@
     <string name="RiskLevel_Excellent">우수</string>
     <string name="RiskLevel_Good">좋음</string>
     <string name="RiskLevel_Fair">보통</string>
+    <string name="Send_EnterAmount">금액 입력</string>
+    <string name="Send_ToAddress">받는 주소</string>
+    <string name="Send_Available">사용 가능: %s</string>
+    <string name="Send_Tab_Standard">표준</string>
+    <string name="Send_Tab_Private">비공개</string>
+    <string name="Send_Utxos_Description">거래에서 사용할 코인을 수동으로 선택하십시오.</string>
+    <string name="Send_InputsOutputs_Description">거래 입력 및 출력이 구조화되는 방식을 변경합니다.</string>
+    <string name="Send_TimeLock">타임락</string>
+    <string name="PrivateSend_Tab_Description">프라이빗 센드는 귀하의 주소와 수신자 간의 직접적인 온체인 연결을 기밀 중개자를 통해 숨깁니다.</string>
 </resources>

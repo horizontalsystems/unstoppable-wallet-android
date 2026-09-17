@@ -1929,4 +1929,13 @@
     <string name="RiskLevel_Excellent">Excellent</string>
     <string name="RiskLevel_Good">Bon</string>
     <string name="RiskLevel_Fair">Acceptable</string>
+    <string name="Send_EnterAmount">Entrer le montant</string>
+    <string name="Send_ToAddress">Adresse de destination</string>
+    <string name="Send_Available">Disponible : %s</string>
+    <string name="Send_Tab_Standard">Standard</string>
+    <string name="Send_Tab_Private">Privé</string>
+    <string name="Send_Utxos_Description">Choisissez manuellement les pièces à dépenser dans la transaction.</string>
+    <string name="Send_InputsOutputs_Description">Modifie la structure des entrées et des sorties de transaction.</string>
+    <string name="Send_TimeLock">Verrou Temporel</string>
+    <string name="PrivateSend_Tab_Description">Private Send masque le lien direct on-chain entre votre adresse et le destinataire par un intermédiaire confidentiel.</string>
 </resources>

@@ -1932,4 +1932,13 @@
     <string name="RiskLevel_Excellent">Excelente</string>
     <string name="RiskLevel_Good">Bom</string>
     <string name="RiskLevel_Fair">Razoável</string>
+    <string name="Send_EnterAmount">Inserir valor</string>
+    <string name="Send_ToAddress">Endereço de destino</string>
+    <string name="Send_Available">Disponível: %s</string>
+    <string name="Send_Tab_Standard">Padrão</string>
+    <string name="Send_Tab_Private">Privado</string>
+    <string name="Send_Utxos_Description">Escolha manualmente quais moedas gastar na transação.</string>
+    <string name="Send_InputsOutputs_Description">Altera como as entradas e saídas da transação são estruturadas.</string>
+    <string name="Send_TimeLock">Bloqueio de Tempo</string>
+    <string name="PrivateSend_Tab_Description">Private Send oculta a ligação direta na cadeia entre seu endereço e o destinatário através de um intermediário confidencial.</string>
 </resources>

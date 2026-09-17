@@ -1927,4 +1927,13 @@
     <string name="RiskLevel_Excellent">优秀</string>
     <string name="RiskLevel_Good">良好</string>
     <string name="RiskLevel_Fair">一般</string>
+    <string name="Send_EnterAmount">输入金额</string>
+    <string name="Send_ToAddress">收款地址</string>
+    <string name="Send_Available">可用: %s</string>
+    <string name="Send_Tab_Standard">标准</string>
+    <string name="Send_Tab_Private">隐私</string>
+    <string name="Send_Utxos_Description">手动选择要在交易中花费的代币。</string>
+    <string name="Send_InputsOutputs_Description">更改交易输入和输出的结构方式。</string>
+    <string name="Send_TimeLock">时间锁</string>
+    <string name="PrivateSend_Tab_Description">私密发送通过机密中介隐藏您的地址与收款人之间的直接链上联系。</string>
 </resources>

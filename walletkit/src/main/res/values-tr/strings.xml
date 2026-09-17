@@ -1928,4 +1928,13 @@
     <string name="RiskLevel_Excellent">Mükemmel</string>
     <string name="RiskLevel_Good">İyi</string>
     <string name="RiskLevel_Fair">Orta</string>
+    <string name="Send_EnterAmount">Miktar Girin</string>
+    <string name="Send_ToAddress">Alıcı Adresi</string>
+    <string name="Send_Available">Mevcut: %s</string>
+    <string name="Send_Tab_Standard">Standart</string>
+    <string name="Send_Tab_Private">Özel</string>
+    <string name="Send_Utxos_Description">İşlemde harcayacağınız madeni paraları manuel olarak seçin.</string>
+    <string name="Send_InputsOutputs_Description">İşlem girdileri ve çıktılarının nasıl yapılandırıldığını değiştirir.</string>
+    <string name="Send_TimeLock">Zaman Kilidi</string>
+    <string name="PrivateSend_Tab_Description">Özel Gönderme, adresiniz ile alıcı arasındaki doğrudan zincir üstü bağlantıyı gizli bir aracı aracılığıyla gizler.</string>
 </resources>
