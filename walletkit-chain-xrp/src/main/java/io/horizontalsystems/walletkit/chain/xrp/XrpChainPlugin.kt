@@ -15,8 +15,10 @@ import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.XrpAdapter
 import io.horizontalsystems.walletkit.core.adapters.XrpTokenAdapter
 import io.horizontalsystems.walletkit.core.adapters.XrpTransactionsAdapter
+import io.horizontalsystems.walletkit.core.ISendXrpAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
 import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.core.factories.XrpTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.XrpAccountManager
@@ -29,6 +31,7 @@ import io.horizontalsystems.walletkit.modules.address.AddressHandlerXrp
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceXrp
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -43,6 +46,7 @@ import io.horizontalsystems.walletkit.modules.send.xrp.SendXrpModule
 import io.horizontalsystems.walletkit.modules.send.xrp.SendXrpScreen
 import io.horizontalsystems.walletkit.modules.send.xrp.SendXrpViewModel
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
+import java.math.BigDecimal
 import kotlin.reflect.KClass
 
 class XrpChainPlugin : ChainPlugin {
@@ -135,6 +139,28 @@ class XrpChainPlugin : ChainPlugin {
             null
         }
     }
+
+    override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? =
+        if (token.type == TokenType.Native) {
+            App.adapterManager.getAdapterForToken<ISendXrpAdapter>(token)?.maxSendableBalance
+                ?.coerceAtLeast(BigDecimal.ZERO)
+        } else {
+            null
+        }
+
+    // An X-address packs the destination tag with the account, so the tag travels with the
+    // address; a classic address carries none. XRP takes no memo on the unified send screen.
+    override fun sendTransactionData(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+        settings: SendChainSettings?,
+    ) = SendTransactionData.Xrp(
+        address = address,
+        amount = amount,
+        destinationTag = XrpKit.decodeXAddress(address)?.second,
+    )
 
     @Composable
     override fun SendScreen(args: ChainSendScreenArgs) {

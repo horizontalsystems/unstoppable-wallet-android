@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDestinationTag
+import io.horizontalsystems.walletkit.modules.send.SendErrorMinimumSendAmount
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,7 @@ import kotlinx.coroutines.withContext
  * amount is checked against what the adapter will actually let go, not the raw balance.
  */
 class SendTransactionServiceXrp(
-    token: Token,
+    private val token: Token,
 ) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Xrp())
 
@@ -63,6 +64,24 @@ class SendTransactionServiceXrp(
                     type = CautionViewItem.Type.Error
                 )
             )
+        }
+
+        // A destination not yet on the ledger is created by the payment, which the network
+        // accepts only from the base reserve upwards; below that the send would fail on
+        // broadcast, so it is refused here. A failed lookup blocks the send too.
+        if (token.type == TokenType.Native) {
+            try {
+                val minimum = adapter.getMinimumSendAmount(data.address)
+                if (minimum != null && data.amount < minimum) {
+                    result.add(
+                        SendErrorMinimumSendAmount("${minimum.toPlainString()} ${token.coin.code}").toCautionViewItem()
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                result.add(CautionViewItem.fromThrowable(e))
+            }
         }
 
         // An untagged payment to an address flagged RequireDestTag is rejected by the ledger,
