@@ -240,6 +240,15 @@ fun SendV2Screen(
                         onValueChange = viewModel::onEnterAmount,
                         onFiatValueChange = viewModel::onEnterFiatAmount,
                         onFocusChanged = { amountInputHasFocus = it },
+                        // The line doubles as the 100% shortcut whenever that percent is offered.
+                        onAvailableBalanceClick = if (100 in uiState.disabledPercents) {
+                            null
+                        } else {
+                            {
+                                focusManager.clearFocus()
+                                viewModel.onEnterAmountPercentage(100)
+                            }
+                        },
                     )
                     if (!uiState.hideAddress) {
                         SectionArrow()
@@ -341,7 +350,8 @@ private fun SendTab.tabItem() = when (this) {
  * The amount block: the available balance, the token with its badge, and the amount with
  * its fiat value. [token] is what the amount is in and may be unchosen; [balanceToken] is
  * what funds it and formats [availableBalance]. An [onTokenClick] makes the token a
- * selector with a drop-down arrow.
+ * selector with a drop-down arrow. An [onAvailableBalanceClick] makes the balance line a
+ * shortcut, shown in blue; without one it is a plain grey note.
  */
 @Composable
 internal fun AmountSection(
@@ -358,7 +368,7 @@ internal fun AmountSection(
     onFiatValueChange: (BigDecimal?) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
     onTokenClick: (() -> Unit)? = null,
-    greyedOutAvailableBalance: Boolean = false,
+    onAvailableBalanceClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -368,12 +378,21 @@ internal fun AmountSection(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             availableBalance?.let {
                 Text(
+                    modifier = if (onAvailableBalanceClick != null) {
+                        Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onAvailableBalanceClick,
+                        )
+                    } else {
+                        Modifier
+                    },
                     text = stringResource(
                         R.string.Send_Available,
                         App.numberFormatter.formatCoinFull(it, balanceToken.coin.code, balanceToken.decimals)
                     ),
                     style = ComposeAppTheme.typography.caption,
-                    color = if (greyedOutAvailableBalance) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.ocean,
+                    color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
                 )
             }
         }

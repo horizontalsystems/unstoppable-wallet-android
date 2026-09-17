@@ -140,7 +140,6 @@ fun CrossPayTabBody(
                 onFiatValueChange = viewModel::onEnterFiatAmount,
                 onFocusChanged = { amountInputHasFocus = it },
                 onTokenClick = openCoinSelect,
-                greyedOutAvailableBalance = true,
             )
             SectionArrow()
             AddressRow(
