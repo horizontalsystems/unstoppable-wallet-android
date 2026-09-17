@@ -294,14 +294,14 @@ fun SendV2Screen(
                             onValueChange = viewModel::onEnterMemo,
                         )
                     }
-                    VSpacer(32.dp)
                     if (uiState.isPrivateSend) {
+                        VSpacer(64.dp)
                         InfoCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             title = stringResource(R.string.PrivateSend_Toggle_Title),
                             text = stringResource(R.string.PrivateSend_Tab_Description)
                         )
-                        VSpacer(48.dp)
+                        VSpacer(32.dp)
                     }
                 }
 

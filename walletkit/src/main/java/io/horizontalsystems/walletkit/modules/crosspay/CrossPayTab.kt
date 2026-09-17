@@ -147,14 +147,18 @@ fun CrossPayTabBody(
                 onClick = { if (uiState.tokenOut != null) openAddress() },
             )
             HsDivider(modifier = Modifier.fillMaxWidth())
-            YouWillPayRow(uiState)
-            VSpacer(32.dp)
-            InfoCard(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                title = stringResource(R.string.CrossPay_Info_Title),
-                text = stringResource(R.string.CrossPay_Info_Description, uiState.tokenIn.coin.code)
-            )
-            VSpacer(48.dp)
+            Box {
+                YouWillPayRow(uiState)
+                Column {
+                    VSpacer(64.dp)
+                    InfoCard(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        title = stringResource(R.string.CrossPay_Info_Title),
+                        text = stringResource(R.string.CrossPay_Info_Description, uiState.tokenIn.coin.code)
+                    )
+                    VSpacer(32.dp)
+                }
+            }
         }
 
         val buttonTitle = when (val step = uiState.step) {
