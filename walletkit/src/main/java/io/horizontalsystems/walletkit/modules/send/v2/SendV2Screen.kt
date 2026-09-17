@@ -166,7 +166,10 @@ fun SendV2Screen(
             listOf()
         },
     ) {
-        val tabs = SendTab.entries.filter { it != SendTab.Private || uiState.privateSendSupported }
+        // CrossPay has no transaction path yet; its tab stays hidden until it does.
+        val tabs = SendTab.entries.filter {
+            it != SendTab.CrossPay && (it != SendTab.Private || uiState.privateSendSupported)
+        }
         val focusRequester = remember { FocusRequester() }
 
         Column(modifier = Modifier.fillMaxSize()) {

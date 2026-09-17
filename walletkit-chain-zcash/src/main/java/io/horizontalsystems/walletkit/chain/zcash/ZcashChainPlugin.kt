@@ -76,6 +76,8 @@ class ZcashChainPlugin(
         val adapter = App.adapterManager.getAdapterForToken<ISendZcashAdapter>(token) ?: return null
         val addressType = try {
             adapter.validate(address)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
             return null
         }
