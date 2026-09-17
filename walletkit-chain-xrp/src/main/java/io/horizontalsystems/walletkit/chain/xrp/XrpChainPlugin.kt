@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.chain.xrp
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -17,7 +16,6 @@ import io.horizontalsystems.walletkit.core.adapters.XrpTokenAdapter
 import io.horizontalsystems.walletkit.core.adapters.XrpTransactionsAdapter
 import io.horizontalsystems.walletkit.core.ISendXrpAdapter
 import io.horizontalsystems.walletkit.core.chain.ChainPlugin
-import io.horizontalsystems.walletkit.core.chain.ChainSendScreenArgs
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import io.horizontalsystems.walletkit.core.factories.XrpTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
@@ -42,9 +40,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.receive.ReceiveScreen
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.send.address.XrpAddressValidator
-import io.horizontalsystems.walletkit.modules.send.xrp.SendXrpModule
-import io.horizontalsystems.walletkit.modules.send.xrp.SendXrpScreen
-import io.horizontalsystems.walletkit.modules.send.xrp.SendXrpViewModel
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -161,19 +156,4 @@ class XrpChainPlugin : ChainPlugin {
         amount = amount,
         destinationTag = XrpKit.decodeXAddress(address)?.second,
     )
-
-    @Composable
-    override fun SendScreen(args: ChainSendScreenArgs) {
-        val factory = SendXrpModule.Factory(args.wallet, args.address, args.hideAddress)
-        val sendViewModel = viewModel<SendXrpViewModel>(factory = factory)
-        SendXrpScreen(
-            args.title,
-            args.navigation,
-            sendViewModel,
-            args.amountInputModeViewModel,
-            args.sendEntryPointDestId,
-            args.amount,
-            riskyAddress = args.riskyAddress,
-        )
-    }
 }
