@@ -1912,7 +1912,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">Pour recevoir %1$s, vous devez activer le token. Le ledger XRP nécessite une ligne de confiance pour chaque token, qui bloque 0,2 XRP de votre solde tant qu\'elle existe. Sans elle, votre portefeuille ne peut pas recevoir %2$s – la transaction sera rejetée et les fonds ne seront pas livrés.</string>
     <string name="Activate_Xrp_ReserveNote">L\'activation verrouille %1$s comme réserve dans votre portefeuille. Il est libéré si la ligne de confiance est supprimée ultérieurement.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">Vous n\'avez pas assez de XRP dépensable pour couvrir la réserve de ligne de confiance et les frais de réseau.</string>
-    <string name="Send_DestinationTag_Hint">Balise de destination (optionnel)</string>
     <string name="Send_DestinationTag_Info">Les bourses et certains services nécessitent une balise de destination pour créditer votre dépôt. La balise est publique sur le ledger.</string>
     <string name="Send_DestinationTag_Required">Cette adresse nécessite une balise de destination. Les paiements sans un sont rejetés.</string>
     <string name="Send_DestinationTag_Invalid">La balise de destination doit être un nombre entier de 0 à 4294967295.</string>

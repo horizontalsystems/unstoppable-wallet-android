@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import io.horizontalsystems.walletkit.core.chain.SendExtraInput
 import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -30,7 +31,7 @@ import java.math.RoundingMode
 
 enum class SendTab { Standard, Private, CrossPay }
 
-enum class SendInputType { Amount, Address }
+enum class SendInputType { Amount, Address, Extra }
 
 sealed class SendStep {
     data class InputRequired(val inputType: SendInputType) : SendStep()
@@ -52,6 +53,10 @@ data class SendUiState(
     val riskyAddress: Boolean,
     val memo: String?,
     val memoSupport: SendMemoSupport?,
+    /** The chain's own field above the memo, if it has one. */
+    val extraInput: SendExtraInput?,
+    val extraInputValue: String?,
+    val extraInputError: String?,
     val chainSettings: SendChainSettings?,
     val privateSendSupported: Boolean,
     val hideAddress: Boolean,
@@ -95,6 +100,9 @@ class SendViewModel(
     private val hideAddress = prefill?.hideAddress == true
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
+    private var extraInput: SendExtraInput? = null
+    private var extraInputValue: String? = null
+    private var extraInputError: String? = null
     private var chainSettings: SendChainSettings? = null
     private var networkState = networkAvailabilityService.stateFlow.value
     private var privateSendSupported = privateSendManager.isSupported(wallet.token)
@@ -227,8 +235,16 @@ class SendViewModel(
             if (memoSupport == null) {
                 memo = null
             }
+            extraInput = chainPlugin?.sendExtraInput(wallet.token, address?.hex)
+            // A value the address itself carries replaces whatever was typed.
+            extraInput?.fixedValue?.let { setExtraInputValue(it) }
             emitState()
         }
+    }
+
+    private fun setExtraInputValue(value: String) {
+        extraInputValue = value.trim().ifBlank { null }
+        extraInputError = extraInputValue?.let { extraInput?.validate?.invoke(it) }
     }
 
     override fun createState() = SendUiState(
@@ -244,6 +260,9 @@ class SendViewModel(
         riskyAddress = riskyAddress,
         memo = memo,
         memoSupport = memoSupport,
+        extraInput = extraInput,
+        extraInputValue = extraInputValue,
+        extraInputError = extraInputError,
         chainSettings = chainSettings,
         privateSendSupported = privateSendSupported,
         hideAddress = hideAddress,
@@ -263,6 +282,15 @@ class SendViewModel(
         }
         if (address == null) {
             return SendStep.InputRequired(SendInputType.Address)
+        }
+        // The chain's own field matters only for a plain send; a private send goes to the
+        // provider's deposit address, which the field is not about.
+        val extraInput = extraInput?.takeIf { tab != SendTab.Private }
+        if (extraInput != null) {
+            extraInputError?.let { return SendStep.Error(Throwable(it)) }
+            if (extraInput.required && extraInputValue == null) {
+                return SendStep.InputRequired(SendInputType.Extra)
+            }
         }
         return SendStep.Proceed
     }
@@ -312,6 +340,11 @@ class SendViewModel(
 
     fun onEnterMemo(memo: String) {
         this.memo = memo.ifBlank { null }
+        emitState()
+    }
+
+    fun onEnterExtraInput(value: String) {
+        setExtraInputValue(value)
         emitState()
     }
 

@@ -40,6 +40,9 @@ they land.
       is retried and then shown as a caution.
 - [x] Zcash send-to-self rejection: the address entry screen's Zcash validator refuses the
       wallet's own address, so it never reaches confirmation.
+- [x] XRP: a destination tag field in place of the memo, locked to the tag of an X-address
+      and required when the recipient demands one; the base reserve minimum for an unfunded
+      recipient is checked on confirmation.
 - [x] Bitcoin and Monero UTxOs rows read "total / total" until outputs are picked by hand;
       an automatic selection is only made when the transaction is built, so no earlier
       count exists.

@@ -1907,7 +1907,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">%1$s을(를) 받으려면 토큰을 활성화해야 합니다. XRP 레져는 각 토큰에 대한 신뢰선이 필요하며, 이는 존재하는 동안 잔액의 0.2 XRP를 잠급니다. 신뢰선이 없으면 지갑이 %2$s을(를) 받을 수 없습니다. 트랜잭션이 거부되고 자금이 전달되지 않습니다.</string>
     <string name="Activate_Xrp_ReserveNote">활성화하면 %1$s이(가) 지갑의 예비금으로 잠깁니다. 신뢰선을 나중에 제거하면 해제됩니다.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">신뢰선 예비금과 네트워크 수수료를 충당할 수 있는 충분한 사용 가능한 XRP가 없습니다.</string>
-    <string name="Send_DestinationTag_Hint">대상 태그(선택사항)</string>
     <string name="Send_DestinationTag_Info">거래소 및 일부 서비스에서는 입금을 송금하기 위해 대상 태그가 필요합니다. 태그는 원장에 공개됩니다.</string>
     <string name="Send_DestinationTag_Required">이 주소에는 대상 태그가 필요합니다. 태그 없는 결제는 거부됩니다.</string>
     <string name="Send_DestinationTag_Invalid">대상 태그는 0부터 4294967295까지의 정수여야 합니다.</string>

@@ -1915,7 +1915,6 @@
     <string name="ActivationRequired_Xrp_DialogDescription">Um %1$s zu empfangen, müssen Sie das Token aktivieren. Das XRP Ledger erfordert eine Vertrauenslinie für jedes Token, die 0,2 XRP Ihres Guthabens sperrt, solange sie existiert. Ohne diese kann Ihr Wallet %2$s nicht empfangen – die Transaktion wird abgelehnt und die Gelder werden nicht übermittelt.</string>
     <string name="Activate_Xrp_ReserveNote">Die Aktivierung sperrt %1$s als Reserve in Ihrem Wallet. Sie wird freigegeben, wenn die Vertrauenslinie später entfernt wird.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">Sie haben nicht genug verfügbare XRP, um die Vertrauenslinie-Reserve und die Netzwerkgebühr zu decken.</string>
-    <string name="Send_DestinationTag_Hint">Ziel-Tag (optional)</string>
     <string name="Send_DestinationTag_Info">Börsen und einige Dienste erfordern ein Ziel-Tag, um Ihre Einzahlung gutzuschreiben. Das Tag ist öffentlich im Ledger.</string>
     <string name="Send_DestinationTag_Required">Diese Adresse erfordert ein Ziel-Tag. Zahlungen ohne eines werden abgelehnt.</string>
     <string name="Send_DestinationTag_Invalid">Destination Tag muss eine ganze Zahl von 0 bis 4294967295 sein.</string>

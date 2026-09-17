@@ -67,6 +67,7 @@ class MoneroChainPlugin(
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Monero(
         address = address,

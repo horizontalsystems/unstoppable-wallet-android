@@ -491,6 +491,7 @@
 
     <string name="Send_EnterAddress">Enter Address</string>
     <string name="Send_EnterAmount">Enter Amount</string>
+    <string name="Send_EnterField">Enter %s</string>
     <string name="Send_ToAddress">To Address</string>
     <string name="Send_Available">Available: %s</string>
     <string name="Send_Tab_Standard">Standard</string>
@@ -1177,7 +1178,7 @@
     <string name="ActivationRequired_Xrp_DialogDescription">To receive %1$s, you need to activate the token. The XRP Ledger requires a trust line for each token, which locks 0.2 XRP of your balance while it exists. Without it, your wallet cannot receive %2$s — the transaction will be rejected and the funds will not be delivered.</string>
     <string name="Activate_Xrp_ReserveNote">Activating locks %1$s as a reserve in your wallet. It is released if the trust line is removed later.</string>
     <string name="Activate_Xrp_InsufficientBalance_Description">You don\'t have enough spendable XRP to cover the trust line reserve and the network fee.</string>
-    <string name="Send_DestinationTag_Hint">Destination tag (optional)</string>
+    <string name="Send_DestinationTag_Title">Destination tag</string>
     <string name="Send_DestinationTag_Info">Exchanges and some services require a destination tag to credit your deposit. The tag is public on the ledger.</string>
     <string name="Send_DestinationTag_Required">This address requires a destination tag. Payments without one are rejected.</string>
     <string name="Send_DestinationTag_Invalid">Destination tag must be a whole number from 0 to 4294967295.</string>

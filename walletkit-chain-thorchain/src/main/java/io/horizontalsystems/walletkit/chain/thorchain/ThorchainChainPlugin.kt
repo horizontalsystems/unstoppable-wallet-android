@@ -48,6 +48,7 @@ class ThorchainChainPlugin : ChainPlugin {
         amount: BigDecimal,
         address: String,
         memo: String?,
+        extraInput: String?,
         settings: SendChainSettings?,
     ) = SendTransactionData.Thorchain.Send(address, amount, memo.orEmpty())
 

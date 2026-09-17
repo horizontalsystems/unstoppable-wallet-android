@@ -40,6 +40,8 @@ data class SendV2ConfirmPage(val input: Input) : HSPage() {
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal,
         val address: Address,
         val memo: String?,
+        /** What was typed into the chain's own field, see ChainPlugin.sendExtraInput. */
+        val extraInput: String?,
         @Serializable(with = HSScreenKClassSerializer::class) val sendEntryPointDestId: KClass<out HSPage>,
     )
 }
