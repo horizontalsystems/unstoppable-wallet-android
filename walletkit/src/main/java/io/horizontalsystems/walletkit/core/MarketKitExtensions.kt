@@ -608,7 +608,7 @@ val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
     }
 
 private val noBadgeCoinCodes by lazy {
-    listOf("AVAX", "XLM", "DASH", "ZEC", "XMR", "XEC", "POL", "SOL", "XDAI", "FTM", "RUNE", "CACAO")
+    listOf("AVAX", "XLM", "DASH", "ZEC", "XMR", "XEC", "POL", "SOL", "XDAI", "FTM", "RUNE", "CACAO", "XRP")
 }
 
 val Token.coinCodeWithNetwork: String
