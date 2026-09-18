@@ -28,6 +28,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
+import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.R
 
 enum class SendTab { Standard, Private, CrossPay }
 
@@ -283,6 +285,13 @@ class SendViewModel(
         }
         if (address == null) {
             return SendStep.InputRequired(SendInputType.Address)
+        }
+        // The memo cell stops typing at the limit, but a prefilled memo arrives past it. It
+        // is shown as it came and blocks the send, rather than being cut to something else.
+        val memoSupport = memoSupport?.takeIf { tab != SendTab.Private }
+        val memo = memo
+        if (memoSupport != null && memo != null && memo.toByteArray(Charsets.UTF_8).size > memoSupport.maxBytes) {
+            return SendStep.Error(Throwable(Translator.getString(R.string.Send_Error_MemoTooLong)))
         }
         // The chain's own field matters only for a plain send; a private send goes to the
         // provider's deposit address, which the field is not about.

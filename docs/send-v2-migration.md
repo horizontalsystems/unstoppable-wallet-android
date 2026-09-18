@@ -68,9 +68,9 @@ they land.
 - [x] Delete per-chain send screens and view models, `EnterAddressPage`, `SendPage`,
       `ChainPlugin.SendScreen` / `ChainSendScreenArgs`.
 
-## Pending
+## Follow-ups
 
-Known gaps left open on purpose, to be worked on after the flow has landed:
+Gaps left open on purpose when the flow landed, and how each was closed:
 
 - [x] Pages are no longer restored after process death: the back stack lives in memory and
       a killed app starts at the main screen. That closes the settings pages' restore crash
