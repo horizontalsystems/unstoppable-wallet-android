@@ -1942,4 +1942,8 @@
     <string name="PrivateSend_Tab_Description">Private Send oculta el vínculo directo en cadena entre su dirección y el destinatario a través de un intermediario confidencial.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">No se pudo estimar la tarifa de red</string>
     <string name="Send_DestinationTag_Title">Etiqueta de destino</string>
+    <string name="SwapHistory_StatusDepositing">Depositando…</string>
+    <string name="SwapHistory_StatusSwapping">Intercambiando…</string>
+    <string name="SwapHistory_StatusSending">Enviando…</string>
+    <string name="SwapHistory_StatusActionRequired">Se requiere acción</string>
 </resources>

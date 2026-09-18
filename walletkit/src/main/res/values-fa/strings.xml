@@ -882,4 +882,8 @@
     <string name="PrivateSend_Tab_Description">Private Send پیوند مستقیم روی زنجیره بلاک بین آدرس شما و دریافت کننده را از طریق یک واسطه محرمانه پنهان می کند.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">نتوانستیم کارمزد شبکه را تخمین بزنیم</string>
     <string name="Send_DestinationTag_Title">برچسب مقصد</string>
+    <string name="SwapHistory_StatusDepositing">درحال واریز…</string>
+    <string name="SwapHistory_StatusSwapping">درحال تبدیل…</string>
+    <string name="SwapHistory_StatusSending">درحال ارسال…</string>
+    <string name="SwapHistory_StatusActionRequired">نیاز به اقدام</string>
 </resources>

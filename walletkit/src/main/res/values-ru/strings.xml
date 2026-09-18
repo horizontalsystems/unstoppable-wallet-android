@@ -1949,4 +1949,8 @@
     <string name="PrivateSend_Tab_Description">Private Send скрывает прямую связь в блокчейне между вашим адресом и получателем через конфиденциального посредника.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Не удалось оценить комиссию сети</string>
     <string name="Send_DestinationTag_Title">Тег назначения</string>
+    <string name="SwapHistory_StatusDepositing">Пополнение…</string>
+    <string name="SwapHistory_StatusSwapping">Обмен…</string>
+    <string name="SwapHistory_StatusSending">Отправка…</string>
+    <string name="SwapHistory_StatusActionRequired">Требуется действие</string>
 </resources>

@@ -1942,4 +1942,8 @@
     <string name="PrivateSend_Tab_Description">Private Send 通过机密中介隐藏您的地址与收款人之间的直接链上连接。</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">无法估算网络费用</string>
     <string name="Send_DestinationTag_Title">目标标签</string>
+    <string name="SwapHistory_StatusDepositing">充值中…</string>
+    <string name="SwapHistory_StatusSwapping">兑换中…</string>
+    <string name="SwapHistory_StatusSending">发送中…</string>
+    <string name="SwapHistory_StatusActionRequired">需要操作</string>
 </resources>

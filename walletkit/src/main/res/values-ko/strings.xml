@@ -1939,4 +1939,8 @@
     <string name="PrivateSend_Tab_Description">Private Send는 기밀 중개자를 통해 귀하의 주소와 수신자 간의 직접적인 온체인 연결을 숨깁니다.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">네트워크 수수료를 추정할 수 없습니다</string>
     <string name="Send_DestinationTag_Title">대상 태그</string>
+    <string name="SwapHistory_StatusDepositing">입금 중…</string>
+    <string name="SwapHistory_StatusSwapping">스왑 중…</string>
+    <string name="SwapHistory_StatusSending">전송 중…</string>
+    <string name="SwapHistory_StatusActionRequired">조치 필요</string>
 </resources>

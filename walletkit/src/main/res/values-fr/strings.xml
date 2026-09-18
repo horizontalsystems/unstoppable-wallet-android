@@ -1944,4 +1944,8 @@
     <string name="PrivateSend_Tab_Description">Private Send masque le lien direct en chaîne entre votre adresse et le destinataire via un intermédiaire confidentiel.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Impossible d\'estimer les frais de réseau</string>
     <string name="Send_DestinationTag_Title">Tag de destination</string>
+    <string name="SwapHistory_StatusDepositing">Dépôt en cours…</string>
+    <string name="SwapHistory_StatusSwapping">Échange en cours…</string>
+    <string name="SwapHistory_StatusSending">Envoi en cours…</string>
+    <string name="SwapHistory_StatusActionRequired">Action requise</string>
 </resources>

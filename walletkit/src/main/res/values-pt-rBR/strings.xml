@@ -1947,4 +1947,8 @@
     <string name="PrivateSend_Tab_Description">Private Send oculta o vínculo direto na blockchain entre seu endereço e o destinatário através de um intermediário confidencial.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Não foi possível estimar a taxa de rede</string>
     <string name="Send_DestinationTag_Title">Tag de destino</string>
+    <string name="SwapHistory_StatusDepositing">Depositando…</string>
+    <string name="SwapHistory_StatusSwapping">Trocando…</string>
+    <string name="SwapHistory_StatusSending">Enviando…</string>
+    <string name="SwapHistory_StatusActionRequired">Ação necessária</string>
 </resources>

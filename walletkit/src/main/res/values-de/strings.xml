@@ -1947,4 +1947,8 @@
     <string name="PrivateSend_Tab_Description">Private Send verbirgt die direkte On-Chain-Verbindung zwischen Ihrer Adresse und dem Empfänger durch einen vertraulichen Vermittler.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Netzwerkgebühr konnte nicht geschätzt werden</string>
     <string name="Send_DestinationTag_Title">Ziel-Tag</string>
+    <string name="SwapHistory_StatusDepositing">Einzahlung läuft…</string>
+    <string name="SwapHistory_StatusSwapping">Tausch läuft…</string>
+    <string name="SwapHistory_StatusSending">Versand läuft…</string>
+    <string name="SwapHistory_StatusActionRequired">Aktion erforderlich</string>
 </resources>

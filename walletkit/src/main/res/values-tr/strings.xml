@@ -1943,4 +1943,8 @@
     <string name="PrivateSend_Tab_Description">Private Send, adresiniz ile alıcı arasındaki doğrudan zincir üstü bağlantısını gizli bir aracı aracılığıyla gizler.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Ağ ücreti tahmin edilemedi</string>
     <string name="Send_DestinationTag_Title">Hedef etiketi</string>
+    <string name="SwapHistory_StatusDepositing">Para yatırılıyor…</string>
+    <string name="SwapHistory_StatusSwapping">Takas yapılıyor…</string>
+    <string name="SwapHistory_StatusSending">Gönderiliyor…</string>
+    <string name="SwapHistory_StatusActionRequired">İşlem gerekli</string>
 </resources>
