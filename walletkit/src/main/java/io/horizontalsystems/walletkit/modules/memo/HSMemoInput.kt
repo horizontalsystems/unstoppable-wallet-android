@@ -22,10 +22,13 @@ enum class MemoVisibility {
     Offchain
 }
 
-/** The memo cell of the send screen, with the memo's visibility explained in its caption. */
+/**
+ * The memo cell of the send screen, with the memo's visibility explained in its caption.
+ * [maxBytes] is the network's limit, so the cell counts UTF-8 bytes.
+ */
 @Composable
 fun HSMemoInput(
-    maxLength: Int,
+    maxBytes: Int,
     memo: String? = null,
     visibility: MemoVisibility = MemoVisibility.Public,
     onValueChange: (String) -> Unit
@@ -35,7 +38,8 @@ fun HSMemoInput(
         hint = stringResource(R.string.Send_DialogMemoHint),
         enabled = true,
         keyboardType = KeyboardType.Text,
-        maxLength = maxLength,
+        maxLength = maxBytes,
+        countBytes = true,
         caption = when (visibility) {
             MemoVisibility.Encrypted -> stringResource(R.string.Send_Memo_EncryptedInfo)
             MemoVisibility.Offchain -> stringResource(R.string.Send_Memo_OffchainInfo)

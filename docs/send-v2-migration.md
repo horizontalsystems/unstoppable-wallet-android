@@ -61,7 +61,7 @@ they land.
 - [x] Amount field affordances: the percent bar above the keyboard covers clear and max;
       the shake on invalid input is dropped.
 - [x] Memo max lengths follow the networks: Stellar 28, Bitcoin 80, Thorchain 250; the
-      rest are within their chains' limits. The field counts characters, not bytes.
+      rest are within their chains' limits. The field counts UTF-8 bytes.
 
 ## Cleanup
 
@@ -80,5 +80,5 @@ Known gaps left open on purpose, to be worked on after the flow has landed:
 - [x] `FiatService` and the send transaction service have a cleanup that their owning view
       models call, so the price subscription and the EVM fee and gas-price pollers stop with
       the screen.
-- [ ] The memo field counts characters, not bytes; Stellar's limit is 28 bytes.
+- [x] The memo field counts UTF-8 bytes, which is what every chain's limit is.
 - [ ] Drop the CodeRabbit path filters for the removed send screen directories.

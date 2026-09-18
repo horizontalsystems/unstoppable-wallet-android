@@ -288,7 +288,7 @@ fun SendV2Screen(
                     }
                     if (memoSupport != null) {
                         HSMemoInput(
-                            maxLength = memoSupport.maxLength,
+                            maxBytes = memoSupport.maxBytes,
                             memo = uiState.memo,
                             visibility = memoSupport.visibility,
                             onValueChange = viewModel::onEnterMemo,

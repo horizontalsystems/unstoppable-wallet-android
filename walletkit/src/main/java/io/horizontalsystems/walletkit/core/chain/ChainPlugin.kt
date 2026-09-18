@@ -366,9 +366,12 @@ interface ChainPlugin {
 /** Per-send, chain-specific choices made on the send screen and carried to confirmation. */
 interface SendChainSettings
 
-/** How a chain's send memo is limited and who can read it once sent. */
+/**
+ * How a chain's send memo is limited and who can read it once sent. [maxBytes] is what the
+ * network stores, so the field counts the memo's UTF-8 bytes, not its characters.
+ */
 data class SendMemoSupport(
-    val maxLength: Int,
+    val maxBytes: Int,
     val visibility: io.horizontalsystems.walletkit.modules.memo.MemoVisibility,
 )
 

@@ -77,7 +77,7 @@ class MoneroChainPlugin(
     )
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Offchain)
+        SendMemoSupport(maxBytes = 120, visibility = MemoVisibility.Offchain)
 
     private val reselectScope = CoroutineScope(Dispatchers.Default)
 

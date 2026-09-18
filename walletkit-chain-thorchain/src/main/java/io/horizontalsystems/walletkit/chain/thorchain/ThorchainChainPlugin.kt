@@ -53,7 +53,7 @@ class ThorchainChainPlugin : ChainPlugin {
     ) = SendTransactionData.Thorchain.Send(address, amount, memo.orEmpty())
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxLength = 250, visibility = MemoVisibility.Public)
+        SendMemoSupport(maxBytes = 250, visibility = MemoVisibility.Public)
 
     override val blockchainType: BlockchainType = BlockchainType.Thorchain
 

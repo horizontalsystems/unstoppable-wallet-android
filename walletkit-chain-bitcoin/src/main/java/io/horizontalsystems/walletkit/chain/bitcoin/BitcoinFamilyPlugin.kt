@@ -103,7 +103,7 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
 
     // The memo becomes an OP_RETURN output; nodes relay at most 80 bytes of data there.
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxLength = 80, visibility = MemoVisibility.Public)
+        SendMemoSupport(maxBytes = 80, visibility = MemoVisibility.Public)
 
     protected val btcBlockchainManager get() = App.btcBlockchainManager
 

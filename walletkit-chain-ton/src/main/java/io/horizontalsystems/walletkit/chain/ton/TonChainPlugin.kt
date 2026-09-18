@@ -64,7 +64,7 @@ class TonChainPlugin(
     ) = SendTransactionData.Ton.Regular(address, amount, memo)
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Public)
+        SendMemoSupport(maxBytes = 120, visibility = MemoVisibility.Public)
 
     companion object {
         val tonConnectManager: TonConnectManager

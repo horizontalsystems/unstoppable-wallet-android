@@ -73,7 +73,7 @@ class StellarChainPlugin : ChainPlugin {
     // A Stellar text memo holds at most 28 bytes; the SDK rejects a longer one when the
     // transaction is built.
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxLength = 28, visibility = MemoVisibility.Public)
+        SendMemoSupport(maxBytes = 28, visibility = MemoVisibility.Public)
 
     override val blockchainType: BlockchainType = BlockchainType.Stellar
 

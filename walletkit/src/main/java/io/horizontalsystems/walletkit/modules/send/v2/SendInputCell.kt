@@ -27,7 +27,8 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 /**
  * A full-width single-line text cell on the send screen, closed by a divider, with a
  * caption below. The row above provides the top divider. A [value] handed in replaces the
- * typed text, which is how a locked value is shown.
+ * typed text, which is how a locked value is shown. [maxLength] counts characters, or
+ * UTF-8 bytes when [countBytes] is set, for fields whose limit is what a network stores.
  */
 @Composable
 fun SendInputCell(
@@ -36,6 +37,7 @@ fun SendInputCell(
     enabled: Boolean,
     keyboardType: KeyboardType,
     maxLength: Int,
+    countBytes: Boolean = false,
     caption: String,
     captionColor: Color,
     onValueChange: (String) -> Unit,
@@ -62,7 +64,8 @@ fun SendInputCell(
                 value = text,
                 enabled = enabled,
                 onValueChange = { new ->
-                    if (new.length <= maxLength) {
+                    val length = if (countBytes) new.toByteArray(Charsets.UTF_8).size else new.length
+                    if (length <= maxLength) {
                         text = new
                         onValueChange(new)
                     }

@@ -54,7 +54,7 @@ class ZanoChainPlugin(
     ) = SendTransactionData.Zano(address, amount, memo)
 
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxLength = 120, visibility = MemoVisibility.Offchain)
+        SendMemoSupport(maxBytes = 120, visibility = MemoVisibility.Offchain)
 
     // Created on first use: before any Zano wallet exists the kit manager's node/background
     // subscriptions are no-ops, so lazy construction preserves startup behavior.
