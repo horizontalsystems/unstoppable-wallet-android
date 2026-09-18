@@ -87,7 +87,7 @@ class SendViewModel(
     private val privateSendManager: PrivateSendManager,
     private val networkAvailabilityService: NetworkAvailabilityService,
     private val contactsRepository: ContactsRepository,
-    prefill: SendV2Page.Prefill?,
+    purpose: SendV2Page.Purpose,
 ) : ViewModelUiState<SendUiState>() {
 
     private var currency = currencyManager.baseCurrency
@@ -99,7 +99,9 @@ class SendViewModel(
     private var contactName: String? = null
     private var riskyAddress = false
     private var memo: String? = null
-    private val hideAddress = prefill?.hideAddress == true
+    // A donation's recipient is fixed by the app and not shown.
+    private val hideAddress = purpose is SendV2Page.Purpose.Donation
+    private val prefill = (purpose as? SendV2Page.Purpose.Transfer)?.prefill
     private var memoSupport: SendMemoSupport? = null
     private var memoSupportJob: Job? = null
     private var extraInput: SendExtraInput? = null
@@ -117,8 +119,8 @@ class SendViewModel(
     init {
         // A hidden destination is the app's own choice and needs no confirmation; a visible
         // prefilled address is confirmed through the address screen, which sets it here.
-        if (hideAddress) {
-            address = prefill?.address?.let { Address(it) }
+        if (purpose is SendV2Page.Purpose.Donation) {
+            address = Address(purpose.address)
         }
         memo = prefill?.memo?.ifBlank { null }
 
@@ -370,7 +372,7 @@ class SendViewModel(
 
     class Factory(
         private val wallet: Wallet,
-        private val prefill: SendV2Page.Prefill? = null,
+        private val purpose: SendV2Page.Purpose = SendV2Page.Purpose.Transfer(),
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -383,7 +385,7 @@ class SendViewModel(
                 App.privateSendManager,
                 NetworkAvailabilityService(App.connectivityManager),
                 App.contactsRepository,
-                prefill,
+                purpose,
             ) as T
         }
     }

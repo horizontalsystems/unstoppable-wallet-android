@@ -13,41 +13,54 @@ import kotlin.reflect.KClass
 
 /**
  * Send screen for every blockchain type. After a successful send the flow pops back to and
- * including [sendEntryPointDestId], or this page when none is given. [prefill] seeds the
- * form from a payment link or a fixed destination. [title] replaces the "Send <coin>" header
- * when the flow has a more specific purpose (a donation).
+ * including [sendEntryPointDestId], or this page when none is given. [purpose] says what the
+ * flow is for and carries its inputs: a plain transfer asks for the recipient, possibly
+ * seeded from a payment link, and offers every tab; a donation goes to a fixed address and
+ * leaves CrossPay out.
  */
 @Serializable
 data class SendV2Page(
     val wallet: Wallet,
     @Serializable(with = HSScreenKClassSerializer::class) val sendEntryPointDestId: KClass<out HSPage>? = null,
-    val prefill: Prefill? = null,
-    val title: String? = null,
+    val purpose: Purpose = Purpose.Transfer(),
 ) : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        val viewModel = viewModel<SendViewModel>(factory = SendViewModel.Factory(wallet, prefill))
+        val viewModel = viewModel<SendViewModel>(factory = SendViewModel.Factory(wallet, purpose))
         SendV2Screen(
             navigation = navigation,
             viewModel = viewModel,
             sendEntryPointDestId = sendEntryPointDestId ?: SendV2Page::class,
-            prefillAddress = prefill?.address?.takeIf { !prefill.hideAddress },
-            title = title,
+            purpose = purpose,
         )
     }
 
-    /**
-     * Values the form starts with. A prefilled [address] is still confirmed through the
-     * address entry screen, with its validation and checks, unless [hideAddress] is set: then
-     * it is a destination the app itself chose (a donation address), taken as is and not
-     * shown.
-     */
+    /** What the send is for; each purpose carries its inputs and implies how the screen is presented. */
+    @Serializable
+    sealed class Purpose {
+        /**
+         * The user picks the recipient and every tab is offered. [prefill] seeds the form
+         * from a payment link; its address is still confirmed through the address entry
+         * screen, with its validation and checks.
+         */
+        @Serializable
+        data class Transfer(val prefill: Prefill? = null) : Purpose()
+
+        /**
+         * A destination the app itself chose. [address] is taken as is and not shown, the
+         * header reads [title], and CrossPay, with its own token and recipient choice, is
+         * left out.
+         */
+        @Serializable
+        data class Donation(val address: String, val title: String) : Purpose()
+    }
+
+    /** Values a payment link supplies for a [Purpose.Transfer]. */
     @Serializable
     data class Prefill(
         val address: String? = null,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val memo: String? = null,
-        val hideAddress: Boolean = false,
     )
 }

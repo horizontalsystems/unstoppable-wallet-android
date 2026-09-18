@@ -38,10 +38,12 @@ data object DonateTokenSelectPage : HSPage() {
                         SendV2Page(
                             wallet = viewItem.wallet,
                             sendEntryPointDestId = DonateTokenSelectPage::class,
-                            prefill = SendV2Page.Prefill(address = donateAddress, hideAddress = true),
-                            title = Translator.getString(
-                                R.string.Settings_DonateToken,
-                                viewItem.wallet.token.fullCoin.coin.code
+                            purpose = SendV2Page.Purpose.Donation(
+                                address = donateAddress,
+                                title = Translator.getString(
+                                    R.string.Settings_DonateToken,
+                                    viewItem.wallet.token.fullCoin.coin.code
+                                ),
                             ),
                         )
                     )

@@ -92,10 +92,11 @@ fun SendV2Screen(
     navigation: HSNavigation,
     viewModel: SendViewModel,
     sendEntryPointDestId: KClass<out HSPage>,
-    prefillAddress: String? = null,
-    title: String? = null,
+    purpose: SendV2Page.Purpose = SendV2Page.Purpose.Transfer(),
 ) {
     val uiState = viewModel.uiState
+    val title = (purpose as? SendV2Page.Purpose.Donation)?.title
+    val prefillAddress = (purpose as? SendV2Page.Purpose.Transfer)?.prefill?.address
     val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
     val hasSettings = remember { chainPlugin?.sendSettingsPage(uiState.wallet, null) != null }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -180,7 +181,13 @@ fun SendV2Screen(
             listOf()
         },
     ) {
-        val tabs = SendTab.entries.filter { it != SendTab.Private || uiState.privateSendSupported }
+        val tabs = SendTab.entries.filter {
+            when (it) {
+                SendTab.Standard -> true
+                SendTab.Private -> uiState.privateSendSupported
+                SendTab.CrossPay -> purpose is SendV2Page.Purpose.Transfer
+            }
+        }
         val focusRequester = remember { FocusRequester() }
 
         Column(modifier = Modifier.fillMaxSize()) {

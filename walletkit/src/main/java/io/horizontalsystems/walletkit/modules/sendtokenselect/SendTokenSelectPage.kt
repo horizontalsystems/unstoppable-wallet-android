@@ -38,7 +38,7 @@ data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
                     SendV2Page(
                         wallet = item.wallet,
                         sendEntryPointDestId = SendTokenSelectPage::class,
-                        prefill = prefill,
+                        purpose = SendV2Page.Purpose.Transfer(prefill),
                     )
                 )
             },
