@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -34,6 +35,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -84,11 +86,9 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
         factory = SwapInfoViewModel.Factory(recordId),
     )
     val uiState = viewModel.uiState
-    val view = LocalView.current
-    val leah = ComposeAppTheme.colors.leah
 
     HSScaffold(
-        title = stringResource(R.string.SwapInfo_Title),
+        title = operationTitle(uiState.operation),
         onBack = navigation::removeLastOrNull,
         bottomBar = {
             if (uiState.status == SwapStatus.ActionRequired) {
@@ -130,159 +130,13 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
         ) {
             VSpacer(12.dp)
 
-            // Token pair card
-            Box(
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
-                ) {
-                    CellPrimary(
-                        left = {
-                            HsImageCircle(
-                                modifier = Modifier.size(32.dp),
-                                url = uiState.tokenInImageUrl,
-                                alternativeUrl = uiState.tokenInAlternativeImageUrl,
-                                placeholder = R.drawable.coin_placeholder,
-                            )
-                        },
-                        middle = {
-                            CellMiddleInfo(
-                                title = uiState.tokenInCode.hs,
-                                subtitle = (uiState.tokenInBadge
-                                    ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
-                            )
-                        },
-                        right = {
-                            CellRightInfo(
-                                titleSubheadSb = uiState.amountIn.hs,
-                                subtitle = uiState.fiatAmountIn?.hs,
-                            )
-                        },
-                    )
-                    CellPrimary(
-                        left = {
-                            HsImageCircle(
-                                modifier = Modifier.size(32.dp),
-                                url = uiState.tokenOutImageUrl,
-                                alternativeUrl = uiState.tokenOutAlternativeImageUrl,
-                                placeholder = R.drawable.coin_placeholder,
-                            )
-                        },
-                        middle = {
-                            CellMiddleInfo(
-                                title = uiState.tokenOutCode.hs,
-                                subtitle = (uiState.tokenOutBadge
-                                    ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
-                            )
-                        },
-                        right = {
-                            CellRightInfo(
-                                titleSubheadSb = (uiState.amountOut ?: "---").hs,
-                                subtitle = uiState.fiatAmountOut?.hs,
-                            )
-                        },
-                    )
-                }
-                HsDivider(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .background(ComposeAppTheme.colors.lawrence),
-                    painter = painterResource(R.drawable.ic_arrow_down_20),
-                    tint = ComposeAppTheme.colors.grey,
-                    contentDescription = null,
-                )
-            }
-
-            VSpacer(16.dp)
-
-            // Details card
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .padding(vertical = 8.dp),
-            ) {
-                // Provider
-                if (uiState.showProvider) {
-                    CellSecondary(
-                        middle = {
-                            CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
-                        },
-                        right = {
-                            CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
-                        },
-                    )
-                }
-                // Date
-                CellSecondary(
-                    middle = {
-                        CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Date).hs)
-                    },
-                    right = {
-                        CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
-                    },
-                )
-                // Swap Time
-                uiState.swapTime?.let { swapTime ->
-                    val infoTitle = stringResource(R.string.Swap_SwapTime)
-                    val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
-                    CellSecondary(
-                        middle = {
-                            CellMiddleInfoTextIcon(
-                                text = infoTitle.hs,
-                                icon = painterResource(R.drawable.ic_info_24),
-                                iconTint = ComposeAppTheme.colors.grey,
-                                onIconClick = {
-                                    navigation.slideFromBottom(
-                                        SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
-                                    )
-                                },
-                            )
-                        },
-                        right = {
-                            CellRightInfoTextIcon(
-                                text = swapTime.hs(
-                                    color = if (uiState.swapTimeAttention) {
-                                        ComposeAppTheme.colors.jacob
-                                    } else {
-                                        leah
-                                    }
-                                )
-                            )
-                        },
-                    )
-                }
-                // Recipient
-                uiState.recipientAddress?.let { address ->
-                    CellSecondary(
-                        middle = {
-                            CellMiddleInfoTextIcon(text = stringResource(R.string.Swap_Recipient).hs)
-                        },
-                        right = {
-                            CellRightControlsButtonText(
-                                subtitle = address.shortenAddress().hs(color = leah),
-                                icon = painterResource(R.drawable.copy_filled_24),
-                                iconTint = leah,
-                                onIconClick = {
-                                    TextHelper.copyText(address)
-                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                },
-                            )
-                        },
-                    )
-                }
+            when (uiState.operation) {
+                SwapOperation.Swap -> SwapInfoContent(uiState, navigation)
+                SwapOperation.PrivateSend -> PrivateSendInfoContent(uiState, navigation)
+                SwapOperation.CrossPay -> CrossPayInfoContent(uiState, navigation)
             }
 
             VSpacer(24.dp)
-
 
             subheadSB_grey(
                 text = stringResource(R.string.SwapInfo_StatusTitle),
@@ -316,7 +170,185 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
 }
 
 @Composable
-private fun SwapStatusSteps(status: SwapStatus, isSingleTransactionSwap: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
+private fun SwapInfoContent(uiState: SwapInfoUiState, navigation: HSNavigation) {
+    val view = LocalView.current
+    val leah = ComposeAppTheme.colors.leah
+
+    Column {
+        // Token pair card
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence),
+        ) {
+            CellPrimary(
+                left = {
+                    HsImageCircle(
+                        modifier = Modifier.size(32.dp),
+                        url = uiState.tokenInImageUrl,
+                        alternativeUrl = uiState.tokenInAlternativeImageUrl,
+                        placeholder = R.drawable.coin_placeholder,
+                    )
+                },
+                middle = {
+                    CellMiddleInfo(
+                        title = uiState.tokenInCode.hs,
+                        subtitle = (uiState.tokenInBadge
+                            ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
+                    )
+                },
+                right = {
+                    CellRightInfo(
+                        titleSubheadSb = uiState.amountIn.hs,
+                        subtitle = uiState.fiatAmountIn?.hs,
+                    )
+                },
+            )
+            DividerWithArrow()
+            CellPrimary(
+                left = {
+                    HsImageCircle(
+                        modifier = Modifier.size(32.dp),
+                        url = uiState.tokenOutImageUrl,
+                        alternativeUrl = uiState.tokenOutAlternativeImageUrl,
+                        placeholder = R.drawable.coin_placeholder,
+                    )
+                },
+                middle = {
+                    CellMiddleInfo(
+                        title = uiState.tokenOutCode.hs,
+                        subtitle = (uiState.tokenOutBadge
+                            ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
+                    )
+                },
+                right = {
+                    CellRightInfo(
+                        titleSubheadSb = (uiState.amountOut ?: "---").hs,
+                        subtitle = uiState.fiatAmountOut?.hs,
+                    )
+                },
+            )
+        }
+
+        VSpacer(16.dp)
+
+        // Details card
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .padding(vertical = 8.dp),
+        ) {
+            // Provider
+            if (uiState.showProvider) {
+                CellSecondary(
+                    middle = {
+                        CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
+                    },
+                    right = {
+                        CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
+                    },
+                )
+            }
+            // Date
+            CellSecondary(
+                middle = {
+                    CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Date).hs)
+                },
+                right = {
+                    CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
+                },
+            )
+            // Swap Time
+            uiState.swapTime?.let { swapTime ->
+                val infoTitle = stringResource(R.string.Swap_SwapTime)
+                val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
+                CellSecondary(
+                    middle = {
+                        CellMiddleInfoTextIcon(
+                            text = infoTitle.hs,
+                            icon = painterResource(R.drawable.ic_info_24),
+                            iconTint = ComposeAppTheme.colors.grey,
+                            onIconClick = {
+                                navigation.slideFromBottom(
+                                    SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                                )
+                            },
+                        )
+                    },
+                    right = {
+                        CellRightInfoTextIcon(
+                            text = swapTime.hs(
+                                color = if (uiState.swapTimeAttention) {
+                                    ComposeAppTheme.colors.jacob
+                                } else {
+                                    leah
+                                }
+                            )
+                        )
+                    },
+                )
+            }
+            // Recipient
+            uiState.recipientAddress?.let { address ->
+                RecipientRow(address = address, view = view)
+            }
+        }
+    }
+}
+
+/**
+ * The divider between the two rows of a token card with the direction arrow centred on it.
+ * The strip itself is only as tall as the line, so the arrow overlaps both rows equally no
+ * matter how tall each row is.
+ */
+@Composable
+internal fun DividerWithArrow() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(0.5.dp)
+            .zIndex(1f),
+        contentAlignment = Alignment.Center,
+    ) {
+        HsDivider()
+        Icon(
+            modifier = Modifier
+                .requiredSize(20.dp)
+                .background(ComposeAppTheme.colors.lawrence),
+            painter = painterResource(R.drawable.ic_arrow_down_20),
+            tint = ComposeAppTheme.colors.grey,
+            contentDescription = null,
+        )
+    }
+}
+
+/** A "Recipient" detail row with a shortened address and a copy action. */
+@Composable
+internal fun RecipientRow(address: String, view: android.view.View) {
+    val leah = ComposeAppTheme.colors.leah
+    CellSecondary(
+        middle = {
+            CellMiddleInfoTextIcon(text = stringResource(R.string.Swap_Recipient).hs)
+        },
+        right = {
+            CellRightControlsButtonText(
+                subtitle = address.shortenAddress().hs(color = leah),
+                icon = painterResource(R.drawable.copy_filled_24),
+                iconTint = leah,
+                onIconClick = {
+                    TextHelper.copyText(address)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                },
+            )
+        },
+    )
+}
+
+@Composable
+internal fun SwapStatusSteps(status: SwapStatus, isSingleTransactionSwap: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
     val context = LocalContext.current
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
@@ -542,6 +574,6 @@ private fun StepIndicator(isActive: Boolean, isDone: Boolean, isFailed: Boolean 
     }
 }
 
-private fun String.shortenAddress(): String {
+internal fun String.shortenAddress(): String {
     return if (length > 12) take(6) + "..." + takeLast(6) else this
 }

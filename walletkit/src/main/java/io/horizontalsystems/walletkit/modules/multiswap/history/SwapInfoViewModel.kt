@@ -13,6 +13,7 @@ import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.coinIconUrl
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
+import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.multiswap.SwapTimeStatus
@@ -36,6 +37,7 @@ class SwapInfoViewModel(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val numberFormatter: IAppNumberFormatter,
+    private val contactsRepository: ContactsRepository,
 ) : ViewModelUiState<SwapInfoUiState>() {
 
     private var tokenInImageUrl: String = ""
@@ -53,7 +55,10 @@ class SwapInfoViewModel(
     private var providerName: String = ""
     private var formattedDate: String = ""
     private var status: SwapStatus = SwapStatus.Depositing
+    private var operation: SwapOperation = SwapOperation.Swap
     private var recipientAddress: String? = null
+    private var recipientContactName: String? = null
+    private var estimatedArrival: String? = null
     private var depositingTxUrl: String? = null
     private var swappingTxUrl: String? = null
     private var sendingTxUrl: String? = null
@@ -79,7 +84,10 @@ class SwapInfoViewModel(
         showProvider = status in listOf(SwapStatus.Refunded, SwapStatus.Failed, SwapStatus.ActionRequired),
         formattedDate = formattedDate,
         status = status,
+        operation = operation,
         recipientAddress = recipientAddress,
+        recipientContactName = recipientContactName,
+        estimatedArrival = estimatedArrival,
         depositingTxUrl = depositingTxUrl,
         swappingTxUrl = swappingTxUrl,
         sendingTxUrl = sendingTxUrl,
@@ -128,7 +136,20 @@ class SwapInfoViewModel(
         if (BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Local) {
             status = SwapStatus.ActionRequired
         }
-        recipientAddress = record.recipientAddress.takeIf { record.customRecipientAddress }
+        operation = SwapOperation.fromString(record.operation)
+        // A private send or CrossPay always has a real recipient the user typed; a plain swap
+        // only shows one when it differs from the user's own wallet.
+        recipientAddress = record.recipientAddress.takeIf { record.customRecipientAddress || operation != SwapOperation.Swap }
+        recipientContactName = recipientAddress?.let { address ->
+            contactsRepository
+                .getContactsFiltered(BlockchainType.fromUid(record.tokenOutBlockchainTypeUid), addressQuery = address)
+                .firstOrNull()
+                ?.name
+        }
+        // Meaningful only while funds are still moving.
+        estimatedArrival = record.estimatedTime
+            ?.takeIf { status in listOf(SwapStatus.Depositing, SwapStatus.Swapping, SwapStatus.Sending) }
+            ?.let { formatDuration(it) }
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         swappingTxUrl = buildProviderTxUrl(record.providerId, record.transactionHash, record.depositAddress)
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
@@ -222,6 +243,7 @@ class SwapInfoViewModel(
                 marketKit = App.marketKit,
                 currencyManager = App.currencyManager,
                 numberFormatter = App.numberFormatter,
+                contactsRepository = App.contactsRepository,
             ) as T
         }
     }
@@ -244,7 +266,11 @@ data class SwapInfoUiState(
     val showProvider: Boolean,
     val formattedDate: String,
     val status: SwapStatus,
+    val operation: SwapOperation,
     val recipientAddress: String?,
+    val recipientContactName: String?,
+    // Localized duration, present only while the operation is still in progress.
+    val estimatedArrival: String?,
     val depositingTxUrl: String?,
     val swappingTxUrl: String?,
     val sendingTxUrl: String?,

@@ -60,6 +60,7 @@ class SwapHistoryViewModel(
                 fiatAmountIn = null,
                 fiatAmountOut = null,
                 status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing),
+                operation = SwapOperation.fromString(record.operation),
                 formattedDate = formatDate(Date(record.timestamp)),
             )
         }
@@ -173,6 +174,7 @@ data class SwapHistoryViewItem(
     val fiatAmountIn: String?,
     val fiatAmountOut: String?,
     val status: SwapStatus,
+    val operation: SwapOperation,
     val formattedDate: String,
 )
 

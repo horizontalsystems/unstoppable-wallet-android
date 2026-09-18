@@ -1003,6 +1003,10 @@
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap History</string>
     <string name="SwapHistory_EmptyList">You don\'t have any pending or past swaps yet.</string>
+    <string name="SwapHistory_StatusDepositing">Depositing…</string>
+    <string name="SwapHistory_StatusSwapping">Swapping…</string>
+    <string name="SwapHistory_StatusSending">Sending…</string>
+    <string name="SwapHistory_StatusActionRequired">Action required</string>
     <string name="SwapInfo_Title">Swap Info</string>
 
     <!-- Swap Info -->
