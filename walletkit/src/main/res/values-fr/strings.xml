@@ -1948,4 +1948,5 @@
     <string name="SwapHistory_StatusSwapping">Échange en cours…</string>
     <string name="SwapHistory_StatusSending">Envoi en cours…</string>
     <string name="SwapHistory_StatusActionRequired">Action requise</string>
+    <string name="Send_Error_MemoTooLong">Le mémo est trop long</string>
 </resources>

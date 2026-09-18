@@ -1946,4 +1946,5 @@
     <string name="SwapHistory_StatusSwapping">Intercambiando…</string>
     <string name="SwapHistory_StatusSending">Enviando…</string>
     <string name="SwapHistory_StatusActionRequired">Se requiere acción</string>
+    <string name="Send_Error_MemoTooLong">El memo es demasiado largo</string>
 </resources>

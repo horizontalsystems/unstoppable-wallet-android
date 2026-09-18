@@ -1135,6 +1135,7 @@
     "Send_Error_LowFee": "Fee Error",
     "Send_Error_LowFee_Description": "Fee Rate is too low.",
     "Send_Error_MaximumAmount": "Max. amount %s",
+    "Send_Error_MemoTooLong": "Memo is too long",
     "Send_Error_MinimumAmount_Description": "Minimum amount must be %s",
     "Send_Error_MinimumAmount_Title": "Minimum amount",
     "Send_Error_SendToSelf": "Sending %s to your own address is not allowed. Please enter a different recipient address.",

@@ -1946,4 +1946,5 @@
     <string name="SwapHistory_StatusSwapping">兑换中…</string>
     <string name="SwapHistory_StatusSending">发送中…</string>
     <string name="SwapHistory_StatusActionRequired">需要操作</string>
+    <string name="Send_Error_MemoTooLong">备忘录过长</string>
 </resources>

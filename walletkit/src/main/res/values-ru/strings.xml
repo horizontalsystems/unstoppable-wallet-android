@@ -1953,4 +1953,5 @@
     <string name="SwapHistory_StatusSwapping">Обмен…</string>
     <string name="SwapHistory_StatusSending">Отправка…</string>
     <string name="SwapHistory_StatusActionRequired">Требуется действие</string>
+    <string name="Send_Error_MemoTooLong">Заметка слишком длинная</string>
 </resources>
