@@ -72,13 +72,11 @@ they land.
 
 Known gaps left open on purpose, to be worked on after the flow has landed:
 
-- [ ] The fee, nonce and private send settings pages look up their confirmation view model
-      without a factory; after process death the lookup cannot recreate it and the app
-      crashes on restore. Give the pages the confirmation input and pass the factory.
-- [ ] Per-send chain settings (Bitcoin coin control and time lock, Monero outputs) are lost
-      after process death on confirmation, and the send form underneath restores empty.
+- [x] Pages are no longer restored after process death: the back stack lives in memory and
+      a killed app starts at the main screen. That closes the settings pages' restore crash
+      and the loss of per-send chain settings on a restored confirmation.
 - [x] `FiatService` and the send transaction service have a cleanup that their owning view
       models call, so the price subscription and the EVM fee and gas-price pollers stop with
       the screen.
 - [x] The memo field counts UTF-8 bytes, which is what every chain's limit is.
-- [ ] Drop the CodeRabbit path filters for the removed send screen directories.
+- [x] The CodeRabbit path filters for the removed send screen directories are gone.

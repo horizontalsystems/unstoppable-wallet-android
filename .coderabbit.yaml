@@ -23,14 +23,6 @@ reviews:
     - "!**/generated/**"
     - "!**/*.pb.kt"
     - "!**/res/values-*/strings.xml"
-    # Per-chain send screens replaced by the unified send flow; nothing lives here any more.
-    - "!**/modules/send/zano/**"
-    - "!**/modules/send/xrp/**"
-    - "!**/modules/send/ton/**"
-    - "!**/modules/send/stellar/**"
-    - "!**/modules/send/thorchain/**"
-    - "!**/modules/send/evm/confirmation/**"
-    - "!**/modules/availablebalance/**"
 
   path_instructions:
     - path: "**/*.kt"
