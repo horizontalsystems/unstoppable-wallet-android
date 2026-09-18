@@ -30,7 +30,13 @@ class StellarSenderRegular(
 
         when (val tokenType = token.tokenQuery.tokenType) {
             is TokenType.Native -> {
-                stellarKit.sendNative(address, amount, memo)
+                // A payment to an account that is not on the ledger yet is rejected; the
+                // first transfer has to create the account instead.
+                if (stellarKit.doesAccountExist(address)) {
+                    stellarKit.sendNative(address, amount, memo)
+                } else {
+                    stellarKit.createAccount(address, amount, memo)
+                }
             }
 
             is TokenType.Asset -> {
