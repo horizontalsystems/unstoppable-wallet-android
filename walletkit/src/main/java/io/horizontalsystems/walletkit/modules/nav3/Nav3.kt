@@ -21,7 +21,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -32,8 +31,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.runtime.serialization.NavBackStackSerializer
-import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -65,14 +62,15 @@ fun Nav3(entryPage: HSPage) {
 
     val activity = LocalActivity.current
 
-    val backStack = rememberSerializable(
-        serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
-    ) {
-        // A market widget tap starts right on its page. Pushing it after the first frame would
-        // show the main screen first and then slide the page in. IntentEffect switches the tab
-        // behind it.
-        val pages = listOfNotNull(entryPage, marketDeepLinkPage(activity?.intent))
-        NavBackStack<HSPage>(*pages.toTypedArray())
+    // Kept by the view model across rotation; a new process starts a new stack (see there).
+    val backStack = remember {
+        mainActivityViewModel.navBackStack ?: run {
+            // A market widget tap starts right on its page. Pushing it after the first frame
+            // would show the main screen first and then slide the page in. IntentEffect
+            // switches the tab behind it.
+            val pages = listOfNotNull(entryPage, marketDeepLinkPage(activity?.intent))
+            NavBackStack<HSPage>(*pages.toTypedArray()).also { mainActivityViewModel.navBackStack = it }
+        }
     }
 
     val hsNavigation = remember { HSNavigation(backStack) }
@@ -160,7 +158,8 @@ private fun HandleNavigateToMain(
 private fun IntentEffect(viewModel: MainActivityViewModel, navigation: HSNavigation) {
     val activity = LocalActivity.current
     // The launch intent is acted on once, on a fresh start. After process death the activity
-    // comes back with the same intent, and the restored back stack already reflects it.
+    // comes back with the same intent; a pairing or payment link must not run again, and the
+    // market page it may have named is already the back stack's initial entry.
     var launchIntentHandled by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         if (launchIntentHandled) return@LaunchedEffect

@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.walletkit.IKeyStoreManager
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ISystemInfoManager
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
@@ -32,6 +34,13 @@ class MainActivityViewModel(
     val intentLiveData = MutableLiveData<Intent?>()
 
     var mainShowedOnce = localStorage.mainShowedOnceFlow.value
+
+    // The navigation back stack. Held here rather than in saved state on purpose: it
+    // survives rotation with the view model, and dies with the process. Inner pages depend
+    // on live state that a killed process loses (view models of the pages beneath them,
+    // adapters built only once the wallets load), so restoring them would crash or show a
+    // flow with its inputs gone; a fresh process starts at the root instead.
+    var navBackStack: NavBackStack<HSPage>? = null
 
     override fun createState() = MainUIState(
         mainShowedOnce = mainShowedOnce
