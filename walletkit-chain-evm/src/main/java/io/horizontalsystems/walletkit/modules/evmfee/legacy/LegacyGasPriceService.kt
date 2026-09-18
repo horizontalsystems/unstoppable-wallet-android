@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import kotlinx.coroutines.cancel
 
 class LegacyGasPriceService(
     private val gasPriceProvider: LegacyGasPriceProvider,
@@ -28,6 +29,10 @@ class LegacyGasPriceService(
     private var state: DataState<GasPriceInfo> = DataState.Loading
 
     override fun createState() = state
+
+    override fun clear() {
+        coroutineScope.cancel()
+    }
 
     override fun start() {
         if (initialGasPrice != null) {

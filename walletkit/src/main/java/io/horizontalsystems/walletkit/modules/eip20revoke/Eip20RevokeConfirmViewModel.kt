@@ -118,6 +118,11 @@ class Eip20RevokeConfirmViewModel(
         sendTransactionService.sendTransaction()
     }
 
+    override fun onCleared() {
+        fiatService.clear()
+        sendTransactionService.clear()
+    }
+
     class Factory(
         private val token: Token,
         private val spenderAddress: String,

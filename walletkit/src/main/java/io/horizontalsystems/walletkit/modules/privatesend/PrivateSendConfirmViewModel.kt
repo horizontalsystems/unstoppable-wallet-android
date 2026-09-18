@@ -221,6 +221,7 @@ class PrivateSendConfirmViewModel(
 
     override fun onCleared() {
         timerService.stop()
+        sendTransactionService.clear()
     }
 
     suspend fun send(): SendTransactionResult = withContext(serviceDispatcher) {

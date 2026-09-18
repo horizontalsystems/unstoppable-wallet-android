@@ -355,6 +355,10 @@ class SendViewModel(
         emitState()
     }
 
+    override fun onCleared() {
+        fiatService.clear()
+    }
+
     class Factory(
         private val wallet: Wallet,
         private val prefill: SendV2Page.Prefill? = null,

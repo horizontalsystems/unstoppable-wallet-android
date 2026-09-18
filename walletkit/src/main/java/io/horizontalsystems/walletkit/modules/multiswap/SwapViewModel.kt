@@ -250,6 +250,8 @@ class SwapViewModel(
         // The quote service keeps a standing subscription to provider suspensions, so it stays
         // referenced until its own scope is cancelled.
         quoteService.clear()
+        fiatServiceIn.clear()
+        fiatServiceOut.clear()
     }
 
     private fun requoteIfTimeout() {

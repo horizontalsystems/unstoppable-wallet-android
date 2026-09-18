@@ -128,6 +128,7 @@ class OpenCryptoPayConfirmationViewModel(
 
     override fun onCleared() {
         countdownJob?.cancel()
+        sendTransactionService.clear()
         super.onCleared()
     }
 

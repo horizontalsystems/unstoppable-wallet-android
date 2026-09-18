@@ -257,6 +257,10 @@ class SwapConfirmViewModel(
 
     override fun onCleared() {
         timerService.stop()
+        fiatServiceIn.clear()
+        fiatServiceOut.clear()
+        fiatServiceOutMin.clear()
+        sendTransactionService.clear()
     }
 
     fun refresh(silent: Boolean = false) {

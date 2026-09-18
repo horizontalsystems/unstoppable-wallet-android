@@ -32,6 +32,13 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     private val baseCurrency = App.currencyManager.baseCurrency
 
     abstract fun start(coroutineScope: CoroutineScope)
+
+    /**
+     * Releases what [start] set up outside the scope it was given (sub-services with their
+     * own scopes). The owning view model calls this when cleared.
+     */
+    open fun clear() = Unit
+
     abstract suspend fun setSendTransactionData(data: SendTransactionData)
     @Composable
     open fun GetSettingsContent(navigation: HSNavigation) = Unit

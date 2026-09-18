@@ -75,7 +75,8 @@ class SendTransactionServiceEvm(
         EvmKitManagerRegistry.getEvmKitManager(blockchainType)
             .getEvmKitWrapper(account, blockchainType)
     }
-    private val gasPriceService: IEvmGasPriceService by lazy {
+    // Lazy so a service that never started has nothing to release; see clear().
+    private val gasPriceServiceDelegate = lazy<IEvmGasPriceService> {
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
             val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
@@ -94,13 +95,15 @@ class SendTransactionServiceEvm(
             )
         }
     }
-    private val feeService by lazy {
+    private val gasPriceService by gasPriceServiceDelegate
+    private val feeServiceDelegate = lazy {
         val gasDataService = EvmCommonGasDataService.instance(
             evmKitWrapper.evmKit,
             evmKitWrapper.blockchainType
         )
         EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService)
     }
+    private val feeService by feeServiceDelegate
     private val coinServiceFactory by lazy {
         EvmCoinServiceFactory(
             token,
@@ -138,6 +141,13 @@ class SendTransactionServiceEvm(
         loading = loading,
         fields = fields,
     )
+
+    // The fee and gas-price services poll on scopes of their own, which the scope handed to
+    // start() does not cancel.
+    override fun clear() {
+        if (feeServiceDelegate.isInitialized()) feeService.clear()
+        if (gasPriceServiceDelegate.isInitialized()) gasPriceService.clear()
+    }
 
     override fun start(coroutineScope: CoroutineScope) {
         gasPriceService.start()

@@ -131,6 +131,11 @@ class Eip20ApproveViewModel(
         sendTransactionService.sendTransaction()
     }
 
+    override fun onCleared() {
+        fiatService.clear()
+        sendTransactionService.clear()
+    }
+
     class Factory(
         private val token: Token,
         private val requiredAllowance: BigDecimal,

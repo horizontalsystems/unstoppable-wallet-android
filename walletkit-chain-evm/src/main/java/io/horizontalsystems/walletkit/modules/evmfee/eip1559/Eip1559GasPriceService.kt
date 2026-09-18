@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
+import kotlinx.coroutines.cancel
 
 class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
@@ -50,6 +51,10 @@ class Eip1559GasPriceService(
 
     var currentPriorityFee: Long? = null
         private set
+
+    override fun clear() {
+        coroutineScope.cancel()
+    }
 
     override fun start() {
         if (initialGasPrice != null) {

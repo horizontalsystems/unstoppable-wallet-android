@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
+import io.horizontalsystems.walletkit.core.Clearable
 
 object EvmFeeModule {
     private const val surchargePercent = 10
@@ -63,7 +64,7 @@ interface IEvmFeeService {
     fun reset()
 }
 
-abstract class IEvmGasPriceService : ServiceState<DataState<GasPriceInfo>>() {
+abstract class IEvmGasPriceService : ServiceState<DataState<GasPriceInfo>>(), Clearable {
     abstract fun setRecommended()
     abstract fun start()
 }

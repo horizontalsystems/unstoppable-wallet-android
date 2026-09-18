@@ -323,6 +323,10 @@ class SendV2ConfirmViewModel(
         const val MAX_ADJUSTMENT_ROUNDS = 20
     }
 
+    override fun onCleared() {
+        sendTransactionService.clear()
+    }
+
     class Factory(
         private val input: SendV2ConfirmPage.Input,
         private val chainSettings: SendChainSettings?,
