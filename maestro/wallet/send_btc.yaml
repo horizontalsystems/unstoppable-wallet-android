@@ -25,14 +25,20 @@ env:
 - tapOn:
     text: "Send"
     index: 0
+- assertVisible: "Send BTC"
 
-# Enter the recipient
+# The recipient row opens the address page; Next brings the address back
+- tapOn: "To Address"
 - tapOn: "Address or Domain"
 - inputText: ${RECIPIENT}
 - hideKeyboard
 - tapOn: "Next"
+- assertVisible: ${RECIPIENT}
 
-# Enter the amount; Next enables once the fee is calculated
+# Enter the amount into the field showing the "0" placeholder
+- tapOn:
+    text: "0"
+    index: 0
 - inputText: ${AMOUNT}
 - hideKeyboard
 - extendedWaitUntil:
@@ -42,9 +48,11 @@ env:
     timeout: 30000
 - tapOn: "Next"
 
-# Confirmation must show exactly what was entered.
+# Confirmation must show exactly what was entered; the fee comes from the node.
 # Stop here — never tap the final Send button.
 - assertVisible: "Confirm Send"
 - assertVisible: ${AMOUNT}
 - assertVisible: ${RECIPIENT}
-- assertVisible: "Fee"
+- extendedWaitUntil:
+    visible: "Network Fee"
+    timeout: 30000
