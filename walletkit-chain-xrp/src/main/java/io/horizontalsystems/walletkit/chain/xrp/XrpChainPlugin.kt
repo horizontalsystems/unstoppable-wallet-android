@@ -131,6 +131,12 @@ class XrpChainPlugin : ChainPlugin {
 
     override fun addressValidator(token: Token): EnterAddressValidator = XrpAddressValidator(token)
 
+    override fun addressValidator(
+        token: Token,
+        allowOwnAddress: Boolean,
+        transparentOnly: Boolean,
+    ): EnterAddressValidator = XrpAddressValidator(token, allowOwnAddress)
+
     /** An unfunded account cannot receive less than the base reserve; say so on the balance row. */
     override suspend fun balanceWarning(wallet: Wallet): BalanceModule.BalanceWarning? {
         val adapter = App.adapterManager.getAdapterForWallet<XrpAdapter>(wallet) ?: return null
