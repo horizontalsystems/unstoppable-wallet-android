@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.EnabledWallet
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -50,16 +51,36 @@ class XrpAccountManager(
         val kit = kitManager.kitWrapper?.kit ?: return
         val account = accountManager.activeAccount ?: return
 
+        // trustLinesFlow is a StateFlow seeded from the kit's storage, so the first emission is
+        // what the kit already knew before this subscription; every later one comes from sync.
+        var initial = true
+        // kitStartedFlow is a StateFlow and may conflate a rapid false -> true, so the collector
+        // for the previous kit has to be dropped here, not only on `false`.
+        subscriptionJob?.cancel()
         subscriptionJob = coroutineScope.launch {
             kit.trustLinesFlow.collect { lines ->
-                handle(lines, account)
+                val isInitial = initial
+                initial = false
+                // coroutineScope has a plain Job: a throw here would cancel it and permanently
+                // kill the kitStartedFlow collector, so swallow and log.
+                try {
+                    handle(lines, account, isInitial)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    logger.warning("error", e)
+                }
             }
         }
     }
 
-    private fun handle(lines: List<TrustLine>, account: Account) {
+    private fun handle(lines: List<TrustLine>, account: Account, initial: Boolean) {
         val shouldAutoEnable = tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
-        if (account.origin == AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnable) return
+        // Lines the kit had stored before this subscription are enabled only when the user opted
+        // into XRP on the restore screen. Lines synced afterwards, i.e. the first sync of a kit
+        // enabled from Coin Manager or a token received later, are auto-enabled as on every
+        // other chain.
+        if (initial && account.origin == AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnable) return
         if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
 
         val held = lines.filter { it.balance > BigDecimal.ZERO }
