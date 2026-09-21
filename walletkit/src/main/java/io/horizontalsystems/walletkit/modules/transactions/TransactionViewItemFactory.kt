@@ -501,7 +501,7 @@ class TransactionViewItemFactory(
         val title: String
         val subtitle: String
         val primaryValue: ColoredValue?
-        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+        var secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
         var sentToSelf = false
 
         when (val recordType = record.type) {
@@ -527,7 +527,10 @@ class TransactionViewItemFactory(
             is XrpTransactionRecord.Type.TrustSet -> {
                 title = Translator.getString(R.string.Transactions_TrustSet)
                 subtitle = recordType.issuer.shorten()
-                primaryValue = getColoredValue(recordType.value, ColorName.Leah, true)
+                // The value is the trust limit (10^15 by default), not an amount moved, so it
+                // has no place on the row and no fiat equivalent; the info page shows it.
+                primaryValue = null
+                secondaryValue = null
                 iconX = singleValueIconType(recordType.value)
             }
 
@@ -600,7 +603,9 @@ class TransactionViewItemFactory(
             is StellarTransactionRecord.Type.ChangeTrust -> {
                 title = Translator.getString(R.string.Transactions_ChangeTrust)
                 subtitle = recordType.trustee.shorten()
-                primaryValue = getColoredValue(recordType.value, ColorName.Leah, true)
+                // The value is the trust limit, not an amount moved; see the XRP TrustSet row.
+                primaryValue = null
+                secondaryValue = null
                 iconX = singleValueIconType(recordType.value)
             }
 

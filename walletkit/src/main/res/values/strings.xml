@@ -1101,6 +1101,7 @@
     <string name="Transactions_StellarTransaction">Stellar Transaction</string>
     <string name="Transactions_XrpTransaction">XRP Ledger Transaction</string>
     <string name="Transactions_TrustSet">Trust Line</string>
+    <string name="Transactions_TrustLimit">Trust Limit</string>
     <string name="Transactions_Unknown_Description">Transaction can not be parsed</string>
     <string name="Transactions_Multiple">Multiple</string>
     <string name="Transactions_Filter">Filter</string>

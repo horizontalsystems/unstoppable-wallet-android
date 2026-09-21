@@ -6,6 +6,9 @@ import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.managers.TonHelper
 import io.horizontalsystems.walletkit.core.providers.Translator
+import java.text.NumberFormat
+import io.horizontalsystems.walletkit.entities.TransactionValue
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -120,7 +123,11 @@ class TransactionInfoViewItemFactory(
                                 Value(
                                     Translator.getString(R.string.Transactions_OperationType),
                                     Translator.getString(R.string.Transactions_OperationType_ChangeTrust)
-                                )
+                                ),
+                                Value(
+                                    Translator.getString(R.string.Transactions_TrustLimit),
+                                    trustLimitString(transactionType.value)
+                                ),
                             )
                         )
                     }
@@ -188,7 +195,11 @@ class TransactionInfoViewItemFactory(
                                 Value(
                                     Translator.getString(R.string.Transactions_OperationType),
                                     Translator.getString(R.string.Transactions_TrustSet)
-                                )
+                                ),
+                                Value(
+                                    Translator.getString(R.string.Transactions_TrustLimit),
+                                    trustLimitString(transactionType.value)
+                                ),
                             )
                         )
                     }
@@ -794,6 +805,18 @@ class TransactionInfoViewItemFactory(
         itemSections.add(TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData))
 
         return itemSections
+    }
+
+    /**
+     * A trust limit is a cap, not an amount: our default XRPL limit is 10^15, which the coin
+     * formatters would shorten to "1Q", so print it in full with digit grouping.
+     */
+    private fun trustLimitString(limit: TransactionValue): String {
+        val value = limit.decimalValue ?: return ""
+        val number = NumberFormat.getNumberInstance(App.languageManager.currentLocale).apply {
+            maximumFractionDigits = limit.decimals ?: 8
+        }.format(value.stripTrailingZeros())
+        return if (limit.coinCode.isEmpty()) number else "$number ${limit.coinCode}"
     }
 
     private fun addMemoItem(
