@@ -887,4 +887,5 @@
     <string name="SwapHistory_StatusSending">درحال ارسال…</string>
     <string name="SwapHistory_StatusActionRequired">نیاز به اقدام</string>
     <string name="Send_Error_MemoTooLong">یادداشت بیش از حد طولانی است</string>
+    <string name="Transactions_TrustLimit">حد اعتماد</string>
 </resources>

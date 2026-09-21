@@ -1952,4 +1952,5 @@
     <string name="SwapHistory_StatusSending">Versand läuft…</string>
     <string name="SwapHistory_StatusActionRequired">Aktion erforderlich</string>
     <string name="Send_Error_MemoTooLong">Memo ist zu lang</string>
+    <string name="Transactions_TrustLimit">Vertrauenslimit</string>
 </resources>

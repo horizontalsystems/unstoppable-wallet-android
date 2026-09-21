@@ -1557,6 +1557,7 @@
     "Transactions_To": "to %s",
     "Transactions_TonTransaction": "Ton Transaction",
     "Transactions_Transfer": "Transfer",
+    "Transactions_TrustLimit": "Trust Limit",
     "Transactions_TrustSet": "Trust Line",
     "Transactions_Unknown": "Unknown Transaction",
     "Transactions_Unknown_Description": "Transaction can not be parsed",
