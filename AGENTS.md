@@ -251,3 +251,48 @@ chore: update provider data   ✗
 
 The message should complete: *"If I add this commit, it will [message]."*  
 Summary line is **60 characters max**. Single-line for small changes; add a blank line + body for context when the why is non-obvious.
+
+## Issues, Pull Requests, and Commits
+
+Issues, pull requests, and commits each answer a different question. Put
+information where it answers its question, and prefer the most durable place:
+commit messages and code comments travel with the code, while issues and pull
+requests stay on GitHub and are rarely read once closed.
+
+### Issue: what do we need, and why?
+
+- What is wrong or missing.
+- How to reproduce it: app version, device, chain, steps.
+- Why it matters: who is affected and how badly.
+- What done looks like, and what is out of scope.
+
+Describe the problem, not the implementation. A solution plan written into an
+issue goes stale as soon as work starts. An issue is closed when the problem
+is solved, which may take several pull requests.
+
+### Pull request: is this change right and safe to merge?
+
+- Which issue it addresses (link it).
+- Why this approach, and which alternatives were ruled out.
+- How to verify it.
+- What is risky and deserves a close look.
+- Dependencies and merge order, or the target branch for a backport.
+
+Keep the description short, usually a sentence or two. Do not list the
+changes; the diff and the commit messages already say that.
+
+Closing keywords (`Closes #123`) only take effect when a pull request merges
+into the default branch (`master`). Pull requests target `version/*`, so close
+issues by hand.
+
+### Commit: what does this change do, and why?
+
+A commit message must be understandable without the issue or the pull
+request. See [Git Commit Messages](#git-commit-messages) for the format.
+
+### Code comments: why is this code the way it is?
+
+Explain what the code cannot show by itself: an invariant, an ordering that
+matters, a reason something cannot be simplified. Do not describe what the
+code does or how it got here. When the same explanation applies in several
+places, it belongs in `docs/` or in this file instead.
