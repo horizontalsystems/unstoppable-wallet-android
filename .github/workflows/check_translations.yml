@@ -3,10 +3,15 @@ name: Check Translations
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Verify every string is translated into all supported locales
         run: python3 .github/scripts/check_translations.py
