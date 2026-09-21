@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.WalletManager
+import io.horizontalsystems.walletkit.core.blockedEip20Addresses
 import io.horizontalsystems.walletkit.core.nativeTokenContractAddress
 import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -57,6 +58,11 @@ class AddTokenService(
             val nativeToken = coinManager.getToken(TokenQuery(blockchain.type, TokenType.Native))
                 ?: throw TokenError.NotFound
             return TokenInfo(nativeToken, true)
+        }
+
+        // Other synthetic transfer-log addresses (Arc's 0xfff…fe) are not contracts at all.
+        if (blockchain.type.blockedEip20Addresses.any { it.equals(reference, ignoreCase = true) }) {
+            throw TokenError.InvalidReference
         }
 
         val token = coinManager.getToken(blockchainService.tokenQuery(reference))
