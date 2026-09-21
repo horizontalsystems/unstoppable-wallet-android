@@ -2305,4 +2305,5 @@
     <string name="Hud_Text_Connected">Connected</string>
     <string name="BirthdayDatePicker_Title">Select Date</string>
     <string name="BirthdayDatePicker_Description">Choose an approximate wallet creation date. \nThe block height will be calculated automatically.</string>
+    <string name="TranslationCheck_Test">Translation check test</string>
 </resources>
