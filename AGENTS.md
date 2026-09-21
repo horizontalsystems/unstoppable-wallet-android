@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 ## Project Overview
 
@@ -198,6 +198,30 @@ ButtonPrimaryYellow(
     onClick = { viewModel.doAction() }
 )
 ```
+
+## Strings and Translations
+
+User-facing text lives in `walletkit/src/main/res/values/strings.xml`. The app
+ships the languages listed in the `LocaleType` enum
+(`walletkit/src/main/java/io/horizontalsystems/walletkit/helpers/LocaleHelper.kt`):
+English as the source plus de, es, pt-BR, fa, fr, ko, ru, tr, zh.
+
+Translations are part of the change that touches the strings. There is no
+separate translation step, so when you add, change, or remove a string:
+
+- Add the translated entry to every locale file in the same change:
+  `values-de`, `values-es`, `values-pt-rBR`, `values-fa`, `values-fr`,
+  `values-ko`, `values-ru`, `values-tr`, `values-zh`. Append new entries at
+  the end of each file, before `</resources>`.
+- When the English text changes, update all nine translations. When a key is
+  removed or renamed, remove or rename it in all nine files.
+- Skip entries marked `translatable="false"`; they exist only in the English
+  file.
+- Keep format placeholders exactly as in English (`%s`, `%d`, `%1$s`) and use
+  Android escaping (`\'`, `\"`, `\n`), never XML entities such as `&apos;`.
+- Use established crypto terminology (wallet, token, swap, gas fee, private
+  key, recovery phrase). Leave proper nouns, blockchain names, and ticker
+  symbols untranslated.
 
 ## Common Gotchas
 
