@@ -228,6 +228,7 @@ class WatchAddressViewModel(
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom -> Type.EvmAddress

@@ -166,6 +166,37 @@ class EvmSyncSourceManager(
                 )
             )
 
+            // The official rpc.mainnet.arc.io (and its QuickNode mirror) sit behind Cloudflare
+            // geo-blocking, so keyless providers reachable everywhere come first.
+            BlockchainType.Arc -> listOf(
+                evmSyncSource(
+                    blockchainType,
+                    "PublicNode",
+                    listOf(URI("https://arc-rpc.publicnode.com"))
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "dRPC",
+                    listOf(URI("https://arc.drpc.org"), URI("https://rpc.drpc.mainnet.arc.io"))
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "Blockdaemon",
+                    listOf(URI("https://rpc.blockdaemon.mainnet.arc.io"))
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "Alchemy",
+                    appConfigProvider.alchemyApiKey.map { URI("https://arc-mainnet.g.alchemy.com/v2/$it") },
+                    displayUrl = "https://arc-mainnet.g.alchemy.com"
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "Arc",
+                    listOf(URI("https://rpc.mainnet.arc.io"))
+                )
+            )
+
             BlockchainType.ArbitrumOne -> listOf(
                 evmSyncSource(
                     blockchainType,

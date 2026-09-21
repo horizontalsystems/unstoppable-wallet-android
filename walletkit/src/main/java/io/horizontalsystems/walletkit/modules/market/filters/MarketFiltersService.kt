@@ -33,6 +33,7 @@ class MarketFiltersService(
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
         BlockchainType.Polygon,
         BlockchainType.Stellar,
         BlockchainType.Xrp,

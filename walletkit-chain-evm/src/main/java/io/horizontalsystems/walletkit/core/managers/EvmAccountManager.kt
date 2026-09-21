@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.managers
 
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.IAccountManager
+import io.horizontalsystems.walletkit.core.blockedEip20Addresses
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.EnabledWallet
@@ -85,14 +86,12 @@ class EvmAccountManager(
         }
     }
 
-    // ZkSync reports plain ETH movements as ERC-20 transfers of the L2 ETH system
-    // contract. It is not a real ERC-20 (every eth_call on it reverts since protocol
-    // upgrade v24), so auto-enabling it creates a permanently unsyncable duplicate of
-    // the native ETH wallet.
+    // Auto-enabling the native coin's ERC-20 interface would create a duplicate of the
+    // native wallet (on ZkSync a permanently unsyncable one: every eth_call on the L2 ETH
+    // system contract reverts since protocol upgrade v24).
     private fun isBlockedTokenType(tokenType: TokenType): Boolean {
-        if (blockchainType != BlockchainType.ZkSync) return false
         val address = (tokenType as? TokenType.Eip20)?.address ?: return false
-        return address.equals(ZKSYNC_L2_ETH_ADDRESS, ignoreCase = true)
+        return blockchainType.blockedEip20Addresses.any { it.equals(address, ignoreCase = true) }
     }
 
     private fun handle(fullTransactions: List<FullTransaction>, account: Account, evmKitWrapper: EvmKitWrapper, initial: Boolean) {
@@ -302,10 +301,6 @@ class EvmAccountManager(
         if (enabledWallets.isNotEmpty()) {
             walletManager.saveEnabledWallets(enabledWallets)
         }
-    }
-
-    companion object {
-        private const val ZKSYNC_L2_ETH_ADDRESS = "0x000000000000000000000000000000000000800a"
     }
 
     data class TokenInfo(

@@ -116,6 +116,7 @@ class AddressHandlerUdn(
             BlockchainType.Base,
             BlockchainType.ZkSync,
             BlockchainType.RobinhoodChain,
+            BlockchainType.Arc,
             BlockchainType.Avalanche,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
@@ -154,6 +155,7 @@ class AddressHandlerUdn(
                 BlockchainType.Base,
                 BlockchainType.ZkSync,
                 BlockchainType.RobinhoodChain,
+                BlockchainType.Arc,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom -> "ERC20"

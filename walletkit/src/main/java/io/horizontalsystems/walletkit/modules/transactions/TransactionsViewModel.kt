@@ -257,6 +257,7 @@ data class TransactionViewItem(
                 BlockchainType.Base -> R.drawable.logo_chain_base_trx_24
                 BlockchainType.ZkSync -> R.drawable.logo_chain_zksync_trx_32
                 BlockchainType.RobinhoodChain -> R.drawable.logo_chain_robinhood_trx_32
+                BlockchainType.Arc -> R.drawable.logo_chain_arc_trx_32
                 BlockchainType.ArbitrumOne -> R.drawable.logo_chain_arbitrum_one_trx_24
                 BlockchainType.Gnosis -> R.drawable.logo_chain_gnosis_trx_32
                 BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32

@@ -133,6 +133,7 @@ class USwapProvider(
                 BlockchainType.Gnosis,
                 BlockchainType.ZkSync,
                 BlockchainType.RobinhoodChain,
+                BlockchainType.Arc,
                     -> {
                     val tokenType = if (!token.address.isNullOrBlank()) {
                         TokenType.Eip20(token.address)
@@ -887,6 +888,7 @@ class USwapProvider(
             "zano" to BlockchainType.Zano,
             "100" to BlockchainType.Gnosis,
             "4663" to BlockchainType.RobinhoodChain,
+            "5042" to BlockchainType.Arc,
 //            "" to BlockchainType.Fantom,
 //            "" to BlockchainType.ZkSync,
         )
@@ -912,6 +914,7 @@ class USwapProvider(
             BlockchainType.Avalanche to "AVAX",
             BlockchainType.BinanceSmartChain to "BSC",
             BlockchainType.RobinhoodChain to "ROBINHOOD",
+            BlockchainType.Arc to "ARC",
         )
     }
 

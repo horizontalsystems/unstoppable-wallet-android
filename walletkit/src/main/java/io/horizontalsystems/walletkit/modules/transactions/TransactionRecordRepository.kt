@@ -90,6 +90,7 @@ class TransactionRecordRepository(
                 BlockchainType.Base,
                 BlockchainType.ZkSync,
                 BlockchainType.RobinhoodChain,
+                BlockchainType.Arc,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,

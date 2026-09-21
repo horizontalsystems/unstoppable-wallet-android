@@ -44,6 +44,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
         BlockchainType.ArbitrumOne,
         BlockchainType.Solana,
         BlockchainType.Gnosis,

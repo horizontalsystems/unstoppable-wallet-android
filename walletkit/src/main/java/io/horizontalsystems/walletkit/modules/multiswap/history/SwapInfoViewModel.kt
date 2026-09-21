@@ -223,6 +223,7 @@ class SwapInfoViewModel(
             BlockchainType.Base -> "https://basescan.org/tx/$txHash"
             BlockchainType.ZkSync -> "https://era.zksync.network/tx/$txHash"
             BlockchainType.RobinhoodChain -> "https://robinhoodchain.blockscout.com/tx/$txHash"
+            BlockchainType.Arc -> "https://arc.etherscan.io/tx/$txHash"
             BlockchainType.Solana -> "https://solscan.io/tx/$txHash"
             BlockchainType.Tron -> "https://tronscan.io/#/transaction/$txHash"
             BlockchainType.Ton -> "https://tonviewer.com/transaction/$txHash"

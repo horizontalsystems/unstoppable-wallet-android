@@ -26,6 +26,7 @@ class AddressHandlerFactory(
             BlockchainType.Base,
             BlockchainType.ZkSync,
             BlockchainType.RobinhoodChain,
+            BlockchainType.Arc,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {

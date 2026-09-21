@@ -164,6 +164,9 @@ val BlockchainType.blockTime : Long?
         BlockchainType.RobinhoodChain,
             -> 2
 
+        // Arc produces sub-second blocks
+        BlockchainType.Arc -> 1
+
         BlockchainType.Gnosis,
         BlockchainType.Stellar,
         BlockchainType.Ton,

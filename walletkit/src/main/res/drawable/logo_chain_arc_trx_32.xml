@@ -1,0 +1,17 @@
+<!-- White Arc arch for the transaction platform badge (logo_chain_*_trx_32
+     convention: monochrome white glyph on transparent). Full-color chain badge lives
+     in arc_erc20.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+  <path
+      android:pathData="M8.5,27C8.5,14.5 11.5,5.5 16,5.5C20.5,5.5 23.5,14.5 23.5,27"
+      android:strokeWidth="3.4"
+      android:strokeColor="#FFFFFF"/>
+  <path
+      android:pathData="M12.5,19.8C16.8,19.8 21.2,21.5 23.5,26"
+      android:strokeWidth="2.6"
+      android:strokeColor="#FFFFFF"/>
+</vector>

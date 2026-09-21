@@ -322,6 +322,7 @@ object EvmKitManagerRegistry {
         BlockchainType.Base -> Chain.Base
         BlockchainType.ZkSync -> Chain.ZkSync
         BlockchainType.RobinhoodChain -> Chain.RobinhoodChain
+        BlockchainType.Arc -> Chain.Arc
         BlockchainType.ArbitrumOne -> Chain.ArbitrumOne
         BlockchainType.Gnosis -> Chain.Gnosis
         BlockchainType.Fantom -> Chain.Fantom

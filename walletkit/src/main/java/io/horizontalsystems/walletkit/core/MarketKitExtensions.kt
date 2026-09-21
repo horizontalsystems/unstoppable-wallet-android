@@ -107,6 +107,7 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
@@ -159,6 +160,7 @@ val Blockchain.description: String
         BlockchainType.Base -> "L2 chain"
         BlockchainType.ZkSync -> "L2 chain"
         BlockchainType.RobinhoodChain -> "L2 chain"
+        BlockchainType.Arc -> "USDC, ERC20 tokens"
         BlockchainType.ArbitrumOne -> "L2 chain"
         BlockchainType.Solana -> "SOL, SPL tokens"
         BlockchainType.Gnosis -> "xDAI, ERC20 tokens"
@@ -236,6 +238,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.ECash,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
     ).forEachIndexed { index, blockchainType ->
@@ -257,6 +260,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Base -> R.drawable.base_erc20
         BlockchainType.ZkSync -> R.drawable.zksync_erc20
         BlockchainType.RobinhoodChain -> R.drawable.robinhood_chain
+        BlockchainType.Arc -> R.drawable.arc_erc20
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         BlockchainType.Gnosis -> R.drawable.gnosis_erc20
         BlockchainType.Fantom -> R.drawable.fantom_erc20
@@ -284,6 +288,7 @@ val BlockchainType.title: String
     BlockchainType.Base -> "Base"
     BlockchainType.ZkSync -> "ZKsync"
     BlockchainType.RobinhoodChain -> "Robinhood Chain"
+    BlockchainType.Arc -> "Arc"
     BlockchainType.Solana -> "Solana"
     BlockchainType.Gnosis -> "Gnosis"
     BlockchainType.Fantom -> "Fantom"
@@ -309,6 +314,7 @@ val BlockchainType.brandColor: Color?
         BlockchainType.Base -> Color(0xFF2759F6)
         BlockchainType.ZkSync -> Color(0xFF8D8FF0)
         BlockchainType.RobinhoodChain -> Color(0xFF00C805)
+        BlockchainType.Arc -> Color(0xFF4A7BB7)
         BlockchainType.ArbitrumOne -> Color(0xFF96BEDC)
         else -> null
     }
@@ -339,7 +345,31 @@ private val chainIdBlockchainTypeMap: Map<Long, BlockchainType> = mapOf(
     8453L to BlockchainType.Base,
     324L to BlockchainType.ZkSync,
     4663L to BlockchainType.RobinhoodChain,
+    5042L to BlockchainType.Arc,
 )
+
+// Contract that exposes the native coin through an ERC-20 interface over the same balance.
+// ZkSync reports plain ETH movements as ERC-20 transfers of its L2 ETH system contract; Arc
+// predeploys a 6-decimal ERC-20 view of its 18-decimal native USDC. Neither is a separate
+// token, so it must never be enabled as one.
+val BlockchainType.nativeTokenContractAddress: String?
+    get() = when (this) {
+        BlockchainType.ZkSync -> "0x000000000000000000000000000000000000800a"
+        BlockchainType.Arc -> "0x3600000000000000000000000000000000000000"
+        else -> null
+    }
+
+// Arc also mirrors every native value movement as a Transfer log from this system address.
+// It is not a contract; the amount is already covered by the transaction value or an
+// internal transaction, so its events are dropped from history and never treated as a token.
+const val ARC_NATIVE_TRANSFER_LOG_ADDRESS = "0xfffffffffffffffffffffffffffffffffffffffe"
+
+// Contract addresses whose Transfer logs must never be auto-enabled as ERC-20 wallets.
+val BlockchainType.blockedEip20Addresses: Set<String>
+    get() = when (this) {
+        BlockchainType.Arc -> setOf(nativeTokenContractAddress!!, ARC_NATIVE_TRANSFER_LOG_ADDRESS)
+        else -> setOfNotNull(nativeTokenContractAddress)
+    }
 
 val BlockchainType.isEvm: Boolean
     get() = when (this) {
@@ -354,6 +384,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Polygon,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
             -> true
 
         BlockchainType.Bitcoin,
@@ -404,7 +435,8 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 BlockchainType.Tron,
                 BlockchainType.Zcash,
                 BlockchainType.ZkSync,
-                BlockchainType.RobinhoodChain -> true
+                BlockchainType.RobinhoodChain,
+                BlockchainType.Arc -> true
                 is BlockchainType.Unsupported -> false
             }
         }
@@ -433,6 +465,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Base
                     || this == BlockchainType.ZkSync
                     || this == BlockchainType.RobinhoodChain
+                    || this == BlockchainType.Arc
                     || this == BlockchainType.ArbitrumOne
                     || this == BlockchainType.Gnosis
                     || this == BlockchainType.Fantom
@@ -445,6 +478,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Base
                     || this == BlockchainType.ZkSync
                     || this == BlockchainType.RobinhoodChain
+                    || this == BlockchainType.Arc
                     || this == BlockchainType.ArbitrumOne
                     || this == BlockchainType.Gnosis
                     || this == BlockchainType.Fantom
@@ -703,6 +737,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.RobinhoodChain,
+        BlockchainType.Arc,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,

@@ -1,4 +1,4 @@
-supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,robinhood,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,dash,monero,zano,zcash,solana,stellar,xrp,the-open-network,thorchain,mayachain
+supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,robinhood,arc,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,dash,monero,zano,zcash,solana,stellar,xrp,the-open-network,thorchain,mayachain
 
 chain ethereum
   title=Ethereum
@@ -168,6 +168,27 @@ chain robinhood
   protocolType[Eip20]=Robinhood
   supports=Mnemonic,EvmAddress,EvmPrivateKey
 
+chain arc
+  title=Arc
+  description=USDC, ERC20 tokens
+  order=24
+  isEvm=true
+  blockTime=1
+  uriScheme=ethereum
+  removeScheme=true
+  chainId=5042
+  brandColor=ff4a7bb700000000
+  feePriceScale=Gwei
+  tokenIconPlaceholder=arc_erc20
+  restoreSettingTypes=
+  nativeTokenQueries=arc|native
+  defaultTokenQuery=arc|native
+  supportedNftTypes=
+  supportedTokenTypes=Native,Eip20
+  protocolType[Native]=Arc
+  protocolType[Eip20]=Arc
+  supports=Mnemonic,EvmAddress,EvmPrivateKey
+
 chain arbitrum-one
   title=Arbitrum
   description=L2 chain
@@ -192,7 +213,7 @@ chain arbitrum-one
 chain gnosis
   title=Gnosis
   description=xDAI, ERC20 tokens
-  order=24
+  order=25
   isEvm=true
   blockTime=5
   uriScheme=ethereum
@@ -213,7 +234,7 @@ chain gnosis
 chain fantom
   title=Fantom
   description=FTM, ERC20 tokens
-  order=25
+  order=26
   isEvm=true
   blockTime=2
   uriScheme=ethereum

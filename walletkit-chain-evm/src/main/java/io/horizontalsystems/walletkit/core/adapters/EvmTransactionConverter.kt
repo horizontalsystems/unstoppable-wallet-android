@@ -1,9 +1,11 @@
 package io.horizontalsystems.walletkit.core.adapters
 
+import io.horizontalsystems.walletkit.core.ARC_NATIVE_TRANSFER_LOG_ADDRESS
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ICoinManager
 import io.horizontalsystems.walletkit.core.managers.EvmKitWrapper
 import io.horizontalsystems.walletkit.core.managers.EvmLabelManager
+import io.horizontalsystems.walletkit.core.nativeTokenContractAddress
 import io.horizontalsystems.walletkit.core.tokenIconPlaceholder
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.nft.NftUid
@@ -32,6 +34,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.InternalTransaction
 import io.horizontalsystems.ethereumkit.models.Transaction
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -195,7 +198,9 @@ class EvmTransactionConverter(
 
                 val internalTransactions = decoration.internalTransactions.filter { it.to == address }
 
-                val eip20Transfers = decoration.eventInstances.mapNotNull { it as? TransferEventInstance }
+                val eip20Transfers = decoration.eventInstances
+                    .mapNotNull { it as? TransferEventInstance }
+                    .filterNot { isNativeTransferLog(it) }
                 val incomingEip20Transfers = eip20Transfers.filter { it.to == address && it.from != address }
                 val outgoingEip20Transfers = eip20Transfers.filter { it.from == address }
 
@@ -278,7 +283,18 @@ class EvmTransactionConverter(
         return significandAmount
     }
 
+    private fun isNativeTransferLog(transfer: TransferEventInstance): Boolean =
+        evmKitWrapper.blockchainType == BlockchainType.Arc &&
+                transfer.contractAddress.hex.equals(ARC_NATIVE_TRANSFER_LOG_ADDRESS, ignoreCase = true)
+
     private fun getEip20Value(tokenAddress: Address, amount: BigInteger, negative: Boolean, tokenInfo: TokenInfo? = null): TransactionValue {
+        // Arc's USDC ERC-20 interface moves the native balance; show it as the native coin.
+        if (evmKitWrapper.blockchainType == BlockchainType.Arc &&
+            tokenAddress.hex.equals(BlockchainType.Arc.nativeTokenContractAddress, ignoreCase = true)
+        ) {
+            return TransactionValue.CoinValue(baseToken, convertAmount(amount, ARC_USDC_ERC20_DECIMALS, negative))
+        }
+
         val query = TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(tokenAddress.hex))
         val token = coinManager.getToken(query)
 
@@ -451,6 +467,9 @@ class EvmTransactionConverter(
             )
         }
 
+    companion object {
+        private const val ARC_USDC_ERC20_DECIMALS = 6
+    }
 }
 
 fun Transaction.toEvmTransactionInfo() = EvmTransactionInfo(
