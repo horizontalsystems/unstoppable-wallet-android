@@ -1961,4 +1961,5 @@
         <item quantity="many">Подписать %d транзакций</item>
         <item quantity="other">Подписать %d транзакции</item>
     </plurals>
+    <string name="TranslationCheck_Demo">Демонстрация проверки переводов</string>
 </resources>

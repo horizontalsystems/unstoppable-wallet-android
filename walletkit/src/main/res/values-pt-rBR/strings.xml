@@ -1957,4 +1957,5 @@
         <item quantity="one">Assinar %d transação</item>
         <item quantity="other">Assinar %d transações</item>
     </plurals>
+    <string name="TranslationCheck_Demo">Demonstração da verificação de traduções</string>
 </resources>

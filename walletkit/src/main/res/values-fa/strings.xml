@@ -1940,4 +1940,5 @@
         <item quantity="one">امضای %d تراکنش</item>
         <item quantity="other">امضای %d تراکنش</item>
     </plurals>
+    <string name="TranslationCheck_Demo">نمایش بررسی ترجمه</string>
 </resources>
