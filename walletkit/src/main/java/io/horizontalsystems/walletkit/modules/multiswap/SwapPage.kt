@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
@@ -935,14 +936,17 @@ private fun SwapCoinInputIn(
                 onValueChange = onValueChange,
                 focusRequester = focusRequester
             )
+            VSpacer(height = 3.dp)
             if (fiatAmountInputEnabled || fiatAmount != null) {
-                VSpacer(height = 3.dp)
                 FiatAmountInput(
                     value = fiatAmount,
                     currency = currency,
                     onValueChange = onFiatValueChange,
                     enabled = fiatAmountInputEnabled
                 )
+            } else {
+                // Keeps the row height stable while the rate is still loading on a cold start.
+                FiatLinePlaceholder(currency)
             }
         }
     }
@@ -979,11 +983,12 @@ private fun SwapCoinInputTo(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            VSpacer(height = 3.dp)
             if (hasRate && fiatAmount == null) {
-                VSpacer(height = 3.dp)
                 body_grey(text = "${currency.symbol}0")
-            } else if (fiatAmount != null) {
-                VSpacer(height = 3.dp)
+            } else if (fiatAmount == null) {
+                FiatLinePlaceholder(currency)
+            } else {
                 Row {
                     body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
                     fiatPriceImpact?.let { diff ->
@@ -1015,21 +1020,33 @@ private fun CoinSelector(
             )
         },
         text = {
-            if (token != null) {
-                Column {
+            Column {
+                if (token != null) {
                     headline2_leah(text = token.coin.code)
-                    VSpacer(height = 5.dp)
-                    BadgeText(
-                        text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
-                        background = ComposeAppTheme.colors.blade,
-                        textColor = ComposeAppTheme.colors.leah,
-                    )
+                } else {
+                    headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
                 }
-            } else {
-                headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
+                VSpacer(height = 5.dp)
+                BadgeText(
+                    // Invisible while no token is chosen so the selector keeps its final height
+                    // and the card does not jump once the default tokens resolve.
+                    modifier = if (token == null) Modifier.alpha(0f) else Modifier,
+                    text = token?.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
+                    background = ComposeAppTheme.colors.blade,
+                    textColor = ComposeAppTheme.colors.leah,
+                )
             }
         },
         onClickSelect = onClickCoin
+    )
+}
+
+/** Invisible fiat line reserving the space the fiat text or input takes once a rate is known. */
+@Composable
+private fun FiatLinePlaceholder(currency: Currency) {
+    body_grey(
+        modifier = Modifier.alpha(0f),
+        text = "${currency.symbol}0",
     )
 }
 
