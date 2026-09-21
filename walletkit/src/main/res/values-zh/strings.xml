@@ -1948,4 +1948,7 @@
     <string name="SwapHistory_StatusActionRequired">需要操作</string>
     <string name="Send_Error_MemoTooLong">备忘录过长</string>
     <string name="Transactions_TrustLimit">信任额度</string>
+    <plurals name="WalletConnect_Solana_SignTransactionsCount">
+        <item quantity="other">签署 %d 笔交易</item>
+    </plurals>
 </resources>

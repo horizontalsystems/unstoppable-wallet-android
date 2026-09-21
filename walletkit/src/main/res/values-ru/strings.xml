@@ -1955,4 +1955,10 @@
     <string name="SwapHistory_StatusActionRequired">Требуется действие</string>
     <string name="Send_Error_MemoTooLong">Заметка слишком длинная</string>
     <string name="Transactions_TrustLimit">Лимит доверия</string>
+    <plurals name="WalletConnect_Solana_SignTransactionsCount">
+        <item quantity="one">Подписать %d транзакцию</item>
+        <item quantity="few">Подписать %d транзакции</item>
+        <item quantity="many">Подписать %d транзакций</item>
+        <item quantity="other">Подписать %d транзакции</item>
+    </plurals>
 </resources>

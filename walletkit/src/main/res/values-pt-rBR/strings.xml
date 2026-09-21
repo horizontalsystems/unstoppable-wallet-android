@@ -1953,4 +1953,8 @@
     <string name="SwapHistory_StatusActionRequired">Ação necessária</string>
     <string name="Send_Error_MemoTooLong">Memo é muito longo</string>
     <string name="Transactions_TrustLimit">Limite de Confiança</string>
+    <plurals name="WalletConnect_Solana_SignTransactionsCount">
+        <item quantity="one">Assinar %d transação</item>
+        <item quantity="other">Assinar %d transações</item>
+    </plurals>
 </resources>

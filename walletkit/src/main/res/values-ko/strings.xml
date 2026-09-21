@@ -1945,4 +1945,7 @@
     <string name="SwapHistory_StatusActionRequired">조치 필요</string>
     <string name="Send_Error_MemoTooLong">메모가 너무 깁니다</string>
     <string name="Transactions_TrustLimit">신뢰 한도</string>
+    <plurals name="WalletConnect_Solana_SignTransactionsCount">
+        <item quantity="other">거래 %d건 서명</item>
+    </plurals>
 </resources>

@@ -1949,4 +1949,8 @@
     <string name="SwapHistory_StatusActionRequired">İşlem gerekli</string>
     <string name="Send_Error_MemoTooLong">Not çok uzun</string>
     <string name="Transactions_TrustLimit">Güven Limiti</string>
+    <plurals name="WalletConnect_Solana_SignTransactionsCount">
+        <item quantity="one">%d işlemi imzala</item>
+        <item quantity="other">%d işlemi imzala</item>
+    </plurals>
 </resources>
