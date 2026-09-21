@@ -259,6 +259,12 @@ information where it answers its question, and prefer the most durable place:
 commit messages and code comments travel with the code, while issues and pull
 requests stay on GitHub and are rarely read once closed.
 
+All three contain only their own content. No footers, signatures, session
+links, or notes about the editor or tool the text or change was made with.
+Git already records the author and date, and the review history lives on
+GitHub, so such lines add nothing a reader can act on and go stale as tools
+change.
+
 ### Issue: what do we need, and why?
 
 - What is wrong or missing.
