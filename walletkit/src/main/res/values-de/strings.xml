@@ -119,7 +119,7 @@
     <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">Nur TRON-Netzwerk.</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Erweitert</string>
-    <string name="Restore_Error_MnemonicWordCount">Falsche Wörter zählen. Es muss zwischen 12 oder 24 Wörter liegen. Sie eingegeben: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Der Wiederherstellungssatz muss mindestens 12 Wörter enthalten.</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
     <string name="Restore_InvalidChecksum">Ungültige Prüfsumme</string>
     <string name="Restore_PassphraseDescription">Geben Sie die Passphrase ein, die Sie beim Erstellen dieser Wiederherstellungs-Phrase verwendet haben. Das Wiederherstellen einer bestehenden Wallet mit einer neuen Passphrase wird eine brandneue Wallet generieren.</string>
@@ -665,7 +665,7 @@
     <string name="RiskLevel_ProviderRiskLevel_Description">Diese Stufen zeigen, wie Routen Swaps und Transaktionsprüfungen handhaben.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Token aktivieren</string>
-    <string name="ActivationRequired_DialogDescription">Um %szu erhalten, müssen Sie das Token aktivieren. Das Stellar-Netzwerk benötigt eine Vertrauenszeile für jeden Token einzurichten. Ohne sie kann Ihre Brieftasche nicht %s erhalten – die Transaktion wird zurückgewiesen und das Guthaben wird nicht ausgeliefert.</string>
+    <string name="ActivationRequired_DialogDescription">Um %1$s zu erhalten, müssen Sie das Token aktivieren. Das Stellar-Netzwerk benötigt eine Vertrauenszeile für jeden Token einzurichten. Ohne sie kann Ihre Brieftasche nicht %2$s erhalten – die Transaktion wird zurückgewiesen und das Guthaben wird nicht ausgeliefert.</string>
     <string name="Activate_YouActivate">Sie aktivieren</string>
     <string name="Activate_Activating">Aktivieren</string>
     <string name="Activate_AlreadyActive_Title">Bereits aktiv</string>

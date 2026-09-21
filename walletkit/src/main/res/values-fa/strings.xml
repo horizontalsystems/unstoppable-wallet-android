@@ -75,7 +75,7 @@
     <string name="RateApp_Button_RateIt">امتیاز بدهید</string>
     <string name="RateApp_Button_NotNow">الان نه</string>
     <!--Restore-->
-    <string name="Restore_Error_MnemonicWordCount">تعداد کلمات اشتباه. باید بین ۱۲ تا ۱۴ کلمه باشد. شما وارد کردید: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">عبارت بازیابی باید حداقل 12 کلمه داشته باشد.</string>
     <string name="Restore_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Restore_Title">انتخاب زنجیره های بلوکی</string>
@@ -136,7 +136,7 @@
     <string name="ScanQr_PleaseGrantCameraPermission">لطفا مجوز دسترسی به دوربین را تایید کنید</string>
     <string name="ScanQr_GoToSettings">برو به تنظیمات</string>
     <string name="Send_Error_MaximumAmount">حداقل مقدار %s</string>
-    <string name="Send_Error_SendToSelf">ارسال به خود پشتیبانی نشده است</string>
+    <string name="Send_Error_SendToSelf">ارسال %s به آدرس خودتان مجاز نیست. لطفاً آدرس گیرنده دیگری وارد کنید.</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
     <string name="Send_LockTime_Off">خاموش</string>
     <string name="Send_LockTime_Hour">۱ ساعت</string>
@@ -475,7 +475,7 @@
     <string name="BalanceSyncError_ButtonRetry">دوباره امتحان کنید</string>
     <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
     <!--Release notes-->
-    <string name="ProUsersInfo_UnstoppablePass">غیرقابل توقف %s</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">انتخاب نوع</string>
     <!--Alert-->

@@ -120,7 +120,7 @@
     <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">Только для сети TRON.</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Доп. настройки</string>
-    <string name="Restore_Error_MnemonicWordCount">Неверное количество слов. Оно должно быть от 12 до 24 слов. Вы ввели: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Фраза восстановления должна содержать не менее 12 слов.</string>
     <string name="Restore_Error_EmptyPassphrase">Пароль не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
     <string name="Restore_PassphraseDescription">Введите пароль, который вы использовали при создании этой фразы восстановления. Восстановление существующего кошелька с новым паролем приведёт к созданию нового кошелька.</string>
@@ -667,7 +667,7 @@
     <string name="RiskLevel_ProviderRiskLevel_Description">Эти уровни показывают, как маршруты обрабатывают обмены и проверки транзакций.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Активировать токен</string>
-    <string name="ActivationRequired_DialogDescription">Чтобы получить %s, вам нужно активировать токен. Для каждого токена Stellar сети требуется установить линию доверия. Без него ваш кошелек не может получить %s — транзакция будет отклонена, а средства не будут доставлены.</string>
+    <string name="ActivationRequired_DialogDescription">Чтобы получить %1$s, вам нужно активировать токен. Для каждого токена Stellar сети требуется установить линию доверия. Без него ваш кошелек не может получить %2$s — транзакция будет отклонена, а средства не будут доставлены.</string>
     <string name="Activate_YouActivate">Вы активируете</string>
     <string name="Activate_Activating">Активация</string>
     <string name="Activate_AlreadyActive_Title">Уже активен</string>

@@ -119,7 +119,7 @@
     <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">Somente rede TRON.</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Avançado</string>
-    <string name="Restore_Error_MnemonicWordCount">Número incorreto de palavras. Deve ter entre 12 ou 24 palavras. Você inseriu: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">A frase de recuperação deve conter pelo menos 12 palavras.</string>
     <string name="Restore_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="Restore_InvalidChecksum">Soma de Verificação Inválida</string>
     <string name="Restore_PassphraseDescription">Digite a senha que você usou ao criar esta frase de recuperação. A restauração de uma carteira existente com uma nova senha gerará uma nova carteira.</string>
@@ -429,7 +429,7 @@
     <string name="ScanQr_QrDetected">Código QR detectado</string>
     <string name="Send_Error_UnsupportedAddress">O bloqueio de tempo funciona apenas ao enviar para endereços de pagamento começando com 1... (também conhecidos como endereços BIP44)</string>
     <string name="Send_Error_MaximumAmount">Valor máximo: %s</string>
-    <string name="Send_Error_SendToSelf">Não é possível enviar para você mesmo</string>
+    <string name="Send_Error_SendToSelf">Não é permitido enviar %s para o seu próprio endereço. Insira um endereço de destinatário diferente.</string>
     <string name="Send_DialogSpeed">Velocidade da Transação</string>
     <string name="Send_LockTime_Off">Desligado</string>
     <string name="Send_LockTime_Hour">1 hora</string>
@@ -665,7 +665,7 @@
     <string name="RiskLevel_ProviderRiskLevel_Description">Esses níveis mostram como as rotas lidam com swaps e verificações de transações.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Ativar Token</string>
-    <string name="ActivationRequired_DialogDescription">Para receber %s, você precisa ativar o token. A rede Stellar requer que uma linha de confiança seja estabelecida para cada token. Sem isso, sua carteira não pode receber %s — a transação será rejeitada e os fundos não serão entregues.</string>
+    <string name="ActivationRequired_DialogDescription">Para receber %1$s, você precisa ativar o token. A rede Stellar requer que uma linha de confiança seja estabelecida para cada token. Sem isso, sua carteira não pode receber %2$s — a transação será rejeitada e os fundos não serão entregues.</string>
     <string name="Activate_YouActivate">Você Ativar</string>
     <string name="Activate_Activating">Ativando</string>
     <string name="Activate_AlreadyActive_Title">Já ativo</string>
@@ -1135,7 +1135,7 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta ação irá apagar do dispositivo a carteira selecionada.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Se você não fizer o backup da chave privada desta carteira, perderá o acesso aos seus fundos.</string>
     <string name="ManageAccount_MigrationRequired_Title">Migração Necessária</string>
-    <string name="ManageAccount_BirthdayHeight">Altura de aniversário</string>
+    <string name="ManageAccount_BirthdayHeight">%s Altura de Aniversário</string>
     <string name="ManageAccount_NWords">%s palavras</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s palavras com senha</string>
     <string name="ManageAccount_SwitchWallet_Title">Trocar carteira</string>

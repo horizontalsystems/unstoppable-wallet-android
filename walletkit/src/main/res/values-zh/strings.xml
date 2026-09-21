@@ -118,7 +118,7 @@
     <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">仅限TRON网络。</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">高级</string>
-    <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
+    <string name="Restore_Error_MnemonicWordCount">恢复码必须至少包含 12 个单词。</string>
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
@@ -428,7 +428,7 @@
     <string name="ScanQr_QrDetected">检测到二维码</string>
     <string name="Send_Error_UnsupportedAddress">时间锁定只能和P2PKH地址（以1开头）一起使用</string>
     <string name="Send_Error_MaximumAmount">最大金额 %s</string>
-    <string name="Send_Error_SendToSelf">不支持发送给自己</string>
+    <string name="Send_Error_SendToSelf">不允许将 %s 发送到您自己的地址。请输入其他收款地址。</string>
     <string name="Send_DialogSpeed">交易速度</string>
     <string name="Send_LockTime_Off">关</string>
     <string name="Send_LockTime_Hour">1 小时</string>
@@ -664,7 +664,7 @@
     <string name="RiskLevel_ProviderRiskLevel_Description">这些级别显示路由如何处理交换和交易检查。</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">激活令牌</string>
-    <string name="ActivationRequired_DialogDescription">若要接收 %s，您需要激活令牌。Stellar 网络需要为每个令牌建立信任线。 没有它，你的钱包就不能收到 %s ——交易将被拒绝，资金将不会交付。</string>
+    <string name="ActivationRequired_DialogDescription">若要接收 %1$s，您需要激活令牌。Stellar 网络需要为每个令牌建立信任线。 没有它，你的钱包就不能收到 %2$s ——交易将被拒绝，资金将不会交付。</string>
     <string name="Activate_YouActivate">您已激活</string>
     <string name="Activate_Activating">正在激活</string>
     <string name="Activate_AlreadyActive_Title">已经激活</string>

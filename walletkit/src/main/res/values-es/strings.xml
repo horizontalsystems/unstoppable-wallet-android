@@ -119,7 +119,7 @@
     <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">TRON red solamente.</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Avanzado</string>
-    <string name="Restore_Error_MnemonicWordCount">Número de palabras erróneas. Debe tener entre 12 y 24 palabras. Has ingresado: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">La frase de recuperación debe contener al menos 12 palabras.</string>
     <string name="Restore_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
     <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
@@ -429,7 +429,7 @@
     <string name="ScanQr_QrDetected">Código QR detectado</string>
     <string name="Send_Error_UnsupportedAddress">El bloqueo del tiempo solo funciona con direcciones P2PKH (a partir de 1)</string>
     <string name="Send_Error_MaximumAmount">Monto máximo %s</string>
-    <string name="Send_Error_SendToSelf">Enviarte a vos mismo no está soportado</string>
+    <string name="Send_Error_SendToSelf">No se permite enviar %s a tu propia dirección. Ingresa una dirección de destinatario diferente.</string>
     <string name="Send_DialogSpeed">Velocidad de transacción</string>
     <string name="Send_LockTime_Off">Desactivado</string>
     <string name="Send_LockTime_Hour">1 hora</string>

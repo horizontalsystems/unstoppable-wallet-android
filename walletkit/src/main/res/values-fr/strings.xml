@@ -119,7 +119,7 @@
     <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">Réseau TRON uniquement.</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Avancé</string>
-    <string name="Restore_Error_MnemonicWordCount">Mauvais nombre de mots. Il doit être compris entre 12 ou 24 mots. Vous avez saisi : %d</string>
+    <string name="Restore_Error_MnemonicWordCount">La phrase de récupération doit contenir au moins 12 mots.</string>
     <string name="Restore_Error_EmptyPassphrase">La phrase de passe ne peut pas être vide</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
     <string name="Restore_PassphraseDescription">Entrez la phrase de passe que vous avez utilisée lors de la création de cette phrase de récupération. La restauration d\'un portefeuille existant avec une nouvelle phrase de passe générera un tout nouveau portefeuille.</string>

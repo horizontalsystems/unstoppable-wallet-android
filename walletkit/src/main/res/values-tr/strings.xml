@@ -102,7 +102,7 @@
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">İleri düzey</string>
-    <string name="Restore_Error_MnemonicWordCount">Hatalı sözcük sayısı. 12-24 arası sözcük olmalıdır. Girilen: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Kurtarma cümlesi en az 12 kelime içermelidir.</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
     <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
@@ -309,7 +309,7 @@
     <string name="ScanQr_GoToSettings">Ayarlara gidin</string>
     <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece BIP44 (1 ile başlayan) adresleriyle çalışır</string>
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
-    <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
+    <string name="Send_Error_SendToSelf">%s varlığını kendi adresinize göndermenize izin verilmez. Lütfen farklı bir alıcı adresi girin.</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
     <string name="Send_LockTime_Off">Kapat</string>
     <string name="Send_LockTime_Hour">1 saat</string>
