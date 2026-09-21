@@ -1,0 +1,12 @@
+name: Check Translations
+
+on:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify every string is translated into all supported locales
+        run: python3 .github/scripts/check_translations.py

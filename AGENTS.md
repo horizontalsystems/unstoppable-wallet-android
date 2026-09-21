@@ -207,7 +207,10 @@ ships the languages listed in the `LocaleType` enum
 English as the source plus de, es, pt-BR, fa, fr, ko, ru, tr, zh.
 
 Translations are part of the change that touches the strings. There is no
-separate translation step, so when you add, change, or remove a string:
+separate translation step, and CI fails a pull request when a key is missing
+from any locale or its placeholders differ from English
+(`.github/scripts/check_translations.py`). When you add, change, or remove a
+string:
 
 - Add the translated entry to every locale file in the same change:
   `values-de`, `values-es`, `values-pt-rBR`, `values-fa`, `values-fr`,
