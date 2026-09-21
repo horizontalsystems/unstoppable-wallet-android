@@ -1,8 +1,10 @@
 package io.horizontalsystems.walletkit.core.managers
 
+import android.util.Log
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.xrpkit.XrpKit
 import io.horizontalsystems.xrpkit.XrpWallet
+import io.horizontalsystems.xrpkit.models.TrustLine
 import io.horizontalsystems.xrpkit.network.Network
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
@@ -11,6 +13,7 @@ import io.horizontalsystems.walletkit.core.BackgroundManagerState
 import io.horizontalsystems.walletkit.core.UnsupportedAccountException
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -119,24 +122,38 @@ class XrpKitManager(
         kitWrapper?.kit?.start()
         // Re-established on every kit creation: the collector only lives while a kit exists,
         // and reloadWallets recreates it after a provider change.
+        // Both collectors share `scope`, which start() reuses after stop(): a throw in either
+        // would cancel it for good and silently end lifecycle handling for every later kit.
         sourceJob = scope.launch {
             rpcSourceManager.rpcSourceUpdatedFlow.collect {
-                handleUpdateNetwork()
+                try {
+                    handleUpdateNetwork()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Log.e(TAG, "rpc source update handling error: ${e.message}", e)
+                }
             }
         }
         job = scope.launch {
             backgroundManager.stateFlow.collectLatest { state ->
-                when (state) {
-                    BackgroundManagerState.EnterForeground -> {
-                        kitWrapper?.kit?.let { kit ->
-                            kit.resume()
-                            delay(1000)
-                            kit.refresh()
+                try {
+                    when (state) {
+                        BackgroundManagerState.EnterForeground -> {
+                            kitWrapper?.kit?.let { kit ->
+                                kit.resume()
+                                delay(1000)
+                                kit.refresh()
+                            }
+                        }
+                        BackgroundManagerState.EnterBackground -> {
+                            kitWrapper?.kit?.pause()
                         }
                     }
-                    BackgroundManagerState.EnterBackground -> {
-                        kitWrapper?.kit?.pause()
-                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Log.e(TAG, "background state handling error: ${e.message}", e)
                 }
             }
         }
@@ -145,9 +162,19 @@ class XrpKitManager(
     fun getAddress(accountType: AccountType): String {
         return XrpKit.getAddress(accountType.toXrpWallet())
     }
+
+    companion object {
+        private const val TAG = "XrpKitManager"
+    }
 }
 
-class XrpKitWrapper(val kit: XrpKit)
+class XrpKitWrapper(val kit: XrpKit) {
+    /**
+     * Trust lines the kit had in storage when this wrapper was created, before the kit was
+     * started: the baseline XrpAccountManager's restore-time auto-enable gate is keyed on.
+     */
+    val persistedTrustLines: List<TrustLine> = kit.trustLines
+}
 
 fun XrpKit.SyncState.toAdapterState(): AdapterState = when (this) {
     is XrpKit.SyncState.NotSynced -> AdapterState.NotSynced(error)

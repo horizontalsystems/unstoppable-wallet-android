@@ -1,62 +1,60 @@
 package io.horizontalsystems.walletkit.modules.xrpnetwork
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.core.ViewModelUiState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class XrpNetworkViewModel(private val service: XrpNetworkService) : ViewModel() {
+class XrpNetworkViewModel(private val service: XrpNetworkService) : ViewModelUiState<XrpNetworkViewModel.UiState>() {
 
-    var closeScreen by mutableStateOf(false)
-        private set
-
-    var viewItems by mutableStateOf<List<ViewItem>>(listOf())
-        private set
+    private var closeScreen = false
+    private var viewItems = listOf<ViewItem>()
 
     val title: String = "XRP Ledger"
     val blockchainType = BlockchainType.Xrp
 
+    override fun createState() = UiState(
+        closeScreen = closeScreen,
+        viewItems = viewItems,
+    )
+
     init {
         viewModelScope.launch {
-            service.itemsFlow
+            service.stateFlow
                 .catch { Timber.e(it, "XRP network items collection failed") }
-                .collect {
-                    sync(it)
+                .collect { state ->
+                    viewItems = state.items.map { viewItem(it) }
+                    emitState()
                 }
         }
     }
 
-    private fun sync(items: List<XrpNetworkService.Item>) {
-        viewModelScope.launch {
-            viewItems = items.map { viewItem(it) }
-        }
-    }
-
-    private fun viewItem(item: XrpNetworkService.Item): ViewItem {
-        return ViewItem(
-            item.rpcSource.name,
-            item.rpcSource.url,
-            item.selected
-        )
-    }
+    private fun viewItem(item: XrpNetworkService.Item) = ViewItem(
+        name = item.rpcSource.name,
+        url = item.rpcSource.url,
+        selected = item.selected,
+    )
 
     fun onSelectViewItem(viewItem: ViewItem) {
         service.setCurrentSource(viewItem.name)
         closeScreen = true
+        emitState()
     }
 
     override fun onCleared() {
         service.clear()
     }
 
+    data class UiState(
+        val closeScreen: Boolean,
+        val viewItems: List<ViewItem>,
+    )
+
     data class ViewItem(
         val name: String,
         val url: String,
-        val selected: Boolean
+        val selected: Boolean,
     )
 }

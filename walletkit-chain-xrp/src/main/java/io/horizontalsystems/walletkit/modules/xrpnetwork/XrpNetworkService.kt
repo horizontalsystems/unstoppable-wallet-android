@@ -1,51 +1,62 @@
 package io.horizontalsystems.walletkit.modules.xrpnetwork
 
 import io.horizontalsystems.walletkit.core.Clearable
+import io.horizontalsystems.walletkit.core.ServiceState
 import io.horizontalsystems.walletkit.core.managers.XrpRpcSource
 import io.horizontalsystems.walletkit.core.managers.XrpRpcSourceManager
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class XrpNetworkService(
     private val rpcSourceManager: XrpRpcSourceManager,
-) : Clearable {
-    private val _itemsFlow = MutableSharedFlow<List<Item>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    var items = listOf<Item>()
-        private set(value) {
-            field = value
+) : ServiceState<XrpNetworkService.State>(), Clearable {
 
-            _itemsFlow.tryEmit(value)
-        }
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val mutex = Mutex()
 
-    private val currentRpcSource: XrpRpcSource
-        get() = rpcSourceManager.rpcSource
+    private var items = listOf<Item>()
+
+    override fun createState() = State(items = items)
 
     init {
         syncItems()
+
+        coroutineScope.launch {
+            rpcSourceManager.rpcSourceUpdatedFlow.collect {
+                mutex.withLock {
+                    syncItems()
+                }
+            }
+        }
     }
 
     private fun syncItems() {
-        val currentRpcSourceName = currentRpcSource.name
+        val currentRpcSourceName = rpcSourceManager.rpcSource.name
 
         items = rpcSourceManager.allRpcSources.map { rpcSource ->
             Item(rpcSource, rpcSource.name == currentRpcSourceName)
         }
+
+        emitState()
     }
 
-    val itemsFlow: Flow<List<Item>>
-        get() = _itemsFlow
-
     fun setCurrentSource(name: String) {
-        if (currentRpcSource.name == name) return
+        if (rpcSourceManager.rpcSource.name == name) return
 
         val rpcSource = items.find { it.rpcSource.name == name }?.rpcSource ?: return
 
         rpcSourceManager.save(rpcSource)
     }
 
-    override fun clear() = Unit
+    override fun clear() {
+        coroutineScope.cancel()
+    }
+
+    data class State(val items: List<Item>)
 
     data class Item(val rpcSource: XrpRpcSource, val selected: Boolean)
-
 }

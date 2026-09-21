@@ -48,23 +48,18 @@ class XrpAccountManager(
     }
 
     private fun subscribe() {
-        val kit = kitManager.kitWrapper?.kit ?: return
+        val wrapper = kitManager.kitWrapper ?: return
         val account = accountManager.activeAccount ?: return
 
-        // trustLinesFlow is a StateFlow seeded from the kit's storage, so the first emission is
-        // what the kit already knew before this subscription; every later one comes from sync.
-        var initial = true
         // kitStartedFlow is a StateFlow and may conflate a rapid false -> true, so the collector
         // for the previous kit has to be dropped here, not only on `false`.
         subscriptionJob?.cancel()
         subscriptionJob = coroutineScope.launch {
-            kit.trustLinesFlow.collect { lines ->
-                val isInitial = initial
-                initial = false
+            wrapper.kit.trustLinesFlow.collect { lines ->
                 // coroutineScope has a plain Job: a throw here would cancel it and permanently
                 // kill the kitStartedFlow collector, so swallow and log.
                 try {
-                    handle(lines, account, isInitial)
+                    handle(lines, account, wrapper.persistedTrustLines)
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Throwable) {
@@ -74,20 +69,26 @@ class XrpAccountManager(
         }
     }
 
-    private fun handle(lines: List<TrustLine>, account: Account, initial: Boolean) {
-        val shouldAutoEnable = tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
-        // Lines the kit had stored before this subscription are enabled only when the user opted
-        // into XRP on the restore screen. Lines synced afterwards, i.e. the first sync of a kit
-        // enabled from Coin Manager or a token received later, are auto-enabled as on every
-        // other chain.
-        if (initial && account.origin == AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnable) return
+    /**
+     * [persisted] is what the kit had in storage when it was created, before any sync. Tokens
+     * held there are enabled only when the user opted into XRP on the restore screen. Anything
+     * synced since, i.e. the first sync of a kit enabled from Coin Manager or a token received
+     * later, is auto-enabled as on every other chain. Keying on the baseline rather than on the
+     * first emission keeps the gate independent of when this collector attaches.
+     */
+    private fun handle(lines: List<TrustLine>, account: Account, persisted: List<TrustLine>) {
         if (!tokenAutoEnableManager.autoEnableTokensOnReceive) return
 
-        val held = lines.filter { it.balance > BigDecimal.ZERO }
+        val gated = account.origin == AccountOrigin.Restored &&
+            !account.isWatchAccount &&
+            !tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
+        val persistedHeldIds = if (gated) persisted.filter { it.isHeld }.map { it.tokenTypeId }.toSet() else emptySet()
+
+        val held = lines.filter { it.isHeld && it.tokenTypeId !in persistedHeldIds }
         if (held.isEmpty()) return
 
         val existingTokenTypeIds = walletManager.activeWallets.map { it.token.type.id }
-        val newLines = held.filter { TokenType.XrpAsset(it.currency, it.issuer).id !in existingTokenTypeIds }
+        val newLines = held.filter { it.tokenTypeId !in existingTokenTypeIds }
         if (newLines.isEmpty()) return
 
         val enabledWallets = newLines.map { line ->
@@ -104,4 +105,7 @@ class XrpAccountManager(
 
         walletManager.saveEnabledWallets(enabledWallets)
     }
+
+    private val TrustLine.isHeld: Boolean get() = balance > BigDecimal.ZERO
+    private val TrustLine.tokenTypeId: String get() = TokenType.XrpAsset(currency, issuer).id
 }

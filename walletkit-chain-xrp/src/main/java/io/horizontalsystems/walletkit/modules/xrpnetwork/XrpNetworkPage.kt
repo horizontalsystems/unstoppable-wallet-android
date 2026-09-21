@@ -57,8 +57,10 @@ private fun XrpNetworkScreen(
     navigation: HSNavigation
 ) {
 
-    LaunchedEffect(viewModel.closeScreen) {
-        if (viewModel.closeScreen) {
+    val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState.closeScreen) {
+        if (uiState.closeScreen) {
             navigation.removeLastOrNull()
         }
     }
@@ -104,7 +106,7 @@ private fun XrpNetworkScreen(
                 }
 
                 item {
-                    CellUniversalLawrenceSection(viewModel.viewItems) { item ->
+                    CellUniversalLawrenceSection(uiState.viewItems) { item ->
                         NetworkSettingCell(item.name, item.url, item.selected) {
                             viewModel.onSelectViewItem(item)
                         }
