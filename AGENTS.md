@@ -284,8 +284,9 @@ is solved, which may take several pull requests.
 - What is risky and deserves a close look.
 - Dependencies and merge order, or the target branch for a backport.
 
-Keep the description short, usually a sentence or two. Do not list the
-changes; the diff and the commit messages already say that.
+Cover only the points above that apply, each in a sentence. Most pull
+requests need one or two. Do not list the changes; the diff and the commit
+messages already say that.
 
 Closing keywords (`Closes #123`) only take effect when a pull request merges
 into the default branch (`master`). Pull requests target `version/*`, so close
