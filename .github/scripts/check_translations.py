@@ -15,6 +15,9 @@ import xml.etree.ElementTree as ET
 
 LOCALE_ENUM = "walletkit/src/main/java/io/horizontalsystems/walletkit/helpers/LocaleHelper.kt"
 PLACEHOLDER = re.compile(r"%(?:\d+\$)?[sdf]|%\.\d+f|%%")
+# values-de, values-pt-rBR: a language with an optional region. Other
+# qualifiers such as values-night or values-sw600dp are not locales.
+LOCALE_DIR = re.compile(r"^values-([a-z]{2,3}(?:-r[A-Z]{2})?)$")
 
 
 def supported_locale_dirs() -> list[str]:
@@ -84,9 +87,9 @@ def main() -> int:
         english = entries(source)
 
         present = {
-            d[len("values-"):]
+            m.group(1)
             for d in os.listdir(res_dir)
-            if d.startswith("values-") and os.path.isfile(os.path.join(res_dir, d, "strings.xml"))
+            if (m := LOCALE_DIR.match(d)) and os.path.isfile(os.path.join(res_dir, d, "strings.xml"))
         }
         for locale in sorted(present - set(locales)):
             error(f"{res_dir}/values-{locale}/strings.xml", f"Locale '{locale}' is not in LocaleType; remove it or add it to the enum")
