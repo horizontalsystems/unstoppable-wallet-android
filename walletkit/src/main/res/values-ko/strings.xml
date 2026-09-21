@@ -1948,4 +1948,5 @@
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="other">거래 %d건 서명</item>
     </plurals>
+    <string name="TranslationCheck_Demo">번역 검사 데모</string>
 </resources>

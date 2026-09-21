@@ -1952,4 +1952,5 @@
         <item quantity="one">Firmar %d transacción</item>
         <item quantity="other">Firmar %d transacciones</item>
     </plurals>
+    <string name="TranslationCheck_Demo">Demostración de la verificación de traducciones</string>
 </resources>
