@@ -13,7 +13,6 @@ reviews:
     ignore_title_keywords:
       - "WIP"
       - "DO NOT REVIEW"
-      - "chore: auto-translate"
 
   path_filters:
     - "!**/build/**"
