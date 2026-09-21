@@ -15,7 +15,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -24,11 +27,20 @@ import kotlinx.coroutines.launch
 /** One XrpKit per active account, shared by every wallet of that account, refreshed on foreground. */
 class XrpKitManager(
     private val backgroundManager: BackgroundManager,
+    private val rpcSourceManager: XrpRpcSourceManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
+    private var sourceJob: Job? = null
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
+
+    // Signals that the running kit was torn down because the user changed the RPC provider;
+    // WalletManager reloads XRP wallets on this, which rebuilds the adapters and the kit with
+    // the newly selected source. tryEmit stays synchronous so it fires before
+    // handleUpdateNetwork cancels the collector coroutine it runs in.
+    private val _kitStoppedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val kitStoppedFlow: SharedFlow<Unit> = _kitStoppedFlow.asSharedFlow()
 
     var kitWrapper: XrpKitWrapper? = null
         private set(value) {
@@ -69,7 +81,13 @@ class XrpKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType, account: Account): XrpKitWrapper {
-        val kit = XrpKit.getInstance(App.instance, accountType.toXrpWallet(), Network.MainNet, account.id)
+        val kit = XrpKit.getInstance(
+            App.instance,
+            accountType.toXrpWallet(),
+            Network.MainNet,
+            account.id,
+            rpcUrls = rpcSourceManager.rpcUrls(),
+        )
         return XrpKitWrapper(kit)
     }
 
@@ -84,15 +102,28 @@ class XrpKitManager(
         }
     }
 
+    private fun handleUpdateNetwork() {
+        stop()
+        _kitStoppedFlow.tryEmit(Unit)
+    }
+
     private fun stop() {
         kitWrapper?.kit?.stop()
         job?.cancel()
+        sourceJob?.cancel()
         kitWrapper = null
         currentAccount = null
     }
 
     private fun start() {
         kitWrapper?.kit?.start()
+        // Re-established on every kit creation: the collector only lives while a kit exists,
+        // and reloadWallets recreates it after a provider change.
+        sourceJob = scope.launch {
+            rpcSourceManager.rpcSourceUpdatedFlow.collect {
+                handleUpdateNetwork()
+            }
+        }
         job = scope.launch {
             backgroundManager.stateFlow.collectLatest { state ->
                 when (state) {

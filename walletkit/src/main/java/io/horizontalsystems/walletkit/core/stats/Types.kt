@@ -32,6 +32,7 @@ enum class StatPage(val key: String) {
     BlockchainSettingsEvmAdd("blockchain_settings_evm_add"),
     BlockchainSettingsSolana("blockchain_settings_sol"),
     BlockchainSettingsThorchain("blockchain_settings_thorchain"),
+    BlockchainSettingsXrp("blockchain_settings_xrp"),
     BlockchainSettingsCryptoNote("blockchain_settings_cryptonote"),
     CloudBackup("cloud_backup"),
     FileBackup("file_backup"),

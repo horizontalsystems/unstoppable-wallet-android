@@ -36,6 +36,12 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.Abstract
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceXrp
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.core.managers.XrpRpcSourceManager
+import io.horizontalsystems.walletkit.core.stats.StatEvent
+import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.walletkit.modules.xrpnetwork.XrpNetworkPage
+import kotlinx.coroutines.flow.Flow
 import io.horizontalsystems.walletkit.modules.receive.ReceiveActivatableTokenScreen
 import io.horizontalsystems.walletkit.core.TokenActivationInfo
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -54,7 +60,11 @@ class XrpChainPlugin : ChainPlugin {
 
     override val blockchainType: BlockchainType = BlockchainType.Xrp
 
-    val kitManager by lazy { XrpKitManager(App.backgroundManager) }
+    val rpcSourceManager by lazy {
+        XrpRpcSourceManager(App.blockchainSettingsStorage, App.marketKit)
+    }
+
+    val kitManager by lazy { XrpKitManager(App.backgroundManager, rpcSourceManager) }
 
     private val accountManager by lazy {
         XrpAccountManager(App.accountManager, App.walletManager, kitManager, App.tokenAutoEnableManager)
@@ -114,6 +124,29 @@ class XrpChainPlugin : ChainPlugin {
     override fun unlink(account: Account) {
         kitManager.unlink(account)
     }
+
+    override val walletReloadTrigger: Flow<*>
+        get() = kitManager.kitStoppedFlow
+
+    // The settings row shows the current RPC source, so it refreshes on source changes
+    // (the kit-stopped signal only fires when a running kit restarts).
+    override val settingsRefreshTrigger: Flow<*>
+        get() = rpcSourceManager.rpcSourceUpdatedFlow
+
+    override fun networkSettingsPage(): HSPage = XrpNetworkPage
+
+    override fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? {
+        val blockchain = rpcSourceManager.blockchain ?: return null
+        return BlockchainSettingsModule.BlockchainItem.Chain(
+            blockchain = blockchain,
+            subtitle = rpcSourceManager.rpcSource.name,
+            btcLike = false,
+            page = XrpNetworkPage,
+            statEvent = StatEvent.Open(StatPage.BlockchainSettingsXrp),
+        )
+    }
+
+    override fun backupSyncSourceName(): String = rpcSourceManager.rpcSource.name
 
     override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 
