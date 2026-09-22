@@ -15,6 +15,7 @@ import kotlin.math.abs
  *
  * Points:
  * - Auto-spam (7 points): Unknown token, zero-value native coin, micro dust
+ *   (micro dust of coins in coinsWithoutMicroDust scores as ordinary dust instead)
  * - Zero Value NFT: +3 points
  * - Dust Amount (based on risk threshold from config):
  *   - If value < risk: +3 points
@@ -107,17 +108,19 @@ class PoisoningScorer {
      *
      * @param events List of incoming transfer events to check
      * @param spamCoinLimits Map of coin code to spam threshold value
+     * @param coinsWithoutMicroDust Coin codes whose micro dust is not auto-spam
      * @return ValueScoringResult with score and whether context check is needed
      */
     fun calculateValueScore(
         events: List<TransferEvent>,
-        spamCoinLimits: Map<String, BigDecimal>
+        spamCoinLimits: Map<String, BigDecimal>,
+        coinsWithoutMicroDust: Set<String> = emptySet()
     ): ValueScoringResult {
         var maxScore = 0
         var maxScoreAddress: String? = null
 
         events.forEach { event ->
-            val result = scoreEventValue(event, spamCoinLimits)
+            val result = scoreEventValue(event, spamCoinLimits, coinsWithoutMicroDust)
             if (result.score > maxScore) {
                 maxScore = result.score
                 maxScoreAddress = result.address
@@ -261,7 +264,8 @@ class PoisoningScorer {
      */
     private fun scoreEventValue(
         event: TransferEvent,
-        spamCoinLimits: Map<String, BigDecimal>
+        spamCoinLimits: Map<String, BigDecimal>,
+        coinsWithoutMicroDust: Set<String>
     ): ScoringResult {
         val address = event.address ?: return ScoringResult(null, 0, emptyList())
         val value = event.value
@@ -309,7 +313,7 @@ class PoisoningScorer {
             val dangerThreshold = limit.multiply(BigDecimal("5"))
 
             when {
-                decimalValue < spamThreshold -> {
+                decimalValue < spamThreshold && coinCode !in coinsWithoutMicroDust -> {
                     score += POINTS_MICRO_DUST
                     reasons.add("Micro dust: value < spam threshold ($decimalValue < $spamThreshold)")
                 }

@@ -115,9 +115,10 @@ class SpamManager(
         }
 
         val spamCoinLimits = App.appConfigProvider.spamCoinValueLimits
+        val coinsWithoutMicroDust = App.appConfigProvider.spamCoinsWithoutMicroDust
 
         // Phase 1: Value-only scoring (fast, no DB calls for outgoing context)
-        val valueResult = poisoningScorer.calculateValueScore(events, spamCoinLimits)
+        val valueResult = poisoningScorer.calculateValueScore(events, spamCoinLimits, coinsWithoutMicroDust)
 
         // Early exit if score is conclusive
         if (valueResult.score >= PoisoningScorer.SPAM_THRESHOLD) {

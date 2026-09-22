@@ -133,7 +133,7 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     }
 
     // coinCode -> risk threshold (used for dust detection scoring)
-    // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
+    // spam = risk/10 (auto-spam, except spamCoinsWithoutMicroDust), risk = config value (+3 points), danger = risk*5 (+2 points)
     override val spamCoinValueLimits: Map<String, BigDecimal> = mapOf(
         "XLM" to BigDecimal("0.1"),
         // XRPL dust spam is sent in single drops; anything under 0.0001 XRP (limit / 10) is auto-spam
@@ -150,6 +150,12 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
         "POL" to BigDecimal("1"),
         "BNB" to BigDecimal("0.0002"),
         "SOL" to BigDecimal("0.0001"),
+    )
+
+    // Cent-sized stablecoin transfers are common test sends, so their micro dust is not
+    // auto-spam: it scores as ordinary dust and needs address or time correlation.
+    override val spamCoinsWithoutMicroDust: Set<String> = setOf(
+        "USDT", "USDC", "USDD", "DAI", "BUSD", "EURS", "BSC-USD",
     )
 
     override val chainalysisBaseUrl = BuildConfig.CHAINALYSIS_BASE_URL

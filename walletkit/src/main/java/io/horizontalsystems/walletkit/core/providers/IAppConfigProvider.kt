@@ -58,6 +58,7 @@ interface IAppConfigProvider {
     val currencies: List<Currency>
     val donateAddresses: Map<BlockchainType, String>
     val spamCoinValueLimits: Map<String, BigDecimal>
+    val spamCoinsWithoutMicroDust: Set<String>
     val chainalysisBaseUrl: String
     val chainalysisApiKey: String
     val hashDitBaseUrl: String
