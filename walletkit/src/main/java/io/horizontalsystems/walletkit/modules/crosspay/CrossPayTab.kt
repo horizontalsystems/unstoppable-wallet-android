@@ -32,7 +32,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.v2.AddressRow
-import io.horizontalsystems.walletkit.modules.send.v2.AmountSection
+import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
 import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
@@ -126,19 +126,19 @@ fun CrossPayTabBody(
                 .verticalScroll(rememberScrollState())
         ) {
             // The balance shown is the SOURCE token's — what funds the payment.
-            AmountSection(
+            TokenAmountInput(
                 token = uiState.tokenOut,
-                balanceToken = uiState.tokenIn,
                 amount = uiState.amountOut,
-                amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
                 fiatAmount = uiState.fiatAmountOut,
                 fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                 currency = uiState.currency,
-                availableBalance = uiState.availableBalance,
                 focusRequester = focusRequester,
                 onValueChange = viewModel::onEnterAmount,
                 onFiatValueChange = viewModel::onEnterFiatAmount,
                 onFocusChanged = { amountInputHasFocus = it },
+                amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
+                balanceToken = uiState.tokenIn,
+                availableBalance = uiState.availableBalance,
                 onTokenClick = openCoinSelect,
             )
             SectionArrow()

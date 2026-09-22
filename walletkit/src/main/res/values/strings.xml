@@ -872,7 +872,6 @@
     <string name="Swap_ToAmountTitle">You Get</string>
     <string name="Swap_FiatPriceImpact" translatable="false">(%s%%)</string>
     <string name="Swap_Percent" translatable="false">%s%%</string>
-    <string name="Swap_TokenSelectorTitle">Select</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="Swap_PriceImpact">Price Impact</string>

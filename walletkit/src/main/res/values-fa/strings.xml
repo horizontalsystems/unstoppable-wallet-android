@@ -201,7 +201,6 @@
     <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
     <string name="Swap_ToAmountTitle">شما دریافت می کنید</string>
-    <string name="Swap_TokenSelectorTitle">انتخاب</string>
     <string name="Swap_Price">قیمت</string>
     <string name="Swap_AvailableBalance">موجودی در دسترس</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>

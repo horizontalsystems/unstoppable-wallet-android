@@ -580,7 +580,6 @@
     <string name="Swap_AML">AML</string>
     <string name="Swap_FromAmountTitle">Sie zahlen</string>
     <string name="Swap_ToAmountTitle">Du bekommst</string>
-    <string name="Swap_TokenSelectorTitle">Auswählen</string>
     <string name="Swap_Price">Preis</string>
     <string name="Swap_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>

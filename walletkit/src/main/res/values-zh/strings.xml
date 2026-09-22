@@ -579,7 +579,6 @@
     <string name="Swap_AML">AML</string>
     <string name="Swap_FromAmountTitle">您支付</string>
     <string name="Swap_ToAmountTitle">您获得</string>
-    <string name="Swap_TokenSelectorTitle">选择</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_AvailableBalance">可用余额</string>
     <string name="Swap_PriceImpact">价格影响</string>

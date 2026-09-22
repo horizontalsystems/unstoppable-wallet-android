@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,9 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -66,7 +62,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -82,10 +77,8 @@ import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -93,8 +86,9 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_jacob
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
+import io.horizontalsystems.walletkit.uiv3.components.controls.FiatLinePlaceholder
+import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
+import io.horizontalsystems.walletkit.uiv3.components.controls.TokenSelector
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
@@ -452,7 +446,7 @@ private fun SwapScreenInner(
                     tokenOut = uiState.tokenOut,
                     currency = uiState.currency,
                     onFocusChanged = {
-                        amountInputHasFocus = it.hasFocus
+                        amountInputHasFocus = it
                     },
                     focusRequester = amountInputFocusRequester,
                 )
@@ -865,24 +859,24 @@ private fun SwapInput(
     tokenIn: Token?,
     tokenOut: Token?,
     currency: Currency,
-    onFocusChanged: (FocusState) -> Unit,
+    onFocusChanged: (Boolean) -> Unit,
     focusRequester: FocusRequester,
 ) {
     Box {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            SwapCoinInputIn(
-                coinAmount = amountIn,
+            TokenAmountInput(
+                token = tokenIn,
+                amount = amountIn,
                 fiatAmount = fiatAmountIn,
+                fiatAmountInputEnabled = fiatAmountInputEnabled,
                 currency = currency,
+                focusRequester = focusRequester,
                 onValueChange = onValueChange,
                 onFiatValueChange = onFiatValueChange,
-                fiatAmountInputEnabled = fiatAmountInputEnabled,
-                token = tokenIn,
-                onClickCoin = onClickCoinFrom,
                 onFocusChanged = onFocusChanged,
-                focusRequester = focusRequester
+                onTokenClick = onClickCoinFrom,
             )
             SwapCoinInputTo(
                 coinAmount = amountOut,
@@ -910,49 +904,6 @@ private fun SwapInput(
 }
 
 @Composable
-private fun SwapCoinInputIn(
-    coinAmount: BigDecimal?,
-    fiatAmount: BigDecimal?,
-    currency: Currency,
-    onValueChange: (BigDecimal?) -> Unit,
-    onFiatValueChange: (BigDecimal?) -> Unit,
-    fiatAmountInputEnabled: Boolean,
-    token: Token?,
-    onClickCoin: () -> Unit,
-    onFocusChanged: (FocusState) -> Unit,
-    focusRequester: FocusRequester,
-) {
-    Row(
-        modifier = Modifier
-            .onFocusChanged(onFocusChanged)
-            .padding(horizontal = 16.dp, vertical = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CoinSelector(token, onClickCoin)
-        HSpacer(width = 8.dp)
-        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-            AmountInput(
-                value = coinAmount,
-                onValueChange = onValueChange,
-                focusRequester = focusRequester
-            )
-            VSpacer(height = 3.dp)
-            if (fiatAmountInputEnabled || fiatAmount != null) {
-                FiatAmountInput(
-                    value = fiatAmount,
-                    currency = currency,
-                    onValueChange = onFiatValueChange,
-                    enabled = fiatAmountInputEnabled
-                )
-            } else {
-                // Keeps the row height stable while the rate is still loading on a cold start.
-                FiatLinePlaceholder(currency)
-            }
-        }
-    }
-}
-
-@Composable
 private fun SwapCoinInputTo(
     coinAmount: BigDecimal?,
     fiatAmount: BigDecimal?,
@@ -965,10 +916,10 @@ private fun SwapCoinInputTo(
 ) {
     Row(
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 20.dp),
+            .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CoinSelector(token, onClickCoin)
+        TokenSelector(token = token, onClick = onClickCoin)
         HSpacer(8.dp)
         Column(
             modifier = Modifier.weight(1f),
@@ -1005,49 +956,6 @@ private fun SwapCoinInputTo(
             }
         }
     }
-}
-
-@Composable
-private fun CoinSelector(
-    token: Token?,
-    onClickCoin: () -> Unit,
-) {
-    Selector(
-        icon = {
-            CoinImage(
-                token = token,
-                modifier = Modifier.size(32.dp)
-            )
-        },
-        text = {
-            Column {
-                if (token != null) {
-                    headline2_leah(text = token.coin.code)
-                } else {
-                    headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
-                }
-                VSpacer(height = 5.dp)
-                BadgeText(
-                    // Invisible while no token is chosen so the selector keeps its final height
-                    // and the card does not jump once the default tokens resolve.
-                    modifier = if (token == null) Modifier.alpha(0f) else Modifier,
-                    text = token?.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
-                    background = ComposeAppTheme.colors.blade,
-                    textColor = ComposeAppTheme.colors.leah,
-                )
-            }
-        },
-        onClickSelect = onClickCoin
-    )
-}
-
-/** Invisible fiat line reserving the space the fiat text or input takes once a rate is known. */
-@Composable
-private fun FiatLinePlaceholder(currency: Currency) {
-    body_grey(
-        modifier = Modifier.alpha(0f),
-        text = "${currency.symbol}0",
-    )
 }
 
 @Composable
@@ -1105,32 +1013,6 @@ fun FiatAmountInput(
         cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
         visualTransformation = displayTransformation,
     )
-}
-
-@Composable
-private fun Selector(
-    icon: @Composable() (RowScope.() -> Unit),
-    text: @Composable() (RowScope.() -> Unit),
-    onClickSelect: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onClickSelect,
-        ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        icon.invoke(this)
-        HSpacer(width = 16.dp)
-        text.invoke(this)
-        HSpacer(width = 8.dp)
-        Icon(
-            painter = painterResource(R.drawable.arrow_s_down_20),
-            contentDescription = "",
-            tint = ComposeAppTheme.colors.leah
-        )
-    }
 }
 
 @Composable

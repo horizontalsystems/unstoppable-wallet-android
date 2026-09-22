@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -47,16 +46,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabBody
 import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabViewModel
-import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.Address
-import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
-import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
-import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
 import io.horizontalsystems.walletkit.modules.multiswap.WalletNotSynced
@@ -69,7 +63,6 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
@@ -77,11 +70,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
+import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
-import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -235,19 +227,19 @@ fun SendV2Screen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     val step = uiState.step
-                    AmountSection(
+                    TokenAmountInput(
                         token = uiState.wallet.token,
-                        balanceToken = uiState.wallet.token,
                         amount = uiState.amount,
-                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
                         fiatAmount = uiState.fiatAmount,
                         fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                         currency = uiState.currency,
-                        availableBalance = uiState.availableBalance,
                         focusRequester = focusRequester,
                         onValueChange = viewModel::onEnterAmount,
                         onFiatValueChange = viewModel::onEnterFiatAmount,
                         onFocusChanged = { amountInputHasFocus = it },
+                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
+                        balanceToken = uiState.wallet.token,
+                        availableBalance = uiState.availableBalance,
                         // The line doubles as the 100% shortcut whenever that percent is offered.
                         onAvailableBalanceClick = if (100 in uiState.disabledPercents) {
                             null
@@ -376,117 +368,6 @@ private fun SendTab.tabItem() = when (this) {
     )
 
     SendTab.CrossPay -> TabFolderItem(stringResource(R.string.Send_Tab_CrossPay))
-}
-
-/**
- * The amount block: the available balance, the token with its badge, and the amount with
- * its fiat value. [token] is what the amount is in and may be unchosen; [balanceToken] is
- * what funds it and formats [availableBalance]. An [onTokenClick] makes the token a
- * selector with a drop-down arrow. An [onAvailableBalanceClick] makes the balance line a
- * shortcut, shown in blue; without one it is a plain grey note.
- */
-@Composable
-internal fun AmountSection(
-    token: Token?,
-    balanceToken: Token,
-    amount: BigDecimal?,
-    amountExceedsBalance: Boolean,
-    fiatAmount: BigDecimal?,
-    fiatAmountInputEnabled: Boolean,
-    currency: Currency,
-    availableBalance: BigDecimal?,
-    focusRequester: FocusRequester,
-    onValueChange: (BigDecimal?) -> Unit,
-    onFiatValueChange: (BigDecimal?) -> Unit,
-    onFocusChanged: (Boolean) -> Unit,
-    onTokenClick: (() -> Unit)? = null,
-    onAvailableBalanceClick: (() -> Unit)? = null,
-) {
-    Column(
-        modifier = Modifier
-            .onFocusChanged { onFocusChanged(it.hasFocus) }
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp)
-    ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            availableBalance?.let {
-                Text(
-                    modifier = if (onAvailableBalanceClick != null) {
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onAvailableBalanceClick,
-                        )
-                    } else {
-                        Modifier
-                    },
-                    text = stringResource(
-                        R.string.Send_Available,
-                        App.numberFormatter.formatCoinFull(it, balanceToken.coin.code, balanceToken.decimals)
-                    ),
-                    style = ComposeAppTheme.typography.caption,
-                    color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
-                )
-            }
-        }
-        VSpacer(8.dp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(
-                modifier = if (onTokenClick != null) {
-                    Modifier.clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = onTokenClick,
-                    )
-                } else {
-                    Modifier
-                },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                CellLeftCoinIcon(token = token)
-                HSpacer(16.dp)
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        headline1_leah(text = token?.coin?.code ?: stringResource(R.string.CrossPay_ChooseCoin))
-                        if (onTokenClick != null) {
-                            HSpacer(4.dp)
-                            Icon(
-                                painter = painterResource(R.drawable.arrow_s_down_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.leah,
-                            )
-                        }
-                    }
-                    token?.let {
-                        VSpacer(5.dp)
-                        BadgeText(
-                            text = it.badge ?: stringResource(R.string.CoinPlatforms_Native),
-                            background = ComposeAppTheme.colors.blade,
-                            textColor = ComposeAppTheme.colors.leah,
-                        )
-                    }
-                }
-            }
-            HSpacer(8.dp)
-            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                AmountInput(
-                    value = amount,
-                    onValueChange = onValueChange,
-                    focusRequester = focusRequester,
-                    textColor = if (amountExceedsBalance) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
-                    placeholderColor = ComposeAppTheme.colors.leah,
-                )
-                if (fiatAmountInputEnabled || fiatAmount != null) {
-                    VSpacer(3.dp)
-                    FiatAmountInput(
-                        value = fiatAmount,
-                        currency = currency,
-                        onValueChange = onFiatValueChange,
-                        enabled = fiatAmountInputEnabled,
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Composable

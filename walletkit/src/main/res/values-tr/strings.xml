@@ -423,7 +423,6 @@
     <string name="Swap">Takas</string>
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
     <string name="Swap_ToAmountTitle">Kazandığınız</string>
-    <string name="Swap_TokenSelectorTitle">Seç</string>
     <string name="Swap_Price">Fiyat</string>
     <string name="Swap_AvailableBalance">Mevcut Bakiye</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
