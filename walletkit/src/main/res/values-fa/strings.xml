@@ -202,7 +202,6 @@
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
     <string name="Swap_ToAmountTitle">شما دریافت می کنید</string>
     <string name="Swap_Price">قیمت</string>
-    <string name="Swap_AvailableBalance">موجودی در دسترس</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
     <string name="Swap_ProviderRisk_Risky">پرمخاطره</string>
     <string name="Swap_AmlError_Button">دوباره امتحان کنید</string>

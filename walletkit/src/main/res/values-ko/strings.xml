@@ -529,7 +529,6 @@
     <string name="Swap_FromAmountTitle">지불하기</string>
     <string name="Swap_ToAmountTitle">얻기</string>
     <string name="Swap_Price">가격</string>
-    <string name="Swap_AvailableBalance">사용 가능한 잔액</string>
     <string name="Swap_PriceImpact">가격 영향</string>
     <string name="Swap_ProviderRisk_Risky">위험</string>
     <string name="Swap_AmlError_Button">재시도</string>

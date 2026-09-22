@@ -581,7 +581,6 @@
     <string name="Swap_FromAmountTitle">Sie zahlen</string>
     <string name="Swap_ToAmountTitle">Du bekommst</string>
     <string name="Swap_Price">Preis</string>
-    <string name="Swap_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
     <string name="Swap_ProviderRisk">Routen-Risiko</string>
     <string name="Swap_ProviderRisk_NoRisk">Kein Risiko</string>

@@ -581,7 +581,6 @@
     <string name="Swap_FromAmountTitle">Você Paga</string>
     <string name="Swap_ToAmountTitle">Você recebe</string>
     <string name="Swap_Price">Preço</string>
-    <string name="Swap_AvailableBalance">Saldo Disponível</string>
     <string name="Swap_PriceImpact">Impacto de preço</string>
     <string name="Swap_ProviderRisk">Risco de Rota</string>
     <string name="Swap_ProviderRisk_NoRisk">Sem Risco</string>

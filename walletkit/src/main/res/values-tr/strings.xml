@@ -424,7 +424,6 @@
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
     <string name="Swap_ToAmountTitle">Kazandığınız</string>
     <string name="Swap_Price">Fiyat</string>
-    <string name="Swap_AvailableBalance">Mevcut Bakiye</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
     <string name="Swap_ProviderRisk_Risky">Riskli</string>
     <string name="Swap_AmlError_Button">Yeniden Dene</string>

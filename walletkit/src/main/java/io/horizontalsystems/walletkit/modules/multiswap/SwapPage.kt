@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,7 +64,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
-import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
@@ -75,7 +73,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
@@ -90,7 +87,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.FiatLinePlacehold
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenSelector
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
-import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
@@ -405,8 +401,6 @@ private fun SwapScreenInner(
             )),
         onBack = onClickClose,
     ) {
-        val keyboardState by observeKeyboardState()
-        var amountInputHasFocus by remember { mutableStateOf(false) }
         val amountInputFocusRequester = remember { FocusRequester() }
 
         // Show the keyboard only when the user navigates to this screen — not when it is
@@ -445,10 +439,21 @@ private fun SwapScreenInner(
                     tokenIn = uiState.tokenIn,
                     tokenOut = uiState.tokenOut,
                     currency = uiState.currency,
-                    onFocusChanged = {
-                        amountInputHasFocus = it
-                    },
                     focusRequester = amountInputFocusRequester,
+                    availableBalance = uiState.availableBalance,
+                    // The line doubles as the 100% shortcut whenever that percent is offered.
+                    onAvailableBalanceClick = if (100 in uiState.disabledPercents) {
+                        null
+                    } else {
+                        {
+                            focusManager.clearFocus()
+                            onEnterAmountPercentage(100)
+                        }
+                    },
+                    onPercentClick = {
+                        focusManager.clearFocus()
+                        onEnterAmountPercentage(it)
+                    },
                 )
                 VSpacer(height = 8.dp)
                 Column(
@@ -464,10 +469,6 @@ private fun SwapScreenInner(
                             .weight(1f)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        if (quote == null) {
-                            AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
-                        }
-
                         var showRegularPrice by remember(uiState.initialShowRegularPrice, uiState.tokenIn, uiState.tokenOut) {
                             mutableStateOf(uiState.initialShowRegularPrice)
                         }
@@ -608,25 +609,7 @@ private fun SwapScreenInner(
                             )
                         }
                     }
-                    if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
-                        val hasNonZeroBalance =
-                            uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-                        VSpacer(height = 16.dp)
-                        SuggestionsBar(
-                            disabledPercents = uiState.disabledPercents,
-                            onDelete = {
-                                onEnterAmount.invoke(null)
-                            },
-                            onSelect = {
-                                focusManager.clearFocus()
-                                onEnterAmountPercentage.invoke(it)
-                            },
-                            selectEnabled = hasNonZeroBalance,
-                            deleteEnabled = uiState.amountIn != null,
-                        )
-                    } else {
-                        VSpacer(height = 16.dp + bottomPadding)
-                    }
+                    VSpacer(height = 16.dp + bottomPadding)
                 }
             }
         }
@@ -776,20 +759,6 @@ private fun LeftSelector(
 }
 
 @Composable
-private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
-    Row(modifier = Modifier.padding(16.dp)) {
-        CellMiddleInfo(eyebrow = stringResource(R.string.Swap_AvailableBalance).hs)
-        val text = if (tokenIn != null && availableBalance != null) {
-            CoinValue(tokenIn, availableBalance).getFormattedFull()
-        } else {
-            "---"
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        CellRightInfo(titleSubheadSb = text.hs)
-    }
-}
-
-@Composable
 fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: PriceImpactLevel?,
@@ -859,8 +828,10 @@ private fun SwapInput(
     tokenIn: Token?,
     tokenOut: Token?,
     currency: Currency,
-    onFocusChanged: (Boolean) -> Unit,
     focusRequester: FocusRequester,
+    availableBalance: BigDecimal?,
+    onAvailableBalanceClick: (() -> Unit)?,
+    onPercentClick: (Int) -> Unit,
 ) {
     Box {
         Column(
@@ -875,8 +846,11 @@ private fun SwapInput(
                 focusRequester = focusRequester,
                 onValueChange = onValueChange,
                 onFiatValueChange = onFiatValueChange,
-                onFocusChanged = onFocusChanged,
                 onTokenClick = onClickCoinFrom,
+                balanceToken = tokenIn,
+                availableBalance = availableBalance,
+                onAvailableBalanceClick = onAvailableBalanceClick,
+                onPercentClick = onPercentClick,
             )
             SwapCoinInputTo(
                 coinAmount = amountOut,
