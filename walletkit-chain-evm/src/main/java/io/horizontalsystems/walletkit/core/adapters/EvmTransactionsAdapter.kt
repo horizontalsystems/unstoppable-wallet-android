@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
+import io.horizontalsystems.walletkit.core.nativeTokenContractAddress
 import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
 import io.horizontalsystems.walletkit.core.managers.EvmTransactionEventExtractor
 import io.horizontalsystems.walletkit.core.ICoinManager
@@ -128,13 +129,21 @@ class EvmTransactionsAdapter(
             is EthereumKit.SyncState.Syncing -> AdapterState.Syncing()
         }
 
-    private fun coinTagName(token: Token) = when (val type = token.type) {
-        TokenType.Native -> TransactionTag.EVM_COIN
+    // Tags whose transactions belong to the token's history. The outer filter list is AND-ed,
+    // each inner list is OR-ed (IN), so several names here widen the match for this token only.
+    private fun coinTagNames(token: Token): List<String> = when (val type = token.type) {
+        // A chain whose native coin also has an ERC-20 interface (Arc 0x3600…, ZkSync 0x…800a)
+        // tags transfers through that contract with its address, not EVM_COIN — e.g. a swap
+        // provider paying out via transferFrom on 0x3600… — so match both.
+        TokenType.Native -> listOfNotNull(
+            TransactionTag.EVM_COIN,
+            evmKitWrapper.blockchainType.nativeTokenContractAddress?.lowercase()
+        )
         // EvmKit writes transaction tags with the contract address lowercased (Address.hex),
         // but a user-added custom token can carry a checksummed address — normalize, or the
         // token's history filter never matches (catalog tokens are already lowercase).
-        is TokenType.Eip20 -> type.address.lowercase()
-        else -> ""
+        is TokenType.Eip20 -> listOf(type.address.lowercase())
+        else -> listOf("")
     }
 
     private fun getFilters(
@@ -143,27 +152,27 @@ class EvmTransactionsAdapter(
         address: String?,
     ) = buildList {
         token?.let {
-            add(listOf(coinTagName(it)))
+            add(coinTagNames(it))
         }
 
         val filterType = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
-                token != null -> TransactionTag.tokenIncoming(coinTagName(token))
-                else -> TransactionTag.INCOMING
+                token != null -> coinTagNames(token).map { TransactionTag.tokenIncoming(it) }
+                else -> listOf(TransactionTag.INCOMING)
             }
 
             FilterTransactionType.Outgoing -> when {
-                token != null -> TransactionTag.tokenOutgoing(coinTagName(token))
-                else -> TransactionTag.OUTGOING
+                token != null -> coinTagNames(token).map { TransactionTag.tokenOutgoing(it) }
+                else -> listOf(TransactionTag.OUTGOING)
             }
 
-            FilterTransactionType.Swap -> TransactionTag.SWAP
-            FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
+            FilterTransactionType.Swap -> listOf(TransactionTag.SWAP)
+            FilterTransactionType.Approve -> listOf(TransactionTag.EIP20_APPROVE)
         }
 
         filterType?.let {
-            add(listOf(it))
+            add(it)
         }
 
         if (!address.isNullOrBlank()) {
