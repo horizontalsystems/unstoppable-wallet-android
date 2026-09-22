@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -58,7 +57,6 @@ fun TokenAmountInput(
     focusRequester: FocusRequester,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
-    onFocusChanged: (Boolean) -> Unit = {},
     amountExceedsBalance: Boolean = false,
     balanceToken: Token? = null,
     availableBalance: BigDecimal? = null,
@@ -67,9 +65,7 @@ fun TokenAmountInput(
     onPercentClick: ((Int) -> Unit)? = null,
 ) {
     Column(
-        modifier = Modifier
-            .onFocusChanged { onFocusChanged(it.hasFocus) }
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp)
+        modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp)
     ) {
         if (availableBalance != null && balanceToken != null) {
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
