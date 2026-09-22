@@ -416,7 +416,11 @@ private fun SwapScreenInner(
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
                 SwapInput(
                     amountIn = uiState.amountIn,
                     fiatAmountIn = uiState.fiatAmountIn,
@@ -455,12 +459,11 @@ private fun SwapScreenInner(
                         onEnterAmountPercentage(it)
                     },
                 )
-                VSpacer(height = 8.dp)
+                HsDivider(modifier = Modifier.fillMaxWidth())
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
-                        .background(ComposeAppTheme.colors.lawrence)
                         .imePadding()
                 ) {
                     Column(
@@ -520,7 +523,7 @@ private fun SwapScreenInner(
 
                             ButtonPrimaryYellow(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
                                 title = title,
                                 enabled = false,
@@ -531,7 +534,7 @@ private fun SwapScreenInner(
                         SwapStep.Quoting -> {
                             ButtonPrimaryYellow(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
                                 title = stringResource(R.string.Swap_Quoting),
                                 enabled = false,
@@ -543,7 +546,7 @@ private fun SwapScreenInner(
                         SwapStep.AmlChecking -> {
                             ButtonPrimaryYellow(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
                                 title = stringResource(R.string.Swap_Proceed),
                                 enabled = false,
@@ -566,7 +569,7 @@ private fun SwapScreenInner(
 
                             ButtonPrimaryYellow(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
                                 title = errorText,
                                 enabled = false,
@@ -586,7 +589,7 @@ private fun SwapScreenInner(
 
                             ButtonPrimaryDefault(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
                                 title = title,
                                 enabled = !action.inProgress,
@@ -601,7 +604,7 @@ private fun SwapScreenInner(
                         SwapStep.Proceed -> {
                             ButtonPrimaryYellow(
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
                                 title = stringResource(R.string.Swap_Proceed),
                                 enabled = proceedEnabled,
@@ -890,7 +893,7 @@ private fun SwapCoinInputTo(
 ) {
     Row(
         modifier = Modifier
-            .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
+            .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         TokenSelector(token = token, onClick = onClickCoin)
