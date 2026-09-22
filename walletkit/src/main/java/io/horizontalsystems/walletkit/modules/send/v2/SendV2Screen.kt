@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -60,8 +59,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmationPage
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.Keyboard
-import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
@@ -74,8 +71,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
-import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
-import java.math.BigDecimal
 import java.net.UnknownHostException
 import kotlin.reflect.KClass
 
@@ -93,8 +88,6 @@ fun SendV2Screen(
     val hasSettings = remember { chainPlugin?.sendSettingsPage(uiState.wallet, null) != null }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    val keyboardState by observeKeyboardState()
-    var amountInputHasFocus by remember { mutableStateOf(false) }
 
     // Opens over the risky-address sheet when that was shown; both are popped once the
     // transaction is sent. The Private tab confirms through the provider order flow, which
@@ -208,7 +201,6 @@ fun SendV2Screen(
                     CrossPayTabBody(
                         navigation = navigation,
                         viewModel = crossPayViewModel,
-                        keyboardState = keyboardState,
                     )
                 }
                 return@Column
@@ -236,7 +228,6 @@ fun SendV2Screen(
                         focusRequester = focusRequester,
                         onValueChange = viewModel::onEnterAmount,
                         onFiatValueChange = viewModel::onEnterFiatAmount,
-                        onFocusChanged = { amountInputHasFocus = it },
                         amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
                         balanceToken = uiState.wallet.token,
                         availableBalance = uiState.availableBalance,
@@ -248,6 +239,10 @@ fun SendV2Screen(
                                 focusManager.clearFocus()
                                 viewModel.onEnterAmountPercentage(100)
                             }
+                        },
+                        onPercentClick = {
+                            focusManager.clearFocus()
+                            viewModel.onEnterAmountPercentage(it)
                         },
                     )
                     if (!uiState.hideAddress) {
@@ -337,23 +332,7 @@ fun SendV2Screen(
                         }
                     },
                 )
-                if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
-                    val hasNonZeroBalance =
-                        uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-                    VSpacer(16.dp)
-                    SuggestionsBar(
-                        disabledPercents = uiState.disabledPercents,
-                        onDelete = { viewModel.onEnterAmount(null) },
-                        onSelect = {
-                            focusManager.clearFocus()
-                            viewModel.onEnterAmountPercentage(it)
-                        },
-                        selectEnabled = hasNonZeroBalance,
-                        deleteEnabled = uiState.amount != null,
-                    )
-                } else {
-                    VSpacer(16.dp)
-                }
+                VSpacer(16.dp)
             }
         }
     }

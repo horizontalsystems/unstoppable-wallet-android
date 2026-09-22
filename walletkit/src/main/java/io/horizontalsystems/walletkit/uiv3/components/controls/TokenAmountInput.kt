@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.uiv3.components.controls
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,8 +41,9 @@ import java.math.BigDecimal
  * its fiat value. [token] is what the amount is in and may be unchosen; [balanceToken] is
  * what funds it and formats [availableBalance], and the balance line is shown only when both
  * are known. An [onTokenClick] makes the token a selector with a drop-down arrow. An
- * [onAvailableBalanceClick] makes the balance line a shortcut, shown in blue; without one it
- * is a plain grey note.
+ * [onAvailableBalanceClick] makes the balance line a shortcut for the whole balance, shown in
+ * blue; without one it is a plain grey note. An [onPercentClick] adds 25/50/75% shortcuts to
+ * the right of it while there is a balance to take a share of.
  *
  * The block keeps its height while the token or the fiat rate is still unknown, so a card
  * built around it does not jump once they resolve.
@@ -56,12 +58,13 @@ fun TokenAmountInput(
     focusRequester: FocusRequester,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
-    onFocusChanged: (Boolean) -> Unit,
+    onFocusChanged: (Boolean) -> Unit = {},
     amountExceedsBalance: Boolean = false,
     balanceToken: Token? = null,
     availableBalance: BigDecimal? = null,
     onTokenClick: (() -> Unit)? = null,
     onAvailableBalanceClick: (() -> Unit)? = null,
+    onPercentClick: ((Int) -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -69,24 +72,43 @@ fun TokenAmountInput(
             .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp)
     ) {
         if (availableBalance != null && balanceToken != null) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                Text(
-                    modifier = if (onAvailableBalanceClick != null) {
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onAvailableBalanceClick,
-                        )
-                    } else {
-                        Modifier
-                    },
-                    text = stringResource(
-                        R.string.Send_Available,
-                        App.numberFormatter.formatCoinFull(availableBalance, balanceToken.coin.code, balanceToken.decimals)
-                    ),
-                    style = ComposeAppTheme.typography.caption,
-                    color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
-                )
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Box(modifier = Modifier.weight(1f)) {
+                    Text(
+                        modifier = if (onAvailableBalanceClick != null) {
+                            Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = onAvailableBalanceClick,
+                            )
+                        } else {
+                            Modifier
+                        },
+                        text = stringResource(
+                            R.string.Send_Available,
+                            App.numberFormatter.formatCoinFull(availableBalance, balanceToken.coin.code, balanceToken.decimals)
+                        ),
+                        style = ComposeAppTheme.typography.caption,
+                        color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
+                    )
+                }
+                if (onPercentClick != null && availableBalance > BigDecimal.ZERO) {
+                    HSpacer(16.dp)
+                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        for (percent in listOf(25, 50, 75)) {
+                            Text(
+                                modifier = Modifier.clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,
+                                    onClick = { onPercentClick(percent) },
+                                ),
+                                text = "$percent%",
+                                style = ComposeAppTheme.typography.caption,
+                                color = ComposeAppTheme.colors.ocean,
+                            )
+                        }
+                    }
+                }
             }
             VSpacer(8.dp)
         }

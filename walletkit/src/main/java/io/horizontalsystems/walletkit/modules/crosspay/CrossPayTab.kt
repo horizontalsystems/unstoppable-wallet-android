@@ -12,10 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -27,7 +24,6 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
-import io.horizontalsystems.walletkit.modules.multiswap.SuggestionsBar
 import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
@@ -37,7 +33,6 @@ import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
 import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
@@ -53,12 +48,10 @@ import java.math.BigDecimal
 fun CrossPayTabBody(
     navigation: HSNavigation,
     viewModel: CrossPayTabViewModel,
-    keyboardState: Keyboard,
 ) {
     val uiState = viewModel.uiState
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    var amountInputHasFocus by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
     val proceed = {
@@ -135,7 +128,6 @@ fun CrossPayTabBody(
                 focusRequester = focusRequester,
                 onValueChange = viewModel::onEnterAmount,
                 onFiatValueChange = viewModel::onEnterFiatAmount,
-                onFocusChanged = { amountInputHasFocus = it },
                 amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
                 balanceToken = uiState.tokenIn,
                 availableBalance = uiState.availableBalance,
@@ -184,25 +176,7 @@ fun CrossPayTabBody(
                 }
             },
         )
-        if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
-            val hasNonZeroBalance =
-                uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-            VSpacer(16.dp)
-            SuggestionsBar(
-                onDelete = { viewModel.onEnterAmount(null) },
-                onSelect = {
-                    focusManager.clearFocus()
-                    viewModel.onEnterAmountPercentage(it)
-                },
-                selectEnabled = hasNonZeroBalance,
-                deleteEnabled = uiState.amountOut != null,
-                // 100% of the source balance cannot survive the exact-output buffer and
-                // fees — it would land on "insufficient" every time.
-                disabledPercents = setOf(100),
-            )
-        } else {
-            VSpacer(16.dp)
-        }
+        VSpacer(16.dp)
     }
 }
 
