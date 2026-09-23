@@ -13,6 +13,7 @@ import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.CancellationException
+import java.math.BigInteger
 import kotlinx.coroutines.delay
 import java.util.Optional
 import kotlinx.coroutines.flow.Flow
@@ -75,6 +76,22 @@ fun String.hexToByteArray(): ByteArray {
 fun ByteArray.toRawHexString(): String {
     return this.joinToString(separator = "") {
         it.toInt().and(0xff).toString(16).padStart(2, '0')
+    }
+}
+
+// BigInteger
+
+private const val PRIVATE_KEY_SIZE = 32
+
+// secp256k1 private key as raw 32-byte big-endian, the form iOS backups and key screens use;
+// BigInteger.toByteArray() yields 33 bytes (sign byte) or fewer than 32 (leading zeros)
+fun BigInteger.toPrivateKeyBytes(): ByteArray {
+    require(signum() >= 0 && bitLength() <= PRIVATE_KEY_SIZE * 8) { "Invalid private key" }
+    val raw = toByteArray()
+    return when {
+        raw.size == PRIVATE_KEY_SIZE -> raw
+        raw.size > PRIVATE_KEY_SIZE -> raw.copyOfRange(raw.size - PRIVATE_KEY_SIZE, raw.size)
+        else -> ByteArray(PRIVATE_KEY_SIZE - raw.size) + raw
     }
 }
 

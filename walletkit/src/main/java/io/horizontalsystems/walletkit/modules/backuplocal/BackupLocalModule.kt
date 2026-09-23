@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.walletkit.core.managers.EncryptDecryptManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
 import io.horizontalsystems.walletkit.toHexString
+import io.horizontalsystems.walletkit.core.toPrivateKeyBytes
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.hdwalletkit.Base58
 import java.math.BigInteger
@@ -144,8 +145,8 @@ object BackupLocalModule {
             combined.toByteArray(Charsets.UTF_8)
         }
 
-        is AccountType.EvmPrivateKey -> accountType.key.toByteArray()
-        is AccountType.TronPrivateKey -> accountType.key.toByteArray()
+        is AccountType.EvmPrivateKey -> accountType.key.toPrivateKeyBytes()
+        is AccountType.TronPrivateKey -> accountType.key.toPrivateKeyBytes()
         is AccountType.StellarSecretKey -> accountType.key.toByteArray(Charsets.UTF_8)
         is AccountType.EvmAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.SolanaAddress -> accountType.address.toByteArray(Charsets.UTF_8)
