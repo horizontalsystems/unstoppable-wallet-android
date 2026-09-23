@@ -123,7 +123,7 @@ private fun WalletIcon2(
 
     val syncingProgress = viewItem.syncingProgress
     val progress = syncingProgress.progress
-    val iconAlpha = if (progress == null) 1f else 0.5f
+    val iconAlpha = if (progress == null && !viewItem.failedIconVisible) 1f else 0.5f
     val leah = ComposeAppTheme.colors.leah
     val andy = ComposeAppTheme.colors.andy
 

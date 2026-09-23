@@ -72,13 +72,13 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
-import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import io.horizontalsystems.marketkit.models.Token
@@ -442,10 +442,7 @@ internal fun AmountSection(
                 },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                CoinImage(
-                    token = token,
-                    modifier = Modifier.size(40.dp)
-                )
+                CellLeftCoinIcon(token = token)
                 HSpacer(16.dp)
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {

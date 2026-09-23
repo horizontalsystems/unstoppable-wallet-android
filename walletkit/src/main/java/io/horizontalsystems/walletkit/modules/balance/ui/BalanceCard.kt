@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -45,10 +44,9 @@ import io.horizontalsystems.walletkit.modules.balance.contextMenuItems
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftLoaderCoinSyncFailed
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSCellButton
 import io.horizontalsystems.marketkit.models.Token
@@ -231,16 +229,12 @@ fun IconCell(
     iconAlpha: Float,
     onClickSyncError: (() -> Unit)?
 ) {
-    if (failedIconVisible) {
-        CellLeftLoaderCoinSyncFailed(onClickSyncError)
-    } else {
-        CoinImage(
-            token = token,
-            modifier = Modifier
-                .size(32.dp)
-                .alpha(iconAlpha),
-        )
-    }
+    CellLeftCoinIcon(
+        token = token,
+        syncFailed = failedIconVisible,
+        iconAlpha = iconAlpha,
+        onClickSyncError = onClickSyncError,
+    )
 }
 
 fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navigation: HSNavigation, view: View) {
