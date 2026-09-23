@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.backuplocal
 
+import io.horizontalsystems.walletkit.core.toPrivateKeyBytes
+import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.AccountType
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
@@ -64,6 +66,13 @@ class BackupLocalModulePrivateKeyTest {
             val accountType = BackupLocalModule.getAccountTypeFromData("private_key", key.toByteArray())
 
             assertEquals(hex, AccountType.EvmPrivateKey(key), accountType)
+        }
+    }
+
+    @Test
+    fun privateKeyHex_isAlways64Chars() {
+        listOf(highBitKey, leadingZeroKey, regularKey).forEach { hex ->
+            assertEquals(hex, BigInteger(hex, 16).toPrivateKeyBytes().toRawHexString())
         }
     }
 

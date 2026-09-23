@@ -19,6 +19,7 @@ import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.core.managers.evmTransactionSource
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.core.toPrivateKeyBytes
 import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
@@ -311,15 +312,7 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
         }
     }
 
-    private fun toHexString(key: BigInteger): String {
-        return key.toByteArray().let {
-            if (it.size > 32) {
-                it.copyOfRange(1, it.size)
-            } else {
-                it
-            }.toRawHexString()
-        }
-    }
+    private fun toHexString(key: BigInteger): String = key.toPrivateKeyBytes().toRawHexString()
 }
 
 /** Consults the USDT/USDC/PYUSD blacklist and freeze contract methods for EVM tokens. */
