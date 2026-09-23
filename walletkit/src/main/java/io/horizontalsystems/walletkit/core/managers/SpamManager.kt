@@ -82,7 +82,15 @@ class SpamManager(
         _hideSuspiciousTxStateFlow.value = hide
     }
 
-    fun findSpamByAddress(address: String): ScannedTransaction? {
+    fun findSpamByAddress(address: String, blockchainType: BlockchainType): ScannedTransaction? {
+        // The user has vouched for an address in their contacts, so a spam row recorded for it -
+        // from before it was added, or from a scan that ran without the contacts - must not go on
+        // failing the address check in the send flow. The row itself stays: it still describes
+        // the transaction it was scored for.
+        if (isAddressTrusted(address, blockchainType)) {
+            return null
+        }
+
         return scannedTransactionStorage.findSpamByAddress(address)
     }
 

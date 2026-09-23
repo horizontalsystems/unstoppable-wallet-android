@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -306,6 +307,25 @@ class SpamManagerCachingTest {
 
         assertFalse(classify(events))
         assertNull(dao.getByHash(txHash))
+    }
+
+    @Test
+    fun `the send-time address check stops reporting an address the user vouches for`() = runBlocking {
+        contactsLoaded()
+        val events = zeroValueFrom(unrelated)
+
+        assertTrue(classify(events))
+        assertNotNull(
+            "the stored row is what makes the address check report the sender",
+            spamManager.findSpamByAddress(unrelated, BlockchainType.Ethereum)
+        )
+
+        contactsArrive(contactFor(unrelated))
+
+        assertNull(
+            "which it must stop doing once the address is a contact",
+            spamManager.findSpamByAddress(unrelated, BlockchainType.Ethereum)
+        )
     }
 
     @Test
