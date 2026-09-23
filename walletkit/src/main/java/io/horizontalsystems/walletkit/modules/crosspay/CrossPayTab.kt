@@ -38,6 +38,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
+import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
 import java.math.BigDecimal
 
 /**
@@ -119,6 +120,12 @@ fun CrossPayTabBody(
                 .verticalScroll(rememberScrollState())
         ) {
             // The balance shown is the SOURCE token's — what funds the payment.
+            AvailableBalanceRow(
+                balanceToken = uiState.tokenIn,
+                availableBalance = uiState.availableBalance,
+                onAvailableBalanceClick = null,
+                onPercentClick = null
+            )
             TokenAmountInput(
                 token = uiState.tokenOut,
                 amount = uiState.amountOut,
@@ -129,9 +136,7 @@ fun CrossPayTabBody(
                 onValueChange = viewModel::onEnterAmount,
                 onFiatValueChange = viewModel::onEnterFiatAmount,
                 amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
-                balanceToken = uiState.tokenIn,
-                availableBalance = uiState.availableBalance,
-                onTokenClick = openCoinSelect,
+                onTokenClick = openCoinSelect
             )
             SectionArrow()
             AddressRow(

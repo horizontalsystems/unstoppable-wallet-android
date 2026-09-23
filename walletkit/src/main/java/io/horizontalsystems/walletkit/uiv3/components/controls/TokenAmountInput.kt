@@ -3,11 +3,11 @@ package io.horizontalsystems.walletkit.uiv3.components.controls
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,22 +31,10 @@ import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
+import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import java.math.BigDecimal
 
-/**
- * The amount block: the available balance, the token with its badge, and the amount with
- * its fiat value. [token] is what the amount is in and may be unchosen; [balanceToken] is
- * what funds it and formats [availableBalance], and the balance line is shown only when both
- * are known. An [onTokenClick] makes the token a selector with a drop-down arrow. An
- * [onAvailableBalanceClick] makes the balance line a shortcut for the whole balance, shown in
- * blue; without one it is a plain grey note. An [onPercentClick] adds 25/50/75% shortcuts to
- * the right of it while there is a balance to take a share of.
- *
- * The block keeps its height while the token or the fiat rate is still unknown, so a card
- * built around it does not jump once they resolve.
- */
 @Composable
 fun TokenAmountInput(
     token: Token?,
@@ -57,58 +45,14 @@ fun TokenAmountInput(
     focusRequester: FocusRequester,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
-    amountExceedsBalance: Boolean = false,
-    balanceToken: Token? = null,
-    availableBalance: BigDecimal? = null,
-    onTokenClick: (() -> Unit)? = null,
-    onAvailableBalanceClick: (() -> Unit)? = null,
-    onPercentClick: ((Int) -> Unit)? = null,
+    amountExceedsBalance: Boolean,
+    onTokenClick: (() -> Unit)?
 ) {
-    Column(
-        modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp)
-    ) {
-        if (availableBalance != null && balanceToken != null) {
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Box(modifier = Modifier.weight(1f)) {
-                    Text(
-                        modifier = if (onAvailableBalanceClick != null) {
-                            Modifier.clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = onAvailableBalanceClick,
-                            )
-                        } else {
-                            Modifier
-                        },
-                        text = stringResource(
-                            R.string.Send_Available,
-                            App.numberFormatter.formatCoinFull(availableBalance, balanceToken.coin.code, balanceToken.decimals)
-                        ),
-                        style = ComposeAppTheme.typography.caption,
-                        color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
-                    )
-                }
-                if (onPercentClick != null && availableBalance > BigDecimal.ZERO) {
-                    HSpacer(16.dp)
-                    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        for (percent in listOf(25, 50, 75)) {
-                            Text(
-                                modifier = Modifier.clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
-                                    onClick = { onPercentClick(percent) },
-                                ),
-                                text = "$percent%",
-                                style = ComposeAppTheme.typography.caption,
-                                color = ComposeAppTheme.colors.ocean,
-                            )
-                        }
-                    }
-                }
-            }
-            VSpacer(8.dp)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    BoxBordered(bottom = true) {
+        Row(
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             TokenSelector(token = token, onClick = onTokenClick)
             HSpacer(8.dp)
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
@@ -116,10 +60,8 @@ fun TokenAmountInput(
                     value = amount,
                     onValueChange = onValueChange,
                     focusRequester = focusRequester,
-                    textColor = if (amountExceedsBalance) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
-                    placeholderColor = ComposeAppTheme.colors.leah,
+                    error = amountExceedsBalance
                 )
-                VSpacer(3.dp)
                 if (fiatAmountInputEnabled || fiatAmount != null) {
                     FiatAmountInput(
                         value = fiatAmount,
@@ -129,6 +71,65 @@ fun TokenAmountInput(
                     )
                 } else {
                     FiatLinePlaceholder(currency)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AvailableBalanceRow(
+    balanceToken: Token?,
+    availableBalance: BigDecimal?,
+    onAvailableBalanceClick: (() -> Unit)?,
+    onPercentClick: ((Int) -> Unit)?
+) {
+    if (availableBalance != null && balanceToken != null) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                modifier = if (onAvailableBalanceClick != null) {
+                    Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onAvailableBalanceClick,
+                    )
+                } else {
+                    Modifier
+                },
+                text = stringResource(
+                    R.string.Send_Available,
+                    App.numberFormatter.formatCoinFull(
+                        availableBalance,
+                        balanceToken.coin.code,
+                        balanceToken.decimals
+                    )
+                ),
+                style = ComposeAppTheme.typography.caption,
+                color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.grey,
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                for (percent in listOf(25, 50, 75)) {
+                    Text(
+                        modifier = if (onPercentClick != null) {
+                            Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPercentClick(percent) }
+                            )
+                        } else {
+                            Modifier
+                        },
+                        text = "$percent%",
+                        style = ComposeAppTheme.typography.caption,
+                        color = if (onPercentClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
+                    )
                 }
             }
         }
@@ -160,17 +161,7 @@ fun TokenSelector(
         CellLeftCoinIcon(token = token)
         HSpacer(16.dp)
         Column {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                headline1_leah(text = token?.coin?.code ?: stringResource(R.string.CrossPay_ChooseCoin))
-                if (onClick != null) {
-                    HSpacer(4.dp)
-                    Icon(
-                        painter = painterResource(R.drawable.arrow_s_down_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.leah,
-                    )
-                }
-            }
+            headline1_leah(text = token?.coin?.code ?: stringResource(R.string.CrossPay_ChooseCoin))
             VSpacer(5.dp)
             BadgeText(
                 modifier = if (token == null) Modifier.alpha(0f) else Modifier,
@@ -179,14 +170,25 @@ fun TokenSelector(
                 textColor = ComposeAppTheme.colors.leah,
             )
         }
+        if (onClick != null) {
+            HSpacer(8.dp)
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.arrow_s_down_24),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.leah,
+            )
+        }
     }
 }
 
 /** Invisible fiat line reserving the space the fiat text or input takes once a rate is known. */
 @Composable
 fun FiatLinePlaceholder(currency: Currency) {
-    body_grey(
+    Text(
         modifier = Modifier.alpha(0f),
         text = "${currency.symbol}0",
+        style = ComposeAppTheme.typography.body,
+        color = ComposeAppTheme.colors.andy,
     )
 }

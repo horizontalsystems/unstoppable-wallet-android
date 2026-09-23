@@ -69,6 +69,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import java.net.UnknownHostException
@@ -219,16 +220,7 @@ fun SendV2Screen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     val step = uiState.step
-                    TokenAmountInput(
-                        token = uiState.wallet.token,
-                        amount = uiState.amount,
-                        fiatAmount = uiState.fiatAmount,
-                        fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
-                        currency = uiState.currency,
-                        focusRequester = focusRequester,
-                        onValueChange = viewModel::onEnterAmount,
-                        onFiatValueChange = viewModel::onEnterFiatAmount,
-                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
+                    AvailableBalanceRow(
                         balanceToken = uiState.wallet.token,
                         availableBalance = uiState.availableBalance,
                         // The line doubles as the 100% shortcut whenever that percent is offered.
@@ -244,6 +236,18 @@ fun SendV2Screen(
                             focusManager.clearFocus()
                             viewModel.onEnterAmountPercentage(it)
                         },
+                    )
+                    TokenAmountInput(
+                        token = uiState.wallet.token,
+                        amount = uiState.amount,
+                        fiatAmount = uiState.fiatAmount,
+                        fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
+                        currency = uiState.currency,
+                        focusRequester = focusRequester,
+                        onValueChange = viewModel::onEnterAmount,
+                        onFiatValueChange = viewModel::onEnterFiatAmount,
+                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
+                        onTokenClick = null
                     )
                     if (!uiState.hideAddress) {
                         SectionArrow()

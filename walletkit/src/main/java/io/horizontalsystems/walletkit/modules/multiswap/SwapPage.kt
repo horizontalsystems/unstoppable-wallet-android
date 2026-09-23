@@ -77,7 +77,6 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
@@ -103,6 +102,8 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -459,7 +460,6 @@ private fun SwapScreenInner(
                         onEnterAmountPercentage(it)
                     },
                 )
-                HsDivider(modifier = Modifier.fillMaxWidth())
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -836,46 +836,50 @@ private fun SwapInput(
     onAvailableBalanceClick: (() -> Unit)?,
     onPercentClick: (Int) -> Unit,
 ) {
-    Box {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            TokenAmountInput(
-                token = tokenIn,
-                amount = amountIn,
-                fiatAmount = fiatAmountIn,
-                fiatAmountInputEnabled = fiatAmountInputEnabled,
-                currency = currency,
-                focusRequester = focusRequester,
-                onValueChange = onValueChange,
-                onFiatValueChange = onFiatValueChange,
-                onTokenClick = onClickCoinFrom,
-                balanceToken = tokenIn,
-                availableBalance = availableBalance,
-                onAvailableBalanceClick = onAvailableBalanceClick,
-                onPercentClick = onPercentClick,
-            )
-            SwapCoinInputTo(
-                coinAmount = amountOut,
-                fiatAmount = fiatAmountOut,
-                hasRate = hasRateOut,
-                fiatPriceImpact = fiatPriceImpact,
-                fiatPriceImpactLevel = fiatPriceImpactLevel,
-                currency = currency,
-                token = tokenOut,
-                onClickCoin = onClickCoinTo
-            )
-        }
-        HsDivider(modifier = Modifier.align(Alignment.Center))
-        Box(Modifier.align(Alignment.Center)) {
-            HSIconButton(
-                variant = ButtonVariant.Secondary,
-                style = ButtonStyle.Solid,
-                size = ButtonSize.Small,
-                icon = painterResource(id = R.drawable.ic_arrow_down_20),
-                enabled = switchPairsEnabled,
-                onClick = onSwitchPairs
-            )
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        AvailableBalanceRow(
+            balanceToken = tokenIn,
+            availableBalance = availableBalance,
+            onAvailableBalanceClick = onAvailableBalanceClick,
+            onPercentClick = onPercentClick
+        )
+        Box {
+            Column {
+                TokenAmountInput(
+                    token = tokenIn,
+                    amount = amountIn,
+                    fiatAmount = fiatAmountIn,
+                    fiatAmountInputEnabled = fiatAmountInputEnabled,
+                    currency = currency,
+                    focusRequester = focusRequester,
+                    onValueChange = onValueChange,
+                    onFiatValueChange = onFiatValueChange,
+                    amountExceedsBalance = false,
+                    onTokenClick = onClickCoinFrom
+                )
+                SwapCoinInputTo(
+                    coinAmount = amountOut,
+                    fiatAmount = fiatAmountOut,
+                    hasRate = hasRateOut,
+                    fiatPriceImpact = fiatPriceImpact,
+                    fiatPriceImpactLevel = fiatPriceImpactLevel,
+                    currency = currency,
+                    token = tokenOut,
+                    onClickCoin = onClickCoinTo
+                )
+            }
+            Box(Modifier.align(Alignment.Center)) {
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Solid,
+                    size = ButtonSize.Small,
+                    icon = painterResource(id = R.drawable.ic_arrow_down_24),
+                    enabled = switchPairsEnabled,
+                    onClick = onSwitchPairs
+                )
+            }
         }
     }
 }
@@ -891,44 +895,44 @@ private fun SwapCoinInputTo(
     token: Token?,
     onClickCoin: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TokenSelector(token = token, onClick = onClickCoin)
-        HSpacer(8.dp)
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.End
+    BoxBordered(bottom = true) {
+        Row(
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (coinAmount == null) {
-                headline1_grey(text = "0")
-            } else {
-                headline1_leah(
-                    text = coinAmount.toPlainString(),
+            TokenSelector(token = token, onClick = onClickCoin)
+            HSpacer(8.dp)
+            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+                Text(
+                    text = (coinAmount ?: BigDecimal.ZERO).toPlainString(),
+                    style = ComposeAppTheme.typography.headline1,
+                    color = if (coinAmount == null) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-            }
-            VSpacer(height = 3.dp)
-            if (hasRate && fiatAmount == null) {
-                body_grey(text = "${currency.symbol}0")
-            } else if (fiatAmount == null) {
-                FiatLinePlaceholder(currency)
-            } else {
-                Row {
-                    body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
-                    fiatPriceImpact?.let { diff ->
-                        HSpacer(width = 4.dp)
+                if (hasRate) {
+                    Row {
                         Text(
-                            text = stringResource(R.string.Swap_FiatPriceImpact, diff.toPlainString()),
+                            text = "${currency.symbol}${(fiatAmount ?: BigDecimal.ZERO).toPlainString()}",
                             style = ComposeAppTheme.typography.body,
-                            color = getPriceImpactColor(fiatPriceImpactLevel),
+                            color = if (fiatAmount == null) ComposeAppTheme.colors.andy else ComposeAppTheme.colors.grey,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
+
+                        fiatPriceImpact?.let { diff ->
+                            HSpacer(width = 4.dp)
+                            Text(
+                                text = stringResource(R.string.Swap_FiatPriceImpact, diff.toPlainString()),
+                                style = ComposeAppTheme.typography.body,
+                                color = getPriceImpactColor(fiatPriceImpactLevel),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
+                } else {
+                    FiatLinePlaceholder(currency)
                 }
             }
         }
@@ -947,18 +951,21 @@ fun FiatAmountInput(
     }
     val displayTransformation = remember(currency.symbol) {
         VisualTransformation { originalText ->
-            val prefixLen = currency.symbol.length
-            val isEmpty = originalText.text.isEmpty()
-            val visual = AnnotatedString(currency.symbol + originalText.text + if (isEmpty) "0" else "")
-            TransformedText(
-                text = visual,
-                offsetMapping = object : OffsetMapping {
-                    override fun originalToTransformed(offset: Int) =
-                        if (isEmpty) prefixLen + 1 else offset + prefixLen
-                    override fun transformedToOriginal(offset: Int) =
-                        (offset - prefixLen).coerceIn(0, originalText.text.length)
-                }
-            )
+            if (originalText.text.isEmpty()) {
+                TransformedText(originalText, OffsetMapping.Identity)
+            } else {
+                val prefixLen = currency.symbol.length
+                val visual = AnnotatedString(currency.symbol + originalText.text)
+                TransformedText(
+                    text = visual,
+                    offsetMapping = object : OffsetMapping {
+                        override fun originalToTransformed(offset: Int) =
+                            offset + prefixLen
+                        override fun transformedToOriginal(offset: Int) =
+                            (offset - prefixLen).coerceIn(0, originalText.text.length)
+                    }
+                )
+            }
         }
     }
     BasicTextField(
@@ -989,6 +996,18 @@ fun FiatAmountInput(
         ),
         cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
         visualTransformation = displayTransformation,
+        decorationBox = { innerTextField ->
+            if (text.isEmpty()) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                    Text(
+                        text = "${currency.symbol}0",
+                        style = ComposeAppTheme.typography.body,
+                        color = ComposeAppTheme.colors.andy,
+                    )
+                }
+            }
+            innerTextField()
+        }
     )
 }
 
@@ -997,9 +1016,9 @@ fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
     focusRequester: FocusRequester = FocusRequester(),
-    textColor: Color = ComposeAppTheme.colors.leah,
-    placeholderColor: Color = ComposeAppTheme.colors.grey,
+    error: Boolean
 ) {
+    val textColor = if (error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah
     var amount by rememberSaveable {
         mutableStateOf(value)
     }
@@ -1069,7 +1088,7 @@ fun AmountInput(
                     Text(
                         text = "0",
                         style = ComposeAppTheme.typography.headline1,
-                        color = placeholderColor,
+                        color = ComposeAppTheme.colors.grey,
                     )
                 }
             }
