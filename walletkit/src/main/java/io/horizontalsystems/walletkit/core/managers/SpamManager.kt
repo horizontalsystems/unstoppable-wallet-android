@@ -83,6 +83,10 @@ class SpamManager(
      * Phase 2 (only when needed): Fetch outgoing context for correlation scoring
      * - Only called when score is in "gray zone" (1-6 points)
      *
+     * Results are cached in [ScannedTransactionStorage] and reused on later calls, so only a
+     * verdict that cannot change is stored: a gray-zone transfer scored against an empty outgoing
+     * context stays unsaved and is scored again on the next call.
+     *
      * Addresses in user's contacts are trusted and never flagged as spam.
      */
     suspend fun isSpam(
@@ -146,10 +150,20 @@ class SpamManager(
         // Final score = value score + correlation score
         val finalScore = valueResult.score + correlationResult.points
         val spamAddress = valueResult.address ?: correlationResult.address
+        val isSpam = finalScore >= PoisoningScorer.SPAM_THRESHOLD
 
-        saveSpamResult(transactionHash, finalScore, blockchainType, spamAddress)
+        // A gray-zone verdict is only worth as much as the context it was scored against, and an
+        // empty context means the outgoing transactions were unavailable (load error, adapter not
+        // registered yet) or simply not synced yet - not that the sender correlates with nothing.
+        // Saving a sub-threshold score here would cache that non-answer as final, because the
+        // stored result short-circuits every later call, so a look-alike address would stay
+        // visible for good once it slipped through. Leave it unsaved instead and score it again
+        // next time, when the context may be there.
+        if (isSpam || outgoingContext.isNotEmpty()) {
+            saveSpamResult(transactionHash, finalScore, blockchainType, spamAddress)
+        }
 
-        return finalScore >= PoisoningScorer.SPAM_THRESHOLD
+        return isSpam
     }
 
     /**
