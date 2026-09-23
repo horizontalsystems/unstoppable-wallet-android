@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
@@ -93,7 +94,7 @@ fun CellLeftCoinIcon(
                 Icon(
                     modifier = Modifier.requiredSize(syncFailedIconSize),
                     painter = painterResource(R.drawable.warning_filled_24),
-                    contentDescription = "sync failed",
+                    contentDescription = stringResource(R.string.BalanceSyncError_Title),
                     tint = ComposeAppTheme.colors.lucian,
                 )
             }
