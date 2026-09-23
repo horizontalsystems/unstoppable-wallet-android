@@ -15,7 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -33,12 +35,23 @@ class SpamManager(
     // Using AtomicReference to ensure consistent reads during cache updates
     private val trustedAddressesCache = AtomicReference<Set<String>>(emptySet())
 
+    // Whether trustedAddressesCache holds the contacts as read from storage, rather than the
+    // empty set it starts out as. ContactsRepository.loadedFlow alone cannot answer that: it
+    // turns true as soon as the file has been read, which is before the collector below has
+    // copied the contacts into the cache that the spam check actually reads.
+    private val trustedAddressesKnown = AtomicBoolean(false)
+
     init {
         // Subscribe to contacts updates to keep cache in sync
         coroutineScope.launch {
-            contactsRepository.contactsFlow.collect { contacts ->
-                updateTrustedAddressesCache(contacts)
-            }
+            combine(
+                contactsRepository.contactsFlow,
+                contactsRepository.loadedFlow
+            ) { contacts, loaded -> contacts to loaded }
+                .collect { (contacts, loaded) ->
+                    updateTrustedAddressesCache(contacts)
+                    trustedAddressesKnown.set(loaded)
+                }
         }
     }
 
@@ -87,7 +100,8 @@ class SpamManager(
      * verdict that cannot change is stored: a gray-zone transfer scored against an empty outgoing
      * context stays unsaved and is scored again on the next call.
      *
-     * Addresses in user's contacts are trusted and never flagged as spam.
+     * Addresses in user's contacts are trusted and never flagged as spam - checked ahead of the
+     * stored result, so the exemption also applies to verdicts reached before the contacts loaded.
      */
     suspend fun isSpam(
         transactionHash: ByteArray,
@@ -97,24 +111,30 @@ class SpamManager(
         blockHeight: Int?,
         operationId: Long? = null
     ): Boolean {
-        // Check database first for stored result
+        val blockchainType = source.blockchain.type
+
+        // Read before the trust check below, so it describes the cache that check actually used.
+        // Reading it afterwards would let contacts arrive in between and report a trust check
+        // that ran without them as one that had them.
+        val contactsKnown = trustedAddressesKnown.get()
+
+        // Contacts are checked ahead of the stored result, and the exemption is never itself
+        // stored: the list is read from a file after startup and the user can edit it at any
+        // time, so a cached verdict would outlive the contacts it was based on and keep hiding a
+        // transfer from an address the user has since vouched for.
+        val eventAddresses = events.mapNotNull { it.address }
+        if (eventAddresses.any { isAddressTrusted(it, blockchainType) }) {
+            return false
+        }
+
+        // Check database for stored result
         scannedTransactionStorage.getScannedTransaction(transactionHash)?.let {
             return it.isSpam
         }
 
-        val blockchainType = source.blockchain.type
-
-        // Check if any event address is from a trusted contact - if so, not spam
-        val eventAddresses = events.mapNotNull { it.address }
-        if (eventAddresses.any { isAddressTrusted(it, blockchainType) }) {
-            // Trusted address - save as score 0 and return not spam
-            saveSpamResult(transactionHash, 0, blockchainType, null)
-            return false
-        }
-
         // No events to check = not spam
         if (events.isEmpty()) {
-            saveSpamResult(transactionHash, 0, blockchainType, null)
+            saveSpamResult(transactionHash, 0, blockchainType, null, contactsKnown)
             return false
         }
 
@@ -127,13 +147,13 @@ class SpamManager(
         // Early exit if score is conclusive
         if (valueResult.score >= PoisoningScorer.SPAM_THRESHOLD) {
             // Instant spam: unknown token, zero-value native coin, micro dust
-            saveSpamResult(transactionHash, valueResult.score, blockchainType, valueResult.address)
+            saveSpamResult(transactionHash, valueResult.score, blockchainType, valueResult.address, contactsKnown)
             return true
         }
 
         if (valueResult.score == 0) {
             // Not spam: normal value transfer
-            saveSpamResult(transactionHash, 0, blockchainType, null)
+            saveSpamResult(transactionHash, 0, blockchainType, null, contactsKnown)
             return false
         }
 
@@ -160,7 +180,7 @@ class SpamManager(
         // visible for good once it slipped through. Leave it unsaved instead and score it again
         // next time, when the context may be there.
         if (isSpam || outgoingContext.isNotEmpty()) {
-            saveSpamResult(transactionHash, finalScore, blockchainType, spamAddress)
+            saveSpamResult(transactionHash, finalScore, blockchainType, spamAddress, contactsKnown)
         }
 
         return isSpam
@@ -203,8 +223,18 @@ class SpamManager(
         transactionHash: ByteArray,
         spamScore: Int,
         blockchainType: BlockchainType,
-        spamAddress: String?
+        spamAddress: String?,
+        contactsKnown: Boolean
     ) {
+        // An address in contacts is exempt from spam scoring, so a spam verdict reached without
+        // them is one that exemption may have overturned. Storing it would keep the transfer
+        // hidden and the sender flagged by findSpamByAddress - which warns the user when they
+        // send to it - long after the contacts arrive. A score below the threshold is safe to
+        // store either way: the exemption would only have confirmed it.
+        if (spamScore >= PoisoningScorer.SPAM_THRESHOLD && !contactsKnown) {
+            return
+        }
+
         try {
             scannedTransactionStorage.save(
                 ScannedTransaction(

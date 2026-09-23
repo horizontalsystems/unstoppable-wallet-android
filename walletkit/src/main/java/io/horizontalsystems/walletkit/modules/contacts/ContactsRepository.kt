@@ -44,6 +44,12 @@ class ContactsRepository(
     private val _contactsFlow = MutableStateFlow(contacts)
     val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
 
+    // Contacts are read from a file after startup, and a missing file is an ordinary empty result
+    // that emits nothing, so an empty contactsFlow means either "no contacts" or "not read yet".
+    // Callers that must not treat an empty list as the answer wait for this to turn true.
+    private val _loadedFlow = MutableStateFlow(false)
+    val loadedFlow: StateFlow<Boolean> = _loadedFlow
+
     fun getContactsFiltered(
         blockchainType: BlockchainType? = null,
         nameQuery: String? = null,
@@ -90,6 +96,10 @@ class ContactsRepository(
     fun initialize() {
         coroutineScope.launch {
             readFromFile()
+            // Set after the attempt, not only after a successful read: a missing or unreadable
+            // file leaves the rest of the app with no contacts too, and holding this at false
+            // would leave those callers waiting for a list that is never coming.
+            _loadedFlow.value = true
         }
     }
 

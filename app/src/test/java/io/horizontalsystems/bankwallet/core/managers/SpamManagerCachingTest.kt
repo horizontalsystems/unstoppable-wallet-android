@@ -23,6 +23,8 @@ import io.horizontalsystems.walletkit.entities.SpamScanState
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
+import io.horizontalsystems.walletkit.modules.contacts.model.Contact
+import io.horizontalsystems.walletkit.modules.contacts.model.ContactAddress
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
@@ -39,10 +41,10 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * Drives the real SpamManager.isSpam over a real ScannedTransactionStorage to pin which verdicts
  * are cached. A stored verdict short-circuits later calls, so it must only hold an answer that
- * cannot turn out to have been wrong, not one scored against an outgoing context that never
- * loaded.
+ * cannot turn out to have been wrong: one scored against an outgoing context that never loaded,
+ * or reached before the contact list - which exempts an address from scoring - was read.
  *
- * The scenario throughout is a cent-sized USDC transfer from an address mimicking someone the
+ * The dust scenario throughout is a cent-sized USDC transfer from an address mimicking someone the
  * user really paid: +3 for dust (USDC has no micro-dust band), then +4/+4/+4 once the outgoing
  * transaction it mimics is there to correlate against.
  */
@@ -52,6 +54,9 @@ class SpamManagerCachingTest {
     private val realRecipient = "0xABCD567890abcdef1234567890abcdef12341234"
     private val mimic = "0xABCD999999999999999999999999999999991234"
     private val unrelated = "0x1111222233334444555566667777888899990000"
+
+    // Never a contact, so probing with it reflects readiness alone.
+    private val probeSender = "0x7777777777777777777777777777777777777777"
 
     private val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
     private val account = Account(
@@ -77,6 +82,9 @@ class SpamManagerCachingTest {
 
     /** USDC 0.05: under limit/10 (0.1), but USDC is in spamCoinsWithoutMicroDust, so +3, not +7. */
     private val dust = transfer(mimic, "0.05")
+
+    /** A zero-value transfer is auto-spam on its own: +7 with no correlation needed. */
+    private fun zeroValueFrom(address: String) = transfer(address, "0")
 
     private val correlatingContext = listOf(
         PoisoningScorer.OutgoingTxInfo(realRecipient, INCOMING_TIMESTAMP - 60, INCOMING_BLOCK - 1)
@@ -136,6 +144,8 @@ class SpamManagerCachingTest {
     private lateinit var dao: FakeDao
     private lateinit var adapter: ContextAdapter
     private lateinit var spamManager: SpamManager
+    private lateinit var contactsFlow: MutableStateFlow<List<Contact>>
+    private lateinit var contactsLoadedFlow: MutableStateFlow<Boolean>
 
     @Before
     fun setUp() {
@@ -150,8 +160,11 @@ class SpamManagerCachingTest {
         val localStorage = Mockito.mock(ILocalStorage::class.java)
         Mockito.`when`(localStorage.hideSuspiciousTransactions).thenReturn(true)
 
+        contactsFlow = MutableStateFlow(emptyList())
+        contactsLoadedFlow = MutableStateFlow(false)
         val contacts = Mockito.mock(ContactsRepository::class.java)
-        Mockito.`when`(contacts.contactsFlow).thenReturn(MutableStateFlow(emptyList()))
+        Mockito.`when`(contacts.contactsFlow).thenReturn(contactsFlow)
+        Mockito.`when`(contacts.loadedFlow).thenReturn(contactsLoadedFlow)
 
         val adapterManager = Mockito.mock(TransactionAdapterManager::class.java)
         Mockito.`when`(adapterManager.adaptersMap).thenReturn(
@@ -161,17 +174,70 @@ class SpamManagerCachingTest {
         spamManager = SpamManager(localStorage, ScannedTransactionStorage(dao), contacts, adapterManager)
     }
 
-    private suspend fun classify() = spamManager.isSpam(
+    private suspend fun classify(events: List<TransferEvent> = dust) = spamManager.isSpam(
         transactionHash = txHash,
-        events = dust,
+        events = events,
         source = source,
         timestamp = INCOMING_TIMESTAMP,
         blockHeight = INCOMING_BLOCK,
         operationId = null
     )
 
+    /** What ContactsRepository.initialize() does once the file read lands. */
+    private fun contactsArrive(vararg contacts: Contact) {
+        contactsFlow.value = contacts.toList()
+        contactsLoadedFlow.value = true
+        contacts.forEach { contact -> contact.addresses.forEach { awaitTrusted(it.address) } }
+    }
+
+    /**
+     * Flips the loaded flag the way ContactsRepository does and waits for SpamManager to pick it
+     * up: readiness is tracked against its own cache, not against the repository's flag, so
+     * setting the flag alone does not mean the scoring path has seen it yet.
+     */
+    private fun contactsLoaded() {
+        contactsLoadedFlow.value = true
+        val probeHash = byteArrayOf(8, 8, 8, 8)
+        val deadline = System.currentTimeMillis() + 5_000
+        while (System.currentTimeMillis() < deadline) {
+            // A spam verdict is stored only once the contacts are known, so a stored probe row
+            // means readiness has landed.
+            runBlocking {
+                spamManager.isSpam(probeHash, zeroValueFrom(probeSender), source, INCOMING_TIMESTAMP, INCOMING_BLOCK, null)
+            }
+            val stored = dao.getByHash(probeHash) != null
+            dao.rows.remove(probeHash.joinToString(","))
+            if (stored) return
+            Thread.sleep(10)
+        }
+        throw AssertionError("the contacts-loaded flag never reached SpamManager")
+    }
+
+    /** SpamManager refreshes its trusted-address cache off its own scope, so wait for it to land. */
+    private fun awaitTrusted(address: String) {
+        val probeHash = byteArrayOf(9, 9, 9, 9)
+        val deadline = System.currentTimeMillis() + 5_000
+        while (System.currentTimeMillis() < deadline) {
+            // Zero-value transfers are auto-spam, so a not-spam verdict here means the exemption
+            // has taken effect. The probe writes no row of its own once it is exempt.
+            val exempt = runBlocking {
+                !spamManager.isSpam(probeHash, zeroValueFrom(address), source, INCOMING_TIMESTAMP, INCOMING_BLOCK, null)
+            }
+            dao.rows.remove(probeHash.joinToString(","))
+            if (exempt) return
+            Thread.sleep(10)
+        }
+        throw AssertionError("trusted-address cache never picked up $address")
+    }
+
+    private fun contactFor(address: String) =
+        Contact(uid = "c-1", name = "Exchange", addresses = listOf(ContactAddress(blockchain, address)))
+
+    // ---- outgoing context --------------------------------------------------------------------
+
     @Test
     fun `dust correlating with a recent payment is spam`() = runBlocking {
+        contactsLoaded()
         adapter.context = correlatingContext
 
         assertTrue(classify())
@@ -180,6 +246,7 @@ class SpamManagerCachingTest {
 
     @Test
     fun `verdict from a missing context is not cached and is reached again once it loads`() = runBlocking {
+        contactsLoaded()
         adapter.context = emptyList()
 
         assertFalse("nothing to correlate against, so the score stays below the threshold", classify())
@@ -193,6 +260,7 @@ class SpamManagerCachingTest {
 
     @Test
     fun `verdict scored against a real context is cached`() = runBlocking {
+        contactsLoaded()
         adapter.context = nonCorrelatingContext
 
         assertFalse(classify())
@@ -201,6 +269,56 @@ class SpamManagerCachingTest {
         val callsAfterFirstPass = adapter.calls
         assertFalse(classify())
         assertEquals("the cached verdict is reused", callsAfterFirstPass, adapter.calls)
+    }
+
+    // ---- contacts ----------------------------------------------------------------------------
+
+    @Test
+    fun `spam verdict reached before contacts load is not cached`() = runBlocking {
+        // Contacts are read from a file well after adapters start converting transactions, so a
+        // transfer from a contact can be scored while the trusted-address cache is still empty.
+        val events = zeroValueFrom(unrelated)
+
+        assertTrue("with no contacts to go on, the transfer scores as spam", classify(events))
+        assertNull("but that verdict must not be stored", dao.getByHash(txHash))
+
+        contactsArrive(contactFor(unrelated))
+
+        assertFalse("the contact exempts it once the list is there", classify(events))
+        assertNull("and no stale spam row is left behind for findSpamByAddress", dao.getByHash(txHash))
+    }
+
+    @Test
+    fun `spam verdict is withheld until the contacts reach the trusted-address cache`() = runBlocking {
+        val events = zeroValueFrom(unrelated)
+
+        // ContactsRepository publishes the contacts it read and flips its loaded flag, but the
+        // cache the trust check reads is filled by a collector on SpamManager's own scope, which
+        // has not necessarily run yet. Whichever side of that the call lands on, the verdict is
+        // not one to keep: either the exemption applies, or it could not be evaluated.
+        contactsFlow.value = listOf(contactFor(unrelated))
+        contactsLoadedFlow.value = true
+
+        classify(events)
+        assertNull("no spam row until the contact is in the trusted-address cache", dao.getByHash(txHash))
+
+        awaitTrusted(unrelated)
+
+        assertFalse(classify(events))
+        assertNull(dao.getByHash(txHash))
+    }
+
+    @Test
+    fun `contacts take precedence over an already stored spam verdict`() = runBlocking {
+        contactsLoaded()
+        val events = zeroValueFrom(unrelated)
+
+        assertTrue(classify(events))
+        assertEquals(7, dao.getByHash(txHash)!!.spamScore)
+
+        contactsArrive(contactFor(unrelated))
+
+        assertFalse("the stored verdict does not outlive the address becoming a contact", classify(events))
     }
 
     companion object {
