@@ -544,7 +544,7 @@ chain thorchain
   supportedTokenTypes=Native,ThorchainAsset
   protocolType[Native]=THORChain
   protocolType[Eip20]=THORChain
-  supports=Mnemonic
+  supports=Mnemonic,ThorchainAddress
 
 chain mayachain
   title=MayaChain
@@ -565,5 +565,5 @@ chain mayachain
   supportedTokenTypes=Native
   protocolType[Native]=MayaChain
   protocolType[Eip20]=MayaChain
-  supports=Mnemonic
+  supports=Mnemonic,MayachainAddress
 

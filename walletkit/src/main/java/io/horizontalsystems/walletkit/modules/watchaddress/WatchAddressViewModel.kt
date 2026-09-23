@@ -238,11 +238,11 @@ class WatchAddressViewModel(
         BlockchainType.Ton -> Type.TonAddress
         BlockchainType.Stellar -> Type.StellarAddress
         BlockchainType.Xrp -> Type.XrpAddress
+        BlockchainType.Thorchain -> Type.ThorchainAddress
+        BlockchainType.Mayachain -> Type.MayachainAddress
         BlockchainType.Monero -> Type.MoneroAddress
         BlockchainType.Zcash,
         BlockchainType.Zano,
-        BlockchainType.Thorchain,
-        BlockchainType.Mayachain,
         is BlockchainType.Unsupported,
         null -> Type.Unsupported
     }
@@ -296,6 +296,8 @@ class WatchAddressViewModel(
             Type.TonAddress -> SubmitButtonType.Watch(address != null)
             Type.StellarAddress -> SubmitButtonType.Watch(address != null)
             Type.XrpAddress -> SubmitButtonType.Watch(address != null)
+            Type.ThorchainAddress -> SubmitButtonType.Watch(address != null)
+            Type.MayachainAddress -> SubmitButtonType.Watch(address != null)
             Type.MoneroAddress -> SubmitButtonType.Watch(address != null && viewKey != null)
             Type.Unsupported -> SubmitButtonType.Watch(false)
         }
@@ -326,6 +328,14 @@ class WatchAddressViewModel(
             AccountType.XrpAddress(it.hex)
         }
 
+        Type.ThorchainAddress -> address?.let {
+            AccountType.ThorchainAddress(it.hex)
+        }
+
+        Type.MayachainAddress -> address?.let {
+            AccountType.MayachainAddress(it.hex)
+        }
+
         Type.MoneroAddress -> address?.let {
             AccountType.MoneroWatchAccount(it.hex, viewKey!!, birthdayHeight ?: 1)
         }
@@ -342,6 +352,8 @@ class WatchAddressViewModel(
         TonAddress,
         StellarAddress,
         XrpAddress,
+        ThorchainAddress,
+        MayachainAddress,
         MoneroAddress,
         Unsupported
     }

@@ -119,6 +119,8 @@ class ChainBehaviorParityTest {
         "StellarAddress" to AccountType.StellarAddress("stellar"),
         "StellarSecretKey" to AccountType.StellarSecretKey("secret"),
         "XrpAddress" to AccountType.XrpAddress("xrp"),
+        "ThorchainAddress" to AccountType.ThorchainAddress("thor"),
+        "MayachainAddress" to AccountType.MayachainAddress("maya"),
         "BitcoinAddress(Bitcoin)" to AccountType.BitcoinAddress(
             "addr",
             BlockchainType.Bitcoin,

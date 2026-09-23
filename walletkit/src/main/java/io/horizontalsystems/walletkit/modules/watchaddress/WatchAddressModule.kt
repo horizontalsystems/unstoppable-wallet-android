@@ -19,6 +19,8 @@ object WatchAddressModule {
         add(BlockchainType.ECash)
         add(BlockchainType.Stellar)
         add(BlockchainType.Xrp)
+        add(BlockchainType.Thorchain)
+        add(BlockchainType.Mayachain)
         add(BlockchainType.Monero)
         add(BlockchainType.Solana)
     }

@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.UnsupportedAccountException
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.thorchainkit.ThorchainKit
+import io.horizontalsystems.thorchainkit.models.Address
 import io.horizontalsystems.thorchainkit.network.Network
 import io.horizontalsystems.thorchainkit.transaction.Signer
 import kotlinx.coroutines.CancellationException
@@ -65,14 +66,7 @@ class ThorchainKitManager(
         }
 
         if (this.thorchainKitWrapper == null) {
-            val accountType = account.type
-            this.thorchainKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account)
-                }
-
-                else -> throw UnsupportedAccountException()
-            }
+            this.thorchainKitWrapper = createKitInstance(kitAddress(account.type), account)
             start()
             useCount = 0
             currentAccount = account
@@ -82,13 +76,13 @@ class ThorchainKitManager(
         return this.thorchainKitWrapper!!
     }
 
-    private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): ThorchainKitWrapper {
+    private fun createKitInstance(address: Address, account: Account): ThorchainKitWrapper {
         // User-selected thornode provider first, then the others as failover. Overrides the
         // kit's built-in Network defaults; every URL ends in "/" as Retrofit requires.
         val thornodeUrls = rpcSourceManager.thornodeUrls()
         val kit = ThorchainKit.getInstance(
             App.instance,
-            accountType.seed,
+            address,
             network,
             account.id,
             thornodeUrls = thornodeUrls,
@@ -102,8 +96,12 @@ class ThorchainKitManager(
         else -> throw UnsupportedAccountException()
     }
 
-    fun getAddress(accountType: AccountType): String = when (accountType) {
-        is AccountType.Mnemonic -> ThorchainKit.getAddress(accountType.seed, network).toString()
+    fun getAddress(accountType: AccountType): String = kitAddress(accountType).toString()
+
+    private fun kitAddress(accountType: AccountType): Address = when {
+        accountType is AccountType.Mnemonic -> ThorchainKit.getAddress(accountType.seed, network)
+        accountType is AccountType.ThorchainAddress && network == Network.Mainnet -> Address.fromString(accountType.address, network)
+        accountType is AccountType.MayachainAddress && network == Network.MayaMainnet -> Address.fromString(accountType.address, network)
         else -> throw UnsupportedAccountException()
     }
 

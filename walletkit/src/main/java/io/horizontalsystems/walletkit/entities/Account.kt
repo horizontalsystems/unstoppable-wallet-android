@@ -136,6 +136,12 @@ sealed class AccountType {
     data class XrpAddress(val address: String) : AccountType()
 
     @Serializable
+    data class ThorchainAddress(val address: String) : AccountType()
+
+    @Serializable
+    data class MayachainAddress(val address: String) : AccountType()
+
+    @Serializable
     data class BitcoinAddress(
         val address: String,
         val blockchainType: BlockchainType,
@@ -345,6 +351,8 @@ sealed class AccountType {
             is TonAddress -> "Ton Address"
             is StellarAddress -> "Stellar Address"
             is XrpAddress -> "XRP Address"
+            is ThorchainAddress -> "THORChain Address"
+            is MayachainAddress -> "Maya Address"
             is EvmPrivateKey -> "EVM Private Key"
             is TronPrivateKey -> "TRON Private Key"
             is Passkey -> "Passkey"
@@ -387,6 +395,8 @@ sealed class AccountType {
             is TonAddress -> this.address.shorten()
             is StellarAddress -> this.address.shorten()
             is XrpAddress -> this.address.shorten()
+            is ThorchainAddress -> this.address.shorten()
+            is MayachainAddress -> this.address.shorten()
             is BitcoinAddress -> this.address.shorten()
             is MoneroWatchAccount -> this.address.shorten()
             else -> this.description
@@ -412,6 +422,8 @@ sealed class AccountType {
             is TonAddress -> true
             is StellarAddress -> true
             is XrpAddress -> true
+            is ThorchainAddress -> true
+            is MayachainAddress -> true
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             is MoneroWatchAccount -> true
@@ -426,6 +438,8 @@ sealed class AccountType {
             is TonAddress -> address
             is StellarAddress -> address
             is XrpAddress -> address
+            is ThorchainAddress -> address
+            is MayachainAddress -> address
             is BitcoinAddress -> address
             is HdExtendedKey -> keySerialized
             is MoneroWatchAccount -> address

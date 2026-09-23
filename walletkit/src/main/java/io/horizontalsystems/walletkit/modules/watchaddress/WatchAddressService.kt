@@ -80,6 +80,18 @@ class WatchAddressService(
                     }
                 }
 
+                is AccountType.ThorchainAddress -> {
+                    if (BlockchainType.Thorchain.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Thorchain, TokenType.Native))
+                    }
+                }
+
+                is AccountType.MayachainAddress -> {
+                    if (BlockchainType.Mayachain.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Mayachain, TokenType.Native))
+                    }
+                }
+
                 is AccountType.HdExtendedKey -> {
                     if (BlockchainType.Bitcoin.supports(accountType)) {
                         accountType.hdExtendedKey.purposes.forEach { purpose ->

@@ -29,7 +29,7 @@ class ThorchainTransactionConverter(
     // delivers TCY in the same action — so every user-side transfer becomes its own
     // record; a single-record conversion would drop the received asset entirely.
     fun convert(transaction: Transaction): List<ThorchainTransactionRecord> {
-        val failed = transaction.status == "failed"
+        val failed = transaction.isFailed
         val blockHeight = if (transaction.isPending) null else transaction.blockHeight.toInt()
 
         val userSpends = transaction.incoming.filter { it.address == userAddress }

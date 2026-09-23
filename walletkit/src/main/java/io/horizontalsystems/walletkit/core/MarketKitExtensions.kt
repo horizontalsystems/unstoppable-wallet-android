@@ -504,6 +504,12 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         is AccountType.XrpAddress ->
             this == BlockchainType.Xrp
 
+        is AccountType.ThorchainAddress ->
+            this == BlockchainType.Thorchain
+
+        is AccountType.MayachainAddress ->
+            this == BlockchainType.Mayachain
+
         is AccountType.MoneroWatchAccount ->
             this == BlockchainType.Monero
 

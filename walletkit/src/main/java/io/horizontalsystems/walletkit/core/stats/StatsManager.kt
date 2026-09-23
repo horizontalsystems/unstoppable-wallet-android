@@ -281,6 +281,14 @@ val AccountType.statAccountType: String
             "xrp_address"
         }
 
+        is AccountType.ThorchainAddress -> {
+            "thorchain_address"
+        }
+
+        is AccountType.MayachainAddress -> {
+            "mayachain_address"
+        }
+
         is AccountType.TronAddress -> {
             "tron_address"
         }
