@@ -14,7 +14,7 @@ class BackupLocalModulePrivateKeyTest {
     private val highBitKey = "f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff01"
 
     // leading zero byte: BigInteger.toByteArray() gives 31 bytes
-    private val leadingZeroKey = "00a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f"
+    private val leadingZeroKey = "00123456789abcdef0112233445566778899aabbccddeeff0011223344556677"
 
     private val regularKey = "4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318"
 
