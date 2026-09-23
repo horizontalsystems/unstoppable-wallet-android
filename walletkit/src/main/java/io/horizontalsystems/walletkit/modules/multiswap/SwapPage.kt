@@ -459,6 +459,9 @@ private fun SwapScreenInner(
                         focusManager.clearFocus()
                         onEnterAmountPercentage(it)
                     },
+                    onClearClick = {
+                        onEnterAmount(null)
+                    }
                 )
                 Column(
                     modifier = Modifier
@@ -835,6 +838,7 @@ private fun SwapInput(
     availableBalance: BigDecimal?,
     onAvailableBalanceClick: (() -> Unit)?,
     onPercentClick: (Int) -> Unit,
+    onClearClick: (() -> Unit)
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -843,7 +847,9 @@ private fun SwapInput(
             balanceToken = tokenIn,
             availableBalance = availableBalance,
             onAvailableBalanceClick = onAvailableBalanceClick,
-            onPercentClick = onPercentClick
+            onPercentClick = onPercentClick,
+            onClearClick = onClearClick,
+            showClear = amountIn != null
         )
         Box {
             Column {

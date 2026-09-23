@@ -1957,4 +1957,5 @@
     </plurals>
     <string name="Hud_Text_ChangeWallet">Wallet wechseln</string>
     <string name="WatchWallet_Typed">%s Watch-Wallet</string>
+    <string name="Action_Clear">Löschen</string>
 </resources>

@@ -1948,4 +1948,5 @@
     </plurals>
     <string name="Hud_Text_ChangeWallet">지갑을 변경하세요</string>
     <string name="WatchWallet_Typed">%s 감시 지갑</string>
+    <string name="Action_Clear">지우기</string>
 </resources>

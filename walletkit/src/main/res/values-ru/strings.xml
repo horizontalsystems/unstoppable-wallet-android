@@ -1961,4 +1961,5 @@
     </plurals>
     <string name="Hud_Text_ChangeWallet">Смените кошелёк</string>
     <string name="WatchWallet_Typed">%s кошелёк наблюдения</string>
+    <string name="Action_Clear">Очистить</string>
 </resources>

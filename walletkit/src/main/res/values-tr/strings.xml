@@ -1953,4 +1953,5 @@
     </plurals>
     <string name="Hud_Text_ChangeWallet">Cüzdan değiştirin</string>
     <string name="WatchWallet_Typed">%s İzleme Cüzdanı</string>
+    <string name="Action_Clear">Temizle</string>
 </resources>

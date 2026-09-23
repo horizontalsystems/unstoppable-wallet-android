@@ -122,9 +122,7 @@ fun CrossPayTabBody(
             // The balance shown is the SOURCE token's — what funds the payment.
             AvailableBalanceRow(
                 balanceToken = uiState.tokenIn,
-                availableBalance = uiState.availableBalance,
-                onAvailableBalanceClick = null,
-                onPercentClick = null
+                availableBalance = uiState.availableBalance
             )
             TokenAmountInput(
                 token = uiState.tokenOut,

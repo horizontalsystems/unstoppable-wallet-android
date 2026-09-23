@@ -1954,4 +1954,5 @@
     </plurals>
     <string name="Hud_Text_ChangeWallet">Changez de portefeuille</string>
     <string name="WatchWallet_Typed">Wallet d\'observation %s</string>
+    <string name="Action_Clear">Effacer</string>
 </resources>

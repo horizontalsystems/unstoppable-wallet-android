@@ -236,6 +236,10 @@ fun SendV2Screen(
                             focusManager.clearFocus()
                             viewModel.onEnterAmountPercentage(it)
                         },
+                        onClearClick = {
+                            viewModel.onEnterAmount(null)
+                        },
+                        showClear = uiState.amount != null
                     )
                     TokenAmountInput(
                         token = uiState.wallet.token,
