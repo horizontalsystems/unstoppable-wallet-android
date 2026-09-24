@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.crosspay
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.WatchAccountException
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
@@ -194,6 +195,10 @@ class CrossPayConfirmViewModel(
         commitJob = viewModelScope.launch(serviceDispatcher) {
             try {
                 error = null
+
+                if (App.accountManager.activeAccount?.isWatchAccount != false) {
+                    throw WatchAccountException()
+                }
 
                 val order = manager.commit(request)
 

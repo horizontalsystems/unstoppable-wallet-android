@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.WatchAccountException
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.modules.multiswap.FeeRow
@@ -326,6 +327,7 @@ private fun errorText(context: android.content.Context, error: Throwable): Strin
     is PrivateSendError.NetworkError -> context.getString(R.string.PrivateSend_Caution_NetworkError)
     is PrivateSendError.TokenUnsupported -> context.getString(R.string.PrivateSend_Caution_TokenUnsupported)
     is PrivateSendError.AttachmentUnsupported -> context.getString(R.string.PrivateSend_Caution_AttachmentUnsupported)
+    is WatchAccountException -> context.getString(R.string.Hud_Text_ChangeWallet)
     else -> context.getString(R.string.PrivateSend_CommitFailed)
 }
 

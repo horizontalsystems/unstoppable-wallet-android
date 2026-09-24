@@ -165,6 +165,12 @@ fun ActivateTokenScreen(
                     icon = R.drawable.ic_attention_20
                 )
 
+                is ActivateTokenError.WatchAccount -> TextImportantError(
+                    modifier = modifier,
+                    text = stringResource(R.string.Hud_Text_ChangeWallet),
+                    title = null,
+                )
+
                 is ActivateTokenError.NullAdapter -> TextImportantError(
                     modifier = modifier,
                     text = stringResource(R.string.Error_ParameterNotSet),
@@ -199,6 +205,7 @@ class ActivateTokenViewModel(
     xRateService: XRateService,
 ) : ViewModelUiState<ActivateTokenUiState>() {
     private val token = wallet.token
+    private val watchAccount = wallet.account.isWatchAccount
     private val adapter = adapterManager.getAdapterForWallet<IActivatableTokenAdapter>(wallet)
     private val activationInfo = ChainRegistry[wallet.token.blockchainType]?.tokenActivationInfo(wallet)
     private var activateEnabled = false
@@ -211,7 +218,12 @@ class ActivateTokenViewModel(
             val tmpAdapter = adapter
 
             try {
-                if (tmpAdapter == null) {
+                if (watchAccount) {
+                    // Backstop: the trust line is a signed transaction. Both entries here —
+                    // the Receive sheet and the pre-swap step — already hide themselves.
+                    activateEnabled = false
+                    error = ActivateTokenError.WatchAccount()
+                } else if (tmpAdapter == null) {
                     activateEnabled = false
                     error = ActivateTokenError.NullAdapter()
                 } else if (tmpAdapter.isActivated()) {
@@ -269,6 +281,7 @@ class ActivateTokenViewModel(
 }
 
 sealed class ActivateTokenError : Throwable() {
+    class WatchAccount : ActivateTokenError()
     class NullAdapter : ActivateTokenError()
     class AlreadyActive : ActivateTokenError()
     class InsufficientBalance : ActivateTokenError()

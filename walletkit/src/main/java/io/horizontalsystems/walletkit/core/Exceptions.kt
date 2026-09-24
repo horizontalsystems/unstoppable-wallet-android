@@ -51,6 +51,11 @@ open class HSCaution(
 }
 class UnsupportedException(override val message: String?) : Exception()
 class UnsupportedAccountException : Exception()
+
+// A watch account has no key to sign with. Every entry into a signing flow is hidden for it,
+// so this is the backstop: thrown before an external provider order is created, since those
+// outlive the app and a late failure at the signature would leave one unpaid.
+class WatchAccountException : Exception()
 class LocalizedException(val errorTextRes: Int) : Exception()
 class NoAuthTokenException(override val message: String = "Auth Token is not set or empty") : Exception()
 class InvalidAuthTokenException(override val message: String = "Auth Token is expired or invalid") : Exception()

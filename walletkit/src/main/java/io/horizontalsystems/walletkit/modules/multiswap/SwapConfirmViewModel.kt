@@ -2,23 +2,25 @@ package io.horizontalsystems.walletkit.modules.multiswap
 
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
 import io.horizontalsystems.walletkit.core.BackgroundManagerState
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.WatchAccountException
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
-import io.horizontalsystems.walletkit.core.toHexString
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.RetryableSwapError
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
@@ -30,8 +32,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDepositAddress
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldDepositMemo
 import io.horizontalsystems.walletkit.modules.send.SendModule
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -284,6 +284,10 @@ class SwapConfirmViewModel(
         fetchFinalQuoteJob = viewModelScope.launch(Dispatchers.Default) {
             try {
                 error = null
+
+                if (App.accountManager.activeAccount?.isWatchAccount != false) {
+                    throw WatchAccountException()
+                }
 
                 val finalQuote = swapProvider.fetchFinalQuote(
                     tokenIn,

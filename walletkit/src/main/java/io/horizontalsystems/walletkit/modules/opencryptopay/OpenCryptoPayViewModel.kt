@@ -52,6 +52,15 @@ class OpenCryptoPayViewModel(
         emitState()
         viewModelScope.launch {
             try {
+                // Before the provider is contacted at all: a watch account cannot pay the
+                // invoice, so it must not announce itself to the payment provider either.
+                if (App.accountManager.activeAccount?.isWatchAccount != false) {
+                    error = Translator.getString(R.string.Hud_Text_ChangeWallet)
+                    loading = false
+                    emitState()
+                    return@launch
+                }
+
                 val url = resolveApiUrl(lnurl)
                 apiUrl = url
                 val baseUrl = url.substringBefore("?").let { u ->

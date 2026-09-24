@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.WatchAccountException
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.CurrencyValue
@@ -310,6 +311,7 @@ private fun errorText(context: android.content.Context, error: Throwable): Strin
     is CrossPayError.ProviderSuspended -> context.getString(R.string.CrossPay_ProviderSuspended)
     is CrossPayError.NetworkError -> context.getString(R.string.CrossPay_NetworkError)
     is CrossPayError.TokenUnsupported -> context.getString(R.string.CrossPay_TokenNotSupported)
+    is WatchAccountException -> context.getString(R.string.Hud_Text_ChangeWallet)
     else -> context.getString(R.string.CrossPay_CommitFailed)
 }
 
