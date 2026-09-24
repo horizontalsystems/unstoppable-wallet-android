@@ -1953,4 +1953,5 @@
         <item quantity="one">%d işlemi imzala</item>
         <item quantity="other">%d işlemi imzala</item>
     </plurals>
+    <string name="Hud_Text_ChangeWallet">Cüzdan değiştirin</string>
 </resources>

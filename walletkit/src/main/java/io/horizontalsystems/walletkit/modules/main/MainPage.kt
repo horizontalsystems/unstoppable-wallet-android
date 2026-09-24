@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,8 +34,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.RateAppManager
+import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -240,6 +243,14 @@ private fun MainScreen(
             delay(500)
             navigation.slideFromRight(deepLinkPage.screen)
             viewModel.deeplinkPageHandled()
+        }
+    }
+
+    if (uiState.showChangeWalletWarning) {
+        val view = LocalView.current
+        LaunchedEffect(Unit) {
+            HudHelper.showErrorMessage(view, R.string.Hud_Text_ChangeWallet)
+            viewModel.changeWalletWarningShown()
         }
     }
 

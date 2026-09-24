@@ -107,6 +107,8 @@ object MainModule {
         val torEnabled: Boolean,
         val wcSupportState: WCManager.SupportState?,
         val openSend: OpenSendTokenSelect?,
+        // A link that needs a signature arrived while a watch account was active.
+        val showChangeWalletWarning: Boolean,
         val selectedTabItem: MainNavigation,
         // Render this tab change without animation. Travels in the same state emission as
         // selectedTabItem so the decision cannot race the lock state: a crossfade after the

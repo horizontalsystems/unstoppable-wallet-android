@@ -67,8 +67,8 @@ fun ReceiveActivatableTokenScreen(
         }
     }
 
-    LaunchedEffect(uiState.activationRequired) {
-        if (uiState.activationRequired) {
+    LaunchedEffect(uiState.activationOffered) {
+        if (uiState.activationOffered) {
             sheetState.show()
         }
     }
@@ -117,7 +117,7 @@ fun ReceiveActivatableTokenScreen(
             setAmount = viewModel::setAmount,
             onErrorClick = viewModel::onErrorClick,
             slot1 = {
-                if (uiState.activated == false) {
+                if (uiState.activationRequired) {
                     HsDivider(modifier = Modifier.fillMaxWidth())
                     RowUniversal(modifier = Modifier.height(48.dp)) {
                         subhead2_grey(
@@ -125,26 +125,30 @@ fun ReceiveActivatableTokenScreen(
                             text = stringResource(R.string.Balance_Receive_Trustline),
                         )
 
-                        HSpacer(8.dp)
-                        HsIconButton(
-                            modifier = Modifier.size(20.dp),
-                            onClick = {
-                                scope.launch { sheetState.show() }
+                        // For a watch account the row stays as a plain warning: no way in to
+                        // the activation sheet, which it could never sign.
+                        if (uiState.activationOffered) {
+                            HSpacer(8.dp)
+                            HsIconButton(
+                                modifier = Modifier.size(20.dp),
+                                onClick = {
+                                    scope.launch { sheetState.show() }
+                                }
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.ic_info_20),
+                                    contentDescription = null
+                                )
                             }
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_info_20),
-                                contentDescription = null
+                            subhead1_jacob(
+                                text = stringResource(R.string.Hud_Text_Activate),
+                                textAlign = TextAlign.End,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .weight(1f)
+                                    .clickable(onClick = runActivation)
                             )
                         }
-                        subhead1_jacob(
-                            text = stringResource(R.string.Hud_Text_Activate),
-                            textAlign = TextAlign.End,
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .weight(1f)
-                                .clickable(onClick = runActivation)
-                        )
                     }
                 }
             },

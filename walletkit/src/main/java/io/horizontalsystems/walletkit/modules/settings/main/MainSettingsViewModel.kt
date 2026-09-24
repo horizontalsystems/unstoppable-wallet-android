@@ -49,6 +49,10 @@ class MainSettingsViewModel(
     val walletConnectSupportState: WCManager.SupportState
         get() = wcManager.getWalletConnectSupportState()
 
+    // Donating means sending, so a watch account is not offered it.
+    val donateEnabled: Boolean
+        get() = accountManager.activeAccount?.isWatchAccount == false
+
     private val appWebPageLink = appConfigProvider.appWebPageLink
     private val hasNonStandardAccount: Boolean
         get() = accountManager.hasNonStandardAccount

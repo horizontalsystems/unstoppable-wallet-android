@@ -1954,4 +1954,5 @@
         <item quantity="one">Signer %d transaction</item>
         <item quantity="other">Signer %d transactions</item>
     </plurals>
+    <string name="Hud_Text_ChangeWallet">Changez de portefeuille</string>
 </resources>

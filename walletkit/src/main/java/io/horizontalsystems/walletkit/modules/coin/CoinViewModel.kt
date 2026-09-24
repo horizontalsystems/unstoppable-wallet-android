@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Clearable
+import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.isSupported
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
@@ -23,6 +24,7 @@ class CoinViewModel(
     private val clearables: List<Clearable>,
     private val marketKit: MarketKitWrapper,
     localStorage: ILocalStorage,
+    accountManager: IAccountManager,
 ) : ViewModel() {
 
     val tabs = CoinModule.Tab.values()
@@ -34,13 +36,19 @@ class CoinViewModel(
     var successMessage by mutableStateOf<Int?>(null)
         private set
 
-     val coinToken: Token? = fullCoin.tokens
-        .filter { it.isSupported }
-        .sortedWith(
-            compareBy<Token> { it.type.order }
-                .thenBy { it.blockchainType.order }
-        )
-        .firstOrNull()
+    // Drives the Buy/Sell buttons, which lead into the swap flow. A watch account cannot
+    // sign, so it gets no token here and the buttons stay off the screen.
+    val coinToken: Token? = if (accountManager.activeAccount?.isWatchAccount == false) {
+        fullCoin.tokens
+            .filter { it.isSupported }
+            .sortedWith(
+                compareBy<Token> { it.type.order }
+                    .thenBy { it.blockchainType.order }
+            )
+            .firstOrNull()
+    } else {
+        null
+    }
 
     var popularToken by mutableStateOf<Token?>(null)
         private set

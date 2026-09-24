@@ -1961,4 +1961,5 @@
         <item quantity="many">Подписать %d транзакций</item>
         <item quantity="other">Подписать %d транзакции</item>
     </plurals>
+    <string name="Hud_Text_ChangeWallet">Смените кошелёк</string>
 </resources>

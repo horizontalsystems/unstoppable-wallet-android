@@ -66,8 +66,10 @@ class ReceiveActivatableTokenViewModel(
         amount = amount,
         amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
         activationRequired = activated == false,
+        // A watch account cannot sign the trust line transaction, but it still needs to know the
+        // asset is inactive — an incoming transfer would be rejected — so only the action goes.
+        activationOffered = !watchAccount && activated == false,
         coinCode = wallet.coin.code,
-        activated = activated,
     )
 
     fun setAmount(amount: BigDecimal?) {
@@ -111,9 +113,8 @@ data class ReceiveActivatableTokenUiState(
     override val amount: BigDecimal?,
     override val amountString: String?,
     val activationRequired: Boolean,
+    val activationOffered: Boolean,
     val coinCode: String,
-    /** Null until the adapter has answered. */
-    val activated: Boolean?,
 ) : ReceiveModule.AbstractUiState() {
     override val addressFormat = null
     override val addressType = null

@@ -1952,4 +1952,5 @@
         <item quantity="one">Firmar %d transacción</item>
         <item quantity="other">Firmar %d transacciones</item>
     </plurals>
+    <string name="Hud_Text_ChangeWallet">Cambia de billetera</string>
 </resources>

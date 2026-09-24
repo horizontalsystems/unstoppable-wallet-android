@@ -416,21 +416,23 @@ private fun SettingSections(
         })
     )
 
-    VSpacer(24.dp)
+    if (viewModel.donateEnabled) {
+        VSpacer(24.dp)
 
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_Donate,
-                R.drawable.ic_heart_24,
-                onClick = {
-                    navigation.slideFromRight(DonateTokenSelectPage)
+        CellUniversalLawrenceSection(
+            listOf {
+                HsSettingCell(
+                    R.string.Settings_Donate,
+                    R.drawable.ic_heart_24,
+                    onClick = {
+                        navigation.slideFromRight(DonateTokenSelectPage)
 
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
-                }
-            )
-        }
-    )
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
+                    }
+                )
+            }
+        )
+    }
 
     if (BuildConfig.DEBUG) {
         VSpacer(24.dp)

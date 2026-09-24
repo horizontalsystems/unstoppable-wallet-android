@@ -1951,4 +1951,5 @@
     <plurals name="WalletConnect_Solana_SignTransactionsCount">
         <item quantity="other">签署 %d 笔交易</item>
     </plurals>
+    <string name="Hud_Text_ChangeWallet">请切换钱包</string>
 </resources>

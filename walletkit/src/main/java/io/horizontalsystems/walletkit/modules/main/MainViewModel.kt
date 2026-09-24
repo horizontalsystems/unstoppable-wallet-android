@@ -59,6 +59,7 @@ class MainViewModel(
     private var wcPendingRequestsCount = 0
     private var marketsTabEnabled = localStorage.marketsTabEnabledFlow.value
     private var transactionsEnabled = isTransactionsTabEnabled()
+    private var swapTabEnabled = isSwapTabEnabled()
     private var settingsBadge: MainModule.BadgeType? = null
     private val launchPage: LaunchPage
         get() = localStorage.launchPage ?: LaunchPage.Auto
@@ -76,21 +77,16 @@ class MainViewModel(
         }
 
     private val items: List<MainNavigation>
-        get() = if (marketsTabEnabled) {
-            listOf(
-                MainNavigation.Market,
-                MainNavigation.Balance,
-                MainNavigation.Swap,
-//                MainNavigation.Transactions,
-                MainNavigation.Settings,
-            )
-        } else {
-            listOf(
-                MainNavigation.Balance,
-                MainNavigation.Swap,
-//                MainNavigation.Transactions,
-                MainNavigation.Settings,
-            )
+        get() = buildList {
+            if (marketsTabEnabled) {
+                add(MainNavigation.Market)
+            }
+            add(MainNavigation.Balance)
+            if (swapTabEnabled) {
+                add(MainNavigation.Swap)
+            }
+//            add(MainNavigation.Transactions)
+            add(MainNavigation.Settings)
         }
     private val selectedTabItem: MainNavigation
         get() = mainNavItems.firstOrNull { it.selected }?.mainNavItem
@@ -106,6 +102,7 @@ class MainViewModel(
     private var torEnabled = localStorage.torEnabled
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var snapTabSwitch = false
+    private var showChangeWalletWarning = false
 
     // App locked while a public screen was showing: fall back to the Market tab so the user
     // keeps browsing instead of getting the keypad. The stored launch tab is left untouched.
@@ -167,6 +164,7 @@ class MainViewModel(
             accountManager.activeAccountStateFlow.collect {
                 if (it is ActiveAccountState.ActiveAccount) {
                     updateTransactionsTabEnabled()
+                    updateSwapTabEnabled()
                 }
             }
         }
@@ -204,9 +202,17 @@ class MainViewModel(
         openSend = openSendTokenSelect,
         selectedTabItem = selectedTabItem,
         snapTabSwitch = snapTabSwitch,
+        showChangeWalletWarning = showChangeWalletWarning,
     )
 
     private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
+
+    // False for a watch account, and with no active account at all.
+    private val canSign: Boolean
+        get() = accountManager.activeAccount?.isWatchAccount == false
+
+    // The whole swap flow ends in a signature, so it is out of reach for a watch account.
+    private fun isSwapTabEnabled(): Boolean = canSign
 
 
     fun whatsNewShown() {
@@ -286,8 +292,18 @@ class MainViewModel(
         syncNavigation()
     }
 
+    private fun updateSwapTabEnabled() {
+        swapTabEnabled = isSwapTabEnabled()
+        syncNavigation()
+    }
+
     fun wcSupportStateHandled() {
         wcSupportState = null
+        emitState()
+    }
+
+    fun changeWalletWarningShown() {
+        showChangeWalletWarning = false
         emitState()
     }
 
@@ -354,7 +370,10 @@ class MainViewModel(
             else -> getLaunchTab()
         }
 
-        return items.indexOf(tab)
+        // The stored tab can be one that is currently hidden — Swap, once the active account
+        // is a watch account — so fall back to Balance rather than leaving nothing selected.
+        val index = items.indexOf(tab)
+        return if (index >= 0) index else items.indexOf(MainNavigation.Balance).coerceAtLeast(0)
     }
 
     private fun getLaunchTab(): MainNavigation = when (launchPage) {
@@ -530,6 +549,14 @@ class MainViewModel(
             || deeplinkString.startsWith("zcash:")
             || deeplinkString.startsWith("litecoin:")
         ) {
+            // A payment link asks for a signature, so a watch account must not be taken to the
+            // send flow. There is no element to hide here, so it is told to switch wallets.
+            if (!canSign) {
+                showChangeWalletWarning = true
+                emitState()
+                return
+            }
+
             AddressUriParser.addressUri(deeplinkString)?.let { addressUri ->
                 val allowedBlockchainTypes = addressUri.allowedBlockchainTypes
                 var allowedTokenTypes: List<TokenType>? = null
