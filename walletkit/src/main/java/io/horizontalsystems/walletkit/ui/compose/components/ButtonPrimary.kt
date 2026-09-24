@@ -2,8 +2,6 @@ package io.horizontalsystems.walletkit.ui.compose.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,8 +20,6 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,89 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-
-@Composable
-fun ButtonPrimaryDefault(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    loadingIndicator: Boolean = false,
-) {
-    ButtonPrimary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.leah,
-            contentColor = ComposeAppTheme.colors.blade,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            if (loadingIndicator) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
-                )
-                HSpacer(width = 8.dp)
-            }
-            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonPrimaryTransparent(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val contentColor = when {
-        !enabled -> ComposeAppTheme.colors.andy
-        isPressed -> ComposeAppTheme.colors.grey
-        else -> ComposeAppTheme.colors.leah
-    }
-
-    Surface(
-        modifier = modifier,
-        color = ComposeAppTheme.colors.transparent,
-        contentColor = contentColor,
-    ) {
-        ProvideTextStyle(
-            value = ComposeAppTheme.typography.headline2
-        ) {
-            Row(
-                Modifier
-                    .defaultMinSize(
-                        minWidth = ButtonPrimaryDefaults.MinWidth,
-                        minHeight = ButtonPrimaryDefaults.MinHeight
-                    )
-                    .padding(ButtonPrimaryDefaults.ContentPadding)
-                    .clickable(
-                        enabled = enabled,
-                        onClick = onClick,
-                        interactionSource = interactionSource,
-                        indication = null
-                    ),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                content = {
-                    Text(
-                        text = title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            )
-        }
-    }
-}
 
 @Composable
 fun ButtonPrimaryYellowWithIcon(

@@ -26,7 +26,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.components.Badge
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellFooter
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
@@ -41,6 +40,8 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Serializable
 data class VaultPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
@@ -119,7 +120,8 @@ private fun VaultScreen(
                         }
                         item {
                             VSpacer(18.dp)
-                            ButtonPrimaryDefault(
+                            HSButton(
+                                variant = ButtonVariant.Secondary,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(start = 16.dp, end = 16.dp),
