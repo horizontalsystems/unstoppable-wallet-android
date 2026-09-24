@@ -105,7 +105,7 @@ fun CrossPayTabBody(
     val openAddress = navigation.slideFromBottomForResult<SendAddressPage.Result>(
         { SendAddressPage(uiState.tokenOut!!, uiState.address?.hex) }
     ) {
-        viewModel.onSelectAddress(it.address, it.risky)
+        viewModel.onSelectAddress(it.address, it.risky, it.contactName)
     }
 
     Column(
@@ -142,7 +142,7 @@ fun CrossPayTabBody(
                     AddressRow(
                         address = uiState.address,
                         onClick = { if (uiState.tokenOut != null) openAddress() },
-                        contactName = null,
+                        contactName = uiState.contactName,
                         risky = uiState.riskyAddress
                     )
                 }

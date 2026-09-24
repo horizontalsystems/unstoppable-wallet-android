@@ -48,6 +48,7 @@ class CrossPayTabViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
     private var address: Address? = null
+    private var contactName: String? = null
     private var riskyAddress = false
     private var quote: CrossPayQuoteState? = null
     private var quoteJob: Job? = null
@@ -121,6 +122,7 @@ class CrossPayTabViewModel(
         currency = currency,
         availableBalance = availableBalance,
         address = address,
+        contactName = contactName,
         riskyAddress = riskyAddress,
         quote = quote,
         step = step(),
@@ -164,6 +166,7 @@ class CrossPayTabViewModel(
         // against the previous chain — neither may survive the switch.
         fiatService.setAmount(null)
         address = null
+        contactName = null
         riskyAddress = false
         quote = null
     }
@@ -205,9 +208,10 @@ class CrossPayTabViewModel(
         }
     }
 
-    fun onSelectAddress(address: Address, risky: Boolean) {
+    fun onSelectAddress(address: Address, risky: Boolean, contactName: String?) {
         this.address = address
         this.riskyAddress = risky
+        this.contactName = contactName
         emitState()
     }
 
@@ -327,6 +331,8 @@ data class CrossPayTabUiState(
     val currency: Currency,
     val availableBalance: BigDecimal?,
     val address: Address?,
+    /** Name of the contact the recipient belongs to, if any. */
+    val contactName: String?,
     val riskyAddress: Boolean,
     val quote: CrossPayQuoteState?,
     val step: CrossPayStep,
