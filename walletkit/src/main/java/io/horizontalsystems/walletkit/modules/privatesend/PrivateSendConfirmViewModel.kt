@@ -194,7 +194,11 @@ class PrivateSendConfirmViewModel(
             try {
                 error = null
 
-                if (App.accountManager.activeAccount?.isWatchAccount != false) {
+                val activeAccount = App.accountManager.activeAccount
+                if (activeAccount == null ||
+                    activeAccount.isWatchAccount ||
+                    activeAccount.id != request.accountId
+                ) {
                     throw WatchAccountException()
                 }
 

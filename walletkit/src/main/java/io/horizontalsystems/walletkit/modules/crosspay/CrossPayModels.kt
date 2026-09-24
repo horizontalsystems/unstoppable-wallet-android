@@ -10,6 +10,9 @@ import java.math.BigDecimal
  * transfer exists yet — both are the commit's answer.
  */
 data class CrossPayRequest(
+    // The account that opened the confirmation. The refund address is derived from whichever
+    // account is active at commit time, so the two must still agree by then.
+    val accountId: String,
     val tokenIn: Token,
     val tokenOut: Token,
     // The REAL recipient on tokenOut's chain, never a deposit address.

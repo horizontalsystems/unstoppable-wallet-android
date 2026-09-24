@@ -14,6 +14,9 @@ import java.math.BigDecimal
  * the amount field means "the amount the recipient receives".
  */
 data class PrivateSendRequest(
+    // The account that opened the confirmation. The refund address is derived from whichever
+    // account is active at commit time, so the two must still agree by then.
+    val accountId: String,
     val token: Token,
     // The REAL recipient, never a deposit address.
     val recipient: String,

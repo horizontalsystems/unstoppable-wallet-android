@@ -344,6 +344,12 @@ class SwapConfirmViewModel(
 
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
+        // The send service was built with the account that was active when the quote was
+        // prepared and holds on to it, so it would still sign after a switch to a watch account.
+        if (App.accountManager.activeAccount?.isWatchAccount != false) {
+            throw WatchAccountException()
+        }
+
         val result = sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
         saveSwapRecord(result)
 

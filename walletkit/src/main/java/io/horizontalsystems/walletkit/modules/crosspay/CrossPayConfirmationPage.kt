@@ -62,6 +62,7 @@ data class CrossPayConfirmationPage(val input: Input) : HSPage() {
         val viewModel = viewModel<CrossPayConfirmViewModel>(
             initializer = CrossPayConfirmViewModel.init(
                 CrossPayRequest(
+                    accountId = input.wallet.account.id,
                     tokenIn = input.wallet.token,
                     tokenOut = input.tokenOut,
                     recipient = input.recipient,

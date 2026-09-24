@@ -27,6 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.WatchAccountException
+import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.iconPlaceholder
@@ -252,9 +254,13 @@ private fun SwapConfirmInternal(
                                 resultEventBus.sendResult(SwapConfirmPage.Result(true))
                                 navigation.removeLastOrNull()
                             } catch (t: Throwable) {
-                                navigation.slideFromBottom(ErrorSheet(
-                                    ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
-                                ))
+                                val message = when (t) {
+                                    is WatchAccountException ->
+                                        Translator.getString(R.string.Hud_Text_ChangeWallet)
+
+                                    else -> t.message ?: t.javaClass.simpleName
+                                }
+                                navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(message)))
                             }
                         }
                     },

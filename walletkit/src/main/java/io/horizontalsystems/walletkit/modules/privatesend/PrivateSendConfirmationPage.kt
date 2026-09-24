@@ -72,6 +72,7 @@ data class PrivateSendConfirmationPage(val input: Input) : HSPage() {
         val viewModel = viewModel<PrivateSendConfirmViewModel>(
             initializer = PrivateSendConfirmViewModel.init(
                 PrivateSendRequest(
+                    accountId = input.wallet.account.id,
                     token = input.wallet.token,
                     recipient = input.recipient,
                     amountOut = input.amount,
