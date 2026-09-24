@@ -38,14 +38,14 @@ data class SendRecipientPage(
             buttonTitle = stringResource(R.string.Button_Next),
             allowNull = false,
             initialAddress = address,
-        ) { result, risky ->
+        ) { result, risky, contactName ->
             result?.let {
                 navigation.slideFromRight(
                     SendV2Page(
                         wallet = wallet,
                         sendEntryPointDestId = sendEntryPointDestId,
                         purpose = SendV2Page.Purpose.Transfer(
-                            SendV2Page.Prefill(address = it, riskyAddress = risky, amount = amount, memo = memo)
+                            SendV2Page.Prefill(address = it, riskyAddress = risky, contactName = contactName, amount = amount, memo = memo)
                         ),
                     )
                 )

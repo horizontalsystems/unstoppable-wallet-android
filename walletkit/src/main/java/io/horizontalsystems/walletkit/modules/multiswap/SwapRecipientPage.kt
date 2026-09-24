@@ -54,7 +54,7 @@ data class SwapRecipientPage(val input: Input) : HSPage() {
             description = stringResource(R.string.Swap_RecipientAddress_Description),
             allowOwnAddress = true,
             zcashTransparentOnly = input.zcashTransparentOnly,
-        ) { address, _ ->
+        ) { address, _, _ ->
             address?.let {
                 swapViewModel.setExternalRecipient(it)
                 openConfirmation()

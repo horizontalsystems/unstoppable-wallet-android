@@ -227,7 +227,7 @@ private fun ColumnScope.SendFormTab(
     val openAddress = navigation.slideFromBottomForResult<SendAddressPage.Result>(
         { SendAddressPage(wallet.token, uiState.address?.hex) }
     ) {
-        viewModel.onSelectAddress(it.address, it.risky)
+        viewModel.onSelectAddress(it.address, it.risky, it.contactName)
     }
 
         Column(

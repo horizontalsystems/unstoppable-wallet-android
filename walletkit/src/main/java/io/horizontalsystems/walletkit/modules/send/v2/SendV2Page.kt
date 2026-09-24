@@ -56,11 +56,15 @@ data class SendV2Page(
         data class Donation(val address: String, val title: String) : Purpose()
     }
 
-    /** Values a payment link supplies for a [Purpose.Transfer]; [address] has passed the address checks. */
+    /**
+     * Values a payment link supplies for a [Purpose.Transfer]; [address] has passed the
+     * address checks, and [contactName] names the contact it belongs to, if any.
+     */
     @Serializable
     data class Prefill(
         val address: Address? = null,
         val riskyAddress: Boolean = false,
+        val contactName: String? = null,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val memo: String? = null,
     )

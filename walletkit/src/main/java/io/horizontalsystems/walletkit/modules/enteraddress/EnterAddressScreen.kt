@@ -70,7 +70,7 @@ fun EnterAddressScreen(
     allowOwnAddress: Boolean = false,
     zcashTransparentOnly: Boolean = false,
     backIcon: Int? = null,
-    onResult: (address: Address?, risky: Boolean) -> Unit
+    onResult: (address: Address?, risky: Boolean, contactName: String?) -> Unit
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
         factory = EnterAddressViewModel.Factory(
@@ -155,7 +155,7 @@ fun EnterAddressScreen(
                         else -> buttonTitle
                     },
                     onClick = {
-                        onResult.invoke(uiState.address, uiState.risky)
+                        onResult.invoke(uiState.address, uiState.risky, uiState.contactName)
                     },
                     enabled = uiState.canBeSendToAddress
                 )

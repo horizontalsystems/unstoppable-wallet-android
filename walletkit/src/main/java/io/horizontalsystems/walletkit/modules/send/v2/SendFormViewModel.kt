@@ -16,7 +16,6 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.NetworkAvailabilityService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
@@ -80,7 +79,6 @@ class SendFormViewModel(
     private val fiatService: FiatService,
     private val balanceService: TokenBalanceService,
     private val networkAvailabilityService: NetworkAvailabilityService,
-    private val contactsRepository: ContactsRepository,
     purpose: SendV2Page.Purpose,
 ) : ViewModelUiState<SendFormUiState>() {
 
@@ -114,7 +112,7 @@ class SendFormViewModel(
         if (purpose is SendV2Page.Purpose.Donation) {
             address = Address(purpose.address)
         }
-        prefill?.address?.let { setAddress(it, prefill.riskyAddress) }
+        prefill?.address?.let { setAddress(it, prefill.riskyAddress, prefill.contactName) }
         memo = prefill?.memo?.ifBlank { null }
 
         fiatService.setCurrency(currency)
@@ -302,19 +300,17 @@ class SendFormViewModel(
         fiatService.setAmount(amount)
     }
 
-    fun onSelectAddress(address: Address, risky: Boolean) {
-        setAddress(address, risky)
+    // The address screen resolves the contact along with the address, so both arrive together.
+    fun onSelectAddress(address: Address, risky: Boolean, contactName: String?) {
+        setAddress(address, risky, contactName)
         emitState()
         refreshMemoSupport()
     }
 
-    private fun setAddress(address: Address, risky: Boolean) {
+    private fun setAddress(address: Address, risky: Boolean, contactName: String?) {
         this.address = address
         this.riskyAddress = risky
-        contactName = contactsRepository
-            .getContactsFiltered(wallet.token.blockchainType, addressQuery = address.hex)
-            .firstOrNull()
-            ?.name
+        this.contactName = contactName
     }
 
     fun onEnterMemo(memo: String) {
@@ -348,7 +344,6 @@ class SendFormViewModel(
                 FiatService(App.marketKit),
                 TokenBalanceService(App.adapterManager),
                 NetworkAvailabilityService(App.connectivityManager),
-                App.contactsRepository,
                 purpose,
             ) as T
         }

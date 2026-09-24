@@ -27,13 +27,13 @@ data class SendAddressPage(val token: Token, val address: String? = null) : HSPa
             allowNull = false,
             initialAddress = address,
             backIcon = R.drawable.close_24
-        ) { result, risky ->
+        ) { result, risky, contactName ->
             result?.let {
-                resultEventBus.sendResult(Result(it, risky))
+                resultEventBus.sendResult(Result(it, risky, contactName))
                 navigation.removeLastOrNull()
             }
         }
     }
 
-    data class Result(val address: Address, val risky: Boolean)
+    data class Result(val address: Address, val risky: Boolean, val contactName: String?)
 }

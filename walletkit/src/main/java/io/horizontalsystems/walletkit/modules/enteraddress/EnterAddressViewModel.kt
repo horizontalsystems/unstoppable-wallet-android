@@ -182,6 +182,12 @@ class EnterAddressViewModel(
         emitState()
     }
 
+    // The same match the contact suggestions above the field are built from, so a picked
+    // suggestion and a typed address resolve to the same name.
+    private fun contactName(address: Address?): String? = address?.let { a ->
+        contactNameAddresses.firstOrNull { it.contactAddress.address.equals(a.hex, ignoreCase = true) }?.name
+    }
+
     override fun createState() = EnterAddressUiState(
         canBeSendToAddress = canBeSendToAddress,
         recentAddress = recentlySentAddress,
@@ -190,6 +196,7 @@ class EnterAddressViewModel(
         value = value,
         inputState = inputState,
         address = address,
+        contactName = contactName(address),
         addressValidationInProgress = addressValidationInProgress,
         addressValidationError = addressValidationError,
         checkResults = checkResults,
@@ -348,6 +355,8 @@ data class EnterAddressUiState(
     val value: String,
     val inputState: DataState<Address>?,
     val address: Address?,
+    /** Name of the contact [address] belongs to, if any. */
+    val contactName: String?,
     val addressValidationInProgress: Boolean,
     val addressValidationError: Throwable?,
     val checkResults: Map<AddressCheckType, AddressCheckData>,

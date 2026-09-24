@@ -26,7 +26,7 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
             initialAddress = input.recipient?.hex,
             allowOwnAddress = true,
             zcashTransparentOnly = input.zcashTransparentOnly,
-        ) { address, _ ->
+        ) { address, _, _ ->
             resultEventBus.sendResult<Result>(Result(address))
             navigation.removeLastOrNull()
         }
