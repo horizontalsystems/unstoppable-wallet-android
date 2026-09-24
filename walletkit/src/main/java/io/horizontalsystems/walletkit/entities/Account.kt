@@ -10,6 +10,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
 import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.core.title
 import io.horizontalsystems.walletkit.serializers.BigIntegerSerializer
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
@@ -401,7 +402,15 @@ sealed class AccountType {
             is XrpAddress -> "XRP"
             is ThorchainAddress -> "THORChain"
             is MayachainAddress -> "Maya"
-            is BitcoinAddress -> "BTC"
+            // BitcoinAddress covers every UTXO chain, so the label comes from the address's own chain.
+            is BitcoinAddress -> when (blockchainType) {
+                BlockchainType.Bitcoin -> "BTC"
+                BlockchainType.BitcoinCash -> "BCH"
+                BlockchainType.ECash -> "XEC"
+                BlockchainType.Litecoin -> "LTC"
+                BlockchainType.Dash -> "DASH"
+                else -> blockchainType.title
+            }
             is MoneroWatchAccount -> "Monero"
             is HdExtendedKey -> if (hdExtendedKey.isPublic) "HD" else null
             else -> null
