@@ -24,7 +24,6 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.math.BigDecimal
-import java.math.RoundingMode
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 import kotlinx.coroutines.flow.StateFlow
@@ -196,33 +195,6 @@ class CrossPayTabViewModel(
     fun onEnterAmount(amount: BigDecimal?) = fiatService.setAmount(amount)
 
     fun onEnterFiatAmount(amount: BigDecimal?) = fiatService.setFiatAmount(amount)
-
-    /**
-     * A share of the SOURCE balance, expressed in the recipient's token: the entered figure
-     * is what the recipient gets, so the share crosses the pair's fiat rates. An estimate by
-     * design — the live quote then prices the exact deposit, and the offered shares (100% is
-     * not one of them) leave more than enough headroom for the difference.
-     */
-    fun onEnterAmountPercentage(percentage: Int) {
-        val tokenOut = tokenOut ?: return
-        val balance = availableBalance ?: return
-        if (balance <= BigDecimal.ZERO) return
-
-        val priceIn = App.marketKit.coinPrice(tokenIn.coin.uid, currency.code)
-            ?.takeIf { !it.expired }?.value ?: return
-        val priceOut = App.marketKit.coinPrice(tokenOut.coin.uid, currency.code)
-            ?.takeIf { !it.expired }?.value ?: return
-
-        val amount = balance
-            .multiply(BigDecimal(percentage))
-            .multiply(priceIn)
-            .divide(priceOut.multiply(BigDecimal(100)), tokenOut.decimals, RoundingMode.DOWN)
-            .stripTrailingZeros()
-
-        if (amount > BigDecimal.ZERO) {
-            fiatService.setAmount(amount)
-        }
-    }
 
     fun onSelectAddress(address: Address, risky: Boolean, contactName: String?) {
         this.address = address

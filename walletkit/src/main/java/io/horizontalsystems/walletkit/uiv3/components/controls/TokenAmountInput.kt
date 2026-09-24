@@ -126,24 +126,20 @@ fun AvailableBalanceRow(
                     style = ComposeAppTheme.typography.caption,
                     color = ComposeAppTheme.colors.ocean,
                 )
-            } else {
+            } else if (onPercentClick != null) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     for (percent in listOf(25, 50, 75)) {
                         Text(
-                            modifier = if (onPercentClick != null) {
-                                Modifier.clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
-                                    onClick = { onPercentClick(percent) }
-                                )
-                            } else {
-                                Modifier
-                            },
+                            modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPercentClick(percent) }
+                            ),
                             text = "$percent%",
                             style = ComposeAppTheme.typography.caption,
-                            color = if (onPercentClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.andy,
+                            color = ComposeAppTheme.colors.ocean,
                         )
                     }
                 }
