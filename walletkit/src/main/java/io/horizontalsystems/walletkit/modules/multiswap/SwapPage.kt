@@ -79,9 +79,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey
-import io.horizontalsystems.walletkit.ui.compose.components.headline1_grey
-import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.controls.FiatLinePlaceholder
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenSelector
@@ -103,7 +100,9 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -516,107 +515,112 @@ private fun SwapScreenInner(
                         VSpacer(height = 32.dp)
                     }
 
-                    when (val currentStep = uiState.currentStep) {
-                        is SwapStep.InputRequired -> {
-                            val title = when (currentStep.inputType) {
-                                InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
-                                InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
-                                InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
-                            }
-
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                                title = title,
-                                enabled = false,
-                                onClick = {}
-                            )
-                        }
-
-                        SwapStep.Quoting -> {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Swap_Quoting),
-                                enabled = false,
-                                loadingIndicator = true,
-                                onClick = {}
-                            )
-                        }
-
-                        SwapStep.AmlChecking -> {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Swap_Proceed),
-                                enabled = false,
-                                loadingIndicator = true,
-                                onClick = {}
-                            )
-                        }
-
-                        is SwapStep.Error -> {
-                            val errorText = when (val error = currentStep.error) {
-                                SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
-                                is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
-                                is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
-                                is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
-                                is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
-                                is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
-                                is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
-                                else -> error.message ?: error.javaClass.simpleName
-                            }
-
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                                title = errorText,
-                                enabled = false,
-                                onClick = {}
-                            )
-                        }
-
-                        is SwapStep.ActionRequired -> {
-                            val action = currentStep.action
-                            val title = if (action.inProgress) {
-                                action.getTitleInProgress()
-                            } else {
-                                action.getTitle()
-                            }
-
-                            val executor = action.executor(navigation, onActionCompleted)
-
-                            ButtonPrimaryDefault(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                                title = title,
-                                enabled = !action.inProgress,
-                                onClick = {
-                                    onActionStarted.invoke()
-                                    executor()
-                                },
-                                loadingIndicator = action.inProgress
-                            )
-                        }
-
-                        SwapStep.Proceed -> {
-                            ButtonPrimaryYellow(
-                                modifier = Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .fillMaxWidth(),
-                                title = stringResource(R.string.Swap_Proceed),
-                                enabled = proceedEnabled,
-                                onClick = onClickNext
-                            )
-                        }
-                    }
-                    VSpacer(height = 16.dp + bottomPadding)
+                    SwapActionButton(
+                        currentStep = uiState.currentStep,
+                        navigation = navigation,
+                        onActionCompleted = onActionCompleted,
+                        onActionStarted = onActionStarted,
+                        proceedEnabled = proceedEnabled,
+                        onClickNext = onClickNext
+                    )
+                    VSpacer(height = bottomPadding)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SwapActionButton(
+    currentStep: SwapStep,
+    navigation: HSNavigation,
+    onActionCompleted: () -> Unit,
+    onActionStarted: () -> Unit,
+    proceedEnabled: Boolean,
+    onClickNext: () -> Unit
+) {
+    ButtonsGroupVertical {
+        when (currentStep) {
+            is SwapStep.InputRequired -> {
+                val title = when (currentStep.inputType) {
+                    InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
+                    InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
+                    InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
+                }
+
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = title,
+                    enabled = false
+                )
+            }
+
+            SwapStep.Quoting -> {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Swap_Quoting),
+                    loadingIndicator = true,
+                    enabled = false
+                )
+            }
+
+            SwapStep.AmlChecking -> {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Swap_Proceed),
+                    loadingIndicator = true,
+                    enabled = false
+                )
+            }
+
+            is SwapStep.Error -> {
+                val errorText = when (val error = currentStep.error) {
+                    SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                    is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
+                    is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                    is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
+                    is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
+                    is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
+                    is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
+                    else -> error.message ?: error.javaClass.simpleName
+                }
+
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = errorText,
+                    enabled = false
+                )
+            }
+
+            is SwapStep.ActionRequired -> {
+                val action = currentStep.action
+                val title = if (action.inProgress) {
+                    action.getTitleInProgress()
+                } else {
+                    action.getTitle()
+                }
+
+                val executor = action.executor(navigation, onActionCompleted)
+
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    title = title,
+                    loadingIndicator = action.inProgress,
+                    enabled = !action.inProgress,
+                ) {
+                    onActionStarted.invoke()
+                    executor()
+                }
+            }
+
+            SwapStep.Proceed -> {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Swap_Proceed),
+                    enabled = proceedEnabled,
+                    onClick = onClickNext
+                )
             }
         }
     }

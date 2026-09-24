@@ -37,7 +37,7 @@ fun HSButton(
     icon: Painter? = null,
     loadingIndicator: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
     val buttonProps = getButtonProps(size, style, variant)
 

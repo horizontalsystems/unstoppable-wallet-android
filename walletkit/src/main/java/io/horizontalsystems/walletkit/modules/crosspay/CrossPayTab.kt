@@ -28,16 +28,17 @@ import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.v2.AddressRow
-import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
-import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
+import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
+import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import java.math.BigDecimal
 
 /**
@@ -168,21 +169,20 @@ fun CrossPayTabBody(
             CrossPayStep.Quoting,
             CrossPayStep.Proceed -> stringResource(R.string.Button_Next)
         }
-        ButtonPrimaryYellow(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
-            title = buttonTitle,
-            enabled = uiState.step is CrossPayStep.Proceed,
-            onClick = {
+        ButtonsGroupVertical {
+            HSButton(
+                modifier = Modifier.fillMaxWidth(),
+                title = buttonTitle,
+                enabled = uiState.step is CrossPayStep.Proceed,
+            ) {
                 if (uiState.riskyAddress) {
                     keyboardController?.hide()
                     confirmRiskyAddress()
                 } else {
                     proceed()
                 }
-            },
-        )
+            }
+        }
         VSpacer(16.dp)
     }
 }

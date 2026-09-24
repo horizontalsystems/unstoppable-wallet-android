@@ -61,7 +61,6 @@ import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendConfirmatio
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -70,7 +69,9 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
@@ -332,22 +333,20 @@ fun SendV2Screen(
 
                     SendStep.Proceed -> stringResource(R.string.Button_Next)
                 }
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .fillMaxWidth(),
-                    title = buttonTitle,
-                    enabled = uiState.step is SendStep.Proceed,
-                    onClick = {
+                ButtonsGroupVertical {
+                    HSButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = buttonTitle,
+                        enabled = uiState.step is SendStep.Proceed,
+                    ) {
                         if (uiState.riskyAddress) {
                             keyboardController?.hide()
                             confirmRiskyAddress()
                         } else {
                             proceed()
                         }
-                    },
-                )
-                VSpacer(16.dp)
+                    }
+                }
             }
         }
     }
