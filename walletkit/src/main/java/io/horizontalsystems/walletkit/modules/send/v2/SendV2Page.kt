@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.send.v2
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -41,8 +42,7 @@ data class SendV2Page(
     sealed class Purpose {
         /**
          * The user picks the recipient and every tab is offered. [prefill] seeds the form
-         * from a payment link; its address is still confirmed through the address entry
-         * screen, with its validation and checks.
+         * from a payment link, its address already confirmed on [SendRecipientPage].
          */
         @Serializable
         data class Transfer(val prefill: Prefill? = null) : Purpose()
@@ -56,10 +56,11 @@ data class SendV2Page(
         data class Donation(val address: String, val title: String) : Purpose()
     }
 
-    /** Values a payment link supplies for a [Purpose.Transfer]. */
+    /** Values a payment link supplies for a [Purpose.Transfer]; [address] has passed the address checks. */
     @Serializable
     data class Prefill(
-        val address: String? = null,
+        val address: Address? = null,
+        val riskyAddress: Boolean = false,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val memo: String? = null,
     )

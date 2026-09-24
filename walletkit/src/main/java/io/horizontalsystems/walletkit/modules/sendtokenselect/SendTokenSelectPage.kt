@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.AddressUri
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.send.v2.SendRecipientPage
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectViewModel
@@ -25,22 +26,23 @@ data class SendTokenSelectPage(val input: Input? = null) : HSPage() {
             navigation = navigation,
             title = stringResource(R.string.Balance_Send),
             onClickItem = { item ->
-                // base-unit amounts (eip-681 `value`/`uint256`) can only be converted to a
-                // readable amount here, where the selected token's decimals are known
-                val prefill = input?.let {
-                    SendV2Page.Prefill(
-                        address = it.address,
-                        amount = it.amount?.humanReadable(item.wallet.token.decimals),
-                        memo = it.memo,
+                val page = if (input != null) {
+                    // base-unit amounts (eip-681 `value`/`uint256`) can only be converted to a
+                    // readable amount here, where the selected token's decimals are known
+                    SendRecipientPage(
+                        wallet = item.wallet,
+                        address = input.address,
+                        amount = input.amount?.humanReadable(item.wallet.token.decimals),
+                        memo = input.memo,
+                        sendEntryPointDestId = SendTokenSelectPage::class,
                     )
-                }
-                navigation.slideFromRight(
+                } else {
                     SendV2Page(
                         wallet = item.wallet,
                         sendEntryPointDestId = SendTokenSelectPage::class,
-                        purpose = SendV2Page.Purpose.Transfer(prefill),
                     )
-                )
+                }
+                navigation.slideFromRight(page)
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
         )

@@ -21,11 +21,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +62,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -87,7 +83,6 @@ fun SendV2Screen(
 ) {
     val uiState = viewModel.uiState
     val title = (purpose as? SendV2Page.Purpose.Donation)?.title
-    val prefillAddress = (purpose as? SendV2Page.Purpose.Transfer)?.prefill?.address
     val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
     val hasSettings = remember { chainPlugin?.sendSettingsPage(uiState.wallet, null) != null }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -137,19 +132,9 @@ fun SendV2Screen(
     }
 
     val openAddress = navigation.slideFromBottomForResult<SendAddressPage.Result>(
-        { SendAddressPage(uiState.wallet.token, uiState.address?.hex ?: prefillAddress) }
+        { SendAddressPage(uiState.wallet.token, uiState.address?.hex) }
     ) {
         viewModel.onSelectAddress(it.address, it.risky)
-    }
-
-    // A prefilled address is confirmed once through the address screen, so it gets the same
-    // validation and checks as a typed one; the user can still change it afterwards.
-    var prefillAddressOffered by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        if (prefillAddress != null && !prefillAddressOffered && uiState.address == null) {
-            prefillAddressOffered = true
-            openAddress()
-        }
     }
 
     HSScaffold(

@@ -117,11 +117,12 @@ class SendViewModel(
     private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
 
     init {
-        // A hidden destination is the app's own choice and needs no confirmation; a visible
-        // prefilled address is confirmed through the address screen, which sets it here.
+        // A hidden destination is the app's own choice and needs no confirmation; a
+        // prefilled one was confirmed on the recipient page before this screen opened.
         if (purpose is SendV2Page.Purpose.Donation) {
             address = Address(purpose.address)
         }
+        prefill?.address?.let { setAddress(it, prefill.riskyAddress) }
         memo = prefill?.memo?.ifBlank { null }
 
         fiatService.setCurrency(currency)
@@ -340,14 +341,18 @@ class SendViewModel(
     }
 
     fun onSelectAddress(address: Address, risky: Boolean) {
+        setAddress(address, risky)
+        emitState()
+        refreshMemoSupport()
+    }
+
+    private fun setAddress(address: Address, risky: Boolean) {
         this.address = address
         this.riskyAddress = risky
         contactName = contactsRepository
             .getContactsFiltered(wallet.token.blockchainType, addressQuery = address.hex)
             .firstOrNull()
             ?.name
-        emitState()
-        refreshMemoSupport()
     }
 
     fun onEnterMemo(memo: String) {
