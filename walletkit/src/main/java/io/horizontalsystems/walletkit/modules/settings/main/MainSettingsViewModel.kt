@@ -49,9 +49,10 @@ class MainSettingsViewModel(
     val walletConnectSupportState: WCManager.SupportState
         get() = wcManager.getWalletConnectSupportState()
 
-    // Donating means sending, so a watch account is not offered it.
+    // Donating means sending, so a watch account is not offered it. Only a known watch
+    // account hides the cell; while accounts are still loading there is nothing to hide.
     private val donateEnabled: Boolean
-        get() = accountManager.activeAccount?.isWatchAccount == false
+        get() = accountManager.activeAccount?.isWatchAccount != true
 
     private val appWebPageLink = appConfigProvider.appWebPageLink
     private val hasNonStandardAccount: Boolean

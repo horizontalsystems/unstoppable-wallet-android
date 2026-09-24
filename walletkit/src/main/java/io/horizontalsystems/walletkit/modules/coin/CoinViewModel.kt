@@ -37,8 +37,10 @@ class CoinViewModel(
         private set
 
     // Drives the Buy/Sell buttons, which lead into the swap flow. A watch account cannot
-    // sign, so it gets no token here and the buttons stay off the screen.
-    val coinToken: Token? = if (accountManager.activeAccount?.isWatchAccount == false) {
+    // sign, so it gets no token here and the buttons stay off the screen. Only a known watch
+    // account hides them: accounts load asynchronously, and "not loaded yet" is not a reason
+    // to strip the buttons from a page that is read once and never recomputed.
+    val coinToken: Token? = if (accountManager.activeAccount?.isWatchAccount != true) {
         fullCoin.tokens
             .filter { it.isSupported }
             .sortedWith(

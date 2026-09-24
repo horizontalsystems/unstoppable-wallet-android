@@ -207,12 +207,14 @@ class MainViewModel(
 
     private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
 
-    // False for a watch account, and with no active account at all.
+    // Refusing an action fails closed: with no active account there is nothing to sign with.
     private val canSign: Boolean
         get() = accountManager.activeAccount?.isWatchAccount == false
 
-    // The whole swap flow ends in a signature, so it is out of reach for a watch account.
-    private fun isSwapTabEnabled(): Boolean = canSign
+    // Hiding a tab fails open instead. Accounts load after this view model is built
+    // (App.startTasks -> initDefaultPinLevel), so treating "not loaded yet" as a watch account
+    // would drop the tab from the first frame and shift the bar under the user once it arrives.
+    private fun isSwapTabEnabled(): Boolean = accountManager.activeAccount?.isWatchAccount != true
 
 
     fun whatsNewShown() {
