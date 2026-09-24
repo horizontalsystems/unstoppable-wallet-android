@@ -37,6 +37,8 @@ import io.horizontalsystems.walletkit.modules.walletconnect.list.WCListPage
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -207,11 +209,8 @@ class MainViewModel(
 
     private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
 
-    // Refusing an action fails closed: with no active account there is nothing to sign with.
-    private val canSign: Boolean
-        get() = accountManager.activeAccount?.isWatchAccount == false
-
-    // Hiding a tab fails open instead. Accounts load after this view model is built
+    // Hiding a tab fails open, unlike the deeplink guard, which waits for the account and then
+    // refuses. Accounts load after this view model is built
     // (App.startTasks -> initDefaultPinLevel), so treating "not loaded yet" as a watch account
     // would drop the tab from the first frame and shift the bar under the user once it arrives.
     private fun isSwapTabEnabled(): Boolean = accountManager.activeAccount?.isWatchAccount != true
@@ -551,30 +550,39 @@ class MainViewModel(
             || deeplinkString.startsWith("zcash:")
             || deeplinkString.startsWith("litecoin:")
         ) {
-            // A payment link asks for a signature, so a watch account must not be taken to the
-            // send flow. There is no element to hide here, so it is told to switch wallets.
-            if (!canSign) {
-                showChangeWalletWarning = true
-                emitState()
-                return
-            }
-
             AddressUriParser.addressUri(deeplinkString)?.let { addressUri ->
-                val allowedBlockchainTypes = addressUri.allowedBlockchainTypes
-                var allowedTokenTypes: List<TokenType>? = null
-                addressUri.value<String>(AddressUri.Field.TokenUid)?.let { uid ->
-                    TokenType.fromId(uid)?.let { tokenType ->
-                        allowedTokenTypes = listOf(tokenType)
-                    }
-                }
+                viewModelScope.launch {
+                    // A payment link normally cold-starts the app, and accounts load after this
+                    // view model is built, so the answer has to be awaited rather than read: a
+                    // not-yet-loaded account would refuse a link it can perfectly well handle.
+                    val account = accountManager.activeAccountStateFlow
+                        .filterIsInstance<ActiveAccountState.ActiveAccount>()
+                        .first()
+                        .account
 
-                openSendTokenSelect = OpenSendTokenSelect(
-                    blockchainTypes = allowedBlockchainTypes,
-                    tokenTypes = allowedTokenTypes,
-                    address = addressUri.address,
-                    amount = addressUri.amount
-                )
-                emitState()
+                    // A payment link asks for a signature, so a watch account must not be taken
+                    // to the send flow. Nothing can be hidden here, so it is told to switch.
+                    if (account == null || account.isWatchAccount) {
+                        showChangeWalletWarning = true
+                        emitState()
+                        return@launch
+                    }
+
+                    var allowedTokenTypes: List<TokenType>? = null
+                    addressUri.value<String>(AddressUri.Field.TokenUid)?.let { uid ->
+                        TokenType.fromId(uid)?.let { tokenType ->
+                            allowedTokenTypes = listOf(tokenType)
+                        }
+                    }
+
+                    openSendTokenSelect = OpenSendTokenSelect(
+                        blockchainTypes = addressUri.allowedBlockchainTypes,
+                        tokenTypes = allowedTokenTypes,
+                        address = addressUri.address,
+                        amount = addressUri.amount
+                    )
+                    emitState()
+                }
                 return
             }
         }
