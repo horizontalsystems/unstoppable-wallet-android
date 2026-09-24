@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -82,11 +83,103 @@ fun SendV2Screen(
     purpose: SendV2Page.Purpose = SendV2Page.Purpose.Transfer(),
 ) {
     val uiState = viewModel.uiState
+    val wallet = uiState.wallet
     val title = (purpose as? SendV2Page.Purpose.Donation)?.title
-    val chainPlugin = remember { ChainRegistry[uiState.wallet.token.blockchainType] }
-    val hasSettings = remember { chainPlugin?.sendSettingsPage(uiState.wallet, null) != null }
+    val chainPlugin = remember { ChainRegistry[wallet.token.blockchainType] }
+    val hasSettings = remember { chainPlugin?.sendSettingsPage(wallet, null) != null }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+
+    // The Standard and Private tabs each keep their own form, so switching tabs switches
+    // forms rather than reusing what was typed on the other. CrossPay has its own below.
+    val formViewModel = if (uiState.tab != SendTab.CrossPay) {
+        viewModel<SendFormViewModel>(
+            key = "SendForm.${uiState.tab}",
+            factory = SendFormViewModel.Factory(wallet, uiState.tab, purpose, viewModel.chainSettingsFlow),
+        )
+    } else {
+        null
+    }
+
+    HSScaffold(
+        title = title ?: stringResource(R.string.Send_Title, wallet.coin.code),
+        onBack = { navigation.removeLastOrNull() },
+        menuItems = if (hasSettings) {
+            listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                    icon = R.drawable.manage_24,
+                    onClick = {
+                        chainPlugin?.sendSettingsPage(wallet, formViewModel?.uiState?.address?.hex)
+                            ?.let { navigation.slideFromRight(it) }
+                    },
+                )
+            )
+        } else {
+            listOf()
+        },
+    ) {
+        val tabs = SendTab.entries.filter {
+            when (it) {
+                SendTab.Standard -> true
+                SendTab.Private -> uiState.privateSendSupported
+                SendTab.CrossPay -> purpose is SendV2Page.Purpose.Transfer
+            }
+        }
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            TabsFolder(
+                tabs = tabs.map { it.tabItem() },
+                selectedIndex = tabs.indexOf(uiState.tab).coerceAtLeast(0),
+                onSelect = {
+                    // The amount field keeps its focus across Standard and Private, so the
+                    // keyboard would otherwise stay up; a tab switch always closes it.
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                    viewModel.onSelectTab(tabs[it])
+                },
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .imePadding()
+            ) {
+                if (formViewModel == null) {
+                    val crossPayViewModel = viewModel<CrossPayTabViewModel>(
+                        factory = CrossPayTabViewModel.Factory(wallet)
+                    )
+                    CrossPayTabBody(
+                        navigation = navigation,
+                        viewModel = crossPayViewModel,
+                    )
+                } else {
+                    SendFormTab(
+                        navigation = navigation,
+                        viewModel = formViewModel,
+                        isPrivateSend = uiState.isPrivateSend,
+                        sendEntryPointDestId = sendEntryPointDestId,
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** One send form: what a tab types, and the confirmation it proceeds to. */
+@Composable
+private fun ColumnScope.SendFormTab(
+    navigation: HSNavigation,
+    viewModel: SendFormViewModel,
+    isPrivateSend: Boolean,
+    sendEntryPointDestId: KClass<out HSPage>,
+) {
+    val uiState = viewModel.uiState
+    val wallet = viewModel.wallet
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     // Opens over the risky-address sheet when that was shown; both are popped once the
     // transaction is sent. The Private tab confirms through the provider order flow, which
@@ -95,10 +188,10 @@ fun SendV2Screen(
         val address = uiState.address
         val amount = uiState.amount
         if (address != null && amount != null) {
-            val page = if (uiState.isPrivateSend) {
+            val page = if (isPrivateSend) {
                 PrivateSendConfirmationPage(
                     PrivateSendConfirmationPage.Input(
-                        wallet = uiState.wallet,
+                        wallet = wallet,
                         recipient = address.hex,
                         amount = amount,
                         sendEntryPointDestId = sendEntryPointDestId,
@@ -107,7 +200,7 @@ fun SendV2Screen(
             } else {
                 SendV2ConfirmPage(
                     SendV2ConfirmPage.Input(
-                        wallet = uiState.wallet,
+                        wallet = wallet,
                         amount = amount,
                         address = address,
                         memo = uiState.memo,
@@ -132,209 +225,142 @@ fun SendV2Screen(
     }
 
     val openAddress = navigation.slideFromBottomForResult<SendAddressPage.Result>(
-        { SendAddressPage(uiState.wallet.token, uiState.address?.hex) }
+        { SendAddressPage(wallet.token, uiState.address?.hex) }
     ) {
         viewModel.onSelectAddress(it.address, it.risky)
     }
 
-    HSScaffold(
-        title = title ?: stringResource(R.string.Send_Title, uiState.wallet.coin.code),
-        onBack = { navigation.removeLastOrNull() },
-        menuItems = if (hasSettings) {
-            listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                    icon = R.drawable.manage_24,
-                    onClick = {
-                        chainPlugin?.sendSettingsPage(uiState.wallet, uiState.address?.hex)
-                            ?.let { navigation.slideFromRight(it) }
-                    },
-                )
-            )
-        } else {
-            listOf()
-        },
-    ) {
-        val tabs = SendTab.entries.filter {
-            when (it) {
-                SendTab.Standard -> true
-                SendTab.Private -> uiState.privateSendSupported
-                SendTab.CrossPay -> purpose is SendV2Page.Purpose.Transfer
-            }
-        }
-        val focusRequester = remember { FocusRequester() }
-
-        Column(modifier = Modifier.fillMaxSize()) {
-            TabsFolder(
-                tabs = tabs.map { it.tabItem() },
-                selectedIndex = tabs.indexOf(uiState.tab).coerceAtLeast(0),
-                onSelect = {
-                    // The amount field keeps its focus across Standard and Private, so the
-                    // keyboard would otherwise stay up; a tab switch always closes it.
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    viewModel.onSelectTab(tabs[it])
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            val step = uiState.step
+            AvailableBalanceRow(
+                balanceToken = wallet.token,
+                availableBalance = uiState.availableBalance,
+                // The line doubles as the 100% shortcut whenever that percent is offered.
+                onAvailableBalanceClick = if (100 in uiState.disabledPercents) {
+                    null
+                } else {
+                    {
+                        focusManager.clearFocus()
+                        viewModel.onEnterAmountPercentage(100)
+                    }
                 },
+                onPercentClick = {
+                    focusManager.clearFocus()
+                    viewModel.onEnterAmountPercentage(it)
+                },
+                onClearClick = {
+                    viewModel.onEnterAmount(null)
+                },
+                showClear = uiState.amount != null
             )
-            if (uiState.tab == SendTab.CrossPay) {
-                val crossPayViewModel = viewModel<CrossPayTabViewModel>(
-                    factory = CrossPayTabViewModel.Factory(uiState.wallet)
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .background(ComposeAppTheme.colors.lawrence)
-                        .imePadding()
-                ) {
-                    CrossPayTabBody(
-                        navigation = navigation,
-                        viewModel = crossPayViewModel,
+            Box {
+                Column {
+                    TokenAmountInput(
+                        token = wallet.token,
+                        amount = uiState.amount,
+                        fiatAmount = uiState.fiatAmount,
+                        fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
+                        currency = uiState.currency,
+                        focusRequester = focusRequester,
+                        onValueChange = viewModel::onEnterAmount,
+                        onFiatValueChange = viewModel::onEnterFiatAmount,
+                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
+                        onTokenClick = null
                     )
+                    if (!uiState.hideAddress) {
+                        AddressRow(
+                            address = uiState.address,
+                            contactName = uiState.contactName,
+                            onClick = openAddress,
+                            risky = uiState.riskyAddress
+                        )
+                    }
                 }
-                return@Column
+                if (!uiState.hideAddress) {
+                    SectionArrow()
+                }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .imePadding()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    val step = uiState.step
-                    AvailableBalanceRow(
-                        balanceToken = uiState.wallet.token,
-                        availableBalance = uiState.availableBalance,
-                        // The line doubles as the 100% shortcut whenever that percent is offered.
-                        onAvailableBalanceClick = if (100 in uiState.disabledPercents) {
-                            null
-                        } else {
-                            {
-                                focusManager.clearFocus()
-                                viewModel.onEnterAmountPercentage(100)
-                            }
-                        },
-                        onPercentClick = {
-                            focusManager.clearFocus()
-                            viewModel.onEnterAmountPercentage(it)
-                        },
-                        onClearClick = {
-                            viewModel.onEnterAmount(null)
-                        },
-                        showClear = uiState.amount != null
-                    )
-                    Box {
-                        Column {
-                            TokenAmountInput(
-                                token = uiState.wallet.token,
-                                amount = uiState.amount,
-                                fiatAmount = uiState.fiatAmount,
-                                fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
-                                currency = uiState.currency,
-                                focusRequester = focusRequester,
-                                onValueChange = viewModel::onEnterAmount,
-                                onFiatValueChange = viewModel::onEnterFiatAmount,
-                                amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
-                                onTokenClick = null
-                            )
-                            if (!uiState.hideAddress) {
-                                AddressRow(
-                                    address = uiState.address,
-                                    contactName = uiState.contactName,
-                                    onClick = openAddress,
-                                    risky = uiState.riskyAddress
-                                )
-                            }
-                        }
-                        if (!uiState.hideAddress) {
-                            SectionArrow()
-                        }
-                    }
-                    // Neither the chain's own field nor a memo can travel with a private send
-                    // deposit (its memo slot belongs to the provider's identifier), so they
-                    // are not offered on that tab.
-                    val extraInput = uiState.extraInput?.takeIf { !uiState.isPrivateSend }
-                    val memoSupport = uiState.memoSupport?.takeIf { !uiState.isPrivateSend }
-                    if (extraInput != null) {
-                        val error = uiState.extraInputError
-                        SendInputCell(
-                            value = uiState.extraInputValue,
-                            hint = extraInput.title,
-                            enabled = extraInput.fixedValue == null,
-                            keyboardType = extraInput.keyboardType,
-                            maxLength = extraInput.maxLength,
-                            caption = error ?: extraInput.info,
-                            captionColor = when {
-                                error != null -> ComposeAppTheme.colors.lucian
-                                extraInput.required -> ComposeAppTheme.colors.jacob
-                                else -> ComposeAppTheme.colors.grey
-                            },
-                            onValueChange = viewModel::onEnterExtraInput,
-                        )
-                        if (memoSupport != null) {
-                            VSpacer(8.dp)
-                            HsDivider(modifier = Modifier.fillMaxWidth())
-                        }
-                    }
-                    if (memoSupport != null) {
-                        HSMemoInput(
-                            maxBytes = memoSupport.maxBytes,
-                            memo = uiState.memo,
-                            visibility = memoSupport.visibility,
-                            onValueChange = viewModel::onEnterMemo,
-                        )
-                    }
-                    if (uiState.isPrivateSend) {
-                        VSpacer(64.dp)
-                        InfoCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            title = stringResource(R.string.PrivateSend_Toggle_Title),
-                            text = stringResource(R.string.PrivateSend_Tab_Description)
-                        )
-                        VSpacer(32.dp)
-                    }
+            // Neither the chain's own field nor a memo can travel with a private send
+            // deposit (its memo slot belongs to the provider's identifier), so they
+            // are not offered on that tab.
+            val extraInput = uiState.extraInput?.takeIf { !isPrivateSend }
+            val memoSupport = uiState.memoSupport?.takeIf { !isPrivateSend }
+            if (extraInput != null) {
+                val error = uiState.extraInputError
+                SendInputCell(
+                    value = uiState.extraInputValue,
+                    hint = extraInput.title,
+                    enabled = extraInput.fixedValue == null,
+                    keyboardType = extraInput.keyboardType,
+                    maxLength = extraInput.maxLength,
+                    caption = error ?: extraInput.info,
+                    captionColor = when {
+                        error != null -> ComposeAppTheme.colors.lucian
+                        extraInput.required -> ComposeAppTheme.colors.jacob
+                        else -> ComposeAppTheme.colors.grey
+                    },
+                    onValueChange = viewModel::onEnterExtraInput,
+                )
+                if (memoSupport != null) {
+                    VSpacer(8.dp)
+                    HsDivider(modifier = Modifier.fillMaxWidth())
                 }
-
-                val buttonTitle = when (val step = uiState.step) {
-                    is SendStep.InputRequired -> when (step.inputType) {
-                        SendInputType.Amount -> stringResource(R.string.Send_EnterAmount)
-                        SendInputType.Address -> stringResource(R.string.Send_EnterAddress)
-                        SendInputType.Extra -> stringResource(R.string.Send_EnterField, uiState.extraInput?.title.orEmpty())
-                    }
-
-                    is SendStep.Error -> when (step.error) {
-                        is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
-                        SwapError.InsufficientBalanceFrom -> stringResource(R.string.Swap_ErrorInsufficientBalance)
-                        is TokenNotEnabled -> stringResource(R.string.Swap_ErrorTokenNotEnabled)
-                        is WalletSyncing -> stringResource(R.string.Swap_ErrorWalletSyncing)
-                        is WalletNotSynced -> stringResource(R.string.Swap_ErrorWalletNotSynced)
-                        else -> step.error.message ?: step.error.javaClass.simpleName
-                    }
-
-                    SendStep.Proceed -> stringResource(R.string.Button_Next)
-                }
-                ButtonsGroupVertical {
-                    HSButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = buttonTitle,
-                        enabled = uiState.step is SendStep.Proceed,
-                    ) {
-                        if (uiState.riskyAddress) {
-                            keyboardController?.hide()
-                            confirmRiskyAddress()
-                        } else {
-                            proceed()
-                        }
-                    }
-                }
+            }
+            if (memoSupport != null) {
+                HSMemoInput(
+                    maxBytes = memoSupport.maxBytes,
+                    memo = uiState.memo,
+                    visibility = memoSupport.visibility,
+                    onValueChange = viewModel::onEnterMemo,
+                )
+            }
+            if (isPrivateSend) {
+                VSpacer(64.dp)
+                InfoCard(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    title = stringResource(R.string.PrivateSend_Toggle_Title),
+                    text = stringResource(R.string.PrivateSend_Tab_Description)
+                )
+                VSpacer(32.dp)
             }
         }
+
+        val buttonTitle = when (val step = uiState.step) {
+            is SendStep.InputRequired -> when (step.inputType) {
+                SendInputType.Amount -> stringResource(R.string.Send_EnterAmount)
+                SendInputType.Address -> stringResource(R.string.Send_EnterAddress)
+                SendInputType.Extra -> stringResource(R.string.Send_EnterField, uiState.extraInput?.title.orEmpty())
+            }
+
+            is SendStep.Error -> when (step.error) {
+                is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
+                SwapError.InsufficientBalanceFrom -> stringResource(R.string.Swap_ErrorInsufficientBalance)
+                is TokenNotEnabled -> stringResource(R.string.Swap_ErrorTokenNotEnabled)
+                is WalletSyncing -> stringResource(R.string.Swap_ErrorWalletSyncing)
+                is WalletNotSynced -> stringResource(R.string.Swap_ErrorWalletNotSynced)
+                else -> step.error.message ?: step.error.javaClass.simpleName
+            }
+
+            SendStep.Proceed -> stringResource(R.string.Button_Next)
+        }
+        ButtonsGroupVertical {
+            HSButton(
+                modifier = Modifier.fillMaxWidth(),
+                title = buttonTitle,
+                enabled = uiState.step is SendStep.Proceed,
+            ) {
+                if (uiState.riskyAddress) {
+                    keyboardController?.hide()
+                    confirmRiskyAddress()
+                } else {
+                    proceed()
+                }
+            }
     }
 }
 

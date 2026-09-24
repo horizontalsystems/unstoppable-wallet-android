@@ -28,7 +28,7 @@ data class SendV2Page(
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        val viewModel = viewModel<SendViewModel>(factory = SendViewModel.Factory(wallet, purpose))
+        val viewModel = viewModel<SendViewModel>(factory = SendViewModel.Factory(wallet))
         SendV2Screen(
             navigation = navigation,
             viewModel = viewModel,

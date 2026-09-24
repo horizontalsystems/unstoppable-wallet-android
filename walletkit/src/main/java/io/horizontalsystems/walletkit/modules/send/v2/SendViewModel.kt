@@ -4,188 +4,46 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.IAdapterManager
-import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
-import io.horizontalsystems.walletkit.core.chain.SendExtraInput
-import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.core.collectSafely
-import io.horizontalsystems.walletkit.core.managers.CurrencyManager
-import io.horizontalsystems.walletkit.entities.Address
-import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
-import io.horizontalsystems.walletkit.modules.multiswap.FiatService
-import io.horizontalsystems.walletkit.modules.multiswap.NetworkAvailabilityService
-import io.horizontalsystems.walletkit.modules.multiswap.SwapError
-import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.math.RoundingMode
-import io.horizontalsystems.walletkit.core.providers.Translator
-import io.horizontalsystems.walletkit.R
 
 enum class SendTab { Standard, Private, CrossPay }
-
-enum class SendInputType { Amount, Address, Extra }
-
-sealed class SendStep {
-    data class InputRequired(val inputType: SendInputType) : SendStep()
-    data class Error(val error: Throwable) : SendStep()
-    data object Proceed : SendStep()
-}
 
 data class SendUiState(
     val wallet: Wallet,
     val tab: SendTab,
-    val amount: BigDecimal?,
-    val fiatAmount: BigDecimal?,
-    val fiatAmountInputEnabled: Boolean,
-    val currency: Currency,
-    val availableBalance: BigDecimal?,
-    val address: Address?,
-    /** Name of the contact the recipient belongs to, if any. */
-    val contactName: String?,
-    val riskyAddress: Boolean,
-    val memo: String?,
-    val memoSupport: SendMemoSupport?,
-    /** The chain's own field above the memo, if it has one. */
-    val extraInput: SendExtraInput?,
-    val extraInputValue: String?,
-    val extraInputError: String?,
     val chainSettings: SendChainSettings?,
     val privateSendSupported: Boolean,
-    val hideAddress: Boolean,
-    /** Percent buttons offered greyed out. */
-    val disabledPercents: Set<Int>,
-    val step: SendStep,
 ) {
     val isPrivateSend: Boolean
         get() = tab == SendTab.Private
 }
 
 /**
- * Input state of the send screen for any blockchain: the selected tab, amount, recipient and
- * memo and the chain's own settings (coin control), plus the available balance, the amount's
- * fiat equivalent and whether the chain accepts a memo for the chosen recipient. The amount
- * is checked against the balance the same way swap does it, unless the chain narrows the
- * balance through its settings; fee-dependent checks belong to the confirmation step, which
- * owns the transaction itself.
+ * What the send screen's tabs share: the selected tab and the chain's own settings (coin
+ * control), which apply to whichever tab sends. Scoped to [SendV2Page], so the settings and
+ * confirmation pages opened over the screen reach the same instance. What is typed on a tab
+ * lives in that tab's own [SendFormViewModel].
  */
 class SendViewModel(
     val wallet: Wallet,
-    private val currencyManager: CurrencyManager,
-    private val adapterManager: IAdapterManager,
-    private val fiatService: FiatService,
-    private val balanceService: TokenBalanceService,
     private val privateSendManager: PrivateSendManager,
-    private val networkAvailabilityService: NetworkAvailabilityService,
-    private val contactsRepository: ContactsRepository,
-    purpose: SendV2Page.Purpose,
 ) : ViewModelUiState<SendUiState>() {
 
-    private var currency = currencyManager.baseCurrency
     private var tab = SendTab.Standard
-    private var amount: BigDecimal? = null
-    private var fiatAmount: BigDecimal? = null
-    private var fiatAmountInputEnabled = false
-    private var address: Address? = null
-    private var contactName: String? = null
-    private var riskyAddress = false
-    private var memo: String? = null
-    // A donation's recipient is fixed by the app and not shown.
-    private val hideAddress = purpose is SendV2Page.Purpose.Donation
-    private val prefill = (purpose as? SendV2Page.Purpose.Transfer)?.prefill
-    private var memoSupport: SendMemoSupport? = null
-    private var memoSupportJob: Job? = null
-    private var extraInput: SendExtraInput? = null
-    private var extraInputValue: String? = null
-    private var extraInputError: String? = null
-    private var chainSettings: SendChainSettings? = null
-    private var networkState = networkAvailabilityService.stateFlow.value
     private var privateSendSupported = privateSendManager.isSupported(wallet.token)
-    // Balance narrowed by the chain settings (selected outputs), or null for the wallet's.
-    private var chainBalance: BigDecimal? = null
-    private var balanceState = balanceService.stateFlow.value
-    private var balanceJob: Job? = null
-    private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
+    private val _chainSettingsFlow = MutableStateFlow<SendChainSettings?>(null)
+    val chainSettingsFlow = _chainSettingsFlow.asStateFlow()
 
     init {
-        // A hidden destination is the app's own choice and needs no confirmation; a
-        // prefilled one was confirmed on the recipient page before this screen opened.
-        if (purpose is SendV2Page.Purpose.Donation) {
-            address = Address(purpose.address)
-        }
-        prefill?.address?.let { setAddress(it, prefill.riskyAddress) }
-        memo = prefill?.memo?.ifBlank { null }
-
-        fiatService.setCurrency(currency)
-        fiatService.setToken(wallet.token)
-        fiatService.setAmount(prefill?.amount)
-        // The service converts in both directions, so the coin amount is taken from it too:
-        // typing a fiat value updates the coin amount and vice versa.
-        viewModelScope.launch {
-            fiatService.stateFlow.collect {
-                amount = it.amount
-                fiatAmount = it.fiatAmount
-                fiatAmountInputEnabled = it.coinPrice != null && !it.coinPrice.expired
-                balanceService.setAmount(amount)
-                emitState()
-            }
-        }
-        balanceService.setToken(wallet.token)
-        viewModelScope.launch {
-            balanceService.stateFlow.collect {
-                balanceState = it
-                refreshChainBalance()
-                emitState()
-            }
-        }
-        viewModelScope.launch {
-            currencyManager.baseCurrencyUpdatedFlow.collect {
-                currency = currencyManager.baseCurrency
-                fiatService.setCurrency(currency)
-                emitState()
-            }
-        }
-        observeBalanceUpdates()
-        refreshMemoSupport()
         observePrivateSendSupport()
-
-        // Every chain needs the network on confirmation; say so before opening it.
-        viewModelScope.launch {
-            networkAvailabilityService.stateFlow.collect {
-                networkState = it
-                emitState()
-            }
-        }
-        networkAvailabilityService.start(viewModelScope)
-        // Adapters are recreated on account or network changes; re-resolve the adapter then.
-        viewModelScope.launch {
-            adapterManager.adaptersReadyFlow.collectSafely {
-                observeBalanceUpdates()
-            }
-        }
-    }
-
-    // The balance service reads the adapter on demand; follow the adapter's own updates so
-    // the balance and its validation stay current while the wallet syncs.
-    private fun observeBalanceUpdates() {
-        balanceJob?.cancel()
-        balanceService.refresh()
-
-        val adapter = adapterManager.getAdapterForWallet<IBalanceAdapter>(wallet) ?: return
-        balanceJob = viewModelScope.launch {
-            adapter.balanceUpdatedFlow.collectSafely {
-                balanceService.refresh()
-            }
-        }
     }
 
     // Support is a lookup over synced provider lists; the sync makes a first open show the
@@ -214,106 +72,12 @@ class SendViewModel(
         }
     }
 
-    private fun refreshChainBalance() {
-        chainBalance = chainPlugin?.sendAvailableBalance(wallet.token, chainSettings)
-    }
-
-    private fun availableBalance(): BigDecimal? = chainBalance ?: balanceState.balance
-
-    // The balance service validates against the wallet's balance; when the chain narrows it,
-    // the insufficient-balance check is redone here against the narrowed value. Sync-state
-    // errors still come from the service.
-    private fun balanceError(): Throwable? {
-        val chainBalance = chainBalance ?: return balanceState.error
-        val serviceError = balanceState.error
-        if (serviceError != null && serviceError !is SwapError.InsufficientBalanceFrom) return serviceError
-        val amount = amount ?: return null
-        return if (amount > chainBalance) SwapError.InsufficientBalanceFrom else null
-    }
-
-    private fun refreshMemoSupport() {
-        memoSupportJob?.cancel()
-        memoSupportJob = viewModelScope.launch {
-            memoSupport = chainPlugin?.sendMemoSupport(wallet.token, address?.hex)
-            // A memo typed before the recipient turned out to have no memo field must not
-            // linger in the state, or it would silently go nowhere.
-            if (memoSupport == null) {
-                memo = null
-            }
-            extraInput = chainPlugin?.sendExtraInput(wallet.token, address?.hex)
-            // The field describes the recipient, so a new recipient starts it over: with the
-            // value the address itself carries, or empty.
-            setExtraInputValue(extraInput?.fixedValue.orEmpty())
-            emitState()
-        }
-    }
-
-    private fun setExtraInputValue(value: String) {
-        extraInputValue = value.trim().ifBlank { null }
-        extraInputError = extraInputValue?.let { extraInput?.validate?.invoke(it) }
-    }
-
     override fun createState() = SendUiState(
         wallet = wallet,
         tab = tab,
-        amount = amount,
-        fiatAmount = fiatAmount,
-        fiatAmountInputEnabled = fiatAmountInputEnabled,
-        currency = currency,
-        availableBalance = availableBalance(),
-        address = address,
-        contactName = contactName,
-        riskyAddress = riskyAddress,
-        memo = memo,
-        memoSupport = memoSupport,
-        extraInput = extraInput,
-        extraInputValue = extraInputValue,
-        extraInputError = extraInputError,
-        chainSettings = chainSettings,
+        chainSettings = _chainSettingsFlow.value,
         privateSendSupported = privateSendSupported,
-        hideAddress = hideAddress,
-        // A private send commits a provider order for the entered amount as is; nothing
-        // later takes the fee out of it, so a coin that pays its own fee cannot send its
-        // whole balance that way. A token whose fee is paid in the chain's coin can.
-        disabledPercents = if (tab == SendTab.Private && feePaidFromAsset(wallet.token.type)) setOf(100) else emptySet(),
-        step = step(),
     )
-
-    private fun step(): SendStep {
-        networkState.error?.let { return SendStep.Error(it) }
-        balanceError()?.let { return SendStep.Error(it) }
-        val amount = amount
-        if (amount == null || amount <= BigDecimal.ZERO) {
-            return SendStep.InputRequired(SendInputType.Amount)
-        }
-        if (address == null) {
-            return SendStep.InputRequired(SendInputType.Address)
-        }
-        // The memo cell stops typing at the limit, but a prefilled memo arrives past it. It
-        // is shown as it came and blocks the send, rather than being cut to something else.
-        val memoSupport = memoSupport?.takeIf { tab != SendTab.Private }
-        val memo = memo
-        if (memoSupport != null && memo != null && memo.toByteArray(Charsets.UTF_8).size > memoSupport.maxBytes) {
-            return SendStep.Error(Throwable(Translator.getString(R.string.Send_Error_MemoTooLong)))
-        }
-        // The chain's own field matters only for a plain send; a private send goes to the
-        // provider's deposit address, which the field is not about.
-        val extraInput = extraInput?.takeIf { tab != SendTab.Private }
-        if (extraInput != null) {
-            extraInputError?.let { return SendStep.Error(Throwable(it)) }
-            if (extraInput.required && extraInputValue == null) {
-                return SendStep.InputRequired(SendInputType.Extra)
-            }
-        }
-        return SendStep.Proceed
-    }
-
-    private fun feePaidFromAsset(type: TokenType) = when (type) {
-        TokenType.Native,
-        is TokenType.Derived,
-        is TokenType.AddressTyped -> true
-        else -> false
-    }
 
     fun onSelectTab(tab: SendTab) {
         if (tab == SendTab.Private && !privateSendSupported) return
@@ -321,77 +85,15 @@ class SendViewModel(
         emitState()
     }
 
-    fun onEnterAmount(amount: BigDecimal?) {
-        fiatService.setAmount(amount)
-    }
-
-    fun onEnterFiatAmount(fiatAmount: BigDecimal?) {
-        fiatService.setFiatAmount(fiatAmount)
-    }
-
-    fun onEnterAmountPercentage(percentage: Int) {
-        val availableBalance = availableBalance() ?: return
-
-        val amount = availableBalance
-            .times(BigDecimal(percentage / 100.0))
-            .setScale(wallet.token.decimals, RoundingMode.DOWN)
-            .stripTrailingZeros()
-
-        fiatService.setAmount(amount)
-    }
-
-    fun onSelectAddress(address: Address, risky: Boolean) {
-        setAddress(address, risky)
-        emitState()
-        refreshMemoSupport()
-    }
-
-    private fun setAddress(address: Address, risky: Boolean) {
-        this.address = address
-        this.riskyAddress = risky
-        contactName = contactsRepository
-            .getContactsFiltered(wallet.token.blockchainType, addressQuery = address.hex)
-            .firstOrNull()
-            ?.name
-    }
-
-    fun onEnterMemo(memo: String) {
-        this.memo = memo.ifBlank { null }
-        emitState()
-    }
-
-    fun onEnterExtraInput(value: String) {
-        setExtraInputValue(value)
-        emitState()
-    }
-
     fun onChangeChainSettings(settings: SendChainSettings?) {
-        chainSettings = settings
-        refreshChainBalance()
+        _chainSettingsFlow.value = settings
         emitState()
     }
 
-    override fun onCleared() {
-        fiatService.clear()
-    }
-
-    class Factory(
-        private val wallet: Wallet,
-        private val purpose: SendV2Page.Purpose = SendV2Page.Purpose.Transfer(),
-    ) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SendViewModel(
-                wallet,
-                App.currencyManager,
-                App.adapterManager,
-                FiatService(App.marketKit),
-                TokenBalanceService(App.adapterManager),
-                App.privateSendManager,
-                NetworkAvailabilityService(App.connectivityManager),
-                App.contactsRepository,
-                purpose,
-            ) as T
+            return SendViewModel(wallet, App.privateSendManager) as T
         }
     }
 }
