@@ -160,14 +160,27 @@ private fun SwapConfirmError(
                 .padding(horizontal = 64.dp),
             icon = painterResource(R.drawable.ic_warning_filled_24),
             iconTint = ComposeAppTheme.colors.grey,
-            text = stringResource(R.string.SwapError_FailedToFetchQuote),
+            // A refused quote is not a failure to reach the provider: say which wallet to
+            // change, and let Copy Error carry the same thing rather than a class name.
+            text = if (error is WatchAccountException) {
+                stringResource(R.string.Hud_Text_ChangeWallet)
+            } else {
+                stringResource(R.string.SwapError_FailedToFetchQuote)
+            },
             button4config = ButtonConfig(
                 variant = ButtonVariant.Primary,
                 style = ButtonStyle.Transparent,
                 size = ButtonSize.Small,
                 title = stringResource(R.string.Button_CopyError),
                 onClick = {
-                    TextHelper.copyText(error.message ?: error.javaClass.simpleName)
+                    TextHelper.copyText(
+                        when (error) {
+                            is WatchAccountException ->
+                                Translator.getString(R.string.Hud_Text_ChangeWallet)
+
+                            else -> error.message ?: error.javaClass.simpleName
+                        }
+                    )
                 }
             )
         )
