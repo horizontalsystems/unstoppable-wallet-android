@@ -267,14 +267,35 @@ change.
 
 ### Issue: what do we need, and why?
 
-- What is wrong or missing.
+An issue is either a bug or a task, and the two are written differently.
+Decide which from the request itself: a bug names behaviour that is wrong
+today against what was already expected (a crash, a wrong value, something
+that used to work); a task names something that should exist or change (a
+design to match, a feature to add, a flow to rework). A request that mixes
+both is a task, and the bugs found on the way are part of what it fixes.
+Ask the developer only when the request reads both ways.
+
+A bug:
+
+- What is wrong.
 - How to reproduce it: app version, device, chain, steps.
 - Why it matters: who is affected and how badly.
 - What done looks like, and what is out of scope.
 
-Describe the problem, not the implementation. A solution plan written into an
-issue goes stale as soon as work starts. An issue is closed when the problem
-is solved, which may take several pull requests.
+A task:
+
+- What should be different when the work is done, and why, in a sentence
+  or two.
+- Where the source of truth is, in a form a reader can open: a Figma link,
+  the iOS implementation, a reference document. Say what to ignore in it.
+- The decisions the work would otherwise have to ask about.
+- Done when: a short checklist a reviewer or an agent can verify.
+
+Both describe the outcome, not the implementation, and leave out what the
+repository already says: conventions, architecture, file names, and
+implementation steps. A solution plan written into an issue goes stale as
+soon as work starts. An issue is closed when the outcome is reached, which
+may take several pull requests.
 
 ### Pull request: is this change right and safe to merge?
 
