@@ -102,6 +102,10 @@ class SwapConfirmViewModel(
     private var depositAddress: String? = null
     private var fetchFinalQuoteJob: Job? = null
 
+    // The account this confirmation was opened for. The send service is built from it and
+    // keeps it, so everything below must agree with it rather than with whatever is active.
+    private val confirmingAccountId = App.accountManager.activeAccount?.id
+
     init {
         fiatServiceIn.setCurrency(currency)
         fiatServiceIn.setToken(tokenIn)
@@ -345,8 +349,13 @@ class SwapConfirmViewModel(
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
         // The send service was built with the account that was active when the quote was
-        // prepared and holds on to it, so it would still sign after a switch to a watch account.
-        if (App.accountManager.activeAccount?.isWatchAccount != false) {
+        // prepared and holds on to it, so it would still sign after a switch — to a watch
+        // account, or to another signing one whose wallet this swap was never meant to spend.
+        val activeAccount = App.accountManager.activeAccount
+        if (activeAccount == null ||
+            activeAccount.isWatchAccount ||
+            activeAccount.id != confirmingAccountId
+        ) {
             throw WatchAccountException()
         }
 
@@ -378,7 +387,7 @@ class SwapConfirmViewModel(
         }
 
         val record = SwapRecord(
-            accountId = App.accountManager.activeAccount?.id ?: "",
+            accountId = confirmingAccountId ?: "",
             timestamp = System.currentTimeMillis(),
             providerId = swapProvider.id,
             providerName = swapProvider.title,

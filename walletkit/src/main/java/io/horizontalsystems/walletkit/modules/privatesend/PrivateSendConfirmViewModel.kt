@@ -244,6 +244,16 @@ class PrivateSendConfirmViewModel(
         try {
             timerService.stop()
 
+            // Checked again here, not only at commit: broadcasting is the step that spends,
+            // and the order was committed for the account named in the request.
+            val activeAccount = App.accountManager.activeAccount
+            if (activeAccount == null ||
+                activeAccount.isWatchAccount ||
+                activeAccount.id != request.accountId
+            ) {
+                throw WatchAccountException()
+            }
+
             // Pre-saved before broadcasting so the record survives the app dying between the
             // two: the committed order is already real server-side, and /v2/track resolves it
             // by uuid alone even before a tx hash lands. A retry reuses the row (flipping a
