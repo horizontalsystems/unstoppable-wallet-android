@@ -245,10 +245,8 @@ class CrossPayConfirmViewModel(
         }
 
         try {
-            timerService.stop()
-
-            // Checked again here, not only at commit: broadcasting is the step that spends,
-            // and the order was committed for the account named in the request.
+            // Checked before the timer is stopped: throwing after that would silence the
+            // expiry watchdog without rearming it, leaving a lapsed order looking sendable.
             val activeAccount = App.accountManager.activeAccount
             if (activeAccount == null ||
                 activeAccount.isWatchAccount ||
@@ -256,6 +254,8 @@ class CrossPayConfirmViewModel(
             ) {
                 throw WatchAccountException()
             }
+
+            timerService.stop()
 
             // Pre-saved before broadcasting so the record survives the app dying between the
             // two: the committed order is already real server-side, and /v2/track resolves it
