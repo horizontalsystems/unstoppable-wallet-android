@@ -1958,4 +1958,5 @@
     <string name="Hud_Text_ChangeWallet">Wallet wechseln</string>
     <string name="WatchWallet_Typed">%s Watch-Wallet</string>
     <string name="Action_Clear">Löschen</string>
+    <string name="Send_Utxos_Auto">Auto</string>
 </resources>

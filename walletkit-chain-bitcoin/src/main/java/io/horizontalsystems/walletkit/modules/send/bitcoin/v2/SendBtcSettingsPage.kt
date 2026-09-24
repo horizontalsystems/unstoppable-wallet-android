@@ -101,11 +101,16 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                 // The rows are gathered first so hairlines only appear between shown rows.
                 val rows = mutableListOf<@Composable () -> Unit>()
                 rows += {
-                    val used = settings.unspentOutputs?.size ?: total
                     SendSettingsRow(
                         title = stringResource(R.string.Send_Utxos),
                         subtitle = stringResource(R.string.Send_Utxos_Description),
-                        value = if (total != null) "$used/$total" else "",
+                        // No selection means the wallet picks the outputs itself, which is not the same
+                        // as having chosen all of them.
+                        value = when {
+                            total == null -> ""
+                            settings.unspentOutputs == null -> stringResource(R.string.Send_Utxos_Auto)
+                            else -> "${settings.unspentOutputs.size}/$total"
+                        },
                         enabled = adapter != null && total != null,
                         onClick = { navigation.slideFromRight(SendBtcUtxoExpertModePage(wallet)) },
                     )

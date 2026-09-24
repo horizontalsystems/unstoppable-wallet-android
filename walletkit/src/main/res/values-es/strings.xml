@@ -1953,4 +1953,5 @@
     <string name="Hud_Text_ChangeWallet">Cambia de billetera</string>
     <string name="WatchWallet_Typed">Wallet de observación %s</string>
     <string name="Action_Clear">Borrar</string>
+    <string name="Send_Utxos_Auto">Auto</string>
 </resources>

@@ -1952,4 +1952,5 @@
     <string name="Hud_Text_ChangeWallet">请切换钱包</string>
     <string name="WatchWallet_Typed">%s 观察钱包</string>
     <string name="Action_Clear">清除</string>
+    <string name="Send_Utxos_Auto">自动</string>
 </resources>

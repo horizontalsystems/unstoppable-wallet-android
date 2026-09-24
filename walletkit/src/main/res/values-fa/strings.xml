@@ -1941,4 +1941,5 @@
     <string name="Hud_Text_ChangeWallet">کیف پول را تغییر دهید</string>
     <string name="WatchWallet_Typed">کیف پول نظارتی %s</string>
     <string name="Action_Clear">پاک کردن</string>
+    <string name="Send_Utxos_Auto">خودکار</string>
 </resources>

@@ -74,13 +74,18 @@ data class SendMoneroSettingsPage(val wallet: Wallet) : HSPage() {
             )
         ) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                val used = settings.unspentOutputs?.size ?: total
                 SendSettingsCard(
                     listOf {
                         SendSettingsRow(
                             title = stringResource(R.string.Send_Utxos),
                             subtitle = stringResource(R.string.Send_Utxos_Description),
-                            value = if (total != null) "$used/$total" else "",
+                            // No selection means the wallet picks the outputs itself, which is not the same
+                            // as having chosen all of them.
+                            value = when {
+                                total == null -> ""
+                                settings.unspentOutputs == null -> stringResource(R.string.Send_Utxos_Auto)
+                                else -> "${settings.unspentOutputs.size}/$total"
+                            },
                             enabled = adapter != null && total != null,
                             onClick = { navigation.slideFromRight(SendMoneroUtxoExpertModePage(wallet)) },
                         )
