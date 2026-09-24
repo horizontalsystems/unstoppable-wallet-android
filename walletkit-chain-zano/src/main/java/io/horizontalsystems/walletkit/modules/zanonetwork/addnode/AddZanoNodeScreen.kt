@@ -19,12 +19,12 @@ import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputStateWarning
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun AddZanoNodeScreen(navigation: HSNavigation) {
@@ -63,7 +63,7 @@ fun AddZanoNodeScreen(navigation: HSNavigation) {
             }
 
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),

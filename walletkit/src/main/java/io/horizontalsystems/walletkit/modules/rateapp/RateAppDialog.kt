@@ -19,10 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
 @Composable
 fun RateApp(
@@ -46,14 +47,16 @@ fun RateApp(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                ButtonPrimaryTransparent(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Transparent,
                     onClick = onCancelClick,
                     title = stringResource(R.string.RateApp_Button_NotNow)
                 )
 
                 Spacer(Modifier.width(8.dp))
 
-                ButtonPrimaryYellow(
+                HSButton(
                     onClick = onRateClick,
                     title = stringResource(R.string.RateApp_Button_RateIt)
                 )

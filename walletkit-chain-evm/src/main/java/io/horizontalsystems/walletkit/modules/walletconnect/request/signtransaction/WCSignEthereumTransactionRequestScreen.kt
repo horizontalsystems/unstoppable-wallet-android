@@ -39,8 +39,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransact
 import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
 import io.horizontalsystems.walletkit.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
@@ -238,7 +236,7 @@ fun WCSignEthereumTransactionRequestScreen(
         onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Sign),
                 enabled = !signAction.inProgress,
@@ -261,7 +259,8 @@ fun WCSignEthereumTransactionRequestScreen(
                 }
             )
             VSpacer(16.dp)
-            ButtonPrimaryDefault(
+            HSButton(
+                variant = ButtonVariant.Secondary,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Reject),
                 onClick = {

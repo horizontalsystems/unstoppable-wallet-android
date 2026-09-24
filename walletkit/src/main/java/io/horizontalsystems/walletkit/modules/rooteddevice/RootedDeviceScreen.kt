@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 
 @Composable
@@ -54,7 +54,7 @@ fun RootedDeviceScreen(
         }
 
         ButtonsGroupWithShade {
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),

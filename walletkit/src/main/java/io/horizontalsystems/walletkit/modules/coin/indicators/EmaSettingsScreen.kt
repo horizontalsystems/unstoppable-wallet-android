@@ -26,7 +26,6 @@ import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
@@ -39,6 +38,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun EmaSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
@@ -143,7 +143,7 @@ fun EmaSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicator
                 VSpacer(32.dp)
             }
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),

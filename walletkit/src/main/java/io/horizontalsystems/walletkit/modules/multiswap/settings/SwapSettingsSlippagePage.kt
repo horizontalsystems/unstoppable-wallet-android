@@ -22,13 +22,13 @@ import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class SwapSettingsSlippagePage(val input: Input) : HSPage() {
@@ -69,7 +69,7 @@ fun SwapSlippageSettingsScreen(
         ),
         bottomBar = {
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),

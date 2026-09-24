@@ -35,8 +35,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -49,6 +47,9 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
 @Serializable
 data object BaseCurrencySettingsPage : HSPage() {
@@ -171,7 +172,7 @@ private fun WarningBottomSheet(
             text = text
         )
 
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp, end = 24.dp, top = 20.dp),
@@ -179,7 +180,9 @@ private fun WarningBottomSheet(
             onClick = onOkClick
         )
 
-        ButtonPrimaryTransparent(
+        HSButton(
+            variant = ButtonVariant.Secondary,
+            style = ButtonStyle.Transparent,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 12.dp),

@@ -18,7 +18,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsCheckbox
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
@@ -31,6 +30,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class Eip20ApprovePage(val input: Input) : HSPage() {
@@ -77,7 +77,7 @@ fun Eip20ApproveScreen(navigation: HSNavigation, input: Eip20ApprovePage.Input) 
                     navigation.removeLastOrNull()
                 }
 
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),

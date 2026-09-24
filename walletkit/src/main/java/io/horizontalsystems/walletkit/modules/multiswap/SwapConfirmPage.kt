@@ -55,8 +55,6 @@ import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImageCircle
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -84,6 +82,7 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Locale
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class SwapConfirmPage(
@@ -143,7 +142,8 @@ private fun SwapConfirmError(
         ),
         bottomBar = {
             ButtonsGroupWithShade {
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -244,7 +244,8 @@ private fun SwapConfirmInternal(
         },
         buttonsSlot = {
             if (!uiState.validQuote || uiState.expired) {
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),
                     onClick = {
@@ -253,7 +254,7 @@ private fun SwapConfirmInternal(
                 )
             } else {
                 val swapAction = rememberAsyncAction()
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(if (swapAction.inProgress) R.string.Swap_Swapping else R.string.Swap),
                     enabled = !swapAction.inProgress && !uiState.loading,

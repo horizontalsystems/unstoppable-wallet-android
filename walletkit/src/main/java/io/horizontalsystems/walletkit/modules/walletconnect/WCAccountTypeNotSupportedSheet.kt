@@ -16,11 +16,11 @@ import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModul
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class WCAccountTypeNotSupportedSheet(val input: Input) : HSBottomSheet() {
@@ -60,7 +60,7 @@ fun WCAccountTypeNotSupportedScreen(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             text = stringResource(id = R.string.WalletConnect_NotSupportedDescription, accountTypeDescription)
         )
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .padding(vertical = 20.dp, horizontal = 24.dp)
                 .fillMaxWidth(),

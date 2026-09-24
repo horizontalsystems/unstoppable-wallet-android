@@ -73,8 +73,6 @@ import io.horizontalsystems.walletkit.ui.compose.Bright
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.AppBar
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
@@ -83,6 +81,7 @@ import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.coroutines.launch
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
 class QRScannerActivity : BaseActivity() {
 
@@ -390,12 +389,14 @@ private fun PermissionNeededDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                ButtonPrimaryTransparent(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Transparent,
                     onClick = onCancelClick,
                     title = stringResource(R.string.Button_Cancel)
                 )
                 Spacer(Modifier.width(8.dp))
-                ButtonPrimaryYellow(
+                HSButton(
                     onClick = onOkClick,
                     title = stringResource(R.string.Button_Ok)
                 )

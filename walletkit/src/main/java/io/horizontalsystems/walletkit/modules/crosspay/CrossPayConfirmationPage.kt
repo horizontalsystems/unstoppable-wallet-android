@@ -35,8 +35,6 @@ import io.horizontalsystems.walletkit.modules.send.ConfirmationTopSection
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -53,6 +51,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class CrossPayConfirmationPage(val input: Input) : HSPage() {
@@ -117,14 +116,15 @@ private fun CrossPayConfirmationScreen(
             if (uiState.expired) {
                 // The committed order is not honoured past its lifetime; Refresh commits a
                 // fresh order in place — the same recovery the swap confirmation offers.
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),
                     onClick = viewModel::refresh,
                 )
             } else {
                 val sendAction = rememberAsyncAction()
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(if (sendAction.inProgress) R.string.Send_Sending else R.string.Send_Confirmation_Send_Button),
                     enabled = uiState.canSend && !sendAction.inProgress && !uiState.loading,
@@ -268,7 +268,8 @@ private fun CrossPayConfirmationError(navigation: HSNavigation, error: Throwable
         onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
-            ButtonPrimaryDefault(
+            HSButton(
+                variant = ButtonVariant.Secondary,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Back),
                 onClick = navigation::removeLastOrNull,

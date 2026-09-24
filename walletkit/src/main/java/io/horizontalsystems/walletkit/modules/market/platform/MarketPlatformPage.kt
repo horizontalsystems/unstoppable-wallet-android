@@ -52,7 +52,6 @@ import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
@@ -67,6 +66,7 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class MarketPlatformPage(val platform: Platform) : HSPage(accessibleWhileLocked = true) {
@@ -321,7 +321,7 @@ fun InfoBottomSheet(
                         .padding(horizontal = 8.dp),
                 )
                 VSpacer(56.dp)
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Close),
                     onClick = hideBottomSheet

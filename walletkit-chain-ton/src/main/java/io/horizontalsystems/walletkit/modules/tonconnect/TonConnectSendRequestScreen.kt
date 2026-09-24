@@ -37,14 +37,14 @@ import io.horizontalsystems.walletkit.modules.xtransaction.sections.SendCoinSect
 import io.horizontalsystems.walletkit.modules.xtransaction.sections.SwapSection
 import io.horizontalsystems.walletkit.modules.xtransaction.sections.ton.ContractCallSection
 import io.horizontalsystems.walletkit.modules.xtransaction.sections.ton.ContractDeploySection
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Composable
 fun TonConnectSendRequestScreen(navigation: HSNavigation) {
@@ -71,7 +71,8 @@ fun TonConnectSendRequestScreen(navigation: HSNavigation) {
             val view = LocalView.current
 
             if (uiState.error != null) {
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Close),
                     enabled = true,
@@ -82,7 +83,7 @@ fun TonConnectSendRequestScreen(navigation: HSNavigation) {
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
 
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Confirm),
                     enabled = uiState.confirmEnabled && buttonEnabled,
@@ -115,7 +116,8 @@ fun TonConnectSendRequestScreen(navigation: HSNavigation) {
                     }
                 )
                 VSpacer(16.dp)
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Reject),
                     enabled = uiState.rejectEnabled,

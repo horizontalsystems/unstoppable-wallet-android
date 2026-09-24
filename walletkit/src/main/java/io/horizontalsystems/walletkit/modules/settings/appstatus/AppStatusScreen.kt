@@ -27,8 +27,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.walletkit.modules.settings.appstatus.AppStatusModule.BlockData
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
@@ -39,6 +37,8 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 
 @Composable
@@ -65,7 +65,7 @@ fun AppStatusScreen(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 12.dp)
             ) {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.Button_Copy),
                     onClick = {
@@ -81,7 +81,8 @@ fun AppStatusScreen(
                     }
                 )
                 HSpacer(8.dp)
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.Button_Share),
                     onClick = {

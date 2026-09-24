@@ -27,8 +27,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
@@ -40,6 +38,9 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
 /**
  * Receive screen for a token the account has to activate first (Stellar trustline, XRPL trust
@@ -90,7 +91,7 @@ fun ReceiveActivatableTokenScreen(
                     text = stringResource(activationInfo.dialogDescriptionRes, uiState.coinCode, uiState.coinCode)
                 )
                 VSpacer(12.dp)
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
@@ -98,7 +99,9 @@ fun ReceiveActivatableTokenScreen(
                     onClick = runActivation
                 )
                 VSpacer(12.dp)
-                ButtonPrimaryTransparent(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    style = ButtonStyle.Transparent,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),

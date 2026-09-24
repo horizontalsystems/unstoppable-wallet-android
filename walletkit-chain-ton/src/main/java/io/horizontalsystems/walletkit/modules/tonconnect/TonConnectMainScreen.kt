@@ -28,11 +28,11 @@ import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun TonConnectMainScreen(navigation: HSNavigation, deepLinkUri: String?) {
@@ -114,7 +114,7 @@ fun TonConnectMainScreen(navigation: HSNavigation, deepLinkUri: String?) {
                 }
             }
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth(),

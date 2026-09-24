@@ -57,8 +57,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellFooter
@@ -71,6 +69,8 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Composable
 fun CoinOverviewScreen(
@@ -421,7 +421,7 @@ private fun CoinBottomButtons(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
         ) {
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.CoinPage_Buy),
                 onClick = {
@@ -438,7 +438,8 @@ private fun CoinBottomButtons(
 
             HSpacer(8.dp)
 
-            ButtonPrimaryDefault(
+            HSButton(
+                variant = ButtonVariant.Secondary,
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.CoinPage_Sell),
                 onClick = {

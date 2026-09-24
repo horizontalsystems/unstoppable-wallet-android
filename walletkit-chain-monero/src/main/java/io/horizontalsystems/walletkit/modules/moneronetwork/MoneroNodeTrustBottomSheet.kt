@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -28,6 +27,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 
 @Composable
@@ -72,7 +72,7 @@ fun MoneroNodeTrustBottomSheet(
                 }
             }
         }
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 32.dp),

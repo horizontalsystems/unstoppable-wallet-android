@@ -75,6 +75,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSCellButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun CoinListSlidable(
@@ -282,7 +283,7 @@ fun ListErrorView(
         text = errorText,
         icon = icon,
     ) {
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .padding(horizontal = 48.dp)
                 .fillMaxWidth(),

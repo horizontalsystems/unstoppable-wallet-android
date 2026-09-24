@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.serializers.BigDecimalSerializer
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -33,6 +32,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class Eip20RevokeConfirmPage(val input: Input) : HSPage() {
@@ -75,7 +75,7 @@ fun Eip20RevokeScreen(navigation: HSNavigation, input: Eip20RevokeConfirmPage.In
         buttonsSlot = {
             val revokeAction = rememberAsyncAction()
 
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(if (revokeAction.inProgress) R.string.Swap_Revoking else R.string.Swap_Revoke),
                 onClick = {

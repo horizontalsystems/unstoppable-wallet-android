@@ -20,6 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Composable
 fun BottomSheetsElementsButtons(
@@ -33,7 +35,7 @@ fun BottomSheetsElementsButtons(
     ) {
         HsDivider()
         Spacer(modifier = Modifier.height(15.dp))
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -42,7 +44,8 @@ fun BottomSheetsElementsButtons(
         )
         buttonDefaultText?.let {
             Spacer(modifier = Modifier.height(16.dp))
-            ButtonPrimaryDefault(
+            HSButton(
+                variant = ButtonVariant.Secondary,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),

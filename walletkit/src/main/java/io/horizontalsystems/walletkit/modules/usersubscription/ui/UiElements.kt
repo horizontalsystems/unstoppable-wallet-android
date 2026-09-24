@@ -48,7 +48,6 @@ import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionMo
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
@@ -60,6 +59,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 val yellowGradient = Brush.horizontalGradient(
     colors = listOf(
@@ -261,7 +261,7 @@ fun InfoBottomSheet(
                         .padding(horizontal = 8.dp),
                 )
                 VSpacer(56.dp)
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Close),
                     onClick = hideBottomSheet

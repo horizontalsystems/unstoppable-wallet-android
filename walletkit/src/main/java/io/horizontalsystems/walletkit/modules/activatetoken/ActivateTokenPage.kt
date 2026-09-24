@@ -41,7 +41,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HFillSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsImageCircle
@@ -59,6 +58,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 /**
  * Confirms and submits the transaction that lets the account hold [wallet]'s token: a Stellar
@@ -94,7 +94,7 @@ fun ActivateTokenScreen(
             val activateAction = rememberAsyncAction()
             val view = LocalView.current
 
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(if (activateAction.inProgress) R.string.Activate_Activating else R.string.Button_Activate),
                 onClick = {

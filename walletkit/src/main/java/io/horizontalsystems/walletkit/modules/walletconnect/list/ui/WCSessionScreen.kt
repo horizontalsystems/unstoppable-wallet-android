@@ -49,7 +49,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.list.WalletConnectLi
 import io.horizontalsystems.walletkit.modules.walletconnect.request.WCRequestSheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -155,7 +154,7 @@ fun WCSessionsScreen(
                 }
             }
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth(),

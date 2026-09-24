@@ -46,7 +46,6 @@ import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -62,6 +61,7 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 enum class ContactsScreenBottomSheetType {
     ReplaceAddressConfirmation, RestoreContactsConfirmation
@@ -226,7 +226,7 @@ fun ContactsScreen(
                         text = stringResource(R.string.Contacts_NoContacts),
                         icon = R.drawable.icon_user_plus
                     ) {
-                        ButtonPrimaryYellow(
+                        HSButton(
                             modifier = Modifier
                                 .padding(horizontal = 48.dp)
                                 .fillMaxWidth(),

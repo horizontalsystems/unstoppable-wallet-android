@@ -32,8 +32,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.session.TitleValueCe
 import io.horizontalsystems.walletkit.modules.walletconnect.session.ui.DropDownCell
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
@@ -42,6 +40,8 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Composable
 fun TonConnectNewScreen(
@@ -81,7 +81,7 @@ fun TonConnectNewScreen(
         bottomBar = {
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
-                    ButtonPrimaryYellow(
+                    HSButton(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
                         onClick = navigation.authorizedAction {
@@ -91,7 +91,8 @@ fun TonConnectNewScreen(
                         enabled = uiState.connectEnabled
                     )
                     VSpacer(16.dp)
-                    ButtonPrimaryDefault(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Cancel),
                         onClick = {

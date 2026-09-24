@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object WCErrorNoAccountSheet : HSBottomSheet() {
@@ -42,7 +42,7 @@ fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
             text = stringResource(id = R.string.WalletConnect_Error_NoWallet)
         )
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .padding(vertical = 20.dp, horizontal = 24.dp)
                 .fillMaxWidth(),

@@ -18,11 +18,11 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SendEvmTransactionView
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class TransactionSpeedUpCancelPage(val input: Input) : HSPage() {
@@ -80,7 +80,7 @@ private fun TransactionSpeedUpCancelScreen(
         buttonsSlot = {
             val sendAction = rememberAsyncAction()
 
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier.fillMaxWidth(),
                 title = if (sendAction.inProgress) stringResource(R.string.Send_Sending) else viewModel.buttonTitle,
                 onClick = {

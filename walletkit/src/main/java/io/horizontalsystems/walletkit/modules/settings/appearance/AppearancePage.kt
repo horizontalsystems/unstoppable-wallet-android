@@ -48,8 +48,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.settings.language.LanguageSettingsPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryTransparent
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
@@ -68,6 +66,9 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
 @Serializable
 data object AppearancePage : HSPage() {
@@ -427,7 +428,7 @@ private fun AppCloseWarningBottomSheet(
             text = stringResource(R.string.Appearance_Warning_CloseApplication)
         )
 
-        ButtonPrimaryYellow(
+        HSButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp, end = 24.dp, top = 20.dp),
@@ -435,7 +436,9 @@ private fun AppCloseWarningBottomSheet(
             onClick = onChangeClick
         )
 
-        ButtonPrimaryTransparent(
+        HSButton(
+            variant = ButtonVariant.Secondary,
+            style = ButtonStyle.Transparent,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 12.dp),

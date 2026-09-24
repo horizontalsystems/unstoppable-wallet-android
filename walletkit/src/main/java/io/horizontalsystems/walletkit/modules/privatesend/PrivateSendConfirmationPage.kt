@@ -36,8 +36,6 @@ import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -53,6 +51,7 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class PrivateSendConfirmationPage(val input: Input) : HSPage() {
@@ -129,14 +128,15 @@ private fun PrivateSendConfirmationScreen(
             if (uiState.expired) {
                 // The committed order is not honoured past its lifetime; Refresh commits a
                 // fresh order in place — the same recovery the swap confirmation offers.
-                ButtonPrimaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),
                     onClick = viewModel::refresh,
                 )
             } else {
                 val sendAction = rememberAsyncAction()
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(if (sendAction.inProgress) R.string.Send_Sending else R.string.Send_Confirmation_Send_Button),
                     enabled = uiState.canSend && !sendAction.inProgress && !uiState.loading,
@@ -281,7 +281,8 @@ private fun PrivateSendConfirmationError(navigation: HSNavigation, error: Throwa
         onClickBack = navigation::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
-            ButtonPrimaryDefault(
+            HSButton(
+                variant = ButtonVariant.Secondary,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Back),
                 onClick = navigation::removeLastOrNull,

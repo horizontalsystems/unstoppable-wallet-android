@@ -24,11 +24,11 @@ import io.horizontalsystems.walletkit.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class BackupKeyPage(val account: Account) : HSPage(screenshotEnabled = false) {
@@ -80,7 +80,7 @@ fun RecoveryPhraseScreen(
             PassphraseCell(viewModel.passphrase, hidden)
             Spacer(modifier = Modifier.weight(1f))
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),

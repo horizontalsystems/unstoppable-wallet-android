@@ -36,7 +36,6 @@ import io.horizontalsystems.walletkit.modules.send.address.AddressValidationErro
 import io.horizontalsystems.walletkit.modules.settings.security.securesend.SecureSendConfigSheet
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -55,6 +54,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun EnterAddressScreen(
@@ -143,7 +143,7 @@ fun EnterAddressScreen(
                 VSpacer(32.dp)
             }
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),

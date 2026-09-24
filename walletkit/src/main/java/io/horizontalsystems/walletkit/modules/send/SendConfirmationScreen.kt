@@ -53,7 +53,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.AddressCell
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -70,6 +69,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import kotlin.reflect.KClass
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun SendConfirmationScreen(
@@ -324,7 +324,7 @@ fun SendButton(
 
     when (sendResult) {
         SendResult.Sending -> {
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Sending),
                 onClick = { },
@@ -333,7 +333,7 @@ fun SendButton(
         }
 
         is SendResult.Sent -> {
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Success),
                 onClick = { },
@@ -342,7 +342,7 @@ fun SendButton(
         }
 
         else -> {
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
                 onClick = {

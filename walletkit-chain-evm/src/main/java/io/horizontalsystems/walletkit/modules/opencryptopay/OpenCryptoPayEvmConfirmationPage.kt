@@ -22,7 +22,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionView
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -35,6 +34,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class OpenCryptoPayEvmConfirmationPage(val input: Input) : HSPage() {
@@ -98,7 +98,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
             val payAction = rememberAsyncAction()
             val isExpired = uiState.secondsUntilExpiry == 0
 
-            ButtonPrimaryYellow(
+            HSButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
