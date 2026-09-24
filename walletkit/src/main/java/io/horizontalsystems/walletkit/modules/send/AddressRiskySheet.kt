@@ -12,7 +12,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
@@ -63,7 +62,8 @@ private fun RiskyAddressAlertView(
             text = alertText
         )
         VSpacer(32.dp)
-        ButtonPrimaryRed(
+        HSButton(
+            variant = ButtonVariant.Destructive,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),

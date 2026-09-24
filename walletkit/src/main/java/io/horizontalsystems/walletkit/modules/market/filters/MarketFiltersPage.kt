@@ -47,7 +47,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.PremiumHeader
@@ -65,6 +64,7 @@ import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetCon
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object MarketFiltersPage : HSPage(accessibleWhileLocked = true) {
@@ -125,7 +125,7 @@ private fun AdvancedSearchScreen(
             }
 
             ButtonsGroupWithShade {
-                ButtonPrimaryYellowWithSpinner(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -133,7 +133,7 @@ private fun AdvancedSearchScreen(
                     onClick = {
                         navigation.slideFromRight(MarketFiltersResultsPage)
                     },
-                    showSpinner = uiState.showSpinner,
+                    loadingIndicator = uiState.showSpinner,
                     enabled = uiState.buttonEnabled,
                 )
             }

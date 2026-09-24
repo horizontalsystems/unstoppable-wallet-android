@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +27,6 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellowWithIcon
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -37,6 +35,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadR_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object WhyDonatePage : HSPage() {
@@ -92,12 +91,11 @@ fun WhyDonateView(
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
                 VSpacer(36.dp)
-                ButtonPrimaryYellowWithIcon(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    icon = R.drawable.ic_heart_filled_24,
-                    iconTint = Color.Black,
+                    icon = painterResource(R.drawable.ic_heart_filled_24),
                     title = stringResource(R.string.SettingsBanner_SupportTheProject),
                     onClick = onClick
                 )
@@ -224,12 +222,11 @@ fun WhyDonateView(
                     textAlign = TextAlign.Center
                 )
                 VSpacer(36.dp)
-                ButtonPrimaryYellowWithIcon(
+                HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    icon = R.drawable.ic_heart_filled_24,
-                    iconTint = Color.Black,
+                    icon = painterResource(R.drawable.ic_heart_filled_24),
                     title = stringResource(R.string.SettingsBanner_SupportTheProject),
                     onClick = onClick
                 )

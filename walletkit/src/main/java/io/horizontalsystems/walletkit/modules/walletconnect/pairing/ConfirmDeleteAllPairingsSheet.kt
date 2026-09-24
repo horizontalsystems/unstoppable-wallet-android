@@ -14,11 +14,12 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Serializable
 data object ConfirmDeleteAllPairingsSheet : HSBottomSheet() {
@@ -47,7 +48,8 @@ fun ConfirmDeleteAllScreen(navigation: HSNavigation) {
             text = stringResource(R.string.WalletConnect_Pairings_ConfirmationDeleteAll)
         )
         Spacer(Modifier.height(20.dp))
-        ButtonPrimaryRed(
+        HSButton(
+            variant = ButtonVariant.Destructive,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),

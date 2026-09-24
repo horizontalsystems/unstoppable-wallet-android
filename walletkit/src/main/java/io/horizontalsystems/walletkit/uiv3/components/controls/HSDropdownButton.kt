@@ -102,6 +102,23 @@ private fun getButtonProps(style: ButtonStyle, variant: ButtonVariant): Dropdown
                 }
             }
         }
+        ButtonVariant.Destructive -> {
+            when (style) {
+                ButtonStyle.Solid -> {
+                    backgroundColor = ComposeAppTheme.colors.lucian
+                    contentColor = ComposeAppTheme.colors.lawrence
+                    disabledBackgroundColor = ComposeAppTheme.colors.blade
+                    disabledContentColor = ComposeAppTheme.colors.andy
+                }
+
+                ButtonStyle.Transparent -> {
+                    backgroundColor = ComposeAppTheme.colors.transparent
+                    contentColor = ComposeAppTheme.colors.lucian
+                    disabledBackgroundColor = ComposeAppTheme.colors.transparent
+                    disabledContentColor = ComposeAppTheme.colors.andy
+                }
+            }
+        }
     }
 
     return DropdownButtonProps(

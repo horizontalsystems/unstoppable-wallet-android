@@ -89,7 +89,7 @@ enum class ButtonSize {
 }
 
 enum class ButtonVariant {
-    Primary, Secondary
+    Primary, Secondary, Destructive
 }
 
 data class ButtonConfig(
@@ -190,6 +190,23 @@ private fun getButtonProps(size: ButtonSize, style: ButtonStyle, variant: Button
                 ButtonStyle.Transparent -> {
                     backgroundColor = ComposeAppTheme.colors.transparent
                     contentColor = ComposeAppTheme.colors.leah
+                    disabledBackgroundColor = ComposeAppTheme.colors.transparent
+                    disabledContentColor = ComposeAppTheme.colors.andy
+                }
+            }
+        }
+        ButtonVariant.Destructive -> {
+            when (style) {
+                ButtonStyle.Solid -> {
+                    backgroundColor = ComposeAppTheme.colors.lucian
+                    contentColor = ComposeAppTheme.colors.lawrence
+                    disabledBackgroundColor = ComposeAppTheme.colors.blade
+                    disabledContentColor = ComposeAppTheme.colors.andy
+                }
+
+                ButtonStyle.Transparent -> {
+                    backgroundColor = ComposeAppTheme.colors.transparent
+                    contentColor = ComposeAppTheme.colors.lucian
                     disabledBackgroundColor = ComposeAppTheme.colors.transparent
                     disabledContentColor = ComposeAppTheme.colors.andy
                 }

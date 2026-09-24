@@ -45,7 +45,6 @@ import io.horizontalsystems.walletkit.modules.contacts.viewmodel.ContactViewMode
 import io.horizontalsystems.walletkit.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -250,7 +249,8 @@ fun ConfirmationBottomSheet(
 
         when (cautionType) {
             Caution.Type.Error -> {
-                ButtonPrimaryRed(
+                HSButton(
+                    variant = ButtonVariant.Destructive,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),

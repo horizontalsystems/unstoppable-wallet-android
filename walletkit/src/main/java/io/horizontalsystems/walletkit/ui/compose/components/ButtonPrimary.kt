@@ -9,122 +9,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonColors
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-
-@Composable
-fun ButtonPrimaryYellowWithIcon(
-    modifier: Modifier = Modifier,
-    icon: Int,
-    iconTint: Color? = null,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-) {
-    ButtonPrimary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            if (iconTint != null) {
-                Icon(
-                    painter = painterResource(icon),
-                    contentDescription = null,
-                    tint = iconTint
-                )
-            } else {
-                Icon(
-                    painter = painterResource(icon),
-                    contentDescription = null
-                )
-            }
-            HSpacer(width = 8.dp)
-            Text(
-                title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonPrimaryRed(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    ButtonPrimary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.lucian,
-            contentColor = ComposeAppTheme.colors.lawrence,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonPrimaryYellowWithSpinner(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    showSpinner: Boolean = false,
-    enabled: Boolean = true
-) {
-
-    ButtonPrimary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            if (showSpinner) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
-                )
-            } else {
-                Text(title)
-            }
-        },
-        enabled = enabled
-    )
-}
 
 @Composable
 fun ButtonPrimaryWrapper(
