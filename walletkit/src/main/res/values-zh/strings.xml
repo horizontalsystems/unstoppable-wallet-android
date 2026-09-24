@@ -1952,4 +1952,5 @@
         <item quantity="other">签署 %d 笔交易</item>
     </plurals>
     <string name="Hud_Text_ChangeWallet">请切换钱包</string>
+    <string name="WatchWallet_Typed">%s 观察钱包</string>
 </resources>

@@ -11,10 +11,7 @@ class BackupViewItemFactory {
             SelectBackupItemsViewModel.WalletBackupViewItem(
                 account = account,
                 name = account.name,
-                type = if (account.isWatchAccount)
-                    Translator.getString(R.string.WatchWallet)
-                else
-                    account.type.detailedDescription,
+                type = account.type.detailedDescription,
                 backupRequired = !account.hasAnyBackup,
                 selected = true
             )

@@ -10,7 +10,6 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
 import io.horizontalsystems.walletkit.core.providers.Translator
-import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.serializers.BigIntegerSerializer
 import kotlinx.serialization.Serializable
 import java.math.BigInteger
@@ -388,18 +387,24 @@ sealed class AccountType {
         get() = false
 
     val detailedDescription: String
+        get() = watchTypeName
+            ?.let { Translator.getString(R.string.WatchWallet_Typed, it) }
+            ?: description
+
+    private val watchTypeName: String?
         get() = when (this) {
-            is EvmAddress -> this.address.shorten()
-            is SolanaAddress -> this.address.shorten()
-            is TronAddress -> this.address.shorten()
-            is TonAddress -> this.address.shorten()
-            is StellarAddress -> this.address.shorten()
-            is XrpAddress -> this.address.shorten()
-            is ThorchainAddress -> this.address.shorten()
-            is MayachainAddress -> this.address.shorten()
-            is BitcoinAddress -> this.address.shorten()
-            is MoneroWatchAccount -> this.address.shorten()
-            else -> this.description
+            is EvmAddress -> "EVM"
+            is SolanaAddress -> "Solana"
+            is TronAddress -> "TRON"
+            is TonAddress -> "TON"
+            is StellarAddress -> "Stellar"
+            is XrpAddress -> "XRP"
+            is ThorchainAddress -> "THORChain"
+            is MayachainAddress -> "Maya"
+            is BitcoinAddress -> "BTC"
+            is MoneroWatchAccount -> "Monero"
+            is HdExtendedKey -> if (hdExtendedKey.isPublic) "HD" else null
+            else -> null
         }
 
     val canAddTokens: Boolean

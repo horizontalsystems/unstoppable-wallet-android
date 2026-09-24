@@ -1941,4 +1941,5 @@
         <item quantity="other">امضای %d تراکنش</item>
     </plurals>
     <string name="Hud_Text_ChangeWallet">کیف پول را تغییر دهید</string>
+    <string name="WatchWallet_Typed">کیف پول نظارتی %s</string>
 </resources>
