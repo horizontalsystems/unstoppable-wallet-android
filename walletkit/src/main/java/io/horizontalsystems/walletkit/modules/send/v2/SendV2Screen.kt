@@ -263,6 +263,7 @@ fun SendV2Screen(
                                     address = uiState.address,
                                     contactName = uiState.contactName,
                                     onClick = openAddress,
+                                    risky = uiState.riskyAddress
                                 )
                             }
                         }
@@ -427,7 +428,8 @@ internal fun InfoCard(
 internal fun AddressRow(
     address: Address?,
     onClick: () -> Unit,
-    contactName: String? = null,
+    contactName: String?,
+    risky: Boolean
 ) {
     val name = contactName ?: address?.domain
     BoxBordered(bottom = true) {
@@ -457,10 +459,16 @@ internal fun AddressRow(
                     address == null -> headline1_leah(text = stringResource(R.string.Send_ToAddress))
                     name != null -> {
                         headline1_leah(text = name, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        body_grey(text = address.hex.shorten())
+                        Text(
+                            text = address.hex.shorten(),
+                            maxLines = ADDRESS_MAX_LINES,
+                            style = ComposeAppTheme.typography.body,
+                            color = if (risky) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.grey
+                        )
+
                     }
 
-                    else -> AddressText(address.hex)
+                    else -> AddressText(address.hex, risky)
                 }
             }
             HSpacer(8.dp)
@@ -481,7 +489,7 @@ private const val ADDRESS_MAX_LINES = 2
  * middle to fit a single line.
  */
 @Composable
-private fun AddressText(address: String) {
+private fun AddressText(address: String, risky: Boolean) {
     BoxWithConstraints {
         val textMeasurer = rememberTextMeasurer()
         val style = ComposeAppTheme.typography.headline1
@@ -492,7 +500,12 @@ private fun AddressText(address: String) {
                 middleEllipsized(address, textMeasurer, style, constraints.maxWidth)
             }
         }
-        headline1_leah(text = text, maxLines = ADDRESS_MAX_LINES)
+        Text(
+            text = text,
+            maxLines = ADDRESS_MAX_LINES,
+            style = ComposeAppTheme.typography.headline1,
+            color = if (risky) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah
+        )
     }
 }
 

@@ -142,6 +142,8 @@ fun CrossPayTabBody(
                     AddressRow(
                         address = uiState.address,
                         onClick = { if (uiState.tokenOut != null) openAddress() },
+                        contactName = null,
+                        risky = uiState.riskyAddress
                     )
                 }
                 SectionArrow()
