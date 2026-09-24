@@ -28,14 +28,13 @@ import io.horizontalsystems.walletkit.modules.multiswap.SwapSelectCoinPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.modules.send.v2.AddressRow
+import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
-import io.horizontalsystems.walletkit.modules.send.v2.SectionArrow
 import io.horizontalsystems.walletkit.modules.send.v2.SendAddressPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
@@ -124,24 +123,29 @@ fun CrossPayTabBody(
                 balanceToken = uiState.tokenIn,
                 availableBalance = uiState.availableBalance
             )
-            TokenAmountInput(
-                token = uiState.tokenOut,
-                amount = uiState.amountOut,
-                fiatAmount = uiState.fiatAmountOut,
-                fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
-                currency = uiState.currency,
-                focusRequester = focusRequester,
-                onValueChange = viewModel::onEnterAmount,
-                onFiatValueChange = viewModel::onEnterFiatAmount,
-                amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
-                onTokenClick = openCoinSelect
-            )
-            SectionArrow()
-            AddressRow(
-                address = uiState.address,
-                onClick = { if (uiState.tokenOut != null) openAddress() },
-            )
-            HsDivider(modifier = Modifier.fillMaxWidth())
+
+            Box {
+                Column {
+                    TokenAmountInput(
+                        token = uiState.tokenOut,
+                        amount = uiState.amountOut,
+                        fiatAmount = uiState.fiatAmountOut,
+                        fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
+                        currency = uiState.currency,
+                        focusRequester = focusRequester,
+                        onValueChange = viewModel::onEnterAmount,
+                        onFiatValueChange = viewModel::onEnterFiatAmount,
+                        amountExceedsBalance = uiState.step is CrossPayStep.InsufficientBalance,
+                        onTokenClick = openCoinSelect
+                    )
+                    AddressRow(
+                        address = uiState.address,
+                        onClick = { if (uiState.tokenOut != null) openAddress() },
+                    )
+                }
+                SectionArrow()
+            }
+
             Box {
                 YouWillPayRow(uiState)
                 Column {

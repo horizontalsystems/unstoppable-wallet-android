@@ -5,12 +5,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,21 +35,21 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabBody
-import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabViewModel
-import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.entities.Address
+import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabBody
+import io.horizontalsystems.walletkit.modules.crosspay.CrossPayTabViewModel
 import io.horizontalsystems.walletkit.modules.memo.HSMemoInput
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenNotEnabled
@@ -61,15 +62,16 @@ import io.horizontalsystems.walletkit.modules.send.AddressRiskySheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
-import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
+import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
+import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import java.net.UnknownHostException
@@ -241,27 +243,32 @@ fun SendV2Screen(
                         },
                         showClear = uiState.amount != null
                     )
-                    TokenAmountInput(
-                        token = uiState.wallet.token,
-                        amount = uiState.amount,
-                        fiatAmount = uiState.fiatAmount,
-                        fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
-                        currency = uiState.currency,
-                        focusRequester = focusRequester,
-                        onValueChange = viewModel::onEnterAmount,
-                        onFiatValueChange = viewModel::onEnterFiatAmount,
-                        amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
-                        onTokenClick = null
-                    )
-                    if (!uiState.hideAddress) {
-                        SectionArrow()
-                        AddressRow(
-                            address = uiState.address,
-                            contactName = uiState.contactName,
-                            onClick = openAddress,
-                        )
+                    Box {
+                        Column {
+                            TokenAmountInput(
+                                token = uiState.wallet.token,
+                                amount = uiState.amount,
+                                fiatAmount = uiState.fiatAmount,
+                                fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
+                                currency = uiState.currency,
+                                focusRequester = focusRequester,
+                                onValueChange = viewModel::onEnterAmount,
+                                onFiatValueChange = viewModel::onEnterFiatAmount,
+                                amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
+                                onTokenClick = null
+                            )
+                            if (!uiState.hideAddress) {
+                                AddressRow(
+                                    address = uiState.address,
+                                    contactName = uiState.contactName,
+                                    onClick = openAddress,
+                                )
+                            }
+                        }
+                        if (!uiState.hideAddress) {
+                            SectionArrow()
+                        }
                     }
-                    HsDivider(modifier = Modifier.fillMaxWidth())
                     // Neither the chain's own field nor a memo can travel with a private send
                     // deposit (its memo slot belongs to the provider's identifier), so they
                     // are not offered on that tab.
@@ -347,6 +354,25 @@ fun SendV2Screen(
 }
 
 @Composable
+fun BoxScope.SectionArrow() {
+    Box(
+        Modifier
+            .align(Alignment.Center)
+            .size(32.dp)
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(20.dp)
+                .align(Alignment.Center),
+            painter = painterResource(R.drawable.ic_arrow_down_24),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey,
+        )
+    }
+}
+
+@Composable
 private fun SendTab.tabItem() = when (this) {
     SendTab.Standard -> TabFolderItem(stringResource(R.string.Send_Tab_Standard))
     SendTab.Private -> TabFolderItem(
@@ -394,23 +420,6 @@ internal fun InfoCard(
     }
 }
 
-@Composable
-internal fun SectionArrow() {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        HsDivider(modifier = Modifier.align(Alignment.Center))
-        Icon(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .background(ComposeAppTheme.colors.lawrence)
-                .padding(horizontal = 8.dp)
-                .size(20.dp),
-            painter = painterResource(R.drawable.ic_arrow_down_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey,
-        )
-    }
-}
-
 /**
  * The recipient row: a placeholder until an address is chosen, then the address in full, or
  * the contact or domain name over the shortened address when the recipient has one.
@@ -422,44 +431,47 @@ internal fun AddressRow(
     contactName: String? = null,
 ) {
     val name = contactName ?: address?.domain
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 97.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick,
-            )
-            .padding(horizontal = 16.dp, vertical = 20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
-            Icon(
-                modifier = Modifier.size(32.dp),
-                painter = painterResource(if (contactName != null) R.drawable.user_filled_24 else R.drawable.wallet_filled_24),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey,
-            )
-        }
-        HSpacer(16.dp)
-        Column(modifier = Modifier.weight(1f, fill = false)) {
-            when {
-                address == null -> headline1_leah(text = stringResource(R.string.Send_ToAddress))
-                name != null -> {
-                    headline1_leah(text = name, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    body_grey(text = address.hex.shorten())
-                }
-
-                else -> AddressText(address.hex)
+    BoxBordered(bottom = true) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(89.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onClick,
+                )
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(if (contactName != null) R.drawable.user_filled_24 else R.drawable.wallet_filled_24),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey,
+                )
             }
+            HSpacer(16.dp)
+            Column(modifier = Modifier.weight(1f, fill = false)) {
+                when {
+                    address == null -> headline1_leah(text = stringResource(R.string.Send_ToAddress))
+                    name != null -> {
+                        headline1_leah(text = name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        body_grey(text = address.hex.shorten())
+                    }
+
+                    else -> AddressText(address.hex)
+                }
+            }
+            HSpacer(8.dp)
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.arrow_s_down_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.leah,
+            )
         }
-        HSpacer(8.dp)
-        Icon(
-            painter = painterResource(R.drawable.arrow_s_down_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.leah,
-        )
     }
 }
 
