@@ -7,6 +7,7 @@ import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ViewModelUiState
+import io.horizontalsystems.walletkit.core.WatchAccountException
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.storage.OcpPaymentDao
@@ -47,6 +48,13 @@ class OpenCryptoPayConfirmationViewModel(
 
     val sendTransactionService = SendTransactionServiceFactory.create(wallet.token)
 
+    // The wallet is captured when the payment opens and never re-read, so by now it can be one
+    // that cannot sign, or one the user has switched away from. Either way this payment must
+    // not go out: the provider is not asked for transaction details and Pay stays disabled.
+    private val payingWalletUnusable: Boolean
+        get() = wallet.account.isWatchAccount ||
+                App.accountManager.activeAccount?.id != wallet.account.id
+
     private var initialLoading = true
     private var apiLoading = true
     private var fetchError: CautionViewItem? = null
@@ -68,10 +76,7 @@ class OpenCryptoPayConfirmationViewModel(
         }
         sendTransactionService.start(viewModelScope)
         viewModelScope.launch {
-            // The wallet is captured when the payment opens, so it can be a watch account by
-            // now if the active one was switched. It could never pay, so the provider is not
-            // asked for transaction details and Pay stays disabled.
-            if (wallet.account.isWatchAccount) {
+            if (payingWalletUnusable) {
                 fetchError = CautionViewItem(
                     title = Translator.getString(R.string.Error),
                     text = Translator.getString(R.string.Hud_Text_ChangeWallet),
@@ -148,6 +153,10 @@ class OpenCryptoPayConfirmationViewModel(
     }
 
     suspend fun pay() {
+        // This screen signs with the wallet it captured, so paying after the active account
+        // moved on would spend from a wallet the user is no longer looking at.
+        if (payingWalletUnusable) throw WatchAccountException()
+
         val baseUrl = proofUrl.substringBefore("/tx/").let { it.trimEnd('/') + "/" }
         if (wallet.token.blockchainType == BlockchainType.Bitcoin) {
             val signed = withContext(Dispatchers.IO) {
