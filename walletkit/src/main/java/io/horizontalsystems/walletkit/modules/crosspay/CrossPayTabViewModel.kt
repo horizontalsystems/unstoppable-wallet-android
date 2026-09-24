@@ -25,6 +25,9 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.math.BigDecimal
 import java.math.RoundingMode
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * The CrossPay tab of the unified send screen: pay an EXACT amount of any provider-supported
@@ -34,6 +37,8 @@ import java.math.RoundingMode
  */
 class CrossPayTabViewModel(
     val wallet: Wallet,
+    /** The send screen's chain settings (coin control), shared with the other tabs. */
+    private val chainSettingsFlow: StateFlow<SendChainSettings?>,
 ) : ViewModelUiState<CrossPayTabUiState>() {
 
     val tokenIn = wallet.token
@@ -52,6 +57,8 @@ class CrossPayTabViewModel(
     private var riskyAddress = false
     private var quote: CrossPayQuoteState? = null
     private var quoteJob: Job? = null
+    private val chainPlugin = ChainRegistry[tokenIn.blockchainType]
+    private var chainSettings: SendChainSettings? = chainSettingsFlow.value
     private var availableBalance: BigDecimal? = readBalance()
 
     init {
@@ -91,7 +98,8 @@ class CrossPayTabViewModel(
         }
 
         // The source balance backs the insufficient-balance step; follow the adapter so it
-        // stays current while the wallet syncs.
+        // stays current while the wallet syncs, and the settings so a narrowed selection of
+        // outputs narrows it too.
         viewModelScope.launch {
             App.adapterManager.getAdapterForWallet<IBalanceAdapter>(wallet)
                 ?.balanceUpdatedFlow
@@ -100,11 +108,19 @@ class CrossPayTabViewModel(
                     emitState()
                 }
         }
+        viewModelScope.launch {
+            chainSettingsFlow.collect {
+                chainSettings = it
+                availableBalance = readBalance()
+                emitState()
+            }
+        }
     }
 
-    private fun readBalance() = App.adapterManager
-        .getAdapterForToken<IBalanceAdapter>(tokenIn)
-        ?.balanceData?.available
+    // The chain narrows the balance to the outputs chosen in the settings, if any; otherwise
+    // it is the wallet's spendable balance.
+    private fun readBalance() = chainPlugin?.sendAvailableBalance(tokenIn, chainSettings)
+        ?: App.adapterManager.getAdapterForToken<IBalanceAdapter>(tokenIn)?.balanceData?.available
 
     // The swap screen's auto-pick, verbatim: the top entry of the context-aware Popular
     // Tokens list (native source → its chain's USDT, else USDT-ETH; token source → its
@@ -310,10 +326,13 @@ class CrossPayTabViewModel(
         fiatService.clear()
     }
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val chainSettingsFlow: StateFlow<SendChainSettings?>,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CrossPayTabViewModel(wallet) as T
+            return CrossPayTabViewModel(wallet, chainSettingsFlow) as T
         }
     }
 

@@ -57,6 +57,15 @@ class MoneroChainPlugin(
 
     override fun sendSettingsPage(wallet: Wallet, address: String?): HSPage = SendMoneroSettingsPage(wallet)
 
+    override fun depositTransactionData(
+        token: Token,
+        data: SendTransactionData,
+        settings: SendChainSettings?,
+    ): SendTransactionData {
+        if (data !is SendTransactionData.Monero) return data
+        return data.copy(selectedOutputs = (settings as? MoneroSendSettings)?.unspentOutputs)
+    }
+
     override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? {
         val outputs = (settings as? MoneroSendSettings)?.unspentOutputs ?: return null
         return outputs.sumOf { it.amount }

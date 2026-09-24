@@ -73,6 +73,19 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
         rbfEnabled = token.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
     )
 
+    override fun depositTransactionData(
+        token: Token,
+        data: SendTransactionData,
+        settings: SendChainSettings?,
+    ): SendTransactionData {
+        if (data !is SendTransactionData.Btc) return data
+        return data.copy(
+            unspentOutputs = (settings as? BtcSendSettings)?.unspentOutputs,
+            transactionSorting = App.btcBlockchainManager.transactionSortMode(token.blockchainType),
+            rbfEnabled = token.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
+        )
+    }
+
     override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? {
         val outputs = (settings as? BtcSendSettings)?.unspentOutputs ?: return null
         return outputs.sumOf { it.value }.toBigDecimal().movePointLeft(token.decimals)

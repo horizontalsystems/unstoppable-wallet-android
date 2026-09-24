@@ -335,6 +335,18 @@ interface ChainPlugin {
     fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? = null
 
     /**
+     * [data], a deposit built by a swap provider, with the coin control the user chose in the
+     * send screen's [settings] applied: the outputs to spend, and for Bitcoin the sorting and
+     * replace-by-fee preferences. A timelock is never applied: the deposit must be spendable
+     * by the provider immediately. Chains without such settings return [data] as is.
+     */
+    fun depositTransactionData(
+        token: Token,
+        data: io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData,
+        settings: SendChainSettings?,
+    ): io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData = data
+
+    /**
      * Bitcoin-family parameters a private send deposit inherits from the send screen's
      * [settings], or null for other chains. A timelock is never part of them: the deposit
      * must be spendable by the provider immediately.

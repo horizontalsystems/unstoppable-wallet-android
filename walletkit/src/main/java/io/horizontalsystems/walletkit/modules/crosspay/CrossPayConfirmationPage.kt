@@ -52,12 +52,20 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 
 @Serializable
 data class CrossPayConfirmationPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
+        // The deposit spends the outputs chosen in the send screen's settings. After process
+        // death that is a fresh instance carrying none, and the build degrades to the
+        // wallet's own selection — safe.
+        val sendViewModel = navigation.viewModelForScreen<SendViewModel>(
+            SendV2Page::class,
+            SendViewModel.Factory(input.wallet),
+        )
         val viewModel = viewModel<CrossPayConfirmViewModel>(
             initializer = CrossPayConfirmViewModel.init(
                 CrossPayRequest(
@@ -66,7 +74,8 @@ data class CrossPayConfirmationPage(val input: Input) : HSPage() {
                     tokenOut = input.tokenOut,
                     recipient = input.recipient,
                     amountOut = input.amount,
-                )
+                ),
+                sendViewModel.uiState.chainSettings,
             )
         )
 

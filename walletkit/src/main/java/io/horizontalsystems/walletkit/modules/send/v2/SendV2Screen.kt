@@ -148,7 +148,7 @@ fun SendV2Screen(
             ) {
                 if (formViewModel == null) {
                     val crossPayViewModel = viewModel<CrossPayTabViewModel>(
-                        factory = CrossPayTabViewModel.Factory(wallet)
+                        factory = CrossPayTabViewModel.Factory(wallet, viewModel.chainSettingsFlow)
                     )
                     CrossPayTabBody(
                         navigation = navigation,

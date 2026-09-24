@@ -30,6 +30,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import kotlin.coroutines.cancellation.CancellationException
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.chain.SendChainSettings
 
 /**
  * The confirmation step of a CrossPay payment: commits the exact-output order, then builds
@@ -44,6 +46,8 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 class CrossPayConfirmViewModel(
     private val request: CrossPayRequest,
+    /** The send screen's chain settings (coin control) the deposit must honour. */
+    private val chainSettings: SendChainSettings?,
     private val manager: CrossPayManager,
     val sendTransactionService: AbstractSendTransactionService,
     currencyManager: CurrencyManager,
@@ -212,7 +216,8 @@ class CrossPayConfirmViewModel(
                 emitState()
 
                 val provider = manager.provider ?: throw CrossPayError.CommitFailed()
-                val data = provider.depositTransactionData(tokenIn, order.depositAmount, order.route)
+                val built = provider.depositTransactionData(tokenIn, order.depositAmount, order.route)
+                val data = ChainRegistry[tokenIn.blockchainType]?.depositTransactionData(tokenIn, built, chainSettings) ?: built
                 depositData = data
                 sendTransactionService.setSendTransactionData(data)
 
@@ -356,9 +361,11 @@ class CrossPayConfirmViewModel(
 
         fun init(
             request: CrossPayRequest,
+            chainSettings: SendChainSettings?,
         ): CreationExtras.() -> CrossPayConfirmViewModel = {
             CrossPayConfirmViewModel(
                 request = request,
+                chainSettings = chainSettings,
                 manager = CrossPayManager(),
                 sendTransactionService = SendTransactionServiceFactory.create(request.tokenIn),
                 currencyManager = App.currencyManager,
