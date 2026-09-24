@@ -68,6 +68,21 @@ class OpenCryptoPayConfirmationViewModel(
         }
         sendTransactionService.start(viewModelScope)
         viewModelScope.launch {
+            // The wallet is captured when the payment opens, so it can be a watch account by
+            // now if the active one was switched. It could never pay, so the provider is not
+            // asked for transaction details and Pay stays disabled.
+            if (wallet.account.isWatchAccount) {
+                fetchError = CautionViewItem(
+                    title = Translator.getString(R.string.Error),
+                    text = Translator.getString(R.string.Hud_Text_ChangeWallet),
+                    type = CautionViewItem.Type.Error,
+                )
+                apiLoading = false
+                updateInitialLoading()
+                emitState()
+                return@launch
+            }
+
             try {
                 val (resolvedAddress, resolvedProofUrl) = fetchOcpTransactionDetails(callbackUrl, quoteId, paymentId, method, asset)
                 address = resolvedAddress

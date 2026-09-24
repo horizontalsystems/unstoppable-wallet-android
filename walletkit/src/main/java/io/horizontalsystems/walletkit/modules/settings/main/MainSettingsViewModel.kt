@@ -50,7 +50,7 @@ class MainSettingsViewModel(
         get() = wcManager.getWalletConnectSupportState()
 
     // Donating means sending, so a watch account is not offered it.
-    val donateEnabled: Boolean
+    private val donateEnabled: Boolean
         get() = accountManager.activeAccount?.isWatchAccount == false
 
     private val appWebPageLink = appConfigProvider.appWebPageLink
@@ -92,6 +92,12 @@ class MainSettingsViewModel(
         }
 
         viewModelScope.launch {
+            accountManager.activeAccountStateFlow.collect {
+                emitState()
+            }
+        }
+
+        viewModelScope.launch {
             termsManager.termsAcceptedSharedFlow.collect {
                 emitState()
             }
@@ -127,6 +133,7 @@ class MainSettingsViewModel(
             wcCounterType = wcCounterType,
             showPremiumBanner = showPremiumBanner,
             hasSubscription = hasSubscription,
+            donateEnabled = donateEnabled,
         )
     }
 
@@ -154,4 +161,5 @@ data class MainSettingUiState(
     val wcCounterType: CounterType?,
     val showPremiumBanner: Boolean,
     val hasSubscription: Boolean,
+    val donateEnabled: Boolean,
 )

@@ -416,7 +416,7 @@ private fun SettingSections(
         })
     )
 
-    if (viewModel.donateEnabled) {
+    if (uiState.donateEnabled) {
         VSpacer(24.dp)
 
         CellUniversalLawrenceSection(
