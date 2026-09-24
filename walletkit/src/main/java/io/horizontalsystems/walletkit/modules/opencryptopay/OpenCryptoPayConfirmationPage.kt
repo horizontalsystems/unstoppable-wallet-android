@@ -12,6 +12,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.WatchAccountException
+import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -108,9 +110,13 @@ private fun OpenCryptoPayConfirmationScreen(
                             delay(1200)
                             navigation.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
-                            navigation.slideFromBottom(
-                                ErrorSheet(ErrorSheet.Input(t.message ?: t.javaClass.simpleName))
-                            )
+                            val message = when (t) {
+                                is WatchAccountException ->
+                                    Translator.getString(R.string.Hud_Text_ChangeWallet)
+
+                                else -> t.message ?: t.javaClass.simpleName
+                            }
+                            navigation.slideFromBottom(ErrorSheet(ErrorSheet.Input(message)))
                         }
                     }
                 },
