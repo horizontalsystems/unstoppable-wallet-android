@@ -21,6 +21,12 @@ import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.core.factories.NearTransactionConverter
 import io.horizontalsystems.walletkit.core.managers.NearAccountManager
 import io.horizontalsystems.walletkit.core.managers.NearKitManager
+import io.horizontalsystems.walletkit.core.managers.NearRpcSourceManager
+import io.horizontalsystems.walletkit.core.stats.StatEvent
+import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.walletkit.modules.nearnetwork.NearNetworkPage
+import kotlinx.coroutines.flow.Flow
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -45,7 +51,11 @@ class NearChainPlugin : ChainPlugin {
 
     override val blockchainType: BlockchainType = BlockchainType.Near
 
-    val kitManager by lazy { NearKitManager(App.backgroundManager) }
+    val rpcSourceManager by lazy {
+        NearRpcSourceManager(App.blockchainSettingsStorage, App.marketKit)
+    }
+
+    val kitManager by lazy { NearKitManager(App.backgroundManager, rpcSourceManager) }
 
     private val accountManager by lazy {
         NearAccountManager(App.accountManager, App.walletManager, kitManager, App.tokenAutoEnableManager, App.coinManager)
@@ -88,6 +98,29 @@ class NearChainPlugin : ChainPlugin {
     override fun unlink(account: Account) {
         kitManager.unlink(account)
     }
+
+    override val walletReloadTrigger: Flow<*>
+        get() = kitManager.kitStoppedFlow
+
+    // The settings row shows the current RPC source, so it refreshes on source changes
+    // (the kit-stopped signal only fires when a running kit restarts).
+    override val settingsRefreshTrigger: Flow<*>
+        get() = rpcSourceManager.rpcSourceUpdatedFlow
+
+    override fun networkSettingsPage(): HSPage = NearNetworkPage
+
+    override fun blockchainSettingsItem(): BlockchainSettingsModule.BlockchainItem.Chain? {
+        val blockchain = rpcSourceManager.blockchain ?: return null
+        return BlockchainSettingsModule.BlockchainItem.Chain(
+            blockchain = blockchain,
+            subtitle = rpcSourceManager.rpcSource.name,
+            btcLike = false,
+            page = NearNetworkPage,
+            statEvent = StatEvent.Open(StatPage.BlockchainSettingsNear),
+        )
+    }
+
+    override fun backupSyncSourceName(): String = rpcSourceManager.rpcSource.name
 
     override fun statusInfo(): Map<String, Any>? = kitManager.statusInfo
 

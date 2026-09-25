@@ -3,6 +3,8 @@ package io.horizontalsystems.walletkit.chain.near
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.nearkit.network.Network
+import io.horizontalsystems.walletkit.core.managers.NearRpcSourceManager
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerNear
 import io.horizontalsystems.walletkit.modules.addtoken.AddNearTokenBlockchainService
 import org.junit.Assert.assertEquals
@@ -40,5 +42,12 @@ class NearAddressAndTokenTest {
         assertEquals(TokenType.Nep141("usdt.tether-token.near"), addToken.tokenQuery("https://nearblocks.io/token/usdt.tether-token.near?tab=holders").tokenType)
         assertFalse(addToken.isValid("not a contract"))
         assertFalse(addToken.isValid(""))
+    }
+
+    @Test
+    fun rpcSourcesFollowTheKitFailoverOrder() {
+        val sources = NearRpcSourceManager.sources
+        assertEquals(listOf("FastNEAR", "dRPC", "Shitzu", "NEAR.org"), sources.map { it.name })
+        assertEquals(Network.MainNet.rpcUrls.map { it.toString() }, sources.map { it.url })
     }
 }
