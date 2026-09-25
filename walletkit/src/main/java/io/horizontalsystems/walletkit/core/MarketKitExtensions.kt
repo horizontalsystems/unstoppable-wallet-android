@@ -129,6 +129,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Xrp -> {
             tokenType is TokenType.Native || tokenType is TokenType.XrpAsset
         }
+        BlockchainType.Near -> {
+            tokenType is TokenType.Native || tokenType is TokenType.Nep141
+        }
         BlockchainType.Thorchain -> {
             tokenType is TokenType.Native || tokenType is TokenType.ThorchainAsset
         }
@@ -169,6 +172,7 @@ val Blockchain.description: String
         BlockchainType.Ton -> "TON"
         BlockchainType.Stellar -> "XLM, Stellar assets"
         BlockchainType.Xrp -> "XRP, XRPL tokens"
+        BlockchainType.Near -> "NEAR, NEP-141 tokens"
         BlockchainType.Thorchain -> "RUNE, THORChain assets"
         BlockchainType.Mayachain -> "CACAO, MayaChain assets"
         BlockchainType.Monero -> "XMR"
@@ -197,6 +201,8 @@ val TokenType.XrpAsset.displayCode: String
         val padded = bytes.drop(end).all { it == 0 }
         return if (printable && padded) String(bytes.take(end).map { it.toChar() }.toCharArray()) else currency
     }
+
+fun Blockchain.nep141TokenUrl(contractId: String) = "https://nearblocks.io/token/$contractId"
 
 fun Blockchain.assetUrl(code: String, issuer: String) = "https://stellar.expert/explorer/public/asset/$code-$issuer"
 
@@ -228,6 +234,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Optimism,
         BlockchainType.Stellar,
         BlockchainType.Xrp,
+        BlockchainType.Near,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
         BlockchainType.Dash,
@@ -268,6 +275,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Ton -> R.drawable.the_open_network_jetton
         BlockchainType.Stellar -> R.drawable.stellar_asset
         BlockchainType.Xrp -> R.drawable.xrp_asset
+        BlockchainType.Near -> R.drawable.near_nep141
         else -> R.drawable.coin_placeholder
     }
 
@@ -296,6 +304,7 @@ val BlockchainType.title: String
     BlockchainType.Ton -> "Ton"
     BlockchainType.Stellar -> "Stellar"
     BlockchainType.Xrp -> "XRP Ledger"
+    BlockchainType.Near -> "NEAR"
     BlockchainType.Thorchain -> "THORChain"
     BlockchainType.Mayachain -> "MayaChain"
     BlockchainType.Monero -> "Monero"
@@ -395,6 +404,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Solana,
         BlockchainType.Stellar,
         BlockchainType.Xrp,
+        BlockchainType.Near,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
         BlockchainType.Ton,
@@ -429,6 +439,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 BlockchainType.Solana,
                 BlockchainType.Stellar,
                 BlockchainType.Xrp,
+                BlockchainType.Near,
                 BlockchainType.Thorchain,
                 BlockchainType.Mayachain,
                 BlockchainType.Ton,
@@ -503,6 +514,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
 
         is AccountType.XrpAddress ->
             this == BlockchainType.Xrp
+
+        is AccountType.NearAddress ->
+            this == BlockchainType.Near
 
         is AccountType.ThorchainAddress ->
             this == BlockchainType.Thorchain

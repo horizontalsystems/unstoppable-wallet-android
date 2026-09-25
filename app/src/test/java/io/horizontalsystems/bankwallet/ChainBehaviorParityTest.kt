@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.chain.bitcoin.ECashChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.LitecoinChainPlugin
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
+import io.horizontalsystems.walletkit.chain.near.NearChainPlugin
 import io.horizontalsystems.walletkit.chain.xrp.XrpChainPlugin
 import io.horizontalsystems.walletkit.chain.stellar.StellarChainPlugin
 import io.horizontalsystems.walletkit.chain.thorchain.MayachainChainPlugin
@@ -89,6 +90,7 @@ class ChainBehaviorParityTest {
         ))
         ChainRegistry.register(StellarChainPlugin())
         ChainRegistry.register(XrpChainPlugin())
+        ChainRegistry.register(NearChainPlugin())
         ChainRegistry.register(TonChainPlugin())
         ChainRegistry.register(ThorchainChainPlugin())
         ChainRegistry.register(MayachainChainPlugin())
@@ -101,6 +103,7 @@ class ChainBehaviorParityTest {
         "Jetton" to TokenType.Jetton("jetton"),
         "Asset" to TokenType.Asset("CODE", "issuer"),
         "XrpAsset" to TokenType.XrpAsset("USD", "issuer"),
+        "Nep141" to TokenType.Nep141("usdt.tether-token.near"),
         "ThorchainAsset" to TokenType.ThorchainAsset("denom"),
         "ZanoAsset" to TokenType.ZanoAsset("ref"),
         "Derived(Bip84)" to TokenType.Derived(TokenType.Derivation.Bip84),
@@ -119,6 +122,7 @@ class ChainBehaviorParityTest {
         "StellarAddress" to AccountType.StellarAddress("stellar"),
         "StellarSecretKey" to AccountType.StellarSecretKey("secret"),
         "XrpAddress" to AccountType.XrpAddress("xrp"),
+        "NearAddress" to AccountType.NearAddress("alice.near"),
         "ThorchainAddress" to AccountType.ThorchainAddress("thor"),
         "MayachainAddress" to AccountType.MayachainAddress("maya"),
         "BitcoinAddress(Bitcoin)" to AccountType.BitcoinAddress(

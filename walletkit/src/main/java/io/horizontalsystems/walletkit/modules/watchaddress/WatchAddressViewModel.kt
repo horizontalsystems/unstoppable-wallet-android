@@ -238,6 +238,7 @@ class WatchAddressViewModel(
         BlockchainType.Ton -> Type.TonAddress
         BlockchainType.Stellar -> Type.StellarAddress
         BlockchainType.Xrp -> Type.XrpAddress
+        BlockchainType.Near -> Type.NearAddress
         BlockchainType.Thorchain -> Type.ThorchainAddress
         BlockchainType.Mayachain -> Type.MayachainAddress
         BlockchainType.Monero -> Type.MoneroAddress
@@ -296,6 +297,7 @@ class WatchAddressViewModel(
             Type.TonAddress -> SubmitButtonType.Watch(address != null)
             Type.StellarAddress -> SubmitButtonType.Watch(address != null)
             Type.XrpAddress -> SubmitButtonType.Watch(address != null)
+            Type.NearAddress -> SubmitButtonType.Watch(address != null)
             Type.ThorchainAddress -> SubmitButtonType.Watch(address != null)
             Type.MayachainAddress -> SubmitButtonType.Watch(address != null)
             Type.MoneroAddress -> SubmitButtonType.Watch(address != null && viewKey != null)
@@ -327,6 +329,9 @@ class WatchAddressViewModel(
         Type.XrpAddress -> address?.let {
             AccountType.XrpAddress(it.hex)
         }
+        Type.NearAddress -> address?.let {
+            AccountType.NearAddress(it.hex)
+        }
 
         Type.ThorchainAddress -> address?.let {
             AccountType.ThorchainAddress(it.hex)
@@ -352,6 +357,7 @@ class WatchAddressViewModel(
         TonAddress,
         StellarAddress,
         XrpAddress,
+        NearAddress,
         ThorchainAddress,
         MayachainAddress,
         MoneroAddress,

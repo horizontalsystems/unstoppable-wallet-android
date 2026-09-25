@@ -50,7 +50,8 @@ class SelectContactViewModel(
                     BlockchainType.Tron +
                     BlockchainType.Ton +
                     BlockchainType.Stellar +
-                    BlockchainType.Xrp
+                    BlockchainType.Xrp +
+                    BlockchainType.Near
 
         fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
             SelectContactViewModel(App.contactsRepository, selected, blockchainType)

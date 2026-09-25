@@ -20,6 +20,7 @@ object BackupLocalModule {
     private const val TON_ADDRESS = "ton_address"
     private const val STELLAR_ADDRESS = "stellar_address"
     private const val XRP_ADDRESS = "xrp_address"
+    private const val NEAR_ADDRESS = "near_address"
     private const val THORCHAIN_ADDRESS = "thorchain_address"
     private const val MAYACHAIN_ADDRESS = "mayachain_address"
     private const val BITCOIN_ADDRESS = "bitcoin_address"
@@ -87,6 +88,7 @@ object BackupLocalModule {
         is AccountType.TonAddress -> TON_ADDRESS
         is AccountType.StellarAddress -> STELLAR_ADDRESS
         is AccountType.XrpAddress -> XRP_ADDRESS
+        is AccountType.NearAddress -> NEAR_ADDRESS
         is AccountType.ThorchainAddress -> THORCHAIN_ADDRESS
         is AccountType.MayachainAddress -> MAYACHAIN_ADDRESS
         is AccountType.BitcoinAddress -> BITCOIN_ADDRESS
@@ -118,6 +120,7 @@ object BackupLocalModule {
             TON_ADDRESS -> AccountType.TonAddress(String(data, Charsets.UTF_8))
             STELLAR_ADDRESS -> AccountType.StellarAddress(String(data, Charsets.UTF_8))
             XRP_ADDRESS -> AccountType.XrpAddress(String(data, Charsets.UTF_8))
+            NEAR_ADDRESS -> AccountType.NearAddress(String(data, Charsets.UTF_8))
             THORCHAIN_ADDRESS -> AccountType.ThorchainAddress(String(data, Charsets.UTF_8))
             MAYACHAIN_ADDRESS -> AccountType.MayachainAddress(String(data, Charsets.UTF_8))
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
@@ -154,6 +157,7 @@ object BackupLocalModule {
         is AccountType.TonAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.StellarAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.XrpAddress -> accountType.address.toByteArray(Charsets.UTF_8)
+        is AccountType.NearAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.ThorchainAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.MayachainAddress -> accountType.address.toByteArray(Charsets.UTF_8)
         is AccountType.BitcoinAddress -> accountType.serialized.toByteArray(Charsets.UTF_8)

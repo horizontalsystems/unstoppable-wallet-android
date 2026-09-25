@@ -134,6 +134,7 @@ object CanonicalAssetId {
         BlockchainType.Ton to "TON",
         BlockchainType.Stellar to "XLM",
         BlockchainType.Xrp to "XRP",
+        BlockchainType.Near to "NEAR",
         BlockchainType.Thorchain to "THOR",
     )
 
@@ -163,6 +164,7 @@ object CanonicalAssetId {
         BlockchainType.Ton to "TON",
         BlockchainType.Stellar to "XLM",
         BlockchainType.Xrp to "XRP",
+        BlockchainType.Near to "NEAR",
         BlockchainType.Thorchain to "RUNE",
     )
 
@@ -196,6 +198,9 @@ object CanonicalAssetId {
             // canonical id is the identifier a quote itself uses, and [chainOf] treats a dot-less
             // id as THORChain — which is where the asset actually lives.
             is TokenType.ThorchainAsset -> type.denom.uppercase()
+
+            // NEP-141 contract ids are lower-case account ids; upper-cased like EVM contracts.
+            is TokenType.Nep141 -> "$chain.${type.contractId.uppercase()}"
 
             // No swap provider lists XRPL issued tokens yet.
             is TokenType.XrpAsset,

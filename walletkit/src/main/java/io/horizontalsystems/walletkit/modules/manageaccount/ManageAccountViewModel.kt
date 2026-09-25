@@ -122,6 +122,7 @@ class ManageAccountViewModel(
             is AccountType.TonAddress -> listOf()
             is AccountType.StellarAddress -> listOf()
             is AccountType.XrpAddress -> listOf()
+            is AccountType.NearAddress -> listOf()
             is AccountType.ThorchainAddress -> listOf()
             is AccountType.MayachainAddress -> listOf()
             is AccountType.BitcoinAddress -> listOf()

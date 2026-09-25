@@ -56,6 +56,7 @@ class AddressViewModel(
                 BlockchainType.Ton,
                 BlockchainType.Stellar,
                 BlockchainType.Xrp,
+                BlockchainType.Near,
             )
             val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
             val availableBlockchainUids =

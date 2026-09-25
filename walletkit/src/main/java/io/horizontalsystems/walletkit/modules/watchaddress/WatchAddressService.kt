@@ -79,6 +79,11 @@ class WatchAddressService(
                         add(TokenQuery(BlockchainType.Xrp, TokenType.Native))
                     }
                 }
+                is AccountType.NearAddress -> {
+                    if (BlockchainType.Near.supports(accountType)) {
+                        add(TokenQuery(BlockchainType.Near, TokenType.Native))
+                    }
+                }
 
                 is AccountType.ThorchainAddress -> {
                     if (BlockchainType.Thorchain.supports(accountType)) {

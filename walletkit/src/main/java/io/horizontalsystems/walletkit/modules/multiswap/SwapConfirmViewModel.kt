@@ -383,6 +383,7 @@ class SwapConfirmViewModel(
             is SendTransactionResult.Thorchain -> result.txHash
             is SendTransactionResult.Stellar -> result.txHash
             is SendTransactionResult.Xrp -> result.txHash
+            is SendTransactionResult.Near -> result.txHash
             else -> null
         }
 

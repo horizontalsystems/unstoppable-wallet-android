@@ -136,6 +136,9 @@ sealed class AccountType {
     data class XrpAddress(val address: String) : AccountType()
 
     @Serializable
+    data class NearAddress(val address: String) : AccountType()
+
+    @Serializable
     data class ThorchainAddress(val address: String) : AccountType()
 
     @Serializable
@@ -351,6 +354,7 @@ sealed class AccountType {
             is TonAddress -> "Ton Address"
             is StellarAddress -> "Stellar Address"
             is XrpAddress -> "XRP Address"
+            is NearAddress -> "NEAR Account"
             is ThorchainAddress -> "THORChain Address"
             is MayachainAddress -> "Maya Address"
             is EvmPrivateKey -> "EVM Private Key"
@@ -400,6 +404,7 @@ sealed class AccountType {
             is TonAddress -> "TON"
             is StellarAddress -> "Stellar"
             is XrpAddress -> "XRP"
+            is NearAddress -> "NEAR"
             is ThorchainAddress -> "THORChain"
             is MayachainAddress -> "Maya"
             // BitcoinAddress covers every UTXO chain, so the label comes from the address's own chain.
@@ -436,6 +441,7 @@ sealed class AccountType {
             is TonAddress -> true
             is StellarAddress -> true
             is XrpAddress -> true
+            is NearAddress -> true
             is ThorchainAddress -> true
             is MayachainAddress -> true
             is BitcoinAddress -> true
@@ -452,6 +458,7 @@ sealed class AccountType {
             is TonAddress -> address
             is StellarAddress -> address
             is XrpAddress -> address
+            is NearAddress -> address
             is ThorchainAddress -> address
             is MayachainAddress -> address
             is BitcoinAddress -> address

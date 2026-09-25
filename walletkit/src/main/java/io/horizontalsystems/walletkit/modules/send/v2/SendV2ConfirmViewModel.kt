@@ -303,6 +303,7 @@ class SendV2ConfirmViewModel(
         is SendTransactionResult.Tron -> result.txHash
         is SendTransactionResult.Stellar -> result.txHash
         is SendTransactionResult.Xrp -> result.txHash
+        is SendTransactionResult.Near -> result.txHash
         is SendTransactionResult.Solana -> result.txHash
         is SendTransactionResult.Zcash -> result.transactionHash
         is SendTransactionResult.Monero -> result.txHash

@@ -43,6 +43,7 @@ class AdapterFactory(
         is TokenType.Jetton -> registryAdapter(wallet)
         is TokenType.Asset -> registryAdapter(wallet)
         is TokenType.XrpAsset -> registryAdapter(wallet)
+        is TokenType.Nep141 -> registryAdapter(wallet)
         is TokenType.ThorchainAsset -> registryAdapter(wallet)
         is TokenType.ZanoAsset -> registryAdapter(wallet)
         is TokenType.Unsupported -> null

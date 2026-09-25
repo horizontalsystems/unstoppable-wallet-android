@@ -192,6 +192,9 @@ val BlockchainType.blockTime : Long?
         // XRPL ledgers close every 3-5 seconds
         BlockchainType.Xrp -> 4
 
+        // NEAR produces a block about every 0.6 seconds
+        BlockchainType.Near -> 1
+
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
         BlockchainType.ECash,

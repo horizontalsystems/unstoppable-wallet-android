@@ -265,6 +265,7 @@ data class TransactionViewItem(
                 BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
                 BlockchainType.Stellar -> R.drawable.logo_chain_stellar_trx_32
                 BlockchainType.Xrp -> R.drawable.logo_chain_xrp_trx_32
+                BlockchainType.Near -> R.drawable.logo_chain_near_trx_32
                 else -> null
             }
         }

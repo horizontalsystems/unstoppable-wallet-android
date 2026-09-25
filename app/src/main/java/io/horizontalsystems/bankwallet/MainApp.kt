@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.chain.bitcoin.LitecoinChainPlugin
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.zano.ZanoChainPlugin
 import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
+import io.horizontalsystems.walletkit.chain.near.NearChainPlugin
 import io.horizontalsystems.walletkit.chain.xrp.XrpChainPlugin
 import io.horizontalsystems.walletkit.chain.stellar.StellarChainPlugin
 import io.horizontalsystems.walletkit.chain.thorchain.MayachainChainPlugin
@@ -51,6 +52,7 @@ class MainApp : App() {
         ChainRegistry.register(SolanaChainPlugin({ BuildConfig.ALCHEMY_API_KEY }, { BuildConfig.SOLANA_JUPITER_API_KEY }))
         ChainRegistry.register(StellarChainPlugin())
         ChainRegistry.register(XrpChainPlugin())
+        ChainRegistry.register(NearChainPlugin())
         ChainRegistry.register(TonChainPlugin())
         ChainRegistry.register(ThorchainChainPlugin())
         ChainRegistry.register(MayachainChainPlugin())

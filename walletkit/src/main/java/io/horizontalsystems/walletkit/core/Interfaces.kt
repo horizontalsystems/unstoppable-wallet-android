@@ -412,6 +412,27 @@ interface ISendXrpAdapter {
     suspend fun send(amount: BigDecimal, address: String, destinationTag: Long?, memo: String?): String
 }
 
+interface ISendNearAdapter {
+    /** What a send can move before the address is known, with the fee of the costliest receiver held back. */
+    val maxSendableBalance: BigDecimal
+    /** Last estimated network fee, for display before the address is known. */
+    val fee: BigDecimal
+    fun validate(address: String)
+    suspend fun estimate(address: String, amount: BigDecimal, memo: String?): NearSendEstimate
+    suspend fun send(amount: BigDecimal, address: String, memo: String?): String
+}
+
+/**
+ * [fee] is what the send costs in NEAR; [storageDeposit] is NEAR paid to register the receiver
+ * with a token contract. [requiredNear] is the NEAR balance the account must hold for the network
+ * to accept it: gas is bought up front at a higher price than it is charged, then refunded.
+ */
+data class NearSendEstimate(
+    val fee: BigDecimal,
+    val storageDeposit: BigDecimal?,
+    val requiredNear: BigDecimal,
+)
+
 interface ISendThorchainAdapter {
     val availableBalance: BigDecimal
     val runeAvailableBalance: BigDecimal
