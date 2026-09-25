@@ -16,7 +16,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -25,11 +28,20 @@ import kotlinx.coroutines.launch
 /** One NearKit per active account, shared by every wallet of that account, refreshed on foreground. */
 class NearKitManager(
     private val backgroundManager: BackgroundManager,
+    private val rpcSourceManager: NearRpcSourceManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
+    private var sourceJob: Job? = null
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
+
+    // Signals that the running kit was torn down because the user changed the RPC provider;
+    // WalletManager reloads NEAR wallets on this, which rebuilds the adapters and the kit with
+    // the newly selected source. tryEmit stays synchronous so it fires before
+    // handleUpdateNetwork cancels the collector coroutine it runs in.
+    private val _kitStoppedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val kitStoppedFlow: SharedFlow<Unit> = _kitStoppedFlow.asSharedFlow()
 
     var kitWrapper: NearKitWrapper? = null
         private set(value) {
@@ -75,6 +87,7 @@ class NearKitManager(
             accountType.toNearWallet(),
             Network.MainNet,
             account.id,
+            rpcUrls = rpcSourceManager.rpcUrls(),
         )
         return NearKitWrapper(kit)
     }
@@ -90,16 +103,34 @@ class NearKitManager(
         }
     }
 
+    private fun handleUpdateNetwork() {
+        stop()
+        _kitStoppedFlow.tryEmit(Unit)
+    }
+
     private fun stop() {
         kitWrapper?.kit?.stop()
         job?.cancel()
+        sourceJob?.cancel()
         kitWrapper = null
         currentAccount = null
     }
 
     private fun start() {
         kitWrapper?.kit?.start()
-        // `scope` is reused after stop(), so a throw here must not cancel it
+        // Both collectors share `scope`, which start() reuses after stop(): a throw in either
+        // would cancel it for good and silently end lifecycle handling for every later kit.
+        sourceJob = scope.launch {
+            rpcSourceManager.rpcSourceUpdatedFlow.collect {
+                try {
+                    handleUpdateNetwork()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Log.e(TAG, "rpc source update handling error: ${e.message}", e)
+                }
+            }
+        }
         job = scope.launch {
             backgroundManager.stateFlow.collectLatest { state ->
                 try {
