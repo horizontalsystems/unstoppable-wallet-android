@@ -127,8 +127,11 @@ class WatchAddressService(
             }
         }
 
+        // Queries are built in enum declaration order and the MarketKit lookup has no ORDER BY,
+        // so the token type needs sorting too, or BCH and the BTC derivations come back with the
+        // recommended type last.
         return marketKit.tokens(tokenQueries)
-            .sortedBy { it.blockchainType.order }
+            .sortedWith(compareBy<Token> { it.blockchainType.order }.thenBy { it.type.order })
     }
 
     fun watchAll(accountType: AccountType, name: String?) {
