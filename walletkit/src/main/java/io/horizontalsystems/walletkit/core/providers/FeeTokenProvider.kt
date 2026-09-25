@@ -17,6 +17,7 @@ class FeeTokenProvider(
             is TokenType.Jetton,
             is TokenType.Asset,
             is TokenType.XrpAsset,
+            is TokenType.Nep141,
             is TokenType.ZanoAsset,
             is TokenType.ThorchainAsset,
             -> {

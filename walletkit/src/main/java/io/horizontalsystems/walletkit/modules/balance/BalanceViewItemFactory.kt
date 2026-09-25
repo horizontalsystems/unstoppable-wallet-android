@@ -169,6 +169,7 @@ class BalanceViewItemFactory {
         BlockchainType.Tron,
         BlockchainType.Stellar,
         BlockchainType.Xrp,
+        BlockchainType.Near,
         BlockchainType.Thorchain,
         BlockchainType.Mayachain,
         BlockchainType.Ton -> 50

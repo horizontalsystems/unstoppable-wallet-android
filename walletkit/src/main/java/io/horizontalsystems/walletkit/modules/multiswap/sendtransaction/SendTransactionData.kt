@@ -114,6 +114,16 @@ sealed class SendTransactionData {
         val destinationTag: Long?,
     ) : SendTransactionData()
 
+    /**
+     * A NEAR transfer: native NEAR, or a NEP-141 token when the token is not native. [memo] is
+     * the NEP-141 `ft_transfer` memo; a native NEAR transfer has no memo field.
+     */
+    data class Near(
+        val address: String,
+        val amount: BigDecimal,
+        val memo: String?,
+    ) : SendTransactionData()
+
     data class Monero(
         val address: String,
         val amount: BigDecimal,

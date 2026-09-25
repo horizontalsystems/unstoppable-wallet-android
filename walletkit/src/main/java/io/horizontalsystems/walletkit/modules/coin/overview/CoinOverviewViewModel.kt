@@ -12,6 +12,7 @@ import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.accountTypeDerivation
 import io.horizontalsystems.walletkit.core.assetUrl
 import io.horizontalsystems.walletkit.core.displayCode
+import io.horizontalsystems.walletkit.core.nep141TokenUrl
 import io.horizontalsystems.walletkit.core.xrpAssetUrl
 import io.horizontalsystems.walletkit.core.bitcoinCashCoinType
 import io.horizontalsystems.walletkit.core.eip20TokenUrl
@@ -185,6 +186,23 @@ class CoinOverviewViewModel(
                                 copyValue = id,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = token.blockchain.xrpAssetUrl(tokenType),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
+                    is TokenType.Nep141 -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.contractId.shorten(),
+                                copyValue = tokenType.contractId,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.nep141TokenUrl(tokenType.contractId),
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,

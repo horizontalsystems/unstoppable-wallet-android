@@ -37,6 +37,7 @@ class MarketFiltersService(
         BlockchainType.Polygon,
         BlockchainType.Stellar,
         BlockchainType.Xrp,
+        BlockchainType.Near,
         BlockchainType.Unsupported("solana"),
         BlockchainType.Unsupported("sora"),
         BlockchainType.Unsupported("tomochain"),

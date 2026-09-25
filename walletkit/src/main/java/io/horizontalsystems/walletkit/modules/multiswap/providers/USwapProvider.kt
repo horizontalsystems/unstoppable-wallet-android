@@ -247,6 +247,20 @@ class USwapProvider(
                     }
                 }
 
+                BlockchainType.Near -> {
+                    // `address` is the NEP-141 contract; native NEAR has none (the server
+                    // routes it through wrap.near itself, which is not the user's wNEAR token)
+                    val tokenType = if (!token.address.isNullOrBlank()) {
+                        TokenType.Nep141(token.address)
+                    } else {
+                        TokenType.Native
+                    }
+
+                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
+                        assetsMap[it] = token.identifier
+                    }
+                }
+
                 is BlockchainType.Unsupported -> Unit
             }
         }
@@ -808,6 +822,17 @@ class USwapProvider(
                 )
             }
 
+            BlockchainType.Near -> {
+                // A deposit-address transfer: NEAR, or `ft_transfer` for a NEP-141 token. A
+                // native NEAR transfer has no memo field, so a route that needs one fails in
+                // resolvedDeliverableMemo rather than sending a deposit the provider cannot match.
+                return SendTransactionData.Near(
+                    address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
+                    amount = amountIn,
+                    memo = resolvedDeliverableMemo(execution, blockchainType),
+                )
+            }
+
             BlockchainType.Zcash -> {
                 if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple ZEC tx providers are supported")
@@ -881,6 +906,7 @@ class USwapProvider(
             "litecoin" to BlockchainType.Litecoin,
             "stellar" to BlockchainType.Stellar,
             "ripple" to BlockchainType.Xrp,
+            "near" to BlockchainType.Near,
             "ton" to BlockchainType.Ton,
             "dash" to BlockchainType.Dash,
             "ecash" to BlockchainType.ECash,

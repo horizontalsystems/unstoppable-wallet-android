@@ -24,6 +24,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val TON_ADDRESS = "ton_address"
         private const val STELLAR_ADDRESS = "stellar_address"
         private const val XRP_ADDRESS = "xrp_address"
+        private const val NEAR_ADDRESS = "near_address"
         private const val THORCHAIN_ADDRESS = "thorchain_address"
         private const val MAYACHAIN_ADDRESS = "mayachain_address"
         private const val BITCOIN_ADDRESS = "bitcoin_address"
@@ -63,6 +64,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             TON_ADDRESS -> AccountType.TonAddress(record.key!!.value)
                             STELLAR_ADDRESS -> AccountType.StellarAddress(record.key!!.value)
                             XRP_ADDRESS -> AccountType.XrpAddress(record.key!!.value)
+                            NEAR_ADDRESS -> AccountType.NearAddress(record.key!!.value)
                             THORCHAIN_ADDRESS -> AccountType.ThorchainAddress(record.key!!.value)
                             MAYACHAIN_ADDRESS -> AccountType.MayachainAddress(record.key!!.value)
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
@@ -166,6 +168,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.XrpAddress -> {
                 key = SecretString(account.type.address)
                 accountType = XRP_ADDRESS
+            }
+            is AccountType.NearAddress -> {
+                key = SecretString(account.type.address)
+                accountType = NEAR_ADDRESS
             }
             is AccountType.ThorchainAddress -> {
                 key = SecretString(account.type.address)

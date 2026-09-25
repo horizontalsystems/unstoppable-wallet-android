@@ -70,6 +70,16 @@ class SwapSuspensionTest {
     }
 
     @Test
+    fun `near native and nep141 tokens get the NEAR chain code`() {
+        assertEquals("NEAR.NEAR", CanonicalAssetId.of(token(BlockchainType.Near, TokenType.Native)))
+        assertEquals(
+            "NEAR.USDT.TETHER-TOKEN.NEAR",
+            CanonicalAssetId.of(token(BlockchainType.Near, TokenType.Nep141("usdt.tether-token.near")))
+        )
+        assertEquals("NEAR", CanonicalAssetId.chainOf("NEAR.USDT.TETHER-TOKEN.NEAR"))
+    }
+
+    @Test
     fun `thorchain secured assets stay unprefixed and read as thorchain`() {
         val secured = token(BlockchainType.Thorchain, TokenType.ThorchainAsset("eth-eth"))
 

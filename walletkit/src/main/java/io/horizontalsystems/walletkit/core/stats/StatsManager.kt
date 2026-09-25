@@ -280,6 +280,9 @@ val AccountType.statAccountType: String
         is AccountType.XrpAddress -> {
             "xrp_address"
         }
+        is AccountType.NearAddress -> {
+            "near_address"
+        }
 
         is AccountType.ThorchainAddress -> {
             "thorchain_address"

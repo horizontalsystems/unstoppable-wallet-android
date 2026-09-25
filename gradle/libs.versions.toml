@@ -73,12 +73,13 @@ moneroKit = "ccd6dd8b"
 zanoKit = "4e55a34"
 stellarKit = "4ecccc5"
 xrpKit = "291142a"
+nearKit = "d6ab793"
 tonKit = "947c48a"
 bitcoinKit = "3e88bb6"
 hdWalletKit = "a74b51f3"
 ethereumKit = "a887150"
 feeRateKit = "393cc14"
-marketKit = "5708b23"
+marketKit = "c275c20"
 solanaKit = "d5a3b0f"
 tronKit = "4033245"
 thorchainKit = "568a089"
@@ -237,6 +238,7 @@ kit-monero = { module = "com.github.horizontalsystems:monero-kit-android", versi
 kit-zano = { module = "com.github.horizontalsystems:zano-kit-android", version.ref = "zanoKit" }
 kit-stellar = { module = "com.github.horizontalsystems:stellar-kit-android", version.ref = "stellarKit" }
 kit-xrp = { module = "com.github.horizontalsystems:xrp-android", version.ref = "xrpKit" }
+kit-near = { module = "com.github.horizontalsystems:near-android-kit", version.ref = "nearKit" }
 kit-ton = { module = "com.github.horizontalsystems:ton-kit-android", version.ref = "tonKit" }
 kit-bitcoin = { module = "com.github.horizontalsystems:bitcoin-kit-android", version.ref = "bitcoinKit" }
 kit-hd-wallet = { module = "com.github.horizontalsystems:hd-wallet-kit-android", version.ref = "hdWalletKit" }

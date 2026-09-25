@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.transactionInfo
 
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.adapters.NearTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.XrpTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
@@ -220,6 +221,63 @@ class TransactionInfoViewItemFactory(
                     miscItemsSection.add(Value(Translator.getString(R.string.Send_DestinationTag), tag.toString()))
                 }
                 addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is NearTransactionRecord -> {
+                when (val transactionType = transaction.type) {
+                    is NearTransactionRecord.Type.Receive -> {
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                value = transactionType.value,
+                                fromAddress = transactionType.from,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                        addMemoItem(transactionType.memo, miscItemsSection)
+                    }
+
+                    is NearTransactionRecord.Type.Send -> {
+                        sentToSelf = transactionType.sentToSelf
+                        itemSections.add(
+                            TransactionViewItemFactoryHelper.getSendSectionItems(
+                                value = transactionType.value,
+                                toAddress = transactionType.to,
+                                coinPrice = rates[transactionType.value.coinUid],
+                                hideAmount = transactionItem.hideAmount,
+                                sentToSelf = transactionType.sentToSelf,
+                                nftMetadata = nftMetadata,
+                                blockchainType = blockchainType,
+                            )
+                        )
+                        addMemoItem(transactionType.memo, miscItemsSection)
+                    }
+
+                    is NearTransactionRecord.Type.ContractCall -> {
+                        val items = mutableListOf<TransactionInfoViewItem>(
+                            Value(
+                                Translator.getString(R.string.Transactions_OperationType),
+                                transactionType.method ?: Translator.getString(R.string.Transactions_ContractCall)
+                            ),
+                            Value(Translator.getString(R.string.AddToken_AddressOrSymbol), transactionType.contractId),
+                        )
+                        itemSections.add(items)
+                        transactionType.value?.let { value ->
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getSendSectionItems(
+                                    value = value,
+                                    toAddress = transactionType.contractId,
+                                    coinPrice = rates[value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    sentToSelf = false,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+                    }
+                }
             }
 
             is ContractCreationTransactionRecord -> {
