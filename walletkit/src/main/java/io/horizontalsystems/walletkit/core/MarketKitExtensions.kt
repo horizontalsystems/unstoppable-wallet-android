@@ -530,7 +530,7 @@ val TokenType.order: Int
         return when (this) {
             TokenType.Native -> 0
             is TokenType.Derived -> derivation.accountTypeDerivation.order
-            is TokenType.AddressTyped -> type.bitcoinCashCoinType.ordinal
+            is TokenType.AddressTyped -> type.bitcoinCashCoinType.order
             else -> Int.MAX_VALUE
         }
     }

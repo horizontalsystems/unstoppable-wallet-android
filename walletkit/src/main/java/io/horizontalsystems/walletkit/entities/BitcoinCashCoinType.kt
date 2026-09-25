@@ -21,6 +21,14 @@ enum class BitcoinCashCoinType(val value: String) {
             }
         }
 
+    // Declaration order is fixed by `value`, which is persisted; display order puts
+    // the recommended type first instead.
+    val order: Int
+        get() = when (this) {
+            type145 -> 0
+            type0 -> 1
+        }
+
         companion object {
             val default = type145
             private val map = values().associateBy(BitcoinCashCoinType::value)
