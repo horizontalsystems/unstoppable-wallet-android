@@ -8,6 +8,7 @@ import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
+import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.supported
 import io.horizontalsystems.walletkit.core.title
@@ -27,7 +28,8 @@ class ManageWalletsViewModel(
     private var searchQuery = ""
     private val allTab = SelectChainTab(title = Translator.getString(R.string.Market_All), null)
     private var selectedChainTab: SelectChainTab = allTab
-    private var availableBlockchainTypes: List<BlockchainType>? = BlockchainType.supported
+    private var availableBlockchainTypes: List<BlockchainType>? =
+        BlockchainType.supported.sortedBy { it.order }
 
     val addTokenEnabled: Boolean
         get() = service.accountType?.canAddTokens ?: false
