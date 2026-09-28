@@ -2307,4 +2307,10 @@
     <string name="BirthdayDatePicker_Description">Choose an approximate wallet creation date. \nThe block height will be calculated automatically.</string>
     <string name="Hud_Text_ChangeWallet">Change Wallet</string>
     <string name="WatchWallet_Typed">%s Watch Wallet</string>
+    <string name="NearSend_ReceiverRegistration">Receiver registration</string>
+    <string name="NearSend_StorageDepositTooHigh">This token asks for an unusually large deposit to register the receiver and may be a scam.</string>
+    <string name="NearSend_StorageDepositChanged">The receiver registration fee has changed. Check the updated fee and send again.</string>
+    <string name="NearSend_PreviousTransactionPending">A previous transaction is still pending. Check your transaction history before sending again.</string>
+    <string name="Transactions_NotProcessed">Not processed</string>
+    <string name="NearSend_Rejected">The network rejected this transaction. Nothing was sent.</string>
 </resources>

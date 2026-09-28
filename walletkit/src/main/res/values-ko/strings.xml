@@ -1950,4 +1950,10 @@
     <string name="WatchWallet_Typed">%s 감시 지갑</string>
     <string name="Action_Clear">지우기</string>
     <string name="Send_Utxos_Auto">자동</string>
+    <string name="NearSend_ReceiverRegistration">수신자 등록</string>
+    <string name="NearSend_StorageDepositTooHigh">이 토큰은 수신자 등록에 비정상적으로 큰 예치금을 요구하며 사기일 수 있습니다.</string>
+    <string name="NearSend_StorageDepositChanged">수신자 등록 수수료가 변경되었습니다. 변경된 수수료를 확인한 후 다시 전송하세요.</string>
+    <string name="NearSend_PreviousTransactionPending">이전 트랜잭션이 아직 대기 중입니다. 다시 전송하기 전에 거래 내역을 확인하세요.</string>
+    <string name="Transactions_NotProcessed">처리되지 않음</string>
+    <string name="NearSend_Rejected">네트워크가 이 트랜잭션을 거부했습니다. 아무것도 전송되지 않았습니다.</string>
 </resources>

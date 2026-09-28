@@ -43,7 +43,8 @@ sealed class TransactionInfoViewItem {
 
     class Explorer(val title: String, val url: String?) : TransactionInfoViewItem()
 
-    class Status(val status: TransactionStatus) : TransactionInfoViewItem()
+    /** [notProcessed]: failed without reaching the chain, which is not an error to show as one. */
+    class Status(val status: TransactionStatus, val notProcessed: Boolean = false) : TransactionInfoViewItem()
 
     object RawTransaction : TransactionInfoViewItem()
 

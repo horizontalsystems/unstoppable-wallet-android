@@ -24,6 +24,9 @@ abstract class BaseNearAdapter(
 
     val availableNear: BigDecimal get() = NearAmount.toNear(kit.availableBalance)
 
+    override val pendingTransactionHashes: Set<String>
+        get() = kit.getPendingTransactions().mapTo(mutableSetOf()) { it.hash }
+
     override fun validate(address: String) {
         NearKit.validateAccountId(address)
     }

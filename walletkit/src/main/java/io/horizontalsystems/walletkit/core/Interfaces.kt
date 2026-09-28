@@ -417,9 +417,12 @@ interface ISendNearAdapter {
     val maxSendableBalance: BigDecimal
     /** Last estimated network fee, for display before the address is known. */
     val fee: BigDecimal
+    /** Transactions sent from this account that are not final yet. */
+    val pendingTransactionHashes: Set<String>
     fun validate(address: String)
     suspend fun estimate(address: String, amount: BigDecimal, memo: String?): NearSendEstimate
-    suspend fun send(amount: BigDecimal, address: String, memo: String?): String
+    /** [estimate] is the one the user confirmed; a token send fails if its storage deposit has changed since. */
+    suspend fun send(amount: BigDecimal, address: String, memo: String?, estimate: NearSendEstimate): String
 }
 
 /**
@@ -427,7 +430,7 @@ interface ISendNearAdapter {
  * with a token contract. [requiredNear] is the NEAR balance the account must hold for the network
  * to accept it: gas is bought up front at a higher price than it is charged, then refunded.
  */
-data class NearSendEstimate(
+open class NearSendEstimate(
     val fee: BigDecimal,
     val storageDeposit: BigDecimal?,
     val requiredNear: BigDecimal,

@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.core.adapters
 
+import io.horizontalsystems.nearkit.NearKit
 import io.horizontalsystems.nearkit.models.NearAmount
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.BalanceData
@@ -75,16 +76,26 @@ class NearTokenAdapter(
         val estimate = kit.estimateFtTransfer(contractId, address, toUnits(amount), memo)
         fee = NearAmount.toNear(estimate.fee.fee)
         val storageDeposit = estimate.storageDeposit?.let { NearAmount.toNear(it) }
-        return NearSendEstimate(
+        return FtSendEstimate(
             fee = fee,
             storageDeposit = storageDeposit,
             // NEP-141 transfers attach one yoctoNEAR, which is below display precision
             requiredNear = NearAmount.toNear(estimate.fee.requiredBalance) + (storageDeposit ?: BigDecimal.ZERO),
+            kitEstimate = estimate,
         )
     }
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String =
-        kit.sendFt(contractId, address, toUnits(amount), memo).hash
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?, estimate: NearSendEstimate): String {
+        require(estimate is FtSendEstimate) { "Not a token transfer estimate" }
+        return kit.sendFt(contractId, address, toUnits(amount), memo, estimate = estimate.kitEstimate).hash
+    }
 
     private fun toUnits(amount: BigDecimal) = amount.movePointRight(decimals).toBigIntegerExact()
+
+    private class FtSendEstimate(
+        fee: BigDecimal,
+        storageDeposit: BigDecimal?,
+        requiredNear: BigDecimal,
+        val kitEstimate: NearKit.FtTransferEstimate,
+    ) : NearSendEstimate(fee, storageDeposit, requiredNear)
 }

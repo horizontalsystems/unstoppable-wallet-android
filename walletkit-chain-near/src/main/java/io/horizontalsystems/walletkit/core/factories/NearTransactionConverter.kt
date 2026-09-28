@@ -54,6 +54,7 @@ class NearTransactionConverter(
             timestamp = tx.timestamp,
             pending = tx.isPending,
             failed = tx.isFailed,
+            expired = tx.failure == EXPIRED,
         )
         val fee = tx.fee?.takeIf { tx.isSigner(selfAccount) }?.let { nearValue(it, negate = false) }
         return NearTransactionRecord(source, info, type, fee, spam)
@@ -141,5 +142,10 @@ class NearTransactionConverter(
             value = if (negate) value.negate() else value,
             coinIconPlaceholder = BlockchainType.Near.tokenIconPlaceholder,
         )
+    }
+
+    private companion object {
+        // the kit's failure value for a transaction whose block hash expired before inclusion
+        const val EXPIRED = "expired"
     }
 }

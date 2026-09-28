@@ -1959,4 +1959,10 @@
     <string name="WatchWallet_Typed">%s Watch-Wallet</string>
     <string name="Action_Clear">Löschen</string>
     <string name="Send_Utxos_Auto">Auto</string>
+    <string name="NearSend_ReceiverRegistration">Registrierung des Empfängers</string>
+    <string name="NearSend_StorageDepositTooHigh">Dieser Token verlangt eine ungewöhnlich hohe Einzahlung für die Registrierung des Empfängers und könnte Betrug sein.</string>
+    <string name="NearSend_StorageDepositChanged">Die Registrierungsgebühr für den Empfänger hat sich geändert. Prüfe die neue Gebühr und sende erneut.</string>
+    <string name="NearSend_PreviousTransactionPending">Eine vorherige Transaktion ist noch ausstehend. Prüfe deinen Transaktionsverlauf, bevor du erneut sendest.</string>
+    <string name="Transactions_NotProcessed">Nicht verarbeitet</string>
+    <string name="NearSend_Rejected">Das Netzwerk hat diese Transaktion abgelehnt. Es wurde nichts gesendet.</string>
 </resources>

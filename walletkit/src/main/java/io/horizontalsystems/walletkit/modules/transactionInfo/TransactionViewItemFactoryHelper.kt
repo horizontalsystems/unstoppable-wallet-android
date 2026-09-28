@@ -623,7 +623,10 @@ object TransactionViewItemFactoryHelper {
                 Translator.getString(R.string.TransactionInfo_Date),
                 DateHelper.getFullDate(Date(transaction.timestamp * 1000))
             ),
-            TransactionInfoViewItem.Status(status)
+            TransactionInfoViewItem.Status(
+                status,
+                notProcessed = (transaction as? NearTransactionRecord)?.info?.expired == true,
+            )
         )
 
         when (transaction) {

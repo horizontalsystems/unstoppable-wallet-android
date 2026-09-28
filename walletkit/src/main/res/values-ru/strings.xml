@@ -1963,4 +1963,10 @@
     <string name="WatchWallet_Typed">%s кошелёк наблюдения</string>
     <string name="Action_Clear">Очистить</string>
     <string name="Send_Utxos_Auto">Авто</string>
+    <string name="NearSend_ReceiverRegistration">Регистрация получателя</string>
+    <string name="NearSend_StorageDepositTooHigh">Этот токен требует необычно большой депозит для регистрации получателя и может быть мошенническим.</string>
+    <string name="NearSend_StorageDepositChanged">Комиссия за регистрацию получателя изменилась. Проверьте новую комиссию и отправьте снова.</string>
+    <string name="NearSend_PreviousTransactionPending">Предыдущая транзакция ещё в ожидании. Проверьте историю транзакций, прежде чем отправлять снова.</string>
+    <string name="Transactions_NotProcessed">Не обработана</string>
+    <string name="NearSend_Rejected">Сеть отклонила эту транзакцию. Ничего не отправлено.</string>
 </resources>

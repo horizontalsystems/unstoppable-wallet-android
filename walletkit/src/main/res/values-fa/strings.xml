@@ -1942,4 +1942,10 @@
     <string name="WatchWallet_Typed">کیف پول نظارتی %s</string>
     <string name="Action_Clear">پاک کردن</string>
     <string name="Send_Utxos_Auto">خودکار</string>
+    <string name="NearSend_ReceiverRegistration">ثبت گیرنده</string>
+    <string name="NearSend_StorageDepositTooHigh">این توکن برای ثبت گیرنده سپرده‌ای غیرعادی بالا درخواست می‌کند و ممکن است کلاهبرداری باشد.</string>
+    <string name="NearSend_StorageDepositChanged">کارمزد ثبت گیرنده تغییر کرده است. کارمزد جدید را بررسی کنید و دوباره ارسال کنید.</string>
+    <string name="NearSend_PreviousTransactionPending">یک تراکنش قبلی هنوز در انتظار است. پیش از ارسال دوباره، تاریخچه تراکنش‌های خود را بررسی کنید.</string>
+    <string name="Transactions_NotProcessed">پردازش نشد</string>
+    <string name="NearSend_Rejected">شبکه این تراکنش را رد کرد. چیزی ارسال نشد.</string>
 </resources>

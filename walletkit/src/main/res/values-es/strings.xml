@@ -1954,4 +1954,10 @@
     <string name="WatchWallet_Typed">Wallet de observación %s</string>
     <string name="Action_Clear">Borrar</string>
     <string name="Send_Utxos_Auto">Auto</string>
+    <string name="NearSend_ReceiverRegistration">Registro del destinatario</string>
+    <string name="NearSend_StorageDepositTooHigh">Este token pide un depósito inusualmente alto para registrar al destinatario y podría ser una estafa.</string>
+    <string name="NearSend_StorageDepositChanged">La tarifa de registro del destinatario ha cambiado. Revisa la nueva tarifa y vuelve a enviar.</string>
+    <string name="NearSend_PreviousTransactionPending">Una transacción anterior sigue pendiente. Revisa tu historial de transacciones antes de volver a enviar.</string>
+    <string name="Transactions_NotProcessed">No procesada</string>
+    <string name="NearSend_Rejected">La red rechazó esta transacción. No se envió nada.</string>
 </resources>
