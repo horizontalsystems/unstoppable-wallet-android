@@ -79,6 +79,6 @@ class NearAdapter(
         )
     }
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String =
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?, estimate: NearSendEstimate): String =
         kit.sendNear(address, NearAmount.toYocto(amount)).hash
 }

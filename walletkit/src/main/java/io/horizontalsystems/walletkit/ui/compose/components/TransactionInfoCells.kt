@@ -362,7 +362,8 @@ fun TransactionInfoContactCell(name: String) {
 @Composable
 fun TransactionInfoStatusCell(
     status: TransactionStatus,
-    navigation: HSNavigation
+    navigation: HSNavigation,
+    notProcessed: Boolean = false,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -393,7 +394,7 @@ fun TransactionInfoStatusCell(
                 .defaultMinSize(minWidth = 8.dp)
         )
         subhead1_leah(
-            text = stringResource(statusTitle(status)),
+            text = stringResource(if (notProcessed) R.string.Transactions_NotProcessed else statusTitle(status)),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(end = 8.dp)
@@ -412,7 +413,7 @@ fun TransactionInfoStatusCell(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_attention_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.lucian
+                    tint = if (notProcessed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.lucian
                 )
             }
 

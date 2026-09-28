@@ -238,6 +238,7 @@ fun TransactionInfoSection(
                         add {
                             TransactionInfoStatusCell(
                                 status = viewItem.status,
+                                notProcessed = viewItem.notProcessed,
                                 navigation = navigation
                             )
                         }

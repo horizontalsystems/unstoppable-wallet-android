@@ -1964,4 +1964,10 @@
     <string name="UnstoppableLabs_SignalSwapBot">Bot de swap Signal</string>
     <string name="UnstoppableLabs_SignalSwapBot_Description">Des swaps crypto privés directement dans Signal.</string>
     <string name="UnstoppableLabs_SwapWeb_Description">Échangez des cryptos directement depuis votre navigateur.</string>
+    <string name="NearSend_ReceiverRegistration">Enregistrement du destinataire</string>
+    <string name="NearSend_StorageDepositTooHigh">Ce token demande un dépôt anormalement élevé pour enregistrer le destinataire et pourrait être une arnaque.</string>
+    <string name="NearSend_StorageDepositChanged">Les frais d\'enregistrement du destinataire ont changé. Vérifiez les nouveaux frais et renvoyez.</string>
+    <string name="NearSend_PreviousTransactionPending">Une transaction précédente est toujours en attente. Vérifiez votre historique des transactions avant de renvoyer.</string>
+    <string name="Transactions_NotProcessed">Non traitée</string>
+    <string name="NearSend_Rejected">Le réseau a rejeté cette transaction. Rien n\'a été envoyé.</string>
 </resources>

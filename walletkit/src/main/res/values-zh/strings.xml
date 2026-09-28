@@ -1961,4 +1961,10 @@
     <string name="UnstoppableLabs_SignalSwapBot">Signal 兑换机器人</string>
     <string name="UnstoppableLabs_SignalSwapBot_Description">直接在 Signal 中进行私密加密货币兑换。</string>
     <string name="UnstoppableLabs_SwapWeb_Description">直接在浏览器中兑换加密货币。</string>
+    <string name="NearSend_ReceiverRegistration">接收方注册</string>
+    <string name="NearSend_StorageDepositTooHigh">该代币要求为注册接收方支付异常高的押金，可能是诈骗。</string>
+    <string name="NearSend_StorageDepositChanged">接收方注册费已变更。请查看新的费用后重新发送。</string>
+    <string name="NearSend_PreviousTransactionPending">之前的一笔交易仍在处理中。再次发送前请查看交易记录。</string>
+    <string name="Transactions_NotProcessed">未处理</string>
+    <string name="NearSend_Rejected">网络拒绝了此交易，未发送任何内容。</string>
 </resources>

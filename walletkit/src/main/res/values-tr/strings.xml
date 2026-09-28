@@ -1963,4 +1963,10 @@
     <string name="UnstoppableLabs_SignalSwapBot">Signal Swap Botu</string>
     <string name="UnstoppableLabs_SignalSwapBot_Description">Doğrudan Signal\'da gizli kripto swap.</string>
     <string name="UnstoppableLabs_SwapWeb_Description">Doğrudan tarayıcınızdan kripto swap yapın.</string>
+    <string name="NearSend_ReceiverRegistration">Alıcı kaydı</string>
+    <string name="NearSend_StorageDepositTooHigh">Bu token, alıcıyı kaydetmek için alışılmadık derecede yüksek bir depozito istiyor ve dolandırıcılık olabilir.</string>
+    <string name="NearSend_StorageDepositChanged">Alıcı kayıt ücreti değişti. Yeni ücreti kontrol edip tekrar gönderin.</string>
+    <string name="NearSend_PreviousTransactionPending">Önceki bir işlem hâlâ beklemede. Tekrar göndermeden önce işlem geçmişinizi kontrol edin.</string>
+    <string name="Transactions_NotProcessed">İşlenmedi</string>
+    <string name="NearSend_Rejected">Ağ bu işlemi reddetti. Hiçbir şey gönderilmedi.</string>
 </resources>

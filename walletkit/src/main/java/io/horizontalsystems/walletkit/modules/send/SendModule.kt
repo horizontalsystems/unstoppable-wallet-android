@@ -62,7 +62,8 @@ object SendModule {
 sealed class SendResult {
     object Sending : SendResult()
     class Sent(val transactionRecord: TransactionRecord? = null, val txHash: String? = null) : SendResult()
-    class Failed(val caution: HSCaution) : SendResult()
+    /** [expected]: a known failure whose message says what happened, not one to report to support. */
+    class Failed(val caution: HSCaution, val expected: Boolean = false) : SendResult()
 }
 
 object SendErrorFetchFeeRateFailed : HSCaution(

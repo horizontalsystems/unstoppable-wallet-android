@@ -83,4 +83,6 @@ data class NearTransactionInfo(
     val timestamp: Long,
     val pending: Boolean,
     val failed: Boolean,
+    /** Failed because it was never included before its block hash expired: nothing happened on chain. */
+    val expired: Boolean,
 )

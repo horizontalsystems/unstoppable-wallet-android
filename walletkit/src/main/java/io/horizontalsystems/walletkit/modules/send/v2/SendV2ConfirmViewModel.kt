@@ -284,7 +284,10 @@ class SendV2ConfirmViewModel(
         val result = try {
             sendTransactionService.sendTransaction()
         } catch (e: Throwable) {
-            sendResult = SendResult.Failed(createCaution(e))
+            sendResult = SendResult.Failed(
+                createCaution(e),
+                expected = e is UnknownHostException || e is LocalizedException,
+            )
             return
         }
         sendResult = SendResult.Sent(txHash = txHash(result))
