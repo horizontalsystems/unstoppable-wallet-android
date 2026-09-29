@@ -195,7 +195,6 @@ dependencies {
     // Utils
     api(libs.circleindicator)
     api(libs.twitter.text)
-    api(libs.android.shell)
     api(libs.portmapper)
 
     // Project modules

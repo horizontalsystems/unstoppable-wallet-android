@@ -103,7 +103,6 @@ jtorctl = "0.4.5.7"
 # Utils
 circleindicator = "2.1.6"
 twitterText = "3.1.0"
-androidShell = "1.0.0"
 portmapper = "2.0.6"
 
 # Startup
@@ -271,7 +270,6 @@ jtorctl = { module = "info.guardianproject:jtorctl", version.ref = "jtorctl" }
 # Utils
 circleindicator = { module = "me.relex:circleindicator", version.ref = "circleindicator" }
 twitter-text = { module = "com.twitter.twittertext:twitter-text", version.ref = "twitterText" }
-android-shell = { module = "com.jaredrummler:android-shell", version.ref = "androidShell" }
 portmapper = { module = "com.offbynull.portmapper:portmapper", version.ref = "portmapper" }
 
 # Startup
