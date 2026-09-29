@@ -1,17 +1,23 @@
 package io.horizontalsystems.walletkit.modules.balance
 
+import android.os.SystemClock
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.IAdapterManager
+import io.horizontalsystems.walletkit.core.ITorManager
+import io.horizontalsystems.walletkit.core.TorUnsupportedException
+import io.horizontalsystems.walletkit.core.managers.TorManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule.BalanceWarning
+import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,9 +26,12 @@ import java.math.BigDecimal
 
 class BalanceAdapterRepository(
     private val adapterManager: IAdapterManager,
-    private val balanceCache: BalanceCache
+    private val balanceCache: BalanceCache,
+    private val torManager: ITorManager,
 ) : Clearable {
     private var wallets = listOf<Wallet>()
+    @Volatile
+    private var torConnectedAt = 0L
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val balanceStateUpdatedJobs = mutableListOf<Job>()
@@ -51,6 +60,18 @@ class BalanceAdapterRepository(
                 )
 
                 subscribeForAdapterUpdates()
+            }
+        }
+        coroutineScope.launch {
+            torManager.torStatusFlow.collectSafely { status ->
+                if (status == TorStatus.Connected) {
+                    torConnectedAt = SystemClock.elapsedRealtime()
+                }
+                wallets.forEach { _updatesFlow.tryEmit(it) }
+                if (status == TorStatus.Connected) {
+                    delay(TOR_ERROR_GRACE_MILLIS)
+                    wallets.forEach { _updatesFlow.tryEmit(it) }
+                }
             }
         }
     }
@@ -99,8 +120,21 @@ class BalanceAdapterRepository(
     }
 
     fun state(wallet: Wallet): AdapterState {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceState
+        val state = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceState
             ?: AdapterState.Syncing()
+
+        // Nothing reaches the network while Tor starts or reconnects, so errors from kits that
+        // tried meanwhile are not real. The kits are refreshed once Tor connects and those still
+        // failing once more after TorManager.WARM_UP_MILLIS, so errors stay hidden until then.
+        if (state is AdapterState.NotSynced && state.error !is TorUnsupportedException && torManager.isTorEnabled) {
+            val torStatus = torManager.torStatusFlow.value
+            val justConnected = torStatus == TorStatus.Connected &&
+                SystemClock.elapsedRealtime() - torConnectedAt < TOR_ERROR_GRACE_MILLIS
+            if (torStatus == TorStatus.Connecting || justConnected) {
+                return AdapterState.Connecting
+            }
+        }
+        return state
     }
 
     fun balanceData(wallet: Wallet): BalanceData {
@@ -119,7 +153,14 @@ class BalanceAdapterRepository(
     }
 
     suspend fun refresh() {
+        // A refresh on the circuit that just failed would fail the same way on a refusing exit
+        if (torManager.isTorEnabled) {
+            torManager.newCircuits()
+        }
         adapterManager.refresh()
     }
 
+    companion object {
+        private const val TOR_ERROR_GRACE_MILLIS = TorManager.WARM_UP_MILLIS + 10_000L
+    }
 }

@@ -27,7 +27,7 @@ class TokenBalanceModule {
             val balanceService = TokenBalanceService(
                 wallet,
                 BalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
-                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao()), App.torKitManager),
             )
 
             val tokenTransactionsService = TokenTransactionsService(

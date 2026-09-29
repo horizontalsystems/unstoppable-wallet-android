@@ -133,6 +133,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
 import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 
 abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
@@ -677,10 +678,18 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         if (torKitManager.isTorEnabled) {
             // Kits start before Tor can carry traffic and give up on their first requests, so
-            // each time Tor connects (at launch or after a retry) they get a fresh attempt
+            // each time Tor connects (at launch, on return or after a retry) they get a fresh
+            // attempt, and those that failed on still cold circuits one more
             coroutineScope.launch {
-                torKitManager.torStatusFlow.filter { it == TorStatus.Connected }.collect {
+                torKitManager.torStatusFlow.filter { it == TorStatus.Connected }.collectLatest {
                     adapterManager.refresh()
+                    delay(TorManager.WARM_UP_MILLIS)
+                    val failed = walletManager.activeWallets
+                        .filter { adapterManager.getBalanceAdapterForWallet(it)?.balanceState is AdapterState.NotSynced }
+                    if (failed.isNotEmpty()) {
+                        torKitManager.newCircuits()
+                        failed.forEach { adapterManager.refreshByWallet(it) }
+                    }
                 }
             }
         }

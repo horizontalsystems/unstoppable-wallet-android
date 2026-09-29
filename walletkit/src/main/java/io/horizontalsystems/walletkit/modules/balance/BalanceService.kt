@@ -210,7 +210,7 @@ class BalanceService(
             return BalanceService(
                 BalanceActiveWalletRepository(App.walletManager, App.evmSyncSourceManager),
                 BalanceXRateRepository(tag, App.currencyManager, App.marketKit),
-                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao()), App.torKitManager),
                 App.localStorage,
                 App.connectivityManager,
                 BalanceSorter(),

@@ -17,7 +17,8 @@ object SyncErrorModule {
                 App.adapterManager,
                 App.appConfigProvider.reportEmail,
                 App.btcBlockchainManager,
-                App.evmBlockchainManager
+                App.evmBlockchainManager,
+                App.torKitManager
             )
             return SyncErrorViewModel(service) as T
         }
