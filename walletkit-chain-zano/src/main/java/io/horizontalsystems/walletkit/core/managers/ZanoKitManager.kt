@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.BackgroundManagerState
 import io.horizontalsystems.walletkit.core.UnsupportedAccountException
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
+import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
 import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -39,6 +41,21 @@ class ZanoKitManager(
         scope.launch {
             zanoNodeManager.currentNodeUpdatedFlow.collect {
                 handleNodeUpdate()
+            }
+        }
+        val torManager = App.torKitManager
+        if (torManager.isTorEnabled) {
+            // The engine reads the Tor SOCKS port when it starts. Tor reports its port only
+            // once connected and a reconnected Tor listens on a new one, so restart on every connect
+            scope.launch {
+                torManager.torStatusFlow.filter { it == TorStatus.Connected }.collect {
+                    synchronized(this@ZanoKitManager) {
+                        zanoKitWrapper?.kit?.let {
+                            it.stop()
+                            it.start()
+                        }
+                    }
+                }
             }
         }
         scope.launch {
@@ -68,7 +85,8 @@ class ZanoKitManager(
                 is AccountType.Mnemonic -> createKitInstance(accountType, account, creationTimestamp)
                 else -> throw UnsupportedAccountException()
             }
-            if (!App.localStorage.torEnabled) {
+            val torManager = App.torKitManager
+            if (!torManager.isTorEnabled || torManager.torStatusFlow.value == TorStatus.Connected) {
                 this.zanoKitWrapper!!.kit.start()
             }
             useCount = 0

@@ -1,14 +1,12 @@
 package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.walletkit.core.AdapterState
-import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.IAdapter
 import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendZanoAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
-import io.horizontalsystems.walletkit.core.TorUnsupportedException
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.ZanoKitManager
 import io.horizontalsystems.walletkit.entities.AccountOrigin
@@ -34,7 +32,6 @@ class ZanoAdapter(
     private val wallet: Wallet,
     private val transactionsProvider: ZanoTransactionsProvider,
     private val transactionsAdapter: ZanoTransactionsAdapter,
-    private val torEnabled: Boolean,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendZanoAdapter, ITransactionsAdapter by transactionsAdapter {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -42,8 +39,7 @@ class ZanoAdapter(
     private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _balanceStateUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override var balanceState: AdapterState =
-        if (torEnabled) AdapterState.NotSynced(TorUnsupportedException()) else kit.syncStateFlow.value.toAdapterState()
+    override var balanceState: AdapterState = kit.syncStateFlow.value.toAdapterState()
 
     override val balanceData: BalanceData
         get() = (kit.balance(assetId) ?: BalanceInfo(assetId, 0, 0, 0, 0)).toBalanceData(wallet.token.decimals)
@@ -67,12 +63,10 @@ class ZanoAdapter(
         get() = true
 
     override fun start() {
-        if (!torEnabled) {
-            coroutineScope.launch {
-                kit.syncStateFlow.collect {
-                    balanceState = it.toAdapterState()
-                    _balanceStateUpdatedFlow.tryEmit(Unit)
-                }
+        coroutineScope.launch {
+            kit.syncStateFlow.collect {
+                balanceState = it.toAdapterState()
+                _balanceStateUpdatedFlow.tryEmit(Unit)
             }
         }
         coroutineScope.launch {
@@ -92,7 +86,6 @@ class ZanoAdapter(
     }
 
     override fun refresh() {
-        if (torEnabled) return
         kit.refresh()
     }
 
@@ -142,7 +135,7 @@ class ZanoAdapter(
             val provider = ZanoTransactionsProvider(assetId)
             val txAdapter = ZanoTransactionsAdapter(kit, provider, wallet)
 
-            return ZanoAdapter(kit, assetId, wallet, provider, txAdapter, App.localStorage.torEnabled)
+            return ZanoAdapter(kit, assetId, wallet, provider, txAdapter)
         }
     }
 }

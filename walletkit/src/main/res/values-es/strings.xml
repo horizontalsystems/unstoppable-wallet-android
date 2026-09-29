@@ -1954,6 +1954,5 @@
     <string name="WatchWallet_Typed">Wallet de observación %s</string>
     <string name="Action_Clear">Borrar</string>
     <string name="Send_Utxos_Auto">Auto</string>
-    <string name="BalanceSyncError_TorUnsupportedText">%s aún no se puede sincronizar a través de Tor. Para sincronizarlo, desactiva Tor en Ajustes → Privacidad.</string>
     <string name="TorPage_ConnectingProgress">Conectando Tor… %d%%</string>
 </resources>

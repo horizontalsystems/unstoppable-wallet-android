@@ -10,7 +10,6 @@ class SyncErrorViewModel(
     val blockchainWrapper by service::blockchainWrapper
     val coinName by service::coinName
     val reportEmail by service::reportEmail
-    val torUnsupported = service.torUnsupported
 
     fun retry() {
         service.retry()

@@ -37,14 +37,14 @@ data class SyncErrorSheet(val input: Input) : HSBottomSheet(expanded = true) {
 @Composable
 private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
-    val text = when {
-        viewModel.torUnsupported -> stringResource(R.string.BalanceSyncError_TorUnsupportedText, viewModel.coinName)
-        viewModel.sourceChangeable -> stringResource(R.string.BalanceSyncError_ChangableSourceErrorText)
-        else -> stringResource(R.string.BalanceSyncError_ErrorText)
+    val text = if (viewModel.sourceChangeable) {
+        stringResource(R.string.BalanceSyncError_ChangableSourceErrorText)
+    } else {
+        stringResource(R.string.BalanceSyncError_ErrorText)
     }
 
     BottomSheetBody(
-        buttons = if (viewModel.torUnsupported) null else ({
+        buttons = {
             HSButton(
                 title = stringResource(R.string.BalanceSyncError_ButtonRetry),
                 modifier = Modifier.fillMaxWidth(),
@@ -86,7 +86,7 @@ private fun SyncErrorScreen(navigation: HSNavigation, wallet: Wallet) {
                     }
                 )
             }
-        }),
+        },
         content = {
             BottomSheetHeaderV3(
                 image72 = painterResource(R.drawable.warning_filled_24),

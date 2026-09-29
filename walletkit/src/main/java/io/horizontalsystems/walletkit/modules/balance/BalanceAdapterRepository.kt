@@ -6,7 +6,6 @@ import io.horizontalsystems.walletkit.core.BalanceData
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ITorManager
-import io.horizontalsystems.walletkit.core.TorUnsupportedException
 import io.horizontalsystems.walletkit.core.managers.TorManager
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.collectSafely
@@ -126,7 +125,7 @@ class BalanceAdapterRepository(
         // Nothing reaches the network while Tor starts or reconnects, so errors from kits that
         // tried meanwhile are not real. The kits are refreshed once Tor connects and those still
         // failing once more after TorManager.WARM_UP_MILLIS, so errors stay hidden until then.
-        if (state is AdapterState.NotSynced && state.error !is TorUnsupportedException && torManager.isTorEnabled) {
+        if (state is AdapterState.NotSynced && torManager.isTorEnabled) {
             val torStatus = torManager.torStatusFlow.value
             val justConnected = torStatus == TorStatus.Connected &&
                 SystemClock.elapsedRealtime() - torConnectedAt < TOR_ERROR_GRACE_MILLIS

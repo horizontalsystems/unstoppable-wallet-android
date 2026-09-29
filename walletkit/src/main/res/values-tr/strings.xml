@@ -1955,6 +1955,5 @@
     <string name="WatchWallet_Typed">%s İzleme Cüzdanı</string>
     <string name="Action_Clear">Temizle</string>
     <string name="Send_Utxos_Auto">Otomatik</string>
-    <string name="BalanceSyncError_TorUnsupportedText">%s henüz Tor üzerinden senkronize edilemiyor. Senkronize etmek için Ayarlar → Gizlilik bölümünden Tor\'u kapatın.</string>
     <string name="TorPage_ConnectingProgress">Tor Bağlanıyor… %d%%</string>
 </resources>
