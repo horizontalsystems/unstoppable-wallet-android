@@ -1342,7 +1342,7 @@
     <string name="Tor_Connection_Enable">启用Tor</string>
     <string name="Tor_Connection_Disable">禁用Tor</string>
     <string name="Tor_Alert_Title">互联网</string>
-    <string name="TorPage_Connecting">토르 연결 중…</string>
+    <string name="TorPage_Connecting">正在连接 Tor…</string>
     <string name="TorPage_Failed">Tor 연결 실패</string>
     <string name="Tor_TorIsActive">Tor 已激活</string>
     <!--Coin Page-->
@@ -1954,4 +1954,5 @@
     <string name="Action_Clear">清除</string>
     <string name="Send_Utxos_Auto">自动</string>
     <string name="BalanceSyncError_TorUnsupportedText">%s 暂不支持通过 Tor 同步。如需同步，请在 设置 → 隐私保护 中关闭 Tor。</string>
+    <string name="TorPage_ConnectingProgress">正在连接 Tor… %d%%</string>
 </resources>

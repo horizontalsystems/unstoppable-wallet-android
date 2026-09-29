@@ -50,6 +50,8 @@ class TorManager(
     private val logger = AppLogger("tor status")
     private val _torStatusFlow = MutableStateFlow(TorStatus.Closed)
     override val torStatusFlow: StateFlow<TorStatus> = _torStatusFlow.asStateFlow()
+    private val _bootstrapProgressFlow = MutableStateFlow<Int?>(null)
+    override val bootstrapProgressFlow: StateFlow<Int?> = _bootstrapProgressFlow.asStateFlow()
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -162,15 +164,34 @@ class TorManager(
         true
     }
 
-    // Runs once TorService is bound: waits for its control connection, routes traffic to the
-    // SOCKS port as soon as it is known, since Tor holds requests until its circuits are ready,
-    // and reports Connected once bootstrap completes.
+    // Some services refuse part of the Tor exits, and Tor keeps a circuit for up to 10 minutes,
+    // so a kit that failed on one exit keeps failing until its circuit changes
+    override suspend fun newCircuits() = withContext(Dispatchers.IO) {
+        executor.submit {
+            if (_torStatusFlow.value != TorStatus.Connected) return@submit
+            try {
+                service?.torControlConnection?.signal("NEWNYM")
+            } catch (e: IOException) {
+                Timber.w(e, "Failed to request new Tor circuits")
+            }
+        }.get()
+        Unit
+    }
+
+    // Runs once TorService is bound: waits for its control connection and bootstrap, then routes
+    // traffic to the SOCKS port and reports Connected, which refreshes the kits. Traffic is only
+    // routed to Tor once it is ready: requests Tor held while bootstrapping would hit their own
+    // timeouts after that refresh and leave the kits in errors nothing retries, while requests
+    // refused before it fail at once and are retried by it.
     private fun connect() {
         val control = awaitControlConnection() ?: return fail("Tor control connection did not come up")
 
         try {
-            enableProxy(socksPort(control))
-            if (awaitBootstrap(control)) {
+            // Bootstrap can report 100% before a single circuit exists
+            val bootstrapped = awaitBootstrap(control) && awaitBuiltCircuit(control)
+            _bootstrapProgressFlow.value = null
+            if (bootstrapped) {
+                enableProxy(socksPort(control))
                 _torStatusFlow.value = TorStatus.Connected
                 Timber.d("Tor bootstrapped")
             } else {
@@ -181,9 +202,9 @@ class TorManager(
         }
     }
 
-    // Blocks until Tor carries traffic again. Disabling the network closes the SOCKS listener as
-    // well and with an "auto" port it reopens on a new one, so the port is read again. Going
-    // through Connecting also gives the kits a fresh attempt once Connected is reported.
+    // Blocks until Tor carries traffic again, routing it to Tor only then, as in connect().
+    // Disabling the network closes the SOCKS listener as well and with an "auto" port it reopens
+    // on a new one, so the port is read again.
     private fun reconnect(control: TorControlConnection, reset: Boolean) {
         blockProxy()
         _torStatusFlow.value = TorStatus.Connecting
@@ -191,8 +212,8 @@ class TorManager(
         try {
             if (reset) control.setConf("DisableNetwork", "1")
             control.setConf("DisableNetwork", "0")
-            enableProxy(socksPort(control))
             if (awaitBuiltCircuit(control)) {
+                enableProxy(socksPort(control))
                 _torStatusFlow.value = TorStatus.Connected
                 Timber.d("Tor reconnected")
             } else {
@@ -205,6 +226,7 @@ class TorManager(
 
     private fun fail(reason: String) {
         Timber.w(reason)
+        _bootstrapProgressFlow.value = null
         blockProxy()
         _torStatusFlow.value = TorStatus.Failed
     }
@@ -279,13 +301,16 @@ class TorManager(
 
     private fun awaitBootstrap(control: TorControlConnection): Boolean {
         repeat(BOOTSTRAP_WAIT_TRIES) {
-            if (control.getInfo("status/bootstrap-phase").contains("PROGRESS=100")) return true
+            val phase = control.getInfo("status/bootstrap-phase")
+            val progress = Regex("PROGRESS=(\\d+)").find(phase)?.groupValues?.get(1)?.toInt()
+            if (progress == 100) return true
+            _bootstrapProgressFlow.value = progress
             Thread.sleep(POLL_INTERVAL_MILLIS)
         }
         return false
     }
 
-    // Disabling the network closes every circuit, so any built one proves Tor reaches relays again
+    // After DisableNetwork every circuit is closed, so any built one proves Tor reaches relays again
     private fun awaitBuiltCircuit(control: TorControlConnection): Boolean {
         repeat(RECONNECT_WAIT_TRIES) {
             if (control.getInfo("circuit-status").lineSequence().any { it.contains(" BUILT ") }) return true
@@ -344,6 +369,10 @@ class TorManager(
     }
 
     companion object {
+        // Right after Tor connects, the first circuits to each destination can take longer than
+        // some kits wait, so kits that failed meanwhile get another attempt after this long
+        const val WARM_UP_MILLIS = 20_000L
+
         private const val LOCALHOST = "127.0.0.1"
         private const val BLOCKED_PORT = 1
         private const val POLL_INTERVAL_MILLIS = 500L

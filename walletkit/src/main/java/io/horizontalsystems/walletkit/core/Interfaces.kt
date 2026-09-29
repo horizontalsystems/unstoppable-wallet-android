@@ -539,6 +539,10 @@ interface ITorManager {
     fun setTorAsDisabled()
     val isTorEnabled: Boolean
     val torStatusFlow: StateFlow<TorStatus>
+    // Bootstrap percentage while Tor starts; null once it is up, or while it only reconnects
+    val bootstrapProgressFlow: StateFlow<Int?>
+    // New requests get new circuits, so a request failing on its exit can leave through another
+    suspend fun newCircuits()
 }
 
 interface IRateAppManager {

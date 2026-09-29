@@ -24,11 +24,18 @@ class TorConnectionViewModel(
     private var showRetryButton = false
     private var showNoNetworkConnectionError = false
     private var torIsActive = false
+    private var progress: Int? = null
 
     init {
         torManager.torStatusFlow
             .onEach { connectionStatus ->
                 updateTorViewState(connectionStatus)
+            }.launchIn(viewModelScope)
+
+        torManager.bootstrapProgressFlow
+            .onEach {
+                progress = it
+                emitState()
             }.launchIn(viewModelScope)
     }
 
@@ -66,6 +73,7 @@ class TorConnectionViewModel(
     private fun getState(): TorViewState {
         return TorViewState(
             stateText = stateText,
+            progress = progress.takeIf { !torIsActive && !showRetryButton },
             showRetryButton = showRetryButton,
             torIsActive = torIsActive,
             showNetworkConnectionError = showNoNetworkConnectionError

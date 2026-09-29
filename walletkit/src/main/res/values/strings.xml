@@ -2308,4 +2308,5 @@
     <string name="Hud_Text_ChangeWallet">Change Wallet</string>
     <string name="WatchWallet_Typed">%s Watch Wallet</string>
     <string name="BalanceSyncError_TorUnsupportedText">%s can\'t sync over Tor yet. To sync it, turn off Tor in Settings → Privacy.</string>
+    <string name="TorPage_ConnectingProgress">Connecting Tor… %d%%</string>
 </resources>

@@ -15,6 +15,7 @@ object TorConnectionModule {
 
     data class TorViewState(
         val stateText: Int,
+        val progress: Int?,
         val showRetryButton: Boolean,
         val torIsActive: Boolean,
         val showNetworkConnectionError: Boolean,

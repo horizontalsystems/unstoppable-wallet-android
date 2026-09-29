@@ -1957,4 +1957,5 @@
     <string name="Action_Clear">Effacer</string>
     <string name="Send_Utxos_Auto">Auto</string>
     <string name="BalanceSyncError_TorUnsupportedText">%s ne peut pas encore être synchronisé via Tor. Pour le synchroniser, désactivez Tor dans Paramètres → Confidentialité.</string>
+    <string name="TorPage_ConnectingProgress">Connexion à Tor… %d%%</string>
 </resources>

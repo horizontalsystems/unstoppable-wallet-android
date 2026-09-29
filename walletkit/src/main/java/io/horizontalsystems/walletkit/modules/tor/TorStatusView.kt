@@ -81,8 +81,13 @@ fun TorStatusView(
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                val progress = viewModel.torViewState.progress
                 Text(
-                    text = stringResource(viewModel.torViewState.stateText),
+                    text = if (progress != null) {
+                        stringResource(R.string.TorPage_ConnectingProgress, progress)
+                    } else {
+                        stringResource(viewModel.torViewState.stateText)
+                    },
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
                     style = ComposeAppTheme.typography.subheadR,
