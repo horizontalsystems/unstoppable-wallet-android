@@ -132,6 +132,8 @@ import java.security.MessageDigest
 import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
+import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
+import kotlinx.coroutines.flow.filter
 
 abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
@@ -262,7 +264,9 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val appConfig = createAppConfigProvider(localStorage)
         appConfigProvider = appConfig
 
-        torKitManager = TorManager(instance, localStorage)
+        backgroundManager = BackgroundManager()
+
+        torKitManager = TorManager(instance, localStorage, backgroundManager)
 
         marketKit = MarketKitWrapper(
             context = this,
@@ -272,8 +276,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         priceManager = PriceManager(localStorage)
-
-        backgroundManager = BackgroundManager()
 
         appDatabase = AppDatabase.getInstance(this)
 
@@ -669,6 +671,16 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                     }
 
                     BackgroundManagerState.EnterBackground -> UserSubscriptionManager.pause()
+                }
+            }
+        }
+
+        if (torKitManager.isTorEnabled) {
+            // Kits start before Tor can carry traffic and give up on their first requests, so
+            // each time Tor connects (at launch or after a retry) they get a fresh attempt
+            coroutineScope.launch {
+                torKitManager.torStatusFlow.filter { it == TorStatus.Connected }.collect {
+                    adapterManager.refresh()
                 }
             }
         }

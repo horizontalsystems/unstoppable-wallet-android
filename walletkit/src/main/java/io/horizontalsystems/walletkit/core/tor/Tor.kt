@@ -75,9 +75,8 @@ object Tor {
                 field = value
             }
 
-        var proxyHost = TorConstants.IP_LOCALHOST
-        var proxySocksPort = TorConstants.SOCKS_PROXY_PORT_DEFAULT
-        var proxyHttpPort = TorConstants.HTTP_PROXY_PORT_DEFAULT
+        var proxySocksPort: String? = null
+        var proxyHttpPort: String? = null
         var status: ConnectionStatus = ConnectionStatus.CLOSED
     }
 
@@ -86,7 +85,6 @@ object Tor {
         var appDataDir: File = context.getDir(TorConstants.DIRECTORY_TOR_DATA, Application.MODE_PRIVATE)
         var appNativeDir: File = File(context.applicationInfo.nativeLibraryDir)
         var appSourceDir: File = File(context.applicationInfo.sourceDir)
-        var useBridges: Boolean = false
     }
 
 }

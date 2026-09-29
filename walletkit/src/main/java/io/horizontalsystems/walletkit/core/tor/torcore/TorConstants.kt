@@ -18,10 +18,10 @@ interface TorConstants {
         const val COMMON_ASSET_KEY = "common/"
         const val TOR_CONTROL_COOKIE = "control_auth_cookie"
         const val IP_LOCALHOST = "127.0.0.1"
-        const val TOR_TRANSPROXY_PORT_DEFAULT = "9040"
-        const val TOR_DNS_PORT_DEFAULT = "5400"
-        const val HTTP_PROXY_PORT_DEFAULT = "8118" // like Privoxy!
-        const val SOCKS_PROXY_PORT_DEFAULT = "9050"
+
+        // Nothing listens on port 1 and an unprivileged app cannot bind it, so pointing the
+        // proxy there refuses every connection until Tor reports the ports it opened
+        const val BLOCKED_PROXY_PORT = "1"
 
         var FILE_WRITE_BUFFER_SIZE = 1024
     }

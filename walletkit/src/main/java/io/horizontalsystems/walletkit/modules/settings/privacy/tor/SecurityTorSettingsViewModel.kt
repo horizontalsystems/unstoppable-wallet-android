@@ -42,12 +42,14 @@ class SecurityTorSettingsViewModel(
             viewModelScope.launch {
                 try {
                     torManager.stop()
-                    pinComponent.updateLastExitDateBeforeRestart()
-                    App.pinComponent.keepUnlocked()
-                    restartApp = true
                 } catch (e: Throwable) {
                     logger.warning("Tor exception", e)
                 }
+                // The preference is already off, so the app restarts into that state even when
+                // stopping Tor fails
+                pinComponent.updateLastExitDateBeforeRestart()
+                App.pinComponent.keepUnlocked()
+                restartApp = true
             }
         }
     }

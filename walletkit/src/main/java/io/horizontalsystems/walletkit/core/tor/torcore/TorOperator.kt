@@ -43,6 +43,9 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
                 killTorProcess()
                 //-----------------------------
 
+                // A control port file left by a previous run would point at a port nobody listens on
+                resManager.fileTorControlPort.delete()
+
                 if (runTorShellCmd(resManager.fileTor, resManager.fileTorrcCustom)) {
 
                     eventMonitor(msg = "Successfully verified config")
@@ -65,14 +68,18 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
                     torControl?.let { it ->
                         coroutineScope.launch {
                             try {
-                                it.initConnection(4).collect { torConnection ->
+                                it.initConnection(20).collect { torConnection ->
                                     torInfo.connection = torConnection
                                 }
                             } catch (e: Throwable) {
                                 torInfo.processId = -1
+                                torInfo.connection.status = ConnectionStatus.FAILED
+                                listener.statusUpdate(torInfo)
                             }
                         }
                     }
+                } else {
+                    throw IllegalStateException("Tor process did not start")
                 }
             } else {
                 throw FileNotFoundException("Error!!! Tor.so file notfound.")
@@ -95,6 +102,36 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
 
     suspend fun stop(): Boolean {
         return killAllDaemons()
+    }
+
+    fun disableNetwork() {
+        try {
+            torControl?.setNetworkEnabled(false)
+        } catch (e: Exception) {
+            eventMonitor(msg = "Failed to disable Tor network: " + e.localizedMessage)
+        }
+    }
+
+    // Blocks until Tor carries traffic again; the status goes through Connecting so the proxy
+    // points at the reopened ports and waiting requests get a fresh attempt on Connected
+    fun reconnect(reset: Boolean) {
+        val control = torControl ?: return
+
+        torInfo.connection.status = ConnectionStatus.CONNECTING
+        listener.statusUpdate(torInfo)
+
+        val connected = try {
+            if (reset) control.setNetworkEnabled(false)
+            control.setNetworkEnabled(true)
+            listener.statusUpdate(torInfo)
+            control.awaitBuiltCircuit(RECONNECT_TIMEOUT_MILLIS)
+        } catch (e: Exception) {
+            eventMonitor(msg = "Failed to reconnect Tor: " + e.localizedMessage)
+            false
+        }
+
+        torInfo.connection.status = if (connected) ConnectionStatus.CONNECTED else ConnectionStatus.FAILED
+        eventMonitor(torInfo, msg = if (connected) "Tor reconnected" else "Tor failed to reconnect")
     }
 
     fun newIdentity(): Boolean {
@@ -198,4 +235,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
         return shellResult.exitCode
     }
 
+    companion object {
+        private const val RECONNECT_TIMEOUT_MILLIS = 60_000L
+    }
 }

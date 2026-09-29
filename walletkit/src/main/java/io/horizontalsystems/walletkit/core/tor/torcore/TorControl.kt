@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.core.tor.torcore
 
-import android.text.TextUtils
 import io.horizontalsystems.walletkit.core.tor.ConnectionStatus
 import io.horizontalsystems.walletkit.core.tor.Tor
 import kotlinx.coroutines.delay
@@ -37,7 +36,7 @@ class TorControl(
     private var controlConn: TorControlConnection? = null
     private var torEventHandler: TorEventHandler? = null
     private var torProcessId: Int = -1
-    private val MAX_BOOTSTRAP_CHECK_TRIES = 60
+    private val MAX_BOOTSTRAP_CHECK_TRIES = 120
 
     fun eventMonitor(torInfo: Tor.Info? = null, msg: String? = null) {
         msg?.let {
@@ -78,8 +77,16 @@ class TorControl(
             .map {
                 configConnection(it, torInfo)
             }.catch {
-                emit(Tor.Connection(-1))
+                emit(failedConnection(it.localizedMessage))
             }
+    }
+
+    private fun failedConnection(reason: String?): Tor.Connection {
+        controlConn = null
+        torInfo.connection.processId = -1
+        torInfo.connection.status = ConnectionStatus.FAILED
+        eventMonitor(torInfo, msg = "Tor connection failed: $reason")
+        return torInfo.connection
     }
 
     private fun createControlConn(maxTries: Int): Flow<TorControlConnection> {
@@ -108,15 +115,15 @@ class TorControl(
                     }
                 } catch (e: Exception) {
                     controlConn = null
-                    torInfo.connection.processId = -1
-                    torInfo.connection.status = ConnectionStatus.FAILED
-
-                    eventMonitor(torInfo, msg = "Error connecting to Tor local control port: " + e.localizedMessage)
-                    throw e
+                    eventMonitor(msg = "Error connecting to Tor local control port: " + e.localizedMessage)
                 }
 
                 // Wait for control file creation
                 delay(300)
+            }
+
+            if (controlConn == null) {
+                throw IllegalStateException("Tor control port did not come up")
             }
         }
     }
@@ -138,25 +145,67 @@ class TorControl(
                 torInfo.connection.processId = torProcessId
                 eventMonitor(torInfo, msg = "SUCCESS - started tor control processId:${torProcId}")
 
+                torInfo.connection.proxySocksPort = listenerPort(conn, "net/listeners/socks")
+                torInfo.connection.proxyHttpPort = listenerPort(conn, "net/listeners/httptunnel")
+
                 torEventHandler = TorEventHandler(this)
                 torEventHandler?.let {
                     addEventHandler(conn, it)
                 }
 
+                Thread {
+                    onBootstrapped(torInfo)
+                }.start()
+
                 return torInfo.connection
 
             } else {
-                eventMonitor(msg = "Tor authentication cookie does not exist yet")
+                return failedConnection("Tor authentication cookie does not exist")
             }
         } catch (e: Exception) {
-
-            controlConn = null
-            torInfo.connection.processId = -1
-            torInfo.connection.status = ConnectionStatus.FAILED
-            eventMonitor(torInfo, msg = "Error configuring Tor connection: " + e.localizedMessage)
+            return failedConnection("Error configuring Tor connection: " + e.localizedMessage)
         }
+    }
 
-        return Tor.Connection(-1)
+    // Tor answers with a quoted "127.0.0.1:43215" per listener; the ports are chosen by Tor
+    // ("auto" in torrc), so they are only known once the control connection is up
+    private fun listenerPort(conn: TorControlConnection, key: String): String {
+        val listeners = conn.getInfo(key)
+        return Regex(":(\\d+)").find(listeners)?.groupValues?.get(1)
+            ?: throw IllegalStateException("Tor reported no listener for $key: $listeners")
+    }
+
+    // DisableNetwork closes the SOCKS and HTTP listeners along with the relay connections, and
+    // with "auto" ports they reopen on new ones, so the ports are read again on every enable
+    @Throws(IOException::class)
+    fun setNetworkEnabled(enabled: Boolean) {
+        val conn = controlConn ?: throw IOException("Not connected to Tor control port")
+        conn.setConf("DisableNetwork", if (enabled) "0" else "1")
+        if (enabled) {
+            torInfo.connection.proxySocksPort = listenerPort(conn, "net/listeners/socks")
+            torInfo.connection.proxyHttpPort = listenerPort(conn, "net/listeners/httptunnel")
+        } else {
+            torInfo.connection.proxySocksPort = null
+            torInfo.connection.proxyHttpPort = null
+        }
+    }
+
+    // Disabling the network closes every circuit, so any built one proves Tor reaches relays again
+    fun awaitBuiltCircuit(timeoutMillis: Long): Boolean {
+        val conn = controlConn ?: return false
+        val deadline = System.currentTimeMillis() + timeoutMillis
+        while (System.currentTimeMillis() < deadline) {
+            try {
+                val circuits = conn.getInfo("circuit-status")
+                if (circuits.lineSequence().any { it.contains(" BUILT ") }) {
+                    return true
+                }
+            } catch (e: IOException) {
+                return false
+            }
+            Thread.sleep(500)
+        }
+        return false
     }
 
     fun newIdentity(): Boolean {
@@ -270,21 +319,9 @@ class TorControl(
             //logger.info("BandwidthUsed:${read},${written}")
         }
 
+        // A single relay connection failing is routine while Tor bootstraps; the bootstrap
+        // check in onBootstrapped decides whether Tor as a whole failed
         override fun orConnStatus(status: String?, orName: String?) {
-            status?.let {
-
-                if (TextUtils.equals(status, "CONNECTED")) {
-
-                    Thread(Runnable {
-                        torControl.onBootstrapped(torControl.torInfo)
-                    }).start()
-
-                } else if (TextUtils.equals(status, "FAILED")) {
-                    torControl.torInfo.connection.status = ConnectionStatus.FAILED
-                    torControl.eventMonitor(torControl.torInfo)
-                }
-            }
-
         }
 
         override fun newDescriptors(orList: MutableList<String>?) {

@@ -1,10 +1,10 @@
 package io.horizontalsystems.walletkit.core.tor.torcore
 
+import android.os.Process
 import android.util.Log
 import io.horizontalsystems.walletkit.core.tor.Tor
 import io.horizontalsystems.walletkit.core.tor.torutils.FileUtils
 import io.horizontalsystems.walletkit.core.tor.torutils.NativeLoader
-import io.horizontalsystems.walletkit.core.tor.torutils.NetworkUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -97,14 +97,16 @@ class TorResourceManager(private val torSettings: Tor.Settings) {
         extraLines.append("AvoidDiskWrites 1").append('\n')
         extraLines.append("ControlPortWriteToFile ").append(fileTorControlPort.absolutePath).append('\n')
         extraLines.append("ControlPort Auto").append('\n')
-        extraLines.append("SOCKSPort ").append(checkPortOrAuto(TorConstants.SOCKS_PROXY_PORT_DEFAULT)).append('\n')
+        extraLines.append("SOCKSPort auto").append('\n')
         extraLines.append("ReducedConnectionPadding 1").append('\n')
         extraLines.append("ReducedCircuitPadding 1").append('\n')
         extraLines.append("SafeSocks 0").append('\n')
         extraLines.append("TestSocks 0").append('\n')
         extraLines.append("TransPort 0").append('\n')
-        extraLines.append("HTTPTunnelPort ").append(checkPortOrAuto(TorConstants.HTTP_PROXY_PORT_DEFAULT)).append('\n')
-        extraLines.append("DNSPort ").append(checkPortOrAuto(TorConstants.TOR_DNS_PORT_DEFAULT)).append('\n')
+        extraLines.append("HTTPTunnelPort auto").append('\n')
+        extraLines.append("DNSPort 0").append('\n')
+        // Tor runs as a daemon, so without this it outlives the app process when Android kills it
+        extraLines.append("__OwningControllerProcess ").append(Process.myPid()).append('\n')
         extraLines.append("CookieAuthentication 1").append('\n')
         extraLines.append("DisableNetwork 0").append('\n')
 
@@ -114,24 +116,6 @@ class TorResourceManager(private val torSettings: Tor.Settings) {
         return if (success && fileTorRcCustom.exists()) {
             fileTorRcCustom
         } else null
-    }
-
-    private fun checkPortOrAuto(portString: String): String {
-
-        if (!portString.lowercase().contentEquals("auto")) {
-            var isPortUsed = true
-            var port = portString.toInt()
-
-            while (isPortUsed) {
-                isPortUsed = NetworkUtils.isPortOpen("127.0.0.1", port, 500)
-                if (isPortUsed) //the specified port is not available, so let Tor find one instead
-                    port++
-            }
-
-            return port.toString() + ""
-        }
-
-        return portString
     }
 
     @Throws(IOException::class, FileNotFoundException::class, TimeoutException::class)

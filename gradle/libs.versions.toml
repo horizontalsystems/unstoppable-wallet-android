@@ -97,7 +97,7 @@ ktor = "2.3.7"
 desugar = "2.1.5"
 
 # Tor
-torAndroid = "0.4.9.8"
+torAndroid = "0.4.9.11"
 jtorctl = "0.4.5.7"
 
 # Utils
