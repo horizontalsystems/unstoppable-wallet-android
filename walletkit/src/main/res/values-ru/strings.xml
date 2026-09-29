@@ -1963,4 +1963,5 @@
     <string name="WatchWallet_Typed">%s кошелёк наблюдения</string>
     <string name="Action_Clear">Очистить</string>
     <string name="Send_Utxos_Auto">Авто</string>
+    <string name="BalanceSyncError_TorUnsupportedText">%s пока не синхронизируется через Tor. Чтобы синхронизировать, отключите Tor в Настройки → Конфиденциальность.</string>
 </resources>

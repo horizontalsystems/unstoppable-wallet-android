@@ -52,6 +52,10 @@ open class HSCaution(
 class UnsupportedException(override val message: String?) : Exception()
 class UnsupportedAccountException : Exception()
 
+// The chain's kit opens its own connections without going through the Tor proxy, so it stays
+// stopped while Tor is on instead of syncing over the open internet
+class TorUnsupportedException : Exception()
+
 // A watch account has no key to sign with. Every entry into a signing flow is hidden for it,
 // so this is the backstop: thrown before an external provider order is created, since those
 // outlive the app and a late failure at the signature would leave one unpaid.

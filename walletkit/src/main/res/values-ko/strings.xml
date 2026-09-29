@@ -1950,4 +1950,5 @@
     <string name="WatchWallet_Typed">%s 감시 지갑</string>
     <string name="Action_Clear">지우기</string>
     <string name="Send_Utxos_Auto">자동</string>
+    <string name="BalanceSyncError_TorUnsupportedText">%s은(는) 아직 Tor를 통해 동기화할 수 없습니다. 동기화하려면 설정 → 개인정보에서 Tor를 끄세요.</string>
 </resources>

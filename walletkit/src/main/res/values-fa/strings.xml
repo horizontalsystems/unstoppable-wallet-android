@@ -1942,4 +1942,5 @@
     <string name="WatchWallet_Typed">کیف پول نظارتی %s</string>
     <string name="Action_Clear">پاک کردن</string>
     <string name="Send_Utxos_Auto">خودکار</string>
+    <string name="BalanceSyncError_TorUnsupportedText">%s هنوز از طریق Tor همگام‌سازی نمی‌شود. برای همگام‌سازی، Tor را در تنظیمات ← حریم خصوصی خاموش کنید.</string>
 </resources>

@@ -1953,4 +1953,5 @@
     <string name="WatchWallet_Typed">%s 观察钱包</string>
     <string name="Action_Clear">清除</string>
     <string name="Send_Utxos_Auto">自动</string>
+    <string name="BalanceSyncError_TorUnsupportedText">%s 暂不支持通过 Tor 同步。如需同步，请在 设置 → 隐私保护 中关闭 Tor。</string>
 </resources>

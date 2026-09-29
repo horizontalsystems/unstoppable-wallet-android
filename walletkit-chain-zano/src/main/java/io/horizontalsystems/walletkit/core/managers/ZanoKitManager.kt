@@ -68,7 +68,9 @@ class ZanoKitManager(
                 is AccountType.Mnemonic -> createKitInstance(accountType, account, creationTimestamp)
                 else -> throw UnsupportedAccountException()
             }
-            this.zanoKitWrapper!!.kit.start()
+            if (!App.localStorage.torEnabled) {
+                this.zanoKitWrapper!!.kit.start()
+            }
             useCount = 0
             currentAccount = account
         }

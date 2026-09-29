@@ -1,6 +1,8 @@
 package io.horizontalsystems.walletkit.modules.syncerror
 
+import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.IAdapterManager
+import io.horizontalsystems.walletkit.core.TorUnsupportedException
 import io.horizontalsystems.walletkit.core.managers.BtcBlockchainManager
 import io.horizontalsystems.walletkit.core.managers.EvmBlockchainManager
 import io.horizontalsystems.walletkit.entities.Wallet
@@ -34,6 +36,10 @@ class SyncErrorService(
     }
 
     val coinName: String = wallet.coin.name
+
+    val torUnsupported: Boolean
+        get() = (adapterManager.getBalanceAdapterForWallet(wallet)?.balanceState as? AdapterState.NotSynced)
+            ?.error is TorUnsupportedException
 
     val sourceChangeable = blockchainWrapper != null
 
