@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
+import io.horizontalsystems.walletkit.core.utils.OnionNodeUrl
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
 import java.net.URI
@@ -46,7 +47,7 @@ class AddRpcViewModel(
 
         try {
             sourceUri = URI(url)
-            val hasRequiredProtocol = listOf("https", "wss").contains(sourceUri.scheme)
+            val hasRequiredProtocol = listOf("https", "wss").contains(sourceUri.scheme) || OnionNodeUrl.isHttpOnion(sourceUri)
             if (!hasRequiredProtocol) {
                 throw MalformedURLException()
             }

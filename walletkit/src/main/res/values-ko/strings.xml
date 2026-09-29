@@ -806,7 +806,7 @@
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다.</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">입력한 URL이 잘못되었습니다. 유효한 URL은 http, https, ws, wss 스키마 중 하나여야 합니다. HTTP는 .onion 호스트에만 허용됩니다</string>
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">노드 추가</string>
     <!--Btc Blockchain Settings -->
@@ -1679,7 +1679,7 @@
     <string name="Activate_InsufficientBalance_Description">이 토큰을 활성화하기에 XLM 잔액이 부족합니다.</string>
     <string name="Activate_YouActivate">활성화</string>
     <string name="ActivationRequired_DialogDescription">%1$s을(를) 받으려면 토큰을 활성화해야 합니다. Stellar 네트워크는 각 토큰에 대해 트러스트라인을 설정하도록 요구합니다. 트러스트라인이 없으면 지갑에서 %2$s을(를) 받을 수 없으며, 거래가 거부되고 자금이 전달되지 않습니다.</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 스킴 중 하나를 사용해야 합니다: https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 스킴 중 하나를 사용해야 합니다: https. HTTP는 .onion 호스트에만 허용됩니다</string>
     <string name="AddMoneroNode_Pasword">비밀번호 (선택 사항)</string>
     <string name="AddMoneroNode_Username">사용자 이름 (선택 사항)</string>
     <string name="AddressEnter_NeedSubscription_Content">보안 전송이 꺼져 있습니다. 위험한 주소로 송금되어 자금을 잃을 수 있습니다.</string>

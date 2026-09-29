@@ -980,14 +980,14 @@
     <string name="AddEvmSyncSource_AddRPCSource">Ajouter une source RPC</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Authentification basique (facultatif)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">La source RPC avec cette url existe déjà</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : http, https, ws, wss. HTTP n\'est autorisé que pour les hôtes .onion</string>
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">Ajouter un noeud</string>
     <string name="AddMoneroNode_NodeUrl">Url du noeud</string>
     <string name="AddMoneroNode_Username">Nom d\'utilisateur (facultatif)</string>
     <string name="AddMoneroNode_Pasword">Mot de passe (facultatif)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Un noeud avec cette url existe déjà</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">L\'url saisie n\'est pas valide. L\'url valide doit avoir un des schémas suivants : https. HTTP n\'est autorisé que pour les hôtes .onion</string>
     <string name="MoneroNodeSettings_TrustedTitle">Préférences du noeud</string>
     <string name="MoneroNodeSettings_TrustedDescription">Noeud de confiance — le portefeuille confie le noeud sélectionné et utilise ses données sans vérification supplémentaire.
         \n\nOn → transactions apparaissent instantanément en attente de diffusion (synchronisation plus rapide, mais la confidentialité et la dépendance au noeud).

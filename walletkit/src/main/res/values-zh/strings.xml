@@ -979,14 +979,14 @@
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss。仅 .onion 主机允许使用 HTTP</string>
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">添加节点</string>
     <string name="AddMoneroNode_NodeUrl">节点网址</string>
     <string name="AddMoneroNode_Username">用户名(可选)</string>
     <string name="AddMoneroNode_Pasword">密码(可选)</string>
     <string name="AddMoneroNode_Warning_UrlExists">此网址的节点已存在</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： https。仅 .onion 主机允许使用 HTTP</string>
     <string name="MoneroNodeSettings_TrustedTitle">节点首选项</string>
     <string name="MoneroNodeSettings_TrustedDescription">信任的节点——钱包信任选定的节点并在没有额外验证的情况下使用其数据。
         \n\n广播时即时显示为挂起的交易(粉刷同步) 但隐私和对节点的依赖性较低)。

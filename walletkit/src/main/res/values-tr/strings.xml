@@ -687,7 +687,7 @@
     <string name="AddEvmSyncSource_AddRPCSource">RPC Kaynağı Ekle</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth (optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">Bu URL\'ye sahip RPC kaynak zaten var</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Girilen Url geçersiz. Geçerli url aşağıdaki şemalardan birine sahip olmalıdır: http, https, ws, wss. HTTP yalnızca .onion ana bilgisayarları için kullanılabilir</string>
     <!--Add Monero Node-->
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Kaynak değiştirdikten sonra cüzdanın kendini yeniden senkronize etmesi gerekecek.</string>
@@ -1623,7 +1623,7 @@
     <string name="Activate_InsufficientBalance_Description">Bu token\'ı etkinleştirmek için yeterli XLM bakiyeniz yok.</string>
     <string name="Activate_YouActivate">Etkinleştiriyorsunuz</string>
     <string name="ActivationRequired_DialogDescription">%1$s almak için token\'ı etkinleştirmeniz gerekir. Stellar ağı her token için bir güven hattı (trustline) oluşturulmasını gerektirir. Bu olmadan cüzdanınız %2$s alamaz — işlem reddedilir ve fonlar teslim edilmez.</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">Girilen URL geçersiz. Geçerli bir URL şu şemalardan birini kullanmalıdır: https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Girilen URL geçersiz. Geçerli bir URL şu şemalardan birini kullanmalıdır: https. HTTP yalnızca .onion ana bilgisayarları için kullanılabilir</string>
     <string name="AddMoneroNode_Pasword">Parola (isteğe bağlı)</string>
     <string name="AddMoneroNode_Username">Kullanıcı adı (isteğe bağlı)</string>
     <string name="AddressEnter_NeedSubscription_Content">Güvenli Gönderim kapalı. Transferiniz riskli bir adrese gidebilir ve fonlar kaybolabilir.</string>

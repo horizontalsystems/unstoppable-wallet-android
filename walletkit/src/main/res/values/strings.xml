@@ -1424,7 +1424,7 @@
     <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss. HTTP is allowed only for .onion hosts</string>
 
 
     <!--Node/server selection, shared by the per-chain network settings screens-->
@@ -1440,7 +1440,7 @@
     <string name="AddMoneroNode_Username">Username (optional)</string>
     <string name="AddMoneroNode_Pasword">Password (optional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Node with this url already exists</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https. HTTP is allowed only for .onion hosts</string>
     <string name="AddMoneroNode_Error_PortRequired">Node url must include a port, e.g. https://node.com:18081</string>
     <string name="AddZanoNode_Warning_UrlExists">Node with this url already exists</string>
     <string name="AddZanoNode_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: http, https</string>
