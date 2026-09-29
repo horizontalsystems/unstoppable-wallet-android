@@ -20,6 +20,7 @@ import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
 import io.horizontalsystems.monerokit.Balance
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.Seed
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -134,7 +136,19 @@ class MoneroAdapter(
             kit.allTransactionsFlow.collect(transactionsProvider::onTransactions)
         }
 
-        kit.start()
+        val torManager = App.torKitManager
+        if (torManager.isTorEnabled) {
+            // The wallet reads the Tor SOCKS port once, when it opens. Tor reports its port only
+            // once connected, and a restarted Tor listens on a new one, so reopen on every connect
+            coroutineScope.launch {
+                torManager.torStatusFlow.filter { it == TorStatus.Connected }.collect {
+                    kit.stop()
+                    kit.start()
+                }
+            }
+        } else {
+            kit.start()
+        }
 
         coroutineScope.launch {
             backgroundManager.stateFlow.collect {

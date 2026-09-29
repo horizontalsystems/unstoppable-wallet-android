@@ -223,7 +223,7 @@ class ZcashAdapter(
                 setup = AccountCreateSetup(accountName = wallet.account.name, keySource = null, seed = FirstClassByteArray(seed)),
                 walletInitMode = walletInitMode,
                 zcashNetwork = network,
-                isTorEnabled = false,
+                isTorEnabled = localStorage.torEnabled,
                 isExchangeRateEnabled = false
             )
         }
@@ -790,7 +790,7 @@ class ZcashAdapter(
                 ),
                 walletInitMode = walletInitMode,
                 zcashNetwork = network,
-                isTorEnabled = false,
+                isTorEnabled = App.localStorage.torEnabled,
                 isExchangeRateEnabled = false
             )
 
