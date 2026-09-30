@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- A second launcher entry makes IDE and launcher starts land on the Leaks screen
+         instead of the wallet. Leaks stay reachable from LeakCanary's notification. -->
+    <bool name="leak_canary_add_launcher_icon">false</bool>
+</resources>

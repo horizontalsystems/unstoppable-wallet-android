@@ -265,6 +265,12 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcutil-jdk18on")
     }
 
+    // Spongycastle's POM declares junit as a compile dependency. LeakCanary disables
+    // heap dumps when it finds org.junit.Test on the classpath, so keep junit out of the APK.
+    configurations.matching { it.name.endsWith("RuntimeClasspath") && !it.name.contains("Test") }.configureEach {
+        exclude(group = "junit", module = "junit")
+    }
+
     // UI Tests
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     // Supplies the ComponentActivity that Compose UI tests are hosted in
