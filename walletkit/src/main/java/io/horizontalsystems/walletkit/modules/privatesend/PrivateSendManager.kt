@@ -70,7 +70,9 @@ class PrivateSendManager(
      * never trigger a fetch, block, or become suspend.
      */
     fun isSupported(token: Token): Boolean =
-        token.blockchainType !in privateChains && candidates().any { it.supportsPrivateSend(token) }
+        token.blockchainType !in privateChains &&
+            token.blockchainType !in payoutUnsupportedChains &&
+            candidates().any { it.supportsPrivateSend(token) }
 
     /**
      * Refreshes the confidential provider list (TTL-guarded) and each candidate's token list.
@@ -112,7 +114,9 @@ class PrivateSendManager(
     suspend fun commit(request: PrivateSendRequest): PrivateSendOrder {
         val token = request.token
 
-        if (token.blockchainType in privateChains) throw PrivateSendError.TokenUnsupported
+        if (token.blockchainType in privateChains || token.blockchainType in payoutUnsupportedChains) {
+            throw PrivateSendError.TokenUnsupported
+        }
 
         val providers = candidates().filter { it.supportsPrivateSend(token) }
 
@@ -388,6 +392,20 @@ class PrivateSendManager(
             BlockchainType.Zcash,
             BlockchainType.Monero,
             BlockchainType.Zano,
+        )
+
+        /**
+         * Chains where the provider's payout cannot reach the recipient the way it usually
+         * has to. Recipients on XRP and Stellar are mostly exchanges that credit a deposit
+         * only by its destination tag (XRP) or memo (Stellar), but the provider pays out to
+         * a bare address: the 1Click API takes no tag or memo, and the backend refuses XRP
+         * X-addresses (routeNotFound) and Stellar muxed M-addresses. Such a payout arrives
+         * but is never credited, or is rejected outright by an XRP account flagged
+         * RequireDestTag. Private Send and CrossPay's destination side both read this list.
+         */
+        val payoutUnsupportedChains = setOf(
+            BlockchainType.Xrp,
+            BlockchainType.Stellar,
         )
     }
 }

@@ -7,6 +7,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProvi
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
+import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
@@ -38,7 +39,7 @@ class CrossPayManager {
     suspend fun commit(request: CrossPayRequest): CrossPayOrder {
         val provider = provider ?: throw CrossPayError.TokenUnsupported
 
-        if (!provider.supports(request.tokenIn, request.tokenOut)) throw CrossPayError.TokenUnsupported
+        if (!supportsPair(provider, request.tokenIn, request.tokenOut)) throw CrossPayError.TokenUnsupported
 
         // Omitting the refund address forfeits the buffer refund, which lands on the success
         // path too — so a missing one fails the commit rather than proceeding without.
@@ -217,5 +218,16 @@ class CrossPayManager {
         fun resolveProvider(): USwapProvider? = MultiSwapProviderRegistry.allProviders
             .filterIsInstance<USwapProvider>()
             .firstOrNull { it.serverProviderId == PROVIDER_SERVER_ID }
+
+        /**
+         * Whether [token] can be what the recipient receives, independent of the provider's
+         * token list: the payout reaches only a bare address, which is not enough on the
+         * chains in [PrivateSendManager.payoutUnsupportedChains].
+         */
+        fun supportsDestination(token: Token): Boolean =
+            token.blockchainType !in PrivateSendManager.payoutUnsupportedChains
+
+        fun supportsPair(provider: USwapProvider, tokenIn: Token, tokenOut: Token): Boolean =
+            supportsDestination(tokenOut) && provider.supports(tokenIn, tokenOut)
     }
 }

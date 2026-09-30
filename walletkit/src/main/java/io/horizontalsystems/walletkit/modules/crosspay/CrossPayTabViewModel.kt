@@ -124,9 +124,12 @@ class CrossPayTabViewModel(
     // The swap screen's auto-pick, verbatim: the top entry of the context-aware Popular
     // Tokens list (native source → its chain's USDT, else USDT-ETH; token source → its
     // chain's native coin). Keeps CrossPay and swap presenting one behavior; a popular
-    // token the provider cannot route just shows "not supported" on the quote row.
+    // token the provider cannot route just shows "not supported" on the quote row. The one
+    // exception is a destination chain CrossPay never pays out on (a USDC-on-Stellar or
+    // RLUSD-on-XRP wallet would otherwise open the tab on its own chain's native coin and an
+    // error), so the pick skips those.
     private fun defaultTokenOut(): Token? =
-        SwapPopularTokens.build(App.marketKit, tokenIn).firstOrNull()
+        SwapPopularTokens.build(App.marketKit, tokenIn).firstOrNull { CrossPayManager.supportsDestination(it) }
 
     override fun createState() = CrossPayTabUiState(
         tokenIn = tokenIn,
@@ -145,7 +148,16 @@ class CrossPayTabViewModel(
 
     private fun step(): CrossPayStep {
         val amountOut = amountOut
-        if (tokenOut == null || amountOut == null || amountOut <= BigDecimal.ZERO) {
+        if (tokenOut == null) {
+            return CrossPayStep.EnterAmount
+        }
+
+        // No amount can make an unsupported pair payable, so asking for one would mislead.
+        (quote as? CrossPayQuoteState.Error)
+            ?.takeIf { it.kind == CrossPayQuoteState.ErrorKind.NotSupported }
+            ?.let { return CrossPayStep.QuoteError(it) }
+
+        if (amountOut == null || amountOut <= BigDecimal.ZERO) {
             return CrossPayStep.EnterAmount
         }
 
@@ -189,7 +201,7 @@ class CrossPayTabViewModel(
     fun onSelectTokenOut(token: Token) {
         if (tokenOut == token) return
         selectTokenOut(token)
-        emitState()
+        scheduleQuote()
     }
 
     fun onEnterAmount(amount: BigDecimal?) = fiatService.setAmount(amount)
@@ -209,7 +221,19 @@ class CrossPayTabViewModel(
         val tokenOut = tokenOut
         val amountOut = amountOut
 
-        if (tokenOut == null || amountOut == null || amountOut <= BigDecimal.ZERO) {
+        if (tokenOut == null) {
+            quote = null
+            emitState()
+            return
+        }
+
+        pairError(tokenOut)?.let {
+            quote = it
+            emitState()
+            return
+        }
+
+        if (amountOut == null || amountOut <= BigDecimal.ZERO) {
             quote = null
             emitState()
             return
@@ -228,7 +252,7 @@ class CrossPayTabViewModel(
             val newQuote = try {
                 val provider = provider
                 when {
-                    provider == null || !provider.supports(tokenIn, tokenOut) ->
+                    provider == null || !CrossPayManager.supportsPair(provider, tokenIn, tokenOut) ->
                         CrossPayQuoteState.Error(CrossPayQuoteState.ErrorKind.NotSupported)
 
                     else -> {
@@ -256,6 +280,21 @@ class CrossPayTabViewModel(
             quote = newQuote
             emitState()
         }
+    }
+
+    // Whether the pair is payable is known without an amount, so an unsupported one is
+    // reported as soon as the token is picked rather than after the user types a figure.
+    // Before the provider's token map lands only the destination chain is judged: the sync
+    // re-schedules on completion, and judging the pair earlier could flash a false refusal.
+    private fun pairError(tokenOut: Token): CrossPayQuoteState.Error? {
+        val provider = provider
+        val supported = when {
+            !CrossPayManager.supportsDestination(tokenOut) -> false
+            provider == null -> false
+            !providerReady -> true
+            else -> provider.supports(tokenIn, tokenOut)
+        }
+        return if (supported) null else CrossPayQuoteState.Error(CrossPayQuoteState.ErrorKind.NotSupported)
     }
 
     // A refused rate is not always a 200: the dev server answers the same
