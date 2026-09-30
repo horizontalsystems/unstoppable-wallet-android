@@ -10,6 +10,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SyncErrorService(
     private val wallet: Wallet,
@@ -45,10 +46,14 @@ class SyncErrorService(
     // The sheet closes as soon as retry is tapped, so the retry must not be tied to its lifecycle
     fun retry() {
         CoroutineScope(Dispatchers.Default).launch {
-            if (torManager.isTorEnabled) {
-                torManager.newCircuits()
+            try {
+                if (torManager.isTorEnabled) {
+                    torManager.newCircuits()
+                }
+                adapterManager.refreshByWallet(wallet)
+            } catch (e: Throwable) {
+                Timber.e(e, "Retrying sync failed")
             }
-            adapterManager.refreshByWallet(wallet)
         }
     }
 }

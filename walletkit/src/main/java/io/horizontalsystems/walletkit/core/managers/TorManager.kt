@@ -283,12 +283,21 @@ class TorManager(
     private fun onDefaultNetworkChanged(network: Network) {
         val previous = currentNetwork
         currentNetwork = network
-        if (previous == null || previous == network) return
-        if (asleep || _torStatusFlow.value != TorStatus.Connected) return
-        val control = service?.torControlConnection ?: return
+        if (previous == null || previous == network || asleep) return
 
-        Timber.d("Default network changed, reconnecting Tor")
-        reconnect(control, reset = true)
+        when (_torStatusFlow.value) {
+            TorStatus.Connected -> {
+                val control = service?.torControlConnection ?: return
+                Timber.d("Default network changed, reconnecting Tor")
+                reconnect(control, reset = true)
+            }
+            // A new network is the likeliest fix for a failed Tor, which nothing else retries
+            TorStatus.Failed -> {
+                Timber.d("Default network changed, starting failed Tor again")
+                start()
+            }
+            else -> Unit
+        }
     }
 
     private fun awaitControlConnection(): TorControlConnection? {

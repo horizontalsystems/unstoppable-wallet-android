@@ -682,13 +682,20 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             // attempt, and those that failed on still cold circuits one more
             coroutineScope.launch {
                 torKitManager.torStatusFlow.filter { it == TorStatus.Connected }.collectLatest {
-                    adapterManager.refresh()
-                    delay(TorManager.WARM_UP_MILLIS)
-                    val failed = walletManager.activeWallets
-                        .filter { adapterManager.getBalanceAdapterForWallet(it)?.balanceState is AdapterState.NotSynced }
-                    if (failed.isNotEmpty()) {
-                        torKitManager.newCircuits()
-                        failed.forEach { adapterManager.refreshByWallet(it) }
+                    // A failure here must not end the collector, or later connects recover nothing
+                    try {
+                        adapterManager.refresh()
+                        delay(TorManager.WARM_UP_MILLIS)
+                        val failed = walletManager.activeWallets
+                            .filter { adapterManager.getBalanceAdapterForWallet(it)?.balanceState is AdapterState.NotSynced }
+                        if (failed.isNotEmpty()) {
+                            torKitManager.newCircuits()
+                            failed.forEach { adapterManager.refreshByWallet(it) }
+                        }
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Throwable) {
+                        Timber.e(e, "Refreshing kits after Tor connected failed")
                     }
                 }
             }
