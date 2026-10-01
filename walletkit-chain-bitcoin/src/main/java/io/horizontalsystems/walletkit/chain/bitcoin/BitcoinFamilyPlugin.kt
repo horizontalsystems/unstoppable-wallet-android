@@ -114,7 +114,9 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
         rbfEnabled = token.blockchainType.rbfSupported && App.localStorage.rbfEnabled,
     )
 
-    // The memo becomes an OP_RETURN output; nodes relay at most 80 bytes of data there.
+    // The memo becomes an OP_RETURN output. 80 bytes of data is what every relay policy still
+    // accepts: Bitcoin Core before 30.0, Knots, Litecoin and Dash cap it there. Bitcoin Cash
+    // and eCash accept 220 and override this.
     override suspend fun sendMemoSupport(token: Token, address: String?) =
         SendMemoSupport(maxBytes = 80, visibility = MemoVisibility.Public)
 
@@ -288,6 +290,9 @@ class BitcoinChainPlugin : BitcoinFamilyPlugin() {
 class BitcoinCashChainPlugin : BitcoinFamilyPlugin() {
     override val blockchainType: BlockchainType = BlockchainType.BitcoinCash
 
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxBytes = 220, visibility = MemoVisibility.Public)
+
     override fun addressHandlers(): List<IAddressHandler> {
         val network = MainNetBitcoinCash()
         return listOf(
@@ -302,6 +307,9 @@ class BitcoinCashChainPlugin : BitcoinFamilyPlugin() {
 
 class ECashChainPlugin : BitcoinFamilyPlugin() {
     override val blockchainType: BlockchainType = BlockchainType.ECash
+
+    override suspend fun sendMemoSupport(token: Token, address: String?) =
+        SendMemoSupport(maxBytes = 220, visibility = MemoVisibility.Public)
 
     override fun addressHandlers(): List<IAddressHandler> {
         val network = MainNetECash()
