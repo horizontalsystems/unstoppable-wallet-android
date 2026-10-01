@@ -238,6 +238,11 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
 
+        // Debug builds run LeakCanary's heap analysis in a separate process, which also
+        // creates this Application. Starting the wallet there would sync kits and open
+        // databases a second time, so only the main process initializes.
+        if (getProcessName() != packageName) return
+
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
             Logger.getLogger("").level = Level.SEVERE

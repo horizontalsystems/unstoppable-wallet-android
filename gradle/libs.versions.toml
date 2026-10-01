@@ -212,7 +212,7 @@ coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 
 # Logging
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android-process", version.ref = "leakcanary" }
 
 # Markdown
 commonmark = { module = "com.atlassian.commonmark:commonmark", version.ref = "commonmark" }
