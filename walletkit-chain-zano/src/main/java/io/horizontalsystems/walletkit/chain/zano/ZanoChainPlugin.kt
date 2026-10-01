@@ -53,8 +53,10 @@ class ZanoChainPlugin(
         settings: SendChainSettings?,
     ) = SendTransactionData.Zano(address, amount, memo)
 
+    // The memo is sent as the transfer comment, which Zano stores on-chain encrypted so that
+    // only the sender and the recipient can read it.
     override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxBytes = 120, visibility = MemoVisibility.Offchain)
+        SendMemoSupport(maxBytes = 120, visibility = MemoVisibility.Encrypted)
 
     // Created on first use: before any Zano wallet exists the kit manager's node/background
     // subscriptions are no-ops, so lazy construction preserves startup behavior.
