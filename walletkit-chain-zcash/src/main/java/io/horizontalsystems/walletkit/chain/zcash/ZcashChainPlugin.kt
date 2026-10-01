@@ -65,8 +65,9 @@ class ZcashChainPlugin(
 
     // Encrypted memos travel only to destinations with a shielded receiver: Sapling and
     // unified addresses. Transparent (including Tex) destinations have no memo field.
+    // The memo field holds 512 bytes (ZIP 302), all of which a text memo may use.
     override suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? {
-        val support = SendMemoSupport(maxBytes = 120, visibility = MemoVisibility.Encrypted)
+        val support = SendMemoSupport(maxBytes = 512, visibility = MemoVisibility.Encrypted)
         address ?: return support
         val adapter = App.adapterManager.getAdapterForToken<ISendZcashAdapter>(token) ?: return null
         val addressType = try {
