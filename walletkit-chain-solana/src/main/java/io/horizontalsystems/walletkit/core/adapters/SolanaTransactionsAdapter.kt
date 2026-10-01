@@ -10,6 +10,8 @@ import io.horizontalsystems.walletkit.core.managers.SolanaTransactionEventExtrac
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.TransactionValue
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.Token
@@ -119,18 +121,22 @@ class SolanaTransactionsAdapter(
             .filter { token == null || movesToken(it, token) }
 
     // Whether a record belongs on [token]'s page. The kit lists a transaction under SOL whenever the
-    // wallet's SOL balance changed, but a swap moves SOL for fees, token-account rent or escrow rent
-    // without SOL being a side of the swap — a token-to-token swap, or either half of a 1inch
-    // Fusion swap (the order-create moves only the sold token, the fill only the bought one). The
-    // converter already sets such legs aside as a network cost (`primaryTransfer`), so a swap is
-    // shown on a token's page only when the token is one of the sides it actually moved; a
-    // pending swap has no legs yet and is kept wherever the kit listed it. Non-swap records are
-    // listed by their transfers and stay as the kit returned them.
+    // wallet's SOL balance changed, but a transaction can move SOL only as a network cost: a swap
+    // pays fees, token-account rent or escrow rent without SOL being a side of it (a token-to-token
+    // swap, or either half of a 1inch Fusion swap), and a plain SPL send pays rent when it creates
+    // the recipient's token account. The converter already sets such legs aside (`primaryTransfer`,
+    // `collapseTokenWithSolRent`), so a recognized send, receive or swap is shown on a token's page
+    // only when the token is a value it actually moved. A pending swap has no legs yet and unknown
+    // records carry every leg, so both stay wherever the kit listed them.
     private fun movesToken(record: TransactionRecord, token: Token): Boolean {
-        if (record !is SolanaSwapTransactionRecord) return true
-        val sides = listOfNotNull(record.valueIn, record.valueOut)
-        if (sides.isEmpty()) return true
-        return sides.any { (it as? TransactionValue.CoinValue)?.token == token }
+        val values = when (record) {
+            is SolanaIncomingTransactionRecord -> listOf(record.value)
+            is SolanaOutgoingTransactionRecord -> listOf(record.value)
+            is SolanaSwapTransactionRecord -> listOfNotNull(record.valueIn, record.valueOut)
+            else -> return true
+        }
+        if (values.isEmpty()) return true
+        return values.any { (it as? TransactionValue.CoinValue)?.token == token }
     }
 
     override fun getTransactionRecordsFlow(
