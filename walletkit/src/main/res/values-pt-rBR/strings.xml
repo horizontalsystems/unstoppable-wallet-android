@@ -1960,4 +1960,11 @@
     <string name="Action_Clear">Limpar</string>
     <string name="Send_Utxos_Auto">Automático</string>
     <string name="TorPage_ConnectingProgress">Conectando Tor… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">Bot de swap do SimpleX</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">Swaps de cripto rápidos e fáceis com o SimpleX.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Bot de swap do Telegram</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">Troque cripto sem sair do Telegram.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Bot de swap do Signal</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">Swaps de cripto privados direto no Signal.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">Troque cripto direto do seu navegador.</string>
 </resources>

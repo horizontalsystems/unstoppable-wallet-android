@@ -1951,4 +1951,11 @@
     <string name="Action_Clear">지우기</string>
     <string name="Send_Utxos_Auto">자동</string>
     <string name="TorPage_ConnectingProgress">토르 연결 중… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">SimpleX 스왑 봇</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">SimpleX로 빠르고 간편한 암호화폐 스왑.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Telegram 스왑 봇</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">Telegram을 벗어나지 않고 암호화폐를 스왑하세요.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Signal 스왑 봇</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">Signal에서 바로 하는 프라이빗 암호화폐 스왑.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">브라우저에서 바로 암호화폐를 스왑하세요.</string>
 </resources>

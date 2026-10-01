@@ -32,6 +32,10 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val simplexSupportChat = "https://smp11.simplex.im/g#yTrDh716RZCNYsdPSDrqMMlHnqZlW4XJGnFTugBrsAI"
     override val nymVpnLink = "https://nymtechnologies.pxf.io/N9vnr1"
     override val telegramSupportChat = "https://t.me/m/1TNZ9JE4MTNi"
+    override val labsSimplexSwapBotLink = "https://unstoppable.money/simplex"
+    override val labsTelegramSwapBotLink = "https://unstoppable.money/telegram"
+    override val labsSignalSwapBotLink = "https://unstoppable.money/signal"
+    override val labsSwapWebLink = "https://swap.unstoppable.money"
 
     override val blocksDecodedEthereumRpc = BuildConfig.BLOCKS_DECODED_ETHEREUM_RPC
     override val twitterBearerToken = BuildConfig.TWITTER_BEARER_TOKEN

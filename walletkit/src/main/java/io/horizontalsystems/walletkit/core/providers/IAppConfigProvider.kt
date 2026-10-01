@@ -34,6 +34,10 @@ interface IAppConfigProvider {
     val simplexSupportChat: String
     val nymVpnLink: String
     val telegramSupportChat: String
+    val labsSimplexSwapBotLink: String
+    val labsTelegramSwapBotLink: String
+    val labsSignalSwapBotLink: String
+    val labsSwapWebLink: String
     val blocksDecodedEthereumRpc: String
     val twitterBearerToken: String
     val etherscanApiKey: List<String>

@@ -1964,4 +1964,11 @@
     <string name="Action_Clear">Очистить</string>
     <string name="Send_Utxos_Auto">Авто</string>
     <string name="TorPage_ConnectingProgress">Подключение Tor… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">Своп-бот в SimpleX</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">Быстрые и простые свопы криптовалют в SimpleX.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Своп-бот в Telegram</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">Обменивайте криптовалюту, не выходя из Telegram.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Своп-бот в Signal</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">Приватные свопы криптовалют прямо в Signal.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">Обменивайте криптовалюту прямо в браузере.</string>
 </resources>

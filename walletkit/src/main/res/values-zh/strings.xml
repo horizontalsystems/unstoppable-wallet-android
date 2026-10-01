@@ -1954,4 +1954,11 @@
     <string name="Action_Clear">清除</string>
     <string name="Send_Utxos_Auto">自动</string>
     <string name="TorPage_ConnectingProgress">正在连接 Tor… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">SimpleX 兑换机器人</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">通过 SimpleX 快速轻松地兑换加密货币。</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Telegram 兑换机器人</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">无需离开 Telegram 即可兑换加密货币。</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Signal 兑换机器人</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">直接在 Signal 中进行私密加密货币兑换。</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">直接在浏览器中兑换加密货币。</string>
 </resources>

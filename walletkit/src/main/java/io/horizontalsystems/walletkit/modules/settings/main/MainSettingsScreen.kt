@@ -60,6 +60,7 @@ import io.horizontalsystems.walletkit.modules.settings.donate.DonateTokenSelectP
 import io.horizontalsystems.walletkit.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.walletkit.modules.settings.faq.FaqListPage
 import io.horizontalsystems.walletkit.modules.settings.guides.GuidesPage
+import io.horizontalsystems.walletkit.modules.settings.labs.UnstoppableLabsPage
 import io.horizontalsystems.walletkit.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.walletkit.modules.settings.privacy.PrivacySettingsPage
 import io.horizontalsystems.walletkit.modules.settings.security.SecuritySettingsPage
@@ -152,6 +153,21 @@ private fun SettingSections(
     }
 
     BannerCarousel(banners = banners)
+
+    CellUniversalLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.UnstoppableLabs_Title,
+                R.drawable.flask_24,
+                iconTint = ComposeAppTheme.colors.jacob,
+                onClick = {
+                    navigation.slideFromRight(UnstoppableLabsPage)
+                }
+            )
+        }
+    )
+
+    VSpacer(24.dp)
 
     CellUniversalLawrenceSection(
         listOfNotNull({

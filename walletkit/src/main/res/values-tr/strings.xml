@@ -1956,4 +1956,11 @@
     <string name="Action_Clear">Temizle</string>
     <string name="Send_Utxos_Auto">Otomatik</string>
     <string name="TorPage_ConnectingProgress">Tor Bağlanıyor… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">SimpleX Swap Botu</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">SimpleX ile hızlı ve kolay kripto swap.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Telegram Swap Botu</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">Telegram\'dan çıkmadan kripto swap yapın.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Signal Swap Botu</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">Doğrudan Signal\'da gizli kripto swap.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">Doğrudan tarayıcınızdan kripto swap yapın.</string>
 </resources>

@@ -2308,4 +2308,13 @@
     <string name="Hud_Text_ChangeWallet">Change Wallet</string>
     <string name="WatchWallet_Typed">%s Watch Wallet</string>
     <string name="TorPage_ConnectingProgress">Connecting Tor… %d%%</string>
+    <string name="UnstoppableLabs_Title" translatable="false">Unstoppable Labs</string>
+    <string name="UnstoppableLabs_SwapWeb" translatable="false">Swap.unstoppable.money</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">SimpleX Swap Bot</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">Fast and easy crypto swaps with SimpleX.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Telegram Swap Bot</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">Swap crypto without leaving Telegram.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Signal Swap Bot</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">Private crypto swaps right in Signal.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">Swap crypto directly from your browser.</string>
 </resources>

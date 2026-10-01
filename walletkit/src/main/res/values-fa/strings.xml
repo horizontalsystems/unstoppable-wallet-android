@@ -1943,4 +1943,11 @@
     <string name="Action_Clear">پاک کردن</string>
     <string name="Send_Utxos_Auto">خودکار</string>
     <string name="TorPage_ConnectingProgress">در حال اتصال به Tor… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">ربات سواپ SimpleX</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">سواپ سریع و آسان رمزارز با SimpleX.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">ربات سواپ Telegram</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">سواپ رمزارز بدون خروج از Telegram.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">ربات سواپ Signal</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">سواپ خصوصی رمزارز درست در Signal.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">سواپ رمزارز مستقیماً از مرورگر شما.</string>
 </resources>

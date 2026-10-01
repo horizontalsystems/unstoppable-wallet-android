@@ -1960,4 +1960,11 @@
     <string name="Action_Clear">Löschen</string>
     <string name="Send_Utxos_Auto">Auto</string>
     <string name="TorPage_ConnectingProgress">Tor wird verbunden… %d%%</string>
+    <string name="UnstoppableLabs_SimplexSwapBot">SimpleX Swap-Bot</string>
+    <string name="UnstoppableLabs_SimplexSwapBot_Description">Schnelle und einfache Krypto-Swaps mit SimpleX.</string>
+    <string name="UnstoppableLabs_TelegramSwapBot">Telegram Swap-Bot</string>
+    <string name="UnstoppableLabs_TelegramSwapBot_Description">Krypto tauschen, ohne Telegram zu verlassen.</string>
+    <string name="UnstoppableLabs_SignalSwapBot">Signal Swap-Bot</string>
+    <string name="UnstoppableLabs_SignalSwapBot_Description">Private Krypto-Swaps direkt in Signal.</string>
+    <string name="UnstoppableLabs_SwapWeb_Description">Krypto direkt im Browser tauschen.</string>
 </resources>
