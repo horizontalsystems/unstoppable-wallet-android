@@ -148,6 +148,15 @@ Each blockchain has:
 
 Supported chains: EVM (Ethereum, BSC, etc.), Bitcoin, Solana, Tron, TON, Zcash, Monero, Stellar
 
+### Adding or changing a chain
+
+Follow `docs/chain-integration/README.md`: delta matrix before code, history
+test vectors from live addresses, role-separated review, and the hand-off to
+iOS. Check the design and the review against
+`docs/chain-integration/checklist.md` and cite item IDs (`AMT-2`, `TX-4`) in
+the delta matrix and findings. With Claude Code, run `/chain-review <chain>`
+for step 4.
+
 ## Subscription/Paid Features
 
 ```kotlin

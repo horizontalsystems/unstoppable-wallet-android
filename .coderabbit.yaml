@@ -47,6 +47,27 @@ reviews:
         4. StateFlow / SharedFlow values exposed to UI must not contain
            secret material.
 
+    - path: "walletkit-chain-*/**/*.kt"
+      instructions: |
+        Chain integration code. Check it against
+        docs/chain-integration/checklist.md and cite item IDs. Most often
+        missed:
+
+        - AMT-2: decimals rescaling that loses special values (unlimited
+          approve, default trust limit). The maximum must be detected
+          before rescaling.
+        - HIST-3: the history amount must be what moved, not what was
+          requested; no fallback to a requested amount.
+        - TX-4 / TX-5: a lost or ambiguous submit response is "unknown",
+          not "failed"; pending is not marked failed because a lookup
+          threw; a retry resends the same signed bytes.
+        - TX-7 / NET-2: encoded fields range-checked, never truncated;
+          every paging loop capped.
+        - NET-1: an empty or "account not found" response is not a zero
+          balance.
+        - ACC-1 / ACC-3: watch accounts never reach a signing path; data
+          for a deleted account cannot be rebound to another account.
+
   tools:
     gitleaks:
       enabled: true
