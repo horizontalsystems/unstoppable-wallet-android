@@ -73,11 +73,13 @@ class WCSessionManager(
     }
 
     private fun syncSessions() {
+        val currentSessions = DAppManager.getActiveSessions()
+        val allDbSessions = storage.getAllSessions()
+
+        disconnectOrphanedSessions(currentSessions, allDbSessions)
+
         val accountId = accountManager.activeAccount?.id ?: return
 
-        val currentSessions = DAppManager.getActiveSessions()
-
-        val allDbSessions = storage.getAllSessions()
         val allDbTopics = allDbSessions.map { it.topic }
 
         val newSessions = currentSessions.filter { !allDbTopics.contains(it.topic) }
@@ -118,9 +120,22 @@ class WCSessionManager(
         }
     }
 
+    // A deleted account's rows are kept until its live sessions are disconnected:
+    // with the rows gone, syncSessions would see those sessions as new and bind
+    // them to the active account. The rows go once the SDK drops the session.
+    private fun disconnectOrphanedSessions(
+        currentSessions: List<HSDAppSession>,
+        dbSessions: List<WalletConnectV2Session>,
+    ) {
+        val existingAccountIds = accountManager.accounts.map { it.id }.toSet()
+        val liveTopics = currentSessions.map { it.topic }.toSet()
+
+        dbSessions
+            .filter { it.accountId !in existingAccountIds && it.topic in liveTopics }
+            .forEach { WCDelegate.deleteSession(it.topic) }
+    }
+
     private fun handleDeletedAccount() {
-        val existingAccountIds = accountManager.accounts.map { it.id }
-        storage.deleteSessionsExcept(accountIds = existingAccountIds)
         syncSessions()
     }
 

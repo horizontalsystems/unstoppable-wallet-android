@@ -20,7 +20,4 @@ interface WCSessionDao {
     @Query("DELETE FROM WalletConnectV2Session WHERE topic IN (:topics)")
     fun deleteByTopics(topics: List<String>)
 
-    @Query("DELETE FROM WalletConnectV2Session WHERE accountId NOT IN (:accountIds)")
-    fun deleteAllExcept(accountIds: List<String>)
-
 }

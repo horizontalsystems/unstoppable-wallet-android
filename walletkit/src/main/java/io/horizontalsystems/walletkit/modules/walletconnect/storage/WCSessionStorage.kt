@@ -20,10 +20,6 @@ class WCSessionStorage(appDatabase: AppDatabase) {
         dao.insert(sessions)
     }
 
-    fun deleteSessionsExcept(accountIds: List<String> = listOf()) {
-        dao.deleteAllExcept(accountIds)
-    }
-
     fun deleteSessionsByTopics(topics: List<String> = listOf()) {
         dao.deleteByTopics(topics)
     }
