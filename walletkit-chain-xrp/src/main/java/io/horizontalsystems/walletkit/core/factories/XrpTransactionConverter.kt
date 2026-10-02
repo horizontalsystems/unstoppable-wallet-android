@@ -55,8 +55,7 @@ class XrpTransactionConverter(
     private fun paymentType(tx: Transaction): Type {
         val outgoing = tx.account == selfAddress
         val incoming = tx.destination == selfAddress
-        // what the destination actually received; falls back to the requested amount while pending
-        val amount = tx.deliveredAmount ?: tx.amount ?: return Type.Unsupported(tx.type)
+        val amount = tx.shownPaymentAmount() ?: return Type.Unsupported(tx.type)
 
         return when {
             outgoing -> Type.Send(
@@ -112,6 +111,18 @@ class XrpTransactionConverter(
         /** Issued currencies have no fixed scale on the ledger; this is a display precision. */
         const val ISSUED_TOKEN_DECIMALS = 8
     }
+}
+
+/**
+ * What the destination actually received. A successful payment without it is a partial
+ * payment whose delivered amount the ledger no longer reports; its Amount is only an upper
+ * bound, so it must not be shown as received. Pending and failed payments delivered
+ * nothing and show the amount that was sent.
+ */
+internal fun Transaction.shownPaymentAmount(): Amount? = when {
+    deliveredAmount != null -> deliveredAmount
+    isSuccess -> null
+    else -> amount
 }
 
 internal fun BigDecimal.negateIf(condition: Boolean): BigDecimal = if (condition) negate() else this
