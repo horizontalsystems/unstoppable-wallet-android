@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -39,7 +40,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversa
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
-import kotlin.system.exitProcess
 
 @Serializable
 data object PrivacySettingsPage : HSPage() {
@@ -59,10 +59,7 @@ data object PrivacySettingsPage : HSPage() {
     }
 
     private fun restartApp(activity: Activity?) {
-        activity?.let {
-            MainModule.startAsNewTask(it)
-            exitProcess(0)
-        }
+        activity?.let { MainModule.restartProcess(it) }
     }
 }
 
@@ -77,8 +74,10 @@ fun PrivacyScreen(
     val context = LocalContext.current
 
     if (torViewModel.restartApp) {
-        restartApp()
-        torViewModel.appRestarted()
+        LaunchedEffect(Unit) {
+            restartApp()
+            torViewModel.appRestarted()
+        }
     }
 
     HSScaffold(

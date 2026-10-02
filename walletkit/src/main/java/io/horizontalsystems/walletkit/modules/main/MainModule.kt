@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.view.Choreographer
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -13,6 +16,7 @@ import io.horizontalsystems.walletkit.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.walletkit.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
+import kotlin.system.exitProcess
 
 object MainModule {
 
@@ -70,6 +74,25 @@ object MainModule {
         )
 
         context.startActivity(intent, options.toBundle())
+    }
+
+    // Until the new process has run Application.onCreate, the system keeps showing the last
+    // frame this process drew. Drawing the splash background first makes that frame match what
+    // follows, instead of a frozen page with a dismissed dialog.
+    fun restartProcess(activity: Activity) {
+        val splash = View(activity).apply {
+            setBackgroundColor(ContextCompat.getColor(activity, R.color.tyler))
+        }
+        activity.setContentView(splash)
+
+        // The second frame callback runs only after the splash frame has been drawn
+        val choreographer = Choreographer.getInstance()
+        choreographer.postFrameCallback {
+            choreographer.postFrameCallback {
+                startAsNewTask(activity)
+                exitProcess(0)
+            }
+        }
     }
 
     sealed class BadgeType {
