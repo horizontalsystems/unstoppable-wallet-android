@@ -3,6 +3,15 @@
     <base-config cleartextTrafficPermitted="false" />
 
     <!--
+      Custom onion RPC endpoints are reached over cleartext HTTP when the device is
+      already routed through Tor. Permit .onion hosts only; ordinary public hosts
+      remain HTTPS-only.
+    -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">onion</domain>
+    </domain-config>
+
+    <!--
       Monero public nodes are commonly served over plain HTTP on ports 18081/18089.
       Cleartext is permitted only for the bundled default node domains so the in-app
       node ping (OkHttp) reaches them; wallet sync itself uses native sockets.

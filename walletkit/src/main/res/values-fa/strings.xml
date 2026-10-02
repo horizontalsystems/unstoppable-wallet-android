@@ -1511,13 +1511,13 @@
     <string name="AddEvmSyncSource_AddRPCSource">افزودن منبع RPC</string>
     <string name="AddEvmSyncSource_BasicAuthentication">احراز هویت پایه (اختیاری)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">منبع RPC با این آدرس از قبل وجود دارد</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">آدرس واردشده نامعتبر است. آدرس معتبر باید یکی از این طرح‌ها را داشته باشد: https، wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">آدرس واردشده نامعتبر است. آدرس معتبر باید یکی از این طرح‌ها را داشته باشد: https، wss. HTTP فقط برای میزبان‌های .onion مجاز است</string>
     <string name="AddMoneroNode_AddNode">افزودن نود</string>
     <string name="AddMoneroNode_NodeUrl">آدرس نود</string>
     <string name="AddMoneroNode_Username">نام کاربری (اختیاری)</string>
     <string name="AddMoneroNode_Pasword">رمز عبور (اختیاری)</string>
     <string name="AddMoneroNode_Warning_UrlExists">نودی با این آدرس از قبل وجود دارد</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">آدرس واردشده نامعتبر است. آدرس معتبر باید این طرح را داشته باشد: https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">آدرس واردشده نامعتبر است. آدرس معتبر باید این طرح را داشته باشد: https. HTTP فقط برای میزبان‌های .onion مجاز است</string>
     <string name="MoneroNodeSettings_TrustedTitle">ترجیحات نود</string>
     <string name="MoneroNodeSettings_TrustedDescription">نود مورد اعتماد — کیف پول به نود انتخاب‌شده اعتماد می‌کند و از داده‌های آن بدون تأیید اضافی استفاده می‌کند. \n\nروشن → تراکنش‌ها بلافاصله پس از ارسال به‌صورت «در انتظار» نمایش داده می‌شوند (همگام‌سازی سریع‌تر، اما حریم خصوصی کمتر و وابستگی به نود). \n\nخاموش → تراکنش‌ها فقط پس از تأیید شبکه نمایش داده می‌شوند (کندتر، اما امن‌تر و خصوصی‌تر).</string>
     <string name="MoneroNodeSettings_Trusted">مورد اعتماد</string>

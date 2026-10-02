@@ -982,14 +982,14 @@
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss. HTTP разрешён только для хостов .onion</string>
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">Добавить узел</string>
     <string name="AddMoneroNode_NodeUrl">Адрес узла</string>
     <string name="AddMoneroNode_Username">Имя пользователя (необязательно)</string>
     <string name="AddMoneroNode_Pasword">Пароль (необязательно)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Узел с этим url уже существует</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: https. HTTP разрешён только для хостов .onion</string>
     <string name="MoneroNodeSettings_TrustedTitle">Настройки узла</string>
     <string name="MoneroNodeSettings_TrustedDescription">Надежный узел - кошелек доверяет выбранному узлу и использует его данные без дополнительной проверки.
         \n\nВключенные → транзакции мгновенно появляются в ожидании передачи (ускоренная синхронизация, но снизить конфиденциальность и полагаться на узел).

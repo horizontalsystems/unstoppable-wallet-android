@@ -980,14 +980,14 @@
     <string name="AddEvmSyncSource_AddRPCSource">RPC-Quelle hinzufügen</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Einfacher Auth(optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC-Quelle mit dieser URL existiert bereits</string>
-    <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: https, wss</string>
+    <string name="AddEvmSyncSource_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: https, wss. HTTP ist nur für .onion-Hosts erlaubt</string>
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">Knoten hinzufügen</string>
     <string name="AddMoneroNode_NodeUrl">Knoten-Url</string>
     <string name="AddMoneroNode_Username">Benutzername (optional)</string>
     <string name="AddMoneroNode_Pasword">Passwort (optional)</string>
     <string name="AddMoneroNode_Warning_UrlExists">Knoten mit dieser URL existiert bereits</string>
-    <string name="AddMoneroNode_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: https</string>
+    <string name="AddMoneroNode_Error_InvalidUrl">Die eingegebene URL ist ungültig. Gültige URL muss eines der folgenden Schemata haben: https. HTTP ist nur für .onion-Hosts erlaubt</string>
     <string name="MoneroNodeSettings_TrustedTitle">Knoten-Einstellungen</string>
     <string name="MoneroNodeSettings_TrustedDescription">Vertrauenswürdiger Knoten — die Brieftasche vertraut dem ausgewählten Knoten und verwendet seine Daten ohne zusätzliche Überprüfung.
         \n\nAuf → Transaktionen erscheinen sofort als ausstehend beim Broadcasten (schneller synchronisieren, aber weniger Privatsphäre und Abhängigkeit vom Knoten).

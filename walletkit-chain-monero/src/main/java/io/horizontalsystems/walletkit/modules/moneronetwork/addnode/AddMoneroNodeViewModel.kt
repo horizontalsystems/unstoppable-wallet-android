@@ -5,6 +5,7 @@ import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.core.utils.OnionNodeUrl
 import java.net.MalformedURLException
 import java.net.URI
 
@@ -49,7 +50,7 @@ class AddMoneroNodeViewModel(
         try {
             sourceUri = URI(url)
             val scheme = sourceUri.scheme?.lowercase()
-            val hasRequiredProtocol = scheme == "https"
+            val hasRequiredProtocol = scheme == "https" || OnionNodeUrl.isHttpOnion(sourceUri)
             val hasHost = !sourceUri.host.isNullOrBlank()
             if (!hasRequiredProtocol || !hasHost) throw MalformedURLException()
         } catch (_: Exception) {
