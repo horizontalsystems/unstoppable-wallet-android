@@ -292,7 +292,10 @@ class EvmTransactionConverter(
         if (evmKitWrapper.blockchainType == BlockchainType.Arc &&
             tokenAddress.hex.equals(BlockchainType.Arc.nativeTokenContractAddress, ignoreCase = true)
         ) {
-            return TransactionValue.CoinValue(baseToken, convertAmount(amount, ARC_USDC_ERC20_DECIMALS, negative))
+            // isMaxValue checks against the native coin's decimals, so an unlimited
+            // approve must not be rescaled from the interface's 6 decimals.
+            val decimals = if (amount == MAX_UINT256) baseToken.decimals else ARC_USDC_ERC20_DECIMALS
+            return TransactionValue.CoinValue(baseToken, convertAmount(amount, decimals, negative))
         }
 
         val query = TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(tokenAddress.hex))
@@ -469,6 +472,7 @@ class EvmTransactionConverter(
 
     companion object {
         private const val ARC_USDC_ERC20_DECIMALS = 6
+        private val MAX_UINT256: BigInteger = BigInteger.ONE.shiftLeft(256) - BigInteger.ONE
     }
 }
 
