@@ -3,17 +3,25 @@ name: Build APK
 on:
   push:
     tags:
-      - '*'
+      - '[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Protection rules for this environment are set in the repository settings
+    environment: release
+    permissions:
+      contents: write
     container:
       image: hsdao/android-release-build:java-17-update
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Fix git safe directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -44,14 +52,19 @@ jobs:
           apksigner sign --ks keystore.jks --ks-pass env:KS_PASS \
             app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
 
+      # The tag goes through an environment variable, never straight into the
+      # script, so a crafted tag name cannot run shell commands
       - name: Rename APKs
         shell: bash
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
-          cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk unstoppable_wallet_google_play_${{ github.ref_name }}.apk
-          cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${{ github.ref_name }}.apk
+          [[ "$TAG" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || { echo "Unexpected tag: $TAG"; exit 1; }
+          cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk "unstoppable_wallet_google_play_${TAG}.apk"
+          cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk "unstoppable_wallet_github_${TAG}.apk"
 
       - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           prerelease: true
           files: |
