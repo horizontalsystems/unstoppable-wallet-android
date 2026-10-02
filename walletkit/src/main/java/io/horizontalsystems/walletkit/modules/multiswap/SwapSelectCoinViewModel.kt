@@ -34,6 +34,9 @@ class SwapSelectCoinViewModel(
     // "You Get" side: tokens the account can't hold stay selectable — the swap is
     // delivered to an external address the user enters before confirmation
     private val allowExternalReceive: Boolean,
+    // CrossPay: paying out in the very asset that funds the payment is a plain send, so
+    // the source asset is hidden — in every derivation/address-format variant
+    private val excludeOtherSelectedToken: Boolean,
 ) : ViewModel() {
     // Account-scoped state is resolved per call, not snapshotted at construction:
     // the picker can outlive an account switch, and a long-lived snapshot would mix
@@ -121,7 +124,7 @@ class SwapSelectCoinViewModel(
             // recent ids are stored globally, so after an account switch they may name
             // tokens the now-active account can't hold
             ids.mapNotNull { id -> TokenQuery.fromId(id)?.let { marketKit.token(it) } }
-                .filter { supportedByAccount(it) }
+                .filter { supportedByAccount(it) && !isExcluded(it) }
                 .map { coinBalanceItem(it, activeWallets) }
         }
 
@@ -140,13 +143,14 @@ class SwapSelectCoinViewModel(
 
         // Your Tokens — all enabled tokens, sorted as on the main Wallet screen
         yourTokens = activeWallets
+            .filterNot { isExcluded(it.token) }
             .map { coinBalanceItem(it.token, activeWallets) }
             .sortedByCriteria(BalanceSorter.VALUE_CRITERIA)
 
         // Popular Tokens — context-aware list (built from the opposite token), minus
         // tokens the active account can't hold (they'd be dead bubbles)
         popular = SwapPopularTokens.build(marketKit, otherSelectedToken)
-            .filter { supportedByAccount(it) }
+            .filter { supportedByAccount(it) && !isExcluded(it) }
             .map { CoinBalanceItem(it, null, null) }
 
         // Top Tokens — top 25 by market cap, excluding everything in Popular and Your Tokens
@@ -165,6 +169,7 @@ class SwapSelectCoinViewModel(
                 externallyReceivableTokens(fullCoin)
             }
             val representative = eligible
+                .filterNot { isExcluded(it) }
                 .map { CoinBalanceItem(it, null, null) }
                 .sortedByCriteria(
                     listOf(SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge)
@@ -193,6 +198,7 @@ class SwapSelectCoinViewModel(
                     }
                 }
                 .flatten()
+                .filterNot { isExcluded(it) }
                 .map { token ->
                     val wallet = activeWallets.firstOrNull { it.token == token }
                     val balance = wallet?.let {
@@ -213,7 +219,7 @@ class SwapSelectCoinViewModel(
         } else {
             marketKit.fullCoins(q, 100)
                 .flatMap { fullCoin -> fullCoin.tokens }
-                .filter { it.blockchainType in BlockchainType.supported }
+                .filter { it.blockchainType in BlockchainType.supported && !isExcluded(it) }
                 .map { token -> CoinBalanceItem(token, null, null) }
         }
     }
@@ -242,6 +248,13 @@ class SwapSelectCoinViewModel(
 
     private fun externallyReceivableTokens(fullCoin: FullCoin): List<Token> =
         fullCoin.supportedTokens.filter { isExternallyReceivable(it) }
+
+    private fun isExcluded(token: Token): Boolean {
+        val other = otherSelectedToken ?: return false
+        return excludeOtherSelectedToken &&
+            token.coin.uid == other.coin.uid &&
+            token.blockchainType == other.blockchainType
+    }
 
     private fun supportedByAccount(token: Token): Boolean {
         // externally receivable tokens are still narrowed to the chain-default variant,
@@ -274,10 +287,11 @@ class SwapSelectCoinViewModel(
     class Factory(
         private val otherSelectedToken: Token?,
         private val allowExternalReceive: Boolean,
+        private val excludeOtherSelectedToken: Boolean,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectCoinViewModel(otherSelectedToken, allowExternalReceive) as T
+            return SwapSelectCoinViewModel(otherSelectedToken, allowExternalReceive, excludeOtherSelectedToken) as T
         }
     }
 

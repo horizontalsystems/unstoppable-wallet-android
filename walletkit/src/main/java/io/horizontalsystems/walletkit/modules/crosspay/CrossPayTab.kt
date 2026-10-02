@@ -85,8 +85,9 @@ fun CrossPayTabBody(
     }
 
     // The same picker the swap screen opens for its "You Get" side, so both flows offer an
-    // identical token universe. A pick the provider cannot route surfaces on the quote row
-    // as "Token not supported" instead of being filtered out up front.
+    // identical token universe, minus the wallet's own asset. A pick the provider cannot
+    // route surfaces on the quote row as "Token not supported" instead of being filtered
+    // out up front.
     val selectTokenTitle = stringResource(R.string.CrossPay_ChooseCoin)
     val openCoinSelect = navigation.slideFromBottomForResult<Token>(
         {
@@ -95,6 +96,7 @@ fun CrossPayTabBody(
                     viewModel.tokenIn,
                     selectTokenTitle,
                     allowExternalReceive = true,
+                    excludeToken = true,
                 )
             )
         }
