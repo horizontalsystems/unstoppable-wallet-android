@@ -116,7 +116,7 @@ by the mirror event and that a fake "USDC" does not mix with the native one.
 | Run | Platform | Build | Result |
 |---|---|---|---|
 | 2026-09-22 | iOS | Arc history fix | passed in the USDC wallet for all four addresses |
-| — | Android | — | not run |
+| — | Android | — | not run: vectors were written for the iOS port and have not been checked on Android yet |
 
 ## Not verified
 

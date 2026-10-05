@@ -14,7 +14,7 @@ the record a reviewer, the iOS port, and a later fix read from.
 | 1. Design | `design.md` with the delta matrix | Every row has a decision and a reason |
 | 2. Build | kit, MarketKit, `walletkit-chain-<chain>` | `ChainBehaviorParityTest` fixture updated |
 | 3. Test vectors | `test-vectors.md` | Every vector has a recorded result or "not run" with a reason |
-| 4. Review | `review.md` with the decision log | Every finding is accepted, rejected, or in tech debt |
+| 4. Review | `review.md` with the decision log | No finding is left `pending`: each is fixed, in tech debt, or rejected |
 | 5. Hand-off | links sent to the iOS developer | Paired-platform check done both ways |
 
 ## 1. Design and the delta matrix
@@ -53,7 +53,9 @@ Unit tests do not show what the user sees in history. Before review, write
 added as watch accounts, each transaction with the row the wallet must show
 and why. [arc/test-vectors.md](arc/test-vectors.md) is the reference example.
 
-Pick addresses that between them cover:
+Pick addresses that between them cover each of the following the chain
+supports. For a case the chain does not have (approves on a UTXO chain), write
+a line saying `n/a` and why:
 
 - plain incoming and outgoing native transfers
 - token transfers, including any native-token interface or mirror event
@@ -85,7 +87,8 @@ A finding counts only with a file:line, a reachable path from user action or
 network input, and a concrete failure: "with input X the app shows or signs Y,
 the chain requires Z". "There is no test for this" is not a finding.
 
-Then record every finding in `review.md`:
+Then record every finding in `review.md`. A finding starts as `pending` and
+the developer decides it:
 
 ```markdown
 | ID | Finding | Decision | Reason | Where |

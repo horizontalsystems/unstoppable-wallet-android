@@ -32,7 +32,7 @@ Criteria for every address:
 | Run | Platform | Build | Result |
 |---|---|---|---|
 | <date> | Android | <commit> | passed / failed: <what> / not run: <reason> |
-| <date> | iOS | <commit> | |
+| <date> | iOS | <commit> | passed / failed: <what> / not run: <reason> |
 
 ## Not verified
 

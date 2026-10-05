@@ -44,13 +44,20 @@ A finding needs all of:
 
 "There is no test for this" is not a finding on its own.
 
-## 3. Try to refute each High or Medium finding
+## 3. Verify each High or Medium finding
 
 For each, start a separate verifier with only the finding and the code. It
 answers: is the code path reachable, is the claim correct, and can it be
-reproduced with a unit test or a watch-only address? When unsure, it refutes.
-Keep the finding only if the verifier cannot refute it, and record the
-verifier's reasoning either way.
+reproduced with a unit test or a watch-only address? It returns one of:
+
+- `confirmed`: reachable and reproduced, or shown from the code.
+- `refuted`: with a concrete counterexample, such as a guard on the path or a
+  test that passes.
+- `unresolved`: neither, with the evidence that is missing.
+
+Keep confirmed and unresolved findings in the decision log, marking the
+unresolved ones and what would settle them. Drop only refuted findings, and
+record the counterexample.
 
 ## 4. Check the paired platform
 
@@ -68,7 +75,7 @@ Write `docs/chain-integration/<chain>/review.md`:
 2. The decision log from README step 4, with every kept finding as a row and
    the Decision column set to `pending`. Decisions are the developer's to
    make; do not fill them in.
-3. Refuted findings, each with one line on why.
+3. Refuted findings, each with its counterexample.
 4. Paired-platform results.
 5. What was not reviewed and why.
 
