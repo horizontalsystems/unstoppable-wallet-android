@@ -466,7 +466,7 @@
     <!-- Swap History -->
     <!-- Swap Info -->
     <string name="SwapInfo_StatusSwapping">Takas</string>
-    <string name="SwapInfo_StatusSending">Gönder</string>
+    <string name="SwapInfo_StatusReceiving">Al</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s alışverişi yapabilir veya yeni tutarı iptal edip onaylamanız gerekir</string>
     <string name="Approve_Spender">Harcayan</string>

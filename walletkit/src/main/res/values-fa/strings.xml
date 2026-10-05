@@ -230,7 +230,7 @@
     <!-- Swap History -->
     <!-- Swap Info -->
     <string name="SwapInfo_StatusSwapping">جایگزینی</string>
-    <string name="SwapInfo_StatusSending">ارسال</string>
+    <string name="SwapInfo_StatusReceiving">دریافت</string>
     <!--Approve-->
     <string name="Approve_Spender">خرج کننده</string>
     <!--Swap Unlock Access-->

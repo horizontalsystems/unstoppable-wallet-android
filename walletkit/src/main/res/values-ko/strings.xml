@@ -573,7 +573,7 @@
     <!-- Swap History -->
     <!-- Swap Info -->
     <string name="SwapInfo_StatusSwapping">스왑</string>
-    <string name="SwapInfo_StatusSending">전송</string>
+    <string name="SwapInfo_StatusReceiving">수신</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s을(를) 교환하거나 새 금액을 취소하고 승인해야 합니다.</string>
     <string name="Approve_Spender">스펜더</string>

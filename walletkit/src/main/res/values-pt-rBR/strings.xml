@@ -680,7 +680,7 @@
     <string name="SwapInfo_StatusTitle">Status da transação</string>
     <string name="SwapInfo_StatusDepositing">Depósito</string>
     <string name="SwapInfo_StatusSwapping">Trocar</string>
-    <string name="SwapInfo_StatusSending">Enviar</string>
+    <string name="SwapInfo_StatusReceiving">Receber</string>
     <string name="SwapInfo_StatusCompleted">Concluído</string>
     <string name="SwapInfo_StatusRefunded">Reembolsado</string>
     <string name="SwapInfo_StatusFailed">Falhou</string>

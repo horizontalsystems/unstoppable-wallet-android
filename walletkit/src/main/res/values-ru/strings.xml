@@ -682,7 +682,7 @@
     <string name="SwapInfo_StatusTitle">Статус транзакции</string>
     <string name="SwapInfo_StatusDepositing">Депозит</string>
     <string name="SwapInfo_StatusSwapping">Обмен</string>
-    <string name="SwapInfo_StatusSending">Отправка</string>
+    <string name="SwapInfo_StatusReceiving">Получение</string>
     <string name="SwapInfo_StatusCompleted">Выполнено</string>
     <string name="SwapInfo_StatusRefunded">Возвращено</string>
     <string name="SwapInfo_StatusFailed">Неудачный</string>

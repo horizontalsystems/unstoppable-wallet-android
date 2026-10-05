@@ -353,7 +353,7 @@ internal fun SwapStatusSteps(status: SwapStatus, isSingleTransactionSwap: Boolea
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
         stringResource(R.string.SwapInfo_StatusSwapping),
-        stringResource(R.string.SwapInfo_StatusSending),
+        stringResource(R.string.SwapInfo_StatusReceiving),
     )
     val refundedSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),

@@ -679,7 +679,7 @@
     <string name="SwapInfo_StatusTitle">交易状态</string>
     <string name="SwapInfo_StatusDepositing">存款</string>
     <string name="SwapInfo_StatusSwapping">互兑交易</string>
-    <string name="SwapInfo_StatusSending">发送​​</string>
+    <string name="SwapInfo_StatusReceiving">接收</string>
     <string name="SwapInfo_StatusCompleted">已完成</string>
     <string name="SwapInfo_StatusRefunded">已退款</string>
     <string name="SwapInfo_StatusFailed">失败</string>
