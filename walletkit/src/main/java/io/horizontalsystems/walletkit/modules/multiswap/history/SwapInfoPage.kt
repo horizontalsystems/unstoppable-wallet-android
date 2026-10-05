@@ -280,13 +280,7 @@ private fun SwapInfoContent(uiState: SwapInfoUiState, navigation: HSNavigation) 
                     },
                     right = {
                         CellRightInfoTextIcon(
-                            text = swapTime.hs(
-                                color = if (uiState.swapTimeAttention) {
-                                    ComposeAppTheme.colors.jacob
-                                } else {
-                                    leah
-                                }
-                            )
+                            text = swapTime.hs(color = leah)
                         )
                     },
                 )

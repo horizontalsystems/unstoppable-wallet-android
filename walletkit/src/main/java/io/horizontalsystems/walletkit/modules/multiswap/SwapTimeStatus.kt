@@ -1,36 +1,33 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
-
 enum class SwapTimeStatus {
     None,
     Attention,
 }
 
 private const val SWAP_TIME_THRESHOLD_SECONDS = 30 * 60L // 30 minutes
+private const val SWAP_TIME_RATIO = 2.0
 
 /**
- * Swap time is highlighted (orange) when the highest time the user may have to wait is 30 min or more.
+ * Swap time is highlighted (yellow) on the Swap screen only when it is critical for the user.
  *
- * The comparison uses the same upper limit that is displayed:
- * - CEX providers show a ±25% range, so the top of that range is used.
- * - DEX providers show the single quoted value, which is used directly.
+ * - Multiple providers: attention when time >= 2x the fastest provider AND time > 30 min.
+ * - Single provider: attention when time > 30 min (no relative comparison possible).
+ *
+ * Both the time and the baseline are the quoted estimates. The ±25% range shown for CEX
+ * providers is display only and never takes part in this decision.
  */
-fun swapTimeStatus(estimationTime: Long?, providerType: SwapProviderType?): SwapTimeStatus {
-    if (estimationTime == null || providerType == null) {
+fun swapTimeStatus(estimationTime: Long?, allEstimationTimes: List<Long?>): SwapTimeStatus {
+    if (estimationTime == null || estimationTime <= SWAP_TIME_THRESHOLD_SECONDS) {
         return SwapTimeStatus.None
     }
 
-    val upperLimitSeconds = swapTimeUpperLimitSeconds(estimationTime, providerType)
-    return if (upperLimitSeconds >= SWAP_TIME_THRESHOLD_SECONDS) {
-        SwapTimeStatus.Attention
-    } else {
-        SwapTimeStatus.None
+    val knownTimes = allEstimationTimes.filterNotNull()
+    if (knownTimes.size <= 1) {
+        return SwapTimeStatus.Attention
     }
-}
 
-private fun swapTimeUpperLimitSeconds(estimationTime: Long, providerType: SwapProviderType): Long =
-    when (providerType) {
-        SwapProviderType.CEX -> roundSecondsToMinutes(estimationTime * 1.25)
-        SwapProviderType.DEX -> estimationTime
-    }
+    val baseline = knownTimes.min()
+    val ratio = estimationTime.toDouble() / baseline
+    return if (ratio >= SWAP_TIME_RATIO) SwapTimeStatus.Attention else SwapTimeStatus.None
+}

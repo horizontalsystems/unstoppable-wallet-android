@@ -351,14 +351,9 @@ private fun SwapConfirmInternal(
                         SwapProviderType.CEX -> formatSwapTimeRange(estimatedTime)
                         SwapProviderType.DEX -> "~${formatDuration(estimatedTime)}"
                     }
-                    val timeColor = if (swapTimeStatus(estimatedTime, uiState.providerType) == SwapTimeStatus.Attention) {
-                        ComposeAppTheme.colors.jacob
-                    } else {
-                        ComposeAppTheme.colors.leah
-                    }
                     QuoteInfoRow(
                         title = stringResource(id = R.string.Swap_SwapTime),
-                        value = timeText.hs(timeColor),
+                        value = timeText.hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navigation.slideFromBottom(
                                 SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
