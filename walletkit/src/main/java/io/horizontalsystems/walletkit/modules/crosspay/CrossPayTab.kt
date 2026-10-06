@@ -121,10 +121,16 @@ fun CrossPayTabBody(
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
         ) {
-            // The balance shown is the SOURCE token's — what funds the payment.
+            // The balance shown is the SOURCE token's — what funds the payment. No percent
+            // shortcuts: the amount is entered in the destination token, so a share of this
+            // balance has no direct value to fill in.
             AvailableBalanceRow(
                 balanceToken = uiState.tokenIn,
-                availableBalance = uiState.availableBalance
+                availableBalance = uiState.availableBalance,
+                onClearClick = {
+                    viewModel.onEnterAmount(null)
+                },
+                showClear = uiState.amountOut != null
             )
 
             Box {
