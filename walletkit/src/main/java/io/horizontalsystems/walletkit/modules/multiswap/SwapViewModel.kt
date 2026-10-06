@@ -414,6 +414,7 @@ class SwapViewModel(
         // can't sign transactions for it
         if (externalRecipientRequired(quoteState.tokenOut)) return
 
+        tokensManuallySet = true
         quoteService.switchPairs()
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
