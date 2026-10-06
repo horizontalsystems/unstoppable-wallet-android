@@ -573,7 +573,7 @@
     <!-- Swap History -->
     <!-- Swap Info -->
     <string name="SwapInfo_StatusSwapping">스왑</string>
-    <string name="SwapInfo_StatusReceiving">수신</string>
+    <string name="SwapInfo_StatusReceive">%s 수신</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s을(를) 교환하거나 새 금액을 취소하고 승인해야 합니다.</string>
     <string name="Approve_Spender">스펜더</string>
@@ -1744,7 +1744,7 @@
     <string name="SwapDefense_Safe_Title">보호됨</string>
     <string name="SwapError_FailedToFetchQuote">견적을 가져오지 못했습니다.</string>
     <string name="SwapInfo_SourceAddress">출발지 주소</string>
-    <string name="SwapInfo_StatusDepositing">입금 중</string>
+    <string name="SwapInfo_StatusDeposit">%s 입금</string>
     <string name="SwapInfo_StatusTitle">거래 상태</string>
     <string name="Swap_AmlRisk_Title">위험 감지됨</string>
     <string name="Swap_ConfirmApprove_Title">승인 확인</string>

@@ -147,6 +147,8 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
 
             SwapStatusSteps(
                 status = uiState.status,
+                tokenInCode = uiState.tokenInCode,
+                tokenOutCode = uiState.tokenOutCode,
                 isSingleTransactionSwap = uiState.isSingleTransactionSwap,
                 depositingTxUrl = uiState.depositingTxUrl,
                 swappingTxUrl = uiState.swappingTxUrl,
@@ -342,15 +344,15 @@ internal fun RecipientRow(address: String, view: android.view.View) {
 }
 
 @Composable
-internal fun SwapStatusSteps(status: SwapStatus, isSingleTransactionSwap: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
+internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCode: String, isSingleTransactionSwap: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
     val context = LocalContext.current
     val normalSteps = listOf(
-        stringResource(R.string.SwapInfo_StatusDepositing),
+        stringResource(R.string.SwapInfo_StatusDeposit, tokenInCode),
         stringResource(R.string.SwapInfo_StatusSwapping),
-        stringResource(R.string.SwapInfo_StatusReceiving),
+        stringResource(R.string.SwapInfo_StatusReceive, tokenOutCode),
     )
     val refundedSteps = listOf(
-        stringResource(R.string.SwapInfo_StatusDepositing),
+        stringResource(R.string.SwapInfo_StatusDeposit, tokenInCode),
         stringResource(R.string.SwapInfo_StatusSwapping),
         stringResource(R.string.SwapInfo_StatusRefunded),
     )

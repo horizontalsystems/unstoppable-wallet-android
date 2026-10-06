@@ -230,7 +230,7 @@
     <!-- Swap History -->
     <!-- Swap Info -->
     <string name="SwapInfo_StatusSwapping">جایگزینی</string>
-    <string name="SwapInfo_StatusReceiving">دریافت</string>
+    <string name="SwapInfo_StatusReceive">دریافت %s</string>
     <!--Approve-->
     <string name="Approve_Spender">خرج کننده</string>
     <!--Swap Unlock Access-->
@@ -1322,7 +1322,7 @@
     <string name="SwapInfo_Title">اطلاعات سواپ</string>
     <string name="SwapInfo_SourceAddress">آدرس مبدأ</string>
     <string name="SwapInfo_StatusTitle">وضعیت تراکنش</string>
-    <string name="SwapInfo_StatusDepositing">در حال واریز</string>
+    <string name="SwapInfo_StatusDeposit">واریز %s</string>
     <string name="SwapInfo_StatusCompleted">تکمیل شد</string>
     <string name="SwapInfo_StatusRefunded">بازگردانده شد</string>
     <string name="SwapInfo_StatusFailed">ناموفق</string>

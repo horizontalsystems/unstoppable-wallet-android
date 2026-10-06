@@ -678,9 +678,9 @@
     <string name="SwapInfo_Provider">Ruta</string>
     <string name="SwapInfo_SourceAddress">Dirección de origen</string>
     <string name="SwapInfo_StatusTitle">Estado de la transacción</string>
-    <string name="SwapInfo_StatusDepositing">Depósito</string>
+    <string name="SwapInfo_StatusDeposit">Depositar %s</string>
     <string name="SwapInfo_StatusSwapping">Permutar</string>
-    <string name="SwapInfo_StatusReceiving">Recibir</string>
+    <string name="SwapInfo_StatusReceive">Recibir %s</string>
     <string name="SwapInfo_StatusCompleted">Completado</string>
     <string name="SwapInfo_StatusRefunded">Reembolsado</string>
     <string name="SwapInfo_StatusFailed">Fallo</string>

@@ -1014,9 +1014,9 @@
     <string name="SwapInfo_Provider">Route</string>
     <string name="SwapInfo_SourceAddress">Source Address</string>
     <string name="SwapInfo_StatusTitle">Transaction Status</string>
-    <string name="SwapInfo_StatusDepositing">Depositing</string>
+    <string name="SwapInfo_StatusDeposit">Deposit %s</string>
     <string name="SwapInfo_StatusSwapping">Swap</string>
-    <string name="SwapInfo_StatusReceiving">Receive</string>
+    <string name="SwapInfo_StatusReceive">Receive %s</string>
     <string name="SwapInfo_StatusCompleted">Completed</string>
     <string name="SwapInfo_StatusRefunded">Refunded</string>
     <string name="SwapInfo_StatusFailed">Failed</string>

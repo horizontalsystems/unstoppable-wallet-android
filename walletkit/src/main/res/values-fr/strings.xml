@@ -678,9 +678,9 @@
     <string name="SwapInfo_Provider">Itinéraire</string>
     <string name="SwapInfo_SourceAddress">Adresse source</string>
     <string name="SwapInfo_StatusTitle">Statut de la transaction</string>
-    <string name="SwapInfo_StatusDepositing">Dépôt</string>
+    <string name="SwapInfo_StatusDeposit">Déposer %s</string>
     <string name="SwapInfo_StatusSwapping">Permuter</string>
-    <string name="SwapInfo_StatusReceiving">Recevoir</string>
+    <string name="SwapInfo_StatusReceive">Recevoir %s</string>
     <string name="SwapInfo_StatusCompleted">Terminé</string>
     <string name="SwapInfo_StatusRefunded">Remboursé</string>
     <string name="SwapInfo_StatusFailed">Echoué</string>

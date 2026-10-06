@@ -680,9 +680,9 @@
     <string name="SwapInfo_Provider">Маршрут</string>
     <string name="SwapInfo_SourceAddress">Адрес источника</string>
     <string name="SwapInfo_StatusTitle">Статус транзакции</string>
-    <string name="SwapInfo_StatusDepositing">Депозит</string>
+    <string name="SwapInfo_StatusDeposit">Депозит %s</string>
     <string name="SwapInfo_StatusSwapping">Обмен</string>
-    <string name="SwapInfo_StatusReceiving">Получение</string>
+    <string name="SwapInfo_StatusReceive">Получение %s</string>
     <string name="SwapInfo_StatusCompleted">Выполнено</string>
     <string name="SwapInfo_StatusRefunded">Возвращено</string>
     <string name="SwapInfo_StatusFailed">Неудачный</string>

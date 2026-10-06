@@ -677,9 +677,9 @@
     <string name="SwapInfo_Provider">路由</string>
     <string name="SwapInfo_SourceAddress">源地址</string>
     <string name="SwapInfo_StatusTitle">交易状态</string>
-    <string name="SwapInfo_StatusDepositing">存款</string>
+    <string name="SwapInfo_StatusDeposit">存入 %s</string>
     <string name="SwapInfo_StatusSwapping">互兑交易</string>
-    <string name="SwapInfo_StatusReceiving">接收</string>
+    <string name="SwapInfo_StatusReceive">接收 %s</string>
     <string name="SwapInfo_StatusCompleted">已完成</string>
     <string name="SwapInfo_StatusRefunded">已退款</string>
     <string name="SwapInfo_StatusFailed">失败</string>
