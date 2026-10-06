@@ -230,6 +230,7 @@ private fun PrivateSendConfirmationScreen(
                         CurrencyValue(it.currency, it.value * fee).getFormattedFull()
                     },
                     valueToken = CoinValue(uiState.token, fee).getFormattedFull(),
+                    fiatFirst = true,
                     onInfoClick = {
                         navigation.slideFromBottom(
                             SwapInfoSheet(
@@ -245,7 +246,7 @@ private fun PrivateSendConfirmationScreen(
             DataFieldFeeTemplate(
                 navigation = navigation,
                 primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
+                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
                 title = stringResource(R.string.FeeSettings_NetworkFee),
                 infoText = stringResource(R.string.FeeSettings_NetworkFee_Info),
             )

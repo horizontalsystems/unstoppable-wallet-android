@@ -28,7 +28,6 @@ import io.horizontalsystems.walletkit.core.stats.StatSection
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.helpers.HudHelper
-import io.horizontalsystems.walletkit.modules.amount.AmountInputType
 import io.horizontalsystems.walletkit.modules.confirm.ErrorSheet
 import io.horizontalsystems.walletkit.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.walletkit.modules.fee.HSFee
@@ -210,7 +209,6 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
                         coinCode = uiState.feeCoin.code,
                         coinDecimal = uiState.coinMaxAllowedDecimals,
                         fee = uiState.fee,
-                        amountInputType = AmountInputType.COIN,
                         rate = uiState.coinRate,
                         navigation = navigation
                     )

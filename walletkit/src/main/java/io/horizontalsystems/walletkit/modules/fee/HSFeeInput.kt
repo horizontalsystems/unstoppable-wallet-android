@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.CurrencyValue
-import io.horizontalsystems.walletkit.modules.amount.AmountInputType
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -28,7 +27,6 @@ fun HSFee(
     coinCode: String,
     coinDecimal: Int,
     fee: BigDecimal?,
-    amountInputType: AmountInputType,
     rate: CurrencyValue?,
     navigation: HSNavigation,
 ) {
@@ -43,7 +41,6 @@ fun HSFee(
             coinCode = coinCode,
             coinDecimal = coinDecimal,
             fee = fee,
-            amountInputType = amountInputType,
             rate = rate,
             navigation = navigation,
         )
@@ -57,21 +54,20 @@ fun HSFeeRaw(
     coinCode: String,
     coinDecimal: Int,
     fee: BigDecimal?,
-    amountInputType: AmountInputType,
     rate: CurrencyValue?,
     navigation: HSNavigation,
 ) {
 
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
 
-    LaunchedEffect(fee, amountInputType, rate) {
-        formatted = getFormatted(fee, rate, coinCode, coinDecimal, amountInputType)
+    LaunchedEffect(fee, rate) {
+        formatted = getFormatted(fee, rate, coinCode, coinDecimal)
     }
 
     DataFieldFeeTemplate(
         navigation = navigation,
         primary = formatted?.primary ?: "---",
-        secondary = formatted?.secondary ?: "---",
+        secondary = formatted?.secondary,
         title = title,
         infoText = info
     )
@@ -82,7 +78,6 @@ private fun getFormatted(
     rate: CurrencyValue?,
     coinCode: String,
     coinDecimal: Int,
-    amountInputType: AmountInputType
 ): FeeItem? {
 
     if (fee == null) return null
@@ -92,9 +87,5 @@ private fun getFormatted(
         it.copy(value = fee.times(it.value)).getFormattedFull()
     }
 
-    return if (amountInputType == AmountInputType.CURRENCY && currencyAmount != null) {
-        FeeItem(currencyAmount, coinAmount)
-    } else {
-        FeeItem(coinAmount, currencyAmount)
-    }
+    return FeeItem(coinAmount, currencyAmount)
 }

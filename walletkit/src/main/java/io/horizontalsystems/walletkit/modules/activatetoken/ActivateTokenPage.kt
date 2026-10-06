@@ -141,7 +141,7 @@ fun ActivateTokenScreen(
             DataFieldFee(
                 navigation,
                 uiState.feeCoinValue?.getFormattedFull() ?: "---",
-                uiState.feeFiatValue?.getFormattedFull() ?: "---"
+                uiState.feeFiatValue?.getFormattedFull()
             )
         }
 

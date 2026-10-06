@@ -58,7 +58,7 @@ fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: S
                 is ViewItem.Fee -> DataFieldFee(
                     navigation,
                     item.networkFee.primary.getFormattedPlain() ?: "---",
-                    item.networkFee.secondary?.getFormattedPlain() ?: "---"
+                    item.networkFee.secondary?.getFormattedPlain()
                 )
                 // Alert is only produced in the WalletConnect request flow (rendered by DataBlock);
                 // it does not appear in these EVM section views.

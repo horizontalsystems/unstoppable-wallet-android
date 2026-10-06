@@ -34,6 +34,7 @@ fun DataFieldFeeTemplate(
         title = title,
         valueFiat = secondary,
         valueToken = primary,
+        fiatFirst = true,
         onInfoClick = infoText?.let {
             {
                 navigation.slideFromBottom(

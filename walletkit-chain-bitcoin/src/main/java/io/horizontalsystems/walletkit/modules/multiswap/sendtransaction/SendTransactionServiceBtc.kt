@@ -23,7 +23,6 @@ import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
-import io.horizontalsystems.walletkit.modules.amount.AmountInputType
 import io.horizontalsystems.walletkit.modules.amount.AmountValidator
 import io.horizontalsystems.walletkit.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.walletkit.modules.fee.HSFee
@@ -290,7 +289,6 @@ fun SendBtcFeeSettingsScreen(
                 coinCode = viewModel.token.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fee = uiState.fee,
-                amountInputType = AmountInputType.COIN,
                 rate = uiState.rate,
                 navigation = navigation
             )

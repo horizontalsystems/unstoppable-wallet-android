@@ -241,7 +241,7 @@ private fun CrossPayConfirmationScreen(
             DataFieldFeeTemplate(
                 navigation = navigation,
                 primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
+                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
                 title = stringResource(R.string.FeeSettings_NetworkFee),
                 infoText = stringResource(R.string.FeeSettings_NetworkFee_Info),
             )

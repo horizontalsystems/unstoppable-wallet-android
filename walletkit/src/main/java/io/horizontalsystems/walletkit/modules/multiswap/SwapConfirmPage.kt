@@ -371,7 +371,7 @@ private fun SwapConfirmInternal(
             DataFieldFee(
                 navigation,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+                uiState.networkFee?.secondary?.getFormattedPlain()
             )
         }
 

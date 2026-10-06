@@ -22,8 +22,11 @@ fun FeeRow(
     valueFiat: String? = null,
     valueToken: String,
     onInfoClick: (() -> Unit)? = null,
+    fiatFirst: Boolean = false,
 ) {
-    var showFiat by remember(valueFiat) { mutableStateOf(false) }
+    // Not keyed on the value: fees are re-estimated while the screen is open, and each new
+    // estimate would otherwise undo the user's tap.
+    var showFiat by remember { mutableStateOf(fiatFirst) }
 
     val displayedValue = when {
         showFiat && valueFiat != null -> valueFiat
