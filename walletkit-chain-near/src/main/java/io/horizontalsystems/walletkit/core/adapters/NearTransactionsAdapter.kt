@@ -83,7 +83,7 @@ class NearTransactionsAdapter(
         val matches = filter(transactionType, address) ?: return emptyFlow()
         return kit.transactionsFlow.map { changed ->
             changed
-                .filter { tx -> tag.value == null || tx.belongsTo(tag.value) }
+                .filter { tx -> tag.value == null || tag.value in kit.tags(tx) }
                 .filter(matches)
                 .map { converter.convert(it) }
         }
@@ -100,14 +100,6 @@ class NearTransactionsAdapter(
         is TokenType.Nep141 -> Tag(type.contractId)
         else -> null
     }
-
-    /** Mirrors the kit's history tags for records that arrive through [NearKit.transactionsFlow]. */
-    private fun Transaction.belongsTo(tag: String): Boolean =
-        if (tag == NearKit.TOKEN_NATIVE) {
-            isSigner(selfAccount) || nearTransfers.any { (it.from == selfAccount || it.to == selfAccount) && it.amount.signum() > 0 }
-        } else {
-            ftTransfers.any { it.contractId == tag } || (isSigner(selfAccount) && receiverId == tag)
-        }
 
     /** Null when the filter combination has no matches on NEAR (no swaps or approvals yet). */
     private fun filter(transactionType: FilterTransactionType, address: String?): ((Transaction) -> Boolean)? {

@@ -88,6 +88,7 @@ class NearKitManager(
             Network.MainNet,
             account.id,
             rpcUrls = rpcSourceManager.rpcUrls(),
+            fastNearApiKey = App.appConfigProvider.fastNearApiKey,
         )
         return NearKitWrapper(kit)
     }

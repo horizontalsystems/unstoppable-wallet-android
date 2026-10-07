@@ -69,6 +69,9 @@ interface IAppConfigProvider {
     val hashDitApiKey: String
     val uswapApiBaseUrl: String
     val uswapApiKey: String
+
+    /** FastNEAR API key for NEAR history and token lists; null uses the keyless tier. */
+    val fastNearApiKey: String?
     val oneInchPartnerFeeAddress: String
     val swapFeeBps: Int
     val fdroidBuild: Boolean

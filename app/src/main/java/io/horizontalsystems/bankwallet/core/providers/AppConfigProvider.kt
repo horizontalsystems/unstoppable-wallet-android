@@ -174,6 +174,8 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
 
     override val uswapApiKey = BuildConfig.USWAP_API_KEY
 
+    override val fastNearApiKey = BuildConfig.FASTNEAR_API_KEY.ifBlank { null }
+
     override val oneInchPartnerFeeAddress = BuildConfig.ONE_INCH_PARTNER_FEE_ADDRESS
 
     override val swapFeeBps: Int = BuildConfig.SWAP_FEE_BPS
