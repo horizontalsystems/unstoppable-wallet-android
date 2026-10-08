@@ -149,9 +149,17 @@ class SendTransactionServiceNear(
         else -> LocalizedException(R.string.NearSend_Rejected)
     }
 
-    // Before the receiver is known, the most a NEAR transfer to any receiver can move.
-    override fun maxSendableAmount(): BigDecimal? =
-        if (token.type == TokenType.Native) adapter.maxSendableBalance else null
+    // The send form offers the balance net of the worst case, a transfer that creates an
+    // implicit account. Once an estimate for the actual receiver exists, the maximum is the
+    // balance net of what that transfer needs, which for a named or existing account is far less.
+    override fun maxSendableAmount(): BigDecimal? {
+        if (token.type != TokenType.Native) return null
+        val estimate = estimate
+        val data = sendData
+        val availableNear = (adapter as? BaseNearAdapter)?.availableNear
+        if (estimate == null || data == null || availableNear == null) return adapter.maxSendableBalance
+        return (availableNear - (estimate.requiredNear - data.amount)).max(BigDecimal.ZERO)
+    }
 
     override fun createState(): SendTransactionServiceState {
         val estimate = estimate

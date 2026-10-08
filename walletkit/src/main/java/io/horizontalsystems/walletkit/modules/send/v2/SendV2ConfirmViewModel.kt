@@ -165,6 +165,10 @@ class SendV2ConfirmViewModel(
                 val data = chainPlugin?.sendTransactionData(token, value, address.hex, memo, extraInput, chainSettings)
                     ?: throw UnsupportedOperationException(token.blockchainType.uid)
                 submittedAmount = value
+                // reconcileMaxSend only runs when the service's StateFlow emits, and StateFlow
+                // drops a value equal to the current one. A reduced amount whose estimate
+                // matches the previous one would leave the screen adjusting forever.
+                sendTransactionService.refreshUuid()
                 sendTransactionService.setSendTransactionData(data)
             } catch (e: CancellationException) {
                 throw e
