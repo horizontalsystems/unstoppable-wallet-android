@@ -1956,4 +1956,5 @@
     <string name="NearSend_PreviousTransactionPending">یک تراکنش قبلی هنوز در انتظار است. پیش از ارسال دوباره، تاریخچه تراکنش‌های خود را بررسی کنید.</string>
     <string name="Transactions_NotProcessed">پردازش نشد</string>
     <string name="NearSend_Rejected">شبکه این تراکنش را رد کرد. چیزی ارسال نشد.</string>
+    <string name="NearSend_TooManyDecimals">این توکن حداکثر %d رقم اعشار را پشتیبانی می‌کند.</string>
 </resources>

@@ -1973,4 +1973,5 @@
     <string name="NearSend_PreviousTransactionPending">Uma transação anterior ainda está pendente. Confira seu histórico de transações antes de enviar novamente.</string>
     <string name="Transactions_NotProcessed">Não processada</string>
     <string name="NearSend_Rejected">A rede rejeitou esta transação. Nada foi enviado.</string>
+    <string name="NearSend_TooManyDecimals">Este token suporta até %d casas decimais.</string>
 </resources>

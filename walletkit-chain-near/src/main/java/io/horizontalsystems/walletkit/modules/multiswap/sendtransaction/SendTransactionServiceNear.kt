@@ -53,7 +53,11 @@ class SendTransactionServiceNear(
 
         var newEstimate: NearSendEstimate? = null
         val newCautions = mutableListOf<CautionViewItem>()
-        try {
+        // The typed amount is not limited to the token's precision, and rounding it would send a
+        // different amount than the one confirmed.
+        if (data.amount.stripTrailingZeros().scale() > token.decimals) {
+            newCautions.add(tooManyDecimals())
+        } else try {
             newEstimate = withContext(Dispatchers.IO) { adapter.estimate(data.address, data.amount, data.memo) }
         } catch (e: CancellationException) {
             throw e
@@ -93,6 +97,12 @@ class SendTransactionServiceNear(
     private fun insufficientBalance() = CautionViewItem(
         title = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
         text = Translator.getString(R.string.Swap_ErrorInsufficientBalance),
+        type = CautionViewItem.Type.Error
+    )
+
+    private fun tooManyDecimals() = CautionViewItem(
+        title = Translator.getString(R.string.Error),
+        text = Translator.getString(R.string.NearSend_TooManyDecimals, token.decimals),
         type = CautionViewItem.Type.Error
     )
 

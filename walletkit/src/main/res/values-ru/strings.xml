@@ -1977,4 +1977,5 @@
     <string name="NearSend_PreviousTransactionPending">Предыдущая транзакция ещё в ожидании. Проверьте историю транзакций, прежде чем отправлять снова.</string>
     <string name="Transactions_NotProcessed">Не обработана</string>
     <string name="NearSend_Rejected">Сеть отклонила эту транзакцию. Ничего не отправлено.</string>
+    <string name="NearSend_TooManyDecimals">Этот токен поддерживает не более %d знаков после запятой.</string>
 </resources>

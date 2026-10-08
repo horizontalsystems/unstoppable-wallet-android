@@ -2323,4 +2323,5 @@
     <string name="NearSend_PreviousTransactionPending">A previous transaction is still pending. Check your transaction history before sending again.</string>
     <string name="Transactions_NotProcessed">Not processed</string>
     <string name="NearSend_Rejected">The network rejected this transaction. Nothing was sent.</string>
+    <string name="NearSend_TooManyDecimals">This token supports up to %d decimal places.</string>
 </resources>

@@ -1967,4 +1967,5 @@
     <string name="NearSend_PreviousTransactionPending">之前的一笔交易仍在处理中。再次发送前请查看交易记录。</string>
     <string name="Transactions_NotProcessed">未处理</string>
     <string name="NearSend_Rejected">网络拒绝了此交易，未发送任何内容。</string>
+    <string name="NearSend_TooManyDecimals">此代币最多支持 %d 位小数。</string>
 </resources>

@@ -1969,4 +1969,5 @@
     <string name="NearSend_PreviousTransactionPending">Önceki bir işlem hâlâ beklemede. Tekrar göndermeden önce işlem geçmişinizi kontrol edin.</string>
     <string name="Transactions_NotProcessed">İşlenmedi</string>
     <string name="NearSend_Rejected">Ağ bu işlemi reddetti. Hiçbir şey gönderilmedi.</string>
+    <string name="NearSend_TooManyDecimals">Bu token en fazla %d ondalık basamağı destekler.</string>
 </resources>
