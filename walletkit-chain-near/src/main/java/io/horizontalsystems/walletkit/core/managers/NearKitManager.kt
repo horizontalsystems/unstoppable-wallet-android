@@ -104,6 +104,7 @@ class NearKitManager(
         }
     }
 
+    @Synchronized
     private fun handleUpdateNetwork() {
         stop()
         _kitStoppedFlow.tryEmit(Unit)
