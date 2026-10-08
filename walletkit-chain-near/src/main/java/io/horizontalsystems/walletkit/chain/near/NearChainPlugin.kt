@@ -10,7 +10,6 @@ import io.horizontalsystems.nearkit.NearKit
 import io.horizontalsystems.nearkit.network.Network
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapter
-import io.horizontalsystems.walletkit.core.ISendNearAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.adapters.NearAdapter
 import io.horizontalsystems.walletkit.core.adapters.NearTokenAdapter
@@ -147,13 +146,6 @@ class NearChainPlugin : ChainPlugin {
     /** Only NEP-141 transfers carry a memo (`ft_transfer`); a native NEAR transfer has none. */
     override suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? =
         if (token.type is TokenType.Nep141) SendMemoSupport(maxBytes = MEMO_MAX_BYTES, visibility = MemoVisibility.Public) else null
-
-    override fun sendAvailableBalance(token: Token, settings: SendChainSettings?): BigDecimal? =
-        if (token.type == TokenType.Native) {
-            App.adapterManager.getAdapterForToken<ISendNearAdapter>(token)?.maxSendableBalance
-        } else {
-            null
-        }
 
     override fun sendTransactionData(
         token: Token,

@@ -149,9 +149,11 @@ class SendTransactionServiceNear(
         else -> LocalizedException(R.string.NearSend_Rejected)
     }
 
-    // The send form offers the balance net of the worst case, a transfer that creates an
-    // implicit account. Once an estimate for the actual receiver exists, the maximum is the
-    // balance net of what that transfer needs, which for a named or existing account is far less.
+    // The send form offers the whole spendable balance; sending it, the confirmation reduces the
+    // amount to this. "Amount minus fee" would not do: the transfer must also cover gas bought
+    // up front at a price above the one charged, and for an implicit receiver the account it
+    // creates, so the maximum is the balance net of what the estimate requires. Without an
+    // estimate it falls back to the balance net of the worst case.
     override fun maxSendableAmount(): BigDecimal? {
         if (token.type != TokenType.Native) return null
         val estimate = estimate
