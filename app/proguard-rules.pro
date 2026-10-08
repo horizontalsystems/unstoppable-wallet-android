@@ -100,6 +100,16 @@
 -keep class io.horizontalsystems.bankwallet.core.storage.** { *; }
 
 # ============================================================
+# App: classes persisted as Gson JSON outside the packages above
+# ============================================================
+# Field names are the stored JSON keys, written by unminified builds
+# up to 0.51.2. Renaming them makes existing rows read back as nulls.
+# BalanceData: EnabledWalletCache.balanceData (DatabaseConverters)
+# PerformanceCoin: LocalStorageManager.roiPerformanceCoins
+-keep class io.horizontalsystems.walletkit.core.BalanceData { *; }
+-keep class io.horizontalsystems.walletkit.modules.roi.PerformanceCoin { *; }
+
+# ============================================================
 # App: backup data classes — deserialized from JSON via Gson
 # ============================================================
 -keep class io.horizontalsystems.walletkit.modules.backuplocal.BackupLocalModule { *; }
