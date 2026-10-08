@@ -3,11 +3,14 @@ package io.horizontalsystems.walletkit.core.adapters
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.nearkit.NearKit
+import io.horizontalsystems.nearkit.crypto.Base58
 import io.horizontalsystems.nearkit.models.Transaction
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.core.factories.NearTransactionConverter
+import io.horizontalsystems.walletkit.core.managers.ISpamOutgoingContextSource
 import io.horizontalsystems.walletkit.core.managers.NearKitWrapper
+import io.horizontalsystems.walletkit.core.managers.PoisoningScorer
 import io.horizontalsystems.walletkit.core.managers.toAdapterState
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
@@ -19,7 +22,7 @@ import kotlinx.coroutines.flow.map
 class NearTransactionsAdapter(
     kitWrapper: NearKitWrapper,
     private val converter: NearTransactionConverter,
-) : ITransactionsAdapter {
+) : ITransactionsAdapter, ISpamOutgoingContextSource {
     private val kit = kitWrapper.kit
     private val selfAccount = kit.accountId
 
@@ -90,6 +93,23 @@ class NearTransactionsAdapter(
     }
 
     override fun getTransactionUrl(transactionHash: String): String = kit.network.transactionUrl(transactionHash)
+
+    /** Counterparties of the account's transfers before the scored one, for lookalike-address checks. */
+    override suspend fun getOutgoingContext(transactionHash: ByteArray, operationId: Long?, limit: Int): List<PoisoningScorer.OutgoingTxInfo> {
+        val anchor = kit.getTransaction(Base58.encode(transactionHash))
+        return kit.getTransactions(null, anchor?.timestamp, anchor?.hash, limit).mapNotNull { tx ->
+            counterparty(tx)?.let { PoisoningScorer.OutgoingTxInfo(it, tx.timestamp, tx.blockHeight?.toInt()) }
+        }
+    }
+
+    private fun counterparty(tx: Transaction): String? {
+        tx.ftTransfers.firstOrNull { it.from == selfAccount && it.to != null && it.to != selfAccount }?.let { return it.to }
+        tx.ftTransfers.firstOrNull { it.to == selfAccount && it.from != null && it.from != selfAccount }?.let { return it.from }
+        if (tx.isSigner(selfAccount)) {
+            return tx.receiverId.takeIf { tx.actions.isNotEmpty() && tx.actions.all { it.type == "Transfer" } && it != selfAccount }
+        }
+        return tx.nearTransfers.firstOrNull { it.to == selfAccount && it.success && it.from != selfAccount }?.from
+    }
 
     private class Tag(val value: String?)
 

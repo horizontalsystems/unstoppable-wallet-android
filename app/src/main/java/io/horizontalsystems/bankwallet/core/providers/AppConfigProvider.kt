@@ -154,6 +154,7 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
         "POL" to BigDecimal("1"),
         "BNB" to BigDecimal("0.0002"),
         "SOL" to BigDecimal("0.0001"),
+        "NEAR" to BigDecimal("0.01"),
     )
 
     // Cent-sized stablecoin transfers are common test sends, so their micro dust is not

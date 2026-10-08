@@ -537,10 +537,17 @@ class TransactionViewItemFactory(
             is NearTransactionRecord.Type.ContractCall -> {
                 title = Translator.getString(R.string.Transactions_ContractCall)
                 subtitle = recordType.method?.let { "$it · ${recordType.contractId.shorten()}" } ?: recordType.contractId.shorten()
-                val value = recordType.value
-                primaryValue = value?.let { getColoredValue(it, getAmountColorForSend(icon)) }
-                if (value == null) secondaryValue = null
-                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                val incomingValues = recordType.incoming.map { it.value }
+                val outgoingValues = recordType.outgoing.map { it.value }
+                if (incomingValues.isEmpty() && outgoingValues.isEmpty()) {
+                    primaryValue = null
+                    secondaryValue = null
+                } else {
+                    val values = getValues(incomingValues, outgoingValues, currencyValue, mapOf())
+                    primaryValue = values.first
+                    secondaryValue = values.second
+                }
+                iconX = iconType(record.blockchainType, incomingValues, outgoingValues, mapOf())
             }
         }
 

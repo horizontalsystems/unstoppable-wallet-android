@@ -42,18 +42,22 @@ class NearTransactionRecord(
             val memo: String?,
         ) : Type()
 
-        /** Any other transaction the account signed; [value] is the NEAR it attached, if any. */
+        /**
+         * Any other transaction, with the account's net movement per asset: none for a call that
+         * moved nothing, several for a swap or a wrap.
+         */
         data class ContractCall(
             val contractId: String,
             val method: String?,
-            val value: TransactionValue?,
+            val incoming: List<TransferEvent>,
+            val outgoing: List<TransferEvent>,
         ) : Type()
 
         val mainValue: TransactionValue?
             get() = when (this) {
                 is Receive -> value
                 is Send -> value
-                is ContractCall -> value
+                is ContractCall -> (incoming + outgoing).singleOrNull()?.value
             }
     }
 
@@ -69,9 +73,8 @@ class NearTransactionRecord(
         fun eventsForPhishingCheck(type: Type): List<TransferEvent> =
             when (type) {
                 is Type.Receive -> listOf(TransferEvent(type.from, type.value))
-
-                is Type.Send,
-                is Type.ContractCall -> listOf()
+                is Type.ContractCall -> type.incoming
+                is Type.Send -> listOf()
             }
     }
 }

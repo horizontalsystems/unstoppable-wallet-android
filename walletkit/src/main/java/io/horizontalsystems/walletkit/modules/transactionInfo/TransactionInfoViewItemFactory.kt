@@ -263,14 +263,26 @@ class TransactionInfoViewItemFactory(
                             Value(Translator.getString(R.string.AddToken_AddressOrSymbol), transactionType.contractId),
                         )
                         itemSections.add(items)
-                        transactionType.value?.let { value ->
+                        for (event in transactionType.outgoing) {
                             itemSections.add(
                                 TransactionViewItemFactoryHelper.getSendSectionItems(
-                                    value = value,
-                                    toAddress = transactionType.contractId,
-                                    coinPrice = rates[value.coinUid],
+                                    value = event.value,
+                                    toAddress = event.address,
+                                    coinPrice = rates[event.value.coinUid],
                                     hideAmount = transactionItem.hideAmount,
                                     sentToSelf = false,
+                                    nftMetadata = nftMetadata,
+                                    blockchainType = blockchainType,
+                                )
+                            )
+                        }
+                        for (event in transactionType.incoming) {
+                            itemSections.add(
+                                TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                    value = event.value,
+                                    fromAddress = event.address,
+                                    coinPrice = rates[event.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
                                     nftMetadata = nftMetadata,
                                     blockchainType = blockchainType,
                                 )
