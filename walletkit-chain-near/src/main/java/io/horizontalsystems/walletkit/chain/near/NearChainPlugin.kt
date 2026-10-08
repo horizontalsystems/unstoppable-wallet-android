@@ -135,6 +135,12 @@ class NearChainPlugin : ChainPlugin {
 
     override fun addressHandlers(): List<IAddressHandler> = listOf(AddressHandlerNear())
 
+    /**
+     * A named account (`alice.near`) is NEAR's own name and resolves to itself. Claiming it here,
+     * ahead of ENS and UDN, spares the remote lookups they would make for any dotted name.
+     */
+    override fun domainAddressHandlers(): List<IAddressHandler> = listOf(AddressHandlerNear())
+
     override fun addressValidator(token: Token): EnterAddressValidator = NearAddressValidator(token)
 
     override fun addressValidator(
