@@ -5,12 +5,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.entities.AccountType
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.walletkit.modules.nav3.ResultEffect
+import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoremnemonic.RestorePhrase
 import io.horizontalsystems.walletkit.modules.restoreconfig.RestoreBirthdayHeightScreen
@@ -72,12 +74,19 @@ data class restore_select_coins(
             }
         }
 
+        val accountPickerKey = observeResult<AccountPickerResult> {
+            mainViewModel.accountPickerResult = it
+        }
+
         ManageWalletsScreen(
             mainViewModel = mainViewModel,
             openBirthdayHeightConfigure = { token ->
                 val screen = RestoreBirthdayHeightPage(token.blockchainType)
                 screen.resultKey = uuid
                 navigation.add(screen)
+            },
+            openAccountPicker = { page ->
+                navigation.slideFromRightForResult(page, accountPickerKey)
             },
             onBackClick = { navigation.removeLastOrNull() },
             onFinish = {

@@ -1974,4 +1974,17 @@
     <string name="Transactions_NotProcessed">Não processada</string>
     <string name="NearSend_Rejected">A rede rejeitou esta transação. Nada foi enviado.</string>
     <string name="NearSend_TooManyDecimals">Este token suporta até %d casas decimais.</string>
+    <string name="NearAccount_Title">Conta NEAR</string>
+    <string name="NearAccount_Description">Esta frase de recuperação controla mais de uma conta NEAR. Escolha a que deseja usar nesta carteira.</string>
+    <string name="NearAccount_Searching">Procurando contas vinculadas a esta frase de recuperação…</string>
+    <string name="NearAccount_SearchFailed">Não foi possível procurar contas vinculadas a esta frase de recuperação. Tente novamente, digite o nome da conta ou use a conta padrão.</string>
+    <string name="NearAccount_DefaultAccount">Conta padrão</string>
+    <string name="NearAccount_UseDefault">Usar conta padrão</string>
+    <string name="NearAccount_EnterName">Digitar nome da conta</string>
+    <string name="NearAccountName_Title">Nome da conta</string>
+    <string name="NearAccountName_Description">Digite uma conta NEAR controlada por esta frase de recuperação, como alice.near.</string>
+    <string name="NearAccountName_Invalid">Nome de conta NEAR inválido</string>
+    <string name="NearAccountName_NotFound">Esta conta não existe</string>
+    <string name="NearAccountName_NoAccess">Esta frase de recuperação não tem acesso total a esta conta</string>
+    <string name="NearAccountName_CheckFailed">Não foi possível verificar a conta. Tente novamente.</string>
 </resources>

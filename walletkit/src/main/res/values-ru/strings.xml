@@ -1978,4 +1978,17 @@
     <string name="Transactions_NotProcessed">Не обработана</string>
     <string name="NearSend_Rejected">Сеть отклонила эту транзакцию. Ничего не отправлено.</string>
     <string name="NearSend_TooManyDecimals">Этот токен поддерживает не более %d знаков после запятой.</string>
+    <string name="NearAccount_Title">Аккаунт NEAR</string>
+    <string name="NearAccount_Description">Эта фраза восстановления управляет несколькими аккаунтами NEAR. Выберите, какой использовать в этом кошельке.</string>
+    <string name="NearAccount_Searching">Поиск аккаунтов, связанных с этой фразой восстановления…</string>
+    <string name="NearAccount_SearchFailed">Не удалось найти аккаунты, связанные с этой фразой восстановления. Повторите попытку, введите имя аккаунта или используйте аккаунт по умолчанию.</string>
+    <string name="NearAccount_DefaultAccount">Аккаунт по умолчанию</string>
+    <string name="NearAccount_UseDefault">Использовать аккаунт по умолчанию</string>
+    <string name="NearAccount_EnterName">Ввести имя аккаунта</string>
+    <string name="NearAccountName_Title">Имя аккаунта</string>
+    <string name="NearAccountName_Description">Введите аккаунт NEAR, которым управляет эта фраза восстановления, например alice.near.</string>
+    <string name="NearAccountName_Invalid">Недопустимое имя аккаунта NEAR</string>
+    <string name="NearAccountName_NotFound">Такого аккаунта не существует</string>
+    <string name="NearAccountName_NoAccess">У этой фразы восстановления нет полного доступа к этому аккаунту</string>
+    <string name="NearAccountName_CheckFailed">Не удалось проверить аккаунт. Повторите попытку.</string>
 </resources>

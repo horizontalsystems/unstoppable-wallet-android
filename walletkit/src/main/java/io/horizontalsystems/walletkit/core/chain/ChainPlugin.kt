@@ -24,6 +24,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProv
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import kotlinx.coroutines.flow.Flow
@@ -90,6 +91,13 @@ interface ChainPlugin {
 
     /** Confirmation page executing the pending migration reported by [migrationRequiredBalance]. */
     fun migrationPage(wallet: Wallet, entryPoint: KClass<out HSPage>): HSPage? = null
+
+    /**
+     * Page that picks which on-chain account [accountType] opens on this chain, shown when the
+     * chain's first wallet is enabled for a restored account; null when there is nothing to pick.
+     * The page sends back an [AccountPickerResult].
+     */
+    fun accountPickerPage(accountType: AccountType): HSPage? = null
 
     /** Lowest accepted birthday height for the restore date picker. */
     fun minBirthdayHeight(): Long? = null

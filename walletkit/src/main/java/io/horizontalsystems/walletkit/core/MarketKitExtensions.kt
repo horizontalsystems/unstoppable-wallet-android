@@ -214,6 +214,7 @@ val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
         BlockchainType.Monero,
         BlockchainType.Zano,
         BlockchainType.Zcash -> listOf(RestoreSettingType.BirthdayHeight)
+        BlockchainType.Near -> listOf(RestoreSettingType.NearAccountId)
         else -> listOf()
     }
 

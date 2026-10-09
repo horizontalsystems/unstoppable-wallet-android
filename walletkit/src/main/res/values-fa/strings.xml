@@ -1957,4 +1957,17 @@
     <string name="Transactions_NotProcessed">پردازش نشد</string>
     <string name="NearSend_Rejected">شبکه این تراکنش را رد کرد. چیزی ارسال نشد.</string>
     <string name="NearSend_TooManyDecimals">این توکن حداکثر %d رقم اعشار را پشتیبانی می‌کند.</string>
+    <string name="NearAccount_Title">حساب NEAR</string>
+    <string name="NearAccount_Description">این عبارت بازیابی بیش از یک حساب NEAR را کنترل می‌کند. حسابی را که می‌خواهید در این کیف پول استفاده کنید انتخاب کنید.</string>
+    <string name="NearAccount_Searching">در حال جستجوی حساب‌های مرتبط با این عبارت بازیابی…</string>
+    <string name="NearAccount_SearchFailed">جستجوی حساب‌های مرتبط با این عبارت بازیابی ممکن نشد. دوباره تلاش کنید، نام حساب را وارد کنید یا از حساب پیش‌فرض استفاده کنید.</string>
+    <string name="NearAccount_DefaultAccount">حساب پیش‌فرض</string>
+    <string name="NearAccount_UseDefault">استفاده از حساب پیش‌فرض</string>
+    <string name="NearAccount_EnterName">وارد کردن نام حساب</string>
+    <string name="NearAccountName_Title">نام حساب</string>
+    <string name="NearAccountName_Description">یک حساب NEAR که این عبارت بازیابی آن را کنترل می‌کند وارد کنید، مثلاً alice.near.</string>
+    <string name="NearAccountName_Invalid">نام حساب NEAR معتبر نیست</string>
+    <string name="NearAccountName_NotFound">این حساب وجود ندارد</string>
+    <string name="NearAccountName_NoAccess">این عبارت بازیابی به این حساب دسترسی کامل ندارد</string>
+    <string name="NearAccountName_CheckFailed">بررسی حساب ممکن نشد. دوباره تلاش کنید.</string>
 </resources>

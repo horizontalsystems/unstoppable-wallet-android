@@ -16,6 +16,7 @@ import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.entities.AccountOrigin
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -47,6 +48,8 @@ class RestoreViewModel(): ViewModelUiState<RestoreViewModel.UiState>() {
         private set
 
     var cancelBirthdayHeightConfig: Boolean by mutableStateOf(false)
+
+    var accountPickerResult: AccountPickerResult? by mutableStateOf(null)
 
     private var openSelectCoinsScreen = false
     private var restored = false

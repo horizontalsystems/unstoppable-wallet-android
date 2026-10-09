@@ -516,7 +516,7 @@ chain near-protocol
   brandColor=null
   feePriceScale=Gwei
   tokenIconPlaceholder=near_nep141
-  restoreSettingTypes=
+  restoreSettingTypes=NearAccountId
   nativeTokenQueries=near-protocol|native
   defaultTokenQuery=near-protocol|native
   supportedNftTypes=

@@ -1969,4 +1969,17 @@
     <string name="Transactions_NotProcessed">No procesada</string>
     <string name="NearSend_Rejected">La red rechazó esta transacción. No se envió nada.</string>
     <string name="NearSend_TooManyDecimals">Este token admite hasta %d decimales.</string>
+    <string name="NearAccount_Title">Cuenta NEAR</string>
+    <string name="NearAccount_Description">Esta frase de recuperación controla más de una cuenta NEAR. Elige la que quieres usar en esta wallet.</string>
+    <string name="NearAccount_Searching">Buscando cuentas vinculadas a esta frase de recuperación…</string>
+    <string name="NearAccount_SearchFailed">No se pudieron buscar las cuentas vinculadas a esta frase de recuperación. Inténtalo de nuevo, introduce el nombre de la cuenta o usa la cuenta predeterminada.</string>
+    <string name="NearAccount_DefaultAccount">Cuenta predeterminada</string>
+    <string name="NearAccount_UseDefault">Usar cuenta predeterminada</string>
+    <string name="NearAccount_EnterName">Introducir nombre de cuenta</string>
+    <string name="NearAccountName_Title">Nombre de cuenta</string>
+    <string name="NearAccountName_Description">Introduce una cuenta NEAR que controle esta frase de recuperación, por ejemplo alice.near.</string>
+    <string name="NearAccountName_Invalid">No es un nombre de cuenta NEAR válido</string>
+    <string name="NearAccountName_NotFound">Esta cuenta no existe</string>
+    <string name="NearAccountName_NoAccess">Esta frase de recuperación no tiene acceso completo a esta cuenta</string>
+    <string name="NearAccountName_CheckFailed">No se pudo comprobar la cuenta. Inténtalo de nuevo.</string>
 </resources>

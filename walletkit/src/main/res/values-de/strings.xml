@@ -1974,4 +1974,17 @@
     <string name="Transactions_NotProcessed">Nicht verarbeitet</string>
     <string name="NearSend_Rejected">Das Netzwerk hat diese Transaktion abgelehnt. Es wurde nichts gesendet.</string>
     <string name="NearSend_TooManyDecimals">Dieser Token unterstützt bis zu %d Dezimalstellen.</string>
+    <string name="NearAccount_Title">NEAR-Konto</string>
+    <string name="NearAccount_Description">Diese Wiederherstellungsphrase verwaltet mehr als ein NEAR-Konto. Wähle das Konto, das in dieser Wallet verwendet werden soll.</string>
+    <string name="NearAccount_Searching">Suche nach Konten, die mit dieser Wiederherstellungsphrase verknüpft sind…</string>
+    <string name="NearAccount_SearchFailed">Die Suche nach Konten zu dieser Wiederherstellungsphrase ist fehlgeschlagen. Versuche es erneut, gib den Kontonamen ein oder verwende das Standardkonto.</string>
+    <string name="NearAccount_DefaultAccount">Standardkonto</string>
+    <string name="NearAccount_UseDefault">Standardkonto verwenden</string>
+    <string name="NearAccount_EnterName">Kontonamen eingeben</string>
+    <string name="NearAccountName_Title">Kontoname</string>
+    <string name="NearAccountName_Description">Gib ein NEAR-Konto ein, das diese Wiederherstellungsphrase verwaltet, zum Beispiel alice.near.</string>
+    <string name="NearAccountName_Invalid">Kein gültiger NEAR-Kontoname</string>
+    <string name="NearAccountName_NotFound">Dieses Konto existiert nicht</string>
+    <string name="NearAccountName_NoAccess">Diese Wiederherstellungsphrase hat keinen Vollzugriff auf dieses Konto</string>
+    <string name="NearAccountName_CheckFailed">Das Konto konnte nicht geprüft werden. Versuche es erneut.</string>
 </resources>

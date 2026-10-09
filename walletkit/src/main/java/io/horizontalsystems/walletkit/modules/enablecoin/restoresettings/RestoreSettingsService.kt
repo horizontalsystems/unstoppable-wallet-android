@@ -8,6 +8,8 @@ import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.restoreSettingTypes
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountOrigin
+import io.horizontalsystems.walletkit.entities.AccountType
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.channels.BufferOverflow
@@ -30,7 +32,7 @@ class RestoreSettingsService(
     private val _requestFlow = MutableSharedFlow<Request>(extraBufferCapacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val requestFlow: Flow<Request> = _requestFlow
 
-    fun approveSettings(token: Token, account: Account? = null) {
+    fun approveSettings(token: Token, account: Account? = null, accountType: AccountType? = account?.type) {
         val blockchainType = token.blockchainType
 
         if (account != null && account.origin == AccountOrigin.Created) {
@@ -51,6 +53,16 @@ class RestoreSettingsService(
         ) {
             _requestFlow.tryEmit(Request(token, RequestType.BirthdayHeight))
             return
+        }
+
+        if (blockchainType.restoreSettingTypes.contains(RestoreSettingType.NearAccountId)
+            && existingSettings.nearAccountId == null
+            && accountType != null
+        ) {
+            ChainRegistry[blockchainType]?.accountPickerPage(accountType)?.let { page ->
+                _requestFlow.tryEmit(Request(token, RequestType.AccountPicker, page))
+                return
+            }
         }
 
         _approveSettingsFlow.tryEmit(TokenWithSettings(token, RestoreSettings()))
@@ -76,6 +88,10 @@ class RestoreSettingsService(
         _approveSettingsFlow.tryEmit(tokenWithSettings)
     }
 
+    fun enter(settings: RestoreSettings, token: Token) {
+        _approveSettingsFlow.tryEmit(TokenWithSettings(token, settings))
+    }
+
     fun cancel(token: Token) {
         _rejectApproveSettingsFlow.tryEmit(token)
     }
@@ -83,8 +99,8 @@ class RestoreSettingsService(
     override fun clear() = Unit
 
     data class TokenWithSettings(val token: Token, val settings: RestoreSettings)
-    data class Request(val token: Token, val requestType: RequestType)
+    data class Request(val token: Token, val requestType: RequestType, val page: HSPage? = null)
     enum class RequestType {
-        BirthdayHeight
+        BirthdayHeight, AccountPicker
     }
 }

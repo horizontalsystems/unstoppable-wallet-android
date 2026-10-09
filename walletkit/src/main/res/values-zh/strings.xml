@@ -1968,4 +1968,17 @@
     <string name="Transactions_NotProcessed">未处理</string>
     <string name="NearSend_Rejected">网络拒绝了此交易，未发送任何内容。</string>
     <string name="NearSend_TooManyDecimals">此代币最多支持 %d 位小数。</string>
+    <string name="NearAccount_Title">NEAR 账户</string>
+    <string name="NearAccount_Description">此恢复短语控制多个 NEAR 账户。请选择要在此钱包中使用的账户。</string>
+    <string name="NearAccount_Searching">正在搜索与此恢复短语关联的账户…</string>
+    <string name="NearAccount_SearchFailed">无法搜索与此恢复短语关联的账户。请重试、输入账户名称或使用默认账户。</string>
+    <string name="NearAccount_DefaultAccount">默认账户</string>
+    <string name="NearAccount_UseDefault">使用默认账户</string>
+    <string name="NearAccount_EnterName">输入账户名称</string>
+    <string name="NearAccountName_Title">账户名称</string>
+    <string name="NearAccountName_Description">输入此恢复短语控制的 NEAR 账户，例如 alice.near。</string>
+    <string name="NearAccountName_Invalid">不是有效的 NEAR 账户名称</string>
+    <string name="NearAccountName_NotFound">此账户不存在</string>
+    <string name="NearAccountName_NoAccess">此恢复短语对此账户没有完全访问权限</string>
+    <string name="NearAccountName_CheckFailed">无法检查账户。请重试。</string>
 </resources>

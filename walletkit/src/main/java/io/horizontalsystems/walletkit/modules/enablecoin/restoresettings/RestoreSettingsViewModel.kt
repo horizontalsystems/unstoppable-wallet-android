@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.collectSafely
+import io.horizontalsystems.walletkit.core.managers.RestoreSettings
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import kotlinx.coroutines.launch
 
 class RestoreSettingsViewModel(
@@ -16,6 +18,9 @@ class RestoreSettingsViewModel(
 ) : ViewModel() {
 
     var openBirthdayHeightConfig by mutableStateOf<Token?>(null)
+        private set
+
+    var openAccountPicker by mutableStateOf<HSPage?>(null)
         private set
 
     private var currentRequest: RestoreSettingsService.Request? = null
@@ -35,6 +40,9 @@ class RestoreSettingsViewModel(
             RestoreSettingsService.RequestType.BirthdayHeight -> {
                 openBirthdayHeightConfig = request.token
             }
+            RestoreSettingsService.RequestType.AccountPicker -> {
+                openAccountPicker = request.page
+            }
         }
     }
 
@@ -45,7 +53,23 @@ class RestoreSettingsViewModel(
             RestoreSettingsService.RequestType.BirthdayHeight -> {
                 service.enter(config, request.token)
             }
+            RestoreSettingsService.RequestType.AccountPicker -> Unit
         }
+    }
+
+    fun onAccountPickerResult(result: AccountPickerResult) {
+        val request = currentRequest ?: return
+        if (request.requestType != RestoreSettingsService.RequestType.AccountPicker) return
+
+        if (result.settings != null) {
+            service.enter(result.settings, request.token)
+        } else {
+            service.cancel(request.token)
+        }
+    }
+
+    fun accountPickerOpened() {
+        openAccountPicker = null
     }
 
     fun onCancelEnterBirthdayHeight() {
@@ -64,3 +88,6 @@ class RestoreSettingsViewModel(
 }
 
 data class BirthdayHeightConfig(val birthdayHeight: String?, val restoreAsNew: Boolean)
+
+/** What a chain's account picker sends back: the settings for the chosen account, or null when cancelled. */
+data class AccountPickerResult(val settings: RestoreSettings?)

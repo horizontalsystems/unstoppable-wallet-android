@@ -38,6 +38,7 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CellMultilineClear
@@ -62,6 +63,7 @@ import kotlinx.coroutines.launch
 fun ManageWalletsScreen(
     mainViewModel: RestoreViewModel,
     openBirthdayHeightConfigure: (Token) -> Unit,
+    openAccountPicker: (HSPage) -> Unit,
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
@@ -112,6 +114,16 @@ fun ManageWalletsScreen(
         openBirthdayHeightConfigure.invoke(token)
 
         stat(page = StatPage.RestoreSelect, event = StatEvent.Open(StatPage.BirthdayInput))
+    }
+
+    mainViewModel.accountPickerResult?.let { result ->
+        restoreSettingsViewModel.onAccountPickerResult(result)
+        mainViewModel.accountPickerResult = null
+    }
+
+    restoreSettingsViewModel.openAccountPicker?.let { page ->
+        restoreSettingsViewModel.accountPickerOpened()
+        openAccountPicker.invoke(page)
     }
 
     LaunchedEffect(restored) {

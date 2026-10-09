@@ -212,7 +212,11 @@ class ManageWalletsService(
     fun enable(token: Token) {
         val account = this.account ?: return
 
-        if (token.blockchainType.restoreSettingTypes.isNotEmpty()) {
+        // A chain's restore settings are chosen with its first wallet; the chain's other
+        // tokens run on the same adapter, so they must not ask again or change them.
+        val chainEnabled = walletManager.activeWallets.any { it.token.blockchainType == token.blockchainType }
+
+        if (token.blockchainType.restoreSettingTypes.isNotEmpty() && !chainEnabled) {
             restoreSettingsService.approveSettings(token, account)
         } else {
             enable(token, RestoreSettings())

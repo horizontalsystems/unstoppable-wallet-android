@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.managers
 
 import android.util.Log
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.nearkit.NearKit
 import io.horizontalsystems.nearkit.NearWallet
 import io.horizontalsystems.nearkit.network.Network
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 class NearKitManager(
     private val backgroundManager: BackgroundManager,
     private val rpcSourceManager: NearRpcSourceManager,
+    private val restoreSettingsManager: RestoreSettingsManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -52,39 +54,39 @@ class NearKitManager(
     private var useCount = 0
     var currentAccount: Account? = null
         private set
+    private var currentWallet: NearWallet? = null
 
     val statusInfo: Map<String, Any>?
         get() = kitWrapper?.kit?.statusInfo()
 
     @Synchronized
     fun getKitWrapper(account: Account): NearKitWrapper {
-        if (this.kitWrapper != null && currentAccount != account) {
+        val nearWallet = nearWallet(account)
+
+        // The chosen NEAR account is a restore setting, not part of Account, so a change of it
+        // alone must also replace the kit.
+        if (this.kitWrapper != null && (currentAccount != account || currentWallet != nearWallet)) {
             stop()
         }
 
         if (this.kitWrapper == null) {
-            val accountType = account.type
-            this.kitWrapper = when (accountType) {
-                is AccountType.Mnemonic,
-                is AccountType.NearAddress -> createKitInstance(accountType, account)
-
-                else -> throw UnsupportedAccountException()
-            }
+            this.kitWrapper = createKitInstance(nearWallet, account)
             scope.launch {
                 start()
             }
             useCount = 0
             currentAccount = account
+            currentWallet = nearWallet
         }
 
         useCount++
         return this.kitWrapper!!
     }
 
-    private fun createKitInstance(accountType: AccountType, account: Account): NearKitWrapper {
+    private fun createKitInstance(nearWallet: NearWallet, account: Account): NearKitWrapper {
         val kit = NearKit.getInstance(
             App.instance,
-            accountType.toNearWallet(),
+            nearWallet,
             Network.MainNet,
             account.id,
             rpcUrls = rpcSourceManager.rpcUrls(),
@@ -116,6 +118,7 @@ class NearKitManager(
         sourceJob?.cancel()
         kitWrapper = null
         currentAccount = null
+        currentWallet = null
     }
 
     private fun start() {
@@ -157,8 +160,17 @@ class NearKitManager(
         }
     }
 
-    fun getAddress(accountType: AccountType): String =
-        NearKit.accountId(accountType.toNearWallet())
+    fun getAddress(account: Account): String =
+        NearKit.accountId(nearWallet(account))
+
+    private fun nearWallet(account: Account): NearWallet {
+        val accountType = account.type
+        if (accountType !is AccountType.Mnemonic && accountType !is AccountType.NearAddress) {
+            throw UnsupportedAccountException()
+        }
+        val nearAccountId = restoreSettingsManager.settings(account, BlockchainType.Near).nearAccountId
+        return accountType.toNearWallet(nearAccountId)
+    }
 
     companion object {
         private const val TAG = "NearKitManager"
@@ -186,9 +198,12 @@ fun NearKit.SyncState.toAdapterState(): AdapterState = when (this) {
     is NearKit.SyncState.Syncing -> AdapterState.Syncing()
 }
 
-/** Mnemonic accounts use the key's implicit account at m/44'/397'/0', as MyNearWallet and Trust Wallet do. */
-fun AccountType.toNearWallet(): NearWallet = when (this) {
-    is AccountType.Mnemonic -> NearWallet.Seed(seed)
+/**
+ * Mnemonic accounts use the key at m/44'/397'/0', as MyNearWallet and Trust Wallet do, on [nearAccountId]
+ * when the user chose a named account it controls, else on the key's implicit account.
+ */
+fun AccountType.toNearWallet(nearAccountId: String? = null): NearWallet = when (this) {
+    is AccountType.Mnemonic -> NearWallet.Seed(seed, nearAccountId)
     is AccountType.NearAddress -> NearWallet.WatchOnly(address)
     else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to NearWallet")
 }

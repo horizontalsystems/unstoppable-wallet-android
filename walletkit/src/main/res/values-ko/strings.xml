@@ -1965,4 +1965,17 @@
     <string name="Transactions_NotProcessed">처리되지 않음</string>
     <string name="NearSend_Rejected">네트워크가 이 트랜잭션을 거부했습니다. 아무것도 전송되지 않았습니다.</string>
     <string name="NearSend_TooManyDecimals">이 토큰은 소수점 이하 최대 %d자리까지 지원합니다.</string>
+    <string name="NearAccount_Title">NEAR 계정</string>
+    <string name="NearAccount_Description">이 복구 문구는 둘 이상의 NEAR 계정을 관리합니다. 이 지갑에서 사용할 계정을 선택하세요.</string>
+    <string name="NearAccount_Searching">이 복구 문구와 연결된 계정을 검색하는 중…</string>
+    <string name="NearAccount_SearchFailed">이 복구 문구와 연결된 계정을 검색하지 못했습니다. 다시 시도하거나, 계정 이름을 입력하거나, 기본 계정을 사용하세요.</string>
+    <string name="NearAccount_DefaultAccount">기본 계정</string>
+    <string name="NearAccount_UseDefault">기본 계정 사용</string>
+    <string name="NearAccount_EnterName">계정 이름 입력</string>
+    <string name="NearAccountName_Title">계정 이름</string>
+    <string name="NearAccountName_Description">이 복구 문구가 관리하는 NEAR 계정을 입력하세요. 예: alice.near</string>
+    <string name="NearAccountName_Invalid">유효한 NEAR 계정 이름이 아닙니다</string>
+    <string name="NearAccountName_NotFound">이 계정은 존재하지 않습니다</string>
+    <string name="NearAccountName_NoAccess">이 복구 문구는 이 계정에 대한 전체 액세스 권한이 없습니다</string>
+    <string name="NearAccountName_CheckFailed">계정을 확인하지 못했습니다. 다시 시도하세요.</string>
 </resources>

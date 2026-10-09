@@ -25,6 +25,7 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenPage
 import io.horizontalsystems.walletkit.modules.configuredtoken.ConfiguredTokenInfoSheet
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -110,6 +111,15 @@ private fun ManageWalletsScreen(
         navigation.slideFromRightForResult(BirthdayHeightConfigPage(token.blockchainType), resultKey)
 
         stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
+    }
+
+    val accountPickerKey = observeResult<AccountPickerResult> {
+        restoreSettingsViewModel.onAccountPickerResult(it)
+    }
+
+    restoreSettingsViewModel.openAccountPicker?.let { page ->
+        restoreSettingsViewModel.accountPickerOpened()
+        navigation.slideFromRightForResult(page, accountPickerKey)
     }
 
     HSScaffold(

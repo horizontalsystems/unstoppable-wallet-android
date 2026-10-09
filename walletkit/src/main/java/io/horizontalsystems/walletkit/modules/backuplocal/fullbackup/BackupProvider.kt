@@ -20,6 +20,7 @@ import io.horizontalsystems.walletkit.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.walletkit.core.managers.LanguageManager
 import io.horizontalsystems.walletkit.core.managers.MarketFavoritesManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
+import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
@@ -181,8 +182,9 @@ class BackupProvider(
             TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
                 if (!enabledWalletBackup.settings.isNullOrEmpty()) {
                     val restoreSettings = RestoreSettings()
-                    enabledWalletBackup.settings.forEach { (restoreSettingType, value) ->
-                        restoreSettings[restoreSettingType] = value
+                    // Gson reads a setting type this version does not know as a null key
+                    enabledWalletBackup.settings.forEach { (restoreSettingType: RestoreSettingType?, value) ->
+                        restoreSettings[restoreSettingType ?: return@forEach] = value
                     }
                     restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
                 }
@@ -214,8 +216,8 @@ class BackupProvider(
                 TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
                     if (!enabledWalletBackup.settings.isNullOrEmpty()) {
                         val restoreSettings = RestoreSettings()
-                        enabledWalletBackup.settings.forEach { (restoreSettingType, value) ->
-                            restoreSettings[restoreSettingType] = value
+                        enabledWalletBackup.settings.forEach { (restoreSettingType: RestoreSettingType?, value) ->
+                            restoreSettings[restoreSettingType ?: return@forEach] = value
                         }
                         restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
                     }

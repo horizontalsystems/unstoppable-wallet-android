@@ -54,6 +54,8 @@ import io.horizontalsystems.walletkit.modules.managewallets.ManageWalletsViewMod
 import io.horizontalsystems.walletkit.modules.markdown.MarkdownPage
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
+import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
@@ -128,6 +130,15 @@ fun CoinOverviewScreen(
             }
         }
         forResult()
+    }
+
+    val accountPickerKey = observeResult<AccountPickerResult> {
+        restoreSettingsViewModel.onAccountPickerResult(it)
+    }
+
+    restoreSettingsViewModel.openAccountPicker?.let { page ->
+        restoreSettingsViewModel.accountPickerOpened()
+        navigation.slideFromRightForResult(page, accountPickerKey)
     }
 
 

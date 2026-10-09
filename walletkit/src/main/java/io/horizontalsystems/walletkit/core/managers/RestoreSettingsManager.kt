@@ -64,12 +64,14 @@ class RestoreSettingsManager(
                     else -> ChainRegistry[blockchainType]?.newWalletBirthdayHeight()?.toString()
                 }
             }
+            RestoreSettingType.NearAccountId -> null
         }
     }
 
     fun getSettingsTitle(settingType: RestoreSettingType, token: Token): String {
         return when (settingType) {
             RestoreSettingType.BirthdayHeight -> Translator.getString(R.string.ManageAccount_BirthdayHeight, token.coin.code)
+            RestoreSettingType.NearAccountId -> token.coin.code
         }
     }
 
@@ -77,7 +79,11 @@ class RestoreSettingsManager(
 
 enum class RestoreSettingType {
     @SerializedName("birthday_height")
-    BirthdayHeight;
+    BirthdayHeight,
+
+    /** The NEAR account a mnemonic opens: a named account its key controls; absent means the implicit one. */
+    @SerializedName("near_account_id")
+    NearAccountId;
 
     companion object {
         private val map = values().associateBy(RestoreSettingType::name)
@@ -94,6 +100,9 @@ class RestoreSettings {
         set(value) {
             values[RestoreSettingType.BirthdayHeight] = value?.toString() ?: "0"
         }
+
+    val nearAccountId: String?
+        get() = values[RestoreSettingType.NearAccountId]
 
     fun isNotEmpty() = values.isNotEmpty()
 

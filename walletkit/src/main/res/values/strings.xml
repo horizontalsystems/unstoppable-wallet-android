@@ -2324,4 +2324,17 @@
     <string name="Transactions_NotProcessed">Not processed</string>
     <string name="NearSend_Rejected">The network rejected this transaction. Nothing was sent.</string>
     <string name="NearSend_TooManyDecimals">This token supports up to %d decimal places.</string>
+    <string name="NearAccount_Title">NEAR Account</string>
+    <string name="NearAccount_Description">This recovery phrase controls more than one NEAR account. Choose the one to use in this wallet.</string>
+    <string name="NearAccount_Searching">Searching for accounts linked to this recovery phrase…</string>
+    <string name="NearAccount_SearchFailed">Couldn\'t search for accounts linked to this recovery phrase. Try again, enter the account name, or use the default account.</string>
+    <string name="NearAccount_DefaultAccount">Default account</string>
+    <string name="NearAccount_UseDefault">Use Default Account</string>
+    <string name="NearAccount_EnterName">Enter Account Name</string>
+    <string name="NearAccountName_Title">Account Name</string>
+    <string name="NearAccountName_Description">Enter a NEAR account this recovery phrase controls, such as alice.near.</string>
+    <string name="NearAccountName_Invalid">Not a valid NEAR account name</string>
+    <string name="NearAccountName_NotFound">This account does not exist</string>
+    <string name="NearAccountName_NoAccess">This recovery phrase has no full access to this account</string>
+    <string name="NearAccountName_CheckFailed">Couldn\'t check the account. Try again.</string>
 </resources>

@@ -169,7 +169,7 @@ class RestoreBlockchainsService(
 
         if (tokens.size == 1) {
             if (token.blockchainType.restoreSettingTypes.isNotEmpty()) {
-                restoreSettingsService.approveSettings(token)
+                restoreSettingsService.approveSettings(token, accountType = accountType)
             } else {
                 handleApproveRestoreSettings(token, RestoreSettings())
             }

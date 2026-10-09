@@ -1970,4 +1970,17 @@
     <string name="Transactions_NotProcessed">İşlenmedi</string>
     <string name="NearSend_Rejected">Ağ bu işlemi reddetti. Hiçbir şey gönderilmedi.</string>
     <string name="NearSend_TooManyDecimals">Bu token en fazla %d ondalık basamağı destekler.</string>
+    <string name="NearAccount_Title">NEAR Hesabı</string>
+    <string name="NearAccount_Description">Bu kurtarma ifadesi birden fazla NEAR hesabını kontrol ediyor. Bu cüzdanda kullanılacak hesabı seçin.</string>
+    <string name="NearAccount_Searching">Bu kurtarma ifadesine bağlı hesaplar aranıyor…</string>
+    <string name="NearAccount_SearchFailed">Bu kurtarma ifadesine bağlı hesaplar aranamadı. Tekrar deneyin, hesap adını girin veya varsayılan hesabı kullanın.</string>
+    <string name="NearAccount_DefaultAccount">Varsayılan hesap</string>
+    <string name="NearAccount_UseDefault">Varsayılan Hesabı Kullan</string>
+    <string name="NearAccount_EnterName">Hesap Adını Gir</string>
+    <string name="NearAccountName_Title">Hesap Adı</string>
+    <string name="NearAccountName_Description">Bu kurtarma ifadesinin kontrol ettiği bir NEAR hesabı girin, örneğin alice.near.</string>
+    <string name="NearAccountName_Invalid">Geçerli bir NEAR hesap adı değil</string>
+    <string name="NearAccountName_NotFound">Bu hesap mevcut değil</string>
+    <string name="NearAccountName_NoAccess">Bu kurtarma ifadesinin bu hesaba tam erişimi yok</string>
+    <string name="NearAccountName_CheckFailed">Hesap kontrol edilemedi. Tekrar deneyin.</string>
 </resources>

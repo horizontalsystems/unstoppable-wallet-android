@@ -24,10 +24,12 @@ import io.horizontalsystems.walletkit.core.managers.NearRpcSourceManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.walletkit.modules.nearaccount.NearAccountPickerPage
 import io.horizontalsystems.walletkit.modules.nearnetwork.NearNetworkPage
 import kotlinx.coroutines.flow.Flow
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
+import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerNear
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
@@ -54,7 +56,7 @@ class NearChainPlugin : ChainPlugin {
         NearRpcSourceManager(App.blockchainSettingsStorage, App.marketKit)
     }
 
-    val kitManager by lazy { NearKitManager(App.backgroundManager, rpcSourceManager) }
+    val kitManager by lazy { NearKitManager(App.backgroundManager, rpcSourceManager, App.restoreSettingsManager) }
 
     private val accountManager by lazy {
         NearAccountManager(App.accountManager, App.walletManager, kitManager, App.tokenAutoEnableManager, App.coinManager)
@@ -127,8 +129,11 @@ class NearChainPlugin : ChainPlugin {
         kitManager.kitWrapper?.kit?.refresh()
     }
 
+    override fun accountPickerPage(accountType: AccountType): HSPage? =
+        if (accountType is AccountType.Mnemonic) NearAccountPickerPage(accountType) else null
+
     override suspend fun swapDestinationAddress(account: Account): String =
-        kitManager.getAddress(account.type)
+        kitManager.getAddress(account)
 
     override fun sendTransactionService(token: Token): AbstractSendTransactionService =
         SendTransactionServiceNear(token)
