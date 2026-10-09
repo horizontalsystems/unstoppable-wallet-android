@@ -207,6 +207,7 @@ private fun AccountList(
                     )
                 }
             }
+            uiState.selectedItem?.let { SelectedAccountWarnings(it) }
             VSpacer(16.dp)
             CellGroup(paddingValues = PaddingValues(horizontal = 16.dp)) {
                 CellPrimary(
@@ -228,5 +229,36 @@ private fun AccountList(
             )
             VSpacer(16.dp)
         }
+    }
+}
+
+// Picking an account is allowed either way: the user may own the other keys or the contract.
+@Composable
+private fun SelectedAccountWarnings(item: NearAccountViewItem) {
+    if (item.accessLost) {
+        VSpacer(16.dp)
+        AlertCard(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            format = AlertFormat.Structured,
+            type = AlertType.Critical,
+            text = stringResource(R.string.NearAccount_AccessLost),
+        )
+    } else if (item.otherFullAccessKeys) {
+        VSpacer(16.dp)
+        AlertCard(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            format = AlertFormat.Structured,
+            type = AlertType.Critical,
+            text = stringResource(R.string.NearAccount_OtherKeysWarning),
+        )
+    }
+    if (item.hasContract) {
+        VSpacer(16.dp)
+        AlertCard(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            format = AlertFormat.Structured,
+            type = AlertType.Caution,
+            text = stringResource(R.string.NearAccount_ContractWarning),
+        )
     }
 }

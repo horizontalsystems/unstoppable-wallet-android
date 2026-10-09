@@ -1982,4 +1982,8 @@
     <string name="NearAccountName_NotFound">Esta cuenta no existe</string>
     <string name="NearAccountName_NoAccess">Esta frase de recuperación no tiene acceso completo a esta cuenta</string>
     <string name="NearAccountName_CheckFailed">No se pudo comprobar la cuenta. Inténtalo de nuevo.</string>
+    <string name="NearAccount_OtherKeysWarning">Otras claves también tienen acceso completo a esta cuenta. Quien las tenga puede mover sus fondos o quitar el acceso a tu frase de recuperación.</string>
+    <string name="NearAccount_ContractWarning">Esta cuenta tiene un smart contract desplegado. Según su código, puede mover los fondos de la cuenta. Continúa solo si sabes lo que hace.</string>
+    <string name="NearAccount_AccessLost">Esta frase de recuperación ya no tiene acceso a esta cuenta. Es posible que se haya eliminado en otra wallet.</string>
+    <string name="NearSend_NotFullAccessKey">Esta frase de recuperación solo tiene acceso limitado a esta cuenta y no puede enviar fondos.</string>
 </resources>

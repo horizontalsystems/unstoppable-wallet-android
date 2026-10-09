@@ -1970,4 +1970,8 @@
     <string name="NearAccountName_NotFound">این حساب وجود ندارد</string>
     <string name="NearAccountName_NoAccess">این عبارت بازیابی به این حساب دسترسی کامل ندارد</string>
     <string name="NearAccountName_CheckFailed">بررسی حساب ممکن نشد. دوباره تلاش کنید.</string>
+    <string name="NearAccount_OtherKeysWarning">کلیدهای دیگری هم به این حساب دسترسی کامل دارند. هر کسی که آن‌ها را داشته باشد می‌تواند وجوه حساب را جابه‌جا کند یا دسترسی عبارت بازیابی شما را حذف کند.</string>
+    <string name="NearAccount_ContractWarning">یک قرارداد هوشمند روی این حساب مستقر است. بسته به کدش، می‌تواند وجوه حساب را جابه‌جا کند. فقط اگر می‌دانید چه می‌کند ادامه دهید.</string>
+    <string name="NearAccount_AccessLost">این عبارت بازیابی دیگر به این حساب دسترسی ندارد. ممکن است در کیف پول دیگری حذف شده باشد.</string>
+    <string name="NearSend_NotFullAccessKey">این عبارت بازیابی فقط دسترسی محدودی به این حساب دارد و نمی‌تواند وجه ارسال کند.</string>
 </resources>

@@ -1987,4 +1987,8 @@
     <string name="NearAccountName_NotFound">Esta conta não existe</string>
     <string name="NearAccountName_NoAccess">Esta frase de recuperação não tem acesso total a esta conta</string>
     <string name="NearAccountName_CheckFailed">Não foi possível verificar a conta. Tente novamente.</string>
+    <string name="NearAccount_OtherKeysWarning">Outras chaves também têm acesso total a esta conta. Quem as tiver pode mover os fundos ou remover o acesso da sua frase de recuperação.</string>
+    <string name="NearAccount_ContractWarning">Há um smart contract implantado nesta conta. Dependendo do código, ele pode mover os fundos da conta. Continue apenas se souber o que ele faz.</string>
+    <string name="NearAccount_AccessLost">Esta frase de recuperação não tem mais acesso a esta conta. Ele pode ter sido removido em outra carteira.</string>
+    <string name="NearSend_NotFullAccessKey">Esta frase de recuperação tem apenas acesso limitado a esta conta e não pode enviar fundos.</string>
 </resources>

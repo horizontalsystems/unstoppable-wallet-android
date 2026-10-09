@@ -1981,4 +1981,8 @@
     <string name="NearAccountName_NotFound">此账户不存在</string>
     <string name="NearAccountName_NoAccess">此恢复短语对此账户没有完全访问权限</string>
     <string name="NearAccountName_CheckFailed">无法检查账户。请重试。</string>
+    <string name="NearAccount_OtherKeysWarning">其他密钥也拥有此账户的完全访问权限。持有这些密钥的人可以转移资金，或移除您的恢复短语的访问权限。</string>
+    <string name="NearAccount_ContractWarning">此账户上部署了智能合约。根据其代码，它可以转移账户中的资金。仅在您了解其功能时继续。</string>
+    <string name="NearAccount_AccessLost">此恢复短语已无法访问此账户。访问权限可能已在其他钱包中被移除。</string>
+    <string name="NearSend_NotFullAccessKey">此恢复短语对此账户只有有限的访问权限，无法发送资金。</string>
 </resources>

@@ -2337,4 +2337,8 @@
     <string name="NearAccountName_NotFound">This account does not exist</string>
     <string name="NearAccountName_NoAccess">This recovery phrase has no full access to this account</string>
     <string name="NearAccountName_CheckFailed">Couldn\'t check the account. Try again.</string>
+    <string name="NearAccount_OtherKeysWarning">Other keys also have full access to this account. Whoever holds them can move its funds or remove your recovery phrase\'s access.</string>
+    <string name="NearAccount_ContractWarning">A smart contract is deployed on this account. Depending on its code, it can move the account\'s funds. Continue only if you know what it does.</string>
+    <string name="NearAccount_AccessLost">This recovery phrase no longer has access to this account. It may have been removed in another wallet.</string>
+    <string name="NearSend_NotFullAccessKey">This recovery phrase has only limited access to this account and can\'t send funds.</string>
 </resources>

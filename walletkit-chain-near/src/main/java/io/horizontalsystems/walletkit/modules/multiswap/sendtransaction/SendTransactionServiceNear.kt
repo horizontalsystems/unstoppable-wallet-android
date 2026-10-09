@@ -132,6 +132,10 @@ class SendTransactionServiceNear(
         } catch (e: TransactionSender.SendError.Rejected) {
             // kept as pending when the kit cannot tell whether an earlier attempt got it on chain
             newPendingHash(pendingBefore) ?: throw rejectedError(e.details)
+        } catch (e: TransactionSender.SendError.AccessKeyNotFound) {
+            throw LocalizedException(R.string.NearAccount_AccessLost)
+        } catch (e: TransactionSender.SendError.NotFullAccessKey) {
+            throw LocalizedException(R.string.NearSend_NotFullAccessKey)
         } catch (e: TransactionSender.SendError) {
             throw e
         } catch (e: Exception) {

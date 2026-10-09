@@ -19,6 +19,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -54,6 +55,9 @@ class NearAccountPickerViewModel(
                     App.numberFormatter.formatCoinFull(BigDecimal(it, NEAR_DECIMALS), "NEAR", 8)
                 },
                 selected = account.accountId == selectedAccountId,
+                accessLost = account.accessLost == true,
+                otherFullAccessKeys = account.otherFullAccessKeys == true,
+                hasContract = account.hasContract == true,
             )
         },
         publicKey = publicKey?.toString(),
@@ -70,10 +74,10 @@ class NearAccountPickerViewModel(
     /** An account the user entered by name; the name page has already checked the key's full access. */
     fun onAccountEntered(accountId: String) {
         if (accounts.none { it.accountId == accountId }) {
-            accounts = accounts + Account(accountId, null)
+            accounts = accounts + Account(accountId)
             viewModelScope.launch {
-                val available = loadAvailable(accountId)
-                accounts = accounts.map { if (it.accountId == accountId) it.copy(available = available) else it }
+                val account = loadAccount(accountId)
+                accounts = accounts.map { if (it.accountId == accountId) account else it }
                 emitState()
             }
         }
@@ -119,7 +123,7 @@ class NearAccountPickerViewModel(
                 }
 
                 accounts = accountIds
-                    .map { accountId -> async { Account(accountId, loadAvailable(accountId)) } }
+                    .map { accountId -> async { loadAccount(accountId) } }
                     .awaitAll()
                 selectedAccountId = preselected(accounts)
             } catch (e: CancellationException) {
@@ -133,8 +137,24 @@ class NearAccountPickerViewModel(
         }
     }
 
-    private suspend fun loadAvailable(accountId: String): BigInteger? = try {
-        NearKit.accountState(accountId, Network.MainNet, fastNearApiKey, rpcUrls).available
+    // Details only inform the choice, so an account whose details fail to load is still listed
+    private suspend fun loadAccount(accountId: String): Account = coroutineScope {
+        val state = async { orNull { NearKit.accountState(accountId, Network.MainNet, fastNearApiKey, rpcUrls) } }
+        val keys = async { orNull { NearKit.accessKeys(accountId, Network.MainNet, fastNearApiKey, rpcUrls) } }
+        val ownKey = publicKey?.toString()
+        val exists = state.await()?.exists
+        val fullAccessKeys = keys.await()?.filter { it.isFullAccess }?.map { it.publicKey }
+        Account(
+            accountId = accountId,
+            available = state.await()?.available,
+            hasContract = state.await()?.hasContract,
+            accessLost = if (exists == null || fullAccessKeys == null) null else exists && ownKey !in fullAccessKeys,
+            otherFullAccessKeys = fullAccessKeys?.any { it != ownKey },
+        )
+    }
+
+    private suspend fun <T> orNull(block: suspend () -> T): T? = try {
+        block()
     } catch (e: CancellationException) {
         throw e
     } catch (e: Throwable) {
@@ -144,7 +164,7 @@ class NearAccountPickerViewModel(
     // Users moving from MyNearWallet keep their funds on a named account while the implicit one
     // of their new phrase is empty, so the richest account is the likely choice; on a tie, named.
     private fun preselected(accounts: List<Account>): String? =
-        accounts.maxWithOrNull(
+        accounts.filter { it.accessLost != true }.maxWithOrNull(
             compareBy<Account> { it.available ?: BigInteger.ZERO }
                 .thenBy { it.accountId != implicitAccountId }
         )?.accountId
@@ -158,7 +178,18 @@ class NearAccountPickerViewModel(
         emitState()
     }
 
-    private data class Account(val accountId: String, val available: BigInteger?)
+    private data class Account(
+        val accountId: String,
+        val available: BigInteger? = null,
+        val hasContract: Boolean? = null,
+        /**
+         * The account exists but the phrase's key is gone from it. Only the implicit account can
+         * get here: the search lists named accounts only while the key has full access to them.
+         */
+        val accessLost: Boolean? = null,
+        /** Whether a key other than the phrase's can also sign anything for the account. */
+        val otherFullAccessKeys: Boolean? = null,
+    )
 
     class Factory(private val accountType: AccountType.Mnemonic) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -187,6 +218,7 @@ data class NearAccountPickerUiState(
     val result: AccountPickerResult?,
 ) {
     val continueEnabled: Boolean get() = items.any { it.selected }
+    val selectedItem: NearAccountViewItem? get() = items.firstOrNull { it.selected }
 }
 
 data class NearAccountViewItem(
@@ -194,4 +226,7 @@ data class NearAccountViewItem(
     val implicit: Boolean,
     val balance: String?,
     val selected: Boolean,
+    val accessLost: Boolean,
+    val otherFullAccessKeys: Boolean,
+    val hasContract: Boolean,
 )

@@ -1987,4 +1987,8 @@
     <string name="NearAccountName_NotFound">Dieses Konto existiert nicht</string>
     <string name="NearAccountName_NoAccess">Diese Wiederherstellungsphrase hat keinen Vollzugriff auf dieses Konto</string>
     <string name="NearAccountName_CheckFailed">Das Konto konnte nicht geprüft werden. Versuche es erneut.</string>
+    <string name="NearAccount_OtherKeysWarning">Auch andere Schlüssel haben Vollzugriff auf dieses Konto. Wer sie besitzt, kann das Guthaben bewegen oder deiner Wiederherstellungsphrase den Zugriff entziehen.</string>
+    <string name="NearAccount_ContractWarning">Auf diesem Konto ist ein Smart Contract installiert. Je nach Code kann er das Guthaben des Kontos bewegen. Fahre nur fort, wenn du weißt, was er tut.</string>
+    <string name="NearAccount_AccessLost">Diese Wiederherstellungsphrase hat keinen Zugriff mehr auf dieses Konto. Er wurde möglicherweise in einer anderen Wallet entfernt.</string>
+    <string name="NearSend_NotFullAccessKey">Diese Wiederherstellungsphrase hat nur eingeschränkten Zugriff auf dieses Konto und kann kein Guthaben senden.</string>
 </resources>

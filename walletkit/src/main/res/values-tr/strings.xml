@@ -1983,4 +1983,8 @@
     <string name="NearAccountName_NotFound">Bu hesap mevcut değil</string>
     <string name="NearAccountName_NoAccess">Bu kurtarma ifadesinin bu hesaba tam erişimi yok</string>
     <string name="NearAccountName_CheckFailed">Hesap kontrol edilemedi. Tekrar deneyin.</string>
+    <string name="NearAccount_OtherKeysWarning">Başka anahtarların da bu hesaba tam erişimi var. Bu anahtarlara sahip olan kişi fonları taşıyabilir veya kurtarma ifadenizin erişimini kaldırabilir.</string>
+    <string name="NearAccount_ContractWarning">Bu hesapta bir akıllı sözleşme dağıtılmış. Koduna bağlı olarak hesabın fonlarını taşıyabilir. Yalnızca ne yaptığını biliyorsanız devam edin.</string>
+    <string name="NearAccount_AccessLost">Bu kurtarma ifadesinin artık bu hesaba erişimi yok. Erişim başka bir cüzdanda kaldırılmış olabilir.</string>
+    <string name="NearSend_NotFullAccessKey">Bu kurtarma ifadesinin bu hesaba yalnızca sınırlı erişimi var ve fon gönderemez.</string>
 </resources>

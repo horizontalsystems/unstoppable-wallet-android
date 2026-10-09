@@ -1978,4 +1978,8 @@
     <string name="NearAccountName_NotFound">이 계정은 존재하지 않습니다</string>
     <string name="NearAccountName_NoAccess">이 복구 문구는 이 계정에 대한 전체 액세스 권한이 없습니다</string>
     <string name="NearAccountName_CheckFailed">계정을 확인하지 못했습니다. 다시 시도하세요.</string>
+    <string name="NearAccount_OtherKeysWarning">다른 키도 이 계정에 대한 전체 액세스 권한을 가지고 있습니다. 해당 키를 가진 사람은 자금을 이동하거나 복구 문구의 액세스 권한을 제거할 수 있습니다.</string>
+    <string name="NearAccount_ContractWarning">이 계정에는 스마트 컨트랙트가 배포되어 있습니다. 코드에 따라 계정의 자금을 이동할 수 있습니다. 어떤 기능인지 알고 있는 경우에만 계속하세요.</string>
+    <string name="NearAccount_AccessLost">이 복구 문구는 더 이상 이 계정에 액세스할 수 없습니다. 다른 지갑에서 제거되었을 수 있습니다.</string>
+    <string name="NearSend_NotFullAccessKey">이 복구 문구는 이 계정에 제한된 액세스 권한만 있어 자금을 보낼 수 없습니다.</string>
 </resources>

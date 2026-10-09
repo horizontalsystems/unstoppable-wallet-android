@@ -1991,4 +1991,8 @@
     <string name="NearAccountName_NotFound">Такого аккаунта не существует</string>
     <string name="NearAccountName_NoAccess">У этой фразы восстановления нет полного доступа к этому аккаунту</string>
     <string name="NearAccountName_CheckFailed">Не удалось проверить аккаунт. Повторите попытку.</string>
+    <string name="NearAccount_OtherKeysWarning">Полный доступ к этому аккаунту есть и у других ключей. Их владелец может перевести средства или отозвать доступ вашей фразы восстановления.</string>
+    <string name="NearAccount_ContractWarning">На этом аккаунте развёрнут смарт-контракт. В зависимости от кода он может переводить средства аккаунта. Продолжайте, только если знаете, что он делает.</string>
+    <string name="NearAccount_AccessLost">У этой фразы восстановления больше нет доступа к этому аккаунту. Возможно, доступ удалили в другом кошельке.</string>
+    <string name="NearSend_NotFullAccessKey">У этой фразы восстановления только ограниченный доступ к этому аккаунту, и она не может отправлять средства.</string>
 </resources>
