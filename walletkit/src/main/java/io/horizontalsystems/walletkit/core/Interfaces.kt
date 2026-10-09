@@ -335,8 +335,15 @@ data class BalanceData(
     }
 
     companion object {
+        @Suppress("SENSELESS_COMPARISON")
         fun deserialize(v: String, gson: Gson): BalanceData? {
-            return gson.fromJson(v, BalanceData::class.java)
+            // Gson bypasses Kotlin null-safety: a row whose keys don't match the field names
+            // (written by a minified 0.52 build before BalanceData was kept) has every field
+            // null. Drop it; the adapter rewrites the cache on its next balance update.
+            return gson.fromJson(v, BalanceData::class.java)?.takeIf {
+                it.available != null && it.timeLocked != null && it.notRelayed != null &&
+                    it.pending != null && it.minimumBalance != null && it.unshielded != null
+            }
         }
     }
 }
