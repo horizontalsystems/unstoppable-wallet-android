@@ -26,6 +26,7 @@ import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.walletkit.core.stats.StatsManager
 import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.walletkit.core.storage.MoneroNodeStorage
 import io.horizontalsystems.walletkit.core.storage.ZanoNodeStorage
@@ -127,7 +128,8 @@ class BackupProvider(
     private val zanoNodeStorage: ZanoNodeStorage,
     private val zcashEndpointManager: ZcashLightWalletEndpointManager,
     private val zcashEndpointStorage: ZcashEndpointStorage,
-    private val contactsRepository: ContactsRepository
+    private val contactsRepository: ContactsRepository,
+    private val statsManager: StatsManager
 ) {
     private val encryptDecryptManager by lazy { EncryptDecryptManager() }
     private val version = 2
@@ -279,6 +281,8 @@ class BackupProvider(
             if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
                 AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
             }
+
+            settings.uiStatsEnabled?.let { statsManager.toggleUiStats(it) }
         }
 
         if (BackupSection.CustomRpc in sections) {
@@ -622,6 +626,7 @@ class BackupProvider(
             moneroNodes = moneroNodes,
             zanoNodes = zanoNodes,
             zcashEndpoints = zcashEndpoints,
+            uiStatsEnabled = localStorage.uiStatsEnabled,
         )
 
         val contacts = if (BackupSection.Contacts in sections && contactsRepository.contacts.isNotEmpty())
@@ -932,7 +937,9 @@ data class Settings(
     @SerializedName("zano_nodes")
     val zanoNodes: ZanoNodes?,
     @SerializedName("zcash_endpoints")
-    val zcashEndpoints: ZcashEndpoints?
+    val zcashEndpoints: ZcashEndpoints?,
+    @SerializedName("ui_stats_enabled")
+    val uiStatsEnabled: Boolean?
 )
 
 sealed class RestoreException(message: String) : Exception(message) {
