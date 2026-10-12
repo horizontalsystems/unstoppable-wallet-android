@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.EvmError
 import io.horizontalsystems.walletkit.core.ISendSolanaAdapter
 import io.horizontalsystems.walletkit.core.adapters.SolanaAdapter
+import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.isNative
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.amount.AmountValidator
@@ -111,12 +112,25 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
     override fun maxSendableAmount(): BigDecimal? =
         if (token.type == TokenType.Native) (solBalance - fee).max(BigDecimal.ZERO) else null
 
+    // The amount and address services are collected asynchronously, so this instance keeps
+    // describing the previous transfer until they run; a replaced deposit gets a fresh instance.
+    override fun fresh(): AbstractSendTransactionService = SendTransactionServiceSolana(token)
+
+    // A plain transfer is loading until both collectors have reported on the data that was set:
+    // an amount, and either a parsed address or the reason it failed to parse.
+    private val simpleTransferSettled: Boolean
+        get() = simpleDataSet && amountState.amount != null &&
+                (addressState.solanaAddress != null || addressState.addressError != null)
+
     override fun createState() = SendTransactionServiceState(
         uuid = uuid,
         networkFee = getAmountData(CoinValue(solToken, fee)),
-        cautions = listOf(),
+        cautions = listOfNotNull(
+            amountState.amountCaution?.toCautionViewItem(),
+            addressState.addressError?.let { CautionViewItem.fromThrowable(it) },
+        ),
         sendable = rawTransaction != null || (amountState.canBeSend && addressState.canBeSend),
-        loading = rawTransaction == null && !simpleDataSet,
+        loading = rawTransaction == null && !simpleTransferSettled,
         fields = listOf(),
     )
 }

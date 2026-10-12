@@ -50,7 +50,12 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
 
-class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false), ISignOnlySendTransactionService {
+class SendTransactionServiceBtc(
+    private val token: Token,
+    // A fee rate chosen on another instance's settings screen, applied once the recommended
+    // rates are known (which would otherwise replace it).
+    private val initialFeeRate: Int? = null,
+) : AbstractSendTransactionService(true, false), ISignOnlySendTransactionService {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!
     private val provider = FeeRateProviderFactory.provider(token.blockchainType)!!
     private val feeService = SendBitcoinFeeService(adapter)
@@ -71,6 +76,9 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     private var rbfEnabled: Boolean = false
     private var pluginData: Map<Byte, IPluginData>? = null
     private var networkFee: SendModule.AmountData? = null
+    // Until the initial fee rate is applied the state must not read as sendable: the recommended
+    // rate lands first, and a send in that window would use it instead of the user's choice.
+    private var feeRateInitialized = initialFeeRate == null
 
     private var fields = listOf<DataField>()
 
@@ -100,8 +108,16 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
         coroutineScope.launch {
             feeRateService.start()
+            initialFeeRate?.let { feeRateService.setFeeRate(it) }
+            feeRateInitialized = true
+            emitState()
         }
     }
+
+    // The amount, address and fee services are collected asynchronously, so this instance keeps
+    // describing the previous deposit until they run; a replaced deposit gets a fresh instance at
+    // the fee rate on screen.
+    override fun fresh(): AbstractSendTransactionService = SendTransactionServiceBtc(token, feeRateState.feeRate)
 
     private fun handleAddressState(state: SendBitcoinAddressService.State) {
         addressState = state
@@ -159,7 +175,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     override fun maxSendableAmount(): BigDecimal? = amountState.availableBalance
 
     override fun createState(): SendTransactionServiceState {
-        val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend
+        val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend && feeRateInitialized
 
         val hasError = amountState.amountCaution?.isError() == true ||
                 feeRateState.feeRateCaution?.isError() == true ||

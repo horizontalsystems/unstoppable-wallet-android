@@ -2003,4 +2003,7 @@
     <string name="NearSend_ReceiverCheckFailed">Não foi possível verificar se esta conta existe. Verifique sua conexão e tente novamente.</string>
     <string name="NearAccount_AccessCheckFailed">Não foi possível verificar se esta frase de recuperação ainda tem acesso a esta conta. Toque para tentar novamente.</string>
     <string name="SwapInfo_StatusExpired">Expirado</string>
+    <string name="SwapConfirm_CommitRateChanged">O preço mudou. Revise a cotação atualizada e tente novamente.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">A cotação expirou. Uma nova cotação foi carregada.</string>
+    <string name="SwapConfirm_CommitFailed">Não foi possível iniciar o swap. Uma nova cotação foi carregada.</string>
 </resources>

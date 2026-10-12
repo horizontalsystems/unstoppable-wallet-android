@@ -85,7 +85,6 @@ class SwapConfirmViewModel(
     private var error: Throwable? = null
     private var initialLoading = true
     private var loading = true
-    private var expired = false
     private var isInBackground = true
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
@@ -96,11 +95,14 @@ class SwapConfirmViewModel(
     private var amountOutMin: BigDecimal? = null
     private var estimatedTime: Long? = null
     private var quoteFields: List<DataField> = listOf()
-    private var providerSwapId: String? = null
-    private var fromAsset: String? = null
-    private var toAsset: String? = null
-    private var depositAddress: String? = null
+    // The quote on screen: what Swap commits. Has no side effects, so it is re-requested freely.
+    private var finalQuote: SwapFinalQuote? = null
     private var fetchFinalQuoteJob: Job? = null
+    // From the moment Swap is pressed until the send ends, nothing may replace the quote or the
+    // data the send service holds: a refresh landing in between would commit another quote, or
+    // put the stand-in deposit back under a transfer about to be signed.
+    @Volatile
+    private var sending = false
 
     // The account this confirmation was opened for. The send service is built from it and
     // keeps it, so everything below must agree with it rather than with whatever is active.
@@ -146,7 +148,7 @@ class SwapConfirmViewModel(
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 sendTransactionSettings = it
 
-                if (!isInBackground) {
+                if (!isInBackground && !sending) {
                     fetchFinalQuote()
                 }
             }
@@ -173,9 +175,10 @@ class SwapConfirmViewModel(
             timerService.stateFlow.collect {
                 timerState = it
 
-                if (timerState.timeout) {
-                    expired = true
-                    emitState()
+                // The quote has no side effects, so an expired one is silently re-requested
+                // instead of dead-ending the screen behind a Refresh button.
+                if (timerState.timeout && !sending) {
+                    refresh(silent = true)
                 }
             }
         }
@@ -239,7 +242,6 @@ class SwapConfirmViewModel(
         networkFee = sendTransactionState.networkFee,
         cautions = sendTransactionState.cautions,
         validQuote = error == null && sendTransactionState.sendable,
-        expired = expired,
         priceImpact = priceImpactState.priceImpact,
         priceImpactLevel = priceImpactState.priceImpactLevel,
         quoteFields = quoteFields,
@@ -268,9 +270,7 @@ class SwapConfirmViewModel(
     }
 
     fun refresh(silent: Boolean = false) {
-        if (isInBackground) return
-
-        expired = false
+        if (isInBackground || sending) return
 
         if (!silent) {
             loading = true
@@ -280,10 +280,14 @@ class SwapConfirmViewModel(
         sendTransactionService.refreshUuid()
         fetchFinalQuote()
 
-        stat(page = StatPage.SwapConfirmation, event = StatEvent.Refresh)
+        if (!silent) {
+            stat(page = StatPage.SwapConfirmation, event = StatEvent.Refresh)
+        }
     }
 
     private fun fetchFinalQuote() {
+        if (sending) return
+
         fetchFinalQuoteJob?.cancel()
         fetchFinalQuoteJob = viewModelScope.launch(Dispatchers.Default) {
             try {
@@ -305,18 +309,15 @@ class SwapConfirmViewModel(
 
                 ensureActive()
 
-                expired = false
+                this@SwapConfirmViewModel.finalQuote = finalQuote
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 estimatedTime = finalQuote.estimatedTime
                 slippage = finalQuote.slippage
-                providerSwapId = finalQuote.providerSwapId
-                fromAsset = finalQuote.fromAsset
-                toAsset = finalQuote.toAsset
-                depositAddress = finalQuote.depositAddress
                 // The deposit target comes from the provider's server and is what the signed
-                // transaction actually pays; it must be on screen next to the recipient so a
-                // compromised or spoofed provider response cannot redirect funds unseen.
+                // transaction actually pays; when it is known at this point it must be on screen
+                // next to the recipient so a compromised or spoofed provider response cannot
+                // redirect funds unseen. Transfer providers name it only with the order.
                 quoteFields = finalQuote.fields + listOfNotNull(
                     finalQuote.depositAddress?.let { DataFieldDepositAddress(it) },
                     finalQuote.depositMemo?.let { DataFieldDepositMemo(it) },
@@ -343,49 +344,139 @@ class SwapConfirmViewModel(
         }
     }
 
+    /**
+     * Creates the order for the quote on screen, signs and broadcasts its transaction, records
+     * the swap and reports the broadcast hash. A [SwapCommitFailedException] means the order
+     * could not be created or its deposit could not be built: a fresh quote is already being
+     * loaded, and the screen only shows the reason briefly.
+     */
     suspend fun swap() = withContext(Dispatchers.Default) {
-        timerService.stop()
+        val quote = finalQuote ?: throw IllegalStateException("No quote to commit")
 
-        stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
-
-        // The send service was built with the account that was active when the quote was
-        // prepared and holds on to it, so it would still sign after a switch — to a watch
-        // account, or to another signing one whose wallet this swap was never meant to spend.
-        val activeAccount = App.accountManager.activeAccount
-        if (activeAccount == null ||
-            activeAccount.isWatchAccount ||
-            activeAccount.id != confirmingAccountId
-        ) {
-            throw WatchAccountException()
+        synchronized(this@SwapConfirmViewModel) {
+            if (sending) throw IllegalStateException("A swap is already being sent")
+            sending = true
         }
 
-        val result = sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
-        saveSwapRecord(result)
+        try {
+            fetchFinalQuoteJob?.cancel()
+            timerService.stop()
 
-        // remember the delivery address so the recipient page can suggest it next time
-        recipient?.let {
-            App.recentAddressManager.setRecentAddress(it, tokenOut.blockchainType)
+            stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
+
+            // The send service was built with the account that was active when the quote was
+            // prepared and holds on to it, so it would still sign after a switch — to a watch
+            // account, or to another signing one whose wallet this swap was never meant to spend.
+            val activeAccount = App.accountManager.activeAccount
+            if (activeAccount == null ||
+                activeAccount.isWatchAccount ||
+                activeAccount.id != confirmingAccountId
+            ) {
+                throw WatchAccountException()
+            }
+
+            // The only step with side effects. On failure the quote is spent either way, so a
+            // fresh preview replaces it; the reason is surfaced by the caller.
+            val commitment = try {
+                swapProvider.commit(quote)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                requote()
+                throw (e as? SwapCommitFailedException) ?: SwapCommitFailedException(SwapCommitFailure.Failed, e)
+            }
+
+            // The order exists from here on. A deposit that cannot be built or sent leaves it to
+            // lapse unfunded, and the screen re-quotes so a retry never reuses it.
+            val service = try {
+                sendServiceFor(quote, commitment)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                requote()
+                throw SwapCommitFailedException(SwapCommitFailure.Failed, e)
+            }
+
+            val result = try {
+                service.sendTransaction(swapDefenseState.mevProtectionEnabled)
+            } catch (e: Throwable) {
+                requote()
+                throw e
+            } finally {
+                if (service !== sendTransactionService) service.clear()
+            }
+
+            saveSwapRecord(result, commitment)
+
+            // Best-effort and off the critical path: funds have moved, so the screen must not
+            // wait on the report, and tracking resolves the swap without it.
+            val txHash = transactionHash(result)
+            val providerSwapId = commitment.providerSwapId
+            if (txHash != null && providerSwapId != null) {
+                App.swapSyncService.reportInboundTxHash(swapProvider, providerSwapId, txHash)
+            }
+
+            // remember the delivery address so the recipient page can suggest it next time
+            recipient?.let {
+                App.recentAddressManager.setRecentAddress(it, tokenOut.blockchainType)
+            }
+
+            result
+        } finally {
+            synchronized(this@SwapConfirmViewModel) { sending = false }
         }
-
-        result
     }
 
-    private suspend fun saveSwapRecord(result: SendTransactionResult) {
-        // The broadcast hash becomes the record's inboundTxHash — required for tracking DEX
-        // swaps (Jupiter, LI.FI), where the server polls the provider's status by the source
-        // chain transaction.
-        val transactionHash = when (result) {
-            is SendTransactionResult.Evm -> result.transactionHash
-            is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
-            is SendTransactionResult.Zcash -> result.transactionHash
-            is SendTransactionResult.Solana -> result.txHash
-            is SendTransactionResult.Tron -> result.txHash
-            is SendTransactionResult.Thorchain -> result.txHash
-            is SendTransactionResult.Stellar -> result.txHash
-            is SendTransactionResult.Xrp -> result.txHash
-            is SendTransactionResult.Near -> result.txHash
-            else -> null
+    // The quote on screen is spent or stale: load a new one without the loading placeholder, so
+    // the screen keeps its numbers until the fresh ones land.
+    private fun requote() {
+        synchronized(this) { sending = false }
+        refresh(silent = true)
+    }
+
+    /**
+     * The service that signs the committed quote. The on-screen one when the transaction is the
+     * previewed one. A transfer provider's deposit is only named by the order, so its transaction
+     * is rebuilt now: the on-screen service takes it when it reflects new data as soon as it is
+     * set, otherwise a fresh instance does, so no state built for the stand-in can be signed. The
+     * fee choices carry over; the estimate is redone for the real destination.
+     */
+    private suspend fun sendServiceFor(quote: SwapFinalQuote, commitment: SwapCommitment): AbstractSendTransactionService {
+        val data = commitment.quote.sendTransactionData
+        if (data == quote.sendTransactionData) return sendTransactionService
+
+        val service = sendTransactionService.fresh()?.also { it.start(viewModelScope) } ?: sendTransactionService
+        try {
+            service.setSendTransactionData(data)
+            val state = service.awaitSettled()
+            if (!state.sendable) {
+                val caution = state.cautions.firstOrNull { it.type == CautionViewItem.Type.Error }
+                throw IllegalStateException(caution?.text ?: caution?.title ?: "Deposit cannot be sent")
+            }
+            return service
+        } catch (e: Throwable) {
+            if (service !== sendTransactionService) service.clear()
+            throw e
         }
+    }
+
+    private fun transactionHash(result: SendTransactionResult): String? = when (result) {
+        is SendTransactionResult.Evm -> result.transactionHash
+        is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
+        is SendTransactionResult.Zcash -> result.transactionHash
+        is SendTransactionResult.Solana -> result.txHash
+        is SendTransactionResult.Tron -> result.txHash
+        is SendTransactionResult.Thorchain -> result.txHash
+        is SendTransactionResult.Stellar -> result.txHash
+        is SendTransactionResult.Xrp -> result.txHash
+        is SendTransactionResult.Near -> result.txHash
+        is SendTransactionResult.Monero -> result.txHash
+        is SendTransactionResult.Zano -> result.txHash
+        SendTransactionResult.Ton -> null
+    }
+
+    private suspend fun saveSwapRecord(result: SendTransactionResult, commitment: SwapCommitment) {
+        val quote = commitment.quote
 
         val record = SwapRecord(
             accountId = confirmingAccountId ?: "",
@@ -403,18 +494,18 @@ class SwapConfirmViewModel(
             tokenOutBadge = tokenOut.badge,
             tokenOutBlockchainTypeUid = tokenOut.blockchainType.uid,
             amountIn = amountIn.toPlainString(),
-            amountOut = amountOut?.toPlainString(),
-            amountOutMin = amountOutMin?.toPlainString(),
+            amountOut = quote.amountOut.toPlainString(),
+            amountOutMin = quote.amountOutMin?.toPlainString(),
             recipientAddress = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut),
             customRecipientAddress = recipient != null,
             sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
-            transactionHash = transactionHash,
-            providerSwapId = providerSwapId,
-            fromAsset = fromAsset,
-            toAsset = toAsset,
-            depositAddress = depositAddress,
+            transactionHash = transactionHash(result),
+            providerSwapId = commitment.providerSwapId,
+            fromAsset = quote.fromAsset,
+            toAsset = quote.toAsset,
+            depositAddress = quote.depositAddress,
             status = SwapStatus.Depositing.name,
-            estimatedTime = estimatedTime,
+            estimatedTime = quote.estimatedTime,
         )
         App.swapRecordManager.save(record)
     }
@@ -485,7 +576,6 @@ data class SwapConfirmUiState(
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
     val validQuote: Boolean,
-    val expired: Boolean,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,

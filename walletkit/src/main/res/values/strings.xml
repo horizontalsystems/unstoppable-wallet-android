@@ -2353,4 +2353,7 @@
     <string name="NearSend_ReceiverCheckFailed">Couldn\'t check that this account exists. Check your connection and try again.</string>
     <string name="NearAccount_AccessCheckFailed">Couldn\'t check whether this recovery phrase still has access to this account. Tap to try again.</string>
     <string name="SwapInfo_StatusExpired">Expired</string>
+    <string name="SwapConfirm_CommitRateChanged">The price moved. Review the updated quote and try again.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">The quote expired. A new quote has been loaded.</string>
+    <string name="SwapConfirm_CommitFailed">The swap could not be started. A new quote has been loaded.</string>
 </resources>

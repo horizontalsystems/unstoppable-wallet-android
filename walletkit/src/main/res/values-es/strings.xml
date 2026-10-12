@@ -1998,4 +1998,7 @@
     <string name="NearSend_ReceiverCheckFailed">No se pudo comprobar que esta cuenta existe. Revisa tu conexión e inténtalo de nuevo.</string>
     <string name="NearAccount_AccessCheckFailed">No se pudo comprobar si esta frase de recuperación aún tiene acceso a esta cuenta. Toca para intentarlo de nuevo.</string>
     <string name="SwapInfo_StatusExpired">Expirado</string>
+    <string name="SwapConfirm_CommitRateChanged">El precio ha cambiado. Revisa la cotización actualizada e inténtalo de nuevo.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">La cotización ha expirado. Se ha cargado una nueva cotización.</string>
+    <string name="SwapConfirm_CommitFailed">No se pudo iniciar el swap. Se ha cargado una nueva cotización.</string>
 </resources>

@@ -5,6 +5,9 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.walletkit.core.managers.APIClient
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitment
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionActivateStellarAsset
@@ -20,8 +23,11 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.util.Collections
 
 /// Stellar-native swaps through uswap-server's Stellar providers, with the grant's
 /// StellarBroker-first waterfall: /v3/rate fans out to the requested set, the SB route is
@@ -30,9 +36,9 @@ import java.math.BigDecimal
 ///
 /// Execution: signed_transaction (kind `stellar`) — the server built the XDR (Soroswap
 /// /quote/build, Aquarius swap_chained assembly, Horizon path payment); we sign + submit
-/// via StellarKit (SendTransactionData.Stellar.WithTransactionEnvelope). Tracking is
-/// server-recorded: the committed route's uuid rides providerSwapId, and the "u_" id
-/// prefix routes SwapTrackRequestBuilder to POST /v3/track { uuid }.
+/// via StellarKit (SendTransactionData.Stellar.WithTransactionEnvelope). The confirmation
+/// screen previews the route; Swap commits it, and the order's uuid rides providerSwapId:
+/// the "u_" id prefix routes SwapTrackRequestBuilder to POST /v3/track { uuid }.
 class StellarSwapProvider : IMultiSwapProvider {
     // "u_" prefix is load-bearing: SwapTrackRequestBuilder tracks any u_* provider's record
     // by uuid alone. The server id (STELLARBROKER) is what /v3/rate and /v3/preview consume.
@@ -99,7 +105,7 @@ class StellarSwapProvider : IMultiSwapProvider {
 
         val provider = selectedProvider ?: throw IllegalStateException("No Stellar route selected")
 
-        val route = unstoppableAPI.swap(
+        val route = unstoppableAPI.preview(
             UnstoppableAPI.Request.Preview(
                 sellAsset = asset(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
                 buyAsset = asset(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
@@ -112,11 +118,10 @@ class StellarSwapProvider : IMultiSwapProvider {
             )
         )
 
-        // A committed route must carry the tracking handle — it is what /v3/track receives
-        // as `uuid`, and the server resolves the record from it alone. Fail before any funds
-        // move rather than create an untrackable swap.
-        if (route.uuid.isNullOrEmpty()) {
-            throw IllegalStateException("Swap is not trackable (no uuid)")
+        // The token is what Swap turns into an order; a route without one cannot be executed.
+        val previewToken = route.previewToken
+        if (previewToken.isNullOrEmpty()) {
+            throw IllegalStateException("Preview carries no token")
         }
 
         val amountOut = route.expectedBuyAmountOrZero
@@ -143,12 +148,53 @@ class StellarSwapProvider : IMultiSwapProvider {
             fields = fields,
             estimatedTime = route.estimatedTime?.total,
             slippage = effectiveSlippage,
-            providerSwapId = route.uuid,
+            providerSwapId = null,
             fromAsset = asset(tokenIn),
             toAsset = asset(tokenOut),
             depositAddress = null,
+            providerContext = previewToken,
         )
     }
+
+    // Creates the order. Every route here is a server-built transaction the preview already
+    // carries, so the commit only adds the uuid; an execution in its answer would be one the
+    // user never reviewed.
+    override suspend fun commit(finalQuote: SwapFinalQuote): SwapCommitment {
+        val previewToken = finalQuote.providerContext as? String
+            ?: throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Quote was not previewed"))
+
+        if (!consumedPreviewTokens.add(previewToken)) {
+            throw SwapCommitFailedException(SwapCommitFailure.RefreshRequired)
+        }
+
+        currentCoroutineContext().ensureActive()
+
+        val commit = try {
+            unstoppableAPI.commit(UnstoppableAPI.Request.Commit(previewToken))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            val commitException = UnstoppableAPI.CommitException.from(e)
+            throw SwapCommitFailedException(commitException.toSwapCommitFailure(), commitException)
+        }
+
+        val uuid = commit.uuid
+        if (commit.status != "ok" || uuid.isNullOrEmpty()) {
+            throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Commit answered ${commit.status} without a uuid"))
+        }
+        if (commit.execution != null) {
+            throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Commit replaced the previewed transaction"))
+        }
+
+        return SwapCommitment(finalQuote.copy(providerSwapId = uuid, providerContext = null), uuid)
+    }
+
+    override suspend fun reportInboundTxHash(providerSwapId: String, txHash: String) {
+        unstoppableAPI.signed(UnstoppableAPI.Request.Signed(providerSwapId, txHash))
+    }
+
+    // Tokens already handed to /v3/commit: a consumed preview is never committed twice.
+    private val consumedPreviewTokens: MutableSet<String> = Collections.synchronizedSet(mutableSetOf())
 
     private fun sendTransactionData(route: UnstoppableAPI.Response.Route): SendTransactionData {
         val execution = route.execution ?: throw IllegalStateException("No execution found")

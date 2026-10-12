@@ -243,7 +243,7 @@ private fun SwapConfirmInternal(
             viewModel.setRecipient(it.address)
         },
         buttonsSlot = {
-            if (!uiState.validQuote || uiState.expired) {
+            if (!uiState.validQuote) {
                 HSButton(
                     variant = ButtonVariant.Secondary,
                     modifier = Modifier.fillMaxWidth(),
@@ -267,6 +267,10 @@ private fun SwapConfirmInternal(
                                 delay(1200)
                                 resultEventBus.sendResult(SwapConfirmPage.Result(true))
                                 navigation.removeLastOrNull()
+                            } catch (t: SwapCommitFailedException) {
+                                // The order was not created; a fresh quote is already loading, so
+                                // the reason is a passing notice rather than an error sheet.
+                                HudHelper.showErrorMessage(view, t.failure.messageRes)
                             } catch (t: Throwable) {
                                 val message = when (t) {
                                     is WatchAccountException ->
@@ -513,3 +517,9 @@ fun formatDuration(totalSeconds: Long): String {
     // formatMeasures takes an array and joins them localized (e.g., "2 mins 25 secs")
     return fmt.formatMeasures(*measures.toTypedArray())
 }
+val SwapCommitFailure.messageRes: Int
+    get() = when (this) {
+        SwapCommitFailure.RateChanged -> R.string.SwapConfirm_CommitRateChanged
+        SwapCommitFailure.RefreshRequired -> R.string.SwapConfirm_CommitRefreshRequired
+        SwapCommitFailure.Failed -> R.string.SwapConfirm_CommitFailed
+    }

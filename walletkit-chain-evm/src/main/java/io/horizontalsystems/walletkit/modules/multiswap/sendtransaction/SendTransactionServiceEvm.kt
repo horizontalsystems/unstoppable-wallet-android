@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SendTransactionServiceEvm(
-    blockchainType: BlockchainType,
+    private val blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
     initialNonce: Long? = null,
     minGasPrice: GasPrice? = null,
@@ -233,6 +233,18 @@ class SendTransactionServiceEvm(
 
         feeService.setGasLimit(data.gasLimit)
         feeService.setTransactionData(data.transactionData.toKitTransactionData())
+    }
+
+    // The fee estimate lands through the settings service's collector, so this instance keeps
+    // describing the previous transaction until then; a replaced deposit gets a fresh instance
+    // that starts from the gas price on screen and a nonce the user fixed, if any.
+    override fun fresh(): AbstractSendTransactionService {
+        val nonce = nonceService.state.dataOrNull?.takeIf { !it.default || it.fixed }?.nonce
+        return SendTransactionServiceEvm(
+            blockchainType,
+            initialGasPrice = gasPriceService.stateFlow.value.dataOrNull?.gasPrice,
+            initialNonce = nonce,
+        )
     }
 
     suspend fun signTransaction(): EvmKitManager.SignedTx {

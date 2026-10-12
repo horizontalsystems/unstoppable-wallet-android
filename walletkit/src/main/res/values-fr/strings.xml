@@ -2000,4 +2000,7 @@
     <string name="NearSend_ReceiverCheckFailed">Impossible de vérifier que ce compte existe. Vérifiez votre connexion et réessayez.</string>
     <string name="NearAccount_AccessCheckFailed">Impossible de vérifier si cette phrase de récupération a encore accès à ce compte. Appuyez pour réessayer.</string>
     <string name="SwapInfo_StatusExpired">Expiré</string>
+    <string name="SwapConfirm_CommitRateChanged">Le prix a changé. Vérifiez la cotation mise à jour et réessayez.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">La cotation a expiré. Une nouvelle cotation a été chargée.</string>
+    <string name="SwapConfirm_CommitFailed">Le swap n\'a pas pu être lancé. Une nouvelle cotation a été chargée.</string>
 </resources>

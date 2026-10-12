@@ -12,6 +12,8 @@ import io.horizontalsystems.walletkit.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeout
 import java.math.BigDecimal
 import java.util.UUID
 
@@ -40,6 +42,28 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     open fun clear() = Unit
 
     abstract suspend fun setSendTransactionData(data: SendTransactionData)
+
+    /**
+     * A new, unstarted service for the same token that starts from this one's fee choices, for a
+     * deposit whose destination is only known right before signing (a swap provider's deposit
+     * address arrives with the order, after the confirmation screen estimated against a stand-in).
+     * Null when this service reflects a replaced [setSendTransactionData] as soon as the call
+     * returns, so it can send the new deposit itself. Services that spread the data over
+     * sub-services collected asynchronously must return a fresh instance: their state keeps
+     * describing the previous destination until those collectors run, and sending in that window
+     * would pay the stand-in.
+     */
+    open fun fresh(): AbstractSendTransactionService? = null
+
+    /**
+     * Suspends until the state describes the current transaction data: not loading, and either
+     * sendable or carrying an error caution. Gives up after [timeoutMs].
+     */
+    suspend fun awaitSettled(timeoutMs: Long = 60_000): SendTransactionServiceState = withTimeout(timeoutMs) {
+        stateFlow.first { state ->
+            !state.loading && (state.sendable || state.cautions.any { it.type == CautionViewItem.Type.Error })
+        }
+    }
     @Composable
     open fun GetSettingsContent(navigation: HSNavigation) = Unit
     @Composable

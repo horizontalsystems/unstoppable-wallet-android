@@ -1999,4 +1999,7 @@
     <string name="NearSend_ReceiverCheckFailed">Bu hesabın var olduğu doğrulanamadı. Bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="NearAccount_AccessCheckFailed">Bu kurtarma ifadesinin bu hesaba hâlâ erişimi olup olmadığı kontrol edilemedi. Tekrar denemek için dokunun.</string>
     <string name="SwapInfo_StatusExpired">Süresi doldu</string>
+    <string name="SwapConfirm_CommitRateChanged">Fiyat değişti. Güncellenen teklifi inceleyip tekrar deneyin.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">Teklifin süresi doldu. Yeni bir teklif yüklendi.</string>
+    <string name="SwapConfirm_CommitFailed">Swap başlatılamadı. Yeni bir teklif yüklendi.</string>
 </resources>

@@ -2007,4 +2007,7 @@
     <string name="NearSend_ReceiverCheckFailed">Не удалось проверить, существует ли этот аккаунт. Проверьте подключение и попробуйте снова.</string>
     <string name="NearAccount_AccessCheckFailed">Не удалось проверить, есть ли у этой фразы восстановления доступ к этому аккаунту. Нажмите, чтобы повторить.</string>
     <string name="SwapInfo_StatusExpired">Истёк</string>
+    <string name="SwapConfirm_CommitRateChanged">Цена изменилась. Проверьте обновлённую котировку и попробуйте снова.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">Котировка истекла. Загружена новая котировка.</string>
+    <string name="SwapConfirm_CommitFailed">Не удалось начать обмен. Загружена новая котировка.</string>
 </resources>

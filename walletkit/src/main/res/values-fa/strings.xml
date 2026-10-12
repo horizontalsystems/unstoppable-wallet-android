@@ -1986,4 +1986,7 @@
     <string name="NearSend_ReceiverCheckFailed">بررسی وجود این حساب ممکن نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="NearAccount_AccessCheckFailed">بررسی اینکه این عبارت بازیابی هنوز به این حساب دسترسی دارد ممکن نشد. برای تلاش دوباره ضربه بزنید.</string>
     <string name="SwapInfo_StatusExpired">منقضی شده</string>
+    <string name="SwapConfirm_CommitRateChanged">قیمت تغییر کرد. پیش‌فاکتور به‌روزشده را بررسی کنید و دوباره تلاش کنید.</string>
+    <string name="SwapConfirm_CommitRefreshRequired">پیش‌فاکتور منقضی شد. پیش‌فاکتور جدید بارگذاری شد.</string>
+    <string name="SwapConfirm_CommitFailed">سواپ شروع نشد. پیش‌فاکتور جدید بارگذاری شد.</string>
 </resources>

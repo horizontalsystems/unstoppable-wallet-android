@@ -10,6 +10,9 @@ import io.horizontalsystems.walletkit.core.derivation
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitment
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.ThorChainSwapMemo
@@ -37,6 +40,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.util.Collections
 
 class USwapProvider(
     private val provider: UProvider,
@@ -48,9 +52,9 @@ class USwapProvider(
     // batched into its own signer flow) turns it off so the server returns the
     // plain deposit route instead of building and gas-estimating a transaction.
     private val shouldIncludeSourceAddress: (Token) -> Boolean = { it.needsServerBuiltTx },
-    // Builds the EVM source leg of a transfer route committed without a server-built
-    // tx (sourceAddress omitted): the app supplies the deposit calldata its own
-    // signer executes. Without it such routes fail the final quote.
+    // Builds the EVM source leg of a transfer route: the deposit calldata the app's own
+    // signer executes. Defaults to the EVM chain plugin's plain transfer; an app whose
+    // signer flow needs another shape supplies its own.
     private val buildEvmDepositTransfer: ((tokenIn: Token, amountIn: BigDecimal, depositAddress: String) -> SendTransactionData.Evm)? = null,
 ) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
@@ -426,11 +430,10 @@ class USwapProvider(
         return bestRoute
     }
 
-    // Commits the order with this single provider (preview followed by commit) and returns the
-    // executable route (execution + uuid). `sellAsset`/`buyAsset` replay the variant the rate quote
-    // chose (Exolix ZEC). A committed route with no uuid can't be tracked, so reject it
-    // before the user sends funds rather than create an untrackable swap.
-    private suspend fun commitSwap(
+    // /v3/preview — the committed route shape for this single provider, without creating an order.
+    // `sellAsset`/`buyAsset` replay the variant the rate quote chose (Exolix ZEC). The route must
+    // carry the token that [commit] later turns into an order; one without it cannot be executed.
+    private suspend fun previewSwap(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
@@ -457,10 +460,10 @@ class USwapProvider(
             sourceAddress = sourceAddress,
             chainId = chainId,
         )
-        val route = unstoppableAPI.swap(request)
+        val route = unstoppableAPI.preview(request)
 
-        if (route.uuid.isNullOrEmpty()) {
-            throw IllegalStateException("Swap is not trackable (no uuid)")
+        if (route.previewToken.isNullOrEmpty()) {
+            throw IllegalStateException("Preview carries no token")
         }
 
         return route
@@ -605,10 +608,11 @@ class USwapProvider(
             else -> SwapHelper.getReceiveAddressForToken(tokenOut)
         }
 
-        // sourceAddress is the build signal — send it only for chains whose server-built tx
-        // we actually consume (by default EVM/Tron/TON/Solana), where it is also required
-        // for the signed_transaction `from`. For UTXO/Zcash/Monero/Zano/Stellar (and any
-        // token the host app opts out of) we omit it and build the transfer ourselves.
+        // sourceAddress is the build signal — send it only for chains whose server-built
+        // signed_transaction / thorchain_deposit tx we consume (by default EVM/Tron/TON/Solana),
+        // where it is also required for the tx `from`. For UTXO/Zcash/Monero/Zano/Stellar (and
+        // any token the host app opts out of) we omit it. A transfer route's deposit is built
+        // locally on every chain, whether or not the address was sent.
         val sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
             SwapHelper.getSendingAddressForToken(tokenIn)
         } else {
@@ -621,7 +625,7 @@ class USwapProvider(
             SwapHelper.getReceiveAddressForToken(tokenIn)
         }
 
-        val bestRoute = commitSwap(
+        val bestRoute = previewSwap(
             tokenIn,
             tokenOut,
             amountIn,
@@ -659,33 +663,171 @@ class USwapProvider(
             }
         }
 
+        val execution = bestRoute.execution
+        val sendTransactionData = if (execution != null) {
+            getSendTransactionData(tokenIn, amountIn, bestRoute)
+        } else {
+            // A transfer provider's deposit address exists only once the order does, so the
+            // confirmation screen estimates the transfer against the server's stand-in account,
+            // and [commit] rebuilds it for the real address. The screen shows no deposit address
+            // meanwhile: the stand-in must never be mistaken for one. Without a stand-in there is
+            // nothing to estimate against, so the quote fails rather than showing no fee.
+            val stub = bestRoute.stubDepositAddress?.takeIf { it.isNotBlank() }
+                ?: throw IllegalStateException("No deposit address to estimate the transfer against")
+            getSendTransactionData(tokenIn, amountIn, bestRoute.copy(execution = estimationExecution(tokenIn, stub)))
+        }
+
         return SwapFinalQuote(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             amountOut = amountOut,
             amountOutMin = amountOutMin,
-            sendTransactionData = getSendTransactionData(
-                tokenIn,
-                amountIn,
-                bestRoute
-            ),
+            sendTransactionData = sendTransactionData,
             priceImpact = null,
             fields = fields,
             estimatedTime = bestRoute.estimatedTime?.total,
             slippage = effectiveSlippage,
-            providerSwapId = bestRoute.uuid,
+            providerSwapId = null,
             fromAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
             toAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
-            depositAddress = bestRoute.execution?.resolvedDepositAddress(),
+            depositAddress = execution?.resolvedDepositAddress(),
             // XRP's identifier is a destination tag, not a memo — the XRP send service shows it
             // under its own label, so showing it here again as a "deposit memo" would misname it.
-            depositMemo = bestRoute.execution
+            depositMemo = execution
                 ?.takeIf { tokenIn.blockchainType != BlockchainType.Xrp }
                 ?.resolvedMemo(),
             approvalSpender = bestRoute.approvalSpenderOrExecution,
+            providerContext = PreviewContext(
+                previewToken = bestRoute.previewToken ?: throw IllegalStateException("Preview carries no token"),
+                route = bestRoute,
+                tokenIn = tokenIn,
+                amountIn = amountIn,
+            ),
         )
     }
+
+    // The deposit transfer the confirmation screen prices while the real deposit address does not
+    // exist yet: the same shape the chain's send service builds for an order, aimed at the stand-in.
+    // Stellar payments to a provider carry a memo, so a placeholder stands in for its size and for
+    // the builder's requirement that a Stellar deposit names one.
+    private fun estimationExecution(tokenIn: Token, stubDepositAddress: String) = UnstoppableAPI.Response.Execution(
+        method = "transfer",
+        chain = null,
+        transactions = null,
+        approval = null,
+        depositAddress = stubDepositAddress,
+        amount = null,
+        asset = null,
+        attachment = if (tokenIn.blockchainType == BlockchainType.Stellar) {
+            UnstoppableAPI.Response.Attachment("text", "0")
+        } else {
+            null
+        },
+        unsignedTx = null,
+        protocol = null,
+        inboundAddress = null,
+        memo = null,
+        delivery = null,
+    )
+
+    override suspend fun commit(finalQuote: SwapFinalQuote): SwapCommitment {
+        // Every quote this provider returns carries a context; a missing one can only mean the
+        // quote came from elsewhere, and executing it as-is would skip creating the order.
+        val context = finalQuote.providerContext as? PreviewContext
+            ?: throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Quote was not previewed"))
+
+        // A consumed token can never create a second order (the server replays the first), but
+        // committing it again would hand back a deposit the screen no longer describes.
+        if (!consumedPreviewTokens.add(context.previewToken)) {
+            throw SwapCommitFailedException(SwapCommitFailure.RefreshRequired)
+        }
+
+        // commit has side effects: never create an order from a cancelled task
+        currentCoroutineContext().ensureActive()
+
+        val commit = try {
+            unstoppableAPI.commit(UnstoppableAPI.Request.Commit(context.previewToken))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            val commitException = UnstoppableAPI.CommitException.from(e)
+            throw SwapCommitFailedException(commitException.toSwapCommitFailure(), commitException)
+        }
+
+        val uuid = commit.uuid
+        if (commit.status != "ok" || uuid.isNullOrEmpty()) {
+            throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Commit answered ${commit.status} without a uuid"))
+        }
+
+        val execution = commit.execution
+            ?: run {
+                // Nothing to rebuild: only a preview that carried its own execution can be sent as
+                // previewed. A transfer preview was built against the stand-in and has nowhere to go.
+                if (context.route.execution == null) {
+                    throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Commit returned no deposit"))
+                }
+                return SwapCommitment(finalQuote.copy(providerSwapId = uuid, providerContext = null), uuid)
+            }
+
+        try {
+            // A signed / thorchain preview already carries its final transaction; a different one
+            // at commit would mean signing something the user never reviewed. Only a plain transfer
+            // is ever rebuilt here, from its deposit address and attachment.
+            val previewedExecution = context.route.execution
+            if (previewedExecution != null && previewedExecution.method != "transfer") {
+                throw IllegalStateException("Commit replaced a ${previewedExecution.method} execution")
+            }
+            if (execution.method != "transfer") {
+                throw IllegalStateException("Commit returned a ${execution.method} execution")
+            }
+            // The order's floor can only hold or improve on what the user confirmed.
+            val previewedMin = context.route.minBuyAmount
+            val committedMin = commit.minBuyAmount
+            if (previewedMin != null && committedMin != null && committedMin < previewedMin) {
+                throw IllegalStateException("Commit lowered the guaranteed amount")
+            }
+
+            // The transfer moves the amount the user saw; the commit's sellAmount is not consulted.
+            val route = context.route.merging(commit)
+            val quote = finalQuote.copy(
+                amountOut = route.expectedBuyAmountOrZero,
+                amountOutMin = route.minBuyAmount,
+                sendTransactionData = getSendTransactionData(context.tokenIn, context.amountIn, route),
+                providerSwapId = uuid,
+                depositAddress = execution.resolvedDepositAddress(),
+                depositMemo = execution
+                    .takeIf { context.tokenIn.blockchainType != BlockchainType.Xrp }
+                    ?.resolvedMemo(),
+                providerContext = null,
+            )
+            return SwapCommitment(quote, uuid)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SwapCommitFailedException) {
+            throw e
+        } catch (e: Throwable) {
+            // The order exists server-side and lapses unfunded; the user gets a fresh quote.
+            throw SwapCommitFailedException(SwapCommitFailure.Failed, e)
+        }
+    }
+
+    override suspend fun reportInboundTxHash(providerSwapId: String, txHash: String) {
+        unstoppableAPI.signed(UnstoppableAPI.Request.Signed(providerSwapId, txHash))
+    }
+
+    // What [commit] needs from the preview: the token to commit and the route to rebuild a transfer
+    // provider's deposit from once the real address arrives.
+    private class PreviewContext(
+        val previewToken: String,
+        val route: UnstoppableAPI.Response.Route,
+        val tokenIn: Token,
+        val amountIn: BigDecimal,
+    )
+
+    // Tokens already handed to /v3/commit. Shared by every instance: a token is bound to the
+    // provider that previewed it, and the registry holds one instance per provider.
+    private val consumedPreviewTokens: MutableSet<String> = Collections.synchronizedSet(mutableSetOf())
 
     // A deposit attachment the chain cannot deliver readably must fail the route rather than
     // be silently kept local (Monero user note) or sent encrypted (Zano comment, shielded
@@ -711,20 +853,20 @@ class USwapProvider(
         val execution = bestRoute.execution ?: throw IllegalStateException("No execution found")
 
         if (blockchainType.isEvm) {
-            val signable = execution.primarySignable?.takeIf { it.kind == "evm" }
+            if (execution.method == "transfer") {
+                // A plain transfer the app builds itself, so the same code prices the stand-in at
+                // preview and the real deposit at commit; the server's unsignedTx is not consumed.
+                // EVM carries no memo: an attachment would never reach the provider.
+                resolvedDeliverableMemo(execution, blockchainType)
+                val depositAddress = execution.depositAddress ?: throw IllegalStateException("No deposit address")
 
-            if (signable == null) {
-                // A transfer route committed without sourceAddress carries no
-                // server-built tx by design — the app builds the deposit transfer.
-                // Any other signable-less response is malformed and must fail.
-                val depositAddress = execution.takeIf { it.method == "transfer" }?.depositAddress
-                if (buildEvmDepositTransfer != null && depositAddress != null &&
-                    !shouldIncludeSourceAddress(tokenIn)
-                ) {
-                    return buildEvmDepositTransfer.invoke(tokenIn, amountIn, depositAddress)
-                }
-                throw IllegalStateException("No evm tx found")
+                return buildEvmDepositTransfer?.invoke(tokenIn, amountIn, depositAddress)
+                    ?: ChainRegistry[blockchainType]?.depositTransferData(tokenIn, amountIn, depositAddress)
+                    ?: throw IllegalStateException("No evm transfer builder for $blockchainType")
             }
+
+            val signable = execution.primarySignable?.takeIf { it.kind == "evm" }
+                ?: throw IllegalStateException("No evm tx found")
 
             val transactionData = EvmTransactionData(
                 to = signable.to ?: throw IllegalStateException("No tx `to`"),
@@ -762,6 +904,15 @@ class USwapProvider(
             }
 
             BlockchainType.Solana -> {
+                if (execution.method == "transfer") {
+                    // Built locally like the EVM transfer; a plain SOL / SPL send carries no memo.
+                    resolvedDeliverableMemo(execution, blockchainType)
+                    return SendTransactionData.Solana.Simple(
+                        address = execution.depositAddress ?: throw IllegalStateException("No deposit address"),
+                        amount = amountIn,
+                    )
+                }
+
                 val message = execution.primarySignable?.takeIf { it.kind == "solana" }?.message
                     ?: throw IllegalStateException("No solana tx found")
 
@@ -771,20 +922,18 @@ class USwapProvider(
             }
 
             BlockchainType.Tron -> {
-                val tx = execution.primarySignable?.takeIf { it.kind == "tron" }?.tx
-
-                if (tx == null) {
-                    // Same opt-out contract as the EVM branch: a bare transfer route
-                    // maps to the plain-transfer shape, but only without a memo — a
-                    // simple send cannot carry the provider's crediting identifier.
-                    val depositAddress = execution.takeIf { it.method == "transfer" }?.depositAddress
-                    if (depositAddress != null && execution.resolvedMemo() == null &&
-                        !shouldIncludeSourceAddress(tokenIn)
-                    ) {
-                        return SendTransactionData.Tron.Simple(depositAddress, amountIn)
-                    }
-                    throw IllegalStateException("No tron tx found")
+                if (execution.method == "transfer") {
+                    // Built locally like the EVM transfer; a simple send cannot carry the
+                    // provider's crediting identifier.
+                    resolvedDeliverableMemo(execution, blockchainType)
+                    return SendTransactionData.Tron.Simple(
+                        address = execution.depositAddress ?: throw IllegalStateException("No deposit address"),
+                        amount = amountIn,
+                    )
                 }
+
+                val tx = execution.primarySignable?.takeIf { it.kind == "tron" }?.tx
+                    ?: throw IllegalStateException("No tron tx found")
 
                 return SendTransactionData.Tron.WithCreateTransaction(tx.toString())
             }
@@ -810,6 +959,16 @@ class USwapProvider(
             }
 
             BlockchainType.Ton -> {
+                if (execution.method == "transfer") {
+                    // Built locally like the EVM transfer. Deliverable here: a TON comment is a
+                    // plain, publicly readable field of the message.
+                    return SendTransactionData.Ton.Regular(
+                        address = execution.depositAddress ?: throw IllegalStateException("No deposit address"),
+                        amount = amountIn,
+                        memo = resolvedDeliverableMemo(execution, blockchainType),
+                    )
+                }
+
                 val tx = execution.primarySignable?.takeIf { it.kind == "ton" }?.tx
                     ?: throw IllegalStateException("No ton tx found")
 
@@ -1520,6 +1679,13 @@ interface UnstoppableAPI {
             }
         }
     }
+}
+
+/** The commit outcome as the confirmation screens present it, from the server's discriminator. */
+fun UnstoppableAPI.CommitException.toSwapCommitFailure(): SwapCommitFailure = when (status) {
+    "rate_changed" -> SwapCommitFailure.RateChanged
+    "refresh_required" -> SwapCommitFailure.RefreshRequired
+    else -> SwapCommitFailure.Failed
 }
 
 /**

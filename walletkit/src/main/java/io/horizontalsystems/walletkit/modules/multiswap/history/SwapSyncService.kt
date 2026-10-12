@@ -10,8 +10,10 @@ import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.providers.AllBridgeAPI
 import io.horizontalsystems.walletkit.modules.multiswap.providers.AllBridgeProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -38,6 +40,23 @@ class SwapSyncService(
             while (isActive) {
                 syncPending()
                 delay(POLL_INTERVAL_MS)
+            }
+        }
+    }
+
+    /**
+     * Reports a broadcast inbound tx hash to the provider's backend, off the send path: funds have
+     * moved, so the screen must not wait on it, and a failure only costs the server its head start
+     * on tracking (it discovers the deposit on its own).
+     */
+    fun reportInboundTxHash(provider: IMultiSwapProvider, providerSwapId: String, txHash: String) {
+        coroutineScope.launch {
+            try {
+                provider.reportInboundTxHash(providerSwapId, txHash)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Log.e("SwapSyncService", "Failed to report inbound tx hash for $providerSwapId: ${e.message}", e)
             }
         }
     }
