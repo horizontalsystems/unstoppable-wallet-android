@@ -652,7 +652,10 @@ class ZcashAdapter(
         Log.e("ZcashAdapter", "Processor error", error)
         // Under the lock so a concurrent STOPPED status publishes this error rather than
         // racing past it to the generic fallback message.
-        synchronized(syncStateLock) { lastProcessorError = error }
+        synchronized(syncStateLock) {
+            lastProcessorError = error
+            ZcashSyncState.fromProcessorError(syncState, error)?.let { syncState = it }
+        }
         return true
     }
 

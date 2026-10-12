@@ -48,4 +48,31 @@ class ZcashSyncStateTest {
         val state = ZcashSyncState.fromStatus(Synchronizer.Status.STOPPED, cause)
         assertEquals(cause, (state as AdapterState.NotSynced).error)
     }
+
+    @Test
+    fun `disconnected without an error is a start, not a failure`() {
+        // A freshly started engine reports DISCONNECTED until it reaches the server; showing a
+        // sync error for that flashed one after every wallet switch.
+        val state = ZcashSyncState.fromStatus(Synchronizer.Status.DISCONNECTED, lastError = null)
+        assertEquals(AdapterState.Connecting, state)
+    }
+
+    @Test
+    fun `disconnected with a processor error is a failure`() {
+        val cause = Exception("server unreachable")
+        val state = ZcashSyncState.fromStatus(Synchronizer.Status.DISCONNECTED, cause)
+        assertEquals(cause, (state as AdapterState.NotSynced).error)
+    }
+
+    @Test
+    fun `an error reported after DISCONNECTED turns connecting into a failure`() {
+        val cause = Exception("server unreachable")
+        val state = ZcashSyncState.fromProcessorError(AdapterState.Connecting, cause)
+        assertEquals(cause, (state as AdapterState.NotSynced).error)
+    }
+
+    @Test
+    fun `an error does not override a sync in progress`() {
+        assertNull(ZcashSyncState.fromProcessorError(AdapterState.Syncing(), Exception("transient")))
+    }
 }
