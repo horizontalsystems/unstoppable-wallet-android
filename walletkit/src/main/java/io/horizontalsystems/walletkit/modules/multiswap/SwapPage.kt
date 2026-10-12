@@ -40,6 +40,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -102,6 +103,7 @@ import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVer
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import kotlinx.coroutines.flow.first
+import io.horizontalsystems.walletkit.helpers.HudHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -332,7 +334,7 @@ fun SwapScreen(
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
-        onEnableTokenIn = viewModel::onEnableTokenIn,
+        onEnableTokenIn = viewModel::enableTokenIn,
         navigation = navigation,
         onResume = viewModel::onResume,
         onPause = viewModel::onPause,
@@ -356,7 +358,7 @@ private fun SwapScreenInner(
     proceedEnabled: Boolean,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
-    onEnableTokenIn: () -> Unit,
+    onEnableTokenIn: suspend () -> Unit,
     navigation: HSNavigation,
     onResume: () -> Unit,
     onPause: () -> Unit,
@@ -541,7 +543,7 @@ private fun SwapActionButton(
     navigation: HSNavigation,
     onActionCompleted: () -> Unit,
     onActionStarted: () -> Unit,
-    onEnableTokenIn: () -> Unit,
+    onEnableTokenIn: suspend () -> Unit,
     proceedEnabled: Boolean,
     onClickNext: () -> Unit
 ) {
@@ -573,6 +575,8 @@ private fun SwapActionButton(
             is SwapStep.EnableTokenIn -> {
                 // Local state: the step only changes once the wallet is saved in the background
                 var enabling by remember(currentStep.token) { mutableStateOf(false) }
+                val coroutineScope = rememberCoroutineScope()
+                val view = LocalView.current
 
                 HSButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -581,7 +585,17 @@ private fun SwapActionButton(
                     enabled = !enabling,
                 ) {
                     enabling = true
-                    onEnableTokenIn()
+                    coroutineScope.launch {
+                        try {
+                            onEnableTokenIn()
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
+                        } finally {
+                            enabling = false
+                        }
+                    }
                 }
             }
 

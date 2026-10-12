@@ -38,6 +38,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -477,16 +478,16 @@ class SwapViewModel(
 
     // No restore settings are saved here: with none, a restored account's adapter scans its
     // full history, so existing funds of the sell token are found.
-    fun onEnableTokenIn() {
+    suspend fun enableTokenIn() {
         val tokenIn = quoteState.tokenIn ?: return
         val account = accountManager.activeAccount ?: return
 
-        viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             if (walletManager.activeWallets.none { it.token == tokenIn }) {
                 walletManager.save(listOf(Wallet(tokenIn, account)))
             }
-            emitState()
         }
+        emitState()
     }
 
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
