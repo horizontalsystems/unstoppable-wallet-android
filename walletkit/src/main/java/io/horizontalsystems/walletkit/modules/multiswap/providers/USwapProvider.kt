@@ -594,52 +594,6 @@ class USwapProvider(
         return commit
     }
 
-    // Commits in exact-output mode across assets (the CrossPay shape). With
-    // [includeSourceAddress] the swap screen's build-signal contract applies verbatim:
-    // chains whose server-built tx the app consumes (EVM/Tron/TON/Solana by default) send
-    // the sender's address and get a ready-to-sign tx back, the rest omit it and build the
-    // deposit transfer locally. Private send keeps it off entirely — handing the provider
-    // the sender's address defeats that feature's point.
-    suspend fun exactOutputCommit(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountOut: BigDecimal,
-        destinationAddress: String,
-        refundAddress: String,
-        slippage: BigDecimal,
-        includeSourceAddress: Boolean = false,
-    ): UnstoppableAPI.Response.Route {
-        val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
-        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
-
-        val sourceAddress = if (includeSourceAddress && shouldIncludeSourceAddress(tokenIn)) {
-            SwapHelper.getSendingAddressForToken(tokenIn)
-        } else {
-            null
-        }
-
-        val route = unstoppableAPI.swap(
-            UnstoppableAPI.Request.Preview(
-                sellAsset = sellAsset,
-                buyAsset = buyAsset,
-                slippage = slippage,
-                provider = provider.id,
-                destinationAddress = destinationAddress,
-                refundAddress = refundAddress,
-                sourceAddress = sourceAddress,
-                chainId = chainId,
-                buyAmount = amountOut.toPlainString(),
-            )
-        )
-
-        if (route.uuid.isNullOrEmpty()) {
-            throw IllegalStateException("Swap is not trackable (no uuid)")
-        }
-
-        return route
-    }
-
     /**
      * The deposit transfer for a route committed in exact-output mode: exactly
      * [depositAmount] (the route's execution.amount) to its deposit address, in the same
@@ -1827,38 +1781,6 @@ fun UnstoppableAPI.CommitException.toSwapCommitFailure(): SwapCommitFailure = wh
     "rate_changed" -> SwapCommitFailure.RateChanged
     "refresh_required" -> SwapCommitFailure.RefreshRequired
     else -> SwapCommitFailure.Failed
-}
-
-/**
- * Transitional: the v2 "quote and create the order in one call" semantics expressed as preview
- * followed by commit, for callers not yet split at the Swap button. The returned route carries the
- * order's uuid and, for transfer providers, the execution. Remove once every caller previews on the
- * confirmation screen and commits on Swap.
- */
-suspend fun UnstoppableAPI.swap(request: UnstoppableAPI.Request.Preview): UnstoppableAPI.Response.Route {
-    val preview = preview(request)
-
-    val previewToken = preview.previewToken
-    if (previewToken.isNullOrEmpty()) {
-        throw UnstoppableAPI.CommitException(null, null, "missing previewToken", null)
-    }
-
-    // commit has side effects: a quote cancelled after the preview must not create an order
-    currentCoroutineContext().ensureActive()
-
-    val commit = try {
-        commit(UnstoppableAPI.Request.Commit(previewToken))
-    } catch (e: CancellationException) {
-        throw e
-    } catch (e: Throwable) {
-        throw UnstoppableAPI.CommitException.from(e)
-    }
-
-    if (commit.status != "ok" || commit.uuid.isNullOrEmpty()) {
-        throw UnstoppableAPI.CommitException(null, commit.status, null, null)
-    }
-
-    return preview.merging(commit)
 }
 
 // Chains where we consume the server-built tx from `execution` (so we send sourceAddress

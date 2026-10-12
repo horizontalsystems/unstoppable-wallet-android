@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.crosspay
 
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -21,34 +22,59 @@ data class CrossPayRequest(
 )
 
 /**
- * The committed order, produced by /v2/swap on the confirmation screen.
+ * A previewed route, produced on the confirmation screen without creating an order. The token is
+ * handed to the commit when the user presses Send. [stubDepositAddress] is a ready-to-receive
+ * account on tokenIn's chain the deposit transfer is priced against — never a destination to
+ * send to.
  */
-data class CrossPayOrder(
+data class CrossPayPreview(
     val request: CrossPayRequest,
-    // execution.amount — EXACTLY what to transfer in tokenIn. Never recompute it, and never
-    // substitute the entered amount: under exact output that is the *output*, a structurally
-    // different quantity in a different token.
+    val previewToken: String,
+    // The provider the route came from: it commits the token, builds the deposit and takes the
+    // hash report.
+    val provider: USwapProvider,
+    // The preview's sellAmount in tokenIn — what the user confirms and what is transferred. Never
+    // the entered amount: under exact output that is the *output*, in a different token.
     val depositAmount: BigDecimal,
     // Below this floor the deposit is refunded whole and no swap happens.
     val minSellAmount: BigDecimal?,
-    // What the recipient gets, in tokenOut.
+    // What the recipient gets, in tokenOut: equal to the requested amount by the exactness check.
     val amountOut: BigDecimal,
-    // App-side provider id ("u_…") — tracking and history rendering only, never shown.
-    val providerId: String,
-    val providerName: String,
-    val depositAddress: String,
-    // /v2 tracking uuid.
-    val providerSwapId: String,
+    val stubDepositAddress: String,
     // Non-optional: the refundable buffer lands here.
     val refundAddress: String,
     // Seconds; null just omits the "estimated arrival" row.
     val estimatedTime: Long?,
-    val committedAt: Long,
-    // The raw committed route — the deposit transfer is built from its execution.
-    val route: UnstoppableAPI.Response.Route,
+    val previewedAt: Long,
 ) {
+    // No cross-asset fee figure: subtracting a tokenOut quantity from a tokenIn one is meaningless.
     val refundableBuffer: BigDecimal?
         get() = minSellAmount?.let { (depositAmount - it).max(BigDecimal.ZERO) }
+}
+
+/**
+ * The committed order, produced when the user presses Send. Everything the commit does not
+ * restate is carried over from the preview the user confirmed.
+ */
+data class CrossPayOrder(
+    val preview: CrossPayPreview,
+    // The PREVIEW's sellAmount in tokenIn — EXACTLY what to transfer, the figure the user
+    // confirmed. The commit may name a lower one; the server refunds the overpayment.
+    val depositAmount: BigDecimal,
+    // What the recipient gets, in tokenOut.
+    val amountOut: BigDecimal,
+    val depositAddress: String,
+    val attachment: UnstoppableAPI.Response.Attachment?,
+    // The tracking uuid.
+    val providerSwapId: String,
+) {
+    val request: CrossPayRequest get() = preview.request
+
+    // App-side provider id ("u_…") — tracking and history rendering only, never shown.
+    val providerId: String get() = preview.provider.id
+    val providerName: String get() = preview.provider.title
+    val refundAddress: String get() = preview.refundAddress
+    val estimatedTime: Long? get() = preview.estimatedTime
 }
 
 /**
@@ -63,6 +89,11 @@ sealed class CrossPayError : Exception() {
     object ProviderSuspended : CrossPayError()
     class NetworkError(override val cause: Throwable) : CrossPayError()
     object TokenUnsupported : CrossPayError()
+    // Commit refusals, by the server's discriminator: the provider's order was worse than the
+    // preview beyond the slippage, or the preview token expired or was already consumed. Both are
+    // shown briefly by the confirmation screen, which then loads a fresh preview.
+    object RateChanged : CrossPayError()
+    object PreviewExpired : CrossPayError()
     // Every internal/protocol failure: each is a "we could not set this up" from the user's
     // side, and naming the internals would not help them act.
     class CommitFailed(override val cause: Throwable? = null) : CrossPayError()

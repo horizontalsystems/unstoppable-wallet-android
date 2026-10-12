@@ -23,6 +23,8 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.walletkit.modules.confirm.ErrorSheet
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
+import io.horizontalsystems.walletkit.modules.multiswap.messageRes
 import io.horizontalsystems.walletkit.modules.evmfee.Cautions
 import io.horizontalsystems.walletkit.modules.multiswap.FeeRow
 import io.horizontalsystems.walletkit.modules.multiswap.QuoteInfoRow
@@ -122,43 +124,36 @@ private fun CrossPayConfirmationScreen(
             null
         },
         buttonsSlot = {
-            if (uiState.expired) {
-                // The committed order is not honoured past its lifetime; Refresh commits a
-                // fresh order in place — the same recovery the swap confirmation offers.
-                HSButton(
-                    variant = ButtonVariant.Secondary,
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Refresh),
-                    onClick = viewModel::refresh,
-                )
-            } else {
-                val sendAction = rememberAsyncAction()
-                HSButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(if (sendAction.inProgress) R.string.Send_Sending else R.string.Send_Confirmation_Send_Button),
-                    enabled = uiState.canSend && !sendAction.inProgress && !uiState.loading,
-                    onClick = {
-                        sendAction.run {
-                            try {
-                                viewModel.send()
+            val sendAction = rememberAsyncAction()
+            HSButton(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(if (sendAction.inProgress) R.string.Send_Sending else R.string.Send_Confirmation_Send_Button),
+                enabled = uiState.canSend && !sendAction.inProgress && !uiState.loading,
+                onClick = {
+                    sendAction.run {
+                        try {
+                            viewModel.send()
 
-                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                                delay(1200)
-                                navigation.removeLastUntil(SendV2Page::class, true)
-                            } catch (t: kotlinx.coroutines.CancellationException) {
-                                // A back press during the success delay cancels this scope;
-                                // showing the failure sheet then would invite a second send
-                                // of a deposit that already broadcast.
-                                throw t
-                            } catch (t: Throwable) {
-                                navigation.slideFromBottom(
-                                    ErrorSheet(ErrorSheet.Input(errorText(context, t)))
-                                )
-                            }
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                            delay(1200)
+                            navigation.removeLastUntil(SendV2Page::class, true)
+                        } catch (t: kotlinx.coroutines.CancellationException) {
+                            // A back press during the success delay cancels this scope;
+                            // showing the failure sheet then would invite a second send
+                            // of a deposit that already broadcast.
+                            throw t
+                        } catch (t: SwapCommitFailedException) {
+                            // The order was not created; a fresh preview is already loading, so
+                            // the reason is a passing notice rather than an error sheet.
+                            HudHelper.showErrorMessage(view, t.failure.messageRes)
+                        } catch (t: Throwable) {
+                            navigation.slideFromBottom(
+                                ErrorSheet(ErrorSheet.Input(errorText(context, t)))
+                            )
                         }
-                    },
-                )
-            }
+                    }
+                },
+            )
         }
     ) {
         // What the recipient receives — the value the user entered, and contractual — then
