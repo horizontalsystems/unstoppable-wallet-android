@@ -518,18 +518,81 @@ class USwapProvider(
         )
     }
 
-    // Commits in exact-output mode. `sourceAddress` is deliberately never sent: it is optional
+    // Previews in exact-output mode. `sourceAddress` is deliberately never sent: it is optional
     // for transfer providers, and handing the provider the sender's address defeats the point
-    // of a private send. The committed route's execution then carries the deposit address and
+    // of a private send. The committed route's execution later carries the deposit address and
     // the exact amount to transfer.
-    suspend fun privateSendCommit(
+    suspend fun privateSendPreview(
         token: Token,
         amountOut: BigDecimal,
         destinationAddress: String,
         refundAddress: String,
         slippage: BigDecimal,
     ): UnstoppableAPI.Response.Route =
-        exactOutputCommit(token, token, amountOut, destinationAddress, refundAddress, slippage)
+        exactOutputPreview(token, token, amountOut, destinationAddress, refundAddress, slippage)
+
+    // /v3/preview in exact-output mode across assets (the CrossPay shape): no order yet, the
+    // route carries the token [commitPreview] turns into one. With [includeSourceAddress] the
+    // swap screen's build-signal contract applies verbatim; private send keeps it off entirely.
+    suspend fun exactOutputPreview(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountOut: BigDecimal,
+        destinationAddress: String,
+        refundAddress: String,
+        slippage: BigDecimal,
+        includeSourceAddress: Boolean = false,
+    ): UnstoppableAPI.Response.Route {
+        val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
+
+        val sourceAddress = if (includeSourceAddress && shouldIncludeSourceAddress(tokenIn)) {
+            SwapHelper.getSendingAddressForToken(tokenIn)
+        } else {
+            null
+        }
+
+        val route = unstoppableAPI.preview(
+            UnstoppableAPI.Request.Preview(
+                sellAsset = sellAsset,
+                buyAsset = buyAsset,
+                slippage = slippage,
+                provider = provider.id,
+                destinationAddress = destinationAddress,
+                refundAddress = refundAddress,
+                sourceAddress = sourceAddress,
+                chainId = chainId,
+                buyAmount = amountOut.toPlainString(),
+            )
+        )
+
+        if (route.previewToken.isNullOrEmpty()) {
+            throw IllegalStateException("Preview carries no token")
+        }
+
+        return route
+    }
+
+    // /v3/commit for a route previewed here. Throws [UnstoppableAPI.CommitException] on refusal.
+    // The commit's `execution` carries the deposit address, amount and attachment.
+    suspend fun commitPreview(previewToken: String): UnstoppableAPI.Response.Commit {
+        currentCoroutineContext().ensureActive()
+
+        val commit = try {
+            unstoppableAPI.commit(UnstoppableAPI.Request.Commit(previewToken))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw UnstoppableAPI.CommitException.from(e)
+        }
+
+        if (commit.status != "ok" || commit.uuid.isNullOrEmpty()) {
+            throw UnstoppableAPI.CommitException(null, commit.status, null, null)
+        }
+
+        return commit
+    }
 
     // Commits in exact-output mode across assets (the CrossPay shape). With
     // [includeSourceAddress] the swap screen's build-signal contract applies verbatim:
@@ -589,6 +652,31 @@ class USwapProvider(
         depositAmount: BigDecimal,
         route: UnstoppableAPI.Response.Route,
     ): SendTransactionData = getSendTransactionData(tokenIn, depositAmount, route)
+
+    /**
+     * The deposit transfer of exactly [depositAmount] to [depositAddress] carrying [attachment],
+     * for a route whose execution is known from its parts: a committed order's deposit, or the
+     * preview's stand-in address (with no attachment) the confirmation screen prices while the
+     * real one does not exist yet.
+     */
+    fun depositTransactionData(
+        tokenIn: Token,
+        depositAmount: BigDecimal,
+        depositAddress: String,
+        attachment: UnstoppableAPI.Response.Attachment?,
+    ): SendTransactionData {
+        val route = UnstoppableAPI.Response.Route(
+            sellAsset = null,
+            buyAsset = null,
+            expectedBuyAmount = null,
+            minBuyAmount = null,
+            estimatedTime = null,
+            approvalSpender = null,
+            execution = transferExecution(depositAddress, attachment),
+            uuid = null,
+        )
+        return getSendTransactionData(tokenIn, depositAmount, route)
+    }
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -678,7 +766,7 @@ class USwapProvider(
             // nothing to estimate against, so the quote fails rather than showing no fee.
             val stub = bestRoute.stubDepositAddress?.takeIf { it.isNotBlank() }
                 ?: throw IllegalStateException("No deposit address to estimate the transfer against")
-            getSendTransactionData(tokenIn, amountIn, bestRoute.copy(execution = estimationExecution(tokenIn, stub)))
+            getSendTransactionData(tokenIn, amountIn, bestRoute.copy(execution = transferExecution(stub, estimationAttachment(tokenIn))))
         }
 
         return SwapFinalQuote(
@@ -711,29 +799,29 @@ class USwapProvider(
         )
     }
 
-    // The deposit transfer the confirmation screen prices while the real deposit address does not
-    // exist yet: the same shape the chain's send service builds for an order, aimed at the stand-in.
-    // Stellar payments to a provider carry a memo, so a placeholder stands in for its size and for
-    // the builder's requirement that a Stellar deposit names one.
-    private fun estimationExecution(tokenIn: Token, stubDepositAddress: String) = UnstoppableAPI.Response.Execution(
-        method = "transfer",
-        chain = null,
-        transactions = null,
-        approval = null,
-        depositAddress = stubDepositAddress,
-        amount = null,
-        asset = null,
-        attachment = if (tokenIn.blockchainType == BlockchainType.Stellar) {
-            UnstoppableAPI.Response.Attachment("text", "0")
-        } else {
-            null
-        },
-        unsignedTx = null,
-        protocol = null,
-        inboundAddress = null,
-        memo = null,
-        delivery = null,
-    )
+    // A plain-transfer execution known from its parts, so the per-chain builders serve a deposit
+    // whether it came in a route or is being priced against the preview's stand-in address.
+    private fun transferExecution(depositAddress: String, attachment: UnstoppableAPI.Response.Attachment?) =
+        UnstoppableAPI.Response.Execution(
+            method = "transfer",
+            chain = null,
+            transactions = null,
+            approval = null,
+            depositAddress = depositAddress,
+            amount = null,
+            asset = null,
+            attachment = attachment,
+            unsignedTx = null,
+            protocol = null,
+            inboundAddress = null,
+            memo = null,
+            delivery = null,
+        )
+
+    // The attachment a stand-in estimate carries: Stellar payments to a provider name a memo, so a
+    // placeholder stands in for its size and for the builder's requirement that one is present.
+    private fun estimationAttachment(tokenIn: Token): UnstoppableAPI.Response.Attachment? =
+        if (tokenIn.blockchainType == BlockchainType.Stellar) UnstoppableAPI.Response.Attachment("text", "0") else null
 
     override suspend fun commit(finalQuote: SwapFinalQuote): SwapCommitment {
         // Every quote this provider returns carries a context; a missing one can only mean the

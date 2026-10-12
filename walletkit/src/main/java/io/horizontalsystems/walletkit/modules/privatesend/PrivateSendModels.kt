@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.privatesend
 
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.walletkit.entities.TransactionDataSortMode
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -24,29 +25,29 @@ data class PrivateSendRequest(
 )
 
 /**
- * The committed order, produced by /v2/swap on the confirmation screen.
+ * A previewed route, produced on the confirmation screen without creating an order. The token is
+ * handed to the commit when the user presses Send. [stubDepositAddress] is a ready-to-receive
+ * account on the token's chain the deposit transfer is priced against — never a destination to
+ * send to.
  */
-data class PrivateSendOrder(
+data class PrivateSendPreview(
     val request: PrivateSendRequest,
-    // execution.amount — EXACTLY what to transfer. Never recompute it, and never substitute
-    // the entered amount: under exact output that is the *output*, a structurally different
-    // quantity.
+    val previewToken: String,
+    // The provider the route came from: it commits the token and takes the hash report.
+    val provider: USwapProvider,
+    // The preview's sellAmount — the ceiling the Send button authorizes. Never the entered
+    // amount: under exact output that is the *output*, a structurally different quantity.
     val depositAmount: BigDecimal,
     // Below this floor the deposit is refunded whole and no swap happens.
     val minSellAmount: BigDecimal?,
     // What the recipient gets.
     val amountOut: BigDecimal,
-    // App-side provider id ("u_…") — tracking and history rendering only, never shown.
-    val providerId: String,
-    val depositAddress: String,
-    val attachment: UnstoppableAPI.Response.Attachment?,
-    // /v2 tracking uuid.
-    val providerSwapId: String,
+    val stubDepositAddress: String,
     // Non-optional: the refundable buffer lands here.
     val refundAddress: String,
     // Seconds; null just omits the "estimated arrival" row.
     val estimatedTime: Long?,
-    val committedAt: Long,
+    val previewedAt: Long,
 ) {
     // The route's cost, NOT `depositAmount - amountOut`: the gap up to `depositAmount` is a
     // refundable deposit ceiling, not a price. With `minSellAmount` unknown this over-states
@@ -57,6 +58,29 @@ data class PrivateSendOrder(
 
     val refundableBuffer: BigDecimal?
         get() = minSellAmount?.let { (depositAmount - it).max(BigDecimal.ZERO) }
+}
+
+/**
+ * The committed order, produced when the user presses Send. Everything the commit does not
+ * restate is carried over from the preview the user confirmed.
+ */
+data class PrivateSendOrder(
+    val preview: PrivateSendPreview,
+    // The commit's amount — EXACTLY what to transfer, never above the preview's.
+    val depositAmount: BigDecimal,
+    // What the recipient gets: equal to the requested amount by the exactness check.
+    val amountOut: BigDecimal,
+    val depositAddress: String,
+    val attachment: UnstoppableAPI.Response.Attachment?,
+    // The tracking uuid.
+    val providerSwapId: String,
+) {
+    val request: PrivateSendRequest get() = preview.request
+
+    // App-side provider id ("u_…") — tracking and history rendering only, never shown.
+    val providerId: String get() = preview.provider.id
+    val refundAddress: String get() = preview.refundAddress
+    val estimatedTime: Long? get() = preview.estimatedTime
 }
 
 /**
@@ -92,6 +116,11 @@ sealed class PrivateSendError : Exception() {
     object TokenUnsupported : PrivateSendError()
     // A route requiring a transaction tag this wallet cannot attach on this chain.
     object AttachmentUnsupported : PrivateSendError()
+    // Commit refusals, by the server's discriminator: the provider's order was worse than the
+    // preview beyond the slippage, or the preview token expired or was already consumed. Both are
+    // shown briefly by the confirmation screen, which then loads a fresh preview.
+    object RateChanged : PrivateSendError()
+    object PreviewExpired : PrivateSendError()
     // Every internal/protocol failure: each is a "we could not set this up" from the user's
     // side, and naming the internals would leak route detail without helping them act.
     class CommitFailed(override val cause: Throwable? = null) : PrivateSendError()

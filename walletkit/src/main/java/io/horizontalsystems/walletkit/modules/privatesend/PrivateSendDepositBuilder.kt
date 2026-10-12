@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.privatesend
 
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.walletkit.modules.multiswap.providers.XrpDestinationTag
@@ -9,26 +10,30 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.memoDelivery
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendDepositBuilder.deliverableDestinationTag
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendDepositBuilder.deliverableMemo
+import java.math.BigDecimal
 
 /**
- * Builds the deposit transfer for a committed private send order: exactly
- * [PrivateSendOrder.depositAmount] to [PrivateSendOrder.depositAddress], carrying the order's
- * attachment only when the chain actually delivers it to the provider.
+ * Builds the deposit transfer of a private send: exactly [amount] to [address], carrying the
+ * [attachment] only when the chain actually delivers it to the provider. Serves both the
+ * preview's estimate against the stand-in address (no attachment) and the committed order's
+ * deposit.
  */
 object PrivateSendDepositBuilder {
 
-    fun build(order: PrivateSendOrder, btcParams: PrivateSendBtcParams? = null): SendTransactionData {
-        val token = order.request.token
-        val memo = deliverableMemo(order.attachment, token.blockchainType)
+    fun build(
+        token: Token,
+        amount: BigDecimal,
+        address: String,
+        attachment: UnstoppableAPI.Response.Attachment?,
+        btcParams: PrivateSendBtcParams? = null,
+    ): SendTransactionData {
+        val memo = deliverableMemo(attachment, token.blockchainType)
 
         // EVM needs the kit for ERC20 transfer calldata, so its plugin builds the data.
         // (No EVM path carries a memo, and the gate above already rejected any attachment.)
-        ChainRegistry[token.blockchainType]?.depositTransferData(token, order.depositAmount, order.depositAddress)?.let {
+        ChainRegistry[token.blockchainType]?.depositTransferData(token, amount, address)?.let {
             return it
         }
-
-        val address = order.depositAddress
-        val amount = order.depositAmount
 
         return when (token.blockchainType) {
             BlockchainType.Bitcoin,
@@ -81,7 +86,7 @@ object PrivateSendDepositBuilder {
             BlockchainType.Xrp -> SendTransactionData.Xrp(
                 address = address,
                 amount = amount,
-                destinationTag = deliverableDestinationTag(order.attachment),
+                destinationTag = deliverableDestinationTag(attachment),
             )
 
             // No Zcash/Monero/Zano branches: those chains' own transactions already hide the

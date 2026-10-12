@@ -10,6 +10,8 @@ import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
+import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
@@ -33,15 +35,14 @@ import java.math.BigDecimal
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
- * The confirmation step of a private send: commits the order (quote + /v2/swap in one), then
- * builds and estimates the deposit transfer through the chain's own send-transaction service.
- * This ViewModel never builds a transaction itself.
+ * The confirmation step of a private send: previews the route, then builds and estimates the
+ * deposit transfer against the preview's stand-in address through the chain's own
+ * send-transaction service. This ViewModel never builds a transaction itself.
  *
- * Committing happens once per user-visible order, and that is mandatory rather than an
- * optimisation: every /v2/swap creates a REAL order. Fee-settings changes re-estimate the
- * same deposit; they never re-commit. Past [QUOTE_LIFETIME_SECONDS] the send button is
- * replaced by Refresh — an order is only ever replaced by that explicit tap, never silently
- * under a live send button. The expired order was never funded and simply lapses server-side.
+ * The preview has no side effects, so it is silently re-requested every [QUOTE_LIFETIME_SECONDS]
+ * and after a failed send. The order is created only when the user presses Send: the commit
+ * names the real deposit address and attachment, the transfer is rebuilt for them, signed and
+ * broadcast, and its hash is reported to the backend. A spent preview is never committed twice.
  */
 class PrivateSendConfirmViewModel(
     private val request: PrivateSendRequest,
@@ -62,26 +63,25 @@ class PrivateSendConfirmViewModel(
         .getContactsFiltered(token.blockchainType, addressQuery = request.recipient)
         .firstOrNull()
 
-    private var order: PrivateSendOrder? = null
+    // The preview on screen: what Send commits.
+    private var preview: PrivateSendPreview? = null
+    // The deposit estimate against the stand-in address, re-fed on fee-settings changes.
     private var depositData: SendTransactionData? = null
     private var error: Throwable? = null
     private var initialLoading = true
-    private var expired = false
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var timerState = timerService.stateFlow.value
 
-    // Reject a second concurrent broadcast (double-tap / overlapping send) so the same
-    // deposit is never sent twice.
+    // From the moment Send is pressed until the send ends, nothing may replace the preview or the
+    // data the send service holds: a refresh landing in between would commit another preview, or
+    // put the stand-in deposit back under a transfer about to be signed. Also rejects a second
+    // concurrent send (double-tap) so the same deposit is never sent twice.
+    @Volatile
     private var isSending = false
 
-    // The one history row for this order. A retry after a failed broadcast reuses it
-    // instead of inserting a duplicate per attempt.
-    private var recordId: Int? = null
-
-    // The in-flight commit. A new commit cancels the previous one: without this a double
-    // tap on Refresh starts two commits whose `order`/`depositData` writes interleave —
-    // the deposit could fund one order while the screen and history describe the other.
-    private var commitJob: Job? = null
+    // The in-flight preview. A new preview cancels the previous one so two responses never
+    // interleave their `preview`/`depositData` writes.
+    private var previewJob: Job? = null
 
     // The chain service and its sub-services are plain objects; their collectors and every
     // deposit fed to them run on this one confined thread so their state stays consistent.
@@ -94,7 +94,7 @@ class PrivateSendConfirmViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect {
                 sendTransactionState = it
-                if (order != null) {
+                if (preview != null) {
                     initialLoading = initialLoading && it.loading
                 }
                 emitState()
@@ -102,11 +102,11 @@ class PrivateSendConfirmViewModel(
         }
 
         viewModelScope.launch {
-            // A fee-settings change re-estimates the SAME deposit — the committed order and
-            // its sellAmount ceiling are never silently replaced. Guarded in the body (a
+            // A fee-settings change re-estimates the SAME deposit. Guarded in the body (a
             // downstream throw would kill viewModelScope and freeze the screen; Flow.catch
             // only sees upstream failures) so the collector survives for later changes.
             sendTransactionService.sendTransactionSettingsFlow.collect {
+                if (isSending) return@collect
                 val data = depositData ?: return@collect
                 try {
                     withContext(serviceDispatcher) {
@@ -124,8 +124,10 @@ class PrivateSendConfirmViewModel(
         viewModelScope.launch {
             timerService.stateFlow.collect {
                 timerState = it
-                if (it.timeout) {
-                    expired = true
+                // The preview has no side effects, so an expired one is silently re-requested:
+                // the deposit ceiling under the Send button is always one the server honours.
+                if (it.timeout && !isSending) {
+                    requestPreview()
                 }
                 emitState()
             }
@@ -133,28 +135,27 @@ class PrivateSendConfirmViewModel(
 
         sendTransactionService.start(serviceScope)
 
-        commit()
+        requestPreview()
     }
 
     override fun createState(): PrivateSendConfirmUiState {
-        val order = order
+        val preview = preview
 
         return PrivateSendConfirmUiState(
             initialLoading = initialLoading,
             loading = sendTransactionState.loading,
             token = token,
             recipient = request.recipient,
-            amountOut = order?.amountOut ?: request.amountOut,
-            privateFee = order?.privateFee,
-            reservedAmount = order?.refundableBuffer?.takeIf { it > BigDecimal.ZERO },
-            bufferUnknown = order != null && order.minSellAmount == null,
-            estimatedTime = order?.estimatedTime,
+            amountOut = preview?.amountOut ?: request.amountOut,
+            privateFee = preview?.privateFee,
+            reservedAmount = preview?.refundableBuffer?.takeIf { it > BigDecimal.ZERO },
+            bufferUnknown = preview != null && preview.minSellAmount == null,
+            estimatedTime = preview?.estimatedTime,
             currency = currency,
             networkFee = sendTransactionState.networkFee,
             cautions = sendTransactionState.cautions,
             transactionFields = sendTransactionState.fields,
-            canSend = order != null && sendTransactionState.sendable && !expired && error == null,
-            expired = expired,
+            canSend = preview != null && sendTransactionState.sendable && error == null,
             hasSettings = sendTransactionService.hasSettings,
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             error = error,
@@ -162,35 +163,31 @@ class PrivateSendConfirmViewModel(
     }
 
     /**
-     * The expired-state action: commits a brand-new order in place. The screen returns to
-     * the exact just-opened state — old order, deposit data and history-row binding are
-     * dropped first, so a stale order can never sit under a live send button and the new
-     * order gets its own history row (a Failed row from the old order's broadcast stays).
+     * The error screen's action: previews again from the just-opened state. The old preview and
+     * deposit data are dropped first, so a stale preview can never sit under a live Send button.
      */
     fun refresh() {
-        synchronized(this) {
-            if (isSending) return
-        }
+        if (isSending) return
 
-        expired = false
-        order = null
+        preview = null
         depositData = null
-        recordId = null
         initialLoading = true
         emitState()
 
-        // `initialLoading` only clears when the service's StateFlow emits after the new order
+        // `initialLoading` only clears when the service's StateFlow emits after the new preview
         // is set, and StateFlow drops a value equal to the current one. A re-estimate of a
         // like-for-like deposit (same amount, fee and fields) lands on an identical state, so
         // without a fresh uuid nothing is emitted and the screen spins forever.
         sendTransactionService.refreshUuid()
 
-        commit()
+        requestPreview()
     }
 
-    private fun commit() {
-        commitJob?.cancel()
-        commitJob = viewModelScope.launch(serviceDispatcher) {
+    private fun requestPreview() {
+        if (isSending) return
+
+        previewJob?.cancel()
+        previewJob = viewModelScope.launch(serviceDispatcher) {
             try {
                 error = null
 
@@ -202,19 +199,27 @@ class PrivateSendConfirmViewModel(
                     throw WatchAccountException()
                 }
 
-                val order = manager.commit(request)
+                val preview = manager.preview(request)
 
                 ensureActive()
 
-                this@PrivateSendConfirmViewModel.order = order
+                this@PrivateSendConfirmViewModel.preview = preview
                 emitState()
 
-                val data = PrivateSendDepositBuilder.build(order, btcParams)
+                // Estimated against the stand-in with no attachment: the deposit address and its
+                // attachment only exist after the commit, and send() rebuilds against them.
+                val data = PrivateSendDepositBuilder.build(
+                    token = token,
+                    amount = preview.depositAmount,
+                    address = preview.stubDepositAddress,
+                    attachment = null,
+                    btcParams = btcParams,
+                )
                 depositData = data
                 sendTransactionService.setSendTransactionData(data)
 
                 // CountDownTimer binds to the current thread's Looper, so the expiry timer
-                // must start on Main — this coroutine runs on Default.
+                // must start on Main — this coroutine runs on the service thread.
                 withContext(Dispatchers.Main) {
                     timerService.start(QUOTE_LIFETIME_SECONDS)
                 }
@@ -233,8 +238,14 @@ class PrivateSendConfirmViewModel(
         sendTransactionService.clear()
     }
 
+    /**
+     * Creates the order for the preview on screen, builds the deposit for its address, signs and
+     * broadcasts it, records the send and reports the hash. A [SwapCommitFailedException] means
+     * the order could not be created or its deposit could not be built: a fresh preview is already
+     * being loaded, and the screen only shows the reason briefly.
+     */
     suspend fun send(): SendTransactionResult = withContext(serviceDispatcher) {
-        val order = order ?: throw PrivateSendError.CommitFailed()
+        val preview = preview ?: throw PrivateSendError.CommitFailed()
 
         synchronized(this@PrivateSendConfirmViewModel) {
             if (isSending) throw PrivateSendError.CommitFailed()
@@ -242,8 +253,9 @@ class PrivateSendConfirmViewModel(
         }
 
         try {
-            // Checked before the timer is stopped: throwing after that would silence the
-            // expiry watchdog without rearming it, leaving a lapsed order looking sendable.
+            previewJob?.cancel()
+            timerService.stop()
+
             val activeAccount = App.accountManager.activeAccount
             if (activeAccount == null ||
                 activeAccount.isWatchAccount ||
@@ -252,41 +264,56 @@ class PrivateSendConfirmViewModel(
                 throw WatchAccountException()
             }
 
-            timerService.stop()
-
-            // Pre-saved before broadcasting so the record survives the app dying between the
-            // two: the committed order is already real server-side, and /v2/track resolves it
-            // by uuid alone even before a tx hash lands. A retry reuses the row (flipping a
-            // previous Failed back to Depositing) rather than inserting one per attempt.
-            val savedRecordId = recordId?.also {
-                swapRecordManager.updateStatus(it, SwapStatus.Depositing, null)
-            } ?: swapRecordManager.save(swapRecord(order)).also { recordId = it }
-
-            val result = try {
-                sendTransactionService.sendTransaction()
-            } catch (e: Throwable) {
-                // A failed broadcast moved no funds; the unfunded order simply expires.
-                swapRecordManager.updateStatus(savedRecordId, SwapStatus.Failed, null)
-
-                // Stopping the timer above silenced the expiry watchdog; a retry is only
-                // legitimate while the committed quote is still alive, so rearm it with the
-                // remaining lifetime — or dead-end the screen if the deadline already passed.
-                val remainingSeconds =
-                    (order.committedAt + QUOTE_LIFETIME_SECONDS * 1000 - System.currentTimeMillis()) / 1000
-                withContext(Dispatchers.Main) {
-                    if (remainingSeconds > 0) {
-                        timerService.start(remainingSeconds)
-                    } else {
-                        expired = true
-                        emitState()
-                    }
-                }
-
+            // The only step with side effects. The token is spent either way, so a fresh preview
+            // replaces the one on screen; the reason is surfaced by the caller.
+            val order = try {
+                manager.commit(preview)
+            } catch (e: CancellationException) {
                 throw e
+            } catch (e: Throwable) {
+                requote()
+                throw SwapCommitFailedException(commitFailure(e), e)
             }
 
-            transactionHash(result)?.let {
-                swapRecordManager.updateTransactionHash(savedRecordId, it)
+            // The order exists from here on. A deposit that cannot be built or sent leaves it to
+            // lapse unfunded, and the screen re-previews so a retry never reuses it.
+            val service = try {
+                val data = PrivateSendDepositBuilder.build(
+                    token = token,
+                    amount = order.depositAmount,
+                    address = order.depositAddress,
+                    attachment = order.attachment,
+                    btcParams = btcParams,
+                )
+                sendServiceFor(data)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                requote()
+                throw SwapCommitFailedException(SwapCommitFailure.Failed, e)
+            }
+
+            // Pre-saved before broadcasting so the record survives the app dying between the
+            // two: the committed order is already real server-side, and tracking resolves it by
+            // uuid alone even before a tx hash lands.
+            val recordId = swapRecordManager.save(swapRecord(order))
+
+            val result = try {
+                service.sendTransaction()
+            } catch (e: Throwable) {
+                // A failed broadcast moved no funds; the unfunded order simply expires.
+                swapRecordManager.updateStatus(recordId, SwapStatus.Failed, null)
+                requote()
+                throw e
+            } finally {
+                if (service !== sendTransactionService) service.clear()
+            }
+
+            transactionHash(result)?.let { txHash ->
+                swapRecordManager.updateTransactionHash(recordId, txHash)
+                // Best-effort and off the critical path: funds have moved, so the screen must
+                // not wait on the report, and tracking resolves the send without it.
+                App.swapSyncService.reportInboundTxHash(preview.provider, order.providerSwapId, txHash)
             }
 
             // The recipient is a wallet-external address worth suggesting next time.
@@ -299,6 +326,42 @@ class PrivateSendConfirmViewModel(
         } finally {
             synchronized(this@PrivateSendConfirmViewModel) { isSending = false }
         }
+    }
+
+    // The preview on screen is spent or stale: load a new one, keeping the screen's numbers until
+    // the fresh ones land.
+    private fun requote() {
+        synchronized(this) { isSending = false }
+        requestPreview()
+    }
+
+    /**
+     * The service that signs the committed deposit. The on-screen one when it reflects new data as
+     * soon as it is set; otherwise a fresh instance, so no state built for the stand-in can be
+     * signed. The fee choices carry over; the estimate is redone for the real destination.
+     */
+    private suspend fun sendServiceFor(data: SendTransactionData): AbstractSendTransactionService {
+        val service = sendTransactionService.fresh()?.also { it.start(serviceScope) } ?: sendTransactionService
+        try {
+            service.setSendTransactionData(data)
+            val state = service.awaitSettled()
+            if (!state.sendable) {
+                val caution = state.cautions.firstOrNull { it.type == CautionViewItem.Type.Error }
+                throw IllegalStateException(caution?.text ?: caution?.title ?: "Deposit cannot be sent")
+            }
+            return service
+        } catch (e: Throwable) {
+            if (service !== sendTransactionService) service.clear()
+            throw e
+        }
+    }
+
+    // What the notice says when the order could not be created: the server's discriminator when
+    // it names one, a generic line otherwise.
+    private fun commitFailure(error: Throwable): SwapCommitFailure = when (error) {
+        PrivateSendError.RateChanged -> SwapCommitFailure.RateChanged
+        PrivateSendError.PreviewExpired -> SwapCommitFailure.RefreshRequired
+        else -> SwapCommitFailure.Failed
     }
 
     private fun swapRecord(order: PrivateSendOrder) = SwapRecord(
@@ -348,9 +411,8 @@ class PrivateSendConfirmViewModel(
     }
 
     companion object {
-        // A committed quote is only honoured for this long. Past it the screen dead-ends
-        // rather than pretending to be current — the deposit ceiling is what the send button
-        // authorizes.
+        // How long a preview is shown before it is silently re-requested. The preview has no
+        // side effects, so a refresh costs nothing; the order is created only on Send.
         const val QUOTE_LIFETIME_SECONDS = 15L
 
         fun init(
@@ -386,7 +448,6 @@ data class PrivateSendConfirmUiState(
     val cautions: List<CautionViewItem>,
     val transactionFields: List<DataField>,
     val canSend: Boolean,
-    val expired: Boolean,
     val hasSettings: Boolean,
     val hasNonceSettings: Boolean,
     val error: Throwable?,

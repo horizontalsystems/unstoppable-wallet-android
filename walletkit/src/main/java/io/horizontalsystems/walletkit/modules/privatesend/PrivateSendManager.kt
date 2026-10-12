@@ -28,8 +28,10 @@ import java.math.BigDecimal
  * The private send stack: which tokens can be sent privately, and committing an order.
  *
  * A private send routes a transfer through a confidential USwap provider so the recipient
- * cannot be linked on-chain to the sender. Execution is a plain transfer to a deposit
- * address, so the multiswap send-transaction machinery does the actual work.
+ * cannot be linked on-chain to the sender. The confirmation screen previews the route (priced
+ * against the provider's stand-in deposit address); Send commits it and learns the real deposit
+ * address. Execution is a plain transfer to that address, so the multiswap send-transaction
+ * machinery does the actual work.
  *
  * Which providers are confidential comes from GET /providers (privacy.confidential), not a
  * hardcoded id — the server, not a release, decides availability. Only providers that also
@@ -104,14 +106,15 @@ class PrivateSendManager(
     }
 
     /**
-     * Quote and commit in one call: /v2/rate exists here only to *choose* a provider, so with
-     * a single candidate the round trip is pure latency on a screen where the user is already
-     * waiting — the fan-out returns the moment a second confidential provider maps the token.
-     * Every economic value below prefers the committed (/v2/swap) response.
+     * Prices the private send for the confirmation screen without creating an order: /v3/rate
+     * exists here only to *choose* a provider, so with a single candidate the round trip is pure
+     * latency on a screen where the user is already waiting — the fan-out returns the moment a
+     * second confidential provider maps the token. Re-run freely; [commit] turns the preview into
+     * an order when the user presses Send. Every economic value below prefers the preview response.
      *
      * Throws [PrivateSendError] only — raw server text never leaves this method.
      */
-    suspend fun commit(request: PrivateSendRequest): PrivateSendOrder {
+    suspend fun preview(request: PrivateSendRequest): PrivateSendPreview {
         val token = request.token
 
         if (token.blockchainType in privateChains || token.blockchainType in payoutUnsupportedChains) {
@@ -129,7 +132,7 @@ class PrivateSendManager(
         }
 
         // Omitting the refund address forfeits the buffer refund, which lands on the success
-        // path too — so a missing one fails the commit rather than proceeding without.
+        // path too — so a missing one fails the preview rather than proceeding without.
         val refundAddress = try {
             SwapHelper.getReceiveAddressForToken(token)
         } catch (e: CancellationException) {
@@ -139,7 +142,7 @@ class PrivateSendManager(
         }
 
         val route = try {
-            provider.privateSendCommit(
+            provider.privateSendPreview(
                 token = token,
                 amountOut = request.amountOut,
                 destinationAddress = request.recipient,
@@ -152,10 +155,74 @@ class PrivateSendManager(
             throw mapCommitError(e)
         }
 
-        val uuid = route.uuid
+        val previewToken = route.previewToken
+        if (previewToken.isNullOrEmpty()) throw PrivateSendError.CommitFailed()
+
+        // The deposit transfer is priced against the stand-in so the confirmation screen shows a
+        // network fee. A provider that already names the deposit account at preview is priced
+        // against that instead; with neither there is nothing to show and nothing to send — from
+        // the user's side, no route.
+        val stubDepositAddress = route.stubDepositAddress?.takeIf { it.isNotBlank() }
+            ?: route.execution?.depositAddress?.takeIf { it.isNotBlank() }
+            ?: throw PrivateSendError.NoRoute
+
+        // Never falls back to the entered amount: in exact-output mode that is the *output*, a
+        // structurally different quantity.
+        val depositAmount = route.sellAmount ?: throw PrivateSendError.CommitFailed()
+        if (depositAmount <= BigDecimal.ZERO) throw PrivateSendError.CommitFailed()
+
+        val minSellAmount = route.minSellAmount
+
+        // A deposit below the floor is refunded whole and no swap happens.
+        if (minSellAmount != null && depositAmount < minSellAmount) {
+            throw PrivateSendError.CommitFailed()
+        }
+
+        val amountOut = route.expectedBuyAmount
+        if (amountOut == null || amountOut <= BigDecimal.ZERO) {
+            throw PrivateSendError.CommitFailed()
+        }
+
+        // Exact output: a re-priced amount would silently deliver the recipient something else,
+        // so a preview promising anything but the requested amount is never shown.
+        if (amountOut.compareTo(request.amountOut) != 0) {
+            throw PrivateSendError.CommitFailed()
+        }
+
+        return PrivateSendPreview(
+            request = request,
+            previewToken = previewToken,
+            provider = provider,
+            depositAmount = depositAmount,
+            minSellAmount = minSellAmount,
+            amountOut = amountOut,
+            stubDepositAddress = stubDepositAddress,
+            refundAddress = refundAddress,
+            estimatedTime = route.estimatedTime?.total,
+            previewedAt = System.currentTimeMillis(),
+        )
+    }
+
+    /**
+     * The only call with side effects: creates the order for a previewed route. The deposit
+     * address and attachment exist only from here on. Every failure is an authored
+     * [PrivateSendError]; the token is never retried.
+     */
+    suspend fun commit(preview: PrivateSendPreview): PrivateSendOrder {
+        val token = preview.request.token
+
+        val commit = try {
+            preview.provider.commitPreview(preview.previewToken)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw mapCommitError(e)
+        }
+
+        val uuid = commit.uuid
         if (uuid.isNullOrEmpty()) throw PrivateSendError.CommitFailed()
 
-        val execution = route.execution
+        val execution = commit.execution
         if (execution == null || execution.method != supportedExecutionType) {
             throw PrivateSendError.CommitFailed()
         }
@@ -173,31 +240,32 @@ class PrivateSendManager(
         val depositAddress = execution.depositAddress
         if (depositAddress.isNullOrBlank()) throw PrivateSendError.CommitFailed()
 
-        val depositAmount = execution.amount?.toBigDecimalOrNull() ?: throw PrivateSendError.CommitFailed()
+        // Exact output: the server decides what to deposit, and the committed order is a fresh
+        // quote, so the commit's figure is the one to transfer. Every committed amount present
+        // must be positive: a zero or negative one means the order has no valid deposit.
+        val executionAmount = execution.amount?.let { it.toBigDecimalOrNull() ?: throw PrivateSendError.CommitFailed() }
+        val depositAmount = executionAmount ?: commit.sellAmount ?: throw PrivateSendError.CommitFailed()
+        if (listOfNotNull(executionAmount, commit.sellAmount).any { it <= BigDecimal.ZERO }) {
+            throw PrivateSendError.CommitFailed()
+        }
 
-        // The floor check below only sees this when the provider stated one, so a transfer of
-        // nothing has to be refused on its own terms.
-        if (depositAmount <= BigDecimal.ZERO) throw PrivateSendError.CommitFailed()
-
-        val minSellAmount = route.minSellAmount
+        // The Send button authorized the previewed ceiling and nothing above it: an order that
+        // wants more is refused like any other rate change (it expires unfunded).
+        if (depositAmount > preview.depositAmount) throw PrivateSendError.RateChanged
 
         // A deposit below the floor is refunded whole and no swap happens.
+        val minSellAmount = preview.minSellAmount
         if (minSellAmount != null && depositAmount < minSellAmount) {
             throw PrivateSendError.CommitFailed()
         }
 
-        // Never falls back to the entered amount: that is the *output* the user asked for,
-        // not a value the provider has agreed to deliver.
-        val amountOut = route.expectedBuyAmount
-        if (amountOut == null || amountOut <= BigDecimal.ZERO) {
-            throw PrivateSendError.CommitFailed()
-        }
+        // The effective output is the commit's figure, or the preview's when the commit omits it.
+        val amountOut = commit.expectedBuyAmount ?: preview.amountOut
+        if (amountOut <= BigDecimal.ZERO) throw PrivateSendError.CommitFailed()
 
-        // Exact output: the route must deliver precisely what the user entered — a re-priced
-        // amount would silently pay the recipient something else.
-        if (amountOut.compareTo(request.amountOut) != 0) {
-            throw PrivateSendError.CommitFailed()
-        }
+        // Exact output: an order delivering anything other than the amount the user asked to send
+        // is refused as a rate change rather than proceeding with a different delivery.
+        if (amountOut.compareTo(preview.request.amountOut) != 0) throw PrivateSendError.RateChanged
 
         // Attachment deliverability is decided here, not left to the deposit build: the order
         // is already committed either way, and an undeliverable attachment must surface once
@@ -205,17 +273,12 @@ class PrivateSendManager(
         PrivateSendDepositBuilder.deliverableMemo(execution.attachment, token.blockchainType)
 
         return PrivateSendOrder(
-            request = request,
+            preview = preview,
             depositAmount = depositAmount,
-            minSellAmount = minSellAmount,
             amountOut = amountOut,
-            providerId = provider.id,
             depositAddress = depositAddress,
             attachment = execution.attachment,
             providerSwapId = uuid,
-            refundAddress = refundAddress,
-            estimatedTime = route.estimatedTime?.total,
-            committedAt = System.currentTimeMillis(),
         )
     }
 
@@ -304,9 +367,15 @@ class PrivateSendManager(
     }
 
     private fun mapCommitError(error: Throwable): PrivateSendError {
-        // A refused commit: the provider refusal it may carry (same fields as a /v3/rate
-        // providerError) first, then the HTTP status.
+        // A refused commit: the server's discriminator first (the price moved / the token is
+        // stale), then the provider refusal it may carry (same fields as a /v3/rate
+        // providerError), then the HTTP status.
         if (error is UnstoppableAPI.CommitException) {
+            when (error.status) {
+                "rate_changed" -> return PrivateSendError.RateChanged
+                "refresh_required" -> return PrivateSendError.PreviewExpired
+            }
+
             error.providerError?.let { providerError ->
                 reason(listOf(providerError))?.let { return it }
             }
@@ -317,8 +386,8 @@ class PrivateSendManager(
         if (error is HttpException) {
             if (error.code() == 503) return PrivateSendError.ProviderSuspended
 
-            // A failed /v2/swap answers with the provider error as its body, carrying the same
-            // minimumAmount / maximumAmount / errorCode fields /v2/rate reports in
+            // A failed /v3/preview answers with the provider error as its body, carrying the same
+            // minimumAmount / maximumAmount / errorCode fields /v3/rate reports in
             // `providerErrors`. Only the parsed fields are read — the body itself is never
             // rendered, because it is raw server text.
             parseProviderError(error)?.let { providerError ->
@@ -358,8 +427,8 @@ class PrivateSendManager(
         return parsed
     }
 
-    // The one mapping from provider errors to authored reasons, shared by the /v2/rate
-    // providerErrors array and the single error body of a failed /v2/swap. Returns null when
+    // The one mapping from provider errors to authored reasons, shared by the /v3/rate
+    // providerErrors array and the single error body of a failed /v3/preview or /v3/commit. Returns null when
     // nothing is recognisable, so each caller decides its own fallback.
     private fun reason(providerErrors: List<UnstoppableAPI.Response.ProviderError>): PrivateSendError? {
         val outOfRange = providerErrors.filter { it.errorCode == "amountOutOfRange" }
