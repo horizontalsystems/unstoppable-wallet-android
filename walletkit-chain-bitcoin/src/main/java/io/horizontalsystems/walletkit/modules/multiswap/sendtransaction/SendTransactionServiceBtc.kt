@@ -166,6 +166,8 @@ class SendTransactionServiceBtc(
 
         feeService.setFeeRate(feeRateState.feeRate)
         amountService.setFeeRate(feeRateState.feeRate)
+        // Published so a swap provider prices its route at the rate the transfer is sent with.
+        sendTransactionSettingsFlow.value = SendTransactionSettings.Btc(feeRateState.feeRate)
 
         emitState()
     }

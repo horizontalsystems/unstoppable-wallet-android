@@ -19,6 +19,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.ThorChainSwapMemo
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SwapNetworkFee
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.walletkit.core.stripHexPrefix
@@ -443,6 +444,7 @@ class USwapProvider(
         refundAddress: String?,
         sellAsset: String?,
         buyAsset: String?,
+        sendTransactionSettings: SendTransactionSettings?,
     ): UnstoppableAPI.Response.Route {
         val usingDerivedIdentifiers = assetsMap.isEmpty()
         val assetIn = sellAsset ?: assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
@@ -459,6 +461,7 @@ class USwapProvider(
             refundAddress = refundAddress,
             sourceAddress = sourceAddress,
             chainId = chainId,
+            networkFee = UnstoppableAPI.Request.NetworkFee.of(tokenIn, sendTransactionSettings),
         )
         val route = unstoppableAPI.preview(request)
 
@@ -634,7 +637,8 @@ class USwapProvider(
             sourceAddress,
             refundAddress,
             selectedRoute?.sellAsset,
-            selectedRoute?.buyAsset
+            selectedRoute?.buyAsset,
+            sendTransactionSettings,
         )
 
         // A THORChain-style deposit memo is what routes the outbound leg: a route without one
@@ -1209,7 +1213,56 @@ interface UnstoppableAPI {
             val sourceAddress: String? = null,
             val chainId: String? = null,
             val buyAmount: String? = null,
+            // The user's fee setting, so the returned transaction and the route's inbound fee line
+            // are priced as the transfer will be sent. Omitted, the server prices the tx itself.
+            val networkFee: NetworkFee? = null,
         )
+
+        // One object discriminated by `kind`; it must match the sell asset's chain (a mismatch is
+        // a 400), so [NetworkFee.of] only builds it for the chains the server names.
+        data class NetworkFee(
+            val kind: String,            // legacy | eip1559 | utxo
+            val gasPrice: String? = null,            // legacy: wei
+            val maxFeePerGas: String? = null,        // eip1559: wei
+            val maxPriorityFeePerGas: String? = null,// eip1559: wei
+            val feeRate: Int? = null,                // utxo: sat/vB
+        ) {
+            companion object {
+                private val utxoFeeRateChains = setOf(
+                    BlockchainType.Bitcoin,
+                    BlockchainType.Litecoin,
+                    BlockchainType.BitcoinCash,
+                    BlockchainType.Dash,
+                )
+
+                fun of(tokenIn: Token, settings: SendTransactionSettings?): NetworkFee? =
+                    when (val fee = settings?.networkFee) {
+                        is SwapNetworkFee.Legacy -> if (tokenIn.blockchainType.isEvm) {
+                            NetworkFee(kind = "legacy", gasPrice = fee.gasPrice.toString())
+                        } else {
+                            null
+                        }
+
+                        is SwapNetworkFee.Eip1559 -> if (tokenIn.blockchainType.isEvm) {
+                            NetworkFee(
+                                kind = "eip1559",
+                                maxFeePerGas = fee.maxFeePerGas.toString(),
+                                maxPriorityFeePerGas = fee.maxPriorityFeePerGas.toString(),
+                            )
+                        } else {
+                            null
+                        }
+
+                        is SwapNetworkFee.Utxo -> if (tokenIn.blockchainType in utxoFeeRateChains) {
+                            NetworkFee(kind = "utxo", feeRate = fee.feeRate)
+                        } else {
+                            null
+                        }
+
+                        null -> null
+                    }
+            }
+        }
 
         // /v3/commit request. `inboundTxHash` only when the preview's transaction was signed
         // before committing; otherwise the hash is reported through /v3/signed.
