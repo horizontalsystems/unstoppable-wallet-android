@@ -411,6 +411,9 @@ class ZcashAdapter(
      * Falls back to the standard unified address if custom address generation fails.
      */
     override suspend fun getFreshReceiveAddress(): String {
+        // A new address stored while the engine is in a sync pass fails that pass, which shows
+        // as a sync error until the engine restarts it. The default address is just as valid.
+        if (syncState != AdapterState.Synced) return receiveAddress
         return try {
             synchronizer.getCustomUnifiedAddress(zcashAccount, UnifiedAddressRequest.shielded)
         } catch (_: Exception) {
