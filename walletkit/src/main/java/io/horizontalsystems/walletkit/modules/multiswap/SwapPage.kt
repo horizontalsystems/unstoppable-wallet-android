@@ -332,6 +332,7 @@ fun SwapScreen(
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
+        onEnableTokenIn = viewModel::onEnableTokenIn,
         navigation = navigation,
         onResume = viewModel::onResume,
         onPause = viewModel::onPause,
@@ -355,6 +356,7 @@ private fun SwapScreenInner(
     proceedEnabled: Boolean,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
+    onEnableTokenIn: () -> Unit,
     navigation: HSNavigation,
     onResume: () -> Unit,
     onPause: () -> Unit,
@@ -443,6 +445,7 @@ private fun SwapScreenInner(
                     currency = uiState.currency,
                     focusRequester = amountInputFocusRequester,
                     availableBalance = uiState.availableBalance,
+                    showBalancePlaceholder = uiState.tokenInWalletState != TokenInWalletState.Ready,
                     // The line doubles as the 100% shortcut whenever that percent is offered.
                     onAvailableBalanceClick = if (100 in uiState.disabledPercents) {
                         null
@@ -518,6 +521,10 @@ private fun SwapScreenInner(
                         navigation = navigation,
                         onActionCompleted = onActionCompleted,
                         onActionStarted = onActionStarted,
+                        onEnableTokenIn = {
+                            focusManager.clearFocus()
+                            onEnableTokenIn()
+                        },
                         proceedEnabled = proceedEnabled,
                         onClickNext = onClickNext
                     )
@@ -534,6 +541,7 @@ private fun SwapActionButton(
     navigation: HSNavigation,
     onActionCompleted: () -> Unit,
     onActionStarted: () -> Unit,
+    onEnableTokenIn: () -> Unit,
     proceedEnabled: Boolean,
     onClickNext: () -> Unit
 ) {
@@ -557,6 +565,30 @@ private fun SwapActionButton(
                 HSButton(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Swap_Quoting),
+                    loadingIndicator = true,
+                    enabled = false
+                )
+            }
+
+            is SwapStep.EnableTokenIn -> {
+                // Local state: the step only changes once the wallet is saved in the background
+                var enabling by remember(currentStep.token) { mutableStateOf(false) }
+
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    title = stringResource(R.string.Swap_EnableToken, currentStep.token.coin.code),
+                    enabled = !enabling,
+                ) {
+                    enabling = true
+                    onEnableTokenIn()
+                }
+            }
+
+            SwapStep.Syncing -> {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Balance_Syncing),
                     loadingIndicator = true,
                     enabled = false
                 )
@@ -838,6 +870,7 @@ private fun SwapInput(
     currency: Currency,
     focusRequester: FocusRequester,
     availableBalance: BigDecimal?,
+    showBalancePlaceholder: Boolean,
     onAvailableBalanceClick: (() -> Unit)?,
     onPercentClick: (Int) -> Unit,
     onClearClick: (() -> Unit)
@@ -848,6 +881,7 @@ private fun SwapInput(
         AvailableBalanceRow(
             balanceToken = tokenIn,
             availableBalance = availableBalance,
+            showPlaceholder = showBalancePlaceholder,
             onAvailableBalanceClick = onAvailableBalanceClick,
             onPercentClick = onPercentClick,
             onClearClick = onClearClick,

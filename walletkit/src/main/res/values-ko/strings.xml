@@ -1989,4 +1989,5 @@
     <string name="Zcash_ConfirmShielding">보호 확인</string>
     <string name="Zcash_ToShieldedAddress">내 보호 주소로</string>
     <string name="Zcash_ShieldingProgress">ZEC 보호 중 (%1$d/%2$d)</string>
+    <string name="Swap_EnableToken">%s 활성화</string>
 </resources>

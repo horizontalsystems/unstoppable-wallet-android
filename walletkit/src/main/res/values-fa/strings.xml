@@ -1981,4 +1981,5 @@
     <string name="Zcash_ConfirmShielding">تایید محافظت</string>
     <string name="Zcash_ToShieldedAddress">به آدرس محافظت‌شده شما</string>
     <string name="Zcash_ShieldingProgress">در حال محافظت ZEC (%1$d/%2$d)</string>
+    <string name="Swap_EnableToken">فعال کردن %s</string>
 </resources>

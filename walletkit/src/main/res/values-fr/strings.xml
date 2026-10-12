@@ -1995,4 +1995,5 @@
     <string name="Zcash_ConfirmShielding">Confirmer la protection</string>
     <string name="Zcash_ToShieldedAddress">Vers votre adresse protégée</string>
     <string name="Zcash_ShieldingProgress">Protection des ZEC (%1$d/%2$d)</string>
+    <string name="Swap_EnableToken">Activer %s</string>
 </resources>

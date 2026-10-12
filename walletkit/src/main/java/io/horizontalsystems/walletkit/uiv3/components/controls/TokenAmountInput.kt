@@ -81,12 +81,15 @@ fun TokenAmountInput(
 fun AvailableBalanceRow(
     balanceToken: Token?,
     availableBalance: BigDecimal?,
+    // Shows the row with a dash while the balance is unknown, instead of hiding it
+    showPlaceholder: Boolean = false,
     onAvailableBalanceClick: (() -> Unit)? = null,
     onPercentClick: ((Int) -> Unit)? = null,
     onClearClick: (() -> Unit)? = null,
     showClear: Boolean = false,
 ) {
-    if (availableBalance != null && balanceToken != null) {
+    if (balanceToken != null && (availableBalance != null || showPlaceholder)) {
+        val clickable = availableBalance != null && onAvailableBalanceClick != null
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -94,25 +97,23 @@ fun AvailableBalanceRow(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                modifier = if (onAvailableBalanceClick != null) {
+                modifier = if (clickable) {
                     Modifier.clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
-                        onClick = onAvailableBalanceClick,
+                        onClick = onAvailableBalanceClick!!,
                     )
                 } else {
                     Modifier
                 },
                 text = stringResource(
                     R.string.Send_Available,
-                    App.numberFormatter.formatCoinFull(
-                        availableBalance,
-                        balanceToken.coin.code,
-                        balanceToken.decimals
-                    )
+                    availableBalance?.let {
+                        App.numberFormatter.formatCoinFull(it, balanceToken.coin.code, balanceToken.decimals)
+                    } ?: "---"
                 ),
                 style = ComposeAppTheme.typography.caption,
-                color = if (onAvailableBalanceClick != null) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.grey,
+                color = if (clickable) ComposeAppTheme.colors.ocean else ComposeAppTheme.colors.grey,
             )
 
             if (showClear) {

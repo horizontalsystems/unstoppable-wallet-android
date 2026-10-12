@@ -1992,4 +1992,5 @@
     <string name="Zcash_ConfirmShielding">确认屏蔽</string>
     <string name="Zcash_ToShieldedAddress">至您的屏蔽地址</string>
     <string name="Zcash_ShieldingProgress">正在屏蔽 ZEC (%1$d/%2$d)</string>
+    <string name="Swap_EnableToken">启用 %s</string>
 </resources>
