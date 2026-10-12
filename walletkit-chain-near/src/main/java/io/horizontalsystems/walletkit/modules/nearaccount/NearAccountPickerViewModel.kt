@@ -116,12 +116,6 @@ class NearAccountPickerViewModel(
 
                 val accountIds = NearKit.findAccounts(publicKey, Network.MainNet, fastNearApiKey, rpcUrls)
 
-                // Only the implicit account: nothing to choose, so the picker is never seen
-                if (accountIds.size <= 1) {
-                    finish(RestoreSettings())
-                    return@launch
-                }
-
                 accounts = accountIds
                     .map { accountId -> async { loadAccount(accountId) } }
                     .awaitAll()
