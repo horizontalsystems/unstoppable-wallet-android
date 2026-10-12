@@ -229,6 +229,7 @@ private fun statusText(status: SwapStatus): String = when (status) {
     SwapStatus.Refunded -> stringResource(R.string.SwapInfo_StatusRefunded)
     SwapStatus.Failed -> stringResource(R.string.SwapInfo_StatusFailed)
     SwapStatus.ActionRequired -> stringResource(R.string.SwapHistory_StatusActionRequired)
+    SwapStatus.Expired -> stringResource(R.string.SwapInfo_StatusExpired)
 }
 
 @Composable
@@ -303,6 +304,8 @@ private fun statusIconAndTint(status: SwapStatus): Pair<Int, Color> = when (stat
     SwapStatus.Refunded -> Pair(R.drawable.ic_arrow_return_20, ComposeAppTheme.colors.grey)
     SwapStatus.Failed,
     SwapStatus.ActionRequired -> Pair(R.drawable.ic_warning_filled_20, ComposeAppTheme.colors.redL)
+    // Nothing was lost: the order lapsed unfunded, so the warning is muted rather than red.
+    SwapStatus.Expired -> Pair(R.drawable.ic_warning_filled_20, ComposeAppTheme.colors.grey)
 }
 
 @Preview

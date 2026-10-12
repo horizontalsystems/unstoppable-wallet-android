@@ -1999,4 +1999,5 @@
     <string name="NearSend_ReceiverIsTokenContract">Ceci est l\'adresse du contrat du token, pas un portefeuille. Les tokens envoyés ici ne peuvent pas être récupérés.</string>
     <string name="NearSend_ReceiverCheckFailed">Impossible de vérifier que ce compte existe. Vérifiez votre connexion et réessayez.</string>
     <string name="NearAccount_AccessCheckFailed">Impossible de vérifier si cette phrase de récupération a encore accès à ce compte. Appuyez pour réessayer.</string>
+    <string name="SwapInfo_StatusExpired">Expiré</string>
 </resources>

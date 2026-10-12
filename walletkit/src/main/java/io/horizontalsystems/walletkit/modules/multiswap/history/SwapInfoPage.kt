@@ -378,7 +378,8 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
             }
 
             SwapStatus.Failed,
-            SwapStatus.ActionRequired -> {
+            SwapStatus.ActionRequired,
+            SwapStatus.Expired -> {
                 steps = singleTransactionFailedSteps
                 activeIndex = -1
                 failedIndex = 1
@@ -403,6 +404,13 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
                 steps = normalSteps.take(2)
                 activeIndex = 1
                 failedIndex = 1
+            }
+
+            // The deposit never arrived: the first step is the one that failed.
+            SwapStatus.Expired -> {
+                steps = normalSteps.take(1)
+                activeIndex = 0
+                failedIndex = 0
             }
 
             SwapStatus.Depositing -> {

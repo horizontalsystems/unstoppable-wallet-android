@@ -2006,4 +2006,5 @@
     <string name="NearSend_ReceiverIsTokenContract">Это адрес контракта токена, а не кошелёк. Отправленные сюда токены нельзя вернуть.</string>
     <string name="NearSend_ReceiverCheckFailed">Не удалось проверить, существует ли этот аккаунт. Проверьте подключение и попробуйте снова.</string>
     <string name="NearAccount_AccessCheckFailed">Не удалось проверить, есть ли у этой фразы восстановления доступ к этому аккаунту. Нажмите, чтобы повторить.</string>
+    <string name="SwapInfo_StatusExpired">Истёк</string>
 </resources>

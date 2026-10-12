@@ -169,6 +169,7 @@ class SwapSyncService(
         "completed" -> SwapStatus.Completed
         "refunded" -> SwapStatus.Refunded
         "failed" -> SwapStatus.Failed
+        "expired" -> SwapStatus.Expired
         "action_required" -> SwapStatus.ActionRequired
         else -> null // "unknown" — leave status unchanged
     }

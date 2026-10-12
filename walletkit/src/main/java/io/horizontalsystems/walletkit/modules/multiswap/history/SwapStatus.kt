@@ -8,6 +8,9 @@ enum class SwapStatus {
     Refunded,
     Failed,
     ActionRequired,
+    // Terminal: no deposit was detected before the order's deadline, so tracking stopped. The
+    // user most likely never sent funds; a late deposit may still be resolved server-side.
+    Expired,
 }
 
 enum class PauseReason {

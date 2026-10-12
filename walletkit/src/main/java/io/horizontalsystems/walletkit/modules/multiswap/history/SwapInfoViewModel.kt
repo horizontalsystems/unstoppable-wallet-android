@@ -78,7 +78,7 @@ class SwapInfoViewModel(
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
         providerName = providerName,
-        showProvider = status in listOf(SwapStatus.Refunded, SwapStatus.Failed, SwapStatus.ActionRequired),
+        showProvider = status in listOf(SwapStatus.Refunded, SwapStatus.Failed, SwapStatus.ActionRequired, SwapStatus.Expired),
         formattedDate = formattedDate,
         status = status,
         operation = operation,

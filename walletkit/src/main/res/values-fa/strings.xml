@@ -1985,4 +1985,5 @@
     <string name="NearSend_ReceiverIsTokenContract">این آدرس قرارداد توکن است، نه یک کیف پول. توکن‌هایی که به اینجا ارسال شوند قابل بازیابی نیستند.</string>
     <string name="NearSend_ReceiverCheckFailed">بررسی وجود این حساب ممکن نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
     <string name="NearAccount_AccessCheckFailed">بررسی اینکه این عبارت بازیابی هنوز به این حساب دسترسی دارد ممکن نشد. برای تلاش دوباره ضربه بزنید.</string>
+    <string name="SwapInfo_StatusExpired">منقضی شده</string>
 </resources>
