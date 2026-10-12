@@ -99,7 +99,7 @@ private fun NearAccountPickerScreen(
         onBack = onBack,
     ) {
         when {
-            uiState.searching || uiState.result != null -> Searching()
+            uiState.searching -> Searching()
             uiState.searchFailed -> SearchFailed(
                 onRetry = onRetry,
                 onEnterName = onEnterName,
