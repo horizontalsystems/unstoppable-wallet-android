@@ -1,0 +1,47 @@
+{
+  "providers": [
+    "QUICKEX"
+  ],
+  "sellAsset": "BTC.BTC",
+  "sellAmount": "0.002",
+  "buyAsset": "XMR.XMR",
+  "expectedBuyAmount": "0.30786298",
+  "minBuyAmount": null,
+  "fees": [
+    {
+      "type": "liquidity",
+      "chain": "BTC",
+      "asset": "BTC.BTC",
+      "amount": "0.000005",
+      "protocol": "QUICKEX"
+    },
+    {
+      "type": "service",
+      "chain": "BTC",
+      "asset": "BTC.BTC",
+      "amount": "0.00002",
+      "protocol": "QUICKEX"
+    },
+    {
+      "type": "inbound",
+      "amount": "0.00000678",
+      "chain": "BTC",
+      "asset": "BTC.BTC",
+      "protocol": "QUICKEX"
+    }
+  ],
+  "estimatedTime": {
+    "inbound": 600,
+    "swap": 390,
+    "outbound": 240,
+    "total": 1230
+  },
+  "amlPolicy": "good",
+  "accuracy": {
+    "matched": 4,
+    "total": 4,
+    "avgDeviation": null
+  },
+  "previewToken": "preview-token-fixture",
+  "stubDepositAddress": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+}
