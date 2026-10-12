@@ -53,6 +53,7 @@ import io.horizontalsystems.walletkit.core.toRawHexString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -196,6 +197,7 @@ class ZcashAdapter(
     private var shieldFee: BigDecimal? = null
     @Volatile
     private var shieldFeeUnshielded: BigDecimal? = null
+    private var shieldFeeJob: Job? = null
 
     // The wallet summary counts a shielding's output as spendable after the trusted
     // confirmation depth, but a transfer proposal does not spend it until the shielding is
@@ -726,9 +728,11 @@ class ZcashAdapter(
         refreshShieldFee(balanceUnshielded)
     }
 
+    @Synchronized
     private fun refreshShieldFee(unshielded: BigDecimal) {
         if (shieldFeeUnshielded?.compareTo(unshielded) == 0) return
         shieldFeeUnshielded = unshielded
+        shieldFeeJob?.cancel()
 
         if (unshielded < minimalShieldThreshold) {
             shieldFee = null
@@ -736,20 +740,27 @@ class ZcashAdapter(
             return
         }
 
-        adapterScope.launch {
+        shieldFeeJob = adapterScope.launch {
             val fee = try {
                 shieldTransactionFee()
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {
                 Log.w("ZcashAdapter", "Shield fee estimation failed", e)
-                // Estimated again on the next balance update or once synced.
-                shieldFeeUnshielded = null
                 null
             }
-            shieldFee = fee
-            _balanceUpdatedFlow.tryEmit(Unit)
+            applyShieldFee(unshielded, fee)
         }
+    }
+
+    // An estimate for a balance that has changed since is dropped; the newer one applies.
+    @Synchronized
+    private fun applyShieldFee(unshielded: BigDecimal, fee: BigDecimal?) {
+        if (shieldFeeUnshielded?.compareTo(unshielded) != 0) return
+        // A failed estimate is retried on the next balance update or once synced.
+        if (fee == null) shieldFeeUnshielded = null
+        shieldFee = fee
+        _balanceUpdatedFlow.tryEmit(Unit)
     }
 
     private fun onTransactions(transactions: List<TransactionOverview>) {
