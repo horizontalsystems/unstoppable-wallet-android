@@ -68,6 +68,7 @@ import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
@@ -346,19 +347,42 @@ private fun ColumnScope.SendFormTab(
                 else -> step.error.message ?: step.error.javaClass.simpleName
             }
 
+            is SendStep.ActionRequired -> if (step.action.inProgress) {
+                step.action.getTitleInProgress()
+            } else {
+                step.action.getTitle()
+            }
+
             SendStep.Proceed -> stringResource(R.string.Button_Next)
         }
         ButtonsGroupVertical {
-            HSButton(
-                modifier = Modifier.fillMaxWidth(),
-                title = buttonTitle,
-                enabled = uiState.step is SendStep.Proceed,
-            ) {
-                if (uiState.riskyAddress) {
+            val step = uiState.step
+            if (step is SendStep.ActionRequired) {
+                val action = step.action
+                val executor = action.executor(navigation, viewModel::onActionCompleted)
+
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    title = buttonTitle,
+                    loadingIndicator = action.inProgress,
+                    enabled = !action.inProgress,
+                ) {
                     keyboardController?.hide()
-                    confirmRiskyAddress()
-                } else {
-                    proceed()
+                    executor()
+                }
+            } else {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = buttonTitle,
+                    enabled = step is SendStep.Proceed,
+                ) {
+                    if (uiState.riskyAddress) {
+                        keyboardController?.hide()
+                        confirmRiskyAddress()
+                    } else {
+                        proceed()
+                    }
                 }
             }
     }

@@ -1991,4 +1991,11 @@
     <string name="NearAccount_ContractWarning">Há um smart contract implantado nesta conta. Dependendo do código, ele pode mover os fundos da conta. Continue apenas se souber o que ele faz.</string>
     <string name="NearAccount_AccessLost">Esta frase de recuperação não tem mais acesso a esta conta. Ele pode ter sido removido em outra carteira.</string>
     <string name="NearSend_NotFullAccessKey">Esta frase de recuperação tem apenas acesso limitado a esta conta e não pode enviar fundos.</string>
+    <string name="Zcash_ShieldToSend">Blindar ZEC para enviar</string>
+    <string name="Zcash_ShieldToSwap">Blindar ZEC para trocar</string>
+    <string name="Zcash_Shielding">Blindando ZEC</string>
+    <string name="Zcash_ShieldZec">Blindar ZEC</string>
+    <string name="Zcash_ConfirmShielding">Confirmar blindagem</string>
+    <string name="Zcash_ToShieldedAddress">Para o seu endereço blindado</string>
+    <string name="Zcash_ShieldingProgress">Blindando ZEC (%1$d/%2$d)</string>
 </resources>

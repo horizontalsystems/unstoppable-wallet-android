@@ -1991,4 +1991,11 @@
     <string name="NearAccount_ContractWarning">Auf diesem Konto ist ein Smart Contract installiert. Je nach Code kann er das Guthaben des Kontos bewegen. Fahre nur fort, wenn du weißt, was er tut.</string>
     <string name="NearAccount_AccessLost">Diese Wiederherstellungsphrase hat keinen Zugriff mehr auf dieses Konto. Er wurde möglicherweise in einer anderen Wallet entfernt.</string>
     <string name="NearSend_NotFullAccessKey">Diese Wiederherstellungsphrase hat nur eingeschränkten Zugriff auf dieses Konto und kann kein Guthaben senden.</string>
+    <string name="Zcash_ShieldToSend">ZEC abschirmen zum Senden</string>
+    <string name="Zcash_ShieldToSwap">ZEC abschirmen zum Tauschen</string>
+    <string name="Zcash_Shielding">ZEC wird abgeschirmt</string>
+    <string name="Zcash_ShieldZec">ZEC abschirmen</string>
+    <string name="Zcash_ConfirmShielding">Abschirmung bestätigen</string>
+    <string name="Zcash_ToShieldedAddress">An Ihre abgeschirmte Adresse</string>
+    <string name="Zcash_ShieldingProgress">ZEC wird abgeschirmt (%1$d/%2$d)</string>
 </resources>

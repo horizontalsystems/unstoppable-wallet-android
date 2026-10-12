@@ -1974,4 +1974,11 @@
     <string name="NearAccount_ContractWarning">یک قرارداد هوشمند روی این حساب مستقر است. بسته به کدش، می‌تواند وجوه حساب را جابه‌جا کند. فقط اگر می‌دانید چه می‌کند ادامه دهید.</string>
     <string name="NearAccount_AccessLost">این عبارت بازیابی دیگر به این حساب دسترسی ندارد. ممکن است در کیف پول دیگری حذف شده باشد.</string>
     <string name="NearSend_NotFullAccessKey">این عبارت بازیابی فقط دسترسی محدودی به این حساب دارد و نمی‌تواند وجه ارسال کند.</string>
+    <string name="Zcash_ShieldToSend">محافظت (Shield) ZEC برای ارسال</string>
+    <string name="Zcash_ShieldToSwap">محافظت (Shield) ZEC برای سواپ</string>
+    <string name="Zcash_Shielding">در حال محافظت ZEC</string>
+    <string name="Zcash_ShieldZec">محافظت ZEC</string>
+    <string name="Zcash_ConfirmShielding">تایید محافظت</string>
+    <string name="Zcash_ToShieldedAddress">به آدرس محافظت‌شده شما</string>
+    <string name="Zcash_ShieldingProgress">در حال محافظت ZEC (%1$d/%2$d)</string>
 </resources>

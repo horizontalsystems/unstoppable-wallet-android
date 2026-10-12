@@ -84,6 +84,27 @@ interface ChainPlugin {
     fun unshieldedBalanceThreshold(): BigDecimal? = null
 
     /**
+     * Funds of [token] that are not spendable yet but become spendable through a step the
+     * user starts from the send or swap form (Zcash: transparent funds, which must be
+     * shielded first), or null when there are none. The forms offer them as part of the
+     * available balance and ask for [balancePreparationAction] when the amount needs them.
+     */
+    fun preparableBalance(token: Token): BigDecimal? = null
+
+    /**
+     * What a transfer of [token] can spend now, when the wallet's available balance claims
+     * more than that, or null to use the available balance.
+     */
+    fun spendableBalance(token: Token): BigDecimal? = null
+
+    /**
+     * The step that makes [amount] of [token], above its spendable balance, spendable, or
+     * null when none is needed or possible. Its in-progress state lasts until the prepared
+     * funds are spendable, so the form waits on it the way swap waits on an approval.
+     */
+    fun balancePreparationAction(token: Token, amount: BigDecimal, purpose: SpendPurpose): ISwapProviderAction? = null
+
+    /**
      * Balance the chain requires the user to migrate (e.g. Zcash Orchard→Ironwood after a
      * network upgrade), or null when no migration is pending for [wallet].
      */
@@ -419,3 +440,6 @@ class ChainKeyRow(
     val statPage: io.horizontalsystems.walletkit.core.stats.StatPage,
 )
 
+
+/** What the funds checked by a send or swap form are about to be spent on. */
+enum class SpendPurpose { Send, Swap }

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IAdapterManager
+import io.horizontalsystems.walletkit.core.IBalanceAdapter
+import io.horizontalsystems.walletkit.core.chain.SpendPurpose
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
@@ -30,6 +32,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -76,6 +79,7 @@ class SwapViewModel(
     private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
     private var amlChecking = false
     private var initialShowRegularPrice = true
+    private var balanceJob: Job? = null
 
     // External delivery address entered on SwapRecipientPage, remembered together with
     // the tokenOut it was entered for so it silently expires when the pair changes
@@ -155,6 +159,8 @@ class SwapViewModel(
         viewModelScope.launch {
             adapterManager.adaptersReadyFlow.collectSafely {
                 balanceService.refresh()
+                // Adapters are recreated on account or network changes; follow the new one.
+                observeBalanceUpdates(quoteState.tokenIn)
             }
         }
 
@@ -287,6 +293,7 @@ class SwapViewModel(
         allowanceActionSuppressed = allowanceActionSuppressed(),
         externalRecipientRequired = externalRecipientRequired(quoteState.tokenOut),
         disabledPercents = disabledPercents(quoteState.tokenIn),
+        balancePreparationAction = balanceState.preparationAction,
     )
 
     // The network fee is only estimated on the confirmation screen, so 100% of an asset
@@ -333,6 +340,18 @@ class SwapViewModel(
         }
     }
 
+    // The balance service reads the adapter on demand; follow the adapter's own updates so
+    // a step waiting on the balance, such as shielding, ends once the funds are spendable.
+    private fun observeBalanceUpdates(tokenIn: Token?) {
+        balanceJob?.cancel()
+        val adapter = tokenIn?.let { adapterManager.getAdapterForToken<IBalanceAdapter>(it) }
+        balanceJob = viewModelScope.launch {
+            adapter?.balanceUpdatedFlow?.collectSafely {
+                balanceService.refresh()
+            }
+        }
+    }
+
     private fun handleUpdatedBalanceState(balanceState: TokenBalanceService.State) {
         this.balanceState = balanceState
 
@@ -340,7 +359,11 @@ class SwapViewModel(
     }
 
     private fun handleUpdatedQuoteState(quoteState: SwapQuoteService.State) {
+        val tokenInChanged = quoteState.tokenIn != this.quoteState.tokenIn || balanceJob == null
         this.quoteState = quoteState
+        if (tokenInChanged) {
+            observeBalanceUpdates(quoteState.tokenIn)
+        }
 
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
@@ -423,7 +446,10 @@ class SwapViewModel(
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     private fun reQuote() = quoteService.reQuote()
     fun onActionStarted(quote: SwapProviderQuote?) = quoteService.onActionStarted(quote)
-    fun onActionCompleted() = quoteService.onActionCompleted()
+    fun onActionCompleted() {
+        balanceService.refresh()
+        quoteService.onActionCompleted()
+    }
 
     /**
      * Returns whether the proceed flow actually started. The caller latches its button on the
@@ -489,7 +515,7 @@ class SwapViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = providers?.let { SwapQuoteService(it) } ?: SwapQuoteService()
-            val tokenBalanceService = TokenBalanceService(App.adapterManager)
+            val tokenBalanceService = TokenBalanceService(App.adapterManager, SpendPurpose.Swap)
             val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
 
             return SwapViewModel(
@@ -541,6 +567,7 @@ data class SwapUiState(
     val allowanceActionSuppressed: Boolean = false,
     val externalRecipientRequired: Boolean = false,
     val disabledPercents: Set<Int> = emptySet(),
+    val balancePreparationAction: ISwapProviderAction? = null,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
@@ -549,6 +576,7 @@ data class SwapUiState(
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
         amlChecking -> SwapStep.AmlChecking
+        balancePreparationAction != null -> SwapStep.ActionRequired(balancePreparationAction)
         quote?.actionRequired != null && !allowanceActionSuppressed -> SwapStep.ActionRequired(quote.actionRequired!!)
         else -> SwapStep.Proceed
     }

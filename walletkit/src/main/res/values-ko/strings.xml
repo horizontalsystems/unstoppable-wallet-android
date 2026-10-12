@@ -1982,4 +1982,11 @@
     <string name="NearAccount_ContractWarning">이 계정에는 스마트 컨트랙트가 배포되어 있습니다. 코드에 따라 계정의 자금을 이동할 수 있습니다. 어떤 기능인지 알고 있는 경우에만 계속하세요.</string>
     <string name="NearAccount_AccessLost">이 복구 문구는 더 이상 이 계정에 액세스할 수 없습니다. 다른 지갑에서 제거되었을 수 있습니다.</string>
     <string name="NearSend_NotFullAccessKey">이 복구 문구는 이 계정에 제한된 액세스 권한만 있어 자금을 보낼 수 없습니다.</string>
+    <string name="Zcash_ShieldToSend">전송을 위해 ZEC 보호(Shield)</string>
+    <string name="Zcash_ShieldToSwap">스왑을 위해 ZEC 보호(Shield)</string>
+    <string name="Zcash_Shielding">ZEC 보호 중</string>
+    <string name="Zcash_ShieldZec">ZEC 보호</string>
+    <string name="Zcash_ConfirmShielding">보호 확인</string>
+    <string name="Zcash_ToShieldedAddress">내 보호 주소로</string>
+    <string name="Zcash_ShieldingProgress">ZEC 보호 중 (%1$d/%2$d)</string>
 </resources>

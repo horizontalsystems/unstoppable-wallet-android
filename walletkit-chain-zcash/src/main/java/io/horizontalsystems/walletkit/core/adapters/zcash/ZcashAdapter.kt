@@ -17,6 +17,8 @@ import cash.z.ecc.android.sdk.model.BlockHeight
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
 import cash.z.ecc.android.sdk.model.Proposal
+import cash.z.ecc.android.sdk.model.TransactionOverview
+import cash.z.ecc.android.sdk.model.TransactionState
 import cash.z.ecc.android.sdk.model.TransactionSubmitResult
 import cash.z.ecc.android.sdk.model.UnifiedAddressRequest
 import cash.z.ecc.android.sdk.model.Zatoshi
@@ -54,6 +56,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -63,6 +66,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Instant
@@ -72,6 +76,7 @@ import java.util.Date
 import java.util.regex.Pattern
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
+import kotlin.math.min
 import io.horizontalsystems.walletkit.entities.Account as WalletAccount
 
 class ZcashAdapter(
@@ -141,6 +146,84 @@ class ZcashAdapter(
     override var balanceData: BalanceData? = null
 
     private var accountBalance: AccountBalance? = null
+
+    // Whether the newest transaction is a shielding, and whether it is short of the SDK's
+    // Confirmed state. Kept apart from the balance: the two arrive on separate flows.
+    @Volatile
+    private var lastTransactionIsShielding = false
+    @Volatile
+    private var shieldingUnconfirmed = false
+    @Volatile
+    private var shieldingMinedHeight: Long? = null
+    @Volatile
+    private var shieldingOutput: BigDecimal? = null
+    // Last count published through balanceUpdatedFlow, so each new block is announced once.
+    @Volatile
+    private var publishedShieldingConfirmations: Int? = null
+
+    /**
+     * Confirmations of the shielding [shieldingPending] waits on, up to the SDK's Confirmed
+     * depth, or null when none is pending. Funds can stay pending past that depth until the
+     * wallet catches up, so the count may rest at its maximum for a while.
+     */
+    val shieldingConfirmations: Int?
+        get() {
+            if (!shieldingPending) return null
+            val minedHeight = shieldingMinedHeight ?: return 0
+            val tip = synchronizer.latestHeight?.value ?: return 0
+            return (tip + 1 - minedHeight).toInt().coerceIn(0, shieldingRequiredConfirmations)
+        }
+
+    val shieldingRequiredConfirmations: Int
+        get() = confirmationsThreshold
+
+    /**
+     * Whether shielded funds are on their way from a shielding. Spendability is the SDK's call
+     * (confirmation depth, witnesses, a fresh chain tip), so this follows its pending balance
+     * rather than counting confirmations: a confirmed shielding still counts while the wallet
+     * has not caught up with it.
+     */
+    val shieldingPending: Boolean
+        get() {
+            if (!lastTransactionIsShielding) return false
+            val pending = balanceData?.pending ?: BigDecimal.ZERO
+            return shieldingUnconfirmed || pending > BigDecimal.ZERO
+        }
+
+    // Fee of shielding the current transparent balance, or null when there is nothing to
+    // shield. Building the proposal reads the wallet database, so it is cached per balance.
+    @Volatile
+    private var shieldFee: BigDecimal? = null
+    @Volatile
+    private var shieldFeeUnshielded: BigDecimal? = null
+
+    // The wallet summary counts a shielding's output as spendable after the trusted
+    // confirmation depth, but a transfer proposal does not spend it until the shielding is
+    // Confirmed. Until then the part of the output the summary already reports as available
+    // is held back, so a form does not offer an amount the proposal rejects.
+    private val shieldingHeldBack: BigDecimal
+        get() {
+            if (!lastTransactionIsShielding || !shieldingUnconfirmed) return BigDecimal.ZERO
+            val output = shieldingOutput ?: return BigDecimal.ZERO
+            val data = balanceData ?: return BigDecimal.ZERO
+            return (output - data.pending).coerceIn(BigDecimal.ZERO, data.available)
+        }
+
+    /** What a transfer proposal can spend now. */
+    val spendableBalance: BigDecimal
+        get() = availableBalance - shieldingHeldBack
+
+    /** Shielded funds still confirming after a shielding transaction, otherwise zero. */
+    val shieldingConfirmingBalance: BigDecimal
+        get() = if (shieldingPending) (balanceData?.pending ?: BigDecimal.ZERO) + shieldingHeldBack else BigDecimal.ZERO
+
+    /** What shielding the transparent balance adds to the shielded one, after its fee. */
+    val shieldableBalance: BigDecimal
+        get() {
+            val unshielded = balanceData?.unshielded ?: return BigDecimal.ZERO
+            val fee = shieldFee ?: return BigDecimal.ZERO
+            return (unshielded - fee).max(BigDecimal.ZERO)
+        }
 
     /**
      * Orchard-pool balance that must be migrated to the Ironwood pool, or null while
@@ -402,6 +485,12 @@ class ZcashAdapter(
     suspend fun sendShieldProposal() {
         val shieldProposal = shieldProposal() ?: throw IllegalStateException("Couldn't create shield proposal")
         send(shieldProposal)
+        // Set before the transaction list catches up, so forms waiting on the shielded
+        // funds see them as confirming rather than gone.
+        lastTransactionIsShielding = true
+        shieldingUnconfirmed = true
+        shieldingMinedHeight = null
+        _balanceUpdatedFlow.tryEmit(Unit)
     }
 
     suspend fun shieldTransactionFee(): BigDecimal? =
@@ -524,7 +613,18 @@ class ZcashAdapter(
         //       the synchronizer itself.
         val scope = adapterScope
         scope.launch {
-            synchronizer.allTransactions.collect(transactionsProvider::onTransactions)
+            synchronizer.allTransactions
+                // On a fresh restore Slipstream falls back to the scanned height in a wallet
+                // database that its deferred preparation may not have opened yet, and throws.
+                .retryWhen { cause, attempt ->
+                    Log.w("ZcashAdapter", "Transactions flow failed, retrying", cause)
+                    delay(min(1_000L shl attempt.coerceAtMost(5).toInt(), 30_000L))
+                    true
+                }
+                .collect { transactions ->
+                    transactionsProvider.onTransactions(transactions)
+                    onTransactions(transactions)
+                }
         }
         scope.launch {
             synchronizer.status.collect(::onStatus)
@@ -570,6 +670,10 @@ class ZcashAdapter(
             if (status == Synchronizer.Status.SYNCED) lastProcessorError = null
             syncState = ZcashSyncState.fromStatus(status, lastProcessorError)
         }
+        // A failed estimate is otherwise retried only when the transparent balance changes.
+        if (status == Synchronizer.Status.SYNCED && shieldFeeUnshielded == null) {
+            balanceData?.unshielded?.let(::refreshShieldFee)
+        }
     }
 
     private fun onDownloadProgress(progress: PercentDecimal) {
@@ -587,6 +691,7 @@ class ZcashAdapter(
     @Suppress("UNUSED_PARAMETER")
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
         _lastBlockUpdatedFlow.tryEmit(Unit)
+        publishShieldingConfirmations()
     }
 
     private fun calculateBlocksRemaining(): Long? {
@@ -611,6 +716,67 @@ class ZcashAdapter(
         )
 
         _balanceUpdatedFlow.tryEmit(Unit)
+
+        refreshShieldFee(balanceUnshielded)
+    }
+
+    private fun refreshShieldFee(unshielded: BigDecimal) {
+        if (shieldFeeUnshielded?.compareTo(unshielded) == 0) return
+        shieldFeeUnshielded = unshielded
+
+        if (unshielded < minimalShieldThreshold) {
+            shieldFee = null
+            _balanceUpdatedFlow.tryEmit(Unit)
+            return
+        }
+
+        adapterScope.launch {
+            val fee = try {
+                shieldTransactionFee()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Log.w("ZcashAdapter", "Shield fee estimation failed", e)
+                // Estimated again on the next balance update or once synced.
+                shieldFeeUnshielded = null
+                null
+            }
+            shieldFee = fee
+            _balanceUpdatedFlow.tryEmit(Unit)
+        }
+    }
+
+    private fun onTransactions(transactions: List<TransactionOverview>) {
+        val latest = transactions
+            .filter { it.transactionState != TransactionState.Expired }
+            .maxByOrNull { it.minedHeight?.value ?: Long.MAX_VALUE }
+        val latestIsShielding = latest?.isShielding == true
+        val unconfirmed = latestIsShielding && latest?.transactionState != TransactionState.Confirmed
+        val minedHeight = latest?.takeIf { latestIsShielding }?.minedHeight?.value
+        val output = latest?.takeIf { latestIsShielding }?.totalReceived?.convertZatoshiToZec(decimalCount)
+        if (
+            latestIsShielding != lastTransactionIsShielding ||
+            unconfirmed != shieldingUnconfirmed ||
+            minedHeight != shieldingMinedHeight ||
+            output != shieldingOutput
+        ) {
+            lastTransactionIsShielding = latestIsShielding
+            shieldingUnconfirmed = unconfirmed
+            shieldingMinedHeight = minedHeight
+            shieldingOutput = output
+            _balanceUpdatedFlow.tryEmit(Unit)
+        }
+        publishShieldingConfirmations()
+    }
+
+    // The count moves with the chain tip, which neither the balance nor the transaction list
+    // has to change for.
+    private fun publishShieldingConfirmations() {
+        val confirmations = shieldingConfirmations
+        if (confirmations != publishedShieldingConfirmations) {
+            publishedShieldingConfirmations = confirmations
+            _balanceUpdatedFlow.tryEmit(Unit)
+        }
     }
 
     private fun getTransactionRecord(transaction: ZcashTransaction): TransactionRecord {

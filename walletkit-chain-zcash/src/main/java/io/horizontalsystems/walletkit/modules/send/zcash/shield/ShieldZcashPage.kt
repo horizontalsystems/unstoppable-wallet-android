@@ -15,13 +15,16 @@ data class ShieldZcashPage(val input: Input) : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val viewModel = viewModel<ShieldZcashViewModel>(factory = ShieldZcashModule.Factory(input.wallet))
-        ShieldZcashScreen(navigation, viewModel, input.entryPointDestId)
+        ShieldZcashScreen(navigation, viewModel, input.entryPointDestId, input.returnsResult)
     }
 
     @Serializable
     data class Input(
         val wallet: Wallet,
-        @Serializable(with = HSScreenKClassSerializer::class) val entryPointDestId: KClass<out HSPage>
+        @Serializable(with = HSScreenKClassSerializer::class) val entryPointDestId: KClass<out HSPage>,
+        /** Opened from a form waiting on the shielding: report back with [Result]. */
+        val returnsResult: Boolean = false,
     )
 
+    data class Result(val shielded: Boolean)
 }

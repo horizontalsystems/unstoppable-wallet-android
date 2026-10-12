@@ -30,6 +30,7 @@ class ShieldZcashViewModel(
 
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
+    val shieldedAddress = adapter.receiveAddress
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set

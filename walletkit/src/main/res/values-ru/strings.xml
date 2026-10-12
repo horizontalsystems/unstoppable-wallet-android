@@ -1995,4 +1995,11 @@
     <string name="NearAccount_ContractWarning">На этом аккаунте развёрнут смарт-контракт. В зависимости от кода он может переводить средства аккаунта. Продолжайте, только если знаете, что он делает.</string>
     <string name="NearAccount_AccessLost">У этой фразы восстановления больше нет доступа к этому аккаунту. Возможно, доступ удалили в другом кошельке.</string>
     <string name="NearSend_NotFullAccessKey">У этой фразы восстановления только ограниченный доступ к этому аккаунту, и она не может отправлять средства.</string>
+    <string name="Zcash_ShieldToSend">Выполнить shielding ZEC для отправки</string>
+    <string name="Zcash_ShieldToSwap">Выполнить shielding ZEC для обмена</string>
+    <string name="Zcash_Shielding">Shielding ZEC</string>
+    <string name="Zcash_ShieldZec">Shielding ZEC</string>
+    <string name="Zcash_ConfirmShielding">Подтвердить shielding</string>
+    <string name="Zcash_ToShieldedAddress">На ваш shielded адрес</string>
+    <string name="Zcash_ShieldingProgress">Shielding ZEC (%1$d/%2$d)</string>
 </resources>

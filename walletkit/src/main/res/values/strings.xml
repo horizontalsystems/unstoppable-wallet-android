@@ -2341,4 +2341,11 @@
     <string name="NearAccount_ContractWarning">A smart contract is deployed on this account. Depending on its code, it can move the account\'s funds. Continue only if you know what it does.</string>
     <string name="NearAccount_AccessLost">This recovery phrase no longer has access to this account. It may have been removed in another wallet.</string>
     <string name="NearSend_NotFullAccessKey">This recovery phrase has only limited access to this account and can\'t send funds.</string>
+    <string name="Zcash_ShieldToSend">Shield ZEC to Send</string>
+    <string name="Zcash_ShieldToSwap">Shield ZEC to Swap</string>
+    <string name="Zcash_Shielding">Shielding ZEC</string>
+    <string name="Zcash_ShieldZec">Shield ZEC</string>
+    <string name="Zcash_ConfirmShielding">Confirm Shielding</string>
+    <string name="Zcash_ToShieldedAddress">To your shielded address</string>
+    <string name="Zcash_ShieldingProgress">Shielding ZEC (%1$d/%2$d)</string>
 </resources>

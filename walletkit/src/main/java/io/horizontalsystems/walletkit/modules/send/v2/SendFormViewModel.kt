@@ -20,6 +20,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.NetworkAvailabilityService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapError
 import io.horizontalsystems.walletkit.modules.multiswap.TokenBalanceService
+import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
+import io.horizontalsystems.walletkit.core.chain.SpendPurpose
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +36,8 @@ enum class SendInputType { Amount, Address, Extra }
 sealed class SendStep {
     data class InputRequired(val inputType: SendInputType) : SendStep()
     data class Error(val error: Throwable) : SendStep()
+    /** The amount is covered only after a step such as shielding, started from the form. */
+    data class ActionRequired(val action: ISwapProviderAction) : SendStep()
     data object Proceed : SendStep()
 }
 
@@ -271,6 +275,11 @@ class SendFormViewModel(
                 return SendStep.InputRequired(SendInputType.Extra)
             }
         }
+        // Asked for last, so the step it starts is only offered for a complete form.
+        // Outputs narrowed by the chain settings are checked on their own above.
+        if (chainBalance == null) {
+            balanceState.preparationAction?.let { return SendStep.ActionRequired(it) }
+        }
         return SendStep.Proceed
     }
 
@@ -323,6 +332,11 @@ class SendFormViewModel(
         emitState()
     }
 
+    /** The step offered by [SendStep.ActionRequired] is done; its funds may have moved. */
+    fun onActionCompleted() {
+        balanceService.refresh()
+    }
+
     override fun onCleared() {
         fiatService.clear()
     }
@@ -342,7 +356,7 @@ class SendFormViewModel(
                 App.currencyManager,
                 App.adapterManager,
                 FiatService(App.marketKit),
-                TokenBalanceService(App.adapterManager),
+                TokenBalanceService(App.adapterManager, SpendPurpose.Send),
                 NetworkAvailabilityService(App.connectivityManager),
                 purpose,
             ) as T

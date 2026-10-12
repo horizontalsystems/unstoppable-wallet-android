@@ -1988,4 +1988,11 @@
     <string name="NearAccount_ContractWarning">Un smart contract est déployé sur ce compte. Selon son code, il peut déplacer les fonds du compte. Ne continuez que si vous savez ce qu\'il fait.</string>
     <string name="NearAccount_AccessLost">Cette phrase de récupération n\'a plus accès à ce compte. Il a peut-être été retiré dans un autre wallet.</string>
     <string name="NearSend_NotFullAccessKey">Cette phrase de récupération n\'a qu\'un accès limité à ce compte et ne peut pas envoyer de fonds.</string>
+    <string name="Zcash_ShieldToSend">Protéger des ZEC pour envoyer</string>
+    <string name="Zcash_ShieldToSwap">Protéger des ZEC pour échanger</string>
+    <string name="Zcash_Shielding">Protection des ZEC</string>
+    <string name="Zcash_ShieldZec">Protéger des ZEC</string>
+    <string name="Zcash_ConfirmShielding">Confirmer la protection</string>
+    <string name="Zcash_ToShieldedAddress">Vers votre adresse protégée</string>
+    <string name="Zcash_ShieldingProgress">Protection des ZEC (%1$d/%2$d)</string>
 </resources>

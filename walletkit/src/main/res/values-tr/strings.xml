@@ -1987,4 +1987,11 @@
     <string name="NearAccount_ContractWarning">Bu hesapta bir akıllı sözleşme dağıtılmış. Koduna bağlı olarak hesabın fonlarını taşıyabilir. Yalnızca ne yaptığını biliyorsanız devam edin.</string>
     <string name="NearAccount_AccessLost">Bu kurtarma ifadesinin artık bu hesaba erişimi yok. Erişim başka bir cüzdanda kaldırılmış olabilir.</string>
     <string name="NearSend_NotFullAccessKey">Bu kurtarma ifadesinin bu hesaba yalnızca sınırlı erişimi var ve fon gönderemez.</string>
+    <string name="Zcash_ShieldToSend">Göndermek için ZEC\'i shield et</string>
+    <string name="Zcash_ShieldToSwap">Takas için ZEC\'i shield et</string>
+    <string name="Zcash_Shielding">ZEC shield ediliyor</string>
+    <string name="Zcash_ShieldZec">ZEC\'i shield et</string>
+    <string name="Zcash_ConfirmShielding">Shield işlemini onaylayın</string>
+    <string name="Zcash_ToShieldedAddress">Shielded adresinize</string>
+    <string name="Zcash_ShieldingProgress">ZEC shield ediliyor (%1$d/%2$d)</string>
 </resources>
