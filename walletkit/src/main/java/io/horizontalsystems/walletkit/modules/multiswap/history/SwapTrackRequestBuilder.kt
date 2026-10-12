@@ -11,7 +11,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 
 object SwapTrackRequestBuilder {
 
-    // The /v2 track endpoint a record is tracked through.
+    // The track endpoint a record is tracked through.
     //   Recorded  — our USwap-mediated swaps; tracked by the record uuid alone.
     //   Evm       — native single-tx EVM swaps (1inch/Uniswap/Pancake); stateless reader.
     //   Thorchain — native THORChain/Mayachain swaps; stateless reader.
@@ -54,15 +54,11 @@ object SwapTrackRequestBuilder {
 
             // Our recorded swaps (every u_ USwap provider — P2P, NEAR, Barter, Circle).
             // Tracked by the record uuid alone; the server resolves the provider + all
-            // details from it. inboundTxHash is required for DEX swaps and harmless for
-            // P2P/NEAR (the server already holds their provider id and ignores it there).
+            // details from it, and rejects any other field. The inbound tx hash reaches
+            // the server through /v3/signed from the send path, never from here.
             record.providerId.startsWith("u_") -> TrackCall(
                 Endpoint.Recorded,
-                UnstoppableAPI.Request.Track(
-                    uuid = record.providerSwapId,
-                    inboundTxHash = record.transactionHash,
-                    fromAddress = fromAddress,
-                )
+                UnstoppableAPI.Request.Track(uuid = record.providerSwapId)
             )
 
             // Native single-tx EVM swaps — stateless on-chain reader.

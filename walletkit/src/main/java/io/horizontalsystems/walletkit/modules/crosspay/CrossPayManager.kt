@@ -149,6 +149,16 @@ class CrossPayManager {
     }
 
     private fun mapCommitError(error: Throwable): CrossPayError {
+        // A refused commit: the provider refusal it may carry (same fields as a /v3/rate
+        // providerError) first, then the HTTP status.
+        if (error is UnstoppableAPI.CommitException) {
+            error.providerError?.let { providerError ->
+                reason(listOf(providerError))?.let { return it }
+            }
+
+            return if (error.httpStatus == 503) CrossPayError.ProviderSuspended else CrossPayError.CommitFailed(error)
+        }
+
         if (error is HttpException) {
             if (error.code() == 503) return CrossPayError.ProviderSuspended
 

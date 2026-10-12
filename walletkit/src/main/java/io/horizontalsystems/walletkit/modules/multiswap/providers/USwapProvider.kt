@@ -1,7 +1,9 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import android.util.Base64
+import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.derivation
@@ -25,7 +27,10 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.core.hexStringToByteArray
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import org.json.JSONObject
+import retrofit2.HttpException
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -363,7 +368,7 @@ class USwapProvider(
         )
     }
 
-    // /v2/rate — read-only price/route comparison narrowed to this provider. Picks the route
+    // /v3/rate — read-only price/route comparison narrowed to this provider. Picks the route
     // with the best expectedBuyAmount. On an Exolix ZEC pair it additionally fans out a
     // shielded (ZEC.ZECSHIELDED) variant and keeps the better-priced one; the winning
     // sell/buy asset travels back on the route so commitSwap can replay the exact variant.
@@ -421,8 +426,8 @@ class USwapProvider(
         return bestRoute
     }
 
-    // /v2/swap — commits the order with this single provider and returns the executable
-    // route (execution + uuid). `sellAsset`/`buyAsset` replay the variant the rate quote
+    // Commits the order with this single provider (preview followed by commit) and returns the
+    // executable route (execution + uuid). `sellAsset`/`buyAsset` replay the variant the rate quote
     // chose (Exolix ZEC). A committed route with no uuid can't be tracked, so reject it
     // before the user sends funds rather than create an untrackable swap.
     private suspend fun commitSwap(
@@ -441,7 +446,7 @@ class USwapProvider(
         val assetOut = buyAsset ?: assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
         val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
-        val request = UnstoppableAPI.Request.Swap(
+        val request = UnstoppableAPI.Request.Preview(
             sellAsset = assetIn,
             buyAsset = assetOut,
             sellAmount = amountIn.toPlainString(),
@@ -473,7 +478,7 @@ class USwapProvider(
 
     fun supportsPrivateSend(token: Token) = supports(token, token)
 
-    // /v2/rate in exact-output mode: same asset on both sides, buyAmount = what the recipient
+    // /v3/rate in exact-output mode: same asset on both sides, buyAmount = what the recipient
     // must receive. Returns the whole response so the caller can read providerErrors when no
     // route comes back.
     suspend fun privateSendRate(
@@ -482,7 +487,7 @@ class USwapProvider(
         slippage: BigDecimal,
     ): UnstoppableAPI.Response.Rate = exactOutputRate(token, token, amountOut, slippage)
 
-    // /v2/rate in exact-output mode across assets (the CrossPay shape): buyAmount = what the
+    // /v3/rate in exact-output mode across assets (the CrossPay shape): buyAmount = what the
     // recipient must receive in tokenOut, sellAmount comes back as the answer. Returns the
     // whole response so the caller can read providerErrors when no route comes back.
     suspend fun exactOutputRate(
@@ -507,7 +512,7 @@ class USwapProvider(
         )
     }
 
-    // /v2/swap in exact-output mode. `sourceAddress` is deliberately never sent: it is optional
+    // Commits in exact-output mode. `sourceAddress` is deliberately never sent: it is optional
     // for transfer providers, and handing the provider the sender's address defeats the point
     // of a private send. The committed route's execution then carries the deposit address and
     // the exact amount to transfer.
@@ -520,7 +525,7 @@ class USwapProvider(
     ): UnstoppableAPI.Response.Route =
         exactOutputCommit(token, token, amountOut, destinationAddress, refundAddress, slippage)
 
-    // /v2/swap in exact-output mode across assets (the CrossPay shape). With
+    // Commits in exact-output mode across assets (the CrossPay shape). With
     // [includeSourceAddress] the swap screen's build-signal contract applies verbatim:
     // chains whose server-built tx the app consumes (EVM/Tron/TON/Solana by default) send
     // the sender's address and get a ready-to-sign tx back, the rest omit it and build the
@@ -546,7 +551,7 @@ class USwapProvider(
         }
 
         val route = unstoppableAPI.swap(
-            UnstoppableAPI.Request.Swap(
+            UnstoppableAPI.Request.Preview(
                 sellAsset = sellAsset,
                 buyAsset = buyAsset,
                 slippage = slippage,
@@ -956,35 +961,56 @@ interface UnstoppableAPI {
         @Query("provider") provider: String
     ): Response.Tokens
 
-    // /v2/rate — read-only, prices the swap across the requested providers. Returns
+    // /v3/rate — read-only, prices the swap across the requested providers. Returns
     // { routes: [...] } with economics only — no execution, no uuid.
     @POST("rate")
     suspend fun rate(
         @Body request: Request.Rate,
     ): Response.Rate
 
-    // /v2/swap — commits against ONE provider. Creates the order and returns the single
-    // executable route DIRECTLY (no { routes } wrapper), now carrying execution + uuid.
-    @POST("swap")
-    suspend fun swap(
-        @Body request: Request.Swap,
+    // /v3/preview — builds the committed route shape for ONE provider without creating anything,
+    // so it can be re-run on every refresh, fee edit or slippage change. Returns the route with a
+    // `previewToken` and no `uuid`. For transfer providers the route carries no `execution` yet
+    // (the deposit address only exists once the order does), only an optional `stubDepositAddress`.
+    @POST("preview")
+    suspend fun preview(
+        @Body request: Request.Preview,
     ): Response.Route
 
-    // /v2/track — our recorded swaps, tracked by the route's uuid alone (the server resolves
-    // the provider and every swap detail from the record).
+    // /v3/commit — the only call with side effects: creates the order for a previewed route and
+    // returns its tracking `uuid`, plus the `execution` (deposit address) for transfer providers.
+    // Idempotent on the token: resending it replays the first answer. A non-2xx carries a `status`
+    // discriminator (see [CommitException]).
+    @POST("commit")
+    suspend fun commit(
+        @Body request: Request.Commit,
+    ): Response.Commit
+
+    // /v3/signed — reports the inbound tx hash of a committed swap whose transfer the app built
+    // itself. The same hash again is a no-op; a different one replaces it while nothing is
+    // observed yet.
+    @POST("signed")
+    suspend fun signed(
+        @Body request: Request.Signed,
+    ): Response.Signed
+
+    // /v3/track — our recorded swaps, tracked by the route's uuid ALONE (the server resolves the
+    // provider and every swap detail from the record; any other field in the body is a 400).
+    // Before the deposit is observed the answer is the record's own state (`not_started` or
+    // `signed`) with empty legs.
     @POST("track")
     suspend fun track(
         @Body request: Request.Track,
     ): Response.Track
 
-    // /v2/track/evm — stateless on-chain reader for native EVM swaps (1inch/Uniswap/Pancake)
-    // that were not created through /v2/swap, so there is no record to look up by uuid.
+    // /v3/track/evm — stateless on-chain reader for native EVM swaps (1inch/Uniswap/Pancake)
+    // that were not created through /v3/commit, so there is no record to look up by uuid.
     @POST("track/evm")
     suspend fun trackEvm(
         @Body request: Request.Track,
     ): Response.Track
 
-    // /v2/track/thorchain — stateless on-chain reader for native THORChain/Mayachain swaps.
+    // /v3/track/thorchain — stateless on-chain reader for native THORChain/Mayachain swaps.
     @POST("track/thorchain")
     suspend fun trackThorchain(
         @Body request: Request.Track,
@@ -996,7 +1022,7 @@ interface UnstoppableAPI {
     ): Response.CheckAddresses
 
     object Request {
-        // /v2/rate request — compare routes; narrow the fan-out to a single provider.
+        // /v3/rate request — compare routes; narrow the fan-out to a single provider.
         // Exactly one of sellAmount / buyAmount must be set — neither or both is a 400.
         // buyAmount asks the route to price backwards from an exact output.
         data class Rate(
@@ -1009,11 +1035,11 @@ interface UnstoppableAPI {
             val buyAmount: String? = null,
         )
 
-        // /v2/swap request — commit with the single provider. `sourceAddress` is the build
-        // signal: supply it and the server returns a ready-to-sign tx; omit it and we build
-        // the tx ourselves (UTXO/Zcash/Monero/Zano/Stellar). Same one-of contract for
-        // sellAmount / buyAmount as on Rate.
-        data class Swap(
+        // /v3/preview request — the route to show on the confirmation screen, for the single
+        // provider. `sourceAddress` is the build signal: supply it and the server returns a
+        // ready-to-sign tx; omit it and we build the tx ourselves (UTXO/Zcash/Monero/Zano/Stellar).
+        // Same one-of contract for sellAmount / buyAmount as on Rate.
+        data class Preview(
             val sellAsset: String,
             val buyAsset: String,
             val sellAmount: String? = null,
@@ -1026,12 +1052,24 @@ interface UnstoppableAPI {
             val buyAmount: String? = null,
         )
 
-        data class Track(
-            // Recorded swaps (/v2/track): the route's uuid resolves provider + all details.
-            val uuid: String? = null,
-            // Broadcast tx hash — required for DEX swaps, harmless for P2P/NEAR.
+        // /v3/commit request. `inboundTxHash` only when the preview's transaction was signed
+        // before committing; otherwise the hash is reported through /v3/signed.
+        data class Commit(
+            val previewToken: String,
             val inboundTxHash: String? = null,
-            // Stateless readers (/v2/track/evm, /v2/track/thorchain) carry full context.
+        )
+
+        data class Signed(
+            val uuid: String,
+            val inboundTxHash: String,
+        )
+
+        data class Track(
+            // Recorded swaps (/v3/track): the route's uuid resolves provider + all details, and
+            // must be the only field sent.
+            val uuid: String? = null,
+            // Stateless readers (/v3/track/evm, /v3/track/thorchain) carry full context.
+            val inboundTxHash: String? = null,
             val provider: String? = null,
             val hash: String? = null,
             val chainId: String? = null,
@@ -1042,7 +1080,8 @@ interface UnstoppableAPI {
             val toAddress: String? = null,
             val toAmount: String? = null,
             val depositAddress: String? = null,
-            // Debug-only: forces the server to return an action_required swap. Null in release builds.
+            // Debug-only: forces the stateless readers to return an action_required swap. Null in
+            // release builds, and never sent to /v3/track, whose body is the uuid alone.
             val testActionRequired: Boolean? = null,
         )
     }
@@ -1115,8 +1154,8 @@ interface UnstoppableAPI {
             val ticker: String? = null,
         )
 
-        // /v2/rate response — a list of routes to compare. Each route carries economics
-        // only (no execution, no uuid — those appear after committing with /v2/swap).
+        // /v3/rate response — a list of routes to compare. Each route carries economics
+        // only (no execution, no uuid — those appear after previewing and committing).
         // A provider that declined to route lands in providerErrors instead of routes.
         data class Rate(
             // Absent entirely (not just empty) when every provider refuses — the response
@@ -1126,10 +1165,10 @@ interface UnstoppableAPI {
             val providerErrors: List<ProviderError>? = null,
         )
 
-        // A per-provider refusal. A failed /v2/rate answers 200 with { routes, providerErrors };
-        // a failed /v2/swap answers a non-2xx with this same field set as the body itself
-        // ({ error, provider, errorCode?, minimumAmount?, maximumAmount? }). Tracking /
-        // diagnostics only — never shown in the UI verbatim.
+        // A per-provider refusal. A failed /v3/rate answers 200 with { routes, providerErrors };
+        // a failed /v3/preview, and a `provider_error` /v3/commit, answer a non-2xx with this same
+        // field set as the body itself ({ error, provider, errorCode?, minimumAmount?,
+        // maximumAmount? }). Tracking / diagnostics only — never shown in the UI verbatim.
         data class ProviderError(
             val provider: String? = null,
             val providerId: String? = null,
@@ -1148,25 +1187,27 @@ interface UnstoppableAPI {
                 get() = message ?: error
         }
 
-        // A single route. From /rate it is economics-only; from /swap it additionally
-        // carries an `execution` block and a top-level `uuid` tracking handle.
+        // A single route. From /rate it is economics-only; from /preview it additionally carries
+        // a `previewToken` and, except for transfer providers, the `execution` block; the `uuid`
+        // tracking handle arrives from /commit.
         data class Route(
             val sellAsset: String?,
             val buyAsset: String?,
             val expectedBuyAmount: BigDecimal?,
-            // The ENFORCED floor the route can deliver (v2 sends an explicit `null` when the
-            // amount is only an estimate — floating-rate P2P, re-priced at deposit). null ⇒ no
-            // guarantee: the confirm page must not render a "Guaranteed" row.
+            // The ENFORCED floor the route can deliver (an explicit `null` when the amount is only
+            // an estimate — floating-rate P2P, re-priced at deposit). null ⇒ no guarantee: the
+            // confirm page must not render a "Guaranteed" row.
             val minBuyAmount: BigDecimal?,
             val estimatedTime: EstimatedTime?,
             // EVM ERC20 spender to approve before swapping (1inch/Barter/Circle). On a rate
-            // route it is top-level; on a committed route it rides execution.approval.spender.
+            // route it is top-level; on a previewed route it rides execution.approval.spender.
             val approvalSpender: String?,
-            // Present only on a committed (/v2/swap) route — tells you how to send funds.
+            // How to send funds. Present on a preview for signed_transaction / thorchain_deposit
+            // providers; for transfer providers it arrives only with the commit.
             val execution: Execution?,
-            // v2 tracking handle (swap_records.uuid), top-level on the committed response.
+            // Tracking handle (swap_records.uuid). Absent on a preview, filled in by [merging].
             val uuid: String?,
-            // The provider(s) that produced this route. On a /v2/rate fan-out each route
+            // The provider(s) that produced this route. On a /v3/rate fan-out each route
             // carries exactly one — how a multi-provider request (StellarSwapProvider's
             // waterfall) knows which provider to commit with.
             val providers: List<String>? = null,
@@ -1174,6 +1215,14 @@ interface UnstoppableAPI {
             // slippage buffer over meta.near.minSellAmount.
             val sellAmount: BigDecimal? = null,
             val meta: Meta? = null,
+            // Opaque handle of a previewed route, passed to /v3/commit. Valid for about ten
+            // minutes, less when `expiresAt` comes first. Null on a rate route and once consumed.
+            val previewToken: String? = null,
+            // Transfer providers only, on a preview without `execution`: a ready-to-receive account
+            // on the sell chain to build the fee estimate against. Never a destination to send to.
+            val stubDepositAddress: String? = null,
+            // Millisecond epoch after which the route (and its preview token) is no longer honoured.
+            val expiresAt: Long? = null,
         ) {
             // should be getter, otherwise it will be null when restored from json
             val expectedBuyAmountOrZero: BigDecimal
@@ -1185,6 +1234,21 @@ interface UnstoppableAPI {
             // The ERC20 spender used to compute allowance, wherever it lives on the route.
             val approvalSpenderOrExecution: String?
                 get() = approvalSpender ?: execution?.approvalSpender
+
+            // The previewed route completed by its commit: the order's uuid, and for transfer
+            // providers the execution (deposit address) and the committed amounts, which may differ
+            // from the preview. The token and the stub are dropped: the token is consumed and the
+            // stub must never be mistaken for the deposit address once the execution carries it.
+            fun merging(commit: Commit): Route = copy(
+                expectedBuyAmount = commit.expectedBuyAmount ?: expectedBuyAmount,
+                minBuyAmount = commit.minBuyAmount ?: minBuyAmount,
+                execution = commit.execution ?: execution,
+                uuid = commit.uuid,
+                sellAmount = commit.sellAmount ?: sellAmount,
+                previewToken = null,
+                stubDepositAddress = null,
+                expiresAt = commit.expiresAt ?: expiresAt,
+            )
 
             data class EstimatedTime(
                 val total: Long
@@ -1205,7 +1269,29 @@ interface UnstoppableAPI {
                 get() = meta?.near?.minSellAmount
         }
 
-        // /v2 `execution` discriminated union — switch on `method`. Modeled as one flat
+        // /v3/commit 200 body. Transfer providers: the committed order is a fresh quote, so the
+        // amounts may differ from the preview, and `execution` carries the deposit address that
+        // did not exist at preview. Signed / thorchain routes: `execution` is absent — the
+        // preview's transaction is the one to sign.
+        data class Commit(
+            val status: String,
+            val uuid: String?,
+            val sellAmount: BigDecimal? = null,
+            val expectedBuyAmount: BigDecimal? = null,
+            val minBuyAmount: BigDecimal? = null,
+            val expiresAt: Long? = null,
+            // true when this token was committed before (a retry replayed the first answer)
+            val replayed: Boolean = false,
+            val execution: Execution? = null,
+        )
+
+        data class Signed(
+            val uuid: String,
+            val status: String,
+            val hash: String? = null,
+        )
+
+        // `execution` discriminated union — switch on `method`. Modeled as one flat
         // class (Gson-friendly) with accessors that read only the fields the method uses.
         data class Execution(
             val method: String,        // signed_transaction | transfer | thorchain_deposit
@@ -1339,7 +1425,7 @@ interface UnstoppableAPI {
         }
 
         data class Track(
-            val status: String, // not_started, pending, swapping, completed, refunded, unknown, failed, action_required
+            val status: String, // not_started, signed, pending, swapping, completed, refunded, unknown, failed, expired, action_required
             val type: String?,
             val hash: String?,
             val chainId: String?,
@@ -1349,6 +1435,7 @@ interface UnstoppableAPI {
             val toAsset: String?,
             val toAmount: String?,
             val toAddress: String?,
+            // Empty before the deposit is observed.
             val legs: List<Leg>?,
             val meta: Meta? = null,
         ) {
@@ -1371,10 +1458,104 @@ interface UnstoppableAPI {
             )
         }
     }
+
+    /**
+     * A failed /v3/commit. [status] is the server's discriminator when the body carried one:
+     * `in_progress` (the same token is being committed right now), `refresh_required` (token
+     * expired or invalid, provider suspended), `rate_changed` (the order drifted against the user
+     * beyond the request's slippage; the record is failed) or `provider_error` (the provider
+     * refused; [providerError] carries the same fields a /v3/rate providerError does). Null for a
+     * transport failure, a 2xx that was not `ok`, or an unrecognisable body.
+     */
+    class CommitException(
+        val httpStatus: Int?,
+        val status: String?,
+        val reason: String?,
+        val providerError: Response.ProviderError?,
+        cause: Throwable? = null,
+    ) : Exception(reason ?: status ?: cause?.message, cause) {
+        companion object {
+            private val gson = Gson()
+
+            /**
+             * Turns whatever [UnstoppableAPI.commit] threw into a [CommitException]: the non-2xx
+             * body is `{ status, reason | error | message, provider?, errorCode?, ... }`, and an
+             * unusable body falls back to the HTTP status alone. A [CommitException] passes through.
+             */
+            fun from(error: Throwable): CommitException {
+                if (error is CommitException) return error
+
+                if (error !is HttpException) {
+                    return CommitException(null, null, null, null, error)
+                }
+
+                val body = try {
+                    error.response()?.errorBody()?.string()
+                } catch (e: Throwable) {
+                    null
+                }
+
+                val json = try {
+                    body?.let { JsonParser.parseString(it) }?.takeIf { it.isJsonObject }?.asJsonObject
+                } catch (e: Throwable) {
+                    null
+                }
+
+                val status = json?.get("status")?.takeIf { it.isJsonPrimitive }?.asString
+                val reason = listOf("reason", "error", "message")
+                    .firstNotNullOfOrNull { key -> json?.get(key)?.takeIf { it.isJsonPrimitive }?.asString }
+
+                // `provider_error` carries the provider refusal as the body itself.
+                val providerError = if (status == "provider_error" && json != null) {
+                    try {
+                        gson.fromJson(json, Response.ProviderError::class.java)
+                    } catch (e: Throwable) {
+                        null
+                    }
+                } else {
+                    null
+                }
+
+                return CommitException(error.code(), status, reason, providerError, error)
+            }
+        }
+    }
+}
+
+/**
+ * Transitional: the v2 "quote and create the order in one call" semantics expressed as preview
+ * followed by commit, for callers not yet split at the Swap button. The returned route carries the
+ * order's uuid and, for transfer providers, the execution. Remove once every caller previews on the
+ * confirmation screen and commits on Swap.
+ */
+suspend fun UnstoppableAPI.swap(request: UnstoppableAPI.Request.Preview): UnstoppableAPI.Response.Route {
+    val preview = preview(request)
+
+    val previewToken = preview.previewToken
+    if (previewToken.isNullOrEmpty()) {
+        throw UnstoppableAPI.CommitException(null, null, "missing previewToken", null)
+    }
+
+    // commit has side effects: a quote cancelled after the preview must not create an order
+    currentCoroutineContext().ensureActive()
+
+    val commit = try {
+        commit(UnstoppableAPI.Request.Commit(previewToken))
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Throwable) {
+        throw UnstoppableAPI.CommitException.from(e)
+    }
+
+    if (commit.status != "ok" || commit.uuid.isNullOrEmpty()) {
+        throw UnstoppableAPI.CommitException(null, commit.status, null, null)
+    }
+
+    return preview.merging(commit)
 }
 
 // Chains where we consume the server-built tx from `execution` (so we send sourceAddress
-// on /v2/swap). Everything else builds its own transfer to the deposit address.
+// on /v3/preview). Everything else builds its own transfer to the deposit address.
 private val Token.needsServerBuiltTx: Boolean
     get() = blockchainType.isEvm || blockchainType in setOf(
         BlockchainType.Tron,

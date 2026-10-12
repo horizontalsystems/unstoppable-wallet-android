@@ -61,7 +61,11 @@ class SwapSyncService(
         try {
             val call = SwapTrackRequestBuilder.build(record)
             var request = call.request
-            if (BuildConfig.DEBUG && App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server) {
+            // Only the stateless readers take the debug flag; /v3/track accepts the uuid alone.
+            if (BuildConfig.DEBUG &&
+                App.localStorage.simulateFailSwap == SimulateFailSwapMode.Server &&
+                call.endpoint != SwapTrackRequestBuilder.Endpoint.Recorded
+            ) {
                 request = request.copy(testActionRequired = true)
             }
             val response = when (call.endpoint) {
@@ -144,7 +148,8 @@ class SwapSyncService(
     }
 
     private fun mapStatus(response: UnstoppableAPI.Response.Track): SwapStatus? = when (response.status) {
-        "not_started" -> SwapStatus.Depositing
+        // `signed`: the inbound tx hash is on the record, the deposit is not yet observed.
+        "not_started", "signed" -> SwapStatus.Depositing
         "pending", "swapping" -> {
             val activeLeg = response.legs?.firstOrNull { it.status != "completed" }
             when (activeLeg?.type) {

@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 /// Stellar-native swaps through uswap-server's Stellar providers, with the grant's
-/// StellarBroker-first waterfall: /v2/rate fans out to the requested set, the SB route is
+/// StellarBroker-first waterfall: /v3/rate fans out to the requested set, the SB route is
 /// preferred whenever present, the best-priced fallback (SOROSWAP / AQUARIUS / STELLAR_DEX)
 /// serves otherwise. One provider card in the UI, one route out.
 ///
@@ -32,10 +32,10 @@ import java.math.BigDecimal
 /// /quote/build, Aquarius swap_chained assembly, Horizon path payment); we sign + submit
 /// via StellarKit (SendTransactionData.Stellar.WithTransactionEnvelope). Tracking is
 /// server-recorded: the committed route's uuid rides providerSwapId, and the "u_" id
-/// prefix routes SwapTrackRequestBuilder to POST /v2/track { uuid, inboundTxHash }.
+/// prefix routes SwapTrackRequestBuilder to POST /v3/track { uuid }.
 class StellarSwapProvider : IMultiSwapProvider {
     // "u_" prefix is load-bearing: SwapTrackRequestBuilder tracks any u_* provider's record
-    // by uuid alone. The server id (STELLARBROKER) is what /v2/rate and /v2/swap consume.
+    // by uuid alone. The server id (STELLARBROKER) is what /v3/rate and /v3/preview consume.
     override val id = "u_$SERVER_ID"
     override val title = "StellarBroker"
     override val type = SwapProviderType.DEX
@@ -100,7 +100,7 @@ class StellarSwapProvider : IMultiSwapProvider {
         val provider = selectedProvider ?: throw IllegalStateException("No Stellar route selected")
 
         val route = unstoppableAPI.swap(
-            UnstoppableAPI.Request.Swap(
+            UnstoppableAPI.Request.Preview(
                 sellAsset = asset(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
                 buyAsset = asset(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
                 sellAmount = amountIn.toPlainString(),
@@ -112,7 +112,7 @@ class StellarSwapProvider : IMultiSwapProvider {
             )
         )
 
-        // A committed /v2/swap must carry the tracking handle — it is what /v2/track receives
+        // A committed route must carry the tracking handle — it is what /v3/track receives
         // as `uuid`, and the server resolves the record from it alone. Fail before any funds
         // move rather than create an untrackable swap.
         if (route.uuid.isNullOrEmpty()) {
@@ -173,7 +173,7 @@ class StellarSwapProvider : IMultiSwapProvider {
         }
     }
 
-    /// /v2/rate over the given provider set, applying the waterfall: STELLARBROKER when it
+    /// /v3/rate over the given provider set, applying the waterfall: STELLARBROKER when it
     /// quoted (the grant's primary), otherwise the best-priced fallback.
     private suspend fun bestRoute(
         tokenIn: Token,
@@ -257,7 +257,7 @@ class StellarSwapProvider : IMultiSwapProvider {
         private const val CHAIN_ID = "stellar"
 
         // StellarBroker participation switch for THIS app — the ONE place SB is turned on or
-        // off. false = SB is never requested from /v2/rate nor picked, and the waterfall runs
+        // off. false = SB is never requested from /v3/rate nor picked, and the waterfall runs
         // over the fallbacks only.
         //
         // Why false (2026-07-24 decision, mirrored from iOS): SB has no service-fee mechanism,
@@ -266,7 +266,7 @@ class StellarSwapProvider : IMultiSwapProvider {
         // client (see sendTransactionData's stellar_broker arm).
         private const val stellarBrokerEnabled = false
 
-        // The full waterfall set requested from /v2/rate.
+        // The full waterfall set requested from /v3/rate.
         private val allProviders = if (stellarBrokerEnabled) {
             listOf(SERVER_ID, "SOROSWAP", "AQUARIUS", "STELLAR_DEX")
         } else {
