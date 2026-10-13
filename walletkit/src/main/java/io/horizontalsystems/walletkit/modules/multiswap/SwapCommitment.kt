@@ -23,10 +23,19 @@ enum class SwapCommitFailure {
 }
 
 /**
+ * The committed deposit was built, but the send service refused it. [message] is the service's
+ * own caution, written for the user, so the screen can show it instead of a generic line.
+ */
+class DepositNotSendableException(message: String) : Exception(message)
+
+/**
  * The order could not be created, or the committed deposit could not be built. The screen shows
  * the reason briefly and loads a fresh quote; it must not present its generic error sheet for it.
+ * [detail] is a user-facing reason when there is one; otherwise [failure] picks the message.
  */
 class SwapCommitFailedException(
     val failure: SwapCommitFailure,
     cause: Throwable? = null,
-) : Exception(cause?.message ?: failure.name, cause)
+) : Exception(cause?.message ?: failure.name, cause) {
+    val detail: String? = (cause as? DepositNotSendableException)?.message?.takeIf { it.isNotBlank() }
+}

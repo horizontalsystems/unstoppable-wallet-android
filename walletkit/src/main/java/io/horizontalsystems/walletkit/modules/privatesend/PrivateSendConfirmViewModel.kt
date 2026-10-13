@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
+import io.horizontalsystems.walletkit.modules.multiswap.DepositNotSendableException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
@@ -380,8 +381,9 @@ class PrivateSendConfirmViewModel(
             service.setSendTransactionData(data)
             val state = service.awaitSettled()
             if (!state.sendable) {
+                // A caution's text can be blank while its title carries the reason.
                 val caution = state.cautions.firstOrNull { it.type == CautionViewItem.Type.Error }
-                throw IllegalStateException(caution?.text ?: caution?.title ?: "Deposit cannot be sent")
+                throw DepositNotSendableException(caution?.text?.ifBlank { null } ?: caution?.title ?: "Deposit cannot be sent")
             }
             return service
         } catch (e: Throwable) {

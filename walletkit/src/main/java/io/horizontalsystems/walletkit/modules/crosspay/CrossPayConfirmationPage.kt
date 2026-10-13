@@ -143,9 +143,9 @@ private fun CrossPayConfirmationScreen(
                             // of a deposit that already broadcast.
                             throw t
                         } catch (t: SwapCommitFailedException) {
-                            // The order was not created; a fresh preview is already loading, so
-                            // the reason is a passing notice rather than an error sheet.
-                            HudHelper.showErrorMessage(view, t.failure.messageRes)
+                            // No deposit was sent; a fresh preview is already loading, so the
+                            // reason is a passing notice rather than an error sheet.
+                            HudHelper.showErrorMessage(view, t.detail ?: context.getString(t.failure.messageRes))
                         } catch (t: Throwable) {
                             navigation.slideFromBottom(
                                 ErrorSheet(ErrorSheet.Input(errorText(context, t)))

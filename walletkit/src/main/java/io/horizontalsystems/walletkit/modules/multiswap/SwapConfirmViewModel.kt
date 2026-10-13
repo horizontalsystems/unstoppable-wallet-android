@@ -485,8 +485,9 @@ class SwapConfirmViewModel(
             service.setSendTransactionData(data)
             val state = service.awaitSettled()
             if (!state.sendable) {
+                // A caution's text can be blank while its title carries the reason.
                 val caution = state.cautions.firstOrNull { it.type == CautionViewItem.Type.Error }
-                throw IllegalStateException(caution?.text ?: caution?.title ?: "Deposit cannot be sent")
+                throw DepositNotSendableException(caution?.text?.ifBlank { null } ?: caution?.title ?: "Deposit cannot be sent")
             }
             return service
         } catch (e: Throwable) {
