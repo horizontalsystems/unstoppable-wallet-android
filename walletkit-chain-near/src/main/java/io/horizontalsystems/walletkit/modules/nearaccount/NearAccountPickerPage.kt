@@ -232,7 +232,7 @@ private fun AccountList(
     }
 }
 
-// Picking an account is allowed either way: the user may own the other keys or the contract.
+// Other keys and a contract only warn: the user may own them. Lost access blocks Continue instead.
 @Composable
 private fun SelectedAccountWarnings(item: NearAccountViewItem) {
     if (item.accessLost) {

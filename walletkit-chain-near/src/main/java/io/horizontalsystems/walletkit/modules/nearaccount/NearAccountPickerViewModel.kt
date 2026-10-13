@@ -87,6 +87,7 @@ class NearAccountPickerViewModel(
     }
 
     fun onContinue() {
+        if (!uiState.continueEnabled) return
         val accountId = selectedAccountId ?: return
         finish(settings(accountId))
     }
@@ -211,7 +212,8 @@ data class NearAccountPickerUiState(
     val publicKey: String?,
     val result: AccountPickerResult?,
 ) {
-    val continueEnabled: Boolean get() = items.any { it.selected }
+    // The phrase can't sign for an account it lost access to, so restoring it would leave a wallet that can't send
+    val continueEnabled: Boolean get() = selectedItem?.accessLost == false
     val selectedItem: NearAccountViewItem? get() = items.firstOrNull { it.selected }
 }
 
