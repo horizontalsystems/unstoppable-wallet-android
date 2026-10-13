@@ -38,6 +38,7 @@ class NearAccountPickerViewModel(
     private var selectedAccountId: String? = null
     private var searching = true
     private var searchFailed = false
+    private var checkingAccess = setOf<String>()
     private var result: AccountPickerResult? = null
 
     init {
@@ -55,7 +56,8 @@ class NearAccountPickerViewModel(
                     App.numberFormatter.formatCoinFull(BigDecimal(it, NEAR_DECIMALS), "NEAR", 8)
                 },
                 selected = account.accountId == selectedAccountId,
-                accessLost = account.accessLost == true,
+                accessLost = account.accessLost,
+                checkingAccess = account.accountId in checkingAccess,
                 otherFullAccessKeys = account.otherFullAccessKeys == true,
                 hasContract = account.hasContract == true,
             )
@@ -66,6 +68,20 @@ class NearAccountPickerViewModel(
 
     fun retry() = search()
 
+    fun onRetryAccessCheck(accountId: String) {
+        val account = accounts.find { it.accountId == accountId } ?: return
+        if (account.accessLost != null || accountId in checkingAccess) return
+        checkingAccess = checkingAccess + accountId
+        emitState()
+
+        viewModelScope.launch {
+            val loaded = loadAccount(accountId)
+            accounts = accounts.map { if (it.accountId == accountId) loaded else it }
+            checkingAccess = checkingAccess - accountId
+            emitState()
+        }
+    }
+
     fun onSelect(accountId: String) {
         selectedAccountId = accountId
         emitState()
@@ -74,9 +90,10 @@ class NearAccountPickerViewModel(
     /** An account the user entered by name; the name page has already checked the key's full access. */
     fun onAccountEntered(accountId: String) {
         if (accounts.none { it.accountId == accountId }) {
-            accounts = accounts + Account(accountId)
+            accounts = accounts + Account(accountId, accessLost = false)
             viewModelScope.launch {
-                val account = loadAccount(accountId)
+                val loaded = loadAccount(accountId)
+                val account = loaded.copy(accessLost = loaded.accessLost ?: false)
                 accounts = accounts.map { if (it.accountId == accountId) account else it }
                 emitState()
             }
@@ -180,6 +197,7 @@ class NearAccountPickerViewModel(
         /**
          * The account exists but the phrase's key is gone from it. Only the implicit account can
          * get here: the search lists named accounts only while the key has full access to them.
+         * Null when the check failed, which must not pass for access.
          */
         val accessLost: Boolean? = null,
         /** Whether a key other than the phrase's can also sign anything for the account. */
@@ -212,7 +230,8 @@ data class NearAccountPickerUiState(
     val publicKey: String?,
     val result: AccountPickerResult?,
 ) {
-    // The phrase can't sign for an account it lost access to, so restoring it would leave a wallet that can't send
+    // The phrase can't sign for an account it lost access to, so restoring it would leave a wallet that
+    // can't send. An unchecked account blocks too: a failed check can hide lost access.
     val continueEnabled: Boolean get() = selectedItem?.accessLost == false
     val selectedItem: NearAccountViewItem? get() = items.firstOrNull { it.selected }
 }
@@ -222,7 +241,9 @@ data class NearAccountViewItem(
     val implicit: Boolean,
     val balance: String?,
     val selected: Boolean,
-    val accessLost: Boolean,
+    /** Null when the check failed; see [NearAccountPickerUiState.continueEnabled]. */
+    val accessLost: Boolean?,
+    val checkingAccess: Boolean,
     val otherFullAccessKeys: Boolean,
     val hasContract: Boolean,
 )

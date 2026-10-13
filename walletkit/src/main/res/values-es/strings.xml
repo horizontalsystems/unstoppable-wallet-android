@@ -1996,4 +1996,5 @@
     <string name="Swap_EnableToken">Habilitar %s</string>
     <string name="NearSend_ReceiverIsTokenContract">Esta es la dirección del contrato del token, no una billetera. Los tokens enviados aquí no se pueden recuperar.</string>
     <string name="NearSend_ReceiverCheckFailed">No se pudo comprobar que esta cuenta existe. Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="NearAccount_AccessCheckFailed">No se pudo comprobar si esta frase de recuperación aún tiene acceso a esta cuenta. Toca para intentarlo de nuevo.</string>
 </resources>

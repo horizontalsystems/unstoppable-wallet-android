@@ -80,6 +80,7 @@ data class NearAccountPickerPage(val accountType: AccountType) : HSPage(screensh
             onRetry = viewModel::retry,
             onUseDefault = viewModel::onUseDefault,
             onContinue = viewModel::onContinue,
+            onRetryAccessCheck = viewModel::onRetryAccessCheck,
         )
     }
 }
@@ -93,6 +94,7 @@ private fun NearAccountPickerScreen(
     onRetry: () -> Unit,
     onUseDefault: () -> Unit,
     onContinue: () -> Unit,
+    onRetryAccessCheck: (String) -> Unit,
 ) {
     HSScaffold(
         title = stringResource(R.string.NearAccount_Title),
@@ -110,6 +112,7 @@ private fun NearAccountPickerScreen(
                 onSelect = onSelect,
                 onEnterName = onEnterName,
                 onContinue = onContinue,
+                onRetryAccessCheck = onRetryAccessCheck,
             )
         }
     }
@@ -182,6 +185,7 @@ private fun AccountList(
     onSelect: (String) -> Unit,
     onEnterName: () -> Unit,
     onContinue: () -> Unit,
+    onRetryAccessCheck: (String) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -207,7 +211,7 @@ private fun AccountList(
                     )
                 }
             }
-            uiState.selectedItem?.let { SelectedAccountWarnings(it) }
+            uiState.selectedItem?.let { SelectedAccountWarnings(it, onRetryAccessCheck) }
             VSpacer(16.dp)
             CellGroup(paddingValues = PaddingValues(horizontal = 16.dp)) {
                 CellPrimary(
@@ -232,10 +236,21 @@ private fun AccountList(
     }
 }
 
-// Other keys and a contract only warn: the user may own them. Lost access blocks Continue instead.
+// Other keys and a contract only warn: the user may own them. Lost or unchecked access blocks Continue instead.
 @Composable
-private fun SelectedAccountWarnings(item: NearAccountViewItem) {
-    if (item.accessLost) {
+private fun SelectedAccountWarnings(item: NearAccountViewItem, onRetryAccessCheck: (String) -> Unit) {
+    if (item.accessLost == null) {
+        if (!item.checkingAccess) {
+            VSpacer(16.dp)
+            AlertCard(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                format = AlertFormat.Structured,
+                type = AlertType.Caution,
+                text = stringResource(R.string.NearAccount_AccessCheckFailed),
+                onClick = { onRetryAccessCheck(item.accountId) },
+            )
+        }
+    } else if (item.accessLost) {
         VSpacer(16.dp)
         AlertCard(
             modifier = Modifier.padding(horizontal = 16.dp),

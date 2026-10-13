@@ -2001,4 +2001,5 @@
     <string name="Swap_EnableToken">%s aktivieren</string>
     <string name="NearSend_ReceiverIsTokenContract">Das ist die Vertragsadresse des Tokens, keine Wallet. Hierher gesendete Token können nicht wiederhergestellt werden.</string>
     <string name="NearSend_ReceiverCheckFailed">Es konnte nicht geprüft werden, ob dieses Konto existiert. Prüfe deine Verbindung und versuche es erneut.</string>
+    <string name="NearAccount_AccessCheckFailed">Es konnte nicht geprüft werden, ob diese Wiederherstellungsphrase noch Zugriff auf dieses Konto hat. Tippe, um es erneut zu versuchen.</string>
 </resources>

@@ -2351,4 +2351,5 @@
     <string name="Swap_EnableToken">Enable %s</string>
     <string name="NearSend_ReceiverIsTokenContract">This is the token\'s contract address, not a wallet. Tokens sent here can\'t be recovered.</string>
     <string name="NearSend_ReceiverCheckFailed">Couldn\'t check that this account exists. Check your connection and try again.</string>
+    <string name="NearAccount_AccessCheckFailed">Couldn\'t check whether this recovery phrase still has access to this account. Tap to try again.</string>
 </resources>

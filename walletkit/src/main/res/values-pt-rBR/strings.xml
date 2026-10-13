@@ -2001,4 +2001,5 @@
     <string name="Swap_EnableToken">Habilitar %s</string>
     <string name="NearSend_ReceiverIsTokenContract">Este é o endereço do contrato do token, não uma carteira. Tokens enviados para cá não podem ser recuperados.</string>
     <string name="NearSend_ReceiverCheckFailed">Não foi possível verificar se esta conta existe. Verifique sua conexão e tente novamente.</string>
+    <string name="NearAccount_AccessCheckFailed">Não foi possível verificar se esta frase de recuperação ainda tem acesso a esta conta. Toque para tentar novamente.</string>
 </resources>

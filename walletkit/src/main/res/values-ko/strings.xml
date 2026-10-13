@@ -1992,4 +1992,5 @@
     <string name="Swap_EnableToken">%s 활성화</string>
     <string name="NearSend_ReceiverIsTokenContract">이 주소는 지갑이 아니라 토큰 컨트랙트 주소입니다. 여기로 보낸 토큰은 복구할 수 없습니다.</string>
     <string name="NearSend_ReceiverCheckFailed">이 계정이 존재하는지 확인할 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
+    <string name="NearAccount_AccessCheckFailed">이 복구 문구가 아직 이 계정에 액세스할 수 있는지 확인하지 못했습니다. 다시 시도하려면 탭하세요.</string>
 </resources>
