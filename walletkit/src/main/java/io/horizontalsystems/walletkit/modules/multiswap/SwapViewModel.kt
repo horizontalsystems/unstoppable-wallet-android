@@ -36,6 +36,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -103,6 +104,7 @@ class SwapViewModel(
     }
 
     val amlCheckEventFlow = MutableSharedFlow<AmlCheckEvent>(extraBufferCapacity = 1)
+    val enableTokenInErrorFlow = MutableSharedFlow<Throwable>(extraBufferCapacity = 1)
 
     init {
         quoteService.start()
@@ -175,7 +177,14 @@ class SwapViewModel(
 
         viewModelScope.launch {
             restoreSettingsService.approveSettingsFlow.collectSafely {
-                saveWallet(it.token, it.settings)
+                // No caller is waiting here to report the failure, unlike enableTokenIn()
+                try {
+                    saveWallet(it.token, it.settings)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    enableTokenInErrorFlow.emit(e)
+                }
             }
         }
 

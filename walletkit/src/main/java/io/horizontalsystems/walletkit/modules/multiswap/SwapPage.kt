@@ -171,6 +171,13 @@ fun SwapScreen(
         restoreSettingsViewModel.onAccountPickerResult(it)
     }
 
+    val view = LocalView.current
+    LaunchedEffect(Unit) {
+        viewModel.enableTokenInErrorFlow.collect { e ->
+            HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
+        }
+    }
+
     restoreSettingsViewModel.openAccountPicker?.let { page ->
         restoreSettingsViewModel.accountPickerOpened()
         navigation.slideFromRightForResult(page, accountPickerKey)
