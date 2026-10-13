@@ -42,6 +42,12 @@ class PoisoningScorerTest {
     }
 
     @Test
+    fun `NEAR named accounts are not matched on their shared top-level suffix`() {
+        assertFalse(scorer.isMimicAddress("abcdefgh.near", "abc-other.near"))
+        assertTrue(scorer.isMimicAddress("binance-dep0sit.near", "binance-deposit.near"))
+    }
+
+    @Test
     fun `requires both prefix and suffix to match`() {
         val userRecipient = "0xABC1234567890abcdef"
 

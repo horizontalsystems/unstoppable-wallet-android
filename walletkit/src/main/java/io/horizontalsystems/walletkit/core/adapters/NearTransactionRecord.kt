@@ -70,11 +70,16 @@ class NearTransactionRecord(
     }
 
     companion object {
+        /**
+         * Events to check in a transaction the account did not sign. Any contract can log a token
+         * transfer out of this account, so an outgoing one there is a fake meant to plant a
+         * look-alike receiver in the history.
+         */
         fun eventsForPhishingCheck(type: Type): List<TransferEvent> =
             when (type) {
                 is Type.Receive -> listOf(TransferEvent(type.from, type.value))
-                is Type.ContractCall -> type.incoming
-                is Type.Send -> listOf()
+                is Type.ContractCall -> type.incoming + type.outgoing
+                is Type.Send -> listOf(TransferEvent(type.to, type.value))
             }
     }
 }

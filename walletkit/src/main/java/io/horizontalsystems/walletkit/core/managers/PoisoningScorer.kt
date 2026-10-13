@@ -375,6 +375,8 @@ class PoisoningScorer {
         return when {
             address.startsWith("0x", ignoreCase = true) -> address.substring(2)
             address.startsWith("T") && address.length == 34 -> address.substring(1) // Tron
+            // NEAR named accounts share their top-level suffix, which would match every pair
+            address.contains('.') -> address.substringBeforeLast('.')
             else -> address
         }
     }
