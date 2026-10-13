@@ -185,10 +185,17 @@ class SendTransactionServiceBtc(
 
         val loading = !sendable && !hasError
 
+        // The address error counts as an error caution too: a state that is neither sendable nor
+        // carrying one reads as still loading, and a deposit to a rejected address would then
+        // wait out the settle timeout instead of failing at once.
+        val addressCaution = addressState.addressError?.let {
+            HSCaution(TranslatableString.PlainString(it.message ?: it.javaClass.simpleName))
+        }
+
         return SendTransactionServiceState(
             uuid = uuid,
             networkFee = networkFee,
-            cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
+            cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution, addressCaution).map(HSCaution::toCautionViewItem),
             sendable = sendable,
             loading = loading,
             fields = fields,

@@ -13,7 +13,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import java.math.BigDecimal
 import java.util.UUID
 
@@ -57,13 +57,16 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
 
     /**
      * Suspends until the state describes the current transaction data: not loading, and either
-     * sendable or carrying an error caution. Gives up after [timeoutMs].
+     * sendable or carrying an error caution. A state that never settles within [timeoutMs] is a
+     * failed estimate and throws [IllegalStateException], never a cancellation: callers treat
+     * cancellation as the user leaving and skip the recovery a failed deposit needs.
      */
-    suspend fun awaitSettled(timeoutMs: Long = 60_000): SendTransactionServiceState = withTimeout(timeoutMs) {
-        stateFlow.first { state ->
-            !state.loading && (state.sendable || state.cautions.any { it.type == CautionViewItem.Type.Error })
-        }
-    }
+    suspend fun awaitSettled(timeoutMs: Long = 60_000): SendTransactionServiceState =
+        withTimeoutOrNull(timeoutMs) {
+            stateFlow.first { state ->
+                !state.loading && (state.sendable || state.cautions.any { it.type == CautionViewItem.Type.Error })
+            }
+        } ?: throw IllegalStateException("The transaction could not be estimated in time")
     @Composable
     open fun GetSettingsContent(navigation: HSNavigation) = Unit
     @Composable
