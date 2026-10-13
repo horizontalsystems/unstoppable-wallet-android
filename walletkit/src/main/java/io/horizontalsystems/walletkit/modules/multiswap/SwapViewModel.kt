@@ -11,8 +11,10 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.chain.SpendPurpose
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.collectSafely
+import io.horizontalsystems.walletkit.core.restoreSettingTypes
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
+import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -23,6 +25,7 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
@@ -58,6 +61,7 @@ class SwapViewModel(
     private val walletManager: WalletManager,
     private val adapterManager: IAdapterManager,
     private val accountManager: IAccountManager,
+    val restoreSettingsService: RestoreSettingsService,
     tokenIn: Token?,
     tokenOut: Token? = null,
     private val allowancePolicy: ISwapAllowancePolicy? = null,
@@ -166,6 +170,12 @@ class SwapViewModel(
                 emitState()
                 // Adapters are recreated on account or network changes; follow the new one.
                 observeBalanceUpdates(quoteState.tokenIn)
+            }
+        }
+
+        viewModelScope.launch {
+            restoreSettingsService.approveSettingsFlow.collectSafely {
+                saveWallet(it.token, it.settings)
             }
         }
 
@@ -476,15 +486,32 @@ class SwapViewModel(
         stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
     }
 
-    // No restore settings are saved here: with none, a restored account's adapter scans its
-    // full history, so existing funds of the sell token are found.
     suspend fun enableTokenIn() {
         val tokenIn = quoteState.tokenIn ?: return
         val account = accountManager.activeAccount ?: return
 
+        // A chain's restore settings are chosen with its first wallet; the chain's other
+        // tokens run on the same adapter, so they must not ask again or change them.
+        val chainEnabled = walletManager.activeWallets.any { it.token.blockchainType == tokenIn.blockchainType }
+
+        if (tokenIn.blockchainType.restoreSettingTypes.isNotEmpty() && !chainEnabled) {
+            // The approved settings come back through approveSettingsFlow
+            restoreSettingsService.approveSettings(tokenIn, account)
+        } else {
+            saveWallet(tokenIn, RestoreSettings())
+        }
+    }
+
+    private suspend fun saveWallet(token: Token, restoreSettings: RestoreSettings) {
+        val account = accountManager.activeAccount ?: return
+
         withContext(Dispatchers.IO) {
-            if (walletManager.activeWallets.none { it.token == tokenIn }) {
-                walletManager.save(listOf(Wallet(tokenIn, account)))
+            if (restoreSettings.isNotEmpty()) {
+                // reload = false: saving the wallet below creates the adapter with these settings
+                restoreSettingsService.save(restoreSettings, account, token.blockchainType, reload = false)
+            }
+            if (walletManager.activeWallets.none { it.token == token }) {
+                walletManager.save(listOf(Wallet(token, account)))
             }
         }
         emitState()
@@ -581,6 +608,7 @@ class SwapViewModel(
                 App.walletManager,
                 App.adapterManager,
                 App.accountManager,
+                RestoreSettingsService(App.restoreSettingsManager),
                 tokenIn,
                 tokenOut,
                 allowancePolicy,

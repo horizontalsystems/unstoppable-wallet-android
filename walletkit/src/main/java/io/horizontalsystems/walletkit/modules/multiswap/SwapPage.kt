@@ -70,8 +70,12 @@ import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
+import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.nav3.observeResult
+import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
@@ -145,6 +149,32 @@ fun SwapScreen(
     val viewModel = viewModel<SwapViewModel>(
         factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
+    // Shares the swap view model's service, which saves the wallet once the settings are approved
+    val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel> {
+        RestoreSettingsViewModel(viewModel.restoreSettingsService, emptyList())
+    }
+
+    val birthdayHeightKey = observeResult<BirthdayHeightConfigPage.Result> {
+        if (it.config != null) {
+            restoreSettingsViewModel.onEnter(it.config)
+        } else {
+            restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+        }
+    }
+
+    restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
+        restoreSettingsViewModel.birthdayHeightConfigOpened()
+        navigation.slideFromRightForResult(BirthdayHeightConfigPage(token.blockchainType), birthdayHeightKey)
+    }
+
+    val accountPickerKey = observeResult<AccountPickerResult> {
+        restoreSettingsViewModel.onAccountPickerResult(it)
+    }
+
+    restoreSettingsViewModel.openAccountPicker?.let { page ->
+        restoreSettingsViewModel.accountPickerOpened()
+        navigation.slideFromRightForResult(page, accountPickerKey)
+    }
 
     LifecycleResumeEffect(Unit) {
         viewModel.refreshDefaultTokens()
