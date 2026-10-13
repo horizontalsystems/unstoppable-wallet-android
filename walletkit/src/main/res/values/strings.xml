@@ -2349,4 +2349,6 @@
     <string name="Zcash_ToShieldedAddress">To your shielded address</string>
     <string name="Zcash_ShieldingProgress">Shielding ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">Enable %s</string>
+    <string name="NearSend_ReceiverIsTokenContract">This is the token\'s contract address, not a wallet. Tokens sent here can\'t be recovered.</string>
+    <string name="NearSend_ReceiverCheckFailed">Couldn\'t check that this account exists. Check your connection and try again.</string>
 </resources>

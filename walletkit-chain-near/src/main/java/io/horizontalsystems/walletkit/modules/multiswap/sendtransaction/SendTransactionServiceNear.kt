@@ -63,6 +63,10 @@ class SendTransactionServiceNear(
             throw e
         } catch (e: TransactionSender.SendError.StorageDepositTooHigh) {
             newCautions.add(storageDepositTooHigh())
+        } catch (e: TransactionSender.SendError.ReceiverIsTokenContract) {
+            newCautions.add(errorCaution(R.string.NearSend_ReceiverIsTokenContract))
+        } catch (e: TransactionSender.SendError.ReceiverNotFound) {
+            newCautions.add(errorCaution(R.string.SwapSettings_Error_InvalidAddress))
         } catch (e: Throwable) {
             // without an estimate the balance cannot be checked, so the send stays blocked
             newCautions.add(CautionViewItem.fromThrowable(e))
@@ -97,6 +101,12 @@ class SendTransactionServiceNear(
     private fun insufficientBalance() = CautionViewItem(
         title = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
         text = Translator.getString(R.string.Swap_ErrorInsufficientBalance),
+        type = CautionViewItem.Type.Error
+    )
+
+    private fun errorCaution(textRes: Int) = CautionViewItem(
+        title = Translator.getString(R.string.Error),
+        text = Translator.getString(textRes),
         type = CautionViewItem.Type.Error
     )
 
@@ -136,6 +146,10 @@ class SendTransactionServiceNear(
             throw LocalizedException(R.string.NearAccount_AccessLost)
         } catch (e: TransactionSender.SendError.NotFullAccessKey) {
             throw LocalizedException(R.string.NearSend_NotFullAccessKey)
+        } catch (e: TransactionSender.SendError.ReceiverIsTokenContract) {
+            throw LocalizedException(R.string.NearSend_ReceiverIsTokenContract)
+        } catch (e: TransactionSender.SendError.ReceiverNotFound) {
+            throw LocalizedException(R.string.SwapSettings_Error_InvalidAddress)
         } catch (e: TransactionSender.SendError) {
             throw e
         } catch (e: Exception) {

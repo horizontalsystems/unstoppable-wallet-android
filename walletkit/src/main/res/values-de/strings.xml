@@ -1999,4 +1999,6 @@
     <string name="Zcash_ToShieldedAddress">An Ihre abgeschirmte Adresse</string>
     <string name="Zcash_ShieldingProgress">ZEC wird abgeschirmt (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">%s aktivieren</string>
+    <string name="NearSend_ReceiverIsTokenContract">Das ist die Vertragsadresse des Tokens, keine Wallet. Hierher gesendete Token können nicht wiederhergestellt werden.</string>
+    <string name="NearSend_ReceiverCheckFailed">Es konnte nicht geprüft werden, ob dieses Konto existiert. Prüfe deine Verbindung und versuche es erneut.</string>
 </resources>

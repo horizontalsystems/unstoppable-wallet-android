@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.send.address
 
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.nearkit.NearKit
 import io.horizontalsystems.nearkit.crypto.AccountId
 import io.horizontalsystems.walletkit.R
@@ -27,9 +28,14 @@ class NearAddressValidator(
             )
         }
 
-        // Implicit accounts are created by the first transfer; a named account has to exist or
-        // the transfer fails on chain. Null: the network could not answer, which must not reject
-        // a well-formed id.
+        // a token contract credits tokens sent to itself, and only the issuer can return them
+        if ((token.type as? TokenType.Nep141)?.contractId == address.hex) {
+            throw AddressValidationError.InvalidAddress(Translator.getString(R.string.NearSend_ReceiverIsTokenContract))
+        }
+
+        // Implicit accounts are created by the first transfer. A named account has to exist: a
+        // NEAR transfer to a missing one fails on chain, but a token contract credits any id, and
+        // tokens sent to an id nobody owns are lost. So an unanswered check blocks too.
         if (AccountId.isImplicit(address.hex)) return
         val exists: Boolean? = withContext(Dispatchers.IO) {
             try {
@@ -40,8 +46,10 @@ class NearAddressValidator(
                 null
             }
         }
-        if (exists == false) {
-            throw AddressValidationError.InvalidAddress(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+        when (exists) {
+            true -> Unit
+            false -> throw AddressValidationError.InvalidAddress(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            null -> throw AddressValidationError.InvalidAddress(Translator.getString(R.string.NearSend_ReceiverCheckFailed))
         }
     }
 }

@@ -1996,4 +1996,6 @@
     <string name="Zcash_ToShieldedAddress">Vers votre adresse protégée</string>
     <string name="Zcash_ShieldingProgress">Protection des ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">Activer %s</string>
+    <string name="NearSend_ReceiverIsTokenContract">Ceci est l\'adresse du contrat du token, pas un portefeuille. Les tokens envoyés ici ne peuvent pas être récupérés.</string>
+    <string name="NearSend_ReceiverCheckFailed">Impossible de vérifier que ce compte existe. Vérifiez votre connexion et réessayez.</string>
 </resources>

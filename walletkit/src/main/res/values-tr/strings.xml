@@ -1995,4 +1995,6 @@
     <string name="Zcash_ToShieldedAddress">Shielded adresinize</string>
     <string name="Zcash_ShieldingProgress">ZEC shield ediliyor (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">%s etkinleştir</string>
+    <string name="NearSend_ReceiverIsTokenContract">Bu bir cüzdan değil, tokenın kontrat adresidir. Buraya gönderilen tokenlar geri alınamaz.</string>
+    <string name="NearSend_ReceiverCheckFailed">Bu hesabın var olduğu doğrulanamadı. Bağlantınızı kontrol edip tekrar deneyin.</string>
 </resources>

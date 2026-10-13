@@ -1982,4 +1982,6 @@
     <string name="Zcash_ToShieldedAddress">به آدرس محافظت‌شده شما</string>
     <string name="Zcash_ShieldingProgress">در حال محافظت ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">فعال کردن %s</string>
+    <string name="NearSend_ReceiverIsTokenContract">این آدرس قرارداد توکن است، نه یک کیف پول. توکن‌هایی که به اینجا ارسال شوند قابل بازیابی نیستند.</string>
+    <string name="NearSend_ReceiverCheckFailed">بررسی وجود این حساب ممکن نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید.</string>
 </resources>

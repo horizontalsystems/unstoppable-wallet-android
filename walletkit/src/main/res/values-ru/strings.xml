@@ -2003,4 +2003,6 @@
     <string name="Zcash_ToShieldedAddress">На ваш shielded адрес</string>
     <string name="Zcash_ShieldingProgress">Shielding ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">Активировать %s</string>
+    <string name="NearSend_ReceiverIsTokenContract">Это адрес контракта токена, а не кошелёк. Отправленные сюда токены нельзя вернуть.</string>
+    <string name="NearSend_ReceiverCheckFailed">Не удалось проверить, существует ли этот аккаунт. Проверьте подключение и попробуйте снова.</string>
 </resources>

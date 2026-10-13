@@ -1999,4 +1999,6 @@
     <string name="Zcash_ToShieldedAddress">Para o seu endereço blindado</string>
     <string name="Zcash_ShieldingProgress">Blindando ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">Habilitar %s</string>
+    <string name="NearSend_ReceiverIsTokenContract">Este é o endereço do contrato do token, não uma carteira. Tokens enviados para cá não podem ser recuperados.</string>
+    <string name="NearSend_ReceiverCheckFailed">Não foi possível verificar se esta conta existe. Verifique sua conexão e tente novamente.</string>
 </resources>
