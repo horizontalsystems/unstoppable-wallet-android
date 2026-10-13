@@ -69,7 +69,7 @@ class SendTransactionServiceNear(
             newCautions.add(errorCaution(R.string.SwapSettings_Error_InvalidAddress))
         } catch (e: Throwable) {
             // without an estimate the balance cannot be checked, so the send stays blocked
-            newCautions.add(CautionViewItem.fromThrowable(e))
+            newCautions.add(if (noConnection(e) != null) errorCaution(R.string.Hud_Text_NoInternet) else CautionViewItem.fromThrowable(e))
         }
 
         if (adapter.pendingTransactionHashes.isNotEmpty()) {
