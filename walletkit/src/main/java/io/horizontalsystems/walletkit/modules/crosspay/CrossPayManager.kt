@@ -155,17 +155,23 @@ class CrossPayManager {
         val depositAddress = execution.depositAddress
         if (depositAddress.isNullOrBlank()) throw CrossPayError.CommitFailed()
 
-        // The transfer carries the PREVIEW's amount — the figure the user confirmed. Every
-        // committed amount present must be positive: a zero or negative one means the order has
-        // no valid deposit. A commit asking for MORE than the preview would leave the order
-        // underfunded, so it is refused as a rate change; a lower or equal figure is accepted, as
-        // the server refunds the overpayment in exact-output mode.
+        // Exact output: the server decides what to deposit, and the committed order is a fresh
+        // quote, so the commit's figure is the one to transfer; without one, the preview's figure
+        // stands. Every committed amount present must be positive: a zero or negative one means
+        // the order has no valid deposit. A commit asking for MORE than the preview would spend
+        // beyond what the Send button authorized, so it is refused as a rate change.
         val executionAmount = execution.amount?.let { it.toBigDecimalOrNull() ?: throw CrossPayError.CommitFailed() }
         if (listOfNotNull(executionAmount, commit.sellAmount).any { it <= BigDecimal.ZERO }) {
             throw CrossPayError.CommitFailed()
         }
-        val committedAmount = executionAmount ?: commit.sellAmount
-        if (committedAmount != null && committedAmount > preview.depositAmount) throw CrossPayError.RateChanged
+        val depositAmount = executionAmount ?: commit.sellAmount ?: preview.depositAmount
+        if (depositAmount > preview.depositAmount) throw CrossPayError.RateChanged
+
+        // A deposit below the floor is refunded whole and no swap happens.
+        val minSellAmount = preview.minSellAmount
+        if (minSellAmount != null && depositAmount < minSellAmount) {
+            throw CrossPayError.CommitFailed()
+        }
 
         // Never the entered amount: that's the requested output, not what the provider promised.
         // The commit's figure wins; without one, the preview's figure stands.
@@ -181,7 +187,7 @@ class CrossPayManager {
         // unsupported chain shape) must surface once as an authored commit error rather than
         // fail on every re-entry into the build.
         try {
-            preview.provider.depositTransactionData(request.tokenIn, preview.depositAmount, depositAddress, execution.attachment)
+            preview.provider.depositTransactionData(request.tokenIn, depositAmount, depositAddress, execution.attachment)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Throwable) {
@@ -190,7 +196,7 @@ class CrossPayManager {
 
         return CrossPayOrder(
             preview = preview,
-            depositAmount = preview.depositAmount,
+            depositAmount = depositAmount,
             amountOut = amountOut,
             depositAddress = depositAddress,
             attachment = execution.attachment,

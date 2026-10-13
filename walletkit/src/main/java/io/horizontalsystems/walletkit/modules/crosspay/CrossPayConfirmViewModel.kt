@@ -220,7 +220,7 @@ class CrossPayConfirmViewModel(
                 // attachment only exist after the commit, and send() rebuilds against them.
                 val stubDepositAddress = preview.stubDepositAddress
                 if (stubDepositAddress != null) {
-                    val data = depositData(preview, stubDepositAddress, attachment = null)
+                    val data = depositData(preview, preview.depositAmount, stubDepositAddress, attachment = null)
                     depositData = data
                     sendTransactionService.setSendTransactionData(data)
                 } else {
@@ -246,14 +246,15 @@ class CrossPayConfirmViewModel(
         }
     }
 
-    // The deposit of the previewed amount to [address], with the coin control the user chose on
-    // the send screen applied.
+    // The deposit of [amount] to [address], with the coin control the user chose on the send
+    // screen applied.
     private fun depositData(
         preview: CrossPayPreview,
+        amount: BigDecimal,
         address: String,
         attachment: UnstoppableAPI.Response.Attachment?,
     ): SendTransactionData {
-        val built = preview.provider.depositTransactionData(tokenIn, preview.depositAmount, address, attachment)
+        val built = preview.provider.depositTransactionData(tokenIn, amount, address, attachment)
         return ChainRegistry[tokenIn.blockchainType]?.depositTransactionData(tokenIn, built, chainSettings) ?: built
     }
 
@@ -302,7 +303,7 @@ class CrossPayConfirmViewModel(
             // The order exists from here on. A deposit that cannot be built or sent leaves it to
             // lapse unfunded, and the screen re-previews so a retry never reuses it.
             val service = try {
-                sendServiceFor(depositData(preview, order.depositAddress, order.attachment))
+                sendServiceFor(depositData(preview, order.depositAmount, order.depositAddress, order.attachment))
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {

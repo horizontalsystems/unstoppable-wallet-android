@@ -59,8 +59,7 @@ data class CrossPayPreview(
  */
 data class CrossPayOrder(
     val preview: CrossPayPreview,
-    // The PREVIEW's sellAmount in tokenIn — EXACTLY what to transfer, the figure the user
-    // confirmed. The commit may name a lower one; the server refunds the overpayment.
+    // The commit's amount in tokenIn — EXACTLY what to transfer, never above the preview's.
     val depositAmount: BigDecimal,
     // What the recipient gets, in tokenOut.
     val amountOut: BigDecimal,
