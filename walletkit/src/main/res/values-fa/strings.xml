@@ -1213,7 +1213,6 @@
     <string name="FeeInfo_TronActivationFee_Description">این آدرس فعال نیست. انتقال TRX یا توکن‌های TRC-10 به آدرس یک حساب غیرفعال، آن حساب را فعال می‌کند.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">منابع مصرف‌شده</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">پهنای باند واحدی است که اندازه بایت‌های تراکنش ذخیره‌شده در پایگاه داده بلاکچین را اندازه‌گیری می‌کند. هرچه تراکنش بزرگ‌تر باشد، منابع پهنای باند بیشتری مصرف می‌شود.\n\nانرژی واحدی است که میزان محاسبات مورد نیاز ماشین مجازی TRON برای انجام عملیات مشخص در شبکه TRON را اندازه‌گیری می‌کند.\n\nاز آنجا که تراکنش‌های قرارداد هوشمند برای اجرا به منابع محاسباتی نیاز دارند، برای هر تراکنش قرارداد هوشمند باید کارمزد انرژی پرداخت شود.</string>
-    <string name="Tron_SelfSendTrxNotAllowed">انتقال TRX به خودتان امکان‌پذیر نیست</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">انتقال 0 %s امکان‌پذیر نیست</string>
     <string name="Tron_TokenPage_AddressNotActivated">فعال نشده</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON فعال نشده است</string>
