@@ -12,11 +12,8 @@ import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.isNative
 import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.entities.CoinValue
-import io.horizontalsystems.walletkit.modules.amount.AmountValidator
-import io.horizontalsystems.walletkit.modules.amount.SendAmountService
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataField
 import io.horizontalsystems.walletkit.modules.send.SendModule
-import io.horizontalsystems.walletkit.modules.send.tron.SendTronAddressService
 import io.horizontalsystems.walletkit.modules.send.tron.SendTronFeeService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -32,7 +29,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.RoundingMode
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 class SendTransactionServiceTron(private val token: Token) : AbstractSendTransactionService(false, false) {
@@ -41,17 +37,8 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     private val adapter = App.adapterManager.getAdapterForToken<ISendTronAdapter>(token)!!
     private val nativeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
-    private val amountService = SendAmountService(
-        AmountValidator(),
-        token.coin.code,
-        adapter.balanceData.available.setScale(token.decimals, RoundingMode.DOWN),
-        token.type.isNative,
-    )
-    private val addressService = SendTronAddressService(adapter, token)
     private val feeService = SendTronFeeService(adapter, nativeToken)
 
-    private var amountState = amountService.stateFlow.value
-    private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
 
     private var networkFee: SendModule.AmountData? = null
@@ -65,17 +52,12 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     private var builtContract: Contract? = null
     private var createdTransaction: CreatedTransaction? = null
 
+    // Only the fee service is collected: the transfer's amount and address are fed to it straight
+    // from the data that is set, never through amount or address sub-services. Such services
+    // would push their initial empty values into the fee service when collection starts, and on
+    // an instance created right before its data is set that push races the real estimate and
+    // can wipe it, leaving the state unable to settle.
     override fun start(coroutineScope: CoroutineScope) {
-        coroutineScope.launch {
-            amountService.stateFlow.collect {
-                handleUpdatedAmountState(it)
-            }
-        }
-        coroutineScope.launch {
-            addressService.stateFlow.collect {
-                handleUpdatedAddressState(it)
-            }
-        }
         coroutineScope.launch {
             feeService.stateFlow.collect {
                 handleUpdatedFeeState(it)
@@ -139,21 +121,11 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
         emitState()
     }
 
-    private suspend fun handleUpdatedAddressState(state: SendTronAddressService.State) {
-        addressState = state
-
-        feeService.setTronAddress(addressState.tronAddress)
-
-        emitState()
-    }
-
-    private suspend fun handleUpdatedAmountState(state: SendAmountService.State) {
-        amountState = state
-
-        feeService.setAmount(amountState.amount)
-
-        emitState()
-    }
+    // The fee state is collected asynchronously, so this instance keeps describing the previous
+    // transfer's fee limit until the collector runs; a replaced deposit gets a fresh instance.
+    // A limit sized for the stand-in address can be half of what a fresh TRC-20 recipient needs,
+    // and a transfer that runs out of energy burns the fee without moving the token.
+    override fun fresh(): AbstractSendTransactionService = SendTransactionServiceTron(token)
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Tron)
