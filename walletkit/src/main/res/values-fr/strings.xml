@@ -1113,7 +1113,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
     <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
     <string name="WatchWallet">Regarder le portefeuille</string>
-    <string name="Watch_Address_Hint">Collez votre adresse (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
+    <string name="Watch_Address_Hint">Collez votre adresse (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
     <string name="Watch_ViewKey">Clé privée</string>
     <string name="Watch_Select_Blockchains">Choisir les Blockchains</string>
     <string name="Watch_Select_Coins">Crypto Monnaie</string>

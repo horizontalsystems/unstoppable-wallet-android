@@ -1116,7 +1116,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
     <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
     <string name="WatchWallet">Assistir Carteira</string>
-    <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
+    <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
     <string name="Watch_ViewKey">Chave Privada de Visualização</string>
     <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
     <string name="Watch_Select_Coins">Escolher Moedas</string>

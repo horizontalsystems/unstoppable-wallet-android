@@ -1110,7 +1110,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
     <string name="WatchWallet">观看钱包</string>
-    <string name="Watch_Address_Hint">粘贴您的地址（EVM、Tron、TON、Stellar、XRP、Monero、BTC、LTC、BCH、Dash）或XPUB</string>
+    <string name="Watch_Address_Hint">粘贴您的地址（EVM、Tron、TON、Stellar、XRP、NEAR、Monero、BTC、LTC、BCH、Dash）或XPUB</string>
     <string name="Watch_ViewKey">私人视图密钥</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>

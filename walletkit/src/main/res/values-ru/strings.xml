@@ -1118,7 +1118,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
     <string name="WatchWallet">Смотреть кошелек</string>
-    <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, XRP, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
+    <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
     <string name="Watch_ViewKey">Приватный ключ просмотра</string>
     <string name="Watch_Select_Blockchains">Выберите блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
