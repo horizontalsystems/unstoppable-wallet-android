@@ -141,7 +141,7 @@ android {
             buildConfigFieldString("HASH_DIT_BASE_URL", "https://service.hashdit.io/v2/hashdit/")
             buildConfigFieldString("HASH_DIT_API_KEY", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-dev.unstoppable.money/api/v2/")
-            buildConfigFieldString("FASTNEAR_API_KEY", "")
+            buildConfigFieldString("FASTNEAR_API_KEY", "184c62a885391e6992a550bce09a95920db5d4a95589ddf0e5932e074f6ad6b6")
             buildConfigField("int", "SWAP_FEE_BPS", "25")
         }
 
@@ -176,7 +176,7 @@ android {
             buildConfigFieldString("HASH_DIT_BASE_URL", "https://service.hashdit.io/v2/hashdit/")
             buildConfigFieldString("HASH_DIT_API_KEY", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-api.unstoppable.money/v2/")
-            buildConfigFieldString("FASTNEAR_API_KEY", "")
+            buildConfigFieldString("FASTNEAR_API_KEY", "184c62a885391e6992a550bce09a95920db5d4a95589ddf0e5932e074f6ad6b6")
             buildConfigField("int", "SWAP_FEE_BPS", "100")
         }
     }
