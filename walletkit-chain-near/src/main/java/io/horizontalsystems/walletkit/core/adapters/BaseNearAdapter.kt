@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.adapters
 
 import io.horizontalsystems.nearkit.NearKit
 import io.horizontalsystems.nearkit.models.NearAmount
+import io.horizontalsystems.nearkit.crypto.AccountId
 import io.horizontalsystems.nearkit.transaction.FeeCalculator
 import io.horizontalsystems.nearkit.transaction.Action
 import io.horizontalsystems.walletkit.core.IAdapter
@@ -33,17 +34,19 @@ abstract class BaseNearAdapter(
 
     companion object {
         /**
-         * Balance a NEAR transfer needs in the worst case, when the receiver is an implicit
-         * account the transfer creates: gas bought at the minimum purchase price plus the account
-         * creation charge. Independent of the block gas price while that stays below the minimum.
+         * Balance a NEAR transfer needs in the worst case: a NEAR-implicit receiver, which pays
+         * for creating the account and its key whether or not it exists, with gas priced at the
+         * minimum purchase price. Holds while the block gas price stays below that minimum.
          */
         val WORST_CASE_TRANSFER_REQUIRED: BigDecimal = NearAmount.toNear(
-            FeeCalculator().estimate(
-                listOf(Action.Transfer(BigInteger.ONE)),
-                receiverIsImplicit = true,
-                createsAccount = true,
-                gasPrice = BigInteger.ZERO,
-            ).requiredBalance
+            FeeCalculator.Config.DEFAULT.minGasPurchasePrice.let { price ->
+                FeeCalculator().estimate(
+                    listOf(Action.Transfer(BigInteger.ONE)),
+                    receiver = AccountId.Type.NearImplicit,
+                    createsAccount = false,
+                    gasPrice = price,
+                ).requiredBalance
+            }
         )
 
         /** A transfer to a named account at the usual 10^8 yocto/gas price; shown until an estimate arrives. */
