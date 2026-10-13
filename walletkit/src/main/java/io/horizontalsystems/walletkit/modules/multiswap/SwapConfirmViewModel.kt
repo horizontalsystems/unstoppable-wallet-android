@@ -468,6 +468,11 @@ class SwapConfirmViewModel(
     // the screen keeps its numbers until the fresh ones land.
     private fun requote() {
         synchronized(this) { sending = false }
+        // The last state was published with the send in progress, which held the button on, and
+        // the inputs still describe the spent quote, so recomputing alone would keep it on. The
+        // button waits until the fresh quote's own state lands.
+        loading = true
+        emitState()
         refresh(silent = true)
     }
 
