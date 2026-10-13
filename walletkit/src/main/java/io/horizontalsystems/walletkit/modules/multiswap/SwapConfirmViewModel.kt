@@ -249,7 +249,10 @@ class SwapConfirmViewModel(
             currency = currency,
             networkFee = if (unpriced) null else sendTransactionState.networkFee,
             cautions = if (unpriced) listOfNotNull(unpricedCaution) else sendTransactionState.cautions,
-            validQuote = error == null && (if (unpriced) unpricedCaution == null else sendTransactionState.sendable),
+            // Frozen while sending: the committed deposit is re-estimated through the on-screen
+            // service on chains without a fresh instance, and its interim not-sendable state
+            // must not swap the button out from under the send running in its scope.
+            validQuote = sending || (error == null && (if (unpriced) unpricedCaution == null else sendTransactionState.sendable)),
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,

@@ -267,6 +267,11 @@ private fun SwapConfirmInternal(
                                 delay(1200)
                                 resultEventBus.sendResult(SwapConfirmPage.Result(true))
                                 navigation.removeLastOrNull()
+                            } catch (t: kotlinx.coroutines.CancellationException) {
+                                // A back press during the success delay cancels this scope;
+                                // showing the failure sheet then would invite a second send
+                                // of a deposit that already broadcast.
+                                throw t
                             } catch (t: SwapCommitFailedException) {
                                 // No deposit was sent; a fresh quote is already loading, so the
                                 // reason is a passing notice rather than an error sheet.
