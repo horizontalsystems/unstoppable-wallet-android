@@ -577,6 +577,13 @@ class USwapProvider(
     // /v3/commit for a route previewed here. Throws [UnstoppableAPI.CommitException] on refusal.
     // The commit's `execution` carries the deposit address, amount and attachment.
     suspend fun commitPreview(previewToken: String): UnstoppableAPI.Response.Commit {
+        // A token is spent by its first commit, whatever the outcome: a refused one may be retried
+        // server-side and run a second provider order, and an accepted one is replayed, which
+        // would fund the same order twice. Either way the screen no longer describes it.
+        if (!consumedPreviewTokens.add(previewToken)) {
+            throw UnstoppableAPI.CommitException(null, "refresh_required", "Preview already committed", null)
+        }
+
         currentCoroutineContext().ensureActive()
 
         val commit = try {
