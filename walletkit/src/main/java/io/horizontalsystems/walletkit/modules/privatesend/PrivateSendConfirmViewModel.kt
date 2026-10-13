@@ -140,10 +140,13 @@ class PrivateSendConfirmViewModel(
 
     override fun createState(): PrivateSendConfirmUiState {
         val preview = preview
+        // With no stand-in there is no estimate to show, and the send service's state describes
+        // whatever it was last fed, not this preview.
+        val unpriced = preview != null && preview.stubDepositAddress == null
 
         return PrivateSendConfirmUiState(
             initialLoading = initialLoading,
-            loading = sendTransactionState.loading,
+            loading = !unpriced && sendTransactionState.loading,
             token = token,
             recipient = request.recipient,
             amountOut = preview?.amountOut ?: request.amountOut,
@@ -152,10 +155,10 @@ class PrivateSendConfirmViewModel(
             bufferUnknown = preview != null && preview.minSellAmount == null,
             estimatedTime = preview?.estimatedTime,
             currency = currency,
-            networkFee = sendTransactionState.networkFee,
-            cautions = sendTransactionState.cautions,
-            transactionFields = sendTransactionState.fields,
-            canSend = preview != null && sendTransactionState.sendable && error == null,
+            networkFee = if (unpriced) null else sendTransactionState.networkFee,
+            cautions = if (unpriced) emptyList() else sendTransactionState.cautions,
+            transactionFields = if (unpriced) emptyList() else sendTransactionState.fields,
+            canSend = preview != null && (unpriced || sendTransactionState.sendable) && error == null,
             hasSettings = sendTransactionService.hasSettings,
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             error = error,
@@ -208,15 +211,24 @@ class PrivateSendConfirmViewModel(
 
                 // Estimated against the stand-in with no attachment: the deposit address and its
                 // attachment only exist after the commit, and send() rebuilds against them.
-                val data = PrivateSendDepositBuilder.build(
-                    token = token,
-                    amount = preview.depositAmount,
-                    address = preview.stubDepositAddress,
-                    attachment = null,
-                    btcParams = btcParams,
-                )
-                depositData = data
-                sendTransactionService.setSendTransactionData(data)
+                val stubDepositAddress = preview.stubDepositAddress
+                if (stubDepositAddress != null) {
+                    val data = PrivateSendDepositBuilder.build(
+                        token = token,
+                        amount = preview.depositAmount,
+                        address = stubDepositAddress,
+                        attachment = null,
+                        btcParams = btcParams,
+                    )
+                    depositData = data
+                    sendTransactionService.setSendTransactionData(data)
+                } else {
+                    // Nothing to estimate before the order names its address: the screen settles
+                    // without a fee, which the service's state collector would otherwise signal.
+                    depositData = null
+                    initialLoading = false
+                    emitState()
+                }
 
                 // CountDownTimer binds to the current thread's Looper, so the expiry timer
                 // must start on Main — this coroutine runs on the service thread.

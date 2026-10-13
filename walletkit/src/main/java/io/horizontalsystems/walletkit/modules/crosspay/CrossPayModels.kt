@@ -25,7 +25,8 @@ data class CrossPayRequest(
  * A previewed route, produced on the confirmation screen without creating an order. The token is
  * handed to the commit when the user presses Send. [stubDepositAddress] is a ready-to-receive
  * account on tokenIn's chain the deposit transfer is priced against — never a destination to
- * send to.
+ * send to. Null when the server names none: the payment is then shown without a network fee and
+ * the deposit is built only once the order names its address.
  */
 data class CrossPayPreview(
     val request: CrossPayRequest,
@@ -40,7 +41,7 @@ data class CrossPayPreview(
     val minSellAmount: BigDecimal?,
     // What the recipient gets, in tokenOut: equal to the requested amount by the exactness check.
     val amountOut: BigDecimal,
-    val stubDepositAddress: String,
+    val stubDepositAddress: String?,
     // Non-optional: the refundable buffer lands here.
     val refundAddress: String,
     // Seconds; null just omits the "estimated arrival" row.

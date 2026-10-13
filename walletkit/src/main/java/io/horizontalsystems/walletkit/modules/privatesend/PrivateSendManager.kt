@@ -160,11 +160,10 @@ class PrivateSendManager(
 
         // The deposit transfer is priced against the stand-in so the confirmation screen shows a
         // network fee. A provider that already names the deposit account at preview is priced
-        // against that instead; with neither there is nothing to show and nothing to send — from
-        // the user's side, no route.
+        // against that instead; with neither the screen shows no fee, and the deposit is built
+        // once the order names its address.
         val stubDepositAddress = route.stubDepositAddress?.takeIf { it.isNotBlank() }
             ?: route.execution?.depositAddress?.takeIf { it.isNotBlank() }
-            ?: throw PrivateSendError.NoRoute
 
         // Never falls back to the entered amount: in exact-output mode that is the *output*, a
         // structurally different quantity.

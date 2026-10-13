@@ -716,11 +716,12 @@ class USwapProvider(
             // A transfer provider's deposit address exists only once the order does, so the
             // confirmation screen estimates the transfer against the server's stand-in account,
             // and [commit] rebuilds it for the real address. The screen shows no deposit address
-            // meanwhile: the stand-in must never be mistaken for one. Without a stand-in there is
-            // nothing to estimate against, so the quote fails rather than showing no fee.
-            val stub = bestRoute.stubDepositAddress?.takeIf { it.isNotBlank() }
-                ?: throw IllegalStateException("No deposit address to estimate the transfer against")
-            getSendTransactionData(tokenIn, amountIn, bestRoute.copy(execution = transferExecution(stub, estimationAttachment(tokenIn))))
+            // meanwhile: the stand-in must never be mistaken for one. Without a stand-in (some
+            // sell chains have none configured) there is nothing to estimate against, and the
+            // quote is shown without a network fee instead of being refused.
+            bestRoute.stubDepositAddress?.takeIf { it.isNotBlank() }?.let { stub ->
+                getSendTransactionData(tokenIn, amountIn, bestRoute.copy(execution = transferExecution(stub, estimationAttachment(tokenIn))))
+            }
         }
 
         return SwapFinalQuote(

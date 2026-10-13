@@ -11,7 +11,10 @@ data class SwapFinalQuote(
     val amountIn: BigDecimal,
     val amountOut: BigDecimal,
     val amountOutMin: BigDecimal?,
-    val sendTransactionData: SendTransactionData,
+    // The transaction to estimate and sign, or null when nothing can be built before the order
+    // exists: a transfer provider's deposit address arrives with the commit, and the server named
+    // no stand-in to price the transfer against. Such a quote is shown without a network fee.
+    val sendTransactionData: SendTransactionData?,
     val priceImpact: BigDecimal?,
     val fields: List<DataField>,
     val estimatedTime: Long?,

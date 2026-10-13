@@ -227,39 +227,45 @@ class SwapConfirmViewModel(
         emitState()
     }
 
-    override fun createState() = SwapConfirmUiState(
-        initialLoading = initialLoading,
-        loading = loading,
-        tokenIn = tokenIn,
-        tokenOut = tokenOut,
-        amountIn = amountIn,
-        amountOut = amountOut,
-        amountOutMin = amountOutMin,
-        fiatAmountIn = fiatAmountIn,
-        fiatAmountOut = fiatAmountOut,
-        fiatAmountOutMin = fiatAmountOutMin,
-        currency = currency,
-        networkFee = sendTransactionState.networkFee,
-        cautions = sendTransactionState.cautions,
-        validQuote = error == null && sendTransactionState.sendable,
-        priceImpact = priceImpactState.priceImpact,
-        priceImpactLevel = priceImpactState.priceImpactLevel,
-        quoteFields = quoteFields,
-        transactionFields = sendTransactionState.fields,
-        hasSettings = sendTransactionService.hasSettings,
-        hasNonceSettings = sendTransactionService.hasNonceSettings,
-        swapDefenseSystemMessage = swapDefenseState.systemMessage,
-        mevProtectionEnabled = swapDefenseState.mevProtectionEnabled,
-        supportsMevProtection = sendTransactionService.supportsMevProtection &&
-                swapProvider.mevProtectionAllowed(tokenIn, tokenOut),
-        mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
-        recipient = recipient,
-        recipientRequired = recipientRequired,
-        slippage = slippage,
-        estimatedTime = estimatedTime,
-        providerType = swapProvider.type,
-        error = error
-    )
+    override fun createState(): SwapConfirmUiState {
+        // A quote with nothing to build before the order exists has no estimate to show, and the
+        // send service's state describes whatever it was last fed, not this quote.
+        val unpriced = finalQuote != null && finalQuote?.sendTransactionData == null
+
+        return SwapConfirmUiState(
+            initialLoading = initialLoading,
+            loading = loading,
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            amountOut = amountOut,
+            amountOutMin = amountOutMin,
+            fiatAmountIn = fiatAmountIn,
+            fiatAmountOut = fiatAmountOut,
+            fiatAmountOutMin = fiatAmountOutMin,
+            currency = currency,
+            networkFee = if (unpriced) null else sendTransactionState.networkFee,
+            cautions = if (unpriced) emptyList() else sendTransactionState.cautions,
+            validQuote = error == null && (unpriced || sendTransactionState.sendable),
+            priceImpact = priceImpactState.priceImpact,
+            priceImpactLevel = priceImpactState.priceImpactLevel,
+            quoteFields = quoteFields,
+            transactionFields = if (unpriced) emptyList() else sendTransactionState.fields,
+            hasSettings = sendTransactionService.hasSettings,
+            hasNonceSettings = sendTransactionService.hasNonceSettings,
+            swapDefenseSystemMessage = swapDefenseState.systemMessage,
+            mevProtectionEnabled = swapDefenseState.mevProtectionEnabled,
+            supportsMevProtection = sendTransactionService.supportsMevProtection &&
+                    swapProvider.mevProtectionAllowed(tokenIn, tokenOut),
+            mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
+            recipient = recipient,
+            recipientRequired = recipientRequired,
+            slippage = slippage,
+            estimatedTime = estimatedTime,
+            providerType = swapProvider.type,
+            error = error
+        )
+    }
 
     override fun onCleared() {
         timerService.stop()
@@ -326,7 +332,22 @@ class SwapConfirmViewModel(
 
                 fiatServiceOut.setAmount(amountOut)
                 fiatServiceOutMin.setAmount(amountOutMin)
-                sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
+
+                val sendTransactionData = finalQuote.sendTransactionData
+                if (sendTransactionData != null) {
+                    sendTransactionService.setSendTransactionData(sendTransactionData)
+                } else {
+                    // Nothing to estimate before the order names its deposit address, so the
+                    // screen settles without a fee. The send service's state collector is what
+                    // normally clears the loading flags and arms the expiry timer.
+                    loading = false
+                    initialLoading = false
+                    emitState()
+                    // CountDownTimer binds to the current thread's Looper.
+                    withContext(Dispatchers.Main) {
+                        timerService.start(20)
+                    }
+                }
 
                 priceImpactService.setProviderTitle(swapProvider.title)
             } catch (e: CancellationException) {
@@ -443,6 +464,7 @@ class SwapConfirmViewModel(
      */
     private suspend fun sendServiceFor(quote: SwapFinalQuote, commitment: SwapCommitment): AbstractSendTransactionService {
         val data = commitment.quote.sendTransactionData
+            ?: throw IllegalStateException("The order names no deposit to send")
         if (data == quote.sendTransactionData) return sendTransactionService
 
         val service = sendTransactionService.fresh()?.also { it.start(viewModelScope) } ?: sendTransactionService
