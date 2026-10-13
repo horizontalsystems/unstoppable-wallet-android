@@ -13,6 +13,7 @@ import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
+import io.horizontalsystems.walletkit.modules.multiswap.UnpricedDeposit
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
@@ -73,6 +74,9 @@ class CrossPayConfirmViewModel(
     private var preview: CrossPayPreview? = null
     // The deposit estimate against the stand-in address, re-fed on fee-settings changes.
     private var depositData: SendTransactionData? = null
+    // Stands in for the send service's cautions while the preview has nothing to estimate: the
+    // only check possible before the order exists is the deposit against the balance.
+    private var unpricedCaution: CautionViewItem? = null
     private var error: Throwable? = null
     private var initialLoading = true
     private var sendTransactionState = sendTransactionService.stateFlow.value
@@ -163,9 +167,10 @@ class CrossPayConfirmViewModel(
             estimatedTime = preview?.estimatedTime,
             currency = currency,
             networkFee = if (unpriced) null else sendTransactionState.networkFee,
-            cautions = if (unpriced) emptyList() else sendTransactionState.cautions,
+            cautions = if (unpriced) listOfNotNull(unpricedCaution) else sendTransactionState.cautions,
             transactionFields = if (unpriced) emptyList() else sendTransactionState.fields,
-            canSend = preview != null && (unpriced || sendTransactionState.sendable) && error == null,
+            canSend = preview != null && error == null &&
+                    (if (unpriced) unpricedCaution == null else sendTransactionState.sendable),
             hasSettings = sendTransactionService.hasSettings,
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             error = error,
@@ -212,6 +217,14 @@ class CrossPayConfirmViewModel(
                 val preview = manager.preview(request)
 
                 ensureActive()
+
+                // Decided before the preview is published, so the button never reads the new
+                // preview against the previous preview's caution.
+                unpricedCaution = if (preview.stubDepositAddress == null) {
+                    UnpricedDeposit.caution(tokenIn, preview.depositAmount, UnpricedDeposit.availableBalance(tokenIn, chainSettings))
+                } else {
+                    null
+                }
 
                 this@CrossPayConfirmViewModel.preview = preview
                 emitState()

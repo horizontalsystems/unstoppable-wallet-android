@@ -97,6 +97,9 @@ class SwapConfirmViewModel(
     private var quoteFields: List<DataField> = listOf()
     // The quote on screen: what Swap commits. Has no side effects, so it is re-requested freely.
     private var finalQuote: SwapFinalQuote? = null
+    // Stands in for the send service's cautions while the quote has nothing to estimate: the
+    // only check possible before the order exists is the amount against the balance.
+    private var unpricedCaution: CautionViewItem? = null
     private var fetchFinalQuoteJob: Job? = null
     // From the moment Swap is pressed until the send ends, nothing may replace the quote or the
     // data the send service holds: a refresh landing in between would commit another quote, or
@@ -245,8 +248,8 @@ class SwapConfirmViewModel(
             fiatAmountOutMin = fiatAmountOutMin,
             currency = currency,
             networkFee = if (unpriced) null else sendTransactionState.networkFee,
-            cautions = if (unpriced) emptyList() else sendTransactionState.cautions,
-            validQuote = error == null && (unpriced || sendTransactionState.sendable),
+            cautions = if (unpriced) listOfNotNull(unpricedCaution) else sendTransactionState.cautions,
+            validQuote = error == null && (if (unpriced) unpricedCaution == null else sendTransactionState.sendable),
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
@@ -315,6 +318,15 @@ class SwapConfirmViewModel(
 
                 ensureActive()
 
+                // Decided before the quote is published, so the button never reads the new quote
+                // against the previous quote's caution.
+                val sendTransactionData = finalQuote.sendTransactionData
+                unpricedCaution = if (sendTransactionData == null) {
+                    UnpricedDeposit.caution(tokenIn, amountIn, UnpricedDeposit.availableBalance(tokenIn, null))
+                } else {
+                    null
+                }
+
                 this@SwapConfirmViewModel.finalQuote = finalQuote
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
@@ -333,15 +345,16 @@ class SwapConfirmViewModel(
                 fiatServiceOut.setAmount(amountOut)
                 fiatServiceOutMin.setAmount(amountOutMin)
 
-                val sendTransactionData = finalQuote.sendTransactionData
                 if (sendTransactionData != null) {
                     sendTransactionService.setSendTransactionData(sendTransactionData)
                 } else {
                     // Nothing to estimate before the order names its deposit address, so the
                     // screen settles without a fee. The send service's state collector is what
-                    // normally clears the loading flags and arms the expiry timer.
+                    // normally clears the loading flags, tells the defense system the quote can
+                    // be sent and arms the expiry timer.
                     loading = false
                     initialLoading = false
+                    swapDefenseSystemService.setSendable(unpricedCaution == null)
                     emitState()
                     // CountDownTimer binds to the current thread's Looper.
                     withContext(Dispatchers.Main) {

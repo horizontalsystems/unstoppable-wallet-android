@@ -13,6 +13,7 @@ import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.TimerService
+import io.horizontalsystems.walletkit.modules.multiswap.UnpricedDeposit
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
@@ -67,6 +68,9 @@ class PrivateSendConfirmViewModel(
     private var preview: PrivateSendPreview? = null
     // The deposit estimate against the stand-in address, re-fed on fee-settings changes.
     private var depositData: SendTransactionData? = null
+    // Stands in for the send service's cautions while the preview has nothing to estimate: the
+    // only check possible before the order exists is the deposit against the balance.
+    private var unpricedCaution: CautionViewItem? = null
     private var error: Throwable? = null
     private var initialLoading = true
     private var sendTransactionState = sendTransactionService.stateFlow.value
@@ -156,9 +160,10 @@ class PrivateSendConfirmViewModel(
             estimatedTime = preview?.estimatedTime,
             currency = currency,
             networkFee = if (unpriced) null else sendTransactionState.networkFee,
-            cautions = if (unpriced) emptyList() else sendTransactionState.cautions,
+            cautions = if (unpriced) listOfNotNull(unpricedCaution) else sendTransactionState.cautions,
             transactionFields = if (unpriced) emptyList() else sendTransactionState.fields,
-            canSend = preview != null && (unpriced || sendTransactionState.sendable) && error == null,
+            canSend = preview != null && error == null &&
+                    (if (unpriced) unpricedCaution == null else sendTransactionState.sendable),
             hasSettings = sendTransactionService.hasSettings,
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             error = error,
@@ -206,6 +211,14 @@ class PrivateSendConfirmViewModel(
 
                 ensureActive()
 
+                // Decided before the preview is published, so the button never reads the new
+                // preview against the previous preview's caution.
+                unpricedCaution = if (preview.stubDepositAddress == null) {
+                    UnpricedDeposit.caution(token, preview.depositAmount, availableBalance())
+                } else {
+                    null
+                }
+
                 this@PrivateSendConfirmViewModel.preview = preview
                 emitState()
 
@@ -243,6 +256,15 @@ class PrivateSendConfirmViewModel(
                 emitState()
             }
         }
+    }
+
+    // What the deposit can draw on: the outputs chosen on the send screen when there are any,
+    // otherwise what the chain lets a deposit spend.
+    private fun availableBalance(): BigDecimal? {
+        btcParams?.unspentOutputs?.let { outputs ->
+            return outputs.sumOf { it.value }.toBigDecimal().movePointLeft(token.decimals)
+        }
+        return UnpricedDeposit.availableBalance(token, null)
     }
 
     override fun onCleared() {
