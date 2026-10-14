@@ -441,7 +441,9 @@ class PrivateSendConfirmViewModel(
         is SendTransactionResult.Stellar -> result.txHash
         is SendTransactionResult.Xrp -> result.txHash
         is SendTransactionResult.Near -> result.txHash
-        else -> null
+        is SendTransactionResult.Monero -> result.txHash
+        is SendTransactionResult.Zano -> result.txHash
+        SendTransactionResult.Ton -> null
     }
 
     companion object {
