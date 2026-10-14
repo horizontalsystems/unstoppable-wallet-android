@@ -25,7 +25,7 @@ android {
         applicationId = "io.horizontalsystems.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
-        versionCode = 182
+        versionCode = 183
         versionName = "0.53.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
