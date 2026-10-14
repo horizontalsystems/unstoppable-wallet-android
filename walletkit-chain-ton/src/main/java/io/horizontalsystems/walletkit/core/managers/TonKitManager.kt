@@ -105,7 +105,13 @@ class TonKitManager(
         accountType: AccountType.Mnemonic,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(
+            accountType.toTonWallet(),
+            Network.MainNet,
+            App.instance,
+            account.id,
+            App.appConfigProvider.tonApiKey,
+        )
 
         return TonKitWrapper(kit)
     }
@@ -114,7 +120,13 @@ class TonKitManager(
         accountType: AccountType.TonAddress,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(
+            accountType.toTonWallet(),
+            Network.MainNet,
+            App.instance,
+            account.id,
+            App.appConfigProvider.tonApiKey,
+        )
 
         return TonKitWrapper(kit)
     }

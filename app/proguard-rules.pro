@@ -245,6 +245,10 @@
 -keep class io.horizontalsystems.xrpkit.** { *; }
 -keep class io.horizontalsystems.stellarkit.** { *; }
 -keep class io.horizontalsystems.tonkit.** { *; }
+# TonKit's generated tonapi client parses JSON with Moshi's KotlinJsonAdapterFactory,
+# which builds models via Kotlin reflection and their synthetic default-args constructors.
+-keep class io.tonapi.** { *; }
+-keep class kotlin.Metadata { *; }
 -keep class io.horizontalsystems.solanakit.** { *; }
 -keep class io.horizontalsystems.bitcoincore.** { *; }
 -keep class io.horizontalsystems.bitcoinkit.** { *; }
