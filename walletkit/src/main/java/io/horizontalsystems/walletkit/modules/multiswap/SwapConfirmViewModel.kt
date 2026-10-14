@@ -434,23 +434,29 @@ class SwapConfirmViewModel(
                 throw SwapCommitFailedException(SwapCommitFailure.Failed, e)
             }
 
+            // Saved before broadcasting so the record survives the app dying between the two, and
+            // so a send that fails after the node may have accepted the transaction stays
+            // trackable: the kits do not say which side of the broadcast an error came from, so
+            // the record is never marked failed here and no fresh quote is offered. Tracking by
+            // uuid resolves it either way, and the spent token already forces a new preview on
+            // the next press, through a notice.
+            val recordId = saveSwapRecord(commitment)
+
             val result = try {
                 service.sendTransaction(swapDefenseState.mevProtectionEnabled)
-            } catch (e: Throwable) {
-                requote()
-                throw e
             } finally {
                 if (service !== sendTransactionService) service.clear()
             }
 
-            saveSwapRecord(result, commitment)
-
-            // Best-effort and off the critical path: funds have moved, so the screen must not
-            // wait on the report, and tracking resolves the swap without it.
             val txHash = transactionHash(result)
             val providerSwapId = commitment.providerSwapId
-            if (txHash != null && providerSwapId != null) {
-                App.swapSyncService.reportInboundTxHash(swapProvider, providerSwapId, txHash)
+            if (txHash != null) {
+                App.swapRecordManager.updateTransactionHash(recordId, txHash)
+                // Best-effort and off the critical path: funds have moved, so the screen must
+                // not wait on the report, and tracking resolves the swap without it.
+                if (providerSwapId != null) {
+                    App.swapSyncService.reportInboundTxHash(swapProvider, providerSwapId, txHash)
+                }
             }
 
             // remember the delivery address so the recipient page can suggest it next time
@@ -519,7 +525,7 @@ class SwapConfirmViewModel(
         SendTransactionResult.Ton -> null
     }
 
-    private suspend fun saveSwapRecord(result: SendTransactionResult, commitment: SwapCommitment) {
+    private suspend fun saveSwapRecord(commitment: SwapCommitment): Int {
         val quote = commitment.quote
 
         val record = SwapRecord(
@@ -543,7 +549,7 @@ class SwapConfirmViewModel(
             recipientAddress = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut),
             customRecipientAddress = recipient != null,
             sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
-            transactionHash = transactionHash(result),
+            transactionHash = null,
             providerSwapId = commitment.providerSwapId,
             fromAsset = quote.fromAsset,
             toAsset = quote.toAsset,
@@ -551,7 +557,7 @@ class SwapConfirmViewModel(
             status = SwapStatus.Depositing.name,
             estimatedTime = quote.estimatedTime,
         )
-        App.swapRecordManager.save(record)
+        return App.swapRecordManager.save(record)
     }
 
     fun setRecipient(recipient: Address?) {

@@ -327,16 +327,14 @@ class CrossPayConfirmViewModel(
 
             // Pre-saved before broadcasting so the record survives the app dying between the
             // two: the committed order is already real server-side, and tracking resolves it by
-            // uuid alone even before a tx hash lands.
+            // uuid alone even before a tx hash lands. A send that fails here may still have
+            // reached the node, and the kits do not say which side of the broadcast an error
+            // came from, so the record is never marked failed and no fresh preview is offered;
+            // the spent token already forces one on the next press, through a notice.
             val recordId = swapRecordManager.save(swapRecord(order))
 
             val result = try {
                 service.sendTransaction()
-            } catch (e: Throwable) {
-                // A failed broadcast moved no funds; the unfunded order simply expires.
-                swapRecordManager.updateStatus(recordId, SwapStatus.Failed, null)
-                requote()
-                throw e
             } finally {
                 if (service !== sendTransactionService) service.clear()
             }
