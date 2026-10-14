@@ -69,6 +69,7 @@ interface IAppConfigProvider {
     val hashDitApiKey: String
     val uswapApiBaseUrl: String
     val uswapApiKey: String
+    val tonApiKey: String
     val oneInchPartnerFeeAddress: String
     val swapFeeBps: Int
     val fdroidBuild: Boolean

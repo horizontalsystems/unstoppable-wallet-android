@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.managers
 
 import android.content.Context
+import io.horizontalsystems.walletkit.core.App
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tonkit.models.Network
@@ -23,7 +24,7 @@ class TonConnectManager(
     private val scope = CoroutineScope(Dispatchers.Default)
 
     val kit = TonConnectKit.getInstance(context, appName, appVersion)
-    val transactionSigner = TonKit.getTransactionSigner(TonKit.getTonApi(Network.MainNet))
+    val transactionSigner = TonKit.getTransactionSigner(TonKit.getTonApi(Network.MainNet, App.appConfigProvider.tonApiKey))
 
     // Pending requests are cached so a request arriving before the main screen is
     // composed (cold start from a deep link) is still delivered.

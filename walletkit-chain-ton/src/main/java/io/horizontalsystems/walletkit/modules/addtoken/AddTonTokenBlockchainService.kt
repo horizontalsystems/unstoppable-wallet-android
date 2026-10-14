@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.addtoken
 
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.customCoinUid
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -24,7 +25,7 @@ class AddTonTokenBlockchainService(private val blockchain: Blockchain) : AddToke
     }
 
     override suspend fun token(reference: String): Token {
-        val jetton = TonKit.getJetton(Network.MainNet, Address.parse(reference))
+        val jetton = TonKit.getJetton(Network.MainNet, Address.parse(reference), App.appConfigProvider.tonApiKey)
 
         val tokenQuery = tokenQuery(reference)
         return Token(
