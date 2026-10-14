@@ -243,6 +243,7 @@
 -keep class io.horizontalsystems.tronkit.** { *; }
 -keep class io.horizontalsystems.thorchainkit.** { *; }
 -keep class io.horizontalsystems.xrpkit.** { *; }
+-keep class io.horizontalsystems.nearkit.** { *; }
 -keep class io.horizontalsystems.stellarkit.** { *; }
 -keep class io.horizontalsystems.tonkit.** { *; }
 # TonKit's generated tonapi client parses JSON with Moshi's KotlinJsonAdapterFactory,
