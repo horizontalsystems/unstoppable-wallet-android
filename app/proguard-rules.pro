@@ -255,8 +255,8 @@
 -keep class io.horizontalsystems.bitcoinkit.** { *; }
 -keep class io.horizontalsystems.dashkit.** { *; }
 -keep class io.horizontalsystems.litecoinkit.** { *; }
--keep class io.horizontalsystems.bitcoincashkit.** { *; }
--keep class io.horizontalsystems.ecashkit.** { *; }
+-keep class io.horizontalsystems.bitcoincash.** { *; }
+-keep class io.horizontalsystems.ecash.** { *; }
 -keep class io.horizontalsystems.hodler.** { *; }
 -keep class io.horizontalsystems.hdwalletkit.** { *; }
 -keep class io.horizontalsystems.feeratekit.** { *; }
