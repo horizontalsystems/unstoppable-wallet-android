@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import io.horizontalsystems.walletkit.core.ServiceState
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SpendPurpose
+import io.horizontalsystems.walletkit.core.chain.spendBalance
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -17,15 +18,14 @@ class TokenBalanceService(
     private var token: Token? = null
     private var amount: BigDecimal? = null
     private var adapter: IBalanceAdapter? = null
-    private var spendableBalance: BigDecimal? = null
-    private var preparableBalance: BigDecimal? = null
+    private var balance: BigDecimal? = null
     private var error: Throwable? = null
-    private var preparationAction: ISwapProviderAction? = null
+    private var spendStep: ISwapProviderAction? = null
 
     override fun createState() = State(
-        balance = spendableBalance?.let { it + (preparableBalance ?: BigDecimal.ZERO) },
+        balance = balance,
         error = error,
-        preparationAction = preparationAction,
+        spendStep = spendStep,
     )
 
     fun setToken(token: Token?) {
@@ -47,7 +47,7 @@ class TokenBalanceService(
 
     private fun validate() {
         error = null
-        preparationAction = null
+        spendStep = null
 
         val amount = amount ?: return
 
@@ -59,18 +59,13 @@ class TokenBalanceService(
             is AdapterState.Connecting -> WalletSyncing()
             is AdapterState.NotSynced -> WalletNotSynced()
             AdapterState.Synced -> {
-                val spendable = spendableBalance ?: BigDecimal.ZERO
-                if (amount <= spendable) {
-                    null
+                // The step covers everything between what is spendable now and the balance,
+                // so the balance check below stays the same for every chain.
+                spendStep = token?.let { ChainRegistry[it.blockchainType]?.spendStep(it, amount, purpose) }
+                if (spendStep == null && amount > (balance ?: BigDecimal.ZERO)) {
+                    SwapError.InsufficientBalanceFrom
                 } else {
-                    val token = token
-                    val action = if (token != null && amount <= spendable + (preparableBalance ?: BigDecimal.ZERO)) {
-                        ChainRegistry[token.blockchainType]?.balancePreparationAction(token, amount, purpose)
-                    } else {
-                        null
-                    }
-                    preparationAction = action
-                    if (action == null) SwapError.InsufficientBalanceFrom else null
+                    null
                 }
             }
         }
@@ -85,19 +80,17 @@ class TokenBalanceService(
     private fun refreshAvailableBalance() {
         val token = token
         adapter = token?.let { adapterManager.getAdapterForToken<IBalanceAdapter>(it) }
-        val plugin = token?.let { ChainRegistry[it.blockchainType] }
-        spendableBalance = adapter?.let { plugin?.spendableBalance(token) ?: it.balanceData?.available }
-        preparableBalance = token?.let { plugin?.preparableBalance(it) }
+        balance = token?.let { adapter?.spendBalance(it) }
     }
 
     /**
-     * [balance] includes funds that need a preparation step before they can be spent; an
-     * amount that needs them comes with [preparationAction] instead of an error.
+     * [balance] includes funds that need a step before they can be spent; an amount that
+     * needs them comes with [spendStep] instead of an error.
      */
     data class State(
         val balance: BigDecimal?,
         val error: Throwable?,
-        val preparationAction: ISwapProviderAction? = null,
+        val spendStep: ISwapProviderAction? = null,
     )
 }
 

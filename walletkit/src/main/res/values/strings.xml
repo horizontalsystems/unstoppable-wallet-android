@@ -2346,7 +2346,6 @@
     <string name="Zcash_ShieldZec">Shield ZEC</string>
     <string name="Zcash_ConfirmShielding">Confirm Shielding</string>
     <string name="Zcash_ToShieldedAddress">To your shielded address</string>
-    <string name="Zcash_ShieldingProgress">Shielding ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">Enable %s</string>
     <string name="NearSend_ReceiverIsTokenContract">This is the token\'s contract address, not a wallet. Tokens sent here can\'t be recovered.</string>
     <string name="NearSend_ReceiverCheckFailed">Couldn\'t check that this account exists. Check your connection and try again.</string>
@@ -2355,4 +2354,5 @@
     <string name="SwapConfirm_CommitRateChanged">The price moved. Review the updated quote and try again.</string>
     <string name="SwapConfirm_CommitRefreshRequired">The quote expired. A new quote has been loaded.</string>
     <string name="SwapConfirm_CommitFailed">The swap could not be started. A new quote has been loaded.</string>
+    <string name="Zcash_Confirming">Confirming</string>
 </resources>

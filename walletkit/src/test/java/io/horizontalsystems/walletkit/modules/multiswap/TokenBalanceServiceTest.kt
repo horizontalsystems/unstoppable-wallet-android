@@ -44,16 +44,13 @@ class TokenBalanceServiceTest {
         override val blockchainType = BlockchainType.Zcash
         override fun clearAccountData(accountId: String) = Unit
 
-        var preparable: BigDecimal? = null
-        var spendable: BigDecimal? = null
+        var balance: BigDecimal? = null
         var action: ISwapProviderAction? = null
         val requestedPurposes = mutableListOf<SpendPurpose>()
 
-        override fun preparableBalance(token: Token) = preparable
+        override fun spendBalance(token: Token) = balance
 
-        override fun spendableBalance(token: Token) = spendable
-
-        override fun balancePreparationAction(
+        override fun spendStep(
             token: Token,
             amount: BigDecimal,
             purpose: SpendPurpose,
@@ -103,91 +100,66 @@ class TokenBalanceServiceTest {
     }
 
     @Test
-    fun balance_includesPreparableFunds() {
-        plugin.preparable = BigDecimal("10")
+    fun balance_comesFromChain() {
+        plugin.balance = BigDecimal("12")
         service.refresh()
 
         assertEquals(BigDecimal("12"), service.stateFlow.value.balance)
     }
 
     @Test
-    fun amountWithinSpendable_needsNoAction() {
-        plugin.preparable = BigDecimal("10")
-        plugin.action = FakeAction(false)
-        service.refresh()
-        service.setAmount(BigDecimal("1.5"))
-
-        val state = service.stateFlow.value
-        assertNull(state.error)
-        assertNull(state.preparationAction)
-        assertEquals(emptyList<SpendPurpose>(), plugin.requestedPurposes)
+    fun balance_fallsBackToAvailable() {
+        assertEquals(BigDecimal("2"), service.stateFlow.value.balance)
     }
 
     @Test
-    fun amountCoveredByPreparableFunds_offersAction() {
+    fun stepFromChain_replacesError() {
         val action = FakeAction(false)
-        plugin.preparable = BigDecimal("10")
+        plugin.balance = BigDecimal("12")
         plugin.action = action
         service.refresh()
         service.setAmount(BigDecimal("8.5"))
 
         val state = service.stateFlow.value
         assertNull(state.error)
-        assertSame(action, state.preparationAction)
+        assertSame(action, state.spendStep)
         assertEquals(listOf(SpendPurpose.Send), plugin.requestedPurposes)
     }
 
     @Test
-    fun amountAboveAllFunds_isInsufficient() {
-        plugin.preparable = BigDecimal("10")
-        plugin.action = FakeAction(false)
+    fun noStepWithinBalance_proceeds() {
+        plugin.balance = BigDecimal("12")
+        service.refresh()
+        service.setAmount(BigDecimal("1.5"))
+
+        val state = service.stateFlow.value
+        assertNull(state.error)
+        assertNull(state.spendStep)
+    }
+
+    @Test
+    fun noStepAboveBalance_isInsufficient() {
+        plugin.balance = BigDecimal("12")
         service.refresh()
         service.setAmount(BigDecimal("12.1"))
 
         val state = service.stateFlow.value
         assertEquals(SwapError.InsufficientBalanceFrom, state.error)
-        assertNull(state.preparationAction)
+        assertNull(state.spendStep)
     }
 
     @Test
-    fun noActionFromChain_isInsufficient() {
-        plugin.preparable = BigDecimal("10")
-        plugin.action = null
-        service.refresh()
-        service.setAmount(BigDecimal("8.5"))
-
-        assertEquals(SwapError.InsufficientBalanceFrom, service.stateFlow.value.error)
-    }
-
-    @Test
-    fun preparedFundsBecomeSpendable_actionClears() {
-        plugin.preparable = BigDecimal("10")
+    fun stepEndsWhenFundsBecomeSpendable() {
+        plugin.balance = BigDecimal("12")
         plugin.action = FakeAction(true)
         service.refresh()
         service.setAmount(BigDecimal("8.5"))
 
-        adapter.available = BigDecimal("12")
-        plugin.preparable = BigDecimal.ZERO
+        plugin.action = null
         service.refresh()
 
         val state = service.stateFlow.value
         assertNull(state.error)
-        assertNull(state.preparationAction)
-    }
-
-    @Test
-    fun chainSpendable_narrowsAvailable() {
-        // The wallet reports 2 available, but only 1.2 can be spent until a shielding confirms.
-        val action = FakeAction(true)
-        plugin.spendable = BigDecimal("1.2")
-        plugin.preparable = BigDecimal("0.8")
-        plugin.action = action
-        service.refresh()
-        service.setAmount(BigDecimal("1.5"))
-
-        val state = service.stateFlow.value
-        assertEquals(BigDecimal("2.0"), state.balance)
-        assertNull(state.error)
-        assertSame(action, state.preparationAction)
+        assertNull(state.spendStep)
     }
 }

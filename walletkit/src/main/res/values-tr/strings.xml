@@ -1992,7 +1992,6 @@
     <string name="Zcash_ShieldZec">ZEC\'i shield et</string>
     <string name="Zcash_ConfirmShielding">Shield işlemini onaylayın</string>
     <string name="Zcash_ToShieldedAddress">Shielded adresinize</string>
-    <string name="Zcash_ShieldingProgress">ZEC shield ediliyor (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">%s etkinleştir</string>
     <string name="NearSend_ReceiverIsTokenContract">Bu bir cüzdan değil, tokenın kontrat adresidir. Buraya gönderilen tokenlar geri alınamaz.</string>
     <string name="NearSend_ReceiverCheckFailed">Bu hesabın var olduğu doğrulanamadı. Bağlantınızı kontrol edip tekrar deneyin.</string>
@@ -2001,4 +2000,5 @@
     <string name="SwapConfirm_CommitRateChanged">Fiyat değişti. Güncellenen teklifi inceleyip tekrar deneyin.</string>
     <string name="SwapConfirm_CommitRefreshRequired">Teklifin süresi doldu. Yeni bir teklif yüklendi.</string>
     <string name="SwapConfirm_CommitFailed">Swap başlatılamadı. Yeni bir teklif yüklendi.</string>
+    <string name="Zcash_Confirming">Onaylanıyor</string>
 </resources>

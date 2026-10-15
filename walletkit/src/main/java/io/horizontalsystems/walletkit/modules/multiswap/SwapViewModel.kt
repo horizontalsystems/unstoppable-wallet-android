@@ -319,7 +319,7 @@ class SwapViewModel(
             allowanceActionSuppressed = allowanceActionSuppressed(),
             externalRecipientRequired = externalRecipientRequired(quoteState.tokenOut),
             disabledPercents = disabledPercents(quoteState.tokenIn),
-            balancePreparationAction = balanceState.preparationAction,
+            spendStep = balanceState.spendStep,
             tokenInWalletState = tokenInWalletState,
         )
     }
@@ -651,7 +651,7 @@ data class SwapUiState(
     val allowanceActionSuppressed: Boolean = false,
     val externalRecipientRequired: Boolean = false,
     val disabledPercents: Set<Int> = emptySet(),
-    val balancePreparationAction: ISwapProviderAction? = null,
+    val spendStep: ISwapProviderAction? = null,
     val tokenInWalletState: TokenInWalletState = TokenInWalletState.Ready,
 ) {
     val currentStep: SwapStep = when {
@@ -663,7 +663,7 @@ data class SwapUiState(
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
         amlChecking -> SwapStep.AmlChecking
-        balancePreparationAction != null -> SwapStep.ActionRequired(balancePreparationAction)
+        spendStep != null -> SwapStep.ActionRequired(spendStep)
         quote?.actionRequired != null && !allowanceActionSuppressed -> SwapStep.ActionRequired(quote.actionRequired!!)
         else -> SwapStep.Proceed
     }

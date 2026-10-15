@@ -1996,7 +1996,6 @@
     <string name="Zcash_ShieldZec">ZEC abschirmen</string>
     <string name="Zcash_ConfirmShielding">Abschirmung bestätigen</string>
     <string name="Zcash_ToShieldedAddress">An Ihre abgeschirmte Adresse</string>
-    <string name="Zcash_ShieldingProgress">ZEC wird abgeschirmt (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">%s aktivieren</string>
     <string name="NearSend_ReceiverIsTokenContract">Das ist die Vertragsadresse des Tokens, keine Wallet. Hierher gesendete Token können nicht wiederhergestellt werden.</string>
     <string name="NearSend_ReceiverCheckFailed">Es konnte nicht geprüft werden, ob dieses Konto existiert. Prüfe deine Verbindung und versuche es erneut.</string>
@@ -2005,4 +2004,5 @@
     <string name="SwapConfirm_CommitRateChanged">Der Preis hat sich geändert. Prüfe das aktualisierte Angebot und versuche es erneut.</string>
     <string name="SwapConfirm_CommitRefreshRequired">Das Angebot ist abgelaufen. Ein neues Angebot wurde geladen.</string>
     <string name="SwapConfirm_CommitFailed">Der Swap konnte nicht gestartet werden. Ein neues Angebot wurde geladen.</string>
+    <string name="Zcash_Confirming">Bestätigung</string>
 </resources>

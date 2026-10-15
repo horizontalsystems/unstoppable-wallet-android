@@ -1990,7 +1990,6 @@
     <string name="Zcash_ShieldZec">屏蔽 ZEC</string>
     <string name="Zcash_ConfirmShielding">确认屏蔽</string>
     <string name="Zcash_ToShieldedAddress">至您的屏蔽地址</string>
-    <string name="Zcash_ShieldingProgress">正在屏蔽 ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">启用 %s</string>
     <string name="NearSend_ReceiverIsTokenContract">这是代币的合约地址，不是钱包地址。发送到这里的代币无法找回。</string>
     <string name="NearSend_ReceiverCheckFailed">无法确认该账户是否存在。请检查网络连接后重试。</string>
@@ -1999,4 +1998,5 @@
     <string name="SwapConfirm_CommitRateChanged">价格已变动。请查看更新后的报价并重试。</string>
     <string name="SwapConfirm_CommitRefreshRequired">报价已过期。已加载新的报价。</string>
     <string name="SwapConfirm_CommitFailed">无法开始兑换。已加载新的报价。</string>
+    <string name="Zcash_Confirming">确认中</string>
 </resources>

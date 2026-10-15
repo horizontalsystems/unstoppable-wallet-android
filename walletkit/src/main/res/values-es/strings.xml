@@ -1991,7 +1991,6 @@
     <string name="Zcash_ShieldZec">Proteger ZEC</string>
     <string name="Zcash_ConfirmShielding">Confirmar protección</string>
     <string name="Zcash_ToShieldedAddress">A tu dirección protegida</string>
-    <string name="Zcash_ShieldingProgress">Protegiendo ZEC (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">Habilitar %s</string>
     <string name="NearSend_ReceiverIsTokenContract">Esta es la dirección del contrato del token, no una billetera. Los tokens enviados aquí no se pueden recuperar.</string>
     <string name="NearSend_ReceiverCheckFailed">No se pudo comprobar que esta cuenta existe. Revisa tu conexión e inténtalo de nuevo.</string>
@@ -2000,4 +1999,5 @@
     <string name="SwapConfirm_CommitRateChanged">El precio ha cambiado. Revisa la cotización actualizada e inténtalo de nuevo.</string>
     <string name="SwapConfirm_CommitRefreshRequired">La cotización ha expirado. Se ha cargado una nueva cotización.</string>
     <string name="SwapConfirm_CommitFailed">No se pudo iniciar el swap. Se ha cargado una nueva cotización.</string>
+    <string name="Zcash_Confirming">Confirmando</string>
 </resources>

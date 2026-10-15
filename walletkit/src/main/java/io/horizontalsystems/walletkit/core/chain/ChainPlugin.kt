@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.core.managers.RestoreSettings
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
+import io.horizontalsystems.walletkit.core.IBalanceAdapter
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
@@ -84,25 +85,18 @@ interface ChainPlugin {
     fun unshieldedBalanceThreshold(): BigDecimal? = null
 
     /**
-     * Funds of [token] that are not spendable yet but become spendable through a step the
-     * user starts from the send or swap form (Zcash: transparent funds, which must be
-     * shielded first), or null when there are none. The forms offer them as part of the
-     * available balance and ask for [balancePreparationAction] when the amount needs them.
+     * The balance of [token] that send and swap forms and token pickers offer, when it
+     * differs from the adapter's available balance, or null to use that. Zcash counts funds
+     * still confirming and transparent funds, which become spendable through [spendStep].
      */
-    fun preparableBalance(token: Token): BigDecimal? = null
+    fun spendBalance(token: Token): BigDecimal? = null
 
     /**
-     * What a transfer of [token] can spend now, when the wallet's available balance claims
-     * more than that, or null to use the available balance.
+     * What a form must wait for or start before it can spend [amount] of [token], or null
+     * when the amount is spendable now or exceeds [spendBalance]. An action in progress
+     * keeps the form waiting, the way swap waits on an approval.
      */
-    fun spendableBalance(token: Token): BigDecimal? = null
-
-    /**
-     * The step that makes [amount] of [token], above its spendable balance, spendable, or
-     * null when none is needed or possible. Its in-progress state lasts until the prepared
-     * funds are spendable, so the form waits on it the way swap waits on an approval.
-     */
-    fun balancePreparationAction(token: Token, amount: BigDecimal, purpose: SpendPurpose): ISwapProviderAction? = null
+    fun spendStep(token: Token, amount: BigDecimal, purpose: SpendPurpose): ISwapProviderAction? = null
 
     /**
      * Balance the chain requires the user to migrate (e.g. Zcash Orchard→Ironwood after a
@@ -443,3 +437,7 @@ class ChainKeyRow(
 
 /** What the funds checked by a send or swap form are about to be spent on. */
 enum class SpendPurpose { Send, Swap }
+
+/** The balance of [token] a form or token picker offers; see [ChainPlugin.spendBalance]. */
+fun IBalanceAdapter.spendBalance(token: Token): BigDecimal? =
+    ChainRegistry[token.blockchainType]?.spendBalance(token) ?: balanceData?.available

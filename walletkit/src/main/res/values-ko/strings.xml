@@ -1987,7 +1987,6 @@
     <string name="Zcash_ShieldZec">ZEC 보호</string>
     <string name="Zcash_ConfirmShielding">보호 확인</string>
     <string name="Zcash_ToShieldedAddress">내 보호 주소로</string>
-    <string name="Zcash_ShieldingProgress">ZEC 보호 중 (%1$d/%2$d)</string>
     <string name="Swap_EnableToken">%s 활성화</string>
     <string name="NearSend_ReceiverIsTokenContract">이 주소는 지갑이 아니라 토큰 컨트랙트 주소입니다. 여기로 보낸 토큰은 복구할 수 없습니다.</string>
     <string name="NearSend_ReceiverCheckFailed">이 계정이 존재하는지 확인할 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
@@ -1996,4 +1995,5 @@
     <string name="SwapConfirm_CommitRateChanged">가격이 변동되었습니다. 업데이트된 견적을 확인하고 다시 시도하세요.</string>
     <string name="SwapConfirm_CommitRefreshRequired">견적이 만료되었습니다. 새 견적을 불러왔습니다.</string>
     <string name="SwapConfirm_CommitFailed">스왑을 시작할 수 없습니다. 새 견적을 불러왔습니다.</string>
+    <string name="Zcash_Confirming">확인 중</string>
 </resources>

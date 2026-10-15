@@ -228,35 +228,18 @@ class ZcashChainPlugin(
 
     override fun unshieldedBalanceThreshold(): BigDecimal = ZcashAdapter.minimalShieldThreshold
 
-    // Transparent funds can be spent only once shielded; while a shielding confirms, its
-    // output is pending, not available. Both count, so the balance a form offers does not
-    // drop and come back around a shielding.
-    override fun preparableBalance(token: Token): BigDecimal? {
-        val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token) ?: return null
-        return adapter.shieldingConfirmingBalance + adapter.shieldableBalance
-    }
+    override fun spendBalance(token: Token): BigDecimal? =
+        App.adapterManager.getAdapterForToken<ZcashAdapter>(token)?.shieldBalance?.balance
 
-    override fun spendableBalance(token: Token): BigDecimal? =
-        App.adapterManager.getAdapterForToken<ZcashAdapter>(token)?.spendableBalance
-
-    override fun balancePreparationAction(
+    override fun spendStep(
         token: Token,
         amount: BigDecimal,
         purpose: SpendPurpose,
     ): ISwapProviderAction? {
         val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token) ?: return null
+        val step = adapter.shieldBalance?.step(amount) ?: return null
         val wallet = App.walletManager.activeWallets.firstOrNull { it.token == token } ?: return null
-        // A pending shielding is waited out even when the amount needs more than it brings:
-        // its inputs are already spent, and the balance catches up with it only gradually.
-        val inProgress = adapter.shieldingPending
-        if (!inProgress && adapter.shieldableBalance <= BigDecimal.ZERO) return null
-        return ActionShield(
-            wallet = wallet,
-            purpose = purpose,
-            inProgress = inProgress,
-            confirmations = adapter.shieldingConfirmations,
-            requiredConfirmations = adapter.shieldingRequiredConfirmations,
-        )
+        return ActionShield(wallet = wallet, purpose = purpose, step = step)
     }
 
     override fun migrationRequiredBalance(wallet: Wallet): BigDecimal? =

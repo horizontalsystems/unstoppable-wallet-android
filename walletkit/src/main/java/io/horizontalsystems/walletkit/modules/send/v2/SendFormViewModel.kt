@@ -256,6 +256,11 @@ class SendFormViewModel(
         if (amount == null || amount <= BigDecimal.ZERO) {
             return SendStep.InputRequired(SendInputType.Amount)
         }
+        // Asked before the address, so a wait or a shielding the amount needs shows as soon as
+        // it is typed. Outputs narrowed by the chain settings are checked on their own above.
+        if (chainBalance == null) {
+            balanceState.spendStep?.let { return SendStep.ActionRequired(it) }
+        }
         if (address == null) {
             return SendStep.InputRequired(SendInputType.Address)
         }
@@ -274,11 +279,6 @@ class SendFormViewModel(
             if (extraInput.required && extraInputValue == null) {
                 return SendStep.InputRequired(SendInputType.Extra)
             }
-        }
-        // Asked for last, so the step it starts is only offered for a complete form.
-        // Outputs narrowed by the chain settings are checked on their own above.
-        if (chainBalance == null) {
-            balanceState.preparationAction?.let { return SendStep.ActionRequired(it) }
         }
         return SendStep.Proceed
     }
