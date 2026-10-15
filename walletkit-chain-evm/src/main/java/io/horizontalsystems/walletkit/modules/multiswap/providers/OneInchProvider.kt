@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.blockTime
 import io.horizontalsystems.walletkit.core.convertedError
 import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
@@ -49,9 +50,6 @@ class OneInchProvider(
     }
 
     override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
-
-    override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =
-        tokenIn.blockchainType == tokenOut.blockchainType && tokenIn.blockchainType.isEvm
 
     override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum,
@@ -169,6 +167,7 @@ class OneInchProvider(
             slippage,
             fromAsset = assetId(tokenIn),
             toAsset = assetId(tokenOut),
+            mevProtectionAllowed = SwapMevProtection.allowedForPair(tokenIn, tokenOut),
         )
     }
 

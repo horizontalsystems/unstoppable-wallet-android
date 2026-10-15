@@ -11,6 +11,7 @@ import io.horizontalsystems.walletkit.core.derivation
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
+import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitment
@@ -844,6 +845,7 @@ class USwapProvider(
                 tokenIn = tokenIn,
                 amountIn = amountIn,
             ),
+            mevProtectionAllowed = SwapMevProtection.allowedForRoute(execution, tokenIn, tokenOut),
         )
     }
 

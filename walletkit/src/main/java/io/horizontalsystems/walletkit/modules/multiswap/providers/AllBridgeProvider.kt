@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.core.hexToByteArray
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
+import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
@@ -157,9 +158,6 @@ object AllBridgeProvider : IMultiSwapProvider {
     override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
         tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
 
-    override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =
-        tokenIn.blockchainType == tokenOut.blockchainType && tokenIn.blockchainType.isEvm
-
     override fun supports(blockchainType: BlockchainType): Boolean {
         // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
         return true
@@ -309,7 +307,8 @@ object AllBridgeProvider : IMultiSwapProvider {
             priceImpact = null,
             fields = fields,
             estimatedTime = estimationTime(tokenIn, tokenOut, crosschain),
-            slippage = if (crosschain) null else slippage
+            slippage = if (crosschain) null else slippage,
+            mevProtectionAllowed = SwapMevProtection.allowedForPair(tokenIn, tokenOut),
         )
     }
 

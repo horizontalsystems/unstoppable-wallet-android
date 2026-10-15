@@ -32,4 +32,8 @@ data class SwapFinalQuote(
     // Provider-private state carried from the preview to [IMultiSwapProvider.commit], such as the
     // token that turns the previewed route into an order. Opaque to everything else.
     val providerContext: Any? = null,
+    // Whether this route can be broadcast through the MEV-protected RPC: a property of the
+    // quote, decided by the provider from the route, never of the provider. The confirmation
+    // offers the toggle only when it is true and the sell chain has a protected sender.
+    val mevProtectionAllowed: Boolean = false,
 )

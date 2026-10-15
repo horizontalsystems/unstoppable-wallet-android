@@ -13,9 +13,11 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SwapDefenseSystemService(
-    private val supportsMevProtection: Boolean,
     private val paidActionSettingsManager: PaidActionSettingsManager
 ) : ServiceState<SwapDefenseSystemService.State>() {
+    // Whether the current quote can be sent MEV-protected: the route allows it and the sell
+    // chain has a protected sender. Unknown until the confirmation quote arrives.
+    private var supportsMevProtection = false
     private var fiatPriceImpact: BigDecimal? = null
     private var fiatPriceImpactLevel: PriceImpactLevel? = null
     private var sendable = false
@@ -58,6 +60,14 @@ class SwapDefenseSystemService(
         mevProtectionEnabled = supportsMevProtection && actionAllowed && actionEnabled,
         mevProtectionActionAllowed = actionAllowed,
     )
+
+    fun setSupportsMevProtection(supported: Boolean) {
+        supportsMevProtection = supported
+
+        refreshSystemMessage()
+
+        emitState()
+    }
 
     fun setPriceImpact(fiatPriceImpact: BigDecimal?, fiatPriceImpactLevel: PriceImpactLevel?) {
         this.fiatPriceImpact = fiatPriceImpact

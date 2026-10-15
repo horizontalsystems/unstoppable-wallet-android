@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.blockTime
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.getEthereumKitAddress
+import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
@@ -30,9 +31,6 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
     override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
-
-    override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =
-        tokenIn.blockchainType == tokenOut.blockchainType && tokenIn.blockchainType.isEvm
 
     final override suspend fun fetchQuote(
         tokenIn: Token,
@@ -104,6 +102,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             slippage,
             fromAsset = deriveIdentifier(tokenIn),
             toAsset = deriveIdentifier(tokenOut),
+            mevProtectionAllowed = SwapMevProtection.allowedForPair(tokenIn, tokenOut),
         )
     }
 

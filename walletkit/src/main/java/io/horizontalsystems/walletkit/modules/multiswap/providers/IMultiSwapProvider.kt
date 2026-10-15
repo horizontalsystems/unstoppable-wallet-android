@@ -22,7 +22,6 @@ interface IMultiSwapProvider {
     val requireTerms: Boolean
     val riskLevel: RiskLevel
     fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean
-    fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean = false
 
     val titleShort: String
         get() {

@@ -65,6 +65,11 @@ class SwapConfirmViewModel(
     // is mandatory and must not be cleared (there is no own-wallet address to fall back to)
     val recipientRequired = !SwapHelper.isTokenReceivableByAccount(tokenOut)
 
+    // MEV protection is a property of the confirmation quote (the route) and needs a protected
+    // sender on the sell chain; nothing is known before the first quote arrives.
+    private fun supportsMevProtection(finalQuote: SwapFinalQuote?): Boolean =
+        sendTransactionService.supportsMevProtection && finalQuote?.mevProtectionAllowed == true
+
     // only a vault-settled provider (per its /v3/providers executionType) delivers ZEC to
     // shielded/unified receivers; every other route needs a transparent recipient address
     val zcashTransparentRecipientOnly: Boolean
@@ -262,8 +267,7 @@ class SwapConfirmViewModel(
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             swapDefenseSystemMessage = swapDefenseState.systemMessage,
             mevProtectionEnabled = swapDefenseState.mevProtectionEnabled,
-            supportsMevProtection = sendTransactionService.supportsMevProtection &&
-                    swapProvider.mevProtectionAllowed(tokenIn, tokenOut),
+            supportsMevProtection = supportsMevProtection(finalQuote),
             mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
             recipient = recipient,
             recipientRequired = recipientRequired,
@@ -332,6 +336,7 @@ class SwapConfirmViewModel(
                 }
 
                 this@SwapConfirmViewModel.finalQuote = finalQuote
+                swapDefenseSystemService.setSupportsMevProtection(supportsMevProtection(finalQuote))
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 estimatedTime = finalQuote.estimatedTime
@@ -599,11 +604,7 @@ class SwapConfirmViewModel(
                 sendTransactionService,
                 TimerService(),
                 PriceImpactService(PriceImpactLevel.Normal),
-                SwapDefenseSystemService(
-                    sendTransactionService.supportsMevProtection &&
-                            quote.provider.mevProtectionAllowed(quote.tokenIn, quote.tokenOut),
-                    App.paidActionSettingsManager
-                ),
+                SwapDefenseSystemService(App.paidActionSettingsManager),
                 App.backgroundManager,
                 initialRecipient,
             )
