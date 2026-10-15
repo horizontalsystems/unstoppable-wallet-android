@@ -75,4 +75,28 @@ class ZcashSyncStateTest {
     fun `an error does not override a sync in progress`() {
         assertNull(ZcashSyncState.fromProcessorError(AdapterState.Syncing(), Exception("transient")))
     }
+
+    @Test
+    fun `a synced wallet catching up a few blocks stays synced`() {
+        val state = ZcashSyncState.fromStatus(Synchronizer.Status.SYNCING, null, AdapterState.Synced, blocksBehind = 1L)
+        assertEquals(AdapterState.Synced, state)
+    }
+
+    @Test
+    fun `a synced wallet far behind shows syncing`() {
+        val state = ZcashSyncState.fromStatus(Synchronizer.Status.SYNCING, null, AdapterState.Synced, blocksBehind = 11L)
+        assertTrue(state is AdapterState.Syncing)
+    }
+
+    @Test
+    fun `catch-up needs a known distance`() {
+        val state = ZcashSyncState.fromStatus(Synchronizer.Status.SYNCING, null, AdapterState.Synced, blocksBehind = null)
+        assertTrue(state is AdapterState.Syncing)
+    }
+
+    @Test
+    fun `a wallet not yet synced keeps syncing however close`() {
+        val state = ZcashSyncState.fromStatus(Synchronizer.Status.SYNCING, null, AdapterState.Syncing(), blocksBehind = 1L)
+        assertTrue(state is AdapterState.Syncing)
+    }
 }

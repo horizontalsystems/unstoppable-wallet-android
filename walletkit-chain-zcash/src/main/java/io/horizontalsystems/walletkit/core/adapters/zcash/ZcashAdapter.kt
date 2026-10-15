@@ -607,11 +607,30 @@ class ZcashAdapter(
     // check-then-write on syncState atomic (see ZcashSyncState for why ordering matters).
     private val syncStateLock = Any()
 
+    @Volatile
+    private var lastStatus: Synchronizer.Status? = null
+
     private fun onStatus(status: Synchronizer.Status) {
         synchronized(syncStateLock) {
+            lastStatus = status
             if (status == Synchronizer.Status.SYNCED) lastProcessorError = null
-            syncState = ZcashSyncState.fromStatus(status, lastProcessorError)
+            syncState = ZcashSyncState.fromStatus(status, lastProcessorError, syncState, blocksBehind())
         }
+    }
+
+    // A wallet kept synced while it catches up shows syncing once it falls further behind;
+    // the status itself does not change for that.
+    private fun refreshCatchUp() {
+        synchronized(syncStateLock) {
+            if (lastStatus != Synchronizer.Status.SYNCING || syncState != AdapterState.Synced) return
+            if (!ZcashSyncState.isCatchingUp(syncState, blocksBehind())) syncState = AdapterState.Syncing()
+        }
+    }
+
+    private fun blocksBehind(): Long? {
+        val network = synchronizer.networkHeight.value?.value ?: return null
+        val scanned = synchronizer.fullyScannedHeight.value?.value ?: return null
+        return (network - scanned).coerceAtLeast(0)
     }
 
     private fun onDownloadProgress(progress: PercentDecimal) {
@@ -629,6 +648,7 @@ class ZcashAdapter(
     @Suppress("UNUSED_PARAMETER")
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
         _lastBlockUpdatedFlow.tryEmit(Unit)
+        refreshCatchUp()
         // Confirmations and expiry move with the chain tip alone.
         refreshShieldBalance()
     }
