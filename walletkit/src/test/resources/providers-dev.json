@@ -33,6 +33,11 @@
     ]
   },
   {
+    "provider": "UNISWAP",
+    "quotes": true,
+    "suspensions": []
+  },
+  {
     "provider": "BARTER",
     "quotes": true,
     "suspensions": [

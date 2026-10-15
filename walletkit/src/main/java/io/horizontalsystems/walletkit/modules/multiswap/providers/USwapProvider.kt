@@ -52,7 +52,7 @@ class USwapProvider(
     // signal. An app that builds the source leg itself (e.g. a deposit transfer
     // batched into its own signer flow) turns it off so the server returns the
     // plain deposit route instead of building and gas-estimating a transaction.
-    private val shouldIncludeSourceAddress: (Token) -> Boolean = { it.needsServerBuiltTx },
+    private val shouldIncludeSourceAddress: (Token) -> Boolean = { provider.consumesServerBuiltTx(it) },
     // Builds the EVM source leg of a transfer route: the deposit calldata the app's own
     // signer executes. Defaults to the EVM chain plugin's plain transfer; an app whose
     // signer flow needs another shape supplies its own.
@@ -91,6 +91,14 @@ class USwapProvider(
     }
 
     override suspend fun start() {
+        // The Stellar DEX routes publish no token list and serve one chain, so the card never
+        // waits on /v3/tokens: it is offered as soon as the swap screen opens, as the native
+        // Stellar client was.
+        if (provider == UProvider.Stellar) {
+            supportedBlockchainTypes = setOf(BlockchainType.Stellar)
+            return
+        }
+
         SwapProviderCacheHelper.getCachedChainIds(id)?.let { chainIds ->
             supportedBlockchainTypes = chainIds.mapNotNull { blockchainTypes[it] }.toSet()
             return
@@ -227,8 +235,11 @@ class USwapProvider(
 
                 BlockchainType.Thorchain,
                 BlockchainType.Mayachain -> {
-                    if (token.address.isNullOrBlank()) {
-                        App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
+                    // No address on these chains: the identifier is the asset notation itself
+                    // (THOR.RUNE, THOR.RUJI, BTC-BTC, MAYA.CACAO), which the chain's plugin
+                    // resolves to the bank denom the token is keyed on.
+                    ChainRegistry[blockchainType]?.swapAssetTokenType(token.identifier)?.let { tokenType ->
+                        App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
                             assetsMap[it] = token.identifier
                         }
                     }
@@ -288,12 +299,21 @@ class USwapProvider(
         return if (assetsMap.isNotEmpty()) {
             assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
         } else {
-            tokenFrom.blockchainType in supportedBlockchainTypes &&
+            // A raw-address identifier names no chain: the request carries the sell token's
+            // chainId for both sides, so such a pair is only expressible on one chain.
+            (!usesRawAddressIdentifiers || tokenFrom.blockchainType == tokenTo.blockchainType) &&
+                    tokenFrom.blockchainType in supportedBlockchainTypes &&
                     tokenTo.blockchainType in supportedBlockchainTypes &&
                     deriveIdentifier(tokenFrom) != null &&
                     deriveIdentifier(tokenTo) != null
         }
     }
+
+    private val usesRawAddressIdentifiers: Boolean
+        get() = when (provider) {
+            UProvider.Jupiter, UProvider.Lifi, UProvider.Stellar -> false
+            else -> true
+        }
 
     // Raw asset encoding for providers that sync no token list from the server (the
     // /tokens response carries only supportedChainIds), so assets are encoded as raw
@@ -340,6 +360,16 @@ class USwapProvider(
                 }
             }
         }
+        // The server's self-describing Stellar identifiers: native → `XLM.XLM`, classic asset →
+        // `XLM.<CODE>-<ISSUER>` with the code verbatim (case-sensitive). The issuer is a `G…`
+        // account; a Soroban contract token (`C…`) is not a classic asset and is not served.
+        UProvider.Stellar -> if (token.blockchainType != BlockchainType.Stellar) {
+            null
+        } else when (val type = token.type) {
+            TokenType.Native -> "XLM.XLM"
+            is TokenType.Asset -> type.issuer.takeIf { it.startsWith("G") }?.let { "XLM.${type.code}-$it" }
+            else -> null
+        }
         // Raw EVM address encoding (BARTER's server adapter expects addresses, not identifiers).
         else -> when (val type = token.type) {
             is TokenType.Eip20 -> type.address
@@ -360,7 +390,7 @@ class USwapProvider(
             val plugin = ChainRegistry[tokenIn.blockchainType]
             val allowance = plugin?.eip20Allowance(tokenIn, approvalAddress)
             plugin?.eip20ApproveAction(allowance, amountIn, approvalAddress, tokenIn)
-        }
+        } ?: ChainRegistry[tokenOut.blockchainType]?.swapActivationAction(tokenOut)
 
         return SwapQuote(
             amountOut = bestRoute.expectedBuyAmountOrZero,
@@ -382,6 +412,7 @@ class USwapProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal,
+        providers: Set<String> = rateProviders,
     ): UnstoppableAPI.Response.Route {
         val usingDerivedIdentifiers = assetsMap.isEmpty()
         val assetIn = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
@@ -393,7 +424,7 @@ class USwapProvider(
             buyAsset = assetOut,
             sellAmount = amountIn.toPlainString(),
             slippage = slippage,
-            providers = setOf(provider.id),
+            providers = providers,
             chainId = chainId,
         )
         var bestRoute = unstoppableAPI.rate(request).routes?.maxByOrNull { it.expectedBuyAmountOrZero }
@@ -431,10 +462,48 @@ class USwapProvider(
         return bestRoute
     }
 
+    // The server providers /v3/rate fans out over. A card normally quotes its one server provider;
+    // the Stellar card quotes the Stellar DEX set and keeps the best-priced route. STELLARBROKER
+    // itself is never requested: it has no service-fee mechanism, and its execution is a broker
+    // WebSocket session this app has no client for.
+    private val rateProviders: Set<String>
+        get() = when (provider) {
+            UProvider.Stellar -> STELLAR_ROUTE_PROVIDERS
+            else -> setOf(provider.id)
+        }
+
+    // The server provider /v3/preview is asked for. The Stellar card previews with the provider
+    // that won the rate fan-out — except for a third-party recipient: Aquarius settles on the
+    // trader's own account and Soroban routes deliver to the signing account only, so just the
+    // path-payment provider can serve one, and the fan-out is re-run over it when the winner is
+    // another.
+    private suspend fun previewProviderId(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        slippage: BigDecimal,
+        selectedRoute: UnstoppableAPI.Response.Route?,
+        recipient: io.horizontalsystems.walletkit.entities.Address?,
+        sourceAddress: String?,
+    ): String {
+        if (provider != UProvider.Stellar) return provider.id
+
+        val thirdPartyRecipient = recipient != null && recipient.hex != sourceAddress
+        val winner = selectedRoute?.providerId
+        if (winner != null && (!thirdPartyRecipient || winner in STELLAR_RECIPIENT_CAPABLE_PROVIDERS)) {
+            return winner
+        }
+
+        val providers = if (thirdPartyRecipient) STELLAR_RECIPIENT_CAPABLE_PROVIDERS else STELLAR_ROUTE_PROVIDERS
+        return rateBestRoute(tokenIn, tokenOut, amountIn, slippage, providers).providerId
+            ?: throw IllegalStateException("No Stellar route selected")
+    }
+
     // /v3/preview — the committed route shape for this single provider, without creating an order.
     // `sellAsset`/`buyAsset` replay the variant the rate quote chose (Exolix ZEC). The route must
     // carry the token that [commit] later turns into an order; one without it cannot be executed.
     private suspend fun previewSwap(
+        providerId: String,
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
@@ -456,7 +525,7 @@ class USwapProvider(
             buyAsset = assetOut,
             sellAmount = amountIn.toPlainString(),
             slippage = slippage,
-            provider = provider.id,
+            provider = providerId,
             destinationAddress = destinationAddress,
             refundAddress = refundAddress,
             sourceAddress = sourceAddress,
@@ -661,10 +730,10 @@ class USwapProvider(
         }
 
         // sourceAddress is the build signal — send it only for chains whose server-built
-        // signed_transaction / thorchain_deposit tx we consume (by default EVM/Tron/TON/Solana),
-        // where it is also required for the tx `from`. For UTXO/Zcash/Monero/Zano/Stellar (and
-        // any token the host app opts out of) we omit it. A transfer route's deposit is built
-        // locally on every chain, whether or not the address was sent.
+        // signed_transaction / thorchain_deposit tx we consume (by default EVM/Tron/TON/Solana,
+        // and Stellar on the Stellar DEX card), where it is also required for the tx `from`. For
+        // UTXO/Zcash/Monero/Zano (and any token the host app opts out of) we omit it. A transfer
+        // route's deposit is built locally on every chain, whether or not the address was sent.
         val sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
             SwapHelper.getSendingAddressForToken(tokenIn)
         } else {
@@ -677,7 +746,10 @@ class USwapProvider(
             SwapHelper.getReceiveAddressForToken(tokenIn)
         }
 
+        val previewProviderId = previewProviderId(tokenIn, tokenOut, amountIn, slippage, selectedRoute, recipient, sourceAddress)
+
         val bestRoute = previewSwap(
+            previewProviderId,
             tokenIn,
             tokenOut,
             amountIn,
@@ -1133,6 +1205,8 @@ class USwapProvider(
             "100" to BlockchainType.Gnosis,
             "4663" to BlockchainType.RobinhoodChain,
             "5042" to BlockchainType.Arc,
+            "thorchain-1" to BlockchainType.Thorchain,
+            "mayachain-mainnet-v1" to BlockchainType.Mayachain,
 //            "" to BlockchainType.Fantom,
 //            "" to BlockchainType.ZkSync,
         )
@@ -1143,6 +1217,11 @@ class USwapProvider(
 
         // Wrapped-SOL mint — the JUPITER server adapter reads it as native SOL.
         private const val WSOL_MINT = "So11111111111111111111111111111111111111112"
+
+        // The Stellar card's fan-out set, and the subset whose execution can deliver to an
+        // address other than the trading account (see previewProviderId).
+        private val STELLAR_ROUTE_PROVIDERS = setOf("SOROSWAP", "AQUARIUS", "STELLAR_DEX")
+        private val STELLAR_RECIPIENT_CAPABLE_PROVIDERS = setOf("STELLAR_DEX")
 
         // LI.FI has no token list, so assets are encoded self-describingly as `<CHAIN>.<address>`
         // (see `deriveIdentifier`). This maps each supported EVM chain to the server's chain
@@ -1799,3 +1878,11 @@ private val Token.needsServerBuiltTx: Boolean
         BlockchainType.Ton,
         BlockchainType.Solana,
     )
+
+// Whether a provider's route for [token] is a server-built tx we sign (so /v3/preview gets the
+// source address). Per chain by default; the Stellar DEX card is server-built on a chain that
+// otherwise builds its own deposit transfers.
+private fun UProvider.consumesServerBuiltTx(token: Token): Boolean = when (this) {
+    UProvider.Stellar -> true
+    else -> token.needsServerBuiltTx
+}

@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.chain
 
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
@@ -283,6 +284,20 @@ interface ChainPlugin {
 
     /** Address reported to market analytics for this chain, or null. */
     fun analyticsAddress(accountType: AccountType): String? = null
+
+    /**
+     * The token type behind a swap server's asset identifier on this chain, for chains whose
+     * identifiers are an asset notation rather than an address (THORChain's `THOR.RUNE`,
+     * `BTC-BTC`), or null when the identifier names nothing this chain serves.
+     */
+    fun swapAssetTokenType(assetIdentifier: String): TokenType? = null
+
+    /**
+     * Pre-swap step the account needs before it can receive [token] (a Stellar trustline), or
+     * null when none is needed or the state cannot be read. Keyed on the buy token alone: every
+     * route delivering it to the account needs the same step.
+     */
+    suspend fun swapActivationAction(token: Token): ISwapProviderAction? = null
 
     /** Current EIP-20 allowance granted to spender, or null when not applicable. */
     suspend fun eip20Allowance(token: Token, spenderAddress: String): BigDecimal? = null

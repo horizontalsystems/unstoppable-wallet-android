@@ -124,6 +124,10 @@ class MayachainChainPlugin : ChainPlugin {
 
     override fun swapProviders(): List<IMultiSwapProvider> = listOf(MayaProvider)
 
+    // Only the settlement coin is served on Maya; it lists no secured assets.
+    override fun swapAssetTokenType(assetIdentifier: String): TokenType? =
+        if (assetIdentifier == "MAYA.CACAO") TokenType.Native else null
+
     override fun addressHandlers(): List<IAddressHandler> =
         listOf(AddressHandlerThorchain(Network.MayaMainnet, BlockchainType.Mayachain))
 

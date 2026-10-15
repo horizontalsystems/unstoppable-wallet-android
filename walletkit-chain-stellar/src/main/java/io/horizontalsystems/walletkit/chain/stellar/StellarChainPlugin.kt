@@ -25,8 +25,11 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.manageaccount.stellarsecretkey.StellarSecretKeyPage
+import io.horizontalsystems.walletkit.modules.multiswap.action.ActionActivateStellarAsset
+import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.StellarSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceStellar
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerStellar
@@ -47,6 +50,10 @@ import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
+import io.horizontalsystems.stellarkit.room.StellarAsset
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.reflect.KClass
 
 class StellarChainPlugin : ChainPlugin {
@@ -140,7 +147,41 @@ class StellarChainPlugin : ChainPlugin {
 
     override fun wcHandlers(): List<IWCHandler> = listOf(WCHandlerStellar(kitManager))
 
-    override fun swapProviders(): List<IMultiSwapProvider> = listOf(StellarSwapProvider())
+    override fun swapProviders(): List<IMultiSwapProvider> = listOf(USwapProvider(UProvider.Stellar))
+
+    // The trustline pre-swap step (the EIP-20 approve analogue): a classic-asset buy needs the
+    // account's trustline BEFORE the swap. The trustline belongs to the ACCOUNT, not the wallet
+    // list — when the buy token was never added as a wallet (no adapter), it is resolved through
+    // the account-level kit, so the user gets the Activate button instead of a raw server 4xx at
+    // confirmation. An unresolvable state does NOT block (null): the server preflight remains
+    // the authority; this only drives the inline button UX.
+    override suspend fun swapActivationAction(token: Token): ISwapProviderAction? {
+        val tokenType = token.type as? TokenType.Asset ?: return null // native XLM needs no trustline
+        val account = App.accountManager.activeAccount ?: return null
+
+        val established = try {
+            App.adapterManager.getAdapterForToken<StellarAssetAdapter>(token)?.isTrustlineEstablished()
+                ?: withContext(Dispatchers.IO) {
+                    // A kit already running for this account answers without taking a reference;
+                    // one started just for the question is released again, or it would keep the
+                    // kit alive after the last Stellar wallet is gone.
+                    val running = kitManager.stellarKitWrapper?.takeIf { kitManager.currentAccount == account }
+                    val wrapper = running ?: kitManager.getStellarKitWrapper(account)
+                    try {
+                        wrapper.stellarKit.isAssetEnabled(StellarAsset.Asset(tokenType.code, tokenType.issuer))
+                    } finally {
+                        if (running == null) kitManager.unlink(account)
+                    }
+                }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Throwable) {
+            return null
+        }
+        if (established) return null
+
+        return ActionActivateStellarAsset(Wallet(token, account))
+    }
 
     override fun privateKeyAccountTypes(privateKey: String): List<AccountType> =
         if (StellarKit.isValidSecretKey(privateKey)) {

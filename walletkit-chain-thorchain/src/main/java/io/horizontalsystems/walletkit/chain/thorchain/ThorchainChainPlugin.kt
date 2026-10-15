@@ -36,6 +36,8 @@ import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.thorchainkit.models.Asset as ThorAsset
+import io.horizontalsystems.thorchainkit.models.ThorchainAssetResolver
 import io.horizontalsystems.thorchainkit.network.Network
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -155,6 +157,20 @@ class ThorchainChainPlugin : ChainPlugin {
     }
 
     override fun swapProviders(): List<IMultiSwapProvider> = listOf(ThorChainProvider)
+
+    // The swap server names THORChain-native assets by their notation (THOR.RUNE, THOR.RUJI,
+    // BTC-BTC); the kit's resolver turns that into the bank denom, including the irregular
+    // ones (RUJI is `x/ruji`), which is what marketkit keys the token on.
+    override fun swapAssetTokenType(assetIdentifier: String): TokenType? {
+        // One identifier the kit cannot parse must not take the whole provider down with it.
+        val asset = try {
+            ThorAsset.fromString(assetIdentifier)
+        } catch (_: Exception) {
+            return null
+        }
+        val denom = ThorchainAssetResolver.denomFor(asset)
+        return if (denom == ThorchainAssetResolver.nativeDenom) TokenType.Native else TokenType.ThorchainAsset(denom)
+    }
 
     override fun addressHandlers(): List<IAddressHandler> =
         listOf(AddressHandlerThorchain(Network.Mainnet, BlockchainType.Thorchain))

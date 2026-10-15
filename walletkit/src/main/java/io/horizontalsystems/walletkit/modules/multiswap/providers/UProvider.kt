@@ -214,5 +214,72 @@ enum class UProvider(
         // Cross-chain: the signed inbound tx is followed by Axelar's GMP delivery leg.
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false
+    ),
+    // Routes execute as thorchain_deposit: a vault deposit carrying the swap memo. UTXO sells
+    // need the vault's input and change rules rather than a plain send (see USwapProvider).
+    ThorChain(
+        id = "THORCHAIN",
+        title = "THORChain",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = false,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = false,
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = false
+    ),
+    Maya(
+        id = "MAYACHAIN",
+        title = "Maya Protocol",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = false,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = false,
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = false
+    ),
+    // Same-chain EVM aggregator routes as server-built signed transactions. No token list:
+    // assets are the raw contract addresses on the sell token's chain.
+    OneInch(
+        id = "ONEINCH",
+        title = "1inch",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = false,
+        riskLevel = RiskLevel.GOOD,
+        isEvm = true,
+        isSingleTransactionSwap = true,
+        supportsSimpleUtxoTransactions = false
+    ),
+    Uniswap(
+        id = "UNISWAP",
+        title = "Uniswap",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = false,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = true,
+        isSingleTransactionSwap = true,
+        supportsSimpleUtxoTransactions = false
+    ),
+    // One card for the Stellar-native DEX routes: /v3/rate fans out over SOROSWAP, AQUARIUS
+    // and STELLAR_DEX and the best-priced route is previewed with that provider. The id is
+    // the server's STELLARBROKER entry, which swap records made through this card carry.
+    Stellar(
+        id = "STELLARBROKER",
+        title = "StellarBroker",
+        type = SwapProviderType.DEX,
+        aml = false,
+        amlPrecheck = false,
+        requireTerms = true,
+        riskLevel = RiskLevel.EXCELLENT,
+        isEvm = false,
+        isSingleTransactionSwap = true,
+        supportsSimpleUtxoTransactions = false
     );
 }
