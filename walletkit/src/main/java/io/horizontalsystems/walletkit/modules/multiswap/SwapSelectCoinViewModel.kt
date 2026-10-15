@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.walletkit.core.chain.spendBalance
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -130,7 +131,7 @@ class SwapSelectCoinViewModel(
 
     private fun coinBalanceItem(token: Token, activeWallets: List<Wallet>): CoinBalanceItem {
         val balance = activeWallets.firstOrNull { it.token == token }?.let {
-            adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
+            adapterManager.getBalanceAdapterForWallet(it)?.spendBalance(it.token)
         }
         return CoinBalanceItem(token, balance, getFiatValue(token, balance))
     }
@@ -202,7 +203,7 @@ class SwapSelectCoinViewModel(
                 .map { token ->
                     val wallet = activeWallets.firstOrNull { it.token == token }
                     val balance = wallet?.let {
-                        adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
+                        adapterManager.getBalanceAdapterForWallet(it)?.spendBalance(it.token)
                     }
                     CoinBalanceItem(token, balance, getFiatValue(token, balance))
                 }

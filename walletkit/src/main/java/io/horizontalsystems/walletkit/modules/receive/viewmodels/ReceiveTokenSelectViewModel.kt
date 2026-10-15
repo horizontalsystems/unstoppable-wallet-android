@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.receive.viewmodels
 
+import io.horizontalsystems.walletkit.core.chain.spendBalance
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -77,7 +78,7 @@ class ReceiveTokenSelectViewModel(
                     .mapNotNull { token -> walletManager.activeWallets.firstOrNull { it.token == token } }
                     .map { wallet ->
                         val balance =
-                            adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+                            adapterManager.getBalanceAdapterForWallet(wallet)?.spendBalance(wallet.token)
                                 ?: BigDecimal.ZERO
                         getFiatValue(wallet.token, balance)?.value ?: BigDecimal.ZERO
                     }
