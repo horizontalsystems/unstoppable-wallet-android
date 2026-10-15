@@ -257,8 +257,8 @@ data class SwapSuspensionIndex(
          * normalizing alone. Renaming the provider instead is not an option: its id is persisted
          * on every swap record and is what the history and refund flows look swaps up by.
          *
-         * This mapping is load-bearing rather than cosmetic — PancakeSwap is quoted by the app
-         * itself, so an unmatched id means no suspension for it can be enforced at all.
+         * PancakeSwap V3 is retired and never quoted, so the override only keeps its old records
+         * matched to the server's policy entry.
          */
         private val serverIdOverrides = mapOf(
             PANCAKE_V3_PROVIDER_ID.uppercase() to "PANCAKESWAP",
