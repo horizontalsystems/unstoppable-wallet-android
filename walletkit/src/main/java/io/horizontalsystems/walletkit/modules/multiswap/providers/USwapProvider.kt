@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.derivation
 import io.horizontalsystems.walletkit.core.isEvm
@@ -765,7 +766,7 @@ class USwapProvider(
         // A THORChain-style deposit memo is what routes the outbound leg: a route without one
         // cannot be delivered, and one whose destination is not the recipient shown to the user
         // must not be signed.
-        bestRoute.execution?.takeIf { it.method == "thorchain_deposit" }?.let { execution ->
+        bestRoute.execution?.takeIf { ThorChainDepositRoute.isVaultDeposit(it) }?.let { execution ->
             val memo = execution.memo ?: throw IllegalStateException("No THORChain deposit memo")
             ThorChainSwapMemo.requireDestination(memo, destination, tokenOut.blockchainType)
         }
@@ -993,12 +994,15 @@ class USwapProvider(
 
             val signable = execution.primarySignable?.takeIf { it.kind == "evm" }
                 ?: throw IllegalStateException("No evm tx found")
+            val to = signable.to ?: throw IllegalStateException("No tx `to`")
+            ThorChainDepositRoute.requireEvmTarget(to, execution)
 
             val transactionData = EvmTransactionData(
-                to = signable.to ?: throw IllegalStateException("No tx `to`"),
+                to = to,
                 value = BigInteger((signable.value ?: "0x0").stripHexPrefix(), 16),
                 input = (signable.data ?: "0x").hexStringToByteArray()
             )
+            ThorChainDepositRoute.requireEvmCalldata(transactionData.input, transactionData.value, execution, tokenIn, amountIn)
 
             return SendTransactionData.Evm(
                 transactionData = transactionData,
@@ -1013,7 +1017,12 @@ class USwapProvider(
             BlockchainType.Dash,
             BlockchainType.ECash,
                 -> {
-                if (!provider.supportsSimpleUtxoTransactions) {
+                // A vault deposit (thorchain_deposit) refunds to the transaction's first input and
+                // cannot pay a taproot address, so it spends only non-taproot UTXOs and returns
+                // change to the first input. Every other route is a plain send, which only the
+                // providers flagged for it accept.
+                val vaultDeposit = ThorChainDepositRoute.isVaultDeposit(execution)
+                if (!vaultDeposit && !provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple BTC tx providers are supported")
                 }
 
@@ -1024,9 +1033,36 @@ class USwapProvider(
                     amount = amountIn,
                     recommendedGasRate = null,
                     minimumSendAmount = null,
-                    changeToFirstInput = false,
-                    utxoFilters = UtxoFilters(),
+                    changeToFirstInput = vaultDeposit,
+                    utxoFilters = if (vaultDeposit) VAULT_DEPOSIT_UTXO_FILTERS else UtxoFilters(),
                 )
+            }
+
+            BlockchainType.Thorchain,
+            BlockchainType.Mayachain -> {
+                if (execution.method == "transfer") {
+                    // A deposit to a provider's own address, as every other chain builds it.
+                    // Deliverable here: the bank memo is a plain, publicly readable field.
+                    return SendTransactionData.Thorchain.Send(
+                        address = execution.depositAddress ?: throw IllegalStateException("No deposit address"),
+                        amount = amountIn,
+                        memo = resolvedDeliverableMemo(execution, blockchainType).orEmpty(),
+                    )
+                }
+
+                return when (val transfer = ThorChainDepositRoute.settlementTransfer(execution)) {
+                    is ThorChainDepositRoute.SettlementTransfer.Send -> SendTransactionData.Thorchain.Send(
+                        address = transfer.inboundAddress,
+                        amount = amountIn,
+                        memo = transfer.memo,
+                    )
+
+                    is ThorChainDepositRoute.SettlementTransfer.Deposit -> SendTransactionData.Thorchain.Deposit(
+                        asset = assetsMap[tokenIn] ?: throw IllegalStateException("No identifier for tokenIn"),
+                        amount = amountIn,
+                        memo = transfer.memo,
+                    )
+                }
             }
 
             BlockchainType.Solana -> {
@@ -1102,6 +1138,12 @@ class USwapProvider(
             }
 
             BlockchainType.Xrp -> {
+                // The XRP payment carries no memo, and a vault deposit without its memo is a
+                // deposit the vault cannot match: refused rather than sent.
+                if (ThorChainDepositRoute.isVaultDeposit(execution)) {
+                    throw IllegalStateException("XRP cannot carry a vault deposit memo")
+                }
+
                 // The identifier travels in the Payment's DestinationTag field rather than a
                 // memo, so this builds the transfer from the tag — see [resolvedDestinationTag],
                 // which refuses any attachment XRP cannot carry there.
@@ -1217,6 +1259,12 @@ class USwapProvider(
 
         // Wrapped-SOL mint — the JUPITER server adapter reads it as native SOL.
         private const val WSOL_MINT = "So11111111111111111111111111111111111111112"
+
+        // Inputs a THORChain-family vault can refund to, and the input count its observers accept.
+        private val VAULT_DEPOSIT_UTXO_FILTERS = UtxoFilters(
+            scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),
+            maxOutputsCountForInputs = 10,
+        )
 
         // The Stellar card's fan-out set, and the subset whose execution can deliver to an
         // address other than the trading account (see previewProviderId).
@@ -1659,7 +1707,7 @@ interface UnstoppableAPI {
                 get() = when (method) {
                     "signed_transaction" -> transactions?.firstOrNull()
                     "transfer" -> unsignedTx
-                    "thorchain_deposit" -> delivery?.unsignedTx
+                    ThorChainDepositRoute.METHOD -> delivery?.unsignedTx
                     else -> null
                 }
 
@@ -1667,7 +1715,8 @@ interface UnstoppableAPI {
             // tx-only and has none.
             fun resolvedDepositAddress(): String? = when (method) {
                 "transfer" -> depositAddress
-                "thorchain_deposit" -> inboundAddress
+                // Absent (or empty) for a settlement-native sell: a MsgDeposit has no vault.
+                ThorChainDepositRoute.METHOD -> inboundAddress?.takeIf { it.isNotBlank() }
                 else -> null
             }
 
@@ -1679,7 +1728,7 @@ interface UnstoppableAPI {
             // XRP is the one chain where a tag is NOT a memo — it reads the same attachment
             // through [resolvedDestinationTag] instead, and never through this.
             fun resolvedMemo(): String? = when (method) {
-                "thorchain_deposit" -> memo
+                ThorChainDepositRoute.METHOD -> memo
                 "transfer" -> attachment?.value
                 else -> null
             }
@@ -1707,7 +1756,7 @@ interface UnstoppableAPI {
             val approvalSpender: String?
                 get() = when (method) {
                     "signed_transaction" -> approval?.spender
-                    "thorchain_deposit" -> delivery?.approval?.spender
+                    ThorChainDepositRoute.METHOD -> delivery?.approval?.spender
                     else -> null
                 }
         }
