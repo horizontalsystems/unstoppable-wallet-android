@@ -719,10 +719,23 @@ class USwapProvider(
         slippage: BigDecimal,
     ): SwapFinalQuote {
         val selectedRoute = (swapQuote.extraData as? SwapQuoteExtraData)?.route
+
+        // The delivery address of a ZEC output depends on how this provider settles, which only
+        // /v3/providers says; a cold start with nothing cached must not fall back to transparent.
+        // Only awaited while nothing is stored: a stale cache still answers, and the hourly sync
+        // refreshes it on its own.
+        if (tokenOut.blockchainType == BlockchainType.Zcash && !App.swapProviderInfoManager.hasExecutionTypes) {
+            App.swapProviderInfoManager.sync()
+        }
+
         val destination = when {
             recipient != null -> recipient.hex
 
-            selectedRoute?.buyAsset == ZCASH_SHIELDED_ASSET -> {
+            // A ZEC output goes to the wallet's unified address when the route delivers to a
+            // shielded receiver: Exolix's shielded variant, or a vault-settled provider (per its
+            // /v3/providers executionType), whose own Zcash client pays unified receivers.
+            tokenOut.blockchainType == BlockchainType.Zcash &&
+                    (routeDeliversShieldedZcash(swapQuote) || App.swapProviderInfoManager.deliversShieldedZcash(id, tokenIn)) -> {
                 ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenOut)
                     ?: throw IllegalStateException("Zcash support is not available")
             }
@@ -1166,6 +1179,16 @@ class USwapProvider(
             }
 
             BlockchainType.Zcash -> {
+                if (ThorChainDepositRoute.isVaultDeposit(execution)) {
+                    val deposit = ThorChainDepositRoute.shieldedMemoDeposit(execution)
+                    return SendTransactionData.Zcash.ShieldedMemo(
+                        address = deposit.inboundAddress,
+                        amount = amountIn,
+                        memo = deposit.memo,
+                        memoShieldedAddress = deposit.memoShieldedAddress,
+                    )
+                }
+
                 if (!provider.supportsSimpleUtxoTransactions) {
                     throw IllegalStateException("Only simple ZEC tx providers are supported")
                 }
@@ -1218,6 +1241,14 @@ class USwapProvider(
     }
 
     companion object {
+        /**
+         * Whether the route a quote selected delivers ZEC to a shielded receiver on its own,
+         * whatever the provider's execution type: Exolix's shielded variant does. The recipient
+         * rule and the delivery address must agree on it.
+         */
+        fun routeDeliversShieldedZcash(swapQuote: SwapQuote): Boolean =
+            (swapQuote.extraData as? SwapQuoteExtraData)?.route?.buyAsset == ZCASH_SHIELDED_ASSET
+
         // The server's chain identifiers. Shared: instances resolve tokens through it, and the
         // private send stack uses it to recognise a committed route's execution.chain — which is
         // sometimes a chain id ("56") and sometimes a name ("bsc"), so only a recognised chain

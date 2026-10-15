@@ -5,6 +5,9 @@ import com.google.gson.Gson
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +30,10 @@ class SwapProviderInfoManager(
     private var cache: Map<String, UnstoppableAPI.Response.Provider>? = null
 
     private val _suspensionsFlow = MutableStateFlow(restoredSuspensions())
+
+    // Restored from storage so a cold start keeps the decision.
+    @Volatile
+    private var executionTypes: SwapExecutionTypes = restoredExecutionTypes()
 
     /**
      * Scoped asset/chain/pair suspensions, indexed by provider id. Applied by [SwapQuoteService]
@@ -56,6 +63,9 @@ class SwapProviderInfoManager(
         // An empty rule set still round-trips as a stored `{}`, so "no suspensions anywhere" is a
         // hit and does not force a fetch on every launch.
         localStorage.uSwapSuspensions ?: return false
+        // Same for execution types: a build that predates them has a fresh timestamp beside no
+        // cache, and shielded ZEC delivery would stay off until the next hourly sync.
+        localStorage.uSwapExecutionTypes ?: return false
 
         // A negative age means the stored timestamp is in the future — a clock correction, which
         // would otherwise read as fresh until the clock caught up.
@@ -84,6 +94,10 @@ class SwapProviderInfoManager(
                 val index = SwapSuspensionIndex.from(responses)
                 _suspensionsFlow.value = index
 
+                val types = SwapExecutionTypes.from(responses)
+                executionTypes = types
+                localStorage.uSwapExecutionTypes = gson.toJson(types)
+
                 localStorage.uSwapSuspensions = gson.toJson(index)
                 localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
             } catch (e: CancellationException) {
@@ -108,6 +122,40 @@ class SwapProviderInfoManager(
         } catch (e: Throwable) {
             Log.e(TAG, "Failed to restore swap suspensions", e)
             SwapSuspensionIndex()
+        }
+    }
+
+    /** Whether any execution types were ever stored; false only before the first successful sync. */
+    val hasExecutionTypes: Boolean
+        get() = localStorage.uSwapExecutionTypes != null
+
+    /**
+     * Whether a swap selling [tokenIn] through this provider can pay its ZEC output to a
+     * shielded / unified receiver: the provider must settle through a vault (see
+     * [SwapExecutionTypes.deliversShieldedZcash]), and the sell chain must carry the memo that
+     * names a unified address, which an OP_RETURN output cannot — the UTXO chains fall back to
+     * the transparent address.
+     */
+    fun deliversShieldedZcash(providerId: String, tokenIn: Token): Boolean =
+        executionTypes.deliversShieldedZcash(providerId) && !tokenIn.blockchainType.memoRidesOpReturn
+
+    /**
+     * Whether a ZEC recipient for this swap must be a transparent address: neither the provider
+     * (by execution type) nor the selected route itself delivers to a shielded receiver.
+     */
+    fun zcashTransparentRecipientOnly(providerId: String, swapQuote: SwapQuote): Boolean =
+        swapQuote.tokenOut.blockchainType == BlockchainType.Zcash &&
+            !USwapProvider.routeDeliversShieldedZcash(swapQuote) &&
+            !deliversShieldedZcash(providerId, swapQuote.tokenIn)
+
+    private fun restoredExecutionTypes(): SwapExecutionTypes {
+        val json = localStorage.uSwapExecutionTypes ?: return SwapExecutionTypes()
+
+        return try {
+            gson.fromJson(json, SwapExecutionTypes::class.java) ?: SwapExecutionTypes()
+        } catch (e: Throwable) {
+            Log.e(TAG, "Failed to restore swap execution types", e)
+            SwapExecutionTypes()
         }
     }
 

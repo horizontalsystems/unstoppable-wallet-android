@@ -98,6 +98,31 @@ class ThorChainDepositRouteTest {
         }
     }
 
+    @Test
+    fun `zcash deposit pays the transparent vault and memos the shielded address`() {
+        val deposit = ThorChainDepositRoute.shieldedMemoDeposit(
+            execution(inboundAddress = "t1V5s2VMSip7qtBVZkpi1mzbnkh7pmeEqtZ", delivery = delivery("utxo_op_return", "u1fcwchlpy2u0t9hdl8wcku8"))
+        )
+        assertEquals(
+            ThorChainDepositRoute.ShieldedMemoDeposit("t1V5s2VMSip7qtBVZkpi1mzbnkh7pmeEqtZ", "u1fcwchlpy2u0t9hdl8wcku8", memo),
+            deposit,
+        )
+    }
+
+    @Test
+    fun `zcash deposit refuses a vault without a shielded memo address`() {
+        assertThrows(IllegalStateException::class.java) {
+            ThorChainDepositRoute.shieldedMemoDeposit(execution(inboundAddress = "t1V5s2VMSip7qtBVZkpi1mzbnkh7pmeEqtZ", delivery = delivery("utxo_op_return", "")))
+        }
+    }
+
+    @Test
+    fun `zcash deposit refuses a shielded inbound address`() {
+        assertThrows(IllegalStateException::class.java) {
+            ThorChainDepositRoute.shieldedMemoDeposit(execution(inboundAddress = "u1inbound", delivery = delivery("utxo_op_return", "u1fcwchlpy2u0t9hdl8wcku8")))
+        }
+    }
+
     // --- EVM calldata ---
 
     private fun token(type: TokenType, decimals: Int) = Token(

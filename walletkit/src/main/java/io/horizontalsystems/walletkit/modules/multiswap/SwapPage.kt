@@ -58,7 +58,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
@@ -207,25 +206,35 @@ fun SwapScreen(
         }
     }
 
+    val recipientScope = rememberCoroutineScope()
     val navigateToSwapConfirm = {
         val tokenOut = viewModel.uiState.tokenOut
+        val quote = viewModel.uiState.quote
         if (viewModel.uiState.externalRecipientRequired && tokenOut != null) {
             // tokenOut the account can't hold: the recipient page collects the external
-            // delivery address and opens the confirmation itself
-            navigation.slideFromRight(
-                SwapRecipientPage(
-                    SwapRecipientPage.Input(
-                        token = tokenOut,
-                        parentScreenContentKey = parentScreenContentKey,
-                        closeAfterSwap = closeAfterSwap,
-                        initialAddress = viewModel.externalRecipient?.hex,
-                        // only Maya delivers ZEC to shielded/unified receivers; every
-                        // other route needs a transparent address
-                        zcashTransparentOnly = tokenOut.blockchainType == BlockchainType.Zcash &&
-                                viewModel.uiState.quote?.provider?.id != MAYA_PROVIDER_ID,
+            // delivery address and opens the confirmation itself. Whether a ZEC recipient may
+            // be shielded depends on the provider's execution type, which only /v3/providers
+            // says: on a first launch with nothing cached that answer is awaited first, so the
+            // page is not opened transparent-only for a route that delivers shielded. A failed
+            // sync leaves nothing cached and the page stays transparent-only.
+            recipientScope.launch {
+                if (tokenOut.blockchainType == BlockchainType.Zcash && !App.swapProviderInfoManager.hasExecutionTypes) {
+                    App.swapProviderInfoManager.sync()
+                }
+                navigation.slideFromRight(
+                    SwapRecipientPage(
+                        SwapRecipientPage.Input(
+                            token = tokenOut,
+                            parentScreenContentKey = parentScreenContentKey,
+                            closeAfterSwap = closeAfterSwap,
+                            initialAddress = viewModel.externalRecipient?.hex,
+                            zcashTransparentOnly = quote
+                                ?.let { App.swapProviderInfoManager.zcashTransparentRecipientOnly(it.provider.id, it.swapQuote) }
+                                ?: (tokenOut.blockchainType == BlockchainType.Zcash),
+                        )
                     )
                 )
-            )
+            }
         } else {
             forResult()
         }

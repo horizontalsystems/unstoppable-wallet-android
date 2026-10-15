@@ -128,4 +128,30 @@ object ThorChainDepositRoute {
             else -> throw IllegalStateException("A ${execution.delivery?.kind} route names no vault")
         }
     }
+
+    /**
+     * A Zcash vault deposit: the amount goes to the transparent inbound address, where the vault
+     * matches it, and the memo rides a zero-value output to the vault's shielded memo address,
+     * where the vault decrypts it.
+     */
+    data class ShieldedMemoDeposit(val inboundAddress: String, val memoShieldedAddress: String, val memo: String)
+
+    /**
+     * Without a shielded memo address the memo cannot be delivered, and a shielded inbound
+     * address would hide the amount from the vault; both refuse the route rather than send.
+     */
+    fun shieldedMemoDeposit(execution: Execution): ShieldedMemoDeposit {
+        if (execution.method != METHOD) {
+            throw IllegalStateException("Not a vault deposit")
+        }
+        val inboundAddress = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address")
+        val memoShieldedAddress = execution.delivery?.shieldedMemoAddress?.takeIf { it.isNotBlank() }
+            ?: throw IllegalStateException("Vault publishes no shielded memo address")
+        if (!inboundAddress.startsWith("t")) {
+            throw IllegalStateException("Vault inbound address is not transparent")
+        }
+        val memo = execution.memo ?: throw IllegalStateException("No THORChain deposit memo")
+
+        return ShieldedMemoDeposit(inboundAddress, memoShieldedAddress, memo)
+    }
 }

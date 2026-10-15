@@ -66,6 +66,7 @@ interface ILocalStorage {
     var swapRecentTokenQueryIds: List<String>
     var uSwapSuspensions: String?
     var uSwapSuspensionsSyncTime: Long
+    var uSwapExecutionTypes: String?
     var privateSendProviderIds: String?
     var privateSendProviderIdsSyncTime: Long
     var zcashAccountIds: Set<String>

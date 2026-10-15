@@ -103,6 +103,7 @@ class LocalStorageManager(
     private val ENABLED_PAID_ACTIONS = "enabled_paid_actions"
     private val USWAP_SUSPENSIONS = "uswap_suspensions"
     private val USWAP_SUSPENSIONS_SYNC_TIME = "uswap_suspensions_sync_time"
+    private val USWAP_EXECUTION_TYPES = "uswap_execution_types"
     private val PRIVATE_SEND_PROVIDER_IDS = "private_send_provider_ids"
     private val PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME = "private_send_provider_ids_sync_time"
 
@@ -168,6 +169,12 @@ class LocalStorageManager(
         get() = preferences.getString(USWAP_SUSPENSIONS, null)
         set(value) {
             preferences.edit { putString(USWAP_SUSPENSIONS, value) }
+        }
+
+    override var uSwapExecutionTypes: String?
+        get() = preferences.getString(USWAP_EXECUTION_TYPES, null)
+        set(value) {
+            preferences.edit { putString(USWAP_EXECUTION_TYPES, value) }
         }
 
     override var uSwapSuspensionsSyncTime: Long

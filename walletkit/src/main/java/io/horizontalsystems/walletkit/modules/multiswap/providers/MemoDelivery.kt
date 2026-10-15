@@ -30,6 +30,19 @@ enum class MemoDelivery {
         get() = this == OnChainPublic
 }
 
+/** Chains whose transfer memo rides an 80-byte OP_RETURN output. */
+val BlockchainType.memoRidesOpReturn: Boolean
+    get() = when (this) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash,
+            -> true
+
+        else -> false
+    }
+
 /**
  * The single classification table behind the private-send deposit gate and the USwap deposit
  * builders, so the two cannot drift apart. Chains absent from the per-chain send transaction

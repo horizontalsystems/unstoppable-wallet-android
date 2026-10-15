@@ -20,9 +20,9 @@ import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.RetryableSwapError
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
@@ -54,6 +54,7 @@ class SwapConfirmViewModel(
     private val swapDefenseSystemService: SwapDefenseSystemService,
     private val backgroundManager: BackgroundManager,
     initialRecipient: Address? = null,
+    private val swapProviderInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -64,10 +65,10 @@ class SwapConfirmViewModel(
     // is mandatory and must not be cleared (there is no own-wallet address to fall back to)
     val recipientRequired = !SwapHelper.isTokenReceivableByAccount(tokenOut)
 
-    // only Maya delivers ZEC to shielded/unified receivers; every other route needs
-    // a transparent recipient address
-    val zcashTransparentRecipientOnly =
-        tokenOut.blockchainType == BlockchainType.Zcash && swapProvider.id != MAYA_PROVIDER_ID
+    // only a vault-settled provider (per its /v3/providers executionType) delivers ZEC to
+    // shielded/unified receivers; every other route needs a transparent recipient address
+    val zcashTransparentRecipientOnly: Boolean
+        get() = swapProviderInfoManager.zcashTransparentRecipientOnly(swapProvider.id, swapQuote)
     private val amountIn = swapQuote.amountIn.let { amount ->
         if (amount.scale() > tokenIn.decimals) {
             amount.setScale(tokenIn.decimals, RoundingMode.DOWN)
