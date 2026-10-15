@@ -291,6 +291,7 @@
 -keep class io.horizontalsystems.walletkit.modules.backuplocal.** { *; }
 -keep class io.horizontalsystems.walletkit.modules.contacts.** { *; }
 -keep class io.horizontalsystems.walletkit.modules.multiswap.providers.** { *; }
+-keep class io.horizontalsystems.walletkit.modules.multiswap.history.AllBridgeTracker** { *; }
 -keep class io.horizontalsystems.walletkit.modules.opencryptopay.** { *; }
 -keep class io.horizontalsystems.walletkit.modules.privatesend.** { *; }
 -keep class io.horizontalsystems.walletkit.modules.restorelocal.** { *; }

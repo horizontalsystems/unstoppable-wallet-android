@@ -311,20 +311,7 @@ private fun SwapSelectProviderScreenPreview() {
     ComposeAppTheme(darkTheme = false) {
         SwapSelectProviderScreenInner(
             onClickClose = {},
-            quotes = listOf(
-//                SwapProviderQuote(
-//                    SwapMainModule.OneInchProvider,
-//                    quote.amountOut,
-//                    quote.fee,
-//                    quote.fields
-//                ),
-//                SwapProviderQuote(
-//                    SwapMainModule.UniswapV3Provider,
-//                    quote.amountOut,
-//                    quote.fee,
-//                    quote.fields
-//                ),
-            ),
+            quotes = listOf(),
             currentQuote = null,
             sortType = ProviderSortType.BestPrice,
             onSortTypeChange = {},

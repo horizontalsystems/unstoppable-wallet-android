@@ -8,8 +8,6 @@ import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.entities.SwapRecord
-import io.horizontalsystems.walletkit.modules.multiswap.providers.AllBridgeAPI
-import io.horizontalsystems.walletkit.modules.multiswap.providers.AllBridgeProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
@@ -73,7 +71,7 @@ class SwapSyncService(
         // tracking service — the server tracker must leave it alone.
         if (record.trackingHandle != null) return
 
-        if (record.providerId == AllBridgeProvider.id) {
+        if (record.providerId == AllBridgeTracker.PROVIDER_ID) {
             syncAllBridgeRecord(record)
             return
         }
@@ -134,8 +132,8 @@ class SwapSyncService(
     private suspend fun syncAllBridgeRecord(record: SwapRecord) {
         try {
             val txId = record.transactionHash ?: return
-            val chain = AllBridgeProvider.chainSymbol(record.tokenInBlockchainTypeUid) ?: return
-            val response = AllBridgeProvider.fetchTransferStatus(chain, txId)
+            val chain = AllBridgeTracker.chainSymbol(record.tokenInBlockchainTypeUid) ?: return
+            val response = AllBridgeTracker.fetchTransferStatus(chain, txId)
 
             val outboundTxId = response.receive?.txId
             if (outboundTxId != null && outboundTxId != record.outboundTransactionHash) {
@@ -156,7 +154,7 @@ class SwapSyncService(
         }
     }
 
-    private fun mapAllBridgeStatus(response: AllBridgeAPI.Response.TransferStatus): SwapStatus {
+    private fun mapAllBridgeStatus(response: AllBridgeTracker.TransferStatus): SwapStatus {
         if (response.isSuspended) return SwapStatus.Failed
         val receive = response.receive
         if (receive == null) {

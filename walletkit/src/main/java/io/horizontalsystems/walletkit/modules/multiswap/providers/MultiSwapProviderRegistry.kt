@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.walletkit.modules.multiswap.history.AllBridgeTracker
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object MultiSwapProviderRegistry {
@@ -44,7 +45,8 @@ object MultiSwapProviderRegistry {
      */
     private val retiredProviders: List<IMultiSwapProvider>
         get() = listOf(
-            AllBridgeProvider,
+            // Same-chain AllBridge swaps were one transaction; bridges were deposit and delivery.
+            RetiredSwapProvider(AllBridgeTracker.PROVIDER_ID, "AllBridge", SwapProviderType.DEX) { tokenIn, tokenOut -> tokenIn == tokenOut },
             RetiredSwapProvider(THORCHAIN_PROVIDER_ID, "THORChain", SwapProviderType.DEX, singleTransactionSwap = false),
             RetiredSwapProvider(MAYA_PROVIDER_ID, "Maya Protocol", SwapProviderType.DEX, singleTransactionSwap = false),
             RetiredSwapProvider(ONEINCH_PROVIDER_ID, "1inch", SwapProviderType.DEX, singleTransactionSwap = true),

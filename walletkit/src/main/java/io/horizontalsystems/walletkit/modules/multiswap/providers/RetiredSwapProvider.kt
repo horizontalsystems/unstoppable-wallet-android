@@ -17,12 +17,16 @@ class RetiredSwapProvider(
     override val id: String,
     override val title: String,
     override val type: SwapProviderType,
-    private val singleTransactionSwap: Boolean,
+    private val singleTransactionSwap: (tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) -> Boolean,
 ) : IMultiSwapProvider {
+    constructor(id: String, title: String, type: SwapProviderType, singleTransactionSwap: Boolean) :
+        this(id, title, type, { _, _ -> singleTransactionSwap })
+
     override val requireTerms = false
     override val riskLevel = RiskLevel.EXCELLENT
 
-    override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = singleTransactionSwap
+    override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
+        singleTransactionSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid)
 
     override fun supports(blockchainType: BlockchainType) = false
 
