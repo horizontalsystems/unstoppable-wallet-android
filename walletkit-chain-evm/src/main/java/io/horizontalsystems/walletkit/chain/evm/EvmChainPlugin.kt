@@ -33,10 +33,6 @@ import io.horizontalsystems.walletkit.modules.manageaccount.evmaddress.AddressPa
 import io.horizontalsystems.walletkit.modules.manageaccount.evmprivatekey.PrivateKeyPage
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.providers.EvmSwapHelper
-import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.OneInchProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.PancakeSwapV3Provider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceEvm
@@ -181,13 +177,6 @@ class EvmChainPlugin(override val blockchainType: BlockchainType) : ChainPlugin 
 
         return SendTransactionData.Evm(transactionData.toEvmTransactionData(), gasLimit = null)
     }
-
-    override fun swapProviders(): List<IMultiSwapProvider> =
-        if (isFamilyAnchor) {
-            listOf(OneInchProvider(), UniswapV3Provider, PancakeSwapV3Provider)
-        } else {
-            emptyList()
-        }
 
     override fun wcHandlers(): List<IWCHandler> =
         if (isFamilyAnchor) listOf(WCHandlerEvm()) else emptyList()

@@ -174,8 +174,7 @@ class SwapQuoteService(
 
             val supportedProviders = allProviders.filter { provider ->
                 // Checked here, in the one place every provider passes through, rather than inside
-                // each `supports` implementation — and it is the only enforcement that exists for
-                // the providers this app quotes natively, since those never reach the server.
+                // each `supports` implementation.
                 !suspensions.isSuspended(provider.id, tokenIn, tokenOut) &&
                     provider.supports(tokenIn, tokenOut)
             }

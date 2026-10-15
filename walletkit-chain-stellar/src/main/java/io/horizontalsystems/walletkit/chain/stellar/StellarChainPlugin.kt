@@ -27,9 +27,6 @@ import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.manageaccount.stellarsecretkey.StellarSecretKeyPage
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionActivateStellarAsset
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
-import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceStellar
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerStellar
@@ -146,8 +143,6 @@ class StellarChainPlugin : ChainPlugin {
     }
 
     override fun wcHandlers(): List<IWCHandler> = listOf(WCHandlerStellar(kitManager))
-
-    override fun swapProviders(): List<IMultiSwapProvider> = listOf(USwapProvider(UProvider.Stellar))
 
     // The trustline pre-swap step (the EIP-20 approve analogue): a classic-asset buy needs the
     // account's trustline BEFORE the swap. The trustline belongs to the ACCOUNT, not the wallet

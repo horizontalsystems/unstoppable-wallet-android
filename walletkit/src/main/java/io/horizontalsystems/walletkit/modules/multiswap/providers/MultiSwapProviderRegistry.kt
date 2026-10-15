@@ -1,7 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
 import io.horizontalsystems.walletkit.core.isEvm
-import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object MultiSwapProviderRegistry {
@@ -27,15 +26,31 @@ object MultiSwapProviderRegistry {
             UProvider.AxelarIts,
             shouldIncludeSourceAddress = { it.blockchainType.isEvm || it.blockchainType == BlockchainType.Stellar },
         ),
-    ) + ChainRegistry.all.flatMap { it.swapProviders() }
+        // An XRP payment carries no memo, so an XRP sell can never fund a vault deposit:
+        // the vault-settled cards do not offer it.
+        USwapProvider(UProvider.ThorChain, supportsSourceToken = { it.blockchainType != BlockchainType.Xrp }),
+        USwapProvider(UProvider.Maya, supportsSourceToken = { it.blockchainType != BlockchainType.Xrp }),
+        USwapProvider(UProvider.OneInch),
+        USwapProvider(UProvider.Uniswap),
+        USwapProvider(UProvider.Stellar),
+    )
 
     /**
      * Providers no longer offered for swapping. They stay reachable by id so swaps already made
      * with them keep resolving their type and stage layout in history, but no quote is requested
-     * from them.
+     * from them. The THORChain-family and EVM entries are the venues the app used to quote
+     * itself before they moved behind the USwap backend; their records keep the native ids,
+     * which also pick the stateless track calls in SwapTrackRequestBuilder.
      */
     private val retiredProviders: List<IMultiSwapProvider>
-        get() = listOf(AllBridgeProvider)
+        get() = listOf(
+            AllBridgeProvider,
+            RetiredSwapProvider(THORCHAIN_PROVIDER_ID, "THORChain", SwapProviderType.DEX, singleTransactionSwap = false),
+            RetiredSwapProvider(MAYA_PROVIDER_ID, "Maya Protocol", SwapProviderType.DEX, singleTransactionSwap = false),
+            RetiredSwapProvider(ONEINCH_PROVIDER_ID, "1inch", SwapProviderType.DEX, singleTransactionSwap = true),
+            RetiredSwapProvider(UNISWAP_V3_PROVIDER_ID, "Uniswap V3", SwapProviderType.DEX, singleTransactionSwap = true),
+            RetiredSwapProvider(PANCAKE_V3_PROVIDER_ID, "PancakeSwap V3", SwapProviderType.DEX, singleTransactionSwap = true),
+        )
 
     /**
      * Confidential rails, executing private sends only. Resolvable by id like the retired

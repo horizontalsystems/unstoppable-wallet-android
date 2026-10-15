@@ -18,8 +18,6 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerThorchain
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
-import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceThorchain
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
@@ -121,8 +119,6 @@ class MayachainChainPlugin : ChainPlugin {
             ?: throw IllegalStateException("ThorchainAdapter is null")
         return SendTransactionServiceThorchain(adapter, BlockchainType.Mayachain)
     }
-
-    override fun swapProviders(): List<IMultiSwapProvider> = listOf(MayaProvider)
 
     // Only the settlement coin is served on Maya; it lists no secured assets.
     override fun swapAssetTokenType(assetIdentifier: String): TokenType? =

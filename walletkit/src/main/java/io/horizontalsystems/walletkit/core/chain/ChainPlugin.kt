@@ -22,7 +22,6 @@ import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
-import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -324,9 +323,6 @@ interface ChainPlugin {
 
     /** Silent handler for wallet_* WalletConnect requests, or null. */
     fun wcWalletRequestHandler(): io.horizontalsystems.walletkit.modules.walletconnect.IWCWalletRequestHandler? = null
-
-    /** Swap providers contributed to the multiswap registry. */
-    fun swapProviders(): List<IMultiSwapProvider> = emptyList()
 
     /** Account types restorable from a pasted private key. */
     fun privateKeyAccountTypes(privateKey: String): List<AccountType> = emptyList()

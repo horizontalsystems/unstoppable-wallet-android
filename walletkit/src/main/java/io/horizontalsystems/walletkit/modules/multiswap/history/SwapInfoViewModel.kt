@@ -188,8 +188,8 @@ class SwapInfoViewModel(
     }
 
     private fun buildProviderTxUrl(providerId: String, txHash: String?, depositAddress: String?): String? = when (providerId) {
-        THORCHAIN_PROVIDER_ID -> txHash?.let { "https://thorchain.net/tx/$it" }
-        MAYA_PROVIDER_ID -> txHash?.let { "https://www.mayascan.org/tx/$it" }
+        THORCHAIN_PROVIDER_ID, "u_${UProvider.ThorChain.id}" -> txHash?.let { "https://thorchain.net/tx/$it" }
+        MAYA_PROVIDER_ID, "u_${UProvider.Maya.id}" -> txHash?.let { "https://www.mayascan.org/tx/$it" }
         "u_${UProvider.Near.id}" -> depositAddress?.let { "https://explorer.near-intents.org/transactions/$it" }
         else -> null
     }

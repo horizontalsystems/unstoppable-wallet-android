@@ -21,8 +21,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerThorchain
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
-import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceThorchain
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -155,8 +153,6 @@ class ThorchainChainPlugin : ChainPlugin {
             ?: throw IllegalStateException("ThorchainAdapter is null")
         return SendTransactionServiceThorchain(adapter, BlockchainType.Thorchain)
     }
-
-    override fun swapProviders(): List<IMultiSwapProvider> = listOf(ThorChainProvider)
 
     // The swap server names THORChain-native assets by their notation (THOR.RUNE, THOR.RUJI,
     // BTC-BTC); the kit's resolver turns that into the bank denom, including the irregular
