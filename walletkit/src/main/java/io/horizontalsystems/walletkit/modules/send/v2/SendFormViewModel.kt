@@ -108,6 +108,8 @@ class SendFormViewModel(
     private var chainBalance: BigDecimal? = null
     private var balanceState = balanceService.stateFlow.value
     private var balanceJob: Job? = null
+    // Max was picked: the amount follows the balance until the user enters one.
+    private var amountIsMax = false
     private val chainPlugin = ChainRegistry[wallet.token.blockchainType]
 
     init {
@@ -138,6 +140,7 @@ class SendFormViewModel(
             balanceService.stateFlow.collect {
                 balanceState = it
                 refreshChainBalance()
+                followMax()
                 emitState()
             }
         }
@@ -154,6 +157,7 @@ class SendFormViewModel(
             chainSettingsFlow.collect {
                 chainSettings = it
                 refreshChainBalance()
+                followMax()
                 emitState()
             }
         }
@@ -193,6 +197,21 @@ class SendFormViewModel(
     }
 
     private fun availableBalance(): BigDecimal? = chainBalance ?: balanceState.balance
+
+    private fun amountOfBalance(percentage: Int): BigDecimal? = availableBalance()
+        ?.times(BigDecimal(percentage / 100.0))
+        ?.setScale(wallet.token.decimals, RoundingMode.DOWN)
+        ?.stripTrailingZeros()
+
+    // A balance change, such as the fee of a shielding started from this form, would otherwise
+    // leave Max above the balance and turn it into an insufficient-balance error.
+    private fun followMax() {
+        if (!amountIsMax) return
+        val max = amountOfBalance(100) ?: return
+        if (amount?.compareTo(max) != 0) {
+            fiatService.setAmount(max)
+        }
+    }
 
     // The balance service validates against the wallet's balance; when the chain narrows it,
     // the insufficient-balance check is redone here against the narrowed value. Sync-state
@@ -291,21 +310,20 @@ class SendFormViewModel(
     }
 
     fun onEnterAmount(amount: BigDecimal?) {
+        if (amount == null || this.amount?.compareTo(amount) != 0) {
+            amountIsMax = false
+        }
         fiatService.setAmount(amount)
     }
 
     fun onEnterFiatAmount(fiatAmount: BigDecimal?) {
+        amountIsMax = false
         fiatService.setFiatAmount(fiatAmount)
     }
 
     fun onEnterAmountPercentage(percentage: Int) {
-        val availableBalance = availableBalance() ?: return
-
-        val amount = availableBalance
-            .times(BigDecimal(percentage / 100.0))
-            .setScale(wallet.token.decimals, RoundingMode.DOWN)
-            .stripTrailingZeros()
-
+        val amount = amountOfBalance(percentage) ?: return
+        amountIsMax = percentage == 100
         fiatService.setAmount(amount)
     }
 
