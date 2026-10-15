@@ -1630,8 +1630,8 @@ interface UnstoppableAPI {
             // Tracking handle (swap_records.uuid). Absent on a preview, filled in by [merging].
             val uuid: String?,
             // The provider(s) that produced this route. On a /v3/rate fan-out each route
-            // carries exactly one — how a multi-provider request (StellarSwapProvider's
-            // waterfall) knows which provider to commit with.
+            // carries exactly one — how a multi-provider request (the Stellar card's
+            // waterfall) knows which provider to preview with.
             val providers: List<String>? = null,
             // In exact-output mode this is the answer: the amount to deposit, carrying the
             // slippage buffer over meta.near.minSellAmount.
