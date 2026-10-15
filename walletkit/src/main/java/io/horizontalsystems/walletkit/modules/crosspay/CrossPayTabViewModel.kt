@@ -26,6 +26,9 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.core.chain.SendChainSettings
+import io.horizontalsystems.walletkit.core.chain.SpendPurpose
+import io.horizontalsystems.walletkit.core.chain.spendBalance
+import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -117,9 +120,15 @@ class CrossPayTabViewModel(
     }
 
     // The chain narrows the balance to the outputs chosen in the settings, if any; otherwise
-    // it is the wallet's spendable balance.
+    // it is the balance the send form offers, which may need a step before it is spent.
     private fun readBalance() = chainPlugin?.sendAvailableBalance(tokenIn, chainSettings)
-        ?: App.adapterManager.getAdapterForToken<IBalanceAdapter>(tokenIn)?.balanceData?.available
+        ?: App.adapterManager.getAdapterForToken<IBalanceAdapter>(tokenIn)?.spendBalance(tokenIn)
+
+    // Outputs narrowed by the settings are spent as chosen; no step applies to them.
+    private fun spendStep(amount: BigDecimal): ISwapProviderAction? {
+        if (chainPlugin?.sendAvailableBalance(tokenIn, chainSettings) != null) return null
+        return chainPlugin?.spendStep(tokenIn, amount, SpendPurpose.Send)
+    }
 
     // The swap screen's auto-pick, verbatim: the top entry of the context-aware Popular
     // Tokens list (native source → its chain's USDT, else USDT-ETH; token source → its
@@ -164,6 +173,7 @@ class CrossPayTabViewModel(
         // The shortfall is against the DEPOSIT the quote asks for, not the entered amount —
         // those are different tokens.
         (quote as? CrossPayQuoteState.Success)?.let { quote ->
+            spendStep(quote.sellAmount)?.let { return CrossPayStep.ActionRequired(it) }
             val balance = availableBalance
             if (balance != null && quote.sellAmount > balance) {
                 return CrossPayStep.InsufficientBalance
@@ -212,6 +222,12 @@ class CrossPayTabViewModel(
         this.address = address
         this.riskyAddress = risky
         this.contactName = contactName
+        emitState()
+    }
+
+    /** The step offered by [CrossPayStep.ActionRequired] is done; its funds may have moved. */
+    fun onActionCompleted() {
+        availableBalance = readBalance()
         emitState()
     }
 
@@ -374,6 +390,8 @@ sealed class CrossPayStep {
     data object InsufficientBalance : CrossPayStep()
     data class QuoteError(val error: CrossPayQuoteState.Error) : CrossPayStep()
     data object Quoting : CrossPayStep()
+    /** The deposit is covered only after a step such as shielding, started from the form. */
+    data class ActionRequired(val action: ISwapProviderAction) : CrossPayStep()
     data object Proceed : CrossPayStep()
 }
 

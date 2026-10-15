@@ -37,6 +37,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 import io.horizontalsystems.walletkit.uiv3.components.controls.AvailableBalanceRow
+import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import java.math.BigDecimal
@@ -176,20 +177,43 @@ fun CrossPayTabBody(
             CrossPayStep.EnterAddress -> stringResource(R.string.Send_EnterAddress)
             CrossPayStep.InsufficientBalance -> stringResource(R.string.CrossPay_InsufficientBalance)
             is CrossPayStep.QuoteError -> quoteErrorText(step.error, uiState.tokenOut)
+            is CrossPayStep.ActionRequired -> if (step.action.inProgress) {
+                step.action.getTitleInProgress()
+            } else {
+                step.action.getTitle()
+            }
+
             CrossPayStep.Quoting,
             CrossPayStep.Proceed -> stringResource(R.string.Button_Next)
         }
         ButtonsGroupVertical {
-            HSButton(
-                modifier = Modifier.fillMaxWidth(),
-                title = buttonTitle,
-                enabled = uiState.step is CrossPayStep.Proceed,
-            ) {
-                if (uiState.riskyAddress) {
+            val step = uiState.step
+            if (step is CrossPayStep.ActionRequired) {
+                val action = step.action
+                val executor = action.executor(navigation, viewModel::onActionCompleted)
+
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    title = buttonTitle,
+                    loadingIndicator = action.inProgress,
+                    enabled = !action.inProgress,
+                ) {
                     keyboardController?.hide()
-                    confirmRiskyAddress()
-                } else {
-                    proceed()
+                    executor()
+                }
+            } else {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = buttonTitle,
+                    enabled = step is CrossPayStep.Proceed,
+                ) {
+                    if (uiState.riskyAddress) {
+                        keyboardController?.hide()
+                        confirmRiskyAddress()
+                    } else {
+                        proceed()
+                    }
                 }
             }
         }
