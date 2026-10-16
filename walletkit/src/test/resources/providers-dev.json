@@ -279,6 +279,11 @@
     ]
   },
   {
+    "provider": "XSWAP",
+    "quotes": true,
+    "suspensions": []
+  },
+  {
     "provider": "UNISWAP_V3",
     "quotes": false,
     "suspensions": [

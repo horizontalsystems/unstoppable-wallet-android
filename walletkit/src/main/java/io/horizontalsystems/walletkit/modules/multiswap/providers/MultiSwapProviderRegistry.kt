@@ -16,6 +16,7 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.Swapuz),
         USwapProvider(UProvider.Lizex),
         USwapProvider(UProvider.Bitania),
+        USwapProvider(UProvider.XSwap),
         USwapProvider(UProvider.Barter),
         USwapProvider(UProvider.Circle),
         USwapProvider(UProvider.Pegasus),
