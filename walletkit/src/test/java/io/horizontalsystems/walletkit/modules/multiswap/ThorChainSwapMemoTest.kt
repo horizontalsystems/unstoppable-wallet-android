@@ -36,6 +36,16 @@ class ThorChainSwapMemoTest {
     }
 
     @Test
+    fun requireDestination_cashAddrPrefixIsIgnored() {
+        val bare = "qpm2qsznhks23z7629mms6s4cwef74vcwvy22gdx6a"
+        ThorChainSwapMemo.requireDestination("=:BCH.BCH:$bare:0/1/0", "bitcoincash:$bare", BlockchainType.BitcoinCash)
+        ThorChainSwapMemo.requireDestination("=:BCH.BCH:bitcoincash:$bare:0/1/0".replace(":bitcoincash:", ":"), "BITCOINCASH:${bare.uppercase()}", BlockchainType.BitcoinCash)
+        assertThrows(IllegalStateException::class.java) {
+            ThorChainSwapMemo.requireDestination("=:BCH.BCH:$bare:0/1/0", "bitcoincash:qother", BlockchainType.BitcoinCash)
+        }
+    }
+
+    @Test
     fun requireDestination_exactMatchOnNonEvm() {
         ThorChainSwapMemo.requireDestination("=:BTC.BTC:$recipient:0/1/0", recipient, BlockchainType.Bitcoin)
     }

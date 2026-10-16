@@ -49,9 +49,13 @@ object ThorChainSwapMemo {
 
     private fun canonical(address: String, chain: BlockchainType): String = when {
         chain.isEvm -> address.lowercase()
-        chain in caseInsensitiveEncodingChains && address.isSingleCase() -> address.lowercase()
+        chain in caseInsensitiveEncodingChains && address.isSingleCase() -> withoutCashAddrPrefix(address).lowercase()
         else -> address
     }
+
+    // A CashAddr may carry its network prefix (`bitcoincash:q…`, `ecash:q…`); the wallet's own
+    // address does, the node's memo names the bare form. Both spell the same address.
+    private fun withoutCashAddrPrefix(address: String): String = address.substringAfter(':')
 
     private fun String.isSingleCase(): Boolean = this == lowercase() || this == uppercase()
 }
