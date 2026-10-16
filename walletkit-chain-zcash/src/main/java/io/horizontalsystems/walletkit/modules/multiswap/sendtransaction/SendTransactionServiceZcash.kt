@@ -1,6 +1,8 @@
 package io.horizontalsystems.walletkit.modules.multiswap.sendtransaction
 
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
+import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
+import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.Proposal
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.coinCodeWithNetwork
@@ -26,12 +28,21 @@ class SendTransactionServiceZcash(
     private var proposal: Proposal? = null
     private var error: Throwable? = null
     private var fee: BigDecimal? = null
+    private var maxSendable: BigDecimal? = null
+
+    // Only until a proposal succeeds: the fee of the full amount includes a change output that
+    // the lowered amount does not need, so its own fee then gives the exact maximum.
+    override fun maxSendableAmount(): BigDecimal? = maxSendable.takeIf { proposal == null }
 
     override fun start(coroutineScope: CoroutineScope) = Unit
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Zcash)
 
+        val amount = when (data) {
+            is SendTransactionData.Zcash.Regular -> data.amount
+            is SendTransactionData.Zcash.ShieldedMemo -> data.amount
+        }
         val outputs = when (data) {
             is SendTransactionData.Zcash.Regular -> {
                 listOf(
@@ -60,11 +71,15 @@ class SendTransactionServiceZcash(
         }
 
         error = null
+        proposal = null
+        fee = null
         try {
             proposal = adapter.createProposal(outputs)
             fee = proposal?.totalFeeRequired()?.convertZatoshiToZec()
         } catch (e: Throwable) {
             val message = e.message
+            maxSendable = maxSendableZatoshi(message, amount.convertZecToZatoshi().value)
+                ?.let { Zatoshi(it).convertZatoshiToZec() }
             error = if (message != null && message.contains("Insufficient balance", ignoreCase = true)) {
                 InsufficientBalance(feeToken.coinCodeWithNetwork)
             } else {
@@ -91,4 +106,23 @@ class SendTransactionServiceZcash(
         fields = listOf(),
     )
 
+
+    companion object {
+        private val insufficientFunds = Regex("""Insufficient balance \(have (\d+), need (\d+) including fee\)""")
+
+        /**
+         * What a transfer of [amount] zatoshi the wallet cannot fund could be lowered to, or null.
+         * The SDK prices only a transfer it can fund, so sending the whole balance leaves no fee
+         * to take out of it; its error names what the wallet has and what the transfer needs,
+         * fee included.
+         */
+        fun maxSendableZatoshi(message: String?, amount: Long): Long? {
+            val match = insufficientFunds.find(message ?: return null) ?: return null
+            val have = match.groupValues[1].toLongOrNull() ?: return null
+            val need = match.groupValues[2].toLongOrNull() ?: return null
+            val fee = need - amount
+            if (fee <= 0) return null
+            return (have - fee).takeIf { it > 0 }
+        }
+    }
 }
