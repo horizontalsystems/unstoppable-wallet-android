@@ -396,6 +396,9 @@ class SwapConfirmViewModel(
      */
     suspend fun swap() = withContext(Dispatchers.Default) {
         val quote = finalQuote ?: throw IllegalStateException("No quote to commit")
+        // Read once: setRecipient() can change the field while the send is suspended, and the
+        // record and the wallet to enable must describe the swap that was actually sent.
+        val recipient = this@SwapConfirmViewModel.recipient
 
         synchronized(this@SwapConfirmViewModel) {
             if (sending) throw IllegalStateException("A swap is already being sent")
@@ -447,7 +450,7 @@ class SwapConfirmViewModel(
             // the record is never marked failed here and no fresh quote is offered. Tracking by
             // uuid resolves it either way, and the spent token already forces a new preview on
             // the next press, through a notice.
-            val recordId = saveSwapRecord(commitment)
+            val recordId = saveSwapRecord(commitment, recipient)
 
             val result = try {
                 service.sendTransaction(swapDefenseState.mevProtectionEnabled)
@@ -539,7 +542,7 @@ class SwapConfirmViewModel(
         SendTransactionResult.Ton -> null
     }
 
-    private suspend fun saveSwapRecord(commitment: SwapCommitment): Int {
+    private suspend fun saveSwapRecord(commitment: SwapCommitment, recipient: Address?): Int {
         val quote = commitment.quote
 
         val record = SwapRecord(
