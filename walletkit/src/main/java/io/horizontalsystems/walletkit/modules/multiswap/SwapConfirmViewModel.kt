@@ -53,6 +53,7 @@ class SwapConfirmViewModel(
     private val priceImpactService: PriceImpactService,
     private val swapDefenseSystemService: SwapDefenseSystemService,
     private val backgroundManager: BackgroundManager,
+    private val swapWalletEnabler: SwapWalletEnabler,
     initialRecipient: Address? = null,
     private val swapProviderInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
 ) : ViewModelUiState<SwapConfirmUiState>() {
@@ -465,6 +466,13 @@ class SwapConfirmViewModel(
                 }
             }
 
+            // The bought token lands in this account unless a custom recipient was set, so its
+            // wallet has to be enabled for the funds to show on Balance. The transaction is
+            // already broadcast at this point, so a failure here must not surface as a swap error.
+            if (recipient == null) {
+                runCatching { swapWalletEnabler.enableReceivingWallet(activeAccount, tokenOut) }
+            }
+
             // remember the delivery address so the recipient page can suggest it next time
             recipient?.let {
                 App.recentAddressManager.setRecentAddress(it, tokenOut.blockchainType)
@@ -606,6 +614,7 @@ class SwapConfirmViewModel(
                 PriceImpactService(PriceImpactLevel.Normal),
                 SwapDefenseSystemService(App.paidActionSettingsManager),
                 App.backgroundManager,
+                SwapWalletEnabler(App.walletManager, App.restoreSettingsManager),
                 initialRecipient,
             )
         }
