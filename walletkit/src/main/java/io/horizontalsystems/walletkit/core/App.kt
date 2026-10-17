@@ -488,7 +488,8 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             zanoNodeStorage = zanoNodeStorage,
             zcashEndpointManager = zcashEndpointManager,
             zcashEndpointStorage = zcashEndpointStorage,
-            contactsRepository = contactsRepository
+            contactsRepository = contactsRepository,
+            statsManager = statsManager
         )
 
         roiManager = RoiManager(localStorage)
