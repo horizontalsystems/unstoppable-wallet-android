@@ -3,14 +3,23 @@
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
 - runFlow: pass_intro.yaml
-- tapOn: "Existing Wallet"
+- tapOn:
+    id: onboarding_existing_wallet
 - runFlow: accept_terms.yaml
-- tapOn: "from Recovery Phrase"
-- tapOn: "Enter Recovery Phrase"
+- tapOn:
+    id: import_recovery_phrase
+- tapOn:
+    id: restore_phrase_input
 - inputText: ${MNEMONIC}
 - hideKeyboard
-- tapOn: "Next"
-- tapOn: "Bitcoin"
-- tapOn: "Done"
-- tapOn: "Ethereum"
-- tapOn: "Restore"
+- tapOn:
+    id: restore_next
+# Bitcoin opens the derivation sheet; its defaults are kept
+- tapOn:
+    id: restore_chain_bitcoin
+- tapOn:
+    id: selector_done
+- tapOn:
+    id: restore_chain_ethereum
+- tapOn:
+    id: restore_submit

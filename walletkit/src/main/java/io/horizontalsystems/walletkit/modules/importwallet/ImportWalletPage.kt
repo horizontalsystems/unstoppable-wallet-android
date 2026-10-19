@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -52,6 +53,7 @@ import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreFromPrivateK
 import io.horizontalsystems.walletkit.modules.restorelocal.RestoreLocalPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
@@ -150,7 +152,8 @@ private fun ImportWalletScreen(
                     icon = painterResource(R.drawable.ic_edit_24),
                     title = stringResource(R.string.ImportWallet_RecoveryPhrase).hs,
                     subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
-                    borderTop = false
+                    borderTop = false,
+                    modifier = Modifier.testTag(TestTags.IMPORT_RECOVERY_PHRASE),
                 ) {
                     navigation.navigateWithTermsAccepted(
                         screen = RestoreAccountPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
@@ -163,7 +166,8 @@ private fun ImportWalletScreen(
                     icon = painterResource(R.drawable.key_24),
                     title = stringResource(R.string.ImportWallet_PrivateKey).hs,
                     subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
-                    borderTop = true
+                    borderTop = true,
+                    modifier = Modifier.testTag(TestTags.IMPORT_PRIVATE_KEY),
                 ) {
                     navigation.navigateWithTermsAccepted(
                         screen = RestoreFromPrivateKeyPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
@@ -177,7 +181,8 @@ private fun ImportWalletScreen(
                     icon = painterResource(R.drawable.touchid_24),
                     title = stringResource(R.string.ImportWallet_Passkey).hs,
                     subtitle = stringResource(R.string.ImportWallet_Passkey_Description).hs,
-                    borderTop = true
+                    borderTop = true,
+                    modifier = Modifier.testTag(TestTags.IMPORT_PASSKEY),
                 ) {
                     if (!passkeyEnabled) return@WalletType
                     passkeyEnabled = false
@@ -219,7 +224,8 @@ private fun ImportWalletScreen(
                     icon = painterResource(R.drawable.ic_download_24),
                     title = stringResource(R.string.ImportWallet_BackupFile).hs,
                     subtitle = stringResource(R.string.ImportWallet_BackupFile_Description).hs,
-                    borderTop = true
+                    borderTop = true,
+                    modifier = Modifier.testTag(TestTags.IMPORT_BACKUP_FILE),
                 ) {
                     restoreLauncher.launchSafe(arrayOf("application/json"), view)
                 }

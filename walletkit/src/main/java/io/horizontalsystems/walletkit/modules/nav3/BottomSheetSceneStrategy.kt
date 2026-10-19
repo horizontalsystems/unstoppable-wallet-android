@@ -10,6 +10,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.scene.OverlayScene
@@ -19,6 +20,7 @@ import androidx.navigation3.scene.SceneStrategyScope
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetSceneStrategy.Companion.bottomSheet
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
@@ -66,6 +68,7 @@ internal class BottomSheetScene<T : Any>(
                     if (handler != null) handler() else onBack()
                 },
                 sheetState = state,
+                modifier = Modifier.exposeTestTags(),
                 containerColor = ComposeAppTheme.colors.lawrence,
                 properties = modalBottomSheetProperties,
                 dragHandle = null

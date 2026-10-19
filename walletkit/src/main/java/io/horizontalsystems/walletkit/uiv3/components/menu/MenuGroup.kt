@@ -20,6 +20,7 @@ import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 data class MenuItemX<T>(
     val title: String,
@@ -37,6 +38,7 @@ fun <T> MenuGroup(
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
             Modifier
+                .exposeTestTags()
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
                 .width(240.dp)
