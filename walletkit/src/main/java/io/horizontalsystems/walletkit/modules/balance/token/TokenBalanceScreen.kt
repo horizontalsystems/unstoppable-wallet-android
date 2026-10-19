@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -65,6 +66,7 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.TextAttention
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -496,6 +498,7 @@ private fun TokenBalanceHeader(
         }
 
         CardsElementAmountText(
+            modifier = Modifier.testTag(TestTags.TOKEN_BALANCE),
             title = title,
             body = body,
             onClickTitle = {
@@ -850,6 +853,7 @@ private fun ButtonsRow(
                 variant = ButtonVariant.Primary,
                 icon = R.drawable.ic_balance_chart_24,
                 title = stringResource(R.string.Coin_Chart),
+                modifier = Modifier.testTag(TestTags.TOKEN_CHART),
                 enabled = !viewItem.wallet.token.isCustom,
                 onClick = {
                     val coinUid = viewItem.wallet.coin.uid
@@ -865,12 +869,14 @@ private fun ButtonsRow(
             variant = ButtonVariant.Secondary,
             icon = R.drawable.ic_arrow_down_24,
             title = stringResource(R.string.Balance_Receive),
+            modifier = Modifier.testTag(TestTags.TOKEN_RECEIVE),
             onClick = onClickReceive,
         )
         BalanceActionButton(
             variant = ButtonVariant.Secondary,
             icon = R.drawable.ic_arrow_up_24,
             title = stringResource(R.string.Balance_Send),
+            modifier = Modifier.testTag(TestTags.TOKEN_SEND),
             onClick = {
                 navigation.slideFromRight(SendV2Page(viewItem.wallet))
 
@@ -885,6 +891,7 @@ private fun ButtonsRow(
                 variant = ButtonVariant.Secondary,
                 icon = R.drawable.ic_swap_circle_24,
                 title = stringResource(R.string.Swap),
+                modifier = Modifier.testTag(TestTags.TOKEN_SWAP),
                 onClick = {
                     navigation.slideFromRight(SwapPage(SwapPage.Input(tokenIn = viewItem.wallet.token)))
 

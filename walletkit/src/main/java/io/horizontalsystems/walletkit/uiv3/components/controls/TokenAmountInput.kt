@@ -46,7 +46,8 @@ fun TokenAmountInput(
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
     amountExceedsBalance: Boolean,
-    onTokenClick: (() -> Unit)?
+    onTokenClick: (() -> Unit)?,
+    amountInputModifier: Modifier = Modifier,
 ) {
     BoxBordered(bottom = true) {
         Row(
@@ -60,7 +61,8 @@ fun TokenAmountInput(
                     value = amount,
                     onValueChange = onValueChange,
                     focusRequester = focusRequester,
-                    error = amountExceedsBalance
+                    error = amountExceedsBalance,
+                    modifier = amountInputModifier,
                 )
                 if (fiatAmountInputEnabled || fiatAmount != null) {
                     FiatAmountInput(

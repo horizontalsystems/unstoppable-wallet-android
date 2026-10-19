@@ -21,38 +21,51 @@ env:
     timeout: 90000
 
 # Open the send form from the token screen
-- tapOn: "BTC"
 - tapOn:
-    text: "Send"
-    index: 0
+    id: balance_item_BTC
+- tapOn:
+    id: token_send
 - assertVisible: "Send BTC"
 
-# The recipient row opens the address page; Next brings the address back
-- tapOn: "To Address"
-- tapOn: "Address or Domain"
+# The recipient row opens the address page; submitting brings the address back
+- tapOn:
+    id: send_recipient_row
+- tapOn:
+    id: enter_address_input
 - inputText: ${RECIPIENT}
 - hideKeyboard
-- tapOn: "Next"
+- tapOn:
+    id: enter_address_submit
 - assertVisible: ${RECIPIENT}
 
-# Enter the amount into the field showing the "0" placeholder
 - tapOn:
-    text: "0"
-    index: 0
+    id: send_amount_input
 - inputText: ${AMOUNT}
 - hideKeyboard
 - extendedWaitUntil:
     visible:
-      text: "Next"
+      id: send_next
       enabled: true
     timeout: 30000
-- tapOn: "Next"
+- tapOn:
+    id: send_next
 
 # Confirmation must show exactly what was entered; the fee comes from the node.
 # Stop here — never tap the final Send button.
 - assertVisible: "Confirm Send"
-- assertVisible: ${AMOUNT}
-- assertVisible: ${RECIPIENT}
+# The tagged rows hold the values in child nodes
+- assertVisible:
+    text: ${AMOUNT}
+    childOf:
+      id: confirm_amount
+- assertVisible:
+    text: ${RECIPIENT}
+    childOf:
+      id: confirm_recipient
+# The fee shows "n/a" until the estimate arrives
 - extendedWaitUntil:
-    visible: "Network Fee"
+    visible:
+      text: ".*\\d.*"
+      childOf:
+        id: confirm_network_fee
     timeout: 30000
