@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -48,7 +50,9 @@ fun BottomSheetSelectorMultiple(
         buttons = {
             HSButton(
                 title = stringResource(R.string.Button_Done),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.SELECTOR_DONE),
                 onClick = {
                     onItemsSelected(selected)
                     onCloseClick.invoke()
@@ -96,7 +100,9 @@ fun BottomSheetSelectorMultiple(
                     },
                     right = {
                         HsSwitch(
-                            modifier = Modifier.padding(start = 5.dp),
+                            modifier = Modifier
+                                .padding(start = 5.dp)
+                                .testTag(TestTags.selectorSwitch(index)),
                             checked = selected.contains(index),
                             onCheckedChange = { checked ->
                                 if (checked) {

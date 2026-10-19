@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,6 +40,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.D1
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -122,7 +124,9 @@ private fun CreateAccountIntroScreen(
                     title = stringResource(id = R.string.ManageAccount_WalletName)
                 )
                 FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .testTag(TestTags.CREATE_NAME_INPUT),
                     initial = viewModel.accountName,
                     pasteEnabled = false,
                     hint = viewModel.defaultAccountName,
@@ -221,7 +225,8 @@ private fun CreateAccountIntroScreen(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                        .padding(horizontal = 24.dp)
+                        .testTag(TestTags.CREATE_SUBMIT),
                     onClick = viewModel::createAccount,
                 )
             }

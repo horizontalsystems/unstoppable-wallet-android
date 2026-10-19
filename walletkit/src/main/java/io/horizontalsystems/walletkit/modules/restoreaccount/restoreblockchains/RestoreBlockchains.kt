@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetSelectorMultiple
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
@@ -186,6 +188,7 @@ fun ManageWalletsScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(horizontal = 16.dp)
+                                .testTag(TestTags.restoreChain(viewItem.item.uid))
                         ) {
                             Image(
                                 painter = viewItem.imageSource.painter(),
@@ -239,7 +242,8 @@ fun ManageWalletsScreen(
                 variant = ButtonVariant.Primary,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 24.dp)
+                    .testTag(TestTags.RESTORE_SUBMIT),
                 enabled = doneButtonEnabled,
                 onClick = { viewModel.onRestore() },
             )

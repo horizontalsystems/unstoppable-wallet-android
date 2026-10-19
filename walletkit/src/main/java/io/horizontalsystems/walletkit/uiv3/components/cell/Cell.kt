@@ -31,8 +31,9 @@ private fun Cell(
     right: @Composable() (() -> Unit)?,
     backgroundColor: Color?,
     onClick: (() -> Unit)?,
+    modifier: Modifier,
 ) {
-    var modifier = Modifier
+    var modifier = modifier
         .fillMaxWidth()
 
     onClick?.let {
@@ -70,6 +71,7 @@ fun CellPrimary(
     right: @Composable() (() -> Unit)? = null,
     backgroundColor: Color? = null,
     onClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     Cell(
         paddingValues = PaddingValues(16.dp),
@@ -77,7 +79,8 @@ fun CellPrimary(
         middle = middle,
         right = right,
         backgroundColor = backgroundColor,
-        onClick = onClick
+        onClick = onClick,
+        modifier = modifier,
     )
 }
 
@@ -87,7 +90,8 @@ fun CellSecondary(
     middle: @Composable() (() -> Unit),
     right: @Composable() (() -> Unit)? = null,
     backgroundColor: Color? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     Cell(
         paddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -95,7 +99,8 @@ fun CellSecondary(
         middle = middle,
         right = right,
         onClick = onClick,
-        backgroundColor = backgroundColor
+        backgroundColor = backgroundColor,
+        modifier = modifier,
     )
 }
 

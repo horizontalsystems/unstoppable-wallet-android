@@ -94,6 +94,7 @@ import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import java.math.BigDecimal
 
 
@@ -490,6 +491,7 @@ fun AmountInputDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
             Modifier
+                .exposeTestTags()
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {

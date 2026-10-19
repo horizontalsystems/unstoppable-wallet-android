@@ -3,7 +3,10 @@
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
 - runFlow: pass_intro.yaml
-- tapOn: "New Wallet"
+- tapOn:
+    id: onboarding_new_wallet
 - runFlow: accept_terms.yaml
-- tapOn: "Standard"
-- tapOn: "Create"
+- tapOn:
+    id: create_type_standard
+- tapOn:
+    id: create_submit
