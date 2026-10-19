@@ -17,6 +17,7 @@ import io.horizontalsystems.walletkit.core.managers.TonKitWrapper
 import io.horizontalsystems.walletkit.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.walletkit.core.meta
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.checkBroadcastAllowed
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -243,6 +244,7 @@ class TonConnectSendRequestViewModel(
             }
             throw IllegalArgumentException("Field validUntil has expired")
         }
+        checkBroadcastAllowed()
 
         viewModelScope.launch(Dispatchers.Default) {
             val boc = transactionSigner.sign(sendRequestEntity, tonWallet)
