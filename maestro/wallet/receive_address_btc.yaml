@@ -13,11 +13,15 @@ env:
 - runFlow: ../subflows/restore_wallet_from_phrase.yaml
 
 # Open the BTC receive screen from the token screen
-- tapOn: "BTC"
 - tapOn:
-    text: "Receive"
-    index: 0
+    id: balance_item_BTC
+- tapOn:
+    id: token_receive
 
 # The exact first address and format must be shown
-- assertVisible: ${EXPECTED_ADDRESS}
-- assertVisible: "Format: Native SegWit (BIP 84)"
+- assertVisible:
+    id: receive_address
+    text: ${EXPECTED_ADDRESS}
+- assertVisible:
+    id: receive_format
+    text: "Format: Native SegWit (BIP 84)"

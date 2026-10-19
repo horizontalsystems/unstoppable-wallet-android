@@ -85,11 +85,13 @@ fun AddressCell(
     address: String,
     contact: String?,
     domain: String? = null,
+    modifier: Modifier = Modifier,
 ) {
     val image = if (contact != null) R.drawable.user_wrapped_32 else R.drawable.wallet_wrapped_32
     val label = contact ?: domain
     val description = if (label != null) address else null
     CellPrimary(
+        modifier = modifier,
         left = {
             Image(
                 painter = painterResource(image),

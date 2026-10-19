@@ -29,12 +29,13 @@ fun HSIconButton(
     icon: Painter,
     contentDescription: String? = null,
     enabled: Boolean = true,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val buttonProps = getButtonProps(size, style, variant)
 
     Button(
-        modifier = Modifier.size(buttonProps.buttonSize),
+        modifier = modifier.size(buttonProps.buttonSize),
         shape = RoundedCornerShape(percent = 50),
         onClick = onClick,
         colors = ButtonPrimaryDefaults.textButtonColors(

@@ -40,6 +40,7 @@ data class MenuItem(
     val enabled: Boolean = true,
     val tint: Color = Color.Unspecified,
     val showAlertDot: Boolean = false,
+    val testTag: String? = null,
     val onClick: () -> Unit,
 ) : IMenuItem()
 
