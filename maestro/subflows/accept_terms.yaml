@@ -1,21 +1,50 @@
+# Checks all 9 terms and continues. The lower ones are below the fold.
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
-- tapOn: "Securely back up.*"
-- tapOn: "Disabling your smartphone.*"
-- tapOn: "The app doesn't spy.*"
-- tapOn: "We do not hold your assets.*"
-- tapOn: "As part of its monetization.*"
-- tapOn: "Blockchain transactions are irreversible.*"
 - scrollUntilVisible:
     element:
-      text: "The app is verifiably open source.*"
-- tapOn: "The app is verifiably open source.*"
+      id: terms_check_0
+- tapOn:
+    id: terms_check_0
 - scrollUntilVisible:
     element:
-      text: "You are solely responsible.*"
-- tapOn: "You are solely responsible.*"
+      id: terms_check_1
+- tapOn:
+    id: terms_check_1
 - scrollUntilVisible:
     element:
-      text: "By proceeding.*"
-- tapOn: "By proceeding.*"
-- tapOn: "Next"
+      id: terms_check_2
+- tapOn:
+    id: terms_check_2
+- scrollUntilVisible:
+    element:
+      id: terms_check_3
+- tapOn:
+    id: terms_check_3
+- scrollUntilVisible:
+    element:
+      id: terms_check_4
+- tapOn:
+    id: terms_check_4
+- scrollUntilVisible:
+    element:
+      id: terms_check_5
+- tapOn:
+    id: terms_check_5
+- scrollUntilVisible:
+    element:
+      id: terms_check_6
+- tapOn:
+    id: terms_check_6
+- scrollUntilVisible:
+    element:
+      id: terms_check_7
+- tapOn:
+    id: terms_check_7
+- scrollUntilVisible:
+    element:
+      id: terms_check_8
+- tapOn:
+    id: terms_check_8
+- tapOn:
+    id: terms_next

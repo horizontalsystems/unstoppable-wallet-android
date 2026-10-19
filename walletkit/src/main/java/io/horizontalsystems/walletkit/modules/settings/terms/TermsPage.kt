@@ -12,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,6 +32,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
@@ -109,7 +111,9 @@ fun TermsScreen(
                     }
 
                     RowUniversal(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .testTag(TestTags.termsCheck(viewModel.termsViewItems.indexOf(item))),
                         onClick = onClick
                     ) {
                         HsCheckbox(
@@ -134,7 +138,8 @@ fun TermsScreen(
                     HSButton(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 24.dp),
+                            .padding(horizontal = 24.dp)
+                            .testTag(TestTags.TERMS_NEXT),
                         title = stringResource(R.string.Button_Next),
                         onClick = { viewModel.onAgreeClick() },
                         enabled = viewModel.buttonEnabled

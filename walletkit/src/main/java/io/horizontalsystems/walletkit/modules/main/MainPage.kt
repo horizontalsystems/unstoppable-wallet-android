@@ -27,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCErrorNoAccountShee
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.HsNavigationBarItemDefaults
 import kotlinx.coroutines.delay
@@ -128,6 +130,7 @@ private fun MainScreen(
                 ) {
                     uiState.mainNavItems.forEach { destination ->
                         HsNavigationBarItem(
+                            modifier = Modifier.testTag(TestTags.tab(destination.mainNavItem.name)),
                             selected = destination.selected,
                             onClick = {
                                 viewModel.onSelect(destination.mainNavItem)

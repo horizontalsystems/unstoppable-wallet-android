@@ -24,6 +24,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 @Composable
 fun RateApp(
@@ -35,6 +36,7 @@ fun RateApp(
     ) {
         Column(
             modifier = Modifier
+                .exposeTestTags()
                 .clip(RoundedCornerShape(16.dp))
                 .background(color = ComposeAppTheme.colors.lawrence)
                 .padding(horizontal = 24.dp, vertical = 20.dp)

@@ -18,6 +18,7 @@ import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 @Composable
 fun <T : WithTranslatableTitle> AlertGroup(
@@ -29,6 +30,7 @@ fun <T : WithTranslatableTitle> AlertGroup(
     Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
+                .exposeTestTags()
                 .padding(horizontal = 20.dp)
                 .clip(RoundedCornerShape(16.dp))
         ) {

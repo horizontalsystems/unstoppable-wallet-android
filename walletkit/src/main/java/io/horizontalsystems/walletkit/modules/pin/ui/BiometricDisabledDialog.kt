@@ -27,12 +27,14 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_jacob
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 @Composable
 fun BiometricDisabledDialog(onClick: () -> Unit) {
     Dialog(onDismissRequest = onClick) {
         Column(
             Modifier
+                .exposeTestTags()
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)

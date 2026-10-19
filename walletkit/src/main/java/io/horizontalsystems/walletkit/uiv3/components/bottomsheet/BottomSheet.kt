@@ -43,6 +43,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -59,6 +60,7 @@ fun BottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
+        modifier = Modifier.exposeTestTags(),
         properties = ModalBottomSheetProperties(
             isAppearanceLightStatusBars = false,
             isAppearanceLightNavigationBars = false
@@ -166,6 +168,7 @@ fun BottomSheetContent(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         containerColor = ComposeAppTheme.colors.lawrence,
+        modifier = Modifier.exposeTestTags(),
         properties = ModalBottomSheetProperties(
             isAppearanceLightStatusBars = false,
             isAppearanceLightNavigationBars = false

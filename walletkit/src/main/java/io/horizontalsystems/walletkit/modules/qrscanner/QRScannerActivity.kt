@@ -80,6 +80,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import kotlinx.coroutines.launch
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
@@ -377,6 +378,7 @@ private fun PermissionNeededDialog(
     Dialog(onDismissRequest = onCancelClick) {
         Column(
             modifier = Modifier
+                .exposeTestTags()
                 .clip(RoundedCornerShape(16.dp))
                 .background(color = ComposeAppTheme.colors.lawrence)
                 .padding(horizontal = 24.dp, vertical = 20.dp)

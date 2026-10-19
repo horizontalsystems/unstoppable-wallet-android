@@ -2,7 +2,9 @@ package io.horizontalsystems.walletkit.modules.createaccount
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +19,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
@@ -53,7 +56,8 @@ fun CreateAccountScreen(navigation: HSNavigation, input: ManageAccountsModule.In
                     icon = painterResource(R.drawable.list_24),
                     title = stringResource(R.string.CreateNewWallet_Standard).hs,
                     subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
-                    borderTop = false
+                    borderTop = false,
+                    modifier = Modifier.testTag(TestTags.CREATE_TYPE_STANDARD),
                 ) {
                     navigation.slideFromRight(CreateAccountStandardPage(input))
                 }
@@ -62,7 +66,8 @@ fun CreateAccountScreen(navigation: HSNavigation, input: ManageAccountsModule.In
                     icon = painterResource(R.drawable.touchid_24),
                     title = stringResource(R.string.CreateNewWallet_Passkey).hs,
                     subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
-                    borderTop = true
+                    borderTop = true,
+                    modifier = Modifier.testTag(TestTags.CREATE_TYPE_PASSKEY),
                 ) {
                     if (!App.localStorage.passkeyTermsAccepted) {
                         navigation.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
@@ -82,10 +87,12 @@ fun WalletType(
     title: HSString,
     subtitle: HSString,
     borderTop: Boolean,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     BoxBordered(top = borderTop) {
         CellPrimary(
+            modifier = modifier,
             left = {
                 CellLeftImage(
                     painter = icon,
@@ -102,7 +109,7 @@ fun WalletType(
             right = {
                 CellRightNavigation()
             },
-            onClick = onClick
+            onClick = onClick,
         )
     }
 }

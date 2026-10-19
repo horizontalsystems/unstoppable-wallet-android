@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.createaccount.WalletType
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSPreview
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
@@ -56,6 +58,7 @@ fun AddWalletView(
                     title = stringResource(R.string.ManageAccounts_CreateNewWallet).hs,
                     subtitle = stringResource(R.string.ManageAccounts_CreateNewWalletDescription).hs,
                     borderTop = false,
+                    modifier = Modifier.testTag(TestTags.ONBOARDING_NEW_WALLET),
                     onClick = onNewWalletClick
                 )
                 WalletType(
@@ -63,6 +66,7 @@ fun AddWalletView(
                     title = stringResource(R.string.ManageAccounts_ExistingWallet).hs,
                     subtitle = stringResource(R.string.ManageAccounts_ExistingWalletDescription).hs,
                     borderTop = true,
+                    modifier = Modifier.testTag(TestTags.ONBOARDING_EXISTING_WALLET),
                     onClick = onWalletRestoreClick
                 )
                 WalletType(
@@ -70,6 +74,7 @@ fun AddWalletView(
                     title = stringResource(R.string.ManageAccounts_ViewOnlyWallet).hs,
                     subtitle = stringResource(R.string.ManageAccounts_ViewOnlyWalletDescription).hs,
                     borderTop = true,
+                    modifier = Modifier.testTag(TestTags.ONBOARDING_WATCH_WALLET),
                     onClick = onWatchWalletClick
                 )
             }

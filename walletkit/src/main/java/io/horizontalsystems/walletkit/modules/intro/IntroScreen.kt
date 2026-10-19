@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +28,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.SliderIndicator
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import kotlinx.coroutines.launch
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
@@ -95,7 +97,8 @@ private fun StaticContent(viewModel: IntroViewModel, pagerState: PagerState, pag
         HSButton(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(TestTags.INTRO_NEXT),
             title = stringResource(R.string.Button_Next),
             onClick = {
                 if (pagerState.currentPage + 1 < pageCount) {

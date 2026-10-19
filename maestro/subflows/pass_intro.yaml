@@ -1,5 +1,8 @@
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 ---
-- tapOn: "Next"
-- tapOn: "Next"
-- tapOn: "Next"
+- tapOn:
+    id: intro_next
+- tapOn:
+    id: intro_next
+- tapOn:
+    id: intro_next

@@ -40,6 +40,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.BottomSheetsElements
 import io.horizontalsystems.walletkit.ui.compose.components.BottomSheetsElementsHeader
 import io.horizontalsystems.walletkit.ui.compose.components.BottomSheetsElementsText
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 class KeyStoreActivity : BaseActivity() {
 
@@ -194,6 +195,7 @@ private fun KeysInvalidatedDialog(onClick: () -> Unit) {
     Dialog(onDismissRequest = onClick) {
         Column(
             Modifier
+                .exposeTestTags()
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)
