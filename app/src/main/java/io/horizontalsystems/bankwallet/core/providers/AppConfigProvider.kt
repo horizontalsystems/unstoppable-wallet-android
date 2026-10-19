@@ -179,4 +179,5 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
 
 
     override val fdroidBuild: Boolean = BuildConfig.FDROID_BUILD
+    override val e2eBuild: Boolean = BuildConfig.E2E_BUILD
 }
