@@ -23,6 +23,7 @@ import io.horizontalsystems.walletkit.modules.send.SendWarningRiskOfGettingStuck
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.checkBroadcastAllowed
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
@@ -208,6 +209,7 @@ class ResendBitcoinViewModel(
             sendResult = SendResult.Sending
             emitState()
 
+            checkBroadcastAllowed()
             adapter.send(replacementTransaction)
 
             logger.info("success")

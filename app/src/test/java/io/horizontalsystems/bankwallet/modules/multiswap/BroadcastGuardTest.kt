@@ -14,14 +14,14 @@ class BroadcastGuardTest {
 
     private val override = Regex("""override suspend fun sendTransaction\(mevProtectionEnabled: Boolean\)[^{]*\{""")
 
+    private val repoRoot = File("..")
+    private val sources = repoRoot.listFiles { f -> f.isDirectory && f.name.startsWith("walletkit") }!!
+        .map { File(it, "src/main/java") }
+        .filter { it.isDirectory }
+        .flatMap { dir -> dir.walk().filter { it.extension == "kt" }.toList() }
+
     @Test
     fun everySendServiceChecksTheGuardFirst() {
-        val repoRoot = File("..")
-        val sources = repoRoot.listFiles { f -> f.isDirectory && f.name.startsWith("walletkit") }!!
-            .map { File(it, "src/main/java") }
-            .filter { it.isDirectory }
-            .flatMap { dir -> dir.walk().filter { it.extension == "kt" }.toList() }
-
         val services = sources.filter { override.containsMatchIn(it.readText()) }
         assertTrue("No send services found under $repoRoot", services.size >= 10)
 
@@ -32,6 +32,22 @@ class BroadcastGuardTest {
                 !body.startsWith("checkBroadcastAllowed()")
             }
         }.map { it.name }
+
+        assertEquals(emptyList<String>(), unguarded)
+    }
+
+    // Flows that broadcast without a send service
+    @Test
+    fun directBroadcastsCheckTheGuard() {
+        val files = listOf(
+            "ResendBitcoinViewModel.kt",
+            "TonConnectSendRequestViewModel.kt",
+            "ShieldZcashViewModel.kt",
+        )
+        val unguarded = files.filter { name ->
+            val file = sources.single { it.name == name }
+            !file.readText().contains("checkBroadcastAllowed()")
+        }
 
         assertEquals(emptyList<String>(), unguarded)
     }
