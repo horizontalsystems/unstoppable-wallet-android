@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 @Composable
 fun CustomKeyboardWarningDialog(
@@ -25,6 +26,7 @@ fun CustomKeyboardWarningDialog(
     ) {
         Column(
             Modifier
+                .exposeTestTags()
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence)

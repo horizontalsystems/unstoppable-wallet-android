@@ -45,6 +45,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -87,6 +88,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.captionSB_leah
 import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -227,6 +229,7 @@ fun RestorePhrase(
 
                     BasicTextField(
                         modifier = Modifier
+                            .testTag(TestTags.RESTORE_PHRASE_INPUT)
                             .fillMaxWidth()
                             .onFocusChanged {
                                 isMnemonicPhraseInputFocused = it.isFocused
@@ -347,7 +350,9 @@ fun RestorePhrase(
                 uiState.error?.let { errorText ->
                     VSpacer(8.dp)
                     caption_lucian(
-                        modifier = Modifier.padding(horizontal = 32.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp)
+                            .testTag(TestTags.RESTORE_ERROR),
                         text = errorText
                     )
                 }
@@ -407,7 +412,8 @@ fun RestorePhrase(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                        .padding(horizontal = 24.dp)
+                        .testTag(TestTags.RESTORE_NEXT),
                     onClick = viewModel::onProceed,
                 )
             }
