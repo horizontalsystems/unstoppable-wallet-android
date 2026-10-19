@@ -111,6 +111,7 @@ class SendTransactionServiceTon(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val transactionType = mutex.withLock { transactionType } ?: throw IllegalStateException("Send data not set")
 
         when (transactionType) {

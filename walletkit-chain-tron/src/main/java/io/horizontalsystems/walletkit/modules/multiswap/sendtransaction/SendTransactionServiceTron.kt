@@ -186,6 +186,7 @@ class SendTransactionServiceTron(private val token: Token) : AbstractSendTransac
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val feeLimit = feeView.feeState.feeLimit
         val txHash = when (val d = sendTransactionData) {
             is SendTransactionData.Tron.Trc20Approve -> {

@@ -60,6 +60,7 @@ class SendTransactionServiceThorchain(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val txHash = when (val data = sendData!!) {
             is SendTransactionData.Thorchain.Deposit -> {
                 adapter.deposit(data.asset, data.amount, data.memo)

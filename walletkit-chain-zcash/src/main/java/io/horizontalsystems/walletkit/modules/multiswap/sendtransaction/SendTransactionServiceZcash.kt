@@ -94,6 +94,7 @@ class SendTransactionServiceZcash(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val transactionHash = adapter.sendProposal(proposal!!)
         onSent()
         return SendTransactionResult.Zcash(transactionHash)

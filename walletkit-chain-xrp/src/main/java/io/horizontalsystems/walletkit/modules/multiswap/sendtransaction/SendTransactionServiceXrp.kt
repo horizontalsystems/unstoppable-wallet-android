@@ -114,6 +114,7 @@ class SendTransactionServiceXrp(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val data = sendData ?: throw IllegalStateException("Send data not set")
 
         val txHash = withContext(Dispatchers.IO) {
