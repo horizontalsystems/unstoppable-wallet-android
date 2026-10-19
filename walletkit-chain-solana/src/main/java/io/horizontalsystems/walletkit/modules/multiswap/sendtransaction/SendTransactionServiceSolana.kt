@@ -94,6 +94,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val tmpRawTransaction = rawTransaction
         val fullTransaction: io.horizontalsystems.solanakit.models.FullTransaction
 

@@ -9,7 +9,7 @@ class DonationShowManager(
     fun shouldShow(): Boolean {
         //show only for FDroid builds
         val isFDroidBuild = io.horizontalsystems.walletkit.core.App.appConfigProvider.fdroidBuild
-        if (!isFDroidBuild) {
+        if (!isFDroidBuild || io.horizontalsystems.walletkit.core.App.appConfigProvider.e2eBuild) {
             return false
         }
 

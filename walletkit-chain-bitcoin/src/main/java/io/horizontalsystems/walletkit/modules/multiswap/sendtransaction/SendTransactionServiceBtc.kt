@@ -264,6 +264,7 @@ class SendTransactionServiceBtc(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Btc {
+        checkBroadcastAllowed()
         val transactionRecord = adapter.send(
             amount = amountState.amount!!,
             address = addressState.validAddress?.hex!!,

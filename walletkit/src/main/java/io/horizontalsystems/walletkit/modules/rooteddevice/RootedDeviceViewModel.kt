@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.utils.RootUtil
 
@@ -12,7 +13,9 @@ class RootedDeviceViewModel(
     rootUtil: RootUtil,
 ): ViewModel() {
 
-    var showRootedDeviceWarning by mutableStateOf(!localStorage.ignoreRootedDeviceWarning && rootUtil.isRooted)
+    var showRootedDeviceWarning by mutableStateOf(
+        !App.appConfigProvider.e2eBuild && !localStorage.ignoreRootedDeviceWarning && rootUtil.isRooted
+    )
         private set
 
     fun ignoreRootedDeviceWarning() {

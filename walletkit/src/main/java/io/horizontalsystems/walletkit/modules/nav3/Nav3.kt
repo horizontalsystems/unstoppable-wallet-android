@@ -354,7 +354,10 @@ private fun ToggleScreenshot(navigation: HSNavigation, showUnlock: Boolean) {
             // screenshotEnabled of its own. Without the lock state here the flag stays however the
             // page underneath left it, and locking over an ordinary screen leaves passcode entry
             // recordable.
-            if (showUnlock || currentScreen?.screenshotEnabled == false) {
+            // E2E builds keep screens capturable so failed UI tests leave readable screenshots
+            val secure = !App.appConfigProvider.e2eBuild &&
+                (showUnlock || currentScreen?.screenshotEnabled == false)
+            if (secure) {
                 activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
             } else {
                 activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)

@@ -52,6 +52,7 @@ class SendTransactionServiceMonero(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val data = sendData!!
         val txHash = adapter.send(data.amount, data.address, data.memo, data.selectedOutputs?.map { it.keyImage })
         return SendTransactionResult.Monero(txHash = txHash)

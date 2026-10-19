@@ -87,6 +87,7 @@ class SendTransactionServiceStellar(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val txHash = stellarSendHandler!!.sendTransaction()
 
         return SendTransactionResult.Stellar(txHash)

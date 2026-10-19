@@ -88,6 +88,7 @@ class SendTransactionServiceZano(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        checkBroadcastAllowed()
         val data = sendData!!
         val txHash = adapter.send(data.amount, data.address, data.memo)
         return SendTransactionResult.Zano(txHash = txHash)

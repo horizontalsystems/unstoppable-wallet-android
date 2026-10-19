@@ -259,6 +259,7 @@ class SendTransactionServiceEvm(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
+        checkBroadcastAllowed()
         val transaction = transaction ?: throw Exception()
         if (transaction.errors.isNotEmpty()) throw Exception()
 
