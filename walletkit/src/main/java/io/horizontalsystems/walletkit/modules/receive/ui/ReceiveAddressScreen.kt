@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -91,6 +92,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
@@ -201,7 +203,9 @@ fun ReceiveAddressScreen(
                                     }
                                     VSpacer(24.dp)
                                     subhead2_leah(
-                                        modifier = Modifier.padding(horizontal = 46.dp),
+                                        modifier = Modifier
+                                            .padding(horizontal = 46.dp)
+                                            .testTag(TestTags.RECEIVE_ADDRESS),
                                         text = uiState.address,
                                         textAlign = TextAlign.Center,
                                     )
@@ -211,7 +215,9 @@ fun ReceiveAddressScreen(
                                     uiState.blockchainName?.let { blockchainName ->
                                         VSpacer(12.dp)
                                         subhead_grey(
-                                            modifier = Modifier.padding(horizontal = 46.dp),
+                                            modifier = Modifier
+                                                .padding(horizontal = 46.dp)
+                                                .testTag(TestTags.RECEIVE_NETWORK),
                                             text = stringResource(R.string.Balance_Network) + ": " + blockchainName + testNetBadge,
                                             textAlign = TextAlign.Center,
                                         )
@@ -219,7 +225,9 @@ fun ReceiveAddressScreen(
                                     uiState.addressFormat?.let { addressFormat ->
                                         VSpacer(12.dp)
                                         subhead_grey(
-                                            modifier = Modifier.padding(horizontal = 46.dp),
+                                            modifier = Modifier
+                                                .padding(horizontal = 46.dp)
+                                                .testTag(TestTags.RECEIVE_FORMAT),
                                             text = stringResource(R.string.Balance_Format) + ": " + addressFormat + testNetBadge,
                                             textAlign = TextAlign.Center,
                                         )
@@ -227,7 +235,9 @@ fun ReceiveAddressScreen(
                                     uiState.addressType?.let { addressType ->
                                         VSpacer(12.dp)
                                         subhead_grey(
-                                            modifier = Modifier.padding(horizontal = 46.dp),
+                                            modifier = Modifier
+                                                .padding(horizontal = 46.dp)
+                                                .testTag(TestTags.RECEIVE_ADDRESS_TYPE),
                                             text = stringResource(R.string.Balance_Receive_AddressType) + ": " + addressType + testNetBadge,
                                             textAlign = TextAlign.Center,
                                         )
@@ -351,6 +361,7 @@ private fun ActionButtonsRow(
             ReceiveActionButton(
                 icon = R.drawable.ic_edit_24px,
                 buttonText = stringResource(R.string.Button_SetAmount),
+                modifier = Modifier.testTag(TestTags.RECEIVE_SET_AMOUNT),
                 onClick = {
                     openAmountDialog.value = true
                 },
@@ -360,6 +371,7 @@ private fun ActionButtonsRow(
         ReceiveActionButton(
             icon = R.drawable.ic_share_24px,
             buttonText = stringResource(R.string.Button_Share),
+            modifier = Modifier.testTag(TestTags.RECEIVE_SHARE),
             onClick = {
                 context.startActivity(Intent().apply {
                     action = Intent.ACTION_SEND
@@ -378,6 +390,7 @@ private fun ActionButtonsRow(
         ReceiveActionButton(
             icon = R.drawable.ic_copy_24px,
             buttonText = stringResource(R.string.Button_Copy),
+            modifier = Modifier.testTag(TestTags.RECEIVE_COPY),
             onClick = {
                 TextHelper.copyText(uri)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
@@ -461,12 +474,14 @@ private fun AdditionalDataSection(
 private fun ReceiveActionButton(
     icon: Int,
     buttonText: String,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         HSIconButton(
+            modifier = modifier,
             variant = ButtonVariant.Secondary,
             onClick = onClick,
             icon = painterResource(icon),

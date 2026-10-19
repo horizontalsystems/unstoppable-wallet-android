@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,6 +60,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
@@ -144,7 +146,8 @@ fun SendConfirmationScreen(
                 SendButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .testTag(TestTags.CONFIRM_SEND),
                     sendResult = sendResult,
                     title = sendButtonTitle,
                     sendingTitle = sendingButtonTitle,
@@ -235,7 +238,8 @@ fun ConfirmationBottomSection(
             primary = formattedFee?.primary ?: stringResource(R.string.NotAvailable),
             secondary = formattedFee?.secondary,
             title = stringResource(id = R.string.FeeSettings_NetworkFee),
-            infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+            infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info),
+            valueModifier = Modifier.testTag(TestTags.CONFIRM_NETWORK_FEE),
         )
     }
 }
@@ -267,6 +271,7 @@ fun ConfirmationTopSection(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             CellPrimary(
+                modifier = Modifier.testTag(TestTags.CONFIRM_AMOUNT),
                 left = {
                     CoinImage(
                         token = token,
@@ -292,6 +297,7 @@ fun ConfirmationTopSection(
                     address = it.hex,
                     contact = contact?.name,
                     domain = it.domain,
+                    modifier = Modifier.testTag(TestTags.CONFIRM_RECIPIENT),
                 )
             }
         }

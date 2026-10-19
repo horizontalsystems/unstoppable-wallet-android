@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +24,7 @@ fun FeeRow(
     valueToken: String,
     onInfoClick: (() -> Unit)? = null,
     fiatFirst: Boolean = false,
+    valueModifier: Modifier = Modifier,
 ) {
     // Not keyed on the value: fees are re-estimated while the screen is open, and each new
     // estimate would otherwise undo the user's tap.
@@ -51,6 +53,7 @@ fun FeeRow(
         right = {
             CellRightInfo(
                 eyebrow = displayedValue.hs(ComposeAppTheme.colors.leah),
+                modifier = valueModifier,
                 onClick = if (valueFiat != null) {
                     { showFiat = !showFiat }
                 } else {

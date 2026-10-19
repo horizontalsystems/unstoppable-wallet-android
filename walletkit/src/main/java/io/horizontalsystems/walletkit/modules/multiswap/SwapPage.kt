@@ -1232,7 +1232,8 @@ fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
     focusRequester: FocusRequester = FocusRequester(),
-    error: Boolean
+    error: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val textColor = if (error) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah
     var amount by rememberSaveable {
@@ -1256,7 +1257,7 @@ fun AmountInput(
     }
 
     BasicTextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
             .onFocusChanged {

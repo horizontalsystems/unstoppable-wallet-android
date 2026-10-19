@@ -27,9 +27,10 @@ fun CardsElementAmountText(
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
     trailingContent: (@Composable () -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(ComposeAppTheme.colors.tyler)
             .padding(horizontal = 16.dp, vertical = 24.dp),

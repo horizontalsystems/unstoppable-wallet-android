@@ -48,6 +48,7 @@ import io.horizontalsystems.walletkit.modules.walletconnect.list.WalletConnectLi
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -151,6 +152,7 @@ fun BalanceForAccount(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Transactions_Title),
                     icon = R.drawable.ic_circle_clock_24,
+                    testTag = TestTags.BALANCE_TRANSACTIONS,
                     onClick = {
                         navigation.slideFromRight(TransactionsPage)
 
@@ -165,6 +167,7 @@ fun BalanceForAccount(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
                     icon = R.drawable.ic_wallet_switch_24,
+                    testTag = TestTags.BALANCE_MANAGE_ACCOUNTS,
                     onClick = {
                         navigation.slideFromRight(
                             ManageAccountsPage(ManageAccountsModule.Mode.Switcher)

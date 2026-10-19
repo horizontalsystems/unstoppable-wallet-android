@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextMeasurer
@@ -64,6 +65,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
@@ -271,7 +273,8 @@ private fun ColumnScope.SendFormTab(
                         onValueChange = viewModel::onEnterAmount,
                         onFiatValueChange = viewModel::onEnterFiatAmount,
                         amountExceedsBalance = step is SendStep.Error && step.error == SwapError.InsufficientBalanceFrom,
-                        onTokenClick = null
+                        onTokenClick = null,
+                        amountInputModifier = Modifier.testTag(TestTags.SEND_AMOUNT_INPUT),
                     )
                     if (!uiState.hideAddress) {
                         AddressRow(
@@ -362,7 +365,9 @@ private fun ColumnScope.SendFormTab(
                 val executor = action.executor(navigation, viewModel::onActionCompleted)
 
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SEND_ACTION),
                     variant = ButtonVariant.Secondary,
                     title = buttonTitle,
                     loadingIndicator = action.inProgress,
@@ -373,7 +378,9 @@ private fun ColumnScope.SendFormTab(
                 }
             } else {
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SEND_NEXT),
                     title = buttonTitle,
                     enabled = step is SendStep.Proceed,
                 ) {
@@ -472,6 +479,7 @@ internal fun AddressRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(89.dp)
+                .testTag(TestTags.SEND_RECIPIENT_ROW)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,

@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -74,6 +75,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
@@ -248,12 +250,14 @@ fun BalanceItems(
                             variant = ButtonVariant.Primary,
                             icon = R.drawable.ic_scan_24,
                             title = stringResource(R.string.Button_ScanQr),
+                            modifier = Modifier.testTag(TestTags.BALANCE_SCAN),
                             onClick = onScanClick
                         )
                         BalanceActionButton(
                             variant = ButtonVariant.Secondary,
                             icon = R.drawable.ic_arrow_down_24,
                             title = stringResource(R.string.Balance_Receive),
+                            modifier = Modifier.testTag(TestTags.BALANCE_RECEIVE),
                             enabled = true,
                             onClick = {
                                 navigation.slideFromRight(ReceiveChooseCoinPage)
@@ -268,6 +272,7 @@ fun BalanceItems(
                             variant = ButtonVariant.Secondary,
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
+                            modifier = Modifier.testTag(TestTags.BALANCE_SEND),
                             onClick = {
                                 navigation.slideFromRight(SendTokenSelectPage())
 
@@ -282,6 +287,7 @@ fun BalanceItems(
                                 variant = ButtonVariant.Secondary,
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
+                                modifier = Modifier.testTag(TestTags.BALANCE_SWAP),
                                 onClick = {
                                     navigation.slideFromRight(SwapPage())
 
@@ -366,6 +372,7 @@ fun BalanceItems(
                                 size = ButtonSize.Small,
                                 icon = painterResource(R.drawable.ic_manage_20),
                                 contentDescription = stringResource(R.string.ManageCoins_title),
+                                modifier = Modifier.testTag(TestTags.BALANCE_MANAGE_COINS),
                                 onClick = {
                                     navigation.slideFromRight(ManageWalletsPage)
 
@@ -382,7 +389,9 @@ fun BalanceItems(
                             }
                             if (uiState.loading) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .testTag(TestTags.BALANCE_SYNC_INDICATOR),
                                     color = ComposeAppTheme.colors.leah,
                                     backgroundColor = ComposeAppTheme.colors.andy,
                                     strokeWidth = 2.dp
@@ -574,12 +583,14 @@ fun BalanceActionButton(
     @DrawableRes icon: Int,
     title: String,
     enabled: Boolean = true,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HSIconButton(
+            modifier = modifier,
             variant = variant,
             icon = painterResource(icon),
             contentDescription = title,
@@ -675,6 +686,7 @@ fun TotalBalanceRow(
 ) {
     if (balanceHidden) {
         CardsElementAmountText(
+            modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
             title = "* * *".hs,
             body = "".hs,
             onClickTitle = onClickTitle,
@@ -682,6 +694,7 @@ fun TotalBalanceRow(
         )
     } else {
         CardsElementAmountText(
+            modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
             title = totalState.primaryAmountStr.hs,
             body = totalState.secondaryAmountStr.hs,
             onClickTitle = onClickTitle,
