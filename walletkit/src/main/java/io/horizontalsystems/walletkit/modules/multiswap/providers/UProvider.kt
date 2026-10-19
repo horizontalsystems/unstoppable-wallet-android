@@ -14,6 +14,13 @@ enum class UProvider(
     // chains (Bitcoin-family, Zcash, Monero, Zano). Providers with special tx
     // requirements (e.g. thorchain memos) must be false and handled separately if ever needed.
     val supportsSimpleUtxoTransactions: Boolean,
+    // Takes a unified ZEC address as the refund target of a ZEC sell. App data: /v3/providers
+    // does not publish which ZEC address types a provider accepts. Transfer venues validate a
+    // refund as transparent (QuickEx and StealthEX reject `u1`), Maya refunds to the address in
+    // the memo (Sapling receiver), NEAR's 1Click to an Orchard one. A provider with the flag also
+    // gets the refund address as `sourceAddress`, and the refund itself is the shielded-only
+    // unified address (see ZcashSellAddresses).
+    val acceptsUnifiedZcashRefund: Boolean = false,
 ) {
     Near(
         "NEAR",
@@ -25,10 +32,13 @@ enum class UProvider(
         RiskLevel.FAIR,
         isEvm = false,
         isSingleTransactionSwap = false,
-        supportsSimpleUtxoTransactions = true
+        supportsSimpleUtxoTransactions = true,
+        acceptsUnifiedZcashRefund = true,
     ),
     // Confidential rail behind private send. Registered so tracking and history rendering
     // resolve it by id, but kept off the ordinary swap screen — see MultiSwapProviderRegistry.
+    // Refunds a ZEC sell to the transparent address: whether its payout bridge pays a unified
+    // address without a transparent receiver is unverified.
     NearConfidential(
         "NEAR_CONFIDENTIAL",
         "Near Confidential",
@@ -252,7 +262,8 @@ enum class UProvider(
         riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         isSingleTransactionSwap = false,
-        supportsSimpleUtxoTransactions = false
+        supportsSimpleUtxoTransactions = false,
+        acceptsUnifiedZcashRefund = true,
     ),
     // Same-chain EVM aggregator routes as server-built signed transactions. No token list:
     // assets are the raw contract addresses on the sell token's chain.

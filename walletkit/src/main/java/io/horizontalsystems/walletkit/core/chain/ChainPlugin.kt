@@ -123,6 +123,15 @@ interface ChainPlugin {
     /** The wallet's unified/shielded receive address for swap delivery, or null. */
     suspend fun swapUnifiedReceiveAddress(token: Token): String? = null
 
+    /**
+     * The wallet's unified address with shielded receivers only, named as the refund (and source)
+     * of a sell to a provider that takes a unified refund, or null for chains without one. One
+     * address per account per operation: every re-preview of one operation gets the same address,
+     * and the chain's send service forgets it once the deposit is sent. Throws instead of falling
+     * back to an address with a transparent receiver.
+     */
+    suspend fun swapShieldedRefundAddress(token: Token): String? = null
+
     /** Birthday height stored when a NEW wallet of this chain is created, or null if unused. */
     fun newWalletBirthdayHeight(): Long? = null
 

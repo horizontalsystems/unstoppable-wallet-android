@@ -18,7 +18,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.math.BigDecimal
 
 class SendTransactionServiceZcash(
-    private val adapter: ZcashAdapter
+    private val adapter: ZcashAdapter,
+    // Runs once the transaction is on its way: a swap, CrossPay or Private Send deposit ends
+    // the operation whose refund address the chain plugin kept, so the next one names a new one.
+    private val onSent: () -> Unit = {},
 ) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Zcash())
 
@@ -92,6 +95,7 @@ class SendTransactionServiceZcash(
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
         val transactionHash = adapter.sendProposal(proposal!!)
+        onSent()
         return SendTransactionResult.Zcash(transactionHash)
     }
 

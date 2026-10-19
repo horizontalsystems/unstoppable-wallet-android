@@ -1,10 +1,8 @@
 package io.horizontalsystems.walletkit.modules.crosspay
 
 import com.google.gson.Gson
-import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
@@ -44,10 +42,11 @@ class CrossPayManager {
         if (!supportsPair(provider, request.tokenIn, request.tokenOut)) throw CrossPayError.TokenUnsupported
 
         // Omitting the refund address forfeits the buffer refund, which lands on the success
-        // path too — so a missing one fails the preview rather than proceeding without.
-        // Zcash refunds go to the unified address, exactly as ZEC-in swaps set it.
+        // path too — so a missing one fails the preview rather than proceeding without. The
+        // address follows the provider's refund policy, exactly as a swap sets it: for ZEC the
+        // shielded-only unified address when the provider takes a unified refund (NEAR does).
         val refundAddress = try {
-            refundAddress(request.tokenIn)
+            provider.refundAddress(request.tokenIn)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Throwable) {
@@ -202,13 +201,6 @@ class CrossPayManager {
             attachment = execution.attachment,
             providerSwapId = uuid,
         )
-    }
-
-    private suspend fun refundAddress(tokenIn: Token): String {
-        if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenIn)?.let { return it }
-        }
-        return SwapHelper.getReceiveAddressForToken(tokenIn)
     }
 
     private fun mapCommitError(error: Throwable): CrossPayError {

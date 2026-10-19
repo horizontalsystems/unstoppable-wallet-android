@@ -102,6 +102,11 @@ class ZcashChainPlugin(
     private val transparentAddressMutex = Mutex()
     private val unifiedAddressCache = ConcurrentHashMap<String, String>()
     private val unifiedAddressMutex = Mutex()
+    // The shielded-only unified address of the operation in progress, per account. The SDK
+    // stores a fresh diversified address on every request and a confirmation re-previews
+    // every 15 s, so one address is kept from the first preview until the deposit is sent.
+    private val shieldedRefundAddressCache = ConcurrentHashMap<String, String>()
+    private val shieldedRefundAddressMutex = Mutex()
 
     override fun createAdapter(wallet: Wallet, restoreSettings: RestoreSettings): IAdapter =
         ZcashAdapter(
@@ -265,10 +270,27 @@ class ZcashChainPlugin(
         }
     }
 
+    // No fallback: without an adapter or while the wallet syncs there is nothing shielded-only
+    // to name, and the default unified address would carry a transparent receiver. Under a
+    // concurrent miss the mutex lets the first stored address win, so one operation names one.
+    override suspend fun swapShieldedRefundAddress(token: Token): String {
+        val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token)
+            ?: throw IllegalStateException("Zcash wallet is not available")
+        val account = App.accountManager.activeAccount ?: throw NoActiveAccount()
+
+        return cachedAddress(account.id, shieldedRefundAddressCache, shieldedRefundAddressMutex) {
+            adapter.shieldedUnifiedAddress()
+        }
+    }
+
     override fun sendTransactionService(token: Token): AbstractSendTransactionService {
         val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token)
             ?: throw IllegalStateException("ZcashAdapter is null")
-        return SendTransactionServiceZcash(adapter)
+        val accountId = App.accountManager.activeAccount?.id
+        return SendTransactionServiceZcash(adapter) {
+            // The deposit is sent: the next operation names a new shielded-only address.
+            accountId?.let { shieldedRefundAddressCache.remove(it) }
+        }
     }
 
 

@@ -362,6 +362,21 @@ class ZcashAdapter(
     }
 
     /**
+     * A fresh unified address with Sapling and Orchard receivers only, for a refund target or a
+     * route memo that must name no transparent receiver. Unlike [getFreshReceiveAddress] there
+     * is no fallback: the default unified address carries a transparent receiver, so an error
+     * is the only honest answer. The SDK stores the address in the wallet database, which fails
+     * a sync pass in progress, so the call is refused until the wallet is synced; callers keep
+     * the address for the whole operation instead of asking again.
+     */
+    suspend fun shieldedUnifiedAddress(): String {
+        if (syncState != AdapterState.Synced) {
+            throw IllegalStateException("Wait for the wallet to finish syncing")
+        }
+        return synchronizer.getCustomUnifiedAddress(zcashAccount, UnifiedAddressRequest.shielded)
+    }
+
+    /**
      * Generates and returns an ephemeral transparent address for one-time use.
      * Used for receiving swaps from decentralized exchanges or other single-use scenarios.
      * Falls back to the standard transparent address if ephemeral address generation fails.

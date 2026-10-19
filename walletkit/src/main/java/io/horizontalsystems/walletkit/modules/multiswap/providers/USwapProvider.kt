@@ -710,6 +710,29 @@ class USwapProvider(
         return getSendTransactionData(tokenIn, depositAmount, route)
     }
 
+    /**
+     * The address a sell of [tokenIn] through this provider is refunded to: the wallet's own
+     * address on the sell chain, which for ZEC is the transparent address unless the provider
+     * takes a unified refund (see [ZcashSellAddresses]). Exact-output flows name it too, so a
+     * CrossPay buffer refund follows the same policy as a swap refund.
+     */
+    suspend fun refundAddress(tokenIn: Token): String =
+        if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            zcashSellAddresses(tokenIn).refund
+        } else {
+            SwapHelper.getReceiveAddressForToken(tokenIn)
+        }
+
+    private suspend fun zcashSellAddresses(tokenIn: Token): ZcashSellAddresses =
+        ZcashSellAddresses.resolve(
+            provider = provider,
+            transparentAddress = { SwapHelper.getReceiveAddressForToken(tokenIn) },
+            shieldedOnlyAddress = {
+                ChainRegistry[BlockchainType.Zcash]?.swapShieldedRefundAddress(tokenIn)
+                    ?: throw IllegalStateException("Zcash support is not available")
+            },
+        )
+
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -747,18 +770,23 @@ class USwapProvider(
         // sourceAddress is the build signal — send it only for chains whose server-built
         // signed_transaction / thorchain_deposit tx we consume (by default EVM/Tron/TON/Solana,
         // and Stellar on the Stellar DEX card), where it is also required for the tx `from`. For
-        // UTXO/Zcash/Monero/Zano (and any token the host app opts out of) we omit it. A transfer
+        // UTXO/Monero/Zano (and any token the host app opts out of) we omit it. A transfer
         // route's deposit is built locally on every chain, whether or not the address was sent.
-        val sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
-            SwapHelper.getSendingAddressForToken(tokenIn)
+        // A ZEC sell is the exception: its source and refund are one decision, the provider's
+        // refund policy (ZcashSellAddresses), independent of the build signal.
+        val sourceAddress: String?
+        val refundAddress: String
+        if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            val addresses = zcashSellAddresses(tokenIn)
+            sourceAddress = addresses.source
+            refundAddress = addresses.refund
         } else {
-            null
-        }
-        val refundAddress = if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenIn)
-                ?: SwapHelper.getReceiveAddressForToken(tokenIn)
-        } else {
-            SwapHelper.getReceiveAddressForToken(tokenIn)
+            sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
+                SwapHelper.getSendingAddressForToken(tokenIn)
+            } else {
+                null
+            }
+            refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
         }
 
         val previewProviderId = previewProviderId(tokenIn, tokenOut, amountIn, slippage, selectedRoute, recipient, sourceAddress)
