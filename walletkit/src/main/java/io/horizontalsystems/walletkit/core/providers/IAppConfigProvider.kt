@@ -75,6 +75,13 @@ interface IAppConfigProvider {
     val fdroidBuild: Boolean
 
     /**
+     * Build for automated UI tests. Turns off what gets in a test's way (rooted-device warning,
+     * screenshot blocking, rate-app and donation prompts) and refuses to broadcast transactions.
+     */
+    val e2eBuild: Boolean
+        get() = false
+
+    /**
      * Whether a token that shows up in the account's history (a received transfer, a swap
      * output, a discovered token account) gets a wallet enabled for it automatically. An app
      * that works with a fixed token set turns this off; its wallets then come only from the

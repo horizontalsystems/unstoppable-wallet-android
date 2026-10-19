@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAdapterManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.IRateAppManager
@@ -63,6 +64,8 @@ class RateAppManager(
     }
 
     override fun onAppLaunch() {
+        if (App.appConfigProvider.e2eBuild) return
+
         val launchCount = localStorage.appLaunchCount
         if (launchCount < MIN_LAUNCH_COUNT) {
             localStorage.appLaunchCount = launchCount + 1

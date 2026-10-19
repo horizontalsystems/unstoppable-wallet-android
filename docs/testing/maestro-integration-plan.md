@@ -178,7 +178,7 @@ Expose the flag the same way `fdroidBuild` already is: add
 | FLAG_SECURE (C4) | Never add the flag when `e2eBuild`, so failure screenshots are readable | `modules/nav3/Nav3.kt` `ToggleScreenshot` |
 | Rate-app (C7) | Never show it when `e2eBuild` | `core/managers/RateAppManager.kt` |
 | Donation sheet (C7) | `shouldShow()` returns false when `e2eBuild` | `core/managers/DonationShowManager.kt` |
-| Broadcast guard (C12) | The final send fails with "Broadcasting is disabled in E2E builds" when `e2eBuild`. A safety net in case a flow ever taps Send with a real wallet | the single point where a signed transaction is handed to the adapter (to be located; if no single point exists, guard each `SendTransactionService`) |
+| Broadcast guard (C12) | The final send fails with "Broadcasting is disabled in E2E builds" when `e2eBuild`. A safety net in case a flow ever taps Send with a real wallet | `checkBroadcastAllowed()` at the top of every `SendTransactionService*.sendTransaction`. There is no single point: overrides return chain-specific result types that callers rely on. `BroadcastGuardTest` fails if an override skips the call |
 
 What deliberately stays as in production:
 
