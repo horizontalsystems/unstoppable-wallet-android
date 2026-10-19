@@ -47,6 +47,7 @@ android {
         buildConfigFieldString("THORCHAIN_API_KEY", "THORCHAIN_APIJ4R0S3UWZI8GEXTQ")
 
         buildConfigField("boolean", "FDROID_BUILD", "false")
+        buildConfigField("boolean", "E2E_BUILD", "false")
 
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a")
@@ -171,6 +172,15 @@ android {
             buildConfigFieldString("USWAP_API_BASE_URL", "https://swap-api.unstoppable.money/v3/")
             buildConfigFieldString("FASTNEAR_API_KEY", "184c62a885391e6992a550bce09a95920db5d4a95589ddf0e5932e074f6ad6b6")
         }
+
+        // Maestro UI tests (maestro/README.md). A separate applicationId so it installs
+        // next to the dev builds; library modules resolve their debug variant.
+        create("e2e") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".e2e"
+            matchingFallbacks += "debug"
+            buildConfigField("boolean", "E2E_BUILD", "true")
+        }
     }
 
     compileOptions {
@@ -284,6 +294,13 @@ dependencies {
     testImplementation(libs.spek.dsl.jvm)
     testRuntimeOnly(libs.spek.runner.junit5)
     testRuntimeOnly(libs.kotlin.reflect)
+}
+
+androidComponents {
+    // UI tests run only against the F-Droid CI flavor
+    beforeVariants(selector().withBuildType("e2e")) { variant ->
+        variant.enable = variant.productFlavors.any { it.second == "fdroidCi" }
+    }
 }
 
 // Flavor-specific dependencies must be added after evaluation
