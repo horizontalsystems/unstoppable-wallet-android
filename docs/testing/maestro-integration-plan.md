@@ -43,7 +43,7 @@ These shape several steps below. Each is referenced by its ID.
 |---|---|---|
 | C1 | The app refuses to run without a device screen lock and calls `resetApp("NoSystemLock")` | `MainActivityViewModel.kt:88`, `Nav3.kt:273`, `KeyStoreViewModel.kt:33` |
 | C2 | The keystore key needs device authentication within 24h (`AUTH_DURATION_SEC`) | `KeyStoreManager.kt:111-122` |
-| C3 | Rooted-device warning on `google_apis` images (`test-keys` and `su`) | `RootUtil.kt`, `MainPage.kt:77` |
+| C3 | Rooted-device warning when `RootUtil` sees `test-keys` or an `su` binary. Not shown on the API 35 `google_apis` arm64 image (`dev-keys`, and `su` is hidden from apps), but other images may trigger it | `RootUtil.kt`, `MainPage.kt:77` |
 | C4 | FLAG_SECURE on 17 pages and the unlock overlay, so failure screenshots and recordings are black there | `Nav3.kt:347-363`, `HSPage(screenshotEnabled = false)` |
 | C5 | Native libraries are ARM-only (`abiFilters`), so x86_64 emulators run under translation | `app/build.gradle.kts:51-53` |
 | C6 | No `testTag` anywhere, and `testTagsAsResourceId` is not enabled | whole codebase |
@@ -683,8 +683,9 @@ Two LaunchAgents for the `ci` user in
   e2e build, flows tagged `secret` must:
   - not record
   - keep no screenshots of restore pages
-  - have the value removed from `commands-*.json` (the script replaces the
-    phrase with `***`, if 1.3 question 6 shows Maestro logs it)
+  - have the value removed from `commands.json` and `logs/maestro.log`, where
+    Maestro 2.11.0 writes typed text in plain text (the script replaces the
+    phrase with `***`)
 - The collect script marks the run as failed, and sends nothing to Telegram but
   a warning, if the raw secret string is found anywhere in the run directory
   after redaction.

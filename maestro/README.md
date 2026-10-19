@@ -1,16 +1,100 @@
 # Maestro UI Tests
 
+## Setup
+
+Tests run against the F-Droid CI flavor on an arm64 emulator.
+
+| Tool | Version |
+|---|---|
+| Maestro CLI | 2.11.0 |
+| System image | `system-images;android-35;google_apis;arm64-v8a` |
+| JDK (for the build) | Temurin 17 |
+
+Use API 35, not the 16 KB-page images (`*_ps16k`): the app's native libraries
+are built for 4 KB pages.
+
+1. Install Maestro at the pinned version:
+
+   ```bash
+   curl -fsSL https://get.maestro.mobile.dev -o maestro-install.sh
+   MAESTRO_VERSION=2.11.0 bash maestro-install.sh
+   ```
+
+2. Turn off Maestro's analytics and banner (add to your shell profile):
+
+   ```bash
+   export MAESTRO_CLI_NO_ANALYTICS=1
+   export MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED=true
+   ```
+
+3. Create the AVD, boot it and prepare it:
+
+   ```bash
+   maestro/scripts/avd-create.sh
+   emulator -avd e2e_api35 -no-window -no-audio -no-boot-anim -no-snapshot -port 5554 &
+   maestro/scripts/device-prepare.sh emulator-5554
+   ```
+
+   `device-prepare.sh` sets a device screen lock (PIN `1111`), turns
+   animations off, keeps the screen on, fixes the locale to en-US, and unlocks
+   the keyguard. The app refuses to run without a screen lock, so this step is
+   required after every boot.
+
+4. Build and install the app:
+
+   ```bash
+   ./gradlew :app:assembleFdroidCiDebug
+   adb -s emulator-5554 install -r app/build/outputs/apk/fdroidCi/debug/app-fdroidCi-debug.apk
+   ```
+
+## Running tests
+
+Pass the emulator with `--device` when a phone is also connected.
+
 Run a single test:
 
 ```bash
-maestro test -e APP_ID=io.horizontalsystems.bankwallet.appcenter.dev maestro/onboarding/intro.yaml
+maestro --device emulator-5554 test -e APP_ID=io.horizontalsystems.bankwallet.fdroidci.dev maestro/onboarding/intro.yaml
 ```
 
 Run all tests:
 
 ```bash
-maestro test -e APP_ID=io.horizontalsystems.bankwallet.appcenter.dev maestro/
+maestro --device emulator-5554 test -e APP_ID=io.horizontalsystems.bankwallet.fdroidci.dev maestro/
 ```
+
+Split tests across several emulators:
+
+```bash
+maestro --device "emulator-5554,emulator-5556" test --shard-split 2 -e APP_ID=... maestro/
+```
+
+## Behaviour notes
+
+Checked on Maestro 2.11.0 with the API 35 image:
+
+- **Clearing app state:** `launchApp: { clearState: true }` is enough between
+  tests. Creating a wallet, clearing state and restoring another works without
+  a keystore error.
+- **Keystore authentication window:** the app's keystore key needs a device
+  unlock within the last 24 hours. Emulators are booted fresh for each run and
+  unlocked by `device-prepare.sh`, so the window is always fresh. An emulator
+  kept running for more than a day needs `device-prepare.sh` again.
+- **Animations:** with the animation scales at 0, the balance screen's sync
+  spinners do not hold Maestro up; taps take 1–2.5 s including Maestro's
+  settle wait.
+- **Rooted-device warning:** not shown on this image. The build tags are
+  `dev-keys`, and the app cannot see `/system/xbin/su`.
+- **Environment variables:** variables prefixed `MAESTRO_` are available in
+  flows without `-e`, for example `${MAESTRO_E2E_DUST_MNEMONIC}`. Use this for
+  secrets, so they stay out of process arguments.
+- **Logged input:** text typed with `inputText` is written in plain text to
+  `commands.json` and `logs/maestro.log` in the test output. Flows that type a
+  secret need those files redacted before they are shared.
+- **Device logs:** Maestro saves `logs/device-logcat.txt` with each test's
+  output, so crashes come with a stack trace.
+- **Reports:** `--format` takes one of `JUNIT`, `HTML` or `HTML-DETAILED` per
+  run.
 
 ## Test structure
 
