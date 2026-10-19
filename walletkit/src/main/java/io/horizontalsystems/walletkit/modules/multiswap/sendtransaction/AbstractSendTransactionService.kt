@@ -73,16 +73,6 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     open fun GetNonceSettingsContent(navigation: HSNavigation) = Unit
     abstract suspend fun sendTransaction(mevProtectionEnabled: Boolean = false): SendTransactionResult
 
-    /**
-     * First call in every [sendTransaction] override. UI tests in E2E builds use mainnet wallets
-     * and stop at the confirmation screen; this makes a flow that taps the final button anyway
-     * fail before anything is signed. Overrides keep their narrower result types, which is why
-     * this is a call in each one rather than a wrapper around them.
-     */
-    protected fun checkBroadcastAllowed() {
-        if (App.appConfigProvider.e2eBuild) throw BroadcastDisabledException()
-    }
-
     fun refreshUuid() {
         uuid = UUID.randomUUID().toString()
     }
@@ -111,6 +101,17 @@ data class SendTransactionServiceState(
     val loading: Boolean,
     val fields: List<DataField>,
 )
+
+/**
+ * First call in every [AbstractSendTransactionService.sendTransaction] override, and in the few
+ * flows that broadcast without a send service. UI tests in E2E builds use mainnet wallets and
+ * stop at the confirmation screen; this makes a flow that taps the final button anyway fail
+ * before anything is signed. Overrides keep their narrower result types, which is why this is a
+ * call in each one rather than a wrapper around them.
+ */
+fun checkBroadcastAllowed() {
+    if (App.appConfigProvider.e2eBuild) throw BroadcastDisabledException()
+}
 
 class BroadcastDisabledException : IllegalStateException("Broadcasting is disabled in E2E builds")
 

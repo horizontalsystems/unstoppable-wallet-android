@@ -15,6 +15,7 @@ import io.horizontalsystems.walletkit.modules.send.SendConfirmationData
 import io.horizontalsystems.walletkit.modules.send.SendResult
 import io.horizontalsystems.walletkit.modules.xrate.XRateService
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
+import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.checkBroadcastAllowed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -94,6 +95,7 @@ class ShieldZcashViewModel(
         try {
             sendResult = SendResult.Sending
 
+            checkBroadcastAllowed()
             adapter.sendShieldProposal()
 
             logger.info("success")
