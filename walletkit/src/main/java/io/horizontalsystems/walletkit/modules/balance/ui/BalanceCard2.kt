@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
@@ -24,6 +25,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.captionSB_leah
 import io.horizontalsystems.walletkit.ui.compose.components.diffColor
 import io.horizontalsystems.walletkit.ui.compose.components.diffText
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
@@ -39,6 +41,7 @@ fun BalanceCardInner2(
     onClick: (() -> Unit)?
 ) {
     CellPrimary(
+        modifier = Modifier.testTag(TestTags.balanceItem(viewItem.wallet.coin.code)),
         left = {
             WalletIcon2(viewItem, onClickSyncError)
         },
@@ -96,7 +99,8 @@ fun BalanceCardInner2(
 
             CellRightInfo(
                 title = title,
-                subtitle = subtitle
+                subtitle = subtitle,
+                modifier = Modifier.testTag(TestTags.balanceItemAmount(viewItem.wallet.coin.code)),
             )
         },
         onClick = onClick,

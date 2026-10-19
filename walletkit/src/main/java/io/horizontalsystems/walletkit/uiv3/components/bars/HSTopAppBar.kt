@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,6 +107,7 @@ fun HSTopAppBar(
                                         modifier = Modifier
                                             .align(Alignment.Center)
                                             .size(24.dp)
+                                            .then(menuItem.testTag?.let { Modifier.testTag(it) } ?: Modifier)
                                             .clickable(
                                                 interactionSource = remember { MutableInteractionSource() },
                                                 indication = ripple(
@@ -137,6 +139,7 @@ fun HSTopAppBar(
                                     color = if (menuItem.enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                                     modifier = Modifier
                                         .padding(end = 16.dp)
+                                        .then(menuItem.testTag?.let { Modifier.testTag(it) } ?: Modifier)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = ripple(

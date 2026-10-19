@@ -38,6 +38,46 @@ object TestTags {
     fun restoreChain(blockchainUid: String) = "restore_chain_$blockchainUid"
     const val RESTORE_SUBMIT = "restore_submit"
 
+    const val BALANCE_TOTAL = "balance_total"
+    const val BALANCE_SCAN = "balance_scan"
+    const val BALANCE_RECEIVE = "balance_receive"
+    const val BALANCE_SEND = "balance_send"
+    const val BALANCE_SWAP = "balance_swap"
+    const val BALANCE_TRANSACTIONS = "balance_transactions"
+    const val BALANCE_MANAGE_ACCOUNTS = "balance_manage_accounts"
+    const val BALANCE_MANAGE_COINS = "balance_manage_coins"
+    const val BALANCE_SYNC_INDICATOR = "balance_sync_indicator"
+    fun balanceItem(coinCode: String) = "balance_item_$coinCode"
+    fun balanceItemAmount(coinCode: String) = "balance_item_${coinCode}_amount"
+
+    const val TOKEN_BALANCE = "token_balance"
+    const val TOKEN_CHART = "token_chart"
+    const val TOKEN_RECEIVE = "token_receive"
+    const val TOKEN_SEND = "token_send"
+    const val TOKEN_SWAP = "token_swap"
+
+    const val RECEIVE_ADDRESS = "receive_address"
+    const val RECEIVE_NETWORK = "receive_network"
+    const val RECEIVE_FORMAT = "receive_format"
+    const val RECEIVE_ADDRESS_TYPE = "receive_address_type"
+    const val RECEIVE_SET_AMOUNT = "receive_set_amount"
+    const val RECEIVE_SHARE = "receive_share"
+    const val RECEIVE_COPY = "receive_copy"
+
+    const val SEND_AMOUNT_INPUT = "send_amount_input"
+    const val SEND_RECIPIENT_ROW = "send_recipient_row"
+    const val SEND_NEXT = "send_next"
+    const val SEND_ACTION = "send_action"
+
+    // The address entry page is shared by send, swap recipient and other flows
+    const val ENTER_ADDRESS_INPUT = "enter_address_input"
+    const val ENTER_ADDRESS_SUBMIT = "enter_address_submit"
+
+    const val CONFIRM_AMOUNT = "confirm_amount"
+    const val CONFIRM_RECIPIENT = "confirm_recipient"
+    const val CONFIRM_NETWORK_FEE = "confirm_network_fee"
+    const val CONFIRM_SEND = "confirm_send"
+
     fun selectorSwitch(index: Int) = "selector_switch_$index"
     const val SELECTOR_DONE = "selector_done"
 }

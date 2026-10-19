@@ -19,8 +19,9 @@ fun CellRightInfo(
     subtitle: HSString? = null,
     description: HSString? = null,
     onClick: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
-    var modifier: Modifier = Modifier
+    var modifier: Modifier = modifier
 
     onClick?.let {
         modifier = modifier.clickable(

@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.multiswap.FeeRow
@@ -29,8 +30,10 @@ fun DataFieldFeeTemplate(
     secondary: String?,
     title: String,
     infoText: String?,
+    valueModifier: Modifier = Modifier,
 ) {
     FeeRow(
+        valueModifier = valueModifier,
         title = title,
         valueFiat = secondary,
         valueToken = primary,
