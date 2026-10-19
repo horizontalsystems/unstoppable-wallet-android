@@ -43,9 +43,14 @@ are built for 4 KB pages.
 4. Build and install the app:
 
    ```bash
-   ./gradlew :app:assembleFdroidCiDebug
-   adb -s emulator-5554 install -r app/build/outputs/apk/fdroidCi/debug/app-fdroidCi-debug.apk
+   ./gradlew :app:assembleFdroidCiE2e
+   adb -s emulator-5554 install -r app/build/outputs/apk/fdroidCi/e2e/app-fdroidCi-e2e.apk
    ```
+
+   The `e2e` build type exists only for the `fdroidCi` flavor. It uses the
+   debug backends and keys, installs as
+   `io.horizontalsystems.bankwallet.fdroidci.e2e` next to the dev builds, and
+   shows as "UW E2E" in the launcher.
 
 ## Running tests
 
@@ -54,13 +59,13 @@ Pass the emulator with `--device` when a phone is also connected.
 Run a single test:
 
 ```bash
-maestro --device emulator-5554 test -e APP_ID=io.horizontalsystems.bankwallet.fdroidci.dev maestro/onboarding/intro.yaml
+maestro --device emulator-5554 test -e APP_ID=io.horizontalsystems.bankwallet.fdroidci.e2e maestro/onboarding/intro.yaml
 ```
 
 Run all tests:
 
 ```bash
-maestro --device emulator-5554 test -e APP_ID=io.horizontalsystems.bankwallet.fdroidci.dev maestro/
+maestro --device emulator-5554 test -e APP_ID=io.horizontalsystems.bankwallet.fdroidci.e2e maestro/
 ```
 
 Split tests across several emulators:
