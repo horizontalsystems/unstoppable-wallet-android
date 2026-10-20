@@ -15,8 +15,9 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
     id: import_recovery_phrase
 - tapOn:
     id: restore_phrase_input
+# Next sits above the keyboard. hideKeyboard is left out: on API 37 it also
+# closes this page.
 - inputText: ${MNEMONIC}
-- hideKeyboard
 - tapOn:
     id: restore_next
 

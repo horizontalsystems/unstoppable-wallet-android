@@ -20,7 +20,6 @@ env:
 - tapOn:
     id: restore_phrase_input
 - inputText: ${MNEMONIC}
-- hideKeyboard
 - tapOn:
     id: restore_next
 - assertVisible:
