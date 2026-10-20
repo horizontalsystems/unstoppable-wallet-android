@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionPremiumUniversalLawrence
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -102,6 +104,7 @@ private fun SecurityCenterScreen(
             ) {
                 if (uiState.pinEnabled) {
                     CellPrimary(
+                        modifier = Modifier.testTag(TestTags.SECURITY_AUTOLOCK),
                         middle = {
                             CellMiddleInfo(
                                 title = stringResource(R.string.Settings_AutoLock).hs,

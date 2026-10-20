@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
@@ -177,7 +179,8 @@ fun ManageAccountScreen(navigation: HSNavigation, accountId: String) {
                     listOf {
                         RedActionItem(
                             title = stringResource(id = R.string.ManageAccount_Unlink),
-                            icon = painterResource(id = R.drawable.ic_delete_20)
+                            icon = painterResource(id = R.drawable.ic_delete_20),
+                            modifier = Modifier.testTag(TestTags.ACCOUNT_UNLINK),
                         ) {
                             navigation.slideFromBottom(
                                 UnlinkAccountSheet(viewModel.account)
@@ -210,6 +213,7 @@ private fun BackupActions(
                 actionItems.add {
                     YellowActionItem(
                         title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
+                        modifier = Modifier.testTag(TestTags.ACCOUNT_MANUAL_BACKUP),
                         icon = painterResource(id = R.drawable.ic_edit_24),
                         attention = action.showAttention,
                         completed = action.completed,
@@ -231,6 +235,7 @@ private fun BackupActions(
                 actionItems.add {
                     YellowActionItem(
                         title = stringResource(id = R.string.ManageAccount_LocalBackup),
+                        modifier = Modifier.testTag(TestTags.ACCOUNT_LOCAL_BACKUP),
                         icon = painterResource(id = R.drawable.ic_file_24),
                         attention = action.showAttention,
                         onClick = navigation.authorizedAction {
@@ -415,10 +420,12 @@ private fun YellowActionItem(
     icon: Painter? = null,
     attention: Boolean = false,
     completed: Boolean = false,
+    modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null
 ) {
 
     RowUniversal(
+        modifier = modifier,
         onClick = onClick
     ) {
         icon?.let {
@@ -461,10 +468,12 @@ private fun YellowActionItem(
 private fun RedActionItem(
     title: String,
     icon: Painter,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
 
     RowUniversal(
+        modifier = modifier,
         onClick = onClick
     ) {
         Icon(

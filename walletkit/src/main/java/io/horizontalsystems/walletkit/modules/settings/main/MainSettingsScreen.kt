@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -86,6 +87,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.walletkit.uiv3.TestTags
 
 @Composable
 fun SettingsScreen(
@@ -174,6 +176,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
                 R.drawable.wallet_24,
+                testTag = TestTags.SETTINGS_MANAGE_WALLETS,
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
                     navigation.slideFromRight(
@@ -187,6 +190,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.BlockchainSettings_Title,
                 R.drawable.box_24,
+                testTag = TestTags.SETTINGS_BLOCKCHAIN,
                 onClick = {
                     navigation.slideFromRight(BlockchainSettingsPage)
 
@@ -200,6 +204,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_SecurityCenter,
                 R.drawable.shield_24,
+                testTag = TestTags.SETTINGS_SECURITY,
                 showAlert = uiState.securityCenterShowAlert,
                 onClick = {
                     navigation.slideFromRight(SecuritySettingsPage)
@@ -211,6 +216,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_Privacy,
                 R.drawable.lock_24,
+                testTag = TestTags.SETTINGS_PRIVACY,
                 onClick = {
                     navigation.slideFromRight(PrivacySettingsPage)
 
@@ -262,6 +268,7 @@ private fun SettingSections(
                 HsSettingCell(
                     R.string.Contacts,
                     R.drawable.user_24,
+                    testTag = TestTags.SETTINGS_CONTACTS,
                     onClick = {
                         navigation.slideFromRight(
                             ContactsRouterPage(ContactsRouterPage.Input(Mode.Full))
@@ -282,6 +289,7 @@ private fun SettingSections(
                 HsSettingCell(
                     R.string.Settings_AppSettings,
                     R.drawable.uw_logo_24,
+                    testTag = TestTags.SETTINGS_APP_SETTINGS,
                     onClick = {
                         navigation.slideFromRight(AppearancePage)
 
@@ -306,6 +314,7 @@ private fun SettingSections(
                 HsSettingCell(
                     R.string.BackupManager_Title,
                     R.drawable.file_24,
+                    testTag = TestTags.SETTINGS_BACKUP_MANAGER,
                     onClick = {
                         navigation.slideFromRight(BackupManagerPage)
 
@@ -357,6 +366,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_info_20,
+                testTag = TestTags.SETTINGS_ABOUT,
                 showAlert = uiState.aboutAppShowAlert,
                 onClick = {
                     navigation.slideFromRight(AboutPage)
@@ -467,7 +477,9 @@ private fun DebugSettingsSection() {
     CellUniversalLawrenceSection(
         listOf({
             RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .testTag(TestTags.SETTINGS_DEBUG_SIMULATE_FAIL_SWAP),
                 onClick = {
                     // Cycle None -> Server -> Local -> None
                     val modes = SimulateFailSwapMode.entries
@@ -489,7 +501,9 @@ private fun DebugSettingsSection() {
             }
         }, {
             RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .testTag(TestTags.SETTINGS_DEBUG_SWAP_PROVIDER_NAME),
                 onClick = {
                     showSwapProviderName = !showSwapProviderName
                     App.localStorage.showSwapProviderName = showSwapProviderName
@@ -518,10 +532,13 @@ fun HsSettingCell(
     value: String? = null,
     counterBadge: String? = null,
     showAlert: Boolean = false,
+    testTag: String? = null,
     onClick: () -> Unit
 ) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
         onClick = onClick
     ) {
         Icon(

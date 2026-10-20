@@ -6,12 +6,15 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
     clearState: true
 - runFlow: ../subflows/create_standard_wallet.yaml
 
-- tapOn: "Settings"
+- tapOn:
+    id: tab_settings
 - scrollUntilVisible:
     element:
-      text: "About App"
-- tapOn: "About App"
-- tapOn: "App Status"
+      id: settings_about
+- tapOn:
+    id: settings_about
+- tapOn:
+    id: about_app_status
 
 # Building the screen assembles every status section up front (the crash
 # this guards against happened there), so reaching the always-present
