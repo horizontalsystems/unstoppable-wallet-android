@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.watchaddress.selectblockchains
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -124,6 +126,7 @@ private fun SelectBlockchainsScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
+                            .testTag(TestTags.watchChain(viewItem.item.blockchainType.uid))
                     ) {
                         Image(
                             painter = viewItem.imageSource.painter(),
@@ -172,7 +175,8 @@ private fun SelectBlockchainsScreen(
                     variant = ButtonVariant.Primary,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                        .padding(horizontal = 24.dp)
+                        .testTag(TestTags.WATCH_CHAINS_DONE),
                     enabled = submitEnabled,
                     onClick = viewModel::onClickWatch,
                 )
