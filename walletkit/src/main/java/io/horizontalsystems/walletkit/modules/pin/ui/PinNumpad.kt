@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +33,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 
 
 @Composable
@@ -79,7 +81,8 @@ fun PinNumpad(
                 image = R.drawable.ic_backspace,
                 contentDescription = stringResource(R.string.Button_Delete),
                 visible = true,
-                enabled = enabled
+                enabled = enabled,
+                modifier = Modifier.testTag(TestTags.PIN_KEY_DELETE),
             ) {
                 onDeleteClick.invoke()
             }
@@ -136,6 +139,7 @@ private fun NumberKey(
     Box(
         modifier = Modifier
             .size(72.dp)
+            .testTag(TestTags.pinKey(number))
             .clip(CircleShape)
             .border(0.5.dp, ComposeAppTheme.colors.blade, CircleShape)
             .clickable(
@@ -161,12 +165,13 @@ private fun ImageKey(
     contentDescription: String? = null,
     visible: Boolean,
     enabled: Boolean,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(72.dp)
             .clip(CircleShape)
             .clickable(

@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,6 +38,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItemDropdown
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottom.BottomSearchBar
@@ -162,9 +164,9 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
                                 SectionHeaderColored(title = stringResource(R.string.ManageAccount_Wallets))
                             }
                         }
-                        regularAccounts.forEach { account ->
+                        regularAccounts.forEachIndexed { index, account ->
                             item {
-                                AccountCellWrapper(account, viewModel, navigation)
+                                AccountCellWrapper(account, index, viewModel, navigation)
                             }
                         }
                     }
@@ -174,9 +176,9 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
                                 SectionHeaderColored(title = stringResource(R.string.ManageAccount_WatchAddresses))
                             }
                         }
-                        watchAccounts.forEach { account ->
+                        watchAccounts.forEachIndexed { index, account ->
                             item {
-                                AccountCellWrapper(account, viewModel, navigation)
+                                AccountCellWrapper(account, regularAccounts.size + index, viewModel, navigation)
                             }
                         }
                     }
@@ -202,11 +204,14 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
 @Composable
 fun AccountCellWrapper(
     account: AccountViewItem,
+    index: Int,
     viewModel: ManageAccountsViewModel,
     navigation: HSNavigation
 ) {
     AccountCell(
         accountViewItem = account,
+        modifier = Modifier.testTag(TestTags.accountRow(index)),
+        optionsModifier = Modifier.testTag(TestTags.accountOptions(index)),
         onSelect = {
             viewModel.onSelect(account)
 
@@ -232,7 +237,9 @@ fun AccountCellWrapper(
 fun AccountCell(
     accountViewItem: AccountViewItem,
     onSelect: (AccountViewItem) -> Unit,
-    onOptionIconClick: (AccountViewItem) -> Unit
+    onOptionIconClick: (AccountViewItem) -> Unit,
+    modifier: Modifier = Modifier,
+    optionsModifier: Modifier = Modifier,
 ) {
     val icon: Int
     val iconTint: Color
@@ -255,6 +262,7 @@ fun AccountCell(
 
     BoxBordered(bottom = true) {
         CellPrimary(
+            modifier = modifier,
             left = {
                 CellLeftSelectors(accountViewItem.selected)
             },
@@ -269,6 +277,7 @@ fun AccountCell(
                     icon = icon,
                     iconTint = iconTint,
                     contentDescription = stringResource(R.string.ManageAccounts_ManageWallet),
+                    modifier = optionsModifier,
                     onClick = {
                         onOptionIconClick.invoke(accountViewItem)
                     }

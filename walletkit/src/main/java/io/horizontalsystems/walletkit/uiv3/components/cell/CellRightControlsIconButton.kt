@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.uiv3.components.cell
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,9 +16,11 @@ fun CellRightControlsIconButton(
     icon: Int,
     iconTint: Color,
     contentDescription: String? = null,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     HSIconButtonTinted(
+        modifier = modifier,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Small,
         icon = painterResource(icon),

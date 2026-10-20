@@ -100,6 +100,10 @@ Checked on Maestro 2.11.0 with the API 35 image:
   output, so crashes come with a stack trace.
 - **Reports:** `--format` takes one of `JUNIT`, `HTML` or `HTML-DETAILED` per
   run.
+- **Emulator network:** the emulator can lose its internet connection while
+  the Mac stays online (seen twice in one day). Send and swap flows then fail
+  with "No Internet" on the button. Restarting the emulator fixes it, so the
+  runner should check the emulator's connectivity before each run.
 
 ## Test structure
 
