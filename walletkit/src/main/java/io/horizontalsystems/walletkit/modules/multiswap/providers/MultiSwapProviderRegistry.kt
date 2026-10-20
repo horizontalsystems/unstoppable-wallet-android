@@ -5,9 +5,14 @@ import io.horizontalsystems.walletkit.modules.multiswap.history.AllBridgeTracker
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object MultiSwapProviderRegistry {
+    // One instance serves both the swap screen and private send, so its token list and
+    // chain set are fetched and cached once.
+    private val nearConfidential = USwapProvider(UProvider.NearConfidential)
+
     val allProviders: List<IMultiSwapProvider> = listOf(
         // Cross-chain providers
         USwapProvider(UProvider.Near),
+        nearConfidential,
         USwapProvider(UProvider.QuickEx),
         USwapProvider(UProvider.LetsExchange),
         USwapProvider(UProvider.StealthEx),
@@ -56,17 +61,16 @@ object MultiSwapProviderRegistry {
         )
 
     /**
-     * Confidential rails, executing private sends only. Resolvable by id like the retired
-     * providers (tracking and history rendering need that), but deliberately absent from
-     * [allProviders]: the ordinary swap screen fans out over that list and must never offer
-     * a confidential provider.
+     * Confidential rails: the providers private send may route a same-asset transfer through.
+     * They also quote on the ordinary swap screen as members of [allProviders], where a
+     * confidential route is just one more card beside the public ones.
      */
     val confidentialProviders: List<USwapProvider> = listOf(
-        USwapProvider(UProvider.NearConfidential),
+        nearConfidential,
     )
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
-        (allProviders + retiredProviders + confidentialProviders).associateBy { it.id }
+        (allProviders + retiredProviders).associateBy { it.id }
     }
 
     fun isSingleTransactionSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean {

@@ -35,8 +35,9 @@ enum class UProvider(
         supportsSimpleUtxoTransactions = true,
         acceptsUnifiedZcashRefund = true,
     ),
-    // Confidential rail behind private send. Registered so tracking and history rendering
-    // resolve it by id, but kept off the ordinary swap screen — see MultiSwapProviderRegistry.
+    // NEAR's confidential rail: the swap executes on a private shard, so the payout cannot be
+    // linked on-chain to the deposit. Quoted on the swap screen like any other provider and
+    // also the rail behind private send (see MultiSwapProviderRegistry.confidentialProviders).
     // Refunds a ZEC sell to the transparent address: whether its payout bridge pays a unified
     // address without a transparent receiver is unverified.
     NearConfidential(
