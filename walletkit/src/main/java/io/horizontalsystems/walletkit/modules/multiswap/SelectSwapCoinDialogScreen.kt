@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -271,6 +273,9 @@ private fun CoinCell(
                 )
             },
             onClick = { onClickItem.invoke(coinItem) },
+            modifier = Modifier.testTag(
+                TestTags.swapCoin(coinItem.token.coin.code, coinItem.token.blockchainType.uid)
+            ),
         )
     }
 }
