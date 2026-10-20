@@ -247,6 +247,33 @@ string:
 
 - Unit tests in `app/src/test/`
 - Instrumentation tests in `app/src/androidTest/`
+- Maestro UI tests in `maestro/`, run against the `fdroidCiE2e` build. Setup,
+  layout and how to run them: `maestro/README.md`
+
+### UI test tags
+
+Maestro selects elements by Compose test tag (`id:` in a flow).
+
+- Tag names live in `TestTags` (`walletkit/.../uiv3/TestTags.kt`) and follow
+  `<screen>_<element>` in snake_case. Add a suffix (coin code, index, word)
+  only where a test has to pick one item of a list.
+- Apply a tag with `Modifier.testTag(TestTags.X)` through the component's
+  `modifier` parameter. If a shared component has none, add one rather than
+  wrapping it.
+- Tags reach Maestro only inside `Modifier.exposeTestTags()`. The activity
+  root has it; a new `Dialog` or `ModalBottomSheet` needs it on its content,
+  because it opens its own window.
+- Do not rename or remove a tag without updating the flows in `maestro/` in the
+  same change.
+
+### UI tests for features
+
+- A pull request that adds or changes a user-facing feature adds or updates a
+  test under `maestro/features/<feature>/`, and tags the new screens it needs.
+- Each feature test starts from `maestro/subflows/setup/wallet_ready.yaml`,
+  never depends on another test, and runs in under 2 minutes.
+- Run it locally before opening the pull request. If the change touches a
+  screen the journey walks through, run the journey too.
 
 ## Git Commit Messages
 
