@@ -78,6 +78,58 @@ object TestTags {
     const val CONFIRM_NETWORK_FEE = "confirm_network_fee"
     const val CONFIRM_SEND = "confirm_send"
 
+    const val TX_EMPTY = "tx_empty"
+    const val TX_WAITING_SYNC = "tx_waiting_sync"
+    const val TX_FILTER = "tx_filter"
+    // The record uid is the transaction hash on most chains
+    fun txItem(uid: String) = "tx_item_${uid.take(8)}"
+
+    const val SWAP_TOKEN_IN = "swap_token_in"
+    const val SWAP_TOKEN_OUT = "swap_token_out"
+    const val SWAP_AMOUNT_IN = "swap_amount_in"
+    const val SWAP_AMOUNT_OUT = "swap_amount_out"
+    const val SWAP_SWITCH = "swap_switch"
+    const val SWAP_NEXT = "swap_next"
+
+    const val SETTINGS_MANAGE_WALLETS = "settings_manage_wallets"
+    const val SETTINGS_BLOCKCHAIN = "settings_blockchain"
+    const val SETTINGS_SECURITY = "settings_security"
+    const val SETTINGS_PRIVACY = "settings_privacy"
+    const val SETTINGS_CONTACTS = "settings_contacts"
+    const val SETTINGS_APP_SETTINGS = "settings_app_settings"
+    const val SETTINGS_BACKUP_MANAGER = "settings_backup_manager"
+    const val SETTINGS_ABOUT = "settings_about"
+    const val SETTINGS_DEBUG_SIMULATE_FAIL_SWAP = "settings_debug_simulate_fail_swap"
+    const val SETTINGS_DEBUG_SWAP_PROVIDER_NAME = "settings_debug_swap_provider_name"
+
+    const val ABOUT_APP_STATUS = "about_app_status"
+    const val ABOUT_TERMS = "about_terms"
+
+    const val SECURITY_PASSCODE = "security_passcode"
+    const val SECURITY_DISABLE_PASSCODE = "security_disable_passcode"
+    const val SECURITY_BIOMETRICS = "security_biometrics"
+    const val SECURITY_AUTOLOCK = "security_autolock"
+
+    fun pinKey(digit: Int) = "pin_key_$digit"
+    const val PIN_KEY_DELETE = "pin_key_delete"
+    const val PIN_TITLE = "pin_title"
+    const val PIN_ERROR = "pin_error"
+    const val PIN_ATTEMPTS_LEFT = "pin_attempts_left"
+
+    // Index over the list as shown: wallets first, then watch addresses
+    fun accountRow(index: Int) = "account_row_$index"
+    fun accountOptions(index: Int) = "account_options_$index"
+    const val ACCOUNT_MANUAL_BACKUP = "account_manual_backup"
+    const val ACCOUNT_LOCAL_BACKUP = "account_local_backup"
+    const val ACCOUNT_UNLINK = "account_unlink"
+
+    const val BACKUP_REVEAL = "backup_reveal"
+    // Numbered as shown on screen, from 1
+    fun backupWord(number: Int) = "backup_word_$number"
+    const val BACKUP_VERIFY = "backup_verify"
+    fun quizPosition(index: Int) = "quiz_position_$index"
+    fun quizOption(word: String) = "quiz_option_$word"
+
     fun selectorSwitch(index: Int) = "selector_switch_$index"
     const val SELECTOR_DONE = "selector_done"
 }

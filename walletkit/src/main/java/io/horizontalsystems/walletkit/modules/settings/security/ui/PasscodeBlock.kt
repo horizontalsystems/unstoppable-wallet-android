@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
@@ -44,6 +46,7 @@ fun PasscodeBlock(
             navigation.slideFromRight(EditPinPage)
         }
         CellPrimary(
+            modifier = Modifier.testTag(TestTags.SECURITY_PASSCODE),
             middle = {
                 val text =
                     if (uiState.pinEnabled) R.string.SettingsSecurity_EditPin else R.string.SettingsSecurity_EnablePin
@@ -66,6 +69,7 @@ fun PasscodeBlock(
         if (uiState.pinEnabled) {
             HsDivider()
             CellPrimary(
+                modifier = Modifier.testTag(TestTags.SECURITY_DISABLE_PASSCODE),
                 middle = {
                     CellMiddleInfo(
                         title = stringResource(R.string.SettingsSecurity_DisablePin).hs(
@@ -96,6 +100,7 @@ fun PasscodeBlock(
                     }
 
                     HsSwitch(
+                        modifier = Modifier.testTag(TestTags.SECURITY_BIOMETRICS),
                         checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
                             if (enabled) {

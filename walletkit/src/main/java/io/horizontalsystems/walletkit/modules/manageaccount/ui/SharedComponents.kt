@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +46,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -215,6 +217,7 @@ fun SeedPhraseList(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
             .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(24.dp))
+            .testTag(TestTags.BACKUP_REVEAL)
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
@@ -236,7 +239,7 @@ fun SeedPhraseList(
                 ) {
                     D7(text = word.number.toString())
                     HSpacer(8.dp)
-                    B2(text = word.word)
+                    B2(text = word.word, modifier = Modifier.testTag(TestTags.backupWord(word.number)))
                 }
             }
         }

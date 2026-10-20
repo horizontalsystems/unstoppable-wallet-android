@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +33,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefau
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
@@ -103,7 +105,7 @@ fun RecoveryPhraseVerifyScreen(navigation: HSNavigation, account: Account) {
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    body_leah(text = it.toString())
+                    body_leah(text = it.toString(), modifier = Modifier.testTag(TestTags.quizPosition(index)))
                 }
             }
 
@@ -121,6 +123,7 @@ fun RecoveryPhraseVerifyScreen(navigation: HSNavigation, account: Account) {
                         modifier = Modifier
                             .height(28.dp)
                             .padding(horizontal = 4.dp)
+                            .testTag(TestTags.quizOption(wordOption.word))
                     ) {
                         ButtonSecondaryDefault(
                             title = wordOption.word,
