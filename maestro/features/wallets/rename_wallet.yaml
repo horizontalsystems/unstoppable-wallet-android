@@ -17,7 +17,6 @@ env:
     id: account_name_input
 - eraseText
 - inputText: ${NEW_NAME}
-- hideKeyboard
 - tapOn:
     id: account_save
 
