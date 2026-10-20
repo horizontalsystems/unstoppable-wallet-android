@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.unlinkaccount
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,7 +62,9 @@ private fun UnlinkAccountScreen(navigation: HSNavigation, account: Account) {
         buttons = {
             HSButton(
                 title = stringResource(viewModel.deleteButtonText),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.UNLINK_DELETE),
                 variant = ButtonVariant.Secondary,
                 enabled = unlinkEnabled,
                 onClick = {
@@ -107,7 +111,8 @@ private fun UnlinkAccountScreen(navigation: HSNavigation, account: Account) {
                             },
                             onClick = {
                                 viewModel.toggleConfirm(item)
-                            }
+                            },
+                            modifier = Modifier.testTag(TestTags.unlinkConfirm(index))
                         )
                         if(index < confirmations.size - 1) {
                             HsDivider()

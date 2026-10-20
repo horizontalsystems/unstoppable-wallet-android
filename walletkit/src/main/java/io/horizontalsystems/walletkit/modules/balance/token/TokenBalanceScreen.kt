@@ -565,7 +565,9 @@ private fun TronAlertBottomSheet(
             HSButton(
                 title = stringResource(R.string.Button_ViewMyAddress),
                 variant = ButtonVariant.Secondary,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.TOKEN_TRON_VIEW_ADDRESS),
                 onClick = onActionButtonClick
             )
         }

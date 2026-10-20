@@ -802,7 +802,7 @@ private fun SwapActionButton(
                 HSButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .testTag(TestTags.SWAP_NEXT),
+                        .testTag(TestTags.SWAP_ERROR),
                     title = errorText,
                     enabled = false
                 )
@@ -869,7 +869,9 @@ private fun ProviderCellInfo(
     }
 
     Column(
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .testTag(TestTags.SWAP_PROVIDER)
     ) {
         CellSecondary(
             middle = {

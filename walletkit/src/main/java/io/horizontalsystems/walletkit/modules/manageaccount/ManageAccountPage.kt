@@ -99,7 +99,8 @@ fun ManageAccountScreen(navigation: HSNavigation, accountId: String) {
                 title = TranslatableString.ResString(R.string.ManageAccount_Save),
                 onClick = { viewModel.onSave() },
                 enabled = viewState.canSave,
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.jacob,
+                testTag = TestTags.ACCOUNT_SAVE
             )
         )
     ) {
@@ -114,7 +115,9 @@ fun ManageAccountScreen(navigation: HSNavigation, accountId: String) {
                 HeaderText(stringResource(id = R.string.ManageAccount_Name))
 
                 FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .testTag(TestTags.ACCOUNT_NAME_INPUT),
                     initial = viewState.title,
                     hint = "",
                     onValueChange = {
