@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.settings.security.autolock
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -74,6 +76,7 @@ private fun IntervalCell(
     onClick: (AutoLockInterval) -> Unit
 ) {
     RowUniversal(
+        modifier = Modifier.testTag(TestTags.autolockInterval(item.raw)),
         onClick = { onClick.invoke(item) }
     ) {
         HSpacer(16.dp)

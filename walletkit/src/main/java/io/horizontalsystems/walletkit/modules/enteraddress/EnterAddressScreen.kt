@@ -241,7 +241,8 @@ fun AddressCheck(
         AlertCard(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(TestTags.ENTER_ADDRESS_ERROR),
             format = AlertFormat.Structured,
             type = AlertType.Critical,
             titleCustom = stringResource(R.string.SwapSettings_Error_InvalidAddress),

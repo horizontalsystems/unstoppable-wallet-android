@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.settings.appearance
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -140,6 +142,7 @@ fun AppearanceScreen(navigation: HSNavigation) {
                         MenuItem(
                             R.string.Settings_BaseCurrency,
                             value = uiState.baseCurrencyCode,
+                            testTag = TestTags.APPEARANCE_BASE_CURRENCY,
                             onClick = {
                                 navigation.slideFromRight(BaseCurrencySettingsPage)
 
@@ -563,10 +566,13 @@ fun MenuItemWithDialog(
 private fun MenuItem(
     @StringRes title: Int,
     value: String? = null,
+    testTag: String? = null,
     onClick: () -> Unit
 ) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier),
         onClick = onClick
     ) {
         body_leah(
