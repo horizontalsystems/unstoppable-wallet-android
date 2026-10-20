@@ -1,11 +1,27 @@
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
 ---
-# Fresh install: create a new standard wallet
-- launchApp:
-    clearState: true
-- runFlow: ../subflows/create_standard_wallet.yaml
+- tapOn:
+    id: tab_balance
+- runFlow: ../subflows/wallet/create_standard_wallet.yaml
 
-# Wallet is created: balance screen with wallet actions
-- assertVisible: "Receive"
-- assertVisible: "Send"
-- assertVisible: "$0"
+# Balance screen of an empty wallet
+- assertVisible:
+    id: balance_receive
+- assertVisible:
+    id: balance_send
+- assertVisible:
+    text: "$0"
+    childOf:
+      id: balance_total
+
+# A new wallet is flagged as not backed up
+- tapOn:
+    id: tab_settings
+- tapOn:
+    id: settings_manage_wallets
+- assertVisible:
+    text: "Backup Required"
+    childOf:
+      id: account_row_0
+- back

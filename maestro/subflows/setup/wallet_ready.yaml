@@ -1,0 +1,16 @@
+# The starting point of every feature test: clears the app, passes the intro
+# and restores the public test wallet with the chains in ${CHAINS} (comma
+# separated blockchain uids, default "bitcoin"). Ends on the balance screen.
+#
+# The phrase is a public test vector and must stay unused on-chain: the
+# address checks in the journey expect its first addresses to be unused.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- launchApp:
+    clearState: true
+- runFlow: ../onboarding/pass_intro.yaml
+- runFlow:
+    file: ../wallet/restore_from_phrase.yaml
+    env:
+      MNEMONIC: "token weekend gadget save flush gaze ready debris input finish evidence diet"
+      CHAINS: ${CHAINS || 'bitcoin'}

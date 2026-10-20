@@ -1,15 +1,14 @@
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
-env:
-  # Public BIP39 test vector. Override: maestro test -e MNEMONIC="..."
-  MNEMONIC: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+# Restores the public test wallet. The address checks in the next step
+# expect its first addresses to be unused: never send funds to it.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
 ---
-# Fresh install: restore a wallet from a recovery phrase
-- launchApp:
-    clearState: true
-- runFlow: ../subflows/restore_wallet_from_phrase.yaml
-
-# Wallet is restored: balance screen with the restored coins
-- assertVisible: "Receive"
-- assertVisible: "Send"
-- assertVisible: "BTC"
-- assertVisible: "ETH"
+- runFlow:
+    file: ../subflows/wallet/restore_from_phrase.yaml
+    env:
+      MNEMONIC: "token weekend gadget save flush gaze ready debris input finish evidence diet"
+      CHAINS: "bitcoin,ethereum"
+- assertVisible:
+    id: balance_item_BTC
+- assertVisible:
+    id: balance_item_ETH

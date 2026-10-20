@@ -1,0 +1,15 @@
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+---
+- tapOn:
+    id: balance_item_USDT
+- tapOn:
+    id: token_receive
+- assertVisible:
+    id: receive_address
+    text: "0x[0-9a-fA-F]{40}"
+- assertVisible:
+    id: receive_network
+    text: "Network: Ethereum"
+- back
+- back

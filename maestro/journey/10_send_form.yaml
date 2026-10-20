@@ -1,0 +1,48 @@
+# The send form rejects an invalid address and an amount above the balance.
+# The restored wallet holds nothing, so this never reaches confirmation.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+env:
+  RECIPIENT: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"
+---
+- tapOn:
+    id: balance_item_BTC
+- tapOn:
+    id: token_send
+
+- tapOn:
+    id: send_recipient_row
+- tapOn:
+    id: enter_address_input
+- inputText: "bc1qnotanaddress"
+- extendedWaitUntil:
+    visible:
+      id: enter_address_error
+    timeout: 10000
+- assertVisible:
+    id: enter_address_submit
+    enabled: false
+- eraseText
+- inputText: ${RECIPIENT}
+- hideKeyboard
+- assertNotVisible:
+    id: enter_address_error
+- tapOn:
+    id: enter_address_submit
+
+- tapOn:
+    id: send_amount_input
+- inputText: "0.001"
+- hideKeyboard
+# Shows "Wallet is Syncing" first
+- extendedWaitUntil:
+    visible:
+      text: "Insufficient balance"
+      childOf:
+        id: send_next
+    timeout: 90000
+- assertVisible:
+    id: send_next
+    enabled: false
+- back
+- back

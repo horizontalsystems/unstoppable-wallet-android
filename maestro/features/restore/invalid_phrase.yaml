@@ -1,0 +1,29 @@
+# A phrase of valid words with a wrong checksum is rejected before any chain
+# is chosen. Starts from a fresh install rather than wallet_ready: restoring
+# is the feature under test.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "Restore · checksum-invalid phrase is rejected"
+tags: [feature, restore]
+env:
+  # The test vector with its last word swapped: every word is in the BIP39
+  # list, the checksum is not
+  MNEMONIC: "token weekend gadget save flush gaze ready debris input finish evidence evidence"
+---
+- launchApp:
+    clearState: true
+- runFlow: ../../subflows/onboarding/pass_intro.yaml
+- tapOn:
+    id: onboarding_existing_wallet
+- runFlow: ../../subflows/onboarding/accept_terms_if_shown.yaml
+- tapOn:
+    id: import_recovery_phrase
+- tapOn:
+    id: restore_phrase_input
+- inputText: ${MNEMONIC}
+- hideKeyboard
+- tapOn:
+    id: restore_next
+- assertVisible:
+    id: restore_error
+- assertNotVisible:
+    id: restore_chain_bitcoin

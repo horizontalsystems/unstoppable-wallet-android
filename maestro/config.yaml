@@ -1,3 +1,7 @@
+# Feature and on-chain tests. The journey runs on its own from journey/,
+# because its steps depend on each other's order.
 flows:
-  - onboarding/**
-  - wallet/**
+  - features/*/*
+  - onchain/**
+excludeTags:
+  - quarantine
