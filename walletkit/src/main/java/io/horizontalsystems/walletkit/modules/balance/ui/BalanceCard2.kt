@@ -131,8 +131,15 @@ private fun WalletIcon2(
     val leah = ComposeAppTheme.colors.leah
     val andy = ComposeAppTheme.colors.andy
 
+    val syncState = when {
+        progress != null -> "syncing"
+        viewItem.failedIconVisible -> "failed"
+        else -> "synced"
+    }
+
     Box(
         modifier = Modifier
+            .testTag(TestTags.balanceItemSync(viewItem.wallet.coin.code, syncState))
             .drawBehind {
                 when (syncingProgress.type) {
                     SyncingProgressType.ProgressWithRing -> {
