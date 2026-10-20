@@ -1,0 +1,10 @@
+# Types ${PIN} on the PIN pad. PINs are 6 digits (PinModule.PIN_COUNT).
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- evalScript: ${output.pinDigit = 0}
+- repeat:
+    times: 6
+    commands:
+      - tapOn:
+          id: pin_key_${PIN[output.pinDigit]}
+      - evalScript: ${output.pinDigit = output.pinDigit + 1}

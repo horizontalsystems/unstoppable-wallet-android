@@ -1,0 +1,28 @@
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "Wallets · rename a wallet"
+tags: [feature, wallets]
+env:
+  NEW_NAME: "Renamed E2E"
+---
+- runFlow:
+    file: ../../subflows/setup/wallet_ready.yaml
+
+- tapOn:
+    id: tab_settings
+- tapOn:
+    id: settings_manage_wallets
+- tapOn:
+    id: account_options_0
+- tapOn:
+    id: account_name_input
+- eraseText
+- inputText: ${NEW_NAME}
+- hideKeyboard
+- tapOn:
+    id: account_save
+
+# Saving returns to the wallet list with the new name
+- assertVisible:
+    text: ${NEW_NAME}
+    childOf:
+      id: account_row_0

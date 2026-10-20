@@ -1,0 +1,24 @@
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+---
+- tapOn:
+    id: tab_balance
+- tapOn:
+    id: balance_manage_coins
+- tapOn:
+    id: search_bar
+- inputText: "USDT"
+- tapOn:
+    id: manage_coin_USDT_ethereum
+- hideKeyboard
+# The first back may only close the search
+- back
+- runFlow:
+    when:
+      notVisible:
+        id: balance_total
+    commands:
+      - back
+- scrollUntilVisible:
+    element:
+      id: balance_item_USDT

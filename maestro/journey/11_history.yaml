@@ -1,0 +1,11 @@
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+---
+- tapOn:
+    id: balance_transactions
+# The test wallet has no transactions; the list shows a sync placeholder first
+- extendedWaitUntil:
+    visible:
+      id: tx_empty
+    timeout: 90000
+- back

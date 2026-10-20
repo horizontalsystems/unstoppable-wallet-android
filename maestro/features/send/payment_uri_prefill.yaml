@@ -1,0 +1,58 @@
+# A bitcoin: payment link leads to the send form with the address and amount
+# from the link filled in.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "Send · payment link fills in the send form"
+tags: [feature, send]
+env:
+  RECIPIENT: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"
+  AMOUNT: "0.0001"
+---
+- runFlow:
+    file: ../../subflows/setup/wallet_ready.yaml
+    env:
+      CHAINS: "bitcoin"
+
+- openLink:
+    link: "bitcoin:${RECIPIENT}?amount=${AMOUNT}"
+# Android asks which app to use when another build that handles bitcoin:
+# links is installed, as on a developer's emulator. The chooser is system UI,
+# so it has no test tags.
+# It lists the apps, or offers the last one picked ("Open with UW E2E").
+- runFlow:
+    when:
+      visible: "Just once"
+    commands:
+      - runFlow:
+          when:
+            visible: "UW E2E"
+          commands:
+            - tapOn: "UW E2E"
+      - tapOn: "Just once"
+# The link opens the token picker, limited to the link's chain. Its rows use
+# the balance screen's tags, so wait until it covers the balance screen.
+- extendedWaitUntil:
+    notVisible:
+      id: balance_total
+    timeout: 15000
+- tapOn:
+    id: balance_item_BTC
+
+# The address page comes first, filled in from the link
+- extendedWaitUntil:
+    visible:
+      text: ${RECIPIENT}
+      childOf:
+        id: enter_address_input
+    timeout: 15000
+- tapOn:
+    id: enter_address_submit
+
+- extendedWaitUntil:
+    visible:
+      id: send_amount_input
+    timeout: 15000
+- assertVisible: ${RECIPIENT}
+- assertVisible:
+    text: ${AMOUNT}
+    childOf:
+      id: send_amount_input

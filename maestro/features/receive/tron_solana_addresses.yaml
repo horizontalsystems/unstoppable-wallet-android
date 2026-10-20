@@ -1,0 +1,46 @@
+# Guards address derivation for Tron (m/44'/195'/0'/0/0) and Solana
+# (m/44'/501'/0'/0'). Both addresses were derived independently from the
+# public test vector with bip_utils.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "Receive · Tron and Solana addresses"
+tags: [feature, receive]
+env:
+  TRX_ADDRESS: "TUoNzbLe6atCB2j9zjSaHeK9qNkn6qrGxz"
+  SOL_ADDRESS: "9oZA73JNvtRR6AYHkPVLocr1qie7DL6acKann2Rm6v5K"
+---
+- runFlow:
+    file: ../../subflows/setup/wallet_ready.yaml
+    env:
+      CHAINS: "tron,solana"
+
+- tapOn:
+    id: balance_item_SOL
+- tapOn:
+    id: token_receive
+- assertVisible:
+    id: receive_address
+    text: ${SOL_ADDRESS}
+- back
+- back
+
+- tapOn:
+    id: balance_item_TRX
+# The test wallet holds no TRX, so the token screen opens with the
+# "not activated" sheet, which leads to the same receive screen
+- runFlow:
+    when:
+      visible:
+        id: token_tron_view_address
+    commands:
+      - tapOn:
+          id: token_tron_view_address
+- runFlow:
+    when:
+      notVisible:
+        id: receive_address
+    commands:
+      - tapOn:
+          id: token_receive
+- assertVisible:
+    id: receive_address
+    text: ${TRX_ADDRESS}

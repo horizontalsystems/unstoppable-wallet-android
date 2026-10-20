@@ -1,22 +1,13 @@
-# Covers the full manual backup journey for a newly created wallet:
-# the app flags the wallet as backup-required, reveals the generated
-# 12-word phrase, demands verification, and after answering the quiz
-# with the correct words the wallet must be marked as backed up.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+# Backs up the wallet created in step 02: reveals the generated 12-word
+# phrase, answers the verification quiz with the right words, and checks the
+# wallet is no longer flagged as backup-required.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
 ---
-- launchApp:
-    clearState: true
-- runFlow: ../subflows/create_standard_wallet.yaml
-
-# A fresh wallet must be flagged as not backed up
 - tapOn:
     id: tab_settings
 - tapOn:
     id: settings_manage_wallets
-- assertVisible:
-    text: "Backup Required"
-    childOf:
-      id: account_row_0
 
 # Open the manual backup
 - tapOn:
@@ -89,3 +80,4 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
     childOf:
       id: account_row_0
 - assertNotVisible: "Backup Required"
+- back

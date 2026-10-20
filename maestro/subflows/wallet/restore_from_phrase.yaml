@@ -1,11 +1,16 @@
-# Restores a Bitcoin + Ethereum wallet from ${MNEMONIC} (callers must define it).
-# Starts from the intro of a freshly launched app, ends on the balance screen.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+# Restores a wallet from ${MNEMONIC} with the chains in ${CHAINS}, a comma
+# separated list of blockchain uids (default "bitcoin,ethereum"). Supported:
+# bitcoin, ethereum, binance-smart-chain, tron, the-open-network, solana.
+# Starts on a screen with "Existing Wallet" (onboarding_existing_wallet), ends
+# on the balance screen.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
 ---
-- runFlow: pass_intro.yaml
+# A flow's own env block would override the caller's values, so defaults are
+# set here instead
+- evalScript: ${output.chains = (CHAINS || 'bitcoin,ethereum').split(',').map(c => c.trim())}
 - tapOn:
     id: onboarding_existing_wallet
-- runFlow: accept_terms.yaml
+- runFlow: ../onboarding/accept_terms_if_shown.yaml
 - tapOn:
     id: import_recovery_phrase
 - tapOn:
@@ -14,12 +19,54 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
 - hideKeyboard
 - tapOn:
     id: restore_next
-# Bitcoin opens the derivation sheet; its defaults are kept
-- tapOn:
-    id: restore_chain_bitcoin
-- tapOn:
-    id: selector_done
-- tapOn:
-    id: restore_chain_ethereum
+
+# Chains are tapped in list order (BlockchainType.order), so each one is
+# usually found by scrolling down
+- runFlow:
+    when:
+      true: ${output.chains.includes('bitcoin')}
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: restore_chain_bitcoin
+      - tapOn:
+          id: restore_chain_bitcoin
+      # Bitcoin opens the derivation sheet; its defaults are kept
+      - tapOn:
+          id: selector_done
+- runFlow:
+    when:
+      true: ${output.chains.includes('ethereum')}
+    file: restore_select_chain.yaml
+    env:
+      CHAIN: ethereum
+- runFlow:
+    when:
+      true: ${output.chains.includes('binance-smart-chain')}
+    file: restore_select_chain.yaml
+    env:
+      CHAIN: binance-smart-chain
+- runFlow:
+    when:
+      true: ${output.chains.includes('solana')}
+    file: restore_select_chain.yaml
+    env:
+      CHAIN: solana
+- runFlow:
+    when:
+      true: ${output.chains.includes('tron')}
+    file: restore_select_chain.yaml
+    env:
+      CHAIN: tron
+- runFlow:
+    when:
+      true: ${output.chains.includes('the-open-network')}
+    file: restore_select_chain.yaml
+    env:
+      CHAIN: the-open-network
 - tapOn:
     id: restore_submit
+- extendedWaitUntil:
+    visible:
+      id: balance_total
+    timeout: 15000

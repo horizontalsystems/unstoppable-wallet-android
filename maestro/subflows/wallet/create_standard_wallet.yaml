@@ -1,12 +1,16 @@
 # Creates a new standard wallet with the suggested name.
-# Starts from the intro of a freshly launched app, ends on the balance screen.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+# Starts on a screen with "Create New Wallet" (onboarding_new_wallet), ends on
+# the balance screen.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
 ---
-- runFlow: pass_intro.yaml
 - tapOn:
     id: onboarding_new_wallet
-- runFlow: accept_terms.yaml
+- runFlow: ../onboarding/accept_terms_if_shown.yaml
 - tapOn:
     id: create_type_standard
 - tapOn:
     id: create_submit
+- extendedWaitUntil:
+    visible:
+      id: balance_total
+    timeout: 15000

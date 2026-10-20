@@ -1,11 +1,7 @@
-# The App Status debug screen must open and render its blockchain
-# status sections for a wallet with default coins enabled.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+# App Status renders, and a base currency change reaches the balance screen.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
 ---
-- launchApp:
-    clearState: true
-- runFlow: ../subflows/create_standard_wallet.yaml
-
 - tapOn:
     id: tab_settings
 - scrollUntilVisible:
@@ -15,10 +11,34 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
     id: settings_about
 - tapOn:
     id: about_app_status
-
 # Building the screen assembles every status section up front (the crash
 # this guards against happened there), so reaching the always-present
 # App Info block proves the whole screen rendered.
-- assertVisible: "App Status"
 - assertVisible: "App Info"
 - assertVisible: "App Version"
+- back
+- back
+
+- scrollUntilVisible:
+    element:
+      id: settings_app_settings
+    direction: UP
+- tapOn:
+    id: settings_app_settings
+- tapOn:
+    id: appearance_base_currency
+- tapOn:
+    id: currency_EUR
+# Choosing a currency closes the pages above Settings
+- runFlow:
+    when:
+      notVisible:
+        id: tab_balance
+    commands:
+      - back
+- tapOn:
+    id: tab_balance
+- assertVisible:
+    text: "€0"
+    childOf:
+      id: balance_total

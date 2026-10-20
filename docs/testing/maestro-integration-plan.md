@@ -19,6 +19,25 @@ integration for now.
 | Notifications | Existing Telegram bot and chat, called directly from the Mac through the Bot API |
 | Cloud devices | None for now |
 
+## Status
+
+Phases 1 and 2 are done. Phase 3: the layout (3.1), the 13 journey steps (3.2,
+about 4.5 minutes) and the feature template with 4 feature tests (3.3) are in
+place and pass; 3.4 waits on the team dust wallet from Phase 4. Where the code
+differs from this plan:
+
+- Subflows: `restore_from_phrase.yaml` takes `CHAINS`, terms are accepted only
+  when shown, and there are no `nav/` subflows (a tab is one `tapOn`).
+  `restore_watch_address.yaml` and `wait_for_sync.yaml` come with 3.4.
+- Step 04 checks a wrong PIN by `pin_attempts_left`: the unlock screen shows
+  the attempts left, not `pin_error`.
+- Step 10 reads the amount error from the `send_next` label; there is no
+  separate `send_error`. Swap uses `swap_error` in place of `swap_quote_error`
+  and covers every reason the swap cannot go on.
+- Step 13 checks App Status and the base currency, not the theme.
+- `receive/tron_solana_addresses` leaves TON out: its wallet contract version
+  is chosen inside ton-kit, so an independent TON vector needs more work.
+
 ## What exists today
 
 The plan builds on these. It does not replace them.
@@ -800,28 +819,28 @@ useful findings, false alarms), and a decision to adopt one or drop the phase.
 ## First week checklist
 
 **Day 1: proof of concept**
-- [ ] Install the pinned Maestro version and the `android-35;google_apis;arm64-v8a` image on your Mac
-- [ ] Create AVD `e2e_api35` and run `adb shell locksettings set-pin 1111`; set the three animation scales to 0
-- [ ] `./gradlew :app:assembleFdroidCiDebug`, install it, and run `intro.yaml` and `create_wallet_standard.yaml` with `APP_ID=io.horizontalsystems.bankwallet.fdroidci.dev`
-- [ ] Fix any F-Droid differences in the sub-flows
+- [x] Install the pinned Maestro version and the `android-35;google_apis;arm64-v8a` image on your Mac
+- [x] Create AVD `e2e_api35` and run `adb shell locksettings set-pin 1111`; set the three animation scales to 0
+- [x] `./gradlew :app:assembleFdroidCiDebug`, install it, and run `intro.yaml` and `create_wallet_standard.yaml` with `APP_ID=io.horizontalsystems.bankwallet.fdroidci.dev`
+- [x] Fix any F-Droid differences in the sub-flows
 
 **Day 2: open questions**
-- [ ] Answer the six questions in 1.3 and write them into `maestro/README.md`
+- [x] Answer the six questions in 1.3 and write them into `maestro/README.md`
 - [ ] Run the two flows 5× headless (`-no-window -read-only`) to confirm stability
 
 **Day 3: build type and hooks**
-- [ ] Add the `e2e` build type and the variant filter (2.1); check that release output is unchanged
-- [ ] Add `e2eBuild` to `IAppConfigProvider` and the rooted, FLAG_SECURE, rate-app and donation hooks (2.2)
-- [ ] Locate the broadcast choke point and add the guard
+- [x] Add the `e2e` build type and the variant filter (2.1); check that release output is unchanged
+- [x] Add `e2eBuild` to `IAppConfigProvider` and the rooted, FLAG_SECURE, rate-app and donation hooks (2.2)
+- [x] Locate the broadcast choke point and add the guard
 
 **Day 4: first selectors**
-- [ ] Enable `testTagsAsResourceId` at the root and in `BottomSheet.kt` / `HSBottomSheet.kt`
-- [ ] Add `TestTags.kt` and tag intro, tabs, terms, create, restore and balance (the screens the first journey steps touch)
-- [ ] Rewrite `accept_terms.yaml` and `create_standard_wallet.yaml` to use `id:` selectors
+- [x] Enable `testTagsAsResourceId` at the root and in `BottomSheet.kt` / `HSBottomSheet.kt`
+- [x] Add `TestTags.kt` and tag intro, tabs, terms, create, restore and balance (the screens the first journey steps touch)
+- [x] Rewrite `accept_terms.yaml` and `create_standard_wallet.yaml` to use `id:` selectors
 
 **Day 5: structure and repeatability**
-- [ ] Move the existing flows into `journey/` and `onchain/` as mapped in 3.1, and check that `executionOrder` runs the journey steps in order
-- [ ] Write `subflows/setup/wallet_ready.yaml` and `features/_template.yaml`
+- [x] Move the existing flows into `journey/` and `onchain/` as mapped in 3.1, and check that `executionOrder` runs the journey steps in order
+- [x] Write `subflows/setup/wallet_ready.yaml` and `features/_template.yaml`
 - [ ] Replace the "abandon" wallet in the send flow with a placeholder for `MAESTRO_E2E_DUST_MNEMONIC`, and create the dust wallet (not yet funded)
 - [ ] Write `emulators-up.sh` and `device-prepare.sh`, and run the journey and a feature test on 2 parallel emulators
 - [ ] Order the runner Mac (if it isn't there yet), create the `ci` macOS user, and store the dust mnemonic and the Telegram token in its Keychain

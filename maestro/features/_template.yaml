@@ -1,0 +1,16 @@
+# Copy to features/<feature>/<scenario>.yaml and replace the name, the second
+# tag and the steps. See maestro/README.md ("Feature tests") for the rules.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "<Feature> · <what the user does>"
+tags: [feature, <feature>]
+---
+# Ready state: app cleared, intro passed, public test wallet restored with
+# the chains listed (blockchain uids, comma separated)
+- runFlow:
+    file: ../../subflows/setup/wallet_ready.yaml
+    env:
+      CHAINS: "bitcoin"
+
+# The feature's own steps and assertions. Select elements by test tag.
+- assertVisible:
+    id: balance_item_BTC
