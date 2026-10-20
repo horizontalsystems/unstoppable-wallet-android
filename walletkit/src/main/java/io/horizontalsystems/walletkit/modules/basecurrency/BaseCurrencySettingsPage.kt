@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.basecurrency
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -202,6 +204,7 @@ private fun CurrencyCell(
     onClick: () -> Unit
 ) {
     RowUniversal(
+        modifier = Modifier.testTag(TestTags.currency(title)),
         onClick = onClick
     ) {
         Image(

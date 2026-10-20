@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.managewallets
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -252,6 +254,9 @@ private fun CoinCell(
                 onCheckedChange = { onItemClick.invoke() }
             )
         },
-        onClick = onItemClick
+        onClick = onItemClick,
+        modifier = Modifier.testTag(
+            TestTags.manageCoin(viewItem.item.coin.code, viewItem.item.blockchainType.uid)
+        )
     )
 }

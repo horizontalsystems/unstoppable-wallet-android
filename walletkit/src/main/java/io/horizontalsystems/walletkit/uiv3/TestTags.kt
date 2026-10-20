@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.uiv3
 
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
@@ -55,6 +56,8 @@ object TestTags {
     const val TOKEN_RECEIVE = "token_receive"
     const val TOKEN_SEND = "token_send"
     const val TOKEN_SWAP = "token_swap"
+    // "View my Address" on the sheet a new, unactivated Tron wallet shows over the token screen
+    const val TOKEN_TRON_VIEW_ADDRESS = "token_tron_view_address"
 
     const val RECEIVE_ADDRESS = "receive_address"
     const val RECEIVE_NETWORK = "receive_network"
@@ -64,6 +67,11 @@ object TestTags {
     const val RECEIVE_SHARE = "receive_share"
     const val RECEIVE_COPY = "receive_copy"
 
+    // The floating search bar shared by list screens; a screen has at most one
+    const val SEARCH_BAR = "search_bar"
+
+    fun manageCoin(coinCode: String, blockchainUid: String) = "manage_coin_${coinCode}_$blockchainUid"
+
     const val SEND_AMOUNT_INPUT = "send_amount_input"
     const val SEND_RECIPIENT_ROW = "send_recipient_row"
     const val SEND_NEXT = "send_next"
@@ -72,6 +80,7 @@ object TestTags {
     // The address entry page is shared by send, swap recipient and other flows
     const val ENTER_ADDRESS_INPUT = "enter_address_input"
     const val ENTER_ADDRESS_SUBMIT = "enter_address_submit"
+    const val ENTER_ADDRESS_ERROR = "enter_address_error"
 
     const val CONFIRM_AMOUNT = "confirm_amount"
     const val CONFIRM_RECIPIENT = "confirm_recipient"
@@ -90,6 +99,10 @@ object TestTags {
     const val SWAP_AMOUNT_OUT = "swap_amount_out"
     const val SWAP_SWITCH = "swap_switch"
     const val SWAP_NEXT = "swap_next"
+    // Replaces swap_next while the swap cannot go on: no quote, insufficient balance, sync
+    const val SWAP_ERROR = "swap_error"
+    const val SWAP_PROVIDER = "swap_provider"
+    fun swapCoin(coinCode: String, blockchainUid: String) = "swap_coin_${coinCode}_$blockchainUid"
 
     const val SETTINGS_MANAGE_WALLETS = "settings_manage_wallets"
     const val SETTINGS_BLOCKCHAIN = "settings_blockchain"
@@ -102,6 +115,9 @@ object TestTags {
     const val SETTINGS_DEBUG_SIMULATE_FAIL_SWAP = "settings_debug_simulate_fail_swap"
     const val SETTINGS_DEBUG_SWAP_PROVIDER_NAME = "settings_debug_swap_provider_name"
 
+    const val APPEARANCE_BASE_CURRENCY = "appearance_base_currency"
+    fun currency(code: String) = "currency_$code"
+
     const val ABOUT_APP_STATUS = "about_app_status"
     const val ABOUT_TERMS = "about_terms"
 
@@ -109,6 +125,7 @@ object TestTags {
     const val SECURITY_DISABLE_PASSCODE = "security_disable_passcode"
     const val SECURITY_BIOMETRICS = "security_biometrics"
     const val SECURITY_AUTOLOCK = "security_autolock"
+    fun autolockInterval(raw: String) = "autolock_$raw"
 
     fun pinKey(digit: Int) = "pin_key_$digit"
     const val PIN_KEY_DELETE = "pin_key_delete"
@@ -122,6 +139,10 @@ object TestTags {
     const val ACCOUNT_MANUAL_BACKUP = "account_manual_backup"
     const val ACCOUNT_LOCAL_BACKUP = "account_local_backup"
     const val ACCOUNT_UNLINK = "account_unlink"
+    const val ACCOUNT_NAME_INPUT = "account_name_input"
+    const val ACCOUNT_SAVE = "account_save"
+    fun unlinkConfirm(index: Int) = "unlink_confirm_$index"
+    const val UNLINK_DELETE = "unlink_delete"
 
     const val BACKUP_REVEAL = "backup_reveal"
     // Numbered as shown on screen, from 1

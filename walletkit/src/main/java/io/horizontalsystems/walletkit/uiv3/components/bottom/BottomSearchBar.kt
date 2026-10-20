@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.uiv3.components.bottom
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxScope
@@ -134,6 +136,7 @@ fun FloatingSearchBar(
             .background(ComposeAppTheme.colors.blade)
             .height(48.dp)
             .focusRequester(focusRequester)
+            .testTag(TestTags.SEARCH_BAR)
             .clickable {
                 onActiveChange(true)
             }
