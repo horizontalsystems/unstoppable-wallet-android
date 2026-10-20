@@ -39,6 +39,12 @@ object TestTags {
     fun restoreChain(blockchainUid: String) = "restore_chain_$blockchainUid"
     const val RESTORE_SUBMIT = "restore_submit"
 
+    const val WATCH_INPUT = "watch_input"
+    // Done for addresses that need no chain choice, Next for the rest
+    const val WATCH_SUBMIT = "watch_submit"
+    fun watchChain(blockchainUid: String) = "watch_chain_$blockchainUid"
+    const val WATCH_CHAINS_DONE = "watch_chains_done"
+
     const val BALANCE_TOTAL = "balance_total"
     const val BALANCE_SCAN = "balance_scan"
     const val BALANCE_RECEIVE = "balance_receive"
@@ -50,6 +56,8 @@ object TestTags {
     const val BALANCE_SYNC_INDICATOR = "balance_sync_indicator"
     fun balanceItem(coinCode: String) = "balance_item_$coinCode"
     fun balanceItemAmount(coinCode: String) = "balance_item_${coinCode}_amount"
+    // The coin icon carries the sync state: synced, syncing or failed
+    fun balanceItemSync(coinCode: String, state: String) = "balance_item_${coinCode}_$state"
 
     const val TOKEN_BALANCE = "token_balance"
     const val TOKEN_CHART = "token_chart"

@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.watchaddress
 
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -136,7 +138,9 @@ fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out 
             )
             VSpacer(32.dp)
             FormsInputMultiline(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .testTag(TestTags.WATCH_INPUT),
                 initial = uiState.inputState?.dataOrNull,
                 hint = stringResource(id = R.string.Watch_Address_Hint),
                 qrScannerEnabled = true,
@@ -177,7 +181,8 @@ fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out 
                         variant = ButtonVariant.Primary,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 24.dp),
+                            .padding(horizontal = 24.dp)
+                            .testTag(TestTags.WATCH_SUBMIT),
                         enabled = submitType.enabled,
                         onClick = viewModel::onClickWatch,
                     )
@@ -186,7 +191,8 @@ fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out 
                         variant = ButtonVariant.Primary,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 24.dp),
+                            .padding(horizontal = 24.dp)
+                            .testTag(TestTags.WATCH_SUBMIT),
                         enabled = submitType.enabled,
                         onClick = viewModel::onClickNext,
                     )
