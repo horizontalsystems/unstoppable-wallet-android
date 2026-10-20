@@ -1,18 +1,14 @@
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+# The only journey step that clears the app. Every later step continues from
+# the state the previous one left.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
 ---
 # First launch after a fresh install must show the intro
 - launchApp:
     clearState: true
 - assertVisible:
     id: intro_next
-
-# Pass the intro (3 slides)
-- tapOn:
-    id: intro_next
-- tapOn:
-    id: intro_next
-- tapOn:
-    id: intro_next
+- runFlow: ../subflows/onboarding/pass_intro.yaml
 
 # Passing the intro lands on the main screen
 - assertVisible:

@@ -1,27 +1,34 @@
-# Guards BIP39 -> BIP84 address derivation: the wallet restored from
-# MNEMONIC must show exactly EXPECTED_ADDRESS (independently derived,
-# verified against the BIP84 spec test vector). The phrase must stay
-# unused on-chain: any transaction on it shifts the first unused
-# address and breaks this test. Never send funds to it.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+# Guards address derivation for the wallet restored in step 08: BIP84 for
+# Bitcoin and m/44'/60'/0'/0/0 for Ethereum. Both addresses were derived
+# independently and checked against the spec test vectors.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
 env:
-  MNEMONIC: "token weekend gadget save flush gaze ready debris input finish evidence diet"
-  EXPECTED_ADDRESS: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"
+  BTC_ADDRESS: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"
+  ETH_ADDRESS: "0x60A40e0483b2eE741A60C3079a06C8A68F3712ee"
 ---
-- launchApp:
-    clearState: true
-- runFlow: ../subflows/restore_wallet_from_phrase.yaml
-
-# Open the BTC receive screen from the token screen
 - tapOn:
     id: balance_item_BTC
 - tapOn:
     id: token_receive
-
-# The exact first address and format must be shown
 - assertVisible:
     id: receive_address
-    text: ${EXPECTED_ADDRESS}
+    text: ${BTC_ADDRESS}
 - assertVisible:
     id: receive_format
     text: "Format: Native SegWit (BIP 84)"
+- back
+- back
+
+- tapOn:
+    id: balance_item_ETH
+- tapOn:
+    id: token_receive
+- assertVisible:
+    id: receive_address
+    text: ${ETH_ADDRESS}
+- assertVisible:
+    id: receive_network
+    text: "Network: Ethereum"
+- back
+- back

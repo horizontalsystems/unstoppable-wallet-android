@@ -1,0 +1,8 @@
+# The terms are shown only until they are accepted once.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- runFlow:
+    when:
+      visible:
+        id: terms_check_0
+    file: accept_terms.yaml

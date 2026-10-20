@@ -1,0 +1,40 @@
+# Picks a pair and an amount and waits for the quote. Stops there: the wallet
+# holds nothing to swap.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+---
+- tapOn:
+    id: tab_swap
+- tapOn:
+    id: swap_token_in
+- tapOn:
+    id: search_bar
+- inputText: "ETH"
+- tapOn:
+    id: swap_coin_ETH_ethereum
+- tapOn:
+    id: swap_token_out
+- tapOn:
+    id: search_bar
+- inputText: "USDT"
+- tapOn:
+    id: swap_coin_USDT_ethereum
+- tapOn:
+    id: swap_amount_in
+- inputText: "0.01"
+- hideKeyboard
+
+# Providers answer from live backends: either a quote arrives or the error
+# button says why not
+- extendedWaitUntil:
+    visible:
+      id: swap_provider
+    timeout: 60000
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: swap_provider
+    commands:
+      - assertVisible:
+          id: swap_error
