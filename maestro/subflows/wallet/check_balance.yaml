@@ -1,0 +1,20 @@
+# Fails unless the balance screen shows at least ${MIN} ${COIN}.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- scrollUntilVisible:
+    element:
+      id: balance_item_${COIN}_amount
+# The first child is the coin amount, the second its fiat value
+- copyTextFrom:
+    text: ".+"
+    childOf:
+      id: balance_item_${COIN}_amount
+    index: 0
+# Thrown rather than asserted, so the failure message names the coin
+- evalScript: |
+    ${
+      const balance = parseFloat(maestro.copiedText.replace(/[^0-9.]/g, '')) || 0;
+      if (balance < parseFloat(MIN)) {
+        throw new Error('Dust wallet below threshold for ' + COIN + ' (' + balance + ' < ' + MIN + '), top up');
+      }
+    }

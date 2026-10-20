@@ -5,3 +5,9 @@ flows:
   - onchain/**
 excludeTags:
   - quarantine
+executionOrder:
+  # The balance check runs first so a low dust balance shows as such, not as
+  # send failures. The flows after it run either way.
+  continueOnFailure: true
+  flowsOrder:
+    - "On-chain · dust wallet balance"

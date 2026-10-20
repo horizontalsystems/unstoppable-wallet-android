@@ -14,7 +14,7 @@ env:
       CHAINS: "bitcoin"
       COIN: "BTC"
 - runFlow:
-    file: ../../subflows/send/send_to_own_address.yaml
+    file: ../../subflows/send/send_to_confirm.yaml
     env:
       COIN: "BTC"
       AMOUNT: ${AMOUNT}

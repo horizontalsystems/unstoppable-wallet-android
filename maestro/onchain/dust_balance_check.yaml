@@ -1,0 +1,41 @@
+# Runs before the send tests and fails with the coin to top up when the team
+# dust wallet holds less than the threshold, so a low balance is not mistaken
+# for an app bug. Thresholds are about 2 × (send amount + typical fee); the
+# TRX one covers activating the recipient as well. See "Topping up the dust
+# wallet" in maestro/README.md.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "On-chain · dust wallet balance"
+tags: [onchain, secret]
+env:
+  MIN_BTC: "0.00004"
+  MIN_ETH: "0.0005"
+  MIN_TRX: "5"
+---
+- runFlow:
+    file: ../subflows/setup/dust_wallet_ready.yaml
+    env:
+      CHAINS: "bitcoin,ethereum,tron"
+      COIN: "BTC"
+- runFlow:
+    file: ../subflows/wallet/wait_for_sync.yaml
+    env:
+      COIN: "ETH"
+- runFlow:
+    file: ../subflows/wallet/wait_for_sync.yaml
+    env:
+      COIN: "TRX"
+- runFlow:
+    file: ../subflows/wallet/check_balance.yaml
+    env:
+      COIN: "BTC"
+      MIN: ${MIN_BTC}
+- runFlow:
+    file: ../subflows/wallet/check_balance.yaml
+    env:
+      COIN: "ETH"
+      MIN: ${MIN_ETH}
+- runFlow:
+    file: ../subflows/wallet/check_balance.yaml
+    env:
+      COIN: "TRX"
+      MIN: ${MIN_TRX}
