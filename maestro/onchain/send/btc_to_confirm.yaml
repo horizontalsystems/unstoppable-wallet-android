@@ -1,78 +1,20 @@
-# Exercises the BTC send flow up to the confirmation screen and STOPS:
-# the final Send button is never tapped, so nothing is broadcast.
-# Uses the public "abandon" test wallet, which holds a little dust —
-# if that balance ever drops below AMOUNT + fee, this test will fail
-# at the amount step and the wallet needs a small top-up.
+# A Bitcoin send filled in up to the confirmation screen, from the team dust
+# wallet to its own address. Never broadcasts. Fails at the amount step when
+# the wallet holds less than AMOUNT plus the fee: see "Topping up the dust
+# wallet" in maestro/README.md.
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
 name: "On-chain · BTC send up to confirmation"
-tags: [onchain]
+tags: [onchain, secret]
 env:
-  MNEMONIC: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
-  # The wallet's own first address: even if a send were ever broadcast
-  # by mistake, the funds would stay in the same wallet.
-  RECIPIENT: "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
   AMOUNT: "0.00001"
 ---
-- launchApp:
-    clearState: true
-- runFlow: ../../subflows/onboarding/pass_intro.yaml
 - runFlow:
-    file: ../../subflows/wallet/restore_from_phrase.yaml
+    file: ../../subflows/setup/dust_wallet_ready.yaml
     env:
-      MNEMONIC: ${MNEMONIC}
       CHAINS: "bitcoin"
-
-# Send needs spendable funds: wait for the BTC balance to sync
-- extendedWaitUntil:
-    notVisible: "Searching transactions…"
-    timeout: 90000
-
-# Open the send form from the token screen
-- tapOn:
-    id: balance_item_BTC
-- tapOn:
-    id: token_send
-- assertVisible: "Send BTC"
-
-# The recipient row opens the address page; submitting brings the address back
-- tapOn:
-    id: send_recipient_row
-- tapOn:
-    id: enter_address_input
-- inputText: ${RECIPIENT}
-- hideKeyboard
-- tapOn:
-    id: enter_address_submit
-- assertVisible: ${RECIPIENT}
-
-- tapOn:
-    id: send_amount_input
-- inputText: ${AMOUNT}
-- hideKeyboard
-- extendedWaitUntil:
-    visible:
-      id: send_next
-      enabled: true
-    timeout: 30000
-- tapOn:
-    id: send_next
-
-# Confirmation must show exactly what was entered; the fee comes from the node.
-# Stop here — never tap the final Send button.
-- assertVisible: "Confirm Send"
-# The tagged rows hold the values in child nodes
-- assertVisible:
-    text: ${AMOUNT}
-    childOf:
-      id: confirm_amount
-- assertVisible:
-    text: ${RECIPIENT}
-    childOf:
-      id: confirm_recipient
-# The fee shows "n/a" until the estimate arrives
-- extendedWaitUntil:
-    visible:
-      text: ".*\\d.*"
-      childOf:
-        id: confirm_network_fee
-    timeout: 30000
+      COIN: "BTC"
+- runFlow:
+    file: ../../subflows/send/send_to_own_address.yaml
+    env:
+      COIN: "BTC"
+      AMOUNT: ${AMOUNT}
