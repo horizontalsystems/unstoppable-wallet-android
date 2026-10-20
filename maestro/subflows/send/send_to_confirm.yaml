@@ -1,0 +1,56 @@
+# Fills in a send of ${AMOUNT} ${COIN} and checks the confirmation screen.
+# Stops there: confirm_send is never tapped, and the e2e build refuses to
+# broadcast anyway. The recipient is the wallet's own receive address, so the
+# funds would stay in the wallet even if that ever changed. Chains that refuse
+# a send to yourself (Tron) pass ${RECIPIENT} instead.
+# Starts and ends on the balance screen (needs a synced balance).
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- tapOn:
+    id: balance_item_${COIN}
+- tapOn:
+    id: token_receive
+- copyTextFrom:
+    id: receive_address
+- evalScript: ${output.recipient = RECIPIENT || maestro.copiedText}
+- back
+
+- tapOn:
+    id: token_send
+- tapOn:
+    id: send_recipient_row
+- tapOn:
+    id: enter_address_input
+- inputText: ${output.recipient}
+- tapOn:
+    id: enter_address_submit
+- tapOn:
+    id: send_amount_input
+- inputText: ${AMOUNT}
+- extendedWaitUntil:
+    visible:
+      id: send_next
+      enabled: true
+    timeout: 30000
+- tapOn:
+    id: send_next
+
+# The tagged rows hold their values in child nodes
+- assertVisible:
+    text: ".*${AMOUNT}.*"
+    childOf:
+      id: confirm_amount
+- assertVisible:
+    text: ${output.recipient}
+    childOf:
+      id: confirm_recipient
+# The fee shows "n/a" until the estimate arrives
+- extendedWaitUntil:
+    visible:
+      text: ".*\\d.*"
+      childOf:
+        id: confirm_network_fee
+    timeout: 30000
+- back
+- back
+- back

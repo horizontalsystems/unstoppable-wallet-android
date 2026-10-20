@@ -1,0 +1,20 @@
+# An Ethereum send filled in up to the confirmation screen, from the team dust
+# wallet to its own address. Never broadcasts. Fails at the amount step when
+# the wallet holds less than AMOUNT plus the fee: see "Topping up the dust
+# wallet" in maestro/README.md.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "On-chain · ETH send up to confirmation"
+tags: [onchain, secret]
+env:
+  AMOUNT: "0.0001"
+---
+- runFlow:
+    file: ../../subflows/setup/dust_wallet_ready.yaml
+    env:
+      CHAINS: "ethereum"
+      COIN: "ETH"
+- runFlow:
+    file: ../../subflows/send/send_to_confirm.yaml
+    env:
+      COIN: "ETH"
+      AMOUNT: ${AMOUNT}

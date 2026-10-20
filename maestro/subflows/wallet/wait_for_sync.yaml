@@ -1,0 +1,8 @@
+# Waits on the balance screen until ${COIN} (a coin code such as BTC) has
+# synced, for up to ${TIMEOUT} ms (default 120000). A sync error fails it.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- extendedWaitUntil:
+    visible:
+      id: balance_item_${COIN}_synced
+    timeout: ${TIMEOUT || 120000}

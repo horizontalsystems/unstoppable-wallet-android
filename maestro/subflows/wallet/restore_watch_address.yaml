@@ -1,0 +1,35 @@
+# Adds a watch-only wallet for ${ADDRESS}. Addresses that fit several chains
+# (EVM) open a chain list; ${CHAIN} names the one to turn on (a blockchain
+# uid, default "ethereum"). Starts on a screen with "View-Only Wallet"
+# (onboarding_watch_wallet), ends on the balance screen.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- tapOn:
+    id: onboarding_watch_wallet
+- runFlow: ../onboarding/accept_terms_if_shown.yaml
+- tapOn:
+    id: watch_input
+- inputText: ${ADDRESS}
+# The keyboard covers the submit button. One Back press closes it; hideKeyboard
+# can press Back again and leave the page.
+- pressKey: Back
+- extendedWaitUntil:
+    visible:
+      id: watch_submit
+      enabled: true
+    timeout: 10000
+- tapOn:
+    id: watch_submit
+- runFlow:
+    when:
+      visible:
+        id: watch_chains_done
+    commands:
+      - tapOn:
+          id: watch_chain_${CHAIN || 'ethereum'}
+      - tapOn:
+          id: watch_chains_done
+- extendedWaitUntil:
+    visible:
+      id: balance_total
+    timeout: 15000

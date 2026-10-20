@@ -1,0 +1,24 @@
+# A Tron send filled in up to the confirmation screen, from the team dust
+# wallet. Never broadcasts. Fails at the amount step when
+# the wallet holds less than AMOUNT plus the fee: see "Topping up the dust
+# wallet" in maestro/README.md.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "On-chain · TRX send up to confirmation"
+tags: [onchain, secret]
+env:
+  AMOUNT: "1"
+  # The app refuses a TRX send to your own address, so this goes to the
+  # public test vector's Tron address
+  RECIPIENT: "TUoNzbLe6atCB2j9zjSaHeK9qNkn6qrGxz"
+---
+- runFlow:
+    file: ../../subflows/setup/dust_wallet_ready.yaml
+    env:
+      CHAINS: "tron"
+      COIN: "TRX"
+- runFlow:
+    file: ../../subflows/send/send_to_confirm.yaml
+    env:
+      COIN: "TRX"
+      AMOUNT: ${AMOUNT}
+      RECIPIENT: ${RECIPIENT}

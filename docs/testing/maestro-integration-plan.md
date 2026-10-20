@@ -23,8 +23,20 @@ integration for now.
 
 Phases 1 and 2 are done. Phase 3: the layout (3.1), the 13 journey steps (3.2,
 about 4.5 minutes) and the feature template with 4 feature tests (3.3) are in
-place and pass; 3.4 waits on the team dust wallet from Phase 4. Where the code
-differs from this plan:
+place and pass. 3.4: the BTC, ETH and TRX send-to-confirm tests and the dust
+balance check are written; BTC passes with the public wallet, ETH and TRX
+wait for the funded dust wallet. The history tests wait for the choice of
+watch addresses.
+
+Phase 4 is done in the repo (environment variable, `.env.example`, Keychain
+instructions, top-up procedure); creating and funding the wallet is left.
+Phases 5 and 6 are written and run on a developer Mac (`run-suite.sh --local`:
+2 emulators, journey and feature tests in about 6.5 minutes, retry, flaky
+report, redaction, Telegram message printed while no bot token is stored).
+Not done: the runner Mac itself, the `clean` snapshot (instances cold boot),
+screen recordings (6.2), and `report.html` / `index.html` (JUnit only).
+
+Where the code differs from this plan:
 
 - Subflows: `restore_from_phrase.yaml` takes `CHAINS`, terms are accepted only
   when shown, and there are no `nav/` subflows (a tab is one `tapOn`).
@@ -37,6 +49,14 @@ differs from this plan:
 - Step 13 checks App Status and the base currency, not the theme.
 - `receive/tron_solana_addresses` leaves TON out: its wallet contract version
   is chosen inside ton-kit, so an independent TON vector needs more work.
+- Sync waits use `balance_item_<code>_synced` on the balance row, not a
+  `token_sync_state` tag.
+- The TRX send test sends to the public vector's Tron address: the app
+  refuses a TRX send to your own address.
+- `device-prepare.sh` turns Wi-Fi off and checks the locale instead of setting
+  it: Wi-Fi fails Android's network check, and `adb root` is avoided.
+- The maintenance job runs daily (silence alarm needs it), with the flaky
+  digest on Sundays.
 
 ## What exists today
 
