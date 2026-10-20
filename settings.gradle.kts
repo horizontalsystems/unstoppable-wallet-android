@@ -13,11 +13,12 @@ dependencyResolutionManagement {
         mavenCentral()
         mavenLocal()
         maven { url = uri("https://jitpack.io") }
-        // horizontalsystems build of the Zodl Zcash SDK (branch hs/3.1.x, Slipstream enabled).
-        // Pinned to the commit of the fork's `maven` branch that published the current
-        // zcashSdk version, so the source is immutable; bump the commit together with the version.
+        // Zodl Zcash SDK. Zodl publishes no releases to Maven Central, only snapshots to the
+        // Sonatype snapshot repository, so zcashSdk pins a timestamped (unique) snapshot build
+        // and gradle/verification-metadata.xml pins its checksums: a re-upload of the same
+        // -SNAPSHOT version cannot change what the app builds against.
         maven {
-            url = uri("https://raw.githubusercontent.com/horizontalsystems/zodl-android-wallet-sdk/8f6c8661321543317cb3c7d09d57d4e2bdddad52/")
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
             content { includeGroup("com.zodl.android") }
         }
     }

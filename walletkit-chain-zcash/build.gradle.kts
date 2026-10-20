@@ -34,6 +34,7 @@ dependencies {
     api(libs.zcash.android.sdk)
     implementation(libs.zcash.android.backend)
     implementation(libs.zcash.android.slipstream)
+    implementation(libs.zcash.android.lightwallet.client)
 
     testImplementation(libs.junit)
 }
