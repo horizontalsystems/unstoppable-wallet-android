@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -62,6 +63,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTop
@@ -100,6 +102,7 @@ fun TransactionsScreen(
                     title = TranslatableString.ResString(R.string.Transactions_Filter),
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
+                    testTag = TestTags.TX_FILTER,
                     onClick = {
                         navigation.slideFromRight(TransactionsFilterPage)
 
@@ -139,13 +142,17 @@ fun TransactionsScreen(
                         if (transactionItems.isEmpty()) {
                             if (syncing) {
                                 ListEmptyView(
-                                    modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
+                                    modifier = Modifier
+                                        .background(ComposeAppTheme.colors.lawrence)
+                                        .testTag(TestTags.TX_WAITING_SYNC),
                                     text = stringResource(R.string.Transactions_WaitForSync),
                                     icon = R.drawable.ic_clock
                                 )
                             } else {
                                 ListEmptyView(
-                                    modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
+                                    modifier = Modifier
+                                        .background(ComposeAppTheme.colors.lawrence)
+                                        .testTag(TestTags.TX_EMPTY),
                                     text = stringResource(R.string.Transactions_EmptyList),
                                     icon = R.drawable.ic_outgoingraw
                                 )
@@ -253,6 +260,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
         RowUniversal(
             modifier = Modifier
                 .height(72.dp)
+                .testTag(TestTags.txItem(item.uid))
                 .background(ComposeAppTheme.colors.lawrence)
                 .clickable(onClick = onClick),
         ) {

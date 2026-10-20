@@ -48,13 +48,14 @@ fun TokenAmountInput(
     amountExceedsBalance: Boolean,
     onTokenClick: (() -> Unit)?,
     amountInputModifier: Modifier = Modifier,
+    tokenSelectorModifier: Modifier = Modifier,
 ) {
     BoxBordered(bottom = true) {
         Row(
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TokenSelector(token = token, onClick = onTokenClick)
+            TokenSelector(token = token, onClick = onTokenClick, modifier = tokenSelectorModifier)
             HSpacer(8.dp)
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
                 AmountInput(
@@ -160,16 +161,17 @@ fun AvailableBalanceRow(
 fun TokenSelector(
     token: Token?,
     onClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = if (onClick != null) {
-            Modifier.clickable(
+            modifier.clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onClick,
             )
         } else {
-            Modifier
+            modifier
         },
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -24,6 +24,7 @@ import io.horizontalsystems.walletkit.modules.settings.terms.TermsPage
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
@@ -103,6 +104,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
+                testTag = TestTags.ABOUT_APP_STATUS,
                 onClick = {
                     navigation.add(AppStatusPage)
 
@@ -113,6 +115,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_Terms,
                 R.drawable.ic_terms_20,
+                testTag = TestTags.ABOUT_TERMS,
                 showAlert = viewModel.termsShowAlert,
                 onClick = {
                     navigation.add(TermsPage())

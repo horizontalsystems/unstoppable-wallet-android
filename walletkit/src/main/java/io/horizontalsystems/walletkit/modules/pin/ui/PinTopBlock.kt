@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +30,7 @@ import io.horizontalsystems.walletkit.ui.compose.animations.shake
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_lucian
+import io.horizontalsystems.walletkit.uiv3.TestTags
 
 @Composable
 fun PinTopBlock(
@@ -54,7 +56,8 @@ fun PinTopBlock(
                 ) {
                     subhead2_grey(
                         text = title,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.testTag(TestTags.PIN_TITLE),
                     )
                     Spacer(Modifier.height(16.dp))
                 }
@@ -77,11 +80,12 @@ fun PinTopBlock(
                     Spacer(Modifier.height(16.dp))
                     when {
                         error != null -> {
-                            subhead2_lucian(text = error)
+                            subhead2_lucian(text = error, modifier = Modifier.testTag(TestTags.PIN_ERROR))
                         }
                         inputState.attemptsLeft != null -> {
                             subhead2_jacob(
-                                text = stringResource(R.string.Unlock_AttemptsLeft, inputState.attemptsLeft)
+                                text = stringResource(R.string.Unlock_AttemptsLeft, inputState.attemptsLeft),
+                                modifier = Modifier.testTag(TestTags.PIN_ATTEMPTS_LEFT),
                             )
                         }
                     }

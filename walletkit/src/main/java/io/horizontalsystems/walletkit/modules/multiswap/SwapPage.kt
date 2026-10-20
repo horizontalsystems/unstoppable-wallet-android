@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -84,6 +85,7 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.controls.FiatLinePlaceholder
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenSelector
@@ -715,7 +717,9 @@ private fun SwapActionButton(
                 }
 
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     title = title,
                     enabled = false
                 )
@@ -723,7 +727,9 @@ private fun SwapActionButton(
 
             SwapStep.Quoting -> {
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     title = stringResource(R.string.Swap_Quoting),
                     loadingIndicator = true,
                     enabled = false
@@ -737,7 +743,9 @@ private fun SwapActionButton(
                 val view = LocalView.current
 
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     variant = ButtonVariant.Secondary,
                     title = stringResource(R.string.Swap_EnableToken, currentStep.token.coin.code),
                     enabled = !enabling,
@@ -759,7 +767,9 @@ private fun SwapActionButton(
 
             SwapStep.Syncing -> {
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     title = stringResource(R.string.Balance_Syncing),
                     loadingIndicator = true,
                     enabled = false
@@ -768,7 +778,9 @@ private fun SwapActionButton(
 
             SwapStep.AmlChecking -> {
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     title = stringResource(R.string.Swap_Proceed),
                     loadingIndicator = true,
                     enabled = false
@@ -788,7 +800,9 @@ private fun SwapActionButton(
                 }
 
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     title = errorText,
                     enabled = false
                 )
@@ -805,7 +819,9 @@ private fun SwapActionButton(
                 val executor = action.executor(navigation, onActionCompleted)
 
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     variant = ButtonVariant.Secondary,
                     title = title,
                     loadingIndicator = action.inProgress,
@@ -818,7 +834,9 @@ private fun SwapActionButton(
 
             SwapStep.Proceed -> {
                 HSButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TestTags.SWAP_NEXT),
                     title = stringResource(R.string.Swap_Proceed),
                     enabled = proceedEnabled,
                     onClick = onClickNext
@@ -1073,7 +1091,9 @@ private fun SwapInput(
                     onValueChange = onValueChange,
                     onFiatValueChange = onFiatValueChange,
                     amountExceedsBalance = false,
-                    onTokenClick = onClickCoinFrom
+                    onTokenClick = onClickCoinFrom,
+                    amountInputModifier = Modifier.testTag(TestTags.SWAP_AMOUNT_IN),
+                    tokenSelectorModifier = Modifier.testTag(TestTags.SWAP_TOKEN_IN),
                 )
                 SwapCoinInputTo(
                     coinAmount = amountOut,
@@ -1093,6 +1113,7 @@ private fun SwapInput(
                     size = ButtonSize.Small,
                     icon = painterResource(id = R.drawable.ic_arrow_down_24),
                     enabled = switchPairsEnabled,
+                    modifier = Modifier.testTag(TestTags.SWAP_SWITCH),
                     onClick = onSwitchPairs
                 )
             }
@@ -1116,10 +1137,11 @@ private fun SwapCoinInputTo(
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 24.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TokenSelector(token = token, onClick = onClickCoin)
+            TokenSelector(token = token, onClick = onClickCoin, modifier = Modifier.testTag(TestTags.SWAP_TOKEN_OUT))
             HSpacer(8.dp)
             Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
                 Text(
+                    modifier = Modifier.testTag(TestTags.SWAP_AMOUNT_OUT),
                     text = (coinAmount ?: BigDecimal.ZERO).toPlainString(),
                     style = ComposeAppTheme.typography.headline1,
                     color = if (coinAmount == null) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
