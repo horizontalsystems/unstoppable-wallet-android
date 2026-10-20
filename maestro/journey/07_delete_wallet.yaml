@@ -1,0 +1,41 @@
+# Deletes the wallet created in step 02, which leaves the app without wallets.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+---
+- tapOn:
+    id: tab_settings
+- tapOn:
+    id: settings_manage_wallets
+- tapOn:
+    id: account_options_0
+- tapOn:
+    id: account_unlink
+# Delete stays disabled until every confirmation is checked
+- assertVisible:
+    id: unlink_delete
+    enabled: false
+- tapOn:
+    id: unlink_confirm_0
+- runFlow:
+    when:
+      visible:
+        id: unlink_confirm_1
+    commands:
+      - tapOn:
+          id: unlink_confirm_1
+- tapOn:
+    id: unlink_delete
+    enabled: true
+
+- runFlow:
+    when:
+      notVisible:
+        id: tab_balance
+    commands:
+      - back
+- tapOn:
+    id: tab_balance
+- assertVisible:
+    id: onboarding_new_wallet
+- assertVisible:
+    id: onboarding_existing_wallet

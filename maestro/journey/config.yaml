@@ -1,0 +1,24 @@
+# The journey: ordered steps on one app install. Run it on its own:
+#   maestro test maestro/journey
+# Flows are named after their files, so each entry is a file name without
+# ".yaml". A name that matches no flow is silently ignored: keep the list in
+# step with the folder.
+flows:
+  - "*.yaml"
+executionOrder:
+  # A later step makes no sense once an earlier one failed
+  continueOnFailure: false
+  flowsOrder:
+    - 01_onboarding
+    - 02_create_wallet
+    - 03_backup
+    - 04_set_pin
+    - 05_enable_token
+    - 06_receive
+    - 07_delete_wallet
+    - 08_restore_wallet
+    - 09_check_addresses
+    - 10_send_form
+    - 11_history
+    - 12_swap
+    - 13_settings

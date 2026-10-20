@@ -1,0 +1,50 @@
+# Sets a passcode with auto-lock on Immediate, then checks that coming back
+# from the background asks for it, rejects a wrong one and accepts the right
+# one.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+tags: [journey]
+env:
+  PIN: "135792"
+  WRONG_PIN: "246801"
+---
+- tapOn:
+    id: tab_settings
+- tapOn:
+    id: settings_security
+- tapOn:
+    id: security_passcode
+- runFlow:
+    file: ../subflows/pin/set_pin.yaml
+    env:
+      PIN: ${PIN}
+- tapOn:
+    id: security_autolock
+- tapOn:
+    id: autolock_immediate
+
+# Back from the background: locked straight away
+- pressKey: Home
+- launchApp:
+    stopApp: false
+- assertVisible:
+    id: pin_key_1
+
+# One wrong attempt stays well below the lockout threshold
+- runFlow:
+    file: ../subflows/pin/enter_pin.yaml
+    env:
+      PIN: ${WRONG_PIN}
+- assertVisible:
+    id: pin_attempts_left
+    text: "Attempts left: 4"
+- assertVisible:
+    id: pin_key_1
+
+# The right PIN returns to where the app was left
+- runFlow:
+    file: ../subflows/pin/enter_pin.yaml
+    env:
+      PIN: ${PIN}
+- assertVisible:
+    id: security_autolock
+- back

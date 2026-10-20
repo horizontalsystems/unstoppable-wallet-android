@@ -1,5 +1,5 @@
 # Checks all 9 terms and continues. The lower ones are below the fold.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.dev'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
 ---
 - scrollUntilVisible:
     element:

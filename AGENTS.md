@@ -270,8 +270,9 @@ Maestro selects elements by Compose test tag (`id:` in a flow).
 
 - A pull request that adds or changes a user-facing feature adds or updates a
   test under `maestro/features/<feature>/`, and tags the new screens it needs.
-- Each feature test starts from `maestro/subflows/setup/wallet_ready.yaml`,
-  never depends on another test, and runs in under 2 minutes.
+- Each feature test starts from `maestro/subflows/setup/wallet_ready.yaml`
+  (tests of onboarding or restore start from a fresh install), never depends
+  on another test, and runs in under 2 minutes.
 - Run it locally before opening the pull request. If the change touches a
   screen the journey walks through, run the journey too.
 
