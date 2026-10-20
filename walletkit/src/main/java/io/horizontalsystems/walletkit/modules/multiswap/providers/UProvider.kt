@@ -7,7 +7,6 @@ enum class UProvider(
     val aml: Boolean,
     val amlPrecheck: Boolean,
     val requireTerms: Boolean,
-    val riskLevel: RiskLevel,
     val isEvm: Boolean,
     val isSingleTransactionSwap: Boolean,
     // Provider accepts plain sends to its deposit address (any output type) on UTXO
@@ -29,7 +28,6 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.FAIR,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true,
@@ -47,7 +45,6 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.FAIR,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -59,7 +56,6 @@ enum class UProvider(
         true,
         true,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -71,7 +67,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -83,7 +78,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.FAIR,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -95,7 +89,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -107,7 +100,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -119,7 +111,6 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -131,7 +122,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -143,7 +133,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -156,7 +145,6 @@ enum class UProvider(
         aml = true,
         amlPrecheck = false,
         requireTerms = true,
-        riskLevel = RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -168,7 +156,6 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.FAIR,
         isEvm = true,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -180,7 +167,6 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.EXCELLENT,
         isEvm = true,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false
@@ -192,7 +178,6 @@ enum class UProvider(
         aml = true,
         amlPrecheck = false,
         requireTerms = true,
-        riskLevel = RiskLevel.GOOD,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -204,7 +189,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = true,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -216,7 +200,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = true,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         // Cross-chain default; a same-chain LI.FI pair IS a single tx —
         // USwapProvider.isSingleTransactionSwap resolves that per pair.
@@ -233,7 +216,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = true,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         // Cross-chain: the signed inbound tx is followed by Axelar's GMP delivery leg.
         isSingleTransactionSwap = false,
@@ -248,7 +230,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = false,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false
@@ -260,7 +241,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = false,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false,
@@ -275,7 +255,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = false,
-        riskLevel = RiskLevel.GOOD,
         isEvm = true,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -287,7 +266,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = false,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = true,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -302,7 +280,6 @@ enum class UProvider(
         aml = false,
         amlPrecheck = false,
         requireTerms = true,
-        riskLevel = RiskLevel.EXCELLENT,
         isEvm = false,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false

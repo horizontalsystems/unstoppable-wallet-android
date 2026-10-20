@@ -69,6 +69,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
+import io.horizontalsystems.walletkit.modules.multiswap.ui.routeScore
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -765,19 +766,21 @@ private fun ProviderCellInfo(
                 }
             )
         }
-        CellSecondary(
-            middle = {
-                CellMiddleInfoTextIcon(
-                    text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
-                    icon = painterResource(R.drawable.ic_info_24),
-                    iconTint = ComposeAppTheme.colors.grey,
-                )
-            },
-            right = {
-                RiskScore(quote.provider.riskLevel)
-            },
-            onClick = onClickProviderScoreInfo
-        )
+        routeScore(quote.provider.id)?.let { riskLevel ->
+            CellSecondary(
+                middle = {
+                    CellMiddleInfoTextIcon(
+                        text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
+                        icon = painterResource(R.drawable.ic_info_24),
+                        iconTint = ComposeAppTheme.colors.grey,
+                    )
+                },
+                right = {
+                    RiskScore(riskLevel)
+                },
+                onClick = onClickProviderScoreInfo
+            )
+        }
         quote.estimationTime?.let { estimationTime ->
             val infoTitle = stringResource(R.string.Swap_SwapTime)
             val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)

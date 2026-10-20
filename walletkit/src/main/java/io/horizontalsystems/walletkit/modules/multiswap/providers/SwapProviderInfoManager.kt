@@ -35,6 +35,15 @@ class SwapProviderInfoManager(
     @Volatile
     private var executionTypes: SwapExecutionTypes = restoredExecutionTypes()
 
+    private val _routeScoresFlow = MutableStateFlow(restoredRouteScores())
+
+    /**
+     * Route Scores by provider, as the server last published them. A flow rather than a lookup:
+     * a sync that changes only a score leaves the suspension index, and so the quotes, unchanged,
+     * and an open Routes list would otherwise keep the old score until it was reopened.
+     */
+    val routeScoresFlow = _routeScoresFlow.asStateFlow()
+
     /**
      * Scoped asset/chain/pair suspensions, indexed by provider id. Applied by [SwapQuoteService]
      * when it decides which providers can serve the current pair.
@@ -66,6 +75,9 @@ class SwapProviderInfoManager(
         // Same for execution types: a build that predates them has a fresh timestamp beside no
         // cache, and shielded ZEC delivery would stay off until the next hourly sync.
         localStorage.uSwapExecutionTypes ?: return false
+        // And for route scores: without this a build that predates them would show no score for
+        // up to an hour after the update.
+        localStorage.uSwapRouteScores ?: return false
 
         // A negative age means the stored timestamp is in the future — a clock correction, which
         // would otherwise read as fresh until the clock caught up.
@@ -97,6 +109,10 @@ class SwapProviderInfoManager(
                 val types = SwapExecutionTypes.from(responses)
                 executionTypes = types
                 localStorage.uSwapExecutionTypes = gson.toJson(types)
+
+                val scores = SwapRouteScores.from(responses)
+                _routeScoresFlow.value = scores
+                localStorage.uSwapRouteScores = gson.toJson(scores)
 
                 localStorage.uSwapSuspensions = gson.toJson(index)
                 localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
@@ -147,6 +163,17 @@ class SwapProviderInfoManager(
         swapQuote.tokenOut.blockchainType == BlockchainType.Zcash &&
             !USwapProvider.routeDeliversShieldedZcash(swapQuote) &&
             !deliversShieldedZcash(providerId, swapQuote.tokenIn)
+
+    private fun restoredRouteScores(): SwapRouteScores {
+        val json = localStorage.uSwapRouteScores ?: return SwapRouteScores()
+
+        return try {
+            gson.fromJson(json, SwapRouteScores::class.java) ?: SwapRouteScores()
+        } catch (e: Throwable) {
+            Log.e(TAG, "Failed to restore swap route scores", e)
+            SwapRouteScores()
+        }
+    }
 
     private fun restoredExecutionTypes(): SwapExecutionTypes {
         val json = localStorage.uSwapExecutionTypes ?: return SwapExecutionTypes()

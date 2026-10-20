@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,9 +14,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
+
+/**
+ * The provider's Route Score as the server last published it, null until it has published one.
+ * Observed, so a score that lands while the screen is open shows without a reopen.
+ */
+@Composable
+fun routeScore(providerId: String): RiskLevel? {
+    val scores by App.swapProviderInfoManager.routeScoresFlow.collectAsState()
+    return scores.riskLevel(providerId)
+}
 
 @Composable
 fun riskLevelColor(riskLevel: RiskLevel): Color = when (riskLevel) {

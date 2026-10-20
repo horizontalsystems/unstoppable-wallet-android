@@ -20,7 +20,6 @@ interface IMultiSwapProvider {
     val isEvm: Boolean
         get() = false
     val requireTerms: Boolean
-    val riskLevel: RiskLevel
     fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean
 
     val titleShort: String
@@ -88,5 +87,10 @@ enum class SwapProviderType(val title: String) {
 enum class RiskLevel(val title: Int, val icon: Int) {
     EXCELLENT(R.string.RiskLevel_Excellent, R.drawable.star_filled_24),
     GOOD(R.string.RiskLevel_Good, R.drawable.shield_check_filled_24),
-    FAIR(R.string.RiskLevel_Fair, R.drawable.thumbsup_24)
+    FAIR(R.string.RiskLevel_Fair, R.drawable.thumbsup_24);
+
+    companion object {
+        /** The server's `amlPolicy` value (`excellent` | `good` | `fair`); null for anything else. */
+        fun fromAmlPolicy(value: String): RiskLevel? = entries.firstOrNull { it.name.equals(value, ignoreCase = true) }
+    }
 }
