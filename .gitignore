@@ -13,3 +13,6 @@ gradle/gradle-daemon-jvm.properties
 
 # Working specs, synced to docs-hub instead of git
 /docs/specs/
+
+# Maestro secrets for local runs (see maestro/.env.example)
+maestro/.env.e2e
