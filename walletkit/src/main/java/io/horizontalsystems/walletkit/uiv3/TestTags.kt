@@ -98,8 +98,13 @@ object TestTags {
     const val TX_EMPTY = "tx_empty"
     const val TX_WAITING_SYNC = "tx_waiting_sync"
     const val TX_FILTER = "tx_filter"
-    // The record uid is the transaction hash on most chains
+    // The record uid is the transaction hash on most chains. Bitcoin-family
+    // chains use a random uid, so their rows cannot be picked by hash.
     fun txItem(uid: String) = "tx_item_${uid.take(8)}"
+
+    fun txInfoHash(hash: String) = "tx_info_hash_${hash.take(8)}"
+    // state: completed, pending, processing, failed or not_processed
+    fun txInfoStatus(state: String) = "tx_info_status_$state"
 
     const val SWAP_TOKEN_IN = "swap_token_in"
     const val SWAP_TOKEN_OUT = "swap_token_out"
