@@ -25,8 +25,9 @@
 set -uo pipefail
 
 SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPTS/load-config.sh"
 E2E_HOME="${E2E_HOME:-$HOME/e2e}"
-REPO="https://github.com/horizontalsystems/unstoppable-wallet-android.git"
+REPO="${E2E_REPO:-https://github.com/horizontalsystems/unstoppable-wallet-android.git}"
 BRANCH=""
 TAGS="journey"
 SHARDS=2
@@ -129,11 +130,11 @@ log "Building"
 APK="$CHECKOUT/app/build/outputs/apk/fdroidCi/e2e/app-fdroidCi-e2e.apk"
 
 # --- Secrets ----------------------------------------------------------------
-# Read from the Keychain into the environment; MAESTRO_ variables reach the
+# From .env.e2e (loaded above) or the Keychain; MAESTRO_ variables reach the
 # flows without -e, so the phrase never appears in process arguments.
 if has_tag onchain && [ -z "${MAESTRO_E2E_DUST_MNEMONIC:-}" ]; then
     MAESTRO_E2E_DUST_MNEMONIC="$(security find-generic-password -s uw-e2e -a dust_mnemonic -w 2>/dev/null)" \
-        || setup_failed "dust_mnemonic is not in the Keychain (see maestro/README.md, Secrets)"
+        || setup_failed "MAESTRO_E2E_DUST_MNEMONIC is not in .env.e2e or the Keychain (see maestro/README.md, Secrets)"
     export MAESTRO_E2E_DUST_MNEMONIC
 fi
 

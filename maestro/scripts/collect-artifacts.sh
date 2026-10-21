@@ -9,6 +9,7 @@
 #
 # Usage: collect-artifacts.sh <run dir>   (reads MAESTRO_E2E_DUST_MNEMONIC)
 set -uo pipefail
+source "$(dirname "$0")/load-config.sh"
 
 RUN_DIR="${1:?usage: collect-artifacts.sh <run dir>}"
 SECRET="${MAESTRO_E2E_DUST_MNEMONIC:-}"

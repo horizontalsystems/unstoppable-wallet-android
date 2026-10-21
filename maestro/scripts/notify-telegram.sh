@@ -7,13 +7,14 @@
 #   other success with flaky  🟡 naming the flaky tests
 #   other successes           nothing
 #
-# The token and chat id come from the Keychain (uw-e2e telegram_token and
-# telegram_chat_id) or from TELEGRAM_TOKEN and TELEGRAM_CHAT_ID. Without
-# them the message is printed instead of sent.
+# The token and chat id come from TELEGRAM_TOKEN and TELEGRAM_CHAT_ID (the
+# environment or .env.e2e) or from the Keychain (uw-e2e telegram_token and
+# telegram_chat_id). Without them the message is printed instead of sent.
 #
 # Usage: notify-telegram.sh <run dir> <trigger: nightly|commit|manual>
 #        notify-telegram.sh --text <message>
 set -uo pipefail
+source "$(dirname "$0")/load-config.sh"
 
 RUN_DIR="${1:?usage: notify-telegram.sh <run dir> <trigger> | --text <message>}"
 TRIGGER="${2:-manual}"
