@@ -13,6 +13,7 @@
 #
 # Usage: device-prepare.sh <serial> [apk]
 set -euo pipefail
+source "$(dirname "$0")/load-config.sh"
 
 SERIAL="${1:?usage: device-prepare.sh <serial> [apk]}"
 APK="${2:-}"
