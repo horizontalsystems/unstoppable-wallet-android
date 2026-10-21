@@ -1,0 +1,35 @@
+# Watches the first Ethereum address of the team dust wallet, unused since
+# 2019. Its newest transactions, both on 2019-09-30, are 0x23c5362d
+# (received) and 0xc7d8388d (sent). The send tests never broadcast, so the
+# history only changes if someone tops the wallet up with ETH.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "On-chain · ETH watch wallet history"
+tags: [onchain, history]
+---
+- runFlow:
+    file: ../../subflows/setup/watch_wallet_ready.yaml
+    env:
+      ADDRESS: "0x68c04eb567B80e712Cbe4dE97Dc8D44182F5d272"
+      CHAIN: "ethereum"
+- runFlow:
+    file: ../../subflows/wallet/wait_for_sync.yaml
+    env:
+      COIN: "ETH"
+- tapOn:
+    id: balance_transactions
+- extendedWaitUntil:
+    visible:
+      id: tx_item_0xc7d838
+    timeout: 90000
+- assertVisible:
+    id: tx_item_0x23c536
+- tapOn:
+    id: tx_item_0xc7d838
+- extendedWaitUntil:
+    visible:
+      id: tx_info_status_completed
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: tx_info_hash_0xc7d838
+    direction: DOWN

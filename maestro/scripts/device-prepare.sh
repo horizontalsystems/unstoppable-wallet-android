@@ -67,7 +67,7 @@ adb_s shell input keyevent KEYCODE_ENTER
 sleep 1
 
 if adb_s shell dumpsys window | grep -q "mDreamingLockscreen=true\|isKeyguardShowing=true\|mShowingLockscreen=true"; then
-    echo "Keyguard is still showing on $SERIAL" >&2
+    echo "Keyguard is still showing on $SERIAL. If the device PIN differs from E2E_DEVICE_PIN, change it with: adb -s $SERIAL shell locksettings set-pin --old <old> $PIN" >&2
     exit 1
 fi
 
