@@ -245,10 +245,35 @@ string:
 
 ## Testing
 
-- Unit tests in `app/src/test/`
+- Unit tests in `src/test/` of the module that holds the code (`walletkit`,
+  `walletkit-chain-<chain>`, `app`)
 - Instrumentation tests in `app/src/androidTest/`
 - Maestro UI tests in `maestro/`, run against the `fdroidCiE2e` build. Setup,
   layout and how to run them: `maestro/README.md`
+
+### Tests a change needs
+
+Every change that alters behaviour adds or updates its tests in the same
+change, written by whoever makes the change. Decide which tests apply before
+calling the work done:
+
+| Change | Test |
+|---|---|
+| User-facing feature added or changed: a new screen, flow, or behaviour the user sees | Maestro feature test, see [UI tests for features](#ui-tests-for-features) |
+| A screen the journey walks through (`maestro/journey/`) | Run the journey; update the steps that break |
+| Logic: amounts, fees, parsing, address validation, sync or state handling in a ViewModel, Service, or adapter | Unit tests for the changed behaviour and its edge cases |
+| Bug fix | A test that fails without the fix, at the lowest level that reproduces the bug: a unit test where possible, a Maestro test when only the UI shows it |
+| A chain added or changed | As `docs/chain-integration/README.md` says, plus history and send-to-confirm tests under `maestro/onchain/` |
+| A test tag renamed or removed | The flows in `maestro/` that use it |
+
+No new test is needed for a refactor that keeps behaviour, for strings and
+translations, styling, build configuration, or dependency updates. Existing
+tests must still pass.
+
+Run the tests you added or touched before finishing. When a needed test cannot
+be written, for example because it needs a hardware wallet, a paid
+subscription, or a real broadcast, say which test is missing and why in the
+pull request description and in your summary to the developer.
 
 ### UI test tags
 
