@@ -1,0 +1,49 @@
+# Watches the second receive address (BIP84) of the team dust wallet. It has
+# two transactions from October 2020: 10615 sat received in a9b668e2 and
+# spent in 18aae972. Bitcoin rows have a random
+# uid, so the test opens them by position (newest first) and checks the
+# hash on the details page.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+name: "On-chain · BTC watch wallet history"
+tags: [onchain, history]
+---
+- runFlow:
+    file: ../../subflows/setup/watch_wallet_ready.yaml
+    env:
+      ADDRESS: "bc1qwz69edkl08csyevgh9vd4wsl6ttts4kpmd4sss"
+      CHAIN: "bitcoin"
+- runFlow:
+    file: ../../subflows/wallet/wait_for_sync.yaml
+    env:
+      COIN: "BTC"
+      TIMEOUT: "180000"
+- tapOn:
+    id: balance_transactions
+- extendedWaitUntil:
+    visible:
+      id: "tx_item_.*"
+      index: 1
+    timeout: 90000
+- tapOn:
+    id: "tx_item_.*"
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: tx_info_status_completed
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: tx_info_hash_18aae972
+    direction: DOWN
+- back
+- tapOn:
+    id: "tx_item_.*"
+    index: 1
+- extendedWaitUntil:
+    visible:
+      id: tx_info_status_completed
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: tx_info_hash_a9b668e2
+    direction: DOWN
