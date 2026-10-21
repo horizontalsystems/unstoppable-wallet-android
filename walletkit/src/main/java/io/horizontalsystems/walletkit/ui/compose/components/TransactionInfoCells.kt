@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -55,6 +56,7 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -365,8 +367,19 @@ fun TransactionInfoStatusCell(
     navigation: HSNavigation,
     notProcessed: Boolean = false,
 ) {
+    val testState = when {
+        notProcessed -> "not_processed"
+        else -> when (status) {
+            TransactionStatus.Completed -> "completed"
+            TransactionStatus.Failed -> "failed"
+            TransactionStatus.Pending -> "pending"
+            is TransactionStatus.Processing -> "processing"
+        }
+    }
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .testTag(TestTags.txInfoStatus(testState)),
     ) {
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_Status),
@@ -488,7 +501,9 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
     val context = LocalContext.current
 
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .testTag(TestTags.txInfoHash(transactionHash)),
     ) {
         subhead2_grey(
             text = stringResource(R.string.TransactionInfo_Id),
