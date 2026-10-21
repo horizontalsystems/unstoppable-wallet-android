@@ -9,6 +9,7 @@
 set -uo pipefail
 
 SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPTS/load-config.sh"
 E2E_HOME="${E2E_HOME:-$HOME/e2e}"
 REPO="${E2E_REPO:-https://github.com/horizontalsystems/unstoppable-wallet-android.git}"
 LAST="$E2E_HOME/last-tested-sha"

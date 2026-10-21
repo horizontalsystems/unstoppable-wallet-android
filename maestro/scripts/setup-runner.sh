@@ -8,7 +8,8 @@
 # run-suite.sh checks out other branches in its clone and would replace
 # itself mid-run. Rerun this script after changing them.
 #
-# The secrets are stored by hand, once (see maestro/README.md, Secrets).
+# The secrets go into $E2E_HOME/.env.e2e, which this creates empty from
+# .env.example (see maestro/README.md, Secrets).
 #
 # Usage: setup-runner.sh [--dry-run]
 #   --dry-run  only print the launchd agents it would install
@@ -64,6 +65,10 @@ ANDROID_HOME="$ANDROID_HOME" "$SCRIPTS/avd-create.sh"
 mkdir -p "$E2E_HOME/bin" "$E2E_HOME/logs" "$E2E_HOME/runs"
 cp "$SCRIPTS"/*.sh "$SCRIPTS"/*.py "$E2E_HOME/bin/"
 chmod +x "$E2E_HOME"/bin/*
+if [ ! -f "$E2E_HOME/.env.e2e" ]; then
+    cp "$SCRIPTS/../.env.example" "$E2E_HOME/.env.e2e"
+    chmod 600 "$E2E_HOME/.env.e2e"
+fi
 
 mkdir -p "$HOME/Library/LaunchAgents"
 for template in "$SCRIPTS"/launchd/*.plist; do
@@ -74,4 +79,4 @@ for template in "$SCRIPTS"/launchd/*.plist; do
 done
 
 echo "Runner set up. Agents: $(launchctl list | grep -c io.horizontalsystems.e2e) loaded."
-echo "Store the secrets next if you have not (maestro/README.md, Secrets)."
+echo "Fill in $E2E_HOME/.env.e2e if you have not (maestro/README.md, Secrets)."
