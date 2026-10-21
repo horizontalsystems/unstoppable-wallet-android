@@ -25,8 +25,8 @@ Phases 1 and 2 are done. Phase 3: the layout (3.1), the 13 journey steps (3.2,
 about 4.5 minutes) and the feature template with 4 feature tests (3.3) are in
 place and pass. 3.4: the BTC, ETH and TRX send-to-confirm tests and the dust
 balance check are written; BTC passes with the public wallet, ETH and TRX
-wait for the funded dust wallet. The history tests wait for the choice of
-watch addresses.
+wait for the funded dust wallet. The history tests watch addresses of the
+dust wallet and pass.
 
 Phase 4 is done in the repo (environment variable, `.env.example`, Keychain
 instructions, top-up procedure); creating and funding the wallet is left.
@@ -41,6 +41,13 @@ Where the code differs from this plan:
 - Subflows: `restore_from_phrase.yaml` takes `CHAINS`, terms are accepted only
   when shown, and there are no `nav/` subflows (a tab is one `tapOn`).
   `restore_watch_address.yaml` and `wait_for_sync.yaml` come with 3.4.
+- History: one test per chain (`history/eth_watch_history`,
+  `history/btc_watch_history`) covers both the list and the details page.
+  They watch addresses of the dust wallet, which has been unused since 2019
+  and 2020, rather than unrelated public addresses: the early ETH addresses
+  we tried show dust as spam and memo transfers as unknown. Bitcoin rows have
+  a random uid, so the BTC test opens rows by position and checks
+  `tx_info_hash_<hash>`.
 - Step 04 checks a wrong PIN by `pin_attempts_left`: the unlock screen shows
   the attempts left, not `pin_error`.
 - Step 10 reads the amount error from the `send_next` label; there is no

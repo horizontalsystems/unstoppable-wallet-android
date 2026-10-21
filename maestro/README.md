@@ -257,6 +257,7 @@ maestro/
 ├── onchain/            # funded wallet or live history, nightly
 └── subflows/
     ├── setup/wallet_ready.yaml   # the start of every feature test
+    ├── setup/watch_wallet_ready.yaml  # fresh install with a watch-only wallet (ADDRESS, CHAIN)
     ├── onboarding/               # intro, terms
     ├── wallet/                   # create, restore (MNEMONIC, CHAINS), watch address, wait for sync
     ├── send/                     # send_to_confirm (COIN, AMOUNT)
