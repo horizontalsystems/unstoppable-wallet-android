@@ -150,6 +150,8 @@ can stay open.
 | `emulators-up.sh` / `emulators-down.sh` | Start and stop read-only instances |
 | `device-prepare.sh` | Screen lock, animations, locale, unlock, network and clock checks, APK install |
 | `collect-artifacts.sh` | Removes the dust wallet phrase and on-chain screenshots from a run directory |
+| `maestro.sh` | `maestro` with the settings from `.env.e2e` loaded |
+| `load-config.sh` | Loads `.env.e2e`; sourced by the other scripts |
 | `notify-telegram.sh` | Posts failures, setup errors, flaky passes and the nightly heartbeat; prints them when no bot token is stored |
 | `junit.py` | Reads Maestro's JUnit reports: failed flows to retry, the summary, the history file |
 | `maintenance.sh` | Daily (launchd): silence alarm, pruning, disk check, Sunday flaky digest |
@@ -182,32 +184,41 @@ itself mid-run. Rerun `setup-runner.sh` after changing a script.
 
 ## Secrets
 
-The on-chain tests (`onchain/`, tagged `secret`) restore the team dust wallet
-from `MAESTRO_E2E_DUST_MNEMONIC`. Its phrase is never committed. Only the
-public test vectors live in the flows.
+The phrase of the team dust wallet, the Telegram bot and other local settings
+go in `maestro/.env.e2e`. It is gitignored; `.env.example` lists every
+setting with a comment. Create it once and fill it in:
 
-- **Runner Mac:** the phrase is stored in the `ci` user's login Keychain and
-  the run script exports it:
+```bash
+cp maestro/.env.example maestro/.env.e2e
+chmod 600 maestro/.env.e2e
+```
 
-  ```bash
-  security add-generic-password -s uw-e2e -a dust_mnemonic -w   # prompts for the phrase
-  export MAESTRO_E2E_DUST_MNEMONIC="$(security find-generic-password -s uw-e2e -a dust_mnemonic -w)"
-  ```
+| Setting | Used for |
+|---|---|
+| `MAESTRO_E2E_DUST_MNEMONIC` | The on-chain tests (`onchain/`, tagged `secret`) |
+| `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` | Run reports; without them the message is printed |
+| `E2E_REPO` | Repository the runner clones and polls; a local path works |
+| `E2E_HOME` | Results, lock and history (default `~/e2e`) |
+| `E2E_DEVICE_PIN` | Emulator screen lock PIN (default `1111`) |
 
-  The Telegram bot is stored the same way, as `telegram_token` and
-  `telegram_chat_id`.
+Every script loads the file itself. To run flows by hand with it, use the
+wrapper instead of `maestro`:
 
-- **Your machine:** use the same Keychain entry, or copy `.env.example` to
-  `maestro/.env.e2e` (gitignored), fill it in and load it before running:
+```bash
+maestro/scripts/maestro.sh --device emulator-5554 test maestro/onchain
+```
 
-  ```bash
-  set -a; source maestro/.env.e2e; set +a
-  maestro --device emulator-5554 test maestro/onchain
-  ```
-
-Never pass the phrase with `-e`: it would show in the process list. Maestro
-writes typed text to `commands.json` and `maestro.log`, so the output of a
-`secret` run must not be shared before it is redacted.
+- On the runner Mac the file is `~/e2e/.env.e2e`, next to the scripts in
+  `~/e2e/bin`; `setup-runner.sh` creates it empty.
+- A variable already set in the environment wins over the file.
+- Instead of the file, the phrase and the bot can live in the Keychain, which
+  the scripts check when a value is empty:
+  `security add-generic-password -s uw-e2e -a dust_mnemonic -w` (and
+  `telegram_token`, `telegram_chat_id`).
+- Never pass the phrase with `-e`: it would show in the process list. Maestro
+  writes typed text to `commands.json` and `maestro.log`; `run-suite.sh`
+  removes the phrase from its run directories, but output from a hand-run
+  `secret` flow must not be shared as it is.
 
 ## Topping up the dust wallet
 

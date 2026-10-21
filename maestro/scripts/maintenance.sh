@@ -9,6 +9,7 @@
 set -uo pipefail
 
 SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPTS/load-config.sh"
 E2E_HOME="${E2E_HOME:-$HOME/e2e}"
 notify() { "$SCRIPTS/notify-telegram.sh" --text "$1"; }
 
