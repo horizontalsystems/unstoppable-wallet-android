@@ -6,6 +6,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.nearkit.network.Network
 import io.horizontalsystems.walletkit.core.managers.NearRpcSourceManager
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerNear
+import io.horizontalsystems.walletkit.modules.address.AddressHandlerNearName
 import io.horizontalsystems.walletkit.modules.addtoken.AddNearTokenBlockchainService
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -30,9 +31,25 @@ class NearAddressAndTokenTest {
         // single-label names are valid ids but would claim any lowercase word
         assertFalse(handler.isSupported("alice"))
         assertFalse(handler.isSupported("Alice.near"))
+        // names other name services may own are left to them
+        assertFalse(handler.isSupported("bob.tg"))
+        assertFalse(handler.isSupported("vitalik.eth"))
+        assertFalse(handler.isSupported("vitalik.zec"))
+        assertFalse(handler.isSupported("alice.sweat"))
         assertFalse(handler.isSupported("GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"))
         assertFalse(handler.isSupported("rMxCKbEDwqr76QuheSUMdEGf4B9xJ8m5De"))
         assertFalse(handler.isSupported("bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"))
+    }
+
+    @Test
+    fun nearOnlyFieldsTakeAnyNamedAccount() {
+        val nameHandler = AddressHandlerNearName()
+
+        assertTrue(nameHandler.isSupported("alice.near"))
+        assertTrue(nameHandler.isSupported("bob.tg"))
+        assertTrue(nameHandler.isSupported("token.sweat"))
+        assertTrue(nameHandler.isSupported("5510e2b44cae6eb807e3e0e45d579dda058c274abcba15e5cb84636f5d1ee412"))
+        assertFalse(nameHandler.isSupported("alice"))
     }
 
     @Test

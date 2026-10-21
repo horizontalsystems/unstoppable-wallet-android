@@ -32,6 +32,7 @@ import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerNear
+import io.horizontalsystems.walletkit.modules.address.AddressHandlerNearName
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.addtoken.AddNearTokenBlockchainService
 import io.horizontalsystems.walletkit.modules.addtoken.AddTokenModule
@@ -144,7 +145,7 @@ class NearChainPlugin : ChainPlugin {
      * A named account (`alice.near`) is NEAR's own name and resolves to itself. Claiming it here,
      * ahead of ENS and UDN, spares the remote lookups they would make for any dotted name.
      */
-    override fun domainAddressHandlers(): List<IAddressHandler> = listOf(AddressHandlerNear())
+    override fun domainAddressHandlers(): List<IAddressHandler> = listOf(AddressHandlerNearName())
 
     override fun addressValidator(token: Token): EnterAddressValidator = NearAddressValidator(token)
 

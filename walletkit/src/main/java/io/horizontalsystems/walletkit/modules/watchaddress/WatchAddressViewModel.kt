@@ -178,13 +178,16 @@ class WatchAddressViewModel(
 
     private fun setAddress(address: Address) {
         this.address = address
+        type = addressType(address)
+
         if (!accountNameEdited) {
-            address.domain?.let {
+            // A NEAR named account is its own name, so the parser leaves domain empty for it.
+            val name = address.domain ?: address.hex.takeIf { type == Type.NearAddress && it.contains('.') }
+            name?.let {
                 accountName = it
             }
         }
 
-        type = addressType(address)
         inputState = DataState.Success(address.domain ?: address.hex)
 
         syncSubmitButtonType()
