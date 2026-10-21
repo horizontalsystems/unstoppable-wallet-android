@@ -1,0 +1,13 @@
+# Clears the app, passes the intro and adds a watch-only wallet for
+# ${ADDRESS} on ${CHAIN} (a blockchain uid, default "ethereum"). Ends on the
+# balance screen.
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+---
+- launchApp:
+    clearState: true
+- runFlow: ../onboarding/pass_intro.yaml
+- runFlow:
+    file: ../wallet/restore_watch_address.yaml
+    env:
+      ADDRESS: ${ADDRESS}
+      CHAIN: ${CHAIN || 'ethereum'}
