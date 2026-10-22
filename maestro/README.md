@@ -141,12 +141,12 @@ release builds stay ARM only.
 | Nightly, 19:00 UTC | The same plus the on-chain tests, on the newest `version/*` branch | Always |
 | Manual (Actions → Maestro UI Tests → Run workflow) | Your choice of tags, or a nightly run | Only as a nightly |
 
-The checks do not block merging. A run takes about 15 minutes: the APK
-build, then the journey and the other tests in two parallel jobs, each on
-its own emulator resumed from a cached snapshot.
+The checks do not block merging. A run takes about 12 minutes: the APK
+build, then three parallel jobs, each on its own emulator: the journey, and
+the feature and on-chain tests split in two (`SHARD` in `ci-run.sh`).
 
 - **Results:** each job writes its summary on the run page and uploads
-  `maestro-journey` or `maestro-flows`: JUnit reports, Maestro output with
+  `maestro-journey`, `maestro-flows-1` or `maestro-flows-2`: JUnit reports, Maestro output with
   failure screenshots, `logcat.txt`, `setup.log` and `summary.txt`.
 - **Setup errors:** when the emulator cannot be prepared (lock screen,
   network, clock), the job fails with exit code 2 and `setup.log` shows the
@@ -157,7 +157,7 @@ its own emulator resumed from a cached snapshot.
 
 | Script | What it does |
 |---|---|
-| `ci-run.sh` | One part of the suite (`journey` or `flows`) on the booted emulator, with one retry |
+| `ci-run.sh` | One part of the suite (`journey`, or a shard of `flows`) on the booted emulator, with one retry |
 | `device-prepare.sh` | Screen lock, animations, locale, unlock, network and clock checks, APK install |
 | `collect-artifacts.sh` | Removes the dust wallet phrase and on-chain screenshots before upload |
 | `notify-telegram.sh` | Posts the nightly result and failed pushes to Telegram |
