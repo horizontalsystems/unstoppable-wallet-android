@@ -300,6 +300,9 @@ Maestro selects elements by Compose test tag (`id:` in a flow).
   on another test, and runs in under 2 minutes.
 - Run it locally before opening the pull request. If the change touches a
   screen the journey walks through, run the journey too.
+- Pull requests to `version/*` also run the journey and the feature tests in
+  GitHub Actions ("Maestro UI Tests"). The check does not block merging, but a
+  red run is looked at before merging.
 
 ## Git Commit Messages
 
