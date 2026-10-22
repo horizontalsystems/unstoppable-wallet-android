@@ -1,52 +1,52 @@
 #!/bin/bash
-# Reports a run to the team Telegram chat through the Bot API.
+# Reports a GitHub Actions run of the suite to the team Telegram chat.
 #
-#   failed run (any trigger)  ❌ with counts, failed flows and a screenshot
-#   setup failure             ⚠️ with the step that failed
-#   nightly success           ✅ one line, as a daily heartbeat
-#   other success with flaky  🟡 naming the flaky tests
-#   other successes           nothing
+#   setup failure      ⚠️ naming the part and the step that failed
+#   failed tests       ❌ with counts and the failed flows
+#   nightly success    ✅ with counts, as a daily heartbeat
+#   other successes    nothing
 #
-# The token and chat id come from TELEGRAM_TOKEN and TELEGRAM_CHAT_ID (the
-# environment or .env.e2e) or from the Keychain (uw-e2e telegram_token and
-# telegram_chat_id). Without them the message is printed instead of sent.
+# RESULTS_DIR holds one folder per part (journey, flows), each with the
+# summary.txt and, after a setup failure, the setup-error.txt that ci-run.sh
+# writes. BRANCH, SHA and RUN_URL describe the run. The token and chat id come
+# from TELEGRAM_TOKEN and TELEGRAM_CHAT_ID; without them the message is
+# printed instead of sent.
 #
-# Usage: notify-telegram.sh <run dir> <trigger: nightly|commit|manual>
-#        notify-telegram.sh --text <message>
+# Usage: notify-telegram.sh <results dir> <trigger: nightly|push|manual>
 set -uo pipefail
 source "$(dirname "$0")/load-config.sh"
 
-RUN_DIR="${1:?usage: notify-telegram.sh <run dir> <trigger> | --text <message>}"
+RESULTS="${1:?usage: notify-telegram.sh <results dir> <trigger>}"
 TRIGGER="${2:-manual}"
+TOKEN="${TELEGRAM_TOKEN:-}"
+CHAT="${TELEGRAM_CHAT_ID:-}"
+where="${BRANCH:-?} ${SHA:0:8}"
 
-TOKEN="${TELEGRAM_TOKEN:-$(security find-generic-password -s uw-e2e -a telegram_token -w 2>/dev/null)}"
-CHAT="${TELEGRAM_CHAT_ID:-$(security find-generic-password -s uw-e2e -a telegram_chat_id -w 2>/dev/null)}"
+count() { cat "$RESULTS"/*/summary.txt 2>/dev/null | grep -c "^\[$1\]"; }
+names() { cat "$RESULTS"/*/summary.txt 2>/dev/null | sed -n "s/^\[$1\] \(.*\) ([0-9].*/• \1$2/p"; }
+passed=$(count Passed)
+failed=$(count Failed)
+flaky=$(count Flaky)
 
-meta() { sed -n "s/.*\"$1\": \"\{0,1\}\([^\",]*\).*/\1/p" "$RUN_DIR/meta.json" 2>/dev/null | head -1; }
-branch="$(meta branch)"
-sha="$(meta sha)"
-where="$branch ${sha:0:8}"
-passed=$(grep -c '^\[Passed' "$RUN_DIR/summary.txt" 2>/dev/null)
-failed=$(grep -c '^\[Failed' "$RUN_DIR/summary.txt" 2>/dev/null)
-flaky=$(grep -c '^\[Flaky' "$RUN_DIR/summary.txt" 2>/dev/null)
-flaky_names="$(sed -n 's/^\[Flaky\] \(.*\) ([0-9].*/• \1 (flaky)/p' "$RUN_DIR/summary.txt" 2>/dev/null)"
-photo=""
+setup_errors=""
+for part in journey flows; do
+    if [ -f "$RESULTS/$part/setup-error.txt" ]; then
+        setup_errors+="• $part: $(cat "$RESULTS/$part/setup-error.txt")"$'\n'
+    elif [ ! -f "$RESULTS/$part/summary.txt" ]; then
+        setup_errors+="• $part: no results (the job stopped before the tests)"$'\n'
+    fi
+done
 
-if [ "$RUN_DIR" = "--text" ]; then
-    text="$TRIGGER"
-elif [ -f "$RUN_DIR/setup-error.txt" ]; then
-    text="⚠️ E2E setup failed ($TRIGGER) on $where: $(cat "$RUN_DIR/setup-error.txt")"
-elif [ -f "$RUN_DIR/secret-leak" ]; then
-    text="⚠️ E2E run on $where left the dust wallet phrase in its output; nothing else was sent. Check $RUN_DIR"
-elif [ "${failed:-0}" -gt 0 ]; then
-    names="$(sed -n 's/^\[Failed\] \(.*\) ([0-9].*/• \1/p' "$RUN_DIR/summary.txt")"
+if [ -n "$setup_errors" ]; then
+    text="$(printf '⚠️ E2E %s on %s: setup failed\n%s%s passed, %s failed\n%s' \
+        "$TRIGGER" "$where" "$setup_errors" "$passed" "$failed" "${RUN_URL:-}")"
+elif [ "$failed" -gt 0 ]; then
     text="$(printf '❌ E2E %s on %s: %s passed, %s flaky, %s failed\n%s\n%s\n%s' \
-        "$TRIGGER" "$where" "$passed" "$flaky" "$failed" "$names" "$flaky_names" "$RUN_DIR")"
-    photo="$(find "$RUN_DIR" -name "*.png" -path "*screenshots*" 2>/dev/null | head -1)"
-elif [ "$TRIGGER" != "nightly" ] && [ "${flaky:-0}" -gt 0 ]; then
-    text="$(printf '🟡 E2E %s on %s passed with %s flaky\n%s' "$TRIGGER" "$where" "$flaky" "$flaky_names")"
+        "$TRIGGER" "$where" "$passed" "$flaky" "$failed" \
+        "$(names Failed '')" "$(names Flaky ' (flaky)')" "${RUN_URL:-}")"
 elif [ "$TRIGGER" = "nightly" ]; then
-    text="$(printf '✅ E2E nightly on %s: %s passed, %s flaky\n%s' "$where" "$passed" "$flaky" "$flaky_names")"
+    text="$(printf '✅ E2E nightly on %s: %s passed, %s flaky\n%s\n%s' \
+        "$where" "$passed" "$flaky" "$(names Flaky ' (flaky)')" "${RUN_URL:-}")"
 else
     exit 0
 fi
@@ -58,13 +58,8 @@ if [ -z "$TOKEN" ] || [ -z "$CHAT" ]; then
 fi
 
 # The URL holds the token, so curl reads it from stdin rather than from its
-# arguments, which other users can see in the process list
-api="https://api.telegram.org/bot$TOKEN"
-echo "url = \"$api/sendMessage\"" | curl -fsS -o /dev/null -K - \
+# arguments, which other processes can see
+echo "url = \"https://api.telegram.org/bot$TOKEN/sendMessage\"" | curl -fsS -o /dev/null -K - \
     --data-urlencode "chat_id=$CHAT" --data-urlencode "text=$text" \
-    || echo "Telegram sendMessage failed" >&2
-if [ -n "$photo" ]; then
-    echo "url = \"$api/sendPhoto\"" | curl -fsS -o /dev/null -K - \
-        -F "chat_id=$CHAT" -F "photo=@$photo" \
-        || echo "Telegram sendPhoto failed" >&2
-fi
+    --data-urlencode "disable_web_page_preview=true" \
+    || { echo "Telegram sendMessage failed" >&2; exit 1; }
