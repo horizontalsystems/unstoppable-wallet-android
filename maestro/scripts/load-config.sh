@@ -1,7 +1,7 @@
 # Sourced by the other scripts: loads the local settings file into the
-# environment. The file is maestro/.env.e2e in a working copy and
-# ~/e2e/.env.e2e on the runner (next to bin/), or $E2E_CONFIG when set.
-# Copy .env.example to create it; it is gitignored.
+# environment. The file is maestro/.env.e2e, or $E2E_CONFIG when set. Copy
+# .env.example to create it; it is gitignored. On GitHub Actions there is no
+# file and the values come from the environment.
 #
 # Lines are KEY=value. A variable already set in the environment wins, so a
 # one-off override needs no edit. The file is read as data, never executed.
