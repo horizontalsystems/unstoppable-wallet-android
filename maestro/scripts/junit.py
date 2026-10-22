@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reads the JUnit reports Maestro writes, for run-suite.sh.
+"""Reads the JUnit reports Maestro writes, for ci-run.sh.
 
   junit.py failed-files <report.xml>
       Prints the flow file of each failed test case, one per line.
@@ -7,12 +7,7 @@
   junit.py summary <run dir>
       Prints "[Passed|Failed|Flaky] <flow> (<seconds>s)" per test case. Flaky
       means failed, then passed on the retry.
-
-  junit.py history <run dir> <results.jsonl>
-      Appends one JSON line per test case of the run (flow, result, retry
-      result, duration, branch, sha) for the flake report.
 """
-import json
 import os
 import sys
 import xml.etree.ElementTree as ET
@@ -49,26 +44,6 @@ def summary(run_dir):
         print(f"[{label}] {case.get('name')} ({round(float(case.get('time') or 0))}s)")
 
 
-def history(run_dir, out):
-    meta = json.load(open(os.path.join(run_dir, "meta.json")))
-    lines = []
-    for case, passed, retry_passed in results(run_dir):
-        lines.append({
-            "flow": case.get("name"),
-            "file": case.get("file"),
-            "result": "passed" if passed else "failed",
-            "retry": None if passed else ("passed" if retry_passed else "failed"),
-            "duration": float(case.get("time") or 0),
-            "branch": meta.get("branch"),
-            "sha": meta.get("sha"),
-            "finished": meta.get("finished"),
-        })
-    os.makedirs(os.path.dirname(out), exist_ok=True)
-    with open(out, "a") as f:
-        for line in lines:
-            f.write(json.dumps(line, ensure_ascii=False) + "\n")
-
-
 if __name__ == "__main__":
     command, *args = sys.argv[1:]
-    {"failed-files": failed_files, "summary": summary, "history": history}[command](*args)
+    {"failed-files": failed_files, "summary": summary}[command](*args)

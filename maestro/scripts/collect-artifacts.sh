@@ -5,7 +5,7 @@
 # phrase can still be found anywhere.
 #
 # Maestro writes typed text in plain text to commands.json and maestro.log,
-# so this runs before anything from the run directory leaves the Mac.
+# so this runs before anything from the run directory is uploaded.
 #
 # Usage: collect-artifacts.sh <run dir>   (reads MAESTRO_E2E_DUST_MNEMONIC)
 set -uo pipefail
