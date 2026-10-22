@@ -17,7 +17,7 @@ source "$(dirname "$0")/load-config.sh"
 
 SERIAL="${1:?usage: device-prepare.sh <serial> [apk]}"
 APK="${2:-}"
-APP_ID="${APP_ID:-io.horizontalsystems.bankwallet.fdroidci.e2e}"
+APP_ID="${APP_ID:-io.horizontalsystems.bankwallet.appcenter.e2e}"
 PIN="${E2E_DEVICE_PIN:-1111}"
 # The host adb server can drop a command while several emulators boot at once
 # ("protocol fault"), so every call is retried

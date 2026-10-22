@@ -1,7 +1,7 @@
 # Backs up the wallet created in step 02: reveals the generated 12-word
 # phrase, answers the verification quiz with the right words, and checks the
 # wallet is no longer flagged as backup-required.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 - tapOn:

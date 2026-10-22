@@ -1,5 +1,5 @@
 # Deletes the wallet created in step 02, which leaves the app without wallets.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 - tapOn:
