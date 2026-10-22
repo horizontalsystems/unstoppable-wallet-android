@@ -138,8 +138,8 @@ Checked on Maestro 2.11.0 with the API 35 image:
 ## GitHub Actions
 
 `.github/workflows/maestro_tests.yml` runs the suite on GitHub's Linux
-runners, on an x86_64 API 35 emulator. Debug builds include x86_64 for this;
-release builds stay ARM only.
+runners, on an x86_64 API 35 emulator. Only the e2e build includes x86_64 for
+this; dev and release builds stay ARM only.
 
 | When | What runs | Telegram |
 |---|---|---|
