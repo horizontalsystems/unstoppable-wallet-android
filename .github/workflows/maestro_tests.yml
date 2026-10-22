@@ -1,12 +1,34 @@
 name: Maestro UI Tests
 
 on:
+  push:
+    branches:
+      - 'version/**'
+      # Temporary: runs the workflow from the feature branch before it merges
+      - maestro-test-plan
+  pull_request:
+    branches:
+      - 'version/**'
+  schedule:
+    # 19:00 UTC, 01:00 in Bishkek
+    - cron: '0 19 * * *'
   workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Tags of the feature and on-chain tests (journey always runs)'
+        default: 'feature,history'
+
+concurrency:
+  group: maestro-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,11 +40,33 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Build the e2e APK
+        run: ./gradlew :app:assembleCiE2e --stacktrace --no-daemon
 
-      - name: Build CI Debug
-        run: ./gradlew assembleCiDebug --stacktrace --no-daemon
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-apk
+          path: app/build/outputs/apk/ci/e2e/app-ci-e2e.apk
+          retention-days: 3
+
+  test:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [journey, flows]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download the APK
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-apk
+          path: apk
 
       - name: Enable KVM
         run: |
@@ -30,26 +74,34 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Install Maestro CLI
+      - name: Install Maestro
         run: |
-          curl -Ls https://get.maestro.mobile.dev | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+          curl -Ls https://get.maestro.mobile.dev | MAESTRO_VERSION=2.11.0 bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
-      - name: Run Maestro tests on emulator
+      - name: Run Maestro tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
+          api-level: 35
+          target: google_apis
           arch: x86_64
+          profile: pixel_6
+          ram-size: 4096M
+          disk-size: 6000M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           disable-animations: true
-          script: |
-            adb install app/build/outputs/apk/ci/debug/app-ci-debug.apk
-            maestro test -e APP_ID=io.horizontalsystems.bankwallet.appcenter.dev --format junit --output maestro-report.xml maestro/
+          script: maestro/scripts/ci-run.sh ${{ matrix.part }} apk/app-ci-e2e.apk maestro-results ${{ inputs.tags || 'feature,history' }}
 
-      - name: Upload test output
-        if: failure()
+      # Maestro writes typed text to its logs; this removes the dust wallet
+      # phrase and the on-chain screenshots before anything is uploaded
+      - name: Redact results
+        if: always()
+        run: maestro/scripts/collect-artifacts.sh maestro-results
+
+      - name: Upload results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-output
-          path: |
-            ~/.maestro/tests/**
-            maestro-report.xml
+          name: maestro-${{ matrix.part }}
+          path: maestro-results
+          retention-days: 14
