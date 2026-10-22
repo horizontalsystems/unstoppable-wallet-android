@@ -58,15 +58,24 @@ if [ "$locale" != "en-US" ]; then
 fi
 adb_s shell cmd alarm set-timezone UTC >/dev/null
 
-# Unlock the keyguard; this also restarts the keystore's 24-hour window
-adb_s shell input keyevent KEYCODE_WAKEUP
-adb_s shell wm dismiss-keyguard
-sleep 1
-adb_s shell input text "$PIN"
-adb_s shell input keyevent KEYCODE_ENTER
-sleep 1
+# Unlock the keyguard; this also restarts the keystore's 24-hour window.
+# Right after boot the PIN pad can take several seconds to appear, and a PIN
+# typed before it is lost (it does not count as a wrong attempt), so the
+# unlock is retried.
+keyguard_showing() {
+    adb_s shell dumpsys window | grep -q "mDreamingLockscreen=true\|isKeyguardShowing=true\|mShowingLockscreen=true"
+}
+for _ in $(seq 5); do
+    adb_s shell input keyevent KEYCODE_WAKEUP
+    adb_s shell wm dismiss-keyguard
+    sleep 3
+    adb_s shell input text "$PIN"
+    adb_s shell input keyevent KEYCODE_ENTER
+    sleep 3
+    keyguard_showing || break
+done
 
-if adb_s shell dumpsys window | grep -q "mDreamingLockscreen=true\|isKeyguardShowing=true\|mShowingLockscreen=true"; then
+if keyguard_showing; then
     echo "Keyguard is still showing on $SERIAL. If the device PIN differs from E2E_DEVICE_PIN, change it with: adb -s $SERIAL shell locksettings set-pin --old <old> $PIN" >&2
     exit 1
 fi
