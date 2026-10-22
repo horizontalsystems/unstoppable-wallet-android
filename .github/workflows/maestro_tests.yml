@@ -114,7 +114,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [journey, flows]
+        # The flows take longer than the journey, so two jobs share them
+        include:
+          - name: journey
+            part: journey
+          - name: flows-1
+            part: flows
+            shard: 1/2
+          - name: flows-2
+            part: flows
+            shard: 2/2
+    name: test (${{ matrix.name }})
     env:
       # Only the nightly runs the on-chain tests; other runs never see the phrase
       MAESTRO_E2E_DUST_MNEMONIC: ${{ needs.plan.outputs.nightly == 'true' && secrets.MAESTRO_E2E_DUST_MNEMONIC || '' }}
@@ -141,31 +151,13 @@ jobs:
           curl -Ls https://get.maestro.mobile.dev | MAESTRO_VERSION=2.11.0 bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
-      # A booted emulator snapshot, so each job resumes it instead of a cold
-      # boot. Change the key when the emulator settings below change
-      - name: Restore the emulator snapshot
-        id: avd-cache
+      # The emulator boots cold in about 35 s; a saved snapshot failed to
+      # load on these runners, so only the system image download is cached
+      - name: Cache the emulator system image
         uses: actions/cache@v6
         with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-35-google_apis-x86_64-pixel_6-v1
-
-      - name: Create the emulator snapshot
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 35
-          target: google_apis
-          arch: x86_64
-          profile: pixel_6
-          ram-size: 4096M
-          disk-size: 6000M
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: echo "Created the emulator snapshot"
+          path: /usr/local/lib/android/sdk/system-images/android-35/google_apis/x86_64
+          key: system-image-35-google_apis-x86_64-v1
 
       - name: Run Maestro tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -176,10 +168,9 @@ jobs:
           profile: pixel_6
           ram-size: 4096M
           disk-size: 6000M
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: maestro/scripts/ci-run.sh ${{ matrix.part }} apk/app-ci-e2e.apk maestro-results ${{ needs.plan.outputs.tags }}
+          script: SHARD=${{ matrix.shard }} maestro/scripts/ci-run.sh ${{ matrix.part }} apk/app-ci-e2e.apk maestro-results ${{ needs.plan.outputs.tags }}
 
       # Maestro writes typed text to its logs; this removes the dust wallet
       # phrase and the on-chain screenshots, and fails if the phrase is left
@@ -192,12 +183,15 @@ jobs:
         if: always() && steps.redact.outcome == 'success'
         uses: actions/upload-artifact@v7
         with:
-          name: maestro-${{ matrix.part }}
+          name: maestro-${{ matrix.name }}
           path: maestro-results
           retention-days: 14
 
   report:
     needs: [plan, build, test]
+    env:
+      # The matrix names of the test jobs
+      PARTS: journey flows-1 flows-2
     # Nightly results, and failed pushes to version/*
     if: >-
       always() && (needs.plan.outputs.nightly == 'true' ||
@@ -221,7 +215,7 @@ jobs:
       - name: Rename result folders
         run: |
           mkdir -p results
-          for part in journey flows; do
+          for part in $PARTS; do
             if [ -d "results/maestro-$part" ]; then mv "results/maestro-$part" "results/$part"; fi
           done
 
@@ -236,7 +230,7 @@ jobs:
           BUILD_RESULT: ${{ needs.build.result }}
         run: |
           if [ "$BUILD_RESULT" = "failure" ]; then
-            for part in journey flows; do
+            for part in $PARTS; do
               mkdir -p "results/$part"
               echo "the e2e APK did not build" > "results/$part/setup-error.txt"
             done
