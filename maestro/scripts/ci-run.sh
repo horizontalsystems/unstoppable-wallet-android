@@ -9,8 +9,9 @@
 #            one by one
 #
 # Results, JUnit reports and logs go to OUT_DIR, the summary also to
-# $GITHUB_STEP_SUMMARY when set. Exit codes: 0 pass (flaky included),
-# 1 failures, 2 setup error.
+# $GITHUB_STEP_SUMMARY when set. The emulator setup is logged to setup.log;
+# when it fails, setup-error.txt holds its last line for the report. Exit
+# codes: 0 pass (flaky included), 1 failures, 2 setup error.
 #
 # Usage: ci-run.sh <journey|flows> <apk> <out dir> [tags, default feature,history]
 set -uo pipefail
@@ -23,9 +24,16 @@ OUT="${3:?out dir}"
 TAGS="${4:-feature,history}"
 mkdir -p "$OUT"
 
+setup_failed() {
+    echo "$1" | tee "$OUT/setup-error.txt" >&2
+    exit 2
+}
+
 SERIAL="$(adb devices | awk 'NR > 1 && $2 == "device" { print $1; exit }')"
-[ -n "$SERIAL" ] || { echo "No emulator found" >&2; exit 2; }
-"$SCRIPTS/device-prepare.sh" "$SERIAL" "$APK" || exit 2
+[ -n "$SERIAL" ] || setup_failed "No emulator found"
+if ! "$SCRIPTS/device-prepare.sh" "$SERIAL" "$APK" 2>&1 | tee "$OUT/setup.log"; then
+    setup_failed "$(tail -n 1 "$OUT/setup.log")"
+fi
 
 adb -s "$SERIAL" logcat -c
 adb -s "$SERIAL" logcat -v time >"$OUT/logcat.txt" 2>&1 &
