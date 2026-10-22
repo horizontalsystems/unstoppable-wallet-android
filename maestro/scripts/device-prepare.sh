@@ -62,8 +62,13 @@ adb_s shell cmd alarm set-timezone UTC >/dev/null
 # Right after boot the PIN pad can take several seconds to appear, and a PIN
 # typed before it is lost (it does not count as a wrong attempt), so the
 # unlock is retried.
+# Output is matched after it is read: grep -q at the end of a pipe exits on
+# the first match, the command before it can then fail on the closed pipe,
+# and pipefail turns a match into a failure
 keyguard_showing() {
-    adb_s shell dumpsys window | grep -q "mDreamingLockscreen=true\|isKeyguardShowing=true\|mShowingLockscreen=true"
+    local out
+    out="$(adb_s shell dumpsys window)"
+    grep -qE "mDreamingLockscreen=true|isKeyguardShowing=true|mShowingLockscreen=true" <<<"$out"
 }
 for _ in $(seq 5); do
     adb_s shell input keyevent KEYCODE_WAKEUP
@@ -89,15 +94,18 @@ fi
 # connection; ping is not used because CI runners block ICMP.
 adb_s shell svc wifi disable
 default_validated() {
-    local id
-    id=$(adb_s shell dumpsys connectivity | sed -n 's/^Active default network: \([0-9]*\).*/\1/p' | tr -d '\r')
-    [ -n "$id" ] && adb_s shell dumpsys connectivity | grep "network{$id}" | grep -q "IS_VALIDATED"
+    local out id
+    out="$(adb_s shell dumpsys connectivity | tr -d '\r')"
+    id="$(sed -n 's/^Active default network: \([0-9]*\).*/\1/p' <<<"$out")"
+    [ -n "$id" ] || return 1
+    [[ "$(grep "network{$id}" <<<"$out")" == *IS_VALIDATED* ]]
 }
+validated=false
 for _ in $(seq 60); do
-    default_validated && break
+    if default_validated; then validated=true; break; fi
     sleep 2
 done
-if ! default_validated; then
+if ! $validated; then
     echo "$SERIAL has no validated network (no internet, or DNS fails); the app would show No Internet" >&2
     exit 1
 fi
