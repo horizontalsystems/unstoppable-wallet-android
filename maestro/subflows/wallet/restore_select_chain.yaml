@@ -1,6 +1,6 @@
 # Turns on ${CHAIN} in the restore chain list. For chains with a single token,
 # which enable without a settings sheet.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - scrollUntilVisible:
     element:

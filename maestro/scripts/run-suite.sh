@@ -125,9 +125,9 @@ log "Testing $BRANCH at ${SHA:0:8}, tags $TAGS, results in $RUN_DIR"
 
 # --- Build ------------------------------------------------------------------
 log "Building"
-(cd "$CHECKOUT" && ./gradlew --quiet :app:assembleFdroidCiE2e) >"$RUN_DIR/build.log" 2>&1 \
+(cd "$CHECKOUT" && ./gradlew --quiet :app:assembleCiE2e) >"$RUN_DIR/build.log" 2>&1 \
     || setup_failed "build (see build.log)"
-APK="$CHECKOUT/app/build/outputs/apk/fdroidCi/e2e/app-fdroidCi-e2e.apk"
+APK="$CHECKOUT/app/build/outputs/apk/ci/e2e/app-ci-e2e.apk"
 
 # --- Secrets ----------------------------------------------------------------
 # From .env.e2e (loaded above) or the Keychain; MAESTRO_ variables reach the

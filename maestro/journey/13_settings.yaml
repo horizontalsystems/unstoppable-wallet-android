@@ -1,5 +1,5 @@
 # App Status renders, and a base currency change reaches the balance screen.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 - tapOn:

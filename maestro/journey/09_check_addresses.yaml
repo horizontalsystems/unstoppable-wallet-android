@@ -1,7 +1,7 @@
 # Guards address derivation for the wallet restored in step 08: BIP84 for
 # Bitcoin and m/44'/60'/0'/0/0 for Ethereum. Both addresses were derived
 # independently and checked against the spec test vectors.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 env:
   BTC_ADDRESS: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"

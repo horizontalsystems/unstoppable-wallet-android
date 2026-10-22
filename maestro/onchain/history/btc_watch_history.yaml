@@ -3,7 +3,7 @@
 # spent in 18aae972. Bitcoin rows have a random
 # uid, so the test opens them by position (newest first) and checks the
 # hash on the details page.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "On-chain · BTC watch wallet history"
 tags: [onchain, history]
 ---

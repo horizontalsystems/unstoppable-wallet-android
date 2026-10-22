@@ -4,7 +4,7 @@
 # funds would stay in the wallet even if that ever changed. Chains that refuse
 # a send to yourself (Tron) pass ${RECIPIENT} instead.
 # Starts and ends on the balance screen (needs a synced balance).
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - tapOn:
     id: balance_item_${COIN}

@@ -1,6 +1,6 @@
 # The send form rejects an invalid address and an amount above the balance.
 # The restored wallet holds nothing, so this never reaches confirmation.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 env:
   RECIPIENT: "bc1qndm0dw0clq4ucr3gnrvpjdculf9xqje3g53gc7"

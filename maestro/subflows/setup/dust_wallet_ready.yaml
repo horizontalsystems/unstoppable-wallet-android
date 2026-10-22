@@ -2,7 +2,7 @@
 # restores the team dust wallet with the chains in ${CHAINS}. The phrase comes
 # from MAESTRO_E2E_DUST_MNEMONIC in the environment, never from the repo (see
 # maestro/README.md, "Secrets"). Waits until ${COIN} has synced.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - assertTrue:
     condition: ${typeof MAESTRO_E2E_DUST_MNEMONIC !== 'undefined' && MAESTRO_E2E_DUST_MNEMONIC.split(' ').length >= 12}

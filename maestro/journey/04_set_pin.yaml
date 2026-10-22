@@ -1,7 +1,7 @@
 # Sets a passcode with auto-lock on Immediate, then checks that coming back
 # from the background asks for it, rejects a wrong one and accepts the right
 # one.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 env:
   PIN: "135792"

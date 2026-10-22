@@ -1,6 +1,6 @@
 # The only journey step that clears the app. Every later step continues from
 # the state the previous one left.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 # First launch after a fresh install must show the intro

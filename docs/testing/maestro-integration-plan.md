@@ -11,7 +11,7 @@ integration for now.
 | Topic | Decision |
 |---|---|
 | Framework | Maestro YAML flows for the regression suite; LLM tools only as an optional later phase |
-| Target build | F-Droid CI flavor (`fdroidCi`) with a dedicated `e2e` build type |
+| Target build | CI flavor (`ci`, the dev build) with a dedicated `e2e` build type: `ciE2e`. Phases 1–3 used `fdroidCi`; see Status |
 | Runner | Dedicated Apple Silicon Mac, native arm64 emulators, scheduled by launchd. No GitHub Actions integration for now |
 | Triggers | New commits on the newest `version/*` branch (polled), nightly, manual |
 | On-chain | No broadcasts. Send flows stop at the confirmation screen. Testnet support is deferred |
@@ -37,6 +37,16 @@ Not done: the runner Mac itself, the `clean` snapshot (instances cold boot),
 screen recordings (6.2), and `report.html` / `index.html` (JUnit only).
 
 Where the code differs from this plan:
+
+- Target build: `ciE2e` (applicationId
+  `io.horizontalsystems.bankwallet.appcenter.e2e`, APK
+  `app/build/outputs/apk/ci/e2e/app-ci-e2e.apk`) replaces `fdroidCiE2e`. The
+  F-Droid flavors ship no WalletConnect (C10), and `ci` is the dev build the
+  team already uses. The sections below still name `fdroidCi` where they
+  describe how Phases 1–3 were built.
+- Test tags are exposed as resource ids only in the e2e build
+  (`exposeTestTags()` checks `e2eBuild`), so release builds keep their
+  accessibility tree unchanged.
 
 - Subflows: `restore_from_phrase.yaml` takes `CHAINS`, terms are accepted only
   when shown, and there are no `nav/` subflows (a tab is one `tapOn`).

@@ -1,5 +1,5 @@
 # Types ${PIN} on the PIN pad. PINs are 6 digits (PinModule.PIN_COUNT).
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - evalScript: ${output.pinDigit = 0}
 - repeat:

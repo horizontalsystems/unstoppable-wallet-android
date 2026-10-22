@@ -1,7 +1,7 @@
 # A phrase of valid words with a wrong checksum is rejected before any chain
 # is chosen. Starts from a fresh install rather than wallet_ready: restoring
 # is the feature under test.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "Restore · checksum-invalid phrase is rejected"
 tags: [feature, restore]
 env:
