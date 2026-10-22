@@ -2,8 +2,9 @@
 
 ## Setup
 
-Tests run against the `ci` flavor, the dev build the team uses, on an arm64
-emulator.
+Tests run against the `ci` flavor, the dev build the team uses: locally on an
+arm64 emulator, and in GitHub Actions on an x86_64 one (see
+[GitHub Actions](#github-actions)).
 
 | Tool | Version |
 |---|---|
@@ -125,70 +126,77 @@ Checked on Maestro 2.11.0 with the API 35 image:
   show "No Internet".
 - **Android Studio and adb:** with Studio open, it restarts the adb server
   while new emulators boot, and adb commands fail for half a minute
-  ("protocol fault"). The scripts retry through it; the runner Mac has no
-  Studio.
+  ("protocol fault"). The scripts retry through it.
 
-## Runner
+## GitHub Actions
 
-`scripts/run-suite.sh` runs the suite the way the runner Mac does: lock,
-fresh checkout, build, read-only emulators, journey on one, feature and
-on-chain tests split across the others, results in `~/e2e/runs/`, Telegram
-report. Try it on your machine against your working copy:
+`.github/workflows/maestro_tests.yml` runs the suite on GitHub's Linux
+runners, on an x86_64 API 35 emulator. Debug builds include x86_64 for this;
+release builds stay ARM only.
 
-```bash
-maestro/scripts/run-suite.sh --local . --tags journey
-maestro/scripts/run-suite.sh --local . --tags feature --shards 2
-```
+| When | What runs | Telegram |
+|---|---|---|
+| Push to `version/*` | Journey, feature and history tests | When something fails |
+| Pull request to `version/*` | Journey, feature and history tests | No |
+| Nightly, 19:00 UTC | The same plus the on-chain tests, on the newest `version/*` branch | Always |
+| Manual (Actions → Maestro UI Tests → Run workflow) | Your choice of tags, or a nightly run | Only as a nightly |
 
-It boots its own read-only instances of `e2e_api35` on ports from 5580, so
-an `e2e_api35` you started yourself must be stopped first; other emulators
-can stay open.
+The checks do not block merging. A run takes about 15 minutes: the APK
+build, then the journey and the other tests in two parallel jobs, each on
+its own emulator resumed from a cached snapshot.
+
+- **Results:** each job writes its summary on the run page and uploads
+  `maestro-journey` or `maestro-flows`: JUnit reports, Maestro output with
+  failure screenshots, `logcat.txt`, `setup.log` and `summary.txt`.
+- **Setup errors:** when the emulator cannot be prepared (lock screen,
+  network, clock), the job fails with exit code 2 and `setup.log` shows the
+  step. No tests ran, so it says nothing about the app.
+- **Nightly from a branch:** scheduled runs use the default branch's copy of
+  the workflow. To try the nightly on another branch, run the workflow by hand
+  with "nightly" on and the branch in "ref".
 
 | Script | What it does |
 |---|---|
-| `setup-runner.sh` | Installs the toolchain, the AVD, the scripts in `~/e2e/bin` and the launchd agents on a fresh `ci` user |
-| `run-suite.sh` | One suite run; `--branch`, `--tags`, `--shards`, `--local`, `--trigger` |
-| `poll-commits.sh` | Every 10 minutes (launchd): runs the journey when the newest `version/*` has a new head |
-| `emulators-up.sh` / `emulators-down.sh` | Start and stop read-only instances |
+| `ci-run.sh` | One part of the suite (`journey` or `flows`) on the booted emulator, with one retry |
 | `device-prepare.sh` | Screen lock, animations, locale, unlock, network and clock checks, APK install |
-| `collect-artifacts.sh` | Removes the dust wallet phrase and on-chain screenshots from a run directory |
-| `maestro.sh` | `maestro` with the settings from `.env.e2e` loaded |
+| `collect-artifacts.sh` | Removes the dust wallet phrase and on-chain screenshots before upload |
+| `notify-telegram.sh` | Posts the nightly result and failed pushes to Telegram |
+| `junit.py` | Reads Maestro's JUnit reports: failed flows to retry, the summary |
+| `avd-create.sh` | Creates the local emulator (Apple Silicon, arm64 image) |
+| `maestro.sh` | `maestro` with the settings from `.env.e2e` loaded, for local runs |
 | `load-config.sh` | Loads `.env.e2e`; sourced by the other scripts |
-| `notify-telegram.sh` | Posts failures, setup errors, flaky passes and the nightly heartbeat; prints them when no bot token is stored |
-| `junit.py` | Reads Maestro's JUnit reports: failed flows to retry, the summary, the history file |
-| `maintenance.sh` | Daily (launchd): silence alarm, pruning, disk check, Sunday flaky digest |
-| `flaky-report.py` | 14-day flake rate per flow from `~/e2e/history/results.jsonl` |
-
-Each run directory holds `journey.xml` and `flows.xml` (JUnit), the Maestro
-output with failure screenshots, `logcat-<serial>.txt`, `build.log`,
-`summary.txt` and `meta.json`, plus `*-retry.*` when something was retried.
-`~/e2e/runs/latest` points to the newest.
 
 ### Failures, retries and flaky tests
 
-- A failed test gets one retry in the same run. A failed journey reruns from
+- A failed test gets one retry in the same job. A failed journey reruns from
   step 01, because its steps depend on each other; feature and on-chain tests
   rerun one by one. A test that passes on the retry counts as passing and is
-  reported as **flaky**.
-- Every result goes to `~/e2e/history/results.jsonl`. The Sunday digest lists
-  flows that flaked 3 times or in more than 10% of runs in 14 days.
-- Such a feature or on-chain test gets the `quarantine` tag and an issue
-  labelled `e2e-flaky`. `config.yaml` leaves quarantined tests out; fix or
-  delete them within 2 weeks.
+  reported as **flaky** in the summary and in Telegram.
+- A feature or on-chain test that keeps flaking gets the `quarantine` tag and
+  an issue labelled `e2e-flaky`. `config.yaml` leaves quarantined tests out;
+  fix or delete them within 2 weeks.
 - Journey steps are never quarantined: a flaky step is fixed first, or moved
   into a feature test.
 - A flaky test is fixed by waiting on a concrete element. Sleeps and extra
   retries do not count as a fix.
 
-The launchd agents run the scripts from `~/e2e/bin`, not from the checkout:
-`run-suite.sh` checks out other branches in its clone and would replace
-itself mid-run. Rerun `setup-runner.sh` after changing a script.
-
 ## Secrets
 
-The phrase of the team dust wallet, the Telegram bot and other local settings
-go in `maestro/.env.e2e`. It is gitignored; `.env.example` lists every
-setting with a comment. Create it once and fill it in:
+GitHub Actions reads these repository secrets:
+
+| Secret | Used for |
+|---|---|
+| `MAESTRO_E2E_DUST_MNEMONIC` | The on-chain tests (`onchain/`, tagged `secret`); passed to nightly runs only |
+| `MAESTRO_TELEGRAM_TOKEN` | The bot that posts reports (`TELEGRAM_TOKEN` is the deploy bot's) |
+| `TELEGRAM_CHAT_ID` | The chat the reports go to |
+
+Pull requests from forks get no secrets, and nothing they run needs them.
+Maestro writes typed text to `commands.json` and `maestro.log`, so every job
+passes its results through `collect-artifacts.sh` before uploading, and
+uploads nothing when the phrase is still found.
+
+For local runs the same settings go in `maestro/.env.e2e`. It is gitignored;
+`.env.example` lists every setting with a comment:
 
 ```bash
 cp maestro/.env.example maestro/.env.e2e
@@ -197,30 +205,19 @@ chmod 600 maestro/.env.e2e
 
 | Setting | Used for |
 |---|---|
-| `MAESTRO_E2E_DUST_MNEMONIC` | The on-chain tests (`onchain/`, tagged `secret`) |
-| `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` | Run reports; without them the message is printed |
-| `E2E_REPO` | Repository the runner clones and polls; a local path works |
-| `E2E_HOME` | Results, lock and history (default `~/e2e`) |
+| `MAESTRO_E2E_DUST_MNEMONIC` | The on-chain tests |
+| `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` | Trying `notify-telegram.sh`; without them the message is printed |
 | `E2E_DEVICE_PIN` | Emulator screen lock PIN (default `1111`) |
 
-Every script loads the file itself. To run flows by hand with it, use the
-wrapper instead of `maestro`:
+Run flows with the wrapper so they get the file's values:
 
 ```bash
 maestro/scripts/maestro.sh --device emulator-5554 test maestro/onchain
 ```
 
-- On the runner Mac the file is `~/e2e/.env.e2e`, next to the scripts in
-  `~/e2e/bin`; `setup-runner.sh` creates it empty.
 - A variable already set in the environment wins over the file.
-- Instead of the file, the phrase and the bot can live in the Keychain, which
-  the scripts check when a value is empty:
-  `security add-generic-password -s uw-e2e -a dust_mnemonic -w` (and
-  `telegram_token`, `telegram_chat_id`).
-- Never pass the phrase with `-e`: it would show in the process list. Maestro
-  writes typed text to `commands.json` and `maestro.log`; `run-suite.sh`
-  removes the phrase from its run directories, but output from a hand-run
-  `secret` flow must not be shared as it is.
+- Never pass the phrase with `-e`: it would show in the process list. Output
+  from a hand-run `secret` flow contains the phrase; do not share it as it is.
 
 ## Topping up the dust wallet
 
@@ -372,6 +369,7 @@ Rules for feature tests:
 
 | Tests | Tag | When |
 |---|---|---|
-| Journey (about 4.5 min) | `journey` | Every new commit on `version/*`, and nightly |
-| Feature tests | `feature` | Nightly, and locally by the developer while working on the feature |
-| Real send to confirm (funded wallet), history with known transactions | `onchain` | Nightly |
+| Journey (about 5 min) | `journey` | Every push and pull request to `version/*`, nightly, and locally when a journey screen changes |
+| Feature tests | `feature` | Every push and pull request to `version/*`, nightly, and locally by the developer while working on the feature |
+| History with known transactions | `onchain`, `history` | Every push and pull request to `version/*`, nightly |
+| Real send to confirm (funded wallet) | `onchain`, `secret` | Nightly |
