@@ -1,5 +1,9 @@
 name: Maestro UI Tests
 
+# Pushes and pull requests to version/* run the journey and the feature and
+# history tests. The nightly run tests the newest version/* branch and adds
+# the on-chain tests, which use the dust wallet phrase. Telegram gets every
+# nightly result and every failed push to version/*. See maestro/README.md.
 on:
   push:
     branches:
@@ -10,12 +14,20 @@ on:
     branches:
       - 'version/**'
   schedule:
-    # 19:00 UTC, 01:00 in Bishkek
+    # 19:00 UTC, 01:00 in Bishkek. Runs from the default branch's copy of
+    # this file, which then checks out the newest version/* branch
     - cron: '0 19 * * *'
   workflow_dispatch:
     inputs:
+      nightly:
+        description: 'Run as the nightly: on-chain tests and a Telegram report'
+        type: boolean
+        default: false
+      ref:
+        description: 'Branch to test as the nightly (default: the newest version/*)'
+        default: ''
       tags:
-        description: 'Tags of the feature and on-chain tests (journey always runs)'
+        description: 'Tags of the feature and on-chain tests, when not nightly'
         default: 'feature,history'
 
 concurrency:
@@ -26,12 +38,57 @@ permissions:
   contents: read
 
 jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      ref: ${{ steps.plan.outputs.ref }}
+      branch: ${{ steps.plan.outputs.branch }}
+      nightly: ${{ steps.plan.outputs.nightly }}
+      tags: ${{ steps.plan.outputs.tags }}
+    steps:
+      - name: Pick the branch and the tests
+        id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_NIGHTLY: ${{ inputs.nightly }}
+          INPUT_REF: ${{ inputs.ref }}
+          INPUT_TAGS: ${{ inputs.tags }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          HEAD_REF: ${{ github.head_ref || github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT" = "schedule" ] || [ "$INPUT_NIGHTLY" = "true" ]; then
+            branch="$INPUT_REF"
+            if [ -z "$branch" ]; then
+              branch="$(git ls-remote --heads "$REPO_URL" 'refs/heads/version/*' \
+                | sed 's|.*refs/heads/||' | sort -V | tail -n 1)"
+            fi
+            echo "ref=$branch" >> "$GITHUB_OUTPUT"
+            echo "branch=$branch" >> "$GITHUB_OUTPUT"
+            echo "nightly=true" >> "$GITHUB_OUTPUT"
+            echo "tags=feature,history,onchain" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=$SHA" >> "$GITHUB_OUTPUT"
+            echo "branch=$HEAD_REF" >> "$GITHUB_OUTPUT"
+            echo "nightly=false" >> "$GITHUB_OUTPUT"
+            echo "tags=${INPUT_TAGS:-feature,history}" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: plan
     runs-on: ubuntu-24.04
     timeout-minutes: 40
+    outputs:
+      sha: ${{ steps.sha.outputs.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.plan.outputs.ref }}
+
+      - name: Record the tested commit
+        id: sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -51,16 +108,21 @@ jobs:
           retention-days: 3
 
   test:
-    needs: build
+    needs: [plan, build]
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         part: [journey, flows]
+    env:
+      # Only the nightly runs the on-chain tests; other runs never see the phrase
+      MAESTRO_E2E_DUST_MNEMONIC: ${{ needs.plan.outputs.nightly == 'true' && secrets.MAESTRO_E2E_DUST_MNEMONIC || '' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.build.outputs.sha }}
 
       - name: Download the APK
         uses: actions/download-artifact@v8
@@ -79,6 +141,32 @@ jobs:
           curl -Ls https://get.maestro.mobile.dev | MAESTRO_VERSION=2.11.0 bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
+      # A booted emulator snapshot, so each job resumes it instead of a cold
+      # boot. Change the key when the emulator settings below change
+      - name: Restore the emulator snapshot
+        id: avd-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-35-google_apis-x86_64-pixel_6-v1
+
+      - name: Create the emulator snapshot
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          ram-size: 4096M
+          disk-size: 6000M
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Created the emulator snapshot"
+
       - name: Run Maestro tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -88,20 +176,69 @@ jobs:
           profile: pixel_6
           ram-size: 4096M
           disk-size: 6000M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: maestro/scripts/ci-run.sh ${{ matrix.part }} apk/app-ci-e2e.apk maestro-results ${{ inputs.tags || 'feature,history' }}
+          script: maestro/scripts/ci-run.sh ${{ matrix.part }} apk/app-ci-e2e.apk maestro-results ${{ needs.plan.outputs.tags }}
 
       # Maestro writes typed text to its logs; this removes the dust wallet
-      # phrase and the on-chain screenshots before anything is uploaded
+      # phrase and the on-chain screenshots, and fails if the phrase is left
       - name: Redact results
+        id: redact
         if: always()
         run: maestro/scripts/collect-artifacts.sh maestro-results
 
       - name: Upload results
-        if: always()
+        if: always() && steps.redact.outcome == 'success'
         uses: actions/upload-artifact@v7
         with:
           name: maestro-${{ matrix.part }}
           path: maestro-results
           retention-days: 14
+
+  report:
+    needs: [plan, build, test]
+    # Nightly results, and failed pushes to version/*
+    if: >-
+      always() && (needs.plan.outputs.nightly == 'true' ||
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/version/') &&
+      (needs.build.result == 'failure' || needs.test.result == 'failure')))
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          sparse-checkout: maestro/scripts
+
+      - name: Download results
+        uses: actions/download-artifact@v8
+        # A job that stopped early uploads nothing; the report says so
+        continue-on-error: true
+        with:
+          pattern: maestro-*
+          path: results
+
+      - name: Rename result folders
+        run: |
+          mkdir -p results
+          for part in journey flows; do
+            if [ -d "results/maestro-$part" ]; then mv "results/maestro-$part" "results/$part"; fi
+          done
+
+      - name: Send to Telegram
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.MAESTRO_TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          BRANCH: ${{ needs.plan.outputs.branch }}
+          SHA: ${{ needs.build.outputs.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TRIGGER: ${{ needs.plan.outputs.nightly == 'true' && 'nightly' || github.event_name }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        run: |
+          if [ "$BUILD_RESULT" = "failure" ]; then
+            for part in journey flows; do
+              mkdir -p "results/$part"
+              echo "the e2e APK did not build" > "results/$part/setup-error.txt"
+            done
+          fi
+          maestro/scripts/notify-telegram.sh results "$TRIGGER"
