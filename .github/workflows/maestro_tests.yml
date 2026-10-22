@@ -8,8 +8,6 @@ on:
   push:
     branches:
       - 'version/**'
-      # Temporary: runs the workflow from the feature branch before it merges
-      - maestro-test-plan
   pull_request:
     branches:
       - 'version/**'

@@ -49,11 +49,18 @@ are built for 4 KB pages.
    adb -s emulator-5554 install -r app/build/outputs/apk/ci/e2e/app-ci-e2e.apk
    ```
 
-   The `e2e` build type exists only for the `ci` flavor, which has WalletConnect
-   (the F-Droid flavors do not). It uses the
-   debug backends and keys, installs as
-   `io.horizontalsystems.bankwallet.appcenter.e2e` next to the dev builds, and
-   shows as "UW E2E" in the launcher.
+   The `e2e` build type exists only for the `ci` flavor, which has
+   WalletConnect (the F-Droid flavors do not). It uses the debug backends and
+   keys, installs as `io.horizontalsystems.bankwallet.appcenter.e2e` next to
+   the dev builds, and shows as "UW E2E" in the launcher. Behind
+   `IAppConfigProvider.e2eBuild` it differs from the dev build in a few ways:
+
+   - Nothing can be broadcast: every send path throws
+     `BroadcastDisabledException` (`BroadcastGuardTest` covers it).
+   - Test tags are exposed as resource ids, which is how Maestro finds them.
+   - No rate-app dialog, donation sheet or rooted-device warning.
+   - Screenshots are allowed on pages that block them otherwise, so failure
+     screenshots are not black.
 
 ## Running tests
 
@@ -234,9 +241,6 @@ broadcast, so its balance only drops through dust attacks or a bug.
   is unactivated, so its fee estimate includes activation.
 
 ## Test structure
-
-See [`docs/testing/maestro-integration-plan.md`](../docs/testing/maestro-integration-plan.md)
-for the full plan.
 
 There are three kinds of tests:
 
