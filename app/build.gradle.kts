@@ -110,11 +110,6 @@ android {
             isDebuggable = true
             isMinifyEnabled = false
             applicationIdSuffix = ".dev"
-            // x86_64 lets dev and e2e builds run natively on x86_64 emulators, such as
-            // the GitHub Actions runners; release builds stay ARM only
-            ndk {
-                abiFilters += "x86_64"
-            }
             buildConfigFieldString("APP_LINKS_HOST", "dev.unstoppable.money")
             manifestPlaceholders["appLinksHost"] = "dev.unstoppable.money"
             buildConfigFieldString("TWITTER_BEARER_TOKEN", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
@@ -185,6 +180,11 @@ android {
             applicationIdSuffix = ".e2e"
             matchingFallbacks += "debug"
             buildConfigField("boolean", "E2E_BUILD", "true")
+            // x86_64 runs natively on the GitHub Actions emulators; ARM stays for
+            // local arm64 emulators. Dev and release builds are ARM only
+            ndk {
+                abiFilters += "x86_64"
+            }
         }
     }
 
