@@ -1,7 +1,7 @@
 # Guards address derivation for Tron (m/44'/195'/0'/0/0) and Solana
 # (m/44'/501'/0'/0'). Both addresses were derived independently from the
 # public test vector with bip_utils.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "Receive · Tron and Solana addresses"
 tags: [feature, receive]
 env:

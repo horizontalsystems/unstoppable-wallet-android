@@ -293,9 +293,10 @@ dependencies {
 }
 
 androidComponents {
-    // UI tests run only against the F-Droid CI flavor
+    // UI tests run only against the CI flavor: it is the dev build the team uses and,
+    // unlike the F-Droid flavors, includes WalletConnect
     beforeVariants(selector().withBuildType("e2e")) { variant ->
-        variant.enable = variant.productFlavors.any { it.second == "fdroidCi" }
+        variant.enable = variant.productFlavors.any { it.second == "ci" }
     }
 }
 

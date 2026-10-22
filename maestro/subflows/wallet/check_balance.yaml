@@ -1,5 +1,5 @@
 # Fails unless the balance screen shows at least ${MIN} ${COIN}.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - scrollUntilVisible:
     element:

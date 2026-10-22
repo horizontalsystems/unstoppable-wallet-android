@@ -3,7 +3,7 @@
 # bitcoin, ethereum, binance-smart-chain, tron, the-open-network, solana.
 # Starts on a screen with "Existing Wallet" (onboarding_existing_wallet), ends
 # on the balance screen.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 # A flow's own env block would override the caller's values, so defaults are
 # set here instead

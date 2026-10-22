@@ -1,6 +1,6 @@
 # Picks a pair and an amount and waits for the quote. Stops there: the wallet
 # holds nothing to swap.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 - tapOn:

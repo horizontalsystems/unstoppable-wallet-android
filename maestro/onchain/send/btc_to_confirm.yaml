@@ -2,7 +2,7 @@
 # wallet to its own address. Never broadcasts. Fails at the amount step when
 # the wallet holds less than AMOUNT plus the fee: see "Topping up the dust
 # wallet" in maestro/README.md.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "On-chain · BTC send up to confirmation"
 tags: [onchain, secret]
 env:

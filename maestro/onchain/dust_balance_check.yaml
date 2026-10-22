@@ -3,7 +3,7 @@
 # for an app bug. Thresholds are about 2 × (send amount + typical fee); the
 # TRX one covers activating the recipient as well. See "Topping up the dust
 # wallet" in maestro/README.md.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "On-chain · dust wallet balance"
 tags: [onchain, secret]
 env:

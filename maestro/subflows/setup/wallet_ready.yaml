@@ -4,7 +4,7 @@
 #
 # The phrase is a public test vector and must stay unused on-chain: the
 # address checks in the journey expect its first addresses to be unused.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - launchApp:
     clearState: true

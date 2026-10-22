@@ -1,6 +1,6 @@
 # Restores the public test wallet. The address checks in the next step
 # expect its first addresses to be unused: never send funds to it.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 - runFlow:

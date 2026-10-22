@@ -1,6 +1,6 @@
 # Copy to features/<feature>/<scenario>.yaml and replace the name, the second
 # tag and the steps. See maestro/README.md ("Feature tests") for the rules.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "<Feature> · <what the user does>"
 tags: [feature, <feature>]
 ---

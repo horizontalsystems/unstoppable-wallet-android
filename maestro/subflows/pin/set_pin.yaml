@@ -1,6 +1,6 @@
 # Enters ${PIN} twice on the set-passcode screen: once to set it, once to
 # confirm it.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 ---
 - runFlow:
     file: enter_pin.yaml
