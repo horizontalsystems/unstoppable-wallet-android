@@ -6,11 +6,11 @@
 #   nightly success    ✅ with counts, as a daily heartbeat
 #   other successes    nothing
 #
-# RESULTS_DIR holds one folder per part (journey, flows), each with the
-# summary.txt and, after a setup failure, the setup-error.txt that ci-run.sh
-# writes. BRANCH, SHA and RUN_URL describe the run. The token and chat id come
-# from TELEGRAM_TOKEN and TELEGRAM_CHAT_ID; without them the message is
-# printed instead of sent.
+# RESULTS_DIR holds one folder per test job named in PARTS (default
+# "journey flows"), each with the summary.txt and, after a setup failure, the
+# setup-error.txt that ci-run.sh writes. BRANCH, SHA and RUN_URL describe the
+# run. The token and chat id come from TELEGRAM_TOKEN and TELEGRAM_CHAT_ID;
+# without them the message is printed instead of sent.
 #
 # Usage: notify-telegram.sh <results dir> <trigger: nightly|push|manual>
 set -uo pipefail
@@ -29,7 +29,7 @@ failed=$(count Failed)
 flaky=$(count Flaky)
 
 setup_errors=""
-for part in journey flows; do
+for part in ${PARTS:-journey flows}; do
     if [ -f "$RESULTS/$part/setup-error.txt" ]; then
         setup_errors+="• $part: $(cat "$RESULTS/$part/setup-error.txt")"$'\n'
     elif [ ! -f "$RESULTS/$part/summary.txt" ]; then

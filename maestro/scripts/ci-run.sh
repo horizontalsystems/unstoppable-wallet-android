@@ -6,7 +6,8 @@
 #   journey  maestro/journey, rerun from the start if a step fails: each step
 #            depends on the ones before it
 #   flows    feature and on-chain tests selected by TAGS, failed ones rerun
-#            one by one
+#            one by one. SHARD=<i>/<n> runs every n-th of them, so several
+#            jobs can split the flows
 #
 # Results, JUnit reports and logs go to OUT_DIR, the summary also to
 # $GITHUB_STEP_SUMMARY when set. The emulator setup is logged to setup.log;
@@ -60,8 +61,27 @@ case "$PART" in
         fi
         ;;
     flows)
-        # The root config.yaml covers features/ and onchain/
-        if ! run flows --include-tags "$TAGS" maestro/; then
+        # The files config.yaml covers (features/*/*, onchain/**) with one of
+        # TAGS and not quarantined, the dust balance check first, then this
+        # shard's share of them
+        FLOWS=()
+        while read -r file; do [ -n "$file" ] && FLOWS+=("$file"); done < <(python3 - "$TAGS" "${SHARD:-1/1}" <<'PY'
+import glob, re, sys
+tags = set(sys.argv[1].split(","))
+index, count = (int(x) for x in sys.argv[2].split("/"))
+files = sorted(f for f in glob.glob("maestro/features/*/*.yaml") + glob.glob("maestro/onchain/**/*.yaml", recursive=True)
+               if not f.split("/")[-1].startswith("_"))
+files.sort(key=lambda f: not f.endswith("dust_balance_check.yaml"))
+def file_tags(f):
+    m = re.search(r"^tags:\s*\[(.*)\]", open(f).read(), re.M)
+    return {t.strip() for t in m.group(1).split(",")} if m else set()
+picked = [f for f in files if file_tags(f) & tags and "quarantine" not in file_tags(f)]
+print("\n".join(picked[index - 1::count]))
+PY
+        )
+        if [ ${#FLOWS[@]} -eq 0 ]; then
+            echo "No flows for tags $TAGS in shard ${SHARD:-1/1}"
+        elif ! run flows "${FLOWS[@]}"; then
             FAILED=()
             while read -r file; do [ -n "$file" ] && FAILED+=("$file"); done \
                 < <(python3 "$SCRIPTS/junit.py" failed-files "$OUT/flows.xml")
@@ -83,7 +103,7 @@ python3 "$SCRIPTS/junit.py" summary "$OUT" >"$OUT/summary.txt"
 cat "$OUT/summary.txt"
 if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
     {
-        echo "### Maestro: $PART"
+        echo "### Maestro: $PART${SHARD:+ $SHARD}"
         echo '```'
         cat "$OUT/summary.txt"
         echo '```'

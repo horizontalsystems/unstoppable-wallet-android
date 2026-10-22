@@ -30,7 +30,7 @@ dust wallet and pass.
 
 Phase 4 is done: the phrase is a repository secret and in `.env.example`
 for local runs; the wallet still needs funding for the send tests. Phases 5
-and 6 run in GitHub Actions instead of on a runner Mac (see below): about 15
+and 6 run in GitHub Actions instead of on a runner Mac (see below): about 12
 minutes per run, one retry, flaky reporting, redaction and Telegram reports.
 Not done: screen recordings (6.2), an HTML report (JUnit and the run page
 summary only), and flake history across runs.
@@ -39,8 +39,9 @@ Where the code differs from this plan:
 
 - Runner: GitHub Actions replaces the local runner Mac (decided 2026-10-22).
   `.github/workflows/maestro_tests.yml` runs on ubuntu-24.04 with an x86_64
-  API 35 emulator resumed from a cached snapshot; debug builds include x86_64
-  for it. Pushes and pull requests to `version/*` run the journey, feature
+  API 35 emulator per job (journey, and the flows in two shards); debug
+  builds include x86_64 for it. Emulator snapshots failed to load on the
+  runners, and a cold boot takes about 35 s, so none are cached. Pushes and pull requests to `version/*` run the journey, feature
   and history tests; the nightly adds the on-chain tests on the newest
   `version/*`. Telegram gets nightly results and failed pushes; the checks do
   not block merging. The launchd agents, `run-suite.sh`, polling,
