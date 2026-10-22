@@ -3,7 +3,7 @@
 # (received) and 0xc7d8388d (sent). The send tests never broadcast, so the
 # history only changes if someone tops the wallet up with ETH.
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
-name: "On-chain · ETH watch wallet history"
+name: "History · ETH watch wallet"
 tags: [onchain, history]
 ---
 - runFlow:

@@ -32,7 +32,7 @@ setup_failed() {
 
 SERIAL="$(adb devices | awk 'NR > 1 && $2 == "device" { print $1; exit }')"
 [ -n "$SERIAL" ] || setup_failed "No emulator found"
-if ! "$SCRIPTS/device-prepare.sh" "$SERIAL" "$APK" 2>&1 | tee "$OUT/setup.log"; then
+if ! SETUP_DEBUG_DIR="$OUT" "$SCRIPTS/device-prepare.sh" "$SERIAL" "$APK" 2>&1 | tee "$OUT/setup.log"; then
     setup_failed "$(tail -n 1 "$OUT/setup.log")"
 fi
 

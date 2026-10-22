@@ -4,7 +4,7 @@
 # uid, so the test opens them by position (newest first) and checks the
 # hash on the details page.
 appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
-name: "On-chain · BTC watch wallet history"
+name: "History · BTC watch wallet"
 tags: [onchain, history]
 ---
 - runFlow:
