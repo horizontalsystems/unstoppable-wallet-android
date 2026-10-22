@@ -14,7 +14,8 @@ source "$(dirname "$0")/load-config.sh"
 RUN_DIR="${1:?usage: collect-artifacts.sh <run dir>}"
 SECRET="${MAESTRO_E2E_DUST_MNEMONIC:-}"
 
-# Every on-chain flow is tagged secret and named "On-chain · ..."
+# Every flow tagged secret is named "On-chain · ..."; the history tests use
+# no secret and are named "History · ..."
 find "$RUN_DIR" -path "*On-chain*" \( -name "*.png" -o -name "*.mp4" \) -delete 2>/dev/null
 
 [ -n "$SECRET" ] || exit 0
