@@ -1,6 +1,6 @@
 # A bitcoin: payment link leads to the send form with the address and amount
 # from the link filled in.
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "Send · payment link fills in the send form"
 tags: [feature, send]
 env:
@@ -18,6 +18,8 @@ env:
 # links is installed, as on a developer's emulator. The chooser is system UI,
 # so it has no test tags.
 # It lists the apps, or offers the last one picked ("Open with UW E2E").
+# Tapping the app in the list can open it at once, so "Just once" is tapped
+# only if it is still there.
 - runFlow:
     when:
       visible: "Just once"
@@ -27,7 +29,11 @@ env:
             visible: "UW E2E"
           commands:
             - tapOn: "UW E2E"
-      - tapOn: "Just once"
+      - runFlow:
+          when:
+            visible: "Just once"
+          commands:
+            - tapOn: "Just once"
 # The link opens the token picker, limited to the link's chain. Its rows use
 # the balance screen's tags, so wait until it covers the balance screen.
 - extendedWaitUntil:

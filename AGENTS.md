@@ -255,7 +255,7 @@ string:
 - Unit tests in `src/test/` of the module that holds the code (`walletkit`,
   `walletkit-chain-<chain>`, `app`)
 - Instrumentation tests in `app/src/androidTest/`
-- Maestro UI tests in `maestro/`, run against the `fdroidCiE2e` build. Setup,
+- Maestro UI tests in `maestro/`, run against the `ciE2e` build. Setup,
   layout and how to run them: `maestro/README.md`
 
 ### Tests a change needs

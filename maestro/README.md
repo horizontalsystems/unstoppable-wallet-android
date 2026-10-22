@@ -2,7 +2,8 @@
 
 ## Setup
 
-Tests run against the F-Droid CI flavor on an arm64 emulator.
+Tests run against the `ci` flavor, the dev build the team uses, on an arm64
+emulator.
 
 | Tool | Version |
 |---|---|
@@ -43,18 +44,19 @@ are built for 4 KB pages.
 4. Build and install the app:
 
    ```bash
-   ./gradlew :app:assembleFdroidCiE2e
-   adb -s emulator-5554 install -r app/build/outputs/apk/fdroidCi/e2e/app-fdroidCi-e2e.apk
+   ./gradlew :app:assembleCiE2e
+   adb -s emulator-5554 install -r app/build/outputs/apk/ci/e2e/app-ci-e2e.apk
    ```
 
-   The `e2e` build type exists only for the `fdroidCi` flavor. It uses the
+   The `e2e` build type exists only for the `ci` flavor, which has WalletConnect
+   (the F-Droid flavors do not). It uses the
    debug backends and keys, installs as
-   `io.horizontalsystems.bankwallet.fdroidci.e2e` next to the dev builds, and
+   `io.horizontalsystems.bankwallet.appcenter.e2e` next to the dev builds, and
    shows as "UW E2E" in the launcher.
 
 ## Running tests
 
-Flows default to the e2e app id, `io.horizontalsystems.bankwallet.fdroidci.e2e`.
+Flows default to the e2e app id, `io.horizontalsystems.bankwallet.appcenter.e2e`.
 Pass `-e APP_ID=...` only to run them against another build. Pass the emulator
 with `--device` when a phone is also connected.
 
@@ -296,7 +298,7 @@ A step continues from the screen the previous one left, so it starts by
 choosing a tab and ends back on a main tab:
 
 ```yaml
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 tags: [journey]
 ---
 - tapOn:
@@ -332,7 +334,7 @@ Each feature test is independent and starts from a ready wallet in one line,
 so it only contains the steps for its feature:
 
 ```yaml
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.fdroidci.e2e'}
+appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 name: "Contacts · add a contact from the send screen"
 tags: [feature, contacts]
 ---
