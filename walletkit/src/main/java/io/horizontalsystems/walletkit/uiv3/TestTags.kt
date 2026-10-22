@@ -5,6 +5,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import io.horizontalsystems.walletkit.core.App
 
 /**
  * Test tags the Maestro UI tests in `maestro/` select by (`id:`). Renaming or removing one
@@ -168,10 +169,17 @@ object TestTags {
     const val SELECTOR_DONE = "selector_done"
 }
 
+// Read once; previews have no App, so they get false
+private val exposeTestTagsEnabled by lazy {
+    runCatching { App.appConfigProvider.e2eBuild }.getOrDefault(false)
+}
+
 /**
  * Exposes [androidx.compose.ui.platform.testTag]s as resource ids, which is how UI tests outside
  * the app see them. Set at the activity root, and again in every dialog and bottom sheet: those
- * open their own windows, which do not inherit it.
+ * open their own windows, which do not inherit it. Only the e2e build exposes them, so other
+ * builds keep their accessibility tree unchanged.
  */
 @OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.exposeTestTags() = semantics { testTagsAsResourceId = true }
+fun Modifier.exposeTestTags() =
+    if (exposeTestTagsEnabled) semantics { testTagsAsResourceId = true } else this
