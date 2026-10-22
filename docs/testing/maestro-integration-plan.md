@@ -28,15 +28,24 @@ balance check are written; BTC passes with the public wallet, ETH and TRX
 wait for the funded dust wallet. The history tests watch addresses of the
 dust wallet and pass.
 
-Phase 4 is done in the repo (environment variable, `.env.example`, Keychain
-instructions, top-up procedure); creating and funding the wallet is left.
-Phases 5 and 6 are written and run on a developer Mac (`run-suite.sh --local`:
-2 emulators, journey and feature tests in about 6.5 minutes, retry, flaky
-report, redaction, Telegram message printed while no bot token is stored).
-Not done: the runner Mac itself, the `clean` snapshot (instances cold boot),
-screen recordings (6.2), and `report.html` / `index.html` (JUnit only).
+Phase 4 is done: the phrase is a repository secret and in `.env.example`
+for local runs; the wallet still needs funding for the send tests. Phases 5
+and 6 run in GitHub Actions instead of on a runner Mac (see below): about 15
+minutes per run, one retry, flaky reporting, redaction and Telegram reports.
+Not done: screen recordings (6.2), an HTML report (JUnit and the run page
+summary only), and flake history across runs.
 
 Where the code differs from this plan:
+
+- Runner: GitHub Actions replaces the local runner Mac (decided 2026-10-22).
+  `.github/workflows/maestro_tests.yml` runs on ubuntu-24.04 with an x86_64
+  API 35 emulator resumed from a cached snapshot; debug builds include x86_64
+  for it. Pushes and pull requests to `version/*` run the journey, feature
+  and history tests; the nightly adds the on-chain tests on the newest
+  `version/*`. Telegram gets nightly results and failed pushes; the checks do
+  not block merging. The launchd agents, `run-suite.sh`, polling,
+  maintenance and flake history (5.x, 6.x) are removed; Phases 5 and 6 below
+  describe the earlier design.
 
 - Target build: `ciE2e` (applicationId
   `io.horizontalsystems.bankwallet.appcenter.e2e`, APK
