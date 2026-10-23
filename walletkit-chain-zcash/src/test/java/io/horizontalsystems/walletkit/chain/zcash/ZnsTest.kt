@@ -1,5 +1,8 @@
 package io.horizontalsystems.walletkit.chain.zcash
 
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.entities.Address
+import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -202,7 +205,7 @@ class ZnsTest {
     @Test
     fun handler_skipsResolverForNonNames() {
         val resolver = RecordingResolver(THEBACKUPKID_ADDRESS)
-        val handler = AddressHandlerZns(resolver)
+        val handler = AddressHandlerZns(resolver, FakeAddressHandler())
         assertFalse(handler.isSupported("thebackupkid"))
         assertFalse(handler.isSupported(THEBACKUPKID_ADDRESS))
         assertFalse(handler.isSupported("my-name.zec"))
@@ -212,7 +215,7 @@ class ZnsTest {
     @Test
     fun handler_resolvesNormalizedName() {
         val resolver = RecordingResolver(THEBACKUPKID_ADDRESS)
-        val handler = AddressHandlerZns(resolver)
+        val handler = AddressHandlerZns(resolver, FakeAddressHandler())
 
         assertTrue(handler.isSupported(" TheBackupKid.ZEC "))
         assertEquals(listOf("thebackupkid"), resolver.queries)
@@ -223,8 +226,21 @@ class ZnsTest {
     }
 
     @Test
+    fun handler_passesResolvedAddressThroughZcashHandler() {
+        val addressHandler = FakeAddressHandler()
+        AddressHandlerZns(RecordingResolver(ZECHARIAH_ADDRESS), addressHandler).isSupported("zechariah.zcash")
+        assertEquals(listOf(ZECHARIAH_ADDRESS), addressHandler.checked)
+    }
+
+    @Test
+    fun handler_invalidResolvedAddressIsNotSupported() {
+        val handler = AddressHandlerZns(RecordingResolver("u1garbage"), FakeAddressHandler())
+        assertFalse(handler.isSupported("thebackupkid.zec"))
+    }
+
+    @Test
     fun handler_unregisteredNameIsNotSupported() {
-        assertFalse(AddressHandlerZns(RecordingResolver(null)).isSupported("childish.zec"))
+        assertFalse(AddressHandlerZns(RecordingResolver(null), FakeAddressHandler()).isSupported("childish.zec"))
     }
 
     @Test
@@ -232,13 +248,26 @@ class ZnsTest {
         val failing = object : ZnsResolver() {
             override fun resolve(name: String): String? = throw UnknownRegistry()
         }
-        assertFalse(AddressHandlerZns(failing).isSupported("thebackupkid.zec"))
+        assertFalse(AddressHandlerZns(failing, FakeAddressHandler()).isSupported("thebackupkid.zec"))
     }
 
     @Test
     fun handler_unreachableResolverIsNotSupported() {
-        val handler = AddressHandlerZns(ZnsResolver(url = "http://127.0.0.1:1"))
+        val handler = AddressHandlerZns(ZnsResolver(url = "http://127.0.0.1:1"), FakeAddressHandler())
         assertFalse(handler.isSupported("alice.zcash"))
+    }
+
+    // Stands in for AddressHandlerZcash, whose SDK backend needs the native library.
+    private class FakeAddressHandler : IAddressHandler {
+        override val blockchainType = BlockchainType.Zcash
+        val checked = mutableListOf<String>()
+
+        override fun isSupported(value: String): Boolean {
+            checked += value
+            return value == THEBACKUPKID_ADDRESS || value == ZECHARIAH_ADDRESS
+        }
+
+        override fun parseAddress(value: String) = Address(value, blockchainType = blockchainType)
     }
 
     private class RecordingResolver(private val address: String?) : ZnsResolver(url = "http://127.0.0.1:1") {

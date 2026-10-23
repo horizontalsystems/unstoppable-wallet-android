@@ -6,6 +6,7 @@ import io.horizontalsystems.walletkit.modules.send.address.AddressValidationErro
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.core.App
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -88,6 +89,10 @@ internal object ZcashStaticAddressValidator {
             backend.isValidUnifiedAddr(address) ||
             backend.isValidTexAddr(address)
     }
+
+    // For IAddressHandler, whose checks are synchronous. The checks are plain JNI calls; only
+    // the first call blocks on loading the native library.
+    fun isValidBlocking(address: String): Boolean = runBlocking { isValid(address) }
 
     // TEX counts as transparent, mirroring ZcashAdapter's AddressType.Tex mapping
     suspend fun isTransparent(address: String): Boolean = withContext(Dispatchers.IO) {

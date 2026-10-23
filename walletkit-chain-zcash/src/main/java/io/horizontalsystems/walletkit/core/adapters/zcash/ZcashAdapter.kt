@@ -73,7 +73,6 @@ import kotlinx.datetime.Instant
 import java.math.BigDecimal
 import java.util.Base64
 import java.util.Date
-import java.util.regex.Pattern
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
 import kotlin.math.min
@@ -955,26 +954,6 @@ class ZcashAdapter(
         } catch (_: Exception) {
             null
         }
-    }
-}
-
-object ZcashAddressValidator {
-    fun validate(address: String): Boolean {
-        return isValidZcashAddress(address)
-    }
-
-    private fun isValidTransparentAddress(address: String): Boolean {
-        val transparentPattern = Pattern.compile("^t[0-9a-zA-Z]{34}$")
-        return transparentPattern.matcher(address).matches()
-    }
-
-    private fun isValidShieldedAddress(address: String): Boolean {
-        val shieldedPattern = Pattern.compile("^z[0-9a-zA-Z]{77}$")
-        return shieldedPattern.matcher(address).matches()
-    }
-
-    private fun isValidZcashAddress(address: String): Boolean {
-        return isValidTransparentAddress(address) || isValidShieldedAddress(address)
     }
 }
 

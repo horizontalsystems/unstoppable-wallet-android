@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.chain.zcash
 
-import io.horizontalsystems.walletkit.core.adapters.zcash.ZcashAddressValidator
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -10,7 +9,7 @@ class AddressHandlerZcash : IAddressHandler {
     override val blockchainType = BlockchainType.Zcash
 
     override fun isSupported(value: String): Boolean {
-        return ZcashAddressValidator.validate(value)
+        return ZcashStaticAddressValidator.isValidBlocking(value)
     }
 
     override fun parseAddress(value: String): Address {
@@ -40,7 +39,14 @@ object ZnsName {
     }
 }
 
-class AddressHandlerZns(private val resolver: ZnsResolver) : IAddressHandler {
+/**
+ * Resolves a ZNS name, then accepts the result only if [addressHandler], the plain Zcash
+ * address handler, accepts it.
+ */
+class AddressHandlerZns(
+    private val resolver: ZnsResolver,
+    private val addressHandler: IAddressHandler,
+) : IAddressHandler {
     override val blockchainType = BlockchainType.Zcash
     private val cache = mutableMapOf<String, Address>()
 
@@ -50,7 +56,11 @@ class AddressHandlerZns(private val resolver: ZnsResolver) : IAddressHandler {
 
         return try {
             val resolved = resolver.resolve(name) ?: return false
-            cache[value] = Address(resolved, value.trim(), blockchainType)
+            if (!addressHandler.isSupported(resolved)) {
+                Timber.w("ZNS name %s resolved to an invalid Zcash address", name)
+                return false
+            }
+            cache[value] = Address(addressHandler.parseAddress(resolved).hex, value.trim(), blockchainType)
             true
         } catch (e: Exception) {
             Timber.w(e, "ZNS resolution failed for %s", name)
