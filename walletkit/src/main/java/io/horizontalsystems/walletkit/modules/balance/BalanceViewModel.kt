@@ -85,6 +85,7 @@ class BalanceViewModel(
         private set
 
     private var refreshViewItemsJob: Job? = null
+    private var scannedDataJob: Job? = null
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
@@ -317,7 +318,9 @@ class BalanceViewModel(
     }
 
     fun handleScannedData(scannedText: String) {
-        viewModelScope.launch {
+        // A newer scan replaces an older one whose address check is still running.
+        scannedDataJob?.cancel()
+        scannedDataJob = viewModelScope.launch {
             val lnurl: String? = when {
                 scannedText.uppercase().startsWith("LNURL") -> scannedText
                 scannedText.lowercase().startsWith("lightning:lnurl") ->
