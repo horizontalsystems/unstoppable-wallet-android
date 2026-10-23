@@ -22,13 +22,13 @@ class AddressHandlerZcash : IAddressHandler {
 /**
  * Zcash Names (ZNS) input rules.
  *
- * On chain a name is 1 to 62 lowercase ASCII letters and digits. Users type it with a
+ * On chain a name is 1 to 63 lowercase ASCII letters and digits. Users type it with a
  * `.zcash` or `.zec` suffix; the suffix is display-only and stripped before lookup.
  * The suffix is required here: a bare lowercase alphanumeric string is indistinguishable
  * from a partially typed address, and the send screen validates on every keystroke.
  */
 object ZnsName {
-    private val nameRegex = Regex("^[a-z0-9]{1,62}$")
+    private val nameRegex = Regex("^[a-z0-9]{1,63}$")
     private val suffixes = listOf(".zcash", ".zec")
 
     /** Returns the on-chain name for [value], or null when it is not a ZNS name. */

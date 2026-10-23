@@ -18,17 +18,23 @@ class ZnsTest {
         assertEquals("alice", ZnsName.normalize("Alice.ZCASH"))
         assertEquals("alice", ZnsName.normalize("aLice.Zec"))
         assertEquals("alice", ZnsName.normalize("  alice.zcash "))
+        assertEquals("thebackupkid", ZnsName.normalize(" TheBackupKid.ZEC "))
         assertEquals("bob42", ZnsName.normalize("bob42.zec"))
         assertEquals("a", ZnsName.normalize("a.zcash"))
-        assertEquals("a".repeat(62), ZnsName.normalize("a".repeat(62) + ".zcash"))
+        assertEquals("a".repeat(63), ZnsName.normalize("a".repeat(63) + ".zcash"))
+    }
+
+    @Test
+    fun normalize_foldsKelvinSign() {
+        assertEquals("kid", ZnsName.normalize("Kid.zec"))
     }
 
     @Test
     fun normalize_rejectsBareNamesAndAddresses() {
         // Suffix is required: bare input is ambiguous with a partially typed address.
         assertNull(ZnsName.normalize("alice"))
-        assertNull(ZnsName.normalize("childish"))
-        assertNull(ZnsName.normalize("u1jlu75mjtmhdekpq0nx5kakkgdnss8ta6xqzwu8p278axz0zt3pmep8hs4u0ws0nhlz"))
+        assertNull(ZnsName.normalize("thebackupkid"))
+        assertNull(ZnsName.normalize(THEBACKUPKID_ADDRESS))
         assertNull(ZnsName.normalize("t1RBzFrCTWSZe3FJbDewtveUMRX2og4kKph"))
         assertNull(ZnsName.normalize("zs1abc"))
     }
@@ -42,22 +48,87 @@ class ZnsTest {
         assertNull(ZnsName.normalize("has space.zcash"))
         assertNull(ZnsName.normalize("café.zcash"))
         assertNull(ZnsName.normalize("alice.zcash.zcash"))
+        assertNull(ZnsName.normalize("alice\n.zcash"))
         assertNull(ZnsName.normalize("alice.eth"))
-        assertNull(ZnsName.normalize("a".repeat(63) + ".zcash"))
+        assertNull(ZnsName.normalize("a".repeat(64) + ".zcash"))
     }
 
-    // ── Response parsing ────────────────────────────────────────────────────
+    // ── Registry check ──────────────────────────────────────────────────────
 
     @Test
-    fun parseResolveResponse_found() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
+    fun mainnetViewingKey_isThePublishedKey() {
+        // Literal copied from the ZNS docs; do not replace it with the constant.
+        assertEquals(
+            "uview1209ld9y4fr2sel9q87kfjg7xm2sy53e3qf7dvcw3w8jwhhjpldl8z0vk0a6hveg4jk7xcn0rc9mr8yg77djfpc0uxrm5pqzt8q7ul4w0nvs3x5q9vmk9nm2crywtqaealek4mp47ur7ywu7g4g4xcdlwv6gnqzvu5panv5je2ps6rxmx4856unlt5wde8fpz8uhrqchmwhn2j252h3cyx5phad877xezerm6ex8l5kcfjw02ll7m0nspfufamh3ae9ea48395elptspnv6vvc70j2gcjrdze9syt8kpr2kc67flvg8687thdkpha7lpt9r4p9wjty90q2v2yjanqsr2zrecrqs7lfx9cpkmshf7jyh2vvwfqnyzwtpuy7p72hm2mjhperdafvm9u5rwa6s6urcy0uw30f687e3jnmas45qfqtwyz39kf6kxklfrdn7t4hkz56jegmlr8s8hwmt9wa8vz8zlmm76lrmzyj82nzpeqfu572njq",
+            ZnsResolver.MAINNET_VIEWING_KEY,
+        )
+    }
 
-        assertEquals("childish", registration.name)
-        assertEquals(CHILDISH_ADDRESS, registration.address)
-        assertEquals(0L, registration.nonce)
-        assertEquals("BUY", registration.lastAction)
-        assertEquals(CHILDISH_SIGNATURE, registration.signature)
-        assertNull(registration.pubkey)
+    @Test
+    fun verifyRegistry_acceptsLiveStatus() {
+        ZnsResolver.verifyRegistry(STATUS_BODY, ZnsResolver.MAINNET_VIEWING_KEY)
+    }
+
+    @Test
+    fun verifyRegistry_rejectsOtherKeys() {
+        val key = ZnsResolver.MAINNET_VIEWING_KEY
+        listOf(
+            "uviewtest1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",
+            key.dropLast(1),
+            key + "q",
+            key.uppercase(),
+        ).forEach { reported ->
+            assertThrows(ZnsResolver.UnknownRegistry::class.java) {
+                ZnsResolver.verifyRegistry(statusBody("\"$reported\""), key)
+            }
+        }
+    }
+
+    @Test
+    fun verifyRegistry_rejectsMalformedStatus() {
+        val key = ZnsResolver.MAINNET_VIEWING_KEY
+        listOf(
+            """{"jsonrpc":"2.0","id":1,"result":{"synced":true}}""",
+            statusBody("42"),
+            statusBody("null"),
+            """{"jsonrpc":"2.0","id":1,"result":null}""",
+            """{"jsonrpc":"2.0","id":1,"result":[]}""",
+            """{"jsonrpc":"2.0","id":1}""",
+            "not json",
+        ).forEach { body ->
+            assertThrows(ZnsResolver.RpcError::class.java) { ZnsResolver.verifyRegistry(body, key) }
+        }
+    }
+
+    @Test
+    fun verifyRegistry_rpcError() {
+        val body = """{"jsonrpc":"2.0","id":1,"error":{"code":-32601,"message":"Method not found"}}"""
+        val error = assertThrows(ZnsResolver.RpcError::class.java) {
+            ZnsResolver.verifyRegistry(body, ZnsResolver.MAINNET_VIEWING_KEY)
+        }
+        assertTrue(error.message!!.contains("-32601"))
+    }
+
+    // ── Response parsing (live mainnet vectors, 2026-10-23) ─────────────────
+
+    @Test
+    fun parseResolveResponse_liveRegistrations() {
+        assertEquals(
+            ZnsResolver.Registration("thebackupkid", THEBACKUPKID_ADDRESS),
+            ZnsResolver.parseResolveResponse(THEBACKUPKID_BODY),
+        )
+        assertEquals(
+            ZnsResolver.Registration("zechariah", ZECHARIAH_ADDRESS),
+            ZnsResolver.parseResolveResponse(ZECHARIAH_BODY),
+        )
+    }
+
+    @Test
+    fun parseResolveResponse_ignoresExpiry() {
+        listOf("\"none\"", "\"1\"", "\"4102444800\"", "\"garbage\"", "null").forEach { expiresAt ->
+            val body = THEBACKUPKID_BODY.replace("\"expires_at\":\"none\"", "\"expires_at\":$expiresAt")
+            assertEquals(THEBACKUPKID_ADDRESS, ZnsResolver.parseResolveResponse(body)!!.address)
+        }
     }
 
     @Test
@@ -72,20 +143,30 @@ class ZnsTest {
             ZnsResolver.parseResolveResponse(body)
         }
         assertTrue(error.message!!.contains("-32602"))
+        assertTrue(error.message!!.contains("Invalid params"))
     }
 
     @Test
     fun parseResolveResponse_arrayResultIsRejected() {
-        // The indexer answers an address query with an array; a name query never should.
+        // The Resolver answers an address query with an array; a name query never should.
         assertThrows(ZnsResolver.RpcError::class.java) {
             ZnsResolver.parseResolveResponse("""{"jsonrpc":"2.0","id":1,"result":[]}""")
         }
     }
 
     @Test
-    fun parseResolveResponse_missingFields() {
-        assertThrows(ZnsResolver.RpcError::class.java) {
-            ZnsResolver.parseResolveResponse("""{"jsonrpc":"2.0","id":1,"result":{"name":"alice"}}""")
+    fun parseResolveResponse_missingOrWrongFields() {
+        listOf(
+            """{"name":"alice"}""",
+            """{"address":"u1abc"}""",
+            """{"name":"alice","address":42}""",
+            """{"name":"alice","address":null}""",
+            """{"name":7,"address":"u1abc"}""",
+            "\"alice\"",
+        ).forEach { result ->
+            assertThrows(ZnsResolver.RpcError::class.java) {
+                ZnsResolver.parseResolveResponse("""{"jsonrpc":"2.0","id":1,"result":$result}""")
+            }
         }
     }
 
@@ -96,124 +177,62 @@ class ZnsTest {
         assertThrows(ZnsResolver.RpcError::class.java) { ZnsResolver.parseResolveResponse("[]") }
     }
 
-    // ── Signature verification (live mainnet vectors, 2026-09-15) ──────────
+    // ── Validation ──────────────────────────────────────────────────────────
 
     @Test
-    fun preImage_followsLastAction() {
-        val base = registration("alice", "u1example", nonce = 2, lastAction = "CLAIM")
-        assertEquals("CLAIM:alice:u1example", ZnsResolver.preImage(base))
-        assertEquals("BUY:alice:u1example", ZnsResolver.preImage(base.copy(lastAction = "BUY")))
-        assertEquals("UPDATE:alice:u1example:2", ZnsResolver.preImage(base.copy(lastAction = "UPDATE")))
-        // DELIST:{name}:{nonce} does not cover the address, so it cannot authenticate one.
-        assertNull(ZnsResolver.preImage(base.copy(lastAction = "DELIST")))
-        assertNull(ZnsResolver.preImage(base.copy(lastAction = "LIST")))
-        assertNull(ZnsResolver.preImage(base.copy(lastAction = "RELEASE")))
-    }
-
-    @Test
-    fun validate_returnsAddressForMatchingVerifiedRegistration() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        assertEquals(CHILDISH_ADDRESS, ZnsResolver.validate("childish", registration, ZnsResolver.ADMIN_PUBKEY))
+    fun validate_returnsAddressForMatchingName() {
+        val registration = ZnsResolver.parseResolveResponse(THEBACKUPKID_BODY)!!
+        assertEquals(THEBACKUPKID_ADDRESS, ZnsResolver.validate("thebackupkid", registration))
     }
 
     @Test
     fun validate_rejectsRegistrationForAnotherName() {
-        // A replayed registration for a different name is validly signed but must not answer this query.
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        assertThrows(ZnsResolver.RpcError::class.java) {
-            ZnsResolver.validate("alice", registration, ZnsResolver.ADMIN_PUBKEY)
+        val registration = ZnsResolver.parseResolveResponse(THEBACKUPKID_BODY)!!
+        listOf("alice", "thebackupkid.zec", "TheBackupKid").forEach { name ->
+            assertThrows(ZnsResolver.RpcError::class.java) { ZnsResolver.validate(name, registration) }
         }
-    }
 
-    @Test
-    fun validate_rejectsInvalidSignature() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        assertThrows(ZnsResolver.InvalidSignature::class.java) {
-            ZnsResolver.validate("childish", registration.copy(nonce = 5, lastAction = "UPDATE"), ZnsResolver.ADMIN_PUBKEY)
-        }
-    }
-
-    @Test
-    fun verify_buyRegistration() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        assertTrue(ZnsResolver.verify(registration, ZnsResolver.ADMIN_PUBKEY))
-    }
-
-    @Test
-    fun verify_claimRegistration() {
-        val registration = registration(
-            name = "gaurang",
-            address = "u1h743e3e4kstgsddvw6ngu8kpntj34keprem8jm3x5tjh47d4g6kg78x4chy444l5mj2xetpnacml6xv4alsm6vwlsvqlrmkjfqza04lxjzm7ctnr6mzh2kmeqqel235mc660uy3a7cjx85vv5l43gl365xhlywe2zeptkppdkk8kqlhpdlaa09d54jgphqugxledqp9syfu9g7qx8ta",
-            nonce = 0,
-            lastAction = "CLAIM",
-            signature = "VL7SIbtmGGCCKPBNV4XnYMAvV6I6qwvXvKV+KY5VIY65JlSVb1+95mrjuUeiIEyWcu2TPGmUj6m+bvNOkI6zDA==",
-        )
-        assertTrue(ZnsResolver.verify(registration, ZnsResolver.ADMIN_PUBKEY))
-    }
-
-    @Test
-    fun verify_updateRegistrationSignedWithEarlierNonce() {
-        // zechariah: CLAIM (nonce 0) -> UPDATE signed with nonce 1 -> LIST bumped the registry
-        // nonce to 2 without touching last_action or signature. The reported nonce (2) does not
-        // verify; the search must find the signed nonce (1).
-        val registration = registration(
-            name = "zechariah",
-            address = "u14lms6q2sg984hhng068lqesatnak86mlg297x0qkqsvkqgk2m7dyj5x2grlku3adg2tq6trl5ue3vce7c3jnu5808kw9lsr890kfetrg524q4pgcn4zcnp84na85453pz67cjfy4sx7y6z6zc9t7666utasw5mehe9r2dwwcrgzp94ah",
-            nonce = 2,
-            lastAction = "UPDATE",
-            signature = "0yNPmGqCQGIMYXOXLmpXRSrOo1B1FWDgpvU1jHrqzvFYz9ZLitNeKB93ANVwpmkU/KD/R6OHK0x9MWIpBDB1BQ==",
-        )
-        assertTrue(ZnsResolver.verify(registration, ZnsResolver.ADMIN_PUBKEY))
-        assertTrue(ZnsResolver.verify(registration.copy(nonce = 1), ZnsResolver.ADMIN_PUBKEY))
-        // The search only walks downward, so a reported nonce below the signed one fails.
-        assertFalse(ZnsResolver.verify(registration.copy(nonce = 0), ZnsResolver.ADMIN_PUBKEY))
-        // CLAIM and BUY do not use the nonce, so no search happens for them.
-        assertFalse(ZnsResolver.verify(registration.copy(lastAction = "CLAIM"), ZnsResolver.ADMIN_PUBKEY))
-    }
-
-    @Test
-    fun verify_rejectsTamperedAddress() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        val swapped = registration.copy(address = registration.address.dropLast(1) + "h")
-        assertFalse(ZnsResolver.verify(swapped, ZnsResolver.ADMIN_PUBKEY))
-    }
-
-    @Test
-    fun verify_rejectsTamperedSignatureAndWrongKey() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        val flipped = registration.copy(signature = "A" + registration.signature!!.drop(1))
-        assertFalse(ZnsResolver.verify(flipped, ZnsResolver.ADMIN_PUBKEY))
-
-        val otherKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-        assertFalse(ZnsResolver.verify(registration, otherKey))
-    }
-
-    @Test
-    fun verify_rejectsMissingSignatureAndActionsThatDoNotCoverTheAddress() {
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        assertFalse(ZnsResolver.verify(registration.copy(signature = null), ZnsResolver.ADMIN_PUBKEY))
-        assertFalse(ZnsResolver.verify(registration.copy(lastAction = "DELIST"), ZnsResolver.ADMIN_PUBKEY))
-        assertFalse(ZnsResolver.verify(registration.copy(lastAction = "RELEASE"), ZnsResolver.ADMIN_PUBKEY))
-        assertFalse(ZnsResolver.verify(registration.copy(signature = "not base64!"), ZnsResolver.ADMIN_PUBKEY))
-    }
-
-    @Test
-    fun verify_rejectsSovereignRegistrations() {
-        // The attached key is unauthenticated (it comes from the same response), so a
-        // registration carrying one is never accepted, even with a valid admin signature.
-        val registration = ZnsResolver.parseResolveResponse(CHILDISH_BODY)!!
-        assertFalse(ZnsResolver.verify(registration.copy(pubkey = ZnsResolver.ADMIN_PUBKEY), ZnsResolver.ADMIN_PUBKEY))
-        val otherKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-        assertFalse(ZnsResolver.verify(registration.copy(pubkey = otherKey), ZnsResolver.ADMIN_PUBKEY))
+        // Canonically equal but byte-different names do not match.
+        val decomposed = ZnsResolver.Registration("café", "u1abc")
+        assertThrows(ZnsResolver.RpcError::class.java) { ZnsResolver.validate("café", decomposed) }
     }
 
     // ── Handler ─────────────────────────────────────────────────────────────
 
     @Test
     fun handler_skipsResolverForNonNames() {
-        val handler = AddressHandlerZns(ZnsResolver(url = "http://127.0.0.1:1"))
-        assertFalse(handler.isSupported("alice"))
-        assertFalse(handler.isSupported("u1jlu75mjtmhdekpq0nx5kakkgdnss8ta6xqzwu8p278axz0zt3pmep8hs4u0ws0nhlz"))
+        val resolver = RecordingResolver(THEBACKUPKID_ADDRESS)
+        val handler = AddressHandlerZns(resolver)
+        assertFalse(handler.isSupported("thebackupkid"))
+        assertFalse(handler.isSupported(THEBACKUPKID_ADDRESS))
+        assertFalse(handler.isSupported("my-name.zec"))
+        assertTrue(resolver.queries.isEmpty())
+    }
+
+    @Test
+    fun handler_resolvesNormalizedName() {
+        val resolver = RecordingResolver(THEBACKUPKID_ADDRESS)
+        val handler = AddressHandlerZns(resolver)
+
+        assertTrue(handler.isSupported(" TheBackupKid.ZEC "))
+        assertEquals(listOf("thebackupkid"), resolver.queries)
+
+        val address = handler.parseAddress(" TheBackupKid.ZEC ")
+        assertEquals(THEBACKUPKID_ADDRESS, address.hex)
+        assertEquals("TheBackupKid.ZEC", address.domain)
+    }
+
+    @Test
+    fun handler_unregisteredNameIsNotSupported() {
+        assertFalse(AddressHandlerZns(RecordingResolver(null)).isSupported("childish.zec"))
+    }
+
+    @Test
+    fun handler_resolverErrorIsNotSupported() {
+        val failing = object : ZnsResolver() {
+            override fun resolve(name: String): String? = throw UnknownRegistry()
+        }
+        assertFalse(AddressHandlerZns(failing).isSupported("thebackupkid.zec"))
     }
 
     @Test
@@ -222,24 +241,31 @@ class ZnsTest {
         assertFalse(handler.isSupported("alice.zcash"))
     }
 
-    private fun registration(
-        name: String,
-        address: String,
-        nonce: Long,
-        lastAction: String,
-        signature: String? = "AQID",
-        pubkey: String? = null,
-    ) = ZnsResolver.Registration(name, address, nonce, lastAction, signature, pubkey)
+    private class RecordingResolver(private val address: String?) : ZnsResolver(url = "http://127.0.0.1:1") {
+        val queries = mutableListOf<String>()
+
+        override fun resolve(name: String): String? {
+            queries += name
+            return address
+        }
+    }
 
     companion object {
-        private const val CHILDISH_ADDRESS =
-            "u1jlu75mjtmhdekpq0nx5kakkgdnss8ta6xqzwu8p278axz0zt3pmep8hs4u0ws0nhlz40925lq770cqw8thnzyp2upm6vwxsc6rrfr3zuvrnjtkrayf9lm09fv3v2erhnu7jme34w2c5x47eafzkks2mwfegphd6aa0dsp0qtxy382nrg"
-        private const val CHILDISH_SIGNATURE =
-            "9ChHKUP7I+j2KKB4WARAayqWY4ZA6pX7cDwKuuGJOVBypAPxXOlUITrC7+B0gekJfN8Zv2Na1Aa+Og/W3qb0AQ=="
+        private const val THEBACKUPKID_ADDRESS =
+            "u19qfnukkpz06w60e7wmgfqv4l0xeyyaprtz59fulemxk0527xnuyewp8gqck3f2kljq29hw7dz8f595pyt5yns5lz6cvyczn2ky7uwplfdkl4m2kgr5ljuam4m3l6mpvdklcut3640txl6z0xduk0lnsqv2zagatlc4extw8j2zyx8829enfkd72xu2r3kt4qrapfty0cttrzyc52ak9"
+        private const val ZECHARIAH_ADDRESS =
+            "u14lms6q2sg984hhng068lqesatnak86mlg297x0qkqsvkqgk2m7dyj5x2grlku3adg2tq6trl5ue3vce7c3jnu5808kw9lsr890kfetrg524q4pgcn4zcnp84na85453pz67cjfy4sx7y6z6zc9t7666utasw5mehe9r2dwwcrgzp94ah"
 
-        // Verbatim mainnet response for resolve {"query":"childish"}
-        private val CHILDISH_BODY = """
-            {"jsonrpc":"2.0","id":1,"result":{"address":"$CHILDISH_ADDRESS","height":3476168,"last_action":"BUY","listing":null,"name":"childish","nonce":0,"signature":"$CHILDISH_SIGNATURE","txid":"8eecefa29c32c9adbc2a0d72d59c7163dd6c744f43c7178caa77d2788dce6e8f"}}
+        // Verbatim mainnet responses, 2026-10-23
+        private val THEBACKUPKID_BODY = """
+            {"jsonrpc":"2.0","id":1,"result":{"name":"thebackupkid","address":"$THEBACKUPKID_ADDRESS","txid":"fedc19a5dd139eb3eaea275163c5671abd13c709e696f2be2a8ff2dd8f73025c","height":3520312,"last_action":"claim","expires_at":"none"}}
         """.trimIndent()
+        private val ZECHARIAH_BODY = """
+            {"jsonrpc":"2.0","id":1,"result":{"name":"zechariah","address":"$ZECHARIAH_ADDRESS","txid":"ed98bed2e92ac46f16b27db5c55597539abc714fb259f1bc2b2fa5dfb586e266","height":3523662,"last_action":"claim","expires_at":"1824002006"}}
+        """.trimIndent()
+        private val STATUS_BODY = statusBody("\"${ZnsResolver.MAINNET_VIEWING_KEY}\"")
+
+        private fun statusBody(viewingKey: String) =
+            """{"jsonrpc":"2.0","id":1,"result":{"synced_height":3527683,"synced":true,"viewing_key":$viewingKey,"treasury_address":"u1f68wxdxsrswjl04kcc397a9ljedg88rl8dgazrk8l9v8jx6t3gqsktvqyvmc3ypgf4pum03q4ftvy5s0fe803nrxm8kw6dgzlvnv83nv"}}"""
     }
 }
