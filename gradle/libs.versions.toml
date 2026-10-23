@@ -83,7 +83,7 @@ marketKit = "73387dd"
 solanaKit = "d5a3b0f"
 tronKit = "4033245"
 thorchainKit = "568a089"
-zcashSdk = "3.2.0-20260908.101839-1"
+zcashSdk = "5.2.2"
 
 # Binance
 binanceConnector = "3.4.1"
@@ -255,8 +255,8 @@ zcash-android-sdk = { module = "com.zodl.android:zcash-android-sdk", version.ref
 zcash-android-backend = { module = "com.zodl.android:zcash-android-backend", version.ref = "zcashSdk" }
 # Slipstream sync engine — version-locked sibling of zcash-android-sdk, must always match zcashSdk
 zcash-android-slipstream = { module = "com.zodl.android:zcash-android-sdk-slipstream", version.ref = "zcashSdk" }
-# lightwalletd gRPC client — transitive dependency of zcash-android-sdk, declared here so it resolves
-# to the pinned timestamped snapshot instead of the mutable -SNAPSHOT its module metadata asks for
+# lightwalletd gRPC client — transitive dependency of zcash-android-sdk, declared here so the
+# version stays pinned together with the other SDK modules (also used directly by the endpoint pinger)
 zcash-android-lightwallet-client = { module = "com.zodl.android:lightwallet-client", version.ref = "zcashSdk" }
 
 # Binance
