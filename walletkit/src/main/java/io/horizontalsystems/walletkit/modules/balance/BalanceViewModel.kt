@@ -399,9 +399,9 @@ class BalanceViewModel(
             )
             emitState()
         } else {
-            // Some handlers check addresses with a native library, and the first check can
-            // block while it loads, so keep them off the main thread.
-            val types = withContext(Dispatchers.Default) {
+            // Some handlers check addresses with a blocking native library call, and the first
+            // check also waits for the library to load.
+            val types = withContext(Dispatchers.IO) {
                 addressHandlerFactory.parserChain(null).supportedAddressHandlers(text)
             }
             if (types.isEmpty()) {
