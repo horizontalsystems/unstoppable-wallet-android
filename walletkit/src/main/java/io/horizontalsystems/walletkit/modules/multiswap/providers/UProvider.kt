@@ -137,7 +137,6 @@ enum class UProvider(
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
     ),
-    // Horizontal Systems' own liquidity engine, offered as a deposit-address provider.
     XSwap(
         id = "XSWAP",
         title = "XSwap",
