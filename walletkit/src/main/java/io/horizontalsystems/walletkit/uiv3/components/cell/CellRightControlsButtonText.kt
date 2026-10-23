@@ -60,7 +60,7 @@ fun CellRightControlsButtonText(
                 style = ComposeAppTheme.typography.subheadSB,
                 color = it.color ?: ComposeAppTheme.colors.leah,
                 textAlign = TextAlign.End,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f, fill = false)
             )
         }
         subhead?.let {
@@ -69,7 +69,7 @@ fun CellRightControlsButtonText(
                 style = ComposeAppTheme.typography.subhead,
                 color = it.color ?: ComposeAppTheme.colors.leah,
                 textAlign = TextAlign.End,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f, fill = false)
             )
         }
         description?.let {
