@@ -233,6 +233,11 @@ class BackupProvider(
         }
     }
 
+    /**
+     * Restores preference and custom-RPC settings from a full backup.
+     * When present, [Settings.uiStatsEnabled] is applied via [StatsManager];
+     * older backups without the field leave the current value unchanged.
+     */
     private suspend fun restoreSettings(
         settings: Settings,
         passphrase: String,
@@ -519,6 +524,10 @@ class BackupProvider(
         return gson.toJson(backup)
     }
 
+    /**
+     * Builds an encrypted full-backup JSON for the given accounts and sections.
+     * Preference backups include [Settings.uiStatsEnabled] (Share UI data).
+     */
     @Throws
     fun createFullBackup(accountIds: List<String>, passphrase: String, sections: Set<BackupSection> = BackupSection.entries.toSet()): String {
         val wallets = accountManager.accounts
@@ -940,6 +949,7 @@ data class Settings(
     val zanoNodes: ZanoNodes?,
     @SerializedName("zcash_endpoints")
     val zcashEndpoints: ZcashEndpoints?,
+    /** Share UI data preference; null in backups created before this field existed. */
     @SerializedName("ui_stats_enabled")
     val uiStatsEnabled: Boolean?
 )
