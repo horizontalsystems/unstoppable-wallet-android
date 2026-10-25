@@ -235,6 +235,10 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
      */
     protected open fun registerChainPlugins() = Unit
 
+    /**
+     * Wires app-wide managers and DI, including [BackupProvider] with [statsManager]
+     * so full backup/restore can persist the Share UI data preference.
+     */
     override fun onCreate() {
         super.onCreate()
 
