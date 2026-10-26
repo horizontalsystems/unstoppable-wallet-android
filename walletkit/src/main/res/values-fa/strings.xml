@@ -117,8 +117,6 @@
     <string name="Balance_Sort_Balance">بالانس</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">ارسال</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>

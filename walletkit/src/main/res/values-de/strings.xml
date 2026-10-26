@@ -366,8 +366,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Verwenden Sie für den Empfang von Börsen oder Diensten, die keine geschützten Adressen unterstützen.</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">Senden</string>
     <!--Send-->
     <string name="Send_EnterAddress">Adresse eingeben</string>
     <string name="Send_Title">Senden %s</string>

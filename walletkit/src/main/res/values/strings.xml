@@ -485,9 +485,6 @@
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Use for receiving from exchanges or services that don’t support shielded addresses.</string>
 
-    <!--Send NFT-->
-    <string name="SendNft_Title">Send</string>
-
     <!--Send-->
 
     <string name="Send_EnterAddress">Enter Address</string>

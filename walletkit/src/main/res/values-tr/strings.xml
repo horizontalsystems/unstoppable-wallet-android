@@ -265,8 +265,6 @@
     <string name="Balance_Receive_ReceiveAddresses">Alıcının adresi</string>
     <string name="Balance_Receive_ChangeAddresses">Değişiklik Adresleri</string>
     <string name="Balance_ReceiveHint_Search">Ara</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">Gönder</string>
     <!--Send-->
     <string name="Send_EnterAddress">Adres Girin</string>
     <string name="Send_Title">%s gönder</string>

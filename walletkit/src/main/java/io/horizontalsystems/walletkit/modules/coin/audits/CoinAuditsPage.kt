@@ -65,7 +65,7 @@ private fun CoinAuditsScreen(
     val uiState = viewModel.uiState
 
     HSScaffold(
-        title = stringResource(R.string.SendNft_Title),
+        title = stringResource(R.string.Coin_Analytics_Audits),
         onBack = onPressBack,
     ) {
         Column(Modifier.fillMaxSize()) {

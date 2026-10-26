@@ -347,8 +347,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
     <string name="Balance_Zcash_Transparent">透明</string>
     <string name="Balance_Zcash_TransparentDescription">보호된 주소를 지원하지 않는 거래소 또는 서비스로부터 수신할 때 사용합니다.</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">전송</string>
     <!--Send-->
     <string name="Send_EnterAddress">주소 입력</string>
     <string name="Send_Title">전송 %s</string>

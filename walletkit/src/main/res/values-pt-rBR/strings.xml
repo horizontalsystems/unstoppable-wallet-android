@@ -366,8 +366,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
     <string name="Balance_Zcash_Transparent">Transparente</string>
     <string name="Balance_Zcash_TransparentDescription">Use para receber de exchanges ou serviços que não suportam endereços blindados.</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">Enviar</string>
     <!--Send-->
     <string name="Send_EnterAddress">Inserir Endereço</string>
     <string name="Send_Title">Enviar %s</string>
