@@ -298,8 +298,6 @@
     <string name="Info_DoubleSpend_Description">خطر دو برابر هزینه کردن! تراکنش دیگری در زنجیره بلوکی وجود دارد که سعی می کنید ورودی های استفاده شده در این تراکنش را استفاده کند. فقط یک تراکنش توسط شبکه پذیرفته خواهد شد</string>
     <string name="Info_DoubleSpend_ThisTx">این Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx متناقص</string>
-    <!--Guides-->
-    <string name="Guides_Title">آکادمی</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">صفحه پیدا نشد</string>
     <!--Setting_Currency-->

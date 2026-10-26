@@ -45,7 +45,6 @@ interface IAppConfigProvider {
     val blockscoutApiKey: List<String>
     val alchemyApiKey: List<String>
     val guidesUrl: String
-    val eduUrl: String
     val faqUrl: String
     val coinsJsonUrl: String
     val providerCoinsJsonUrl: String

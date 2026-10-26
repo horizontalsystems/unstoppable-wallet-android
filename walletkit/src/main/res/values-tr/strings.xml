@@ -571,8 +571,6 @@
     <string name="Info_DoubleSpend_Description">Çifte Harcama Riski! Blockchain\'de, bu işlemde kullanılan girdileri harcamaya çalışan başka bir işlem var. Ağ tarafından yalnızca bir işlem kabul edilecektir</string>
     <string name="Info_DoubleSpend_ThisTx">Bu Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Çakışan Tx</string>
-    <!--Guides-->
-    <string name="Guides_Title">Akademi</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Hiçbir sayfa bulunamadı</string>
     <!--Setting_Currency-->

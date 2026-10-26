@@ -52,8 +52,8 @@ class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
     private fun didFetchFaqSections(faqSections: List<FaqSection>) {
         sections = faqSections
 
-        // See GuidesViewModel: an empty but successful index used to crash the process here.
-        // Assigned rather than skipped when empty, so a refetch that comes back empty clears the
+        // A successful fetch can carry an empty index — the content is served, not built in — and
+        // first() on it used to crash the process here. Assigned rather than skipped when empty, so a refetch that comes back empty clears the
         // previous selection instead of leaving its items on a screen that has no sections.
         val section = faqSections.firstOrNull()
         selectedSection = section

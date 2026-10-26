@@ -812,8 +812,6 @@
     <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
     <string name="Info_DoubleSpend_ConflictingTx">Конфликтующая транзакция</string>
-    <!--Guides-->
-    <string name="Guides_Title">Академия</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Страница не найдена</string>
     <!--Setting_Currency-->

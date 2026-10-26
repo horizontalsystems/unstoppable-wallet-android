@@ -809,8 +809,6 @@
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此交易</string>
     <string name="Info_DoubleSpend_ConflictingTx">冲突交易</string>
-    <!--Guides-->
-    <string name="Guides_Title">钱包学院</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">无法找到页面</string>
     <!--Setting_Currency-->

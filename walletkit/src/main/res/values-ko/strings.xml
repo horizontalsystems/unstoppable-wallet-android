@@ -683,8 +683,6 @@
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">충돌하는 Tx</string>
-    <!--Guides-->
-    <string name="Guides_Title">아카데미</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">연락처</string>
     <!--Setting_Currency-->

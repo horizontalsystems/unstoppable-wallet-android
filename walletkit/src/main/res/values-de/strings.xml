@@ -810,8 +810,6 @@
     <string name="Info_DoubleSpend_Description">Doppeltes Ausgaberisiko! Es gibt eine weitere Transaktion in der Blockkette, die versucht, Eingaben auszugeben, die für diese Transaktion verwendet werden. Nur eine Transaktion wird vom Netzwerk akzeptiert</string>
     <string name="Info_DoubleSpend_ThisTx">Dieser Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Widersprüchliche Tx</string>
-    <!--Guides-->
-    <string name="Guides_Title">Akademie</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Seite nicht gefunden</string>
     <!--Setting_Currency-->

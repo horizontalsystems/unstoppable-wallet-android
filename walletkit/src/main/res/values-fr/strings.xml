@@ -810,8 +810,6 @@
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser des intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Ce Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx en conflit</string>
-    <!--Guides-->
-    <string name="Guides_Title">Académie</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Page introuvable</string>
     <!--Setting_Currency-->

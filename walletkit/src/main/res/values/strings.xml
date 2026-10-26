@@ -1196,10 +1196,6 @@
     <string name="Info_DoubleSpend_ThisTx">This Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
 
-    <!--Guides-->
-
-    <string name="Guides_Title">Academy</string>
-
     <!--Markdown-->
 
     <string name="Markdown_Error_NotFound">Page not found</string>

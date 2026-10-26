@@ -810,8 +810,6 @@
     <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx Conflitante</string>
-    <!--Guides-->
-    <string name="Guides_Title">Treinamento</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Página não encontrada</string>
     <!--Setting_Currency-->
