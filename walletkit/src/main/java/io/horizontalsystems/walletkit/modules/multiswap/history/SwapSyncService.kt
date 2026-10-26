@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import kotlinx.coroutines.CancellationException
@@ -59,6 +60,19 @@ class SwapSyncService(
         }
     }
 
+    /** The split counterpart of [reportInboundTxHash]: one deposit hash for every output of the split. */
+    fun reportSplitInboundTxHash(provider: ISplitSwapProvider, splitUuid: String, txHash: String) {
+        coroutineScope.launch {
+            try {
+                provider.reportSplitInboundTxHash(splitUuid, txHash)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                Log.e("SwapSyncService", "Failed to report inbound tx hash for split $splitUuid: ${e.message}", e)
+            }
+        }
+    }
+
     private suspend fun syncPending() {
         val pending = swapRecordManager.getPending()
         for (record in pending) {
@@ -73,6 +87,11 @@ class SwapSyncService(
 
         if (record.providerId == AllBridgeTracker.PROVIDER_ID) {
             syncAllBridgeRecord(record)
+            return
+        }
+
+        if (SwapOperation.fromString(record.operation) == SwapOperation.SplitSwap) {
+            syncSplitRecord(record)
             return
         }
         try {
@@ -126,6 +145,40 @@ class SwapSyncService(
             Log.e("SwapSyncService", "Provider not supported for tracking: ${record.providerId}", e)
         } catch (e: Throwable) {
             Log.e("SwapSyncService", "Failed to sync record ${record.id}: ${e.message}", e)
+        }
+    }
+
+    // A split is tracked by its splitUuid alone; the answer carries the whole split as one swap
+    // with a payout leg per output, which advances each output on its own.
+    private suspend fun syncSplitRecord(record: SwapRecord) {
+        try {
+            val splitUuid = record.providerSwapId ?: return
+            val response = unstoppableAPI.splitTrack(UnstoppableAPI.Request.SplitTrack(splitUuid))
+
+            if (record.transactionHash == null && response.hash != null) {
+                swapRecordManager.updateTransactionHash(record.id, response.hash)
+            }
+
+            val outputs = SwapRecordOutput.fromJson(record.splitOutputs)
+            val result = SplitSwapTracker.map(response, outputs)
+            if (result.outputs != outputs) {
+                swapRecordManager.updateSplitOutputs(record.id, result.outputs)
+            }
+
+            val mappedStatus = result.status ?: return
+            val currentStatus = runCatching { SwapStatus.valueOf(record.status) }.getOrNull()
+            if (mappedStatus == currentStatus && result.pauseReason == record.pauseReason) return
+
+            val amountOut = result.amountOut
+            if (amountOut != null) {
+                swapRecordManager.updateStatusAndAmountOut(record.id, mappedStatus, amountOut.toPlainString(), result.pauseReason)
+            } else {
+                swapRecordManager.updateStatus(record.id, mappedStatus, result.pauseReason)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            Log.e("SwapSyncService", "Failed to sync split record ${record.id}: ${e.message}", e)
         }
     }
 

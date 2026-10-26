@@ -49,4 +49,7 @@ data class SwapRecord(
     val trackingHandle: String? = null,
     // estimated swap duration in seconds, as quoted at swap time
     val estimatedTime: Long? = null,
+    // SplitSwap only: the outputs as JSON (SwapRecordOutput list), each with its own status,
+    // amount and payout hash, since the outputs of one deposit finish independently.
+    val splitOutputs: String? = null,
 )

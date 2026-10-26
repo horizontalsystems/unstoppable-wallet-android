@@ -70,4 +70,9 @@ class SwapRecordManager(
         swapRecordDao.updateOutboundTransactionHash(id, hash)
         _recordsUpdatedFlow.tryEmit(Unit)
     }
+
+    fun updateSplitOutputs(id: Int, outputs: List<SwapRecordOutput>) {
+        swapRecordDao.updateSplitOutputs(id, SwapRecordOutput.toJson(outputs))
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
 }

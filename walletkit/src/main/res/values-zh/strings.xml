@@ -1999,4 +1999,18 @@
     <string name="SwapConfirm_CommitRefreshRequired">报价已过期。已加载新的报价。</string>
     <string name="SwapConfirm_CommitFailed">无法开始兑换。已加载新的报价。</string>
     <string name="Zcash_Confirming">确认中</string>
+    <string name="Swap_Tab_Standard">标准</string>
+    <string name="Swap_Tab_Private">私密</string>
+    <string name="SplitSwap_Caution_Title">私密兑换</string>
+    <string name="SplitSwap_Caution_Text">私密兑换将收到的金额拆分到多个地址，使交易流向更难被追踪。</string>
+    <string name="SplitSwap_Recipients_Title">收款人</string>
+    <string name="SplitSwap_Recipients_Description">添加收款地址，并选择如何在它们之间拆分收到的金额。</string>
+    <string name="SplitSwap_Address">地址 %d</string>
+    <string name="SplitSwap_EnterAddresses">输入地址</string>
+    <string name="SplitSwap_InvalidSplit_Title">无效的拆分</string>
+    <string name="SplitSwap_InvalidSplit_Text">服务商不支持此拆分比例。请调整拆分后继续。</string>
+    <string name="SplitSwap_DuplicateAddresses_Title">重复地址</string>
+    <string name="SplitSwap_DuplicateAddresses_Text">使用相同的地址会降低拆分带来的隐私优势。</string>
+    <string name="SwapInfo_StatusSwapIndexed">兑换 %d</string>
+    <string name="SwapInfo_StatusReceiveIndexed">接收 %1$s %2$d</string>
 </resources>

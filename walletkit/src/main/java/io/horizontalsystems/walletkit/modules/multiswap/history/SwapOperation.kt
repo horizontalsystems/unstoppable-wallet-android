@@ -8,7 +8,10 @@ package io.horizontalsystems.walletkit.modules.multiswap.history
 enum class SwapOperation {
     Swap,
     PrivateSend,
-    CrossPay;
+    CrossPay,
+    // One deposit paid out to several addresses; the record's providerSwapId is the split's
+    // id and its outputs are tracked one by one (see SwapRecord.splitOutputs).
+    SplitSwap;
 
     companion object {
         // Unknown values (a record written by a NEWER app version) read as a plain swap

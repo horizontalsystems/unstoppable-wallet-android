@@ -63,6 +63,7 @@ class SwapInfoViewModel(
     private var isSingleTransactionSwap: Boolean = false
     private var pauseReason: PauseReason? = null
     private var swapTime: String? = null
+    private var splitOutputs: List<SplitOutputInfoItem>? = null
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -91,6 +92,7 @@ class SwapInfoViewModel(
         isSingleTransactionSwap = isSingleTransactionSwap,
         pauseReason = pauseReason,
         swapTime = swapTime,
+        splitOutputs = splitOutputs,
     )
 
     init {
@@ -134,8 +136,11 @@ class SwapInfoViewModel(
         }
         operation = SwapOperation.fromString(record.operation)
         // A private send or CrossPay always has a real recipient the user typed; a plain swap
-        // only shows one when it differs from the user's own wallet.
-        recipientAddress = record.recipientAddress.takeIf { record.customRecipientAddress || operation != SwapOperation.Swap }
+        // only shows one when it differs from the user's own wallet. A split's recipients are
+        // shown per output instead.
+        recipientAddress = record.recipientAddress.takeIf {
+            operation != SwapOperation.SplitSwap && (record.customRecipientAddress || operation != SwapOperation.Swap)
+        }
         recipientContactName = recipientAddress?.let { address ->
             contactsRepository
                 .getContactsFiltered(BlockchainType.fromUid(record.tokenOutBlockchainTypeUid), addressQuery = address)
@@ -160,6 +165,26 @@ class SwapInfoViewModel(
                 SwapProviderType.CEX -> formatSwapTimeRange(time)
                 else -> "~${formatDuration(time)}"
             }
+        }
+        splitOutputs = if (operation == SwapOperation.SplitSwap) {
+            val blockchainType = BlockchainType.fromUid(record.tokenOutBlockchainTypeUid)
+            SwapRecordOutput.fromJson(record.splitOutputs).map { output ->
+                SplitOutputInfoItem(
+                    index = output.index,
+                    percent = output.percent,
+                    address = output.address,
+                    contactName = contactsRepository
+                        .getContactsFiltered(blockchainType, addressQuery = output.address)
+                        .firstOrNull()
+                        ?.name,
+                    amountOut = output.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
+                    fiatAmountOut = output.amountOut?.let { formatFiat(it, priceOut, currency.symbol, currency.decimal) },
+                    status = output.swapStatus,
+                    txUrl = output.txHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) },
+                )
+            }
+        } else {
+            null
         }
 
         emitState()
@@ -270,4 +295,17 @@ data class SwapInfoUiState(
     val isSingleTransactionSwap: Boolean,
     val pauseReason: PauseReason?,
     val swapTime: String?,
+    // A split swap's outputs in request order, each with its own stage; null otherwise.
+    val splitOutputs: List<SplitOutputInfoItem>? = null,
+)
+
+data class SplitOutputInfoItem(
+    val index: Int,
+    val percent: Int,
+    val address: String,
+    val contactName: String?,
+    val amountOut: String?,
+    val fiatAmountOut: String?,
+    val status: SwapStatus,
+    val txUrl: String?,
 )

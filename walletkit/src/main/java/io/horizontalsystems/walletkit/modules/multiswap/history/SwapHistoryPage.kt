@@ -98,7 +98,9 @@ fun SwapHistoryScreen(navigation: HSNavigation) {
                             )
                         }
                         when (item.operation) {
-                            SwapOperation.Swap -> SwapHistoryCell(item = item, onClick = onClick)
+                            // A split reads as a swap of the total: one deposit, one bought amount.
+                            SwapOperation.Swap,
+                            SwapOperation.SplitSwap -> SwapHistoryCell(item = item, onClick = onClick)
                             SwapOperation.PrivateSend,
                             SwapOperation.CrossPay -> OperationHistoryCell(item = item, onClick = onClick)
                         }
@@ -215,7 +217,8 @@ private fun OperationHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit)
 
 @Composable
 fun operationTitle(operation: SwapOperation): String = when (operation) {
-    SwapOperation.Swap -> stringResource(R.string.SwapInfo_Title)
+    SwapOperation.Swap,
+    SwapOperation.SplitSwap -> stringResource(R.string.SwapInfo_Title)
     SwapOperation.PrivateSend -> stringResource(R.string.PrivateSend_Toggle_Title)
     SwapOperation.CrossPay -> stringResource(R.string.CrossPay_Info_Title)
 }

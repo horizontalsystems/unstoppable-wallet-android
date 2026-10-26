@@ -18,8 +18,11 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.SwapRecord
+import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
+import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordOutput
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.RetryableSwapError
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
@@ -55,6 +58,9 @@ class SwapConfirmViewModel(
     private val backgroundManager: BackgroundManager,
     private val swapWalletEnabler: SwapWalletEnabler,
     initialRecipient: Address? = null,
+    // A split swap's recipients, chosen with their shares before this screen; null for a
+    // single swap. They cannot change here: the preview is priced for exactly these.
+    private val splitRecipients: List<SplitSwapRecipient>? = null,
     private val swapProviderInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
@@ -62,9 +68,11 @@ class SwapConfirmViewModel(
     private val tokenIn = swapQuote.tokenIn
     private val tokenOut = swapQuote.tokenOut
 
+    val isSplit: Boolean = splitRecipients != null
+
     // tokenOut the account can't hold — the recipient came from SwapRecipientPage,
     // is mandatory and must not be cleared (there is no own-wallet address to fall back to)
-    val recipientRequired = !SwapHelper.isTokenReceivableByAccount(tokenOut)
+    val recipientRequired = !isSplit && !SwapHelper.isTokenReceivableByAccount(tokenOut)
 
     // MEV protection is a property of the confirmation quote (the route) and needs a protected
     // sender on the sell chain; nothing is known before the first quote arrives.
@@ -275,8 +283,25 @@ class SwapConfirmViewModel(
             slippage = slippage,
             estimatedTime = estimatedTime,
             providerType = swapProvider.type,
-            error = error
+            error = error,
+            splitOutputs = finalQuote?.splitOutputs,
+            splitOutputFiatAmounts = splitOutputFiatAmounts(finalQuote?.splitOutputs),
         )
+    }
+
+    // Each output's share of the total's fiat value: one rate serves every output, so the
+    // proportion is exact and needs no second price lookup.
+    private fun splitOutputFiatAmounts(outputs: List<SplitSwapOutput>?): List<BigDecimal?>? {
+        outputs ?: return null
+        val total = amountOut?.takeIf { it > BigDecimal.ZERO }
+        val fiatTotal = fiatAmountOut
+        return outputs.map { output ->
+            if (total == null || fiatTotal == null) {
+                null
+            } else {
+                (fiatTotal * output.amountOut).divide(total, currency.decimal, RoundingMode.DOWN)
+            }
+        }
     }
 
     override fun onCleared() {
@@ -315,15 +340,29 @@ class SwapConfirmViewModel(
                     throw WatchAccountException()
                 }
 
-                val finalQuote = swapProvider.fetchFinalQuote(
-                    tokenIn,
-                    tokenOut,
-                    amountIn,
-                    sendTransactionSettings,
-                    swapQuote,
-                    recipient,
-                    slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
-                )
+                val finalQuote = if (splitRecipients != null) {
+                    val splitProvider = swapProvider as? ISplitSwapProvider
+                        ?: throw IllegalStateException("${swapProvider.id} cannot split a swap")
+                    splitProvider.fetchSplitFinalQuote(
+                        tokenIn,
+                        tokenOut,
+                        amountIn,
+                        splitRecipients,
+                        sendTransactionSettings,
+                        swapQuote,
+                        slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                    )
+                } else {
+                    swapProvider.fetchFinalQuote(
+                        tokenIn,
+                        tokenOut,
+                        amountIn,
+                        sendTransactionSettings,
+                        swapQuote,
+                        recipient,
+                        slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                    )
+                }
 
                 ensureActive()
 
@@ -465,20 +504,29 @@ class SwapConfirmViewModel(
                 // Best-effort and off the critical path: funds have moved, so the screen must
                 // not wait on the report, and tracking resolves the swap without it.
                 if (providerSwapId != null) {
-                    App.swapSyncService.reportInboundTxHash(swapProvider, providerSwapId, txHash)
+                    val splitProvider = swapProvider as? ISplitSwapProvider
+                    if (splitRecipients != null && splitProvider != null) {
+                        App.swapSyncService.reportSplitInboundTxHash(splitProvider, providerSwapId, txHash)
+                    } else {
+                        App.swapSyncService.reportInboundTxHash(swapProvider, providerSwapId, txHash)
+                    }
                 }
             }
 
             // The bought token lands in this account unless a custom recipient was set, so its
             // wallet has to be enabled for the funds to show on Balance. The transaction is
             // already broadcast at this point, so a failure here must not surface as a swap error.
-            if (recipient == null) {
+            // A split's outputs go to typed addresses, any of which may be this account's.
+            if (recipient == null && (splitRecipients == null || SwapHelper.isTokenReceivableByAccount(tokenOut))) {
                 runCatching { swapWalletEnabler.enableReceivingWallet(activeAccount, tokenOut) }
             }
 
             // remember the delivery address so the recipient page can suggest it next time
             recipient?.let {
                 App.recentAddressManager.setRecentAddress(it, tokenOut.blockchainType)
+            }
+            splitRecipients?.forEach {
+                App.recentAddressManager.setRecentAddress(it.address, tokenOut.blockchainType)
             }
 
             result
@@ -544,6 +592,16 @@ class SwapConfirmViewModel(
 
     private suspend fun saveSwapRecord(commitment: SwapCommitment, recipient: Address?): Int {
         val quote = commitment.quote
+        val splitOutputs = quote.splitOutputs?.takeIf { isSplit }?.map { output ->
+            SwapRecordOutput(
+                index = output.index,
+                uuid = output.uuid,
+                percent = output.percent,
+                address = output.address,
+                amountOut = output.amountOut.toPlainString(),
+                status = SwapStatus.Depositing.name,
+            )
+        }
 
         val record = SwapRecord(
             accountId = confirmingAccountId ?: "",
@@ -563,8 +621,12 @@ class SwapConfirmViewModel(
             amountIn = amountIn.toPlainString(),
             amountOut = quote.amountOut.toPlainString(),
             amountOutMin = quote.amountOutMin?.toPlainString(),
-            recipientAddress = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut),
-            customRecipientAddress = recipient != null,
+            // A split's recipients are all typed addresses; the first stands in for the single
+            // recipient field, the rest live in splitOutputs.
+            recipientAddress = splitOutputs?.firstOrNull()?.address
+                ?: recipient?.hex
+                ?: SwapHelper.getReceiveAddressForToken(tokenOut),
+            customRecipientAddress = recipient != null || splitOutputs != null,
             sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
             transactionHash = null,
             providerSwapId = commitment.providerSwapId,
@@ -572,12 +634,16 @@ class SwapConfirmViewModel(
             toAsset = quote.toAsset,
             depositAddress = quote.depositAddress,
             status = SwapStatus.Depositing.name,
+            operation = (if (splitOutputs != null) SwapOperation.SplitSwap else SwapOperation.Swap).name,
             estimatedTime = quote.estimatedTime,
+            splitOutputs = splitOutputs?.let { SwapRecordOutput.toJson(it) },
         )
         return App.swapRecordManager.save(record)
     }
 
     fun setRecipient(recipient: Address?) {
+        // A split's recipients were fixed before this screen.
+        if (isSplit) return
         // a mandatory external recipient can be changed but never cleared
         if (recipient == null && recipientRequired) return
 
@@ -602,6 +668,7 @@ class SwapConfirmViewModel(
         fun init(
             quote: SwapProviderQuote,
             initialRecipient: Address? = null,
+            splitRecipients: List<SplitSwapRecipient>? = null,
         ): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
 
@@ -619,6 +686,7 @@ class SwapConfirmViewModel(
                 App.backgroundManager,
                 SwapWalletEnabler(App.walletManager, App.restoreSettingsManager),
                 initialRecipient,
+                splitRecipients,
             )
         }
     }
@@ -656,4 +724,7 @@ data class SwapConfirmUiState(
     val estimatedTime: Long?,
     val providerType: SwapProviderType,
     val error: Throwable?,
+    // A split swap's outputs in recipient order, each with its fiat value; null for a single swap.
+    val splitOutputs: List<SplitSwapOutput>? = null,
+    val splitOutputFiatAmounts: List<BigDecimal?>? = null,
 )

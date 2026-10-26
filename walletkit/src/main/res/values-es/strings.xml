@@ -2000,4 +2000,18 @@
     <string name="SwapConfirm_CommitRefreshRequired">La cotización ha expirado. Se ha cargado una nueva cotización.</string>
     <string name="SwapConfirm_CommitFailed">No se pudo iniciar el swap. Se ha cargado una nueva cotización.</string>
     <string name="Zcash_Confirming">Confirmando</string>
+    <string name="Swap_Tab_Standard">Estándar</string>
+    <string name="Swap_Tab_Private">Privado</string>
+    <string name="SplitSwap_Caution_Title">Swap privado</string>
+    <string name="SplitSwap_Caution_Text">El swap privado divide el importe recibido entre varias direcciones, lo que dificulta rastrear el flujo de la transacción.</string>
+    <string name="SplitSwap_Recipients_Title">Destinatarios</string>
+    <string name="SplitSwap_Recipients_Description">Añade las direcciones de los destinatarios y elige cómo se reparte el importe recibido entre ellas.</string>
+    <string name="SplitSwap_Address">Dirección %d</string>
+    <string name="SplitSwap_EnterAddresses">Introducir direcciones</string>
+    <string name="SplitSwap_InvalidSplit_Title">División no válida</string>
+    <string name="SplitSwap_InvalidSplit_Text">El proveedor no admite esta proporción de división. Ajusta la división para continuar.</string>
+    <string name="SplitSwap_DuplicateAddresses_Title">Direcciones duplicadas</string>
+    <string name="SplitSwap_DuplicateAddresses_Text">Usar la misma dirección reduce la ventaja de privacidad de la división.</string>
+    <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>
+    <string name="SwapInfo_StatusReceiveIndexed">Recibir %1$s %2$d</string>
 </resources>

@@ -53,19 +53,24 @@ import kotlinx.serialization.Serializable
 import kotlin.math.roundToLong
 
 @Serializable
-data class SwapSelectProviderPage(val parentScreenContentKey: String) : HSPage() {
+data class SwapSelectProviderPage(
+    val parentScreenContentKey: String,
+    // Which of the swap screen's tabs opened the list; null is the Standard tab.
+    val swapViewModelKey: String? = null,
+) : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        SwapSelectProviderScreen(navigation, parentScreenContentKey)
+        SwapSelectProviderScreen(navigation, parentScreenContentKey, swapViewModelKey)
     }
 }
 
 @Composable
 fun SwapSelectProviderScreen(
     navigation: HSNavigation,
-    parentScreenContentKey: String
+    parentScreenContentKey: String,
+    swapViewModelKey: String? = null,
 ) {
-    val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
+    val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey, key = swapViewModelKey)
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(
             swapViewModel.uiState.quotes,

@@ -3,7 +3,13 @@ package io.horizontalsystems.walletkit.modules.multiswap
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -133,8 +139,12 @@ data class SwapPage(val input: Input? = null) : HSPage() {
     data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("LocalContextGetResourceValueCall")
+/** What a tab of the swap screen offers: one output, or a Private split between several addresses. */
+enum class SwapTab {
+    Standard,
+    Private,
+}
+
 @Composable
 fun SwapScreen(
     navigation: HSNavigation,
@@ -146,8 +156,96 @@ fun SwapScreen(
     closeAfterSwap: Boolean = true,
     autofocus: Boolean = true
 ) {
+    var selectedTab by rememberSaveable { mutableStateOf(SwapTab.Standard) }
+
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val imeInsets = WindowInsets.ime
+    val navigateAfterKeyboardClosed: (() -> Unit) -> Unit = { action ->
+        focusManager.clearFocus()
+        coroutineScope.launch {
+            withTimeoutOrNull(500.milliseconds) {
+                snapshotFlow { imeInsets.getBottom(density) }.first { it == 0 }
+            }
+            action()
+        }
+    }
+
+    HSScaffold(
+        title = stringResource(R.string.Swap),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.SwapHistory_Title),
+                icon = R.drawable.ic_circle_clock_24,
+                onClick = {
+                    navigateAfterKeyboardClosed {
+                        navigation.slideFromRight(SwapHistoryPage)
+                    }
+                }
+            )),
+        onBack = onClickClose,
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            TabsFolder(
+                tabs = listOf(
+                    TabFolderItem(stringResource(R.string.Swap_Tab_Standard)),
+                    TabFolderItem(stringResource(R.string.Swap_Tab_Private), R.drawable.prem_fraud_24),
+                ),
+                selectedIndex = selectedTab.ordinal,
+                onSelect = {
+                    // The amount field keeps its focus across tabs, so the keyboard would
+                    // otherwise stay up over the other tab's content.
+                    focusManager.clearFocus()
+                    selectedTab = SwapTab.entries[it]
+                },
+            )
+            // Each tab keeps its own view model in the screen's store, so switching back finds
+            // its tokens, amount and quote. Only the shown tab is composed, so only it requotes.
+            when (selectedTab) {
+                SwapTab.Standard -> SwapTabScreen(
+                    navigation = navigation,
+                    parentScreenContentKey = parentScreenContentKey,
+                    tokenIn = tokenIn,
+                    tokenOut = tokenOut,
+                    split = false,
+                    bottomPadding = bottomPadding,
+                    closeAfterSwap = closeAfterSwap,
+                    autofocus = autofocus,
+                )
+
+                SwapTab.Private -> SwapTabScreen(
+                    navigation = navigation,
+                    parentScreenContentKey = parentScreenContentKey,
+                    tokenIn = tokenIn,
+                    tokenOut = tokenOut,
+                    split = true,
+                    bottomPadding = bottomPadding,
+                    closeAfterSwap = closeAfterSwap,
+                    autofocus = false,
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("LocalContextGetResourceValueCall")
+@Composable
+private fun SwapTabScreen(
+    navigation: HSNavigation,
+    parentScreenContentKey: String,
+    tokenIn: Token?,
+    tokenOut: Token?,
+    split: Boolean,
+    bottomPadding: Dp,
+    closeAfterSwap: Boolean,
+    autofocus: Boolean,
+) {
+    val swapViewModelKey = if (split) SwapViewModel.PRIVATE_VIEW_MODEL_KEY else null
     val viewModel = viewModel<SwapViewModel>(
-        factory = SwapViewModel.Factory(tokenIn, tokenOut)
+        key = swapViewModelKey,
+        factory = SwapViewModel.Factory(tokenIn, tokenOut, split = split)
     )
     // Shares the swap view model's service, which saves the wallet once the settings are approved
     val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel> {
@@ -211,7 +309,13 @@ fun SwapScreen(
     val navigateToSwapConfirm = {
         val tokenOut = viewModel.uiState.tokenOut
         val quote = viewModel.uiState.quote
-        if (viewModel.uiState.externalRecipientRequired && tokenOut != null) {
+        if (split) {
+            // A split's recipients and shares are always chosen on their own page, which opens
+            // the confirmation itself.
+            navigation.slideFromRight(
+                SplitSwapRecipientsPage(SplitSwapRecipientsPage.Input(parentScreenContentKey, closeAfterSwap))
+            )
+        } else if (viewModel.uiState.externalRecipientRequired && tokenOut != null) {
             // tokenOut the account can't hold: the recipient page collects the external
             // delivery address and opens the confirmation itself. Whether a ZEC recipient may
             // be shielded depends on the provider's execution type, which only /v3/providers
@@ -302,7 +406,7 @@ fun SwapScreen(
             onDismiss = { showAmlRiskSheet = false },
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
-                navigation.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey))
+                navigation.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey, swapViewModelKey))
             },
         )
     }
@@ -338,7 +442,6 @@ fun SwapScreen(
 
     SwapScreenInner(
         uiState = uiState,
-        onClickClose = onClickClose,
         onClickCoinFrom = navigation.slideFromBottomForResult<Token>(
             {
                 SwapSelectCoinPage(
@@ -369,7 +472,7 @@ fun SwapScreen(
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navigation.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey))
+            navigation.slideFromBottom(SwapSelectProviderPage(parentScreenContentKey, swapViewModelKey))
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
@@ -393,7 +496,6 @@ fun SwapScreen(
 @Composable
 private fun SwapScreenInner(
     uiState: SwapUiState,
-    onClickClose: (() -> Unit)?,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
     onSwitchPairs: () -> Unit,
@@ -436,20 +538,7 @@ private fun SwapScreenInner(
         }
     }
 
-    HSScaffold(
-        title = stringResource(R.string.Swap),
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.SwapHistory_Title),
-                icon = R.drawable.ic_circle_clock_24,
-                onClick = {
-                    navigateAfterKeyboardClosed {
-                        navigation.slideFromRight(SwapHistoryPage)
-                    }
-                }
-            )),
-        onBack = onClickClose,
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         val amountInputFocusRequester = remember { FocusRequester() }
 
         // Show the keyboard only when the user navigates to this screen — not when it is
@@ -550,6 +639,11 @@ private fun SwapScreenInner(
                             )
                         }
 
+                        if (uiState.split) {
+                            VSpacer(height = 16.dp)
+                            SplitSwapInfoCard()
+                        }
+
                         if (uiState.currentStep is SwapStep.ActionRequired) {
                             uiState.currentStep.action.getDescription()?.let { actionDescription ->
                                 VSpacer(height = 16.dp)
@@ -581,6 +675,35 @@ private fun SwapScreenInner(
                 }
             }
         }
+    }
+}
+
+// What the Private tab does, told once above the button: the split is explained before the
+// recipients are asked for.
+@Composable
+private fun SplitSwapInfoCard() {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+            .padding(16.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.ic_info_filled_20),
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = null,
+            )
+            subhead2_leah(text = stringResource(R.string.SplitSwap_Caution_Title))
+        }
+        VSpacer(8.dp)
+        subhead2_grey(text = stringResource(R.string.SplitSwap_Caution_Text))
     }
 }
 

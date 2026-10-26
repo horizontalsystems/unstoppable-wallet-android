@@ -86,9 +86,13 @@ class HSNavigation(
     inline fun <reified VM : ViewModel> viewModelForScreen(
         contentKey: String,
         factory: ViewModelProvider.Factory? = null,
+        // Tells apart several view models of one class in the same screen's store (the
+        // swap screen keeps one per tab); null is the class's default key.
+        key: String? = null,
     ) : VM {
         return viewModel(
             viewModelStoreOwner = rememberChildViewModelStoreOwner(contentKey),
+            key = key,
             factory = factory,
         )
     }

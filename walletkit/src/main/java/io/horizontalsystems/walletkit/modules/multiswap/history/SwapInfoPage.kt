@@ -40,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.walletkit.modules.multiswap.SplitAddressRow
 import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -47,6 +48,9 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImageCircle
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -134,6 +138,7 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
                 SwapOperation.Swap -> SwapInfoContent(uiState, navigation)
                 SwapOperation.PrivateSend -> PrivateSendInfoContent(uiState, navigation)
                 SwapOperation.CrossPay -> CrossPayInfoContent(uiState, navigation)
+                SwapOperation.SplitSwap -> SplitSwapInfoContent(uiState, navigation)
             }
 
             VSpacer(24.dp)
@@ -145,15 +150,19 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
 
             VSpacer(12.dp)
 
-            SwapStatusSteps(
-                status = uiState.status,
-                tokenInCode = uiState.tokenInCode,
-                tokenOutCode = uiState.tokenOutCode,
-                isSingleTransactionSwap = uiState.isSingleTransactionSwap,
-                depositingTxUrl = uiState.depositingTxUrl,
-                swappingTxUrl = uiState.swappingTxUrl,
-                sendingTxUrl = uiState.sendingTxUrl,
-            )
+            if (uiState.operation == SwapOperation.SplitSwap) {
+                SplitSwapStatusSteps(uiState)
+            } else {
+                SwapStatusSteps(
+                    status = uiState.status,
+                    tokenInCode = uiState.tokenInCode,
+                    tokenOutCode = uiState.tokenOutCode,
+                    isSingleTransactionSwap = uiState.isSingleTransactionSwap,
+                    depositingTxUrl = uiState.depositingTxUrl,
+                    swappingTxUrl = uiState.swappingTxUrl,
+                    sendingTxUrl = uiState.sendingTxUrl,
+                )
+            }
 
             if (uiState.status == SwapStatus.ActionRequired) {
                 VSpacer(16.dp)
@@ -235,64 +244,221 @@ private fun SwapInfoContent(uiState: SwapInfoUiState, navigation: HSNavigation) 
 
         VSpacer(16.dp)
 
-        // Details card
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
-                .padding(vertical = 8.dp),
-        ) {
-            // Provider
-            if (uiState.showProvider) {
-                CellSecondary(
-                    middle = {
-                        CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
-                    },
-                    right = {
-                        CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
-                    },
-                )
-            }
-            // Date
-            CellSecondary(
-                middle = {
-                    CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Date).hs)
-                },
-                right = {
-                    CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
-                },
-            )
-            // Swap Time
-            uiState.swapTime?.let { swapTime ->
-                val infoTitle = stringResource(R.string.Swap_SwapTime)
-                val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
-                CellSecondary(
-                    middle = {
-                        CellMiddleInfoTextIcon(
-                            text = infoTitle.hs,
-                            icon = painterResource(R.drawable.ic_info_24),
-                            iconTint = ComposeAppTheme.colors.grey,
-                            onIconClick = {
-                                navigation.slideFromBottom(
-                                    SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
-                                )
-                            },
-                        )
-                    },
-                    right = {
-                        CellRightInfoTextIcon(
-                            text = swapTime.hs(color = leah)
-                        )
-                    },
-                )
-            }
+        SwapDetailsCard(uiState, navigation) {
             // Recipient
             uiState.recipientAddress?.let { address ->
                 RecipientRow(address = address, view = view)
             }
         }
     }
+}
+
+/** The Route, Date and Swap Time rows of an operation's details, followed by [extraRows]. */
+@Composable
+internal fun SwapDetailsCard(
+    uiState: SwapInfoUiState,
+    navigation: HSNavigation,
+    extraRows: @Composable () -> Unit = {},
+) {
+    val leah = ComposeAppTheme.colors.leah
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(vertical = 8.dp),
+    ) {
+        // Provider
+        if (uiState.showProvider) {
+            CellSecondary(
+                middle = {
+                    CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_Provider).hs)
+                },
+                right = {
+                    CellRightInfoTextIcon(text = uiState.providerName.hs(color = leah))
+                },
+            )
+        }
+        // Date
+        CellSecondary(
+            middle = {
+                CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Date).hs)
+            },
+            right = {
+                CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
+            },
+        )
+        // Swap Time
+        uiState.swapTime?.let { swapTime ->
+            val infoTitle = stringResource(R.string.Swap_SwapTime)
+            val infoText = stringResource(R.string.Swap_EstimatedTimeDescription)
+            CellSecondary(
+                middle = {
+                    CellMiddleInfoTextIcon(
+                        text = infoTitle.hs,
+                        icon = painterResource(R.drawable.ic_info_24),
+                        iconTint = ComposeAppTheme.colors.grey,
+                        onIconClick = {
+                            navigation.slideFromBottom(
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
+                            )
+                        },
+                    )
+                },
+                right = {
+                    CellRightInfoTextIcon(
+                        text = swapTime.hs(color = leah)
+                    )
+                },
+            )
+        }
+        extraRows()
+    }
+}
+
+/**
+ * A split swap: the deposit, then each output with its share, what it received and where.
+ * Every output has its own stage, so the status list below carries one swap and payout step
+ * per output after the shared deposit.
+ */
+@Composable
+private fun SplitSwapInfoContent(uiState: SwapInfoUiState, navigation: HSNavigation) {
+    val view = LocalView.current
+    val leah = ComposeAppTheme.colors.leah
+
+    Column {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence),
+        ) {
+            CellPrimary(
+                left = {
+                    HsImageCircle(
+                        modifier = Modifier.size(32.dp),
+                        url = uiState.tokenInImageUrl,
+                        alternativeUrl = uiState.tokenInAlternativeImageUrl,
+                        placeholder = R.drawable.coin_placeholder,
+                    )
+                },
+                middle = {
+                    CellMiddleInfo(
+                        title = uiState.tokenInCode.hs,
+                        subtitle = (uiState.tokenInBadge
+                            ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
+                    )
+                },
+                right = {
+                    CellRightInfo(
+                        titleSubheadSb = uiState.amountIn.hs,
+                        subtitle = uiState.fiatAmountIn?.hs,
+                    )
+                },
+            )
+            uiState.splitOutputs.orEmpty().forEachIndexed { position, output ->
+                if (position == 0) DividerWithArrow() else HsDivider()
+                CellPrimary(
+                    left = {
+                        HsImageCircle(
+                            modifier = Modifier.size(32.dp),
+                            url = uiState.tokenOutImageUrl,
+                            alternativeUrl = uiState.tokenOutAlternativeImageUrl,
+                            placeholder = R.drawable.coin_placeholder,
+                        )
+                    },
+                    middle = {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                subhead2_leah(text = uiState.tokenOutCode)
+                                subhead2_jacob(text = "${output.percent}%")
+                            }
+                            subhead2_grey(text = uiState.tokenOutBadge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                        }
+                    },
+                    right = {
+                        CellRightInfo(
+                            titleSubheadSb = (output.amountOut ?: "---").hs(color = leah),
+                            subtitle = output.fiatAmountOut?.hs,
+                        )
+                    },
+                )
+                SplitAddressRow(
+                    title = output.contactName ?: stringResource(R.string.SplitSwap_Address, output.index + 1),
+                    address = output.address,
+                    view = view,
+                )
+            }
+        }
+
+        VSpacer(16.dp)
+
+        SwapDetailsCard(uiState, navigation)
+    }
+}
+
+/**
+ * The shared deposit, then "Swap N" and "Receive CODE N" per output from that output's own
+ * stage: outputs finish independently, minutes apart, and one may be held while another is paid.
+ */
+@Composable
+private fun SplitSwapStatusSteps(uiState: SwapInfoUiState) {
+    val steps = buildList {
+        add(
+            StatusStepItem(
+                label = stringResource(R.string.SwapInfo_StatusDeposit, uiState.tokenInCode),
+                state = when (uiState.status) {
+                    SwapStatus.Depositing -> StatusStepState.Active
+                    // The deposit never arrived: the first step is the one that failed.
+                    SwapStatus.Expired -> StatusStepState.Failed
+                    else -> StatusStepState.Done
+                },
+                url = uiState.depositingTxUrl,
+            )
+        )
+        uiState.splitOutputs.orEmpty().forEach { output ->
+            val number = output.index + 1
+            val swapLabel = stringResource(R.string.SwapInfo_StatusSwapIndexed, number)
+            val receiveLabel = stringResource(R.string.SwapInfo_StatusReceiveIndexed, uiState.tokenOutCode, number)
+            when (output.status) {
+                SwapStatus.Depositing,
+                SwapStatus.Expired -> {
+                    add(StatusStepItem(swapLabel, StatusStepState.Pending, null))
+                    add(StatusStepItem(receiveLabel, StatusStepState.Pending, null))
+                }
+
+                SwapStatus.Swapping -> {
+                    add(StatusStepItem(swapLabel, StatusStepState.Active, null))
+                    add(StatusStepItem(receiveLabel, StatusStepState.Pending, null))
+                }
+
+                SwapStatus.Sending -> {
+                    add(StatusStepItem(swapLabel, StatusStepState.Done, null))
+                    add(StatusStepItem(receiveLabel, StatusStepState.Active, output.txUrl))
+                }
+
+                SwapStatus.Completed -> {
+                    add(StatusStepItem(swapLabel, StatusStepState.Done, null))
+                    add(StatusStepItem(receiveLabel, StatusStepState.Done, output.txUrl))
+                }
+
+                SwapStatus.Refunded -> {
+                    add(StatusStepItem(swapLabel, StatusStepState.Done, null))
+                    add(StatusStepItem(stringResource(R.string.SwapInfo_StatusRefunded), StatusStepState.Done, output.txUrl))
+                }
+
+                SwapStatus.Failed,
+                SwapStatus.ActionRequired -> {
+                    add(StatusStepItem(swapLabel, StatusStepState.Failed, null))
+                }
+            }
+        }
+    }
+
+    StatusStepRows(steps)
 }
 
 /**
@@ -345,7 +511,6 @@ internal fun RecipientRow(address: String, view: android.view.View) {
 
 @Composable
 internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCode: String, isSingleTransactionSwap: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
-    val context = LocalContext.current
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDeposit, tokenInCode),
         stringResource(R.string.SwapInfo_StatusSwapping),
@@ -363,7 +528,6 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
         stringResource(R.string.SwapInfo_StatusSwapping),
         stringResource(R.string.SwapInfo_StatusFailed),
     )
-    val viewLabel = stringResource(R.string.Button_View)
 
     val steps: List<String>
     val activeIndex: Int
@@ -439,6 +603,46 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
         }
     }
 
+    StatusStepRows(
+        steps.mapIndexed { index, label ->
+            StatusStepItem(
+                label = label,
+                state = when {
+                    failedIndex == index -> StatusStepState.Failed
+                    activeIndex > index -> StatusStepState.Done
+                    activeIndex == index -> StatusStepState.Active
+                    else -> StatusStepState.Pending
+                },
+                url = when (index) {
+                    0 -> depositingTxUrl
+                    1 if steps.size > 2 -> swappingTxUrl
+                    2 if steps.size == 3 -> sendingTxUrl
+                    else -> null
+                },
+            )
+        }
+    )
+}
+
+enum class StatusStepState {
+    Pending,
+    Active,
+    Done,
+    Failed,
+}
+
+/** One row of a status list: its label, where it stands, and the explorer link when there is one. */
+data class StatusStepItem(
+    val label: String,
+    val state: StatusStepState,
+    val url: String?,
+)
+
+/** A vertical list of steps joined by connectors, green up to the last completed one. */
+@Composable
+internal fun StatusStepRows(steps: List<StatusStepItem>) {
+    val context = LocalContext.current
+    val viewLabel = stringResource(R.string.Button_View)
     val green = ComposeAppTheme.colors.remus
     val blade = ComposeAppTheme.colors.blade
 
@@ -449,20 +653,14 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
             .background(ComposeAppTheme.colors.lawrence)
             .padding(vertical = 8.dp)
     ) {
-        steps.forEachIndexed { index, label ->
-            val isFailed = failedIndex == index
-            val isDone = activeIndex > index
-            val isActive = activeIndex == index && !isFailed
+        steps.forEachIndexed { index, step ->
+            val isFailed = step.state == StatusStepState.Failed
+            val isDone = step.state == StatusStepState.Done
+            val isActive = step.state == StatusStepState.Active
             val isFirst = index == 0
             val isLast = index == steps.lastIndex
-            val stepUrl: String? = when (index) {
-                0 -> depositingTxUrl
-                1 if steps.size > 2 -> swappingTxUrl
-                2 if steps.size == 3 -> sendingTxUrl
-                else -> null
-            }
-            val showView = stepUrl != null && (isDone || isActive || isFailed)
-            val isPrevDone = index > 0 && activeIndex >= index
+            val showView = step.url != null && step.state != StatusStepState.Pending
+            val isPrevDone = index > 0 && steps[index - 1].state == StatusStepState.Done
             val topConnectorColor = if (isPrevDone) green else blade
             val bottomConnectorColor = if (isDone) green else blade
 
@@ -473,7 +671,7 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
                     .then(if (showView) Modifier.clickable {
                         LinkHelper.openLinkInAppBrowser(
                             context,
-                            stepUrl
+                            step.url
                         )
                     } else Modifier)
                     .padding(end = 16.dp),
@@ -504,7 +702,7 @@ internal fun SwapStatusSteps(status: SwapStatus, tokenInCode: String, tokenOutCo
 
                 Box(modifier = Modifier.weight(1f)) {
                     CellMiddleInfoTextIcon(
-                        text = label.hs(
+                        text = step.label.hs(
                             color = if (isActive || isDone || isFailed) ComposeAppTheme.colors.leah else null
                         )
                     )

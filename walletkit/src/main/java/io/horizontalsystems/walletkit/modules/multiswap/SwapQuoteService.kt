@@ -4,6 +4,7 @@ import android.util.Log
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.marketkit.models.Token
@@ -28,6 +29,9 @@ class SwapQuoteService(
     // can only broadcast a subset of providers) pass their own set.
     private val allProviders: List<IMultiSwapProvider> = MultiSwapProviderRegistry.allProviders,
     private val providerInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
+    // Split mode: quotes come from these providers' split endpoints, priced for
+    // [splitPercents], and `allProviders` is not consulted. Null quotes single swaps.
+    private val splitProviders: List<ISplitSwapProvider>? = null,
 ) : Clearable {
     private val tag = "SwapQuoteService"
 
@@ -39,6 +43,10 @@ class SwapQuoteService(
     private var preferredProvider: IMultiSwapProvider? = null
     private var error: Throwable? = null
     private var quote: SwapProviderQuote? = null
+    private var splitPercents: List<Int> = SplitSwapRules.percents(SplitSwapRules.PERCENT_DEFAULT)
+
+    val isSplit: Boolean
+        get() = splitProviders != null
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -50,6 +58,7 @@ class SwapQuoteService(
             preferredProvider = preferredProvider,
             quote = quote,
             error = error,
+            splitPercents = splitPercents,
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -96,6 +105,26 @@ class SwapQuoteService(
                     }
                 }
         }
+
+        if (splitProviders != null) {
+            // Which providers may split is the server's call, made by the same sync: a change
+            // adds or removes split quotes without touching the token selection.
+            val startingSplitProviders = providerInfoManager.splitProvidersFlow.value
+            launchGuarded("split provider updates") {
+                initialQuotation.join()
+                providerInfoManager.splitProvidersFlow
+                    .dropWhile { it == startingSplitProviders }
+                    .collect {
+                        try {
+                            runQuotation()
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            Log.e(tag, "error on re-quoting after a split provider change", e)
+                        }
+                    }
+            }
+        }
     }
 
     override fun clear() {
@@ -126,7 +155,7 @@ class SwapQuoteService(
     }
 
     private suspend fun CoroutineScope.startProviders() {
-        allProviders.map { provider ->
+        (splitProviders ?: allProviders).map { provider ->
             async {
                 try {
                     provider.start()
@@ -148,6 +177,7 @@ class SwapQuoteService(
                 preferredProvider = preferredProvider,
                 quote = quote,
                 error = error,
+                splitPercents = splitPercents,
             )
         }
     }
@@ -172,7 +202,12 @@ class SwapQuoteService(
             // the flow's own atomic read is what keeps the two from seeing different indexes.
             val suspensions = providerInfoManager.suspensionsFlow.value
 
-            val supportedProviders = allProviders.filter { provider ->
+            // In split mode only the providers the server flags as split-capable are asked;
+            // a registered candidate it no longer lists quotes nothing.
+            val candidates: List<IMultiSwapProvider> = splitProviders
+                ?.filter { providerInfoManager.supportsSplitSwaps(it.id) }
+                ?: allProviders
+            val supportedProviders = candidates.filter { provider ->
                 // Checked here, in the one place every provider passes through, rather than inside
                 // each `supports` implementation.
                 !suspensions.isSuspended(provider.id, tokenIn, tokenOut) &&
@@ -188,8 +223,9 @@ class SwapQuoteService(
                     emitState()
                 }
 
+                val percents = splitPercents
                 quotingJob = coroutineScope.launch {
-                    quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
+                    quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn, percents)
 
                     if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
                         preferredProvider = null
@@ -215,13 +251,18 @@ class SwapQuoteService(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
+        splitPercents: List<Int>,
     ) = coroutineScope {
         supportedProviders
             .map { provider ->
                 async {
                     try {
                         withTimeout(5000) {
-                            val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn)
+                            val quote = if (isSplit && provider is ISplitSwapProvider) {
+                                provider.fetchSplitQuote(tokenIn, tokenOut, amountIn, splitPercents)
+                            } else {
+                                provider.fetchQuote(tokenIn, tokenOut, amountIn)
+                            }
                             SwapProviderQuote(provider = provider, swapQuote = quote)
                         }
                     } catch (e: Throwable) {
@@ -270,6 +311,16 @@ class SwapQuoteService(
         runQuotation()
     }
 
+    /** Split mode: re-prices the outputs for new shares. The selected provider is kept. */
+    fun setSplitPercents(percents: List<Int>) {
+        if (splitPercents == percents) return
+        SplitSwapRules.requireValid(percents)
+
+        splitPercents = percents
+
+        runQuotation()
+    }
+
     fun switchPairs() {
         val tmpTokenIn = tokenIn
 
@@ -309,5 +360,7 @@ class SwapQuoteService(
         val preferredProvider: IMultiSwapProvider?,
         val quote: SwapProviderQuote?,
         val error: Throwable?,
+        // The shares the split quotes were priced for; meaningless for single swaps.
+        val splitPercents: List<Int>,
     )
 }

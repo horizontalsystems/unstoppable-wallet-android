@@ -31,6 +31,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -39,6 +40,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
@@ -69,6 +71,10 @@ class SwapViewModel(
     // false = tokenOut stays empty until the user picks it explicitly
     private val autoResolveTokenOut: Boolean = true,
 ) : ViewModelUiState<SwapUiState>() {
+
+    // The Private tab: the quote service prices one deposit split between several recipients,
+    // whose shares and addresses live here until the confirmation is opened.
+    val split: Boolean = quoteService.isSplit
 
     private val quoteLifetime = 20
     private val hasExplicitTokens = tokenIn != null || tokenOut != null
@@ -101,6 +107,62 @@ class SwapViewModel(
     fun setExternalRecipient(address: Address) {
         externalRecipientAddress = address
         externalRecipientToken = quoteState.tokenOut
+    }
+
+    // Split state. The shares are the user's current choice; the quote service holds the ones
+    // the visible quote was priced for. Recipients are addresses on tokenOut's chain, so they
+    // expire with it. The last priced output amounts stay on screen, dimmed, while a new share
+    // is being quoted.
+    private var splitPercents: List<Int> = SplitSwapRules.percents(SplitSwapRules.PERCENT_DEFAULT)
+    private var splitRecipients: List<Address?> = List(SplitSwapRules.OUTPUT_COUNT) { null }
+    private var lastSplitOutputAmounts: List<BigDecimal>? = null
+    private var splitRequoteJob: Job? = null
+    private var splitRequotePending = false
+
+    /** Moves one share of a two-output split; the requote waits for the slider to settle. */
+    fun onSplitPercentChanged(first: Int) {
+        val percents = SplitSwapRules.percents(first)
+        if (percents == splitPercents) return
+
+        splitPercents = percents
+        splitRequotePending = true
+        emitState()
+
+        splitRequoteJob?.cancel()
+        splitRequoteJob = viewModelScope.launch {
+            delay(SPLIT_REQUOTE_DEBOUNCE_MS)
+            splitRequotePending = false
+            quoteService.setSplitPercents(percents)
+            emitState()
+        }
+    }
+
+    fun setSplitRecipient(index: Int, address: Address) {
+        if (index !in splitRecipients.indices) return
+        splitRecipients = splitRecipients.toMutableList().also { it[index] = address }
+        emitState()
+    }
+
+    /** The recipients the confirmation is opened with, or null while one is still missing. */
+    fun splitRecipientsForConfirm(): List<SplitSwapRecipient>? {
+        if (!split || splitRecipients.any { it == null }) return null
+        return splitRecipients.mapIndexed { index, address -> SplitSwapRecipient(splitPercents[index], address!!) }
+    }
+
+    /** After a successful split swap: the next one starts from an even split with no recipients. */
+    fun resetSplit() {
+        splitRequoteJob?.cancel()
+        splitRequotePending = false
+        splitPercents = SplitSwapRules.percents(SplitSwapRules.PERCENT_DEFAULT)
+        splitRecipients = List(SplitSwapRules.OUTPUT_COUNT) { null }
+        lastSplitOutputAmounts = null
+        quoteService.setSplitPercents(splitPercents)
+        emitState()
+    }
+
+    private fun clearSplitRecipients() {
+        if (splitRecipients.all { it == null }) return
+        splitRecipients = List(SplitSwapRules.OUTPUT_COUNT) { null }
     }
 
     val amlCheckEventFlow = MutableSharedFlow<AmlCheckEvent>(extraBufferCapacity = 1)
@@ -317,10 +379,18 @@ class SwapViewModel(
                 quoteState.quotes.map { it.estimationTime }
             ),
             allowanceActionSuppressed = allowanceActionSuppressed(),
-            externalRecipientRequired = externalRecipientRequired(quoteState.tokenOut),
+            // A split's recipients are always entered on their own page.
+            externalRecipientRequired = !split && externalRecipientRequired(quoteState.tokenOut),
             disabledPercents = disabledPercents(quoteState.tokenIn),
             spendStep = balanceState.spendStep,
             tokenInWalletState = tokenInWalletState,
+            split = split,
+            splitPercents = splitPercents,
+            splitRecipients = splitRecipients,
+            splitOutputAmounts = (quoteState.quote?.swapQuote?.extraData as? SplitSwapQuoteExtraData)?.outputAmounts,
+            splitLastOutputAmounts = lastSplitOutputAmounts,
+            splitRequoting = split && (quoteState.quoting || splitRequotePending),
+            splitDuplicateIndexes = SplitSwapRules.duplicateIndexes(splitRecipients.map { it?.hex }, quoteState.tokenOut?.blockchainType),
         )
     }
 
@@ -411,9 +481,16 @@ class SwapViewModel(
 
     private fun handleUpdatedQuoteState(quoteState: SwapQuoteService.State) {
         val tokenInChanged = quoteState.tokenIn != this.quoteState.tokenIn || balanceJob == null
+        // Recipients are addresses on the bought token's chain: another token invalidates them.
+        if (quoteState.tokenOut != this.quoteState.tokenOut) {
+            clearSplitRecipients()
+        }
         this.quoteState = quoteState
         if (tokenInChanged) {
             observeBalanceUpdates(quoteState.tokenIn)
+        }
+        (quoteState.quote?.swapQuote?.extraData as? SplitSwapQuoteExtraData)?.let {
+            lastSplitOutputAmounts = it.outputAmounts
         }
 
         balanceService.setToken(quoteState.tokenIn)
@@ -594,10 +671,16 @@ class SwapViewModel(
         private val allowancePolicy: ISwapAllowancePolicy? = null,
         // false = tokenOut stays empty until the user picks it explicitly
         private val autoResolveTokenOut: Boolean = true,
+        // true = the Private tab: split quotes from the split-capable providers
+        private val split: Boolean = false,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val swapQuoteService = providers?.let { SwapQuoteService(it) } ?: SwapQuoteService()
+            val swapQuoteService = when {
+                split -> SwapQuoteService(splitProviders = MultiSwapProviderRegistry.splitProviders)
+                providers != null -> SwapQuoteService(providers)
+                else -> SwapQuoteService()
+            }
             val tokenBalanceService = TokenBalanceService(App.adapterManager, SpendPurpose.Swap)
             val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
 
@@ -624,6 +707,14 @@ class SwapViewModel(
                 autoResolveTokenOut,
             ) as T
         }
+    }
+
+    companion object {
+        /** Key of the Private tab's view model in the swap screen's store; the Standard tab uses the default key. */
+        const val PRIVATE_VIEW_MODEL_KEY = "private"
+
+        // A slider reports every step it passes; the quote is requested once it rests.
+        private const val SPLIT_REQUOTE_DEBOUNCE_MS = 250L
     }
 }
 
@@ -653,7 +744,32 @@ data class SwapUiState(
     val disabledPercents: Set<Int> = emptySet(),
     val spendStep: ISwapProviderAction? = null,
     val tokenInWalletState: TokenInWalletState = TokenInWalletState.Ready,
+    val split: Boolean = false,
+    val splitPercents: List<Int> = emptyList(),
+    val splitRecipients: List<Address?> = emptyList(),
+    // What each output receives under the quote on screen, in recipient order.
+    val splitOutputAmounts: List<BigDecimal>? = null,
+    // The previous quote's amounts, shown dimmed while new shares are being quoted.
+    val splitLastOutputAmounts: List<BigDecimal>? = null,
+    // Quoting, or a share change waiting for its debounced requote.
+    val splitRequoting: Boolean = false,
+    val splitDuplicateIndexes: Set<Int> = emptySet(),
 ) {
+    // No provider priced the current shares although the amount is set: a share under the
+    // per-output minimum, typically. Distinct from having no split provider at all.
+    val splitInvalid: Boolean
+        get() = split && !splitRequoting && quote == null &&
+                amountIn != null && amountIn > BigDecimal.ZERO && error is SwapRouteNotFound
+
+    val splitRecipientsStep: SplitRecipientsStep
+        get() = when {
+            splitRequoting -> SplitRecipientsStep.Quoting
+            splitInvalid -> SplitRecipientsStep.InvalidSplit
+            splitRecipients.any { it == null } -> SplitRecipientsStep.EnterAddresses
+            quote == null -> SplitRecipientsStep.NoQuotes
+            else -> SplitRecipientsStep.Next
+        }
+
     val currentStep: SwapStep = when {
         tokenIn != null && tokenInWalletState == TokenInWalletState.NotEnabled -> SwapStep.EnableTokenIn(tokenIn)
         tokenInWalletState == TokenInWalletState.Syncing -> SwapStep.Syncing
@@ -684,6 +800,15 @@ enum class TokenInWalletState {
     Ready,
     NotEnabled,
     Syncing
+}
+
+/** What the Recipients page's button offers, in order of precedence. */
+enum class SplitRecipientsStep {
+    Quoting,
+    InvalidSplit,
+    EnterAddresses,
+    NoQuotes,
+    Next,
 }
 
 sealed class AmlCheckEvent {

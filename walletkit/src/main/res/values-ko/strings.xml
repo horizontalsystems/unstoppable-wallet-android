@@ -1996,4 +1996,18 @@
     <string name="SwapConfirm_CommitRefreshRequired">견적이 만료되었습니다. 새 견적을 불러왔습니다.</string>
     <string name="SwapConfirm_CommitFailed">스왑을 시작할 수 없습니다. 새 견적을 불러왔습니다.</string>
     <string name="Zcash_Confirming">확인 중</string>
+    <string name="Swap_Tab_Standard">표준</string>
+    <string name="Swap_Tab_Private">프라이빗</string>
+    <string name="SplitSwap_Caution_Title">프라이빗 스왑</string>
+    <string name="SplitSwap_Caution_Text">프라이빗 스왑은 받은 금액을 여러 주소로 분할하여 거래 흐름을 추적하기 어렵게 만듭니다.</string>
+    <string name="SplitSwap_Recipients_Title">수신자</string>
+    <string name="SplitSwap_Recipients_Description">수신자 주소를 추가하고 받은 금액을 어떻게 나눌지 선택하세요.</string>
+    <string name="SplitSwap_Address">주소 %d</string>
+    <string name="SplitSwap_EnterAddresses">주소 입력</string>
+    <string name="SplitSwap_InvalidSplit_Title">잘못된 분할</string>
+    <string name="SplitSwap_InvalidSplit_Text">제공자가 이 분할 비율을 지원하지 않습니다. 계속하려면 분할을 조정하세요.</string>
+    <string name="SplitSwap_DuplicateAddresses_Title">중복 주소</string>
+    <string name="SplitSwap_DuplicateAddresses_Text">같은 주소를 사용하면 분할의 프라이버시 이점이 줄어듭니다.</string>
+    <string name="SwapInfo_StatusSwapIndexed">스왑 %d</string>
+    <string name="SwapInfo_StatusReceiveIndexed">%1$s %2$d 받기</string>
 </resources>

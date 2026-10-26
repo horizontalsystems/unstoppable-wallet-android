@@ -66,10 +66,18 @@ import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cards.CardsErrorMessageDefault
+import io.horizontalsystems.walletkit.modules.multiswap.history.DividerWithArrow
+import io.horizontalsystems.walletkit.modules.multiswap.history.shortenAddress
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsButtonText
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonConfig
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
@@ -89,10 +97,14 @@ data class SwapConfirmPage(
     val parentScreenContentKey: String,
     // serialized with the page so an external recipient survives process recreation
     val initialRecipient: Address? = null,
+    // A split swap's recipients with their shares; null confirms a single swap
+    val splitRecipients: List<SplitSwapRecipient>? = null,
+    // Which of the swap screen's tabs the quote belongs to; null is the Standard tab
+    val swapViewModelKey: String? = null,
 ) : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        SwapConfirmScreen(navigation, parentScreenContentKey, contentKey(), initialRecipient)
+        SwapConfirmScreen(navigation, parentScreenContentKey, contentKey(), initialRecipient, splitRecipients, swapViewModelKey)
     }
 
     data class Result(val success: Boolean)
@@ -104,13 +116,15 @@ fun SwapConfirmScreen(
     parentScreenContentKey: String,
     screenContentKey: String,
     pageRecipient: Address? = null,
+    splitRecipients: List<SplitSwapRecipient>? = null,
+    swapViewModelKey: String? = null,
 ) {
-    val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
+    val swapViewModel = navigation.viewModelForScreen<SwapViewModel>(parentScreenContentKey, key = swapViewModelKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
     val initialRecipient = remember { pageRecipient ?: swapViewModel.externalRecipient }
 
     val viewModel = viewModel<SwapConfirmViewModel>(
-        initializer = SwapConfirmViewModel.init(currentQuote, initialRecipient)
+        initializer = SwapConfirmViewModel.init(currentQuote, initialRecipient, splitRecipients)
     )
 
     val uiState = viewModel.uiState
@@ -226,7 +240,8 @@ private fun SwapConfirmInternal(
                 viewModel.setSlippage(it.slippage)
             }
         },
-        onClickRecipientSettings = navigation.slideFromRightForResult<SwapSettingsRecipientPage.Result>(
+        // A split's recipients were fixed with their shares before this screen.
+        onClickRecipientSettings = if (viewModel.isSplit) null else navigation.slideFromRightForResult<SwapSettingsRecipientPage.Result>(
             {
                 // the recipient receives tokenOut, so the address is validated against
                 // its blockchain; a mandatory external recipient can't be removed
@@ -291,36 +306,41 @@ private fun SwapConfirmInternal(
             }
         }
     ) {
-        Box {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-            ) {
-                TokenRow(
-                    token = uiState.tokenIn,
-                    amount = uiState.amountIn,
-                    fiatAmount = uiState.fiatAmountIn,
-                    currency = uiState.currency,
-                )
-                HsDivider()
-                TokenRow(
-                    token = uiState.tokenOut,
-                    amount = uiState.amountOut,
-                    fiatAmount = uiState.fiatAmountOut,
-                    currency = uiState.currency,
+        val splitOutputs = uiState.splitOutputs
+        if (splitOutputs != null) {
+            SplitSwapFlowCard(uiState, splitOutputs)
+        } else {
+            Box {
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                ) {
+                    TokenRow(
+                        token = uiState.tokenIn,
+                        amount = uiState.amountIn,
+                        fiatAmount = uiState.fiatAmountIn,
+                        currency = uiState.currency,
+                    )
+                    HsDivider()
+                    TokenRow(
+                        token = uiState.tokenOut,
+                        amount = uiState.amountOut,
+                        fiatAmount = uiState.fiatAmountOut,
+                        currency = uiState.currency,
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_down_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .clip(CircleShape)
+                        .background(ComposeAppTheme.colors.lawrence)
                 )
             }
-            Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_down_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .clip(CircleShape)
-                    .background(ComposeAppTheme.colors.lawrence)
-            )
         }
         VSpacer(height = 16.dp)
         Column(
@@ -450,6 +470,125 @@ private fun SwapConfirmInternal(
             Cautions(cautions = uiState.cautions)
         }
     }
+}
+
+// The deposit, then every output with its share and the address it is paid to: what the
+// user confirms is where each part of the deposit ends up.
+@Composable
+private fun SplitSwapFlowCard(uiState: SwapConfirmUiState, outputs: List<SplitSwapOutput>) {
+    val view = LocalView.current
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        TokenRow(
+            token = uiState.tokenIn,
+            amount = uiState.amountIn,
+            fiatAmount = uiState.fiatAmountIn,
+            currency = uiState.currency,
+        )
+        outputs.forEachIndexed { index, output ->
+            if (index == 0) DividerWithArrow() else HsDivider()
+            SplitOutputRow(
+                token = uiState.tokenOut,
+                percent = output.percent,
+                amount = output.amountOut,
+                fiatAmount = uiState.splitOutputFiatAmounts?.getOrNull(index),
+                currency = uiState.currency,
+            )
+            SplitAddressRow(
+                title = stringResource(R.string.SplitSwap_Address, index + 1),
+                address = output.address,
+                view = view,
+            )
+        }
+    }
+}
+
+/** One output of a split: the bought token with this output's share beside its code. */
+@Composable
+fun SplitOutputRow(
+    token: Token,
+    percent: Int,
+    amount: BigDecimal?,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
+) = SplitOutputRowPure(
+    percent = percent,
+    amountFormatted = amount?.let { CoinValue(token, it).getFormatted() },
+    fiatAmount = fiatAmount,
+    currency = currency,
+    code = token.coin.code,
+    imageUrl = token.coin.imageUrl,
+    alternativeImageUrl = token.coin.alternativeImageUrl,
+    imagePlaceholder = token.iconPlaceholder,
+    badge = token.badge,
+)
+
+@Composable
+fun SplitOutputRowPure(
+    percent: Int,
+    amountFormatted: String?,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
+    code: String,
+    imageUrl: String?,
+    alternativeImageUrl: String?,
+    imagePlaceholder: Int?,
+    badge: String?,
+) {
+    CellPrimary(
+        left = {
+            HsImageCircle(
+                modifier = Modifier.size(32.dp),
+                url = imageUrl,
+                alternativeUrl = alternativeImageUrl,
+                placeholder = imagePlaceholder
+            )
+        },
+        middle = {
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    subhead2_leah(text = code)
+                    subhead2_jacob(text = "$percent%")
+                }
+                subhead2_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+            }
+        },
+        right = {
+            CellRightInfo(
+                eyebrow = (amountFormatted ?: "---").hs(ComposeAppTheme.colors.leah),
+                subtitle = fiatAmount?.let { CurrencyValue(currency, it).getFormattedFull() }?.hs,
+            )
+        }
+    )
+}
+
+/** A titled address row with a copy action, for the destination of one split output. */
+@Composable
+fun SplitAddressRow(title: String, address: String, view: android.view.View) {
+    val leah = ComposeAppTheme.colors.leah
+    CellSecondary(
+        middle = {
+            CellMiddleInfoTextIcon(text = title.hs)
+        },
+        right = {
+            CellRightControlsButtonText(
+                subtitle = address.shortenAddress().hs(color = leah),
+                icon = painterResource(R.drawable.copy_filled_24),
+                iconTint = leah,
+                onIconClick = {
+                    TextHelper.copyText(address)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                },
+            )
+        },
+    )
 }
 
 @Composable

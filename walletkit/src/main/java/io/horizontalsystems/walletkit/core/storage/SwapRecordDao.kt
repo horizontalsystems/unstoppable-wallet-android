@@ -38,6 +38,9 @@ interface SwapRecordDao {
     @Query("UPDATE SwapRecord SET outboundTransactionHash = :hash WHERE id = :id")
     fun updateOutboundTransactionHash(id: Int, hash: String)
 
+    @Query("UPDATE SwapRecord SET splitOutputs = :splitOutputs WHERE id = :id")
+    fun updateSplitOutputs(id: Int, splitOutputs: String)
+
     @Query("DELETE FROM SwapRecord WHERE id = :id")
     fun delete(id: Int)
 }
