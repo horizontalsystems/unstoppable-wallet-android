@@ -21,7 +21,6 @@ import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.merkleiokit.MerkleTransactionAdapter
-import io.horizontalsystems.nftkit.core.NftKit
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.TokenFactory.UnsupportedChainError
 import io.horizontalsystems.uniswapkit.UniswapKit
@@ -169,26 +168,6 @@ class EvmKitManager(
             OneInchKit.addDecorators(evmKit)
         }
 
-        val nftKit: NftKit? = null
-//        var nftKit: NftKit? = null
-//        val supportedNftTypes = blockchainType.supportedNftTypes
-//        if (supportedNftTypes.isNotEmpty()) {
-//            val nftKitInstance = NftKit.getInstance(App.instance, evmKit)
-//            supportedNftTypes.forEach {
-//                when (it) {
-//                    NftType.Eip721 -> {
-//                        nftKitInstance.addEip721TransactionSyncer()
-//                        nftKitInstance.addEip721Decorators()
-//                    }
-//                    NftType.Eip1155 -> {
-//                        nftKitInstance.addEip1155TransactionSyncer()
-//                        nftKitInstance.addEip1155Decorators()
-//                    }
-//                }
-//            }
-//            nftKit = nftKitInstance
-//        }
-
         val merkleTransactionAdapter = MerkleTransactionAdapter.getInstance(
             merkleIoPubKey = "pk_mbs_5f012edb2cf20a96b49429a3ed285a45",
             address = address,
@@ -203,7 +182,7 @@ class EvmKitManager(
 
         evmKit.start()
 
-        return EvmKitWrapper(evmKit, nftKit, blockchainType, signer, merkleTransactionAdapter)
+        return EvmKitWrapper(evmKit, blockchainType, signer, merkleTransactionAdapter)
     }
 
     @Synchronized
@@ -257,7 +236,6 @@ val RpcSource.uris: List<URI>
 
 class EvmKitWrapper(
     val evmKit: EthereumKit,
-    val nftKit: NftKit?,
     val blockchainType: BlockchainType,
     val signer: Signer?,
     val merkleTransactionAdapter: MerkleTransactionAdapter?

@@ -236,7 +236,6 @@
 
 -keep class io.horizontalsystems.ethereumkit.** { *; }
 -keep class io.horizontalsystems.erc20kit.** { *; }
--keep class io.horizontalsystems.nftkit.** { *; }
 -keep class io.horizontalsystems.uniswapkit.** { *; }
 -keep class io.horizontalsystems.oneinchkit.** { *; }
 -keep class io.horizontalsystems.marketkit.** { *; }

@@ -12,8 +12,6 @@ import io.horizontalsystems.walletkit.core.stats.StatSection
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.TransactionValue
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
@@ -127,7 +125,6 @@ object TransactionViewItemFactoryHelper {
         value: TransactionValue.NftValue,
         incoming: Boolean?,
         hideAmount: Boolean,
-        nftMetadata: NftAssetBriefMetadata?,
     ): TransactionInfoViewItem {
         val valueFormatted = if (hideAmount) "* * *" else value.decimalValue.let { decimalValue ->
             val sign = when {
@@ -141,18 +138,12 @@ object TransactionViewItemFactoryHelper {
             "$sign$valueWithCoinCode"
         }
 
-        val nftName = nftMetadata?.name ?: value.tokenName?.let {
-            when (value.nftUid) {
-                is NftUid.Evm -> "$it #${value.nftUid.tokenId}"
-                is NftUid.Solana -> it
-            }
-        } ?: "#${value.nftUid.tokenId}"
+        val nftName = value.tokenName ?: "#${value.nftUid.tokenId}"
 
         return TransactionInfoViewItem.NftAmount(
             title,
             ColoredValue(valueFormatted, getAmountColor(incoming)),
             nftName,
-            nftMetadata?.previewImageUrl,
             R.drawable.icon_24_nft_placeholder,
             null,
         )
@@ -245,7 +236,6 @@ object TransactionViewItemFactoryHelper {
         fromAddress: String?,
         coinPrice: CurrencyValue?,
         hideAmount: Boolean,
-        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
         showHistoricalRate: Boolean = true,
         toAddress: String? = null
@@ -259,7 +249,7 @@ object TransactionViewItemFactoryHelper {
 
         when (value) {
             is TransactionValue.NftValue -> {
-                amount = getNftAmount(title, value, true, hideAmount, nftMetadata[value.nftUid])
+                amount = getNftAmount(title, value, true, hideAmount)
                 rate = null
             }
 
@@ -324,7 +314,6 @@ object TransactionViewItemFactoryHelper {
         coinPrice: CurrencyValue?,
         hideAmount: Boolean,
         sentToSelf: Boolean = false,
-        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
         showHistoricalRate: Boolean = true
     ): List<TransactionInfoViewItem> {
@@ -342,8 +331,7 @@ object TransactionViewItemFactoryHelper {
                     title,
                     value,
                     if (sentToSelf) null else false,
-                    hideAmount,
-                    nftMetadata[value.nftUid]
+                    hideAmount
                 )
                 rate = null
             }

@@ -1576,8 +1576,6 @@
     <string name="Detectors_TokenDetectors">Detectores de Token</string>
     <string name="Detectors_GeneralDetectors">Detectores Gerais</string>
     <string name="Detectors_IssuesCount">Problemas %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Ganhadores</string>
     <string name="RateList_TopLosers">Perdedores</string>
@@ -1593,17 +1591,8 @@
     <string name="BalanceSyncError_ErrorText">Falha ao buscar dados da fonte atual. Tente novamente mais tarde.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
-    <string name="ProUsersInfo_UnstoppablePass">Senha Unstoppable</string>
-    <string name="ProUsersInfo_Description">Para ativar estes dados, você deve obter o nível bronze de UW NFT \"Coin Info+\"\n\nTambém você terá acesso aos dados abaixo:</string>
-    <string name="ProUsersInfo_Features_DexVolume">Volume e Rank DEX</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">Liquidez e Rank DEX</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Endereços ativos</string>
-    <string name="ProUsersInfo_Features_TxCount">Contagem de transações</string>
-    <string name="ProUsersInfo_Features_TxVolume">Contagem de transações</string>
     <string name="Hud_Text_LearnMore">Coming So Soon</string>
     <string name="Hud_Text_Activate">Ativar</string>
-    <string name="ProUsersActivate_Title">Ativar passe</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - Fique sem fronteiras. Mostrará a você dados de mercado importantes, ferramentas analíticas, gráficos úteis com base em dados on-chain que ajudarão você a visualizar os projetos</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Escolha o tipo</string>
     <string name="Widget_EnableAutostartWarning">Para garantir que este widget funcione corretamente, você deve habilitar o início automático.</string>

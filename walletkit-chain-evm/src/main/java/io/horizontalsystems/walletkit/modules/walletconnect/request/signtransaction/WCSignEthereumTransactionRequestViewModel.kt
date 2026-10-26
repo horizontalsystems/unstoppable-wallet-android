@@ -84,7 +84,6 @@ class WCSignEthereumTransactionRequestViewModel(
     private fun getSectionViewItems(): List<SectionViewItem> {
         val items = sendEvmTransactionViewItemFactory.getItems(
             transactionData,
-            null,
             evmKit.evmKit.decorate(transactionData)
         )
 

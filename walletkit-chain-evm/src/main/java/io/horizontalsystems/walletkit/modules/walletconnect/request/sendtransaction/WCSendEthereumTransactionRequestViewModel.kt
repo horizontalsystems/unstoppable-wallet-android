@@ -78,7 +78,6 @@ class WCSendEthereumTransactionRequestViewModel(
     private fun getSectionViewItems(): List<SectionViewItem> =
         sendEvmTransactionViewItemFactory.getItems(
             transactionData,
-            null,
             sendTransactionService.decorate(transactionData)
         )
 

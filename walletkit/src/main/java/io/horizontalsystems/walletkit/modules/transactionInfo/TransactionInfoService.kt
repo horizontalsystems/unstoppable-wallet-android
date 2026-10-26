@@ -9,8 +9,6 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.storage.OcpPaymentDao
 import io.horizontalsystems.walletkit.entities.CurrencyValue
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -26,7 +24,6 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroI
 import io.horizontalsystems.walletkit.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.thorchain.ThorchainOutgoingTransactionRecord
-import io.horizontalsystems.walletkit.entities.transactionrecords.nftUids
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
@@ -41,7 +38,6 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoIncom
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
-import io.horizontalsystems.walletkit.modules.transactions.NftMetadataService
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +52,6 @@ class TransactionInfoService(
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
-    private val nftMetadataService: NftMetadataService,
     private val ocpPaymentDao: OcpPaymentDao,
     balanceHidden: Boolean,
 ) {
@@ -71,7 +66,6 @@ class TransactionInfoService(
         transactionRecord,
         adapter.lastBlockInfo,
         TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
-        mapOf(),
         mapOf(),
         balanceHidden
     )
@@ -239,25 +233,7 @@ class TransactionInfoService(
                 }
         }
 
-        launch {
-            nftMetadataService.assetsBriefMetadataFlow.collect {
-                handleNftMetadata(it)
-            }
-        }
-
         fetchRates()
-        fetchNftMetadata()
-    }
-
-    private suspend fun fetchNftMetadata() {
-        val nftUids = transactionRecord.nftUids
-        val assetsBriefMetadata = nftMetadataService.assetsBriefMetadata(nftUids)
-
-        handleNftMetadata(assetsBriefMetadata)
-
-        if (nftUids.subtract(assetsBriefMetadata.keys).isNotEmpty()) {
-            nftMetadataService.fetch(nftUids)
-        }
     }
 
     private suspend fun fetchRates() = withContext(Dispatchers.IO) {
@@ -294,11 +270,6 @@ class TransactionInfoService(
     @Synchronized
     private fun handleRates(rates: Map<String, CurrencyValue>) {
         transactionInfoItem = transactionInfoItem.copy(rates = rates)
-    }
-
-    @Synchronized
-    private fun handleNftMetadata(nftMetadata: Map<NftUid, NftAssetBriefMetadata>) {
-        transactionInfoItem = transactionInfoItem.copy(nftMetadata = nftMetadata)
     }
 
     fun getRawTransaction(): String? {

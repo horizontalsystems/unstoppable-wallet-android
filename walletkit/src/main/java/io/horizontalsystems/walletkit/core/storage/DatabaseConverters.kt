@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BalanceData
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 import java.util.Date
@@ -84,16 +83,6 @@ class DatabaseConverters {
     @TypeConverter
     fun toBlockchainType(string: String): BlockchainType {
         return BlockchainType.fromUid(string)
-    }
-
-    @TypeConverter
-    fun fromNftUid(nftUid: NftUid): String {
-        return nftUid.uid
-    }
-
-    @TypeConverter
-    fun toNftUid(string: String): NftUid {
-        return NftUid.fromUid(string)
     }
 
     @TypeConverter

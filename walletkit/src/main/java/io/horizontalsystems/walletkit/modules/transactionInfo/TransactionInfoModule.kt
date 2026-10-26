@@ -8,10 +8,7 @@ import io.horizontalsystems.walletkit.core.ITransactionsAdapter
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.OcpPaymentRecord
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.walletkit.modules.transactions.NftMetadataService
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object TransactionInfoModule {
@@ -27,7 +24,6 @@ object TransactionInfoModule {
                 adapter,
                 App.marketKit,
                 App.currencyManager,
-                NftMetadataService(App.nftMetadataManager),
                 App.appDatabase.ocpPaymentDao(),
                 App.balanceHiddenManager.balanceHidden,
             )
@@ -60,7 +56,6 @@ data class TransactionInfoItem(
     val lastBlockInfo: LastBlockInfo?,
     val explorerData: TransactionInfoModule.ExplorerData,
     val rates: Map<String, CurrencyValue>,
-    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
     val hideAmount: Boolean,
     val ocpPayment: OcpPaymentRecord? = null,
 )

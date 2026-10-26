@@ -1578,8 +1578,6 @@
     <string name="Detectors_TokenDetectors">Детекторы токенов</string>
     <string name="Detectors_GeneralDetectors">Общие детекторы</string>
     <string name="Detectors_IssuesCount">Запросы: %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Показывают рост</string>
     <string name="RateList_TopLosers">Теряют в цене</string>
@@ -1595,17 +1593,8 @@
     <string name="BalanceSyncError_ErrorText">Не удалось получить данные из текущего источника. Пожалуйста, повторите попытку позже.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">ПРИСОЕДИНЯЙТЕСЬ</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable пропуск</string>
-    <string name="ProUsersInfo_Description">Для включения этих данных необходимо получить бронзовый уровень UW NFTs “Coin Info+”\n\nтакже получить доступ к данным ниже:</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX ликвидность и рейтинг</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Активные адреса</string>
-    <string name="ProUsersInfo_Features_TxCount">Количество транзакций</string>
-    <string name="ProUsersInfo_Features_TxVolume">Объем транзакций</string>
     <string name="Hud_Text_LearnMore">Уже скоро</string>
     <string name="Hud_Text_Activate">Активировать</string>
-    <string name="ProUsersActivate_Title">Активировать пасс</string>
-    <string name="ProUsersActivate_Description">Горный Як - Безграничный. Покажет важные данные рынка, аналитические инструменты, полезные диаграммы, основанные на данных по цепочке, которые помогут вам получить четкое представление о проектах.</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Выберите тип</string>
     <string name="Widget_EnableAutostartWarning">Чтобы убедиться, что этот виджет работает правильно, необходимо включить автозапуск.</string>

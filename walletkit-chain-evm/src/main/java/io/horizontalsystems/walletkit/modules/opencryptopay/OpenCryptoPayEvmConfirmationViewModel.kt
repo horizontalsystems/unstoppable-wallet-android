@@ -74,7 +74,7 @@ class OpenCryptoPayEvmConfirmationViewModel(
                     ?: throw Exception("Ethereum adapter not found for ${wallet.token.coin.code}")
                 val transactionData = adapter.getTransactionData(amount, Address(address))
                 val decoration = sendTransactionService.decorate(transactionData)
-                sectionViewItems = sendEvmTransactionViewItemFactory.getItems(transactionData, null, decoration)
+                sectionViewItems = sendEvmTransactionViewItemFactory.getItems(transactionData, decoration)
                 sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData.toEvmTransactionData(), null))
             } catch (e: Exception) {
                 fetchError = CautionViewItem(

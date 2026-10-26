@@ -141,7 +141,6 @@ enum class StatPage(val key: String) {
     SwitchWallet("switch_wallet"),
     TellFriends("tell_friends"),
     Terms("terms"),
-    TopNftCollections("top_nft_collections"),
     TopPlatform("top_platform"),
     TokenPage("token_page"),
     Transactions("transactions"),

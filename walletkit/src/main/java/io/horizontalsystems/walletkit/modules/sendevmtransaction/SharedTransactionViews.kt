@@ -29,7 +29,6 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
-import io.horizontalsystems.walletkit.ui.compose.components.NftIcon
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
@@ -51,7 +50,6 @@ fun SectionView(viewItems: List<ViewItem>, navigation: HSNavigation, statPage: S
                 is ViewItem.Value -> TitleValue(item)
                 is ViewItem.Amount -> Amount(item)
                 is ViewItem.AmountWithTitle -> AmountWithTitle(item)
-                is ViewItem.NftAmount -> NftAmount(item)
                 is ViewItem.Address -> AddressCell(address = item.address, contact = item.contact)
                 is ViewItem.Input -> TitleValueHex(item.title, item.value.shorten(), item.value)
                 is ViewItem.TokenItem -> Token(item)
@@ -193,24 +191,6 @@ fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
             )
         }
     )
-}
-
-@Composable
-fun NftAmount(item: ViewItem.NftAmount) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        NftIcon(
-            modifier = Modifier.padding(end = 16.dp),
-            iconUrl = item.iconUrl,
-        )
-        Text(
-            text = item.amount,
-            maxLines = 1,
-            style = ComposeAppTheme.typography.subheadR,
-            color = setColorByType(item.type)
-        )
-    }
 }
 
 @Composable

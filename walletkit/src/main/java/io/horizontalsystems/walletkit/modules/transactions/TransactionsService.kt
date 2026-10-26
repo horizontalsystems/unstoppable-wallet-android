@@ -5,10 +5,7 @@ import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.walletkit.entities.transactionrecords.nftUids
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -27,7 +24,6 @@ class TransactionsService(
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
-    private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
 
@@ -61,11 +57,6 @@ class TransactionsService(
                 .collectSafely { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
-        }
-        coroutineScope.launch {
-            nftMetadataService.assetsBriefMetadataFlow.collectSafely {
-                handle(it)
-            }
         }
         coroutineScope.launch {
             contactsRepository.contactsFlow.collectSafely {
@@ -103,25 +94,6 @@ class TransactionsService(
         transactionItems.addAll(tmpList)
 
         emitItems()
-    }
-
-    @Synchronized
-    private fun handle(assetBriefMetadataMap: Map<NftUid, NftAssetBriefMetadata>) {
-        var updated = false
-        transactionItems.forEachIndexed { index, item ->
-            val tmpMetadata = item.nftMetadata.toMutableMap()
-            item.record.nftUids.forEach { nftUid ->
-                assetBriefMetadataMap[nftUid]?.let {
-                    tmpMetadata[nftUid] = it
-                }
-            }
-            transactionItems[index] = item.copy(nftMetadata = tmpMetadata)
-            updated = true
-        }
-
-        if (updated) {
-            emitItems()
-        }
     }
 
     @Synchronized
@@ -178,16 +150,6 @@ class TransactionsService(
     private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
         val tmpList = mutableListOf<TransactionItem>()
 
-        val nftUids = transactionRecords.nftUids
-        val nftMetadata = nftMetadataService.assetsBriefMetadata(nftUids)
-
-        val missingNftUids = nftUids.subtract(nftMetadata.keys)
-        if (missingNftUids.isNotEmpty()) {
-            coroutineScope.launch {
-                nftMetadataService.fetch(missingNftUids)
-            }
-        }
-
         val newRecords = mutableListOf<TransactionRecord>()
         transactionRecords.forEach { record ->
             var transactionItem = transactionItems.find { it.record == record }
@@ -201,7 +163,7 @@ class TransactionsService(
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
                 val currencyValue = getCurrencyValue(record)
 
-                TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
+                TransactionItem(record, currencyValue, lastBlockInfo)
             } else {
                 transactionItem.copy(record = record)
             }

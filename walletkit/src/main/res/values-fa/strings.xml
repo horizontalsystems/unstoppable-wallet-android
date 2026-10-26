@@ -462,8 +462,6 @@
     <string name="CoinAnalytics_CountItems">%d مورد</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">پرمخاطره</string>
     <string name="TechnicalAdvice_Details">جزئیات</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="Market_DaysAgo">%d؜دقيقه پيش</string>
     <string name="Market_HoursAgo">%dساعتپيش</string>
@@ -473,7 +471,6 @@
     <string name="BalanceSyncError_ButtonRetry">دوباره امتحان کنید</string>
     <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
     <!--Release notes-->
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">انتخاب نوع</string>
     <!--Alert-->
@@ -1887,16 +1884,8 @@
     <string name="BalanceSyncError_ChangableSourceErrorText">دریافت داده از منبع فعلی ناموفق بود. می‌توانید دوباره تلاش کنید یا منبع همگام‌سازی دیگری انتخاب کنید.</string>
     <string name="BalanceSyncError_ErrorText">دریافت داده از منبع فعلی ناموفق بود. لطفاً بعداً دوباره تلاش کنید.</string>
     <string name="ReleaseNotes_JoinUnstoppables">به UNSTOPPABLES بپیوندید</string>
-    <string name="ProUsersInfo_Description">برای فعال‌سازی این داده‌ها باید NFT سطح برنزی UW با نام «Coin Info+» را دریافت کنید\n\nهمچنین به داده‌های زیر دسترسی خواهید داشت:</string>
-    <string name="ProUsersInfo_Features_DexVolume">حجم و رتبه DEX</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">نقدینگی و رتبه DEX</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">آدرس‌های فعال</string>
-    <string name="ProUsersInfo_Features_TxCount">تعداد تراکنش‌ها</string>
-    <string name="ProUsersInfo_Features_TxVolume">حجم تراکنش‌ها</string>
     <string name="Hud_Text_LearnMore">به‌زودی</string>
     <string name="Hud_Text_Activate">فعال‌سازی</string>
-    <string name="ProUsersActivate_Title">فعال‌سازی Pass</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - بدون مرز پیش بروید. داده‌های مهم بازار، ابزارهای تحلیلی و نمودارهای مفید مبتنی بر داده‌های درون‌زنجیره‌ای را نشان می‌دهد که به شما دید روشنی از پروژه‌ها می‌دهد</string>
     <string name="Widget_EnableAutostartWarning">برای اطمینان از عملکرد درست این ویجت، باید اجرای خودکار را فعال کنید.</string>
     <string name="Alert_CustomKeyboardIsUsed">به نظر می‌رسد دستگاه شما از صفحه‌کلیدی غیر از صفحه‌کلید پیش‌فرض استفاده می‌کند. Unstoppable توصیه می‌کند صفحه‌کلید پیش‌فرض دستگاه را انتخاب کنید، زیرا صفحه‌کلیدهای شخص ثالث ممکن است داده‌های ورودی کاربران را جمع‌آوری و افشا کنند. \n\nاگر می‌خواهید همچنان از صفحه‌کلید دلخواه خود استفاده کنید، دکمه «رد کردن» را بزنید.</string>
     <string name="Alert_DeviceIsRootedWarning">تیم Unstoppable توصیه می‌کند برنامه را فقط روی گوشی‌های روت‌نشده (جیلبریک‌نشده) اجرا کنید.\n\nتوجه داشته باشید که هنگام استفاده از دستگاه روت‌شده، برنامه دیگر نمی‌تواند امنیت رمزارزهای شما را در برابر بدافزارها تضمین کند.</string>

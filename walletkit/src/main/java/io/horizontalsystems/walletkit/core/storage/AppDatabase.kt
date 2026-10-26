@@ -59,6 +59,7 @@ import io.horizontalsystems.walletkit.core.storage.migrations.Migration_81_82
 import io.horizontalsystems.walletkit.core.storage.migrations.Migration_82_83
 import io.horizontalsystems.walletkit.core.storage.migrations.Migration_83_84
 import io.horizontalsystems.walletkit.core.storage.migrations.Migration_84_85
+import io.horizontalsystems.walletkit.core.storage.migrations.Migration_85_86
 import io.horizontalsystems.walletkit.entities.ActiveAccount
 import io.horizontalsystems.walletkit.entities.BlockchainSettingRecord
 import io.horizontalsystems.walletkit.entities.EnabledWallet
@@ -81,10 +82,6 @@ import io.horizontalsystems.walletkit.entities.SyncerState
 import io.horizontalsystems.walletkit.entities.TokenAutoEnabledBlockchain
 import io.horizontalsystems.walletkit.entities.ZanoNodeRecord
 import io.horizontalsystems.walletkit.entities.ZcashEndpointRecord
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadataRecord
-import io.horizontalsystems.walletkit.entities.nft.NftAssetRecord
-import io.horizontalsystems.walletkit.entities.nft.NftCollectionRecord
-import io.horizontalsystems.walletkit.entities.nft.NftMetadataSyncRecord
 import io.horizontalsystems.walletkit.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.walletkit.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.walletkit.modules.pin.core.Pin
@@ -92,7 +89,7 @@ import io.horizontalsystems.walletkit.modules.pin.core.PinDao
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.walletkit.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 85, exportSchema = false, entities = [
+@Database(version = 86, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -103,10 +100,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.storage.WalletConnec
     WalletConnectV2Session::class,
     RestoreSettingRecord::class,
     ActiveAccount::class,
-    NftCollectionRecord::class,
-    NftAssetRecord::class,
-    NftMetadataSyncRecord::class,
-    NftAssetBriefMetadataRecord::class,
     EvmAddressLabel::class,
     EvmMethodLabel::class,
     SyncerState::class,
@@ -139,7 +132,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun wcSessionDao(): WCSessionDao
-    abstract fun nftDao(): NftDao
     abstract fun evmAddressLabelDao(): EvmAddressLabelDao
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao
     abstract fun syncerStateDao(): SyncerStateDao
@@ -226,6 +218,7 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_82_83,
                     Migration_83_84,
                     Migration_84_85,
+                    Migration_85_86,
                 )
                 .build()
         }

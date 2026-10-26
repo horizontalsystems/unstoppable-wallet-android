@@ -1573,8 +1573,6 @@
     <string name="Detectors_TokenDetectors">Détection de token</string>
     <string name="Detectors_GeneralDetectors">Détection générale</string>
     <string name="Detectors_IssuesCount">Problèmes %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Gagnants</string>
     <string name="RateList_TopLosers">Les perdants</string>
@@ -1590,17 +1588,8 @@
     <string name="BalanceSyncError_ErrorText">Impossible de récupérer les données de la source actuelle. Veuillez réessayer plus tard.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">REJOIGNEZ LES UNSTOPPABLES</string>
-    <string name="ProUsersInfo_UnstoppablePass">Passe Unstoppable</string>
-    <string name="ProUsersInfo_Description">Pour activer ces données, vous devriez obtenir des NFT UW au niveau de bronze « Coin Info+»\n\nVous avez également accès aux données ci-dessous:</string>
-    <string name="ProUsersInfo_Features_DexVolume">Volume et rang DEX</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">Liquidité et rang DEX</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Adresses actives</string>
-    <string name="ProUsersInfo_Features_TxCount">Nombre de transactions</string>
-    <string name="ProUsersInfo_Features_TxVolume">Volume de transactions</string>
     <string name="Hud_Text_LearnMore">Bientôt disponible</string>
     <string name="Hud_Text_Activate">Activer</string>
-    <string name="ProUsersActivate_Title">Activer le Passe</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - Au-delà des frontières. Il vous permettra de disposer de données essentielles sur le marché, d\'outils analytiques, de graphiques utiles basés sur des données on-chain qui vous aideront à avoir une vision claire des projets</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Choisir le type</string>
     <string name="Widget_EnableAutostartWarning">Pour vous assurer que ce widget fonctionne correctement, vous devez activer le démarrage automatique.</string>

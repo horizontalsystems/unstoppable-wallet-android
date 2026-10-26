@@ -16,8 +16,6 @@ import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
@@ -219,8 +217,7 @@ class TransactionsViewModel(
 data class TransactionItem(
     val record: TransactionRecord,
     val currencyValue: CurrencyValue?,
-    val lastBlockInfo: LastBlockInfo?,
-    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    val lastBlockInfo: LastBlockInfo?
 ) {
     val createdAt = System.currentTimeMillis()
 }

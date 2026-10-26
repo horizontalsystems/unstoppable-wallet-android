@@ -26,7 +26,6 @@ sealed class TransactionInfoViewItem {
         val title: String,
         val nftValue: ColoredValue,
         val nftName: String?,
-        val iconUrl: String?,
         val iconPlaceholder: Int?,
         val badge: String?,
     ) : TransactionInfoViewItem()

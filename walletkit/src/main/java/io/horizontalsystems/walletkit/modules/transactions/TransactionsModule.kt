@@ -19,7 +19,6 @@ object TransactionsModule {
                 TransactionsRateRepository(App.currencyManager, App.marketKit),
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
-                NftMetadataService(App.nftMetadataManager),
                 App.spamManager
             )
             val transactionViewItemFactory = TransactionViewItemFactory(

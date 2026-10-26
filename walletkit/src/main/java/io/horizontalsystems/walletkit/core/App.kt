@@ -43,7 +43,6 @@ import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.MigrationManager
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager
 import io.horizontalsystems.walletkit.core.managers.NetworkManager
-import io.horizontalsystems.walletkit.core.managers.NftMetadataManager
 import io.horizontalsystems.walletkit.core.managers.NumberFormatter
 import io.horizontalsystems.walletkit.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.walletkit.core.managers.PasskeyManager
@@ -78,7 +77,6 @@ import io.horizontalsystems.walletkit.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.walletkit.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.walletkit.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.walletkit.core.storage.MoneroNodeStorage
-import io.horizontalsystems.walletkit.core.storage.NftStorage
 import io.horizontalsystems.walletkit.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.walletkit.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.walletkit.core.storage.ZanoNodeStorage
@@ -196,7 +194,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var zanoNodeManager: ZanoNodeManager
         lateinit var zcashEndpointStorage: ZcashEndpointStorage
         lateinit var zcashEndpointManager: ZcashLightWalletEndpointManager
-        lateinit var nftMetadataManager: NftMetadataManager
         lateinit var evmLabelManager: EvmLabelManager
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
@@ -433,9 +430,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         donationShowManager = DonationShowManager(localStorage)
 
         setAppTheme()
-
-        val nftStorage = NftStorage(appDatabase.nftDao(), marketKit)
-        nftMetadataManager = NftMetadataManager(marketKit, appConfigProvider, nftStorage)
 
         DAppManager.initialize(
             params = DAppInitParams(

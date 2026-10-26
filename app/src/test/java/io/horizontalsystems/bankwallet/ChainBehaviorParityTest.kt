@@ -37,7 +37,6 @@ import io.horizontalsystems.walletkit.core.order
 import io.horizontalsystems.walletkit.core.protocolType
 import io.horizontalsystems.walletkit.core.restoreSettingTypes
 import io.horizontalsystems.walletkit.core.supported
-import io.horizontalsystems.walletkit.core.supportedNftTypes
 import io.horizontalsystems.walletkit.core.supports
 import io.horizontalsystems.walletkit.core.title
 import io.horizontalsystems.walletkit.core.tokenIconPlaceholder
@@ -175,7 +174,6 @@ class ChainBehaviorParityTest {
             appendLine("  restoreSettingTypes=${chain.restoreSettingTypes.joinToString(",")}")
             appendLine("  nativeTokenQueries=${chain.nativeTokenQueries.joinToString(",") { it.id }}")
             appendLine("  defaultTokenQuery=${chain.defaultTokenQuery.id}")
-            appendLine("  supportedNftTypes=${chain.supportedNftTypes.joinToString(",")}")
 
             val supportedTokens = sampleTokenTypes
                 .filter { (_, tokenType) -> TokenQuery(chain, tokenType).isSupported }

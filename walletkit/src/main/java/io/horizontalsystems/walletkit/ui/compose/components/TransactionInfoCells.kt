@@ -115,7 +115,6 @@ fun TransactionNftAmountCell(
     title: String,
     amount: ColoredValue,
     nftName: String?,
-    iconUrl: String?,
     iconPlaceholder: Int?,
     badge: String?,
 ) {
@@ -123,7 +122,7 @@ fun TransactionNftAmountCell(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         HsImage(
-            url = iconUrl,
+            url = null,
             placeholder = iconPlaceholder,
             modifier = Modifier
                 .size(32.dp)

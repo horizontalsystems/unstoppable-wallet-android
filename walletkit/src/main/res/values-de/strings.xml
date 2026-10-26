@@ -1576,8 +1576,6 @@
     <string name="Detectors_TokenDetectors">Token-Detektoren</string>
     <string name="Detectors_GeneralDetectors">Allgemeine Detektoren</string>
     <string name="Detectors_IssuesCount">Probleme %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Erlöse</string>
     <string name="RateList_TopLosers">Verlierer</string>
@@ -1593,17 +1591,8 @@
     <string name="BalanceSyncError_ErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Bitte versuchen Sie es später erneut.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">UNSTOPPABLEN JOIN</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unaufhaltsamer Pass</string>
-    <string name="ProUsersInfo_Description">Um diese Daten zu aktivieren, solltest du Bronze-Level UW NFTs “Coin Info+”\n\nerwerben:</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX-Volume und Rang</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidität und Rang</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Aktive Adressen</string>
-    <string name="ProUsersInfo_Features_TxCount">Transaktionsanzahl</string>
-    <string name="ProUsersInfo_Features_TxVolume">Transaktionsvolumen</string>
     <string name="Hud_Text_LearnMore">Demnächst</string>
     <string name="Hud_Text_Activate">Aktivieren</string>
-    <string name="ProUsersActivate_Title">Pass aktivieren</string>
-    <string name="ProUsersActivate_Description">Berg Yak - Grenzenlos gehen. Zeigt Ihnen wichtige Marktdaten, analytische Werkzeuge, nützliche Diagramme basierend auf On-Chain-Daten, die Ihnen helfen, eine klare Sicht auf die Projekte zu geben</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Typ auswählen</string>
     <string name="Widget_EnableAutostartWarning">Um sicherzustellen, dass dieses Widget richtig funktioniert, sollten Sie Autostart aktivieren.</string>

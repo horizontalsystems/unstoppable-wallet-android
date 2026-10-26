@@ -2,10 +2,6 @@ package io.horizontalsystems.walletkit.entities.transactionrecords
 
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.TransactionValue
-import io.horizontalsystems.walletkit.entities.nft.NftUid
-import io.horizontalsystems.walletkit.entities.transactionrecords.evm.ContractCallTransactionRecord
-import io.horizontalsystems.walletkit.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
-import io.horizontalsystems.walletkit.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -66,24 +62,3 @@ abstract class TransactionRecord(
         return TransactionStatus.Pending
     }
 }
-
-val TransactionRecord.nftUids: Set<NftUid>
-    get() = when (this) {
-        is EvmOutgoingTransactionRecord -> {
-            value.nftUid?.let { setOf(it) } ?: emptySet()
-        }
-        is ContractCallTransactionRecord -> {
-            ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
-        }
-        is ExternalContractCallTransactionRecord -> {
-            ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
-        }
-        else -> emptySet()
-    }
-
-val List<TransactionRecord>.nftUids: Set<NftUid>
-    get() {
-        val nftUids = mutableSetOf<NftUid>()
-        forEach { nftUids.addAll(it.nftUids) }
-        return nftUids
-    }

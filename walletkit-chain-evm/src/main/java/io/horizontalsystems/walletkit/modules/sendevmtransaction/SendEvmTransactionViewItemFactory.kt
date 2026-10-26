@@ -9,8 +9,6 @@ import io.horizontalsystems.walletkit.entities.isMaxValue
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.send.SendModule
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmData
-import io.horizontalsystems.walletkit.modules.send.evm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.walletkit.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
@@ -20,8 +18,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.nftkit.decorations.OutgoingEip1155Decoration
-import io.horizontalsystems.nftkit.decorations.OutgoingEip721Decoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
@@ -36,11 +32,10 @@ class SendEvmTransactionViewItemFactory(
 ) {
     fun getItems(
         transactionData: TransactionData?,
-        additionalInfo: AdditionalInfo?,
         decoration: TransactionDecoration?
     ): List<SectionViewItem> {
         var sections = decoration?.let {
-            getViewItems(it, additionalInfo)
+            getViewItems(it)
         } ?: listOf()
 
         if (sections.isEmpty()) {
@@ -56,8 +51,7 @@ class SendEvmTransactionViewItemFactory(
     }
 
     private fun getViewItems(
-        decoration: TransactionDecoration,
-        additionalInfo: AdditionalInfo?
+        decoration: TransactionDecoration
     ): List<SectionViewItem>? =
         when (decoration) {
             is OutgoingDecoration -> getSendBaseCoinItems(
@@ -101,64 +95,8 @@ class SendEvmTransactionViewItemFactory(
 
             is OneInchDecoration -> null
 
-            is OutgoingEip721Decoration -> getNftTransferItems(
-                decoration.to,
-                BigInteger.ONE,
-                additionalInfo?.sendInfo,
-                decoration.tokenId,
-            )
-
-            is OutgoingEip1155Decoration -> getNftTransferItems(
-                decoration.to,
-                decoration.value,
-                additionalInfo?.sendInfo,
-                decoration.tokenId,
-            )
-
             else -> null
         }
-
-    private fun getNftTransferItems(
-        recipient: Address,
-        value: BigInteger,
-        sendInfo: SendEvmData.SendInfo?,
-        tokenId: BigInteger
-    ): List<SectionViewItem> {
-
-        val sections = mutableListOf<SectionViewItem>()
-        val addressValue = recipient.eip55
-
-        val viewItems = buildList {
-            add(
-                ViewItem.Subhead(
-                    Translator.getString(R.string.Send_Confirmation_YouSend),
-                    sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
-                    R.drawable.ic_arrow_up_right_12
-                )
-            )
-
-            add(
-                getNftAmount(
-                    value,
-                    sendInfo?.nftShortMeta?.previewImageUrl
-                )
-            )
-
-            val contact = getContact(addressValue)
-
-            add(
-                ViewItem.Address(
-                    Translator.getString(R.string.Send_Confirmation_To),
-                    addressValue,
-                    contact?.name
-                )
-            )
-        }
-
-        sections.add(SectionViewItem(viewItems))
-
-        return sections
-    }
 
     private fun getUniswapViewItems(
         amountIn: SwapDecoration.Amount,
@@ -431,9 +369,6 @@ class SendEvmTransactionViewItemFactory(
         OneInchDecoration.Token.EvmCoin -> coinServiceFactory.baseCoinService
         is OneInchDecoration.Token.Eip20Coin -> coinServiceFactory.getCoinService(token.address)
     }
-
-    private fun getNftAmount(value: BigInteger, previewImageUrl: String?): ViewItem.NftAmount =
-        ViewItem.NftAmount(previewImageUrl, "$value NFT", ValueType.Regular)
 
     private fun getAmount(amountData: SendModule.AmountData, valueType: ValueType, token: Token) =
         ViewItem.Amount(

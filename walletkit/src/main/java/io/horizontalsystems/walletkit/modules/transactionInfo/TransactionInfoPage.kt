@@ -168,7 +168,6 @@ fun TransactionInfoSection(
                                 viewItem.title,
                                 viewItem.nftValue,
                                 viewItem.nftName,
-                                viewItem.iconUrl,
                                 viewItem.iconPlaceholder,
                                 viewItem.badge,
                             )

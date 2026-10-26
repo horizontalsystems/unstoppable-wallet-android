@@ -15,7 +15,6 @@ chain ethereum
   restoreSettingTypes=
   nativeTokenQueries=ethereum|native
   defaultTokenQuery=ethereum|native
-  supportedNftTypes=Eip721,Eip1155
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=null
   protocolType[Eip20]=ERC20
@@ -36,7 +35,6 @@ chain binance-smart-chain
   restoreSettingTypes=
   nativeTokenQueries=binance-smart-chain|native
   defaultTokenQuery=binance-smart-chain|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=null
   protocolType[Eip20]=BEP20
@@ -57,7 +55,6 @@ chain polygon-pos
   restoreSettingTypes=
   nativeTokenQueries=polygon-pos|native
   defaultTokenQuery=polygon-pos|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Polygon
   protocolType[Eip20]=Polygon
@@ -78,7 +75,6 @@ chain avalanche
   restoreSettingTypes=
   nativeTokenQueries=avalanche|native
   defaultTokenQuery=avalanche|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Avalanche
   protocolType[Eip20]=Avalanche
@@ -99,7 +95,6 @@ chain optimistic-ethereum
   restoreSettingTypes=
   nativeTokenQueries=optimistic-ethereum|native
   defaultTokenQuery=optimistic-ethereum|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Optimism
   protocolType[Eip20]=Optimism
@@ -120,7 +115,6 @@ chain base
   restoreSettingTypes=
   nativeTokenQueries=base|native
   defaultTokenQuery=base|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Base
   protocolType[Eip20]=Base
@@ -141,7 +135,6 @@ chain zksync
   restoreSettingTypes=
   nativeTokenQueries=zksync|native
   defaultTokenQuery=zksync|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=ZKsync
   protocolType[Eip20]=ZKsync
@@ -162,7 +155,6 @@ chain robinhood
   restoreSettingTypes=
   nativeTokenQueries=robinhood|native
   defaultTokenQuery=robinhood|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Robinhood
   protocolType[Eip20]=Robinhood
@@ -183,7 +175,6 @@ chain arc
   restoreSettingTypes=
   nativeTokenQueries=arc|native
   defaultTokenQuery=arc|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Arc
   protocolType[Eip20]=Arc
@@ -204,7 +195,6 @@ chain arbitrum-one
   restoreSettingTypes=
   nativeTokenQueries=arbitrum-one|native
   defaultTokenQuery=arbitrum-one|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Arbitrum
   protocolType[Eip20]=Arbitrum
@@ -225,7 +215,6 @@ chain gnosis
   restoreSettingTypes=
   nativeTokenQueries=gnosis|native
   defaultTokenQuery=gnosis|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Gnosis
   protocolType[Eip20]=Gnosis
@@ -246,7 +235,6 @@ chain fantom
   restoreSettingTypes=
   nativeTokenQueries=fantom|native
   defaultTokenQuery=fantom|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=Fantom
   protocolType[Eip20]=Fantom
@@ -267,7 +255,6 @@ chain tron
   restoreSettingTypes=
   nativeTokenQueries=tron|native
   defaultTokenQuery=tron|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Eip20
   protocolType[Native]=null
   protocolType[Eip20]=TRC20
@@ -288,7 +275,6 @@ chain bitcoin
   restoreSettingTypes=
   nativeTokenQueries=bitcoin|derived:bip44,bitcoin|derived:bip49,bitcoin|derived:bip84,bitcoin|derived:bip86
   defaultTokenQuery=bitcoin|derived:bip84
-  supportedNftTypes=
   supportedTokenTypes=Derived(Bip84)
   protocolType[Native]=Bitcoin
   protocolType[Eip20]=Bitcoin
@@ -309,7 +295,6 @@ chain bitcoin-cash
   restoreSettingTypes=
   nativeTokenQueries=bitcoin-cash|address_type:type0,bitcoin-cash|address_type:type145
   defaultTokenQuery=bitcoin-cash|address_type:type145
-  supportedNftTypes=
   supportedTokenTypes=AddressTyped(Type145)
   protocolType[Native]=Bitcoin Cash
   protocolType[Eip20]=Bitcoin Cash
@@ -330,7 +315,6 @@ chain ecash
   restoreSettingTypes=
   nativeTokenQueries=ecash|native
   defaultTokenQuery=ecash|native
-  supportedNftTypes=
   supportedTokenTypes=Native
   protocolType[Native]=Ecash
   protocolType[Eip20]=Ecash
@@ -351,7 +335,6 @@ chain litecoin
   restoreSettingTypes=
   nativeTokenQueries=litecoin|derived:bip44,litecoin|derived:bip49,litecoin|derived:bip84,litecoin|derived:bip86
   defaultTokenQuery=litecoin|derived:bip84
-  supportedNftTypes=
   supportedTokenTypes=Derived(Bip84)
   protocolType[Native]=Litecoin
   protocolType[Eip20]=Litecoin
@@ -372,7 +355,6 @@ chain dash
   restoreSettingTypes=
   nativeTokenQueries=dash|native
   defaultTokenQuery=dash|native
-  supportedNftTypes=
   supportedTokenTypes=Native
   protocolType[Native]=Dash
   protocolType[Eip20]=Dash
@@ -393,7 +375,6 @@ chain monero
   restoreSettingTypes=BirthdayHeight
   nativeTokenQueries=monero|native
   defaultTokenQuery=monero|native
-  supportedNftTypes=
   supportedTokenTypes=Native
   protocolType[Native]=Monero
   protocolType[Eip20]=Monero
@@ -414,7 +395,6 @@ chain zano
   restoreSettingTypes=BirthdayHeight
   nativeTokenQueries=zano|native
   defaultTokenQuery=zano|native
-  supportedNftTypes=
   supportedTokenTypes=Native,ZanoAsset
   protocolType[Native]=Zano
   protocolType[Eip20]=Zano
@@ -435,7 +415,6 @@ chain zcash
   restoreSettingTypes=BirthdayHeight
   nativeTokenQueries=zcash|native
   defaultTokenQuery=zcash|native
-  supportedNftTypes=
   supportedTokenTypes=Native
   protocolType[Native]=Zcash
   protocolType[Eip20]=Zcash
@@ -456,7 +435,6 @@ chain solana
   restoreSettingTypes=
   nativeTokenQueries=solana|native
   defaultTokenQuery=solana|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Spl
   protocolType[Native]=Solana
   protocolType[Eip20]=Solana
@@ -477,7 +455,6 @@ chain stellar
   restoreSettingTypes=
   nativeTokenQueries=stellar|native
   defaultTokenQuery=stellar|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Asset
   protocolType[Native]=Stellar
   protocolType[Eip20]=Stellar
@@ -498,7 +475,6 @@ chain xrp
   restoreSettingTypes=
   nativeTokenQueries=xrp|native
   defaultTokenQuery=xrp|native
-  supportedNftTypes=
   supportedTokenTypes=Native,XrpAsset
   protocolType[Native]=XRP Ledger
   protocolType[Eip20]=XRP Ledger
@@ -519,7 +495,6 @@ chain near-protocol
   restoreSettingTypes=NearAccountId
   nativeTokenQueries=near-protocol|native
   defaultTokenQuery=near-protocol|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Nep141
   protocolType[Native]=NEAR
   protocolType[Eip20]=NEAR
@@ -540,7 +515,6 @@ chain the-open-network
   restoreSettingTypes=
   nativeTokenQueries=the-open-network|native
   defaultTokenQuery=the-open-network|native
-  supportedNftTypes=
   supportedTokenTypes=Native,Jetton
   protocolType[Native]=null
   protocolType[Eip20]=Ton
@@ -561,7 +535,6 @@ chain thorchain
   restoreSettingTypes=
   nativeTokenQueries=thorchain|native
   defaultTokenQuery=thorchain|native
-  supportedNftTypes=
   supportedTokenTypes=Native,ThorchainAsset
   protocolType[Native]=THORChain
   protocolType[Eip20]=THORChain
@@ -582,7 +555,6 @@ chain mayachain
   restoreSettingTypes=
   nativeTokenQueries=mayachain|native
   defaultTokenQuery=mayachain|native
-  supportedNftTypes=
   supportedTokenTypes=Native
   protocolType[Native]=MayaChain
   protocolType[Eip20]=MayaChain

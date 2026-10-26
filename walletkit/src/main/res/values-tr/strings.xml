@@ -1201,8 +1201,6 @@
     <string name="Detectors_TokenDetectors">Token Tespit Ediciler</string>
     <string name="Detectors_GeneralDetectors">Genel Tespit Ediciler</string>
     <string name="Detectors_IssuesCount">Sorunlar: %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Kazanlar</string>
     <string name="RateList_TopLosers">Kaybedenler</string>
@@ -1215,9 +1213,7 @@
     <string name="BalanceSyncError_ButtonChangeSource">Kaynağı Değiştir</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">KATIL UNSTOPPABLES</string>
-    <string name="ProUsersInfo_Features_TxCount">İşlem Sayısı</string>
     <string name="Hud_Text_LearnMore">Çok Yakında</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, and useful charts based on on-chain data that will help give you a clear view of projects</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
     <string name="Widget_EnableAutostartWarning">Bu widget\'ın düzgün çalışması için Otomatik Başlatmayı etkinleştirmelisiniz.</string>
@@ -1688,13 +1684,6 @@
     <string name="Premium_TitleForDroid">Premium (F-Droid için Ücretsiz)</string>
     <string name="Privacy_Information">Unstoppable, bakiyeleriniz veya cüzdan adresleriniz gibi kişisel verileri toplamaz. Uygulamayı geliştirmek için yalnızca anonim veriler kullanırız.</string>
     <string name="PrivateKeys_TronPrivateKeyDescription">Bu cüzdandaki TRON ağındaki varlıklar üzerinde tam kontrol sağlar.</string>
-    <string name="ProUsersActivate_Title">Pass\'ı Etkinleştir</string>
-    <string name="ProUsersInfo_Description">Bu verileri etkinleştirmek için bronz seviye UW NFT\'leri “Coin Info+” edinmelisiniz\n\nAyrıca aşağıdaki verilere erişebilirsiniz:</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Aktif Adresler</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX Likiditesi ve Sıralaması</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX Hacmi ve Sıralaması</string>
-    <string name="ProUsersInfo_Features_TxVolume">İşlem Hacmi</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="PublicKeys_TronAddress_Description">TRON blok zincirinde varlık tutan cüzdanın salt okunur izlenmesine olanak tanır.</string>
     <string name="ROI_Period_N">Dönem %s</string>
     <string name="ROI_SelectCoin_SelectAssets">Varlıkları Seç</string>
