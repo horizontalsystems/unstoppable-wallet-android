@@ -3,11 +3,7 @@ package io.horizontalsystems.walletkit.modules.multiswap
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.draw.clip
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import androidx.compose.foundation.layout.Arrangement
@@ -91,6 +87,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.controls.FiatLinePlaceholder
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenSelector
+import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
@@ -640,8 +637,12 @@ private fun SwapScreenInner(
                         }
 
                         if (uiState.split) {
-                            VSpacer(height = 16.dp)
-                            SplitSwapInfoCard()
+                            VSpacer(height = 64.dp)
+                            InfoCard(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                title = stringResource(R.string.SplitSwap_Caution_Title),
+                                text = stringResource(R.string.SplitSwap_Caution_Text)
+                            )
                         }
 
                         if (uiState.currentStep is SwapStep.ActionRequired) {
@@ -675,35 +676,6 @@ private fun SwapScreenInner(
                 }
             }
         }
-    }
-}
-
-// What the Private tab does, told once above the button: the split is explained before the
-// recipients are asked for.
-@Composable
-private fun SplitSwapInfoCard() {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-            .padding(16.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Icon(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.ic_info_filled_20),
-                tint = ComposeAppTheme.colors.grey,
-                contentDescription = null,
-            )
-            subhead2_leah(text = stringResource(R.string.SplitSwap_Caution_Title))
-        }
-        VSpacer(8.dp)
-        subhead2_grey(text = stringResource(R.string.SplitSwap_Caution_Text))
     }
 }
 
