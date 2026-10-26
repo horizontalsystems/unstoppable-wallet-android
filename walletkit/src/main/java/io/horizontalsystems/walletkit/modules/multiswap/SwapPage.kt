@@ -244,8 +244,12 @@ private fun SwapTabScreen(
         key = swapViewModelKey,
         factory = SwapViewModel.Factory(tokenIn, tokenOut, split = split)
     )
-    // Shares the swap view model's service, which saves the wallet once the settings are approved
-    val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel> {
+    // Shares the swap view model's service, which saves the wallet once the settings are approved.
+    // Keyed like the swap view model: both tabs share one store, and an unkeyed instance would
+    // stay bound to the first tab's service.
+    val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(
+        key = swapViewModelKey?.let { "restore_$it" }
+    ) {
         RestoreSettingsViewModel(viewModel.restoreSettingsService, emptyList())
     }
 
