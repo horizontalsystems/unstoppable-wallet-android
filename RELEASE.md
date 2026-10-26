@@ -38,7 +38,8 @@ Hotfixes that land on `master` after the release are merged back into `develop` 
 
 ### 6. Set repository tag
 
-* Create tag for current version.
+* Check out `master` at the merge commit from step 4.
+* Create the tag for the released version.
 
 ### 7. Build apk file
 
