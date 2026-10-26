@@ -319,7 +319,7 @@ requests need one or two. Do not list the changes; the diff and the commit
 messages already say that.
 
 Closing keywords (`Closes #123`) only take effect when a pull request merges
-into the default branch (`master`). Pull requests target `version/*`, so close
+into the default branch (`master`). Pull requests target `develop`, so close
 issues by hand.
 
 ### Commit: what does this change do, and why?

@@ -2,7 +2,7 @@ name: Deploy Dev to Firebase
 
 on:
   push:
-    branches: [ version/* ]
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
@@ -121,7 +121,7 @@ jobs:
           format: html
           disable_web_page_preview: true
           message: |
-            ✅ Version Build (${{ needs.build.outputs.build_number }})
+            ✅ Develop Build (${{ needs.build.outputs.build_number }})
 
             ${{ needs.build.outputs.details }}
 
@@ -136,7 +136,7 @@ jobs:
           format: html
           disable_web_page_preview: true
           message: |
-            ❌ Version Build (${{ needs.build.outputs.build_number }}) failed
+            ❌ Develop Build (${{ needs.build.outputs.build_number }}) failed
 
             ${{ needs.build.outputs.details }}
 

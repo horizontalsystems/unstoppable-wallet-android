@@ -7,8 +7,8 @@ argument-hint: "<chain> [base-branch]"
 # Chain review
 
 Review the chain integration named in the arguments, following
-`docs/chain-integration/README.md` step 4. The base branch defaults to the
-`version/*` branch the current branch was cut from.
+`docs/chain-integration/README.md` step 4. The base branch defaults to
+`develop`.
 
 ## 1. Collect the scope
 

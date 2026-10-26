@@ -25,18 +25,16 @@ Initial coins dump `json` file should be updated to latest state of backend.
 
 ### 4. Transfer Code to Production Branch
 
-Merge `version` branch into `master` branch.
+Open a pull request from `develop` into `master` and merge it.
 
-### 5. Prepare New Development Branch
+### 5. Prepare `develop` for the Next Version
 
-* Create new `version` branch.
-
-```
-$ git branch version/0.1
-```
+On `develop`:
 
 * Increment version code.
 * Increase version name.
+
+Hotfixes that land on `master` after the release are merged back into `develop` so the two branches do not diverge.
 
 ### 6. Set repository tag
 

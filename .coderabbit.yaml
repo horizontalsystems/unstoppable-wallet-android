@@ -9,7 +9,7 @@ reviews:
     enabled: true
     drafts: false
     base_branches:
-      - "^version/.*"
+      - "^develop$"
     ignore_title_keywords:
       - "WIP"
       - "DO NOT REVIEW"

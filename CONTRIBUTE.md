@@ -26,19 +26,19 @@ If you’re a submitting a PR with the intent to extend wallet support to additi
 
 ### Terminology
 
-* **Working development branch**. It matches the pattern "version/X.Y.Z", where X.Y.Z the version of app we're working on at the time. Usually there is only one working branch
+* **Working development branch**. The `develop` branch. All work for the next release lands there; `master` holds the released code.
 
 Please follow these steps
 
-1. Clone the current working development branch.
+1. Clone the repository and check out `develop`.
 1. Make changes in your cloned version. When making changes please make sure that you follow the style-guides
-1. Send the Pull Request to the current working development branch.
+1. Send the Pull Request to `develop`.
 
 ### Pull Requests
 
 Please follow these steps when sending pull requests
 
-1. Choose the current working development branch as base branch for Pull Request
+1. Choose `develop` as base branch for Pull Request
 1. Make reference to the related issue if any in the description
 
 ### Style-guides
