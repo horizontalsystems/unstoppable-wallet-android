@@ -105,6 +105,7 @@ class LocalStorageManager(
     private val USWAP_SUSPENSIONS_SYNC_TIME = "uswap_suspensions_sync_time"
     private val USWAP_EXECUTION_TYPES = "uswap_execution_types"
     private val USWAP_ROUTE_SCORES = "uswap_route_scores"
+    private val USWAP_SPLIT_PROVIDERS = "uswap_split_providers"
     private val PRIVATE_SEND_PROVIDER_IDS = "private_send_provider_ids"
     private val PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME = "private_send_provider_ids_sync_time"
 
@@ -182,6 +183,12 @@ class LocalStorageManager(
         get() = preferences.getString(USWAP_ROUTE_SCORES, null)
         set(value) {
             preferences.edit { putString(USWAP_ROUTE_SCORES, value) }
+        }
+
+    override var uSwapSplitProviders: String?
+        get() = preferences.getString(USWAP_SPLIT_PROVIDERS, null)
+        set(value) {
+            preferences.edit { putString(USWAP_SPLIT_PROVIDERS, value) }
         }
 
     override var uSwapSuspensionsSyncTime: Long

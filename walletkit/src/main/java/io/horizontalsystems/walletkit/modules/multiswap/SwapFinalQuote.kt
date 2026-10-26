@@ -36,4 +36,7 @@ data class SwapFinalQuote(
     // quote, decided by the provider from the route, never of the provider. The confirmation
     // offers the toggle only when it is true and the sell chain has a protected sender.
     val mevProtectionAllowed: Boolean = false,
+    // A split swap's outputs in request order; null for a single-output swap. [amountOut] is
+    // their total. After the commit each carries the uuid of its own swap record.
+    val splitOutputs: List<SplitSwapOutput>? = null,
 )

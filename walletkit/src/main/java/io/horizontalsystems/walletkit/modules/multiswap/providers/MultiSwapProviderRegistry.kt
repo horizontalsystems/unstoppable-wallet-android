@@ -61,6 +61,16 @@ object MultiSwapProviderRegistry {
         )
 
     /**
+     * Split-capable providers: the candidates the Private swap tab quotes through the split
+     * endpoints. Kept out of [allProviders], which is what /v3/rate is fanned out over: a
+     * split-only provider refuses single-output quotes. Whether a candidate is actually offered
+     * is decided by `/v3/providers` (see SwapProviderInfoManager.supportsSplitSwaps).
+     */
+    val splitProviders: List<ISplitSwapProvider> = listOf(
+        USwapProvider(UProvider.SwapuzSplit),
+    )
+
+    /**
      * Confidential rails: the providers private send may route a same-asset transfer through.
      * They also quote on the ordinary swap screen as members of [allProviders], where a
      * confidential route is just one more card beside the public ones.
@@ -70,7 +80,7 @@ object MultiSwapProviderRegistry {
     )
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {
-        (allProviders + retiredProviders).associateBy { it.id }
+        (allProviders + splitProviders + retiredProviders).associateBy { it.id }
     }
 
     fun isSingleTransactionSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean {

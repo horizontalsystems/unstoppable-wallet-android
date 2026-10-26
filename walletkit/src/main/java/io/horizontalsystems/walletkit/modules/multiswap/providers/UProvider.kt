@@ -115,6 +115,20 @@ enum class UProvider(
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
     ),
+    // Swapuz's split orders under their own server id: one deposit paid out to several
+    // addresses. Serves the /v3/split endpoints only, so it is never quoted on /v3/rate; the
+    // deposit is a plain transfer like Swapuz's.
+    SwapuzSplit(
+        "SWAPUZ_SPLIT",
+        "Swapuz Split",
+        SwapProviderType.CEX,
+        false,
+        false,
+        true,
+        isEvm = false,
+        isSingleTransactionSwap = false,
+        supportsSimpleUtxoTransactions = true
+    ),
     Lizex(
         "LIZEX",
         "Lizex",

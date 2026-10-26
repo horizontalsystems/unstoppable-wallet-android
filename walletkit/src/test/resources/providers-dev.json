@@ -320,5 +320,11 @@
         "side": "any"
       }
     ]
+  },
+  {
+    "provider": "SWAPUZ_SPLIT",
+    "quotes": false,
+    "suspensions": [],
+    "splitSwaps": true
   }
 ]

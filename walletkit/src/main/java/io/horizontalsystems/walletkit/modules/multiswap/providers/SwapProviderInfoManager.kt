@@ -37,6 +37,18 @@ class SwapProviderInfoManager(
 
     private val _routeScoresFlow = MutableStateFlow(restoredRouteScores())
 
+    private val _splitProvidersFlow = MutableStateFlow(restoredSplitProviders())
+
+    /**
+     * Server ids of the providers that serve the split endpoints (`splitSwaps: true` on
+     * `/v3/providers`). The Private swap tab offers exactly these; a registered candidate the
+     * server no longer flags disappears from it on the next sync.
+     */
+    val splitProvidersFlow = _splitProvidersFlow.asStateFlow()
+
+    fun supportsSplitSwaps(providerId: String): Boolean =
+        SwapSuspensionIndex.serverId(providerId) in _splitProvidersFlow.value
+
     /**
      * Route Scores by provider, as the server last published them. A flow rather than a lookup:
      * a sync that changes only a score leaves the suspension index, and so the quotes, unchanged,
@@ -78,6 +90,9 @@ class SwapProviderInfoManager(
         // And for route scores: without this a build that predates them would show no score for
         // up to an hour after the update.
         localStorage.uSwapRouteScores ?: return false
+        // And for the split-capable set: a build that predates it would offer no split provider
+        // until the next hourly sync.
+        localStorage.uSwapSplitProviders ?: return false
 
         // A negative age means the stored timestamp is in the future — a clock correction, which
         // would otherwise read as fresh until the clock caught up.
@@ -113,6 +128,13 @@ class SwapProviderInfoManager(
                 val scores = SwapRouteScores.from(responses)
                 _routeScoresFlow.value = scores
                 localStorage.uSwapRouteScores = gson.toJson(scores)
+
+                val splitProviders = responses
+                    .filter { it.splitSwaps && !it.suspended }
+                    .map { SwapSuspensionIndex.serverId(it.provider) }
+                    .toSet()
+                _splitProvidersFlow.value = splitProviders
+                localStorage.uSwapSplitProviders = gson.toJson(splitProviders.toList())
 
                 localStorage.uSwapSuspensions = gson.toJson(index)
                 localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
@@ -163,6 +185,17 @@ class SwapProviderInfoManager(
         swapQuote.tokenOut.blockchainType == BlockchainType.Zcash &&
             !USwapProvider.routeDeliversShieldedZcash(swapQuote) &&
             !deliversShieldedZcash(providerId, swapQuote.tokenIn)
+
+    private fun restoredSplitProviders(): Set<String> {
+        val json = localStorage.uSwapSplitProviders ?: return emptySet()
+
+        return try {
+            gson.fromJson(json, Array<String>::class.java)?.toSet() ?: emptySet()
+        } catch (e: Throwable) {
+            Log.e(TAG, "Failed to restore split providers", e)
+            emptySet()
+        }
+    }
 
     private fun restoredRouteScores(): SwapRouteScores {
         val json = localStorage.uSwapRouteScores ?: return SwapRouteScores()

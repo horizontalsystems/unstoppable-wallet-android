@@ -11,6 +11,11 @@ import io.horizontalsystems.walletkit.core.derivation
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.nativeTokenQueries
+import io.horizontalsystems.walletkit.modules.multiswap.SplitRateException
+import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapOutput
+import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapQuoteExtraData
+import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapRecipient
+import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapRules
 import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
@@ -59,7 +64,7 @@ class USwapProvider(
     // signer executes. Defaults to the EVM chain plugin's plain transfer; an app whose
     // signer flow needs another shape supplies its own.
     private val buildEvmDepositTransfer: ((tokenIn: Token, amountIn: BigDecimal, depositAddress: String) -> SendTransactionData.Evm)? = null,
-) : IMultiSwapProvider {
+) : ISplitSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
     override val type = provider.type
@@ -901,6 +906,9 @@ class USwapProvider(
         if (tokenIn.blockchainType == BlockchainType.Stellar) UnstoppableAPI.Response.Attachment("text", "0") else null
 
     override suspend fun commit(finalQuote: SwapFinalQuote): SwapCommitment {
+        // A split preview is committed through its own endpoint; its token is refused by /v3/commit.
+        (finalQuote.providerContext as? SplitPreviewContext)?.let { return commitSplit(finalQuote, it) }
+
         // Every quote this provider returns carries a context; a missing one can only mean the
         // quote came from elsewhere, and executing it as-is would skip creating the order.
         val context = finalQuote.providerContext as? PreviewContext
@@ -984,6 +992,283 @@ class USwapProvider(
     override suspend fun reportInboundTxHash(providerSwapId: String, txHash: String) {
         unstoppableAPI.signed(UnstoppableAPI.Request.Signed(providerSwapId, txHash))
     }
+
+    // ----- Split swaps: one deposit, several outputs of the same buy token -----
+
+    override suspend fun fetchSplitQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        percents: List<Int>,
+    ): SwapQuote {
+        SplitSwapRules.requireValid(percents)
+
+        val route = splitRateBestRoute(tokenIn, tokenOut, amountIn, percents, IMultiSwapProvider.DEFAULT_SLIPPAGE)
+
+        return SwapQuote(
+            amountOut = route.expectedBuyAmountTotal,
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            // The deposit is a plain transfer, so the sell side never needs an approval; the buy
+            // side may still need the account to accept the token (a Stellar trustline).
+            actionRequired = ChainRegistry[tokenOut.blockchainType]?.swapActivationAction(tokenOut),
+            estimationTime = route.estimatedTime?.total,
+            extraData = SplitSwapQuoteExtraData(route, percents),
+        )
+    }
+
+    // /v3/split/rate — prices the shares for this provider alone. A refusal is a non-2xx carrying
+    // providerErrors (a share under the per-output minimum, a pair the provider does not quote).
+    private suspend fun splitRateBestRoute(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        percents: List<Int>,
+        slippage: BigDecimal,
+    ): UnstoppableAPI.Response.SplitRoute {
+        val assetOut = assetIdentifier(tokenOut)
+        val request = UnstoppableAPI.Request.SplitRate(
+            sellAsset = assetIdentifier(tokenIn),
+            sellAmount = amountIn.toPlainString(),
+            slippage = slippage,
+            outputs = percents.map { UnstoppableAPI.Request.SplitOutput(buyAsset = assetOut, amount = it.toString()) },
+            providers = setOf(provider.id),
+            chainId = rateChainId(tokenIn),
+        )
+
+        val response = try {
+            unstoppableAPI.splitRate(request)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: HttpException) {
+            throw SplitRateException.from(e)
+        }
+
+        // A route must price every requested output, or an output would have no amount to show.
+        return response.routes.orEmpty()
+            .filter { route -> route.outputsByIndex.map { it.index } == percents.indices.toList() }
+            .maxByOrNull { it.expectedBuyAmountTotal }
+            ?: throw SplitRateException(response.providerErrors.orEmpty(), "No split routes")
+    }
+
+    override suspend fun fetchSplitFinalQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        recipients: List<SplitSwapRecipient>,
+        sendTransactionSettings: SendTransactionSettings?,
+        swapQuote: SwapQuote,
+        slippage: BigDecimal,
+    ): SwapFinalQuote {
+        SplitSwapRules.requireValid(recipients.map { it.percent })
+
+        // The same decision as for a single swap: where a failed deposit is refunded, and whether
+        // the sender is named. A split is always a transfer the app builds, so the source
+        // address is only recorded as the sender; the ZEC refund policy still decides both.
+        val sourceAddress: String?
+        val refundAddress: String
+        if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            val addresses = zcashSellAddresses(tokenIn)
+            sourceAddress = addresses.source
+            refundAddress = addresses.refund
+        } else {
+            sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
+                SwapHelper.getSendingAddressForToken(tokenIn)
+            } else {
+                null
+            }
+            refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+        }
+
+        val assetIn = assetIdentifier(tokenIn)
+        val assetOut = assetIdentifier(tokenOut)
+        val request = UnstoppableAPI.Request.SplitPreview(
+            sellAsset = assetIn,
+            sellAmount = amountIn.toPlainString(),
+            slippage = slippage,
+            provider = provider.id,
+            refundAddress = refundAddress,
+            sourceAddress = sourceAddress,
+            chainId = rateChainId(tokenIn),
+            networkFee = UnstoppableAPI.Request.NetworkFee.of(tokenIn, sendTransactionSettings),
+            outputs = recipients.map {
+                UnstoppableAPI.Request.SplitOutput(buyAsset = assetOut, amount = it.percent.toString(), destinationAddress = it.address.hex)
+            },
+        )
+
+        val route = try {
+            unstoppableAPI.splitPreview(request)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: HttpException) {
+            throw SplitRateException.from(e)
+        }
+
+        val previewToken = route.previewToken?.takeIf { it.isNotEmpty() }
+            ?: throw IllegalStateException("Preview carries no token")
+
+        val outputs = previewedOutputs(route, recipients)
+
+        // A split preview never names the deposit: the transfer is estimated against the
+        // server's stand-in account and rebuilt for the real address at commit, exactly as a
+        // single transfer provider's is. Without a stand-in the quote is shown without a fee.
+        val sendTransactionData = route.stubDepositAddress?.takeIf { it.isNotBlank() }?.let { stub ->
+            depositTransactionData(tokenIn, amountIn, stub, estimationAttachment(tokenIn))
+        }
+
+        return SwapFinalQuote(
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            amountOut = outputs.fold(BigDecimal.ZERO) { sum, output -> sum + output.amountOut },
+            // Split rates are floating: nothing guarantees an output's amount, so neither a
+            // Guaranteed row nor a slippage row applies.
+            amountOutMin = null,
+            sendTransactionData = sendTransactionData,
+            priceImpact = null,
+            fields = emptyList(),
+            estimatedTime = route.estimatedTime?.total,
+            slippage = null,
+            providerSwapId = null,
+            fromAsset = assetIn,
+            toAsset = assetOut,
+            depositAddress = null,
+            depositMemo = null,
+            approvalSpender = null,
+            providerContext = SplitPreviewContext(previewToken, tokenIn, amountIn, recipients),
+            mevProtectionAllowed = false,
+            splitOutputs = outputs,
+        )
+    }
+
+    // The previewed outputs matched to the recipients by index. Each must name the destination
+    // that was sent: a preview paying elsewhere must not reach the confirmation screen.
+    private fun previewedOutputs(
+        route: UnstoppableAPI.Response.SplitRoute,
+        recipients: List<SplitSwapRecipient>,
+    ): List<SplitSwapOutput> {
+        val byIndex = route.outputsByIndex.associateBy { it.index }
+        return recipients.mapIndexed { index, recipient ->
+            val output = byIndex[index] ?: throw IllegalStateException("Preview has no output $index")
+            requireSameDestination(output.destinationAddress, recipient, index)
+            SplitSwapOutput(
+                index = index,
+                percent = recipient.percent,
+                address = recipient.address.hex,
+                amountOut = output.expectedBuyAmount ?: BigDecimal.ZERO,
+            )
+        }
+    }
+
+    private fun requireSameDestination(destinationAddress: String?, recipient: SplitSwapRecipient, index: Int) {
+        if (destinationAddress != null && destinationAddress != recipient.address.hex) {
+            throw IllegalStateException("Output $index names another destination")
+        }
+    }
+
+    // /v3/split/commit for a split previewed here: creates the order, then rebuilds the one
+    // transfer for the deposit address the order names.
+    private suspend fun commitSplit(finalQuote: SwapFinalQuote, context: SplitPreviewContext): SwapCommitment {
+        if (!consumedPreviewTokens.add(context.previewToken)) {
+            throw SwapCommitFailedException(SwapCommitFailure.RefreshRequired)
+        }
+
+        currentCoroutineContext().ensureActive()
+
+        val commit = try {
+            unstoppableAPI.splitCommit(UnstoppableAPI.Request.Commit(context.previewToken))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            val commitException = UnstoppableAPI.CommitException.from(e)
+            throw SwapCommitFailedException(commitException.toSwapCommitFailure(), commitException)
+        }
+
+        val splitUuid = commit.splitUuid
+        if (commit.status != "ok" || splitUuid.isNullOrEmpty()) {
+            throw SwapCommitFailedException(SwapCommitFailure.Failed, IllegalStateException("Commit answered ${commit.status} without a splitUuid"))
+        }
+
+        try {
+            val execution = commit.execution ?: throw IllegalStateException("Commit returned no deposit")
+            if (execution.method != "transfer") {
+                throw IllegalStateException("Commit returned a ${execution.method} execution")
+            }
+            // The order is funded with exactly the amount the user confirmed, once: an order
+            // asking for anything else is left unfunded and lapses.
+            val orderAmount = execution.amount?.toBigDecimalOrNull()
+                ?: throw IllegalStateException("Commit names no deposit amount")
+            if (orderAmount.compareTo(context.amountIn) != 0) {
+                throw IllegalStateException("Commit asks for a different deposit amount")
+            }
+            val depositAddress = execution.depositAddress?.takeIf { it.isNotBlank() }
+                ?: throw IllegalStateException("No deposit address")
+
+            val outputs = committedOutputs(commit, finalQuote.splitOutputs.orEmpty(), context.recipients)
+            val quote = finalQuote.copy(
+                amountOut = outputs.fold(BigDecimal.ZERO) { sum, output -> sum + output.amountOut },
+                sendTransactionData = depositTransactionData(context.tokenIn, context.amountIn, depositAddress, execution.attachment),
+                providerSwapId = splitUuid,
+                depositAddress = depositAddress,
+                depositMemo = execution
+                    .takeIf { context.tokenIn.blockchainType != BlockchainType.Xrp }
+                    ?.resolvedMemo(),
+                providerContext = null,
+                splitOutputs = outputs,
+            )
+            return SwapCommitment(quote, splitUuid)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SwapCommitFailedException) {
+            throw e
+        } catch (e: Throwable) {
+            // The order exists server-side and lapses unfunded; the user gets a fresh quote.
+            throw SwapCommitFailedException(SwapCommitFailure.Failed, e)
+        }
+    }
+
+    // The committed outputs matched to the recipients by index: each must carry its own uuid and
+    // name the destination that was previewed. The committed amount replaces the previewed one.
+    private fun committedOutputs(
+        commit: UnstoppableAPI.Response.SplitCommit,
+        previewed: List<SplitSwapOutput>,
+        recipients: List<SplitSwapRecipient>,
+    ): List<SplitSwapOutput> {
+        val byIndex = commit.outputsByIndex.associateBy { it.index }
+        return recipients.mapIndexed { index, recipient ->
+            val output = byIndex[index] ?: throw IllegalStateException("Commit has no output $index")
+            val uuid = output.uuid?.takeIf { it.isNotEmpty() } ?: throw IllegalStateException("Output $index has no uuid")
+            requireSameDestination(output.destinationAddress, recipient, index)
+            SplitSwapOutput(
+                index = index,
+                percent = recipient.percent,
+                address = recipient.address.hex,
+                amountOut = output.expectedBuyAmount ?: previewed.getOrNull(index)?.amountOut ?: BigDecimal.ZERO,
+                uuid = uuid,
+            )
+        }
+    }
+
+    override suspend fun reportSplitInboundTxHash(splitUuid: String, txHash: String) {
+        unstoppableAPI.splitSigned(UnstoppableAPI.Request.SplitSigned(splitUuid, txHash))
+    }
+
+    private fun assetIdentifier(token: Token): String =
+        assetsMap[token] ?: deriveIdentifier(token) ?: throw IllegalStateException("No identifier for ${token.coin.code}")
+
+    // The sell chain hint a raw-address identifier needs; a token-list identifier names its chain.
+    private fun rateChainId(tokenIn: Token): String? =
+        if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
+
+    // What [commitSplit] needs from the preview: the token to commit, the deposit the transfer
+    // is rebuilt for, and the recipients the order's outputs are checked against.
+    private class SplitPreviewContext(
+        val previewToken: String,
+        val tokenIn: Token,
+        val amountIn: BigDecimal,
+        val recipients: List<SplitSwapRecipient>,
+    )
 
     // What [commit] needs from the preview: the token to commit and the route to rebuild a transfer
     // provider's deposit from once the real address arrives.
@@ -1403,6 +1688,43 @@ interface UnstoppableAPI {
         @Body request: Request.Track,
     ): Response.Track
 
+    // /v3/split/rate — prices one deposit fanned out to several outputs, each a share of the
+    // deposit. Only split-capable providers answer; naming any other is `invalidParams`. A
+    // refusal is a non-2xx whose body carries the same { providerErrors } shape.
+    @POST("split/rate")
+    suspend fun splitRate(
+        @Body request: Request.SplitRate,
+    ): Response.SplitRate
+
+    // /v3/split/preview — the split route for ONE provider with a destination per output, plus
+    // the `previewToken` and the stand-in deposit address. Never carries an execution: the
+    // deposit address only exists once the order does.
+    @POST("split/preview")
+    suspend fun splitPreview(
+        @Body request: Request.SplitPreview,
+    ): Response.SplitRoute
+
+    // /v3/split/commit — creates the split order for a previewed split route. Answers the
+    // `splitUuid`, one `uuid` per output and the single transfer that funds every output. A
+    // simple preview token here, or a split token on /v3/commit, is a 400.
+    @POST("split/commit")
+    suspend fun splitCommit(
+        @Body request: Request.Commit,
+    ): Response.SplitCommit
+
+    // /v3/split/signed — reports the deposit hash to every output of the split at once.
+    @POST("split/signed")
+    suspend fun splitSigned(
+        @Body request: Request.SplitSigned,
+    ): Response.SplitSigned
+
+    // /v3/split/track — the split as one swap in the /v3/track shape: one deposit leg, then a
+    // payout leg per output tagged with `meta.outputIndex`.
+    @POST("split/track")
+    suspend fun splitTrack(
+        @Body request: Request.SplitTrack,
+    ): Response.Track
+
     // /v3/track/evm — stateless on-chain reader for native EVM swaps (1inch/Uniswap/Pancake)
     // that were not created through /v3/commit, so there is no record to look up by uuid.
     @POST("track/evm")
@@ -1533,6 +1855,54 @@ interface UnstoppableAPI {
             // release builds, and never sent to /v3/track, whose body is the uuid alone.
             val testActionRequired: Boolean? = null,
         )
+
+        // One output of a split request: what it receives and its share of the deposit, as a
+        // percent (the only form this app sends) that must sum to 100 over the outputs. The
+        // destination is required on a preview and refused on a rate.
+        data class SplitOutput(
+            val buyAsset: String,
+            val amount: String,
+            val destinationAddress: String? = null,
+        )
+
+        // /v3/split/rate request — the rate body with the buy side pluralised. Exact input only.
+        data class SplitRate(
+            val sellAsset: String,
+            val sellAmount: String,
+            val amountType: String = SPLIT_AMOUNT_TYPE_PERCENT,
+            val slippage: BigDecimal,
+            val outputs: List<SplitOutput>,
+            val providers: Set<String>,
+            val chainId: String? = null,
+        )
+
+        // /v3/split/preview request — the split rate body for one provider, with a destination
+        // per output. `refundAddress` is required here; `sourceAddress` is only recorded as the
+        // sender, since a split is always a transfer the app builds itself.
+        data class SplitPreview(
+            val sellAsset: String,
+            val sellAmount: String,
+            val amountType: String = SPLIT_AMOUNT_TYPE_PERCENT,
+            val slippage: BigDecimal,
+            val provider: String,
+            val refundAddress: String,
+            val sourceAddress: String? = null,
+            val chainId: String? = null,
+            val networkFee: NetworkFee? = null,
+            val outputs: List<SplitOutput>,
+        )
+
+        data class SplitSigned(
+            val splitUuid: String,
+            val inboundTxHash: String,
+        )
+
+        data class SplitTrack(
+            val splitUuid: String,
+            val inboundTxHash: String? = null,
+        )
+
+        const val SPLIT_AMOUNT_TYPE_PERCENT = "percent"
     }
 
     object Response {
@@ -1559,6 +1929,13 @@ interface UnstoppableAPI {
             // because the field is absent for the many providers that carry no rules, and Gson
             // fills absent fields with null rather than the declared default.
             val suspensions: List<SwapSuspension>? = null,
+            // Whether the provider serves the /v3/split endpoints. Split swaps are offered for
+            // exactly the providers that say so; absent reads as false.
+            val splitSwaps: Boolean = false,
+            // Whether the server quotes this provider's single-output swaps. False for a
+            // split-only provider, which must never be named on /v3/rate. Nullable rather than
+            // defaulted: Gson skips the constructor, so an absent field would read as false.
+            val quotes: Boolean? = null,
         ) {
             data class Contacts(
                 val email: String? = null,
@@ -1740,6 +2117,83 @@ interface UnstoppableAPI {
             val hash: String? = null,
         )
 
+        // /v3/split/rate response. As on /v3/rate, `routes` is absent when every provider refuses.
+        data class SplitRate(
+            val routes: List<SplitRoute>? = null,
+            val providerErrors: List<ProviderError>? = null,
+        )
+
+        // A split route: the deposit side at the top level, the buy side per output. From
+        // /split/rate it is economics only; from /split/preview it carries the token and the
+        // stand-in deposit address, never an execution.
+        data class SplitRoute(
+            val providers: List<String>? = null,
+            val sellAsset: String? = null,
+            val sellAmount: BigDecimal? = null,
+            val amountType: String? = null,
+            val outputs: List<SplitRouteOutput>? = null,
+            val estimatedTime: Route.EstimatedTime? = null,
+            val amlPolicy: String? = null,
+            val previewToken: String? = null,
+            val stubDepositAddress: String? = null,
+            val expiresAt: Long? = null,
+        ) {
+            val providerId: String?
+                get() = providers?.firstOrNull()
+
+            // Outputs in request order. Matched by `index`, never by asset or address: several
+            // outputs may share both.
+            val outputsByIndex: List<SplitRouteOutput>
+                get() = outputs.orEmpty().sortedBy { it.index }
+
+            // What the deposit buys in total; every output is priced in the same buy asset here.
+            val expectedBuyAmountTotal: BigDecimal
+                get() = outputsByIndex.fold(BigDecimal.ZERO) { sum, output -> sum + (output.expectedBuyAmount ?: BigDecimal.ZERO) }
+        }
+
+        data class SplitRouteOutput(
+            val index: Int,
+            val buyAsset: String? = null,
+            val destinationAddress: String? = null,
+            // This output's share of the deposit, in the sell asset, resolved from the percent.
+            val sellAmount: BigDecimal? = null,
+            val expectedBuyAmount: BigDecimal? = null,
+            // Always null today: split rates are floating, nothing guarantees an output's amount.
+            val minBuyAmount: BigDecimal? = null,
+            val estimatedTime: Route.EstimatedTime? = null,
+        )
+
+        // /v3/split/commit 200 body: the order's handles and the one transfer funding every output.
+        data class SplitCommit(
+            val status: String,
+            val splitUuid: String? = null,
+            val sellAmount: BigDecimal? = null,
+            val expiresAt: Long? = null,
+            val replayed: Boolean = false,
+            val execution: Execution? = null,
+            val outputs: List<SplitCommitOutput>? = null,
+        ) {
+            val outputsByIndex: List<SplitCommitOutput>
+                get() = outputs.orEmpty().sortedBy { it.index }
+        }
+
+        data class SplitCommitOutput(
+            val index: Int,
+            // The output's own swap record; /v3/track and /v3/signed accept it like any swap's.
+            val uuid: String? = null,
+            val buyAsset: String? = null,
+            val destinationAddress: String? = null,
+            val sellAmount: BigDecimal? = null,
+            val expectedBuyAmount: BigDecimal? = null,
+            val minBuyAmount: BigDecimal? = null,
+        )
+
+        data class SplitSigned(
+            val splitUuid: String,
+            val status: String,
+            val hash: String? = null,
+        )
+
         // `execution` discriminated union — switch on `method`. Modeled as one flat
         // class (Gson-friendly) with accessors that read only the fields the method uses.
         data class Execution(
@@ -1888,6 +2342,8 @@ interface UnstoppableAPI {
             // Empty before the deposit is observed.
             val legs: List<Leg>?,
             val meta: Meta? = null,
+            // /v3/split/track only: stands in for `uuid`.
+            val splitUuid: String? = null,
         ) {
             data class Leg(
                 val type: String,   // "swap" | "native_send"
@@ -1900,6 +2356,21 @@ interface UnstoppableAPI {
                 val toAsset: String?,
                 val toAmount: String?,
                 val toAddress: String?,
+                val meta: LegMeta? = null,
+            ) {
+                // A split's payout (or refund) leg for the output at `outputIndex`; the deposit
+                // leg carries no index.
+                val outputIndex: Int?
+                    get() = meta?.outputIndex
+
+                val isRefund: Boolean
+                    get() = meta?.refund == true
+            }
+
+            // Split legs: which output a payout belongs to, and whether it is a refund.
+            data class LegMeta(
+                val outputIndex: Int? = null,
+                val refund: Boolean? = null,
             )
 
             data class Meta(
