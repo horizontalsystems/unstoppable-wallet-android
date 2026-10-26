@@ -366,8 +366,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Verwenden Sie für den Empfang von Börsen oder Diensten, die keine geschützten Adressen unterstützen.</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">Senden</string>
     <!--Send-->
     <string name="Send_EnterAddress">Adresse eingeben</string>
     <string name="Send_Title">Senden %s</string>
@@ -812,8 +810,6 @@
     <string name="Info_DoubleSpend_Description">Doppeltes Ausgaberisiko! Es gibt eine weitere Transaktion in der Blockkette, die versucht, Eingaben auszugeben, die für diese Transaktion verwendet werden. Nur eine Transaktion wird vom Netzwerk akzeptiert</string>
     <string name="Info_DoubleSpend_ThisTx">Dieser Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Widersprüchliche Tx</string>
-    <!--Guides-->
-    <string name="Guides_Title">Akademie</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Seite nicht gefunden</string>
     <!--Setting_Currency-->
@@ -1576,8 +1572,6 @@
     <string name="Detectors_TokenDetectors">Token-Detektoren</string>
     <string name="Detectors_GeneralDetectors">Allgemeine Detektoren</string>
     <string name="Detectors_IssuesCount">Probleme %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Erlöse</string>
     <string name="RateList_TopLosers">Verlierer</string>
@@ -1593,17 +1587,8 @@
     <string name="BalanceSyncError_ErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Bitte versuchen Sie es später erneut.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">UNSTOPPABLEN JOIN</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unaufhaltsamer Pass</string>
-    <string name="ProUsersInfo_Description">Um diese Daten zu aktivieren, solltest du Bronze-Level UW NFTs “Coin Info+”\n\nerwerben:</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX-Volume und Rang</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidität und Rang</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Aktive Adressen</string>
-    <string name="ProUsersInfo_Features_TxCount">Transaktionsanzahl</string>
-    <string name="ProUsersInfo_Features_TxVolume">Transaktionsvolumen</string>
     <string name="Hud_Text_LearnMore">Demnächst</string>
     <string name="Hud_Text_Activate">Aktivieren</string>
-    <string name="ProUsersActivate_Title">Pass aktivieren</string>
-    <string name="ProUsersActivate_Description">Berg Yak - Grenzenlos gehen. Zeigt Ihnen wichtige Marktdaten, analytische Werkzeuge, nützliche Diagramme basierend auf On-Chain-Daten, die Ihnen helfen, eine klare Sicht auf die Projekte zu geben</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Typ auswählen</string>
     <string name="Widget_EnableAutostartWarning">Um sicherzustellen, dass dieses Widget richtig funktioniert, sollten Sie Autostart aktivieren.</string>

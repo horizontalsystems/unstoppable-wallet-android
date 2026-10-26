@@ -366,8 +366,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">El saldo transparente no puede ser utilizado en nuestra cartera por ahora. Pero este dinero puede ser gastado por otras billeteras con soporte de e-address</string>
     <string name="Balance_Zcash_Transparent">Transparente</string>
     <string name="Balance_Zcash_TransparentDescription">Úselo para recibir de intercambios o servicios que no admiten direcciones protegidas.</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">Enviar</string>
     <!--Send-->
     <string name="Send_EnterAddress">Introduce una dirección</string>
     <string name="Send_Title">Enviar %s</string>
@@ -812,8 +810,6 @@
     <string name="Info_DoubleSpend_Description">¡Doble riesgo de gasto! Hay otra transacción en el blockchain que está intentando gastar entradas usadas en esta transacción. Sólo una transacción será aceptada por la red</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Conflicto Tx</string>
-    <!--Guides-->
-    <string name="Guides_Title">Academia</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Página no encontrada</string>
     <!--Setting_Currency-->
@@ -1571,8 +1567,6 @@
     <string name="Detectors_TokenDetectors">Detectores de Tokens</string>
     <string name="Detectors_GeneralDetectors">Detectores Generales</string>
     <string name="Detectors_IssuesCount">Problemas %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Ganadores</string>
     <string name="RateList_TopLosers">Perdedores</string>
@@ -1588,17 +1582,8 @@
     <string name="BalanceSyncError_ErrorText">Error al obtener los datos de la fuente actual. Inténtalo de nuevo más tarde.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">ÚNETE A UNSTOPPABLES</string>
-    <string name="ProUsersInfo_UnstoppablePass">Pase imparable</string>
-    <string name="ProUsersInfo_Description">Para activar estos datos, debes obtener NFT de bronce de nivel \"Coin Info+\"\n\nTambién obtendrás acceso a los datos a continuación:</string>
-    <string name="ProUsersInfo_Features_DexVolume">Volumen y Rango DEX</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">Liquidez y rango DEX</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Direcciones activas</string>
-    <string name="ProUsersInfo_Features_TxCount">Número de transacciones</string>
-    <string name="ProUsersInfo_Features_TxVolume">Volumen de la transacción</string>
     <string name="Hud_Text_LearnMore">Próximamente</string>
     <string name="Hud_Text_Activate">Activar</string>
-    <string name="ProUsersActivate_Title">Activar el Pase</string>
-    <string name="ProUsersActivate_Description">Yak de Montaña - Ve sin fronteras. Le mostrará datos de mercado importantes, herramientas analíticas, gráficos útiles basados en datos en cadena que le ayudarán a ver claramente los proyectos</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Elegir tipo</string>
     <string name="Widget_EnableAutostartWarning">Para asegurarse de que este widget funciona correctamente, debe habilitar Autoiniciar.</string>

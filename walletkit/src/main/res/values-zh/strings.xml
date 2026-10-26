@@ -365,8 +365,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
     <string name="Balance_Zcash_Transparent">透明的</string>
     <string name="Balance_Zcash_TransparentDescription">用于从不支持受保护地址的交易所或服务接收资金。</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">发送​​</string>
     <!--Send-->
     <string name="Send_EnterAddress">输入地址</string>
     <string name="Send_Title">发送%s</string>
@@ -811,8 +809,6 @@
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此交易</string>
     <string name="Info_DoubleSpend_ConflictingTx">冲突交易</string>
-    <!--Guides-->
-    <string name="Guides_Title">钱包学院</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">无法找到页面</string>
     <!--Setting_Currency-->
@@ -1570,8 +1566,6 @@
     <string name="Detectors_TokenDetectors">代币检测器</string>
     <string name="Detectors_GeneralDetectors">通用检测器</string>
     <string name="Detectors_IssuesCount">发布 %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">涨幅最大者</string>
     <string name="RateList_TopLosers">跌幅最大者</string>
@@ -1587,17 +1581,8 @@
     <string name="BalanceSyncError_ErrorText">无法从当前源获取数据。请稍后再试。</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">加入未加入的</string>
-    <string name="ProUsersInfo_UnstoppablePass">不可阻止的通路</string>
-    <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX 流动性和等级</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">活跃地址</string>
-    <string name="ProUsersInfo_Features_TxCount">交易数</string>
-    <string name="ProUsersInfo_Features_TxVolume">交易量</string>
     <string name="Hud_Text_LearnMore">即将推出</string>
     <string name="Hud_Text_Activate">激活</string>
-    <string name="ProUsersActivate_Title">激活Pass</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - 不受边界限制。 将为您提供重要的市场数据、分析工具、基于链式数据的有用图表，有助您清晰了解项目</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">选择类型</string>
     <string name="Widget_EnableAutostartWarning">为了确保这个部件正常工作，您应该启用自动启动。</string>

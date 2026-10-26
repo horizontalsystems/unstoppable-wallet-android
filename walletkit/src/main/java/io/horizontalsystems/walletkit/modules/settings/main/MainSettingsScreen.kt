@@ -59,7 +59,6 @@ import io.horizontalsystems.walletkit.modules.settings.banners.SubscriptionBanne
 import io.horizontalsystems.walletkit.modules.settings.donate.DonateTokenSelectPage
 import io.horizontalsystems.walletkit.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.walletkit.modules.settings.faq.FaqListPage
-import io.horizontalsystems.walletkit.modules.settings.guides.GuidesPage
 import io.horizontalsystems.walletkit.modules.settings.labs.UnstoppableLabsPage
 import io.horizontalsystems.walletkit.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.walletkit.modules.settings.privacy.PrivacySettingsPage
@@ -392,14 +391,6 @@ private fun SettingSections(
                     navigation.slideFromRight(FaqListPage)
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.Guides_Title,
-                R.drawable.book_24,
-                onClick = {
-                    navigation.slideFromRight(GuidesPage)
-                }
-            )
         })
     )
 
@@ -625,20 +616,14 @@ private fun previewSettingsScreen() {
     ComposeAppTheme {
         Column {
             CellSingleLineLawrenceSection(
-                listOf({
+                listOf {
                     HsSettingCell(
                         R.string.Settings_Faq,
                         R.drawable.ic_faq_20,
                         showAlert = true,
                         onClick = { }
                     )
-                }, {
-                    HsSettingCell(
-                        R.string.Guides_Title,
-                        R.drawable.ic_academy_20,
-                        onClick = { }
-                    )
-                })
+                }
             )
 
             Spacer(Modifier.height(32.dp))

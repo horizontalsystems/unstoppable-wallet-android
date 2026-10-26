@@ -12,7 +12,6 @@ import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfo
-import io.horizontalsystems.marketkit.models.NftTopCollection
 import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.Vault
@@ -269,11 +268,6 @@ class MarketKitWrapper(
         marketKit.topPlatformMarketInfosSingle(chain, currencyCode)
 
     suspend fun getCoinSignalsSingle(coinUids: List<String>) = marketKit.coinsSignalsSingle(coinUids)
-
-    // NFT
-
-    suspend fun nftCollections(): List<NftTopCollection> =
-        marketKit.nftTopCollections()
 
     suspend fun subscriptionsSingle(addresses: List<String>) =
         marketKit.subscriptionsSingle(addresses)

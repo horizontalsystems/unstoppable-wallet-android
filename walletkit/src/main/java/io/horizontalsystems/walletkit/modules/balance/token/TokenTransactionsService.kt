@@ -6,15 +6,11 @@ import io.horizontalsystems.walletkit.core.managers.TransactionAdapterManager
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.LastBlockInfo
 import io.horizontalsystems.walletkit.entities.Wallet
-import io.horizontalsystems.walletkit.entities.nft.NftAssetBriefMetadata
-import io.horizontalsystems.walletkit.entities.nft.NftUid
 import io.horizontalsystems.walletkit.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.walletkit.entities.transactionrecords.nftUids
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.walletkit.modules.transactions.HistoricalRateKey
 import io.horizontalsystems.walletkit.modules.transactions.ITransactionRecordRepository
-import io.horizontalsystems.walletkit.modules.transactions.NftMetadataService
 import io.horizontalsystems.walletkit.modules.transactions.TransactionItem
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSyncStateRepository
@@ -37,7 +33,6 @@ class TokenTransactionsService(
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
-    private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
     private val transactionAdapterManager: TransactionAdapterManager,
 ) : Clearable {
@@ -68,11 +63,6 @@ class TokenTransactionsService(
                 .collect { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
-        }
-        coroutineScope.launch {
-            nftMetadataService.assetsBriefMetadataFlow.collect {
-                handle(it)
-            }
         }
         coroutineScope.launch {
             contactsRepository.contactsFlow.drop(1).collect {
@@ -118,25 +108,6 @@ class TokenTransactionsService(
         transactionItems.addAll(tmpList)
 
         _itemsFlow.tryEmit(transactionItems)
-    }
-
-    @Synchronized
-    private fun handle(assetBriefMetadataMap: Map<NftUid, NftAssetBriefMetadata>) {
-        var updated = false
-        transactionItems.forEachIndexed { index, item ->
-            val tmpMetadata = item.nftMetadata.toMutableMap()
-            item.record.nftUids.forEach { nftUid ->
-                assetBriefMetadataMap[nftUid]?.let {
-                    tmpMetadata[nftUid] = it
-                }
-            }
-            transactionItems[index] = item.copy(nftMetadata = tmpMetadata)
-            updated = true
-        }
-
-        if (updated) {
-            _itemsFlow.tryEmit(transactionItems)
-        }
     }
 
     @Synchronized
@@ -193,16 +164,6 @@ class TokenTransactionsService(
     private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
         val tmpList = mutableListOf<TransactionItem>()
 
-        val nftUids = transactionRecords.nftUids
-        val nftMetadata = nftMetadataService.assetsBriefMetadata(nftUids)
-
-        val missingNftUids = nftUids.subtract(nftMetadata.keys)
-        if (missingNftUids.isNotEmpty()) {
-            coroutineScope.launch {
-                nftMetadataService.fetch(missingNftUids)
-            }
-        }
-
         val newRecords = mutableListOf<TransactionRecord>()
         transactionRecords.forEach { record ->
             var transactionItem = transactionItems.find { it.record == record }
@@ -216,7 +177,7 @@ class TokenTransactionsService(
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
                 val currencyValue = getCurrencyValue(record)
 
-                TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
+                TransactionItem(record, currencyValue, lastBlockInfo)
             } else {
                 transactionItem.copy(record = record)
             }

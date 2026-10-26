@@ -1,9 +1,7 @@
 package io.horizontalsystems.walletkit.ui.compose.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -11,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -126,37 +123,6 @@ fun HsImage(
             painter = painterResource(fallback),
             contentDescription = null,
             modifier = modifier,
-            colorFilter = colorFilter
-        )
-    }
-}
-
-@Composable
-fun NftIcon(
-    modifier: Modifier = Modifier,
-    iconUrl: String?,
-    placeholder: Int? = null,
-    colorFilter: ColorFilter? = null
-) {
-    val fallback = placeholder ?: R.drawable.ic_platform_placeholder_24
-    when {
-        iconUrl != null -> Image(
-            painter = rememberAsyncImagePainter(
-                model = iconUrl,
-                error = painterResource(fallback)
-            ),
-            contentDescription = null,
-            modifier = modifier
-                .clip(RoundedCornerShape(8.dp))
-                .size(32.dp),
-            colorFilter = colorFilter,
-            contentScale = ContentScale.Crop
-        )
-
-        else -> Image(
-            painter = painterResource(fallback),
-            contentDescription = null,
-            modifier = modifier.size(32.dp),
             colorFilter = colorFilter
         )
     }

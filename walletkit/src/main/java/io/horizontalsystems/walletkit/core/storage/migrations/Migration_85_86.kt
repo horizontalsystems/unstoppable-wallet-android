@@ -5,6 +5,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 object Migration_85_86 : Migration(85, 86) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("ALTER TABLE `SwapRecord` ADD COLUMN `splitOutputs` TEXT")
+        db.execSQL("DROP TABLE IF EXISTS `NftCollectionRecord`")
+        db.execSQL("DROP TABLE IF EXISTS `NftAssetRecord`")
+        db.execSQL("DROP TABLE IF EXISTS `NftMetadataSyncRecord`")
+        db.execSQL("DROP TABLE IF EXISTS `NftAssetBriefMetadataRecord`")
     }
 }

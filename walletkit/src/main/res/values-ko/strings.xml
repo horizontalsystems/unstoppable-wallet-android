@@ -347,8 +347,6 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
     <string name="Balance_Zcash_Transparent">透明</string>
     <string name="Balance_Zcash_TransparentDescription">보호된 주소를 지원하지 않는 거래소 또는 서비스로부터 수신할 때 사용합니다.</string>
-    <!--Send NFT-->
-    <string name="SendNft_Title">전송</string>
     <!--Send-->
     <string name="Send_EnterAddress">주소 입력</string>
     <string name="Send_Title">전송 %s</string>
@@ -685,8 +683,6 @@
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">충돌하는 Tx</string>
-    <!--Guides-->
-    <string name="Guides_Title">아카데미</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">연락처</string>
     <!--Setting_Currency-->
@@ -1348,8 +1344,6 @@
     <string name="Detectors_TokenDetectors">토큰 탐지기</string>
     <string name="Detectors_GeneralDetectors">일반 탐지기</string>
     <string name="Detectors_IssuesCount">문제점 %d</string>
-    <!-- NFT Collection -->
-    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">이득자</string>
     <string name="RateList_TopLosers">해자</string>
@@ -1363,18 +1357,8 @@
     <string name="BalanceSyncError_ChangableSourceErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 다시 시도하거나 다른 동기화 소스로 변경할 수 있습니다.</string>
     <string name="BalanceSyncError_ErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 나중에 다시 시도하세요.</string>
     <!--Release notes-->
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
-    <string name="ProUsersInfo_Description">이 데이터를 활성화하려면 브론즈 레벨 UW NFTs \'Coin Info+\'를 획득해야 합니다.
-\n\n또한 아래의 데이터에 액세스할 수 있습니다:</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX 거래량 및 순위</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX 유동성 및 순위</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">활성 주소</string>
-    <string name="ProUsersInfo_Features_TxCount">트랜잭션 수</string>
-    <string name="ProUsersInfo_Features_TxVolume">트랜잭션 거래량</string>
     <string name="Hud_Text_LearnMore">추후 공개</string>
     <string name="Hud_Text_Activate">활성화</string>
-    <string name="ProUsersActivate_Title">패스 활성화</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - 경계 없이 사용. 중요한 시장 데이터, 분석 도구, 온체인 데이터를 기반으로 하는 유용한 차트를 보여줌으로써 프로젝트를 명확하게 볼 수 있습니다.</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">유형 선택</string>
     <string name="Widget_EnableAutostartWarning">이 위젯이 올바르게 작동하려면 Autostart를 활성화해야 합니다.</string>

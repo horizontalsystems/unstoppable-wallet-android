@@ -485,9 +485,6 @@
     <string name="Balance_Zcash_Transparent">Transparent</string>
     <string name="Balance_Zcash_TransparentDescription">Use for receiving from exchanges or services that don’t support shielded addresses.</string>
 
-    <!--Send NFT-->
-    <string name="SendNft_Title">Send</string>
-
     <!--Send-->
 
     <string name="Send_EnterAddress">Enter Address</string>
@@ -1198,10 +1195,6 @@
     <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on the blockchain that is trying to spend inputs used in this transaction. Only one transaction will be accepted by the network</string>
     <string name="Info_DoubleSpend_ThisTx">This Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Conflicting Tx</string>
-
-    <!--Guides-->
-
-    <string name="Guides_Title">Academy</string>
 
     <!--Markdown-->
 
@@ -2191,10 +2184,6 @@
     <string name="Detectors_GeneralDetectors">General Detectors</string>
     <string name="Detectors_IssuesCount">Issues %d</string>
 
-    <!-- NFT Collection -->
-
-    <!-- NFT Collection Events -->
-
     <!--Rate list-->
     <string name="RateList_TopGainers">Gainers</string>
     <string name="RateList_TopLosers">Losers</string>
@@ -2215,17 +2204,8 @@
     <!--Release notes-->
 
     <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
-    <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
-    <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
-    <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
-    <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
-    <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">Activate</string>
-    <string name="ProUsersActivate_Title">Activate the Pass</string>
-    <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
 
     <!--Widget-->
 

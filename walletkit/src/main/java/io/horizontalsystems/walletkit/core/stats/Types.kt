@@ -10,7 +10,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class StatPage(val key: String) {
     AboutApp("about_app"),
-    Academy("academy"),
     AccountExtendedPrivateKey("account_extended_private_key"),
     AccountExtendedPublicKey("account_extended_public_key"),
     AddEvmSyncSource("add_evm_sync_source"),
@@ -141,7 +140,6 @@ enum class StatPage(val key: String) {
     SwitchWallet("switch_wallet"),
     TellFriends("tell_friends"),
     Terms("terms"),
-    TopNftCollections("top_nft_collections"),
     TopPlatform("top_platform"),
     TokenPage("token_page"),
     Transactions("transactions"),

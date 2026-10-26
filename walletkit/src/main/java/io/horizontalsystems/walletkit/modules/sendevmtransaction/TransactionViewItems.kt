@@ -32,12 +32,6 @@ sealed class ViewItem {
         val badge: String?
     ) : ViewItem()
 
-    class NftAmount(
-        val iconUrl: String?,
-        val amount: String,
-        val type: ValueType,
-    ) : ViewItem()
-
     class Address(val title: String, val address: String, val contact: String? = null) : ViewItem()
     class Input(val title: String, val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()

@@ -25,8 +25,8 @@ android {
         applicationId = "io.horizontalsystems.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
-        versionCode = 184
-        versionName = "0.53.0"
+        versionCode = 185
+        versionName = "0.54.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         resourceConfigurations += listOf("de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh")
@@ -116,13 +116,11 @@ android {
             buildConfigFieldString("BSCSCAN_KEY", "R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN")
             buildConfigFieldString("BLOCKSCOUT_KEY", "proapi_fzFc5CuNP9f9h2ah6k3Z7kcb6bKKcHUL6M2DfBWmgILHPDFrPMyNdlLfjjnjsMm7K_b9AqMj")
             buildConfigFieldString("GUIDES_URL", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
-            buildConfigFieldString("EDU_URL", "https://raw.githubusercontent.com/horizontalsystems/unstoppable.money/refs/heads/main/edu.json")
             buildConfigFieldString("FAQ_URL", "https://raw.githubusercontent.com/horizontalsystems/unstoppable.money/refs/heads/main/faq.json")
             buildConfigFieldString("COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json")
             buildConfigFieldString("PROVIDER_COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json")
             buildConfigFieldString("MARKET_API_BASE_URL", "https://api-dev.blocksdecoded.com")
             buildConfigFieldString("MARKET_API_KEY", "IQf1uAjkthZp1i2pYzkXFDom")
-            buildConfigFieldString("OPEN_SEA_API_KEY", "bfbd6061a33e455c8581b594774fecb3")
             buildConfigFieldString("WALLET_CONNECT_V2_KEY", "8b4f41c60880a3e3ad57d82fddb30568")
             buildConfigFieldString("ALCHEMY_API_KEY", "PKgWxOMarrHgyMESGjIkJ,BOlzgqJUeGYe5E7K613Fm")
             buildConfigFieldString("SOLANA_JUPITER_API_KEY", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")
@@ -150,13 +148,11 @@ android {
             buildConfigFieldString("BSCSCAN_KEY", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,8QW2JNMPHPUPAACFGXZ3A5PVQY6PBCJPEG")
             buildConfigFieldString("BLOCKSCOUT_KEY", "proapi_fzFc5CuNP9f9h2ah6k3Z7kcb6bKKcHUL6M2DfBWmgILHPDFrPMyNdlLfjjnjsMm7K_b9AqMj")
             buildConfigFieldString("GUIDES_URL", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
-            buildConfigFieldString("EDU_URL", "https://raw.githubusercontent.com/horizontalsystems/unstoppable.money/refs/heads/main/edu.json")
             buildConfigFieldString("FAQ_URL", "https://raw.githubusercontent.com/horizontalsystems/unstoppable.money/refs/heads/main/faq.json")
             buildConfigFieldString("COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json")
             buildConfigFieldString("PROVIDER_COINS_JSON_URL", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json")
             buildConfigFieldString("MARKET_API_BASE_URL", "https://api.blocksdecoded.com")
             buildConfigFieldString("MARKET_API_KEY", "IQf1uAjkthZp1i2pYzkXFDom")
-            buildConfigFieldString("OPEN_SEA_API_KEY", "bfbd6061a33e455c8581b594774fecb3")
             buildConfigFieldString("WALLET_CONNECT_V2_KEY", "0c5ca155c2f165a7d0c88686f2113a72")
             buildConfigFieldString("ALCHEMY_API_KEY", "BOlzgqJUeGYe5E7K613Fm,Vmt7ucAGIMEux_c43Qqqf,uCordWq3EOD800awDx1kb,1uAryzn6DOEVs5PIugeoR,PKgWxOMarrHgyMESGjIkJ")
             buildConfigFieldString("SOLANA_JUPITER_API_KEY", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")

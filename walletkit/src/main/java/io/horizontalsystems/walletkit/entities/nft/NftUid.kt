@@ -1,14 +1,11 @@
 package io.horizontalsystems.walletkit.entities.nft
 
-import io.horizontalsystems.marketkit.models.BlockchainType
-
-sealed class NftUid(val contractAddress: String, val tokenId: String, val blockchainType: BlockchainType) {
-    class Evm(blockchainType: BlockchainType, contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, blockchainType)
-    class Solana(mintAccountAddress: String) : NftUid("", mintAccountAddress, BlockchainType.Solana)
+// Only Solana transfers still produce NFT values; EVM NFT support was removed together with NftKit.
+sealed class NftUid(val tokenId: String) {
+    class Solana(mintAccountAddress: String) : NftUid(mintAccountAddress)
 
     val uid: String
         get() = when (this) {
-            is Evm -> "evm|${blockchainType.uid}|${contractAddress}|${tokenId}"
             is Solana -> "solana|${tokenId}"
         }
 
@@ -18,27 +15,5 @@ sealed class NftUid(val contractAddress: String, val tokenId: String, val blockc
 
     override fun hashCode(): Int {
         return uid.hashCode()
-    }
-
-    companion object {
-        fun fromUid(uid: String): NftUid {
-            val parts = uid.split("|")
-
-            return try {
-                when (parts[0]) {
-                    "evm" -> {
-                        Evm(BlockchainType.fromUid(parts[1]), parts[2], parts[3])
-                    }
-                    "solana" -> {
-                        Solana(parts[1])
-                    }
-                    else -> {
-                        throw IllegalStateException()
-                    }
-                }
-            } catch (error: Throwable) {
-                throw IllegalStateException("Could not parse NftUid: $uid")
-            }
-        }
     }
 }

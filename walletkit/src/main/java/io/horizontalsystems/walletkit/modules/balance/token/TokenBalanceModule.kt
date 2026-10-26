@@ -11,7 +11,6 @@ import io.horizontalsystems.walletkit.modules.balance.BalanceCache
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.walletkit.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.walletkit.modules.transactions.NftMetadataService
 import io.horizontalsystems.walletkit.modules.transactions.TransactionRecordRepository
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSyncStateRepository
 import io.horizontalsystems.walletkit.modules.transactions.TransactionViewItem
@@ -36,7 +35,6 @@ class TokenBalanceModule {
                 TransactionsRateRepository(App.currencyManager, App.marketKit),
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
-                NftMetadataService(App.nftMetadataManager),
                 App.spamManager,
                 App.transactionAdapterManager
             )

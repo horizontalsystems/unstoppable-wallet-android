@@ -44,13 +44,11 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val blockscoutApiKey = BuildConfig.BLOCKSCOUT_KEY.split(",")
     override val alchemyApiKey = BuildConfig.ALCHEMY_API_KEY.split(",")
     override val guidesUrl = BuildConfig.GUIDES_URL
-    override val eduUrl = BuildConfig.EDU_URL
     override val faqUrl = BuildConfig.FAQ_URL
     override val coinsJsonUrl = BuildConfig.COINS_JSON_URL
     override val providerCoinsJsonUrl = BuildConfig.PROVIDER_COINS_JSON_URL
     override val marketApiBaseUrl = BuildConfig.MARKET_API_BASE_URL
     override val marketApiKey = BuildConfig.MARKET_API_KEY
-    override val openSeaApiKey = BuildConfig.OPEN_SEA_API_KEY
     override val trongridApiKeys: List<String> = BuildConfig.TRONGRID_API_KEYS.split(",")
     override val udnApiKey = BuildConfig.UDN_API_KEY
     override val thorchainApiKey = BuildConfig.THORCHAIN_API_KEY
