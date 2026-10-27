@@ -32,14 +32,13 @@ import io.horizontalsystems.walletkit.modules.settings.security.passcode.Securit
 import io.horizontalsystems.walletkit.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.walletkit.modules.settings.security.securesend.SecureSendConfigSheet
 import io.horizontalsystems.walletkit.modules.settings.security.ui.PasscodeBlock
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionPremiumUniversalLawrence
+import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
@@ -54,7 +53,6 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -158,7 +156,7 @@ private fun SecurityCenterScreen(
                 icon = R.drawable.defense_gradient_filled_24
             )
 
-            SectionPremiumUniversalLawrence {
+            SectionUniversalLawrence {
                 uiState.defenseSystemActions.forEachIndexed { i, defenseAction ->
                     val action = defenseAction.action
                     BoxBordered(top = i != 0) {
@@ -173,16 +171,11 @@ private fun SecurityCenterScreen(
                                 CellRightControlsSwitcher(
                                     checked = defenseAction.enabled,
                                     confirmChange = {
-                                        if (UserSubscriptionManager.isActionAllowed(action)) {
-                                            if (action == SecureSend) {
-                                                navigation.slideFromBottom(SecureSendConfigSheet)
-                                                false
-                                            } else {
-                                                true
-                                            }
-                                        } else {
-                                            navigation.slideFromBottom(BuySubscriptionHavHostPage)
+                                        if (action == SecureSend) {
+                                            navigation.slideFromBottom(SecureSendConfigSheet)
                                             false
+                                        } else {
+                                            true
                                         }
                                     }
                                 ) {

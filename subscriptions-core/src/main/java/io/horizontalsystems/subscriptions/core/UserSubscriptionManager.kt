@@ -14,10 +14,7 @@ object UserSubscriptionManager {
             actions = listOf(
                 AdvancedSearch,
                 TradeSignals,
-                SecureSend,
-                ScamProtection,
                 PrioritySupport,
-                SwapProtection,
             )
         ),
     )

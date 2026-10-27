@@ -1287,8 +1287,6 @@
     <string name="SwapDefense_PriceImpact_High_Description">در این سواپ بخش بزرگی (-%s%%) از دارایی خود را از دست می‌دهید.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">قیمت نامطلوب!</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">این سواپ به دلیل نقدینگی بسیار کم، زیان بزرگی (-%s%%) به همراه دارد.</string>
-    <string name="SwapDefense_Attention_Title">توجه!</string>
-    <string name="SwapDefense_Attention_Description">محافظت خاموش است. ربات‌ها ممکن است در سواپ شما دخالت کنند و باعث ضرر شما شوند.</string>
     <string name="SwapDefense_Safe_Title">محافظت‌شده</string>
     <string name="SwapDefense_Safe_Description">من جلوی ربات‌ها را می‌گیرم تا از سواپ شما ارزشی برداشت نکنند.</string>
     <string name="SwapConfirm_SwapProtection">محافظت سواپ</string>

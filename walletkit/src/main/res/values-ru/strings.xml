@@ -631,8 +631,6 @@
     <string name="SwapDefense_PriceImpact_High_Description">Вы потеряете большую часть (-%s%%) Ваших средств на этом свопе.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">Неблагоприятная цена!</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">Этот обмен приведет к крупным потерям (-%s%%) из-за очень низкой ликвидности.</string>
-    <string name="SwapDefense_Attention_Title">Внимание!</string>
-    <string name="SwapDefense_Attention_Description">Защита отключена. Бот может помешать вашей замене и заставить вас потерять деньги.</string>
     <string name="SwapDefense_Safe_Title">Защищено</string>
     <string name="SwapDefense_Safe_Description">Я блокирую ботов принимать значение в своем.</string>
     <string name="SwapConfirm_SwapProtection">Защита обмена</string>

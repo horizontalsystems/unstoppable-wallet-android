@@ -5,7 +5,6 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.StateFlow
 
 class PaidActionSettingsManager(
@@ -33,15 +32,6 @@ class PaidActionSettingsManager(
         }
 
         localStorage.enabledPaidActions = current
-    }
-
-    /**
-     * Returns true if action is:
-     * 1. Allowed by subscription (user has premium)
-     * 2. Enabled by user (in enabled list)
-     */
-    fun isActionActive(action: IPaidAction): Boolean {
-        return UserSubscriptionManager.isActionAllowed(action) && isActionEnabled(action)
     }
 
     private val IPaidAction.key: String

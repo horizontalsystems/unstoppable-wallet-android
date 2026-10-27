@@ -32,7 +32,6 @@ import io.horizontalsystems.dapp.core.HSDAppSession
 import io.horizontalsystems.dapp.core.HSDAppVerification
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.subscriptions.core.ScamProtection
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,10 +69,8 @@ class WCSessionViewModel(
     private var connected: Boolean = topic != null
     private var whiteListState: WCWhiteListState? = null
     private var whiteListCache: List<ServiceWCWhitelist.WCWhiteList>? = null
-    private var hasSubscription = false
     private var closeDialog = false
     private var scamProtectionEnabled = paidActionSettingsManager.isActionEnabled(ScamProtection)
-    private var scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
     // Null while the sheet shows an already established session. The attestation describes the
     // moment of connecting, and it is not carried on the session, so re-opening one has nothing to
     // report — reporting "unknown" there would warn about sessions that were verified when approved.
@@ -91,8 +88,6 @@ class WCSessionViewModel(
         pendingRequests = pendingRequests,
         blockchainTypes = blockchainTypes,
         whiteListState = whiteListState,
-        hasSubscription = hasSubscription,
-        scamProtectionActionAllowed = scamProtectionActionAllowed,
         closeDialog = closeDialog,
         verification = verification
     )
@@ -175,14 +170,6 @@ class WCSessionViewModel(
                 whiteListState = WCWhiteListState.InProgress
                 whiteListCache = getWCWhiteList()
                 checkWhiteListStatus()
-            }
-        }
-
-        viewModelScope.launch {
-            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                hasSubscription = it != null
-                scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
-                emitState()
             }
         }
 

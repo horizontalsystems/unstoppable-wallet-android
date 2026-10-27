@@ -4,9 +4,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ServiceState
 import io.horizontalsystems.walletkit.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.SwapProtection
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,19 +21,9 @@ class SwapDefenseSystemService(
     private var sendable = false
 
     private var systemMessage: DefenseSystemMessage? = null
-    private var actionAllowed: Boolean = false
     private var actionEnabled: Boolean = false
 
     fun start(coroutineScope: CoroutineScope) {
-        coroutineScope.launch(Dispatchers.Default) {
-            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                refreshMevProtectionEnabled()
-                refreshSystemMessage()
-
-                emitState()
-            }
-        }
-
         coroutineScope.launch(Dispatchers.Default) {
             paidActionSettingsManager.enabledActionsFlow.collect {
                 refreshMevProtectionEnabled()
@@ -47,7 +35,6 @@ class SwapDefenseSystemService(
     }
 
     private fun refreshMevProtectionEnabled() {
-        actionAllowed = UserSubscriptionManager.isActionAllowed(SwapProtection)
         actionEnabled = paidActionSettingsManager.isActionEnabled(SwapProtection)
     }
 
@@ -57,8 +44,7 @@ class SwapDefenseSystemService(
 
     override fun createState() = State(
         systemMessage = systemMessage,
-        mevProtectionEnabled = supportsMevProtection && actionAllowed && actionEnabled,
-        mevProtectionActionAllowed = actionAllowed,
+        mevProtectionEnabled = supportsMevProtection && actionEnabled,
     )
 
     fun setSupportsMevProtection(supported: Boolean) {
@@ -122,31 +108,18 @@ class SwapDefenseSystemService(
             }
         }
 
-        if (systemMessage == null && supportsMevProtection) {
-            systemMessage = when {
-                !actionAllowed -> DefenseSystemMessage(
-                    level = DefenseAlertLevel.WARNING,
-                    title = TranslatableString.ResString(R.string.SwapDefense_Attention_Title),
-                    body = TranslatableString.ResString(R.string.SwapDefense_Attention_Description),
-                    actionText = TranslatableString.ResString(R.string.Button_Activate),
-                    requiredPaidAction = SwapProtection
-                )
-
-                !actionEnabled -> null
-
-                else -> DefenseSystemMessage(
-                    level = DefenseAlertLevel.SAFE,
-                    title = TranslatableString.ResString(R.string.SwapDefense_Safe_Title),
-                    body = TranslatableString.ResString(R.string.SwapDefense_Safe_Description),
-                )
-            }
+        if (systemMessage == null && supportsMevProtection && actionEnabled) {
+            systemMessage = DefenseSystemMessage(
+                level = DefenseAlertLevel.SAFE,
+                title = TranslatableString.ResString(R.string.SwapDefense_Safe_Title),
+                body = TranslatableString.ResString(R.string.SwapDefense_Safe_Description),
+            )
         }
     }
 
     data class State(
         val systemMessage: DefenseSystemMessage?,
         val mevProtectionEnabled: Boolean,
-        val mevProtectionActionAllowed: Boolean,
     )
 }
 
@@ -154,8 +127,6 @@ data class DefenseSystemMessage(
     val level: DefenseAlertLevel,
     val title: TranslatableString,
     val body: TranslatableString,
-    val actionText: TranslatableString? = null,
-    val requiredPaidAction: IPaidAction? = null
 )
 
 enum class DefenseAlertLevel {

@@ -629,8 +629,6 @@
     <string name="SwapDefense_PriceImpact_High_Description">Vous perdrez une grande partie de vos fonds (-%s%%) sur cet échange.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">Prix défavorable !</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">Ce swap entraînerait une perte majeure (-%s%%) en raison d\'une très faible liquidité.</string>
-    <string name="SwapDefense_Attention_Title">Attention !</string>
-    <string name="SwapDefense_Attention_Description">La protection est désactivée. Les robots peuvent interférer avec votre swap et vous faire perdre de l\'argent.</string>
     <string name="SwapDefense_Safe_Title">Protégé</string>
     <string name="SwapDefense_Safe_Description">Je bloque les bots de prendre de la valeur dans votre swap.</string>
     <string name="SwapConfirm_SwapProtection">Protection contre le swap</string>

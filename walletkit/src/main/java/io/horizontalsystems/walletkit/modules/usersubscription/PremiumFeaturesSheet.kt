@@ -114,8 +114,7 @@ fun PremiumFeaturesScreen(
                 ActionText()
                 VSpacer(24.dp)
                 FeaturesSection(
-                    features = uiState.defenseSystemFeatures +
-                        uiState.advancedControlsFeatures +
+                    features = uiState.advancedControlsFeatures +
                         uiState.marketInsightsFeatures,
                 )
 

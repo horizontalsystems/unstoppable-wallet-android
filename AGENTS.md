@@ -161,13 +161,17 @@ for step 4.
 
 ```kotlin
 // Check if action is allowed
-UserSubscriptionManager.isActionAllowed(SwapProtection)
+UserSubscriptionManager.isActionAllowed(AdvancedSearch)
 
 // Paid actions defined in IPaidAction
-object SwapProtection : IPaidAction
-object SecureSend : IPaidAction
+object AdvancedSearch : IPaidAction
+object TradeSignals : IPaidAction
 // etc.
 ```
+
+The Defense System actions (`SecureSend`, `ScamProtection`, `SwapProtection`)
+are free: they are not part of the Premium subscription, and only the user's
+on/off setting in `PaidActionSettingsManager` decides whether they run.
 
 ## Conventions
 

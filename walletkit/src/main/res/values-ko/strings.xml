@@ -554,7 +554,6 @@
     <string name="Swap_YouPay">지불하기</string>
     <string name="Swap_YouGet">얻기</string>
     <string name="Swap_Confirm_Title">확인</string>
-    <string name="SwapDefense_Attention_Title">주목!</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">토큰 범위 설정</string>
     <string name="SwapSettings_RecipientAddressTitle">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다</string>
@@ -1718,7 +1717,6 @@
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="Settings_Donate_DonationAddresses">기부 주소</string>
     <string name="Settings_Support">지원</string>
-    <string name="SwapDefense_Attention_Description">보호 기능이 꺼져 있습니다. 봇이 스왑을 방해하여 손실을 입힐 수 있습니다.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">유동성이 매우 낮아 이 스왑은 큰 손실(-%s%%)을 초래할 수 있습니다.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">불리한 가격!</string>
     <string name="SwapDefense_PriceImpact_High_Description">이 스왑에서 자금의 상당 부분(-%s%%)을 잃게 됩니다.</string>

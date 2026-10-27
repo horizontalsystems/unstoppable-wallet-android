@@ -27,9 +27,6 @@ import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.subscriptions.core.ScamProtection
-import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -66,11 +63,10 @@ class EnterAddressViewModel(
     private var inputState: DataState<Address>? = null
     private var parseAddressJob: Job? = null
     private val checkJobs: MutableMap<AddressCheckType, Job> = mutableMapOf()
-    private var hasPremium = UserSubscriptionManager.isActionAllowed(SecureSend)
 
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
     private val addressCheckEnabled: Boolean
-        get() = hasPremium && AddressCheckType.entries.any { it.name in localStorage.enabledPaidActions }
+        get() = AddressCheckType.entries.any { it.name in localStorage.enabledPaidActions }
 
     private val recentlySentAddress = if (recentEnabled) recentAddress else null
 
@@ -85,7 +81,6 @@ class EnterAddressViewModel(
 
     init {
         initialAddress?.let { onEnterAddress(it) }
-        observeSubscription()
         observeCheckSettings()
     }
 
@@ -96,31 +91,10 @@ class EnterAddressViewModel(
     }
 
     private fun buildInitialCheckResults(): Map<AddressCheckType, AddressCheckData> =
-        if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-            availableCheckTypes.associateWith { type ->
-                if (isCheckEnabled(type)) AddressCheckData(inProgress = true, disabled = false)
-                else AddressCheckData(inProgress = false, disabled = true)
-            }
-        } else {
-            availableCheckTypes.associateWith {
-                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
-            }
+        availableCheckTypes.associateWith { type ->
+            if (isCheckEnabled(type)) AddressCheckData(inProgress = true, disabled = false)
+            else AddressCheckData(inProgress = false, disabled = true)
         }
-
-    private fun observeSubscription() {
-        viewModelScope.launch {
-            UserSubscriptionManager.activeSubscriptionStateFlow.collect { subscription ->
-                hasPremium = UserSubscriptionManager.isActionAllowed(SecureSend)
-                if (value.isNotEmpty()) {
-                    cancelAllJobs()
-                    checkResults = buildInitialCheckResults()
-                    addressValidationInProgress = true
-                    emitState()
-                    processAddress(value)
-                }
-            }
-        }
-    }
 
     private fun observeCheckSettings() {
         viewModelScope.launch {
@@ -200,7 +174,6 @@ class EnterAddressViewModel(
         addressValidationInProgress = addressValidationInProgress,
         addressValidationError = addressValidationError,
         checkResults = checkResults,
-        hasPremium = hasPremium
     )
 
     fun onEnterAddress(value: String) {
@@ -271,15 +244,6 @@ class EnterAddressViewModel(
 
     private fun dispatchChecks(address: Address) {
         if (!addressCheckEnabled) {
-            addressValidationInProgress = false
-            inputState = DataState.Success(address)
-            emitState()
-            return
-        }
-        if (!UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-            checkResults = availableCheckTypes.associateWith {
-                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
-            }
             addressValidationInProgress = false
             inputState = DataState.Success(address)
             emitState()
@@ -360,7 +324,6 @@ data class EnterAddressUiState(
     val addressValidationInProgress: Boolean,
     val addressValidationError: Throwable?,
     val checkResults: Map<AddressCheckType, AddressCheckData>,
-    val hasPremium: Boolean,
 ) {
     val risky = checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected }
 }

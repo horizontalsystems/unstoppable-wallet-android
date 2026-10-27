@@ -43,10 +43,7 @@ object BuySubscriptionModel {
         get() = when (this) {
             AdvancedSearch -> R.drawable.prem_search_24
             TradeSignals -> R.drawable.prem_bell_24
-            SecureSend -> R.drawable.prem_wallet_in_24
-            ScamProtection -> R.drawable.prem_radar_24
             PrioritySupport -> R.drawable.prem_message_24
-            SwapProtection -> R.drawable.prem_usd_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 

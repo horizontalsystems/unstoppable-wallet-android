@@ -1548,7 +1548,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">Swap işleminizi güvence altına almak ve botlara karşı değer kaybını önlemek için korumayı açın.</string>
     <string name="SwapConfirm_SwapProtection">Swap Protection</string>
-    <string name="SwapDefense_Attention_Title">Dikkat!</string>
     <string name="SwapHistory_Title">Swap Geçmişi</string>
     <string name="SwapInfo_StatusCompleted">Tamamlandı</string>
     <string name="SwapInfo_StatusFailed">Başarısız</string>
@@ -1716,7 +1715,6 @@
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="Settings_Donate_DonationAddresses">Bağış Adresleri</string>
     <string name="Settings_Support">Destek</string>
-    <string name="SwapDefense_Attention_Description">Koruma kapalı. Botlar takasınıza müdahale edebilir ve para kaybetmenize neden olabilir.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">Çok düşük likidite nedeniyle bu takas büyük bir kayba (-%s%%) yol açar.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">Elverişsiz fiyat!</string>
     <string name="SwapDefense_PriceImpact_High_Description">Bu takasta fonlarınızın büyük bir kısmını (-%s%%) kaybedeceksiniz.</string>

@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.walletconnect.session
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,7 +37,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.VerificationAlert
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetDismissHandler
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsImage
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
@@ -170,9 +167,6 @@ fun WCSessionScreen(
                     .clip(RoundedCornerShape(16.dp))
                     .background(ComposeAppTheme.colors.lawrence)
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
-                    .clickable(enabled = !uiState.scamProtectionActionAllowed) {
-                        navigation.slideFromBottom(BuySubscriptionHavHostPage)
-                    }
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -184,21 +178,12 @@ fun WCSessionScreen(
                     modifier = Modifier.widthIn(max = 200.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    if (!uiState.scamProtectionActionAllowed) {
-                        Icon(
-                            painter = painterResource(R.drawable.lock_24),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.grey,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    } else {
-                        when (uiState.whiteListState) {
-                            WCWhiteListState.InWhiteList ->
-                                subheadSB_remus(text = stringResource(R.string.WalletConnect_DAppCheck_Secure))
-                            WCWhiteListState.NotInWhiteList ->
-                                subheadSB_lucian(text = stringResource(R.string.WalletConnect_DAppCheck_Risky))
-                            else -> {}
-                        }
+                    when (uiState.whiteListState) {
+                        WCWhiteListState.InWhiteList ->
+                            subheadSB_remus(text = stringResource(R.string.WalletConnect_DAppCheck_Secure))
+                        WCWhiteListState.NotInWhiteList ->
+                            subheadSB_lucian(text = stringResource(R.string.WalletConnect_DAppCheck_Risky))
+                        else -> {}
                     }
                 }
             }
@@ -222,9 +207,7 @@ fun WCSessionScreen(
                 text = stringResource(R.string.WalletConnect_ConnectWarning),
             )
 
-            if (uiState.scamProtectionActionAllowed &&
-                uiState.whiteListState == WCWhiteListState.NotInWhiteList
-            ) {
+            if (uiState.whiteListState == WCWhiteListState.NotInWhiteList) {
                 VSpacer(16.dp)
                 AlertCard(
                     modifier = Modifier.padding(horizontal = 16.dp),

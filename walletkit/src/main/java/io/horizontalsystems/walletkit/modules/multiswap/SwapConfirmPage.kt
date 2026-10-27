@@ -52,7 +52,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
@@ -446,14 +445,6 @@ private fun SwapConfirmInternal(
                 ) {
                     CellRightControlsSwitcher(
                         checked = uiState.mevProtectionEnabled,
-                        confirmChange = {
-                            if (!uiState.mevProtectionActionAllowed) {
-                                navigation.slideFromBottom(BuySubscriptionHavHostPage)
-                                false
-                            } else {
-                                true
-                            }
-                        },
                         onCheckedChange = { enabled ->
                             viewModel.setMevProtectionEnabled(enabled)
                         }

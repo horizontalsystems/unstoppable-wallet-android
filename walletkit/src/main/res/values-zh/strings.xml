@@ -628,8 +628,6 @@
     <string name="SwapDefense_PriceImpact_High_Description">您将在这次交换中失去大部分资金 (-%s%%)。</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">取消优惠价格！</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">这种交换会因流动性很低而造成重大损失 (-%s%%)。</string>
-    <string name="SwapDefense_Attention_Title">注意！</string>
-    <string name="SwapDefense_Attention_Description">保护已关闭。Bots可能会干扰您的交换并使您失去钱。</string>
     <string name="SwapDefense_Safe_Title">保护</string>
     <string name="SwapDefense_Safe_Description">我正在阻止机器人在你的交换中接受值。</string>
     <string name="SwapConfirm_SwapProtection">交换保护</string>

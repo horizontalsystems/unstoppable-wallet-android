@@ -11,7 +11,6 @@ import io.horizontalsystems.walletkit.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
@@ -47,12 +46,6 @@ class SecuritySettingsViewModel(
         }
 
         viewModelScope.launch {
-            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                refreshDefenseSystemActions()
-            }
-        }
-
-        viewModelScope.launch {
             localStorage.enabledPaidActionsFlow.drop(1).collect {
                 refreshDefenseSystemActions()
             }
@@ -72,8 +65,8 @@ class SecuritySettingsViewModel(
 
         defenseSystemActions = paidActionSettingsManager.toggleableActions.map { action ->
             val enabled = when (action) {
-                SecureSend -> anyDetectionEnabled && UserSubscriptionManager.isActionAllowed(action)
-                else -> paidActionSettingsManager.isActionActive(action)
+                SecureSend -> anyDetectionEnabled
+                else -> paidActionSettingsManager.isActionEnabled(action)
             }
             DefenseSystemAction(action, enabled)
         }

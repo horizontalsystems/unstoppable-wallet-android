@@ -15,11 +15,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,7 +32,6 @@ import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.send.address.AddressValidationError
 import io.horizontalsystems.walletkit.modules.settings.security.securesend.SecureSendConfigSheet
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
@@ -132,11 +129,7 @@ fun EnterAddressScreen(
                         uiState.addressValidationError,
                         uiState.checkResults,
                     ) {
-                        if (uiState.hasPremium){
-                            navigation.slideFromBottom(SecureSendConfigSheet)
-                        } else {
-                            navigation.slideFromBottom(BuySubscriptionHavHostPage)
-                        }
+                        navigation.slideFromBottom(SecureSendConfigSheet)
                     }
                 }
 
@@ -334,7 +327,6 @@ private fun CheckCell(
             },
             right = {
                 when {
-                    checkResult == AddressCheckResult.NotAllowed -> CheckLocked()
                     disabled -> CheckDisabled()
                     else -> CheckValue(inProgress, checkResult)
                 }
@@ -381,16 +373,6 @@ fun CheckValue(
             titleSubheadSb = text.hs(color = color)
         )
     }
-}
-
-@Composable
-fun CheckLocked() {
-    Icon(
-        painter = painterResource(R.drawable.lock_filled_24),
-        contentDescription = null,
-        modifier = Modifier.size(20.dp),
-        tint = ComposeAppTheme.colors.grey,
-    )
 }
 
 @Composable
