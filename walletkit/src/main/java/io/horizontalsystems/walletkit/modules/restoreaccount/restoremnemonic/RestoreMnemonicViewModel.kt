@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.restoreaccount.restoremnemonic
 import io.horizontalsystems.walletkit.CoreApp
 import io.horizontalsystems.walletkit.IThirdKeyboard
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.IAccountFactory
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.WordsManager
@@ -17,6 +18,7 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 
 class RestoreMnemonicViewModel(
+    private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
@@ -39,8 +41,8 @@ class RestoreMnemonicViewModel(
 
     private val regex = Regex("\\S+")
 
-    val defaultName = accountManager.getRandomWalletName()
-    private var _accountName: String = defaultName
+    val defaultName = accountFactory.getNextAccountName()
+    private var _accountName: String = accountManager.getRandomWalletName()
     val accountName: String get() = _accountName.ifBlank { defaultName }
 
     val isThirdPartyKeyboardAllowed: Boolean

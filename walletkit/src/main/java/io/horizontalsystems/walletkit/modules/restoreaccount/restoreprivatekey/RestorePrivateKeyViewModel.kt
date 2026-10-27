@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.IAccountFactory
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.hexToByteArray
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -19,11 +20,12 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import java.math.BigInteger
 
 class RestorePrivateKeyViewModel(
+    private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
 ) : ViewModel() {
 
-    val defaultName = accountManager.getRandomWalletName()
-    private var _accountName: String by mutableStateOf(defaultName)
+    val defaultName = accountFactory.getNextAccountName()
+    private var _accountName: String by mutableStateOf(accountManager.getRandomWalletName())
     val accountName: String get() = _accountName
 
     private var text = ""
