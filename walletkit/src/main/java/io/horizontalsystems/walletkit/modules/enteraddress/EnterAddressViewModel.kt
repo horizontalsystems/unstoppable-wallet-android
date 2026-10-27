@@ -243,18 +243,18 @@ class EnterAddressViewModel(
     }
 
     private fun dispatchChecks(address: Address) {
+        // Checks toggled while the address was resolving are not seen by observeCheckSettings,
+        // so the results are rebuilt from the current settings before any check starts.
+        checkResults = buildInitialCheckResults()
         if (!addressCheckEnabled) {
             addressValidationInProgress = false
             inputState = DataState.Success(address)
             emitState()
             return
         }
+        emitState()
         for (type in availableCheckTypes) {
             if (isCheckEnabled(type)) startCheckJob(type, address)
-            else {
-                checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = true))
-                emitState()
-            }
         }
         tryFinalizeProcessing()
     }
