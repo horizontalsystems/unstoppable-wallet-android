@@ -46,18 +46,20 @@ class AccountFactory(
     }
 
     override fun getNextWatchAccountName(): String {
-        val watchAccountsCount = accountManager.accounts.count { it.isWatchAccount }
-
-        return "Watch Address ${watchAccountsCount + 1}"
+        return nextUnusedName("Watch Address") { it.isWatchAccount }
     }
 
     override fun getNextAccountName(): String {
+        return nextUnusedName("Wallet") { !it.isWatchAccount }
+    }
+
+    private fun nextUnusedName(prefix: String, counted: (Account) -> Boolean): String {
         val accounts = accountManager.accounts
         val existingNames = accounts.map { it.name }.toSet()
-        var number = accounts.count { !it.isWatchAccount } + 1
-        while ("Wallet $number" in existingNames) number++
+        var number = accounts.count(counted) + 1
+        while ("$prefix $number" in existingNames) number++
 
-        return "Wallet $number"
+        return "$prefix $number"
     }
 
 }
