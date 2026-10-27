@@ -170,8 +170,11 @@ object TradeSignals : IPaidAction
 ```
 
 The Defense System actions (`SecureSend`, `ScamProtection`, `SwapProtection`)
-are free: they are not part of the Premium subscription, and only the user's
-on/off setting in `PaidActionSettingsManager` decides whether they run.
+are free: they are not part of the Premium subscription, so never gate them
+with `isActionAllowed`. `ScamProtection` and `SwapProtection` follow the user's
+switch in `PaidActionSettingsManager`; Swap Protection also needs a route that
+supports MEV protection. Secure Send has no switch of its own: each address
+check (`AddressCheckType`) is enabled separately.
 
 ## Conventions
 
