@@ -1999,9 +1999,9 @@
     <string name="SplitSwap_Recipients_Title">Получатели</string>
     <string name="SplitSwap_Recipients_Description">Добавьте адреса получателей и выберите, как разделить между ними полученную сумму.</string>
     <string name="SplitSwap_Address">Адрес %d</string>
-    <string name="SplitSwap_EnterAddresses">Введите адреса</string>
+    <string name="SplitSwap_AddAddress">Добавить адрес %d</string>
     <string name="SplitSwap_InvalidSplit_Title">Недопустимое разделение</string>
-    <string name="SplitSwap_InvalidSplit_Text">Провайдер не поддерживает такое соотношение разделения. Измените разделение, чтобы продолжить.</string>
+    <string name="SplitSwap_InvalidSplit_Text">Одна из сумм получателей меньше допустимого минимума. Измените разделение, чтобы продолжить.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">Одинаковые адреса</string>
     <string name="SplitSwap_DuplicateAddresses_Text">Использование одного и того же адреса снижает преимущество разделения для приватности.</string>
     <string name="SwapInfo_StatusSwapIndexed">Обмен %d</string>

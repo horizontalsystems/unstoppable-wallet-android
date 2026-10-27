@@ -1989,9 +1989,9 @@
     <string name="SplitSwap_Recipients_Title">收款人</string>
     <string name="SplitSwap_Recipients_Description">添加收款地址，并选择如何在它们之间拆分收到的金额。</string>
     <string name="SplitSwap_Address">地址 %d</string>
-    <string name="SplitSwap_EnterAddresses">输入地址</string>
+    <string name="SplitSwap_AddAddress">添加地址 %d</string>
     <string name="SplitSwap_InvalidSplit_Title">无效的拆分</string>
-    <string name="SplitSwap_InvalidSplit_Text">服务商不支持此拆分比例。请调整拆分后继续。</string>
+    <string name="SplitSwap_InvalidSplit_Text">其中一个收款金额低于允许的最小值。请调整拆分后继续。</string>
     <string name="SplitSwap_DuplicateAddresses_Title">重复地址</string>
     <string name="SplitSwap_DuplicateAddresses_Text">使用相同的地址会降低拆分带来的隐私优势。</string>
     <string name="SwapInfo_StatusSwapIndexed">兑换 %d</string>

@@ -3,6 +3,8 @@ package io.horizontalsystems.walletkit.modules.multiswap.settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.walletkit.R.string.Button_Apply
+import io.horizontalsystems.walletkit.R.string.Button_Done
+import io.horizontalsystems.walletkit.R.string.SplitSwap_Address
 import io.horizontalsystems.walletkit.R.string.SendEvmSettings_SetRecipient
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.enteraddress.EnterAddressScreen
@@ -20,8 +22,9 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
         EnterAddressScreen(
             navigation = navigation,
             token = input.token,
-            title = stringResource(SendEvmSettings_SetRecipient),
-            buttonTitle = stringResource(Button_Apply),
+            title = input.splitIndex?.let { stringResource(SplitSwap_Address, it) }
+                ?: stringResource(SendEvmSettings_SetRecipient),
+            buttonTitle = stringResource(if (input.splitIndex != null) Button_Done else Button_Apply),
             allowNull = input.allowRemoval,
             initialAddress = input.recipient?.hex,
             allowOwnAddress = true,
@@ -37,6 +40,8 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
         val token: Token,
         val recipient: Address?,
         val allowRemoval: Boolean = true,
+        // Which of a split's recipients is being entered, numbered from 1, for the page title
+        val splitIndex: Int? = null,
         // the selected route delivers only to transparent Zcash addresses
         val zcashTransparentOnly: Boolean = false,
     )

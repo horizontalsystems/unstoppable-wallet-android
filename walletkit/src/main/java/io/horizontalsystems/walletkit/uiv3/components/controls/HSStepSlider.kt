@@ -1,15 +1,23 @@
 package io.horizontalsystems.walletkit.uiv3.components.controls
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Slider
-import androidx.compose.material.SliderDefaults
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
 import kotlin.math.roundToInt
@@ -17,7 +25,10 @@ import kotlin.math.roundToInt
 /**
  * A slider over whole numbers from [range] in multiples of [step], with a label at either end.
  * [onValueChange] is called once per step crossed, never with a value between two steps.
+ * The track is not filled on either side of the thumb: the two labels already say how the
+ * whole is divided, so a filled side would wrongly single one of them out.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HSStepSlider(
     value: Int,
@@ -43,13 +54,31 @@ fun HSStepSlider(
             },
             valueRange = range.first.toFloat()..range.last.toFloat(),
             steps = ((range.last - range.first) / step - 1).coerceAtLeast(0),
-            colors = SliderDefaults.colors(
-                thumbColor = ComposeAppTheme.colors.jacob,
-                activeTrackColor = ComposeAppTheme.colors.jacob,
-                inactiveTrackColor = ComposeAppTheme.colors.blade,
-                activeTickColor = Color.Transparent,
-                inactiveTickColor = Color.Transparent,
-            ),
+            thumb = {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(ComposeAppTheme.colors.jacob),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(R.drawable.ic_minus_20),
+                        tint = ComposeAppTheme.colors.lawrence,
+                        contentDescription = null,
+                    )
+                }
+            },
+            track = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(4.dp)
+                        .clip(CircleShape)
+                        .background(ComposeAppTheme.colors.blade),
+                )
+            },
         )
         rightLabel?.let { subhead_grey(text = it) }
     }

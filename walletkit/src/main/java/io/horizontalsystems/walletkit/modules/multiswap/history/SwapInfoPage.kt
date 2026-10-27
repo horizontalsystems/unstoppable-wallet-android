@@ -370,7 +370,7 @@ private fun SplitSwapInfoContent(uiState: SwapInfoUiState, navigation: HSNavigat
                     middle = {
                         Column {
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 subhead2_leah(text = uiState.tokenOutCode)

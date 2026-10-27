@@ -1985,9 +1985,9 @@
     <string name="SplitSwap_Recipients_Title">수신자</string>
     <string name="SplitSwap_Recipients_Description">수신자 주소를 추가하고 받은 금액을 어떻게 나눌지 선택하세요.</string>
     <string name="SplitSwap_Address">주소 %d</string>
-    <string name="SplitSwap_EnterAddresses">주소 입력</string>
+    <string name="SplitSwap_AddAddress">주소 %d 추가</string>
     <string name="SplitSwap_InvalidSplit_Title">잘못된 분할</string>
-    <string name="SplitSwap_InvalidSplit_Text">제공자가 이 분할 비율을 지원하지 않습니다. 계속하려면 분할을 조정하세요.</string>
+    <string name="SplitSwap_InvalidSplit_Text">수취인 금액 중 하나가 허용된 최소 금액보다 적습니다. 계속하려면 분할을 조정하세요.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">중복 주소</string>
     <string name="SplitSwap_DuplicateAddresses_Text">같은 주소를 사용하면 분할의 프라이버시 이점이 줄어듭니다.</string>
     <string name="SwapInfo_StatusSwapIndexed">스왑 %d</string>

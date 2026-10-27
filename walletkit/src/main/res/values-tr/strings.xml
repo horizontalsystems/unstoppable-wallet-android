@@ -1991,9 +1991,9 @@
     <string name="SplitSwap_Recipients_Title">Alıcılar</string>
     <string name="SplitSwap_Recipients_Description">Alıcı adreslerini ekleyin ve alınan tutarın bunlar arasında nasıl bölüneceğini seçin.</string>
     <string name="SplitSwap_Address">Adres %d</string>
-    <string name="SplitSwap_EnterAddresses">Adresleri Girin</string>
+    <string name="SplitSwap_AddAddress">Adres %d Ekle</string>
     <string name="SplitSwap_InvalidSplit_Title">Geçersiz bölme</string>
-    <string name="SplitSwap_InvalidSplit_Text">Sağlayıcı bu bölme oranını desteklemiyor. Devam etmek için bölmeyi ayarlayın.</string>
+    <string name="SplitSwap_InvalidSplit_Text">Alıcı tutarlarından biri izin verilen minimumun altında. Devam etmek için bölmeyi ayarlayın.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">Yinelenen Adresler</string>
     <string name="SplitSwap_DuplicateAddresses_Text">Aynı adresi kullanmak bölmenin gizlilik avantajını azaltır.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>

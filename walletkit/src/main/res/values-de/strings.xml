@@ -1995,9 +1995,9 @@
     <string name="SplitSwap_Recipients_Title">Empfänger</string>
     <string name="SplitSwap_Recipients_Description">Fügen Sie Empfängeradressen hinzu und legen Sie fest, wie der erhaltene Betrag zwischen ihnen aufgeteilt wird.</string>
     <string name="SplitSwap_Address">Adresse %d</string>
-    <string name="SplitSwap_EnterAddresses">Adressen eingeben</string>
+    <string name="SplitSwap_AddAddress">Adresse %d hinzufügen</string>
     <string name="SplitSwap_InvalidSplit_Title">Ungültige Aufteilung</string>
-    <string name="SplitSwap_InvalidSplit_Text">Der Anbieter unterstützt dieses Aufteilungsverhältnis nicht. Passen Sie die Aufteilung an, um fortzufahren.</string>
+    <string name="SplitSwap_InvalidSplit_Text">Einer der Empfängerbeträge liegt unter dem zulässigen Minimum. Passen Sie die Aufteilung an, um fortzufahren.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">Doppelte Adressen</string>
     <string name="SplitSwap_DuplicateAddresses_Text">Die Verwendung derselben Adresse verringert den Datenschutzvorteil der Aufteilung.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>

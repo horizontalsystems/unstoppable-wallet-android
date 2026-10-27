@@ -1,7 +1,9 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +18,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -45,8 +48,8 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSStepSlider
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
-import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import kotlinx.serialization.Serializable
 
 /**
  * The Private tab's step between the swap screen and the confirmation: where each output goes
@@ -108,6 +111,7 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
                     token = tokenOut,
                     recipient = uiState.splitRecipients.getOrNull(editingIndex),
                     allowRemoval = false,
+                    splitIndex = editingIndex + 1,
                     zcashTransparentOnly = uiState.quote
                         ?.let { App.swapProviderInfoManager.zcashTransparentRecipientOnly(it.provider.id, it.swapQuote) }
                         ?: (tokenOut.blockchainType == BlockchainType.Zcash),
@@ -142,7 +146,7 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
 
                     SplitRecipientsStep.EnterAddresses -> HSButton(
                         modifier = modifier,
-                        title = stringResource(R.string.SplitSwap_EnterAddresses),
+                        title = stringResource(R.string.SplitSwap_AddAddress, uiState.splitRecipients.indexOfFirst { it == null } + 1),
                         enabled = false,
                     )
 
@@ -188,10 +192,9 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
                         openAddress()
                     },
                 )
-                VSpacer(12.dp)
+                VSpacer(16.dp)
             }
 
-            VSpacer(4.dp)
             val firstPercent = uiState.splitPercents.firstOrNull() ?: SplitSwapRules.PERCENT_DEFAULT
             HSStepSlider(
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -269,18 +272,29 @@ private fun RecipientCard(
                 )
             },
             middle = {
-                when {
-                    address == null -> CellMiddleInfo(
-                        title = stringResource(R.string.SplitSwap_Address, index + 1).hs(leah),
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    when {
+                        address == null -> CellMiddleInfo(
+                            title = stringResource(R.string.SplitSwap_Address, index + 1).hs(leah),
+                        )
 
-                    contactName != null -> CellMiddleInfo(
-                        title = contactName.hs(leah),
-                        subtitle = address.hex.shortenAddress().hs(addressColor),
-                    )
+                        contactName != null -> CellMiddleInfo(
+                            title = contactName.hs(leah),
+                            subtitle = address.hex.shortenAddress().hs(addressColor),
+                        )
 
-                    else -> CellMiddleInfo(
-                        title = address.hex.shortenAddress().hs(addressColor),
+                        else -> CellMiddleInfo(
+                            title = address.hex.shortenAddress().hs(addressColor),
+                        )
+                    }
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(R.drawable.arrow_s_down_20),
+                        tint = ComposeAppTheme.colors.grey,
+                        contentDescription = null,
                     )
                 }
             },

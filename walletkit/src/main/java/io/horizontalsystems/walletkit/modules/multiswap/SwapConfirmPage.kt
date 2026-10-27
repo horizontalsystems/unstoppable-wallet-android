@@ -350,14 +350,18 @@ private fun SwapConfirmInternal(
                 .padding(vertical = 8.dp)
         ) {
             uiState.amountOut?.let { amountOut ->
-                PriceField(
-                    tokenIn = uiState.tokenIn,
-                    tokenOut = uiState.tokenOut,
-                    amountIn = uiState.amountIn,
-                    amountOut = amountOut,
-                    statPage = StatPage.SwapConfirmation,
-                )
-                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navigation)
+                // A split's outputs are priced separately, so a single price and its impact
+                // would describe none of them.
+                if (uiState.splitOutputs == null) {
+                    PriceField(
+                        tokenIn = uiState.tokenIn,
+                        tokenOut = uiState.tokenOut,
+                        amountIn = uiState.amountIn,
+                        amountOut = amountOut,
+                        statPage = StatPage.SwapConfirmation,
+                    )
+                    PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navigation)
+                }
                 uiState.amountOutMin?.let { amountOutMin ->
                     val infoTitle = stringResource(id = R.string.Swap_MinimumReceived)
                     val infoText = stringResource(id = R.string.Swap_MinimumReceivedDescription)
@@ -381,7 +385,7 @@ private fun SwapConfirmInternal(
                     }
                     QuoteInfoRow(
                         title = stringResource(id = R.string.Swap_SwapTime),
-                        value = timeText.hs(ComposeAppTheme.colors.leah),
+                        value = timeText.hs(if (uiState.splitOutputs != null) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navigation.slideFromBottom(
                                 SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText, R.drawable.ic_circle_clock_24))
@@ -542,7 +546,7 @@ fun SplitOutputRowPure(
         middle = {
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     subhead2_leah(text = code)
