@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +42,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsImage
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
+import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_remus
 import io.horizontalsystems.walletkit.ui.compose.components.subhead_grey
@@ -183,7 +185,15 @@ fun WCSessionScreen(
                             subheadSB_remus(text = stringResource(R.string.WalletConnect_DAppCheck_Secure))
                         WCWhiteListState.NotInWhiteList ->
                             subheadSB_lucian(text = stringResource(R.string.WalletConnect_DAppCheck_Risky))
-                        else -> {}
+                        WCWhiteListState.Error ->
+                            subheadSB_grey(text = stringResource(R.string.NotAvailable))
+                        WCWhiteListState.InProgress ->
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = ComposeAppTheme.colors.grey,
+                                strokeWidth = 2.dp
+                            )
+                        null -> {}
                     }
                 }
             }
