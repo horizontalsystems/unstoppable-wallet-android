@@ -52,9 +52,12 @@ class AccountFactory(
     }
 
     override fun getNextAccountName(): String {
-        val nonWatchAccountsCount = accountManager.accounts.count { !it.isWatchAccount }
+        val accounts = accountManager.accounts
+        val existingNames = accounts.map { it.name }.toSet()
+        var number = accounts.count { !it.isWatchAccount } + 1
+        while ("Wallet $number" in existingNames) number++
 
-        return "Wallet ${nonWatchAccountsCount + 1}"
+        return "Wallet $number"
     }
 
 }
