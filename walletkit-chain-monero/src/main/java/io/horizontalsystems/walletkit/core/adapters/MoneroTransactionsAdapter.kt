@@ -14,10 +14,12 @@ import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
 import io.horizontalsystems.monerokit.model.Transfer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.withContext
 
 class MoneroTransactionsAdapter(
     private val kit: MoneroKit,
@@ -70,7 +72,7 @@ class MoneroTransactionsAdapter(
     override fun getTransactionUrl(transactionHash: String): String =
         "https://blockchair.com/monero/transaction/$transactionHash"
 
-    private fun getTransactionRecord(transaction: TransactionInfo): TransactionRecord {
+    private suspend fun getTransactionRecord(transaction: TransactionInfo): TransactionRecord {
         val blockHeight = if (transaction.blockheight == 0L || transaction.isPending) null else transaction.blockheight.toInt()
         return when (transaction.direction) {
             Direction.Direction_In -> {
@@ -121,12 +123,15 @@ class MoneroTransactionsAdapter(
         }
     }
 
-    private fun isSentToSelf(transaction: TransactionInfo, transfers: List<Transfer>): Boolean {
+    private suspend fun isSentToSelf(transaction: TransactionInfo, transfers: List<Transfer>): Boolean {
         if (transaction.amount == 0L) return true
         // the zero net amount appears only once the tx is mined; while it is still
         // unconfirmed the change is the real change output, so check the destinations
         if (!transaction.isPending || transfers.isEmpty()) return false
-        val ownAddresses = kit.getSubaddresses(transaction.accountIndex).map { it.address }.toSet()
+        // derives addresses from the seed while the wallet is closed
+        val ownAddresses = withContext(Dispatchers.IO) {
+            kit.getSubaddresses(transaction.accountIndex).map { it.address }.toSet()
+        }
         return transfers.all { it.address in ownAddresses }
     }
 }
