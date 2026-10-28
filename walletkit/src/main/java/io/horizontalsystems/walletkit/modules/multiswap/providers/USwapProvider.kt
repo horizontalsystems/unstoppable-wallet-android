@@ -1151,9 +1151,10 @@ class USwapProvider(
         route: UnstoppableAPI.Response.SplitRoute,
         recipients: List<SplitSwapRecipient>,
     ): List<SplitSwapOutput> {
-        val byIndex = route.outputsByIndex.associateBy { it.index }
+        val outputs = route.outputsByIndex
+        requireOneOutputPerRecipient(outputs.map { it.index }, recipients)
         return recipients.mapIndexed { index, recipient ->
-            val output = byIndex[index] ?: throw IllegalStateException("Preview has no output $index")
+            val output = outputs[index]
             requireSameDestination(output.destinationAddress, recipient, index)
             SplitSwapOutput(
                 index = index,
@@ -1167,6 +1168,14 @@ class USwapProvider(
     private fun requireSameDestination(destinationAddress: String?, recipient: SplitSwapRecipient, index: Int) {
         if (destinationAddress != null && destinationAddress != recipient.address.hex) {
             throw IllegalStateException("Output $index names another destination")
+        }
+    }
+
+    // Exactly one output per recipient, indexed as requested. A missing one leaves a recipient
+    // unpaid; a surplus or repeated one would be summed into the split's totals unseen.
+    private fun requireOneOutputPerRecipient(sortedIndices: List<Int>, recipients: List<SplitSwapRecipient>) {
+        if (sortedIndices != recipients.indices.toList()) {
+            throw IllegalStateException("Outputs $sortedIndices do not match ${recipients.size} recipients")
         }
     }
 
@@ -1209,15 +1218,16 @@ class USwapProvider(
                 ?: throw IllegalStateException("No deposit address")
 
             val outputs = committedOutputs(commit, finalQuote.splitOutputs.orEmpty(), context.recipients)
-            // The order's floor can only hold or improve on what the user confirmed.
+            // The order's floor can only hold or improve on what the user confirmed: a commit
+            // that lowers it, or stops guaranteeing an output, is not funded.
             val previewedMin = finalQuote.amountOutMin
             val committedMin = commit.minBuyAmountTotal
-            if (previewedMin != null && committedMin != null && committedMin < previewedMin) {
-                throw IllegalStateException("Commit lowered the guaranteed amount")
+            if (previewedMin != null && (committedMin == null || committedMin < previewedMin)) {
+                throw IllegalStateException("Commit withdrew the guaranteed amount")
             }
             val quote = finalQuote.copy(
                 amountOut = outputs.fold(BigDecimal.ZERO) { sum, output -> sum + output.amountOut },
-                amountOutMin = committedMin ?: previewedMin,
+                amountOutMin = committedMin,
                 sendTransactionData = depositTransactionData(context.tokenIn, context.amountIn, depositAddress, execution.attachment),
                 providerSwapId = splitUuid,
                 depositAddress = depositAddress,
@@ -1245,9 +1255,10 @@ class USwapProvider(
         previewed: List<SplitSwapOutput>,
         recipients: List<SplitSwapRecipient>,
     ): List<SplitSwapOutput> {
-        val byIndex = commit.outputsByIndex.associateBy { it.index }
+        val outputs = commit.outputsByIndex
+        requireOneOutputPerRecipient(outputs.map { it.index }, recipients)
         return recipients.mapIndexed { index, recipient ->
-            val output = byIndex[index] ?: throw IllegalStateException("Commit has no output $index")
+            val output = outputs[index]
             val uuid = output.uuid?.takeIf { it.isNotEmpty() } ?: throw IllegalStateException("Output $index has no uuid")
             requireSameDestination(output.destinationAddress, recipient, index)
             SplitSwapOutput(
