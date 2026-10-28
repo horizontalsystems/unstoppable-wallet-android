@@ -1117,19 +1117,22 @@ class USwapProvider(
             depositTransactionData(tokenIn, amountIn, stub, estimationAttachment(tokenIn))
         }
 
+        // As for a single swap, a floor exists only where the server enforces one: the
+        // Guaranteed and slippage rows show only when every output's amount is guaranteed.
+        val amountOutMin = route.minBuyAmountTotal
+        val effectiveSlippage = if (amountOutMin != null) slippage else null
+
         return SwapFinalQuote(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             amountOut = outputs.fold(BigDecimal.ZERO) { sum, output -> sum + output.amountOut },
-            // Split rates are floating: nothing guarantees an output's amount, so neither a
-            // Guaranteed row nor a slippage row applies.
-            amountOutMin = null,
+            amountOutMin = amountOutMin,
             sendTransactionData = sendTransactionData,
             priceImpact = null,
-            fields = emptyList(),
+            fields = listOfNotNull(DataFieldSlippage.getField(effectiveSlippage)),
             estimatedTime = route.estimatedTime?.total,
-            slippage = null,
+            slippage = effectiveSlippage,
             providerSwapId = null,
             fromAsset = assetIn,
             toAsset = assetOut,
@@ -1206,8 +1209,15 @@ class USwapProvider(
                 ?: throw IllegalStateException("No deposit address")
 
             val outputs = committedOutputs(commit, finalQuote.splitOutputs.orEmpty(), context.recipients)
+            // The order's floor can only hold or improve on what the user confirmed.
+            val previewedMin = finalQuote.amountOutMin
+            val committedMin = commit.minBuyAmountTotal
+            if (previewedMin != null && committedMin != null && committedMin < previewedMin) {
+                throw IllegalStateException("Commit lowered the guaranteed amount")
+            }
             val quote = finalQuote.copy(
                 amountOut = outputs.fold(BigDecimal.ZERO) { sum, output -> sum + output.amountOut },
+                amountOutMin = committedMin ?: previewedMin,
                 sendTransactionData = depositTransactionData(context.tokenIn, context.amountIn, depositAddress, execution.attachment),
                 providerSwapId = splitUuid,
                 depositAddress = depositAddress,
@@ -1906,6 +1916,13 @@ interface UnstoppableAPI {
     }
 
     object Response {
+        // The floor of a split as a whole: the outputs' floors summed, or null while any output
+        // floats or there are no outputs.
+        fun minBuyAmountTotal(mins: List<BigDecimal?>): BigDecimal? {
+            if (mins.isEmpty() || mins.any { it == null }) return null
+            return mins.fold(BigDecimal.ZERO) { sum, min -> sum + min!! }
+        }
+
         data class Provider(
             val provider: String,
             val name: String? = null,
@@ -2149,6 +2166,11 @@ interface UnstoppableAPI {
             // What the deposit buys in total; every output is priced in the same buy asset here.
             val expectedBuyAmountTotal: BigDecimal
                 get() = outputsByIndex.fold(BigDecimal.ZERO) { sum, output -> sum + (output.expectedBuyAmount ?: BigDecimal.ZERO) }
+
+            // The enforced floor of the whole split; null while any output floats, since a
+            // total that guarantees only part of the payout would guarantee nothing.
+            val minBuyAmountTotal: BigDecimal?
+                get() = minBuyAmountTotal(outputsByIndex.map { it.minBuyAmount })
         }
 
         data class SplitRouteOutput(
@@ -2158,7 +2180,7 @@ interface UnstoppableAPI {
             // This output's share of the deposit, in the sell asset, resolved from the percent.
             val sellAmount: BigDecimal? = null,
             val expectedBuyAmount: BigDecimal? = null,
-            // Always null today: split rates are floating, nothing guarantees an output's amount.
+            // The floor the route enforces for this output; null for a floating rate.
             val minBuyAmount: BigDecimal? = null,
             val estimatedTime: Route.EstimatedTime? = null,
         )
@@ -2175,6 +2197,9 @@ interface UnstoppableAPI {
         ) {
             val outputsByIndex: List<SplitCommitOutput>
                 get() = outputs.orEmpty().sortedBy { it.index }
+
+            val minBuyAmountTotal: BigDecimal?
+                get() = minBuyAmountTotal(outputsByIndex.map { it.minBuyAmount })
         }
 
         data class SplitCommitOutput(

@@ -35,11 +35,22 @@ class USwapSplitContractTest {
         assertEquals(listOf(0, 1), route.outputsByIndex.map { it.index })
         assertEquals(BigDecimal("0.025"), route.outputsByIndex[0].sellAmount)
         assertEquals(BigDecimal("52.12") + BigDecimal("173.3907"), route.expectedBuyAmountTotal)
-        // Split rates are floating: no output has an enforced floor.
+        // The dev server's split rates float: no output has an enforced floor, so neither has the split.
         assertTrue(route.outputsByIndex.all { it.minBuyAmount == null })
+        assertNull(route.minBuyAmountTotal)
         assertEquals(426L, route.estimatedTime?.total)
         assertNull(route.previewToken)
         assertTrue(response.providerErrors!!.isEmpty())
+    }
+
+    @Test
+    fun `a split's floor is the sum of its outputs' floors, and none while any output floats`() {
+        assertEquals(
+            BigDecimal("12.5"),
+            UnstoppableAPI.Response.minBuyAmountTotal(listOf(BigDecimal("4.5"), BigDecimal("8"))),
+        )
+        assertNull(UnstoppableAPI.Response.minBuyAmountTotal(listOf(BigDecimal("4.5"), null)))
+        assertNull(UnstoppableAPI.Response.minBuyAmountTotal(emptyList()))
     }
 
     @Test
