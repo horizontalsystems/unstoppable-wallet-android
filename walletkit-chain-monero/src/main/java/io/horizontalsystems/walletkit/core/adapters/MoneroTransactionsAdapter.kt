@@ -13,10 +13,13 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
+import io.horizontalsystems.monerokit.model.Transfer
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.withContext
 
 class MoneroTransactionsAdapter(
     private val kit: MoneroKit,
@@ -69,7 +72,7 @@ class MoneroTransactionsAdapter(
     override fun getTransactionUrl(transactionHash: String): String =
         "https://blockchair.com/monero/transaction/$transactionHash"
 
-    private fun getTransactionRecord(transaction: TransactionInfo): TransactionRecord {
+    private suspend fun getTransactionRecord(transaction: TransactionInfo): TransactionRecord {
         val blockHeight = if (transaction.blockheight == 0L || transaction.isPending) null else transaction.blockheight.toInt()
         return when (transaction.direction) {
             Direction.Direction_In -> {
@@ -93,6 +96,12 @@ class MoneroTransactionsAdapter(
             }
 
             Direction.Direction_Out -> {
+                val transfers = transaction.transfers.orEmpty()
+                val sentToSelf = isSentToSelf(transaction, transfers)
+                // wallet2 books every output that returns to the sending account as change,
+                // so a self-send nets to zero; the sent amount lives in the destinations,
+                // which a wallet restored from seed doesn't have, leaving the amount at zero
+                val amount = if (sentToSelf && transfers.isNotEmpty()) transfers.sumOf { it.amount } else transaction.amount
                 MoneroOutgoingTransactionRecord(
                     token = wallet.token,
                     uid = transaction.hash,
@@ -103,14 +112,26 @@ class MoneroTransactionsAdapter(
                     timestamp = transaction.timestamp,
                     fee = transaction.fee.scaledDown(DECIMALS),
                     failed = transaction.isFailed,
-                    amount = transaction.amount.scaledDown(DECIMALS).negate(),
-                    to = if (transaction.transfers.isNullOrEmpty()) null else transaction.transfers[0].address,
-                    sentToSelf = false,
+                    amount = amount.scaledDown(DECIMALS).negate(),
+                    to = transfers.firstOrNull()?.address,
+                    sentToSelf = sentToSelf,
                     memo = transaction.notes,
                     source = wallet.transactionSource,
                     txKey = kit.getTxKey(transaction.hash)
                 )
             }
         }
+    }
+
+    private suspend fun isSentToSelf(transaction: TransactionInfo, transfers: List<Transfer>): Boolean {
+        if (transaction.amount == 0L) return true
+        // the zero net amount appears only once the tx is mined; while it is still
+        // unconfirmed the change is the real change output, so check the destinations
+        if (!transaction.isPending || transfers.isEmpty()) return false
+        // derives addresses from the seed while the wallet is closed
+        val ownAddresses = withContext(Dispatchers.IO) {
+            kit.getSubaddresses(transaction.accountIndex).map { it.address }.toSet()
+        }
+        return transfers.all { it.address in ownAddresses }
     }
 }
