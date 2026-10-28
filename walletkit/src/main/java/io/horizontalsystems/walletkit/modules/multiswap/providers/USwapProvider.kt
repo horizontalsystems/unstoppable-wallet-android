@@ -1139,7 +1139,13 @@ class USwapProvider(
             depositAddress = null,
             depositMemo = null,
             approvalSpender = null,
-            providerContext = SplitPreviewContext(previewToken, tokenIn, amountIn, recipients),
+            providerContext = SplitPreviewContext(
+                previewToken = previewToken,
+                tokenIn = tokenIn,
+                amountIn = amountIn,
+                recipients = recipients,
+                previewedMins = route.outputsByIndex.map { it.minBuyAmount },
+            ),
             mevProtectionAllowed = false,
             splitOutputs = outputs,
         )
@@ -1176,6 +1182,17 @@ class USwapProvider(
     private fun requireOneOutputPerRecipient(sortedIndices: List<Int>, recipients: List<SplitSwapRecipient>) {
         if (sortedIndices != recipients.indices.toList()) {
             throw IllegalStateException("Outputs $sortedIndices do not match ${recipients.size} recipients")
+        }
+    }
+
+    // Both lists are in recipient order, one entry per recipient.
+    private fun requireFloorsKept(previewed: List<BigDecimal?>, committed: List<BigDecimal?>) {
+        previewed.forEachIndexed { index, previewedMin ->
+            if (previewedMin == null) return@forEachIndexed
+            val committedMin = committed.getOrNull(index)
+            if (committedMin == null || committedMin < previewedMin) {
+                throw IllegalStateException("Commit withdrew the guaranteed amount of output $index")
+            }
         }
     }
 
@@ -1218,16 +1235,13 @@ class USwapProvider(
                 ?: throw IllegalStateException("No deposit address")
 
             val outputs = committedOutputs(commit, finalQuote.splitOutputs.orEmpty(), context.recipients)
-            // The order's floor can only hold or improve on what the user confirmed: a commit
-            // that lowers it, or stops guaranteeing an output, is not funded.
-            val previewedMin = finalQuote.amountOutMin
-            val committedMin = commit.minBuyAmountTotal
-            if (previewedMin != null && (committedMin == null || committedMin < previewedMin)) {
-                throw IllegalStateException("Commit withdrew the guaranteed amount")
-            }
+            // Each recipient's floor can only hold or improve on what was previewed: a commit
+            // that lowers one, or stops guaranteeing it, is not funded. Judged per output, since
+            // an unchanged total could hide one recipient's loss behind another's gain.
+            requireFloorsKept(context.previewedMins, commit.outputsByIndex.map { it.minBuyAmount })
             val quote = finalQuote.copy(
                 amountOut = outputs.fold(BigDecimal.ZERO) { sum, output -> sum + output.amountOut },
-                amountOutMin = committedMin,
+                amountOutMin = commit.minBuyAmountTotal,
                 sendTransactionData = depositTransactionData(context.tokenIn, context.amountIn, depositAddress, execution.attachment),
                 providerSwapId = splitUuid,
                 depositAddress = depositAddress,
@@ -1283,12 +1297,14 @@ class USwapProvider(
         if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
     // What [commitSplit] needs from the preview: the token to commit, the deposit the transfer
-    // is rebuilt for, and the recipients the order's outputs are checked against.
+    // is rebuilt for, the recipients the order's outputs are checked against, and each output's
+    // previewed floor (in recipient order) the committed ones must keep.
     private class SplitPreviewContext(
         val previewToken: String,
         val tokenIn: Token,
         val amountIn: BigDecimal,
         val recipients: List<SplitSwapRecipient>,
+        val previewedMins: List<BigDecimal?>,
     )
 
     // What [commit] needs from the preview: the token to commit and the route to rebuild a transfer
