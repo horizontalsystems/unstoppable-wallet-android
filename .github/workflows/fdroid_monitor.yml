@@ -2,8 +2,9 @@ name: F-Droid Release Monitor
 
 # Follows the newest version tag through F-Droid (fdroiddata, build cycle,
 # publishing) and posts to Telegram each time it moves to a new stage. The
-# last reported stage is kept in the FDROID_MONITOR_STATE repository
-# variable so scheduled runs only report changes.
+# last reported stage travels between runs as the fdroid-monitor-state
+# artifact, which the workflow token can read and write, so scheduled runs
+# only report changes.
 
 on:
   push:
@@ -25,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: read
     outputs:
       state: ${{ steps.monitor.outputs.state }}
       changed: ${{ steps.monitor.outputs.changed }}
@@ -37,12 +39,24 @@ jobs:
           sparse-checkout: .github/scripts/fdroid_monitor.py
           sparse-checkout-cone-mode: false
 
+      - name: Restore last reported stage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          run_id=$(gh api "repos/$GH_REPO/actions/artifacts?name=fdroid-monitor-state&per_page=100" \
+            --jq '[.artifacts[] | select(.expired | not)] | sort_by(.created_at) | last | .workflow_run.id // empty')
+          if [ -n "$run_id" ]; then
+            gh run download "$run_id" --name fdroid-monitor-state --dir state
+          fi
+
       - name: Check F-Droid status
         id: monitor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PREVIOUS_STATE: ${{ vars.FDROID_MONITOR_STATE }}
-        run: python3 -I .github/scripts/fdroid_monitor.py
+        run: |
+          PREVIOUS_STATE="$(cat state/state.json 2>/dev/null || true)" \
+            python3 -I .github/scripts/fdroid_monitor.py
 
   notify:
     needs: check
@@ -59,19 +73,26 @@ jobs:
           disable_web_page_preview: true
           message: ${{ needs.check.outputs.message }}
 
-  # Saved only after the notification went out, so a failed send is retried
-  # on the next scheduled run instead of being lost
+  # Runs on every check so the artifact never expires while the schedule is
+  # alive, but after a change only once the notification went out, so a
+  # failed send is retried on the next run instead of being lost
   save:
     needs: [check, notify]
-    if: needs.check.outputs.changed == 'true' && needs.notify.result == 'success'
+    if: always() && needs.check.result == 'success' && (needs.check.outputs.changed != 'true' || needs.notify.result == 'success')
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
+    permissions: {}
 
     steps:
-      - name: Save reported stage
+      - name: Write stage file
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
           STATE: ${{ needs.check.outputs.state }}
-        run: gh variable set FDROID_MONITOR_STATE --body "$STATE"
+        run: |
+          mkdir state
+          printf '%s\n' "$STATE" > state/state.json
+
+      - name: Save reported stage
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: fdroid-monitor-state
+          path: state/state.json
+          retention-days: 90

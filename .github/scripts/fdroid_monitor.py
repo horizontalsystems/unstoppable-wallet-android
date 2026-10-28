@@ -6,7 +6,7 @@ picked up into fdroiddata, built in one of the build cycles, signed offline
 and finally deployed to the index. This script finds the stage the newest
 tag is in, compares it with the stage recorded on the previous run, and
 reports a Telegram message when the stage changed. The stage record is a
-small JSON document kept in a repository variable by the workflow.
+small JSON document the workflow carries between runs as an artifact.
 
 Environment:
   GITHUB_REPOSITORY  owner/name of this repository
@@ -58,8 +58,14 @@ def fetch_optional(url):
 
 
 def latest_tag(token):
-    tags = json.loads(fetch(f"https://api.github.com/repos/{REPOSITORY}/tags?per_page=100", token))
-    names = [tag["name"] for tag in tags if TAG_PATTERN.match(tag["name"])]
+    names = []
+    page = 1
+    while True:
+        tags = json.loads(fetch(f"https://api.github.com/repos/{REPOSITORY}/tags?per_page=100&page={page}", token))
+        names += [tag["name"] for tag in tags if TAG_PATTERN.match(tag["name"])]
+        if len(tags) < 100:
+            break
+        page += 1
     if not names:
         sys.exit("No version tags found")
     return max(names, key=lambda name: tuple(int(part) for part in name.split(".")))
