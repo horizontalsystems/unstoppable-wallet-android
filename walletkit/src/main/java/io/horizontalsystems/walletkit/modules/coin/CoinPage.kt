@@ -2,10 +2,12 @@ package io.horizontalsystems.walletkit.modules.coin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -27,9 +29,12 @@ data class CoinPage(val input: Input) : HSPage(accessibleWhileLocked = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
+        val fullCoin = remember(input.coinUid) {
+            App.marketKit.fullCoins(coinUids = listOf(input.coinUid)).firstOrNull()
+        }
         CoinScreen(
             input.coinUid,
-            viewModel(factory = CoinModule.Factory(input.coinUid)),
+            fullCoin?.let { viewModel(factory = CoinModule.Factory(it)) },
             navigation
         )
     }
