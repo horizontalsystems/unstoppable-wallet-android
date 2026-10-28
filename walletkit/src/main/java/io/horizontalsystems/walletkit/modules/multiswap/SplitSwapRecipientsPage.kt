@@ -213,7 +213,9 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
                     format = AlertFormat.Structured,
                     type = AlertType.Critical,
                     titleCustom = stringResource(R.string.SplitSwap_InvalidSplit_Title),
-                    text = stringResource(R.string.SplitSwap_InvalidSplit_Text),
+                    text = stringResource(
+                        if (uiState.splitBelowMinimum) R.string.SplitSwap_InvalidSplit_BelowMinimum else R.string.SplitSwap_InvalidSplit_Text
+                    ),
                 )
             }
 

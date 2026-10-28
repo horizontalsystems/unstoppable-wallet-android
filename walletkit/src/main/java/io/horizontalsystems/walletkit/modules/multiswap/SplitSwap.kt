@@ -94,6 +94,12 @@ class SplitRateException(
     val errorCode: String?
         get() = providerErrors.firstOrNull()?.errorCode
 
+    /** A provider refused because the deposit or an output is under its minimum. */
+    val belowMinimum: Boolean
+        get() = providerErrors.any {
+            it.errorCode == "amountTooSmall" || (it.errorCode == "amountOutOfRange" && it.minimumAmount != null)
+        }
+
     companion object {
         private val gson = Gson()
 

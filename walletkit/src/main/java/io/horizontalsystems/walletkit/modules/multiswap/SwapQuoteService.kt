@@ -42,6 +42,8 @@ class SwapQuoteService(
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: IMultiSwapProvider? = null
     private var error: Throwable? = null
+    // Split mode: the provider's own refusal behind a route-not-found, when it gave one.
+    private var splitProviderError: SplitRateException? = null
     private var quote: SwapProviderQuote? = null
     private var splitPercents: List<Int> = SplitSwapRules.percents(SplitSwapRules.PERCENT_DEFAULT)
 
@@ -59,6 +61,7 @@ class SwapQuoteService(
             quote = quote,
             error = error,
             splitPercents = splitPercents,
+            splitProviderError = splitProviderError,
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -178,6 +181,7 @@ class SwapQuoteService(
                 quote = quote,
                 error = error,
                 splitPercents = splitPercents,
+                splitProviderError = splitProviderError,
             )
         }
     }
@@ -188,6 +192,7 @@ class SwapQuoteService(
         quotes = listOf()
         quote = null
         error = null
+        splitProviderError = null
 
         if (!silent) {
             emitState()
@@ -225,7 +230,13 @@ class SwapQuoteService(
 
                 val percents = splitPercents
                 quotingJob = coroutineScope.launch {
-                    quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn, percents)
+                    val results = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn, percents)
+                    quotes = results.quotes
+                    // Kept apart from `error`, which stays the generic route-not-found the swap
+                    // button reports: the refusal only refines the split's own alert.
+                    splitProviderError = results.failures
+                        .filterIsInstance<SplitRateException>()
+                        .let { refusals -> refusals.firstOrNull { it.belowMinimum } ?: refusals.firstOrNull() }
 
                     if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
                         preferredProvider = null
@@ -252,8 +263,8 @@ class SwapQuoteService(
         tokenOut: Token,
         amountIn: BigDecimal,
         splitPercents: List<Int>,
-    ) = coroutineScope {
-        supportedProviders
+    ): QuoteResults = coroutineScope {
+        val results = supportedProviders
             .map { provider ->
                 async {
                     try {
@@ -263,17 +274,20 @@ class SwapQuoteService(
                             } else {
                                 provider.fetchQuote(tokenIn, tokenOut, amountIn)
                             }
-                            SwapProviderQuote(provider = provider, swapQuote = quote)
+                            Result.success(SwapProviderQuote(provider = provider, swapQuote = quote))
                         }
                     } catch (e: Throwable) {
                         Log.e(tag, "fetchQuoteError: ${provider.id}", e)
-                        null
+                        Result.failure(e)
                     }
                 }
             }
             .awaitAll()
-            .filterNotNull()
-            .sortedByDescending { it.amountOut }
+
+        QuoteResults(
+            quotes = results.mapNotNull { it.getOrNull() }.sortedByDescending { it.amountOut },
+            failures = results.mapNotNull { it.exceptionOrNull() },
+        )
     }
 
     fun setAmount(v: BigDecimal?) {
@@ -362,5 +376,12 @@ class SwapQuoteService(
         val error: Throwable?,
         // The shares the split quotes were priced for; meaningless for single swaps.
         val splitPercents: List<Int>,
+        // Split mode: why a provider refused to price these shares, when it said.
+        val splitProviderError: SplitRateException? = null,
+    )
+
+    private class QuoteResults(
+        val quotes: List<SwapProviderQuote>,
+        val failures: List<Throwable>,
     )
 }

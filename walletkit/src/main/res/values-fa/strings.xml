@@ -1980,7 +1980,8 @@
     <string name="SplitSwap_Address">آدرس %d</string>
     <string name="SplitSwap_AddAddress">افزودن آدرس %d</string>
     <string name="SplitSwap_InvalidSplit_Title">تقسیم نامعتبر</string>
-    <string name="SplitSwap_InvalidSplit_Text">یکی از مبالغ گیرندگان کمتر از حداقل مجاز است. برای ادامه، تقسیم را تنظیم کنید.</string>
+    <string name="SplitSwap_InvalidSplit_Text">امکان قیمت‌گذاری این تقسیم وجود نداشت. تقسیم را تنظیم کنید یا دوباره تلاش کنید.</string>
+    <string name="SplitSwap_InvalidSplit_BelowMinimum">یکی از مبالغ گیرندگان کمتر از حداقل مجاز است. برای ادامه، تقسیم را تنظیم کنید.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">آدرس‌های تکراری</string>
     <string name="SplitSwap_DuplicateAddresses_Text">استفاده از یک آدرس یکسان مزیت حریم خصوصی تقسیم را کاهش می‌دهد.</string>
     <string name="SwapInfo_StatusSwapIndexed">سواپ %d</string>

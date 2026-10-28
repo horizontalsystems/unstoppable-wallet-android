@@ -1,6 +1,10 @@
 package io.horizontalsystems.walletkit.uiv3.components.controls
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -12,6 +16,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +45,14 @@ fun HSStepSlider(
     leftLabel: String? = null,
     rightLabel: String? = null,
 ) {
+    // The thumb is drawn here, so it is also this code that has to show the slider holding
+    // keyboard focus or being dragged; the default thumb would have done both itself.
+    val interactionSource = remember { MutableInteractionSource() }
+    val focused by interactionSource.collectIsFocusedAsState()
+    val dragged by interactionSource.collectIsDraggedAsState()
+    val pressed by interactionSource.collectIsPressedAsState()
+    val highlighted = focused || dragged || pressed
+
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -47,6 +61,7 @@ fun HSStepSlider(
         leftLabel?.let { subhead_grey(text = it) }
         Slider(
             modifier = Modifier.weight(1f),
+            interactionSource = interactionSource,
             value = value.toFloat(),
             onValueChange = { raw ->
                 val snapped = (((raw - range.first) / step).roundToInt() * step + range.first).coerceIn(range)
@@ -56,18 +71,31 @@ fun HSStepSlider(
             steps = ((range.last - range.first) / step - 1).coerceAtLeast(0),
             thumb = {
                 Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(ComposeAppTheme.colors.jacob),
+                    modifier = Modifier.size(40.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(R.drawable.ic_minus_20),
-                        tint = ComposeAppTheme.colors.lawrence,
-                        contentDescription = null,
-                    )
+                    if (highlighted) {
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clip(CircleShape)
+                                .background(ComposeAppTheme.colors.jacob.copy(alpha = 0.24f)),
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(ComposeAppTheme.colors.jacob),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(R.drawable.ic_minus_20),
+                            tint = ComposeAppTheme.colors.lawrence,
+                            contentDescription = null,
+                        )
+                    }
                 }
             },
             track = {

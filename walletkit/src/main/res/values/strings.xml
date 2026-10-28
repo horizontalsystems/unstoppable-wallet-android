@@ -2342,7 +2342,8 @@
     <string name="SplitSwap_Address">Address %d</string>
     <string name="SplitSwap_AddAddress">Add Address %d</string>
     <string name="SplitSwap_InvalidSplit_Title">Invalid split</string>
-    <string name="SplitSwap_InvalidSplit_Text">One of the recipient amounts is below the minimum allowed. Adjust the split to continue.</string>
+    <string name="SplitSwap_InvalidSplit_Text">Couldn\'t price this split. Adjust the split or try again.</string>
+    <string name="SplitSwap_InvalidSplit_BelowMinimum">One of the recipient amounts is below the minimum allowed. Adjust the split to continue.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">Duplicate Addresses</string>
     <string name="SplitSwap_DuplicateAddresses_Text">Using the same address reduces the privacy benefit of splitting.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>

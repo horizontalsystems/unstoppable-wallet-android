@@ -391,6 +391,7 @@ class SwapViewModel(
             splitLastOutputAmounts = lastSplitOutputAmounts,
             splitRequoting = split && (quoteState.quoting || splitRequotePending),
             splitDuplicateIndexes = SplitSwapRules.duplicateIndexes(splitRecipients.map { it?.hex }, quoteState.tokenOut?.blockchainType),
+            splitBelowMinimum = quoteState.splitProviderError?.belowMinimum == true,
         )
     }
 
@@ -754,6 +755,8 @@ data class SwapUiState(
     // Quoting, or a share change waiting for its debounced requote.
     val splitRequoting: Boolean = false,
     val splitDuplicateIndexes: Set<Int> = emptySet(),
+    // The provider said a share is under its minimum; otherwise an invalid split has no known cause.
+    val splitBelowMinimum: Boolean = false,
 ) {
     // No provider priced the current shares although the amount is set: a share under the
     // per-output minimum, typically. Distinct from having no split provider at all.

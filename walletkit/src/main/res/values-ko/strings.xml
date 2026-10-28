@@ -1987,7 +1987,8 @@
     <string name="SplitSwap_Address">주소 %d</string>
     <string name="SplitSwap_AddAddress">주소 %d 추가</string>
     <string name="SplitSwap_InvalidSplit_Title">잘못된 분할</string>
-    <string name="SplitSwap_InvalidSplit_Text">수취인 금액 중 하나가 허용된 최소 금액보다 적습니다. 계속하려면 분할을 조정하세요.</string>
+    <string name="SplitSwap_InvalidSplit_Text">이 분할의 견적을 받을 수 없습니다. 분할을 조정하거나 다시 시도하세요.</string>
+    <string name="SplitSwap_InvalidSplit_BelowMinimum">수취인 금액 중 하나가 허용된 최소 금액보다 적습니다. 계속하려면 분할을 조정하세요.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">중복 주소</string>
     <string name="SplitSwap_DuplicateAddresses_Text">같은 주소를 사용하면 분할의 프라이버시 이점이 줄어듭니다.</string>
     <string name="SwapInfo_StatusSwapIndexed">스왑 %d</string>

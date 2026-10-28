@@ -1992,7 +1992,8 @@
     <string name="SplitSwap_Address">Dirección %d</string>
     <string name="SplitSwap_AddAddress">Añadir dirección %d</string>
     <string name="SplitSwap_InvalidSplit_Title">División no válida</string>
-    <string name="SplitSwap_InvalidSplit_Text">Uno de los importes de los destinatarios está por debajo del mínimo permitido. Ajusta la división para continuar.</string>
+    <string name="SplitSwap_InvalidSplit_Text">No se pudo calcular esta división. Ajusta la división o inténtalo de nuevo.</string>
+    <string name="SplitSwap_InvalidSplit_BelowMinimum">Uno de los importes de los destinatarios está por debajo del mínimo permitido. Ajusta la división para continuar.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">Direcciones duplicadas</string>
     <string name="SplitSwap_DuplicateAddresses_Text">Usar la misma dirección reduce la ventaja de privacidad de la división.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>

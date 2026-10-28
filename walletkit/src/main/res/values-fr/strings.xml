@@ -1994,7 +1994,8 @@
     <string name="SplitSwap_Address">Adresse %d</string>
     <string name="SplitSwap_AddAddress">Ajouter l\'adresse %d</string>
     <string name="SplitSwap_InvalidSplit_Title">Répartition invalide</string>
-    <string name="SplitSwap_InvalidSplit_Text">L\'un des montants des destinataires est inférieur au minimum autorisé. Ajustez la répartition pour continuer.</string>
+    <string name="SplitSwap_InvalidSplit_Text">Impossible d\'évaluer cette répartition. Ajustez la répartition ou réessayez.</string>
+    <string name="SplitSwap_InvalidSplit_BelowMinimum">L\'un des montants des destinataires est inférieur au minimum autorisé. Ajustez la répartition pour continuer.</string>
     <string name="SplitSwap_DuplicateAddresses_Title">Adresses en double</string>
     <string name="SplitSwap_DuplicateAddresses_Text">Utiliser la même adresse réduit l\'avantage de confidentialité de la répartition.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>

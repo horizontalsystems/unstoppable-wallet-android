@@ -173,6 +173,7 @@ class USwapSplitContractTest {
 
         assertEquals("amountTooSmall", exception.errorCode)
         assertEquals("Swapuz: deposit is below the minimum 0.01721", exception.message)
+        assertTrue(exception.belowMinimum)
     }
 
     @Test
@@ -182,6 +183,7 @@ class USwapSplitContractTest {
 
         assertNull(exception.errorCode)
         assertEquals("outputs[].amount must sum to sellAmount (absolute) or to 100 (percent)", exception.message)
+        assertFalse(exception.belowMinimum)
     }
 
     @Test
