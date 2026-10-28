@@ -307,7 +307,7 @@ internal fun SwapDetailsCard(
                 },
                 right = {
                     CellRightInfoTextIcon(
-                        text = swapTime.hs(color = leah)
+                        text = swapTime.hs(color = if (uiState.splitOutputs != null) ComposeAppTheme.colors.jacob else leah)
                     )
                 },
             )
