@@ -4,46 +4,55 @@ appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
 - scrollUntilVisible:
     element:
       id: terms_check_0
+    centerElement: true
 - tapOn:
     id: terms_check_0
 - scrollUntilVisible:
     element:
       id: terms_check_1
+    centerElement: true
 - tapOn:
     id: terms_check_1
 - scrollUntilVisible:
     element:
       id: terms_check_2
+    centerElement: true
 - tapOn:
     id: terms_check_2
 - scrollUntilVisible:
     element:
       id: terms_check_3
+    centerElement: true
 - tapOn:
     id: terms_check_3
 - scrollUntilVisible:
     element:
       id: terms_check_4
+    centerElement: true
 - tapOn:
     id: terms_check_4
 - scrollUntilVisible:
     element:
       id: terms_check_5
+    centerElement: true
 - tapOn:
     id: terms_check_5
 - scrollUntilVisible:
     element:
       id: terms_check_6
+    centerElement: true
 - tapOn:
     id: terms_check_6
 - scrollUntilVisible:
     element:
       id: terms_check_7
+    centerElement: true
 - tapOn:
     id: terms_check_7
 - scrollUntilVisible:
     element:
       id: terms_check_8
+    centerElement: true
 - tapOn:
     id: terms_check_8
 - tapOn:
