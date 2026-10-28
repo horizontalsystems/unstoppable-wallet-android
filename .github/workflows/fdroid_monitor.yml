@@ -1,0 +1,77 @@
+name: F-Droid Release Monitor
+
+# Follows the newest version tag through F-Droid (fdroiddata, build cycle,
+# publishing) and posts to Telegram each time it moves to a new stage. The
+# last reported stage is kept in the FDROID_MONITOR_STATE repository
+# variable so scheduled runs only report changes.
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: fdroid-monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      state: ${{ steps.monitor.outputs.state }}
+      changed: ${{ steps.monitor.outputs.changed }}
+      message: ${{ steps.monitor.outputs.message }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          sparse-checkout: .github/scripts/fdroid_monitor.py
+          sparse-checkout-cone-mode: false
+
+      - name: Check F-Droid status
+        id: monitor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PREVIOUS_STATE: ${{ vars.FDROID_MONITOR_STATE }}
+        run: python3 -I .github/scripts/fdroid_monitor.py
+
+  notify:
+    needs: check
+    if: needs.check.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions: {}
+
+    steps:
+      - name: Notify Telegram
+        uses: appleboy/telegram-action@221e6b684967abe813051ee4a37dd61770a83ad3 # v1.0.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: ${{ needs.check.outputs.message }}
+
+  # Saved only after the notification went out, so a failed send is retried
+  # on the next scheduled run instead of being lost
+  save:
+    needs: [check, notify]
+    if: needs.check.outputs.changed == 'true' && needs.notify.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
+    steps:
+      - name: Save reported stage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          STATE: ${{ needs.check.outputs.state }}
+        run: gh variable set FDROID_MONITOR_STATE --body "$STATE"
