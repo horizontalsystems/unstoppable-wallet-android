@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.modules.multiswap.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.R.string.Button_Apply
 import io.horizontalsystems.walletkit.R.string.Button_Done
 import io.horizontalsystems.walletkit.R.string.SplitSwap_Address
@@ -29,6 +30,8 @@ data class SwapSettingsRecipientPage(val input: Input) : HSPage() {
             initialAddress = input.recipient?.hex,
             allowOwnAddress = true,
             zcashTransparentOnly = input.zcashTransparentOnly,
+            // A split's address page slides up from the Recipients screen, so it closes with a cross
+            backIcon = if (input.splitIndex != null) R.drawable.close_24 else null,
         ) { address, _, _ ->
             resultEventBus.sendResult<Result>(Result(address))
             navigation.removeLastOrNull()

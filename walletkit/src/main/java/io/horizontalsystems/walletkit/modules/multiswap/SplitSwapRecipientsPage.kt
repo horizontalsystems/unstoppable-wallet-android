@@ -104,7 +104,7 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
 
     // One address page serves every card; the card tapped last is the one its result fills.
     var editingIndex by rememberSaveable { mutableIntStateOf(0) }
-    val openAddress = navigation.slideFromRightForResult<SwapSettingsRecipientPage.Result>(
+    val openAddress = navigation.slideFromBottomForResult<SwapSettingsRecipientPage.Result>(
         {
             SwapSettingsRecipientPage(
                 SwapSettingsRecipientPage.Input(
