@@ -68,6 +68,11 @@ class SwapQuoteService(
 
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var quotingJob: Job? = null
+    // Cancelling a quotation is cooperative: one whose fetch has already returned still runs its
+    // publication. The generation it was started under tells it that it has been superseded, and
+    // the lock keeps that check and its writes from interleaving with the next quotation's reset.
+    private val publishLock = Any()
+    private var quotationGeneration = 0
     private var startProvidersJob: Job? = null
 
     fun start() {
@@ -188,11 +193,14 @@ class SwapQuoteService(
 
     private fun runQuotation(silent: Boolean = false) {
         quotingJob?.cancel()
-        quoting = false
-        quotes = listOf()
-        quote = null
-        error = null
-        splitProviderError = null
+        val generation = synchronized(publishLock) {
+            quoting = false
+            quotes = listOf()
+            quote = null
+            error = null
+            splitProviderError = null
+            ++quotationGeneration
+        }
 
         if (!silent) {
             emitState()
@@ -231,27 +239,33 @@ class SwapQuoteService(
                 val percents = splitPercents
                 quotingJob = coroutineScope.launch {
                     val results = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn, percents)
-                    quotes = results.quotes
-                    // Kept apart from `error`, which stays the generic route-not-found the swap
-                    // button reports: the refusal only refines the split's own alert.
-                    splitProviderError = results.failures
-                        .filterIsInstance<SplitRateException>()
-                        .let { refusals -> refusals.firstOrNull { it.belowMinimum } ?: refusals.firstOrNull() }
 
-                    if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
-                        preferredProvider = null
+                    val published = synchronized(publishLock) {
+                        if (generation != quotationGeneration) return@synchronized false
+
+                        quotes = results.quotes
+                        // Kept apart from `error`, which stays the generic route-not-found the swap
+                        // button reports: the refusal only refines the split's own alert.
+                        splitProviderError = results.failures
+                            .filterIsInstance<SplitRateException>()
+                            .let { refusals -> refusals.firstOrNull { it.belowMinimum } ?: refusals.firstOrNull() }
+
+                        if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
+                            preferredProvider = null
+                        }
+
+                        if (quotes.isEmpty()) {
+                            error = SwapRouteNotFound()
+                        } else {
+                            quote = preferredProvider
+                                ?.let { provider -> quotes.find { it.provider == provider } }
+                                ?: quotes.firstOrNull()
+                        }
+
+                        quoting = false
+                        true
                     }
-
-                    if (quotes.isEmpty()) {
-                        error = SwapRouteNotFound()
-                    } else {
-                        quote = preferredProvider
-                            ?.let { provider -> quotes.find { it.provider == provider } }
-                            ?: quotes.firstOrNull()
-                    }
-
-                    quoting = false
-                    emitState()
+                    if (published) emitState()
                 }
             }
         }

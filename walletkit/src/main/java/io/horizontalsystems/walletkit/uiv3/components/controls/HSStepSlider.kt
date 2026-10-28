@@ -1,6 +1,8 @@
 package io.horizontalsystems.walletkit.uiv3.components.controls
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -17,10 +19,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
@@ -51,7 +57,11 @@ fun HSStepSlider(
     val focused by interactionSource.collectIsFocusedAsState()
     val dragged by interactionSource.collectIsDraggedAsState()
     val pressed by interactionSource.collectIsPressedAsState()
-    val highlighted = focused || dragged || pressed
+    // The slider reports a press only once it turns into a drag, so a finger resting on the
+    // thumb is watched here, in the initial pass and without consuming, which leaves the
+    // slider's own gesture handling as it is.
+    var held by remember { mutableStateOf(false) }
+    val highlighted = focused || dragged || pressed || held
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -71,7 +81,21 @@ fun HSStepSlider(
             steps = ((range.last - range.first) / step - 1).coerceAtLeast(0),
             thumb = {
                 Box(
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier
+                        .size(40.dp)
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                                held = true
+                                try {
+                                    do {
+                                        val event = awaitPointerEvent(PointerEventPass.Initial)
+                                    } while (event.changes.any { it.pressed })
+                                } finally {
+                                    held = false
+                                }
+                            }
+                        },
                     contentAlignment = Alignment.Center,
                 ) {
                     if (highlighted) {
