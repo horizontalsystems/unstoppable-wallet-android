@@ -1993,4 +1993,7 @@
     <string name="SplitSwap_DuplicateAddresses_Text">같은 주소를 사용하면 분할의 프라이버시 이점이 줄어듭니다.</string>
     <string name="SwapInfo_StatusSwapIndexed">스왑 %d</string>
     <string name="SwapInfo_StatusReceiveIndexed">%1$s %2$d 받기</string>
+    <string name="Swap_SuggestedPath_NoQuotesAvailable">사용 가능한 견적이 없습니다</string>
+    <string name="Swap_SuggestedPath_Text">먼저 %1$s한 다음 %2$s를 %3$s로 스왑해 볼 수 있습니다.</string>
+    <string name="Swap_SuggestedPath_TextPart">%1$s를 %2$s로 스왑</string>
 </resources>

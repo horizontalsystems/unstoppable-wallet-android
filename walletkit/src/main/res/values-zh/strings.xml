@@ -1997,4 +1997,7 @@
     <string name="SplitSwap_DuplicateAddresses_Text">使用相同的地址会降低拆分带来的隐私优势。</string>
     <string name="SwapInfo_StatusSwapIndexed">兑换 %d</string>
     <string name="SwapInfo_StatusReceiveIndexed">接收 %1$s %2$d</string>
+    <string name="Swap_SuggestedPath_NoQuotesAvailable">没有可用报价</string>
+    <string name="Swap_SuggestedPath_Text">您可以尝试先%1$s，然后再将 %2$s 兑换为 %3$s。</string>
+    <string name="Swap_SuggestedPath_TextPart">将 %1$s 兑换为 %2$s</string>
 </resources>

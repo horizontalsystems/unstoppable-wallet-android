@@ -3,10 +3,13 @@ package io.horizontalsystems.walletkit.modules.multiswap
 import android.util.Log
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Clearable
+import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPath
+import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFinder
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapSuspensionIndex
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +35,7 @@ class SwapQuoteService(
     // Split mode: quotes come from these providers' split endpoints, priced for
     // [splitPercents], and `allProviders` is not consulted. Null quotes single swaps.
     private val splitProviders: List<ISplitSwapProvider>? = null,
+    private val pathFinder: SwapPathFinder = SwapPathFinder.default(),
 ) : Clearable {
     private val tag = "SwapQuoteService"
 
@@ -49,6 +53,12 @@ class SwapQuoteService(
 
     val isSplit: Boolean
         get() = splitProviders != null
+    private var suggestedPath: SwapPath? = null
+
+    // The pair and provider set whose last quote round came back empty. The amount is
+    // deliberately not part of it, so the suggested path stays put while the user edits the
+    // amount and leaves only once quotes arrive or the pair changes.
+    private var emptyRoundKey: QuoteRoundKey? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -62,6 +72,7 @@ class SwapQuoteService(
             error = error,
             splitPercents = splitPercents,
             splitProviderError = splitProviderError,
+            suggestedPath = suggestedPath,
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -187,6 +198,7 @@ class SwapQuoteService(
                 error = error,
                 splitPercents = splitPercents,
                 splitProviderError = splitProviderError,
+                suggestedPath = suggestedPath,
             )
         }
     }
@@ -227,9 +239,36 @@ class SwapQuoteService(
                     provider.supports(tokenIn, tokenOut)
             }
 
+            val roundKey = QuoteRoundKey(tokenIn, tokenOut, supportedProviders.map { it.id }.toSet())
+
+            if (emptyRoundKey != roundKey) {
+                // A changed pair or an untried set of providers has not failed at anything yet.
+                synchronized(publishLock) {
+                    emptyRoundKey = null
+                    suggestedPath = null
+                }
+                emitState()
+            }
+
             if (supportedProviders.isEmpty()) {
                 error = NoSupportedSwapProvider()
                 emitState()
+
+                // The lookup reads the coin database, so it runs off the caller's thread like the
+                // quote round does. The previous suggestion for this pair stays visible until the
+                // fresh one replaces it.
+                quotingJob = coroutineScope.launch {
+                    val path = findSuggestedPath(tokenIn, tokenOut, suspensions)
+
+                    val published = synchronized(publishLock) {
+                        if (generation != quotationGeneration) return@synchronized false
+
+                        emptyRoundKey = roundKey
+                        suggestedPath = path
+                        true
+                    }
+                    if (published) emitState()
+                }
             } else if (amountIn != null && amountIn > BigDecimal.ZERO) {
                 if (!silent) {
                     quoting = true
@@ -239,6 +278,7 @@ class SwapQuoteService(
                 val percents = splitPercents
                 quotingJob = coroutineScope.launch {
                     val results = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn, percents)
+                    val path = if (results.quotes.isEmpty()) findSuggestedPath(tokenIn, tokenOut, suspensions) else null
 
                     val published = synchronized(publishLock) {
                         if (generation != quotationGeneration) return@synchronized false
@@ -256,7 +296,11 @@ class SwapQuoteService(
 
                         if (quotes.isEmpty()) {
                             error = SwapRouteNotFound()
+                            emptyRoundKey = roundKey
+                            suggestedPath = path
                         } else {
+                            emptyRoundKey = null
+                            suggestedPath = null
                             quote = preferredProvider
                                 ?.let { provider -> quotes.find { it.provider == provider } }
                                 ?: quotes.firstOrNull()
@@ -268,6 +312,31 @@ class SwapQuoteService(
                     if (published) emitState()
                 }
             }
+        } else {
+            synchronized(publishLock) {
+                emptyRoundKey = null
+                suggestedPath = null
+            }
+            emitState()
+        }
+    }
+
+    /**
+     * Null in split mode: the finder reasons about the regular provider set, and a split swap has
+     * no first-leg screen to hand the intermediate token to.
+     */
+    private fun findSuggestedPath(
+        tokenIn: Token,
+        tokenOut: Token,
+        suspensions: SwapSuspensionIndex,
+    ): SwapPath? {
+        if (splitProviders != null) return null
+
+        return try {
+            pathFinder.find(tokenIn, tokenOut, allProviders, suspensions)
+        } catch (e: Throwable) {
+            Log.e(tag, "error on finding a suggested path", e)
+            null
         }
     }
 
@@ -392,10 +461,17 @@ class SwapQuoteService(
         val splitPercents: List<Int>,
         // Split mode: why a provider refused to price these shares, when it said.
         val splitProviderError: SplitRateException? = null,
+        val suggestedPath: SwapPath? = null,
     )
 
     private class QuoteResults(
         val quotes: List<SwapProviderQuote>,
         val failures: List<Throwable>,
+    )
+
+    private data class QuoteRoundKey(
+        val tokenIn: Token,
+        val tokenOut: Token,
+        val providerIds: Set<String>,
     )
 }

@@ -1999,4 +1999,7 @@
     <string name="SplitSwap_DuplicateAddresses_Text">Aynı adresi kullanmak bölmenin gizlilik avantajını azaltır.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>
     <string name="SwapInfo_StatusReceiveIndexed">%1$s %2$d Al</string>
+    <string name="Swap_SuggestedPath_NoQuotesAvailable">Mevcut teklif yok</string>
+    <string name="Swap_SuggestedPath_Text">Önce %1$s, ardından %2$s varlığını %3$s ile takas etmeyi deneyebilirsiniz.</string>
+    <string name="Swap_SuggestedPath_TextPart">%1$s varlığını %2$s ile</string>
 </resources>

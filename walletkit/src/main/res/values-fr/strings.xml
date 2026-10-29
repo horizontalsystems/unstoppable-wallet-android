@@ -2000,4 +2000,7 @@
     <string name="SplitSwap_DuplicateAddresses_Text">Utiliser la même adresse réduit l\'avantage de confidentialité de la répartition.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>
     <string name="SwapInfo_StatusReceiveIndexed">Recevoir %1$s %2$d</string>
+    <string name="Swap_SuggestedPath_NoQuotesAvailable">Aucune cotation disponible</string>
+    <string name="Swap_SuggestedPath_Text">Vous pouvez d\'abord essayer %1$s, puis %2$s contre %3$s.</string>
+    <string name="Swap_SuggestedPath_TextPart">d\'échanger %1$s contre %2$s</string>
 </resources>

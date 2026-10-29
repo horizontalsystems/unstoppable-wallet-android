@@ -2003,4 +2003,7 @@
     <string name="SplitSwap_DuplicateAddresses_Text">Die Verwendung derselben Adresse verringert den Datenschutzvorteil der Aufteilung.</string>
     <string name="SwapInfo_StatusSwapIndexed">Swap %d</string>
     <string name="SwapInfo_StatusReceiveIndexed">%1$s %2$d erhalten</string>
+    <string name="Swap_SuggestedPath_NoQuotesAvailable">Keine Angebote verfügbar</string>
+    <string name="Swap_SuggestedPath_Text">Sie können versuchen, zuerst %1$s und dann %2$s in %3$s zu tauschen.</string>
+    <string name="Swap_SuggestedPath_TextPart">%1$s in %2$s</string>
 </resources>

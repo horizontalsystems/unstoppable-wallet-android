@@ -89,6 +89,7 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.TokenAmountInput
 import io.horizontalsystems.walletkit.uiv3.components.controls.TokenSelector
 import io.horizontalsystems.walletkit.modules.send.v2.InfoCard
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
+import io.horizontalsystems.walletkit.modules.multiswap.ui.SwapSuggestedPathCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
@@ -468,6 +469,7 @@ private fun SwapTabScreen(
         ) {
             viewModel.onSelectTokenOut(it)
         },
+        onSwapFirstHop = viewModel::onSelectTokenOut,
         onSwitchPairs = viewModel::onSwitchPairs,
         onEnterAmount = viewModel::onEnterAmount,
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
@@ -499,6 +501,7 @@ private fun SwapScreenInner(
     uiState: SwapUiState,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
+    onSwapFirstHop: (Token) -> Unit,
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
     onEnterFiatAmount: (BigDecimal?) -> Unit,
@@ -646,6 +649,15 @@ private fun SwapScreenInner(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 title = stringResource(R.string.SplitSwap_Caution_Title),
                                 text = stringResource(R.string.SplitSwap_Caution_Text)
+                            )
+                        }
+
+                        if (quote == null && uiState.suggestedPath != null) {
+                            VSpacer(height = 16.dp)
+                            SwapSuggestedPathCard(
+                                path = uiState.suggestedPath,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                onSwapFirstHop = onSwapFirstHop,
                             )
                         }
 

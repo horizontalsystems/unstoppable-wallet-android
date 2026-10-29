@@ -30,6 +30,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.walletkit.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.walletkit.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
+import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPath
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
@@ -392,6 +393,7 @@ class SwapViewModel(
             splitRequoting = split && (quoteState.quoting || splitRequotePending),
             splitDuplicateIndexes = SplitSwapRules.duplicateIndexes(splitRecipients.map { it?.hex }, quoteState.tokenOut?.blockchainType),
             splitBelowMinimum = quoteState.splitProviderError?.belowMinimum == true,
+            suggestedPath = quoteState.suggestedPath,
         )
     }
 
@@ -757,6 +759,7 @@ data class SwapUiState(
     val splitDuplicateIndexes: Set<Int> = emptySet(),
     // The provider said a share is under its minimum; otherwise an invalid split has no known cause.
     val splitBelowMinimum: Boolean = false,
+    val suggestedPath: SwapPath? = null,
 ) {
     // No provider priced the current shares although the amount is set: a share under the
     // per-output minimum, typically. Distinct from having no split provider at all.

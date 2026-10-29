@@ -2007,4 +2007,7 @@
     <string name="SplitSwap_DuplicateAddresses_Text">Использование одного и того же адреса снижает преимущество разделения для приватности.</string>
     <string name="SwapInfo_StatusSwapIndexed">Обмен %d</string>
     <string name="SwapInfo_StatusReceiveIndexed">Получить %1$s %2$d</string>
+    <string name="Swap_SuggestedPath_NoQuotesAvailable">Нет доступных предложений</string>
+    <string name="Swap_SuggestedPath_Text">Вы можете попробовать сначала %1$s, а затем %2$s на %3$s.</string>
+    <string name="Swap_SuggestedPath_TextPart">обменять %1$s на %2$s</string>
 </resources>
