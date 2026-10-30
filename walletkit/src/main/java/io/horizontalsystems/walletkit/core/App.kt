@@ -232,6 +232,10 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
      */
     protected open fun registerChainPlugins() = Unit
 
+    /**
+     * Wires app-wide managers and DI, including [BackupProvider] with [statsManager]
+     * so full backup/restore can persist the Share UI data preference.
+     */
     override fun onCreate() {
         super.onCreate()
 
@@ -482,7 +486,8 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             zanoNodeStorage = zanoNodeStorage,
             zcashEndpointManager = zcashEndpointManager,
             zcashEndpointStorage = zcashEndpointStorage,
-            contactsRepository = contactsRepository
+            contactsRepository = contactsRepository,
+            statsManager = statsManager
         )
 
         roiManager = RoiManager(localStorage)
