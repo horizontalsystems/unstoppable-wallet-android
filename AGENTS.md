@@ -284,24 +284,60 @@ pull request description and in your summary to the developer.
 
 ### UI test tags
 
-Maestro selects elements by Compose test tag (`id:` in a flow).
+Maestro selects elements by test tag (`id:` in a flow). Tags are added while
+the code is written, in the same change as the control, never later.
 
-- Tag names live in `TestTags` (`walletkit/.../uiv3/TestTags.kt`) and follow
-  `<screen>_<element>` in snake_case. Add a suffix (coin code, index, word)
-  only where a test has to pick one item of a list.
-- Apply a tag with `Modifier.testTag(TestTags.X)` through the component's
+**When.** Give a test tag to every control the user interacts with, and to
+every value a test checks. A control is anything given an `onClick*`,
+`onValueChange` or `onCheckedChange` lambda, or a `Modifier.clickable`,
+`toggleable` or `selectable`. Do not wait for a test to need it. A screen
+or container that only passes callbacks down has no tag of its own; the
+controls inside it do.
+
+**Name protocol.**
+
+- Names are declared only in code: `TestTags` in
+  `walletkit/.../uiv3/TestTags.kt`. appkb holds the shared flows, not a list
+  of names; the flows select names as plain strings (`id: send_next`).
+- Form: `<screen>_<element>` in snake_case (`send_next`, `confirm_amount`).
+  `<screen>` is the screen's name without `Screen`/`Page`.
+- A name with a variable part is a function. Add a suffix (coin code,
+  blockchain uid, index, word) only where a test has to pick one item of
+  a list: `fun balanceItem(coinCode: String) = "balance_item_$coinCode"`.
+- No app is the source of truth. A name belongs to whichever app declares
+  it first, and both apps use the same string. Before declaring a name,
+  look for the control in, in this order:
+  1. the shared flows (appkb `flows/`) and this repo's `maestro/`: a name a
+     flow selects is the contract, and an app that differs renames;
+  2. the iOS app's `TestTags`
+     (`packages/WalletCore/Sources/WalletCore/UserInterface/TestTags.swift` in
+     `horizontalsystems/unstoppable-wallet-ios`, readable with
+     `gh api repos/horizontalsystems/unstoppable-wallet-ios/contents/<path>`;
+     add `?ref=<branch>` when it is not on the default branch yet);
+  3. this app's `TestTags`.
+
+  Reuse a name you find. Only when none exists, declare a new one.
+- One control, one name. If the two apps already named a control
+  differently and no flow selects either name, the older name wins.
+- Apply it with `Modifier.testTag(TestTags.X)` through the component's
   `modifier` parameter. If a shared component has none, add one rather than
   wrapping it.
 - Tags reach Maestro only inside `Modifier.exposeTestTags()`. The activity
-  root has it; a new `Dialog` or `ModalBottomSheet` needs it on its content,
-  because it opens its own window.
-- Do not rename or remove a tag without updating the flows in `maestro/` in the
-  same change.
+  root has it; a new `Dialog` or `ModalBottomSheet` needs it on its
+  content, because it opens its own window.
+- A name is renamed or removed only together with every flow that selects
+  it, here and in appkb.
+
+**Undeclared names fail silently.** A flow step that selects an undeclared
+name fails the run, unless the step is conditional (`when: visible`,
+`optional: true`). Then Maestro skips it and the flow passes. When you add
+an `id:` to a flow, check that `TestTags` declares it.
 
 ### UI tests for features
 
 - A pull request that adds or changes a user-facing feature adds or updates a
-  test under `maestro/features/<feature>/`, and tags the new screens it needs.
+  test under `maestro/features/<feature>/`, selecting the tags its controls
+  got when they were written.
 - Each feature test starts from `maestro/subflows/setup/wallet_ready.yaml`
   (tests of onboarding or restore start from a fresh install), never depends
   on another test, and runs in under 2 minutes.
