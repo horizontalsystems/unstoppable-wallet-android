@@ -305,7 +305,9 @@ A task:
 - Where the source of truth is, in a form a reader can open: a Figma link,
   the iOS implementation, a reference document. Say what to ignore in it.
 - The decisions the work would otherwise have to ask about.
-- Done when: a short checklist a reviewer or an agent can verify.
+- Done when: a short checklist a reviewer or an agent can verify, only when
+  the bullets above state a goal without saying how to tell it is reached.
+  Skip it when every bullet is already a checkable statement.
 
 Both describe the outcome, not the implementation, and leave out what the
 repository already says: conventions, architecture, file names, and
