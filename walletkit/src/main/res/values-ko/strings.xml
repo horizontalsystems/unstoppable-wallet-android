@@ -1996,4 +1996,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">사용 가능한 견적이 없습니다</string>
     <string name="Swap_SuggestedPath_Text">먼저 %1$s한 다음 %2$s를 %3$s로 스왑해 볼 수 있습니다.</string>
     <string name="Swap_SuggestedPath_TextPart">%1$s를 %2$s로 스왑</string>
+    <string name="DisableDuressPin_Title">강압 모드 비활성화</string>
+    <string name="DisableDuressPin_Description">이 보호 기능이 비활성화됩니다. 이 모드에서 추가된 모든 지갑은 강압 모드가 생성된 기본 지갑에 그대로 유지됩니다.</string>
+    <string name="DisableDuressPin_Button">보호 비활성화</string>
+    <string name="Hud_Text_Disabled">비활성화됨</string>
+    <string name="Hud_Text_Changed">변경됨</string>
 </resources>

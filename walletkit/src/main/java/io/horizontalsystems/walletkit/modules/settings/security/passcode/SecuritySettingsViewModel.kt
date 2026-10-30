@@ -100,11 +100,6 @@ class SecuritySettingsViewModel(
         emitState()
     }
 
-    fun disableDuressPin() {
-        pinComponent.disableDuressPin()
-        emitState()
-    }
-
     fun onSetBalanceAutoHidden(enabled: Boolean) {
         balanceAutoHideEnabled = enabled
         emitState()

@@ -2006,4 +2006,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">Sem cotações disponíveis</string>
     <string name="Swap_SuggestedPath_Text">Você pode tentar %1$s primeiro e depois %2$s por %3$s.</string>
     <string name="Swap_SuggestedPath_TextPart">trocar %1$s por %2$s</string>
+    <string name="DisableDuressPin_Title">Desativar Modo de Coação</string>
+    <string name="DisableDuressPin_Description">Esta proteção será desativada. Todas as carteiras adicionadas neste modo permanecerão na carteira principal onde o Modo de Coação foi criado.</string>
+    <string name="DisableDuressPin_Button">Desativar proteção</string>
+    <string name="Hud_Text_Disabled">Desativado</string>
+    <string name="Hud_Text_Changed">Alterado</string>
 </resources>

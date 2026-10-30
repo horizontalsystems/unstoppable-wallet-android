@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.pin.DisableDuressPinSheet
 import io.horizontalsystems.walletkit.modules.pin.EditDuressPinPage
 import io.horizontalsystems.walletkit.modules.pin.SetDuressPinIntroPage
 import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLockIntervalsPage
@@ -249,7 +250,7 @@ private fun SecurityCenterScreen(
                                     icon = painterResource(R.drawable.trash_24),
                                     contentDescription = stringResource(R.string.Button_Delete),
                                     onClick = navigation.authorizedAction {
-                                        securitySettingsViewModel.disableDuressPin()
+                                        navigation.slideFromBottom(DisableDuressPinSheet)
                                     }
                                 )
                             }

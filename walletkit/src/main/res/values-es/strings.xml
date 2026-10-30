@@ -2001,4 +2001,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">No hay cotizaciones disponibles</string>
     <string name="Swap_SuggestedPath_Text">Puede intentar %1$s primero y luego %2$s a %3$s.</string>
     <string name="Swap_SuggestedPath_TextPart">cambiar %1$s a %2$s</string>
+    <string name="DisableDuressPin_Title">Desactivar Modo Coacción</string>
+    <string name="DisableDuressPin_Description">Esta protección se desactivará. Todas las wallets añadidas en este modo permanecerán en la wallet principal donde se creó el Modo Coacción.</string>
+    <string name="DisableDuressPin_Button">Desactivar protección</string>
+    <string name="Hud_Text_Disabled">Desactivado</string>
+    <string name="Hud_Text_Changed">Cambiado</string>
 </resources>

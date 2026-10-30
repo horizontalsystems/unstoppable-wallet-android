@@ -2002,4 +2002,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">Mevcut teklif yok</string>
     <string name="Swap_SuggestedPath_Text">Önce %1$s, ardından %2$s varlığını %3$s ile takas etmeyi deneyebilirsiniz.</string>
     <string name="Swap_SuggestedPath_TextPart">%1$s varlığını %2$s ile</string>
+    <string name="DisableDuressPin_Title">Tehdit Modunu Devre Dışı Bırak</string>
+    <string name="DisableDuressPin_Description">Bu koruma devre dışı bırakılacak. Bu modda eklenen tüm cüzdanlar, Tehdit Modunun oluşturulduğu ana cüzdanda kalacaktır.</string>
+    <string name="DisableDuressPin_Button">Korumayı Devre Dışı Bırak</string>
+    <string name="Hud_Text_Disabled">Devre dışı bırakıldı</string>
+    <string name="Hud_Text_Changed">Değiştirildi</string>
 </resources>

@@ -2003,4 +2003,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">Aucune cotation disponible</string>
     <string name="Swap_SuggestedPath_Text">Vous pouvez d\'abord essayer %1$s, puis %2$s contre %3$s.</string>
     <string name="Swap_SuggestedPath_TextPart">d\'échanger %1$s contre %2$s</string>
+    <string name="DisableDuressPin_Title">Désactiver le Mode Contrainte</string>
+    <string name="DisableDuressPin_Description">Cette protection sera désactivée. Tous les wallets ajoutés dans ce mode resteront dans le wallet principal où le Mode Contrainte a été créé.</string>
+    <string name="DisableDuressPin_Button">Désactiver la protection</string>
+    <string name="Hud_Text_Disabled">Désactivé</string>
+    <string name="Hud_Text_Changed">Modifié</string>
 </resources>

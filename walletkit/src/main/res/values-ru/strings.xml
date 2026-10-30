@@ -2010,4 +2010,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">Нет доступных предложений</string>
     <string name="Swap_SuggestedPath_Text">Вы можете попробовать сначала %1$s, а затем %2$s на %3$s.</string>
     <string name="Swap_SuggestedPath_TextPart">обменять %1$s на %2$s</string>
+    <string name="DisableDuressPin_Title">Отключить защиту от грабежа</string>
+    <string name="DisableDuressPin_Description">Эта защита будет отключена. Все кошельки, добавленные в этом режиме, останутся в основном кошельке, где была создана защита от грабежа.</string>
+    <string name="DisableDuressPin_Button">Отключить защиту</string>
+    <string name="Hud_Text_Disabled">Отключено</string>
+    <string name="Hud_Text_Changed">Изменено</string>
 </resources>

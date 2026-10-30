@@ -1989,4 +1989,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">قیمتی در دسترس نیست</string>
     <string name="Swap_SuggestedPath_Text">می‌توانید ابتدا %1$s را امتحان کنید، سپس %2$s را به %3$s تبدیل کنید.</string>
     <string name="Swap_SuggestedPath_TextPart">تبدیل %1$s به %2$s</string>
+    <string name="DisableDuressPin_Title">غیرفعال کردن محافظت در برابر سرقت</string>
+    <string name="DisableDuressPin_Description">این محافظت غیرفعال می‌شود. همه کیف پول‌هایی که در این حالت اضافه شده‌اند در کیف پول اصلی که محافظت در برابر سرقت در آن ایجاد شده بود باقی می‌مانند.</string>
+    <string name="DisableDuressPin_Button">غیرفعال کردن محافظت</string>
+    <string name="Hud_Text_Disabled">غیرفعال شد</string>
+    <string name="Hud_Text_Changed">تغییر کرد</string>
 </resources>

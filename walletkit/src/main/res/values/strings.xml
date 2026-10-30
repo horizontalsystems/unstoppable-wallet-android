@@ -2351,4 +2351,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">No quotes available</string>
     <string name="Swap_SuggestedPath_Text">You may try %1$s first, then %2$s to %3$s.</string>
     <string name="Swap_SuggestedPath_TextPart">swapping %1$s to %2$s</string>
+    <string name="DisableDuressPin_Title">Disable Robbery Protection</string>
+    <string name="DisableDuressPin_Description">This protection will be disabled. All wallets added in this mode will remain in the main wallet where Robbery Protection was created.</string>
+    <string name="DisableDuressPin_Button">Disable Protection</string>
+    <string name="Hud_Text_Disabled">Disabled</string>
+    <string name="Hud_Text_Changed">Changed</string>
 </resources>

@@ -2006,4 +2006,9 @@
     <string name="Swap_SuggestedPath_NoQuotesAvailable">Keine Angebote verfügbar</string>
     <string name="Swap_SuggestedPath_Text">Sie können versuchen, zuerst %1$s und dann %2$s in %3$s zu tauschen.</string>
     <string name="Swap_SuggestedPath_TextPart">%1$s in %2$s</string>
+    <string name="DisableDuressPin_Title">Duress-Modus deaktivieren</string>
+    <string name="DisableDuressPin_Description">Dieser Schutz wird deaktiviert. Alle in diesem Modus hinzugefügten Wallets bleiben in der Haupt-Wallet, in der der Duress-Modus erstellt wurde.</string>
+    <string name="DisableDuressPin_Button">Schutz deaktivieren</string>
+    <string name="Hud_Text_Disabled">Deaktiviert</string>
+    <string name="Hud_Text_Changed">Geändert</string>
 </resources>
