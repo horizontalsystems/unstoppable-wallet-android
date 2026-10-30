@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.pin.DisableDuressPinSheet
@@ -79,6 +81,7 @@ private fun SecurityCenterScreen(
     }
 
     val uiState = securitySettingsViewModel.uiState
+    val view = LocalView.current
 
     HSScaffold(
         title = stringResource(R.string.Settings_SecurityCenter),
@@ -216,6 +219,20 @@ private fun SecurityCenterScreen(
                     navigation.slideFromRight(SetDuressPinIntroPage)
                 }
 
+                val disableDuressPin = navigation.authorizedAction {
+                    securitySettingsViewModel.disableDuressPin()
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Disabled)
+                }
+
+                val confirmDisableDuressPin =
+                    navigation.slideFromBottomForResult<DisableDuressPinSheet.Result>(
+                        { DisableDuressPinSheet }
+                    ) { result ->
+                        if (result.confirmed) {
+                            disableDuressPin()
+                        }
+                    }
+
                 CellPrimary(
                     middle = {
                         CellMiddleInfo(
@@ -249,9 +266,7 @@ private fun SecurityCenterScreen(
                                     size = ButtonSize.Small,
                                     icon = painterResource(R.drawable.trash_24),
                                     contentDescription = stringResource(R.string.Button_Delete),
-                                    onClick = navigation.authorizedAction {
-                                        navigation.slideFromBottom(DisableDuressPinSheet)
-                                    }
+                                    onClick = confirmDisableDuressPin
                                 )
                             }
                         } else {
