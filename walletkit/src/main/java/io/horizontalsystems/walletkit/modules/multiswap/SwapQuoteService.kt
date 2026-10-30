@@ -243,11 +243,7 @@ class SwapQuoteService(
 
             if (emptyRoundKey != roundKey) {
                 // A changed pair or an untried set of providers has not failed at anything yet.
-                synchronized(publishLock) {
-                    emptyRoundKey = null
-                    suggestedPath = null
-                }
-                emitState()
+                if (clearSuggestedPath(generation)) emitState()
             }
 
             if (supportedProviders.isEmpty()) {
@@ -312,13 +308,21 @@ class SwapQuoteService(
                     if (published) emitState()
                 }
             }
-        } else {
-            synchronized(publishLock) {
-                emptyRoundKey = null
-                suggestedPath = null
-            }
+        } else if (clearSuggestedPath(generation)) {
             emitState()
         }
+    }
+
+    /**
+     * Under the same generation check as a quote publication: the provider-support work above
+     * runs unlocked, so a quotation overtaken meanwhile must not clear what the newer one found.
+     */
+    private fun clearSuggestedPath(generation: Int): Boolean = synchronized(publishLock) {
+        if (generation != quotationGeneration) return@synchronized false
+
+        emptyRoundKey = null
+        suggestedPath = null
+        true
     }
 
     /**
