@@ -28,10 +28,11 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPath
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
+import io.horizontalsystems.walletkit.uiv3.components.cell.CoinIconSize
 
 /**
  * Shown under the swap form when the pair gets no quote but a one-hop route exists. Tapping the
@@ -64,11 +65,11 @@ fun SwapSuggestedPathCard(
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            CoinImage(token = path.tokenIn, modifier = Modifier.size(32.dp))
+            CellLeftCoinIcon(token = path.tokenIn, size = CoinIconSize.Compact)
             HopArrow()
-            CoinImage(token = path.intermediateToken, modifier = Modifier.size(32.dp))
+            CellLeftCoinIcon(token = path.intermediateToken, size = CoinIconSize.Compact)
             HopArrow()
-            CoinImage(token = path.tokenOut, modifier = Modifier.size(32.dp))
+            CellLeftCoinIcon(token = path.tokenOut, size = CoinIconSize.Compact)
         }
     }
 }

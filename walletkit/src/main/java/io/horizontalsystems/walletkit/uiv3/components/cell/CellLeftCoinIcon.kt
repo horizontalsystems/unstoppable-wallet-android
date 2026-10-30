@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
@@ -28,10 +29,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HsImage
 
-private val iconSize = 40.dp
-private val badgeIconSize = 16.dp
 private val badgeBorder = 1.dp
-private val badgeSize = badgeIconSize + badgeBorder * 2
 
 // warning_filled_24 insets its octagon by 2 of the 24 viewport units on every side, so a layer has
 // to be scaled by this much for the octagon itself — rather than its bounding box — to come out at
@@ -39,15 +37,23 @@ private val badgeSize = badgeIconSize + badgeBorder * 2
 // be coerced into the box's constraints and both would collapse to the same size, erasing the
 // border entirely.
 private const val syncFailedGlyphScale = 24f / 20f
-private val syncFailedIconSize = badgeIconSize * syncFailedGlyphScale
-private val syncFailedBorderSize = badgeSize * syncFailedGlyphScale
-
-// The badge hangs past the coin icon so it reads as a separate mark rather than a hole punched
-// into it. The icon keeps its 40.dp layout size, so the overhang eats into the cell's leading gap.
-private val badgeOverhang = 3.dp
 
 private val badgeIconShape = RoundedCornerShape(4.dp)
 private val badgePlateShape = RoundedCornerShape(4.dp + badgeBorder)
+
+/** The coin icon's layout size and how its chain badge is sized and placed against it. */
+data class CoinIconSize(
+    val icon: Dp,
+    val badgeIcon: Dp,
+    // The badge hangs past the coin icon so it reads as a separate mark rather than a hole punched
+    // into it. The icon keeps its layout size, so the overhang eats into the neighbouring gap.
+    val badgeOverhang: Dp,
+) {
+    companion object {
+        val Cell = CoinIconSize(icon = 40.dp, badgeIcon = 16.dp, badgeOverhang = 3.dp)
+        val Compact = CoinIconSize(icon = 32.dp, badgeIcon = 12.dp, badgeOverhang = 2.dp)
+    }
+}
 
 /**
  * Coin icon with the blockchain it lives on marked in the bottom-right corner.
@@ -61,7 +67,14 @@ fun CellLeftCoinIcon(
     syncFailed: Boolean = false,
     iconAlpha: Float = 1f,
     onClickSyncError: (() -> Unit)? = null,
+    size: CoinIconSize = CoinIconSize.Cell,
 ) {
+    val iconSize = size.icon
+    val badgeIconSize = size.badgeIcon
+    val badgeSize = badgeIconSize + badgeBorder * 2
+    val syncFailedIconSize = badgeIconSize * syncFailedGlyphScale
+    val syncFailedBorderSize = badgeSize * syncFailedGlyphScale
+
     val clickable = if (syncFailed && onClickSyncError != null) {
         Modifier.clickable(
             interactionSource = remember { MutableInteractionSource() },
@@ -84,7 +97,7 @@ fun CellLeftCoinIcon(
             // The border traces the octagon instead of sitting behind it as a plate: it is the same
             // silhouette grown by the border width. It has to be the solid one, so that it also
             // backs the exclamation mark, which is a cut-out in the red layer above.
-            syncFailed -> Badge {
+            syncFailed -> Badge(badgeSize, size.badgeOverhang) {
                 Icon(
                     modifier = Modifier.requiredSize(syncFailedBorderSize),
                     painter = painterResource(R.drawable.warning_octagon_24),
@@ -99,7 +112,7 @@ fun CellLeftCoinIcon(
                 )
             }
 
-            token != null && !token.type.isNative -> Badge {
+            token != null && !token.type.isNative -> Badge(badgeSize, size.badgeOverhang) {
                 Box(
                     modifier = Modifier
                         .size(badgeSize)
@@ -124,7 +137,7 @@ fun CellLeftCoinIcon(
  * failed sync.
  */
 @Composable
-private fun BoxScope.Badge(content: @Composable () -> Unit) {
+private fun BoxScope.Badge(badgeSize: Dp, badgeOverhang: Dp, content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .align(Alignment.BottomEnd)
