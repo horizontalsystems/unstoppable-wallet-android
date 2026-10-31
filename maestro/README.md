@@ -143,14 +143,15 @@ this; dev and release builds stay ARM only.
 
 | When | What runs | Telegram |
 |---|---|---|
-| Push to `version/*` | Journey, feature and history tests | When something fails |
-| Pull request to `version/*` | Journey, feature and history tests | No |
-| Nightly, 19:00 UTC | The same plus the on-chain tests, on the newest `version/*` branch | Always |
-| Manual (Actions → Maestro UI Tests → Run workflow) | Your choice of tags, or a nightly run | Only as a nightly |
+| Push to `develop` | Feature tests | When something fails |
+| Pull request to `develop` | Feature tests | No |
+| Nightly, 19:00 UTC | Journey, feature and on-chain tests, on `develop` | Always |
+| Manual (Actions → Maestro UI Tests → Run workflow) | Your choice of tags (`journey` adds the journey), or a nightly run | Only as a nightly |
 
-The checks do not block merging. A run takes about 12 minutes: the APK
-build, then three parallel jobs, each on its own emulator: the journey, and
-the feature and on-chain tests split in two (`SHARD` in `ci-run.sh`).
+The checks do not block merging. A run is the APK build, then parallel
+jobs, each on its own emulator: the feature and on-chain tests split in two
+(`SHARD` in `ci-run.sh`), and in the nightly the journey as a third job,
+about 12 minutes in all.
 
 A separate, quick check (Check Test Tags) fails a pull request when a flow
 selects an `id:` that `TestTags` does not declare.
@@ -376,7 +377,7 @@ Rules for feature tests:
 
 | Tests | Tag | When |
 |---|---|---|
-| Journey (about 5 min) | `journey` | Every push and pull request to `version/*`, nightly, and locally when a journey screen changes |
-| Feature tests | `feature` | Every push and pull request to `version/*`, nightly, and locally by the developer while working on the feature |
-| History with known transactions | `onchain`, `history` | Every push and pull request to `version/*`, nightly |
+| Journey (about 5 min) | `journey` | Nightly, and locally when a journey screen changes |
+| Feature tests | `feature` | Every push and pull request to `develop`, nightly, and locally by the developer while working on the feature |
+| History with known transactions | `onchain`, `history` | Nightly |
 | Real send to confirm (funded wallet) | `onchain`, `secret` | Nightly |
