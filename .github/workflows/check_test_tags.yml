@@ -1,0 +1,17 @@
+name: Check Test Tags
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check-test-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify every test tag a Maestro flow selects is declared in TestTags
+        run: python3 .github/scripts/check_test_tags.py

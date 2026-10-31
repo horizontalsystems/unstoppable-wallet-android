@@ -152,6 +152,9 @@ The checks do not block merging. A run takes about 12 minutes: the APK
 build, then three parallel jobs, each on its own emulator: the journey, and
 the feature and on-chain tests split in two (`SHARD` in `ci-run.sh`).
 
+A separate, quick check (Check Test Tags) fails a pull request when a flow
+selects an `id:` that `TestTags` does not declare.
+
 - **Results:** each job writes its summary on the run page and uploads
   `maestro-journey`, `maestro-flows-1` or `maestro-flows-2`: JUnit reports, Maestro output with
   failure screenshots, `logcat.txt`, `setup.log` and `summary.txt`.

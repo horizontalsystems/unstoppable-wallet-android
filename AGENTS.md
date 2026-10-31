@@ -331,7 +331,9 @@ controls inside it do.
 **Undeclared names fail silently.** A flow step that selects an undeclared
 name fails the run, unless the step is conditional (`when: visible`,
 `optional: true`). Then Maestro skips it and the flow passes. When you add
-an `id:` to a flow, check that `TestTags` declares it.
+an `id:` to a flow, check that `TestTags` declares it. CI fails a pull
+request when a flow in `maestro/` selects a name `TestTags` does not declare
+(`.github/scripts/check_test_tags.py`).
 
 ### UI tests for features
 
