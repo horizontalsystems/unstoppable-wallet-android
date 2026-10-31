@@ -1,32 +1,32 @@
 name: Maestro UI Tests
 
-# Pushes and pull requests to version/* run the journey and the feature and
-# history tests. The nightly run tests the newest version/* branch and adds
-# the on-chain tests, which use the dust wallet phrase. Telegram gets every
-# nightly result and every failed push to version/*. See maestro/README.md.
+# Pushes and pull requests to develop run the feature tests. The nightly
+# run tests develop and adds the journey and the on-chain tests, which use
+# the dust wallet phrase. Telegram gets every nightly result and every failed
+# push to develop. See maestro/README.md.
 on:
   push:
     branches:
-      - 'version/**'
+      - develop
   pull_request:
     branches:
-      - 'version/**'
+      - develop
   schedule:
     # 19:00 UTC, 01:00 in Bishkek. Runs from the default branch's copy of
-    # this file, which then checks out the newest version/* branch
+    # this file, which then checks out develop
     - cron: '0 19 * * *'
   workflow_dispatch:
     inputs:
       nightly:
-        description: 'Run as the nightly: on-chain tests and a Telegram report'
+        description: 'Run as the nightly: journey, on-chain tests and a Telegram report'
         type: boolean
         default: false
       ref:
-        description: 'Branch to test as the nightly (default: the newest version/*)'
+        description: 'Branch to test as the nightly (default: develop)'
         default: ''
       tags:
-        description: 'Tags of the feature and on-chain tests, when not nightly'
-        default: 'feature,history'
+        description: 'Tags of the tests to run when not nightly; journey adds the journey'
+        default: 'feature'
 
 concurrency:
   group: maestro-${{ github.ref }}
@@ -43,6 +43,8 @@ jobs:
       branch: ${{ steps.plan.outputs.branch }}
       nightly: ${{ steps.plan.outputs.nightly }}
       tags: ${{ steps.plan.outputs.tags }}
+      parts: ${{ steps.plan.outputs.parts }}
+      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - name: Pick the branch and the tests
         id: plan
@@ -51,26 +53,33 @@ jobs:
           INPUT_NIGHTLY: ${{ inputs.nightly }}
           INPUT_REF: ${{ inputs.ref }}
           INPUT_TAGS: ${{ inputs.tags }}
-          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
           HEAD_REF: ${{ github.head_ref || github.ref_name }}
           SHA: ${{ github.sha }}
         run: |
           if [ "$EVENT" = "schedule" ] || [ "$INPUT_NIGHTLY" = "true" ]; then
-            branch="$INPUT_REF"
-            if [ -z "$branch" ]; then
-              branch="$(git ls-remote --heads "$REPO_URL" 'refs/heads/version/*' \
-                | sed 's|.*refs/heads/||' | sort -V | tail -n 1)"
-            fi
+            branch="${INPUT_REF:-develop}"
             echo "ref=$branch" >> "$GITHUB_OUTPUT"
             echo "branch=$branch" >> "$GITHUB_OUTPUT"
             echo "nightly=true" >> "$GITHUB_OUTPUT"
-            echo "tags=feature,history,onchain" >> "$GITHUB_OUTPUT"
+            tags="feature,history,onchain"
+            journey=true
           else
             echo "ref=$SHA" >> "$GITHUB_OUTPUT"
             echo "branch=$HEAD_REF" >> "$GITHUB_OUTPUT"
             echo "nightly=false" >> "$GITHUB_OUTPUT"
-            echo "tags=${INPUT_TAGS:-feature,history}" >> "$GITHUB_OUTPUT"
+            tags="${INPUT_TAGS:-feature}"
+            case ",$tags," in *,journey,*) journey=true ;; *) journey=false ;; esac
           fi
+          echo "tags=$tags" >> "$GITHUB_OUTPUT"
+          # The flows take longer than the journey, so two jobs share them
+          parts="flows-1 flows-2"
+          matrix='{"name":"flows-1","part":"flows","shard":"1/2"},{"name":"flows-2","part":"flows","shard":"2/2"}'
+          if [ "$journey" = "true" ]; then
+            parts="journey $parts"
+            matrix='{"name":"journey","part":"journey"},'"$matrix"
+          fi
+          echo "parts=$parts" >> "$GITHUB_OUTPUT"
+          echo "matrix=[$matrix]" >> "$GITHUB_OUTPUT"
 
   build:
     needs: plan
@@ -112,16 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The flows take longer than the journey, so two jobs share them
-        include:
-          - name: journey
-            part: journey
-          - name: flows-1
-            part: flows
-            shard: 1/2
-          - name: flows-2
-            part: flows
-            shard: 2/2
+        include: ${{ fromJSON(needs.plan.outputs.matrix) }}
     name: test (${{ matrix.name }})
     env:
       # Only the nightly runs the on-chain tests; other runs never see the phrase
@@ -189,11 +189,11 @@ jobs:
     needs: [plan, build, test]
     env:
       # The matrix names of the test jobs
-      PARTS: journey flows-1 flows-2
-    # Nightly results, and failed pushes to version/*
+      PARTS: ${{ needs.plan.outputs.parts }}
+    # Nightly results, and failed pushes to develop
     if: >-
       always() && (needs.plan.outputs.nightly == 'true' ||
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/version/') &&
+      (github.event_name == 'push' && github.ref == 'refs/heads/develop' &&
       (needs.build.result == 'failure' || needs.test.result == 'failure')))
     runs-on: ubuntu-24.04
     steps:

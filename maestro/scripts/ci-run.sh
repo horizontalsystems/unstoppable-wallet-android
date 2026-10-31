@@ -14,7 +14,7 @@
 # when it fails, setup-error.txt holds its last line for the report. Exit
 # codes: 0 pass (flaky included), 1 failures, 2 setup error.
 #
-# Usage: ci-run.sh <journey|flows> <apk> <out dir> [tags, default feature,history]
+# Usage: ci-run.sh <journey|flows> <apk> <out dir> [tags, default feature]
 set -uo pipefail
 SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(cd "$SCRIPTS/../.." && pwd)"
@@ -22,7 +22,7 @@ REPO="$(cd "$SCRIPTS/../.." && pwd)"
 PART="${1:?usage: ci-run.sh <journey|flows> <apk> <out dir> [tags]}"
 APK="${2:?apk}"
 OUT="${3:?out dir}"
-TAGS="${4:-feature,history}"
+TAGS="${4:-feature}"
 mkdir -p "$OUT"
 
 setup_failed() {

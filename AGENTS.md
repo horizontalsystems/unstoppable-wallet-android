@@ -345,9 +345,9 @@ request when a flow in `maestro/` selects a name `TestTags` does not declare
   on another test, and runs in under 2 minutes.
 - Run it locally before opening the pull request. If the change touches a
   screen the journey walks through, run the journey too.
-- Pull requests to `version/*` also run the journey and the feature tests in
-  GitHub Actions ("Maestro UI Tests"). The check does not block merging, but a
-  red run is looked at before merging.
+- Pull requests to `develop` also run the feature tests in GitHub Actions
+  ("Maestro UI Tests"); the journey runs nightly. The check does not block
+  merging, but a red run is looked at before merging.
 
 ## Git Commit Messages
 
