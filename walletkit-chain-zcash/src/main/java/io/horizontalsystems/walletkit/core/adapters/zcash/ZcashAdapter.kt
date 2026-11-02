@@ -262,7 +262,9 @@ class ZcashAdapter(
         }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
-        val blockTimeResolver = ZcashBlockTimeResolver.forEndpoint(appContext, lightWalletEndpoint, network)
+        val blockTimeResolver = ZcashBlockTimeResolver.forEndpoint(appContext, lightWalletEndpoint, network) {
+            localStorage.torEnabled
+        }
         transactionsProvider = ZcashTransactionsProvider(
             accountUuid = zcashAccount.accountUuid,
             scope = adapterScope,

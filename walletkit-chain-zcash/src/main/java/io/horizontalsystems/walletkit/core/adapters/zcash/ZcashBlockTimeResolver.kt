@@ -28,6 +28,10 @@ import kotlin.time.Duration.Companion.seconds
  * [fetch] reads the exact time from the block header on the light wallet server; its result is
  * cached by height. When that fails, [estimate] interpolates from the bundled checkpoints; an
  * estimate is not cached so a later call can still replace it with the exact time.
+ *
+ * The light wallet client has no Tor option, so while the app routes the synchronizer through
+ * Tor the server is not asked at all (a direct request would show it the wallet's address and
+ * the heights it holds transactions at) and only the estimate is used.
  */
 class ZcashBlockTimeResolver(
     private val fetch: suspend (height: Long) -> Long?,
@@ -64,10 +68,12 @@ class ZcashBlockTimeResolver(
             context: Context,
             endpoint: LightWalletEndpoint,
             network: ZcashNetwork,
+            // Read per lookup: a direct request must never leave while the wallet is on Tor.
+            isTorEnabled: () -> Boolean,
         ): ZcashBlockTimeResolver {
             val appContext = context.applicationContext
             return ZcashBlockTimeResolver(
-                fetch = { height -> fetchBlockTime(appContext, endpoint, height) },
+                fetch = { height -> if (isTorEnabled()) null else fetchBlockTime(appContext, endpoint, height) },
                 estimate = { height ->
                     SdkSynchronizer.estimateBirthdayDate(
                         context = appContext,
