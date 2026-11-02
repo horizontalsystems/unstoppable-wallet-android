@@ -1,4 +1,4 @@
-supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,robinhood,arc,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,dash,monero,zano,zcash,solana,stellar,xrp,near-protocol,the-open-network,thorchain,mayachain
+supported=ethereum,binance-smart-chain,polygon-pos,avalanche,optimistic-ethereum,base,zksync,robinhood,arc,arbitrum-one,gnosis,fantom,tron,bitcoin,bitcoin-cash,ecash,litecoin,litecoin-mweb,dash,monero,zano,zcash,solana,stellar,xrp,near-protocol,the-open-network,thorchain,mayachain
 
 chain ethereum
   title=Ethereum
@@ -63,7 +63,7 @@ chain polygon-pos
 chain avalanche
   title=Avalanche
   description=AVAX, ERC20 tokens
-  order=20
+  order=21
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -123,7 +123,7 @@ chain base
 chain zksync
   title=ZKsync
   description=L2 chain
-  order=23
+  order=24
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -143,7 +143,7 @@ chain zksync
 chain robinhood
   title=Robinhood Chain
   description=L2 chain
-  order=24
+  order=25
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -163,7 +163,7 @@ chain robinhood
 chain arc
   title=Arc
   description=USDC, ERC20 tokens
-  order=25
+  order=26
   isEvm=true
   blockTime=1
   uriScheme=ethereum
@@ -203,7 +203,7 @@ chain arbitrum-one
 chain gnosis
   title=Gnosis
   description=xDAI, ERC20 tokens
-  order=26
+  order=27
   isEvm=true
   blockTime=5
   uriScheme=ethereum
@@ -223,7 +223,7 @@ chain gnosis
 chain fantom
   title=Fantom
   description=FTM, ERC20 tokens
-  order=27
+  order=28
   isEvm=true
   blockTime=2
   uriScheme=ethereum
@@ -283,7 +283,7 @@ chain bitcoin
 chain bitcoin-cash
   title=Bitcoin Cash
   description=BCH (Legacy, CashAddress)
-  order=19
+  order=20
   isEvm=false
   blockTime=600
   uriScheme=bitcoincash
@@ -303,7 +303,7 @@ chain bitcoin-cash
 chain ecash
   title=Ecash
   description=XEC
-  order=22
+  order=23
   isEvm=false
   blockTime=600
   uriScheme=ecash
@@ -338,6 +338,26 @@ chain litecoin
   supportedTokenTypes=Derived(Bip84)
   protocolType[Native]=Litecoin
   protocolType[Eip20]=Litecoin
+  supports=Mnemonic
+
+chain litecoin-mweb
+  title=Litecoin MWEB
+  description=LTC
+  order=19
+  isEvm=false
+  blockTime=150
+  uriScheme=litecoin
+  removeScheme=true
+  chainId=null
+  brandColor=null
+  feePriceScale=Gwei
+  tokenIconPlaceholder=coin_placeholder
+  restoreSettingTypes=
+  nativeTokenQueries=litecoin-mweb|native
+  defaultTokenQuery=litecoin-mweb|native
+  supportedTokenTypes=Native
+  protocolType[Native]=Litecoin MWEB
+  protocolType[Eip20]=Litecoin MWEB
   supports=Mnemonic
 
 chain dash
@@ -503,7 +523,7 @@ chain near-protocol
 chain the-open-network
   title=Ton
   description=TON
-  order=21
+  order=22
   isEvm=false
   blockTime=5
   uriScheme=toncoin

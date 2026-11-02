@@ -2008,4 +2008,9 @@
     <string name="DisableDuressPin_Button">Désactiver la protection</string>
     <string name="Hud_Text_Disabled">Désactivé</string>
     <string name="Hud_Text_Changed">Modifié</string>
+    <string name="Mweb_FromLitecoin">Depuis Litecoin</string>
+    <string name="Mweb_SpentInAnotherWallet">Dépensé dans un autre portefeuille</string>
+    <string name="Mweb_BroadcastUnknown">La transaction a été envoyée, mais son statut est inconnu. Vérifiez l\'historique avant de renvoyer.</string>
+    <string name="Send_Error_EnableMwebWallet">Activez le portefeuille Litecoin MWEB pour envoyer vers des adresses MWEB</string>
+    <string name="Transactions_UnknownDate">Date inconnue</string>
 </resources>

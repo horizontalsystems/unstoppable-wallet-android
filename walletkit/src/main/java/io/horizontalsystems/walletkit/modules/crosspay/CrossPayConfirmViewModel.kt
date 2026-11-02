@@ -440,6 +440,7 @@ class CrossPayConfirmViewModel(
         is SendTransactionResult.Near -> result.txHash
         is SendTransactionResult.Monero -> result.txHash
         is SendTransactionResult.Zano -> result.txHash
+        is SendTransactionResult.Mweb -> result.txHash
         SendTransactionResult.Ton -> null
     }
 

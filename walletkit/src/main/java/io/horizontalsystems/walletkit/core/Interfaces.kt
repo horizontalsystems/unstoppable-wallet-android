@@ -486,6 +486,21 @@ data class MoneroAccountInfo(
     val unlocked: BigDecimal,
 )
 
+/**
+ * Sends from a Litecoin MWEB wallet: to an MWEB address, or to a Litecoin address as a
+ * peg-out. [feeRate] is litoshi per virtual byte, the rate the Litecoin fee provider
+ * recommends; the MWEB fee is derived from it by the kit.
+ */
+interface ISendMwebAdapter {
+    val balanceData: BalanceData
+    /** Throws when [address] is neither an MWEB nor a Litecoin address of the network. */
+    fun validate(address: String)
+    suspend fun estimateFee(amount: BigDecimal, address: String, feeRate: Int): BigDecimal
+    suspend fun maximumSendable(address: String, feeRate: Int): BigDecimal
+    /** Returns the record uid; a pure MWEB transaction has no Litecoin transaction hash. */
+    suspend fun send(amount: BigDecimal, address: String, feeRate: Int): String
+}
+
 interface ISendZanoAdapter {
     val balanceData: BalanceData
     val isNativeAsset: Boolean

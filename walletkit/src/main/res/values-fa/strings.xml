@@ -1994,4 +1994,9 @@
     <string name="DisableDuressPin_Button">غیرفعال کردن محافظت</string>
     <string name="Hud_Text_Disabled">غیرفعال شد</string>
     <string name="Hud_Text_Changed">تغییر کرد</string>
+    <string name="Mweb_FromLitecoin">از Litecoin</string>
+    <string name="Mweb_SpentInAnotherWallet">در کیف پول دیگری خرج شده</string>
+    <string name="Mweb_BroadcastUnknown">تراکنش ارسال شد، اما وضعیت آن نامشخص است. قبل از ارسال مجدد، تاریخچه را بررسی کنید.</string>
+    <string name="Send_Error_EnableMwebWallet">برای ارسال به آدرس‌های MWEB، کیف پول Litecoin MWEB را فعال کنید</string>
+    <string name="Transactions_UnknownDate">تاریخ نامشخص</string>
 </resources>

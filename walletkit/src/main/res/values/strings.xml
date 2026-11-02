@@ -2356,4 +2356,9 @@
     <string name="DisableDuressPin_Button">Disable Protection</string>
     <string name="Hud_Text_Disabled">Disabled</string>
     <string name="Hud_Text_Changed">Changed</string>
+    <string name="Mweb_FromLitecoin">From Litecoin</string>
+    <string name="Mweb_SpentInAnotherWallet">Spent in another wallet</string>
+    <string name="Mweb_BroadcastUnknown">The transaction was sent, but its status is unknown. Check the history before sending again.</string>
+    <string name="Send_Error_EnableMwebWallet">Enable the Litecoin MWEB wallet to send to MWEB addresses</string>
+    <string name="Transactions_UnknownDate">Unknown date</string>
 </resources>

@@ -25,7 +25,9 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaO
 import io.horizontalsystems.walletkit.entities.transactionrecords.solana.SolanaSwapTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebTransactionRecord
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
@@ -606,10 +608,15 @@ object TransactionViewItemFactoryHelper {
         rates: Map<String, CurrencyValue?>,
         blockchainType: BlockchainType,
     ): List<TransactionInfoViewItem> {
+        val date = if (transaction is MwebTransactionRecord && transaction.blockTimestamp == null) {
+            Translator.getString(R.string.Transactions_UnknownDate)
+        } else {
+            DateHelper.getFullDate(Date(transaction.timestamp * 1000))
+        }
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             TransactionInfoViewItem.Value(
                 Translator.getString(R.string.TransactionInfo_Date),
-                DateHelper.getFullDate(Date(transaction.timestamp * 1000))
+                date
             ),
             TransactionInfoViewItem.Status(
                 status,
@@ -717,6 +724,14 @@ object TransactionViewItemFactoryHelper {
             }
 
             is ThorchainOutgoingTransactionRecord -> {
+                transaction.fee?.let { fee ->
+                    if (!fee.zeroValue) {
+                        items.add(getFee(fee, rates[fee.coinUid]))
+                    }
+                }
+            }
+
+            is MwebOutgoingTransactionRecord -> {
                 transaction.fee?.let { fee ->
                     if (!fee.zeroValue) {
                         items.add(getFee(fee, rates[fee.coinUid]))

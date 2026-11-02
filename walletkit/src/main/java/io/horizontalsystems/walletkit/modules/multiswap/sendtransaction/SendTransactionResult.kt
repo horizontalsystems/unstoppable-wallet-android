@@ -15,4 +15,5 @@ sealed class SendTransactionResult {
     data class Monero(val txHash: String? = null) : SendTransactionResult()
     data class Thorchain(val txHash: String? = null) : SendTransactionResult()
     data class Zano(val txHash: String? = null) : SendTransactionResult()
+    data class Mweb(val txHash: String? = null) : SendTransactionResult()
 }

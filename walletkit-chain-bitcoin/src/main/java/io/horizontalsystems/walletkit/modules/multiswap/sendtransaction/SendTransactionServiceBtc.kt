@@ -17,7 +17,16 @@ import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.HSCaution
+import io.horizontalsystems.walletkit.core.IPegInMwebAdapter
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
+import io.horizontalsystems.walletkit.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.walletkit.core.adapters.LitecoinAdapter
+import io.horizontalsystems.walletkit.modules.address.AddressHandlerMweb
+import io.horizontalsystems.litecoinmwebkit.MwebFee
+import io.horizontalsystems.litecoinmwebkit.MwebSendError
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.walletkit.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.walletkit.entities.Address
@@ -81,6 +90,22 @@ class SendTransactionServiceBtc(
     private var feeRateInitialized = initialFeeRate == null
 
     private var fields = listOf<DataField>()
+
+    // A Litecoin wallet paying an MWEB address is a peg-in, built and broadcast by the MWEB
+    // kit of the same account; the address, amount and fee services above do not apply to it.
+    private var pegIn: PegIn? = null
+
+    private class PegIn(val address: String, val amount: BigDecimal) {
+        var fee: BigDecimal? = null
+        var error: HSCaution? = null
+    }
+
+    private val pegInAdapter: IPegInMwebAdapter? by lazy {
+        App.coinManager.getToken(TokenQuery(BlockchainType.LitecoinMweb, TokenType.Native))
+            ?.let { App.adapterManager.getAdapterForToken<IPegInMwebAdapter>(it) }
+    }
+
+    private val litecoinKit get() = (adapter as? LitecoinAdapter)?.kit
 
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Btc())
 
@@ -161,11 +186,12 @@ class SendTransactionServiceBtc(
         }
     }
 
-    private fun handleFeeRateState(state: SendBitcoinFeeRateService.State) {
+    private suspend fun handleFeeRateState(state: SendBitcoinFeeRateService.State) {
         feeRateState = state
 
         feeService.setFeeRate(feeRateState.feeRate)
         amountService.setFeeRate(feeRateState.feeRate)
+        refreshPegIn()
         // Published so a swap provider prices its route at the rate the transfer is sent with.
         sendTransactionSettingsFlow.value = SendTransactionSettings.Btc(feeRateState.feeRate)
 
@@ -174,9 +200,58 @@ class SendTransactionServiceBtc(
 
     // Fee-inclusive: computed by the adapter from the fee rate, recipient, memo and the
     // selected outputs, so it is the exact amount a whole-balance send can carry.
-    override fun maxSendableAmount(): BigDecimal? = amountState.availableBalance
+    override fun maxSendableAmount(): BigDecimal? {
+        val pegIn = pegIn ?: return amountState.availableBalance
+        val feeRate = feeRateState.feeRate ?: return null
+        val mwebAdapter = pegInAdapter ?: return null
+        // The Litecoin side pays the MWEB fee and the next block's HogEx input on top of its own fee.
+        val available = adapter.availableBalance(feeRate, null, null, unspentOutputs, null, false, utxoFilters)
+        val hogExInputFee = adapter.satoshiToBTC(feeRate.toLong() * MwebFee.HOGEX_INPUT_VBYTES)
+        return (available - mwebAdapter.pegInMwebFee(feeRate) - hogExInputFee).coerceAtLeast(BigDecimal.ZERO)
+    }
+
+    private suspend fun refreshPegIn() {
+        val pegIn = pegIn ?: return
+        val feeRate = feeRateState.feeRate ?: return
+        val kit = litecoinKit
+        val mwebAdapter = pegInAdapter
+        pegIn.fee = null
+        networkFee = null
+        if (kit == null || mwebAdapter == null) {
+            pegIn.error = HSCaution(TranslatableString.ResString(R.string.Send_Error_EnableMwebWallet))
+            return
+        }
+        try {
+            val fee = mwebAdapter.estimatePegInFee(kit, pegIn.amount, feeRate)
+            pegIn.fee = fee
+            pegIn.error = null
+            networkFee = getAmountData(CoinValue(token, fee))
+        } catch (e: MwebSendError.InsufficientBalance) {
+            pegIn.error = HSCaution(TranslatableString.ResString(R.string.Swap_ErrorInsufficientBalance))
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            pegIn.error = HSCaution(TranslatableString.PlainString(e.message ?: e.javaClass.simpleName))
+        }
+    }
+
+    private fun pegInState(pegIn: PegIn): SendTransactionServiceState {
+        val sendable = pegIn.fee != null && pegIn.error == null && feeRateState.canBeSend && feeRateInitialized
+        val hasError = pegIn.error != null || feeRateState.feeRateCaution?.isError() == true
+
+        return SendTransactionServiceState(
+            uuid = uuid,
+            networkFee = networkFee,
+            cautions = listOfNotNull(feeRateState.feeRateCaution, pegIn.error).map(HSCaution::toCautionViewItem),
+            sendable = sendable,
+            loading = !sendable && !hasError,
+            fields = listOf(),
+        )
+    }
 
     override fun createState(): SendTransactionServiceState {
+        pegIn?.let { return pegInState(it) }
+
         val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend && feeRateInitialized
 
         val hasError = amountState.amountCaution?.isError() == true ||
@@ -204,6 +279,17 @@ class SendTransactionServiceBtc(
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Btc)
+
+        unspentOutputs = data.unspentOutputs
+        utxoFilters = data.utxoFilters
+        if (token.blockchainType == BlockchainType.Litecoin && AddressHandlerMweb.isMwebAddress(data.address)) {
+            pegIn = PegIn(data.address, data.amount)
+            fields = listOf()
+            refreshPegIn()
+            emitState()
+            return
+        }
+        pegIn = null
 
         memo = data.memo
         changeToFirstInput = data.changeToFirstInput
@@ -248,6 +334,7 @@ class SendTransactionServiceBtc(
     }
 
     override fun signTransaction(): SignedTransactionInfo {
+        check(pegIn == null) { "A peg-in is signed and broadcast by the MWEB kit in one step" }
         val signed = signRawTransaction()
         return SignedTransactionInfo(hex = signed.hex, transactionHash = signed.transactionHash)
     }
@@ -264,6 +351,15 @@ class SendTransactionServiceBtc(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Btc {
+        pegIn?.let { pegIn ->
+            val kit = litecoinKit ?: throw IllegalStateException("Litecoin kit is not available")
+            val mwebAdapter = pegInAdapter ?: throw IllegalStateException("Litecoin MWEB wallet is not enabled")
+            val txHash = mwebAdapter.pegIn(kit, pegIn.address, pegIn.amount, feeRateState.feeRate!!)
+            // The kit registered the signed transaction with the Litecoin wallet before broadcasting.
+            val record = kit.getTransaction(txHash)?.let { (adapter as BitcoinBaseAdapter).transactionRecord(it) }
+            return SendTransactionResult.Btc(record)
+        }
+
         val transactionRecord = adapter.send(
             amount = amountState.amount!!,
             address = addressState.validAddress?.hex!!,

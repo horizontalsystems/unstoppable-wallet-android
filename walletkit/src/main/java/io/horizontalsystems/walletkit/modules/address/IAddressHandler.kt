@@ -138,6 +138,7 @@ class AddressHandlerUdn(
             BlockchainType.Mayachain -> "CACAO"
             BlockchainType.Monero -> "XMR"
             BlockchainType.Zano -> "ZANO"
+            BlockchainType.LitecoinMweb -> "LTC"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 

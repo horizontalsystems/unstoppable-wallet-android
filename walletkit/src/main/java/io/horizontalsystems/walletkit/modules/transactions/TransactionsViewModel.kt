@@ -230,7 +230,8 @@ data class TransactionViewItem(
     val subtitle: String,
     val primaryValue: ColoredValue?,
     val secondaryValue: ColoredValue?,
-    val date: Date,
+    /** Null when the block time is unknown (an MWEB output recovered from below the header checkpoint). */
+    val date: Date?,
     val showAmount: Boolean = true,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
@@ -268,7 +269,7 @@ data class TransactionViewItem(
         }
     }
 
-    val formattedDate = formatDate(date).uppercase()
+    val formattedDate = (date?.let { formatDate(it) } ?: Translator.getString(R.string.Transactions_UnknownDate)).uppercase()
 
     private fun formatDate(date: Date): String {
         val calendar = Calendar.getInstance()

@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerBase58
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerBech32
 import io.horizontalsystems.walletkit.modules.address.AddressHandlerBitcoinCash
+import io.horizontalsystems.walletkit.modules.address.AddressHandlerMweb
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.walletkit.modules.btcblockchainsettings.BtcBlockchainSettingsPage
@@ -117,8 +118,13 @@ abstract class BitcoinFamilyPlugin : ChainPlugin {
     // The memo becomes an OP_RETURN output. 80 bytes of data is what every relay policy still
     // accepts: Bitcoin Core before 30.0, Knots, Litecoin and Dash cap it there. Bitcoin Cash
     // and eCash accept 220 and override this.
-    override suspend fun sendMemoSupport(token: Token, address: String?) =
-        SendMemoSupport(maxBytes = 80, visibility = MemoVisibility.Public)
+    //
+    // A peg-in carries no memo: the MWEB daemon turns every non-MWEB output of the template
+    // into a peg-out, so an OP_RETURN output would corrupt the transaction.
+    override suspend fun sendMemoSupport(token: Token, address: String?): SendMemoSupport? {
+        if (address != null && AddressHandlerMweb.isMwebAddress(address)) return null
+        return SendMemoSupport(maxBytes = 80, visibility = MemoVisibility.Public)
+    }
 
     protected val btcBlockchainManager get() = App.btcBlockchainManager
 
@@ -331,6 +337,8 @@ class LitecoinChainPlugin : BitcoinFamilyPlugin() {
         return listOf(
             AddressHandlerBase58(network, blockchainType),
             AddressHandlerBech32(network, blockchainType),
+            // A Litecoin wallet pays MWEB addresses through a peg-in.
+            AddressHandlerMweb(blockchainType),
         )
     }
 

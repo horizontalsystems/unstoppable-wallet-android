@@ -37,6 +37,8 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronOutgo
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebIncomingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoViewItem.SentToSelf
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoViewItem.SpeedUpCancel
@@ -684,6 +686,30 @@ class TransactionInfoViewItemFactory(
                     )
                 )
                 addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is MwebIncomingTransactionRecord -> {
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                        value = transaction.value,
+                        fromAddress = null,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        blockchainType = blockchainType,
+                    )
+                )
+            }
+
+            is MwebOutgoingTransactionRecord -> {
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getSendSectionItems(
+                        value = transaction.value,
+                        toAddress = transaction.to,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        blockchainType = blockchainType,
+                    )
+                )
             }
 
             is ZcashShieldingTransactionRecord -> {

@@ -230,6 +230,7 @@ class OpenCryptoPayConfirmationViewModel(
         is SendTransactionResult.Solana -> result.txHash
         is SendTransactionResult.Monero -> result.txHash
         is SendTransactionResult.Zano -> result.txHash
+        is SendTransactionResult.Mweb -> result.txHash
         is SendTransactionResult.Zcash -> result.transactionHash
         else -> null
     }

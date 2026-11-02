@@ -33,6 +33,7 @@ dependencies {
 
     api(libs.kit.bitcoin)
     api(libs.kit.fee.rate)
+    api(libs.kit.litecoin.mweb)
 
     api(libs.kit.bitcoin)
 

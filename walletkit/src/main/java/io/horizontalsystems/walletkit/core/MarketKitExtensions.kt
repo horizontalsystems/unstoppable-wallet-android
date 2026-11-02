@@ -141,6 +141,9 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Monero -> {
             tokenType is TokenType.Native
         }
+        BlockchainType.LitecoinMweb -> {
+            tokenType is TokenType.Native
+        }
         BlockchainType.Zano -> {
             tokenType is TokenType.Native || tokenType is TokenType.ZanoAsset
         }
@@ -154,6 +157,7 @@ val Blockchain.description: String
         BlockchainType.ECash -> "XEC"
         BlockchainType.Zcash -> "ZEC"
         BlockchainType.Litecoin -> "LTC (BIP44, BIP49, BIP84, BIP86)"
+        BlockchainType.LitecoinMweb -> "LTC"
         BlockchainType.Dash -> "DASH"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
@@ -240,6 +244,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Mayachain,
         BlockchainType.Dash,
         BlockchainType.Litecoin,
+        BlockchainType.LitecoinMweb,
         BlockchainType.BitcoinCash,
         BlockchainType.Avalanche,
         BlockchainType.Ton,
@@ -286,6 +291,7 @@ val BlockchainType.title: String
     BlockchainType.BitcoinCash -> "Bitcoin Cash"
     BlockchainType.ECash -> "Ecash"
     BlockchainType.Litecoin -> "Litecoin"
+    BlockchainType.LitecoinMweb -> "Litecoin MWEB"
     BlockchainType.Dash -> "Dash"
     BlockchainType.Zcash -> "Zcash"
     BlockchainType.Ethereum -> "Ethereum"
@@ -414,6 +420,7 @@ val BlockchainType.isEvm: Boolean
         BlockchainType.Zcash,
         BlockchainType.Monero,
         BlockchainType.Zano,
+        BlockchainType.LitecoinMweb,
             -> false
     }
 
@@ -433,6 +440,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 BlockchainType.Fantom,
                 BlockchainType.Gnosis,
                 BlockchainType.Litecoin,
+                BlockchainType.LitecoinMweb,
                 BlockchainType.Monero,
                 BlockchainType.Zano,
                 BlockchainType.Optimism,

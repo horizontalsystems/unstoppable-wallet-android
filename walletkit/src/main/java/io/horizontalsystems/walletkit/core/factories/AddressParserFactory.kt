@@ -14,6 +14,7 @@ val BlockchainType.uriScheme: String?
             BlockchainType.BitcoinCash -> "bitcoincash"
             BlockchainType.ECash -> "ecash"
             BlockchainType.Litecoin -> "litecoin"
+            BlockchainType.LitecoinMweb -> "litecoin"
             BlockchainType.Dash -> "dash"
             BlockchainType.Zcash -> "zcash"
             BlockchainType.Ethereum -> "ethereum"
@@ -37,6 +38,7 @@ val BlockchainType.removeScheme: Boolean
         return when (this) {
             BlockchainType.Bitcoin,
             BlockchainType.Litecoin,
+            BlockchainType.LitecoinMweb,
             BlockchainType.Dash,
             BlockchainType.Zcash,
             BlockchainType.Ethereum,

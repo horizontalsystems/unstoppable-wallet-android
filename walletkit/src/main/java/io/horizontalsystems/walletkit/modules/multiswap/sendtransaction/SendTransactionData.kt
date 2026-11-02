@@ -138,6 +138,12 @@ sealed class SendTransactionData {
         val memo: String?,
     ) : SendTransactionData()
 
+    /** A Litecoin MWEB send: to an MWEB address, or to a Litecoin address as a peg-out. */
+    data class Mweb(
+        val address: String,
+        val amount: BigDecimal,
+    ) : SendTransactionData()
+
 }
 
 /** Kit-free projection of ethereum-kit's TransactionData. */

@@ -316,6 +316,7 @@ class SendV2ConfirmViewModel(
         is SendTransactionResult.Monero -> result.txHash
         is SendTransactionResult.Thorchain -> result.txHash
         is SendTransactionResult.Zano -> result.txHash
+        is SendTransactionResult.Mweb -> result.txHash
         SendTransactionResult.Ton -> null
     }
 

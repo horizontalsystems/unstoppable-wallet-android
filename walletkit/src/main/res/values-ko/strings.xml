@@ -2001,4 +2001,9 @@
     <string name="DisableDuressPin_Button">보호 비활성화</string>
     <string name="Hud_Text_Disabled">비활성화됨</string>
     <string name="Hud_Text_Changed">변경됨</string>
+    <string name="Mweb_FromLitecoin">Litecoin에서</string>
+    <string name="Mweb_SpentInAnotherWallet">다른 지갑에서 사용됨</string>
+    <string name="Mweb_BroadcastUnknown">거래가 전송되었지만 상태를 알 수 없습니다. 다시 보내기 전에 내역을 확인하세요.</string>
+    <string name="Send_Error_EnableMwebWallet">MWEB 주소로 보내려면 Litecoin MWEB 지갑을 활성화하세요</string>
+    <string name="Transactions_UnknownDate">날짜 알 수 없음</string>
 </resources>

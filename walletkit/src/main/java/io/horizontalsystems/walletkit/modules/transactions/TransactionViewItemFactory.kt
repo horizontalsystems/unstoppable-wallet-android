@@ -44,6 +44,8 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronOutgo
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebIncomingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
@@ -467,6 +469,24 @@ class TransactionViewItemFactory(
 
             is ZanoOutgoingTransactionRecord -> {
                 createViewItemFromZanoOutgoingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    icon
+                )
+            }
+
+            is MwebIncomingTransactionRecord -> {
+                createViewItemFromMwebIncomingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    icon
+                )
+            }
+
+            is MwebOutgoingTransactionRecord -> {
+                createViewItemFromMwebOutgoingTransactionRecord(
                     record,
                     transactionItem.currencyValue,
                     progress,
@@ -1565,6 +1585,66 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             sentToSelf = record.sentToSelf,
+            spam = record.spam,
+            icon = icon ?: singleValueIconType(record.value)
+        )
+    }
+
+    private fun createViewItemFromMwebIncomingTransactionRecord(
+        record: MwebIncomingTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        // An MWEB output carries no sender; a peg-in is the one case where the origin is known.
+        val subtitle = if (record.pegIn) Translator.getString(R.string.Mweb_FromLitecoin) else "---"
+
+        val primaryValue = getColoredValue(record.value, ColorName.Remus)
+        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Receive),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = record.blockTimestamp?.let { Date(it * 1000) },
+            sentToSelf = false,
+            spam = record.spam,
+            icon = icon ?: singleValueIconType(record.value)
+        )
+    }
+
+    private fun createViewItemFromMwebOutgoingTransactionRecord(
+        record: MwebOutgoingTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val title = if (record.spentElsewhere) {
+            Translator.getString(R.string.Mweb_SpentInAnotherWallet)
+        } else {
+            Translator.getString(R.string.Transactions_Send)
+        }
+        val subtitle = record.to?.let {
+            Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
+        } ?: "---"
+
+        val primaryValue = getColoredValue(record.value, getAmountColorForSend(icon))
+        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = title,
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = record.blockTimestamp?.let { Date(it * 1000) },
+            sentToSelf = false,
             spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )

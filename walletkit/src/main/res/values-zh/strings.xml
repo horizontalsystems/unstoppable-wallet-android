@@ -2005,4 +2005,9 @@
     <string name="DisableDuressPin_Button">禁用保护</string>
     <string name="Hud_Text_Disabled">已禁用</string>
     <string name="Hud_Text_Changed">已更改</string>
+    <string name="Mweb_FromLitecoin">来自 Litecoin</string>
+    <string name="Mweb_SpentInAnotherWallet">已在其他钱包中花费</string>
+    <string name="Mweb_BroadcastUnknown">交易已发送，但状态未知。请在再次发送前检查历史记录。</string>
+    <string name="Send_Error_EnableMwebWallet">启用 Litecoin MWEB 钱包以向 MWEB 地址发送</string>
+    <string name="Transactions_UnknownDate">日期未知</string>
 </resources>

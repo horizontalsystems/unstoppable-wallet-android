@@ -36,6 +36,8 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronOutgo
 import io.horizontalsystems.walletkit.entities.transactionrecords.tron.TronTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebIncomingTransactionRecord
+import io.horizontalsystems.walletkit.entities.transactionrecords.mweb.MwebOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.walletkit.modules.transactions.TransactionSource
@@ -181,6 +183,12 @@ class TransactionInfoService(
                     listOf(tx.value.coinUid)
                 }
                 is ZanoOutgoingTransactionRecord -> {
+                    listOf(tx.fee?.coinUid, tx.value.coinUid)
+                }
+                is MwebIncomingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
+                }
+                is MwebOutgoingTransactionRecord -> {
                     listOf(tx.fee?.coinUid, tx.value.coinUid)
                 }
                 is ThorchainIncomingTransactionRecord -> {

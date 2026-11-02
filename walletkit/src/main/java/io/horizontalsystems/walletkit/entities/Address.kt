@@ -58,6 +58,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Mayachain,
         BlockchainType.Monero,
         BlockchainType.Zano,
+        BlockchainType.LitecoinMweb,
         is BlockchainType.Unsupported,
         null -> TokenType.Unsupported("", "")
     }

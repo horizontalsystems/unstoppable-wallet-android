@@ -2015,4 +2015,9 @@
     <string name="DisableDuressPin_Button">Отключить защиту</string>
     <string name="Hud_Text_Disabled">Отключено</string>
     <string name="Hud_Text_Changed">Изменено</string>
+    <string name="Mweb_FromLitecoin">Из Litecoin</string>
+    <string name="Mweb_SpentInAnotherWallet">Потрачено в другом кошельке</string>
+    <string name="Mweb_BroadcastUnknown">Транзакция отправлена, но ее статус неизвестен. Проверьте историю перед повторной отправкой.</string>
+    <string name="Send_Error_EnableMwebWallet">Включите кошелек Litecoin MWEB, чтобы отправлять на MWEB-адреса</string>
+    <string name="Transactions_UnknownDate">Дата неизвестна</string>
 </resources>

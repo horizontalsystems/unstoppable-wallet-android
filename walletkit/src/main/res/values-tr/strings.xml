@@ -2007,4 +2007,9 @@
     <string name="DisableDuressPin_Button">Korumayı Devre Dışı Bırak</string>
     <string name="Hud_Text_Disabled">Devre dışı bırakıldı</string>
     <string name="Hud_Text_Changed">Değiştirildi</string>
+    <string name="Mweb_FromLitecoin">Litecoin\'den</string>
+    <string name="Mweb_SpentInAnotherWallet">Başka bir cüzdanda harcandı</string>
+    <string name="Mweb_BroadcastUnknown">İşlem gönderildi ancak durumu bilinmiyor. Tekrar göndermeden önce geçmişi kontrol edin.</string>
+    <string name="Send_Error_EnableMwebWallet">MWEB adreslerine göndermek için Litecoin MWEB cüzdanını etkinleştirin</string>
+    <string name="Transactions_UnknownDate">Bilinmeyen tarih</string>
 </resources>

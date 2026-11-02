@@ -67,3 +67,22 @@ class AddressHandlerBitcoinCash(network: Network, override val blockchainType: B
         return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, derivation = address.scriptType.derivation)
     }
 }
+
+/**
+ * Litecoin MWEB stealth addresses (`ltcmweb1…`). Registered by the Litecoin MWEB chain and
+ * by Litecoin itself, where such a destination means a peg-in.
+ */
+class AddressHandlerMweb(override val blockchainType: BlockchainType) : IAddressHandler {
+    override fun isSupported(value: String) = isMwebAddress(value)
+
+    override fun parseAddress(value: String): Address {
+        // Re-encoded from the decoded keys: bech32 is case-insensitive, the stored form is not.
+        val address = io.horizontalsystems.litecoinmwebkit.MwebAddress.decode(value, io.horizontalsystems.litecoinmwebkit.MwebAddress.MAINNET_HRP)
+        return Address(address.stringValue, blockchainType = blockchainType)
+    }
+
+    companion object {
+        fun isMwebAddress(value: String) =
+            io.horizontalsystems.litecoinmwebkit.MwebAddress.isValid(value, io.horizontalsystems.litecoinmwebkit.MwebAddress.MAINNET_HRP)
+    }
+}

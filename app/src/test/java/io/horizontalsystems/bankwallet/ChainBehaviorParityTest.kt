@@ -10,6 +10,7 @@ import io.horizontalsystems.walletkit.chain.bitcoin.BitcoinChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.DashChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.ECashChainPlugin
 import io.horizontalsystems.walletkit.chain.bitcoin.LitecoinChainPlugin
+import io.horizontalsystems.walletkit.chain.litecoinmweb.LitecoinMwebChainPlugin
 import io.horizontalsystems.walletkit.chain.monero.MoneroChainPlugin
 import io.horizontalsystems.walletkit.chain.solana.SolanaChainPlugin
 import io.horizontalsystems.walletkit.chain.near.NearChainPlugin
@@ -69,6 +70,7 @@ class ChainBehaviorParityTest {
         ChainRegistry.register(BitcoinCashChainPlugin())
         ChainRegistry.register(ECashChainPlugin())
         ChainRegistry.register(LitecoinChainPlugin())
+        ChainRegistry.register(LitecoinMwebChainPlugin { error("ITorManager is not available in unit tests") })
         ChainRegistry.register(DashChainPlugin())
         ChainRegistry.register(MoneroChainPlugin(
             { error("Context is not available in unit tests") },

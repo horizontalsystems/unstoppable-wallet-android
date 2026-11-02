@@ -24,6 +24,7 @@ abstract class SendTransactionSettings {
     class Monero : SendTransactionSettings()
     class Thorchain : SendTransactionSettings()
     class Zano : SendTransactionSettings()
+    class Mweb : SendTransactionSettings()
     class Solana : SendTransactionSettings()
 }
 

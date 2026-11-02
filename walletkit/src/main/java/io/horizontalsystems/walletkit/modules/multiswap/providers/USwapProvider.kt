@@ -288,6 +288,8 @@ class USwapProvider(
                     }
                 }
 
+                // MWEB coins are not accepted by any exchange; the token stays out of swap.
+                BlockchainType.LitecoinMweb,
                 is BlockchainType.Unsupported -> Unit
             }
         }
