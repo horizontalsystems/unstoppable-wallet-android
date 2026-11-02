@@ -262,12 +262,21 @@ class ZcashAdapter(
         }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
         receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
-        transactionsProvider = ZcashTransactionsProvider(zcashAccount.accountUuid, adapterScope, synchronizer) { txHash ->
-            // Migration txids recorded at broadcast; match both hash orientations since
-            // TransferResult.Success txid endianness is not guaranteed
-            val migrationTxIds = localStorage.zcashMigrationTransactionIds
-            migrationTxIds.contains(txHash.toRawHexString()) || migrationTxIds.contains(txHash.toReversedHex())
+        val blockTimeResolver = ZcashBlockTimeResolver.forEndpoint(appContext, lightWalletEndpoint, network) {
+            localStorage.torEnabled
         }
+        transactionsProvider = ZcashTransactionsProvider(
+            accountUuid = zcashAccount.accountUuid,
+            scope = adapterScope,
+            synchronizer = synchronizer,
+            isMigrationTransaction = { txHash ->
+                // Migration txids recorded at broadcast; match both hash orientations since
+                // TransferResult.Success txid endianness is not guaranteed
+                val migrationTxIds = localStorage.zcashMigrationTransactionIds
+                migrationTxIds.contains(txHash.toRawHexString()) || migrationTxIds.contains(txHash.toReversedHex())
+            },
+            blockTime = blockTimeResolver::blockTime,
+        )
         synchronizer.onCriticalErrorHandler = { error ->
             Log.e("ZcashAdapter", "Critical error", error)
             true
