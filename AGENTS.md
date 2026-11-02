@@ -268,11 +268,10 @@ calling the work done:
 
 | Change | Test |
 |---|---|
-| User-facing feature added or changed: a new screen, flow, or behaviour the user sees | Maestro feature test, see [UI tests for features](#ui-tests-for-features) |
-| A screen the journey walks through (`journey/` in the flows) | Run the journey; update the steps that break |
+| User-facing feature added or changed: a new screen, flow, or behaviour the user sees | Test tags on its controls and a description of the behaviour, see [UI tests for features](#ui-tests-for-features) |
 | Logic: amounts, fees, parsing, address validation, sync or state handling in a ViewModel, Service, or adapter | Unit tests for the changed behaviour and its edge cases |
-| Bug fix | A test that fails without the fix, at the lowest level that reproduces the bug: a unit test where possible, a Maestro test when only the UI shows it |
-| A chain added or changed | As `docs/chain-integration/README.md` says, plus history and send-to-confirm tests under `onchain/` in the flows |
+| Bug fix | A unit test that fails without the fix. When only the UI shows the bug, the steps that reproduce it in the pull request description instead |
+| A chain added or changed | As `docs/chain-integration/README.md` says |
 | A test tag renamed or removed | The flows in appkb that select it |
 
 No new test is needed for a refactor that keeps behaviour, for strings and
@@ -340,14 +339,16 @@ removes a tag a flow selects fails until appkb is changed too.
 
 ### UI tests for features
 
-- A pull request that adds or changes a user-facing feature adds or updates a
-  test under `features/<feature>/` in the flows, selecting the tags its
-  controls got when they were written.
-- Each feature test starts from `subflows/setup/wallet_ready.yaml`
-  (tests of onboarding or restore start from a fresh install), never depends
-  on another test, and runs in under 2 minutes.
-- Run it locally before opening the pull request. If the change touches a
-  screen the journey walks through, run the journey too.
+A pull request does not write Maestro tests; it adds test tags only. As soon
+as a pull request is merged, a job on the test station reads its code and
+description, writes Maestro tests for its new features into appkb's `flows`
+branch, selecting their test tags, and runs them. It can only test what the pull request gives it:
+
+- a test tag on every control and every checked value, as
+  [UI test tags](#ui-test-tags) says;
+- a pull request description that says what the user does and what they see
+  as a result. The test checks that, so a bug in the code does not become
+  the expected behaviour.
 
 ## Git Commit Messages
 
@@ -415,6 +416,8 @@ may take several pull requests.
 - Why this approach, and which alternatives were ruled out.
 - How to verify it.
 - What is risky and deserves a close look.
+- For a user-facing change, what the user does and sees, which its UI test
+  is written from ([UI tests for features](#ui-tests-for-features)).
 - Dependencies and merge order, or the target branch for a backport.
 
 Cover only the points above that apply, each in a sentence. Most pull
