@@ -22,6 +22,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.min
 
 class ZcashTransactionsProvider(
@@ -34,14 +35,21 @@ class ZcashTransactionsProvider(
 ) {
     private val mutex = Mutex()
     private var transactions = listOf<ZcashTransaction>()
+    // Batches resolve block times off the lock and so may finish out of order; each carries the
+    // whole transaction set, so a batch older than the one last stored must not overwrite it.
+    private val batchOrder = TransactionBatchOrder()
     private val newTransactionsFlow = MutableSharedFlow<List<ZcashTransaction>>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
+        val batch = batchOrder.next()
         scope.launch {
             val newTransactions = mutex.withLock {
-                transactionOverviews.filter { tx ->
+                val new = transactionOverviews.filter { tx ->
                     transactions.none { known -> known.isSameAs(tx) }
                 }
+                // Nothing to store: the list already reflects this batch.
+                if (new.isEmpty()) batchOrder.accept(batch)
+                new
             }
             if (newTransactions.isEmpty()) return@launch
 
@@ -50,6 +58,8 @@ class ZcashTransactionsProvider(
             val resolvedBlockTimes = resolveBlockTimes(newTransactions)
 
             mutex.withLock {
+                // A newer batch stored while the lookup ran supersedes this one.
+                if (!batchOrder.accept(batch)) return@withLock
                 val newZcashTransactions = newTransactions.map {
                     val recipients = if (it.isSentTransaction) {
                         synchronizer.getRecipients(it)
@@ -164,5 +174,25 @@ class ZcashTransactionsProvider(
 
     companion object {
         private const val MAX_PARALLEL_BLOCK_TIME_LOOKUPS = 4
+    }
+}
+
+/**
+ * Orders the batches [ZcashTransactionsProvider.onTransactions] receives. Each batch is the
+ * whole transaction set, so once one has been stored, every batch received before it is stale.
+ * [accept] is called under the provider's lock.
+ */
+internal class TransactionBatchOrder {
+    private val issued = AtomicLong()
+    private var stored = 0L
+
+    /** The sequence number of a batch just received. */
+    fun next(): Long = issued.incrementAndGet()
+
+    /** Whether [batch] may be stored: false once a batch received after it has been. */
+    fun accept(batch: Long): Boolean {
+        if (batch < stored) return false
+        stored = batch
+        return true
     }
 }
