@@ -13,14 +13,6 @@ dependencyResolutionManagement {
         mavenCentral()
         mavenLocal()
         maven { url = uri("https://jitpack.io") }
-        // Zodl Zcash SDK. Zodl publishes no releases to Maven Central, only snapshots to the
-        // Sonatype snapshot repository, so zcashSdk pins a timestamped (unique) snapshot build
-        // and gradle/verification-metadata.xml pins its checksums: a re-upload of the same
-        // -SNAPSHOT version cannot change what the app builds against.
-        maven {
-            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            content { includeGroup("com.zodl.android") }
-        }
     }
 }
 
