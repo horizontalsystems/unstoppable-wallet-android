@@ -6,6 +6,9 @@ import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionRecipient
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +19,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.sync.withPermit
 import kotlin.math.min
 
 class ZcashTransactionsProvider(
@@ -33,36 +38,63 @@ class ZcashTransactionsProvider(
 
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
         scope.launch {
-            mutex.withLock {
-                val newTransactions = transactionOverviews.filter { tx ->
+            val newTransactions = mutex.withLock {
+                transactionOverviews.filter { tx ->
                     transactions.none { known -> known.isSameAs(tx) }
                 }
-
-                if (newTransactions.isNotEmpty()) {
-                    val newZcashTransactions = newTransactions.map {
-                        val recipients = if (it.isSentTransaction) {
-                            synchronizer.getRecipients(it)
-                                .filterIsInstance<TransactionRecipient>()
-                                .toList()
-                        } else {
-                            null
-                        }
-                        val memo = synchronizer.getMemos(it).firstOrNull()
-                        val outputs = if (it.isSentTransaction) {
-                            synchronizer.getTransactionOutputs(it)
-                        } else {
-                            emptyList()
-                        }
-                        val time = it.blockTimeEpochSeconds
-                            ?: it.minedHeight?.value?.let { height -> blockTime(height) }
-                        ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs, time)
-                    }
-                    newTransactionsFlow.tryEmit(newZcashTransactions)
-                    val notUpdatedTransactions =
-                        transactions.filter { old -> newZcashTransactions.none { new -> new.transactionHash.contentEquals(old.transactionHash) } }
-                    transactions = (notUpdatedTransactions + newZcashTransactions).sortedDescending()
-                }
             }
+            if (newTransactions.isEmpty()) return@launch
+
+            // Off the lock: a server lookup may wait on the network, and the batch's other
+            // transactions, as well as later batches, must not wait behind it.
+            val resolvedBlockTimes = resolveBlockTimes(newTransactions)
+
+            mutex.withLock {
+                val newZcashTransactions = newTransactions.map {
+                    val recipients = if (it.isSentTransaction) {
+                        synchronizer.getRecipients(it)
+                            .filterIsInstance<TransactionRecipient>()
+                            .toList()
+                    } else {
+                        null
+                    }
+                    val memo = synchronizer.getMemos(it).firstOrNull()
+                    val outputs = if (it.isSentTransaction) {
+                        synchronizer.getTransactionOutputs(it)
+                    } else {
+                        emptyList()
+                    }
+                    val time = it.blockTimeEpochSeconds
+                        ?: it.minedHeight?.value?.let { height -> resolvedBlockTimes[height] }
+                    ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs, time)
+                }
+                newTransactionsFlow.tryEmit(newZcashTransactions)
+                val notUpdatedTransactions =
+                    transactions.filter { old -> newZcashTransactions.none { new -> new.transactionHash.contentEquals(old.transactionHash) } }
+                transactions = (notUpdatedTransactions + newZcashTransactions).sortedDescending()
+            }
+        }
+    }
+
+    /**
+     * Block times, by height, for the transactions the SDK reports no block time for. Each
+     * distinct height is looked up once, a few at a time, so one slow lookup does not serialize
+     * the rest; a height neither source can date is left out.
+     */
+    private suspend fun resolveBlockTimes(overviews: List<TransactionOverview>): Map<Long, Long> {
+        val heights = overviews
+            .filter { it.blockTimeEpochSeconds == null }
+            .mapNotNull { it.minedHeight?.value }
+            .distinct()
+        if (heights.isEmpty()) return emptyMap()
+
+        val permits = Semaphore(MAX_PARALLEL_BLOCK_TIME_LOOKUPS)
+        return coroutineScope {
+            heights
+                .map { height -> async { permits.withPermit { height to blockTime(height) } } }
+                .awaitAll()
+                .mapNotNull { (height, time) -> time?.let { height to it } }
+                .toMap()
         }
     }
 
@@ -128,5 +160,9 @@ class ZcashTransactionsProvider(
         } ?: 0
 
         return filtered.subList(fromIndex, min(filtered.size, fromIndex + limit))
+    }
+
+    companion object {
+        private const val MAX_PARALLEL_BLOCK_TIME_LOOKUPS = 4
     }
 }
