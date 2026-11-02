@@ -255,8 +255,10 @@ string:
 - Unit tests in `src/test/` of the module that holds the code (`walletkit`,
   `walletkit-chain-<chain>`, `app`)
 - Instrumentation tests in `app/src/androidTest/`
-- Maestro UI tests in `maestro/`, run against the `ciE2e` build. Setup,
-  layout and how to run them: `maestro/README.md`
+- Maestro UI tests, run against the `ciE2e` build by the test station
+  (`horizontalsystems/uw-testlab`). The flows are shared with iOS and live
+  in appkb (`flows/` on its `flows` branch). How to fetch and run them:
+  `maestro/README.md`. How to write a flow: the flows' own `README.md`
 
 ### Tests a change needs
 
@@ -267,11 +269,11 @@ calling the work done:
 | Change | Test |
 |---|---|
 | User-facing feature added or changed: a new screen, flow, or behaviour the user sees | Maestro feature test, see [UI tests for features](#ui-tests-for-features) |
-| A screen the journey walks through (`maestro/journey/`) | Run the journey; update the steps that break |
+| A screen the journey walks through (`journey/` in the flows) | Run the journey; update the steps that break |
 | Logic: amounts, fees, parsing, address validation, sync or state handling in a ViewModel, Service, or adapter | Unit tests for the changed behaviour and its edge cases |
 | Bug fix | A test that fails without the fix, at the lowest level that reproduces the bug: a unit test where possible, a Maestro test when only the UI shows it |
-| A chain added or changed | As `docs/chain-integration/README.md` says, plus history and send-to-confirm tests under `maestro/onchain/` |
-| A test tag renamed or removed | The flows in `maestro/` that use it |
+| A chain added or changed | As `docs/chain-integration/README.md` says, plus history and send-to-confirm tests under `onchain/` in the flows |
+| A test tag renamed or removed | The flows in appkb that select it |
 
 No new test is needed for a refactor that keeps behaviour, for strings and
 translations, styling, build configuration, or dependency updates. Existing
@@ -307,14 +309,13 @@ controls inside it do.
 - No app is the source of truth. A name belongs to whichever app declares
   it first, and both apps use the same string. Before declaring a name,
   look for the control in, in this order:
-  1. the shared flows (appkb `flows/`) and this repo's `maestro/`: a name a
-     flow selects is the contract, and an app that differs renames;
-  2. the iOS app's `TestTags`
+  1. the shared flows (appkb `flows/`): a name a flow selects is the
+     contract, and an app that differs renames;
+  2. both apps' `TestTags`: this app's, and the iOS app's
      (`packages/WalletCore/Sources/WalletCore/UserInterface/TestTags.swift` in
      `horizontalsystems/unstoppable-wallet-ios`, readable with
      `gh api repos/horizontalsystems/unstoppable-wallet-ios/contents/<path>`;
-     add `?ref=<branch>` when it is not on the default branch yet);
-  3. this app's `TestTags`.
+     add `?ref=<branch>` when it is not on the default branch yet).
 
   Reuse a name you find. Only when none exists, declare a new one.
 - One control, one name. If the two apps already named a control
@@ -325,22 +326,24 @@ controls inside it do.
 - Tags reach Maestro only inside `Modifier.exposeTestTags()`. The activity
   root has it; a new `Dialog` or `ModalBottomSheet` needs it on its
   content, because it opens its own window.
-- A name is renamed or removed only together with every flow that selects
-  it, here and in appkb.
+- A name is renamed or removed only together with every flow in appkb that
+  selects it.
 
 **Undeclared names fail silently.** A flow step that selects an undeclared
 name fails the run, unless the step is conditional (`when: visible`,
 `optional: true`). Then Maestro skips it and the flow passes. When you add
 an `id:` to a flow, check that `TestTags` declares it. CI fails a pull
-request when a flow in `maestro/` selects a name `TestTags` does not declare
-(`.github/scripts/check_test_tags.py`).
+request when a flow on appkb's `flows` branch selects a name `TestTags` does
+not declare, outside steps that run only on iOS
+(`.github/scripts/check_test_tags.py`). So a pull request that renames or
+removes a tag a flow selects fails until appkb is changed too.
 
 ### UI tests for features
 
 - A pull request that adds or changes a user-facing feature adds or updates a
-  test under `maestro/features/<feature>/`, selecting the tags its controls
-  got when they were written.
-- Each feature test starts from `maestro/subflows/setup/wallet_ready.yaml`
+  test under `features/<feature>/` in the flows, selecting the tags its
+  controls got when they were written.
+- Each feature test starts from `subflows/setup/wallet_ready.yaml`
   (tests of onboarding or restore start from a fresh install), never depends
   on another test, and runs in under 2 minutes.
 - Run it locally before opening the pull request. If the change touches a

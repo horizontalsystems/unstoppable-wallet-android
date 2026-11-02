@@ -16,3 +16,6 @@ gradle/gradle-daemon-jvm.properties
 
 # Maestro secrets for local runs (see maestro/.env.example)
 maestro/.env.e2e
+
+# Shared Maestro flows fetched from appkb (maestro/scripts/fetch-flows.sh)
+maestro/appkb/

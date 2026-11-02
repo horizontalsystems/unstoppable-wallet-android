@@ -8,8 +8,8 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import io.horizontalsystems.walletkit.core.App
 
 /**
- * Test tags the Maestro UI tests in `maestro/` select by (`id:`). Renaming or removing one
- * breaks those tests, so update the flows in the same change. Names are `<screen>_<element>`
+ * Test tags the shared Maestro flows (appkb `flows/`, see `maestro/README.md`) select by (`id:`).
+ * Renaming or removing one breaks those flows, so update them together. Names are `<screen>_<element>`
  * in snake_case; a suffix is added only where a test has to pick one item of a list.
  */
 object TestTags {

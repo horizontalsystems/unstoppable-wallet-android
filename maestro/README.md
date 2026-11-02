@@ -63,6 +63,33 @@ are built for 4 KB pages.
    - Screenshots are allowed on pages that block them otherwise, so failure
      screenshots are not black.
 
+## The flows
+
+The flows are shared with the iOS app and live in the `flows/` folder of
+the `flows` branch of
+[horizontalsystems/appkb](https://github.com/horizontalsystems/appkb/tree/flows/flows).
+How to write one, the kinds of tests, tags, platform branches, secrets and
+the dust wallet are in its
+[README](https://github.com/horizontalsystems/appkb/blob/flows/flows/README.md).
+This folder holds only what runs them on Android.
+
+New feature tests are written into appkb by a job on the test station as
+soon as the feature's pull request is merged, from its test tags and its
+description. The station
+runs the tip of the `flows` branch.
+
+`fetch-flows.sh` checks the flows out into `maestro/appkb/` (gitignored),
+with your git credentials for appkb:
+
+```bash
+maestro/scripts/fetch-flows.sh            # the tip of flows
+maestro/scripts/fetch-flows.sh my-branch  # another appkb branch
+```
+
+To change a flow by hand, start a branch from `flows` in that clone, edit
+`maestro/appkb/flows/`, run it (below), and open a pull request in appkb.
+`fetch-flows.sh` refuses to overwrite uncommitted edits in the clone.
+
 ## Running tests
 
 Flows default to the e2e app id, `io.horizontalsystems.bankwallet.appcenter.e2e`.
@@ -72,23 +99,23 @@ with `--device` when a phone is also connected.
 Run the journey (its steps run in order on one emulator):
 
 ```bash
-maestro --device emulator-5554 test maestro/journey
+maestro --device emulator-5554 test maestro/appkb/flows/journey
 ```
 
 Run one feature's tests, or all feature and on-chain tests:
 
 ```bash
-maestro --device emulator-5554 test maestro/features/<feature>
-maestro --device emulator-5554 test maestro/
+maestro --device emulator-5554 test maestro/appkb/flows/features/<feature>
+maestro --device emulator-5554 test maestro/appkb/flows
 ```
 
-`maestro/config.yaml` covers `features/` and `onchain/` only. The journey has
-its own `journey/config.yaml` and always runs on its own.
+The flows' `config.yaml` covers `features/` and `onchain/` only. The journey
+has its own `journey/config.yaml` and always runs on its own.
 
 Split feature tests across several emulators:
 
 ```bash
-maestro --device "emulator-5554,emulator-5556" test --shard-split 2 maestro/
+maestro --device "emulator-5554,emulator-5556" test --shard-split 2 maestro/appkb/flows
 ```
 
 ## Behaviour notes
@@ -140,20 +167,23 @@ Checked on Maestro 2.11.0 with the API 35 image:
 
 | Script | What it does |
 |---|---|
+| `fetch-flows.sh` | Checks the shared flows out of appkb into `maestro/appkb/` |
 | `device-prepare.sh` | Screen lock, animations, locale, unlock, network and clock checks, APK install; the test station runs it too |
 | `avd-create.sh` | Creates the local emulator (Apple Silicon, arm64 image) |
 | `maestro.sh` | `maestro` with the settings from `.env.e2e` loaded, for local runs |
 | `load-config.sh` | Loads `.env.e2e`; sourced by the other scripts |
 
-## Flaky tests
+## Test tag check
 
-- A feature or on-chain test that keeps flaking gets the `quarantine` tag and
-  an issue labelled `e2e-flaky`. `config.yaml` leaves quarantined tests out;
-  fix or delete them within 2 weeks.
-- Journey steps are never quarantined: a flaky step is fixed first, or moved
-  into a feature test.
-- A flaky test is fixed by waiting on a concrete element. Sleeps and extra
-  retries do not count as a fix.
+The Check Test Tags workflow fails a pull request when a flow on appkb's
+`flows` branch selects an `id:` that `TestTags` does not declare, outside
+steps that run only on iOS. It reads appkb with the `APPKB_TOKEN` repository
+secret, a read-only token for that repository. Pull requests from forks get
+no secrets and skip the check. To run it locally, after `fetch-flows.sh`:
+
+```bash
+python3 .github/scripts/check_test_tags.py
+```
 
 ## Secrets
 
@@ -173,161 +203,9 @@ chmod 600 maestro/.env.e2e
 Run flows with the wrapper so they get the file's values:
 
 ```bash
-maestro/scripts/maestro.sh --device emulator-5554 test maestro/onchain
+maestro/scripts/maestro.sh --device emulator-5554 test maestro/appkb/flows/onchain
 ```
 
 - A variable already set in the environment wins over the file.
 - Never pass the phrase with `-e`: it would show in the process list. Output
   from a hand-run `secret` flow contains the phrase; do not share it as it is.
-
-## Topping up the dust wallet
-
-The dust wallet holds a few dollars of BTC, ETH and TRX and is treated as
-burnable. The send tests fill in a send to the confirmation screen and never
-broadcast, so its balance only drops through dust attacks or a bug.
-
-- **Who:** the suite owner.
-- **When:** `onchain/dust_balance_check.yaml` runs first in every on-chain run
-  and fails with "Dust wallet below threshold for <COIN>, top up". The
-  thresholds are in that file, about 2 × (send amount + typical fee).
-- **How:** send from the team treasury to the dust wallet's first receive
-  address for that coin. TRX needs a little extra: the TRX test's recipient
-  is unactivated, so its fee estimate includes activation.
-
-## Test structure
-
-There are three kinds of tests:
-
-- **The journey**: one test made of ordered steps that walk the main user path
-  on a single app install, the way a real user would.
-- **Feature tests**: small independent tests, one or more per feature, added by
-  the developer who builds the feature.
-- **On-chain tests**: the few tests that need a funded wallet or live chain
-  history. They run nightly only.
-
-```
-maestro/
-├── journey/            # the main user path, ordered steps
-├── features/           # one folder per feature, independent tests
-│   ├── _template.yaml
-│   └── <feature>/<scenario>.yaml
-├── onchain/            # funded wallet or live history, nightly
-└── subflows/
-    ├── setup/wallet_ready.yaml   # the start of every feature test
-    ├── setup/watch_wallet_ready.yaml  # fresh install with a watch-only wallet (ADDRESS, CHAIN)
-    ├── onboarding/               # intro, terms
-    ├── wallet/                   # create, restore (MNEMONIC, CHAINS), watch address, wait for sync
-    ├── send/                     # send_to_confirm (COIN, AMOUNT)
-    └── pin/                      # set_pin, enter_pin (PIN)
-```
-
-### The journey
-
-Each step is its own file and the steps run in a fixed order on the same app
-state. Only the first step clears the app; every later step continues from
-where the previous one stopped. Because each step is a separate file, the
-report names the step that failed.
-
-```
-journey/
-├── config.yaml              # run order, stop at the first failure
-├── 01_onboarding.yaml       # fresh install, intro, terms
-├── 02_create_wallet.yaml    # new wallet, "Backup required" shown
-├── 03_backup.yaml           # reveal phrase, pass the quiz
-├── 04_set_pin.yaml          # set PIN, lock from background, wrong PIN rejected
-├── 05_enable_token.yaml     # Manage coins → search USDT → enable → shows on balance
-├── 06_receive.yaml          # receive screen shows an address
-├── 07_delete_wallet.yaml    # delete the created wallet
-├── 08_restore_wallet.yaml   # restore from the public test phrase
-├── 09_check_addresses.yaml  # exact BTC/ETH addresses match the test vector
-├── 10_send_form.yaml        # send form: address, amount, "insufficient balance"
-├── 11_history.yaml          # transactions screen opens
-├── 12_swap.yaml             # swap tab, pick a pair, quote or error appears
-└── 13_settings.yaml         # App Status, base currency
-```
-
-`journey/config.yaml` lists the steps by file name in `flowsOrder`. A new
-step needs an entry there, or it runs in arbitrary order.
-
-A step continues from the screen the previous one left, so it starts by
-choosing a tab and ends back on a main tab:
-
-```yaml
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
-tags: [journey]
----
-- tapOn:
-    id: tab_balance
-- tapOn:
-    id: balance_manage_coins
-- tapOn:
-    id: search_bar
-- inputText: "USDT"
-- tapOn:
-    id: manage_coin_USDT_ethereum
-# ... back to the balance screen
-- scrollUntilVisible:
-    element:
-      id: balance_item_USDT
-```
-
-Rules for the journey:
-
-- Use only the public test phrase, never the funded team wallet, so the
-  journey can always be recorded and screenshotted. A real send up to the
-  confirmation screen needs a balance and is a separate nightly test.
-- Only step 01 uses `clearState`. A step must not reset state the next step
-  relies on.
-- When a step fails, the remaining steps are skipped for that run. Fix the
-  first failure first.
-- Keep the whole journey under 10 minutes (about 4.5 today). A step that grows
-  long moves into a feature test.
-
-### Feature tests
-
-Each feature test is independent and starts from a ready wallet in one line,
-so it only contains the steps for its feature:
-
-```yaml
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
-name: "Contacts · add a contact from the send screen"
-tags: [feature, contacts]
----
-# Ready state: app cleared, onboarding passed, public test wallet restored with BTC
-- runFlow:
-    file: ../../subflows/setup/wallet_ready.yaml
-    env:
-      CHAINS: "bitcoin"
-
-# ... the feature's own steps and assertions
-```
-
-`features/wallets/rename_wallet.yaml` is a complete example.
-
-Rules for feature tests:
-
-- A pull request that adds or changes a user-facing feature adds or updates a
-  test under `features/<feature>/`. Start from `features/_template.yaml`.
-- Always start with `subflows/setup/wallet_ready.yaml`, unless the test is
-  about onboarding or restoring itself (`features/restore/`). Never depend on
-  another test or on the order tests run in.
-- Keep each test under 2 minutes.
-- Select elements by test tag (`id:`). New screens get their test tags in the
-  same pull request.
-- Run it locally before opening the pull request:
-
-  ```bash
-  maestro test maestro/features/<feature>
-  ```
-
-- When a feature becomes part of the main user path, add a step for it to the
-  journey and delete the feature test.
-
-### When tests run
-
-| Tests | Tag | When |
-|---|---|---|
-| Journey (about 5 min) | `journey` | On the test station, and locally when a journey screen changes |
-| Feature tests | `feature` | On the test station, and locally by the developer while working on the feature |
-| History with known transactions | `onchain`, `history` | On the test station |
-| Real send to confirm (funded wallet) | `onchain`, `secret` | On the test station |

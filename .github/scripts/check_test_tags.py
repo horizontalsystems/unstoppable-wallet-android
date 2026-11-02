@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
 """Fail when a Maestro flow selects a test tag that TestTags does not declare.
 
-Collects every `id:` selector in maestro/ and matches it against the names
-in TestTags.kt: each `const val` is one name, each `fun` a pattern whose
-string-template parts match anything. A conditional step (`when: visible`,
-`optional: true`) with an undeclared name is skipped by Maestro and the flow
-still passes, so a typo or a renamed tag would otherwise go unnoticed.
+Collects every `id:` selector in the shared flows (maestro/appkb/flows, where
+maestro/scripts/fetch-flows.sh puts them, or the directories given as
+arguments) and matches it against the names in
+TestTags.kt: each `const val` is one name, each `fun` a pattern whose
+string-template parts match anything. Selectors inside a
+`runFlow` that runs only on iOS (`when: platform: iOS`) select iOS names
+and are skipped. A conditional step (`when: visible`, `optional: true`) with
+an undeclared name is skipped by Maestro and the flow still passes, so a typo
+or a renamed tag would otherwise go unnoticed.
 A name a function builds is checked up to its variable part only:
 balance_item_BTC_amout passes, because balanceItem() takes any coin code.
 Reports each undeclared name as a GitHub error annotation and exits non-zero.
 """
 
 import glob
+import os
 import re
 import sys
 
 TEST_TAGS = "walletkit/src/main/java/io/horizontalsystems/walletkit/uiv3/TestTags.kt"
-FLOWS = "maestro/**/*.yaml"
+DEFAULT_FLOWS = ["maestro/appkb/flows"]
 CONST = re.compile(r'^\s*const val \w+ = "([^"]*)"', re.MULTILINE)
 FUNCTION = re.compile(r'^\s*fun \w+\([^)]*\) = "([^"]*)"', re.MULTILINE)
 # $name or ${expression} in a Kotlin string template
 KOTLIN_TEMPLATE = re.compile(r"\$\{[^}]*\}|\$\w+")
 SELECTOR = re.compile(r"(?<![\w-])id:\s*(.+)$")
+RUN_FLOW = re.compile(r"^(\s*)- runFlow:")
+PLATFORM = re.compile(r"^\s*platform:\s*(\w+)")
 # ${expression} in a flow, or a regex wildcard: Maestro matches id as a regex
 FLOW_VARIABLE = re.compile(r"\$\{.*?\}|\.[*+]")
 SAMPLE = "x1"
@@ -40,9 +47,22 @@ def declared_patterns() -> list[re.Pattern]:
 
 
 def selectors(path: str):
-    """Yield (line number, id value) for every `id:` selector in a flow file."""
+    """Yield (line number, id value) for every `id:` selector a flow runs on Android."""
+    # (indent of the "- runFlow:" line, platform its when names, or None)
+    run_flows: list[list] = []
     for number, line in enumerate(open(path, encoding="utf-8"), start=1):
-        if line.lstrip().startswith("#"):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip())
+        while run_flows and indent <= run_flows[-1][0]:
+            run_flows.pop()
+        if match := RUN_FLOW.match(line):
+            run_flows.append([len(match.group(1)), None])
+            continue
+        if run_flows and (match := PLATFORM.match(line)):
+            run_flows[-1][1] = match.group(1)
+            continue
+        if any(platform not in (None, "Android") for _, platform in run_flows):
             continue
         match = SELECTOR.search(line)
         if not match:
@@ -55,11 +75,15 @@ def selectors(path: str):
 
 def main() -> int:
     """Check every flow's id selectors against TestTags and report undeclared names."""
+    flows_dirs = sys.argv[1:] or DEFAULT_FLOWS
     patterns = declared_patterns()
-    flows = sorted(glob.glob(FLOWS, recursive=True))
-    if not flows:
-        print("No Maestro flows found.")
-        return 1
+    flows = []
+    for flows_dir in flows_dirs:
+        found = sorted(glob.glob(os.path.join(flows_dir, "**/*.yaml"), recursive=True))
+        if not found:
+            print(f"No Maestro flows found in {flows_dir}; run maestro/scripts/fetch-flows.sh")
+            return 1
+        flows += found
 
     problems = 0
     checked = 0

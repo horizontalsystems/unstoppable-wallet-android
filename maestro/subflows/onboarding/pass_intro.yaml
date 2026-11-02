@@ -1,8 +1,0 @@
-appId: ${APP_ID || 'io.horizontalsystems.bankwallet.appcenter.e2e'}
----
-- tapOn:
-    id: intro_next
-- tapOn:
-    id: intro_next
-- tapOn:
-    id: intro_next

@@ -13,5 +13,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+
+      # The flows live in the private appkb repository. Pull requests from
+      # forks get no secrets, so they skip the check instead of failing it
+      - name: Check for the appkb token
+        id: token
+        env:
+          HAS_APPKB_TOKEN: ${{ secrets.APPKB_TOKEN != '' }}
+        run: |
+          echo "available=$HAS_APPKB_TOKEN" >> "$GITHUB_OUTPUT"
+          if [ "$HAS_APPKB_TOKEN" != "true" ]; then
+            echo "::warning::No APPKB_TOKEN; the test tags were not checked"
+          fi
+
+      - name: Checkout the shared flows
+        if: steps.token.outputs.available == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: horizontalsystems/appkb
+          ref: flows
+          token: ${{ secrets.APPKB_TOKEN }}
+          path: maestro/appkb
+          sparse-checkout: flows
+          persist-credentials: false
+
       - name: Verify every test tag a Maestro flow selects is declared in TestTags
+        if: steps.token.outputs.available == 'true'
         run: python3 .github/scripts/check_test_tags.py
