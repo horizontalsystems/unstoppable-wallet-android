@@ -38,6 +38,18 @@ class TransactionBatchOrderTest {
     }
 
     @Test
+    fun `a batch is superseded only once a later one has been stored`() {
+        val order = TransactionBatchOrder()
+        val slow = order.next()
+        val fast = order.next()
+
+        assertFalse(order.isSuperseded(slow))
+        assertTrue(order.accept(fast))
+        assertTrue(order.isSuperseded(slow))
+        assertFalse(order.isSuperseded(fast))
+    }
+
+    @Test
     fun `the same batch may be accepted twice`() {
         val order = TransactionBatchOrder()
         val batch = order.next()

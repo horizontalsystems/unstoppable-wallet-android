@@ -43,69 +43,84 @@ class ZcashTransactionsProvider(
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
         val batch = batchOrder.next()
         scope.launch {
-            val newTransactions = mutex.withLock {
-                val new = transactionOverviews.filter { tx ->
-                    transactions.none { known -> known.isSameAs(tx) }
-                }
-                // Nothing to store: the list already reflects this batch.
-                if (new.isEmpty()) batchOrder.accept(batch)
-                new
-            }
-            if (newTransactions.isEmpty()) return@launch
-
-            // Off the lock: a server lookup may wait on the network, and the batch's other
-            // transactions, as well as later batches, must not wait behind it.
-            val resolvedBlockTimes = resolveBlockTimes(newTransactions)
-
-            mutex.withLock {
-                // A newer batch stored while the lookup ran supersedes this one.
-                if (!batchOrder.accept(batch)) return@withLock
-                val newZcashTransactions = newTransactions.map {
-                    val recipients = if (it.isSentTransaction) {
-                        synchronizer.getRecipients(it)
-                            .filterIsInstance<TransactionRecipient>()
-                            .toList()
-                    } else {
-                        null
+            // Block times looked up so far; a height neither source can date maps to null so it
+            // is not looked up again.
+            val resolvedBlockTimes = mutableMapOf<Long, Long?>()
+            while (true) {
+                val heightsToResolve = mutex.withLock {
+                    // Decided against the current list, not the one seen on arrival: another
+                    // batch may have changed a record this batch disagrees with while a lookup
+                    // ran, and this batch's view of it is the newer one.
+                    val newTransactions = transactionOverviews.filter { tx ->
+                        transactions.none { known -> known.isSameAs(tx) }
                     }
-                    val memo = synchronizer.getMemos(it).firstOrNull()
-                    val outputs = if (it.isSentTransaction) {
-                        synchronizer.getTransactionOutputs(it)
-                    } else {
-                        emptyList()
+                    val heights = heightsWithoutBlockTime(newTransactions, resolvedBlockTimes)
+                    if (heights.isNotEmpty()) {
+                        // Nothing to look up for a batch a newer one has already superseded.
+                        if (batchOrder.isSuperseded(batch)) return@launch
+                        return@withLock heights
                     }
-                    val time = it.blockTimeEpochSeconds
-                        ?: it.minedHeight?.value?.let { height -> resolvedBlockTimes[height] }
-                    ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs, time)
+                    // A newer batch stored while a lookup ran supersedes this one. A batch with
+                    // nothing to store is accepted as well: the list already reflects it.
+                    if (!batchOrder.accept(batch)) return@launch
+                    if (newTransactions.isNotEmpty()) store(newTransactions, resolvedBlockTimes)
+                    emptyList()
                 }
-                newTransactionsFlow.tryEmit(newZcashTransactions)
-                val notUpdatedTransactions =
-                    transactions.filter { old -> newZcashTransactions.none { new -> new.transactionHash.contentEquals(old.transactionHash) } }
-                transactions = (notUpdatedTransactions + newZcashTransactions).sortedDescending()
+                if (heightsToResolve.isEmpty()) return@launch
+
+                // Off the lock: a server lookup may wait on the network, and the batch's other
+                // transactions, as well as later batches, must not wait behind it.
+                resolvedBlockTimes += resolveBlockTimes(heightsToResolve)
             }
         }
     }
 
-    /**
-     * Block times, by height, for the transactions the SDK reports no block time for. Each
-     * distinct height is looked up once, a few at a time, so one slow lookup does not serialize
-     * the rest; a height neither source can date is left out.
-     */
-    private suspend fun resolveBlockTimes(overviews: List<TransactionOverview>): Map<Long, Long> {
-        val heights = overviews
+    /** Mined heights of the transactions the SDK reports no block time for, not yet looked up. */
+    private fun heightsWithoutBlockTime(overviews: List<TransactionOverview>, resolved: Map<Long, Long?>): List<Long> =
+        overviews
             .filter { it.blockTimeEpochSeconds == null }
             .mapNotNull { it.minedHeight?.value }
+            .filter { it !in resolved }
             .distinct()
-        if (heights.isEmpty()) return emptyMap()
 
+    /**
+     * Block times by height, looked up a few at a time so one slow lookup does not serialize
+     * the rest; a height neither source can date maps to null.
+     */
+    private suspend fun resolveBlockTimes(heights: List<Long>): Map<Long, Long?> {
         val permits = Semaphore(MAX_PARALLEL_BLOCK_TIME_LOOKUPS)
         return coroutineScope {
             heights
                 .map { height -> async { permits.withPermit { height to blockTime(height) } } }
                 .awaitAll()
-                .mapNotNull { (height, time) -> time?.let { height to it } }
                 .toMap()
         }
+    }
+
+    // Under the lock.
+    private suspend fun store(newTransactions: List<TransactionOverview>, resolvedBlockTimes: Map<Long, Long?>) {
+        val newZcashTransactions = newTransactions.map {
+            val recipients = if (it.isSentTransaction) {
+                synchronizer.getRecipients(it)
+                    .filterIsInstance<TransactionRecipient>()
+                    .toList()
+            } else {
+                null
+            }
+            val memo = synchronizer.getMemos(it).firstOrNull()
+            val outputs = if (it.isSentTransaction) {
+                synchronizer.getTransactionOutputs(it)
+            } else {
+                emptyList()
+            }
+            val time = it.blockTimeEpochSeconds
+                ?: it.minedHeight?.value?.let { height -> resolvedBlockTimes[height] }
+            ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs, time)
+        }
+        newTransactionsFlow.tryEmit(newZcashTransactions)
+        val notUpdatedTransactions =
+            transactions.filter { old -> newZcashTransactions.none { new -> new.transactionHash.contentEquals(old.transactionHash) } }
+        transactions = (notUpdatedTransactions + newZcashTransactions).sortedDescending()
     }
 
     /**
@@ -189,9 +204,12 @@ internal class TransactionBatchOrder {
     /** The sequence number of a batch just received. */
     fun next(): Long = issued.incrementAndGet()
 
+    /** Whether a batch received after [batch] has been stored. */
+    fun isSuperseded(batch: Long): Boolean = batch < stored
+
     /** Whether [batch] may be stored: false once a batch received after it has been. */
     fun accept(batch: Long): Boolean {
-        if (batch < stored) return false
+        if (isSuperseded(batch)) return false
         stored = batch
         return true
     }
