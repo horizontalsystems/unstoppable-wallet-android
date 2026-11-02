@@ -33,7 +33,10 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
         recipients: List<TransactionRecipient>?,
         memo: String?,
         isIronwoodMigration: Boolean,
-        outputs: List<TransactionOutput>
+        outputs: List<TransactionOutput>,
+        // The SDK's block time, or one resolved from the mined height when the SDK has none
+        // yet (a transaction found ahead of the scan, see ZcashBlockTimeResolver).
+        blockTimeEpochSeconds: Long? = confirmedTransaction.blockTimeEpochSeconds,
     ) {
         confirmedTransaction.let {
             val hasSpentAndReceived = it.totalSpent.value > 0 && it.totalReceived.value > 0
@@ -75,7 +78,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             this.recipients = recipients
             expiryHeight = it.expiryHeight?.value?.toInt()
             minedHeight = it.minedHeight?.value
-            timestamp = it.blockTimeEpochSeconds ?: when (it.transactionState) {
+            timestamp = blockTimeEpochSeconds ?: when (it.transactionState) {
                 TransactionState.Pending -> Date().time / 1000
                 else -> 0
             }

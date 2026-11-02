@@ -23,7 +23,9 @@ class ZcashTransactionsProvider(
     private val accountUuid: AccountUuid,
     private val scope: CoroutineScope,
     private val synchronizer: Synchronizer,
-    private val isMigrationTransaction: (txHash: ByteArray) -> Boolean
+    private val isMigrationTransaction: (txHash: ByteArray) -> Boolean,
+    // Block time of a mined height the SDK reports no block time for; null when unknown.
+    private val blockTime: suspend (height: Long) -> Long? = { null },
 ) {
     private val mutex = Mutex()
     private var transactions = listOf<ZcashTransaction>()
@@ -33,7 +35,7 @@ class ZcashTransactionsProvider(
         scope.launch {
             mutex.withLock {
                 val newTransactions = transactionOverviews.filter { tx ->
-                    transactions.none { it.transactionHash.contentEquals(tx.txId.value.byteArray) && it.minedHeight == tx.minedHeight?.value }
+                    transactions.none { known -> known.isSameAs(tx) }
                 }
 
                 if (newTransactions.isNotEmpty()) {
@@ -51,7 +53,9 @@ class ZcashTransactionsProvider(
                         } else {
                             emptyList()
                         }
-                        ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs)
+                        val time = it.blockTimeEpochSeconds
+                            ?: it.minedHeight?.value?.let { height -> blockTime(height) }
+                        ZcashTransaction(accountUuid, it, recipients, memo, isMigrationTransaction(it.txId.value.byteArray), outputs, time)
                     }
                     newTransactionsFlow.tryEmit(newZcashTransactions)
                     val notUpdatedTransactions =
@@ -61,6 +65,16 @@ class ZcashTransactionsProvider(
             }
         }
     }
+
+    /**
+     * Whether [tx] is the record this transaction was built from. A transaction found ahead of
+     * the scan carries a resolved or estimated time; once its block is scanned the SDK reports
+     * the block time, and that re-emission must replace the record rather than be skipped.
+     */
+    private fun ZcashTransaction.isSameAs(tx: TransactionOverview): Boolean =
+        transactionHash.contentEquals(tx.txId.value.byteArray) &&
+                minedHeight == tx.minedHeight?.value &&
+                (tx.blockTimeEpochSeconds == null || tx.blockTimeEpochSeconds == timestamp)
 
     fun getNewTransactionsFlow(transactionType: FilterTransactionType, address: String?): Flow<List<ZcashTransaction>> {
         val filters = getFilters(transactionType, address)
