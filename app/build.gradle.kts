@@ -176,11 +176,6 @@ android {
             applicationIdSuffix = ".e2e"
             matchingFallbacks += "debug"
             buildConfigField("boolean", "E2E_BUILD", "true")
-            // x86_64 runs natively on the GitHub Actions emulators; ARM stays for
-            // local arm64 emulators. Dev and release builds are ARM only
-            ndk {
-                abiFilters += "x86_64"
-            }
         }
     }
 

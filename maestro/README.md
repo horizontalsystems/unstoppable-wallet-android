@@ -2,9 +2,10 @@
 
 ## Setup
 
-Tests run against the `ci` flavor, the dev build the team uses: locally on an
-arm64 emulator, and in GitHub Actions on an x86_64 one (see
-[GitHub Actions](#github-actions)).
+Tests run against the `ci` flavor, the dev build the team uses, on an arm64
+emulator: locally, and on the test station
+([horizontalsystems/uw-testlab](https://github.com/horizontalsystems/uw-testlab)),
+a Mac mini in the office that builds the app and runs the suite.
 
 | Tool | Version |
 |---|---|
@@ -135,54 +136,17 @@ Checked on Maestro 2.11.0 with the API 35 image:
   while new emulators boot, and adb commands fail for half a minute
   ("protocol fault"). The scripts retry through it.
 
-## GitHub Actions
-
-`.github/workflows/maestro_tests.yml` runs the suite on GitHub's Linux
-runners, on an x86_64 API 35 emulator. Only the e2e build includes x86_64 for
-this; dev and release builds stay ARM only.
-
-| When | What runs | Telegram |
-|---|---|---|
-| Push to `develop` | Feature tests | When something fails |
-| Pull request to `develop` | Feature tests | No |
-| Nightly, 19:00 UTC | Journey, feature and on-chain tests, on `develop` | Always |
-| Manual (Actions → Maestro UI Tests → Run workflow) | Your choice of tags (`journey` adds the journey), or a nightly run | Only as a nightly |
-
-The checks do not block merging. A run is the APK build, then parallel
-jobs, each on its own emulator: the feature and on-chain tests split in two
-(`SHARD` in `ci-run.sh`), and in the nightly the journey as a third job,
-about 12 minutes in all.
-
-A separate, quick check (Check Test Tags) fails a pull request when a flow
-selects an `id:` that `TestTags` does not declare.
-
-- **Results:** each job writes its summary on the run page and uploads
-  `maestro-journey`, `maestro-flows-1` or `maestro-flows-2`: JUnit reports, Maestro output with
-  failure screenshots, `logcat.txt`, `setup.log` and `summary.txt`.
-- **Setup errors:** when the emulator cannot be prepared (lock screen,
-  network, clock), the job fails with exit code 2 and `setup.log` shows the
-  step. No tests ran, so it says nothing about the app.
-- **Nightly from a branch:** scheduled runs use the default branch's copy of
-  the workflow. To try the nightly on another branch, run the workflow by hand
-  with "nightly" on and the branch in "ref".
+## Scripts
 
 | Script | What it does |
 |---|---|
-| `ci-run.sh` | One part of the suite (`journey`, or a shard of `flows`) on the booted emulator, with one retry |
-| `device-prepare.sh` | Screen lock, animations, locale, unlock, network and clock checks, APK install |
-| `collect-artifacts.sh` | Removes the dust wallet phrase and on-chain screenshots before upload |
-| `notify-telegram.sh` | Posts the nightly result and failed pushes to Telegram |
-| `junit.py` | Reads Maestro's JUnit reports: failed flows to retry, the summary |
+| `device-prepare.sh` | Screen lock, animations, locale, unlock, network and clock checks, APK install; the test station runs it too |
 | `avd-create.sh` | Creates the local emulator (Apple Silicon, arm64 image) |
 | `maestro.sh` | `maestro` with the settings from `.env.e2e` loaded, for local runs |
 | `load-config.sh` | Loads `.env.e2e`; sourced by the other scripts |
 
-### Failures, retries and flaky tests
+## Flaky tests
 
-- A failed test gets one retry in the same job. A failed journey reruns from
-  step 01, because its steps depend on each other; feature and on-chain tests
-  rerun one by one. A test that passes on the retry counts as passing and is
-  reported as **flaky** in the summary and in Telegram.
 - A feature or on-chain test that keeps flaking gets the `quarantine` tag and
   an issue labelled `e2e-flaky`. `config.yaml` leaves quarantined tests out;
   fix or delete them within 2 weeks.
@@ -193,20 +157,7 @@ selects an `id:` that `TestTags` does not declare.
 
 ## Secrets
 
-GitHub Actions reads these repository secrets:
-
-| Secret | Used for |
-|---|---|
-| `MAESTRO_E2E_DUST_MNEMONIC` | The on-chain tests (`onchain/`, tagged `secret`); passed to nightly runs only |
-| `MAESTRO_TELEGRAM_TOKEN` | The bot that posts reports (`TELEGRAM_TOKEN` is the deploy bot's) |
-| `TELEGRAM_CHAT_ID` | The chat the reports go to |
-
-Pull requests from forks get no secrets, and nothing they run needs them.
-Maestro writes typed text to `commands.json` and `maestro.log`, so every job
-passes its results through `collect-artifacts.sh` before uploading, and
-uploads nothing when the phrase is still found.
-
-For local runs the same settings go in `maestro/.env.e2e`. It is gitignored;
+Local runs read their settings from `maestro/.env.e2e`. It is gitignored;
 `.env.example` lists every setting with a comment:
 
 ```bash
@@ -217,7 +168,6 @@ chmod 600 maestro/.env.e2e
 | Setting | Used for |
 |---|---|
 | `MAESTRO_E2E_DUST_MNEMONIC` | The on-chain tests |
-| `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID` | Trying `notify-telegram.sh`; without them the message is printed |
 | `E2E_DEVICE_PIN` | Emulator screen lock PIN (default `1111`) |
 
 Run flows with the wrapper so they get the file's values:
@@ -377,7 +327,7 @@ Rules for feature tests:
 
 | Tests | Tag | When |
 |---|---|---|
-| Journey (about 5 min) | `journey` | Nightly, and locally when a journey screen changes |
-| Feature tests | `feature` | Every push and pull request to `develop`, nightly, and locally by the developer while working on the feature |
-| History with known transactions | `onchain`, `history` | Nightly |
-| Real send to confirm (funded wallet) | `onchain`, `secret` | Nightly |
+| Journey (about 5 min) | `journey` | On the test station, and locally when a journey screen changes |
+| Feature tests | `feature` | On the test station, and locally by the developer while working on the feature |
+| History with known transactions | `onchain`, `history` | On the test station |
+| Real send to confirm (funded wallet) | `onchain`, `secret` | On the test station |
