@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentCompat
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.BaseActivity
 import io.horizontalsystems.walletkit.modules.main.MainModule
@@ -45,7 +46,7 @@ import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 class KeyStoreActivity : BaseActivity() {
 
     private val mode by lazy {
-        intent.parcelable<KeyStoreModule.ModeType>(MODE)!!
+        IntentCompat.getParcelableExtra(intent, MODE, KeyStoreModule.ModeType::class.java)!!
     }
 
     val viewModel by viewModels<KeyStoreViewModel> { KeyStoreModule.Factory(mode) }
@@ -124,13 +125,6 @@ class KeyStoreActivity : BaseActivity() {
             }
 
             context.startActivity(intent)
-        }
-
-        //  Intent & Parcelable Enum
-
-        inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
-            Build.VERSION.SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
-            else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
         }
     }
 }
