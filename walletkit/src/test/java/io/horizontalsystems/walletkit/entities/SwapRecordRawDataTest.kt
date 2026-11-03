@@ -50,7 +50,7 @@ class SwapRecordRawDataTest {
             .toSet()
         val listed = record.toRawData().lines().map { it.substringBefore(": ") }.toSet()
 
-        assertEquals(columns, listed)
+        assertEquals(columns, listed - "checksum")
     }
 
     @Test
@@ -61,6 +61,24 @@ class SwapRecordRawDataTest {
         assertTrue("recipientAddress: SoLRecipient111" in lines)
         assertTrue("customRecipientAddress: false" in lines)
         assertTrue("transactionHash: " in lines)
-        assertEquals("estimatedTime: ", lines.last())
+        assertTrue("estimatedTime: " in lines)
+    }
+
+    @Test
+    fun checksumIsTheSha256PrefixOfTheLinesAboveIt() {
+        val text = record.toRawData()
+        val body = text.substringBeforeLast("\nchecksum: ")
+        val checksum = text.substringAfterLast("\nchecksum: ")
+
+        assertEquals(rawDataChecksum(body), checksum)
+        assertEquals(16, checksum.length)
+        assertTrue(checksum.all { it in '0'..'9' || it in 'a'..'f' })
+    }
+
+    @Test
+    fun checksumChangesWhenAColumnChanges() {
+        val edited = record.copy(recipientAddress = "SoLRecipient112").toRawData()
+
+        assertTrue(edited.substringAfterLast("checksum: ") != record.toRawData().substringAfterLast("checksum: "))
     }
 }
