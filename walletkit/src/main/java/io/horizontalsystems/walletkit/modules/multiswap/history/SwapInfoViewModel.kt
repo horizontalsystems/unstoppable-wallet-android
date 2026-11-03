@@ -25,6 +25,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -65,6 +67,9 @@ class SwapInfoViewModel(
     private var pauseReason: PauseReason? = null
     private var swapTime: String? = null
     private var rawData: String = ""
+    // The first load and the replayed update-flow load run at once; one at a time keeps every
+    // published state built from a single read of the record.
+    private val loadMutex = Mutex()
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -107,9 +112,11 @@ class SwapInfoViewModel(
         RequestRefundDataLoader.load(recordId, swapRecordManager)
     }
 
-    private suspend fun loadData() {
-        val record = swapRecordManager.getById(recordId) ?: return
+    private suspend fun loadData() = loadMutex.withLock {
+        val record = swapRecordManager.getById(recordId) ?: return@withLock
+        // Published before the price lookups so "Copy Raw Data" has the record at once.
         rawData = record.toRawData()
+        emitState()
         val currency = currencyManager.baseCurrency
         val timestampSeconds = record.timestamp / 1000
         val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)

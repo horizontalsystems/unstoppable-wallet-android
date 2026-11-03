@@ -99,6 +99,7 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
                 title = TranslatableString.ResString(R.string.Contacts_ActionMore),
                 icon = R.drawable.threedots_24,
                 iconTint = ComposeAppTheme.colors.grey,
+                enabled = uiState.rawData.isNotEmpty(),
                 alwaysShowMenu = true,
                 items = listOf(
                     MenuItem(

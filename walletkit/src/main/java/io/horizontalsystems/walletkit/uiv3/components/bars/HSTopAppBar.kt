@@ -227,7 +227,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
                     }
                 ),
             painter = painterResource(menuItemDropdown.icon),
-            contentDescription = null,
+            contentDescription = menuItemDropdown.title.getString(),
             tint = menuItemDropdown.iconTint ?: Color.Unspecified
         )
     }
