@@ -138,8 +138,10 @@ Checked on Maestro 2.11.0 with the API 35 image:
   flows without `-e`, for example `${MAESTRO_E2E_DUST_MNEMONIC}`. Use this for
   secrets, so they stay out of process arguments.
 - **Logged input:** text typed with `inputText` is written in plain text to
-  `commands.json` and `logs/maestro.log` in the test output. Flows that type a
-  secret need those files redacted before they are shared.
+  `commands.json` and `logs/maestro.log` in the test output. E2E builds also
+  allow screenshots everywhere, so a failure screenshot of the restore screen
+  shows the phrase typed into it. Output from flows that type a secret needs
+  those files redacted, and its screenshots checked, before it is shared.
 - **Device logs:** Maestro saves `logs/device-logcat.txt` with each test's
   output, so crashes come with a stack trace.
 - **Reports:** `--format` takes one of `JUNIT`, `HTML` or `HTML-DETAILED` per
