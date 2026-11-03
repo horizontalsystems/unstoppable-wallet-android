@@ -13,10 +13,11 @@ URL="${APPKB_URL:-https://github.com/horizontalsystems/appkb.git}"
 if [ ! -d "$DEST/.git" ]; then
     git clone --quiet --filter=blob:none --no-checkout "$URL" "$DEST"
     git -C "$DEST" sparse-checkout set flows
-fi
-# checkout keeps an edit that does not conflict with the new commit, so the
-# flows would then differ from the commit reported below
-if [ -n "$(git -C "$DEST" status --porcelain)" ]; then
+# A clone made with --no-checkout shows every file as deleted until its first
+# checkout, so only an existing clone is checked for edits. checkout keeps an
+# edit that does not conflict with the new commit, and the flows would then
+# differ from the commit reported below
+elif [ -n "$(git -C "$DEST" status --porcelain)" ]; then
     echo "Uncommitted edits in ${DEST#"$PWD"/}, commit or discard them first:" >&2
     git -C "$DEST" status --short >&2
     exit 1
