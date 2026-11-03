@@ -14,7 +14,13 @@ if [ ! -d "$DEST/.git" ]; then
     git clone --quiet --filter=blob:none --no-checkout "$URL" "$DEST"
     git -C "$DEST" sparse-checkout set flows
 fi
+# checkout keeps an edit that does not conflict with the new commit, so the
+# flows would then differ from the commit reported below
+if [ -n "$(git -C "$DEST" status --porcelain)" ]; then
+    echo "Uncommitted edits in ${DEST#"$PWD"/}, commit or discard them first:" >&2
+    git -C "$DEST" status --short >&2
+    exit 1
+fi
 git -C "$DEST" fetch --quiet origin "$REF"
-# Fails rather than overwrite uncommitted edits to the flows
 git -C "$DEST" checkout --quiet --detach FETCH_HEAD
 echo "Flows at $(git -C "$DEST" rev-parse --short HEAD) in ${DEST#"$PWD"/}/flows"
