@@ -2005,4 +2005,5 @@
     <string name="SwapConfirm_CommitRefreshRequired">Das Angebot ist abgelaufen. Ein neues Angebot wurde geladen.</string>
     <string name="SwapConfirm_CommitFailed">Der Swap konnte nicht gestartet werden. Ein neues Angebot wurde geladen.</string>
     <string name="Zcash_Confirming">Bestätigung</string>
+    <string name="SwapInfo_CopyRawData">Rohdaten kopieren</string>
 </resources>

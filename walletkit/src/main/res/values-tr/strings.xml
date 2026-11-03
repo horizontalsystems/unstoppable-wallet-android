@@ -2001,4 +2001,5 @@
     <string name="SwapConfirm_CommitRefreshRequired">Teklifin süresi doldu. Yeni bir teklif yüklendi.</string>
     <string name="SwapConfirm_CommitFailed">Swap başlatılamadı. Yeni bir teklif yüklendi.</string>
     <string name="Zcash_Confirming">Onaylanıyor</string>
+    <string name="SwapInfo_CopyRawData">Ham Verileri Kopyala</string>
 </resources>

@@ -2009,4 +2009,5 @@
     <string name="SwapConfirm_CommitRefreshRequired">Котировка истекла. Загружена новая котировка.</string>
     <string name="SwapConfirm_CommitFailed">Не удалось начать обмен. Загружена новая котировка.</string>
     <string name="Zcash_Confirming">Подтверждение</string>
+    <string name="SwapInfo_CopyRawData">Копировать необработанные данные</string>
 </resources>

@@ -15,6 +15,7 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
+import io.horizontalsystems.walletkit.entities.toRawData
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.multiswap.formatDuration
 import io.horizontalsystems.walletkit.modules.multiswap.formatSwapTimeRange
@@ -63,6 +64,7 @@ class SwapInfoViewModel(
     private var isSingleTransactionSwap: Boolean = false
     private var pauseReason: PauseReason? = null
     private var swapTime: String? = null
+    private var rawData: String = ""
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -91,6 +93,7 @@ class SwapInfoViewModel(
         isSingleTransactionSwap = isSingleTransactionSwap,
         pauseReason = pauseReason,
         swapTime = swapTime,
+        rawData = rawData,
     )
 
     init {
@@ -106,6 +109,7 @@ class SwapInfoViewModel(
 
     private suspend fun loadData() {
         val record = swapRecordManager.getById(recordId) ?: return
+        rawData = record.toRawData()
         val currency = currencyManager.baseCurrency
         val timestampSeconds = record.timestamp / 1000
         val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
@@ -270,4 +274,6 @@ data class SwapInfoUiState(
     val isSingleTransactionSwap: Boolean,
     val pauseReason: PauseReason?,
     val swapTime: String?,
+    // The stored record, column by column, for the toolbar's "Copy Raw Data".
+    val rawData: String = "",
 )

@@ -44,8 +44,11 @@ import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImageCircle
+import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.ui.compose.components.MenuItemDropdown
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
@@ -86,10 +89,28 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
         factory = SwapInfoViewModel.Factory(recordId),
     )
     val uiState = viewModel.uiState
+    val view = LocalView.current
 
     HSScaffold(
         title = operationTitle(uiState.operation),
         onBack = navigation::removeLastOrNull,
+        menuItems = listOf(
+            MenuItemDropdown(
+                title = TranslatableString.ResString(R.string.Contacts_ActionMore),
+                icon = R.drawable.threedots_24,
+                iconTint = ComposeAppTheme.colors.grey,
+                alwaysShowMenu = true,
+                items = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.SwapInfo_CopyRawData),
+                        onClick = {
+                            TextHelper.copyText(uiState.rawData)
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                        },
+                    ),
+                ),
+            ),
+        ),
         bottomBar = {
             if (uiState.status == SwapStatus.ActionRequired) {
                 val coroutineScope = rememberCoroutineScope()

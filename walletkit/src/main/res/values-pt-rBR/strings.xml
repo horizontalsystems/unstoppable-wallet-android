@@ -2005,4 +2005,5 @@
     <string name="SwapConfirm_CommitRefreshRequired">A cotação expirou. Uma nova cotação foi carregada.</string>
     <string name="SwapConfirm_CommitFailed">Não foi possível iniciar o swap. Uma nova cotação foi carregada.</string>
     <string name="Zcash_Confirming">Confirmando</string>
+    <string name="SwapInfo_CopyRawData">Copiar dados brutos</string>
 </resources>
