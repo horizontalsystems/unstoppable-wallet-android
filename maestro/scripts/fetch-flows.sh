@@ -19,9 +19,10 @@ if [ ! -d "$DEST/.git" ]; then
 fi
 # checkout keeps an edit that does not conflict with the new commit, so the
 # flows would then differ from the commit reported below
-if [ -n "$(git -C "$DEST" status --porcelain)" ]; then
+EDITS="$(git -C "$DEST" status --porcelain --untracked-files=all)"
+if [ -n "$EDITS" ]; then
     echo "Uncommitted edits in ${DEST#"$PWD"/}, commit or discard them first:" >&2
-    git -C "$DEST" status --short >&2
+    echo "$EDITS" >&2
     exit 1
 fi
 git -C "$DEST" fetch --quiet origin "$REF"
