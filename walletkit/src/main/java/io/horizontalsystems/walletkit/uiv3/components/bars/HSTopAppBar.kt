@@ -222,7 +222,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
                     ),
                     enabled = menuItemDropdown.enabled,
                     onClick = {
-                        if (menuItemDropdown.items.size == 1) {
+                        if (menuItemDropdown.items.size == 1 && !menuItemDropdown.alwaysShowMenu) {
                             menuItemDropdown.items.first().onClick.invoke()
                         } else {
                             expanded = true
@@ -230,7 +230,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
                     }
                 ),
             painter = painterResource(menuItemDropdown.icon),
-            contentDescription = null,
+            contentDescription = menuItemDropdown.title.getString(),
             tint = menuItemDropdown.iconTint ?: Color.Unspecified
         )
     }

@@ -2356,4 +2356,5 @@
     <string name="DisableDuressPin_Button">Disable Protection</string>
     <string name="Hud_Text_Disabled">Disabled</string>
     <string name="Hud_Text_Changed">Changed</string>
+    <string name="SwapInfo_CopyRawData">Copy Raw Data</string>
 </resources>

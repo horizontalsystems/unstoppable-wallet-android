@@ -2011,4 +2011,5 @@
     <string name="DisableDuressPin_Button">Schutz deaktivieren</string>
     <string name="Hud_Text_Disabled">Deaktiviert</string>
     <string name="Hud_Text_Changed">Geändert</string>
+    <string name="SwapInfo_CopyRawData">Rohdaten kopieren</string>
 </resources>

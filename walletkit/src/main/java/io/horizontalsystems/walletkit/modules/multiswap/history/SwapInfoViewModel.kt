@@ -15,6 +15,7 @@ import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
+import io.horizontalsystems.walletkit.entities.toRawData
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.multiswap.formatDuration
 import io.horizontalsystems.walletkit.modules.multiswap.formatSwapTimeRange
@@ -24,6 +25,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -64,6 +67,10 @@ class SwapInfoViewModel(
     private var pauseReason: PauseReason? = null
     private var swapTime: String? = null
     private var splitOutputs: List<SplitOutputInfoItem>? = null
+    private var rawData: String = ""
+    // The first load and the replayed update-flow load run at once; one at a time keeps every
+    // published state built from a single read of the record.
+    private val loadMutex = Mutex()
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -93,6 +100,7 @@ class SwapInfoViewModel(
         pauseReason = pauseReason,
         swapTime = swapTime,
         splitOutputs = splitOutputs,
+        rawData = rawData,
     )
 
     init {
@@ -106,8 +114,11 @@ class SwapInfoViewModel(
         RequestRefundDataLoader.load(recordId, swapRecordManager)
     }
 
-    private suspend fun loadData() {
-        val record = swapRecordManager.getById(recordId) ?: return
+    private suspend fun loadData() = loadMutex.withLock {
+        val record = swapRecordManager.getById(recordId) ?: return@withLock
+        // Published before the price lookups so "Copy Raw Data" has the record at once.
+        rawData = record.toRawData()
+        emitState()
         val currency = currencyManager.baseCurrency
         val timestampSeconds = record.timestamp / 1000
         val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
@@ -297,6 +308,8 @@ data class SwapInfoUiState(
     val swapTime: String?,
     // A split swap's outputs in request order, each with its own stage; null otherwise.
     val splitOutputs: List<SplitOutputInfoItem>? = null,
+    // The stored record, column by column, for the toolbar's "Copy Raw Data".
+    val rawData: String = "",
 )
 
 data class SplitOutputInfoItem(
