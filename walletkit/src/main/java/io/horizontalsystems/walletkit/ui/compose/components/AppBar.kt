@@ -50,6 +50,7 @@ data class MenuItemDropdown(
     val enabled: Boolean = true,
     val items: List<MenuItem>,
     val iconTint: Color? = null,
+    val testTag: String? = null,
     // A single item normally runs on tap of the icon; set when the icon (a "more" glyph, say)
     // promises a menu and the item's title is what tells the user what the tap does.
     val alwaysShowMenu: Boolean = false,

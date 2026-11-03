@@ -116,6 +116,8 @@ object TestTags {
     // Replaces swap_next while the swap cannot go on: no quote, insufficient balance, sync
     const val SWAP_ERROR = "swap_error"
     const val SWAP_PROVIDER = "swap_provider"
+    const val SWAP_INFO_MORE = "swap_info_more"
+    const val SWAP_INFO_COPY_RAW_DATA = "swap_info_copy_raw_data"
     fun swapCoin(coinCode: String, blockchainUid: String) = "swap_coin_${coinCode}_$blockchainUid"
 
     const val SETTINGS_MANAGE_WALLETS = "settings_manage_wallets"

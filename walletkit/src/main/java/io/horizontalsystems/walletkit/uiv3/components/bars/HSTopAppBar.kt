@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -214,6 +215,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(24.dp)
+                .then(menuItemDropdown.testTag?.let { Modifier.testTag(it) } ?: Modifier)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(
@@ -240,11 +242,15 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
         onDismissRequest = { expanded = false },
         shape = RoundedCornerShape(16.dp),
         containerColor = ComposeAppTheme.colors.lawrence,
-        modifier = Modifier.defaultMinSize(minWidth = 200.dp)
+        // the menu is a popup with its own window, so tags must be exposed again inside it
+        modifier = Modifier
+            .defaultMinSize(minWidth = 200.dp)
+            .exposeTestTags()
     ) {
         menuItemDropdown.items.forEachIndexed { i, menuItem ->
             BoxBordered(top = i != 0) {
                 DropdownMenuItem(
+                    modifier = menuItem.testTag?.let { Modifier.testTag(it) } ?: Modifier,
                     text = {
                         body_leah(menuItem.title.getString())
                     },

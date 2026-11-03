@@ -50,6 +50,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImageCircle
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItemDropdown
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
@@ -103,11 +104,13 @@ fun SwapInfoScreen(recordId: Int, navigation: HSNavigation) {
                 title = TranslatableString.ResString(R.string.Contacts_ActionMore),
                 icon = R.drawable.threedots_24,
                 iconTint = ComposeAppTheme.colors.grey,
+                testTag = TestTags.SWAP_INFO_MORE,
                 enabled = uiState.rawData.isNotEmpty(),
                 alwaysShowMenu = true,
                 items = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.SwapInfo_CopyRawData),
+                        testTag = TestTags.SWAP_INFO_COPY_RAW_DATA,
                         onClick = {
                             TextHelper.copyText(uiState.rawData)
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
