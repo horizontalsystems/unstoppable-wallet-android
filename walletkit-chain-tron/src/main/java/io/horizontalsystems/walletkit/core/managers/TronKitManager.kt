@@ -71,12 +71,7 @@ class TronKitManager(
 
     private fun tronRpcSource(): RpcSource {
         val syncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
-        val tronGridUrl = URL("https://api.trongrid.io/")
-        return if (syncSource.uri.toString() == tronGridUrl.toString()) {
-            RpcSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)
-        } else {
-            RpcSource(urls = listOf(URL(syncSource.uri.toString())), auth = syncSource.auth)
-        }
+        return RpcSource(urls = listOf(URL(syncSource.uri.toString())), auth = syncSource.auth)
     }
 
     private fun tronTransactionSource(): TransactionSource {
