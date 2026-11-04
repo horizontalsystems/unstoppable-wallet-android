@@ -129,6 +129,9 @@ class WatchAddressService(
                         add(TokenQuery(BlockchainType.Monero, TokenType.Native))
                     }
                 }
+                is AccountType.ZcashViewingKey -> {
+                    add(TokenQuery(BlockchainType.Zcash, TokenType.Native))
+                }
             }
         }
 
@@ -152,6 +155,11 @@ class WatchAddressService(
         if (accountType is AccountType.MoneroWatchAccount) {
             val restoreSettings = RestoreSettings().apply { birthdayHeight = accountType.restoreHeight }
             restoreSettingsManager.save(restoreSettings, account, BlockchainType.Monero)
+        }
+
+        if (accountType is AccountType.ZcashViewingKey) {
+            val restoreSettings = RestoreSettings().apply { birthdayHeight = accountType.birthdayHeight }
+            restoreSettingsManager.save(restoreSettings, account, BlockchainType.Zcash)
         }
 
         try {

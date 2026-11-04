@@ -531,6 +531,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         is AccountType.MoneroMnemonic ->
             this == BlockchainType.Monero
 
+        is AccountType.ZcashViewingKey ->
+            this == BlockchainType.Zcash
+
         // Passkey smart-account: ERC-4337 Kernel on the supported EVM chains and GasFree on Tron.
         is AccountType.Passkey ->
             this == BlockchainType.Ethereum

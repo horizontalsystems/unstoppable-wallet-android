@@ -18,6 +18,7 @@ import io.horizontalsystems.walletkit.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -36,6 +37,7 @@ class WatchAddressViewModel(
     private var viewKey: String? = null
     private var birthdayHeight: Long? = null
     private var xPubKey: String? = null
+    private var zcashViewingKey: String? = null
     private var accountType: AccountType? = null
     private var accountNameEdited = false
     private var inputState: DataState<String>? = null
@@ -56,7 +58,8 @@ class WatchAddressViewModel(
         inputState = inputState,
         addressType = type,
         viewKeyState = viewKeyState,
-        openBirthdayHeightScreen = openBirthdayHeightScreen
+        openBirthdayHeightScreen = openBirthdayHeightScreen,
+        birthdayBlockchainType = if (type == Type.ZcashViewingKey) BlockchainType.Zcash else BlockchainType.Monero
     )
 
     fun onEnterAccountName(v: String) {
@@ -74,6 +77,7 @@ class WatchAddressViewModel(
         parseAddressJob?.cancel()
         address = null
         xPubKey = null
+        zcashViewingKey = null
         type = Type.Unsupported
         viewKey = null
         birthdayHeight = null
@@ -96,9 +100,20 @@ class WatchAddressViewModel(
                 val handler = addressParserChain.supportedHandler(vTrimmed)
 
                 if (handler == null) {
+                    val isZcashViewingKey = try {
+                        ChainRegistry[BlockchainType.Zcash]?.isWatchViewingKey(vTrimmed) == true
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (_: Throwable) {
+                        false
+                    }
                     ensureActive()
                     withContext(Dispatchers.Main) {
-                        setXPubKey(vTrimmed)
+                        if (isZcashViewingKey) {
+                            setZcashViewingKey(vTrimmed)
+                        } else {
+                            setXPubKey(vTrimmed)
+                        }
                     }
                     return@launch
                 } else {
@@ -194,6 +209,15 @@ class WatchAddressViewModel(
         emitState()
     }
 
+    private fun setZcashViewingKey(input: String) {
+        zcashViewingKey = input
+        type = Type.ZcashViewingKey
+        inputState = DataState.Success(input)
+
+        syncSubmitButtonType()
+        emitState()
+    }
+
     private fun setXPubKey(input: String) {
         xPubKey = try {
             val hdKey = HDExtendedKey(input)
@@ -264,7 +288,7 @@ class WatchAddressViewModel(
     }
 
     fun onClickWatch() {
-        if (type == Type.MoneroAddress && birthdayHeight == null) {
+        if ((type == Type.MoneroAddress || type == Type.ZcashViewingKey) && birthdayHeight == null) {
             openBirthdayHeightScreen = true
             emitState()
             return
@@ -304,6 +328,7 @@ class WatchAddressViewModel(
             Type.ThorchainAddress -> SubmitButtonType.Watch(address != null)
             Type.MayachainAddress -> SubmitButtonType.Watch(address != null)
             Type.MoneroAddress -> SubmitButtonType.Watch(address != null && viewKey != null)
+            Type.ZcashViewingKey -> SubmitButtonType.Watch(zcashViewingKey != null)
             Type.Unsupported -> SubmitButtonType.Watch(false)
         }
     }
@@ -348,6 +373,11 @@ class WatchAddressViewModel(
             AccountType.MoneroWatchAccount(it.hex, viewKey!!, birthdayHeight ?: 1)
         }
 
+        Type.ZcashViewingKey -> zcashViewingKey?.let {
+            val minHeight = ChainRegistry[BlockchainType.Zcash]?.minBirthdayHeight() ?: 0
+            AccountType.ZcashViewingKey(it, maxOf(birthdayHeight ?: 0, minHeight))
+        }
+
         Type.Unsupported -> throw IllegalStateException("Unsupported address type")
     }
 
@@ -364,6 +394,7 @@ class WatchAddressViewModel(
         ThorchainAddress,
         MayachainAddress,
         MoneroAddress,
+        ZcashViewingKey,
         Unsupported
     }
 }
@@ -376,7 +407,8 @@ data class WatchAddressUiState(
     val inputState: DataState<String>?,
     val addressType: WatchAddressViewModel.Type,
     val viewKeyState: DataState<String>?,
-    val openBirthdayHeightScreen: Boolean
+    val openBirthdayHeightScreen: Boolean,
+    val birthdayBlockchainType: BlockchainType
 )
 
 sealed class SubmitButtonType {

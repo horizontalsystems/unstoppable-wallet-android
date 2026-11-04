@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.entities
 
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -27,6 +28,7 @@ class AccountTypeWatchAccountTest {
             AccountType.MayachainAddress("maya1"),
             AccountType.BitcoinAddress("bc1", BlockchainType.Bitcoin, TokenType.Native),
             AccountType.MoneroWatchAccount("monero", "viewKey", 0),
+            AccountType.ZcashViewingKey("uview1", 0),
         )
 
         addressOnly.forEach {
@@ -60,6 +62,13 @@ class AccountTypeWatchAccountTest {
     fun extendedKeyIsAWatchAccountOnlyWhenPublic() {
         assertFalse("xprv", AccountType.HdExtendedKey(XPRV).isWatchAccountType)
         assertTrue("xpub", AccountType.HdExtendedKey(XPUB).isWatchAccountType)
+    }
+
+    /** Storage and local backup both keep the key in this form, so it must round-trip. */
+    @Test
+    fun zcashViewingKeyRoundTripsThroughSerialization() {
+        val key = AccountType.ZcashViewingKey("uview1abc", 2_500_000)
+        assertEquals(key, AccountType.ZcashViewingKey.fromSerialized(key.serialized))
     }
 
     companion object {

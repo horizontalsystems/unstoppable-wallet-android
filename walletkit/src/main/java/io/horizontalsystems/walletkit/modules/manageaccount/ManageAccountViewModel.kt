@@ -134,6 +134,7 @@ class ManageAccountViewModel(
                 }
             }
             is AccountType.MoneroWatchAccount -> listOf()
+            is AccountType.ZcashViewingKey -> listOf(KeyAction.PublicKeys)
             // the 25-word phrase is the only exportable secret; there are no BIP32 keys behind it
             is AccountType.MoneroMnemonic -> listOf(
                 KeyAction.RecoveryPhrase,

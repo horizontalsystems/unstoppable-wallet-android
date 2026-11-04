@@ -1109,7 +1109,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
     <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
     <string name="WatchWallet">Assistir Carteira</string>
-    <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
+    <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) ou XPUB / Zcash UFVK</string>
     <string name="Watch_ViewKey">Chave Privada de Visualização</string>
     <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
     <string name="Watch_Select_Coins">Escolher Moedas</string>
@@ -2012,4 +2012,6 @@
     <string name="Hud_Text_Disabled">Desativado</string>
     <string name="Hud_Text_Changed">Alterado</string>
     <string name="SwapInfo_CopyRawData">Copiar dados brutos</string>
+    <string name="PublicKeys_ZcashViewingKey">Chave de visualização Zcash</string>
+    <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Mostra o saldo e todas as transações da carteira Zcash, mas não pode gastar fundos.</string>
 </resources>

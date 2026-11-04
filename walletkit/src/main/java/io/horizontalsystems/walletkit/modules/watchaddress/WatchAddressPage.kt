@@ -92,19 +92,21 @@ fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out 
         )
     }
 
+    // Registered outside the if: the flag clears as soon as the page opens, and a listener
+    // that leaves composition with it never receives the birthday height.
+    val openBirthdayHeight = navigation.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+        { BirthdayHeightConfigPage(uiState.birthdayBlockchainType) }
+    ) { result ->
+        if (result.config != null) {
+            viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())
+        } else {
+            viewModel.onBirthdayHeightCancelled()
+        }
+    }
+
     if (uiState.openBirthdayHeightScreen) {
         viewModel.onBirthdayHeightScreenOpened()
-
-        val forResult = navigation.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
-            { BirthdayHeightConfigPage(BlockchainType.Monero) }
-        ) { result ->
-            if (result.config != null) {
-                viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())
-            } else {
-                viewModel.onBirthdayHeightCancelled()
-            }
-        }
-        forResult()
+        openBirthdayHeight()
     }
 
     HSScaffold(

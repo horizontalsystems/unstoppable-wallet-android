@@ -41,7 +41,7 @@ data class AddressPage(val input: Input) : HSPage(screenshotEnabled = false) {
 
     @Serializable
     enum class Type {
-        Evm, Tron
+        Evm, Tron, ZcashViewingKey
     }
 }
 
@@ -56,16 +56,19 @@ private fun AddressScreen(
     val title = when (type) {
         AddressPage.Type.Evm -> stringResource(R.string.PublicKeys_EvmAddress)
         AddressPage.Type.Tron -> stringResource(R.string.PublicKeys_TronAddress)
+        AddressPage.Type.ZcashViewingKey -> stringResource(R.string.PublicKeys_ZcashViewingKey)
     }
 
     val statPage = when (type) {
         AddressPage.Type.Evm -> StatPage.EvmAddress
         AddressPage.Type.Tron -> StatPage.TronAddress
+        AddressPage.Type.ZcashViewingKey -> StatPage.ZcashViewingKey
     }
 
     val statEntity = when (type) {
         AddressPage.Type.Evm -> StatEntity.EvmAddress
         AddressPage.Type.Tron -> StatEntity.TronAddress
+        AddressPage.Type.ZcashViewingKey -> StatEntity.ZcashViewingKey
     }
 
     HSScaffold(

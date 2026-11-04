@@ -189,6 +189,31 @@ sealed class AccountType {
         }
     }
 
+    // Zcash Unified Full Viewing Key (ZIP 316): sees every pool's incoming and outgoing
+    // transactions but cannot spend.
+    @Serializable
+    data class ZcashViewingKey(
+        val ufvk: String,
+        val birthdayHeight: Long
+    ) : AccountType() {
+
+        val serialized: String
+            get() = "$ufvk|$birthdayHeight"
+
+        override fun toString() = "ZcashViewingKey(ufvk=***, birthdayHeight=$birthdayHeight)"
+
+        companion object {
+            fun fromSerialized(serialized: String): ZcashViewingKey {
+                val split = serialized.split("|")
+                require(split.size == 2) { "Invalid Zcash viewing key serialization format" }
+                return ZcashViewingKey(
+                    ufvk = split[0],
+                    birthdayHeight = split[1].toLong()
+                )
+            }
+        }
+    }
+
     @Serializable
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
@@ -362,6 +387,7 @@ sealed class AccountType {
             is Passkey -> "Passkey"
             is StellarSecretKey -> "Stellar Secret Key"
             is MoneroWatchAccount -> "Monero Watch Wallet"
+            is ZcashViewingKey -> "Zcash Viewing Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Master -> "BIP32 Root Key"
@@ -417,6 +443,7 @@ sealed class AccountType {
                 else -> blockchainType.title
             }
             is MoneroWatchAccount -> "Monero"
+            is ZcashViewingKey -> "Zcash"
             is HdExtendedKey -> if (hdExtendedKey.isPublic) "HD" else null
             else -> null
         }
@@ -447,6 +474,7 @@ sealed class AccountType {
             is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             is MoneroWatchAccount -> true
+            is ZcashViewingKey -> true
             else -> false
         }
 
@@ -464,6 +492,7 @@ sealed class AccountType {
             is BitcoinAddress -> address
             is HdExtendedKey -> keySerialized
             is MoneroWatchAccount -> address
+            is ZcashViewingKey -> ufvk
             else -> null
         }
 

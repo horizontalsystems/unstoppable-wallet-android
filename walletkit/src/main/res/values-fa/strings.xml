@@ -843,7 +843,7 @@
     <string name="Send_DestinationTag_Info">صرافی ها و برخی خدمات برای اعتباری کردن سپرده خود به برچسب مقصد نیاز دارند. برچسب در دفتر عمومی است.</string>
     <string name="Send_DestinationTag_Required">این آدرس به برچسب مقصد نیاز دارد. پرداخت های بدون آن رد می شوند.</string>
     <string name="Send_DestinationTag_Invalid">برچسب مقصد باید یک عدد صحیح از 0 تا 4294967295 باشد.</string>
-    <string name="Watch_Address_Hint">آدرس خود را وارد کنید (EVM، Tron، TON، Stellar، XRP، NEAR، Monero، BTC، LTC، BCH، Dash) یا XPUB</string>
+    <string name="Watch_Address_Hint">آدرس خود را وارد کنید (EVM، Tron، TON، Stellar، XRP، NEAR، Monero، BTC، LTC، BCH، Dash) یا XPUB / Zcash UFVK</string>
     <string name="RiskLevel_Excellent">عالی</string>
     <string name="RiskLevel_Good">خوب</string>
     <string name="RiskLevel_Fair">متوسط</string>
@@ -1995,4 +1995,6 @@
     <string name="Hud_Text_Disabled">غیرفعال شد</string>
     <string name="Hud_Text_Changed">تغییر کرد</string>
     <string name="SwapInfo_CopyRawData">کپی داده‌های خام</string>
+    <string name="PublicKeys_ZcashViewingKey">کلید مشاهده Zcash</string>
+    <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). موجودی و همه تراکنش‌های کیف پول Zcash را نشان می‌دهد، اما نمی‌تواند وجوه را خرج کند.</string>
 </resources>

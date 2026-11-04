@@ -13,6 +13,8 @@ import cash.z.ecc.android.sdk.ext.fromHex
 import cash.z.ecc.android.sdk.model.Account
 import cash.z.ecc.android.sdk.model.AccountBalance
 import cash.z.ecc.android.sdk.model.AccountCreateSetup
+import cash.z.ecc.android.sdk.model.AccountImportSetup
+import cash.z.ecc.android.sdk.model.AccountPurpose
 import cash.z.ecc.android.sdk.model.BlockHeight
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
@@ -20,6 +22,7 @@ import cash.z.ecc.android.sdk.model.Proposal
 import cash.z.ecc.android.sdk.model.TransactionOverview
 import cash.z.ecc.android.sdk.model.TransactionState
 import cash.z.ecc.android.sdk.model.TransactionSubmitResult
+import cash.z.ecc.android.sdk.model.UnifiedFullViewingKey
 import cash.z.ecc.android.sdk.model.UnifiedAddressRequest
 import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.ZcashNetwork
@@ -111,14 +114,19 @@ class ZcashAdapter(
     private val _lastBlockUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val _balanceUpdatedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    private val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-    private val seed = accountType.seed
+    // A mnemonic account syncs and spends; a viewing-key account only syncs.
+    private val seed: ByteArray? = when (val type = wallet.account.type) {
+        is AccountType.Mnemonic -> type.seed
+        is AccountType.ZcashViewingKey -> null
+        else -> throw UnsupportedAccountException()
+    }
+    private val viewingKey = wallet.account.type as? AccountType.ZcashViewingKey
 
     private val zcashAccount: Account
 
     override val receiveAddress: String
 
-    override val receiveAddressTransparent: String
+    override val receiveAddressTransparent: String?
 
     override val isMainNet: Boolean = true
 
@@ -174,6 +182,7 @@ class ZcashAdapter(
             // (notes spent in not-yet-scanned blocks still count), so the migration
             // alerts would show with a wrong amount
             if (syncState != AdapterState.Synced) return null
+            if (seed == null) return null
             val tip = synchronizer.latestHeight?.value ?: return null
             if (tip < ironwoodActivationHeight) return null
             val orchard = accountBalance?.orchard ?: return null
@@ -242,8 +251,12 @@ class ZcashAdapter(
                 birthday = birthday,
                 context = context,
                 lightWalletEndpoint = lightWalletEndpoint,
-                setup = AccountCreateSetup(accountName = wallet.account.name, keySource = null, seed = FirstClassByteArray(seed)),
-                walletInitMode = walletInitMode,
+                // Slipstream creates accounts only from a seed; a viewing-key wallet opens
+                // without one and gets its account through importAccountByUfvk below.
+                setup = seed?.let {
+                    AccountCreateSetup(accountName = wallet.account.name, keySource = null, seed = FirstClassByteArray(it))
+                },
+                walletInitMode = if (seed == null) WalletInitMode.ExistingWallet else walletInitMode,
                 zcashNetwork = network,
                 isTorEnabled = localStorage.torEnabled,
                 isExchangeRateEnabled = false
@@ -252,7 +265,11 @@ class ZcashAdapter(
 
         zcashAccount = runBlocking {
             try {
-                awaitFirstAccount(synchronizer)
+                if (viewingKey != null) {
+                    viewOnlyAccount(synchronizer, viewingKey, wallet.account.name, birthday)
+                } else {
+                    awaitFirstAccount(synchronizer)
+                }
             } catch (e: Throwable) {
                 // Without close() the Slipstream InstanceGuard keeps holding this alias and
                 // every retry of adapter creation would fail on the single-instance check
@@ -261,7 +278,15 @@ class ZcashAdapter(
             }
         }
         receiveAddress = runBlocking { synchronizer.getUnifiedAddress(zcashAccount) }
-        receiveAddressTransparent = runBlocking { synchronizer.getTransparentAddress(zcashAccount) }
+        // A viewing key may leave out the transparent component, and then has no transparent address.
+        receiveAddressTransparent = runBlocking {
+            try {
+                synchronizer.getTransparentAddress(zcashAccount)
+            } catch (e: Exception) {
+                if (viewingKey == null || e is CancellationException) throw e
+                null
+            }
+        }
         val blockTimeResolver = ZcashBlockTimeResolver.forEndpoint(appContext, lightWalletEndpoint, network) {
             localStorage.torEnabled
         }
@@ -389,7 +414,7 @@ class ZcashAdapter(
      * Used for receiving swaps from decentralized exchanges or other single-use scenarios.
      * Falls back to the standard transparent address if ephemeral address generation fails.
      */
-    override suspend fun getFreshReceiveAddressTransparent(): String {
+    override suspend fun getFreshReceiveAddressTransparent(): String? {
         //TODO transparent address rotation is disabled for now
         return receiveAddressTransparent
 //        return try {
@@ -484,6 +509,7 @@ class ZcashAdapter(
     )
 
     private suspend fun send(proposal: Proposal): List<String> {
+        val seed = seed ?: throw IllegalStateException("A Zcash viewing key cannot spend")
         val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
 
         try {
@@ -883,6 +909,30 @@ class ZcashAdapter(
             return accounts?.first()
                 ?: throw (synchronizer.setupError.value
                     ?: IllegalStateException("Zcash wallet preparation failed or timed out without accounts"))
+        }
+
+        /**
+         * The wallet's view-only account, imported from the viewing key the first time the
+         * wallet opens. With no seed Slipstream starts on an empty account list, so the
+         * import is what gives the engine an account to scan.
+         */
+        private suspend fun viewOnlyAccount(
+            synchronizer: Synchronizer,
+            viewingKey: AccountType.ZcashViewingKey,
+            accountName: String,
+            birthday: BlockHeight?,
+        ): Account {
+            synchronizer.getAccounts().firstOrNull()?.let { return it }
+
+            return synchronizer.importAccountByUfvk(
+                AccountImportSetup(
+                    accountName = accountName,
+                    keySource = null,
+                    purpose = AccountPurpose.ViewOnly,
+                    ufvk = UnifiedFullViewingKey(viewingKey.ufvk),
+                    birthday = birthday,
+                )
+            )
         }
 
         private suspend fun <T> withTemporarySynchronizer(

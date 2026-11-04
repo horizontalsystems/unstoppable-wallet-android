@@ -1109,7 +1109,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Ungültiges Passwort</string>
     <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
     <string name="WatchWallet">Wallet ansehen</string>
-    <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) oder XPUB</string>
+    <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) oder XPUB / Zcash UFVK</string>
     <string name="Watch_ViewKey">Privater Ansichtsschlüssel</string>
     <string name="Watch_Select_Blockchains">Blockchains auswählen</string>
     <string name="Watch_Select_Coins">Münzen auswählen</string>
@@ -2012,4 +2012,6 @@
     <string name="Hud_Text_Disabled">Deaktiviert</string>
     <string name="Hud_Text_Changed">Geändert</string>
     <string name="SwapInfo_CopyRawData">Rohdaten kopieren</string>
+    <string name="PublicKeys_ZcashViewingKey">Zcash-Viewing-Key</string>
+    <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Zeigt das Guthaben und alle Transaktionen der Zcash-Wallet an, kann aber keine Gelder ausgeben.</string>
 </resources>

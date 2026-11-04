@@ -1631,7 +1631,9 @@
     <string name="ImportBackupFile_BackupPassword">Backup Password</string>
 
     <string name="WatchWallet">Watch Wallet</string>
-    <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) or XPUB</string>
+    <string name="PublicKeys_ZcashViewingKey">Zcash Viewing Key</string>
+    <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Shows the balance and every transaction of the Zcash wallet, but cannot spend.</string>
+    <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) or XPUB / Zcash UFVK</string>
     <string name="Watch_ViewKey">Private View Key</string>
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>
     <string name="Watch_Select_Coins">Choose Coins</string>

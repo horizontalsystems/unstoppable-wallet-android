@@ -15,6 +15,12 @@ import io.horizontalsystems.walletkit.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.walletkit.core.managers.ZcashLightWalletEndpointManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.entities.Account
+import io.horizontalsystems.walletkit.entities.AccountType
+import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.chain.ChainKeyRow
+import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.modules.manageaccount.evmaddress.AddressPage
+import kotlinx.coroutines.runBlocking
 import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.address.IAddressHandler
 import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSettingsModule
@@ -30,6 +36,9 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.chain.SendMemoSupport
 import io.horizontalsystems.walletkit.modules.memo.MemoVisibility
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
+import cash.z.ecc.android.sdk.model.UnifiedFullViewingKey
+import cash.z.ecc.android.sdk.model.ZcashNetwork
+import cash.z.ecc.android.sdk.tool.DerivationTool
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -196,6 +205,32 @@ class ZcashChainPlugin(
     override fun firstBlockDate(): LocalDate = LocalDate.of(2018, 10, 29)
 
     override fun minBirthdayHeight(): Long = 420_000L
+
+    override fun publicKeyRows(account: Account): List<ChainKeyRow> {
+        val ufvk = when (val type = account.type) {
+            is AccountType.ZcashViewingKey -> type.ufvk
+            // Same account the adapter syncs: the seed's first ZIP 32 account.
+            is AccountType.Mnemonic -> runBlocking(Dispatchers.Default) {
+                DerivationTool.getInstance()
+                    .deriveUnifiedFullViewingKeys(type.seed, ZcashNetwork.Mainnet, numberOfAccounts = 1)
+                    .first().encoding
+            }
+            else -> null
+        } ?: return emptyList()
+
+        return listOf(
+            ChainKeyRow(
+                titleRes = R.string.PublicKeys_ZcashViewingKey,
+                descriptionRes = R.string.PublicKeys_ZcashViewingKey_Description,
+                page = AddressPage(AddressPage.Input(ufvk, AddressPage.Type.ZcashViewingKey)),
+                statPage = StatPage.ZcashViewingKey,
+            )
+        )
+    }
+
+    override suspend fun isWatchViewingKey(input: String): Boolean =
+        DerivationTool.getInstance()
+            .describeUnifiedFullViewingKey(UnifiedFullViewingKey(input), ZcashNetwork.Mainnet) != null
 
     override suspend fun estimateBlockDate(height: Long): Date? =
         ZcashAdapter.estimateBirthdayDate(context(), height)

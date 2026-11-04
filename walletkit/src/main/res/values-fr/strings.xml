@@ -1106,7 +1106,7 @@
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
     <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
     <string name="WatchWallet">Regarder le portefeuille</string>
-    <string name="Watch_Address_Hint">Collez votre adresse (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
+    <string name="Watch_Address_Hint">Collez votre adresse (EVM, Tron, TON, Stellar, XRP, NEAR, Monero, BTC, LTC, BCH, Dash) ou XPUB / Zcash UFVK</string>
     <string name="Watch_ViewKey">Clé privée</string>
     <string name="Watch_Select_Blockchains">Choisir les Blockchains</string>
     <string name="Watch_Select_Coins">Crypto Monnaie</string>
@@ -2009,4 +2009,6 @@
     <string name="Hud_Text_Disabled">Désactivé</string>
     <string name="Hud_Text_Changed">Modifié</string>
     <string name="SwapInfo_CopyRawData">Copier les données brutes</string>
+    <string name="PublicKeys_ZcashViewingKey">Clé de visualisation Zcash</string>
+    <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Affiche le solde et toutes les transactions du portefeuille Zcash, mais ne permet pas de dépenser.</string>
 </resources>

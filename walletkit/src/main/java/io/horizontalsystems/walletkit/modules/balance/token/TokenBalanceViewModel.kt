@@ -196,6 +196,8 @@ class TokenBalanceViewModel(
             ?.migrationRequiredBalance(wallet)
             ?.let { App.numberFormatter.formatCoinShort(it, wallet.coin.code, wallet.decimal) }
 
+        // A viewing key cannot shield, so its transparent funds are not worth an alert.
+        if (wallet.account.isWatchAccount) return
         val threshold = ChainRegistry[wallet.token.blockchainType]?.unshieldedBalanceThreshold() ?: return
         if (balanceItem.state == AdapterState.Synced && balanceItem.balanceData.unshielded > threshold) {
             val unshielded = balanceItem.balanceData.unshielded

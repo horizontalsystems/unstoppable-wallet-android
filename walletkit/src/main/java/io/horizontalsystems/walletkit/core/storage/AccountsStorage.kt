@@ -30,6 +30,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val BITCOIN_ADDRESS = "bitcoin_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
         private const val MONERO_WATCH_ACCOUNT = "monero_watch_account"
+        private const val ZCASH_VIEWING_KEY = "zcash_viewing_key"
         private const val MONERO_MNEMONIC = "monero_mnemonic"
         private const val PASSKEY = "passkey"
     }
@@ -70,6 +71,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             MONERO_WATCH_ACCOUNT -> AccountType.MoneroWatchAccount.fromSerialized(record.key!!.value)
+                            ZCASH_VIEWING_KEY -> AccountType.ZcashViewingKey.fromSerialized(record.key!!.value)
                             MONERO_MNEMONIC -> AccountType.MoneroMnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PASSKEY -> AccountType.Passkey(record.key!!.value)
                             else -> null
@@ -192,6 +194,10 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.MoneroWatchAccount -> {
                 key = SecretString(account.type.serialized)
                 accountType = MONERO_WATCH_ACCOUNT
+            }
+            is AccountType.ZcashViewingKey -> {
+                key = SecretString(account.type.serialized)
+                accountType = ZCASH_VIEWING_KEY
             }
             is AccountType.MoneroMnemonic -> {
                 words = SecretList(account.type.words)

@@ -249,6 +249,9 @@ interface ChainPlugin {
         throw UnsupportedOperationException("watch accounts not supported")
     }
 
+    /** Whether [input] is a viewing key this chain can watch on its own, without an address. */
+    suspend fun isWatchViewingKey(input: String): Boolean = false
+
     /** Word suggestions for the chain's own mnemonic scheme (e.g. Monero 25-word legacy). */
     fun altMnemonicSuggestions(word: String): List<String> = emptyList()
 

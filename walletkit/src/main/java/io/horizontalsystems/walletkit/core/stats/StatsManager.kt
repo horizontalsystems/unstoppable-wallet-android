@@ -248,6 +248,10 @@ val AccountType.statAccountType: String
             "monero_watch_account"
         }
 
+        is AccountType.ZcashViewingKey -> {
+            "zcash_viewing_key"
+        }
+
         is AccountType.MoneroMnemonic -> {
             // same blank-passphrase rule as backup serialization and description
             if (passphrase.isBlank()) "monero_mnemonic" else "monero_mnemonic_with_passphrase"
