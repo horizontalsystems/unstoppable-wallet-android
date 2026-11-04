@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.entities
 
+import io.horizontalsystems.walletkit.core.managers.BirthdayHeightHelper
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Language
@@ -206,9 +207,12 @@ sealed class AccountType {
             fun fromSerialized(serialized: String): ZcashViewingKey {
                 val split = serialized.split("|")
                 require(split.size == 2) { "Invalid Zcash viewing key serialization format" }
+                // The height sits in plain text in a backup file, so an unusable value restores
+                // from the chain's minimum instead of sending the wallet syncing into the future.
                 return ZcashViewingKey(
                     ufvk = split[0],
-                    birthdayHeight = split[1].toLong()
+                    birthdayHeight = split[1].toLongOrNull()
+                        ?.takeIf { it in 0..BirthdayHeightHelper.MAX_BIRTHDAY_HEIGHT } ?: 0
                 )
             }
         }

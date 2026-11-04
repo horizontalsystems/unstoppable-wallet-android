@@ -71,6 +71,15 @@ class AccountTypeWatchAccountTest {
         assertEquals(key, AccountType.ZcashViewingKey.fromSerialized(key.serialized))
     }
 
+    /** A tampered or unreadable height in storage or a backup must not send the wallet into the future. */
+    @Test
+    fun zcashViewingKeyRejectsUnusableBirthdayHeights() {
+        listOf("uview1|-1", "uview1|4294967296", "uview1|abc").forEach {
+            assertEquals(it, 0L, AccountType.ZcashViewingKey.fromSerialized(it).birthdayHeight)
+        }
+        assertEquals(4_294_967_295L, AccountType.ZcashViewingKey.fromSerialized("uview1|4294967295").birthdayHeight)
+    }
+
     companion object {
         // BIP-32 test vector 1, master key (depth 0; HDExtendedKey rejects any depth but 0 and 3)
         private const val XPRV =

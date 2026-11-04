@@ -130,6 +130,7 @@ class ChainBehaviorParityTest {
             TokenType.Derived(TokenType.Derivation.Bip84)
         ),
         "MoneroWatchAccount" to AccountType.MoneroWatchAccount("addr", "viewKey", 1L),
+        "ZcashViewingKey" to AccountType.ZcashViewingKey("uview1", 1L),
         "Passkey" to AccountType.Passkey("credential"),
     )
 

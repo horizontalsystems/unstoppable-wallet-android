@@ -234,7 +234,10 @@ class ZcashAdapter(
                 BlockHeight.ofLatestCheckpoint(context, network)
             }
 
-            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+            // A viewing-key account stores the height entered when it was added next to the
+            // key, so backups authenticate it, as a Monero watch account does. The plain-text
+            // restore settings are only for seed accounts.
+            AccountOrigin.Restored -> (viewingKey?.birthdayHeight ?: restoreSettings.birthdayHeight)
                 ?.let { height ->
                     max(network.saplingActivationHeight.value, height)
                 }

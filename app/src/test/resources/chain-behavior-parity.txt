@@ -418,7 +418,7 @@ chain zcash
   supportedTokenTypes=Native
   protocolType[Native]=Zcash
   protocolType[Eip20]=Zcash
-  supports=Mnemonic
+  supports=Mnemonic,ZcashViewingKey
 
 chain solana
   title=Solana
