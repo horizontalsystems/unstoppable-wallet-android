@@ -106,6 +106,11 @@ class EvmSyncSourceManager(
             BlockchainType.Optimism -> listOf(
                 evmSyncSource(
                     blockchainType,
+                    "Unstoppable",
+                    listOf(URI("https://optimism-rpc.unstoppable.money"))
+                ),
+                evmSyncSource(
+                    blockchainType,
                     "Optimism",
                     listOf(URI("https://mainnet.optimism.io"))
                 ),
@@ -117,6 +122,11 @@ class EvmSyncSourceManager(
             )
 
             BlockchainType.Base -> listOf(
+                evmSyncSource(
+                    blockchainType,
+                    "Unstoppable",
+                    listOf(URI("https://base-rpc.unstoppable.money"))
+                ),
                 evmSyncSource(
                     blockchainType,
                     "PublicNode",
@@ -244,13 +254,13 @@ class EvmSyncSourceManager(
             BlockchainType.Tron -> listOf(
                 evmSyncSource(
                     blockchainType,
-                    "TronGrid",
-                    listOf(URI("https://api.trongrid.io/"))
+                    "Unstoppable",
+                    listOf(URI("https://tron-rpc.unstoppable.money/"))
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "Pocket Network",
-                    listOf(URI("https://tron.api.pocket.network"))
+                    "PublicNode",
+                    listOf(URI("https://tron-rpc.publicnode.com/"))
                 )
             )
 
