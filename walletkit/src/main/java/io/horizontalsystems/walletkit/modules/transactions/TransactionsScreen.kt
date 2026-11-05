@@ -191,7 +191,8 @@ fun TransactionsScreen(
                             ) {
                                 transactionList(
                                     transactionsMap = transactionItems,
-                                    willShow = { viewModel.willShow(it) },
+                                    // Swap record rows have no on-chain transaction to fetch a rate for.
+                                    willShow = { if (pagedList) viewModel.willShow(it) },
                                     onClick = onClick,
                                     // Only Transfers pages its on-chain transactions in.
                                     onBottomReached = { if (pagedList) viewModel.onBottomReached() }

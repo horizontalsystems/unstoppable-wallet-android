@@ -48,12 +48,20 @@ class SwapRecordsRepository(
 
     // Keyed by record id; dropped with the currency it was fetched in.
     private val fiatRates = ConcurrentHashMap<Int, CurrencyValue>()
+    // Record ids whose rate was requested in the current currency, found or not: records are
+    // reloaded on every status update, and a coin without a price would be asked for again each time.
+    private val rateRequested = ConcurrentHashMap.newKeySet<Int>()
+    @Volatile
+    private var ratesCurrency = currencyManager.baseCurrency
 
     fun start() {
         coroutineScope.launch {
             merge(swapRecordManager.recordsUpdatedFlow, currencyManager.baseCurrencyUpdatedFlow).collect {
-                if (fiatRates.values.any { it.currency != currencyManager.baseCurrency }) {
+                val currency = currencyManager.baseCurrency
+                if (currency != ratesCurrency) {
                     fiatRates.clear()
+                    rateRequested.clear()
+                    ratesCurrency = currency
                 }
                 load()
             }
@@ -90,6 +98,7 @@ class SwapRecordsRepository(
         _itemsFlow.value = items
         items
             .filter { it.kind == SwapRecordKind.PrivateSend && it.fiatIn == null }
+            .filter { rateRequested.add(it.record.id) }
             .forEach { fetchRate(it.record) }
     }
 
@@ -104,6 +113,8 @@ class SwapRecordsRepository(
                 null
             }
             if (price == null || price.compareTo(BigDecimal.ZERO) == 0) return@launch
+            // The currency changed while the price was fetched; the reload asks again in the new one.
+            if (currency != ratesCurrency) return@launch
 
             val rate = CurrencyValue(currency, price)
             fiatRates[record.id] = rate
