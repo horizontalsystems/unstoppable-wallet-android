@@ -93,7 +93,11 @@ class PrivateSendManager(
         val venueIds = privateVenueIds(token)
         if (venueIds.isEmpty()) throw PrivateSendError.TokenUnsupported
 
-        val venueId = selectCheapestVenue(venueIds, token, request.amountOut)
+        val venueId = if (venueIds.size > 1) {
+            selectCheapestVenue(venueIds, token, request.amountOut) ?: venueIds.first()
+        } else {
+            venueIds.first()
+        }
 
         // Omitting the refund address forfeits the buffer refund, which lands on the success
         // path too — so a missing one fails the preview rather than proceeding without.
@@ -174,7 +178,9 @@ class PrivateSendManager(
     // One unnamed exact-output rate over the confidential levels: the venue with the cheapest
     // deposit among those that list the token wins. No route anywhere surfaces an authored
     // reason when a venue named one.
-    private suspend fun selectCheapestVenue(venueIds: List<String>, token: Token, amountOut: BigDecimal): String {
+    // Null when the round fails or no listed venue priced the output: the preview then runs on the
+    // first venue and reports its own refusal, rather than the comparison refusing for it.
+    private suspend fun selectCheapestVenue(venueIds: List<String>, token: Token, amountOut: BigDecimal): String? {
         val rate = try {
             provider.exactOutputRate(
                 tokenIn = token,
@@ -186,16 +192,14 @@ class PrivateSendManager(
         } catch (e: CancellationException) {
             throw e
         } catch (e: Throwable) {
-            throw mapCommitError(e)
+            return null
         }
 
-        val best = rate.routes.orEmpty()
-            .filter { route -> route.providerId?.uppercase() in venueIds.map { it.uppercase() } && route.sellAmount != null }
+        val ids = venueIds.map { it.uppercase() }
+        return rate.routes.orEmpty()
+            .filter { route -> route.providerId?.uppercase() in ids && route.sellAmount != null }
             .minByOrNull { it.sellAmount!! }
-
-        return best?.providerId
-            ?: reason(rate.providerErrors.orEmpty())?.let { throw it }
-            ?: throw PrivateSendError.NoRoute
+            ?.providerId
     }
 
     /**
