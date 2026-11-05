@@ -4,6 +4,7 @@ import io.horizontalsystems.walletkit.core.Clearable
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
+import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
@@ -50,9 +51,13 @@ class SwapRecordsRepository(
     private val fiatRates = ConcurrentHashMap<Int, CurrencyValue>()
     // Record ids whose rate was requested in the current currency, found or not: records are
     // reloaded on every status update, and a coin without a price would be asked for again each time.
-    private val rateRequested = ConcurrentHashMap.newKeySet<Int>()
+    // Each id maps to the currency generation it was requested in, so a request that fails after
+    // a currency switch, even one back to the same currency, leaves the newer request marked.
+    private val rateRequested = ConcurrentHashMap<Int, Long>()
     @Volatile
     private var ratesCurrency = currencyManager.baseCurrency
+    @Volatile
+    private var ratesGeneration = 0L
 
     fun start() {
         coroutineScope.launch {
@@ -65,6 +70,7 @@ class SwapRecordsRepository(
                         fiatRates.clear()
                         rateRequested.clear()
                         ratesCurrency = currency
+                        ratesGeneration++
                     }
                 }
                 load()
@@ -102,27 +108,30 @@ class SwapRecordsRepository(
         _itemsFlow.value = items
         items
             .filter { it.kind == SwapRecordKind.PrivateSend && it.fiatIn == null }
-            .filter { rateRequested.add(it.record.id) }
-            .forEach { fetchRate(it.record) }
+            .forEach { item ->
+                val generation = ratesGeneration
+                if (rateRequested.putIfAbsent(item.record.id, generation) == null) {
+                    fetchRate(item.record, ratesCurrency, generation)
+                }
+            }
     }
 
-    private fun fetchRate(record: SwapRecord) {
+    private fun fetchRate(record: SwapRecord, currency: Currency, generation: Long) {
         coroutineScope.launch {
-            val currency = currencyManager.baseCurrency
             val timestamp = record.timestamp / 1000
             val price = try {
                 marketKit.coinHistoricalPrice(record.tokenInCoinUid, currency.code, timestamp)
                     ?: marketKit.coinHistoricalPriceSingle(record.tokenInCoinUid, currency.code, timestamp)
             } catch (_: Throwable) {
                 // A failed request, unlike a coin without a price, is asked again on the next load.
-                rateRequested.remove(record.id)
+                rateRequested.remove(record.id, generation)
                 null
             }
             if (price == null || price.compareTo(BigDecimal.ZERO) == 0) return@launch
 
             synchronized(this@SwapRecordsRepository) {
                 // The currency changed while the price was fetched; the reload asks again in the new one.
-                if (currency != ratesCurrency) return@launch
+                if (generation != ratesGeneration) return@launch
 
                 val rate = CurrencyValue(currency, price)
                 fiatRates[record.id] = rate
