@@ -29,6 +29,7 @@ data class SwapRecipientPage(val input: Input) : HSPage() {
             { SwapConfirmPage(input.parentScreenContentKey, swapViewModel.externalRecipient) }
         ) { result ->
             if (result.success) {
+                swapViewModel.onSwapCompleted()
                 // the confirmation popped itself — drop this page too so the user
                 // lands back on the swap screen rather than the address form
                 navigation.removeLastOrNull()

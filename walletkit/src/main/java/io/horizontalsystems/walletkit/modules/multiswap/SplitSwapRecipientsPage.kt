@@ -90,6 +90,7 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
         }
     ) { result ->
         if (result.success) {
+            swapViewModel.onSwapCompleted()
             // The confirmation popped itself; this page goes too, so the user lands on the
             // swap screen, which starts the next split from scratch.
             swapViewModel.resetSplit()
