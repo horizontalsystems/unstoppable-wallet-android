@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.transactions
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.imageUrl
@@ -60,13 +60,13 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImage
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
-import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIcon
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import kotlinx.coroutines.delay
@@ -280,83 +280,83 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
         else -> ComposeAppTheme.colors.grey
     }
 
+    val contentAlpha = if (item.spam) 0.5f else 1f
+
     Column {
-        RowUniversal(
-            modifier = Modifier
-                .height(72.dp)
-                .testTag(TestTags.txItem(item.uid))
-                .background(ComposeAppTheme.colors.lawrence)
-                .clickable(onClick = onClick),
-        ) {
-            TransactionIcon(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .alpha(if (item.spam) 0.5f else 1f),
-                icon = item.type.icon,
-                state = item.state,
-            )
-            Column(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .alpha(if (item.spam) 0.5f else 1f)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+        CellPrimary(
+            modifier = Modifier.testTag(TestTags.txItem(item.uid)),
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = onClick,
+            left = {
+                TransactionIcon(
+                    modifier = Modifier.alpha(contentAlpha),
+                    icon = item.type.icon,
+                    state = item.state,
+                )
+            },
+            middle = {
+                Column(modifier = Modifier.alpha(contentAlpha)) {
                     TransactionTitle(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 16.dp)
-                            .testTag(TestTags.txItemTitle(item.uid)),
+                        modifier = Modifier.testTag(TestTags.txItemTitle(item.uid)),
                         title = item.title
                     )
-                    item.primaryValue?.let { coloredValue ->
-                        Text(
-                            modifier = Modifier.testTag(TestTags.txItemValue(item.uid)),
-                            text = if (item.showAmount) coloredValue.value else "* * *",
-                            style = ComposeAppTheme.typography.headline2,
-                            color = if (ended) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                        )
-                    }
-
-                    if (item.doubleSpend) {
-                        Image(
-                            modifier = Modifier.padding(start = 6.dp),
-                            painter = painterResource(R.drawable.ic_double_spend_20),
-                            contentDescription = null
-                        )
-                    }
-                    item.locked?.let { locked ->
-                        Image(
-                            modifier = Modifier.padding(start = 6.dp),
-                            painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
-                            contentDescription = null
-                        )
-                    }
-                }
-                Spacer(Modifier.height(1.dp))
-                Row {
-                    val subtitleModifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                        .testTag(TestTags.txItemSubtitle(item.uid))
+                    Spacer(Modifier.height(1.dp))
                     Text(
+                        modifier = Modifier.testTag(TestTags.txItemSubtitle(item.uid)),
                         text = item.subtitle,
-                        modifier = subtitleModifier,
-                        style = ComposeAppTheme.typography.subhead.copy(fontWeight= FontWeight.SemiBold),
+                        // Without a line height the line box ends at the font's descent, which Manrope's g crosses and gets clipped.
+                        style = ComposeAppTheme.typography.subhead.copy(fontWeight = FontWeight.SemiBold, lineHeight = 20.sp),
                         color = subtitleColor,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
                     )
+                }
+            },
+            right = {
+                Column(
+                    modifier = Modifier.alpha(contentAlpha),
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        item.primaryValue?.let { coloredValue ->
+                            Text(
+                                modifier = Modifier
+                                    .weight(1f, fill = false)
+                                    .testTag(TestTags.txItemValue(item.uid)),
+                                text = if (item.showAmount) coloredValue.value else "* * *",
+                                style = ComposeAppTheme.typography.headline2,
+                                color = if (ended) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                            )
+                        }
+                        if (item.doubleSpend) {
+                            Image(
+                                modifier = Modifier.padding(start = 6.dp),
+                                painter = painterResource(R.drawable.ic_double_spend_20),
+                                contentDescription = null
+                            )
+                        }
+                        item.locked?.let { locked ->
+                            Image(
+                                modifier = Modifier.padding(start = 6.dp),
+                                painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(1.dp))
                     item.secondaryValue?.let { coloredValue ->
                         Text(
                             text = if (item.showAmount) coloredValue.value else "",
-                            style = ComposeAppTheme.typography.subheadSB,
+                            style = ComposeAppTheme.typography.subheadSB.copy(lineHeight = 20.sp),
                             color = if (ended) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
                             maxLines = 1,
                         )
                     }
                 }
-            }
-        }
+            },
+        )
         HsDivider()
     }
 }
