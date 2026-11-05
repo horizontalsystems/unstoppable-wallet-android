@@ -526,7 +526,8 @@ class BackupProvider(
 
     /**
      * Builds an encrypted full-backup JSON for the given accounts and sections.
-     * Preference backups include [Settings.uiStatsEnabled] (Share UI data).
+     * Preference backups include [Settings.uiStatsEnabled] (Share UI data),
+     * writing the effective default (`false`) when the preference is unset.
      */
     @Throws
     fun createFullBackup(accountIds: List<String>, passphrase: String, sections: Set<BackupSection> = BackupSection.entries.toSet()): String {
@@ -637,7 +638,7 @@ class BackupProvider(
             moneroNodes = moneroNodes,
             zanoNodes = zanoNodes,
             zcashEndpoints = zcashEndpoints,
-            uiStatsEnabled = localStorage.uiStatsEnabled,
+            uiStatsEnabled = localStorage.uiStatsEnabled ?: false,
         )
 
         val contacts = if (BackupSection.Contacts in sections && contactsRepository.contacts.isNotEmpty())
