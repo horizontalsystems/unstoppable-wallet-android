@@ -70,6 +70,17 @@ object USwapAssetMapping {
         if (blockchainType.isEvm) chainIdByBlockchainType[blockchainType] else null
 
     /**
+     * The key a catalog entry is stored and looked up under. An EVM contract address is spelled
+     * two ways, checksummed by the server and lowercase by the coin database, so it is keyed in
+     * one case; every other token query is keyed by its id as is.
+     */
+    fun catalogKey(query: TokenQuery): String {
+        val type = query.tokenType
+        if (!query.blockchainType.isEvm || type !is TokenType.Eip20) return query.id
+        return TokenQuery(query.blockchainType, TokenType.Eip20(type.address.lowercase())).id
+    }
+
+    /**
      * The wallet tokens a catalog row names. A UTXO coin resolves to every derivation the wallet
      * may hold it under; a row on a chain the app does not know resolves to nothing.
      */

@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
@@ -43,7 +44,7 @@ class USwapAssetCatalog(
     private val gson = Gson()
     private val syncMutex = Mutex()
 
-    // Keyed by the token query id, so a lookup needs no coin database read.
+    // Keyed by [USwapAssetMapping.catalogKey], so a lookup needs no coin database read.
     @Volatile
     private var entries: Map<String, Entry> = emptyMap()
 
@@ -65,7 +66,7 @@ class USwapAssetCatalog(
     val isLoaded: Boolean
         get() = entries.isNotEmpty()
 
-    fun entry(token: Token): Entry? = entries[token.tokenQuery.id]
+    fun entry(token: Token): Entry? = entries[USwapAssetMapping.catalogKey(token.tokenQuery)]
 
     /** The identifier a request names the token by, or null when the token cannot be quoted. */
     fun asset(token: Token): String? = entry(token)?.identifier ?: USwapAssetMapping.derivedIdentifier(token)
@@ -124,6 +125,10 @@ class USwapAssetCatalog(
         }
     }
 
+    // Rows written before the key was case-normalized are re-keyed on the way in.
+    private fun storedKey(tokenQueryId: String): String =
+        TokenQuery.fromId(tokenQueryId)?.let { USwapAssetMapping.catalogKey(it) } ?: tokenQueryId
+
     private fun loadStoredRows() {
         storedRowsLoaded = true
         val records = try {
@@ -136,7 +141,7 @@ class USwapAssetCatalog(
 
         val restored = records.mapNotNull { record ->
             try {
-                gson.fromJson(record.data, Entry::class.java)?.let { record.tokenQueryId to it }
+                gson.fromJson(record.data, Entry::class.java)?.let { storedKey(record.tokenQueryId) to it }
             } catch (e: Throwable) {
                 null
             }
@@ -170,7 +175,7 @@ class USwapAssetCatalog(
         for (token in tokens) {
             val entry = Entry(token.identifier, token.providers.orEmpty().map { it.uppercase() })
             for (query in USwapAssetMapping.tokenQueries(token)) {
-                fetched[query.id] = entry
+                fetched[USwapAssetMapping.catalogKey(query)] = entry
             }
         }
 

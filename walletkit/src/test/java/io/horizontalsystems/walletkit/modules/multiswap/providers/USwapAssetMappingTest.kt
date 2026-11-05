@@ -81,4 +81,17 @@ class USwapAssetMappingTest {
         assertNull(USwapAssetMapping.chainId(BlockchainType.Solana))
         assertNull(USwapAssetMapping.chainId(BlockchainType.Bitcoin))
     }
+
+    @Test
+    fun `an EVM contract address keys the catalog in one case, other tokens by their id`() {
+        val checksummed = TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdAC17F958D2ee523a2206206994597C13D831ec7"))
+        val lowercase = TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7"))
+        assertEquals(lowercase.id, USwapAssetMapping.catalogKey(checksummed))
+        assertEquals(lowercase.id, USwapAssetMapping.catalogKey(lowercase))
+
+        val tron = TokenQuery(BlockchainType.Tron, TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"))
+        assertEquals(tron.id, USwapAssetMapping.catalogKey(tron))
+        val native = TokenQuery(BlockchainType.Ethereum, TokenType.Native)
+        assertEquals(native.id, USwapAssetMapping.catalogKey(native))
+    }
 }
