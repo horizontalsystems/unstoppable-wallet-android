@@ -402,8 +402,10 @@ A task:
 
 - What should be different when the work is done, and why, in a sentence
   or two.
-- Where the source of truth is, in a form a reader can open: a Figma link,
-  the iOS implementation, a reference document. Say what to ignore in it.
+- Where the source of truth is, in a form a reader can open: the server
+  API document, a Figma link, a product decision. Say what to ignore in
+  it. Another platform's implementation is not a source of truth; when
+  one exists, it may be linked as something to compare against.
 - A decision the source of truth leaves open, one line each, only when
   the work would otherwise stop to ask.
 
