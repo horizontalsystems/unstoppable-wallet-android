@@ -270,7 +270,15 @@ fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionViewItem>>)
 
 @Composable
 fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
-    val failed = item.state == TransactionIconState.Failed
+    // A transaction that did not complete shows no amount colour; its status line tells why.
+    val ended = item.state == TransactionIconState.Failed ||
+        item.state == TransactionIconState.Muted ||
+        item.state == TransactionIconState.Warning
+    val subtitleColor = when (item.state) {
+        TransactionIconState.Failed -> ComposeAppTheme.colors.lucian
+        TransactionIconState.Warning -> ComposeAppTheme.colors.jacob
+        else -> ComposeAppTheme.colors.grey
+    }
 
     Column {
         RowUniversal(
@@ -305,7 +313,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                             modifier = Modifier.testTag(TestTags.txItemValue(item.uid)),
                             text = if (item.showAmount) coloredValue.value else "* * *",
                             style = ComposeAppTheme.typography.headline2,
-                            color = if (failed) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
+                            color = if (ended) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                         )
@@ -336,13 +344,13 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         text = item.subtitle,
                         modifier = subtitleModifier,
                         style = ComposeAppTheme.typography.subhead.copy(fontWeight= FontWeight.SemiBold),
-                        color = if (failed) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.grey,
+                        color = subtitleColor,
                     )
                     item.secondaryValue?.let { coloredValue ->
                         Text(
                             text = if (item.showAmount) coloredValue.value else "",
                             style = ComposeAppTheme.typography.subheadSB,
-                            color = if (failed) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
+                            color = if (ended) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
                             maxLines = 1,
                         )
                     }

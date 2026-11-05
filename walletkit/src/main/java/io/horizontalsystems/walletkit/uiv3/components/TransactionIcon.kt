@@ -14,7 +14,11 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
-enum class TransactionIconState { Pending, Completed, Failed }
+/**
+ * Muted: ended without completing, though nothing was lost (refunded, expired).
+ * Warning: stopped until the user acts.
+ */
+enum class TransactionIconState { Pending, Completed, Failed, Muted, Warning }
 
 @Composable
 fun TransactionIcon(
@@ -26,6 +30,8 @@ fun TransactionIcon(
         TransactionIconState.Pending -> ComposeAppTheme.colors.grey
         TransactionIconState.Completed -> ComposeAppTheme.colors.leah
         TransactionIconState.Failed -> ComposeAppTheme.colors.lucian
+        TransactionIconState.Muted -> ComposeAppTheme.colors.grey
+        TransactionIconState.Warning -> ComposeAppTheme.colors.jacob
     }
 
     Box(modifier = modifier.size(40.dp), contentAlignment = Alignment.Center) {
@@ -49,6 +55,8 @@ fun Preview_TransactionIcon() {
             TransactionIcon(R.drawable.arrow_m_down_24, TransactionIconState.Pending)
             TransactionIcon(R.drawable.arrow_m_down_24, TransactionIconState.Completed)
             TransactionIcon(R.drawable.arrow_m_down_24, TransactionIconState.Failed)
+            TransactionIcon(R.drawable.arrow_m_down_24, TransactionIconState.Muted)
+            TransactionIcon(R.drawable.arrow_m_down_24, TransactionIconState.Warning)
         }
     }
 }

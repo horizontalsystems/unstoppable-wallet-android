@@ -309,7 +309,9 @@ data class TransactionViewItem(
         fun stateText(state: TransactionIconState): Int? = when (state) {
             TransactionIconState.Pending -> pendingText
             TransactionIconState.Failed -> failedText
-            TransactionIconState.Completed -> null
+            TransactionIconState.Completed,
+            TransactionIconState.Muted,
+            TransactionIconState.Warning -> null
         }
     }
 

@@ -75,11 +75,19 @@ class ActivityTabTest {
     }
 
     @Test
-    fun `failed, refunded, expired and action required records show the failed state`() {
+    fun `a failed record shows the failed state`() {
         assertEquals(TransactionIconState.Failed, swapRecordIconState(SwapStatus.Failed))
-        assertEquals(TransactionIconState.Failed, swapRecordIconState(SwapStatus.Refunded))
-        assertEquals(TransactionIconState.Failed, swapRecordIconState(SwapStatus.Expired))
-        assertEquals(TransactionIconState.Failed, swapRecordIconState(SwapStatus.ActionRequired))
+    }
+
+    @Test
+    fun `refunded and expired records are muted`() {
+        assertEquals(TransactionIconState.Muted, swapRecordIconState(SwapStatus.Refunded))
+        assertEquals(TransactionIconState.Muted, swapRecordIconState(SwapStatus.Expired))
+    }
+
+    @Test
+    fun `a record needing action shows a warning`() {
+        assertEquals(TransactionIconState.Warning, swapRecordIconState(SwapStatus.ActionRequired))
     }
 
     @Test

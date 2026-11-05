@@ -48,12 +48,13 @@ internal fun swapRecordIconState(status: SwapStatus) = when (status) {
 
     SwapStatus.Completed -> TransactionIconState.Completed
 
-    // Every way a record ends without the swap done is shown alike, though a refund
-    // returned the funds and an expired order was never funded.
-    SwapStatus.Failed,
+    SwapStatus.Failed -> TransactionIconState.Failed
+
+    // Nothing is lost: a refund returned the funds, an expired order was never funded.
     SwapStatus.Refunded,
-    SwapStatus.Expired,
-    SwapStatus.ActionRequired -> TransactionIconState.Failed
+    SwapStatus.Expired -> TransactionIconState.Muted
+
+    SwapStatus.ActionRequired -> TransactionIconState.Warning
 }
 
 /**
