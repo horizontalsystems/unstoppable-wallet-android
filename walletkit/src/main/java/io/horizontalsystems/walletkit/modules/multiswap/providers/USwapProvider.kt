@@ -91,9 +91,12 @@ class USwapProvider(
         sessionId = UUID.randomUUID().toString()
     }
 
-    override suspend fun start() {
-        providerInfoManager.sync()
-        assetCatalog.sync()
+    // Independent fetches; the first quote waits for the slower, not the sum.
+    override suspend fun start() = coroutineScope {
+        val directory = async { providerInfoManager.sync() }
+        val catalog = async { assetCatalog.sync() }
+        directory.await()
+        catalog.await()
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean = assetCatalog.canQuote(tokenFrom, tokenTo)

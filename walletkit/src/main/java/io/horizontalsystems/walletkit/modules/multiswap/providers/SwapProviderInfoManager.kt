@@ -108,7 +108,7 @@ class SwapProviderInfoManager(
                 true
             }
         }
-        if (due) fetchIf { true }
+        if (due) fetchIf { !rows.containsKey(unknownProviderId.uppercase()) }
     }
 
     private fun isFresh(): Boolean {
