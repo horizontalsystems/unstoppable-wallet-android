@@ -135,15 +135,16 @@ fun TransactionsScreen(
             )
 
             Crossfade(
-                // The list waits for the view model to follow a tab switch, so the old tab's
-                // rows never show under the new tab.
+                // The list waits for the view model to follow a tab switch. The outgoing content
+                // reads the current state too, so it draws nothing while the tabs differ: the old
+                // tab's rows never show, not even fading out, under the new tab.
                 uiState.viewState.takeIf { uiState.tab == selectedTab },
                 modifier = Modifier
                     .fillMaxSize()
                     .background(ComposeAppTheme.colors.lawrence),
                 label = ""
             ) { viewState ->
-                if (listVisible && viewState == ViewState.Success) {
+                if (listVisible && viewState == ViewState.Success && uiState.tab == selectedTab) {
                     val pagedList = uiState.tab == ActivityTab.Transfers
                     transactions?.let { transactionItems ->
                         if (transactionItems.isEmpty()) {
