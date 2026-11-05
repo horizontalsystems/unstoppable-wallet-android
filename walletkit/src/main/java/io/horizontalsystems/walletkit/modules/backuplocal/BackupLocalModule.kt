@@ -5,8 +5,11 @@ import io.horizontalsystems.walletkit.core.managers.EncryptDecryptManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingType
 import io.horizontalsystems.walletkit.toHexString
 import io.horizontalsystems.walletkit.core.toPrivateKeyBytes
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
 import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.hdwalletkit.Base58
+import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.runBlocking
 import java.math.BigInteger
 
 object BackupLocalModule {
@@ -128,7 +131,14 @@ object BackupLocalModule {
             BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(String(data, Charsets.UTF_8))
             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(Base58.encode(data))
             MONERO_WATCH_ACCOUNT -> AccountType.MoneroWatchAccount.fromSerialized(String(data, Charsets.UTF_8))
-            ZCASH_VIEWING_KEY -> AccountType.ZcashViewingKey.fromSerialized(String(data, Charsets.UTF_8))
+            ZCASH_VIEWING_KEY -> {
+                val type = AccountType.ZcashViewingKey.fromSerialized(String(data, Charsets.UTF_8))
+                // A backup is an entry path like the watch screen: a key the chain cannot decode
+                // would restore an account that never syncs.
+                val valid = runBlocking { ChainRegistry[BlockchainType.Zcash]?.isWatchViewingKey(type.ufvk) }
+                if (valid != true) throw IllegalStateException("Invalid Zcash viewing key")
+                type
+            }
             MONERO_MNEMONIC -> {
                 val parts = String(data, Charsets.UTF_8).split("@", limit = 2)
                 val words = parts[0].split(" ")
