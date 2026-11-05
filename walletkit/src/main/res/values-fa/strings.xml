@@ -666,10 +666,6 @@
     <string name="Swap_YourTokens">توکن های شما</string>
     <string name="Swap_TopTokens">بهترین توکن ها</string>
     <string name="Swap_RecentSearch">جستجوی اخیر</string>
-    <string name="SwapTerms_TopText">برای ادامه، لطفاً موافقت خود را با هر مورد تأیید کنید.</string>
-    <string name="SwapTerms_RiskRestrictions_Info">برخی مسیرها ممکن است swapها را رد کنند یا دسترسی به وجوه را محدود کنند. هنگام انتخاب یک مسیر به امتیازات مسیر توجه کنید.</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">امتیازات مسیر</string>
-    <string name="SwapTerms_UserResponsibility_Info">من خطرات احتمالی را بررسی کرده‌ام و مسئولیت انتخاب مسیر خود را می‌پذیرم.</string>
     <string name="ZcashEndpointSettings_Description">سرور lightwallet را انتخاب کنید که برنامه Unstoppable باید برای همگام‌سازی کیف پول Zcash استفاده کند.</string>
     <string name="AddZcashEndpoint_AddEndpoint">افزودن نقطه پایانی</string>
     <string name="AddZcashEndpoint_EndpointUrl">URL نقطه پایانی</string>
@@ -682,7 +678,6 @@
     <string name="Swap_AmlRisk_Description">ریسک های احتمالی برای این معامله شناسایی شد. در حین پردازش، ممکن است وجوه شما رد یا محدود شود. لطفاً مسیر دیگری را انتخاب کنید.</string>
     <string name="Swap_AmlRisk_Button">انتخاب مسیر دیگر</string>
     <string name="Swap_EstimatedTimeDescription">این زمان تخمینی مورد نیاز برای تکمیل تبدیل و دریافت وجوه شما است. زمان واقعی ممکن است بسته به شرایط شبکه، تأیید تراکنش‌ها و مسیر تبدیل انتخاب شده کوتاه‌تر یا طولانی‌تر باشد.</string>
-    <string name="SwapTerms_BottomText">همیشه مسیر swap را انتخاب کنید که با نیازهای شما مطابقت داشته باشد.</string>
     <string name="SwapInfo_Provider">مسیر</string>
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
     <string name="ManageAccounts_ViewOnlyWallet">کیف پول فقط مشاهده</string>
@@ -1288,9 +1283,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">محافظت را روشن کنید تا سواپ شما ایمن بماند و ارزشی به ربات‌ها از دست نرود.</string>
     <string name="SwapError_FailedToFetchQuote">دریافت قیمت ناموفق بود.</string>
-    <string name="SwapTerms_Title">شرایط سواپ</string>
-    <string name="SwapTerms_RiskRestrictions">خطر محدودیت‌ها</string>
-    <string name="SwapTerms_UserResponsibility">مسئولیت کاربر</string>
     <string name="SwapSettings_Error_InvalidBlockchainAddress">آدرس %s نامعتبر است</string>
     <string name="SwapSort_BestRate">بهترین نرخ</string>
     <string name="SwapSort_BestTime">سریع‌ترین</string>

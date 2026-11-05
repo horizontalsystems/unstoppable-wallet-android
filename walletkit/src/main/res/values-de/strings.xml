@@ -635,13 +635,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">Schalten Sie den Schutz ein, um Ihren Swap-Wert zu sichern und vermeiden Sie den Verlust von Wert an Bots.</string>
     <string name="SwapError_FailedToFetchQuote">Zitat konnte nicht abgerufen werden.</string>
-    <string name="SwapTerms_Title">Begriffe tauschen</string>
-    <string name="SwapTerms_TopText">Um fortzufahren, bestätigen Sie bitte Ihre Zustimmung zu jedem Punkt.</string>
-    <string name="SwapTerms_BottomText">Wählen Sie immer eine Swap-Route, die Ihren Anforderungen entspricht.</string>
-    <string name="SwapTerms_RiskRestrictions">Risiko von Einschränkungen</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Einige Routen können Swaps ablehnen oder den Zugriff auf Gelder einschränken. Achten Sie auf Routen-Bewertungen bei der Auswahl einer Route.</string>
-    <string name="SwapTerms_UserResponsibility">Benutzerverantwortung</string>
-    <string name="SwapTerms_UserResponsibility_Info">Ich habe die möglichen Risiken überprüft und akzeptiere die Verantwortung für meine Routenwahl.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Slippage Toleranz</string>
     <string name="SwapSettings_RecipientAddressTitle">Empfängeradresse</string>
@@ -1710,7 +1703,6 @@
     <string name="Swap_YourTokens">Ihre Token</string>
     <string name="Swap_TopTokens">Top-Token</string>
     <string name="Swap_RecentSearch">Letzte Suche</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">Routen-Bewertungen</string>
     <string name="ZcashEndpointSettings_Description">Wählen Sie den Lightwallet-Server, den die Unstoppable-App zur Synchronisierung der Zcash-Wallet(s) verwenden soll.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Endpoint hinzufügen</string>
     <string name="AddZcashEndpoint_EndpointUrl">Endpoint-URL</string>

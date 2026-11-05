@@ -94,7 +94,6 @@ object SwapPathFixtures {
     ) : IMultiSwapProvider {
         override val title = id
         override val type = SwapProviderType.DEX
-        override val requireTerms = false
 
         override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
 

@@ -637,13 +637,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">Включите защиту, чтобы защитить подкачку и избежать потери значения для ботов.</string>
     <string name="SwapError_FailedToFetchQuote">Не удалось получить данные.</string>
-    <string name="SwapTerms_Title">Условия обмена</string>
-    <string name="SwapTerms_TopText">Чтобы продолжить, подтвердите ваше согласие с каждым пунктом.</string>
-    <string name="SwapTerms_BottomText">Всегда выбирайте маршрут обмена, соответствующий вашим требованиям.</string>
-    <string name="SwapTerms_RiskRestrictions">Риск ограничений</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Некоторые маршруты могут отклонить обмены или ограничить доступ к средствам. Обратите внимание на оценки маршрута при выборе маршрута.</string>
-    <string name="SwapTerms_UserResponsibility">Ответственность пользователя</string>
-    <string name="SwapTerms_UserResponsibility_Info">Я ознакомился с возможными рисками и принимаю ответственность за выбор маршрута.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Допустимое отклонение</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес получателя</string>
@@ -1712,7 +1705,6 @@
     <string name="Swap_YourTokens">Ваши токены</string>
     <string name="Swap_TopTokens">Топ токены</string>
     <string name="Swap_RecentSearch">Недавний поиск</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">оценки маршрута</string>
     <string name="ZcashEndpointSettings_Description">Выберите сервер lightwallet, который приложение Unstoppable должно использовать для синхронизации кошелька(ков) Zcash.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Добавить конечную точку</string>
     <string name="AddZcashEndpoint_EndpointUrl">URL конечной точки</string>

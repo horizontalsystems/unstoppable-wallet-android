@@ -98,7 +98,6 @@ interface ILocalStorage {
     var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
-    var swapTermsAccepted: Boolean
     var simulateFailSwap: SimulateFailSwapMode
     var showSwapProviderName: Boolean
     var passkeyTermsAccepted: Boolean

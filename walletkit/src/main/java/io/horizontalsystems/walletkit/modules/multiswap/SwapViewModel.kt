@@ -15,7 +15,6 @@ import io.horizontalsystems.walletkit.core.restoreSettingTypes
 import io.horizontalsystems.walletkit.core.managers.CurrencyManager
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.core.managers.RestoreSettings
-import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
 import io.horizontalsystems.walletkit.core.managers.WalletManager
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -59,7 +58,6 @@ class SwapViewModel(
     private val timerService: TimerService,
     private val networkAvailabilityService: NetworkAvailabilityService,
     private val defaultTokenService: SwapDefaultTokenService,
-    private val swapTermsManager: SwapTermsManager,
     private val swapRecordManager: SwapRecordManager,
     private val marketKit: MarketKitWrapper,
     private val walletManager: WalletManager,
@@ -92,7 +90,6 @@ class SwapViewModel(
     private var hasRateOut = false
     private var currency = currencyManager.baseCurrency
     private var requoteOnTimeout = true
-    private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
     private var amlChecking = false
     private var initialShowRegularPrice = true
     private var balanceJob: Job? = null
@@ -251,13 +248,6 @@ class SwapViewModel(
             }
         }
 
-        viewModelScope.launch {
-            swapTermsManager.swapTermsAcceptedStateFlow.collect { accepted ->
-                swapTermsAccepted = accepted
-                emitState()
-            }
-        }
-
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
 
@@ -372,7 +362,6 @@ class SwapViewModel(
             currency = currency,
             fiatAmountInputEnabled = fiatAmountInputEnabled,
             hasRateOut = hasRateOut,
-            needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true,
             amlChecking = amlChecking,
             initialShowRegularPrice = initialShowRegularPrice,
             swapTimeStatus = swapTimeStatus(
@@ -697,7 +686,6 @@ class SwapViewModel(
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
                 SwapDefaultTokenService(App.marketKit, App.walletManager),
-                App.swapTermsManager,
                 App.swapRecordManager,
                 App.marketKit,
                 App.walletManager,
@@ -738,7 +726,6 @@ data class SwapUiState(
     val fiatAmountInputEnabled: Boolean,
     val hasRateOut: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
-    val needToAcceptTerms: Boolean,
     val amlChecking: Boolean,
     val initialShowRegularPrice: Boolean,
     val swapTimeStatus: SwapTimeStatus,

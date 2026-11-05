@@ -6,7 +6,6 @@ enum class UProvider(
     val type: SwapProviderType,
     val aml: Boolean,
     val amlPrecheck: Boolean,
-    val requireTerms: Boolean,
     val isEvm: Boolean,
     val isSingleTransactionSwap: Boolean,
     // Provider accepts plain sends to its deposit address (any output type) on UTXO
@@ -27,7 +26,6 @@ enum class UProvider(
         SwapProviderType.DEX,
         false,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true,
@@ -44,7 +42,6 @@ enum class UProvider(
         SwapProviderType.DEX,
         false,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -53,7 +50,6 @@ enum class UProvider(
         "QUICKEX",
         "QuickEx",
         SwapProviderType.CEX,
-        true,
         true,
         true,
         isEvm = false,
@@ -66,7 +62,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -77,7 +72,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -88,7 +82,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -99,7 +92,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -110,7 +102,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         false,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -124,7 +115,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         false,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -135,7 +125,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -146,7 +135,6 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         false,
-        true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -157,7 +145,6 @@ enum class UProvider(
         type = SwapProviderType.CEX,
         aml = true,
         amlPrecheck = false,
-        requireTerms = true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -168,7 +155,6 @@ enum class UProvider(
         SwapProviderType.DEX,
         true,
         false,
-        true,
         isEvm = true,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -179,7 +165,6 @@ enum class UProvider(
         SwapProviderType.DEX,
         false,
         false,
-        true,
         isEvm = true,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false
@@ -190,7 +175,6 @@ enum class UProvider(
         type = SwapProviderType.CEX,
         aml = true,
         amlPrecheck = false,
-        requireTerms = true,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = true
@@ -201,7 +185,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = true,
         isEvm = false,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -212,7 +195,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = true,
         isEvm = false,
         // Cross-chain default; a same-chain LI.FI pair IS a single tx —
         // USwapProvider.isSingleTransactionSwap resolves that per pair.
@@ -228,7 +210,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = true,
         isEvm = false,
         // Cross-chain: the signed inbound tx is followed by Axelar's GMP delivery leg.
         isSingleTransactionSwap = false,
@@ -242,7 +223,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = false,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false
@@ -253,7 +233,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = false,
         isEvm = false,
         isSingleTransactionSwap = false,
         supportsSimpleUtxoTransactions = false,
@@ -267,7 +246,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = false,
         isEvm = true,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -278,7 +256,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = false,
         isEvm = true,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false
@@ -292,7 +269,6 @@ enum class UProvider(
         type = SwapProviderType.DEX,
         aml = false,
         amlPrecheck = false,
-        requireTerms = true,
         isEvm = false,
         isSingleTransactionSwap = true,
         supportsSimpleUtxoTransactions = false

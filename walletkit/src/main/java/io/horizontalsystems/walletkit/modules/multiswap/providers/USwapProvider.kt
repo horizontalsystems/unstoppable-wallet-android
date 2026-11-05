@@ -70,7 +70,6 @@ class USwapProvider(
     override val type = provider.type
     override val amlPrecheck = provider.amlPrecheck
     override val isEvm = provider.isEvm
-    override val requireTerms = provider.requireTerms
 
     override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = when (provider) {
         // LI.FI spans both: a same-chain pair is a plain single-tx DEX swap, a cross-chain

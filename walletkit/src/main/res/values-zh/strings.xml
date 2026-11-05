@@ -634,13 +634,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">开启保护，保护您的交换，避免丢失机器人的价值。</string>
     <string name="SwapError_FailedToFetchQuote">获取报价失败。</string>
-    <string name="SwapTerms_Title">交换条款</string>
-    <string name="SwapTerms_TopText">要继续，请确认您同意每一项。</string>
-    <string name="SwapTerms_BottomText">始终选择符合您要求的交换路由。</string>
-    <string name="SwapTerms_RiskRestrictions">限制的风险</string>
-    <string name="SwapTerms_RiskRestrictions_Info">某些路由可能拒绝交换或限制对资金的访问。选择路由时要注意路由评分。</string>
-    <string name="SwapTerms_UserResponsibility">用户责任</string>
-    <string name="SwapTerms_UserResponsibility_Info">我已审查可能的风险，并对我的路由选择承担责任。</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">无效滑点</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
@@ -1704,7 +1697,6 @@
     <string name="Swap_YourTokens">您的代币</string>
     <string name="Swap_TopTokens">顶级代币</string>
     <string name="Swap_RecentSearch">最近搜索</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">路由评分</string>
     <string name="ZcashEndpointSettings_Description">选择 Unstoppable 应用用于同步 Zcash 钱包的轻钱包服务器。</string>
     <string name="AddZcashEndpoint_AddEndpoint">添加端点</string>
     <string name="AddZcashEndpoint_EndpointUrl">端点 URL</string>

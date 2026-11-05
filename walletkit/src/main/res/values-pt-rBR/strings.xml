@@ -635,13 +635,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">Ative a proteção para proteger sua troca e evitar perder valor para bots.</string>
     <string name="SwapError_FailedToFetchQuote">Falha ao obter citação.</string>
-    <string name="SwapTerms_Title">Trocar Termos</string>
-    <string name="SwapTerms_TopText">Para continuar, confirme seu acordo com cada item.</string>
-    <string name="SwapTerms_BottomText">Sempre escolha uma rota de swap que se alinhe com seus requisitos.</string>
-    <string name="SwapTerms_RiskRestrictions">Risco de restrições</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Algumas rotas podem rejeitar swaps ou restringir o acesso a fundos. Preste atenção aos scores de rota ao escolher uma rota.</string>
-    <string name="SwapTerms_UserResponsibility">Responsabilidade do usuário</string>
-    <string name="SwapTerms_UserResponsibility_Info">Revisei os riscos possíveis e aceito a responsabilidade pela minha escolha de rota.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolerância de Slippage</string>
     <string name="SwapSettings_RecipientAddressTitle">Endereço do Destinatário</string>
@@ -1710,7 +1703,6 @@
     <string name="Swap_YourTokens">Seus Tokens</string>
     <string name="Swap_TopTokens">Tokens Principais</string>
     <string name="Swap_RecentSearch">Pesquisa Recente</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">scores de rota</string>
     <string name="ZcashEndpointSettings_Description">Escolha o servidor lightwallet que o aplicativo Unstoppable deve usar para sincronizar a(s) carteira(s) Zcash.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Adicionar ponto de extremidade</string>
     <string name="AddZcashEndpoint_EndpointUrl">URL do ponto de extremidade</string>

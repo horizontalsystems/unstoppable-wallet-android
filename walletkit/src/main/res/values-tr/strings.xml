@@ -1335,10 +1335,6 @@
     <string name="Swap_YourTokens">Sizin Tokenleriniz</string>
     <string name="Swap_TopTokens">En İyi Tokenler</string>
     <string name="Swap_RecentSearch">Son Arama</string>
-    <string name="SwapTerms_TopText">Devam etmek için lütfen her öğeye olan anlaşmanızı onaylayın.</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Bazı rotalar swapları reddedebilir veya fonlara erişimi kısıtlayabilir. Bir rota seçerken rota puanlarına dikkat edin.</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">rota puanları</string>
-    <string name="SwapTerms_UserResponsibility_Info">Olası riskleri gözden geçirdim ve rota seçimim için sorumluluğu kabul ediyorum.</string>
     <string name="ZcashEndpointSettings_Description">Unstoppable uygulamasının Zcash cüzdan(larını) senkronize etmek için kullanması gereken lightwallet sunucusunu seçin.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Uç nokta ekle</string>
     <string name="AddZcashEndpoint_EndpointUrl">Uç nokta URL\'si</string>
@@ -1349,7 +1345,6 @@
     <string name="Swap_AmlRisk_Description">Bu işlem için olası riskler tespit edildi. İşlem sırasında fonlarınız reddedilebilir veya kısıtlanabilir. Lütfen başka bir rota seçin.</string>
     <string name="Swap_AmlRisk_Button">Başka Rota Seç</string>
     <string name="Swap_EstimatedTimeDescription">Bu, takası tamamlamak ve fonlarınızı almak için gereken tahmini süredir. Gerçek süre, ağ koşullarına, işlem onaylarına ve seçilen takas rotasına bağlı olarak daha kısa veya daha uzun olabilir.</string>
-    <string name="SwapTerms_BottomText">Her zaman gereksinimlerinize uygun bir swap rotası seçin.</string>
     <string name="SwapInfo_Provider">Rota</string>
     <string name="ManageAccounts_ViewOnlyWallet">Yalnızca Görüntüleme Cüzdanı</string>
     <string name="ActivationRequired_DialogTitle">Token’i Aktive Et</string>
@@ -1552,9 +1547,6 @@
     <string name="SwapInfo_Title">Swap Bilgisi</string>
     <string name="SwapSort_BestRate">En İyi Oran</string>
     <string name="SwapSort_BestTime">En Hızlı</string>
-    <string name="SwapTerms_RiskRestrictions">Kısıtlama riski</string>
-    <string name="SwapTerms_Title">Swap Koşulları</string>
-    <string name="SwapTerms_UserResponsibility">Kullanıcı sorumluluğu</string>
     <string name="Swap_AML">AML</string>
     <string name="Swap_AmlError_Description">Şu anda yanıt alınamıyor. Lütfen tekrar deneyin.</string>
     <string name="Swap_AmlError_Title">Bağlantı Sorunu</string>

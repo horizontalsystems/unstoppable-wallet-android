@@ -53,7 +53,6 @@ import io.horizontalsystems.walletkit.core.managers.ReleaseNotesManager
 import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.walletkit.core.managers.SwapTermsManager
 import io.horizontalsystems.walletkit.core.managers.SystemInfoManager
 import io.horizontalsystems.walletkit.core.managers.TermsManager
 import io.horizontalsystems.walletkit.core.managers.TokenAutoEnableManager
@@ -179,7 +178,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var lockGate: LockGate
         var wcWalletRequestHandler: IWCWalletRequestHandler? = null
         lateinit var termsManager: ITermsManager
-        lateinit var swapTermsManager: SwapTermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
         lateinit var priceManager: PriceManager
@@ -413,7 +411,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         wcWalletRequestHandler = ChainRegistry.all.firstNotNullOfOrNull { it.wcWalletRequestHandler() }
 
         termsManager = TermsManager(localStorage)
-        swapTermsManager = SwapTermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
         marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)

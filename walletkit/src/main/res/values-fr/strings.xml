@@ -635,13 +635,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">Activez la protection pour sécuriser votre swap et évitez de perdre de la valeur aux bots.</string>
     <string name="SwapError_FailedToFetchQuote">Impossible de récupérer le devis.</string>
-    <string name="SwapTerms_Title">Échanger les conditions</string>
-    <string name="SwapTerms_TopText">Pour continuer, veuillez confirmer votre accord avec chaque élément.</string>
-    <string name="SwapTerms_BottomText">Choisissez toujours un itinéraire de swap qui correspond à vos besoins.</string>
-    <string name="SwapTerms_RiskRestrictions">Risque de restrictions</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Certains itinéraires peuvent rejeter les swaps ou restreindre l\'accès aux fonds. Prêtez attention aux scores d\'itinéraire lors du choix d\'un itinéraire.</string>
-    <string name="SwapTerms_UserResponsibility">Responsabilité de l\'utilisateur</string>
-    <string name="SwapTerms_UserResponsibility_Info">J\'ai examiné les risques possibles et j\'accepte la responsabilité de mon choix d\'itinéraire.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolérance de Slippage</string>
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
@@ -1707,7 +1700,6 @@
     <string name="Swap_YourTokens">Vos tokens</string>
     <string name="Swap_TopTokens">Meilleurs tokens</string>
     <string name="Swap_RecentSearch">Recherche récente</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">scores d\'itinéraire</string>
     <string name="ZcashEndpointSettings_Description">Choisissez le serveur lightwallet que l\'application Unstoppable doit utiliser pour synchroniser le(s) portefeuille(s) Zcash.</string>
     <string name="AddZcashEndpoint_AddEndpoint">Ajouter un point de terminaison</string>
     <string name="AddZcashEndpoint_EndpointUrl">URL du point de terminaison</string>

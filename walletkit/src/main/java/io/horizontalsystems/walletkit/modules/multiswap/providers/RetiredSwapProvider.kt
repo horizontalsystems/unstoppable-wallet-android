@@ -22,7 +22,6 @@ class RetiredSwapProvider(
     constructor(id: String, title: String, type: SwapProviderType, singleTransactionSwap: Boolean) :
         this(id, title, type, { _, _ -> singleTransactionSwap })
 
-    override val requireTerms = false
 
     override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
         singleTransactionSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid)

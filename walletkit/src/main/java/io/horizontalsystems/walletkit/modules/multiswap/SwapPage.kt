@@ -69,7 +69,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
-import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
 import io.horizontalsystems.walletkit.modules.multiswap.ui.routeScore
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
@@ -325,11 +324,6 @@ private fun SwapTabScreen(
         stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
     }
 
-    val forResultSwapTerms = navigation.slideFromRightForResult<SwapTermsPage.Result>(
-        { SwapTermsPage }
-    ) {
-        if (it.accepted) navigateToSwapConfirm()
-    }
     // startProceed() is asynchronous on both of its paths — the no-precheck path only emits on the
     // view model scope and sets no state at all — so the Proceed button stays live after the first
     // tap. A second tap emits a second Proceed and pushes a second confirmation page. Latch in the
@@ -355,11 +349,7 @@ private fun SwapTabScreen(
             try {
                 when (event) {
                     AmlCheckEvent.Proceed -> {
-                        if (viewModel.uiState.needToAcceptTerms) {
-                            forResultSwapTerms()
-                        } else {
-                            navigateToSwapConfirm()
-                        }
+                        navigateToSwapConfirm()
                     }
                     AmlCheckEvent.RiskDetected -> {
                         showAmlRiskSheet = true

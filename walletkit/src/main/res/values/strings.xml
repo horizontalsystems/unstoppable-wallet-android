@@ -942,14 +942,6 @@
     <string name="SwapConfirm_MevDescription">Turn on protection to secure your swap and avoid losing value to bots.</string>
     <string name="SwapError_FailedToFetchQuote">Failed to fetch quote.</string>
 
-    <string name="SwapTerms_Title">Swap Terms</string>
-    <string name="SwapTerms_TopText">To continue, please confirm your agreement with each item.</string>
-    <string name="SwapTerms_BottomText">Always choose a swap route that aligns with your requirements.</string>
-    <string name="SwapTerms_RiskRestrictions">Risk of restrictions</string>
-    <string name="SwapTerms_RiskRestrictions_Info">Some routes may reject swaps or restrict access to funds. Pay attention to route scores when choosing a route.</string>
-    <string name="SwapTerms_RiskRestrictions_Highlight">route scores</string>
-    <string name="SwapTerms_UserResponsibility">User responsibility</string>
-    <string name="SwapTerms_UserResponsibility_Info">I have reviewed the possible risks and accept responsibility for my choice of route.</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>

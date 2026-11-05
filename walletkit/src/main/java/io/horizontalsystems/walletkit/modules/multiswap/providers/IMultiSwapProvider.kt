@@ -19,7 +19,6 @@ interface IMultiSwapProvider {
         get() = false
     val isEvm: Boolean
         get() = false
-    val requireTerms: Boolean
     fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean
 
     val titleShort: String
