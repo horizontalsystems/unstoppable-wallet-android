@@ -57,4 +57,14 @@ class SwapProviderInfoManagerTest {
 
         assertEquals("Pancakeswap Api", SwapProviderInfoManager.venues(mapOf("PANCAKESWAP_API" to row)).getValue("PANCAKESWAP_API").name)
     }
+
+    @Test
+    fun `a synced row without an id is dropped instead of failing the whole list`() {
+        val json = """[{"provider":"NEAR","name":"Near"},{"name":"Nameless"},{"provider":"","name":"Blank"}]"""
+        val parsed = Gson().fromJson(json, Array<UnstoppableAPI.Response.Provider>::class.java).toList()
+
+        val indexed = SwapProviderInfoManager.index(parsed)
+
+        assertEquals(setOf("NEAR"), indexed.keys)
+    }
 }

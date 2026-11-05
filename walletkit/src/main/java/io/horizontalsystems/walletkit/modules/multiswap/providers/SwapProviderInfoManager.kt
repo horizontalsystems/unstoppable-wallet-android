@@ -149,19 +149,19 @@ class SwapProviderInfoManager(
     }
 
     private fun apply(responses: List<UnstoppableAPI.Response.Provider>) {
-        val byId = responses.associateBy { it.provider.uppercase() }
+        val byId = index(responses)
         rows = byId
         _venuesFlow.value = venues(byId)
         _splitProvidersFlow.value = splitProviderIds(byId)
     }
+
 
     private fun restoredRows(): Map<String, UnstoppableAPI.Response.Provider> {
         val json = localStorage.uSwapProviders ?: return emptyMap()
 
         return try {
             gson.fromJson(json, Array<UnstoppableAPI.Response.Provider>::class.java)
-                ?.filter { !it.provider.isNullOrEmpty() }
-                ?.associateBy { it.provider.uppercase() }
+                ?.let { index(it.toList()) }
                 ?: emptyMap()
         } catch (e: Throwable) {
             Log.e(TAG, "Failed to restore swap providers", e)
@@ -171,6 +171,11 @@ class SwapProviderInfoManager(
 
     companion object {
         private const val TAG = "SwapProviderInfoManager"
+
+        /** The rows by upper-cased id. A row without an id (Gson leaves an absent field null) is dropped, not thrown on. */
+        fun index(responses: List<UnstoppableAPI.Response.Provider>): Map<String, UnstoppableAPI.Response.Provider> =
+            responses.filter { !it.provider.isNullOrEmpty() }.associateBy { it.provider.uppercase() }
+
         private const val SYNC_INTERVAL = 60 * 60 * 1000L // 1 hour
         private val FALLBACK_PRIVACY_LEVELS = listOf("basic")
 
