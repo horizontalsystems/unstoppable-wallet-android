@@ -72,10 +72,11 @@ object SwapTrackRequestBuilder {
             // alone; the server resolves the provider + all details from it, and rejects any
             // other field. The inbound tx hash reaches the server through /v3/signed from the
             // send path, never from here.
-            else -> TrackCall(
-                Endpoint.Recorded,
-                UnstoppableAPI.Request.Track(uuid = record.providerSwapId)
-            )
+            else -> {
+                val uuid = record.providerSwapId?.takeIf { it.isNotBlank() }
+                    ?: throw IllegalArgumentException("No tracking uuid for ${record.providerId}")
+                TrackCall(Endpoint.Recorded, UnstoppableAPI.Request.Track(uuid = uuid))
+            }
         }
     }
 
