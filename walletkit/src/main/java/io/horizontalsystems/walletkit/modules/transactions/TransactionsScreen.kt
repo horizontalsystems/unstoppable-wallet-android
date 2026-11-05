@@ -49,6 +49,7 @@ import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.walletkit.modules.balance.BalanceModule
 import io.horizontalsystems.walletkit.modules.balance.BalanceScreenState
+import io.horizontalsystems.walletkit.modules.multiswap.history.SwapInfoPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
@@ -66,9 +67,8 @@ import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIcon
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
-import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
-import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTop
-import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTopType
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
+import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import kotlinx.coroutines.delay
 
 private const val SlideDurationMillis = 300L
@@ -77,11 +77,17 @@ private const val SlideDurationMillis = 300L
 fun TransactionsScreen(
     navigation: HSNavigation,
     viewModel: TransactionsViewModel,
+    initialTab: ActivityTab = ActivityTab.Transfers,
 ) {
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
-    val filterTypes by viewModel.filterTypesLiveData.observeAsState()
+    // The view model is shared by every way into the screen, so the tab lives here.
+    var selectedTab by rememberSaveable { mutableStateOf(initialTab) }
+    LaunchedEffect(selectedTab) {
+        viewModel.setTab(selectedTab)
+    }
+
     val showFilterAlertDot by viewModel.filterResetEnabled.observeAsState(false)
 
     val uiState = viewModel.uiState
@@ -95,7 +101,7 @@ fun TransactionsScreen(
     }
 
     HSScaffold(
-        title = stringResource(R.string.Transactions_Title),
+        title = stringResource(R.string.Activity_Title),
         onBack = navigation::removeLastOrNull,
         menuItems = buildList {
             add(
@@ -117,28 +123,29 @@ fun TransactionsScreen(
         }
     ) {
         Column {
-            filterTypes?.let { filterTypes ->
-                FilterTypeTabs(
-                    filterTypes = filterTypes,
-                    onTransactionTypeClick = {
-                        viewModel.setFilterTransactionType(it)
+            ActivityTabs(
+                selectedTab = selectedTab,
+                onSelect = {
+                    selectedTab = it
 
-                        stat(
-                            page = StatPage.Transactions,
-                            event = StatEvent.SwitchTab(it.statTab)
-                        )
-                    }
-                )
-            }
+                    stat(
+                        page = StatPage.Transactions,
+                        event = StatEvent.SwitchTab(it.statTab)
+                    )
+                }
+            )
 
             Crossfade(
-                uiState.viewState,
+                // The list waits for the view model to follow a tab switch, so the old tab's
+                // rows never show under the new tab.
+                uiState.viewState.takeIf { uiState.tab == selectedTab },
                 modifier = Modifier
                     .fillMaxSize()
                     .background(ComposeAppTheme.colors.lawrence),
                 label = ""
             ) { viewState ->
                 if (listVisible && viewState == ViewState.Success) {
+                    val pagedList = uiState.tab == ActivityTab.Transfers
                     transactions?.let { transactionItems ->
                         if (transactionItems.isEmpty()) {
                             if (syncing) {
@@ -155,7 +162,7 @@ fun TransactionsScreen(
                                         .background(ComposeAppTheme.colors.lawrence)
                                         .testTag(TestTags.TX_EMPTY),
                                     text = stringResource(R.string.Transactions_EmptyList),
-                                    icon = R.drawable.ic_outgoingraw
+                                    icon = R.drawable.warning_octagon_24
                                 )
                             }
                         } else {
@@ -187,7 +194,8 @@ fun TransactionsScreen(
                                     transactionsMap = transactionItems,
                                     willShow = { viewModel.willShow(it) },
                                     onClick = onClick,
-                                    onBottomReached = { viewModel.onBottomReached() }
+                                    // Only Transfers pages its on-chain transactions in.
+                                    onBottomReached = { if (pagedList) viewModel.onBottomReached() }
                                 )
                             }
                         }
@@ -203,6 +211,11 @@ private fun onTransactionClick(
     viewModel: TransactionsViewModel,
     navigation: HSNavigation
 ) {
+    transactionViewItem.swapRecordId?.let { id ->
+        navigation.slideFromRight(SwapInfoPage(SwapInfoPage.Input(id)))
+        return
+    }
+
     val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
 
     TransactionInfoPayload.record = transactionItem.record
@@ -395,17 +408,24 @@ private fun TransactionTitlePart(part: TransactionViewItem.Title.Single, modifie
 }
 
 @Composable
-private fun FilterTypeTabs(
-    filterTypes: List<Filter<FilterTransactionType>>,
-    onTransactionTypeClick: (FilterTransactionType) -> Unit
+private fun ActivityTabs(
+    selectedTab: ActivityTab,
+    onSelect: (ActivityTab) -> Unit
 ) {
-    val tabItems = filterTypes.map {
-        TabItem(stringResource(it.item.title), it.selected, it.item)
-    }
-
-    TabsTop(TabsTopType.Scrolled, tabItems) { transactionType ->
-        onTransactionTypeClick.invoke(transactionType)
-    }
+    val tabs = ActivityTab.entries
+    TabsFolder(
+        tabs = tabs.map { TabFolderItem(stringResource(it.title), testTag = it.testTag) },
+        selectedIndex = tabs.indexOf(selectedTab),
+        onSelect = { onSelect(tabs[it]) },
+    )
 }
+
+private val ActivityTab.testTag: String
+    get() = when (this) {
+        ActivityTab.Transfers -> TestTags.TX_TAB_TRANSFERS
+        ActivityTab.Swaps -> TestTags.TX_TAB_SWAPS
+        ActivityTab.Privates -> TestTags.TX_TAB_PRIVATES
+        ActivityTab.CrossPays -> TestTags.TX_TAB_CROSS_PAYS
+    }
 
 data class Filter<T>(val item: T, val selected: Boolean)

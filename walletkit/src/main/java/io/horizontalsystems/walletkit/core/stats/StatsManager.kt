@@ -30,7 +30,7 @@ import io.horizontalsystems.walletkit.modules.metricchart.ProChartModule
 import io.horizontalsystems.walletkit.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
-import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
+import io.horizontalsystems.walletkit.modules.transactions.ActivityTab
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.CoroutineScope
@@ -358,13 +358,12 @@ val MarketSearchSection.statSection: StatSection
         MarketSearchSection.SearchResults -> StatSection.SearchResults
     }
 
-val FilterTransactionType.statTab: StatTab
+val ActivityTab.statTab: StatTab
     get() = when (this) {
-        FilterTransactionType.All -> StatTab.All
-        FilterTransactionType.Incoming -> StatTab.Incoming
-        FilterTransactionType.Outgoing -> StatTab.Outgoing
-        FilterTransactionType.Swap -> StatTab.Swap
-        FilterTransactionType.Approve -> StatTab.Approve
+        ActivityTab.Transfers -> StatTab.All
+        ActivityTab.Swaps -> StatTab.Swap
+        ActivityTab.Privates -> StatTab.Private
+        ActivityTab.CrossPays -> StatTab.CrossPay
     }
 
 val SpeedUpCancelType.statResendType: StatResendType

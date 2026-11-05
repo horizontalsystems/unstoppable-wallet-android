@@ -667,7 +667,6 @@
     <string name="Activate_InsufficientBalance_Description">Você não tem saldo XLM suficiente para ativar este token.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">Histórico de trocas</string>
-    <string name="SwapHistory_EmptyList">Você ainda não possui nenhum swap pendente ou anterior.</string>
     <string name="SwapInfo_Title">Trocar informações</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Rota</string>
@@ -695,8 +694,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Receber %s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transações</string>
-    <string name="Transactions_EmptyList">Nenhuma transação pendente ou anterior ainda.</string>
+    <string name="Transactions_EmptyList">Você ainda não tem nenhuma transação pendente ou anterior.</string>
     <string name="Transactions_WaitForSync">Por favor, aguarde a sincronização concluir.</string>
     <string name="Transactions_Pending">Pendente</string>
     <string name="Transactions_Receive">Recebido</string>
@@ -1927,9 +1925,6 @@
     <string name="PrivateSend_Tab_Description">Private Send oculta o vínculo direto na blockchain entre seu endereço e o destinatário através de um intermediário confidencial.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Não foi possível estimar a taxa de rede</string>
     <string name="Send_DestinationTag_Title">Tag de destino</string>
-    <string name="SwapHistory_StatusDepositing">Depositando…</string>
-    <string name="SwapHistory_StatusSwapping">Trocando…</string>
-    <string name="SwapHistory_StatusSending">Enviando…</string>
     <string name="SwapHistory_StatusActionRequired">Ação necessária</string>
     <string name="Send_Error_MemoTooLong">Memo é muito longo</string>
     <string name="Transactions_TrustLimit">Limite de Confiança</string>
@@ -2024,4 +2019,7 @@
     <string name="Transactions_Status_SwapFailed">Falha na troca</string>
     <string name="Transactions_Status_TransactionFailed">Falha na transação</string>
     <string name="Transactions_ToYourself">Para você mesmo</string>
+    <string name="Activity_Title">Atividade</string>
+    <string name="Activity_Tab_Transfers">Transferências</string>
+    <string name="Activity_Tab_Privates">Privadas</string>
 </resources>

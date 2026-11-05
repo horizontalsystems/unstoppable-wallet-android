@@ -99,6 +99,11 @@ object TestTags {
     const val TX_EMPTY = "tx_empty"
     const val TX_WAITING_SYNC = "tx_waiting_sync"
     const val TX_FILTER = "tx_filter"
+    const val TX_TAB_TRANSFERS = "tx_tab_transfers"
+    const val TX_TAB_SWAPS = "tx_tab_swaps"
+    const val TX_TAB_PRIVATES = "tx_tab_privates"
+    const val TX_TAB_CROSS_PAYS = "tx_tab_cross_pays"
+
     // The record uid is the transaction hash on most chains. Bitcoin-family
     // chains use a random uid, so their rows cannot be picked by hash.
     fun txItem(uid: String) = "tx_item_${uid.take(8)}"

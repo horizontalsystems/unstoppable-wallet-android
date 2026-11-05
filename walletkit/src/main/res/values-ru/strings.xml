@@ -669,7 +669,6 @@
     <string name="Activate_InsufficientBalance_Description">У вас недостаточно средств XLM для активации этого токена.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">История обмена</string>
-    <string name="SwapHistory_EmptyList">У вас еще нет ожидающих или прошлых свопов.</string>
     <string name="SwapInfo_Title">Детали обмена</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Маршрут</string>
@@ -697,8 +696,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Транзакции</string>
-    <string name="Transactions_EmptyList">Еще нет отложенных или прошлых транзакций.</string>
+    <string name="Transactions_EmptyList">У вас еще нет ожидающих или прошлых транзакций.</string>
     <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
     <string name="Transactions_Pending">В ожидании</string>
     <string name="Transactions_Receive">Получено</string>
@@ -1929,9 +1927,6 @@
     <string name="PrivateSend_Tab_Description">Private Send скрывает прямую связь в блокчейне между вашим адресом и получателем через конфиденциального посредника.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Не удалось оценить комиссию сети</string>
     <string name="Send_DestinationTag_Title">Тег назначения</string>
-    <string name="SwapHistory_StatusDepositing">Пополнение…</string>
-    <string name="SwapHistory_StatusSwapping">Обмен…</string>
-    <string name="SwapHistory_StatusSending">Отправка…</string>
     <string name="SwapHistory_StatusActionRequired">Требуется действие</string>
     <string name="Send_Error_MemoTooLong">Заметка слишком длинная</string>
     <string name="Transactions_TrustLimit">Лимит доверия</string>
@@ -2028,4 +2023,7 @@
     <string name="Transactions_Status_SwapFailed">Обмен не выполнен</string>
     <string name="Transactions_Status_TransactionFailed">Транзакция не выполнена</string>
     <string name="Transactions_ToYourself">Себе</string>
+    <string name="Activity_Title">Активность</string>
+    <string name="Activity_Tab_Transfers">Переводы</string>
+    <string name="Activity_Tab_Privates">Приватные</string>
 </resources>

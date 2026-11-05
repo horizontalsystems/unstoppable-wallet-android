@@ -28,6 +28,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 data class TabFolderItem(
     val title: String,
     @DrawableRes val icon: Int? = null,
+    val testTag: String? = null,
 )
 
 /**
@@ -83,6 +85,7 @@ private fun FolderTab(
     Row(
         modifier = Modifier
             .height(43.dp)
+            .then(item.testTag?.let { Modifier.testTag(it) } ?: Modifier)
             .then(
                 if (selected) {
                     Modifier.drawBehind { drawPath(folderTabPath(size, density), fill) }

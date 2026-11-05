@@ -8,6 +8,7 @@ import io.horizontalsystems.walletkit.core.adapters.XrpTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.walletkit.core.adapters.TonTransactionRecord
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
+import io.horizontalsystems.walletkit.core.coinIconUrl
 import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.managers.BalanceHiddenManager
@@ -48,6 +49,7 @@ import io.horizontalsystems.walletkit.entities.transactionrecords.zano.ZanoOutgo
 import io.horizontalsystems.walletkit.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
+import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColorName
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
@@ -89,6 +91,91 @@ class TransactionViewItemFactory(
         cache[transactionItem.record.uid] = mapOf(transactionItem.createdAt to transactionViewItem)
 
         return transactionViewItem
+    }
+
+    fun convertToViewItem(item: SwapRecordItem): TransactionViewItem {
+        val record = item.record
+        val state = swapRecordIconState(item.status)
+        val titleIn = recordCoinTitle(record.tokenInCoinCode, record.tokenInCoinUid, item.tokenInAlternativeImageUrl)
+        val titleOut = recordCoinTitle(record.tokenOutCoinCode, record.tokenOutCoinUid, item.tokenOutAlternativeImageUrl)
+        val amountIn = recordAmount(record.amountIn)
+        val amountOut = record.amountOut?.let { recordAmount(it) }
+        val recipient = record.recipientAddress?.let { address ->
+            val blockchainType = BlockchainType.fromUid(record.tokenOutBlockchainTypeUid)
+            Translator.getString(R.string.Transactions_To, mapped(address, blockchainType))
+        } ?: "---"
+
+        val type: TransactionViewItem.Type
+        val title: TransactionViewItem.Title
+        val completedSubtitle: String
+        val primaryValue: ColoredValue?
+        val secondaryValue: ColoredValue?
+
+        when (item.kind) {
+            SwapRecordKind.Swap,
+            SwapRecordKind.PrivateSwap -> {
+                type = if (item.kind == SwapRecordKind.Swap) TransactionViewItem.Type.Swap else TransactionViewItem.Type.PrivateSwap
+                title = TransactionViewItem.Title.Pair(titleIn, titleOut)
+                completedSubtitle = Translator.getString(R.string.Transactions_Swap)
+                // Bought for someone else, the amount is not the user's: grey, as for an on-chain swap.
+                primaryValue = amountOut?.let {
+                    ColoredValue("+$it", if (record.customRecipientAddress) ColorName.Grey else ColorName.Remus)
+                }
+                secondaryValue = ColoredValue("-$amountIn", ColorName.Leah)
+            }
+
+            SwapRecordKind.PrivateSend -> {
+                type = TransactionViewItem.Type.PrivateSend
+                title = titleIn
+                completedSubtitle = recipient
+                primaryValue = ColoredValue("-$amountIn", ColorName.Leah)
+                secondaryValue = item.fiatIn?.let { ColoredValue(getCurrencyString(it), ColorName.Grey) }
+            }
+
+            SwapRecordKind.CrossPay -> {
+                type = TransactionViewItem.Type.CrossPay
+                title = TransactionViewItem.Title.Pair(titleIn, titleOut)
+                completedSubtitle = recipient
+                // What the recipient was paid, then what it cost.
+                primaryValue = ColoredValue("-${amountOut ?: amountIn}", ColorName.Leah)
+                secondaryValue = amountOut?.let { ColoredValue(amountIn, ColorName.Grey) }
+            }
+        }
+
+        val subtitle = when (item.status) {
+            SwapStatus.Refunded -> Translator.getString(R.string.SwapInfo_StatusRefunded)
+            SwapStatus.Expired -> Translator.getString(R.string.SwapInfo_StatusExpired)
+            SwapStatus.ActionRequired -> Translator.getString(R.string.SwapHistory_StatusActionRequired)
+            else -> type.stateText(state)?.let { Translator.getString(it) } ?: completedSubtitle
+        }
+
+        return TransactionViewItem(
+            uid = swapRecordUid(record.id),
+            type = type,
+            state = state,
+            title = title,
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            date = Date(record.timestamp),
+            showAmount = showAmount,
+            swapRecordId = record.id,
+        )
+    }
+
+    private fun recordCoinTitle(coinCode: String, coinUid: String, alternativeImageUrl: String?) =
+        TransactionViewItem.Title.Single(
+            coinCode,
+            TransactionViewItem.Icon.Regular(coinUid.coinIconUrl, alternativeImageUrl, R.drawable.coin_placeholder)
+        )
+
+    private fun recordAmount(amount: String): String {
+        val decimal = amount.toBigDecimalOrNull()?.abs() ?: return amount
+        return if (roundCoinAmount) {
+            App.numberFormatter.formatCoinShort(decimal, null, 8)
+        } else {
+            App.numberFormatter.formatCoinFull(decimal, null, 8)
+        }
     }
 
     private fun coinIconType(token: Token) = TransactionViewItem.Icon.Regular(
@@ -1183,6 +1270,9 @@ class TransactionViewItemFactory(
     }
 
 }
+
+// Short ids keep the row's test tag, which takes the first 8 characters, unique.
+internal fun swapRecordUid(id: Int) = "sr$id"
 
 internal fun transactionIconState(status: TransactionStatus) = when (status) {
     TransactionStatus.Pending, is TransactionStatus.Processing -> TransactionIconState.Pending

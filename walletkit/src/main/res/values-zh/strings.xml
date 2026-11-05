@@ -666,7 +666,6 @@
     <string name="Activate_InsufficientBalance_Description">您没有足够的 XLM 余额来激活这个令牌。</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">交换历史</string>
-    <string name="SwapHistory_EmptyList">您还没有任何待处理或过去的兑换。</string>
     <string name="SwapInfo_Title">交换信息</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">路由</string>
@@ -694,8 +693,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">交易</string>
-    <string name="Transactions_EmptyList">尚无待处理或过去的交易。</string>
+    <string name="Transactions_EmptyList">您还没有任何待处理或过去的交易。</string>
     <string name="Transactions_WaitForSync">请等待同步结束。</string>
     <string name="Transactions_Pending">待处理</string>
     <string name="Transactions_Receive">已收到</string>
@@ -1922,9 +1920,6 @@
     <string name="PrivateSend_Tab_Description">Private Send 通过机密中介隐藏您的地址与收款人之间的直接链上连接。</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">无法估算网络费用</string>
     <string name="Send_DestinationTag_Title">目标标签</string>
-    <string name="SwapHistory_StatusDepositing">充值中…</string>
-    <string name="SwapHistory_StatusSwapping">兑换中…</string>
-    <string name="SwapHistory_StatusSending">发送中…</string>
     <string name="SwapHistory_StatusActionRequired">需要操作</string>
     <string name="Send_Error_MemoTooLong">备忘录过长</string>
     <string name="Transactions_TrustLimit">信任额度</string>
@@ -2018,4 +2013,7 @@
     <string name="Transactions_Status_SwapFailed">交换失败</string>
     <string name="Transactions_Status_TransactionFailed">交易失败</string>
     <string name="Transactions_ToYourself">发给自己</string>
+    <string name="Activity_Title">活动</string>
+    <string name="Activity_Tab_Transfers">转账</string>
+    <string name="Activity_Tab_Privates">隐私</string>
 </resources>

@@ -22,12 +22,6 @@ class TransactionFilterService(
     private var selectedBlockchain: Blockchain? = null
     private var filterTokenList: List<FilterToken?> = listOf(null)
     private var selectedToken: FilterToken? = null
-    private val transactionTypes = listOf(
-        FilterTransactionType.All,
-        FilterTransactionType.Incoming,
-        FilterTransactionType.Outgoing,
-    )
-    private var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
     private var contact: Contact? = null
     private var uniqueId = UUID.randomUUID().toString()
     private var hideSuspiciousTx = spamManager.hideSuspiciousTx
@@ -38,8 +32,6 @@ class TransactionFilterService(
             selectedBlockchain = selectedBlockchain,
             filterTokens = filterTokenList,
             selectedToken = selectedToken,
-            transactionTypes = transactionTypes,
-            selectedTransactionType = selectedTransactionType,
             resetEnabled = resetEnabled(),
             uniqueId = uniqueId,
             contact = contact,
@@ -55,8 +47,6 @@ class TransactionFilterService(
                 selectedBlockchain = selectedBlockchain,
                 filterTokens = filterTokenList,
                 selectedToken = selectedToken,
-                transactionTypes = transactionTypes,
-                selectedTransactionType = selectedTransactionType,
                 resetEnabled = resetEnabled(),
                 uniqueId = uniqueId,
                 contact = contact,
@@ -92,9 +82,6 @@ class TransactionFilterService(
         // When the whole wallets list is changed (switch account) it should be reset
         if (!filterTokenList.contains(selectedToken)) {
             selectedToken = null
-
-            selectedTransactionType = FilterTransactionType.All
-
             selectedBlockchain = null
         }
 
@@ -121,12 +108,6 @@ class TransactionFilterService(
         selectedToken = null
 
         refreshContact()
-
-        emitState()
-    }
-
-    fun setSelectedTransactionType(type: FilterTransactionType) {
-        selectedTransactionType = type
 
         emitState()
     }
@@ -187,8 +168,6 @@ class TransactionFilterService(
         val selectedBlockchain: Blockchain?,
         val filterTokens: List<FilterToken?>,
         val selectedToken: FilterToken?,
-        val transactionTypes: List<FilterTransactionType>,
-        val selectedTransactionType: FilterTransactionType,
         val resetEnabled: Boolean,
         val uniqueId: String,
         val contact: Contact?,

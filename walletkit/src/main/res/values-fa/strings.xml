@@ -237,7 +237,6 @@
     <!--Deposit-->
     <string name="Deposit_Title">دریافت %s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">تراکنش ها</string>
     <string name="Transactions_WaitForSync">لطفا منتظر بمانید تا همگام سازی تمام شود.</string>
     <string name="Transactions_Pending">در حالت معلق</string>
     <string name="Transactions_Receive">دريافت شد</string>
@@ -686,7 +685,6 @@
     <string name="SwapTerms_BottomText">همیشه مسیر swap را انتخاب کنید که با نیازهای شما مطابقت داشته باشد.</string>
     <string name="SwapInfo_Provider">مسیر</string>
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
-    <string name="SwapHistory_EmptyList">شما هنوز هیچ تبدیل معلق یا قبلی ندارید.</string>
     <string name="ManageAccounts_ViewOnlyWallet">کیف پول فقط مشاهده</string>
     <string name="CreateNewWallet_Button_CreateStandardWallet">ساخت کیف‌پول استاندارد</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">این دستگاه از کیف‌پول‌های Passkey پشتیبانی نمی‌کند. در عوض می‌توانید یک کیف‌پول استاندارد بسازید.</string>
@@ -873,9 +871,6 @@
     <string name="PrivateSend_Tab_Description">Private Send پیوند مستقیم روی زنجیره بلاک بین آدرس شما و دریافت کننده را از طریق یک واسطه محرمانه پنهان می کند.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">نتوانستیم کارمزد شبکه را تخمین بزنیم</string>
     <string name="Send_DestinationTag_Title">برچسب مقصد</string>
-    <string name="SwapHistory_StatusDepositing">درحال واریز…</string>
-    <string name="SwapHistory_StatusSwapping">درحال تبدیل…</string>
-    <string name="SwapHistory_StatusSending">درحال ارسال…</string>
     <string name="SwapHistory_StatusActionRequired">نیاز به اقدام</string>
     <string name="Send_Error_MemoTooLong">یادداشت بیش از حد طولانی است</string>
     <string name="Transactions_TrustLimit">حد اعتماد</string>
@@ -1324,7 +1319,7 @@
     <string name="Swap_Approve_Info">به یک قرارداد هوشمند اجازه دهید از طرف شما توکن معامله کند و مقدار مجاز را مشخص کنید. این کار تأثیری بر موجودی شما ندارد، اما کارمزد کوچکی برای تأیید دارد.\n\nتأیید پیشاپیش مقدار بیشتر برای معاملات آینده، نسبت به تأیید جداگانه در هر بار، مقرون‌به‌صرفه‌تر است.</string>
     <string name="Swap_Approve_Unlimited">نامحدود</string>
     <string name="SwapInfo_PriceImpactDescription">انحراف مورد انتظار قیمت از قیمت نمایش‌داده‌شده که معمولاً با افزایش مقدار سواپ بیشتر می‌شود.</string>
-    <string name="Transactions_EmptyList">هنوز تراکنش در انتظار یا گذشته‌ای وجود ندارد.</string>
+    <string name="Transactions_EmptyList">شما هنوز هیچ تراکنش در انتظار یا گذشته‌ای ندارید.</string>
     <string name="Transactions_ChangeTrust">تغییر اعتماد</string>
     <string name="Transactions_Completed">تکمیل شد</string>
     <string name="Transactions_Burn">سوزانده شد</string>
@@ -2007,4 +2002,7 @@
     <string name="Transactions_Status_SwapFailed">سواپ ناموفق بود</string>
     <string name="Transactions_Status_TransactionFailed">تراکنش ناموفق بود</string>
     <string name="Transactions_ToYourself">به خودتان</string>
+    <string name="Activity_Title">فعالیت</string>
+    <string name="Activity_Tab_Transfers">انتقال‌ها</string>
+    <string name="Activity_Tab_Privates">خصوصی</string>
 </resources>

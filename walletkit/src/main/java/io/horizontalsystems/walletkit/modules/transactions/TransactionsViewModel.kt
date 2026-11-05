@@ -41,18 +41,24 @@ class TransactionsViewModel(
     private val walletManager: WalletManager,
     private val transactionFilterService: TransactionFilterService,
     private val localStorage: ILocalStorage,
+    private val swapRecordsRepository: SwapRecordsRepository,
 ) : ViewModelUiState<TransactionsUiState>() {
 
 
     val filterResetEnabled = MutableLiveData<Boolean>()
     val filterTokensLiveData = MutableLiveData<List<Filter<FilterToken?>>>()
-    val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val filterContactLiveData = MutableLiveData<Contact?>()
     var filterHideSuspiciousTx = MutableLiveData<Boolean>()
 
     private var transactionListId: String? = null
+    private var tab = ActivityTab.Transfers
+    private var transactionItems: List<TransactionItem>? = null
+    private var swapRecordItems: List<SwapRecordItem>? = null
+    private var recordFilter: TransactionFilterService.State? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
+    // The tab [transactions] were built for, which trails [tab] until they are rebuilt.
+    private var transactionsTab = tab
     private var viewState: ViewState = ViewState.Loading
     private var syncing = false
 
@@ -65,9 +71,19 @@ class TransactionsViewModel(
             service.start()
         }
 
+        swapRecordsRepository.start()
+
         viewModelScope.launch(Dispatchers.Default) {
             transactionAdapterManager.adaptersReadyFlow.collect {
                 handleUpdatedWallets(walletManager.activeWallets)
+                swapRecordsRepository.reload()
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            swapRecordsRepository.itemsFlow.collect {
+                swapRecordItems = it
+                refreshViewItems()
             }
         }
 
@@ -84,17 +100,13 @@ class TransactionsViewModel(
                 service.set(
                     transactionWallets.filterNotNull(),
                     selectedTransactionWallet,
-                    state.selectedTransactionType,
+                    FilterTransactionType.All,
                     state.selectedBlockchain,
                     state.contact,
                 )
 
                 filterResetEnabled.postValue(state.resetEnabled)
-
-                val types = state.transactionTypes
-                val selectedType = state.selectedTransactionType
-                val filterTypes = types.map { Filter(it, it == selectedType) }
-                filterTypesLiveData.postValue(filterTypes)
+                recordFilter = state
 
                 val blockchains = state.blockchains
                 val selectedBlockchain = state.selectedBlockchain
@@ -114,8 +126,10 @@ class TransactionsViewModel(
                 filterHideSuspiciousTx.postValue(state.hideSuspiciousTx)
 
                 transactionListId = selectedTransactionWallet.hashCode().toString() +
-                    state.selectedTransactionType.name +
-                    state.selectedBlockchain?.uid
+                    state.selectedBlockchain?.uid +
+                    state.contact?.uid
+
+                refreshViewItems()
             }
         }
 
@@ -128,14 +142,15 @@ class TransactionsViewModel(
 
         viewModelScope.launch {
             service.itemsFlow.collect { items ->
-                handleUpdatedItems(items)
+                transactionItems = items
+                refreshViewItems()
             }
         }
 
         viewModelScope.launch(Dispatchers.Default) {
             balanceHiddenManager.balanceHiddenFlow.collect {
                 transactionViewItem2Factory.updateCache()
-                handleUpdatedItems(service.itemsFlow.value)
+                refreshViewItems()
             }
         }
 
@@ -146,24 +161,44 @@ class TransactionsViewModel(
         }
     }
 
-    private fun handleUpdatedItems(items: List<TransactionItem>) {
+    // Called from the collectors' threads and the main thread.
+    @Synchronized
+    private fun refreshViewItems() {
+        val tab = tab
+        val items = transactionItems
+        val records = swapRecordItems?.filter { tab.shows(it.kind) && matchesFilter(it) } ?: return
+        if (tab == ActivityTab.Transfers && items == null) return
+
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            val viewItems = items
-                .map {
-                    ensureActive()
-                    transactionViewItem2Factory.convertToViewItemCached(it)
-                }
-                .groupBy {
-                    ensureActive()
-                    it.formattedDate
-                }
-
-            transactions = if (BuildConfig.DEBUG) {
-                mapOf(DummyTransactions.HEADER to DummyTransactions.viewItems()) + viewItems
-            } else {
-                viewItems
+            val recordViewItems = records.map {
+                ensureActive()
+                transactionViewItem2Factory.convertToViewItem(it)
             }
+            val viewItems = if (tab == ActivityTab.Transfers) {
+                val transactionViewItems = items.orEmpty().map {
+                    ensureActive()
+                    transactionViewItem2Factory.convertToViewItemCached(it) to it.record.transactionHash
+                }
+                mergeActivity(
+                    transactions = transactionViewItems,
+                    swapRecords = recordViewItems,
+                    depositHashes = records.mapNotNullTo(HashSet()) { it.record.transactionHash },
+                    date = { it.date },
+                )
+            } else {
+                recordViewItems
+            }
+            ensureActive()
+
+            val grouped = viewItems.groupBy { it.formattedDate }
+            val dummies = if (BuildConfig.DEBUG) DummyTransactions.viewItems(tab) else emptyList()
+            transactions = if (dummies.isNotEmpty()) {
+                mapOf(DummyTransactions.HEADER to dummies) + grouped
+            } else {
+                grouped
+            }
+            transactionsTab = tab
             viewState = ViewState.Success
 
             ensureActive()
@@ -172,18 +207,42 @@ class TransactionsViewModel(
     }
 
     override fun createState() = TransactionsUiState(
+        tab = transactionsTab,
         transactions = transactions,
         viewState = viewState,
-        transactionListId = transactionListId,
-        syncing = syncing
+        transactionListId = transactionListId + transactionsTab.name,
+        syncing = syncing && transactionsTab == ActivityTab.Transfers,
     )
+
+    // The filter's blockchain, coin and contact apply to swap records too: a record matches
+    // when either of its sides does.
+    private fun matchesFilter(item: SwapRecordItem): Boolean {
+        val filter = recordFilter ?: return true
+        val record = item.record
+
+        filter.selectedToken?.let { filterToken ->
+            val tokenId = filterToken.token.tokenQuery.id
+            if (record.tokenInUid != tokenId && record.tokenOutUid != tokenId) return false
+        }
+        filter.selectedBlockchain?.let { blockchain ->
+            val uid = blockchain.type.uid
+            if (record.tokenInBlockchainTypeUid != uid && record.tokenOutBlockchainTypeUid != uid) return false
+        }
+        filter.contact?.let { contact ->
+            val recipient = record.recipientAddress ?: return false
+            if (contact.addresses.none { it.address.equals(recipient, ignoreCase = true) }) return false
+        }
+        return true
+    }
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
         transactionFilterService.setWallets(wallets)
     }
 
-    fun setFilterTransactionType(filterType: FilterTransactionType) {
-        transactionFilterService.setSelectedTransactionType(filterType)
+    fun setTab(tab: ActivityTab) {
+        if (this.tab == tab) return
+        this.tab = tab
+        refreshViewItems()
     }
 
     fun setFilterToken(w: FilterToken?) {
@@ -212,6 +271,7 @@ class TransactionsViewModel(
 
     override fun onCleared() {
         service.clear()
+        swapRecordsRepository.clear()
     }
 
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
@@ -244,6 +304,8 @@ data class TransactionViewItem(
     val doubleSpend: Boolean = false,
     val spam: Boolean = false,
     val locked: Boolean? = null,
+    // Set when the row is a swap record rather than an on-chain transaction.
+    val swapRecordId: Int? = null,
 ) {
 
     enum class Type(
@@ -256,6 +318,9 @@ data class TransactionViewItem(
         SendToSelf(R.drawable.arrow_return_24, R.string.Transactions_Status_Sending, R.string.Transactions_Status_TransferFailed),
         Approve(R.drawable.unlock_24, R.string.Transactions_Status_Approving, R.string.Transactions_Status_ApprovalFailed),
         Swap(R.drawable.swap_e_24, R.string.Transactions_Status_Swapping, R.string.Transactions_Status_SwapFailed),
+        PrivateSwap(R.drawable.private_swap_24, R.string.Transactions_Status_Swapping, R.string.Transactions_Status_SwapFailed),
+        PrivateSend(R.drawable.private_send_24, R.string.Transactions_Status_Sending, R.string.Transactions_Status_TransferFailed),
+        CrossPay(R.drawable.double_arrow_24, R.string.Transactions_Status_Swapping, R.string.Transactions_Status_TransferFailed),
         Shield(R.drawable.shield_24, R.string.Transactions_Status_Shielding, R.string.Transactions_Status_ShieldingFailed),
         Unshield(R.drawable.shield_off_24, R.string.Transactions_Status_Unshielding, R.string.Transactions_Status_UnshieldFailed),
         Migrate(R.drawable.ic_migrate_24, R.string.Transactions_Status_Pending, R.string.Transactions_Status_TransactionFailed),
@@ -302,7 +367,7 @@ data class TransactionViewItem(
         }
     }
 
-    val formattedDate = formatDate(date).uppercase()
+    val formattedDate = formatDate(date)
 
     private fun formatDate(date: Date): String {
         val calendar = Calendar.getInstance()
@@ -319,7 +384,7 @@ data class TransactionViewItem(
             return Translator.getString(R.string.Timestamp_Yesterday)
         }
 
-        return DateHelper.shortDate(date, "MMMM d", "MMMM d, yyyy")
+        return DateHelper.shortDate(date, "MMM d", "MMM d, yyyy")
     }
 }
 

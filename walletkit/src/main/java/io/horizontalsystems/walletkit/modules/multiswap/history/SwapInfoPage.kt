@@ -804,3 +804,11 @@ private fun StepIndicator(isActive: Boolean, isDone: Boolean, isFailed: Boolean 
 internal fun String.shortenAddress(): String {
     return if (length > 12) take(6) + "..." + takeLast(6) else this
 }
+
+@Composable
+private fun operationTitle(operation: SwapOperation): String = when (operation) {
+    SwapOperation.Swap,
+    SwapOperation.SplitSwap -> stringResource(R.string.SwapInfo_Title)
+    SwapOperation.PrivateSend -> stringResource(R.string.PrivateSend_Toggle_Title)
+    SwapOperation.CrossPay -> stringResource(R.string.CrossPay_Info_Title)
+}

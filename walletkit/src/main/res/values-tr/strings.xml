@@ -477,7 +477,6 @@
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Hesap işlemleri</string>
     <string name="Transactions_WaitForSync">Lütfen güncellemenin bitmesini bekleyin.</string>
     <string name="Transactions_Pending">Devam ediyor</string>
     <string name="Transactions_Receive">Alındı</string>
@@ -1352,7 +1351,6 @@
     <string name="Swap_EstimatedTimeDescription">Bu, takası tamamlamak ve fonlarınızı almak için gereken tahmini süredir. Gerçek süre, ağ koşullarına, işlem onaylarına ve seçilen takas rotasına bağlı olarak daha kısa veya daha uzun olabilir.</string>
     <string name="SwapTerms_BottomText">Her zaman gereksinimlerinize uygun bir swap rotası seçin.</string>
     <string name="SwapInfo_Provider">Rota</string>
-    <string name="SwapHistory_EmptyList">Henüz beklemede veya geçmiş takasınız yok.</string>
     <string name="ManageAccounts_ViewOnlyWallet">Yalnızca Görüntüleme Cüzdanı</string>
     <string name="ActivationRequired_DialogTitle">Token’i Aktive Et</string>
     <string name="AddEvmSyncSource_RpcUrl">RPC URL</string>
@@ -1572,7 +1570,7 @@
     <string name="TransactionInfo_TransactionSecretKey">Tx Secret Key</string>
     <string name="Transactions_Burn">Burn</string>
     <string name="Transactions_Completed">Tamamlandı</string>
-    <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
+    <string name="Transactions_EmptyList">Henüz bekleyen veya geçmiş işleminiz yok.</string>
     <string name="Transactions_Failed">Başarısız</string>
     <string name="Transactions_Filter_Coin">Coin</string>
     <string name="Transactions_Mint">Mint</string>
@@ -1923,9 +1921,6 @@
     <string name="PrivateSend_Tab_Description">Private Send, adresiniz ile alıcı arasındaki doğrudan zincir üstü bağlantısını gizli bir aracı aracılığıyla gizler.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Ağ ücreti tahmin edilemedi</string>
     <string name="Send_DestinationTag_Title">Hedef etiketi</string>
-    <string name="SwapHistory_StatusDepositing">Para yatırılıyor…</string>
-    <string name="SwapHistory_StatusSwapping">Takas yapılıyor…</string>
-    <string name="SwapHistory_StatusSending">Gönderiliyor…</string>
     <string name="SwapHistory_StatusActionRequired">İşlem gerekli</string>
     <string name="Send_Error_MemoTooLong">Not çok uzun</string>
     <string name="Transactions_TrustLimit">Güven Limiti</string>
@@ -2020,4 +2015,7 @@
     <string name="Transactions_Status_SwapFailed">Takas başarısız</string>
     <string name="Transactions_Status_TransactionFailed">İşlem başarısız</string>
     <string name="Transactions_ToYourself">Kendinize</string>
+    <string name="Activity_Title">Etkinlik</string>
+    <string name="Activity_Tab_Transfers">Transferler</string>
+    <string name="Activity_Tab_Privates">Gizli</string>
 </resources>

@@ -68,7 +68,6 @@ import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Currency
-import io.horizontalsystems.walletkit.modules.multiswap.history.SwapHistoryPage
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.swapterms.SwapTermsPage
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
@@ -76,6 +75,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.routeScore
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.modules.transactions.ActivityTab
+import io.horizontalsystems.walletkit.modules.transactions.TransactionsPage
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
@@ -180,7 +181,7 @@ fun SwapScreen(
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
                     navigateAfterKeyboardClosed {
-                        navigation.slideFromRight(SwapHistoryPage)
+                        navigation.slideFromRight(TransactionsPage(ActivityTab.Swaps))
                     }
                 }
             )),

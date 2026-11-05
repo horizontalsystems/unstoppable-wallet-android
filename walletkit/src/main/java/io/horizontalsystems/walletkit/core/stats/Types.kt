@@ -580,6 +580,8 @@ enum class StatTab(val key: String) {
     Outgoing("outgoing"),
     Swap("swap"),
     Approve("approve"),
+    Private("private"),
+    CrossPay("cross_pay"),
     Coins("coins"),
     Pairs("pairs"),
     Sectors("sectors"),

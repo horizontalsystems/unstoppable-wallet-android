@@ -667,7 +667,6 @@
     <string name="Activate_InsufficientBalance_Description">Sie haben nicht genug XLM-Guthaben, um dieses Token zu aktivieren.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap-Verlauf</string>
-    <string name="SwapHistory_EmptyList">Sie haben noch keine ausstehenden oder bisherigen Swaps.</string>
     <string name="SwapInfo_Title">Swap-Info</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Route</string>
@@ -695,8 +694,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Erhalte %s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transaktionen</string>
-    <string name="Transactions_EmptyList">Noch keine ausstehenden oder letzten Transaktionen.</string>
+    <string name="Transactions_EmptyList">Sie haben noch keine ausstehenden oder bisherigen Transaktionen.</string>
     <string name="Transactions_WaitForSync">Bitte warten Sie, bis die Synchronisation beendet ist.</string>
     <string name="Transactions_Pending">Ausstehend</string>
     <string name="Transactions_Receive">Erhalten</string>
@@ -1927,9 +1925,6 @@
     <string name="PrivateSend_Tab_Description">Private Send verbirgt die direkte On-Chain-Verbindung zwischen Ihrer Adresse und dem Empfänger durch einen vertraulichen Vermittler.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Netzwerkgebühr konnte nicht geschätzt werden</string>
     <string name="Send_DestinationTag_Title">Ziel-Tag</string>
-    <string name="SwapHistory_StatusDepositing">Einzahlung läuft…</string>
-    <string name="SwapHistory_StatusSwapping">Tausch läuft…</string>
-    <string name="SwapHistory_StatusSending">Versand läuft…</string>
     <string name="SwapHistory_StatusActionRequired">Aktion erforderlich</string>
     <string name="Send_Error_MemoTooLong">Memo ist zu lang</string>
     <string name="Transactions_TrustLimit">Vertrauenslimit</string>
@@ -2024,4 +2019,7 @@
     <string name="Transactions_Status_SwapFailed">Tausch fehlgeschlagen</string>
     <string name="Transactions_Status_TransactionFailed">Transaktion fehlgeschlagen</string>
     <string name="Transactions_ToYourself">An dich selbst</string>
+    <string name="Activity_Title">Aktivität</string>
+    <string name="Activity_Tab_Transfers">Transfers</string>
+    <string name="Activity_Tab_Privates">Privat</string>
 </resources>

@@ -997,10 +997,6 @@
 
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap History</string>
-    <string name="SwapHistory_EmptyList">You don\'t have any pending or past swaps yet.</string>
-    <string name="SwapHistory_StatusDepositing">Depositing…</string>
-    <string name="SwapHistory_StatusSwapping">Swapping…</string>
-    <string name="SwapHistory_StatusSending">Sending…</string>
     <string name="SwapHistory_StatusActionRequired">Action required</string>
     <string name="SwapInfo_Title">Swap Info</string>
 
@@ -1049,8 +1045,7 @@
 
     <!--Transactions-->
 
-    <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_EmptyList">No pending or past transactions yet.</string>
+    <string name="Transactions_EmptyList">You don\'t have any pending or past transactions yet.</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
@@ -2375,4 +2370,8 @@
     <string name="Transactions_Status_UnshieldFailed" translatable="false">Unshield failed</string>
     <string name="Transactions_Shielded" translatable="false">Shielded</string>
     <string name="Transactions_Unshielded" translatable="false">Unshielded</string>
+    <string name="Activity_Title">Activity</string>
+    <string name="Activity_Tab_Transfers">Transfers</string>
+    <string name="Activity_Tab_Privates">Privates</string>
+    <string name="Activity_Tab_CrossPays" translatable="false">CrossPays</string>
 </resources>

@@ -667,7 +667,6 @@
     <string name="Activate_InsufficientBalance_Description">Vous n\'avez pas assez de solde XLM pour activer ce jeton.</string>
     <!-- Swap History -->
     <string name="SwapHistory_Title">Échanger l\'historique</string>
-    <string name="SwapHistory_EmptyList">Vous n\'avez pas encore d\'échanges en attente ou antérieurs.</string>
     <string name="SwapInfo_Title">Permuter les informations</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Itinéraire</string>
@@ -695,8 +694,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_EmptyList">Aucune transaction en attente ou passée pour le moment.</string>
+    <string name="Transactions_EmptyList">Vous n\'avez pas encore de transactions en attente ou passées.</string>
     <string name="Transactions_WaitForSync">Veuillez attendre la fin de la synchronisation.</string>
     <string name="Transactions_Pending">En attente</string>
     <string name="Transactions_Receive">Reçu</string>
@@ -1924,9 +1922,6 @@
     <string name="PrivateSend_Tab_Description">Private Send masque le lien direct en chaîne entre votre adresse et le destinataire via un intermédiaire confidentiel.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">Impossible d\'estimer les frais de réseau</string>
     <string name="Send_DestinationTag_Title">Tag de destination</string>
-    <string name="SwapHistory_StatusDepositing">Dépôt en cours…</string>
-    <string name="SwapHistory_StatusSwapping">Échange en cours…</string>
-    <string name="SwapHistory_StatusSending">Envoi en cours…</string>
     <string name="SwapHistory_StatusActionRequired">Action requise</string>
     <string name="Send_Error_MemoTooLong">Le mémo est trop long</string>
     <string name="Transactions_TrustLimit">Limite de Confiance</string>
@@ -2021,4 +2016,7 @@
     <string name="Transactions_Status_SwapFailed">Échec de la permutation</string>
     <string name="Transactions_Status_TransactionFailed">Échec de la transaction</string>
     <string name="Transactions_ToYourself">À vous-même</string>
+    <string name="Activity_Title">Activité</string>
+    <string name="Activity_Tab_Transfers">Transferts</string>
+    <string name="Activity_Tab_Privates">Privées</string>
 </resources>

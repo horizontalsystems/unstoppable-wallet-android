@@ -584,7 +584,6 @@
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <!--Transactions-->
-    <string name="Transactions_Title">거래기록</string>
     <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
     <string name="Transactions_Receive">수령됨</string>
@@ -1500,7 +1499,6 @@
     <string name="Swap_EstimatedTimeDescription">이는 스왑을 완료하고 자금을 받기 위해 필요한 예상 시간입니다. 실제 시간은 네트워크 상태, 거래 확인 및 선택한 스왑 경로에 따라 더 짧거나 길 수 있습니다.</string>
     <string name="SwapTerms_BottomText">항상 귀하의 요구 사항과 일치하는 스왑 경로를 선택하세요.</string>
     <string name="SwapInfo_Provider">경로</string>
-    <string name="SwapHistory_EmptyList">아직 대기 중이거나 이전의 스왑이 없습니다.</string>
     <string name="ManageAccounts_ViewOnlyWallet">보기 전용 지갑</string>
     <string name="ActivationRequired_DialogTitle">토큰 활성화</string>
     <string name="AddEvmSyncSource_RpcUrl">RPC URL</string>
@@ -1635,7 +1633,7 @@
     <string name="Swap_ProviderRisk_Unknown">알 수 없음</string>
     <string name="TransactionInfo_TransactionSecretKey">트랜잭션 시크릿 키</string>
     <string name="Transactions_Completed">완료됨</string>
-    <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
+    <string name="Transactions_EmptyList">아직 대기 중이거나 지난 거래가 없습니다.</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_StellarTransaction">Stellar 트랜잭션</string>
     <string name="TronPrivateKey_Title">Tron 개인 키</string>
@@ -1918,9 +1916,6 @@
     <string name="PrivateSend_Tab_Description">Private Send는 기밀 중개자를 통해 귀하의 주소와 수신자 간의 직접적인 온체인 연결을 숨깁니다.</string>
     <string name="FeeSettings_Error_FeeEstimateFailed">네트워크 수수료를 추정할 수 없습니다</string>
     <string name="Send_DestinationTag_Title">대상 태그</string>
-    <string name="SwapHistory_StatusDepositing">입금 중…</string>
-    <string name="SwapHistory_StatusSwapping">스왑 중…</string>
-    <string name="SwapHistory_StatusSending">전송 중…</string>
     <string name="SwapHistory_StatusActionRequired">조치 필요</string>
     <string name="Send_Error_MemoTooLong">메모가 너무 깁니다</string>
     <string name="Transactions_TrustLimit">신뢰 한도</string>
@@ -2014,4 +2009,7 @@
     <string name="Transactions_Status_SwapFailed">스왑 실패</string>
     <string name="Transactions_Status_TransactionFailed">트랜잭션 실패</string>
     <string name="Transactions_ToYourself">나에게</string>
+    <string name="Activity_Title">활동</string>
+    <string name="Activity_Tab_Transfers">전송</string>
+    <string name="Activity_Tab_Privates">비공개</string>
 </resources>
