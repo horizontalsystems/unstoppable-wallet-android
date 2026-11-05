@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -158,7 +159,11 @@ class TransactionsViewModel(
                     it.formattedDate
                 }
 
-            transactions = viewItems
+            transactions = if (BuildConfig.DEBUG) {
+                mapOf(DummyTransactions.HEADER to DummyTransactions.viewItems()) + viewItems
+            } else {
+                viewItems
+            }
             viewState = ViewState.Success
 
             ensureActive()
