@@ -981,7 +981,7 @@ class TransactionViewItemFactory(
                 type = sendType(actionType.sentToSelf),
                 title = coinTitle(actionType.value),
                 completedSubtitle = sendSubtitle(actionType.sentToSelf, actionType.to, record.blockchainType),
-                primaryValue = getColoredValue(actionType.value, ColorName.Leah)
+                primaryValue = sendPrimaryValue(actionType.value, actionType.sentToSelf)
             )
 
             is TonTransactionRecord.Action.Type.Receive -> item(
