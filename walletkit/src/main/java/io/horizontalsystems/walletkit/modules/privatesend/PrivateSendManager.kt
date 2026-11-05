@@ -8,6 +8,7 @@ import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetMapping
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -229,7 +230,7 @@ class PrivateSendManager(
         // `execution.chain` is sometimes a chain id ("56") and sometimes a name ("bsc"), so
         // only a recognised chain that resolves to a *different* blockchain is treated as a
         // mismatch. An unrecognised string is not evidence of disagreement.
-        val executionBlockchainType = execution.chain?.let { USwapProvider.chainIdBlockchainTypes[it] }
+        val executionBlockchainType = execution.chain?.let { USwapAssetMapping.chainIdBlockchainTypes[it] }
         if (executionBlockchainType != null && executionBlockchainType != token.blockchainType) {
             throw PrivateSendError.CommitFailed()
         }

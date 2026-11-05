@@ -107,6 +107,7 @@ class LocalStorageManager(
     private val USWAP_SPLIT_PROVIDERS = "uswap_split_providers"
     private val PRIVATE_SEND_PROVIDER_IDS = "private_send_provider_ids"
     private val PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME = "private_send_provider_ids_sync_time"
+    private val USWAP_CATALOG_ETAG = "uswap_catalog_etag"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(preferences.getBoolean(UTXO_EXPERT_MODE, false))
@@ -209,6 +210,13 @@ class LocalStorageManager(
         get() = preferences.getLong(PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME, 0)
         set(value) {
             preferences.edit { putLong(PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME, value) }
+        }
+
+    // The ETag of the stored token catalog, so a repeat `GET /v3/tokens/all` is a 304.
+    override var uSwapCatalogEtag: String?
+        get() = preferences.getString(USWAP_CATALOG_ETAG, null)
+        set(value) {
+            preferences.edit { putString(USWAP_CATALOG_ETAG, value) }
         }
 
     override var zcashAccountIds: Set<String>

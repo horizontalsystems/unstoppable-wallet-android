@@ -71,6 +71,7 @@ interface ILocalStorage {
     var uSwapSplitProviders: String?
     var privateSendProviderIds: String?
     var privateSendProviderIdsSyncTime: Long
+    var uSwapCatalogEtag: String?
     var zcashAccountIds: Set<String>
     var zcashMigrationTransactionIds: Set<String>
     var autoLockInterval: AutoLockInterval

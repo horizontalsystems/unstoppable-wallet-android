@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.crosspay
 import com.google.gson.Gson
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetMapping
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
@@ -146,7 +147,7 @@ class CrossPayManager {
         // `execution.chain` is sometimes a chain id ("56") and sometimes a name ("bsc"), so
         // only a recognised chain that resolves to a *different* blockchain is treated as a
         // mismatch. An unrecognised string is not evidence of disagreement.
-        val executionBlockchainType = execution.chain?.let { USwapProvider.chainIdBlockchainTypes[it] }
+        val executionBlockchainType = execution.chain?.let { USwapAssetMapping.chainIdBlockchainTypes[it] }
         if (executionBlockchainType != null && executionBlockchainType != request.tokenIn.blockchainType) {
             throw CrossPayError.CommitFailed()
         }

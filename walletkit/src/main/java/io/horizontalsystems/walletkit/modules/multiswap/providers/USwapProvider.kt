@@ -75,7 +75,7 @@ class USwapProvider(
         mapOf("x-api-key" to App.appConfigProvider.uswapApiKey)
     ).create(UnstoppableAPI::class.java)
 
-    private val blockchainTypes = chainIdBlockchainTypes
+    private val blockchainTypes = USwapAssetMapping.chainIdBlockchainTypes
 
     private val chainIdByBlockchainType = blockchainTypes.entries.associate { (k, v) -> v to k }
 
@@ -1595,36 +1595,6 @@ class USwapProvider(
         // private send stack uses it to recognise a committed route's execution.chain — which is
         // sometimes a chain id ("56") and sometimes a name ("bsc"), so only a recognised chain
         // resolving to a DIFFERENT blockchain counts as a mismatch there.
-        val chainIdBlockchainTypes = mapOf(
-            "43114" to BlockchainType.Avalanche,
-            "10" to BlockchainType.Optimism,
-            "8453" to BlockchainType.Base,
-            "728126428" to BlockchainType.Tron,
-            "42161" to BlockchainType.ArbitrumOne,
-            "56" to BlockchainType.BinanceSmartChain,
-            "solana" to BlockchainType.Solana,
-            "137" to BlockchainType.Polygon,
-            "bitcoin" to BlockchainType.Bitcoin,
-            "1" to BlockchainType.Ethereum,
-            "zcash" to BlockchainType.Zcash,
-            "bitcoincash" to BlockchainType.BitcoinCash,
-            "litecoin" to BlockchainType.Litecoin,
-            "stellar" to BlockchainType.Stellar,
-            "ripple" to BlockchainType.Xrp,
-            "near" to BlockchainType.Near,
-            "ton" to BlockchainType.Ton,
-            "dash" to BlockchainType.Dash,
-            "ecash" to BlockchainType.ECash,
-            "monero" to BlockchainType.Monero,
-            "zano" to BlockchainType.Zano,
-            "100" to BlockchainType.Gnosis,
-            "4663" to BlockchainType.RobinhoodChain,
-            "5042" to BlockchainType.Arc,
-            "thorchain-1" to BlockchainType.Thorchain,
-            "mayachain-mainnet-v1" to BlockchainType.Mayachain,
-//            "" to BlockchainType.Fantom,
-//            "" to BlockchainType.ZkSync,
-        )
 
         // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
         // and lets the server expand it into this shielded variant.
