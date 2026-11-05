@@ -378,6 +378,12 @@ change.
 
 ### Issue: what do we need, and why?
 
+An issue is read long after it is closed, by people and by agents, and
+usually without its pull requests. It says only what is needed and why,
+in a few lines; the pull requests say how it was done and verified, and
+their commits say what each change does. Nothing that lives in one of
+those belongs in the issue.
+
 An issue is either a bug or a task, and the two are written differently.
 Decide which from the request itself: a bug names behaviour that is wrong
 today against what was already expected (a crash, a wrong value, something
@@ -388,10 +394,9 @@ Ask the developer only when the request reads both ways.
 
 A bug:
 
-- What is wrong.
+- What is wrong, and what was expected instead.
 - How to reproduce it: app version, device, chain, steps.
 - Why it matters: who is affected and how badly.
-- What done looks like, and what is out of scope.
 
 A task:
 
@@ -399,10 +404,8 @@ A task:
   or two.
 - Where the source of truth is, in a form a reader can open: a Figma link,
   the iOS implementation, a reference document. Say what to ignore in it.
-- The decisions the work would otherwise have to ask about.
-- Done when: a short checklist a reviewer or an agent can verify, only when
-  the bullets above state a goal without saying how to tell it is reached.
-  Skip it when every bullet is already a checkable statement.
+- A decision the source of truth leaves open, one line each, only when
+  the work would otherwise stop to ask.
 
 Both describe the outcome, not the implementation, and leave out what the
 repository already says: conventions, architecture, file names, and
