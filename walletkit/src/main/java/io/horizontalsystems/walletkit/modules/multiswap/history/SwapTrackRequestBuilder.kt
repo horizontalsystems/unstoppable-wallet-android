@@ -6,7 +6,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.ONEINCH_PROVID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.modules.multiswap.providers.THORCHAIN_PROVIDER_ID
 import io.horizontalsystems.walletkit.entities.SwapRecord
-import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIds
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 
 object SwapTrackRequestBuilder {
@@ -52,15 +52,6 @@ object SwapTrackRequestBuilder {
                 )
             )
 
-            // Our recorded swaps (every u_ USwap provider — P2P, NEAR, Barter, Circle).
-            // Tracked by the record uuid alone; the server resolves the provider + all
-            // details from it, and rejects any other field. The inbound tx hash reaches
-            // the server through /v3/signed from the send path, never from here.
-            record.providerId.startsWith("u_") -> TrackCall(
-                Endpoint.Recorded,
-                UnstoppableAPI.Request.Track(uuid = record.providerSwapId)
-            )
-
             // Native single-tx EVM swaps — stateless on-chain reader.
             record.providerId == ONEINCH_PROVIDER_ID ||
             record.providerId == UNISWAP_V3_PROVIDER_ID ||
@@ -77,7 +68,14 @@ object SwapTrackRequestBuilder {
                 )
             )
 
-            else -> throw IllegalArgumentException("Unsupported provider for tracking: ${record.providerId}")
+            // Our recorded swaps: every order the server created, tracked by the record uuid
+            // alone; the server resolves the provider + all details from it, and rejects any
+            // other field. The inbound tx hash reaches the server through /v3/signed from the
+            // send path, never from here.
+            else -> TrackCall(
+                Endpoint.Recorded,
+                UnstoppableAPI.Request.Track(uuid = record.providerSwapId)
+            )
         }
     }
 
@@ -87,7 +85,7 @@ object SwapTrackRequestBuilder {
         ONEINCH_PROVIDER_ID -> "ONEINCH"
         PANCAKE_V3_PROVIDER_ID -> "PANCAKESWAP"
         UNISWAP_V3_PROVIDER_ID -> "UNISWAP_V3"
-        else -> if (providerId.startsWith("u_")) providerId.removePrefix("u_") else providerId.uppercase()
+        else -> SwapProviderIds.serverId(providerId)
     }
 }
 

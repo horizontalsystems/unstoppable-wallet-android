@@ -25,8 +25,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProv
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.RetryableSwapError
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceFactory
@@ -61,7 +59,6 @@ class SwapConfirmViewModel(
     // A split swap's recipients, chosen with their shares before this screen; null for a
     // single swap. They cannot change here: the preview is priced for exactly these.
     private val splitRecipients: List<SplitSwapRecipient>? = null,
-    private val swapProviderInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -79,10 +76,9 @@ class SwapConfirmViewModel(
     private fun supportsMevProtection(finalQuote: SwapFinalQuote?): Boolean =
         sendTransactionService.supportsMevProtection && finalQuote?.mevProtectionAllowed == true
 
-    // only a vault-settled provider (per its /v3/providers executionType) delivers ZEC to
-    // shielded/unified receivers; every other route needs a transparent recipient address
+    // whether a typed ZEC recipient must be transparent is the selected route's own rule
     val zcashTransparentRecipientOnly: Boolean
-        get() = swapProviderInfoManager.zcashTransparentRecipientOnly(swapProvider.id, swapQuote)
+        get() = swapProvider.zcashTransparentRecipientOnly(swapQuote)
     private val amountIn = swapQuote.amountIn.let { amount ->
         if (amount.scale() > tokenIn.decimals) {
             amount.setScale(tokenIn.decimals, RoundingMode.DOWN)
@@ -281,7 +277,6 @@ class SwapConfirmViewModel(
             recipientRequired = recipientRequired,
             slippage = slippage,
             estimatedTime = estimatedTime,
-            providerType = swapProvider.type,
             error = error,
             splitOutputs = finalQuote?.splitOutputs,
             splitOutputFiatAmounts = splitOutputFiatAmounts(finalQuote?.splitOutputs),
@@ -410,7 +405,7 @@ class SwapConfirmViewModel(
                     }
                 }
 
-                priceImpactService.setProviderTitle(swapProvider.title)
+                priceImpactService.setProviderTitle(swapQuote.venue.name)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: RetryableSwapError) {
@@ -605,8 +600,8 @@ class SwapConfirmViewModel(
         val record = SwapRecord(
             accountId = confirmingAccountId ?: "",
             timestamp = System.currentTimeMillis(),
-            providerId = swapProvider.id,
-            providerName = swapProvider.title,
+            providerId = swapQuote.venue.id,
+            providerName = swapQuote.venue.name,
             tokenInUid = tokenIn.tokenQuery.id,
             tokenInCoinCode = tokenIn.coin.code,
             tokenInCoinUid = tokenIn.coin.uid,
@@ -720,7 +715,6 @@ data class SwapConfirmUiState(
     val recipientRequired: Boolean,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,
-    val providerType: SwapProviderType,
     val error: Throwable?,
     // A split swap's outputs in recipient order, each with its fiat value; null for a single swap.
     val splitOutputs: List<SplitSwapOutput>? = null,

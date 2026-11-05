@@ -36,6 +36,8 @@ data class PrivateSendPreview(
     val previewToken: String,
     // The provider the route came from: it commits the token and takes the hash report.
     val provider: USwapProvider,
+    // The server venue the route is served by: what the preview and the swap record name.
+    val venueId: String,
     // The preview's sellAmount — the ceiling the Send button authorizes. Never the entered
     // amount: under exact output that is the *output*, a structurally different quantity.
     val depositAmount: BigDecimal,
@@ -78,8 +80,8 @@ data class PrivateSendOrder(
 ) {
     val request: PrivateSendRequest get() = preview.request
 
-    // App-side provider id ("u_…") — tracking and history rendering only, never shown.
-    val providerId: String get() = preview.provider.id
+    // The venue's server id — tracking and history rendering only, never shown.
+    val providerId: String get() = preview.venueId
     val refundAddress: String get() = preview.refundAddress
     val estimatedTime: Long? get() = preview.estimatedTime
 }

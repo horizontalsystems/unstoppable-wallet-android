@@ -1,13 +1,11 @@
 package io.horizontalsystems.walletkit.modules.privatesend
 
-import android.util.Log
 import com.google.gson.Gson
-import io.horizontalsystems.walletkit.core.ILocalStorage
-import io.horizontalsystems.walletkit.core.managers.APIClient
-import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapHelper
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIds
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetCatalog
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetMapping
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
@@ -15,8 +13,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,43 +24,26 @@ import java.math.BigDecimal
 /**
  * The private send stack: which tokens can be sent privately, and committing an order.
  *
- * A private send routes a transfer through a confidential USwap provider so the recipient
- * cannot be linked on-chain to the sender. The confirmation screen previews the route (priced
- * against the provider's stand-in deposit address); Send commits it and learns the real deposit
- * address. Execution is a plain transfer to that address, so the multiswap send-transaction
- * machinery does the actual work.
+ * A private send routes a transfer through a confidential USwap venue so the recipient cannot
+ * be linked on-chain to the sender. The confirmation screen previews the route (priced against
+ * the venue's stand-in deposit address); Send commits it and learns the real deposit address.
+ * Execution is a plain transfer to that address, so the multiswap send-transaction machinery
+ * does the actual work.
  *
- * Which providers are confidential comes from GET /providers (privacy.confidential), not a
- * hardcoded id — the server, not a release, decides availability. Only providers that also
- * exist in [MultiSwapProviderRegistry.confidentialProviders] are usable: a brand-new server
- * id still needs an app update to be resolvable for tracking and history rendering.
+ * Which venues are confidential comes from `GET /v3/providers` (`privacy`), and which tokens they
+ * list from the token catalog, never from a hardcoded id: the server, not a release, decides
+ * availability.
  */
 class PrivateSendManager(
-    appConfigProvider: IAppConfigProvider,
-    private val localStorage: ILocalStorage,
+    private val provider: USwapProvider,
+    private val providerInfoManager: SwapProviderInfoManager,
+    private val assetCatalog: USwapAssetCatalog,
 ) {
-    private val unstoppableAPI = APIClient.build(
-        appConfigProvider.uswapApiBaseUrl,
-        mapOf("x-api-key" to appConfigProvider.uswapApiKey),
-    ).create(UnstoppableAPI::class.java)
-
     private val gson = Gson()
     private val syncMutex = Mutex()
 
-    // A confidential provider is only usable here if it executes as a plain transfer:
-    // anything else (signed_transaction, thorchain_deposit, …) needs real transaction
-    // building and must not silently join the private send flow.
-    private val supportedExecutionType = "transfer"
-
-    @Volatile
-    private var confidentialServerIds: List<String> = restoredServerIds()
-
-    // Guarded by syncMutex. Tracks per-provider token-list starts so a send screen opening
-    // repeatedly doesn't re-run the provider's cache reads each time.
-    private val providerStartedAt = mutableMapOf<String, Long>()
-
-    // Bumped whenever availability data changes (provider list or a token list sync), so an
-    // open send screen reveals or hides the toggle without a reload.
+    // Bumped whenever availability data changes (the provider list or the catalog), so an open
+    // send screen reveals or hides the toggle without a reload.
     private val _availabilityFlow = MutableStateFlow(0L)
     val availabilityFlow = _availabilityFlow.asStateFlow()
 
@@ -73,64 +52,48 @@ class PrivateSendManager(
      * never trigger a fetch, block, or become suspend.
      */
     fun isSupported(token: Token): Boolean =
-        token.blockchainType !in privateChains &&
-            token.blockchainType !in payoutUnsupportedChains &&
-            candidates().any { it.supportsPrivateSend(token) }
+        token.blockchainType !in payoutUnsupportedChains && privateVenueIds(token).isNotEmpty()
 
     /**
-     * Refreshes the confidential provider list (TTL-guarded) and each candidate's token list.
-     * Cheap to call on every send screen open: everything runs on IO — provider.start() does
-     * blocking Room and marketKit reads — and a successfully started provider is not
-     * re-started for a whole interval.
+     * Refreshes the provider list and the token catalog (both TTL-guarded). Cheap to call on
+     * every send screen open: everything runs on IO and a fresh list is not fetched again for
+     * a whole interval.
      */
     suspend fun sync() = withContext(Dispatchers.IO) {
         syncMutex.withLock {
-            syncProviderIds()
-
-            for (provider in candidates()) {
-                val startedAt = providerStartedAt[provider.serverProviderId]
-                if (startedAt != null && System.currentTimeMillis() - startedAt in 0 until SYNC_INTERVAL) {
-                    continue
-                }
-
-                try {
-                    provider.start()
-                    providerStartedAt[provider.serverProviderId] = System.currentTimeMillis()
-                    _availabilityFlow.value++
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Throwable) {
-                    Log.e(TAG, "Failed to sync tokens of ${provider.serverProviderId}", e)
-                }
+            try {
+                provider.start()
+            } finally {
+                _availabilityFlow.value++
             }
         }
     }
 
+    // The confidential venues that list the token: in the catalog under a provider that is
+    // confidential, settles as a plain transfer and is not suspended.
+    private fun privateVenueIds(token: Token): List<String> =
+        assetCatalog.privateVenueIds(token, providerInfoManager.privateProviderIds)
+
     /**
-     * Prices the private send for the confirmation screen without creating an order: /v3/rate
-     * exists here only to *choose* a provider, so with a single candidate the round trip is pure
-     * latency on a screen where the user is already waiting — the fan-out returns the moment a
-     * second confidential provider maps the token. Re-run freely; [commit] turns the preview into
-     * an order when the user presses Send. Every economic value below prefers the preview response.
+     * Prices the private send for the confirmation screen without creating an order: one
+     * exact-output `/v3/rate` over the confidential privacy levels chooses the venue (every
+     * route delivers the identical requested output, so the cheapest deposit wins), and the
+     * preview is made with that venue. Re-run freely; [commit] turns the preview into an order
+     * when the user presses Send. Every economic value below prefers the preview response.
      *
      * Throws [PrivateSendError] only — raw server text never leaves this method.
      */
     suspend fun preview(request: PrivateSendRequest): PrivateSendPreview {
         val token = request.token
 
-        if (token.blockchainType in privateChains || token.blockchainType in payoutUnsupportedChains) {
+        if (token.blockchainType in payoutUnsupportedChains) {
             throw PrivateSendError.TokenUnsupported
         }
 
-        val providers = candidates().filter { it.supportsPrivateSend(token) }
+        val venueIds = privateVenueIds(token)
+        if (venueIds.isEmpty()) throw PrivateSendError.TokenUnsupported
 
-        if (providers.isEmpty()) throw PrivateSendError.TokenUnsupported
-
-        val provider = if (providers.size > 1) {
-            selectCheapestProvider(providers, token, request.amountOut) ?: providers.first()
-        } else {
-            providers.first()
-        }
+        val venueId = selectCheapestVenue(venueIds, token, request.amountOut)
 
         // Omitting the refund address forfeits the buffer refund, which lands on the success
         // path too — so a missing one fails the preview rather than proceeding without.
@@ -142,13 +105,17 @@ class PrivateSendManager(
             throw PrivateSendError.CommitFailed(e)
         }
 
+        // `sourceAddress` is deliberately never sent: it is optional for transfer venues, and
+        // handing the venue the sender's address defeats the point of a private send.
         val route = try {
-            provider.privateSendPreview(
-                token = token,
+            provider.exactOutputPreview(
+                tokenIn = token,
+                tokenOut = token,
                 amountOut = request.amountOut,
                 destinationAddress = request.recipient,
                 refundAddress = refundAddress,
                 slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                venueId = venueId,
             )
         } catch (e: CancellationException) {
             throw e
@@ -160,7 +127,7 @@ class PrivateSendManager(
         if (previewToken.isNullOrEmpty()) throw PrivateSendError.CommitFailed()
 
         // The deposit transfer is priced against the stand-in so the confirmation screen shows a
-        // network fee. A provider that already names the deposit account at preview is priced
+        // network fee. A venue that already names the deposit account at preview is priced
         // against that instead; with neither the screen shows no fee, and the deposit is built
         // once the order names its address.
         val stubDepositAddress = route.stubDepositAddress?.takeIf { it.isNotBlank() }
@@ -193,6 +160,7 @@ class PrivateSendManager(
             request = request,
             previewToken = previewToken,
             provider = provider,
+            venueId = venueId,
             depositAmount = depositAmount,
             minSellAmount = minSellAmount,
             amountOut = amountOut,
@@ -201,6 +169,33 @@ class PrivateSendManager(
             estimatedTime = route.estimatedTime?.total,
             previewedAt = System.currentTimeMillis(),
         )
+    }
+
+    // One unnamed exact-output rate over the confidential levels: the venue with the cheapest
+    // deposit among those that list the token wins. No route anywhere surfaces an authored
+    // reason when a venue named one.
+    private suspend fun selectCheapestVenue(venueIds: List<String>, token: Token, amountOut: BigDecimal): String {
+        val rate = try {
+            provider.exactOutputRate(
+                tokenIn = token,
+                tokenOut = token,
+                amountOut = amountOut,
+                slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                privacy = providerInfoManager.privacyLevelsExcludingNone,
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw mapCommitError(e)
+        }
+
+        val best = rate.routes.orEmpty()
+            .filter { route -> route.providerId?.uppercase() in venueIds.map { it.uppercase() } && route.sellAmount != null }
+            .minByOrNull { it.sellAmount!! }
+
+        return best?.providerId
+            ?: reason(rate.providerErrors.orEmpty())?.let { throw it }
+            ?: throw PrivateSendError.NoRoute
     }
 
     /**
@@ -223,7 +218,7 @@ class PrivateSendManager(
         if (uuid.isNullOrEmpty()) throw PrivateSendError.CommitFailed()
 
         val execution = commit.execution
-        if (execution == null || execution.method != supportedExecutionType) {
+        if (execution == null || execution.method != SwapProviderIds.TRANSFER_EXECUTION_TYPE) {
             throw PrivateSendError.CommitFailed()
         }
 
@@ -280,90 +275,6 @@ class PrivateSendManager(
             attachment = execution.attachment,
             providerSwapId = uuid,
         )
-    }
-
-    private fun candidates(): List<USwapProvider> {
-        val serverIds = confidentialServerIds
-        return MultiSwapProviderRegistry.confidentialProviders.filter { it.serverProviderId in serverIds }
-    }
-
-    private fun restoredServerIds(): List<String> {
-        // The fallback seed only covers first launch / offline. A successful sync always
-        // replaces it, including removing a provider the server stops marking confidential.
-        val json = localStorage.privateSendProviderIds ?: return FALLBACK_SERVER_IDS
-
-        return try {
-            gson.fromJson(json, Array<String>::class.java)?.toList() ?: FALLBACK_SERVER_IDS
-        } catch (e: Throwable) {
-            Log.e(TAG, "Failed to restore confidential provider ids", e)
-            FALLBACK_SERVER_IDS
-        }
-    }
-
-    private suspend fun syncProviderIds() {
-        val stored = localStorage.privateSendProviderIds
-        val age = System.currentTimeMillis() - localStorage.privateSendProviderIdsSyncTime
-        if (stored != null && age in 0 until SYNC_INTERVAL) return
-
-        try {
-            val providerIds = unstoppableAPI.providers()
-                .filter {
-                    it.isConfidential &&
-                            !it.suspended &&
-                            it.executionType == supportedExecutionType
-                }
-                .map { it.provider }
-
-            confidentialServerIds = providerIds
-
-            if (providerIds.isNotEmpty()) {
-                localStorage.privateSendProviderIds = gson.toJson(providerIds)
-                localStorage.privateSendProviderIdsSyncTime = System.currentTimeMillis()
-            } else {
-                // An empty filtered list is honoured for this session but neither persisted
-                // nor timestamped: it can also mean a server that doesn't send executionType
-                // or the privacy marker yet, and locking "[]" in for the whole sync interval
-                // (and across restarts) would keep the feature dark long after the server
-                // starts sending them. Clearing storage keeps the next sync retrying.
-                localStorage.privateSendProviderIds = null
-                localStorage.privateSendProviderIdsSyncTime = 0
-            }
-
-            _availabilityFlow.value++
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Throwable) {
-            Log.e(TAG, "Failed to sync confidential providers", e)
-        }
-    }
-
-    // Every route delivers the identical requested output, so the cheapest deposit wins.
-    private suspend fun selectCheapestProvider(
-        providers: List<USwapProvider>,
-        token: Token,
-        amountOut: BigDecimal,
-    ): USwapProvider? = coroutineScope {
-        val rated = providers.map { provider ->
-            async {
-                try {
-                    val rate = provider.privateSendRate(token, amountOut, IMultiSwapProvider.DEFAULT_SLIPPAGE)
-                    val sellAmount = rate.routes.orEmpty().mapNotNull { it.sellAmount }.minOrNull()
-                    Triple(provider, sellAmount, rate.providerErrors.orEmpty())
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Throwable) {
-                    Triple(provider, null, emptyList())
-                }
-            }
-        }.map { it.await() }
-
-        val best = rated.filter { it.second != null }.minByOrNull { it.second!! }
-        if (best != null) return@coroutineScope best.first
-
-        // No routes anywhere: surface an authored reason if any provider named one.
-        reason(rated.flatMap { it.third })?.let { throw it }
-
-        null
     }
 
     private fun mapCommitError(error: Throwable): PrivateSendError {
@@ -457,22 +368,6 @@ class PrivateSendManager(
     }
 
     companion object {
-        private const val TAG = "PrivateSendManager"
-        private const val SYNC_INTERVAL = 6 * 60 * 60 * 1000L // 6 hours
-        private val FALLBACK_SERVER_IDS = listOf("NEAR_CONFIDENTIAL")
-
-        // Chains whose own transactions already hide the sender: Monero and Zano by
-        // protocol, Zcash when spending from the shielded pool (a shielded-input send to
-        // any recipient reveals no source address). Routing them through a swap rail adds
-        // a counterparty who learns the refund address and the recipient — strictly less
-        // private than a plain send — so the server token list is never allowed to light
-        // the toggle here, whatever it starts serving.
-        private val privateChains = setOf(
-            BlockchainType.Zcash,
-            BlockchainType.Monero,
-            BlockchainType.Zano,
-        )
-
         /**
          * Chains where the provider's payout cannot reach the recipient the way it usually
          * has to. Recipients on XRP and Stellar are mostly exchanges that credit a deposit

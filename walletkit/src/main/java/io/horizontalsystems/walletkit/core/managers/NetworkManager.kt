@@ -111,10 +111,10 @@ object APIClient {
         level = HttpLoggingInterceptor.Level.BASIC
     }
 
-    private fun buildClient(headers: Map<String, String>): OkHttpClient {
+    private fun buildClient(headers: () -> Map<String, String>): OkHttpClient {
         val headersInterceptor = Interceptor { chain ->
             val requestBuilder = chain.request().newBuilder()
-            headers.forEach { (name, value) ->
+            headers().forEach { (name, value) ->
                 requestBuilder.header(name, value)
             }
             chain.proceed(requestBuilder.build())
@@ -128,7 +128,10 @@ object APIClient {
             .build()
     }
 
-    fun build(baseUrl: String, headers: Map<String, String> = mapOf()): Retrofit {
+    fun build(baseUrl: String, headers: Map<String, String> = mapOf()): Retrofit = build(baseUrl) { headers }
+
+    /** As [build], with the headers read on every request, for values that change between calls. */
+    fun build(baseUrl: String, headers: () -> Map<String, String>): Retrofit {
         val client = buildClient(headers)
 
         return Retrofit.Builder()

@@ -10,11 +10,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
-import io.horizontalsystems.walletkit.modules.multiswap.providers.CanonicalAssetId
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapSuspension
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapSuspensionIndex
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import java.math.BigDecimal
 
@@ -50,18 +46,6 @@ object SwapPathFixtures {
         override fun candidates(tokenIn: Token, tokenOut: Token) = tokens.toList()
     }
 
-    fun suspensions(providerId: String, sell: Token, buy: Token) = SwapSuspensionIndex(
-        rulesByProvider = mapOf(
-            SwapSuspensionIndex.serverId(providerId) to listOf(
-                SwapSuspension(
-                    kind = SwapSuspension.Kind.Pair,
-                    sellAsset = CanonicalAssetId.of(sell),
-                    buyAsset = CanonicalAssetId.of(buy),
-                )
-            )
-        )
-    )
-
     fun stubTokenSource() = StubTokenSource().apply {
         for (token in listOf(eth, sol, trx)) {
             tokensByQuery[token.tokenQuery] = token
@@ -92,20 +76,13 @@ object SwapPathFixtures {
         private val edges: Set<String>,
         private val log: MutableList<String>?,
     ) : IMultiSwapProvider {
-        override val title = id
-        override val type = SwapProviderType.DEX
-
-        override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
-
-        override fun supports(blockchainType: BlockchainType) = true
-
         override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
             val edge = edge(tokenFrom, tokenTo)
             log?.add(edge)
             return edge in edges
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote =
+        override suspend fun fetchQuotes(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): List<SwapQuote> =
             error("not used")
 
         override suspend fun fetchFinalQuote(

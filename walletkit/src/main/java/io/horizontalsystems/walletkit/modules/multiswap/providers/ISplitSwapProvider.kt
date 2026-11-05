@@ -9,19 +9,19 @@ import java.math.BigDecimal
 
 /**
  * A provider that splits one deposit between several outputs of the same buy token, each paid
- * to its own address. The quote and the final quote are the single-swap ones with the buy side
- * per output: the quote's `amountOut` is the outputs' total, and the final quote carries
+ * to its own address. The quotes and the final quote are the single-swap ones with the buy side
+ * per output: a quote's `amountOut` is the outputs' total, and the final quote carries
  * [SwapFinalQuote.splitOutputs]. [IMultiSwapProvider.commit] creates the order for a split
  * preview exactly as for a single one; the committed quote's `providerSwapId` is the split's id.
  */
 interface ISplitSwapProvider : IMultiSwapProvider {
-    /** Prices a split with the given shares of the deposit, which must sum to 100. */
-    suspend fun fetchSplitQuote(
+    /** Prices a split with the given shares of the deposit, which must sum to 100: one quote per venue that serves splits. */
+    suspend fun fetchSplitQuotes(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
         percents: List<Int>,
-    ): SwapQuote
+    ): List<SwapQuote>
 
     /** The confirmation screen's split quote, with a destination per output. No side effects. */
     suspend fun fetchSplitFinalQuote(

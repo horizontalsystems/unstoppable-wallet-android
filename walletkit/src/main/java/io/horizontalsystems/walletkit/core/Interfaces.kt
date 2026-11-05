@@ -64,13 +64,8 @@ interface ILocalStorage {
     var roiPerformanceCoins: List<PerformanceCoin>
     var marketSearchRecentCoinUids: List<String>
     var swapRecentTokenQueryIds: List<String>
-    var uSwapSuspensions: String?
-    var uSwapSuspensionsSyncTime: Long
-    var uSwapExecutionTypes: String?
-    var uSwapRouteScores: String?
-    var uSwapSplitProviders: String?
-    var privateSendProviderIds: String?
-    var privateSendProviderIdsSyncTime: Long
+    var uSwapProviders: String?
+    var uSwapProvidersSyncTime: Long
     var uSwapCatalogEtag: String?
     var zcashAccountIds: Set<String>
     var zcashMigrationTransactionIds: Set<String>

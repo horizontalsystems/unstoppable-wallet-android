@@ -1,10 +1,5 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
@@ -82,16 +77,4 @@ class XrpDestinationTagTest {
         assertNull(signed.resolvedDestinationTag())
     }
 
-    // --- suspension rules reach XRP ---
-
-    @Test
-    fun `native XRP has a canonical id, so a rule can suspend it`() {
-        val xrp = Token(
-            coin = Coin("ripple", "XRP", "XRP"),
-            blockchain = Blockchain(BlockchainType.Xrp, "XRP Ledger", null),
-            type = TokenType.Native,
-            decimals = 6,
-        )
-        assertEquals("XRP.XRP", CanonicalAssetId.of(xrp))
-    }
 }

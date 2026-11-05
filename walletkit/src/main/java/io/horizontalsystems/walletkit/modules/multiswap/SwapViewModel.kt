@@ -351,7 +351,7 @@ class SwapViewModel(
             tokenOut = quoteState.tokenOut,
             quoting = quoteState.quoting,
             quotes = quoteState.quotes,
-            preferredProvider = quoteState.preferredProvider,
+            preferredVenueId = quoteState.preferredVenueId,
             quote = quoteState.quote,
             error = networkState.error ?: quoteState.error ?: balanceState.error,
             availableBalance = balanceState.balance.takeIf { tokenInWalletState == TokenInWalletState.Ready },
@@ -488,7 +488,7 @@ class SwapViewModel(
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
 
-        priceImpactService.setProviderTitle(quoteState.quote?.provider?.title)
+        priceImpactService.setProviderTitle(quoteState.quote?.venue?.name)
 
         fiatServiceIn.setToken(quoteState.tokenIn)
         fiatServiceIn.setAmount(quoteState.amountIn)
@@ -609,11 +609,14 @@ class SwapViewModel(
      * disabled with no event ever coming back to release it.
      */
     fun startProceed(): Boolean {
-        val provider = quoteState.quote?.provider ?: return false
+        val quote = quoteState.quote ?: return false
         val tokenIn = quoteState.tokenIn ?: return false
         val amountIn = quoteState.amountIn ?: return false
 
-        if (!provider.amlPrecheck) {
+        // The precheck is route-driven: a quote carries `amlProviderId` when and only when its
+        // route has one, and the value is passed through verbatim.
+        val amlProviderId = quote.swapQuote.amlProviderId
+        if (amlProviderId == null) {
             viewModelScope.launch { amlCheckEventFlow.emit(AmlCheckEvent.Proceed) }
             return true
         }
@@ -624,7 +627,7 @@ class SwapViewModel(
             try {
                 val addresses = SwapHelper.getSourceAddressesForAmlCheck(tokenIn, amountIn)
                 val passedAmlCheck = if (addresses.isNotEmpty()) {
-                    provider.checkAmlAddresses(addresses)
+                    quote.provider.checkAmlAddresses(addresses, amlProviderId)
                 } else {
                     throw IllegalStateException("No addresses found")
                 }
@@ -645,6 +648,9 @@ class SwapViewModel(
     }
 
     fun getCurrentQuote() = quoteState.quote
+
+    /** A swap was sent from this screen: the next one is a new session for the backend. */
+    fun onSwapCompleted() = quoteService.startNewSession()
     fun onResume() {
         requoteOnTimeout = true
         quoteService.restart(::requoteIfTimeout)
@@ -715,7 +721,7 @@ data class SwapUiState(
     val tokenOut: Token?,
     val quoting: Boolean,
     val quotes: List<SwapProviderQuote>,
-    val preferredProvider: IMultiSwapProvider?,
+    val preferredVenueId: String?,
     val quote: SwapProviderQuote?,
     val error: Throwable?,
     val availableBalance: BigDecimal?,

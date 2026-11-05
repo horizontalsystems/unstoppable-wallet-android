@@ -6,10 +6,8 @@ import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtu
 import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtures.eth
 import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtures.provider
 import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtures.sol
-import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtures.suspensions
 import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtures.trx
 import io.horizontalsystems.walletkit.modules.multiswap.pathfinder.SwapPathFixtures.usdtSol
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapSuspensionIndex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -19,13 +17,11 @@ import org.junit.Test
 // Tier order (native first, then the coin list) IS the ranking: the finder returns on the first hit.
 class SwapPathFinderTest {
 
-    private val noSuspensions = SwapSuspensionIndex()
-
     @Test
     fun `no candidates returns null`() {
         val finder = SwapPathFinder(emptyList())
 
-        assertNull(finder.find(eth, bonk, listOf(provider(edges = emptyList())), noSuspensions))
+        assertNull(finder.find(eth, bonk, listOf(provider(edges = emptyList()))))
     }
 
     @Test
@@ -33,7 +29,7 @@ class SwapPathFinderTest {
         val providers = listOf(provider("a", listOf(edge(eth, sol), edge(sol, bonk))))
         val finder = SwapPathFinder(listOf(candidates(sol)))
 
-        val path = finder.find(eth, bonk, providers, noSuspensions)
+        val path = finder.find(eth, bonk, providers)
 
         assertEquals(SwapPath(eth, sol, bonk), path)
     }
@@ -45,7 +41,7 @@ class SwapPathFinderTest {
         )
         val finder = SwapPathFinder(listOf(candidates(sol), candidates(usdtSol)))
 
-        assertEquals(sol, finder.find(eth, bonk, providers, noSuspensions)?.intermediateToken)
+        assertEquals(sol, finder.find(eth, bonk, providers)?.intermediateToken)
     }
 
     @Test
@@ -56,7 +52,7 @@ class SwapPathFinderTest {
         )
         val finder = SwapPathFinder(listOf(candidates(sol, trx)))
 
-        assertEquals(sol, finder.find(eth, bonk, providers, noSuspensions)?.intermediateToken)
+        assertEquals(sol, finder.find(eth, bonk, providers)?.intermediateToken)
     }
 
     @Test
@@ -67,7 +63,7 @@ class SwapPathFinderTest {
         )
         val finder = SwapPathFinder(listOf(candidates(sol)))
 
-        assertNotNull(finder.find(eth, bonk, providers, noSuspensions))
+        assertNotNull(finder.find(eth, bonk, providers))
     }
 
     @Test
@@ -75,7 +71,7 @@ class SwapPathFinderTest {
         val providers = listOf(provider("a", listOf(edge(eth, sol))))
         val finder = SwapPathFinder(listOf(candidates(sol)))
 
-        assertNull(finder.find(eth, bonk, providers, noSuspensions))
+        assertNull(finder.find(eth, bonk, providers))
     }
 
     @Test
@@ -86,7 +82,7 @@ class SwapPathFinderTest {
         )
         val finder = SwapPathFinder(listOf(candidates(sol), candidates(usdtSol)))
 
-        assertEquals(usdtSol, finder.find(eth, bonk, providers, noSuspensions)?.intermediateToken)
+        assertEquals(usdtSol, finder.find(eth, bonk, providers)?.intermediateToken)
     }
 
     @Test
@@ -95,29 +91,9 @@ class SwapPathFinderTest {
         val providers = listOf(provider("a", listOf(edge(sol, bonk)), log))
         val finder = SwapPathFinder(listOf(candidates(sol)))
 
-        finder.find(eth, bonk, providers, noSuspensions)
+        finder.find(eth, bonk, providers)
 
         assertEquals(listOf(edge(eth, sol)), log)
-    }
-
-    @Test
-    fun `respects suspensions`() {
-        // The one provider that could serve leg two is suspended for exactly that directed pair.
-        val providers = listOf(provider("a", listOf(edge(eth, sol), edge(sol, bonk))))
-        val finder = SwapPathFinder(listOf(candidates(sol)))
-
-        assertNull(finder.find(eth, bonk, providers, suspensions("a", sell = sol, buy = bonk)))
-    }
-
-    @Test
-    fun `suspended provider does not count toward leg`() {
-        val providers = listOf(
-            provider("a", listOf(edge(eth, sol), edge(sol, bonk))),
-            provider("b", listOf(edge(sol, bonk))),
-        )
-        val finder = SwapPathFinder(listOf(candidates(sol)))
-
-        assertNotNull(finder.find(eth, bonk, providers, suspensions("a", sell = sol, buy = bonk)))
     }
 
     @Test
@@ -126,7 +102,7 @@ class SwapPathFinderTest {
         val providers = listOf(provider("a", listOf(edge(eth, bonk)), log))
         val finder = SwapPathFinder(listOf(candidates(eth, bonk)))
 
-        assertNull(finder.find(eth, bonk, providers, noSuspensions))
+        assertNull(finder.find(eth, bonk, providers))
         assertTrue(log.isEmpty())
     }
 
@@ -136,7 +112,7 @@ class SwapPathFinderTest {
         val providers = listOf(provider("a", emptyList(), log))
         val finder = SwapPathFinder(listOf(candidates(sol), candidates(sol)))
 
-        finder.find(eth, bonk, providers, noSuspensions)
+        finder.find(eth, bonk, providers)
 
         assertEquals(listOf(edge(eth, sol)), log)
     }

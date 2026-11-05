@@ -124,11 +124,12 @@ interface ChainPlugin {
     suspend fun swapUnifiedReceiveAddress(token: Token): String? = null
 
     /**
-     * The wallet's unified address with shielded receivers only, named as the refund (and source)
-     * of a sell to a provider that takes a unified refund, or null for chains without one. One
-     * address per account per operation: every re-preview of one operation gets the same address,
-     * and the chain's send service forgets it once the deposit is sent. Throws instead of falling
-     * back to an address with a transparent receiver.
+     * The wallet's unified address with shielded receivers only, named wherever a route's address
+     * rules ask for a unified address without a transparent receiver (a refund, a source, or a
+     * delivery), or null for chains without one. One address per account per operation: every
+     * re-preview of one operation gets the same address, and the chain's send service forgets it
+     * once the deposit is sent. Throws instead of falling back to an address with a transparent
+     * receiver.
      */
     suspend fun swapShieldedRefundAddress(token: Token): String? = null
 

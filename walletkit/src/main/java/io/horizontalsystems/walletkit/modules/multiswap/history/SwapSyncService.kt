@@ -10,7 +10,6 @@ import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope

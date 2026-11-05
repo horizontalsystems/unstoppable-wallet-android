@@ -68,9 +68,7 @@ import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Currency
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
-import io.horizontalsystems.walletkit.modules.multiswap.ui.routeScore
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -275,6 +273,7 @@ private fun SwapTabScreen(
 
     val forResult = navigation.slideFromRightForResult<SwapConfirmPage.Result>({ SwapConfirmPage(parentScreenContentKey) }) {
         if (it.success) {
+            viewModel.onSwapCompleted()
             if (closeAfterSwap) {
                 navigation.removeLastOrNull()
             } else {
@@ -283,7 +282,6 @@ private fun SwapTabScreen(
         }
     }
 
-    val recipientScope = rememberCoroutineScope()
     val navigateToSwapConfirm = {
         val tokenOut = viewModel.uiState.tokenOut
         val quote = viewModel.uiState.quote
@@ -296,28 +294,20 @@ private fun SwapTabScreen(
         } else if (viewModel.uiState.externalRecipientRequired && tokenOut != null) {
             // tokenOut the account can't hold: the recipient page collects the external
             // delivery address and opens the confirmation itself. Whether a ZEC recipient may
-            // be shielded depends on the provider's execution type, which only /v3/providers
-            // says: on a first launch with nothing cached that answer is awaited first, so the
-            // page is not opened transparent-only for a route that delivers shielded. A failed
-            // sync leaves nothing cached and the page stays transparent-only.
-            recipientScope.launch {
-                if (tokenOut.blockchainType == BlockchainType.Zcash && !App.swapProviderInfoManager.hasExecutionTypes) {
-                    App.swapProviderInfoManager.sync()
-                }
-                navigation.slideFromRight(
-                    SwapRecipientPage(
-                        SwapRecipientPage.Input(
-                            token = tokenOut,
-                            parentScreenContentKey = parentScreenContentKey,
-                            closeAfterSwap = closeAfterSwap,
-                            initialAddress = viewModel.externalRecipient?.hex,
-                            zcashTransparentOnly = quote
-                                ?.let { App.swapProviderInfoManager.zcashTransparentRecipientOnly(it.provider.id, it.swapQuote) }
-                                ?: (tokenOut.blockchainType == BlockchainType.Zcash),
-                        )
+            // be shielded is the selected route's own rule.
+            navigation.slideFromRight(
+                SwapRecipientPage(
+                    SwapRecipientPage.Input(
+                        token = tokenOut,
+                        parentScreenContentKey = parentScreenContentKey,
+                        closeAfterSwap = closeAfterSwap,
+                        initialAddress = viewModel.externalRecipient?.hex,
+                        zcashTransparentOnly = quote
+                            ?.let { it.provider.zcashTransparentRecipientOnly(it.swapQuote) }
+                            ?: (tokenOut.blockchainType == BlockchainType.Zcash),
                     )
                 )
-            }
+            )
         } else {
             forResult()
         }
@@ -858,11 +848,11 @@ private fun ProviderCellInfo(
                     CellMiddleInfo(eyebrow = "Provider".hs)
                 },
                 right = {
-                    CellRightInfo(titleSubheadSb = quote.provider.title.hs)
+                    CellRightInfo(titleSubheadSb = quote.venue.name.hs)
                 }
             )
         }
-        routeScore(quote.provider.id)?.let { riskLevel ->
+        quote.venue.riskLevel?.let { riskLevel ->
             CellSecondary(
                 middle = {
                     CellMiddleInfoTextIcon(
@@ -891,7 +881,6 @@ private fun ProviderCellInfo(
                 right = {
                     SwapTime(
                         estimationTime = estimationTime,
-                        providerType = quote.provider.type,
                         timeStatus = swapTimeStatus,
                     )
                 },
@@ -907,7 +896,6 @@ private fun ProviderCellInfo(
 private fun SwapTime(
     modifier: Modifier = Modifier,
     estimationTime: Long,
-    providerType: SwapProviderType,
     timeStatus: SwapTimeStatus,
 ) {
     val color = if (timeStatus == SwapTimeStatus.Attention) {
@@ -920,7 +908,7 @@ private fun SwapTime(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = formatSwapTime(estimationTime, providerType),
+            text = formatSwapTime(estimationTime),
             style = ComposeAppTheme.typography.subheadSB,
             color = color,
             overflow = TextOverflow.Ellipsis,

@@ -113,7 +113,7 @@ private fun SplitSwapRecipientsScreen(navigation: HSNavigation, input: SplitSwap
                     allowRemoval = false,
                     splitIndex = editingIndex + 1,
                     zcashTransparentOnly = uiState.quote
-                        ?.let { App.swapProviderInfoManager.zcashTransparentRecipientOnly(it.provider.id, it.swapQuote) }
+                        ?.let { it.provider.zcashTransparentRecipientOnly(it.swapQuote) }
                         ?: (tokenOut.blockchainType == BlockchainType.Zcash),
                 )
             )

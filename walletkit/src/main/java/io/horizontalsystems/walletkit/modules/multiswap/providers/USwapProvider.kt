@@ -1,23 +1,29 @@
 package io.horizontalsystems.walletkit.modules.multiswap.providers
 
+import android.os.Build
 import android.util.Base64
+import android.util.Log
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.core.derivation
+import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.hexStringToByteArray
 import io.horizontalsystems.walletkit.core.isEvm
 import io.horizontalsystems.walletkit.core.managers.APIClient
-import io.horizontalsystems.walletkit.core.nativeTokenQueries
+import io.horizontalsystems.walletkit.core.stripHexPrefix
+import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.modules.multiswap.SplitRateException
 import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapOutput
 import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapQuoteExtraData
 import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapRecipient
 import io.horizontalsystems.walletkit.modules.multiswap.SplitSwapRules
-import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailedException
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitment
 import io.horizontalsystems.walletkit.modules.multiswap.SwapFinalQuote
+import io.horizontalsystems.walletkit.modules.multiswap.SwapMevProtection
 import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import io.horizontalsystems.walletkit.modules.multiswap.ThorChainSwapMemo
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.EvmTransactionData
@@ -25,581 +31,198 @@ import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTran
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldSlippage
-import io.horizontalsystems.walletkit.core.stripHexPrefix
-import io.horizontalsystems.walletkit.core.chain.ChainRegistry
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.walletkit.core.hexStringToByteArray
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.HttpException
-import retrofit2.http.GET
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Collections
+import java.util.UUID
 
+/**
+ * The one swap provider. One unnamed `/v3/rate` per round answers with every venue's route; each
+ * becomes a quote whose venue is the route's provider, handed back here for the preview
+ * (`/v3/preview` with that `provider`), the AML precheck and the commit. Venue identity comes
+ * from [SwapProviderInfoManager], token identifiers from [USwapAssetCatalog] and Zcash addresses
+ * from the route's `addressRules`, so no provider is named anywhere in the app: the server adds
+ * or removes one without a release.
+ */
 class USwapProvider(
-    private val provider: UProvider,
-    // Narrows the sell side to sources the host app can actually execute (e.g. a
-    // route-calldata provider offered only where contract calls are possible).
-    private val supportsSourceToken: (Token) -> Boolean = { true },
-    // Whether /swap gets `sourceAddress` for this sell token — the server-built-tx
-    // signal. An app that builds the source leg itself (e.g. a deposit transfer
-    // batched into its own signer flow) turns it off so the server returns the
-    // plain deposit route instead of building and gas-estimating a transaction.
-    private val shouldIncludeSourceAddress: (Token) -> Boolean = { provider.consumesServerBuiltTx(it) },
+    private val providerInfoManager: SwapProviderInfoManager,
+    private val assetCatalog: USwapAssetCatalog,
+    // Whether /v3/preview gets `sourceAddress` for this sell token: the server-built-tx signal.
+    // An app that builds the source leg itself (e.g. a deposit transfer batched into its own
+    // signer flow) turns it off so the server returns the plain deposit route instead of
+    // building and gas-estimating a transaction.
+    private val shouldIncludeSourceAddress: (Token) -> Boolean = { it.needsServerBuiltTx },
     // Builds the EVM source leg of a transfer route: the deposit calldata the app's own
     // signer executes. Defaults to the EVM chain plugin's plain transfer; an app whose
     // signer flow needs another shape supplies its own.
     private val buildEvmDepositTransfer: ((tokenIn: Token, amountIn: BigDecimal, depositAddress: String) -> SendTransactionData.Evm)? = null,
 ) : ISplitSwapProvider {
-    override val id = "u_${provider.id}"
-    override val title = provider.title
-    override val type = provider.type
-    override val amlPrecheck = provider.amlPrecheck
-    override val isEvm = provider.isEvm
+    override val id = ID
 
-    override fun isSingleTransactionSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = when (provider) {
-        // LI.FI spans both: a same-chain pair is a plain single-tx DEX swap, a cross-chain
-        // pair is deposit → bridge → delivery, so the flag depends on the pair, not the provider.
-        UProvider.Lifi -> tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
-        else -> provider.isSingleTransactionSwap
-    }
+    // The `X-Session-Id` of the swap screen that is open: generated when it opens and replaced
+    // after a swap, so support can line up the quotes the user compared with the swap they made.
+    @Volatile
+    private var sessionId: String? = null
 
-    private val unstoppableAPI = APIClient.build(
-        App.appConfigProvider.uswapApiBaseUrl,
-        mapOf("x-api-key" to App.appConfigProvider.uswapApiKey)
-    ).create(UnstoppableAPI::class.java)
+    private val unstoppableAPI = APIClient.build(App.appConfigProvider.uswapApiBaseUrl) {
+        buildMap {
+            put("x-api-key", App.appConfigProvider.uswapApiKey)
+            put("User-Agent", userAgent)
+            sessionId?.let { put("X-Session-Id", it) }
+        }
+    }.create(UnstoppableAPI::class.java)
 
-    private val blockchainTypes = USwapAssetMapping.chainIdBlockchainTypes
+    // A venue the directory does not know forces a sync off the quoting path.
+    private val syncScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val chainIdByBlockchainType = blockchainTypes.entries.associate { (k, v) -> v to k }
-
-    private var assetsMap = mapOf<Token, String>()
-    private var supportedBlockchainTypes = setOf<BlockchainType>()
-
-    private sealed class ProviderData {
-        data class TokenMap(val map: Map<Token, String>) : ProviderData()
-        data class ChainIds(val ids: List<String>) : ProviderData()
+    override fun startSession() {
+        sessionId = UUID.randomUUID().toString()
     }
 
     override suspend fun start() {
-        // The Stellar DEX routes publish no token list and serve one chain, so the card never
-        // waits on /v3/tokens: it is offered as soon as the swap screen opens, as the native
-        // Stellar client was.
-        if (provider == UProvider.Stellar) {
-            supportedBlockchainTypes = setOf(BlockchainType.Stellar)
-            return
-        }
-
-        SwapProviderCacheHelper.getCachedChainIds(id)?.let { chainIds ->
-            supportedBlockchainTypes = chainIds.mapNotNull { blockchainTypes[it] }.toSet()
-            return
-        }
-
-        SwapProviderCacheHelper.getCachedTokenMap(id) { it }?.let { map ->
-            assetsMap = map
-            return
-        }
-
-        when (val data = fetchProviderData()) {
-            is ProviderData.TokenMap -> {
-                assetsMap = data.map
-                SwapProviderCacheHelper.saveTokenMap(id, data.map) { it }
-            }
-            is ProviderData.ChainIds -> {
-                supportedBlockchainTypes = data.ids.mapNotNull { blockchainTypes[it] }.toSet()
-                SwapProviderCacheHelper.saveChainIds(id, data.ids)
-            }
-        }
+        providerInfoManager.sync()
+        assetCatalog.sync()
     }
 
-    private suspend fun fetchProviderData(): ProviderData {
-        val response = unstoppableAPI.tokens(provider.id)
-        val tokens = response.tokens
+    override fun supports(tokenFrom: Token, tokenTo: Token): Boolean = assetCatalog.canQuote(tokenFrom, tokenTo)
 
-        if (tokens.isEmpty()) {
-            return ProviderData.ChainIds(response.supportedChainIds)
-        }
-
-        val assetsMap = mutableMapOf<Token, String>()
-        for (token in tokens) {
-            // ZEC.ZECSHIELDED is an internal Exolix routing variant. The app always quotes
-            // ZEC.ZEC and lets the server expand it into the shielded route, so skip it here
-            // to keep the Zcash native token mapping deterministic.
-            if (token.identifier == ZCASH_SHIELDED_ASSET) continue
-
-            val blockchainType = blockchainTypes[token.chainId] ?: continue
-
-            when (blockchainType) {
-                BlockchainType.ArbitrumOne,
-                BlockchainType.Avalanche,
-                BlockchainType.Base,
-                BlockchainType.BinanceSmartChain,
-                BlockchainType.Ethereum,
-                BlockchainType.Optimism,
-                BlockchainType.Polygon,
-                BlockchainType.Tron,
-                BlockchainType.Fantom,
-                BlockchainType.Gnosis,
-                BlockchainType.ZkSync,
-                BlockchainType.RobinhoodChain,
-                BlockchainType.Arc,
-                    -> {
-                    val tokenType = if (!token.address.isNullOrBlank()) {
-                        TokenType.Eip20(token.address)
-                    } else {
-                        TokenType.Native
-                    }
-
-                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Bitcoin,
-                BlockchainType.BitcoinCash,
-                BlockchainType.Litecoin,
-                BlockchainType.Zcash,
-                BlockchainType.Dash,
-                BlockchainType.ECash,
-                    -> {
-                    var nativeTokenQueries = blockchainType.nativeTokenQueries
-
-                    // filter out taproot for ltc
-                    if (blockchainType == BlockchainType.Litecoin) {
-                        nativeTokenQueries = nativeTokenQueries.filterNot {
-                            it.tokenType.derivation == TokenType.Derivation.Bip86
-                        }
-                    }
-
-                    val tokens = App.marketKit.tokens(nativeTokenQueries)
-                    tokens.forEach {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Solana -> {
-                    val tokenType = if (!token.address.isNullOrBlank()) {
-                        TokenType.Spl(token.address)
-                    } else {
-                        TokenType.Native
-                    }
-
-                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Stellar -> {
-                    val issuer = token.address
-                    val tokenType = if (!issuer.isNullOrBlank()) {
-                        // Classic asset: the server sends the issuer in `address` and the
-                        // asset code in `ticker` (the Axelar ITS SHX case).
-                        token.ticker?.let { TokenType.Asset(it, issuer) }
-                    } else {
-                        TokenType.Native
-                    }
-
-                    tokenType?.let {
-                        App.marketKit.token(TokenQuery(blockchainType, it))
-                    }?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Ton -> {
-                    val tokenType = if (!token.address.isNullOrBlank()) {
-                        TokenType.Jetton(token.address)
-                    } else {
-                        TokenType.Native
-                    }
-
-                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Monero -> {
-                    App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Thorchain,
-                BlockchainType.Mayachain -> {
-                    // No address on these chains: the identifier is the asset notation itself
-                    // (THOR.RUNE, THOR.RUJI, BTC-BTC, MAYA.CACAO), which the chain's plugin
-                    // resolves to the bank denom the token is keyed on.
-                    ChainRegistry[blockchainType]?.swapAssetTokenType(token.identifier)?.let { tokenType ->
-                        App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                            assetsMap[it] = token.identifier
-                        }
-                    }
-                }
-
-                BlockchainType.Zano -> {
-                    val tokenType = if (!token.address.isNullOrBlank()) {
-                        TokenType.ZanoAsset(token.address)
-                    } else {
-                        TokenType.Native
-                    }
-
-                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                BlockchainType.Xrp -> {
-                    // Native XRP only: the server lists no XRPL issued token (`address` is
-                    // always null), and CanonicalAssetId maps TokenType.XrpAsset to no id, so
-                    // a trust-line asset would be unsuspendable even if one appeared.
-                    if (token.address.isNullOrBlank()) {
-                        App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
-                            assetsMap[it] = token.identifier
-                        }
-                    }
-                }
-
-                BlockchainType.Near -> {
-                    // `address` is the NEP-141 contract; native NEAR has none (the server
-                    // routes it through wrap.near itself, which is not the user's wNEAR token)
-                    val tokenType = if (!token.address.isNullOrBlank()) {
-                        TokenType.Nep141(token.address)
-                    } else {
-                        TokenType.Native
-                    }
-
-                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        assetsMap[it] = token.identifier
-                    }
-                }
-
-                is BlockchainType.Unsupported -> Unit
-            }
-        }
-
-        return ProviderData.TokenMap(assetsMap)
+    override fun zcashTransparentRecipientOnly(quote: SwapQuote): Boolean {
+        if (quote.tokenOut.blockchainType != BlockchainType.Zcash) return false
+        val rules = (quote.extraData as? SwapQuoteExtraData)?.route?.addressRules
+        return USwapZcashAddressPolicy.transparentRecipientOnly(rules, quote.tokenIn.blockchainType, executionType(quote.venue))
     }
 
-    override fun supports(blockchainType: BlockchainType): Boolean {
-        // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
-        return true
-    }
+    override suspend fun fetchQuotes(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+    ): List<SwapQuote> {
+        val request = UnstoppableAPI.Request.Rate(
+            sellAsset = assetIdentifier(tokenIn),
+            buyAsset = assetIdentifier(tokenOut),
+            sellAmount = amountIn.toPlainString(),
+            slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
+            chainId = rateChainId(tokenIn),
+        )
+        val response = unstoppableAPI.rate(request)
+        val routes = USwapRouteFilter.filter(response.routes.orEmpty(), tokenIn, providerInfoManager::executionType)
+        if (routes.isEmpty()) throw NoSuchElementException("No routes")
 
-    override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        if (!supportsSourceToken(tokenFrom)) return false
-        return if (assetsMap.isNotEmpty()) {
-            assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
-        } else {
-            // A raw-address identifier names no chain: the request carries the sell token's
-            // chainId for both sides, so such a pair is only expressible on one chain.
-            (!usesRawAddressIdentifiers || tokenFrom.blockchainType == tokenTo.blockchainType) &&
-                    tokenFrom.blockchainType in supportedBlockchainTypes &&
-                    tokenTo.blockchainType in supportedBlockchainTypes &&
-                    deriveIdentifier(tokenFrom) != null &&
-                    deriveIdentifier(tokenTo) != null
-        }
-    }
-
-    private val usesRawAddressIdentifiers: Boolean
-        get() = when (provider) {
-            UProvider.Jupiter, UProvider.Lifi, UProvider.Stellar -> false
-            else -> true
-        }
-
-    // Raw asset encoding for providers that sync no token list from the server (the
-    // /tokens response carries only supportedChainIds), so assets are encoded as raw
-    // chain addresses instead of resolved through the asset map.
-    private fun deriveIdentifier(token: Token): String? = when (provider) {
-        // Solana-only: raw SPL mint encoding, case-sensitive base58 — pass verbatim, never
-        // re-cased. The wSOL mint means native SOL server-side. The Solana check also makes
-        // `supports()` reject non-Solana pairs (`Native` alone would match any chain).
-        UProvider.Jupiter -> if (token.blockchainType != BlockchainType.Solana) {
-            null
-        } else when (val type = token.type) {
-            TokenType.Native -> WSOL_MINT
-            // The wSOL TOKEN is not swappable here: the server reads the wSOL mint as native
-            // SOL, so SOL→wSOL degenerates to "same asset" (wrapping is not a swap) and
-            // X→wSOL would deliver native SOL while the user watches the wSOL token balance.
-            is TokenType.Spl -> type.address.takeIf { it != WSOL_MINT }
-            else -> null
-        }
-        // No token list (BARTER-style), but LI.FI is CROSS-CHAIN, so each side must be
-        // self-describing — the chain travels with the asset so the server resolves a
-        // cross-chain pair without a shared `chainId` hint. EVM token → `<CHAIN>.<contract>`,
-        // EVM native → `<CHAIN>.<0xeee…>` sentinel, Solana → `SOL.<mint>` (wSOL = native SOL),
-        // Tron → `TRON.TRX` (native) / `TRON.<contract>` (TRC20).
-        UProvider.Lifi -> when (token.blockchainType) {
-            BlockchainType.Solana -> when (val type = token.type) {
-                TokenType.Native -> "SOL.$WSOL_MINT"
-                // The wSOL TOKEN is excluded for the same reason as on the JUPITER path above.
-                is TokenType.Spl -> type.address.takeIf { it != WSOL_MINT }?.let { "SOL.$it" }
-                else -> null
-            }
-            // Tron is TVM (base58 addresses, not `0x`): the server resolves `TRON.TRX` as native
-            // and `TRON.<contract>` as a TRC20 — the EVM `0xeee…` native sentinel does not apply.
-            // TRC20 contracts ride the `Eip20` type with a base58 address.
-            BlockchainType.Tron -> when (val type = token.type) {
-                TokenType.Native -> "TRON.TRX"
-                is TokenType.Eip20 -> "TRON.${type.address}"
-                else -> null
-            }
-            else -> lifiChainCodes[token.blockchainType]?.let { code ->
-                when (val type = token.type) {
-                    is TokenType.Eip20 -> "$code.${type.address}"
-                    TokenType.Native -> "$code.0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-                    else -> null
+        // Built in parallel (the allowance read reaches the chain); the server's order is kept,
+        // and a route that cannot be read into a quote is dropped rather than failing the round.
+        val quotes = coroutineScope {
+            routes.map { route ->
+                async {
+                    try {
+                        quote(route, tokenIn, tokenOut, amountIn)
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Throwable) {
+                        Log.e(TAG, "Quote build failed for ${route.providerId}", e)
+                        null
+                    }
                 }
-            }
+            }.awaitAll().filterNotNull()
         }
-        // The server's self-describing Stellar identifiers: native → `XLM.XLM`, classic asset →
-        // `XLM.<CODE>-<ISSUER>` with the code verbatim (case-sensitive). The issuer is a `G…`
-        // account; a Soroban contract token (`C…`) is not a classic asset and is not served.
-        UProvider.Stellar -> if (token.blockchainType != BlockchainType.Stellar) {
-            null
-        } else when (val type = token.type) {
-            TokenType.Native -> "XLM.XLM"
-            is TokenType.Asset -> type.issuer.takeIf { it.startsWith("G") }?.let { "XLM.${type.code}-$it" }
-            else -> null
-        }
-        // Raw EVM address encoding (BARTER's server adapter expects addresses, not identifiers).
-        else -> when (val type = token.type) {
-            is TokenType.Eip20 -> type.address
-            TokenType.Native if token.blockchainType.isEvm -> "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-            else -> null
-        }
+        if (quotes.isEmpty()) throw NoSuchElementException("No routes")
+
+        return quotes
     }
 
-    override suspend fun fetchQuote(
+    private suspend fun quote(
+        route: UnstoppableAPI.Response.Route,
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
     ): SwapQuote {
-        val bestRoute = rateBestRoute(tokenIn, tokenOut, amountIn, BigDecimal("1"))
-
-        val approvalAddress = bestRoute.approvalSpenderOrExecution
-        val actionRequired = approvalAddress?.let { approvalAddress ->
+        val approvalAddress = route.approvalSpenderOrExecution
+        val actionRequired = approvalAddress?.let {
             val plugin = ChainRegistry[tokenIn.blockchainType]
-            val allowance = plugin?.eip20Allowance(tokenIn, approvalAddress)
-            plugin?.eip20ApproveAction(allowance, amountIn, approvalAddress, tokenIn)
+            val allowance = plugin?.eip20Allowance(tokenIn, it)
+            plugin?.eip20ApproveAction(allowance, amountIn, it, tokenIn)
         } ?: ChainRegistry[tokenOut.blockchainType]?.swapActivationAction(tokenOut)
 
         return SwapQuote(
-            amountOut = bestRoute.expectedBuyAmountOrZero,
+            amountOut = route.expectedBuyAmountOrZero,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionRequired,
-            estimationTime = bestRoute.estimatedTime?.total,
-            extraData = SwapQuoteExtraData(bestRoute)
+            estimationTime = route.estimatedTime?.total,
+            venue = resolveVenue(route.providerId.orEmpty(), route.amlPolicy),
+            amlProviderId = route.amlProviderId?.takeIf { it.isNotEmpty() },
+            extraData = SwapQuoteExtraData(route),
         )
     }
 
-    // /v3/rate — read-only price/route comparison narrowed to this provider. Picks the route
-    // with the best expectedBuyAmount. On an Exolix ZEC pair it additionally fans out a
-    // shielded (ZEC.ZECSHIELDED) variant and keeps the better-priced one; the winning
-    // sell/buy asset travels back on the route so commitSwap can replay the exact variant.
-    private suspend fun rateBestRoute(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal,
-        slippage: BigDecimal,
-        providers: Set<String> = rateProviders,
-    ): UnstoppableAPI.Response.Route {
-        val usingDerivedIdentifiers = assetsMap.isEmpty()
-        val assetIn = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val assetOut = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
-        val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
-
-        val request = UnstoppableAPI.Request.Rate(
-            sellAsset = assetIn,
-            buyAsset = assetOut,
-            sellAmount = amountIn.toPlainString(),
-            slippage = slippage,
-            providers = providers,
-            chainId = chainId,
-        )
-        var bestRoute = unstoppableAPI.rate(request).routes?.maxByOrNull { it.expectedBuyAmountOrZero }
-            ?: throw NoSuchElementException("No routes")
-
-        if (provider == UProvider.Exolix) {
-            val requestAlternate = when {
-                tokenIn.blockchainType == BlockchainType.Zcash -> {
-                    request.copy(sellAsset = ZCASH_SHIELDED_ASSET)
-                }
-
-                tokenOut.blockchainType == BlockchainType.Zcash -> {
-                    request.copy(buyAsset = ZCASH_SHIELDED_ASSET)
-                }
-
-                else -> null
-            }
-
-            if (requestAlternate != null) {
+    // The venue a route is served by. An id the directory does not know yet is still quoted,
+    // under a humanized name, and the directory is asked to refresh for it.
+    private fun resolveVenue(providerId: String, amlPolicy: String?): SwapVenue {
+        val venue = providerInfoManager.venue(providerId)
+        if (!venue.isKnown) {
+            syncScope.launch {
                 try {
-                    val bestRouteAlternate = unstoppableAPI.rate(requestAlternate).routes?.maxByOrNull { it.expectedBuyAmountOrZero }
-                    if (bestRouteAlternate != null &&
-                        bestRouteAlternate.expectedBuyAmountOrZero >= bestRoute.expectedBuyAmountOrZero
-                    ) {
-                        bestRoute = bestRouteAlternate
-                    }
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (_: Throwable) {
-
+                    providerInfoManager.requestSync(providerId)
+                } catch (e: Throwable) {
+                    Log.e(TAG, "Provider sync for $providerId failed", e)
                 }
             }
         }
-
-        return bestRoute
+        return venue.overriding(amlPolicy)
     }
 
-    // The server providers /v3/rate fans out over. A card normally quotes its one server provider;
-    // the Stellar card quotes the Stellar DEX set and keeps the best-priced route. STELLARBROKER
-    // itself is never requested: it has no service-fee mechanism, and its execution is a broker
-    // WebSocket session this app has no client for.
-    private val rateProviders: Set<String>
-        get() = when (provider) {
-            UProvider.Stellar -> STELLAR_ROUTE_PROVIDERS
-            else -> setOf(provider.id)
-        }
+    // The directory's current word on how the venue settles, falling back to what the quote
+    // captured when the directory has not listed it yet.
+    private fun executionType(venue: SwapVenue): String? =
+        providerInfoManager.executionType(venue.id) ?: venue.executionType
 
-    // The server provider /v3/preview is asked for. The Stellar card previews with the provider
-    // that won the rate fan-out — except for a third-party recipient: Aquarius settles on the
-    // trader's own account and Soroban routes deliver to the signing account only, so just the
-    // path-payment provider can serve one, and the fan-out is re-run over it when the winner is
-    // another.
-    private suspend fun previewProviderId(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal,
-        slippage: BigDecimal,
-        selectedRoute: UnstoppableAPI.Response.Route?,
-        recipient: io.horizontalsystems.walletkit.entities.Address?,
-        sourceAddress: String?,
-    ): String {
-        if (provider != UProvider.Stellar) return provider.id
+    override suspend fun checkAmlAddresses(addresses: List<String>, amlProviderId: String): Boolean? =
+        unstoppableAPI.checkAddresses(addresses.joinToString(","), amlProviderId).passedAmlCheck
 
-        val thirdPartyRecipient = recipient != null && recipient.hex != sourceAddress
-        val winner = selectedRoute?.providerId
-        if (winner != null && (!thirdPartyRecipient || winner in STELLAR_RECIPIENT_CAPABLE_PROVIDERS)) {
-            return winner
-        }
+    // ----- Exact output: private send (same asset, confidential) and CrossPay (cross asset) -----
 
-        val providers = if (thirdPartyRecipient) STELLAR_RECIPIENT_CAPABLE_PROVIDERS else STELLAR_ROUTE_PROVIDERS
-        return rateBestRoute(tokenIn, tokenOut, amountIn, slippage, providers).providerId
-            ?: throw IllegalStateException("No Stellar route selected")
-    }
-
-    // /v3/preview — the committed route shape for this single provider, without creating an order.
-    // `sellAsset`/`buyAsset` replay the variant the rate quote chose (Exolix ZEC). The route must
-    // carry the token that [commit] later turns into an order; one without it cannot be executed.
-    private suspend fun previewSwap(
-        providerId: String,
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal,
-        slippage: BigDecimal,
-        destinationAddress: String,
-        sourceAddress: String?,
-        refundAddress: String?,
-        sellAsset: String?,
-        buyAsset: String?,
-        sendTransactionSettings: SendTransactionSettings?,
-    ): UnstoppableAPI.Response.Route {
-        val usingDerivedIdentifiers = assetsMap.isEmpty()
-        val assetIn = sellAsset ?: assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val assetOut = buyAsset ?: assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
-        val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
-
-        val request = UnstoppableAPI.Request.Preview(
-            sellAsset = assetIn,
-            buyAsset = assetOut,
-            sellAmount = amountIn.toPlainString(),
-            slippage = slippage,
-            provider = providerId,
-            destinationAddress = destinationAddress,
-            refundAddress = refundAddress,
-            sourceAddress = sourceAddress,
-            chainId = chainId,
-            networkFee = UnstoppableAPI.Request.NetworkFee.of(tokenIn, sendTransactionSettings),
-        )
-        val route = unstoppableAPI.preview(request)
-
-        if (route.previewToken.isNullOrEmpty()) {
-            throw IllegalStateException("Preview carries no token")
-        }
-
-        return route
-    }
-
-    override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
-        return unstoppableAPI.checkAddresses(addresses.joinToString(","), provider.id).passedAmlCheck
-    }
-
-    // ----- Private send (same-asset confidential transfer) -----
-
-    // The server-side id ("NEAR_CONFIDENTIAL"), matched against GET /providers by the
-    // private send stack. `id` is the app-side "u_…" form used in swap records.
-    val serverProviderId: String get() = provider.id
-
-    fun supportsPrivateSend(token: Token) = supports(token, token)
-
-    // /v3/rate in exact-output mode: same asset on both sides, buyAmount = what the recipient
-    // must receive. Returns the whole response so the caller can read providerErrors when no
-    // route comes back.
-    suspend fun privateSendRate(
-        token: Token,
-        amountOut: BigDecimal,
-        slippage: BigDecimal,
-    ): UnstoppableAPI.Response.Rate = exactOutputRate(token, token, amountOut, slippage)
-
-    // /v3/rate in exact-output mode across assets (the CrossPay shape): buyAmount = what the
-    // recipient must receive in tokenOut, sellAmount comes back as the answer. Returns the
-    // whole response so the caller can read providerErrors when no route comes back.
+    /**
+     * `/v3/rate` in exact-output mode, unnamed: `buyAmount` is what the recipient must receive,
+     * and every provider that can price backwards answers. [privacy] narrows the fan-out to those
+     * privacy levels; null includes every level. Returns the whole response so the caller can
+     * read `providerErrors` when no route comes back.
+     */
     suspend fun exactOutputRate(
         tokenIn: Token,
         tokenOut: Token,
         amountOut: BigDecimal,
         slippage: BigDecimal,
-    ): UnstoppableAPI.Response.Rate {
-        val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
-        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
-
-        return unstoppableAPI.rate(
-            UnstoppableAPI.Request.Rate(
-                sellAsset = sellAsset,
-                buyAsset = buyAsset,
-                slippage = slippage,
-                providers = setOf(provider.id),
-                chainId = chainId,
-                buyAmount = amountOut.toPlainString(),
-            )
+        privacy: List<String>? = null,
+    ): UnstoppableAPI.Response.Rate = unstoppableAPI.rate(
+        UnstoppableAPI.Request.Rate(
+            sellAsset = assetIdentifier(tokenIn),
+            buyAsset = assetIdentifier(tokenOut),
+            slippage = slippage,
+            privacy = privacy,
+            chainId = rateChainId(tokenIn),
+            buyAmount = amountOut.toPlainString(),
         )
-    }
+    )
 
-    // Previews in exact-output mode. `sourceAddress` is deliberately never sent: it is optional
-    // for transfer providers, and handing the provider the sender's address defeats the point
-    // of a private send. The committed route's execution later carries the deposit address and
-    // the exact amount to transfer.
-    suspend fun privateSendPreview(
-        token: Token,
-        amountOut: BigDecimal,
-        destinationAddress: String,
-        refundAddress: String,
-        slippage: BigDecimal,
-    ): UnstoppableAPI.Response.Route =
-        exactOutputPreview(token, token, amountOut, destinationAddress, refundAddress, slippage)
-
-    // /v3/preview in exact-output mode across assets (the CrossPay shape): no order yet, the
-    // route carries the token [commitPreview] turns into one. With [includeSourceAddress] the
-    // swap screen's build-signal contract applies verbatim; private send keeps it off entirely.
+    /**
+     * `/v3/preview` in exact-output mode with the one [venueId] the rate round chose: no order yet,
+     * the route carries the token [commitPreview] turns into one. With [includeSourceAddress] the
+     * swap screen's build-signal contract applies verbatim; a private send keeps it off entirely,
+     * since handing the provider the sender's address defeats the point. A ZEC sell's refund and
+     * source follow the route's [addressRules] instead.
+     */
     suspend fun exactOutputPreview(
         tokenIn: Token,
         tokenOut: Token,
@@ -607,28 +230,26 @@ class USwapProvider(
         destinationAddress: String,
         refundAddress: String,
         slippage: BigDecimal,
+        venueId: String,
         includeSourceAddress: Boolean = false,
+        addressRules: UnstoppableAPI.Response.ZcashAddressRules? = null,
     ): UnstoppableAPI.Response.Route {
-        val sellAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
-        val buyAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
-        val chainId = if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
-
-        val sourceAddress = if (includeSourceAddress && shouldIncludeSourceAddress(tokenIn)) {
-            SwapHelper.getSendingAddressForToken(tokenIn)
-        } else {
-            null
+        val sourceAddress = when {
+            tokenIn.blockchainType == BlockchainType.Zcash -> zcashSourceAddress(tokenIn, addressRules, refundAddress)
+            includeSourceAddress && shouldIncludeSourceAddress(tokenIn) -> SwapHelper.getSendingAddressForToken(tokenIn)
+            else -> null
         }
 
         val route = unstoppableAPI.preview(
             UnstoppableAPI.Request.Preview(
-                sellAsset = sellAsset,
-                buyAsset = buyAsset,
+                sellAsset = assetIdentifier(tokenIn),
+                buyAsset = assetIdentifier(tokenOut),
                 slippage = slippage,
-                provider = provider.id,
+                provider = venueId,
                 destinationAddress = destinationAddress,
                 refundAddress = refundAddress,
                 sourceAddress = sourceAddress,
-                chainId = chainId,
+                chainId = rateChainId(tokenIn),
                 buyAmount = amountOut.toPlainString(),
             )
         )
@@ -706,27 +327,45 @@ class USwapProvider(
     }
 
     /**
-     * The address a sell of [tokenIn] through this provider is refunded to: the wallet's own
-     * address on the sell chain, which for ZEC is the transparent address unless the provider
-     * takes a unified refund (see [ZcashSellAddresses]). Exact-output flows name it too, so a
-     * CrossPay buffer refund follows the same policy as a swap refund.
+     * The address a sell of [tokenIn] is refunded to: the wallet's own address on the sell chain,
+     * which for ZEC is what the route's [addressRules] recommend, a unified address where the rule
+     * names one and the transparent address otherwise. Exact-output flows name it too, so a
+     * CrossPay buffer refund follows the same rule as a swap refund.
      */
-    suspend fun refundAddress(tokenIn: Token): String =
+    suspend fun refundAddress(tokenIn: Token, addressRules: UnstoppableAPI.Response.ZcashAddressRules?): String =
         if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            zcashSellAddresses(tokenIn).refund
+            zcashAddress(tokenIn, USwapZcashAddressPolicy.refundKind(addressRules))
         } else {
             SwapHelper.getReceiveAddressForToken(tokenIn)
         }
 
-    private suspend fun zcashSellAddresses(tokenIn: Token): ZcashSellAddresses =
-        ZcashSellAddresses.resolve(
-            provider = provider,
-            transparentAddress = { SwapHelper.getReceiveAddressForToken(tokenIn) },
-            shieldedOnlyAddress = {
-                ChainRegistry[BlockchainType.Zcash]?.swapShieldedRefundAddress(tokenIn)
-                    ?: throw IllegalStateException("Zcash support is not available")
-            },
-        )
+    // ----- Zcash addresses, from the route's rules -----
+
+    // A ZEC address of the kind a rule names: the transparent address, the wallet's unified
+    // address when the rule's receivers include a transparent one, or a unified address with
+    // shielded receivers only when they do not.
+    private suspend fun zcashAddress(token: Token, kind: ZcashAddressKind): String = when (kind) {
+        ZcashAddressKind.Transparent -> SwapHelper.getReceiveAddressForToken(token)
+        is ZcashAddressKind.Unified -> {
+            val plugin = ChainRegistry[BlockchainType.Zcash] ?: throw IllegalStateException("Zcash support is not available")
+            val address = if (kind.carriesTransparent) plugin.swapUnifiedReceiveAddress(token) else plugin.swapShieldedRefundAddress(token)
+            address ?: throw IllegalStateException("Zcash support is not available")
+        }
+    }
+
+    // What a ZEC sell names as `sourceAddress`: nothing without a source rule, the refund address
+    // when the provider refunds to the sender, or an address of the rule's own kind.
+    private suspend fun zcashSourceAddress(
+        token: Token,
+        addressRules: UnstoppableAPI.Response.ZcashAddressRules?,
+        refundAddress: String,
+    ): String? = when (val policy = USwapZcashAddressPolicy.sourcePolicy(addressRules)) {
+        ZcashSourcePolicy.Omit -> null
+        ZcashSourcePolicy.SameAsRefund -> refundAddress
+        is ZcashSourcePolicy.Own -> zcashAddress(token, policy.kind)
+    }
+
+    // ----- The confirmation screen -----
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -734,71 +373,38 @@ class USwapProvider(
         amountIn: BigDecimal,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
-        recipient: io.horizontalsystems.walletkit.entities.Address?,
+        recipient: Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
         val selectedRoute = (swapQuote.extraData as? SwapQuoteExtraData)?.route
+            ?: throw IllegalStateException("Quote carries no route")
+        val venueId = swapQuote.venue.id
 
-        // The delivery address of a ZEC output depends on how this provider settles, which only
-        // /v3/providers says; a cold start with nothing cached must not fall back to transparent.
-        // Only awaited while nothing is stored: a stale cache still answers, and the hourly sync
-        // refreshes it on its own.
-        if (tokenOut.blockchainType == BlockchainType.Zcash && !App.swapProviderInfoManager.hasExecutionTypes) {
-            App.swapProviderInfoManager.sync()
-        }
+        var request = previewRequest(selectedRoute.addressRules, venueId, tokenIn, tokenOut, amountIn, slippage, swapQuote.venue, recipient, sendTransactionSettings)
 
-        val destination = when {
-            recipient != null -> recipient.hex
-
-            // A ZEC output goes to the wallet's unified address when the route delivers to a
-            // shielded receiver: Exolix's shielded variant, or a vault-settled provider (per its
-            // /v3/providers executionType), whose own Zcash client pays unified receivers.
-            tokenOut.blockchainType == BlockchainType.Zcash &&
-                    (routeDeliversShieldedZcash(swapQuote) || App.swapProviderInfoManager.deliversShieldedZcash(id, tokenIn)) -> {
-                ChainRegistry[BlockchainType.Zcash]?.swapUnifiedReceiveAddress(tokenOut)
-                    ?: throw IllegalStateException("Zcash support is not available")
+        val bestRoute = try {
+            previewSwap(request)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            UnstoppableAPI.AddressBlacklistedException.from(e)?.let { throw it }
+            // A Zcash address the route does not take: preview ONCE more with the addresses the
+            // server's rules point to; a second refusal shows the server's message.
+            val addressError = UnstoppableAPI.PreviewAddressException.from(e) ?: throw e
+            val correctedRules = addressError.addressRules ?: throw addressError
+            request = previewRequest(correctedRules, venueId, tokenIn, tokenOut, amountIn, slippage, swapQuote.venue, recipient, sendTransactionSettings)
+            try {
+                previewSwap(request)
+            } catch (e2: CancellationException) {
+                throw e2
+            } catch (e2: Throwable) {
+                throw UnstoppableAPI.AddressBlacklistedException.from(e2)
+                    ?: UnstoppableAPI.PreviewAddressException.from(e2)
+                    ?: e2
             }
-
-            else -> SwapHelper.getReceiveAddressForToken(tokenOut)
         }
 
-        // sourceAddress is the build signal — send it only for chains whose server-built
-        // signed_transaction / thorchain_deposit tx we consume (by default EVM/Tron/TON/Solana,
-        // and Stellar on the Stellar DEX card), where it is also required for the tx `from`. For
-        // UTXO/Monero/Zano (and any token the host app opts out of) we omit it. A transfer
-        // route's deposit is built locally on every chain, whether or not the address was sent.
-        // A ZEC sell is the exception: its source and refund are one decision, the provider's
-        // refund policy (ZcashSellAddresses), independent of the build signal.
-        val sourceAddress: String?
-        val refundAddress: String
-        if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            val addresses = zcashSellAddresses(tokenIn)
-            sourceAddress = addresses.source
-            refundAddress = addresses.refund
-        } else {
-            sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
-                SwapHelper.getSendingAddressForToken(tokenIn)
-            } else {
-                null
-            }
-            refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
-        }
-
-        val previewProviderId = previewProviderId(tokenIn, tokenOut, amountIn, slippage, selectedRoute, recipient, sourceAddress)
-
-        val bestRoute = previewSwap(
-            previewProviderId,
-            tokenIn,
-            tokenOut,
-            amountIn,
-            slippage,
-            destination,
-            sourceAddress,
-            refundAddress,
-            selectedRoute?.sellAsset,
-            selectedRoute?.buyAsset,
-            sendTransactionSettings,
-        )
+        val destination = request.destinationAddress
 
         // A THORChain-style deposit memo is what routes the outbound leg: a route without one
         // cannot be delivered, and one whose destination is not the recipient shown to the user
@@ -853,8 +459,8 @@ class USwapProvider(
             estimatedTime = bestRoute.estimatedTime?.total,
             slippage = effectiveSlippage,
             providerSwapId = null,
-            fromAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
-            toAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
+            fromAsset = request.sellAsset,
+            toAsset = request.buyAsset,
             depositAddress = execution?.resolvedDepositAddress(),
             // XRP's identifier is a destination tag, not a memo — the XRP send service shows it
             // under its own label, so showing it here again as a "deposit memo" would misname it.
@@ -870,6 +476,66 @@ class USwapProvider(
             ),
             mevProtectionAllowed = SwapMevProtection.allowedForRoute(execution, tokenIn, tokenOut),
         )
+    }
+
+    // The /v3/preview body for the route's provider: the addresses a ZEC side takes come from
+    // [addressRules], and `sourceAddress` is the build signal — sent only for chains whose
+    // server-built signed_transaction / thorchain_deposit tx we consume (by default EVM/Tron/
+    // TON/Solana/Stellar), where it is also required for the tx `from`. For UTXO/Monero/Zano
+    // (and any token the host app opts out of) it is omitted; a transfer route's deposit is
+    // built locally on every chain either way. A ZEC sell is the exception: its source follows
+    // the route's source rule, independent of the build signal.
+    private suspend fun previewRequest(
+        addressRules: UnstoppableAPI.Response.ZcashAddressRules?,
+        venueId: String,
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        slippage: BigDecimal,
+        venue: SwapVenue,
+        recipient: Address?,
+        sendTransactionSettings: SendTransactionSettings?,
+    ): UnstoppableAPI.Request.Preview {
+        val destination = when {
+            recipient != null -> recipient.hex
+            tokenOut.blockchainType == BlockchainType.Zcash -> zcashAddress(
+                tokenOut,
+                USwapZcashAddressPolicy.destinationKind(addressRules, tokenIn.blockchainType, executionType(venue)),
+            )
+            else -> SwapHelper.getReceiveAddressForToken(tokenOut)
+        }
+
+        val refundAddress = refundAddress(tokenIn, addressRules)
+        val sourceAddress = when {
+            tokenIn.blockchainType == BlockchainType.Zcash -> zcashSourceAddress(tokenIn, addressRules, refundAddress)
+            shouldIncludeSourceAddress(tokenIn) -> SwapHelper.getSendingAddressForToken(tokenIn)
+            else -> null
+        }
+
+        return UnstoppableAPI.Request.Preview(
+            sellAsset = assetIdentifier(tokenIn),
+            buyAsset = assetIdentifier(tokenOut),
+            sellAmount = amountIn.toPlainString(),
+            slippage = slippage,
+            provider = venueId,
+            destinationAddress = destination,
+            refundAddress = refundAddress,
+            sourceAddress = sourceAddress,
+            chainId = rateChainId(tokenIn),
+            networkFee = UnstoppableAPI.Request.NetworkFee.of(tokenIn, sendTransactionSettings),
+        )
+    }
+
+    // /v3/preview — the committed route shape for one provider, without creating an order. The
+    // route must carry the token that [commit] later turns into an order.
+    private suspend fun previewSwap(request: UnstoppableAPI.Request.Preview): UnstoppableAPI.Response.Route {
+        val route = unstoppableAPI.preview(request)
+
+        if (route.previewToken.isNullOrEmpty()) {
+            throw IllegalStateException("Preview carries no token")
+        }
+
+        return route
     }
 
     // A plain-transfer execution known from its parts, so the per-chain builders serve a deposit
@@ -986,48 +652,25 @@ class USwapProvider(
 
     // ----- Split swaps: one deposit, several outputs of the same buy token -----
 
-    override suspend fun fetchSplitQuote(
+    override suspend fun fetchSplitQuotes(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
         percents: List<Int>,
-    ): SwapQuote {
+    ): List<SwapQuote> {
         SplitSwapRules.requireValid(percents)
 
-        val route = splitRateBestRoute(tokenIn, tokenOut, amountIn, percents, IMultiSwapProvider.DEFAULT_SLIPPAGE)
-
-        return SwapQuote(
-            amountOut = route.expectedBuyAmountTotal,
-            tokenIn = tokenIn,
-            tokenOut = tokenOut,
-            amountIn = amountIn,
-            // The deposit is a plain transfer, so the sell side never needs an approval; the buy
-            // side may still need the account to accept the token (a Stellar trustline).
-            actionRequired = ChainRegistry[tokenOut.blockchainType]?.swapActivationAction(tokenOut),
-            estimationTime = route.estimatedTime?.total,
-            extraData = SplitSwapQuoteExtraData(route, percents),
-        )
-    }
-
-    // /v3/split/rate — prices the shares for this provider alone. A refusal is a non-2xx carrying
-    // providerErrors (a share under the per-output minimum, a pair the provider does not quote).
-    private suspend fun splitRateBestRoute(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal,
-        percents: List<Int>,
-        slippage: BigDecimal,
-    ): UnstoppableAPI.Response.SplitRoute {
         val assetOut = assetIdentifier(tokenOut)
         val request = UnstoppableAPI.Request.SplitRate(
             sellAsset = assetIdentifier(tokenIn),
             sellAmount = amountIn.toPlainString(),
-            slippage = slippage,
+            slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
             outputs = percents.map { UnstoppableAPI.Request.SplitOutput(buyAsset = assetOut, amount = it.toString()) },
-            providers = setOf(provider.id),
             chainId = rateChainId(tokenIn),
         )
 
+        // /v3/split/rate, unnamed: only split-capable providers answer. A refusal is a non-2xx
+        // carrying providerErrors (a share under the per-output minimum, a pair no one quotes).
         val response = try {
             unstoppableAPI.splitRate(request)
         } catch (e: CancellationException) {
@@ -1036,11 +679,29 @@ class USwapProvider(
             throw SplitRateException.from(e)
         }
 
-        // A route must price every requested output, or an output would have no amount to show.
-        return response.routes.orEmpty()
+        // A route must price every requested output, or an output would have no amount to show,
+        // and its venue must be one the directory flags as serving split swaps.
+        val quotes = response.routes.orEmpty()
             .filter { route -> route.outputsByIndex.map { it.index } == percents.indices.toList() }
-            .maxByOrNull { it.expectedBuyAmountTotal }
-            ?: throw SplitRateException(response.providerErrors.orEmpty(), "No split routes")
+            .filter { route -> route.providerId?.let { providerInfoManager.supportsSplitSwaps(it) } == true }
+            .map { route ->
+                SwapQuote(
+                    amountOut = route.expectedBuyAmountTotal,
+                    tokenIn = tokenIn,
+                    tokenOut = tokenOut,
+                    amountIn = amountIn,
+                    // The deposit is a plain transfer, so the sell side never needs an approval; the buy
+                    // side may still need the account to accept the token (a Stellar trustline).
+                    actionRequired = ChainRegistry[tokenOut.blockchainType]?.swapActivationAction(tokenOut),
+                    estimationTime = route.estimatedTime?.total,
+                    venue = resolveVenue(route.providerId.orEmpty(), route.amlPolicy),
+                    extraData = SplitSwapQuoteExtraData(route, percents),
+                )
+            }
+
+        if (quotes.isEmpty()) throw SplitRateException(response.providerErrors.orEmpty(), "No split routes")
+
+        return quotes
     }
 
     override suspend fun fetchSplitFinalQuote(
@@ -1056,20 +717,13 @@ class USwapProvider(
 
         // The same decision as for a single swap: where a failed deposit is refunded, and whether
         // the sender is named. A split is always a transfer the app builds, so the source
-        // address is only recorded as the sender; the ZEC refund policy still decides both.
-        val sourceAddress: String?
-        val refundAddress: String
-        if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            val addresses = zcashSellAddresses(tokenIn)
-            sourceAddress = addresses.source
-            refundAddress = addresses.refund
-        } else {
-            sourceAddress = if (shouldIncludeSourceAddress(tokenIn)) {
-                SwapHelper.getSendingAddressForToken(tokenIn)
-            } else {
-                null
-            }
-            refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+        // address is only recorded as the sender. Split routes carry no `addressRules` (no split
+        // provider lists ZEC), so a ZEC refund is the transparent address and no source is named.
+        val refundAddress = refundAddress(tokenIn, null)
+        val sourceAddress = when {
+            tokenIn.blockchainType == BlockchainType.Zcash -> zcashSourceAddress(tokenIn, null, refundAddress)
+            shouldIncludeSourceAddress(tokenIn) -> SwapHelper.getSendingAddressForToken(tokenIn)
+            else -> null
         }
 
         val assetIn = assetIdentifier(tokenIn)
@@ -1078,7 +732,7 @@ class USwapProvider(
             sellAsset = assetIn,
             sellAmount = amountIn.toPlainString(),
             slippage = slippage,
-            provider = provider.id,
+            provider = swapQuote.venue.id,
             refundAddress = refundAddress,
             sourceAddress = sourceAddress,
             chainId = rateChainId(tokenIn),
@@ -1280,12 +934,13 @@ class USwapProvider(
         unstoppableAPI.splitSigned(UnstoppableAPI.Request.SplitSigned(splitUuid, txHash))
     }
 
+    // The catalog identifier, or the chain-prefixed address of a token the catalog lacks.
     private fun assetIdentifier(token: Token): String =
-        assetsMap[token] ?: deriveIdentifier(token) ?: throw IllegalStateException("No identifier for ${token.coin.code}")
+        assetCatalog.asset(token) ?: throw IllegalStateException("No identifier for ${token.coin.code}")
 
-    // The sell chain hint a raw-address identifier needs; a token-list identifier names its chain.
+    // The sell chain hint beside a chain-addressed asset; a catalog identifier names its chain.
     private fun rateChainId(tokenIn: Token): String? =
-        if (assetsMap.isEmpty()) chainIdByBlockchainType[tokenIn.blockchainType] else null
+        if (assetCatalog.entry(tokenIn) == null) USwapAssetMapping.chainId(tokenIn.blockchainType) else null
 
     // What [commitSplit] needs from the preview: the token to commit, the deposit the transfer
     // is rebuilt for, the recipients the order's outputs are checked against, and each output's
@@ -1307,8 +962,7 @@ class USwapProvider(
         val amountIn: BigDecimal,
     )
 
-    // Tokens already handed to /v3/commit. Shared by every instance: a token is bound to the
-    // provider that previewed it, and the registry holds one instance per provider.
+    // Tokens already handed to /v3/commit.
     private val consumedPreviewTokens: MutableSet<String> = Collections.synchronizedSet(mutableSetOf())
 
     // A deposit attachment the chain cannot deliver readably must fail the route rather than
@@ -1374,12 +1028,8 @@ class USwapProvider(
                 -> {
                 // A vault deposit (thorchain_deposit) refunds to the transaction's first input and
                 // cannot pay a taproot address, so it spends only non-taproot UTXOs and returns
-                // change to the first input. Every other route is a plain send, which only the
-                // providers flagged for it accept.
+                // change to the first input. Every other route is a plain send.
                 val vaultDeposit = ThorChainDepositRoute.isVaultDeposit(execution)
-                if (!vaultDeposit && !provider.supportsSimpleUtxoTransactions) {
-                    throw IllegalStateException("Only simple BTC tx providers are supported")
-                }
 
                 return SendTransactionData.Btc(
                     address = execution.resolvedDepositAddress() ?: throw IllegalStateException("No deposit address"),
@@ -1413,7 +1063,7 @@ class USwapProvider(
                     )
 
                     is ThorChainDepositRoute.SettlementTransfer.Deposit -> SendTransactionData.Thorchain.Deposit(
-                        asset = assetsMap[tokenIn] ?: throw IllegalStateException("No identifier for tokenIn"),
+                        asset = assetIdentifier(tokenIn),
                         amount = amountIn,
                         memo = transfer.memo,
                     )
@@ -1531,10 +1181,6 @@ class USwapProvider(
                     )
                 }
 
-                if (!provider.supportsSimpleUtxoTransactions) {
-                    throw IllegalStateException("Only simple ZEC tx providers are supported")
-                }
-
                 // Throws on any attachment: the memo would ride shielded (encrypted, unverifiable
                 // that the provider reads it) or not at all on a transparent address. Neither
                 // delivers the crediting identifier, and a deposit the provider cannot match is
@@ -1547,10 +1193,6 @@ class USwapProvider(
             }
 
             BlockchainType.Monero -> {
-                if (!provider.supportsSimpleUtxoTransactions) {
-                    throw IllegalStateException("Only simple XMR tx providers are supported")
-                }
-
                 // Throws on any attachment: a Monero memo never leaves this device — the adapter
                 // stores it as a wallet user note against the tx id, so the provider can never
                 // read the identifier it needs to match this deposit.
@@ -1562,10 +1204,6 @@ class USwapProvider(
             }
 
             BlockchainType.Zano -> {
-                if (!provider.supportsSimpleUtxoTransactions) {
-                    throw IllegalStateException("Only simple ZANO tx providers are supported")
-                }
-
                 // Throws on any attachment: the adapter passes a Zano memo as the transfer's
                 // "comment", which travels encrypted on-chain — whether the provider decrypts
                 // and reads it is unverifiable from here, and the failure mode is lost funds.
@@ -1583,25 +1221,8 @@ class USwapProvider(
     }
 
     companion object {
-        /**
-         * Whether the route a quote selected delivers ZEC to a shielded receiver on its own,
-         * whatever the provider's execution type: Exolix's shielded variant does. The recipient
-         * rule and the delivery address must agree on it.
-         */
-        fun routeDeliversShieldedZcash(swapQuote: SwapQuote): Boolean =
-            (swapQuote.extraData as? SwapQuoteExtraData)?.route?.buyAsset == ZCASH_SHIELDED_ASSET
-
-        // The server's chain identifiers. Shared: instances resolve tokens through it, and the
-        // private send stack uses it to recognise a committed route's execution.chain — which is
-        // sometimes a chain id ("56") and sometimes a name ("bsc"), so only a recognised chain
-        // resolving to a DIFFERENT blockchain counts as a mismatch there.
-
-        // Exolix's shielded Zcash route. Internal routing detail — the app always quotes ZEC.ZEC
-        // and lets the server expand it into this shielded variant.
-        private const val ZCASH_SHIELDED_ASSET = "ZEC.ZECSHIELDED"
-
-        // Wrapped-SOL mint — the JUPITER server adapter reads it as native SOL.
-        private const val WSOL_MINT = "So11111111111111111111111111111111111111112"
+        const val ID = "USWAP"
+        private const val TAG = "USwapProvider"
 
         // Inputs a THORChain-family vault can refund to, and the input count its observers accept.
         private val VAULT_DEPOSIT_UTXO_FILTERS = UtxoFilters(
@@ -1609,45 +1230,22 @@ class USwapProvider(
             maxOutputsCountForInputs = 10,
         )
 
-        // The Stellar card's fan-out set, and the subset whose execution can deliver to an
-        // address other than the trading account (see previewProviderId).
-        private val STELLAR_ROUTE_PROVIDERS = setOf("SOROSWAP", "AQUARIUS", "STELLAR_DEX")
-        private val STELLAR_RECIPIENT_CAPABLE_PROVIDERS = setOf("STELLAR_DEX")
-
-        // LI.FI has no token list, so assets are encoded self-describingly as `<CHAIN>.<address>`
-        // (see `deriveIdentifier`). This maps each supported EVM chain to the server's chain
-        // code — the prefix the server's LI.FI resolver expects. Solana and Tron are handled
-        // inline (`SOL.` / `TRON.` prefixes) since their address formats aren't the EVM
-        // `0xeee…`/contract shape.
-        private val lifiChainCodes = mapOf(
-            BlockchainType.Ethereum to "ETH",
-            BlockchainType.Polygon to "POL",
-            BlockchainType.ArbitrumOne to "ARB",
-            BlockchainType.Optimism to "OP",
-            BlockchainType.Base to "BASE",
-            BlockchainType.Avalanche to "AVAX",
-            BlockchainType.BinanceSmartChain to "BSC",
-            BlockchainType.RobinhoodChain to "ROBINHOOD",
-            BlockchainType.Arc to "ARC",
-        )
+        // Recorded with every quote and swap so an issue can be pinned to a release.
+        private val userAgent: String by lazy {
+            "Unstoppable/${App.appConfigProvider.appVersion} (${App.instance.packageName}; Android ${Build.VERSION.SDK_INT})"
+        }
     }
 
     data class SwapQuoteExtraData(val route: UnstoppableAPI.Response.Route) : SwapQuote.ExtraData
 }
 
-// Chains where we consume the server-built tx from `execution` (so we send sourceAddress
-// on /v3/preview). Everything else builds its own transfer to the deposit address.
+// Chains where we consume the server-built tx from `execution` (so we send sourceAddress on
+// /v3/preview). Everything else builds its own transfer to the deposit address. Stellar is
+// server-built on the DEX routes and names the sender either way on a deposit transfer.
 private val Token.needsServerBuiltTx: Boolean
     get() = blockchainType.isEvm || blockchainType in setOf(
         BlockchainType.Tron,
         BlockchainType.Ton,
         BlockchainType.Solana,
+        BlockchainType.Stellar,
     )
-
-// Whether a provider's route for [token] is a server-built tx we sign (so /v3/preview gets the
-// source address). Per chain by default; the Stellar DEX card is server-built on a chain that
-// otherwise builds its own deposit transfers.
-private fun UProvider.consumesServerBuiltTx(token: Token): Boolean = when (this) {
-    UProvider.Stellar -> true
-    else -> token.needsServerBuiltTx
-}

@@ -18,6 +18,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.helpers.HudHelper
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIds
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -214,8 +215,7 @@ object RequestRefundDataLoader {
             txHash = record.transactionHash.orEmpty(),
         )
 
-        val providerName = record.providerId.removePrefix("u_")
-        val contacts = swapProviderInfoManager.getInfo(providerName)?.contacts
+        val contacts = swapProviderInfoManager.getInfo(SwapProviderIds.serverId(record.providerId))?.contacts
         val contactLinks = buildList {
             contacts?.telegram?.takeIf { it.isNotBlank() }?.let {
                 add(ContactLink(ContactType.Telegram, "Telegram", it, it, R.drawable.ic_telegram_24))

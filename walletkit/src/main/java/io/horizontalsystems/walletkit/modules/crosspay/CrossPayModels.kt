@@ -34,6 +34,9 @@ data class CrossPayPreview(
     // The provider the route came from: it commits the token, builds the deposit and takes the
     // hash report.
     val provider: USwapProvider,
+    // The server venue the route is served by: what the preview and the swap record name.
+    val venueId: String,
+    val venueName: String,
     // The preview's sellAmount in tokenIn — what the user confirms and what is transferred. Never
     // the entered amount: under exact output that is the *output*, in a different token.
     val depositAmount: BigDecimal,
@@ -70,9 +73,9 @@ data class CrossPayOrder(
 ) {
     val request: CrossPayRequest get() = preview.request
 
-    // App-side provider id ("u_…") — tracking and history rendering only, never shown.
-    val providerId: String get() = preview.provider.id
-    val providerName: String get() = preview.provider.title
+    // The venue's server id and name — tracking and history rendering only, never shown.
+    val providerId: String get() = preview.venueId
+    val providerName: String get() = preview.venueName
     val refundAddress: String get() = preview.refundAddress
     val estimatedTime: Long? get() = preview.estimatedTime
 }

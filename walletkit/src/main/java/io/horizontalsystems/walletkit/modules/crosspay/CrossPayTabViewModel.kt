@@ -14,6 +14,7 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.multiswap.FiatService
 import io.horizontalsystems.walletkit.modules.multiswap.SwapPopularTokens
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
@@ -46,7 +47,7 @@ class CrossPayTabViewModel(
     val tokenIn = wallet.token
     private val currency = App.currencyManager.baseCurrency
     private val fiatService = FiatService(App.marketKit)
-    private val provider = CrossPayManager.resolveProvider()
+    private val provider = MultiSwapProviderRegistry.uswap
     private val gson = Gson()
 
     private var providerReady = false
@@ -86,9 +87,9 @@ class CrossPayTabViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Populates the provider's token map (server-side sync, cached); until it
-                // lands any pending quote request waits via the re-schedule below.
-                provider?.start()
+                // Loads the token catalog and the provider list (server-side sync, cached);
+                // until they land any pending quote request waits via the re-schedule below.
+                provider.start()
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Throwable) {
@@ -266,9 +267,8 @@ class CrossPayTabViewModel(
             if (!providerReady) return@launch
 
             val newQuote = try {
-                val provider = provider
                 when {
-                    provider == null || !CrossPayManager.supportsPair(provider, tokenIn, tokenOut) ->
+                    !CrossPayManager.supportsPair(tokenIn, tokenOut, provider) ->
                         CrossPayQuoteState.Error(CrossPayQuoteState.ErrorKind.NotSupported)
 
                     else -> {
@@ -278,7 +278,7 @@ class CrossPayTabViewModel(
                             amountOut = amountOut,
                             slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
                         )
-                        val sellAmount = rate.routes.orEmpty().mapNotNull { it.sellAmount }.minOrNull()
+                        val sellAmount = CrossPayManager.bestTransferRoute(rate, App.swapProviderInfoManager)?.sellAmount
                         if (sellAmount != null) {
                             CrossPayQuoteState.Success(sellAmount)
                         } else {
@@ -300,15 +300,13 @@ class CrossPayTabViewModel(
 
     // Whether the pair is payable is known without an amount, so an unsupported one is
     // reported as soon as the token is picked rather than after the user types a figure.
-    // Before the provider's token map lands only the destination chain is judged: the sync
+    // Before the token catalog lands only the destination chain is judged: the sync
     // re-schedules on completion, and judging the pair earlier could flash a false refusal.
     private fun pairError(tokenOut: Token): CrossPayQuoteState.Error? {
-        val provider = provider
         val supported = when {
             !CrossPayManager.supportsDestination(tokenOut) -> false
-            provider == null -> false
             !providerReady -> true
-            else -> provider.supports(tokenIn, tokenOut)
+            else -> CrossPayManager.supportsPair(tokenIn, tokenOut, provider)
         }
         return if (supported) null else CrossPayQuoteState.Error(CrossPayQuoteState.ErrorKind.NotSupported)
     }

@@ -3,8 +3,6 @@ package io.horizontalsystems.walletkit.modules.multiswap.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.modules.multiswap.providers.THORCHAIN_PROVIDER_ID
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MAYA_PROVIDER_ID
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.IAppNumberFormatter
@@ -18,10 +16,7 @@ import io.horizontalsystems.walletkit.entities.SimulateFailSwapMode
 import io.horizontalsystems.walletkit.entities.toRawData
 import io.horizontalsystems.walletkit.helpers.DateHelper
 import io.horizontalsystems.walletkit.modules.multiswap.formatDuration
-import io.horizontalsystems.walletkit.modules.multiswap.formatSwapTimeRange
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
-import io.horizontalsystems.walletkit.modules.multiswap.providers.UProvider
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIds
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -165,18 +160,9 @@ class SwapInfoViewModel(
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         swappingTxUrl = buildProviderTxUrl(record.providerId, record.transactionHash, record.depositAddress)
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
-        isSingleTransactionSwap = MultiSwapProviderRegistry.isSingleTransactionSwap(
-            record.providerId,
-            record.tokenInBlockchainTypeUid,
-            record.tokenOutBlockchainTypeUid,
-        )
+        isSingleTransactionSwap = SwapProviderIds.isSingleTransactionSwap(record, App.swapProviderInfoManager::executionType)
         pauseReason = PauseReason.fromApi(record.pauseReason)
-        swapTime = record.estimatedTime?.let { time ->
-            when (MultiSwapProviderRegistry.providerType(record.providerId)) {
-                SwapProviderType.CEX -> formatSwapTimeRange(time)
-                else -> "~${formatDuration(time)}"
-            }
-        }
+        swapTime = record.estimatedTime?.let { time -> "~${formatDuration(time)}" }
         splitOutputs = if (operation == SwapOperation.SplitSwap) {
             val blockchainType = BlockchainType.fromUid(record.tokenOutBlockchainTypeUid)
             SwapRecordOutput.fromJson(record.splitOutputs).map { output ->
@@ -223,12 +209,13 @@ class SwapInfoViewModel(
         return numberFormatter.formatFiatShort(fiat, symbol, decimals)
     }
 
-    private fun buildProviderTxUrl(providerId: String, txHash: String?, depositAddress: String?): String? = when (providerId) {
-        THORCHAIN_PROVIDER_ID, "u_${UProvider.ThorChain.id}" -> txHash?.let { "https://thorchain.net/tx/$it" }
-        MAYA_PROVIDER_ID, "u_${UProvider.Maya.id}" -> txHash?.let { "https://www.mayascan.org/tx/$it" }
-        "u_${UProvider.Near.id}" -> depositAddress?.let { "https://explorer.near-intents.org/transactions/$it" }
-        else -> null
-    }
+    private fun buildProviderTxUrl(providerId: String, txHash: String?, depositAddress: String?): String? =
+        when (SwapProviderIds.serverId(providerId)) {
+            "THORCHAIN" -> txHash?.let { "https://thorchain.net/tx/$it" }
+            "MAYACHAIN" -> txHash?.let { "https://www.mayascan.org/tx/$it" }
+            "NEAR" -> depositAddress?.let { "https://explorer.near-intents.org/transactions/$it" }
+            else -> null
+        }
 
     private fun buildTxUrl(blockchainTypeUid: String, txHash: String): String? =
         when (BlockchainType.fromUid(blockchainTypeUid)) {

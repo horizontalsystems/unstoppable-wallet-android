@@ -5,15 +5,20 @@ import com.google.gson.Gson
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.managers.APIClient
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.walletkit.modules.multiswap.SwapQuote
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+/**
+ * The only provider directory: `GET /v3/providers`, synced hourly and kept in local storage so a
+ * cold launch names venues straight away. Venue names, Route Scores, privacy levels, execution
+ * types, split capability and refund contacts are read from here and nowhere else; the app
+ * carries no list of providers of its own. Suspensions are enforced server-side: a suspended
+ * provider is simply absent from an unnamed `/v3/rate`, so the rows only decide which venues
+ * the split tab and private send may name.
+ */
 class SwapProviderInfoManager(
     appConfigProvider: IAppConfigProvider,
     private val localStorage: ILocalStorage,
@@ -26,84 +31,98 @@ class SwapProviderInfoManager(
     private val gson = Gson()
     private val fetchMutex = Mutex()
 
+    // Every synced row, suspended ones included: a swap made before a suspension still needs
+    // its venue name and refund contacts.
     @Volatile
-    private var cache: Map<String, UnstoppableAPI.Response.Provider>? = null
+    private var rows: Map<String, UnstoppableAPI.Response.Provider> = restoredRows()
 
-    private val _suspensionsFlow = MutableStateFlow(restoredSuspensions())
+    // Ids that already forced a sync and when, so an id the server keeps quoting but never
+    // lists forces at most one fetch an hour.
+    private val unknownSyncTimes = mutableMapOf<String, Long>()
 
-    // Restored from storage so a cold start keeps the decision.
-    @Volatile
-    private var executionTypes: SwapExecutionTypes = restoredExecutionTypes()
-
-    private val _routeScoresFlow = MutableStateFlow(restoredRouteScores())
-
-    private val _splitProvidersFlow = MutableStateFlow(restoredSplitProviders())
+    private val _venuesFlow = MutableStateFlow(venues(rows))
+    private val _splitProvidersFlow = MutableStateFlow(splitProviderIds(rows))
 
     /**
-     * Server ids of the providers that serve the split endpoints (`splitSwaps: true` on
-     * `/v3/providers`). The Private swap tab offers exactly these; a registered candidate the
-     * server no longer flags disappears from it on the next sync.
+     * The venues by server id, as the last sync published them. A flow rather than a lookup: a
+     * sync that changes a name or a Route Score reaches an open screen without a reopen.
+     */
+    val venuesFlow = _venuesFlow.asStateFlow()
+
+    /**
+     * Server ids of the providers that serve the split endpoints (`splitSwaps: true` and not
+     * suspended). The Private swap tab offers exactly these.
      */
     val splitProvidersFlow = _splitProvidersFlow.asStateFlow()
 
-    fun supportsSplitSwaps(providerId: String): Boolean =
-        SwapSuspensionIndex.serverId(providerId) in _splitProvidersFlow.value
+    /** The venue a route is served by. An id the last sync did not list gets a humanized name and no policy. */
+    fun venue(id: String): SwapVenue = _venuesFlow.value[id.uppercase()] ?: SwapVenue.unknown(id)
+
+    /** `executionType` as published by `/v3/providers`; null for an unknown id or an entry without one. */
+    fun executionType(id: String): String? = rows[id.uppercase()]?.executionType?.takeIf { it.isNotEmpty() }
+
+    fun supportsSplitSwaps(id: String): Boolean = id.uppercase() in _splitProvidersFlow.value
 
     /**
-     * Route Scores by provider, as the server last published them. A flow rather than a lookup:
-     * a sync that changes only a score leaves the suspension index, and so the quotes, unchanged,
-     * and an open Routes list would otherwise keep the old score until it was reopened.
+     * Providers a private send may route through: confidential (`privacy != none`), settling as
+     * a plain `transfer`, and not suspended.
      */
-    val routeScoresFlow = _routeScoresFlow.asStateFlow()
+    val privateProviderIds: Set<String>
+        get() = rows.values
+            .filter { it.isConfidential && !it.suspended && it.executionType == SwapProviderIds.TRANSFER_EXECUTION_TYPE }
+            .map { it.provider.uppercase() }
+            .toSet()
 
     /**
-     * Scoped asset/chain/pair suspensions, indexed by provider id. Applied by [SwapQuoteService]
-     * when it decides which providers can serve the current pair.
+     * The distinct synced privacy levels other than `none`, what a private send asks `/v3/rate`
+     * for. `["basic"]` until a sync has listed a confidential provider.
      */
-    val suspensionsFlow = _suspensionsFlow.asStateFlow()
+    val privacyLevelsExcludingNone: List<String>
+        get() = rows.values
+            .mapNotNull { it.privacyLevel }
+            .filter { it != SwapVenue.NO_PRIVACY }
+            .distinct()
+            .sorted()
+            .ifEmpty { FALLBACK_PRIVACY_LEVELS }
 
-    suspend fun getInfo(providerName: String): UnstoppableAPI.Response.Provider? {
-        // Contact details are needed for whatever provider the record names, so this ignores the
-        // sync interval and only asks whether this process has the response in hand yet.
-        fetchIf { cache == null }
-
-        return cache?.get(providerName.uppercase())
+    /** The synced row of a provider, for its refund contacts. Fetches once when nothing is stored yet. */
+    suspend fun getInfo(id: String): UnstoppableAPI.Response.Provider? {
+        fetchIf { rows.isEmpty() }
+        return rows[id.uppercase()]
     }
 
-    /**
-     * Refreshes suspensions if the cached ones are stale. Cheap to call on every swap screen open.
-     */
+    /** Refreshes the list if the stored one is stale. Cheap to call on every swap screen open. */
     suspend fun sync() {
         fetchIf { !isFresh() }
     }
 
-    private fun isFresh(): Boolean {
-        // A missing cache counts as stale even when the timestamp is recent. Upgrading from a
-        // build that predates suspensions can leave a fresh timestamp beside an empty cache, and
-        // the first hour after the update is precisely the window where a live suspension matters.
-        // An empty rule set still round-trips as a stored `{}`, so "no suspensions anywhere" is a
-        // hit and does not force a fetch on every launch.
-        localStorage.uSwapSuspensions ?: return false
-        // Same for execution types: a build that predates them has a fresh timestamp beside no
-        // cache, and shielded ZEC delivery would stay off until the next hourly sync.
-        localStorage.uSwapExecutionTypes ?: return false
-        // And for route scores: without this a build that predates them would show no score for
-        // up to an hour after the update.
-        localStorage.uSwapRouteScores ?: return false
-        // And for the split-capable set: a build that predates it would offer no split provider
-        // until the next hourly sync.
-        localStorage.uSwapSplitProviders ?: return false
+    /** A route named a venue the list does not know: fetch the list now, ignoring the hour, once per id per hour. */
+    suspend fun requestSync(unknownProviderId: String) {
+        val now = System.currentTimeMillis()
+        val due = synchronized(unknownSyncTimes) {
+            val last = unknownSyncTimes[unknownProviderId]
+            if (last != null && now - last in 0 until SYNC_INTERVAL) {
+                false
+            } else {
+                unknownSyncTimes[unknownProviderId] = now
+                true
+            }
+        }
+        if (due) fetchIf { true }
+    }
 
-        // A negative age means the stored timestamp is in the future — a clock correction, which
+    private fun isFresh(): Boolean {
+        localStorage.uSwapProviders ?: return false
+        // A negative age means the stored timestamp is in the future (a clock correction), which
         // would otherwise read as fresh until the clock caught up.
-        val age = System.currentTimeMillis() - localStorage.uSwapSuspensionsSyncTime
+        val age = System.currentTimeMillis() - localStorage.uSwapProvidersSyncTime
         return age in 0 until SYNC_INTERVAL
     }
 
     /**
      * Fetches under a lock, re-testing [needed] once it is held: a swap screen open and a refund
      * sheet can ask at the same time, and two responses landing concurrently would publish one
-     * index while persisting the other.
+     * list while persisting the other.
      */
     private suspend fun fetchIf(needed: () -> Boolean) {
         if (!needed()) return
@@ -113,31 +132,12 @@ class SwapProviderInfoManager(
 
             try {
                 val responses = unstoppableAPI.providers()
-
-                // Suspended providers stay in the metadata cache: a swap made before the
-                // suspension still needs its refund contacts.
-                cache = responses.associateBy { it.provider.uppercase() }
-
-                val index = SwapSuspensionIndex.from(responses)
-                _suspensionsFlow.value = index
-
-                val types = SwapExecutionTypes.from(responses)
-                executionTypes = types
-                localStorage.uSwapExecutionTypes = gson.toJson(types)
-
-                val scores = SwapRouteScores.from(responses)
-                _routeScoresFlow.value = scores
-                localStorage.uSwapRouteScores = gson.toJson(scores)
-
-                val splitProviders = responses
-                    .filter { it.splitSwaps && !it.suspended }
-                    .map { SwapSuspensionIndex.serverId(it.provider) }
-                    .toSet()
-                _splitProvidersFlow.value = splitProviders
-                localStorage.uSwapSplitProviders = gson.toJson(splitProviders.toList())
-
-                localStorage.uSwapSuspensions = gson.toJson(index)
-                localStorage.uSwapSuspensionsSyncTime = System.currentTimeMillis()
+                // Stored before it is published: a failed write, like a failed fetch, leaves the
+                // previous list and timestamp in place, so the next sync retries instead of
+                // waiting out the hour.
+                localStorage.uSwapProviders = gson.toJson(responses)
+                localStorage.uSwapProvidersSyncTime = System.currentTimeMillis()
+                apply(responses)
             } catch (e: CancellationException) {
                 // The caller's screen went away mid-request. Not a fetch failure, and swallowing
                 // it would leave its coroutine looking like it completed.
@@ -148,79 +148,46 @@ class SwapProviderInfoManager(
         }
     }
 
-    /**
-     * Suspensions must survive a cold launch: they are refreshed at most hourly, so without this a
-     * restart would quote a suspended provider until the next sync completes.
-     */
-    private fun restoredSuspensions(): SwapSuspensionIndex {
-        val json = localStorage.uSwapSuspensions ?: return SwapSuspensionIndex()
-
-        return try {
-            gson.fromJson(json, SwapSuspensionIndex::class.java) ?: SwapSuspensionIndex()
-        } catch (e: Throwable) {
-            Log.e(TAG, "Failed to restore swap suspensions", e)
-            SwapSuspensionIndex()
-        }
+    private fun apply(responses: List<UnstoppableAPI.Response.Provider>) {
+        val byId = responses.associateBy { it.provider.uppercase() }
+        rows = byId
+        _venuesFlow.value = venues(byId)
+        _splitProvidersFlow.value = splitProviderIds(byId)
     }
 
-    /** Whether any execution types were ever stored; false only before the first successful sync. */
-    val hasExecutionTypes: Boolean
-        get() = localStorage.uSwapExecutionTypes != null
-
-    /**
-     * Whether a swap selling [tokenIn] through this provider can pay its ZEC output to a
-     * shielded / unified receiver: the provider must settle through a vault (see
-     * [SwapExecutionTypes.deliversShieldedZcash]), and the sell chain must carry the memo that
-     * names a unified address, which an OP_RETURN output cannot — the UTXO chains fall back to
-     * the transparent address.
-     */
-    fun deliversShieldedZcash(providerId: String, tokenIn: Token): Boolean =
-        executionTypes.deliversShieldedZcash(providerId) && !tokenIn.blockchainType.memoRidesOpReturn
-
-    /**
-     * Whether a ZEC recipient for this swap must be a transparent address: neither the provider
-     * (by execution type) nor the selected route itself delivers to a shielded receiver.
-     */
-    fun zcashTransparentRecipientOnly(providerId: String, swapQuote: SwapQuote): Boolean =
-        swapQuote.tokenOut.blockchainType == BlockchainType.Zcash &&
-            !USwapProvider.routeDeliversShieldedZcash(swapQuote) &&
-            !deliversShieldedZcash(providerId, swapQuote.tokenIn)
-
-    private fun restoredSplitProviders(): Set<String> {
-        val json = localStorage.uSwapSplitProviders ?: return emptySet()
+    private fun restoredRows(): Map<String, UnstoppableAPI.Response.Provider> {
+        val json = localStorage.uSwapProviders ?: return emptyMap()
 
         return try {
-            gson.fromJson(json, Array<String>::class.java)?.toSet() ?: emptySet()
+            gson.fromJson(json, Array<UnstoppableAPI.Response.Provider>::class.java)
+                ?.filter { !it.provider.isNullOrEmpty() }
+                ?.associateBy { it.provider.uppercase() }
+                ?: emptyMap()
         } catch (e: Throwable) {
-            Log.e(TAG, "Failed to restore split providers", e)
-            emptySet()
-        }
-    }
-
-    private fun restoredRouteScores(): SwapRouteScores {
-        val json = localStorage.uSwapRouteScores ?: return SwapRouteScores()
-
-        return try {
-            gson.fromJson(json, SwapRouteScores::class.java) ?: SwapRouteScores()
-        } catch (e: Throwable) {
-            Log.e(TAG, "Failed to restore swap route scores", e)
-            SwapRouteScores()
-        }
-    }
-
-    private fun restoredExecutionTypes(): SwapExecutionTypes {
-        val json = localStorage.uSwapExecutionTypes ?: return SwapExecutionTypes()
-
-        return try {
-            gson.fromJson(json, SwapExecutionTypes::class.java) ?: SwapExecutionTypes()
-        } catch (e: Throwable) {
-            Log.e(TAG, "Failed to restore swap execution types", e)
-            SwapExecutionTypes()
+            Log.e(TAG, "Failed to restore swap providers", e)
+            emptyMap()
         }
     }
 
     companion object {
         private const val TAG = "SwapProviderInfoManager"
         private const val SYNC_INTERVAL = 60 * 60 * 1000L // 1 hour
+        private val FALLBACK_PRIVACY_LEVELS = listOf("basic")
+
+        fun venues(rows: Map<String, UnstoppableAPI.Response.Provider>): Map<String, SwapVenue> =
+            rows.mapValues { (id, row) ->
+                SwapVenue(
+                    id = id,
+                    name = row.name?.takeIf { it.isNotBlank() } ?: SwapVenue.humanized(id),
+                    riskLevel = row.amlPolicy?.let { RiskLevel.fromAmlPolicy(it) },
+                    privacy = row.privacyLevel ?: SwapVenue.NO_PRIVACY,
+                    executionType = row.executionType?.takeIf { it.isNotEmpty() },
+                    isKnown = true,
+                )
+            }
+
+        /** Ids quoted on the Private (split) tab: every provider that serves the split endpoints and is not suspended. */
+        fun splitProviderIds(rows: Map<String, UnstoppableAPI.Response.Provider>): Set<String> =
+            rows.values.filter { it.splitSwaps && !it.suspended }.map { it.provider.uppercase() }.toSet()
     }
 }

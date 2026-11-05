@@ -100,13 +100,8 @@ class LocalStorageManager(
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val LAST_MIGRATION_VERSION = "last_migration_version"
     private val ENABLED_PAID_ACTIONS = "enabled_paid_actions"
-    private val USWAP_SUSPENSIONS = "uswap_suspensions"
-    private val USWAP_SUSPENSIONS_SYNC_TIME = "uswap_suspensions_sync_time"
-    private val USWAP_EXECUTION_TYPES = "uswap_execution_types"
-    private val USWAP_ROUTE_SCORES = "uswap_route_scores"
-    private val USWAP_SPLIT_PROVIDERS = "uswap_split_providers"
-    private val PRIVATE_SEND_PROVIDER_IDS = "private_send_provider_ids"
-    private val PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME = "private_send_provider_ids_sync_time"
+    private val USWAP_PROVIDERS = "uswap_providers"
+    private val USWAP_PROVIDERS_SYNC_TIME = "uswap_providers_sync_time"
     private val USWAP_CATALOG_ETAG = "uswap_catalog_etag"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -164,52 +159,18 @@ class LocalStorageManager(
             preferences.edit { putString("swapRecentTokenQueryIds", value.joinToString(",")) }
         }
 
-    // Provider suspensions as JSON, cached so a cold launch keeps honouring them until the next
-    // sync. Null means never stored, which is what makes the manager sync regardless of the
-    // interval.
-    override var uSwapSuspensions: String?
-        get() = preferences.getString(USWAP_SUSPENSIONS, null)
+    // The last `GET /v3/providers` answer as JSON, so a cold launch names swap venues straight
+    // away. Null means never stored, which is what makes the manager sync regardless of the interval.
+    override var uSwapProviders: String?
+        get() = preferences.getString(USWAP_PROVIDERS, null)
         set(value) {
-            preferences.edit { putString(USWAP_SUSPENSIONS, value) }
+            preferences.edit { putString(USWAP_PROVIDERS, value) }
         }
 
-    override var uSwapExecutionTypes: String?
-        get() = preferences.getString(USWAP_EXECUTION_TYPES, null)
+    override var uSwapProvidersSyncTime: Long
+        get() = preferences.getLong(USWAP_PROVIDERS_SYNC_TIME, 0)
         set(value) {
-            preferences.edit { putString(USWAP_EXECUTION_TYPES, value) }
-        }
-
-    override var uSwapRouteScores: String?
-        get() = preferences.getString(USWAP_ROUTE_SCORES, null)
-        set(value) {
-            preferences.edit { putString(USWAP_ROUTE_SCORES, value) }
-        }
-
-    override var uSwapSplitProviders: String?
-        get() = preferences.getString(USWAP_SPLIT_PROVIDERS, null)
-        set(value) {
-            preferences.edit { putString(USWAP_SPLIT_PROVIDERS, value) }
-        }
-
-    override var uSwapSuspensionsSyncTime: Long
-        get() = preferences.getLong(USWAP_SUSPENSIONS_SYNC_TIME, 0)
-        set(value) {
-            preferences.edit { putLong(USWAP_SUSPENSIONS_SYNC_TIME, value) }
-        }
-
-    // Confidential provider ids as JSON, cached so a cold launch keeps offering private send
-    // until the next sync. Null means never stored, which is what makes the manager sync
-    // regardless of the interval.
-    override var privateSendProviderIds: String?
-        get() = preferences.getString(PRIVATE_SEND_PROVIDER_IDS, null)
-        set(value) {
-            preferences.edit { putString(PRIVATE_SEND_PROVIDER_IDS, value) }
-        }
-
-    override var privateSendProviderIdsSyncTime: Long
-        get() = preferences.getLong(PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME, 0)
-        set(value) {
-            preferences.edit { putLong(PRIVATE_SEND_PROVIDER_IDS_SYNC_TIME, value) }
+            preferences.edit { putLong(USWAP_PROVIDERS_SYNC_TIME, value) }
         }
 
     // The ETag of the stored token catalog, so a repeat `GET /v3/tokens/all` is a 304.

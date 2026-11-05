@@ -88,7 +88,9 @@ import io.horizontalsystems.walletkit.modules.market.favorites.MarketFavoritesMe
 import io.horizontalsystems.walletkit.modules.market.topplatforms.TopPlatformsRepository
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapSyncService
+import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetCatalog
 import io.horizontalsystems.walletkit.modules.privatesend.PrivateSendManager
 import io.horizontalsystems.walletkit.modules.opencryptopay.OcpProofSubmissionWorker
 import io.horizontalsystems.walletkit.modules.pin.PinComponent
@@ -211,6 +213,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var swapRecordManager: SwapRecordManager
         lateinit var swapSyncService: SwapSyncService
         lateinit var swapProviderInfoManager: SwapProviderInfoManager
+        lateinit var uSwapAssetCatalog: USwapAssetCatalog
         lateinit var privateSendManager: PrivateSendManager
         var trialExpired: Boolean = false
     }
@@ -340,7 +343,8 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
         swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
         swapProviderInfoManager = SwapProviderInfoManager(appConfigProvider, localStorage)
-        privateSendManager = PrivateSendManager(appConfigProvider, localStorage)
+        uSwapAssetCatalog = USwapAssetCatalog(appConfigProvider, localStorage, appDatabase.swapProviderAssetDao())
+        privateSendManager = PrivateSendManager(MultiSwapProviderRegistry.uswap, swapProviderInfoManager, uSwapAssetCatalog)
         evmBlockchainManager = EvmBlockchainManager(marketKit)
 
 

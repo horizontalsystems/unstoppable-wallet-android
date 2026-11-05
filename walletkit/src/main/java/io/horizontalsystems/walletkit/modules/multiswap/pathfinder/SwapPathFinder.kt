@@ -4,7 +4,6 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.MarketKitWrapper
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapSuspensionIndex
 
 /**
  * Finds a one-hop route for a pair that can't be swapped directly.
@@ -18,14 +17,11 @@ class SwapPathFinder(private val candidateProviders: List<ISwapPathCandidateProv
         tokenIn: Token,
         tokenOut: Token,
         providers: List<IMultiSwapProvider>,
-        suspensions: SwapSuspensionIndex,
     ): SwapPath? {
-        // Same gate as SwapQuoteService.runQuotation: a leg we would refuse to quote must not
-        // count, or we would advertise a route through a provider the backend switched off.
-        fun usable(provider: IMultiSwapProvider, from: Token, to: Token): Boolean {
-            if (suspensions.isSuspended(provider.id, from, to)) return false
-            return provider.supports(from, to)
-        }
+        // Same gate as SwapQuoteService.runQuotation: a leg we would refuse to ask for must not
+        // count, or we would advertise a route no provider can be asked about.
+        fun usable(provider: IMultiSwapProvider, from: Token, to: Token): Boolean =
+            provider.supports(from, to)
 
         val endpointIds = setOf(tokenIn.tokenQuery.id, tokenOut.tokenQuery.id)
         val triedIds = mutableSetOf<String>()

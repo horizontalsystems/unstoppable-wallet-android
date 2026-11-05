@@ -30,9 +30,7 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderType
 import io.horizontalsystems.walletkit.modules.multiswap.ui.RiskScore
-import io.horizontalsystems.walletkit.modules.multiswap.ui.routeScore
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
@@ -50,7 +48,6 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsSectionButtons
 import kotlinx.serialization.Serializable
-import kotlin.math.roundToLong
 
 @Serializable
 data class SwapSelectProviderPage(
@@ -95,7 +92,7 @@ fun SwapSelectProviderScreen(
         swapViewModel.onSelectQuote(it)
         navigation.removeLastOrNull()
 
-        stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
+        stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.venue.id))
     }
 }
 
@@ -142,7 +139,7 @@ private fun SwapSelectProviderScreenInner(
                 }
 
                 quotes.forEach { viewItem ->
-                    val provider = viewItem.quote.provider
+                    val venue = viewItem.quote.venue
                     val icon = if (viewItem.quote == currentQuote) {
                         R.drawable.selector_checked_20
                     } else {
@@ -193,7 +190,7 @@ private fun SwapSelectProviderScreenInner(
                                         }
                                         if (BuildConfig.DEBUG && App.localStorage.showSwapProviderName) {
                                             Text(
-                                                text = provider.title,
+                                                text = venue.name,
                                                 style = ComposeAppTheme.typography.subhead,
                                                 color = ComposeAppTheme.colors.grey,
                                             )
@@ -203,7 +200,7 @@ private fun SwapSelectProviderScreenInner(
                                         horizontalAlignment = Alignment.End,
                                         verticalArrangement = spacedBy(3.dp)
                                     ) {
-                                        routeScore(provider.id)?.let { riskLevel ->
+                                        venue.riskLevel?.let { riskLevel ->
                                             RiskScore(
                                                 riskLevel = riskLevel,
                                                 modifier = Modifier.clickable {
@@ -213,7 +210,7 @@ private fun SwapSelectProviderScreenInner(
                                         }
                                         Text(
                                             text = viewItem.estimationTime?.let {
-                                                formatSwapTime(it, provider.type)
+                                                formatSwapTime(it)
                                             } ?: stringResource(R.string.NotAvailable),
                                             style = ComposeAppTheme.typography.subheadSB,
                                             color = if (viewItem.timeStatus == SwapTimeStatus.Attention) {
@@ -292,26 +289,8 @@ fun formatDurationShort(totalSeconds: Long): String {
     }.trim()
 }
 
-// CEX estimates are a measured average, so display them as a ±25% range;
-// DEX providers quote their own timing and keep the single value.
-fun formatSwapTime(estimationTime: Long, providerType: SwapProviderType): String =
-    when (providerType) {
-        SwapProviderType.CEX -> formatSwapTimeRange(estimationTime)
-        SwapProviderType.DEX -> "~${formatDurationShort(estimationTime)}"
-    }
-
-fun formatSwapTimeRange(totalSeconds: Long): String {
-    val minSeconds = roundSecondsToMinutes(totalSeconds * 0.75)
-    val maxSeconds = roundSecondsToMinutes(totalSeconds * 1.25)
-    return if (minSeconds == maxSeconds) {
-        "~${formatDurationShort(minSeconds)}"
-    } else {
-        "${formatDurationShort(minSeconds)}-${formatDurationShort(maxSeconds)}"
-    }
-}
-
-fun roundSecondsToMinutes(seconds: Double): Long =
-    (seconds / 60).roundToLong().coerceAtLeast(1) * 60
+// Every venue's estimate is one approximate value: the backend publishes no precision per venue.
+fun formatSwapTime(estimationTime: Long): String = "~${formatDurationShort(estimationTime)}"
 
 @Preview
 @Composable

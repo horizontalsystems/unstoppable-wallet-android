@@ -327,10 +327,6 @@ interface UnstoppableAPI {
             // [isConfidential] so either wire form works and neither can break the shared
             // /providers parse (this DTO also serves the suspensions sync).
             val privacy: JsonElement? = null,
-            // Scoped restrictions — asset, chain or directed pair. See SwapSuspension. Nullable
-            // because the field is absent for the many providers that carry no rules, and Gson
-            // fills absent fields with null rather than the declared default.
-            val suspensions: List<SwapSuspension>? = null,
             // Whether the provider serves the /v3/split endpoints. Split swaps are offered for
             // exactly the providers that say so; absent reads as false.
             val splitSwaps: Boolean = false,

@@ -9,7 +9,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProv
 import io.horizontalsystems.walletkit.modules.multiswap.providers.ISplitSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
-import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapSuspensionIndex
+import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetCatalog
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -32,6 +32,7 @@ class SwapQuoteService(
     // can only broadcast a subset of providers) pass their own set.
     private val allProviders: List<IMultiSwapProvider> = MultiSwapProviderRegistry.allProviders,
     private val providerInfoManager: SwapProviderInfoManager = App.swapProviderInfoManager,
+    private val assetCatalog: USwapAssetCatalog = App.uSwapAssetCatalog,
     // Split mode: quotes come from these providers' split endpoints, priced for
     // [splitPercents], and `allProviders` is not consulted. Null quotes single swaps.
     private val splitProviders: List<ISplitSwapProvider>? = null,
@@ -44,7 +45,8 @@ class SwapQuoteService(
     private var tokenOut: Token? = null
     private var quoting = false
     private var quotes: List<SwapProviderQuote> = listOf()
-    private var preferredProvider: IMultiSwapProvider? = null
+    // The venue the user picked on the Routes list, kept while it is still quoted.
+    private var preferredVenueId: String? = null
     private var error: Throwable? = null
     // Split mode: the provider's own refusal behind a route-not-found, when it gave one.
     private var splitProviderError: SplitRateException? = null
@@ -67,7 +69,7 @@ class SwapQuoteService(
             tokenOut = tokenOut,
             quoting = quoting,
             quotes = quotes,
-            preferredProvider = preferredProvider,
+            preferredVenueId = preferredVenueId,
             quote = quote,
             error = error,
             splitPercents = splitPercents,
@@ -87,48 +89,46 @@ class SwapQuoteService(
     private var startProvidersJob: Job? = null
 
     fun start() {
-        // Read before the sync is launched, so an index landing before the collector subscribes
+        // A session per swap screen: the quotes compared here are linked to the swap made from it.
+        startNewSession()
+
+        // Read before the syncs are launched, so a list landing before the collector subscribes
         // still reads as a change rather than arriving as the collector's own first value.
-        val startingSuspensions = providerInfoManager.suspensionsFlow.value
+        val startingCatalogVersion = assetCatalog.syncFlow.value
+        val startingSplitProviders = providerInfoManager.splitProvidersFlow.value
 
         val initialQuotation = launchGuarded("initial quotation") {
             startProviders()
             runQuotation()
         }
 
-        launchGuarded("suspension sync") {
-            providerInfoManager.sync()
-        }
-
-        launchGuarded("suspension updates") {
+        launchGuarded("catalog updates") {
             // Waiting for the first quotation: re-running it before the providers have started
-            // would quote against a registry that supports nothing yet and surface "no supported
+            // would quote against a catalog that supports nothing yet and surface "no supported
             // provider" for as long as the startup takes.
             initialQuotation.join()
 
-            // A sync that only changes which PAIRS a provider may serve leaves the token
-            // selection untouched, so this is the only thing that re-runs quotation for it. Not
-            // silent: the visible quotes may name a provider that has just been suspended, and
-            // the index only emits when it actually changed, so the refresh is rare.
-            providerInfoManager.suspensionsFlow
-                .dropWhile { it == startingSuspensions }
+            // A catalog that lands can turn an unsupported pair into a quotable one, or name a
+            // token the last round could not. Re-run only for a round that found nothing: a
+            // sync that changes nothing visible must not refresh the quotes under the user.
+            assetCatalog.syncFlow
+                .dropWhile { it == startingCatalogVersion }
                 .collect {
                     try {
-                        runQuotation()
+                        if (error != null) runQuotation()
                     } catch (e: CancellationException) {
                         throw e
                     } catch (e: Throwable) {
                         // Caught per emission, not just at the launch: the collector is the only
-                        // path back from a suspension change, so it has to outlive a failed run.
-                        Log.e(tag, "error on re-quoting after a suspension change", e)
+                        // path back from a catalog change, so it has to outlive a failed run.
+                        Log.e(tag, "error on re-quoting after a catalog change", e)
                     }
                 }
         }
 
         if (splitProviders != null) {
-            // Which providers may split is the server's call, made by the same sync: a change
+            // Which venues may split is the server's call, made by the provider sync: a change
             // adds or removes split quotes without touching the token selection.
-            val startingSplitProviders = providerInfoManager.splitProvidersFlow.value
             launchGuarded("split provider updates") {
                 initialQuotation.join()
                 providerInfoManager.splitProvidersFlow
@@ -144,6 +144,12 @@ class SwapQuoteService(
                     }
             }
         }
+    }
+
+    /** A new `X-Session-Id` for the next swap: on open, and once a swap has been sent. */
+    fun startNewSession() {
+        val providers: List<IMultiSwapProvider> = splitProviders ?: allProviders
+        providers.forEach { it.startSession() }
     }
 
     override fun clear() {
@@ -193,7 +199,7 @@ class SwapQuoteService(
                 tokenOut = tokenOut,
                 quoting = quoting,
                 quotes = quotes,
-                preferredProvider = preferredProvider,
+                preferredVenueId = preferredVenueId,
                 quote = quote,
                 error = error,
                 splitPercents = splitPercents,
@@ -223,20 +229,13 @@ class SwapQuoteService(
         val amountIn = amountIn
 
         if (tokenIn != null && tokenOut != null) {
-            // Read once, here: quotation runs from both the main thread and the sync collector, so
-            // the flow's own atomic read is what keeps the two from seeing different indexes.
-            val suspensions = providerInfoManager.suspensionsFlow.value
-
-            // In split mode only the providers the server flags as split-capable are asked;
-            // a registered candidate it no longer lists quotes nothing.
-            val candidates: List<IMultiSwapProvider> = splitProviders
-                ?.filter { providerInfoManager.supportsSplitSwaps(it.id) }
-                ?: allProviders
+            // In split mode the split endpoints are asked; which venues answer is the server's
+            // call, and the provider keeps only the ones the directory flags as split-capable.
+            val candidates: List<IMultiSwapProvider> = splitProviders ?: allProviders
             val supportedProviders = candidates.filter { provider ->
-                // Checked here, in the one place every provider passes through, rather than inside
-                // each `supports` implementation.
-                !suspensions.isSuspended(provider.id, tokenIn, tokenOut) &&
-                    provider.supports(tokenIn, tokenOut)
+                // Checked here, in the one place every provider passes through: a pair no
+                // provider can ask for shows as unsupported before any amount is typed.
+                provider.supports(tokenIn, tokenOut)
             }
 
             val roundKey = QuoteRoundKey(tokenIn, tokenOut, supportedProviders.map { it.id }.toSet())
@@ -254,7 +253,7 @@ class SwapQuoteService(
                 // quote round does. The previous suggestion for this pair stays visible until the
                 // fresh one replaces it.
                 quotingJob = coroutineScope.launch {
-                    val path = findSuggestedPath(tokenIn, tokenOut, suspensions)
+                    val path = findSuggestedPath(tokenIn, tokenOut)
 
                     val published = synchronized(publishLock) {
                         if (generation != quotationGeneration) return@synchronized false
@@ -274,7 +273,7 @@ class SwapQuoteService(
                 val percents = splitPercents
                 quotingJob = coroutineScope.launch {
                     val results = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn, percents)
-                    val path = if (results.quotes.isEmpty()) findSuggestedPath(tokenIn, tokenOut, suspensions) else null
+                    val path = if (results.quotes.isEmpty()) findSuggestedPath(tokenIn, tokenOut) else null
 
                     val published = synchronized(publishLock) {
                         if (generation != quotationGeneration) return@synchronized false
@@ -286,8 +285,9 @@ class SwapQuoteService(
                             .filterIsInstance<SplitRateException>()
                             .let { refusals -> refusals.firstOrNull { it.belowMinimum } ?: refusals.firstOrNull() }
 
-                        if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
-                            preferredProvider = null
+                        val preferred = preferredVenueId
+                        if (preferred != null && quotes.none { it.venue.id == preferred }) {
+                            preferredVenueId = null
                         }
 
                         if (quotes.isEmpty()) {
@@ -297,8 +297,8 @@ class SwapQuoteService(
                         } else {
                             emptyRoundKey = null
                             suggestedPath = null
-                            quote = preferredProvider
-                                ?.let { provider -> quotes.find { it.provider == provider } }
+                            quote = preferredVenueId
+                                ?.let { venueId -> quotes.find { it.venue.id == venueId } }
                                 ?: quotes.firstOrNull()
                         }
 
@@ -329,15 +329,11 @@ class SwapQuoteService(
      * Null in split mode: the finder reasons about the regular provider set, and a split swap has
      * no first-leg screen to hand the intermediate token to.
      */
-    private fun findSuggestedPath(
-        tokenIn: Token,
-        tokenOut: Token,
-        suspensions: SwapSuspensionIndex,
-    ): SwapPath? {
+    private fun findSuggestedPath(tokenIn: Token, tokenOut: Token): SwapPath? {
         if (splitProviders != null) return null
 
         return try {
-            pathFinder.find(tokenIn, tokenOut, allProviders, suspensions)
+            pathFinder.find(tokenIn, tokenOut, allProviders)
         } catch (e: Throwable) {
             Log.e(tag, "error on finding a suggested path", e)
             null
@@ -355,13 +351,15 @@ class SwapQuoteService(
             .map { provider ->
                 async {
                     try {
-                        withTimeout(5000) {
-                            val quote = if (isSplit && provider is ISplitSwapProvider) {
-                                provider.fetchSplitQuote(tokenIn, tokenOut, amountIn, splitPercents)
+                        // One request fans out to every venue server-side, so the round takes as
+                        // long as the slowest venue the server waits for.
+                        withTimeout(QUOTE_TIMEOUT_MS) {
+                            val swapQuotes = if (isSplit && provider is ISplitSwapProvider) {
+                                provider.fetchSplitQuotes(tokenIn, tokenOut, amountIn, splitPercents)
                             } else {
-                                provider.fetchQuote(tokenIn, tokenOut, amountIn)
+                                provider.fetchQuotes(tokenIn, tokenOut, amountIn)
                             }
-                            Result.success(SwapProviderQuote(provider = provider, swapQuote = quote))
+                            Result.success(swapQuotes.map { SwapProviderQuote(provider = provider, swapQuote = it) })
                         }
                     } catch (e: Throwable) {
                         Log.e(tag, "fetchQuoteError: ${provider.id}", e)
@@ -372,7 +370,7 @@ class SwapQuoteService(
             .awaitAll()
 
         QuoteResults(
-            quotes = results.mapNotNull { it.getOrNull() }.sortedByDescending { it.amountOut },
+            quotes = results.flatMap { it.getOrNull().orEmpty() }.sortedByDescending { it.amountOut },
             failures = results.mapNotNull { it.exceptionOrNull() },
         )
     }
@@ -381,7 +379,7 @@ class SwapQuoteService(
         if (amountIn == v) return
 
         amountIn = v
-        preferredProvider = null
+        preferredVenueId = null
 
         runQuotation()
     }
@@ -389,7 +387,7 @@ class SwapQuoteService(
     fun setTokenIn(token: Token) {
         if (tokenIn == token) return
 
-        preferredProvider = null
+        preferredVenueId = null
         if (tokenOut == token) {
             // selected token is already on the other side, swap places instead of clearing it
             tokenOut = tokenIn
@@ -402,7 +400,7 @@ class SwapQuoteService(
     fun setTokenOut(token: Token) {
         if (tokenOut == token) return
 
-        preferredProvider = null
+        preferredVenueId = null
         if (tokenIn == token) {
             // selected token is already on the other side, swap places instead of clearing it
             tokenIn = tokenOut
@@ -412,7 +410,7 @@ class SwapQuoteService(
         runQuotation()
     }
 
-    /** Split mode: re-prices the outputs for new shares. The selected provider is kept. */
+    /** Split mode: re-prices the outputs for new shares. The selected venue is kept. */
     fun setSplitPercents(percents: List<Int>) {
         if (splitPercents == percents) return
         SplitSwapRules.requireValid(percents)
@@ -434,7 +432,7 @@ class SwapQuoteService(
     }
 
     fun selectQuote(quote: SwapProviderQuote) {
-        preferredProvider = quote.provider
+        preferredVenueId = quote.venue.id
         this.quote = quote
 
         emitState()
@@ -445,7 +443,7 @@ class SwapQuoteService(
     }
 
     fun onActionStarted(quote: SwapProviderQuote?) {
-        preferredProvider = quote?.provider
+        preferredVenueId = quote?.venue?.id
     }
 
     fun onActionCompleted() {
@@ -458,7 +456,7 @@ class SwapQuoteService(
         val tokenOut: Token?,
         val quoting: Boolean,
         val quotes: List<SwapProviderQuote>,
-        val preferredProvider: IMultiSwapProvider?,
+        val preferredVenueId: String?,
         val quote: SwapProviderQuote?,
         val error: Throwable?,
         // The shares the split quotes were priced for; meaningless for single swaps.
@@ -478,4 +476,8 @@ class SwapQuoteService(
         val tokenOut: Token,
         val providerIds: Set<String>,
     )
+
+    companion object {
+        private const val QUOTE_TIMEOUT_MS = 15_000L
+    }
 }

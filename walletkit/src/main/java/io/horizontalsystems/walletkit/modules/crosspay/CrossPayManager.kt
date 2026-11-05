@@ -3,6 +3,8 @@ package io.horizontalsystems.walletkit.modules.crosspay
 import com.google.gson.Gson
 import io.horizontalsystems.walletkit.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIds
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapAssetMapping
 import io.horizontalsystems.walletkit.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
@@ -14,22 +16,21 @@ import retrofit2.HttpException
 import java.math.BigDecimal
 
 /**
- * A CrossPay payment in cross-asset exact-output mode against the one exact-output-capable
- * provider. The confirmation screen previews the route (priced against the provider's stand-in
- * deposit address); Send commits it and learns the real deposit address. Execution is a locally
- * built deposit transfer, and the multiswap send-transaction machinery does the actual work.
+ * A CrossPay payment in cross-asset exact-output mode. One unnamed exact-output `/v3/rate`
+ * answers with every venue that can price backwards; the cheapest plain-transfer route wins and
+ * its venue is previewed. The confirmation screen previews the route (priced against the venue's
+ * stand-in deposit address); Send commits it and learns the real deposit address. Execution is a
+ * locally built deposit transfer, and the multiswap send-transaction machinery does the actual
+ * work.
  *
  * Only the commit creates a REAL order, so the preview is re-run freely and the entry screen's
  * rate is display-only.
  */
-class CrossPayManager {
+class CrossPayManager(
+    private val provider: USwapProvider = MultiSwapProviderRegistry.uswap,
+    private val providerInfoManager: SwapProviderInfoManager = io.horizontalsystems.walletkit.core.App.swapProviderInfoManager,
+) {
     private val gson = Gson()
-
-    val provider: USwapProvider? = resolveProvider()
-
-    // Only a plain-transfer route may proceed: anything else (signed_transaction,
-    // thorchain_deposit, …) needs real transaction building and must not silently join.
-    private val supportedExecutionType = "transfer"
 
     /**
      * Prices the payment for the confirmation screen without creating an order. Re-run freely;
@@ -38,16 +39,33 @@ class CrossPayManager {
      * amountOut come from the preview response alone.
      */
     suspend fun preview(request: CrossPayRequest): CrossPayPreview {
-        val provider = provider ?: throw CrossPayError.TokenUnsupported
+        if (!supportsPair(request.tokenIn, request.tokenOut, provider)) throw CrossPayError.TokenUnsupported
 
-        if (!supportsPair(provider, request.tokenIn, request.tokenOut)) throw CrossPayError.TokenUnsupported
+        val rate = try {
+            provider.exactOutputRate(
+                tokenIn = request.tokenIn,
+                tokenOut = request.tokenOut,
+                amountOut = request.amountOut,
+                slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            throw mapCommitError(e)
+        }
+
+        val rateRoute = bestTransferRoute(rate, providerInfoManager)
+            ?: reason(rate.providerErrors.orEmpty())?.let { throw it }
+            ?: throw CrossPayError.NoRoute
+        val venueId = rateRoute.providerId ?: throw CrossPayError.NoRoute
+        val venue = providerInfoManager.venue(venueId)
 
         // Omitting the refund address forfeits the buffer refund, which lands on the success
         // path too — so a missing one fails the preview rather than proceeding without. The
-        // address follows the provider's refund policy, exactly as a swap sets it: for ZEC the
-        // shielded-only unified address when the provider takes a unified refund (NEAR does).
+        // address follows the route's own rule, exactly as a swap sets it: for ZEC a unified
+        // address where the route names one, the transparent address otherwise.
         val refundAddress = try {
-            provider.refundAddress(request.tokenIn)
+            provider.refundAddress(request.tokenIn, rateRoute.addressRules)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Throwable) {
@@ -62,10 +80,12 @@ class CrossPayManager {
                 destinationAddress = request.recipient,
                 refundAddress = refundAddress,
                 slippage = IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                venueId = venueId,
                 // CrossPay is an ordinary swap in a payment-shaped UI: the swap screen's
                 // build-signal contract applies, so the server prices the inbound fee line for
                 // tx-consuming chains (EVM & co). The deposit itself is built locally either way.
                 includeSourceAddress = true,
+                addressRules = rateRoute.addressRules,
             )
         } catch (e: CancellationException) {
             throw e
@@ -77,14 +97,14 @@ class CrossPayManager {
         if (previewToken.isNullOrEmpty()) throw CrossPayError.CommitFailed()
 
         // The deposit transfer is priced against the stand-in so the confirmation screen shows a
-        // network fee. A provider that already names the deposit account at preview is priced
+        // network fee. A venue that already names the deposit account at preview is priced
         // against that instead; with neither the screen shows no fee, and the deposit is built
         // once the order names its address.
         val stubDepositAddress = route.stubDepositAddress?.takeIf { it.isNotBlank() }
             ?: route.execution?.depositAddress?.takeIf { it.isNotBlank() }
 
         // Never falls back to the entered amount: in exact-output mode that is the *output*, in a
-        // different token. A deposit of nothing funds nothing, whatever floor the provider states.
+        // different token. A deposit of nothing funds nothing, whatever floor the venue states.
         val depositAmount = route.sellAmount ?: throw CrossPayError.CommitFailed()
         if (depositAmount <= BigDecimal.ZERO) throw CrossPayError.CommitFailed()
 
@@ -110,6 +130,8 @@ class CrossPayManager {
             request = request,
             previewToken = previewToken,
             provider = provider,
+            venueId = venueId,
+            venueName = venue.name,
             depositAmount = depositAmount,
             minSellAmount = minSellAmount,
             amountOut = amountOut,
@@ -140,7 +162,7 @@ class CrossPayManager {
         if (uuid.isNullOrEmpty()) throw CrossPayError.CommitFailed()
 
         val execution = commit.execution
-        if (execution == null || execution.method != supportedExecutionType) {
+        if (execution == null || execution.method != SwapProviderIds.TRANSFER_EXECUTION_TYPE) {
             throw CrossPayError.CommitFailed()
         }
 
@@ -283,23 +305,31 @@ class CrossPayManager {
     }
 
     companion object {
-        // The one provider serving exact-output cross-asset routes. Resolved by server id so
-        // a second exact-output provider some day means widening this to a fan-out.
-        private const val PROVIDER_SERVER_ID = "NEAR"
-
-        fun resolveProvider(): USwapProvider? = MultiSwapProviderRegistry.allProviders
-            .filterIsInstance<USwapProvider>()
-            .firstOrNull { it.serverProviderId == PROVIDER_SERVER_ID }
-
         /**
-         * Whether [token] can be what the recipient receives, independent of the provider's
-         * token list: the payout reaches only a bare address, which is not enough on the
-         * chains in [PrivateSendManager.payoutUnsupportedChains].
+         * Whether [token] can be what the recipient receives, independent of any token list:
+         * the payout reaches only a bare address, which is not enough on the chains in
+         * [PrivateSendManager.payoutUnsupportedChains].
          */
         fun supportsDestination(token: Token): Boolean =
             token.blockchainType !in PrivateSendManager.payoutUnsupportedChains
 
-        fun supportsPair(provider: USwapProvider, tokenIn: Token, tokenOut: Token): Boolean =
+        fun supportsPair(tokenIn: Token, tokenOut: Token, provider: USwapProvider = MultiSwapProviderRegistry.uswap): Boolean =
             supportsDestination(tokenOut) && provider.supports(tokenIn, tokenOut)
+
+        /**
+         * The route to pay with: among the venues that settle as a plain transfer (anything else,
+         * signed_transaction or thorchain_deposit, needs real transaction building and must not
+         * silently join), the one asking for the smallest deposit.
+         */
+        fun bestTransferRoute(
+            rate: UnstoppableAPI.Response.Rate,
+            providerInfoManager: SwapProviderInfoManager,
+        ): UnstoppableAPI.Response.Route? = rate.routes.orEmpty()
+            .filter { route ->
+                val providerId = route.providerId ?: return@filter false
+                route.sellAmount != null &&
+                    providerInfoManager.executionType(providerId) == SwapProviderIds.TRANSFER_EXECUTION_TYPE
+            }
+            .minByOrNull { it.sellAmount!! }
     }
 }
