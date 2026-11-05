@@ -132,6 +132,89 @@ class USwapV3ContractTest {
         assertEquals(SwapCommitFailure.Failed, exception.toSwapCommitFailure())
     }
 
+    @Test
+    fun `an unnamed rate omits providers and privacy, a narrowed one sends them`() {
+        val unnamed = JsonParser.parseString(
+            gson.toJson(UnstoppableAPI.Request.Rate(sellAsset = "BTC.BTC", buyAsset = "ETH.ETH", sellAmount = "0.1", slippage = BigDecimal.ONE))
+        ).asJsonObject
+        assertEquals(setOf("sellAsset", "buyAsset", "sellAmount", "slippage"), unnamed.keySet())
+
+        val narrowed = JsonParser.parseString(
+            gson.toJson(
+                UnstoppableAPI.Request.Rate(
+                    sellAsset = "BTC.BTC", buyAsset = "BTC.BTC", slippage = BigDecimal.ONE,
+                    privacy = listOf("basic"), buyAmount = "0.1",
+                )
+            )
+        ).asJsonObject
+        assertEquals(setOf("sellAsset", "buyAsset", "slippage", "privacy", "buyAmount"), narrowed.keySet())
+        assertEquals("basic", narrowed["privacy"].asJsonArray[0].asString)
+    }
+
+    @Test
+    fun `a rate route carries its venue, policy, precheck id and Zcash address rules`() {
+        val route = gson.fromJson(
+            """
+            {
+              "providers": ["EXOLIX"], "sellAsset": "BTC.BTC", "buyAsset": "ZEC.ZEC", "expectedBuyAmount": "1.5",
+              "minBuyAmount": null, "amlPolicy": "good", "amlProviderId": "quickex",
+              "addressRules": {
+                "destination": { "unified": { "receivers": ["orchard", "sapling"], "requiresOneOf": ["orchard", "transparent"] }, "transparent": true, "tex": true },
+                "refund": { "transparent": true },
+                "source": { "transparent": true, "sameAsRefund": true }
+              }
+            }
+            """.trimIndent(),
+            UnstoppableAPI.Response.Route::class.java,
+        )
+
+        assertEquals("EXOLIX", route.providerId)
+        assertEquals("good", route.amlPolicy)
+        assertEquals("quickex", route.amlProviderId)
+        assertEquals(listOf("orchard", "sapling"), route.addressRules?.destination?.unified?.receivers)
+        assertEquals(true, route.addressRules?.destination?.tex)
+        assertNull(route.addressRules?.refund?.unified)
+        assertEquals(true, route.addressRules?.source?.sameAsRefund)
+    }
+
+    @Test
+    fun `a preview refused for a Zcash address carries the message, the field and the rules`() {
+        val body = """{"message":"refundAddress is a unified address; this route takes transparent","field":"refundAddress","addressRules":{"refund":{"transparent":true}}}"""
+
+        val error = UnstoppableAPI.PreviewAddressException.from(httpException(400, body))!!
+
+        assertEquals("refundAddress", error.field)
+        assertTrue(error.message.startsWith("refundAddress is a unified address"))
+        assertEquals(true, error.addressRules?.refund?.transparent)
+        // an ordinary 400 is not an address refusal
+        assertNull(UnstoppableAPI.PreviewAddressException.from(httpException(400, """{"error":"Amount out of range","provider":"QUICKEX","errorCode":"amountOutOfRange"}""")))
+    }
+
+    @Test
+    fun `a blacklisted address is read from its error code`() {
+        val body = """{"error":"Address is blacklisted","errorCode":"addressBlacklisted","provider":"QUICKEX"}"""
+
+        val error = UnstoppableAPI.AddressBlacklistedException.from(httpException(403, body))!!
+
+        assertEquals("Address is blacklisted", error.message)
+        assertNull(UnstoppableAPI.AddressBlacklistedException.from(httpException(403, """{"error":"Account is not active"}""")))
+        assertNull(UnstoppableAPI.AddressBlacklistedException.from(httpException(400, body)))
+    }
+
+    @Test
+    fun `a provider row's privacy level is read in either wire form`() {
+        val string = gson.fromJson("""{"provider":"NEAR_CONFIDENTIAL","privacy":"basic"}""", UnstoppableAPI.Response.Provider::class.java)
+        val none = gson.fromJson("""{"provider":"NEAR","privacy":"none"}""", UnstoppableAPI.Response.Provider::class.java)
+        val obj = gson.fromJson("""{"provider":"X","privacy":{"confidential":true}}""", UnstoppableAPI.Response.Provider::class.java)
+        val absent = gson.fromJson("""{"provider":"Y"}""", UnstoppableAPI.Response.Provider::class.java)
+
+        assertEquals("basic", string.privacyLevel)
+        assertTrue(string.isConfidential)
+        assertEquals("none", none.privacyLevel)
+        assertEquals("basic", obj.privacyLevel)
+        assertNull(absent.privacyLevel)
+    }
+
     private fun httpException(code: Int, body: String): retrofit2.HttpException {
         val response = retrofit2.Response.error<Any>(code, body.toResponseBody("application/json".toMediaType()))
         return retrofit2.HttpException(response)

@@ -539,7 +539,7 @@ class USwapProvider(
     }
 
     override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
-        return unstoppableAPI.checkAddresses(addresses.joinToString(",")).passedAmlCheck
+        return unstoppableAPI.checkAddresses(addresses.joinToString(","), provider.id).passedAmlCheck
     }
 
     // ----- Private send (same-asset confidential transfer) -----

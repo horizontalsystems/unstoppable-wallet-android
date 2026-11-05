@@ -3,15 +3,16 @@ package io.horizontalsystems.walletkit.modules.multiswap.providers
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import io.horizontalsystems.walletkit.core.isEvm
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.modules.multiswap.SwapCommitFailure
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SwapNetworkFee
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.core.isEvm
 import retrofit2.HttpException
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -117,13 +118,23 @@ interface UnstoppableAPI {
         @Body request: Request.Track,
     ): Response.Track
 
+    // /v3/check-addresses — the AML precheck of a route that carries `amlProviderId`; the value is
+    // passed through as the route gave it.
     @GET("check-addresses")
     suspend fun checkAddresses(
         @Query("addresses") addresses: String,
+        @Query("amlProviderId") amlProviderId: String,
     ): Response.CheckAddresses
 
+    // /v3/tokens/all — every catalog token with the providers that list it. Several hundred KB
+    // that only change when the server restarts, so the stored ETag turns a repeat into a 304.
+    @GET("tokens/all")
+    suspend fun allTokens(
+        @Header("If-None-Match") etag: String?,
+    ): retrofit2.Response<List<Response.CatalogToken>>
+
     object Request {
-        // /v3/rate request — compare routes; narrow the fan-out to a single provider.
+        // /v3/rate request — compare routes across the providers that can serve the pair.
         // Exactly one of sellAmount / buyAmount must be set — neither or both is a 400.
         // buyAmount asks the route to price backwards from an exact output.
         data class Rate(
@@ -131,7 +142,11 @@ interface UnstoppableAPI {
             val buyAsset: String,
             val sellAmount: String? = null,
             val slippage: BigDecimal,
-            val providers: Set<String>,
+            // Null leaves the fan-out to the server: it calls every provider that can serve the
+            // pair, and the ones that cannot appear neither in `routes` nor in `providerErrors`.
+            val providers: Set<String>? = null,
+            // The privacy levels to include (`none`, `basic`, ...). Absent means every level.
+            val privacy: List<String>? = null,
             val chainId: String? = null,
             val buyAmount: String? = null,
         )
@@ -251,7 +266,8 @@ interface UnstoppableAPI {
             val amountType: String = SPLIT_AMOUNT_TYPE_PERCENT,
             val slippage: BigDecimal,
             val outputs: List<SplitOutput>,
-            val providers: Set<String>,
+            // Null leaves the fan-out to the server: every split-capable provider answers.
+            val providers: Set<String>? = null,
             val chainId: String? = null,
         )
 
@@ -330,6 +346,17 @@ interface UnstoppableAPI {
                 val website: String? = null,
             )
 
+            // The privacy level as a string: the wire form, or `basic` / `none` for the object form.
+            val privacyLevel: String?
+                get() {
+                    val privacy = privacy ?: return null
+                    return when {
+                        privacy.isJsonPrimitive && privacy.asJsonPrimitive.isString -> privacy.asString.takeIf { it.isNotEmpty() }
+                        privacy.isJsonObject -> if (isConfidential) "basic" else "none"
+                        else -> null
+                    }
+                }
+
             // Any privacy level other than "none" marks the rail as confidential; the object
             // form reports it explicitly.
             val isConfidential: Boolean
@@ -365,6 +392,42 @@ interface UnstoppableAPI {
             // `address` carries the issuer, `ticker` the code).
             val ticker: String? = null,
         )
+
+        // One `/v3/tokens/all` row: the catalog identifier a request names the asset by, and the
+        // providers with a token list that quote it (the DEXes and LI.FI keep none, so they are
+        // never named). `address` is null on a native coin.
+        data class CatalogToken(
+            val identifier: String,
+            val chain: String? = null,
+            val chainId: String? = null,
+            val address: String? = null,
+            val ticker: String? = null,
+            val providers: List<String>? = null,
+        )
+
+        // A route's Zcash address rules: for each address it needs, whether to send a unified
+        // address (and which receivers it must carry) or a transparent one. The rule for every
+        // side alike: `unified` present means send a unified address, otherwise transparent.
+        data class ZcashAddressRules(
+            val destination: Rule? = null,
+            val refund: Rule? = null,
+            val source: Rule? = null,
+        ) {
+            data class Rule(
+                val unified: Unified? = null,
+                val transparent: Boolean? = null,
+                val tex: Boolean? = null,
+                // `sourceAddress`, when sent, must equal `refundAddress`.
+                val sameAsRefund: Boolean? = null,
+            )
+
+            data class Unified(
+                // The receivers to build the unified address from.
+                val receivers: List<String>? = null,
+                // The address must carry at least one of these receivers.
+                val requiresOneOf: List<String>? = null,
+            )
+        }
 
         // /v3/rate response — a list of routes to compare. Each route carries economics
         // only (no execution, no uuid — those appear after previewing and committing).
@@ -435,6 +498,12 @@ interface UnstoppableAPI {
             val stubDepositAddress: String? = null,
             // Millisecond epoch after which the route (and its preview token) is no longer honoured.
             val expiresAt: Long? = null,
+            // The route's own AML policy (`excellent` | `good` | `fair`); the Route Score of this quote.
+            val amlPolicy: String? = null,
+            // Present when the route has an address precheck: the value `/v3/check-addresses` takes.
+            val amlProviderId: String? = null,
+            // On a route with ZEC on either side: which Zcash address each side takes.
+            val addressRules: ZcashAddressRules? = null,
         ) {
             // should be getter, otherwise it will be null when restored from json
             val expectedBuyAmountOrZero: BigDecimal
@@ -775,6 +844,55 @@ interface UnstoppableAPI {
     }
 
     /**
+     * A `/v3/preview` refused for a Zcash address the route does not take: `400 { message, field,
+     * addressRules }`. [addressRules] are the rules the server checked against, so the caller can
+     * preview again with the addresses they point to.
+     */
+    class PreviewAddressException(
+        override val message: String,
+        val field: String,
+        val addressRules: Response.ZcashAddressRules?,
+        cause: Throwable,
+    ) : Exception(message, cause) {
+        companion object {
+            fun from(error: Throwable): PreviewAddressException? {
+                if (error !is HttpException || error.code() != 400) return null
+                val json = errorJson(error) ?: return null
+                val field = json.get("field")?.takeIf { it.isJsonPrimitive }?.asString ?: return null
+                val message = json.get("message")?.takeIf { it.isJsonPrimitive }?.asString ?: return null
+                val rules = json.get("addressRules")?.takeIf { it.isJsonObject }?.let {
+                    try {
+                        Gson().fromJson(it, Response.ZcashAddressRules::class.java)
+                    } catch (e: Throwable) {
+                        null
+                    }
+                }
+                return PreviewAddressException(message, field, rules, error)
+            }
+        }
+    }
+
+    /**
+     * A `/v3/preview` or `/v3/commit` refused because a source, destination or refund address is
+     * blacklisted (`403`, `errorCode: addressBlacklisted`). [message] is the server's text for the user.
+     */
+    class AddressBlacklistedException(override val message: String, cause: Throwable) : Exception(message, cause) {
+        companion object {
+            const val ERROR_CODE = "addressBlacklisted"
+
+            fun from(error: Throwable): AddressBlacklistedException? {
+                if (error !is HttpException || error.code() != 403) return null
+                val json = errorJson(error) ?: return null
+                if (json.get("errorCode")?.takeIf { it.isJsonPrimitive }?.asString != ERROR_CODE) return null
+                val message = listOf("message", "error")
+                    .firstNotNullOfOrNull { key -> json.get(key)?.takeIf { it.isJsonPrimitive }?.asString }
+                    .orEmpty()
+                return AddressBlacklistedException(message, error)
+            }
+        }
+    }
+
+    /**
      * A failed /v3/commit. [status] is the server's discriminator when the body carried one:
      * `in_progress` (the same token is being committed right now), `refresh_required` (token
      * expired or invalid, provider suspended), `rate_changed` (the order drifted against the user
@@ -804,17 +922,7 @@ interface UnstoppableAPI {
                     return CommitException(null, null, null, null, error)
                 }
 
-                val body = try {
-                    error.response()?.errorBody()?.string()
-                } catch (e: Throwable) {
-                    null
-                }
-
-                val json = try {
-                    body?.let { JsonParser.parseString(it) }?.takeIf { it.isJsonObject }?.asJsonObject
-                } catch (e: Throwable) {
-                    null
-                }
+                val json = errorJson(error)
 
                 val status = json?.get("status")?.takeIf { it.isJsonPrimitive }?.asString
                 val reason = listOf("reason", "error", "message")
@@ -842,4 +950,18 @@ fun UnstoppableAPI.CommitException.toSwapCommitFailure(): SwapCommitFailure = wh
     "rate_changed" -> SwapCommitFailure.RateChanged
     "refresh_required" -> SwapCommitFailure.RefreshRequired
     else -> SwapCommitFailure.Failed
+}
+
+/** The JSON object of a non-2xx body, or null when the body is missing or not an object. */
+private fun errorJson(error: HttpException): com.google.gson.JsonObject? {
+    val body = try {
+        error.response()?.errorBody()?.string()
+    } catch (e: Throwable) {
+        null
+    }
+    return try {
+        body?.let { JsonParser.parseString(it) }?.takeIf { it.isJsonObject }?.asJsonObject
+    } catch (e: Throwable) {
+        null
+    }
 }
