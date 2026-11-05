@@ -58,10 +58,14 @@ class SwapRecordsRepository(
         coroutineScope.launch {
             merge(swapRecordManager.recordsUpdatedFlow, currencyManager.baseCurrencyUpdatedFlow).collect {
                 val currency = currencyManager.baseCurrency
-                if (currency != ratesCurrency) {
-                    fiatRates.clear()
-                    rateRequested.clear()
-                    ratesCurrency = currency
+                // Under the lock fetchRate publishes with, so no rate of the old currency is
+                // stored after the switch.
+                synchronized(this@SwapRecordsRepository) {
+                    if (currency != ratesCurrency) {
+                        fiatRates.clear()
+                        rateRequested.clear()
+                        ratesCurrency = currency
+                    }
                 }
                 load()
             }
@@ -110,17 +114,22 @@ class SwapRecordsRepository(
                 marketKit.coinHistoricalPrice(record.tokenInCoinUid, currency.code, timestamp)
                     ?: marketKit.coinHistoricalPriceSingle(record.tokenInCoinUid, currency.code, timestamp)
             } catch (_: Throwable) {
+                // A failed request, unlike a coin without a price, is asked again on the next load.
+                rateRequested.remove(record.id)
                 null
             }
             if (price == null || price.compareTo(BigDecimal.ZERO) == 0) return@launch
-            // The currency changed while the price was fetched; the reload asks again in the new one.
-            if (currency != ratesCurrency) return@launch
 
-            val rate = CurrencyValue(currency, price)
-            fiatRates[record.id] = rate
-            _itemsFlow.update { items ->
-                items?.map { item ->
-                    if (item.record.id == record.id) item.copy(fiatIn = fiatValue(record.amountIn, rate)) else item
+            synchronized(this@SwapRecordsRepository) {
+                // The currency changed while the price was fetched; the reload asks again in the new one.
+                if (currency != ratesCurrency) return@launch
+
+                val rate = CurrencyValue(currency, price)
+                fiatRates[record.id] = rate
+                _itemsFlow.update { items ->
+                    items?.map { item ->
+                        if (item.record.id == record.id) item.copy(fiatIn = fiatValue(record.amountIn, rate)) else item
+                    }
                 }
             }
         }
