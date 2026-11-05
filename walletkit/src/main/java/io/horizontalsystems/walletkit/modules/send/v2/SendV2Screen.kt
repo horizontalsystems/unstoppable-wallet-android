@@ -22,8 +22,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,6 +95,9 @@ fun SendV2Screen(
     val hasSettings = remember { chainPlugin?.sendSettingsPage(wallet, null) != null }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
+    // The amount field takes focus, and the keyboard opens, only when the screen first opens:
+    // not again on the way back from confirmation, nor on a tab switch, which closes it.
+    var amountFocusRequested by rememberSaveable { mutableStateOf(false) }
 
     // The Standard and Private tabs each keep their own form, so switching tabs switches
     // forms rather than reusing what was typed on the other. CrossPay has its own below.
@@ -139,6 +145,7 @@ fun SendV2Screen(
                     // keyboard would otherwise stay up; a tab switch always closes it.
                     focusManager.clearFocus()
                     keyboardController?.hide()
+                    amountFocusRequested = true
                     viewModel.onSelectTab(tabs[it])
                 },
             )
@@ -163,6 +170,8 @@ fun SendV2Screen(
                         viewModel = formViewModel,
                         isPrivateSend = uiState.isPrivateSend,
                         sendEntryPointDestId = sendEntryPointDestId,
+                        focusAmount = !amountFocusRequested,
+                        onAmountFocused = { amountFocusRequested = true },
                     )
                 }
             }
@@ -177,12 +186,21 @@ private fun ColumnScope.SendFormTab(
     viewModel: SendFormViewModel,
     isPrivateSend: Boolean,
     sendEntryPointDestId: KClass<out HSPage>,
+    focusAmount: Boolean,
+    onAmountFocused: () -> Unit,
 ) {
     val uiState = viewModel.uiState
     val wallet = viewModel.wallet
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        if (focusAmount) {
+            focusRequester.requestFocus()
+            onAmountFocused()
+        }
+    }
 
     // Opens over the risky-address sheet when that was shown; both are popped once the
     // transaction is sent. The Private tab confirms through the provider order flow, which
