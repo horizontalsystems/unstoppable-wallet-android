@@ -47,6 +47,7 @@ import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapSettingsRec
 import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapSettingsSlippagePage
 import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapTransactionNonceSettingsPage
 import io.horizontalsystems.walletkit.modules.multiswap.settings.SwapTransactionSettingsPage
+import io.horizontalsystems.walletkit.modules.multiswap.providers.UnstoppableAPI
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
@@ -173,11 +174,14 @@ private fun SwapConfirmError(
             icon = painterResource(R.drawable.ic_warning_filled_24),
             iconTint = ComposeAppTheme.colors.grey,
             // A refused quote is not a failure to reach the provider: say which wallet to
-            // change, and let Copy Error carry the same thing rather than a class name.
-            text = if (error is WatchAccountException) {
-                stringResource(R.string.Hud_Text_ChangeWallet)
-            } else {
-                stringResource(R.string.SwapError_FailedToFetchQuote)
+            // change, or repeat the server's reason for an address it does not take, and let
+            // Copy Error carry the same thing rather than a class name.
+            text = when (error) {
+                is WatchAccountException -> stringResource(R.string.Hud_Text_ChangeWallet)
+                is UnstoppableAPI.PreviewAddressException,
+                is UnstoppableAPI.AddressBlacklistedException,
+                    -> error.message?.takeIf { it.isNotBlank() } ?: stringResource(R.string.SwapError_FailedToFetchQuote)
+                else -> stringResource(R.string.SwapError_FailedToFetchQuote)
             },
             button4config = ButtonConfig(
                 variant = ButtonVariant.Primary,
