@@ -210,7 +210,7 @@ class ZcashChainPlugin(
         val ufvk = when (val type = account.type) {
             is AccountType.ZcashViewingKey -> type.ufvk
             // Same account the adapter syncs: the seed's first ZIP 32 account.
-            is AccountType.Mnemonic -> runBlocking(Dispatchers.Default) {
+            is AccountType.Mnemonic -> runBlocking(Dispatchers.IO) {
                 DerivationTool.getInstance()
                     .deriveUnifiedFullViewingKeys(type.seed, ZcashNetwork.Mainnet, numberOfAccounts = 1)
                     .first().encoding
