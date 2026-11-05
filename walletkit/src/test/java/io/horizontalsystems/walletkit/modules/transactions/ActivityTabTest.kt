@@ -1,5 +1,10 @@
 package io.horizontalsystems.walletkit.modules.transactions
 
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.walletkit.entities.SwapRecord
+import io.horizontalsystems.walletkit.modules.contacts.model.Contact
+import io.horizontalsystems.walletkit.modules.contacts.model.ContactAddress
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
@@ -7,21 +12,20 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.Date
 
 class ActivityTabTest {
 
     private val confidential = setOf("u_NEAR_CONFIDENTIAL")
 
     @Test
-    fun `transfers shows every kind of swap record`() {
+    fun `transfers shows no swap records`() {
         SwapRecordKind.entries.forEach {
-            assertTrue(it.name, ActivityTab.Transfers.shows(it))
+            assertFalse(it.name, ActivityTab.Transfers.shows(it))
         }
     }
 
     @Test
-    fun `swaps shows public and private swaps only`() {
+    fun `swaps shows swaps and split swaps only`() {
         assertTrue(ActivityTab.Swaps.shows(SwapRecordKind.Swap))
         assertTrue(ActivityTab.Swaps.shows(SwapRecordKind.PrivateSwap))
         assertFalse(ActivityTab.Swaps.shows(SwapRecordKind.PrivateSend))
@@ -29,9 +33,9 @@ class ActivityTabTest {
     }
 
     @Test
-    fun `privates shows private swaps and private sends only`() {
+    fun `privates shows private sends only`() {
         assertFalse(ActivityTab.Privates.shows(SwapRecordKind.Swap))
-        assertTrue(ActivityTab.Privates.shows(SwapRecordKind.PrivateSwap))
+        assertFalse(ActivityTab.Privates.shows(SwapRecordKind.PrivateSwap))
         assertTrue(ActivityTab.Privates.shows(SwapRecordKind.PrivateSend))
         assertFalse(ActivityTab.Privates.shows(SwapRecordKind.CrossPay))
     }
@@ -79,30 +83,65 @@ class ActivityTabTest {
     }
 
     @Test
-    fun `transfers merges transactions and records newest first`() {
-        val merged = mergeActivity(
-            transactions = listOf(Row("tx3", 3) to "0x3", Row("tx1", 1) to "0x1"),
-            swapRecords = listOf(Row("sr4", 4), Row("sr2", 2)),
-            depositHashes = emptySet(),
-            date = { it.date },
-        )
-
-        assertEquals(listOf("sr4", "tx3", "sr2", "tx1"), merged.map { it.id })
+    fun `a coin filter matches a record with the coin on either side`() {
+        assertTrue(btcToSol.matchesActivityFilter("bitcoin|native", null, null))
+        assertTrue(btcToSol.matchesActivityFilter("solana|native", null, null))
+        assertFalse(btcToSol.matchesActivityFilter("ethereum|native", null, null))
     }
 
     @Test
-    fun `a swap deposit is listed once, as its record`() {
-        val merged = mergeActivity(
-            transactions = listOf(Row("deposit", 2) to "0xAbC", Row("other", 1) to "0xdef"),
-            swapRecords = listOf(Row("record", 3)),
-            depositHashes = setOf("0xabc"),
-            date = { it.date },
-        )
-
-        assertEquals(listOf("record", "other"), merged.map { it.id })
+    fun `a blockchain filter matches a record with the blockchain on either side`() {
+        assertTrue(btcToSol.matchesActivityFilter(null, "bitcoin", null))
+        assertTrue(btcToSol.matchesActivityFilter(null, "solana", null))
+        assertFalse(btcToSol.matchesActivityFilter(null, "ethereum", null))
     }
 
-    private data class Row(val id: String, val seconds: Long) {
-        val date = Date(seconds * 1000)
+    @Test
+    fun `a contact filter matches the recipient or the source address, ignoring case`() {
+        assertTrue(btcToSol.matchesActivityFilter(null, null, contact(solana to "solrecipient111")))
+        assertTrue(btcToSol.matchesActivityFilter(null, null, contact(bitcoin to "BC1SOURCE")))
+        assertFalse(btcToSol.matchesActivityFilter(null, null, contact(solana to "someoneElse")))
     }
+
+    @Test
+    fun `with a blockchain chosen only the contact's addresses on it count`() {
+        val sourceOnBitcoin = contact(bitcoin to "bc1source")
+
+        assertTrue(btcToSol.matchesActivityFilter(null, "bitcoin", sourceOnBitcoin))
+        assertFalse(btcToSol.matchesActivityFilter(null, "solana", sourceOnBitcoin))
+    }
+
+    private val bitcoin = Blockchain(BlockchainType.Bitcoin, "Bitcoin", null)
+    private val solana = Blockchain(BlockchainType.Solana, "Solana", null)
+
+    private fun contact(vararg addresses: Pair<Blockchain, String>) =
+        Contact("uid", "Contact", addresses.map { (blockchain, address) -> ContactAddress(blockchain, address) })
+
+    private val btcToSol = SwapRecord(
+        accountId = "account-1",
+        timestamp = 0,
+        providerId = "u_NEAR",
+        providerName = "NEAR Intents",
+        tokenInUid = "bitcoin|native",
+        tokenInCoinCode = "BTC",
+        tokenInCoinUid = "bitcoin",
+        tokenInBadge = null,
+        tokenInBlockchainTypeUid = "bitcoin",
+        tokenOutUid = "solana|native",
+        tokenOutCoinCode = "SOL",
+        tokenOutCoinUid = "solana",
+        tokenOutBadge = null,
+        tokenOutBlockchainTypeUid = "solana",
+        amountIn = "0.01",
+        amountOut = "1.5",
+        amountOutMin = null,
+        recipientAddress = "SoLRecipient111",
+        sourceAddress = "bc1source",
+        transactionHash = null,
+        providerSwapId = null,
+        fromAsset = null,
+        toAsset = null,
+        depositAddress = null,
+        status = "Completed",
+    )
 }

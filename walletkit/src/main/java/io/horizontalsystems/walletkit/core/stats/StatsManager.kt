@@ -362,7 +362,7 @@ val ActivityTab.statTab: StatTab
     get() = when (this) {
         ActivityTab.Transfers -> StatTab.All
         ActivityTab.Swaps -> StatTab.Swap
-        ActivityTab.Privates -> StatTab.Private
+        ActivityTab.Privates -> StatTab.PrivateSend
         ActivityTab.CrossPays -> StatTab.CrossPay
     }
 

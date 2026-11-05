@@ -75,16 +75,12 @@ import io.horizontalsystems.walletkit.modules.multiswap.ui.routeScore
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.modules.transactions.ActivityTab
-import io.horizontalsystems.walletkit.modules.transactions.TransactionsPage
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.controls.FiatLinePlaceholder
@@ -160,31 +156,9 @@ fun SwapScreen(
     var selectedTab by rememberSaveable { mutableStateOf(SwapTab.Standard) }
 
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
-    val density = LocalDensity.current
-    val imeInsets = WindowInsets.ime
-    val navigateAfterKeyboardClosed: (() -> Unit) -> Unit = { action ->
-        focusManager.clearFocus()
-        coroutineScope.launch {
-            withTimeoutOrNull(500.milliseconds) {
-                snapshotFlow { imeInsets.getBottom(density) }.first { it == 0 }
-            }
-            action()
-        }
-    }
 
     HSScaffold(
         title = stringResource(R.string.Swap),
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.SwapHistory_Title),
-                icon = R.drawable.ic_circle_clock_24,
-                onClick = {
-                    navigateAfterKeyboardClosed {
-                        navigation.slideFromRight(TransactionsPage(ActivityTab.Swaps))
-                    }
-                }
-            )),
         onBack = onClickClose,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {

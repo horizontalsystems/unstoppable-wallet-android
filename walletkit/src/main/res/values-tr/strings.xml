@@ -1546,7 +1546,6 @@
     <string name="SwapConfirm_Mev">MEV</string>
     <string name="SwapConfirm_MevDescription">Swap işleminizi güvence altına almak ve botlara karşı değer kaybını önlemek için korumayı açın.</string>
     <string name="SwapConfirm_SwapProtection">Swap Protection</string>
-    <string name="SwapHistory_Title">Swap Geçmişi</string>
     <string name="SwapInfo_StatusCompleted">Tamamlandı</string>
     <string name="SwapInfo_StatusFailed">Başarısız</string>
     <string name="SwapInfo_StatusRefunded">İade edildi</string>
@@ -1570,7 +1569,7 @@
     <string name="TransactionInfo_TransactionSecretKey">Tx Secret Key</string>
     <string name="Transactions_Burn">Burn</string>
     <string name="Transactions_Completed">Tamamlandı</string>
-    <string name="Transactions_EmptyList">Henüz bekleyen veya geçmiş işleminiz yok.</string>
+    <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
     <string name="Transactions_Failed">Başarısız</string>
     <string name="Transactions_Filter_Coin">Coin</string>
     <string name="Transactions_Mint">Mint</string>
@@ -2018,4 +2017,8 @@
     <string name="Activity_Title">Etkinlik</string>
     <string name="Activity_Tab_Transfers">Transferler</string>
     <string name="Activity_Tab_Privates">Gizli</string>
+    <string name="Activity_Empty_Transfers">Henüz bekleyen veya geçmiş bir transferiniz yok.</string>
+    <string name="Activity_Empty_Swaps">Henüz bekleyen veya geçmiş bir swap işleminiz yok.</string>
+    <string name="Activity_Empty_PrivateSends">Henüz bekleyen veya geçmiş bir gizli gönderiminiz yok.</string>
+    <string name="Activity_Empty_CrossPay">Henüz bekleyen veya geçmiş bir CrossPay ödemeniz yok.</string>
 </resources>

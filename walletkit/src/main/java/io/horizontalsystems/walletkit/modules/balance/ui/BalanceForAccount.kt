@@ -154,7 +154,7 @@ fun BalanceForAccount(
                     icon = R.drawable.ic_circle_clock_24,
                     testTag = TestTags.BALANCE_TRANSACTIONS,
                     onClick = {
-                        navigation.slideFromRight(TransactionsPage())
+                        navigation.slideFromRight(TransactionsPage)
 
                         stat(
                             page = StatPage.Balance,

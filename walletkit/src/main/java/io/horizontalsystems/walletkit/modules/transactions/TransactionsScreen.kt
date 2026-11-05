@@ -77,13 +77,12 @@ private const val SlideDurationMillis = 300L
 fun TransactionsScreen(
     navigation: HSNavigation,
     viewModel: TransactionsViewModel,
-    initialTab: ActivityTab = ActivityTab.Transfers,
 ) {
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
-    // The view model is shared by every way into the screen, so the tab lives here.
-    var selectedTab by rememberSaveable { mutableStateOf(initialTab) }
+    // The view model lives as long as the main screen, so the tab is kept between visits.
+    var selectedTab by rememberSaveable { mutableStateOf(viewModel.uiState.tab) }
     LaunchedEffect(selectedTab) {
         viewModel.setTab(selectedTab)
     }
@@ -160,9 +159,9 @@ fun TransactionsScreen(
                                 ListEmptyView(
                                     modifier = Modifier
                                         .background(ComposeAppTheme.colors.lawrence)
-                                        .testTag(TestTags.TX_EMPTY),
-                                    text = stringResource(R.string.Transactions_EmptyList),
-                                    icon = R.drawable.warning_octagon_24
+                                        .testTag(if (pagedList) TestTags.TX_EMPTY else TestTags.ACTIVITY_EMPTY),
+                                    text = stringResource(uiState.tab.emptyText),
+                                    icon = R.drawable.ic_outgoingraw
                                 )
                             }
                         } else {
@@ -422,10 +421,10 @@ private fun ActivityTabs(
 
 private val ActivityTab.testTag: String
     get() = when (this) {
-        ActivityTab.Transfers -> TestTags.TX_TAB_TRANSFERS
-        ActivityTab.Swaps -> TestTags.TX_TAB_SWAPS
-        ActivityTab.Privates -> TestTags.TX_TAB_PRIVATES
-        ActivityTab.CrossPays -> TestTags.TX_TAB_CROSS_PAYS
+        ActivityTab.Transfers -> TestTags.ACTIVITY_TAB_TRANSFER
+        ActivityTab.Swaps -> TestTags.ACTIVITY_TAB_SWAP
+        ActivityTab.Privates -> TestTags.ACTIVITY_TAB_PRIVATE_SEND
+        ActivityTab.CrossPays -> TestTags.ACTIVITY_TAB_CROSS_PAY
     }
 
 data class Filter<T>(val item: T, val selected: Boolean)

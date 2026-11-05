@@ -996,7 +996,6 @@
     <string name="Activate_InsufficientBalance_Description">You don\'t have enough XLM balance to activate this token.</string>
 
     <!-- Swap History -->
-    <string name="SwapHistory_Title">Swap History</string>
     <string name="SwapHistory_StatusActionRequired">Action required</string>
     <string name="SwapInfo_Title">Swap Info</string>
 
@@ -1045,7 +1044,7 @@
 
     <!--Transactions-->
 
-    <string name="Transactions_EmptyList">You don\'t have any pending or past transactions yet.</string>
+    <string name="Transactions_EmptyList">No pending or past transactions yet.</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
@@ -2373,5 +2372,9 @@
     <string name="Activity_Title">Activity</string>
     <string name="Activity_Tab_Transfers">Transfers</string>
     <string name="Activity_Tab_Privates">Privates</string>
-    <string name="Activity_Tab_CrossPays" translatable="false">CrossPays</string>
+    <string name="Activity_Tab_CrossPay" translatable="false">CrossPay</string>
+    <string name="Activity_Empty_Transfers">You don\'t have any pending or past transfers yet.</string>
+    <string name="Activity_Empty_Swaps">You don\'t have any pending or past swaps yet.</string>
+    <string name="Activity_Empty_PrivateSends">You don\'t have any pending or past private sends yet.</string>
+    <string name="Activity_Empty_CrossPay">You don\'t have any pending or past CrossPay payments yet.</string>
 </resources>

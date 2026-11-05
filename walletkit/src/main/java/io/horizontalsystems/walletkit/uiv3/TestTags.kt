@@ -99,10 +99,11 @@ object TestTags {
     const val TX_EMPTY = "tx_empty"
     const val TX_WAITING_SYNC = "tx_waiting_sync"
     const val TX_FILTER = "tx_filter"
-    const val TX_TAB_TRANSFERS = "tx_tab_transfers"
-    const val TX_TAB_SWAPS = "tx_tab_swaps"
-    const val TX_TAB_PRIVATES = "tx_tab_privates"
-    const val TX_TAB_CROSS_PAYS = "tx_tab_cross_pays"
+    const val ACTIVITY_TAB_TRANSFER = "activity_tab_transfer"
+    const val ACTIVITY_TAB_SWAP = "activity_tab_swap"
+    const val ACTIVITY_TAB_PRIVATE_SEND = "activity_tab_private_send"
+    const val ACTIVITY_TAB_CROSS_PAY = "activity_tab_cross_pay"
+    const val ACTIVITY_EMPTY = "activity_empty"
 
     // The record uid is the transaction hash on most chains. Bitcoin-family
     // chains use a random uid, so their rows cannot be picked by hash.

@@ -666,7 +666,6 @@
     <string name="Activate_InsufficientBalance_Title">Saldo insuficiente</string>
     <string name="Activate_InsufficientBalance_Description">No tienes suficiente saldo XLM para activar este token.</string>
     <!-- Swap History -->
-    <string name="SwapHistory_Title">Historial de intercambio</string>
     <string name="SwapInfo_Title">Info de intercambio</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Ruta</string>
@@ -694,7 +693,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
     <!--Transactions-->
-    <string name="Transactions_EmptyList">Aún no tienes transacciones pendientes ni anteriores.</string>
+    <string name="Transactions_EmptyList">Aún no hay transacciones pendientes o pasadas.</string>
     <string name="Transactions_WaitForSync">Por favor, espere a que termine la sincronización.</string>
     <string name="Transactions_Pending">Pendiente</string>
     <string name="Transactions_Receive">Recibido</string>
@@ -2017,4 +2016,8 @@
     <string name="Activity_Title">Actividad</string>
     <string name="Activity_Tab_Transfers">Transferencias</string>
     <string name="Activity_Tab_Privates">Privadas</string>
+    <string name="Activity_Empty_Transfers">Aún no tienes transferencias pendientes o anteriores.</string>
+    <string name="Activity_Empty_Swaps">Aún no tienes swaps pendientes o anteriores.</string>
+    <string name="Activity_Empty_PrivateSends">Aún no tienes envíos privados pendientes o anteriores.</string>
+    <string name="Activity_Empty_CrossPay">Aún no tienes pagos CrossPay pendientes o anteriores.</string>
 </resources>

@@ -1303,7 +1303,6 @@
     <string name="Activate_AlreadyActive_Title">از قبل فعال است</string>
     <string name="Activate_AlreadyActive_Description">این توکن از قبل فعال است.</string>
     <string name="Activate_InsufficientBalance_Description">موجودی XLM شما برای فعال‌سازی این توکن کافی نیست.</string>
-    <string name="SwapHistory_Title">تاریخچه سواپ</string>
     <string name="SwapInfo_Title">اطلاعات سواپ</string>
     <string name="SwapInfo_SourceAddress">آدرس مبدأ</string>
     <string name="SwapInfo_StatusTitle">وضعیت تراکنش</string>
@@ -1319,7 +1318,7 @@
     <string name="Swap_Approve_Info">به یک قرارداد هوشمند اجازه دهید از طرف شما توکن معامله کند و مقدار مجاز را مشخص کنید. این کار تأثیری بر موجودی شما ندارد، اما کارمزد کوچکی برای تأیید دارد.\n\nتأیید پیشاپیش مقدار بیشتر برای معاملات آینده، نسبت به تأیید جداگانه در هر بار، مقرون‌به‌صرفه‌تر است.</string>
     <string name="Swap_Approve_Unlimited">نامحدود</string>
     <string name="SwapInfo_PriceImpactDescription">انحراف مورد انتظار قیمت از قیمت نمایش‌داده‌شده که معمولاً با افزایش مقدار سواپ بیشتر می‌شود.</string>
-    <string name="Transactions_EmptyList">شما هنوز هیچ تراکنش در انتظار یا گذشته‌ای ندارید.</string>
+    <string name="Transactions_EmptyList">هنوز تراکنش در انتظار یا گذشته‌ای وجود ندارد.</string>
     <string name="Transactions_ChangeTrust">تغییر اعتماد</string>
     <string name="Transactions_Completed">تکمیل شد</string>
     <string name="Transactions_Burn">سوزانده شد</string>
@@ -2005,4 +2004,8 @@
     <string name="Activity_Title">فعالیت</string>
     <string name="Activity_Tab_Transfers">انتقال‌ها</string>
     <string name="Activity_Tab_Privates">خصوصی</string>
+    <string name="Activity_Empty_Transfers">هنوز هیچ انتقال در انتظار یا گذشته‌ای ندارید.</string>
+    <string name="Activity_Empty_Swaps">هنوز هیچ سواپ در انتظار یا گذشته‌ای ندارید.</string>
+    <string name="Activity_Empty_PrivateSends">هنوز هیچ ارسال خصوصی در انتظار یا گذشته‌ای ندارید.</string>
+    <string name="Activity_Empty_CrossPay">هنوز هیچ پرداخت CrossPay در انتظار یا گذشته‌ای ندارید.</string>
 </resources>

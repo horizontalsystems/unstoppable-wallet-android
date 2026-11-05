@@ -7,10 +7,10 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TransactionsPage(val tab: ActivityTab = ActivityTab.Transfers) : HSPage() {
+data object TransactionsPage : HSPage() {
     @Composable
     override fun GetContent(navigation: HSNavigation) {
         val viewModel = navigation.viewModelForScreen<TransactionsViewModel>(EntryPage::class, TransactionsModule.Factory())
-        TransactionsScreen(navigation, viewModel, tab)
+        TransactionsScreen(navigation, viewModel)
     }
 }

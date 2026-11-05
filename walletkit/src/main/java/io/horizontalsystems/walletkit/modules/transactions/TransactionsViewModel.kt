@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.ViewModelUiState
@@ -166,38 +165,28 @@ class TransactionsViewModel(
     private fun refreshViewItems() {
         val tab = tab
         val items = transactionItems
-        val records = swapRecordItems?.filter { tab.shows(it.kind) && matchesFilter(it) } ?: return
+        val records = swapRecordItems
         if (tab == ActivityTab.Transfers && items == null) return
+        if (tab != ActivityTab.Transfers && records == null) return
 
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            val recordViewItems = records.map {
-                ensureActive()
-                transactionViewItem2Factory.convertToViewItem(it)
-            }
             val viewItems = if (tab == ActivityTab.Transfers) {
-                val transactionViewItems = items.orEmpty().map {
+                items.orEmpty().map {
                     ensureActive()
-                    transactionViewItem2Factory.convertToViewItemCached(it) to it.record.transactionHash
+                    transactionViewItem2Factory.convertToViewItemCached(it)
                 }
-                mergeActivity(
-                    transactions = transactionViewItems,
-                    swapRecords = recordViewItems,
-                    depositHashes = records.mapNotNullTo(HashSet()) { it.record.transactionHash },
-                    date = { it.date },
-                )
             } else {
-                recordViewItems
+                records.orEmpty()
+                    .filter { tab.shows(it.kind) && matchesFilter(it) }
+                    .map {
+                        ensureActive()
+                        transactionViewItem2Factory.convertToViewItem(it)
+                    }
             }
             ensureActive()
 
-            val grouped = viewItems.groupBy { it.formattedDate }
-            val dummies = if (BuildConfig.DEBUG) DummyTransactions.viewItems(tab) else emptyList()
-            transactions = if (dummies.isNotEmpty()) {
-                mapOf(DummyTransactions.HEADER to dummies) + grouped
-            } else {
-                grouped
-            }
+            transactions = viewItems.groupBy { it.formattedDate }
             transactionsTab = tab
             viewState = ViewState.Success
 
@@ -214,25 +203,13 @@ class TransactionsViewModel(
         syncing = syncing && transactionsTab == ActivityTab.Transfers,
     )
 
-    // The filter's blockchain, coin and contact apply to swap records too: a record matches
-    // when either of its sides does.
     private fun matchesFilter(item: SwapRecordItem): Boolean {
         val filter = recordFilter ?: return true
-        val record = item.record
-
-        filter.selectedToken?.let { filterToken ->
-            val tokenId = filterToken.token.tokenQuery.id
-            if (record.tokenInUid != tokenId && record.tokenOutUid != tokenId) return false
-        }
-        filter.selectedBlockchain?.let { blockchain ->
-            val uid = blockchain.type.uid
-            if (record.tokenInBlockchainTypeUid != uid && record.tokenOutBlockchainTypeUid != uid) return false
-        }
-        filter.contact?.let { contact ->
-            val recipient = record.recipientAddress ?: return false
-            if (contact.addresses.none { it.address.equals(recipient, ignoreCase = true) }) return false
-        }
-        return true
+        return item.record.matchesActivityFilter(
+            tokenQueryId = filter.selectedToken?.token?.tokenQuery?.id,
+            blockchainUid = filter.selectedBlockchain?.type?.uid,
+            contact = filter.contact,
+        )
     }
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {

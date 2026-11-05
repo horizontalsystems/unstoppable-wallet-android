@@ -668,7 +668,6 @@
     <string name="Activate_InsufficientBalance_Title">Недостаточный баланс</string>
     <string name="Activate_InsufficientBalance_Description">У вас недостаточно средств XLM для активации этого токена.</string>
     <!-- Swap History -->
-    <string name="SwapHistory_Title">История обмена</string>
     <string name="SwapInfo_Title">Детали обмена</string>
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Маршрут</string>
@@ -696,7 +695,7 @@
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <!--Transactions-->
-    <string name="Transactions_EmptyList">У вас еще нет ожидающих или прошлых транзакций.</string>
+    <string name="Transactions_EmptyList">Еще нет отложенных или прошлых транзакций.</string>
     <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
     <string name="Transactions_Pending">В ожидании</string>
     <string name="Transactions_Receive">Получено</string>
@@ -2026,4 +2025,8 @@
     <string name="Activity_Title">Активность</string>
     <string name="Activity_Tab_Transfers">Переводы</string>
     <string name="Activity_Tab_Privates">Приватные</string>
+    <string name="Activity_Empty_Transfers">У вас пока нет ожидающих или завершённых переводов.</string>
+    <string name="Activity_Empty_Swaps">У вас пока нет ожидающих или завершённых свопов.</string>
+    <string name="Activity_Empty_PrivateSends">У вас пока нет ожидающих или завершённых приватных отправок.</string>
+    <string name="Activity_Empty_CrossPay">У вас пока нет ожидающих или завершённых платежей CrossPay.</string>
 </resources>
