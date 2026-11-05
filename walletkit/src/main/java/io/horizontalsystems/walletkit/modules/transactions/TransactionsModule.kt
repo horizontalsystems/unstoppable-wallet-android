@@ -36,7 +36,7 @@ object TransactionsModule {
                 App.walletManager,
                 TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
                 App.localStorage,
-                SwapRecordsRepository(App.swapRecordManager, App.marketKit, App.currencyManager),
+                SwapRecordsRepository(App.swapRecordManager, App.marketKit, App.currencyManager, App.swapProviderInfoManager),
             ) as T
         }
     }

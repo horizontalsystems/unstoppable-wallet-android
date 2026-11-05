@@ -63,6 +63,10 @@ class SwapProviderInfoManager(
 
     fun supportsSplitSwaps(id: String): Boolean = id.uppercase() in _splitProvidersFlow.value
 
+    /** Every confidential provider (`privacy != none`), suspended or not: what makes a recorded swap a private one. */
+    val confidentialProviderIds: Set<String>
+        get() = rows.values.filter { it.isConfidential }.map { it.provider.uppercase() }.toSet()
+
     /**
      * Providers a private send may route through: confidential (`privacy != none`), settling as
      * a plain `transfer`, and not suspended.

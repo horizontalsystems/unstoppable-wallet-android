@@ -10,7 +10,8 @@ import io.horizontalsystems.walletkit.entities.SwapRecord
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapOperation
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.walletkit.modules.multiswap.history.SwapStatus
-import io.horizontalsystems.walletkit.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderIds
+import io.horizontalsystems.walletkit.modules.multiswap.providers.SwapProviderInfoManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -39,9 +40,9 @@ class SwapRecordsRepository(
     private val swapRecordManager: SwapRecordManager,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
+    private val providerInfoManager: SwapProviderInfoManager,
 ) : Clearable {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    private val confidentialProviderIds = MultiSwapProviderRegistry.confidentialProviders.map { it.id }.toSet()
 
     // Null until the records are first read.
     private val _itemsFlow = MutableStateFlow<List<SwapRecordItem>?>(null)
@@ -93,8 +94,10 @@ class SwapRecordsRepository(
             emptyMap()
         }
 
+        // Read per load: the synced list may land after the first read.
+        val confidentialProviderIds = providerInfoManager.confidentialProviderIds
         val items = records.map { record ->
-            val kind = SwapRecordKind.of(SwapOperation.fromString(record.operation), record.providerId, confidentialProviderIds)
+            val kind = SwapRecordKind.of(SwapOperation.fromString(record.operation), SwapProviderIds.serverId(record.providerId), confidentialProviderIds)
             SwapRecordItem(
                 record = record,
                 kind = kind,
