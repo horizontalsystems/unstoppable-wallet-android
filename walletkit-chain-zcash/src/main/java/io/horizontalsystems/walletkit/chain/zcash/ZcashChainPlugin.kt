@@ -27,6 +27,7 @@ import io.horizontalsystems.walletkit.modules.blockchainsettings.BlockchainSetti
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.walletkit.modules.multiswap.sendtransaction.SendTransactionServiceZcash
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
+import io.horizontalsystems.walletkit.modules.receive.ReceivePage
 import io.horizontalsystems.walletkit.modules.receive.ZcashAddressTypeSelectPage
 import io.horizontalsystems.walletkit.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.walletkit.modules.zcashmigration.ZcashMigrationPage
@@ -261,8 +262,16 @@ class ZcashChainPlugin(
         )
     }
 
-    override fun receivePage(wallet: Wallet, entryPoint: KClass<out HSPage>?): HSPage =
-        ZcashAddressTypeSelectPage(ZcashAddressTypeSelectPage.Input(wallet, entryPoint))
+    override fun receivePage(wallet: Wallet, entryPoint: KClass<out HSPage>?): HSPage {
+        // A viewing key may leave out the transparent component; such a wallet has only a
+        // shielded address to show, so the address-type choice is skipped.
+        val adapter = App.adapterManager.getReceiveAdapterForWallet(wallet)
+        return if (adapter != null && adapter.receiveAddressTransparent == null) {
+            ReceivePage(ReceivePage.Input(wallet, entryPoint, isTransparentAddress = false))
+        } else {
+            ZcashAddressTypeSelectPage(ZcashAddressTypeSelectPage.Input(wallet, entryPoint))
+        }
+    }
 
     override fun shieldPage(wallet: Wallet, entryPoint: KClass<out HSPage>): HSPage =
         ShieldZcashPage(ShieldZcashPage.Input(wallet, entryPoint))
