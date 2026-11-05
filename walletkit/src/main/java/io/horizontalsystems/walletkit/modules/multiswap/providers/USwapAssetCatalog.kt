@@ -59,13 +59,6 @@ class USwapAssetCatalog(
     /** Bumped when the stored rows are loaded and after every sync, 200 and 304 alike: the signal to re-evaluate on. */
     val syncFlow = _syncFlow.asStateFlow()
 
-    /**
-     * Whether a catalog has landed (the stored rows or a fetch). Until then every catalogued
-     * token would read as uncatalogued, so callers that show "not supported" wait for this.
-     */
-    val isLoaded: Boolean
-        get() = entries.isNotEmpty()
-
     fun entry(token: Token): Entry? = entries[USwapAssetMapping.catalogKey(token.tokenQuery)]
 
     /** The identifier a request names the token by, or null when the token cannot be quoted. */

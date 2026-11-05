@@ -21,11 +21,6 @@ interface UnstoppableAPI {
     @GET("providers")
     suspend fun providers(): List<Response.Provider>
 
-    @GET("tokens")
-    suspend fun tokens(
-        @Query("provider") provider: String
-    ): Response.Tokens
-
     // /v3/rate — read-only, prices the swap across the requested providers. Returns
     // { routes: [...] } with economics only — no execution, no uuid.
     @POST("rate")
@@ -373,21 +368,6 @@ interface UnstoppableAPI {
                     }
                 }
         }
-
-        data class Tokens(
-            val tokens: List<Token>,
-            val supportedChainIds: List<String> = emptyList(),
-        )
-
-        data class Token(
-            val chain: String,
-            val chainId: String,
-            val address: String?,
-            val identifier: String,
-            // Asset code for chains whose assets are identified by code + issuer (Stellar:
-            // `address` carries the issuer, `ticker` the code).
-            val ticker: String? = null,
-        )
 
         // One `/v3/tokens/all` row: the catalog identifier a request names the asset by, and the
         // providers with a token list that quote it (the DEXes and LI.FI keep none, so they are
