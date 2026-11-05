@@ -34,8 +34,9 @@ data class SwapVenue(
             .filter { it.isNotEmpty() }
             .joinToString(" ") { word -> word.take(1).uppercase() + word.drop(1).lowercase() }
 
+        // Keyed like a synced row, so a record made before the sync resolves the same way after it.
         fun unknown(id: String) = SwapVenue(
-            id = id,
+            id = id.uppercase(),
             name = humanized(id),
             riskLevel = null,
             privacy = NO_PRIVACY,

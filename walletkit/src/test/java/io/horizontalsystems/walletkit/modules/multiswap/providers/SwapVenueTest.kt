@@ -10,7 +10,9 @@ class SwapVenueTest {
 
     @Test
     fun `an unknown id gets a humanized name and no policy`() {
-        val venue = SwapVenue.unknown("PANCAKESWAP_API")
+        val venue = SwapVenue.unknown("pancakeswap_api")
+
+        assertEquals("PANCAKESWAP_API", venue.id)
 
         assertEquals("Pancakeswap Api", venue.name)
         assertNull(venue.riskLevel)
