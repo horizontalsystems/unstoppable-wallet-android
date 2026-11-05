@@ -16,6 +16,7 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.entities.TransactionValue
+import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.walletkit.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -49,6 +50,7 @@ import io.horizontalsystems.walletkit.modules.contacts.ContactsRepository
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColorName
 import io.horizontalsystems.walletkit.modules.transactionInfo.ColoredValue
+import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -89,10 +91,6 @@ class TransactionViewItemFactory(
         return transactionViewItem
     }
 
-    private fun singleValueIconType(
-        value: TransactionValue
-    ): TransactionViewItem.Icon = regularIconType(value)
-
     private fun coinIconType(token: Token) = TransactionViewItem.Icon.Regular(
         token.coin.imageUrl,
         token.coin.alternativeImageUrl,
@@ -122,77 +120,125 @@ class TransactionViewItemFactory(
             null -> TransactionViewItem.Icon.Regular(null, null, R.drawable.coin_placeholder)
         }
 
-    private fun doubleValueIconType(
-        primaryValue: TransactionValue?,
-        secondaryValue: TransactionValue?
-    ): TransactionViewItem.Icon = TransactionViewItem.Icon.Double(
-        back = regularIconType(secondaryValue),
-        front = regularIconType(primaryValue)
-    )
+    private fun coinTitle(value: TransactionValue?) =
+        TransactionViewItem.Title.Single(value?.coinCode ?: "", regularIconType(value))
 
-    private fun iconType(
-        blockchainType: BlockchainType,
+    private fun tokenTitle(token: Token) =
+        TransactionViewItem.Title.Single(token.coin.code, coinIconType(token))
+
+    private fun pairTitle(from: TransactionValue?, to: TransactionValue?) =
+        TransactionViewItem.Title.Pair(coinTitle(from), coinTitle(to))
+
+    private fun namedTitle(text: String, blockchainType: BlockchainType) =
+        TransactionViewItem.Title.Single(text, TransactionViewItem.Icon.Platform(blockchainType))
+
+    // Null when the values do not reduce to one coin or one pair: the row is then titled by name.
+    private fun coinsTitle(
         incomingValues: List<TransactionValue>,
         outgoingValues: List<TransactionValue>
-    ): TransactionViewItem.Icon = when {
-        incomingValues.size == 1 && outgoingValues.isEmpty() -> {
-            singleValueIconType(incomingValues[0])
-        }
+    ): TransactionViewItem.Title? = when {
+        incomingValues.size == 1 && outgoingValues.isEmpty() -> coinTitle(incomingValues[0])
+        incomingValues.isEmpty() && outgoingValues.size == 1 -> coinTitle(outgoingValues[0])
+        incomingValues.size == 1 && outgoingValues.size == 1 -> pairTitle(outgoingValues[0], incomingValues[0])
+        else -> null
+    }
 
-        incomingValues.isEmpty() && outgoingValues.size == 1 -> {
-            singleValueIconType(outgoingValues[0])
-        }
+    private fun viewItem(
+        uid: String,
+        type: TransactionViewItem.Type,
+        state: TransactionIconState,
+        title: TransactionViewItem.Title,
+        completedSubtitle: String,
+        primaryValue: ColoredValue?,
+        secondaryValue: ColoredValue?,
+        timestamp: Long,
+        spam: Boolean,
+        doubleSpend: Boolean = false,
+        locked: Boolean? = null,
+    ) = TransactionViewItem(
+        uid = uid,
+        type = type,
+        state = state,
+        title = title,
+        subtitle = type.stateText(state)?.let { Translator.getString(it) } ?: completedSubtitle,
+        primaryValue = primaryValue,
+        secondaryValue = secondaryValue,
+        date = Date(timestamp * 1000),
+        showAmount = showAmount,
+        doubleSpend = doubleSpend,
+        spam = spam,
+        locked = locked,
+    )
 
-        incomingValues.size == 1 && outgoingValues.size == 1 -> {
-            doubleValueIconType(incomingValues[0], outgoingValues[0])
-        }
+    private fun sendType(sentToSelf: Boolean) =
+        if (sentToSelf) TransactionViewItem.Type.SendToSelf else TransactionViewItem.Type.Send
 
-        else -> {
-            TransactionViewItem.Icon.Platform(blockchainType)
-        }
+    private fun sendSubtitle(sentToSelf: Boolean, to: String?, blockchainType: BlockchainType, noAddress: String = "---") = when {
+        sentToSelf -> Translator.getString(R.string.Transactions_ToYourself)
+        to != null -> Translator.getString(R.string.Transactions_To, mapped(to, blockchainType))
+        else -> noAddress
+    }
+
+    private fun sendPrimaryValue(value: TransactionValue, sentToSelf: Boolean) = if (sentToSelf) {
+        ColoredValue(getCoinString(value, true), ColorName.Leah)
+    } else {
+        getColoredValue(value, ColorName.Leah)
+    }
+
+    private fun receiveSubtitle(from: String?, blockchainType: BlockchainType, noAddress: String = "---") =
+        from?.let { Translator.getString(R.string.Transactions_From, mapped(it, blockchainType)) } ?: noAddress
+
+    private fun locked(lockState: TransactionLockState?) = when {
+        lockState == null -> null
+        lockState.locked -> true
+        else -> false
     }
 
     private fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem {
         val record = transactionItem.record
         val status = record.status(transactionItem.lastBlockInfo?.height)
-        val progress = when (status) {
-            is TransactionStatus.Pending -> 0.15f
-            is TransactionStatus.Processing -> status.progress
-            else -> null
-        }
-        val icon = if (status is TransactionStatus.Failed) TransactionViewItem.Icon.Failed else null
-
+        val state = transactionIconState(status)
+        val currencyValue = transactionItem.currencyValue
         val lastBlockTimestamp = transactionItem.lastBlockInfo?.timestamp
 
         return when (record) {
-            is ApproveTransactionRecord -> {
-                createViewItemFromApproveTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    spender = record.spender,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                lastBlockTimestamp,
-                icon
+            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(
+                uid = record.uid,
+                value = record.value,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
             )
 
-            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                lastBlockTimestamp,
-                icon
+            is BitcoinIncomingTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Receive,
+                state = state,
+                title = coinTitle(record.value),
+                completedSubtitle = record.from?.let { receiveSubtitle(it, record.blockchainType) }
+                    ?: record.to?.let { Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType)) }
+                    ?: "---",
+                primaryValue = getColoredValue(record.value, ColorName.Remus),
+                secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) },
+                timestamp = record.timestamp,
+                spam = record.spam,
+                doubleSpend = record.conflictingHash != null,
+                locked = locked(record.lockState(lastBlockTimestamp))
+            )
+
+            is BitcoinOutgoingTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = sendType(record.sentToSelf),
+                state = state,
+                title = coinTitle(record.value),
+                completedSubtitle = sendSubtitle(record.sentToSelf, record.to, record.blockchainType),
+                primaryValue = sendPrimaryValue(record.value, record.sentToSelf),
+                secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) },
+                timestamp = record.timestamp,
+                spam = record.spam,
+                doubleSpend = record.conflictingHash != null,
+                locked = locked(record.lockState(lastBlockTimestamp))
             )
 
             is ContractCallTransactionRecord -> {
@@ -205,9 +251,8 @@ class TransactionViewItemFactory(
                     contractAddress = record.contractAddress,
                     blockchainType = record.blockchainType,
                     timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
+                    currencyValue = currencyValue,
+                    state = state,
                     spam = record.spam
                 )
             }
@@ -221,96 +266,150 @@ class TransactionViewItemFactory(
                     incomingEvents = record.incomingEvents,
                     blockchainType = record.blockchainType,
                     timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
+                    currencyValue = currencyValue,
+                    state = state,
+                    spam = record.spam
                 )
             }
 
-            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, progress, icon)
-            is EvmIncomingTransactionRecord -> {
-                createViewItemFromEvmIncomingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    from = record.from,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is EvmOutgoingTransactionRecord -> {
-                createViewItemFromEvmOutgoingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    to = record.to,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    sentToSelf = record.sentToSelf,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, progress, icon)
-            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, progress, icon)
-            is EvmTransactionRecord -> {
-                createViewItemFromEvmTransactionRecord(
-                    uid = record.uid,
-                    timestamp = record.timestamp,
-                    blockchainType = record.blockchainType,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
-
-            is SolanaIncomingTransactionRecord -> createViewItemFromSolanaIncomingTransactionRecord(
-                record = record,
-                currencyValue = transactionItem.currencyValue,
-                progress = progress,
-                icon = icon
+            is ContractCreationTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Contract,
+                state = state,
+                title = namedTitle(Translator.getString(R.string.Transactions_ContractCreation), record.blockchainType),
+                completedSubtitle = "---",
+                primaryValue = null,
+                secondaryValue = null,
+                timestamp = record.timestamp,
+                spam = record.spam
             )
 
-            is SolanaOutgoingTransactionRecord -> createViewItemFromSolanaOutgoingTransactionRecord(
-                record = record,
-                currencyValue = transactionItem.currencyValue,
-                progress = progress,
-                icon = icon
+            is EvmIncomingTransactionRecord -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = record.value,
+                from = record.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
             )
 
-            is SolanaSwapTransactionRecord -> createViewItemFromSolanaSwapTransactionRecord(
-                record = record,
-                progress = progress,
-                icon = icon
+            is EvmOutgoingTransactionRecord -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = record.value,
+                to = record.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
             )
 
-            is SolanaUnknownTransactionRecord -> createViewItemFromSolanaUnknownTransactionRecord(
-                record = record,
-                currencyValue = transactionItem.currencyValue,
-                progress = progress,
-                icon = icon
+            is SwapTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Swap,
+                state = state,
+                title = pairTitle(record.valueIn, record.valueOut),
+                completedSubtitle = Translator.getString(R.string.Transactions_Swap),
+                primaryValue = record.valueOut?.let {
+                    getColoredValue(it, if (record.recipient != null) ColorName.Grey else ColorName.Remus)
+                },
+                secondaryValue = getColoredValue(record.valueIn, ColorName.Leah),
+                timestamp = record.timestamp,
+                spam = record.spam
             )
 
-            is TronApproveTransactionRecord -> {
-                createViewItemFromApproveTransactionRecord(
+            is UnknownSwapTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Swap,
+                state = state,
+                title = pairTitle(record.valueIn, record.valueOut),
+                completedSubtitle = Translator.getString(R.string.Transactions_Swap),
+                primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) },
+                secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) },
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
+
+            is EvmTransactionRecord -> createViewItemFromUnknownTransaction(
+                uid = record.uid,
+                name = Translator.getString(R.string.Transactions_Unknown),
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                state = state,
+                spam = record.spam
+            )
+
+            is SolanaIncomingTransactionRecord -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = record.value,
+                from = record.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam,
+                noAddress = ""
+            )
+
+            is SolanaOutgoingTransactionRecord -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = record.value,
+                to = record.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam,
+                noAddress = ""
+            )
+
+            is SolanaSwapTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Swap,
+                state = state,
+                // The pair by token, not by value: a 1inch Fusion transaction moves only one side
+                // (the other lands in its counterpart transaction) but names both tokens.
+                title = TransactionViewItem.Title.Pair(
+                    from = record.tokenIn?.let { tokenTitle(it) } ?: coinTitle(record.valueIn),
+                    to = record.tokenOut?.let { tokenTitle(it) } ?: coinTitle(record.valueOut)
+                ),
+                completedSubtitle = Translator.getString(R.string.Transactions_Swap),
+                primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) },
+                secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) },
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
+
+            is SolanaUnknownTransactionRecord -> {
+                val incomingValues = record.incomingTransfers.map { it.value }
+                val outgoingValues = record.outgoingTransfers.map { it.value }
+                val (primaryValue, secondaryValue) = getValues(incomingValues, outgoingValues, currencyValue)
+                viewItem(
                     uid = record.uid,
-                    value = record.value,
-                    spender = record.spender,
-                    blockchainType = record.blockchainType,
+                    type = TransactionViewItem.Type.Unknown,
+                    state = state,
+                    title = coinsTitle(incomingValues, outgoingValues)
+                        ?: namedTitle(Translator.getString(R.string.Transactions_Unknown), record.blockchainType),
+                    completedSubtitle = Translator.getString(R.string.Transactions_Unknown_Description),
+                    primaryValue = primaryValue,
+                    secondaryValue = secondaryValue,
                     timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
+                    spam = record.spam
                 )
             }
+
+            is TronApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(
+                uid = record.uid,
+                value = record.value,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
             is TronContractCallTransactionRecord -> {
                 val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
@@ -322,9 +421,8 @@ class TransactionViewItemFactory(
                     contractAddress = record.contractAddress,
                     blockchainType = record.blockchainType,
                     timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
+                    currencyValue = currencyValue,
+                    state = state,
                     spam = record.spam
                 )
             }
@@ -338,594 +436,518 @@ class TransactionViewItemFactory(
                     incomingEvents = record.incomingEvents,
                     blockchainType = record.blockchainType,
                     timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
+                    currencyValue = currencyValue,
+                    state = state,
                     spam = record.spam
                 )
             }
 
-            is TronIncomingTransactionRecord -> {
-                createViewItemFromEvmIncomingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    from = record.from,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
+            is TronIncomingTransactionRecord -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = record.value,
+                from = record.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is TronOutgoingTransactionRecord -> {
-                createViewItemFromEvmOutgoingTransactionRecord(
-                    uid = record.uid,
-                    value = record.value,
-                    to = record.to,
-                    blockchainType = record.blockchainType,
-                    timestamp = record.timestamp,
-                    sentToSelf = record.sentToSelf,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                    icon = icon,
-                    spam = record.spam
-                )
-            }
+            is TronOutgoingTransactionRecord -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = record.value,
+                to = record.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is TronTransactionRecord -> {
-                createViewItemFromTronTransactionRecord(
-                    uid = record.uid,
-                    timestamp = record.timestamp,
-                    contractLabel = record.transaction.contractLabel,
-                    progress = progress,
-                    spam = record.spam,
-                    icon = icon
-                )
-            }
+            is TronTransactionRecord -> createViewItemFromUnknownTransaction(
+                uid = record.uid,
+                name = record.transaction.contractLabel ?: Translator.getString(R.string.Transactions_Unknown),
+                blockchainType = BlockchainType.Tron,
+                timestamp = record.timestamp,
+                state = state,
+                spam = record.spam
+            )
 
-            is TonTransactionRecord -> {
-                createViewItemFromTonTransactionRecord(
-                    icon = icon,
-                    record = record,
-                    currencyValue = transactionItem.currencyValue
-                )
-            }
+            // TON and Stellar rows never showed a pending state; only a failure is kept.
+            is TonTransactionRecord -> createViewItemFromTonTransactionRecord(
+                record = record,
+                currencyValue = currencyValue,
+                state = withoutPending(state)
+            )
 
-            is StellarTransactionRecord -> {
-                createViewItemFromStellarTransactionRecord(
-                    icon = icon,
-                    record = record,
-                    currencyValue = transactionItem.currencyValue
-                )
-            }
+            is StellarTransactionRecord -> createViewItemFromStellarTransactionRecord(
+                record = record,
+                currencyValue = currencyValue,
+                state = withoutPending(state)
+            )
 
-            is XrpTransactionRecord -> {
-                createViewItemFromXrpTransactionRecord(
-                    icon = icon,
-                    record = record,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                )
-            }
+            is XrpTransactionRecord -> createViewItemFromXrpTransactionRecord(
+                record = record,
+                currencyValue = currencyValue,
+                state = state
+            )
 
             is ZcashShieldingTransactionRecord -> {
-                createViewItemFromZcashShieldingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    lastBlockTimestamp,
-                    icon
+                val type: TransactionViewItem.Type
+                val completedSubtitle: String
+                when (record.direction) {
+                    ZcashShieldingTransactionRecord.Direction.Shield -> {
+                        type = TransactionViewItem.Type.Shield
+                        completedSubtitle = Translator.getString(R.string.Transactions_Shielded)
+                    }
+
+                    ZcashShieldingTransactionRecord.Direction.Unshield -> {
+                        type = TransactionViewItem.Type.Unshield
+                        completedSubtitle = Translator.getString(R.string.Transactions_Unshielded)
+                    }
+
+                    ZcashShieldingTransactionRecord.Direction.MigrateToIronwood -> {
+                        type = TransactionViewItem.Type.Migrate
+                        completedSubtitle = Translator.getString(R.string.Transactions_Migrate_ToIronwood)
+                    }
+                }
+                viewItem(
+                    uid = record.uid,
+                    type = type,
+                    state = state,
+                    title = coinTitle(record.value),
+                    completedSubtitle = completedSubtitle,
+                    primaryValue = ColoredValue(getCoinString(record.value, true), ColorName.Leah),
+                    secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) },
+                    timestamp = record.timestamp,
+                    spam = record.spam,
+                    locked = locked(record.lockState(lastBlockTimestamp))
                 )
             }
 
-            is MoneroIncomingTransactionRecord -> {
-                createViewItemFromMoneroIncomingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
-            }
+            is MoneroIncomingTransactionRecord -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Receive,
+                state = state,
+                title = coinTitle(record.value),
+                completedSubtitle = record.from?.let { receiveSubtitle(it, record.blockchainType) }
+                    ?: record.to?.let { Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType)) }
+                    ?: "---",
+                primaryValue = getColoredValue(record.value, ColorName.Remus),
+                secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) },
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
 
-            is MoneroOutgoingTransactionRecord -> {
-                createViewItemFromMoneroOutgoingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
-            }
+            is MoneroOutgoingTransactionRecord -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = record.value,
+                to = record.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is ThorchainIncomingTransactionRecord -> {
-                createViewItemFromThorchainIncomingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
-            }
+            is ThorchainIncomingTransactionRecord -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = record.value,
+                from = record.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is ThorchainOutgoingTransactionRecord -> {
-                createViewItemFromThorchainOutgoingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
-            }
+            is ThorchainOutgoingTransactionRecord -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = record.value,
+                to = record.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is ZanoIncomingTransactionRecord -> {
-                createViewItemFromZanoIncomingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
-            }
+            is ZanoIncomingTransactionRecord -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = record.value,
+                from = record.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is ZanoOutgoingTransactionRecord -> {
-                createViewItemFromZanoOutgoingTransactionRecord(
-                    record,
-                    transactionItem.currencyValue,
-                    progress,
-                    icon
-                )
-            }
+            is ZanoOutgoingTransactionRecord -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = record.value,
+                to = record.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = record.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            )
 
-            is NearTransactionRecord -> {
-                createViewItemFromNearTransactionRecord(
-                    icon = icon,
-                    record = record,
-                    currencyValue = transactionItem.currencyValue,
-                    progress = progress,
-                )
-            }
+            is NearTransactionRecord -> createViewItemFromNearTransactionRecord(
+                record = record,
+                currencyValue = currencyValue,
+                state = state
+            )
 
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
 
+    private fun withoutPending(state: TransactionIconState) =
+        if (state == TransactionIconState.Failed) state else TransactionIconState.Completed
+
+    private fun createViewItemFromIncoming(
+        uid: String,
+        value: TransactionValue,
+        from: String?,
+        blockchainType: BlockchainType,
+        timestamp: Long,
+        currencyValue: CurrencyValue?,
+        state: TransactionIconState,
+        spam: Boolean,
+        noAddress: String = "---"
+    ) = viewItem(
+        uid = uid,
+        type = TransactionViewItem.Type.Receive,
+        state = state,
+        title = coinTitle(value),
+        completedSubtitle = receiveSubtitle(from, blockchainType, noAddress),
+        primaryValue = getColoredValue(value, ColorName.Remus),
+        secondaryValue = singleValueSecondaryValue(value, currencyValue),
+        timestamp = timestamp,
+        spam = spam
+    )
+
+    private fun createViewItemFromOutgoing(
+        uid: String,
+        value: TransactionValue,
+        to: String?,
+        blockchainType: BlockchainType,
+        timestamp: Long,
+        sentToSelf: Boolean,
+        currencyValue: CurrencyValue?,
+        state: TransactionIconState,
+        spam: Boolean,
+        noAddress: String = "---"
+    ) = viewItem(
+        uid = uid,
+        type = sendType(sentToSelf),
+        state = state,
+        title = coinTitle(value),
+        completedSubtitle = sendSubtitle(sentToSelf, to, blockchainType, noAddress),
+        primaryValue = sendPrimaryValue(value, sentToSelf),
+        secondaryValue = singleValueSecondaryValue(value, currencyValue),
+        timestamp = timestamp,
+        spam = spam
+    )
+
+    private fun createViewItemFromUnknownTransaction(
+        uid: String,
+        name: String,
+        blockchainType: BlockchainType,
+        timestamp: Long,
+        state: TransactionIconState,
+        spam: Boolean
+    ) = viewItem(
+        uid = uid,
+        type = TransactionViewItem.Type.Unknown,
+        state = state,
+        title = namedTitle(name, blockchainType),
+        completedSubtitle = Translator.getString(R.string.Transactions_Unknown_Description),
+        primaryValue = null,
+        secondaryValue = null,
+        timestamp = timestamp,
+        spam = spam
+    )
+
     private fun createViewItemFromNearTransactionRecord(
-        icon: TransactionViewItem.Icon.Failed?,
         record: NearTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Float?,
-    ): TransactionViewItem {
-        val iconX: TransactionViewItem.Icon
-        val title: String
-        val subtitle: String
-        val primaryValue: ColoredValue?
-        var secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-        var sentToSelf = false
-
-        when (val recordType = record.type) {
-            is NearTransactionRecord.Type.Send -> {
-                title = Translator.getString(R.string.Transactions_Send)
-                subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
-                sentToSelf = recordType.sentToSelf
-                primaryValue = if (sentToSelf) {
-                    ColoredValue(getCoinString(recordType.value, true), ColorName.Grey)
-                } else {
-                    getColoredValue(recordType.value, getAmountColorForSend(icon))
-                }
-                iconX = singleValueIconType(recordType.value)
-            }
-
-            is NearTransactionRecord.Type.Receive -> {
-                title = Translator.getString(R.string.Transactions_Receive)
-                subtitle = Translator.getString(R.string.Transactions_From, mapped(recordType.from, record.blockchainType))
-                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
-                iconX = singleValueIconType(recordType.value)
-            }
-
-            is NearTransactionRecord.Type.ContractCall -> {
-                title = Translator.getString(R.string.Transactions_ContractCall)
-                subtitle = recordType.method?.let { "$it · ${recordType.contractId.shorten()}" } ?: recordType.contractId.shorten()
-                val incomingValues = recordType.incoming.map { it.value }
-                val outgoingValues = recordType.outgoing.map { it.value }
-                if (incomingValues.isEmpty() && outgoingValues.isEmpty()) {
-                    primaryValue = null
-                    secondaryValue = null
-                } else {
-                    val values = getValues(incomingValues, outgoingValues, currencyValue)
-                    primaryValue = values.first
-                    secondaryValue = values.second
-                }
-                iconX = iconType(record.blockchainType, incomingValues, outgoingValues)
-            }
-        }
-
-        return TransactionViewItem(
+        state: TransactionIconState,
+    ): TransactionViewItem = when (val recordType = record.type) {
+        is NearTransactionRecord.Type.Send -> createViewItemFromOutgoing(
             uid = record.uid,
-            progress = progress,
-            title = title,
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            sentToSelf = sentToSelf,
-            date = Date(record.timestamp * 1000),
-            icon = icon ?: iconX,
+            value = recordType.value,
+            to = recordType.to,
+            blockchainType = record.blockchainType,
+            timestamp = record.timestamp,
+            sentToSelf = recordType.sentToSelf,
+            currencyValue = currencyValue,
+            state = state,
             spam = record.spam
-        )
+        ).copy(secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) })
+
+        is NearTransactionRecord.Type.Receive -> createViewItemFromIncoming(
+            uid = record.uid,
+            value = recordType.value,
+            from = recordType.from,
+            blockchainType = record.blockchainType,
+            timestamp = record.timestamp,
+            currencyValue = currencyValue,
+            state = state,
+            spam = record.spam
+        ).copy(secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) })
+
+        is NearTransactionRecord.Type.ContractCall -> {
+            val incomingValues = recordType.incoming.map { it.value }
+            val outgoingValues = recordType.outgoing.map { it.value }
+            val values = if (incomingValues.isEmpty() && outgoingValues.isEmpty()) {
+                Pair(null, null)
+            } else {
+                getValues(incomingValues, outgoingValues, currencyValue)
+            }
+            val contract = recordType.method?.let { "$it · ${recordType.contractId.shorten()}" } ?: recordType.contractId.shorten()
+            val coinsTitle = coinsTitle(incomingValues, outgoingValues)
+            viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Contract,
+                state = state,
+                title = coinsTitle ?: namedTitle(Translator.getString(R.string.Transactions_ContractCall), record.blockchainType),
+                completedSubtitle = if (coinsTitle != null) Translator.getString(R.string.Transactions_ContractCall) else contract,
+                primaryValue = values.first,
+                secondaryValue = values.second,
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
+        }
     }
 
     private fun createViewItemFromXrpTransactionRecord(
-        icon: TransactionViewItem.Icon.Failed?,
         record: XrpTransactionRecord,
         currencyValue: CurrencyValue?,
-        progress: Float?,
+        state: TransactionIconState,
     ): TransactionViewItem {
-        val iconX: TransactionViewItem.Icon
-        val title: String
-        val subtitle: String
-        val primaryValue: ColoredValue?
-        var secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-        var sentToSelf = false
+        val fiatValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+        return when (val recordType = record.type) {
+            is XrpTransactionRecord.Type.Send -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = recordType.value,
+                to = recordType.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = recordType.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            ).copy(secondaryValue = fiatValue)
 
-        when (val recordType = record.type) {
-            is XrpTransactionRecord.Type.Send -> {
-                title = Translator.getString(R.string.Transactions_Send)
-                subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
-                sentToSelf = recordType.sentToSelf
-                primaryValue = if (sentToSelf) {
-                    ColoredValue(getCoinString(recordType.value, true), ColorName.Grey)
-                } else {
-                    getColoredValue(recordType.value, getAmountColorForSend(icon))
-                }
-                iconX = singleValueIconType(recordType.value)
-            }
+            is XrpTransactionRecord.Type.Receive -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = recordType.value,
+                from = recordType.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            ).copy(secondaryValue = fiatValue)
 
-            is XrpTransactionRecord.Type.Receive -> {
-                title = Translator.getString(R.string.Transactions_Receive)
-                subtitle = Translator.getString(R.string.Transactions_From, mapped(recordType.from, record.blockchainType))
-                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
-                iconX = singleValueIconType(recordType.value)
-            }
+            // The value is the trust limit (10^15 by default), not an amount moved, so it
+            // has no place on the row and no fiat equivalent; the info page shows it.
+            is XrpTransactionRecord.Type.TrustSet -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Contract,
+                state = state,
+                title = coinTitle(recordType.value),
+                completedSubtitle = Translator.getString(R.string.Transactions_TrustSet),
+                primaryValue = null,
+                secondaryValue = null,
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
 
-            is XrpTransactionRecord.Type.TrustSet -> {
-                title = Translator.getString(R.string.Transactions_TrustSet)
-                subtitle = recordType.issuer.shorten()
-                // The value is the trust limit (10^15 by default), not an amount moved, so it
-                // has no place on the row and no fiat equivalent; the info page shows it.
-                primaryValue = null
-                secondaryValue = null
-                iconX = singleValueIconType(recordType.value)
-            }
-
-            is XrpTransactionRecord.Type.Unsupported -> {
-                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-                title = Translator.getString(R.string.Transactions_XrpTransaction)
-                subtitle = recordType.type
-                primaryValue = null
-            }
+            is XrpTransactionRecord.Type.Unsupported -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Contract,
+                state = state,
+                title = namedTitle(Translator.getString(R.string.Transactions_XrpTransaction), record.blockchainType),
+                completedSubtitle = recordType.type,
+                primaryValue = null,
+                secondaryValue = fiatValue,
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
         }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = title,
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            sentToSelf = sentToSelf,
-            date = Date(record.timestamp * 1000),
-            icon = icon ?: iconX,
-            spam = record.spam
-        )
     }
 
     private fun createViewItemFromStellarTransactionRecord(
-        icon: TransactionViewItem.Icon.Failed?,
         record: StellarTransactionRecord,
         currencyValue: CurrencyValue?,
+        state: TransactionIconState,
     ): TransactionViewItem {
+        val fiatValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+        return when (val recordType = record.type) {
+            is StellarTransactionRecord.Type.Send -> createViewItemFromOutgoing(
+                uid = record.uid,
+                value = recordType.value,
+                to = recordType.to,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                sentToSelf = recordType.sentToSelf,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            ).copy(secondaryValue = fiatValue)
 
-        val iconX: TransactionViewItem.Icon
-        val title: String
-        val subtitle: String
-        val primaryValue: ColoredValue?
-        var secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-        var sentToSelf = false
+            is StellarTransactionRecord.Type.Receive -> createViewItemFromIncoming(
+                uid = record.uid,
+                value = recordType.value,
+                from = recordType.from,
+                blockchainType = record.blockchainType,
+                timestamp = record.timestamp,
+                currencyValue = currencyValue,
+                state = state,
+                spam = record.spam
+            ).copy(secondaryValue = fiatValue)
 
-        when (val recordType = record.type) {
-            is StellarTransactionRecord.Type.Send -> {
-                title = Translator.getString(R.string.Transactions_Send)
-                subtitle = Translator.getString(R.string.Transactions_To, mapped(recordType.to, record.blockchainType))
+            // The value is the trust limit, not an amount moved; see the XRP TrustSet row.
+            is StellarTransactionRecord.Type.ChangeTrust -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Contract,
+                state = state,
+                title = coinTitle(recordType.value),
+                completedSubtitle = Translator.getString(R.string.Transactions_ChangeTrust),
+                primaryValue = null,
+                secondaryValue = null,
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
 
-                sentToSelf = recordType.sentToSelf
+            is StellarTransactionRecord.Type.Swap -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Swap,
+                state = state,
+                title = pairTitle(recordType.valueIn, recordType.valueOut),
+                completedSubtitle = Translator.getString(R.string.Transactions_Swap),
+                primaryValue = getColoredValue(recordType.valueOut, ColorName.Remus),
+                secondaryValue = getColoredValue(recordType.valueIn, ColorName.Leah),
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
 
-                primaryValue = if (sentToSelf) {
-                    ColoredValue(getCoinString(recordType.value, true), ColorName.Grey)
-                } else {
-                    getColoredValue(recordType.value, getAmountColorForSend(icon))
-                }
-
-                iconX = singleValueIconType(recordType.value)
-
-            }
-
-            is StellarTransactionRecord.Type.Receive -> {
-                title = Translator.getString(R.string.Transactions_Receive)
-                subtitle = Translator.getString(
-                    R.string.Transactions_From,
-                    mapped(recordType.from, record.blockchainType)
-                )
-
-                primaryValue = getColoredValue(recordType.value, ColorName.Remus)
-                iconX = singleValueIconType(recordType.value)
-            }
-
-            is StellarTransactionRecord.Type.ChangeTrust -> {
-                title = Translator.getString(R.string.Transactions_ChangeTrust)
-                subtitle = recordType.trustee.shorten()
-                // The value is the trust limit, not an amount moved; see the XRP TrustSet row.
-                primaryValue = null
-                secondaryValue = null
-                iconX = singleValueIconType(recordType.value)
-            }
-
-            is StellarTransactionRecord.Type.Swap -> {
-                title = Translator.getString(R.string.Transactions_Swap)
-                subtitle = ""
-
-                primaryValue = getColoredValue(recordType.valueOut, ColorName.Remus)
-                secondaryValue = getColoredValue(recordType.valueIn, ColorName.Leah)
-
-                iconX = doubleValueIconType(recordType.valueOut, recordType.valueIn)
-            }
-
-            is StellarTransactionRecord.Type.Unsupported -> {
-                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-                title = Translator.getString(R.string.Transactions_StellarTransaction)
-                subtitle = recordType.type
-                primaryValue = null
-                secondaryValue = null
-            }
-        }
-
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = null,
-            title = title,
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            sentToSelf = sentToSelf,
-            date = Date(record.timestamp * 1000),
-            icon = icon ?: iconX,
-            spam = record.spam
-        )
-    }
-
-    private fun getAmountColorForSend(icon: TransactionViewItem.Icon?): ColorName {
-        return when (icon) {
-            is TransactionViewItem.Icon.Failed -> ColorName.Grey
-            else -> ColorName.Leah
+            is StellarTransactionRecord.Type.Unsupported -> viewItem(
+                uid = record.uid,
+                type = TransactionViewItem.Type.Contract,
+                state = state,
+                title = namedTitle(Translator.getString(R.string.Transactions_StellarTransaction), record.blockchainType),
+                completedSubtitle = recordType.type,
+                primaryValue = null,
+                secondaryValue = null,
+                timestamp = record.timestamp,
+                spam = record.spam
+            )
         }
     }
 
     private fun createViewItemFromTonTransactionRecord(
-        icon: TransactionViewItem.Icon?,
         record: TonTransactionRecord,
         currencyValue: CurrencyValue?,
+        state: TransactionIconState,
     ): TransactionViewItem {
-        val title: String
-        val subtitle: String?
-        val primaryValue: ColoredValue?
-        var secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        val iconX: TransactionViewItem.Icon
-        var sentToSelf = false
-
+        val fiatValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
         val action = record.actions.singleOrNull()
 
-        if (action != null) {
-            when (val actionType = action.type) {
-                is TonTransactionRecord.Action.Type.Send -> {
-                    title = Translator.getString(R.string.Transactions_Send)
-                    subtitle = Translator.getString(R.string.Transactions_To, mapped(actionType.to, record.blockchainType))
-
-                    val amountColor = if (actionType.sentToSelf) {
-                        ColorName.Grey
-                    } else {
-                        getAmountColorForSend(icon)
-                    }
-
-                    primaryValue = getColoredValue(actionType.value, amountColor)
-
-                    sentToSelf = actionType.sentToSelf
-
-                    iconX = singleValueIconType(actionType.value)
-                }
-
-                is TonTransactionRecord.Action.Type.Receive -> {
-                    title = Translator.getString(R.string.Transactions_Receive)
-                    subtitle = Translator.getString(
-                        R.string.Transactions_From,
-                        mapped(actionType.from, record.blockchainType)
-                    )
-
-                    primaryValue = getColoredValue(actionType.value, ColorName.Remus)
-                    iconX = singleValueIconType(actionType.value)
-                }
-
-                is TonTransactionRecord.Action.Type.Unsupported -> {
-                    title = Translator.getString(R.string.Transactions_TonTransaction)
-                    subtitle = actionType.type
-                    primaryValue = null
-                    secondaryValue = null
-
-
-                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-                }
-
-                is TonTransactionRecord.Action.Type.Burn -> {
-                    iconX = singleValueIconType(actionType.value)
-                    title = Translator.getString(R.string.Transactions_Burn)
-                    subtitle = actionType.value.fullName
-                    primaryValue = getColoredValue(actionType.value, ColorName.Leah)
-                }
-
-                is TonTransactionRecord.Action.Type.ContractCall -> {
-                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-                    title = Translator.getString(R.string.Transactions_ContractCall)
-                    subtitle = actionType.address.shorten()
-                    primaryValue = getColoredValue(actionType.value, ColorName.Leah)
-                }
-
-                is TonTransactionRecord.Action.Type.ContractDeploy -> {
-                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-                    title = Translator.getString(R.string.Transactions_ContractDeploy)
-                    subtitle = actionType.interfaces.joinToString()
-                    primaryValue = null
-                }
-
-                is TonTransactionRecord.Action.Type.Mint -> {
-                    iconX = singleValueIconType(actionType.value)
-                    title = Translator.getString(R.string.Transactions_Mint)
-                    subtitle = actionType.value.fullName
-                    primaryValue = getColoredValue(actionType.value, ColorName.Remus)
-                }
-
-                is TonTransactionRecord.Action.Type.Swap -> {
-                    iconX = doubleValueIconType(actionType.valueOut, actionType.valueIn)
-                    title = Translator.getString(R.string.Transactions_Swap)
-                    subtitle = actionType.routerName ?: actionType.routerAddress.shorten()
-                    primaryValue = getColoredValue(actionType.valueOut, ColorName.Remus)
-                    secondaryValue = getColoredValue(actionType.valueIn, ColorName.Leah)
-                }
-            }
-        } else {
-            iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-            title = Translator.getString(R.string.Transactions_TonTransaction)
-            subtitle = Translator.getString(R.string.Transactions_Multiple)
-            primaryValue = null
-        }
-
-        return TransactionViewItem(
+        fun item(
+            type: TransactionViewItem.Type,
+            title: TransactionViewItem.Title,
+            completedSubtitle: String,
+            primaryValue: ColoredValue?,
+            secondaryValue: ColoredValue? = fiatValue,
+        ) = viewItem(
             uid = record.uid,
-            progress = null,
+            type = type,
+            state = state,
             title = title,
-            subtitle = subtitle,
+            completedSubtitle = completedSubtitle,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            sentToSelf = sentToSelf,
-            date = Date(record.timestamp * 1000),
-            icon = icon ?: iconX
+            timestamp = record.timestamp,
+            spam = record.spam
         )
-    }
 
-    private fun createViewItemFromSolanaSwapTransactionRecord(
-        record: SolanaSwapTransactionRecord,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) }
-        val secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = record.exchangeName,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            // The pair by token, not by value: a 1inch Fusion transaction moves only one side
-            // (the other lands in its counterpart transaction) but names both tokens.
-            icon = icon ?: TransactionViewItem.Icon.Double(
-                back = record.tokenIn?.let { coinIconType(it) } ?: regularIconType(record.valueIn),
-                front = record.tokenOut?.let { coinIconType(it) } ?: regularIconType(record.valueOut)
+        if (action == null) {
+            return item(
+                type = TransactionViewItem.Type.Contract,
+                title = namedTitle(Translator.getString(R.string.Transactions_TonTransaction), record.blockchainType),
+                completedSubtitle = Translator.getString(R.string.Transactions_Multiple),
+                primaryValue = null
             )
-        )
-    }
-
-    private fun createViewItemFromSolanaUnknownTransactionRecord(
-        record: SolanaUnknownTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon.Failed?
-    ): TransactionViewItem {
-        val incomingValues = record.incomingTransfers.map { it.value }
-        val outgoingValues = record.outgoingTransfers.map { it.value }
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue)
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Unknown),
-            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            icon = icon ?: iconType(record.blockchainType, incomingValues, outgoingValues)
-        )
-    }
-
-    private fun createViewItemFromSolanaOutgoingTransactionRecord(
-        record: SolanaOutgoingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon.Failed?
-    ): TransactionViewItem {
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
-        } else {
-            getColoredValue(record.value, getAmountColorForSend(icon))
         }
-        val secondaryValue = singleValueSecondaryValue(record.value, currencyValue)
 
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = record.to?.let { to -> Translator.getString(R.string.Transactions_To, mapped(to, record.blockchainType)) } ?: "",
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
+        return when (val actionType = action.type) {
+            is TonTransactionRecord.Action.Type.Send -> item(
+                type = sendType(actionType.sentToSelf),
+                title = coinTitle(actionType.value),
+                completedSubtitle = sendSubtitle(actionType.sentToSelf, actionType.to, record.blockchainType),
+                primaryValue = getColoredValue(actionType.value, ColorName.Leah)
+            )
 
-    private fun createViewItemFromSolanaIncomingTransactionRecord(
-        record: SolanaIncomingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon.Failed?
-    ): TransactionViewItem {
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
-        val secondaryValue = singleValueSecondaryValue(record.value, currencyValue)
+            is TonTransactionRecord.Action.Type.Receive -> item(
+                type = TransactionViewItem.Type.Receive,
+                title = coinTitle(actionType.value),
+                completedSubtitle = receiveSubtitle(actionType.from, record.blockchainType),
+                primaryValue = getColoredValue(actionType.value, ColorName.Remus)
+            )
 
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = record.from?.let { from -> Translator.getString(R.string.Transactions_From, mapped(from, record.blockchainType)) } ?: "",
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
+            is TonTransactionRecord.Action.Type.Unsupported -> item(
+                type = TransactionViewItem.Type.Contract,
+                title = namedTitle(Translator.getString(R.string.Transactions_TonTransaction), record.blockchainType),
+                completedSubtitle = actionType.type,
+                primaryValue = null,
+                secondaryValue = null
+            )
+
+            is TonTransactionRecord.Action.Type.Burn -> item(
+                type = TransactionViewItem.Type.Send,
+                title = coinTitle(actionType.value),
+                completedSubtitle = Translator.getString(R.string.Transactions_Burn),
+                primaryValue = getColoredValue(actionType.value, ColorName.Leah)
+            )
+
+            is TonTransactionRecord.Action.Type.ContractCall -> item(
+                type = TransactionViewItem.Type.Contract,
+                title = namedTitle(Translator.getString(R.string.Transactions_ContractCall), record.blockchainType),
+                completedSubtitle = actionType.address.shorten(),
+                primaryValue = getColoredValue(actionType.value, ColorName.Leah)
+            )
+
+            is TonTransactionRecord.Action.Type.ContractDeploy -> item(
+                type = TransactionViewItem.Type.Contract,
+                title = namedTitle(Translator.getString(R.string.Transactions_ContractDeploy), record.blockchainType),
+                completedSubtitle = actionType.interfaces.joinToString(),
+                primaryValue = null
+            )
+
+            is TonTransactionRecord.Action.Type.Mint -> item(
+                type = TransactionViewItem.Type.Receive,
+                title = coinTitle(actionType.value),
+                completedSubtitle = Translator.getString(R.string.Transactions_Mint),
+                primaryValue = getColoredValue(actionType.value, ColorName.Remus)
+            )
+
+            is TonTransactionRecord.Action.Type.Swap -> item(
+                type = TransactionViewItem.Type.Swap,
+                title = pairTitle(actionType.valueIn, actionType.valueOut),
+                completedSubtitle = Translator.getString(R.string.Transactions_Swap),
+                primaryValue = getColoredValue(actionType.valueOut, ColorName.Remus),
+                secondaryValue = getColoredValue(actionType.valueIn, ColorName.Leah)
+            )
+        }
     }
 
     private fun getContact(address: String, blockchainType: BlockchainType): Contact? {
@@ -936,186 +958,12 @@ class TransactionViewItemFactory(
         return getContact(address, blockchainType)?.name ?: evmLabelManager.mapped(address)
     }
 
-    private fun createViewItemFromSwapTransactionRecord(
-        record: SwapTransactionRecord,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = record.valueOut?.let {
-            getColoredValue(it, if (record.recipient != null) ColorName.Grey else ColorName.Remus)
-        }
-        val secondaryValue = getColoredValue(record.valueIn, ColorName.Leah)
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = mapped(record.exchangeAddress, record.blockchainType),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
-        )
-    }
-
-    private fun createViewItemFromUnknownSwapTransactionRecord(
-        record: UnknownSwapTransactionRecord,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) }
-        val secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Swap),
-            subtitle = mapped(record.exchangeAddress, record.blockchainType),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            icon = icon ?: doubleValueIconType(record.valueOut, record.valueIn)
-        )
-    }
-
-    private fun createViewItemFromTronTransactionRecord(
-        uid: String,
-        timestamp: Long,
-        contractLabel: String?,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        return TransactionViewItem(
-            uid = uid,
-            progress = progress,
-            title = contractLabel ?: Translator.getString(R.string.Transactions_Unknown),
-            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
-            primaryValue = null,
-            secondaryValue = null,
-            date = Date(timestamp * 1000),
-            spam = spam,
-            icon = icon ?: TransactionViewItem.Icon.Platform(BlockchainType.Tron)
-        )
-    }
-
-    private fun createViewItemFromEvmTransactionRecord(
-        uid: String,
-        timestamp: Long,
-        blockchainType: BlockchainType,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        return TransactionViewItem(
-            uid = uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Unknown),
-            subtitle = Translator.getString(R.string.Transactions_Unknown_Description),
-            primaryValue = null,
-            secondaryValue = null,
-            date = Date(timestamp * 1000),
-            spam = spam,
-            icon = icon ?: TransactionViewItem.Icon.Platform(blockchainType)
-        )
-    }
-
-    private fun createViewItemFromEvmOutgoingTransactionRecord(
-        uid: String,
-        value: TransactionValue,
-        to: String,
-        blockchainType: BlockchainType,
-        timestamp: Long,
-        sentToSelf: Boolean,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = if (sentToSelf) {
-            ColoredValue(getCoinString(value, true), ColorName.Grey)
-        } else {
-            getColoredValue(value, getAmountColorForSend(icon))
-        }
-
-        val secondaryValue = singleValueSecondaryValue(value, currencyValue)
-
-        return TransactionViewItem(
-            uid = uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, mapped(to, blockchainType)),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(timestamp * 1000),
-            sentToSelf = sentToSelf,
-            spam = spam,
-            icon = icon ?: singleValueIconType(value)
-        )
-    }
-
     private fun getColoredValue(value: Any, color: ColorName, hideSign: Boolean = false): ColoredValue =
         when (value) {
             is TransactionValue -> ColoredValue(getCoinString(value, hideSign), if (value.zeroValue) ColorName.Leah else color)
             is CurrencyValue -> ColoredValue(getCurrencyString(value), if (value.value.compareTo(BigDecimal.ZERO) == 0) ColorName.Grey else color)
             else -> ColoredValue(value.toString(), color)
         }
-
-    private fun createViewItemFromEvmIncomingTransactionRecord(
-        uid: String,
-        value: TransactionValue,
-        from: String,
-        blockchainType: BlockchainType,
-        timestamp: Long,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = getColoredValue(value, ColorName.Remus)
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = Translator.getString(
-                R.string.Transactions_From,
-                mapped(from, blockchainType)
-            ),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(timestamp * 1000),
-            spam = spam,
-            icon = icon ?: singleValueIconType(value)
-        )
-    }
-
-    private fun createViewItemFromContractCreationTransactionRecord(
-        record: ContractCreationTransactionRecord,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_ContractCreation),
-            subtitle = "---",
-            primaryValue = null,
-            secondaryValue = null,
-            date = Date(record.timestamp * 1000),
-            spam = record.spam,
-            icon = icon ?: TransactionViewItem.Icon.Platform(record.blockchainType)
-        )
-    }
 
     private fun createViewItemFromContractCallTransactionRecord(
         uid: String,
@@ -1126,24 +974,23 @@ class TransactionViewItemFactory(
         blockchainType: BlockchainType,
         timestamp: Long,
         currencyValue: CurrencyValue?,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
+        state: TransactionIconState,
+        spam: Boolean
     ): TransactionViewItem {
         val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue)
-        val title = method ?: Translator.getString(R.string.Transactions_ContractCall)
+        val name = method ?: Translator.getString(R.string.Transactions_ContractCall)
+        val coinsTitle = coinsTitle(incomingValues, outgoingValues)
 
-        return TransactionViewItem(
+        return viewItem(
             uid = uid,
-            progress = progress,
-            title = title,
-            subtitle = mapped(contractAddress, blockchainType),
+            type = TransactionViewItem.Type.Contract,
+            state = state,
+            title = coinsTitle ?: namedTitle(name, blockchainType),
+            completedSubtitle = if (coinsTitle != null) name else mapped(contractAddress, blockchainType),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(timestamp * 1000),
-            spam = spam,
-            icon = icon ?: iconType(blockchainType, incomingValues, outgoingValues)
+            timestamp = timestamp,
+            spam = spam
         )
     }
 
@@ -1155,418 +1002,77 @@ class TransactionViewItemFactory(
         blockchainType: BlockchainType,
         timestamp: Long,
         currencyValue: CurrencyValue?,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
+        state: TransactionIconState,
+        spam: Boolean
     ): TransactionViewItem {
-
         val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(
             incomingValues,
             outgoingValues,
             currencyValue
         )
+        val coinsTitle = coinsTitle(incomingValues, outgoingValues)
 
-        val title: String
-        val subTitle: String
+        val type: TransactionViewItem.Type
+        val title: TransactionViewItem.Title
+        val subtitle: String
         if (outgoingValues.isEmpty()) {
-            title = Translator.getString(R.string.Transactions_Receive)
+            type = TransactionViewItem.Type.Receive
+            title = coinsTitle ?: namedTitle(Translator.getString(R.string.Transactions_Receive), blockchainType)
             val addresses = incomingEvents.mapNotNull { it.address }.toSet().toList()
-
-            subTitle = if (addresses.size == 1) {
-                Translator.getString(
-                    R.string.Transactions_From, mapped(addresses.first(), blockchainType)
-                )
+            subtitle = if (addresses.size == 1) {
+                Translator.getString(R.string.Transactions_From, mapped(addresses.first(), blockchainType))
             } else {
                 Translator.getString(R.string.Transactions_Multiple)
             }
         } else {
-            title = Translator.getString(R.string.Transactions_ExternalContractCall)
-            subTitle = "---"
+            val name = Translator.getString(R.string.Transactions_ExternalContractCall)
+            type = TransactionViewItem.Type.Contract
+            title = coinsTitle ?: namedTitle(name, blockchainType)
+            subtitle = if (coinsTitle != null) name else "---"
         }
 
-        return TransactionViewItem(
+        return viewItem(
             uid = uid,
-            progress = progress,
+            type = type,
+            state = state,
             title = title,
-            subtitle = subTitle,
+            completedSubtitle = subtitle,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(timestamp * 1000),
-            spam = spam,
-            icon = icon ?: iconType(blockchainType, incomingValues, outgoingValues)
-        )
-    }
-
-    private fun createViewItemFromBitcoinOutgoingTransactionRecord(
-        record: BitcoinOutgoingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        lastBlockTimestamp: Long?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.to?.let {
-            Translator.getString(
-                R.string.Transactions_To,
-                mapped(it, record.blockchainType)
-            )
-        } ?: "---"
-
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
-        } else {
-            getColoredValue(record.value, getAmountColorForSend(icon))
-        }
-
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        val lockState = record.lockState(lastBlockTimestamp)
-        val locked = when {
-            lockState == null -> null
-            lockState.locked -> true
-            else -> false
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            doubleSpend = record.conflictingHash != null,
-            locked = locked,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromBitcoinIncomingTransactionRecord(
-        record: BitcoinIncomingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        lastBlockTimestamp: Long?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.from?.let {
-            Translator.getString(
-                R.string.Transactions_From,
-                mapped(it, record.blockchainType)
-            )
-        } ?: record.to?.let {
-            Translator.getString(
-                R.string.Transactions_To,
-                mapped(it, record.blockchainType)
-            )
-        } ?: "---"
-
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        val lockState = record.lockState(lastBlockTimestamp)
-        val locked = when {
-            lockState == null -> null
-            lockState.locked -> true
-            else -> false
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = false,
-            doubleSpend = record.conflictingHash != null,
-            locked = locked,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            timestamp = timestamp,
+            spam = spam
         )
     }
 
     private fun createViewItemFromApproveTransactionRecord(
         uid: String,
         value: TransactionValue,
-        spender: String,
-        blockchainType: BlockchainType,
         timestamp: Long,
         currencyValue: CurrencyValue?,
-        progress: Float?,
-        spam: Boolean,
-        icon: TransactionViewItem.Icon?
+        state: TransactionIconState,
+        spam: Boolean
     ): TransactionViewItem {
         val primaryValueText: String
         val secondaryValueText: String?
 
         if (value.isMaxValue) {
             primaryValueText = "∞"
-            secondaryValueText = if (value.coinCode.isEmpty()) "" else Translator.getString(R.string.Transaction_Unlimited_CoinCode, value.coinCode)
+            secondaryValueText = Translator.getString(R.string.Swap_Approve_Unlimited)
         } else {
             primaryValueText = getCoinString(value, hideSign = true)
             secondaryValueText = currencyValue?.let { getCurrencyString(it) }
         }
 
-        val primaryValue = ColoredValue(primaryValueText, ColorName.Leah)
-        val secondaryValue = secondaryValueText?.let { ColoredValue(it, ColorName.Grey) }
-
-        return TransactionViewItem(
+        return viewItem(
             uid = uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Approve),
-            subtitle = mapped(spender, blockchainType),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(timestamp * 1000),
-            spam = spam,
-            icon = icon ?: singleValueIconType(value)
-        )
-    }
-
-    private fun createViewItemFromZcashShieldingTransactionRecord(
-        record: ZcashShieldingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        lastBlockTimestamp: Long?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = when (record.direction) {
-            ZcashShieldingTransactionRecord.Direction.MigrateToIronwood ->
-                Translator.getString(R.string.Transactions_Migrate_ToIronwood)
-
-            else -> Translator.getString(R.string.Transactions_Transfer)
-        }
-        val primaryValue = ColoredValue(getCoinString(record.value, true), ColorName.Leah)
-        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-        val lockState = record.lockState(lastBlockTimestamp)
-        val locked = when {
-            lockState == null -> null
-            lockState.locked -> true
-            else -> false
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(record.direction.title),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = false,
-            doubleSpend = false,
-            locked = locked,
-            spam = record.spam,
-            icon = icon ?: TransactionViewItem.Icon.ImageResource(record.direction.icon)
-        )
-    }
-
-    private fun createViewItemFromMoneroIncomingTransactionRecord(
-        record: MoneroIncomingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.from?.let {
-            Translator.getString(
-                R.string.Transactions_From,
-                mapped(it, record.blockchainType)
-            )
-        } ?: record.to?.let {
-            Translator.getString(
-                R.string.Transactions_To,
-                mapped(it, record.blockchainType)
-            )
-        } ?: "---"
-
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = false,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromMoneroOutgoingTransactionRecord(
-        record: MoneroOutgoingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.to?.let {
-            Translator.getString(
-                R.string.Transactions_To,
-                mapped(it, record.blockchainType)
-            )
-        } ?: "---"
-
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
-        } else {
-            getColoredValue(record.value, getAmountColorForSend(icon))
-        }
-
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromThorchainIncomingTransactionRecord(
-        record: ThorchainIncomingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.from?.let {
-            Translator.getString(R.string.Transactions_From, mapped(it, record.blockchainType))
-        } ?: "---"
-
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
-        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = false,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromThorchainOutgoingTransactionRecord(
-        record: ThorchainOutgoingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.to?.let {
-            Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
-        } ?: "---"
-
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
-        } else {
-            getColoredValue(record.value, getAmountColorForSend(icon))
-        }
-
-        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromZanoIncomingTransactionRecord(
-        record: ZanoIncomingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.from?.let {
-            Translator.getString(R.string.Transactions_From, mapped(it, record.blockchainType))
-        } ?: "---"
-
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
-        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = false,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromZanoOutgoingTransactionRecord(
-        record: ZanoOutgoingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val subtitle = record.to?.let {
-            Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
-        } ?: "---"
-
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
-        } else {
-            getColoredValue(record.value, getAmountColorForSend(icon))
-        }
-
-        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = subtitle,
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
+            type = TransactionViewItem.Type.Approve,
+            state = state,
+            title = coinTitle(value),
+            completedSubtitle = Translator.getString(R.string.Transactions_Approve),
+            primaryValue = ColoredValue(primaryValueText, ColorName.Leah),
+            secondaryValue = secondaryValueText?.let { ColoredValue(it, ColorName.Grey) },
+            timestamp = timestamp,
+            spam = spam
         )
     }
 
@@ -1662,13 +1168,13 @@ class TransactionViewItemFactory(
             val coinAmount = if (roundCoinAmount) {
                 App.numberFormatter.formatCoinShort(
                     decimalValue.abs(),
-                    transactionValue.coinCode,
+                    null,
                     transactionValue.decimals ?: 8,
                 )
             } else {
                 App.numberFormatter.formatCoinFull(
                     decimalValue.abs(),
-                    transactionValue.coinCode,
+                    null,
                     transactionValue.decimals ?: 8,
                 )
             }
@@ -1676,4 +1182,10 @@ class TransactionViewItemFactory(
         } ?: ""
     }
 
+}
+
+internal fun transactionIconState(status: TransactionStatus) = when (status) {
+    TransactionStatus.Pending, is TransactionStatus.Processing -> TransactionIconState.Pending
+    TransactionStatus.Failed -> TransactionIconState.Failed
+    TransactionStatus.Completed -> TransactionIconState.Completed
 }

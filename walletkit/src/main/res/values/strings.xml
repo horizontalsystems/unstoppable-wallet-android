@@ -2359,4 +2359,20 @@
     <string name="Hud_Text_Disabled">Disabled</string>
     <string name="Hud_Text_Changed">Changed</string>
     <string name="SwapInfo_CopyRawData">Copy Raw Data</string>
+    <string name="Transactions_Status_Receiving">Receiving…</string>
+    <string name="Transactions_Status_Sending">Sending…</string>
+    <string name="Transactions_Status_Approving">Approving…</string>
+    <string name="Transactions_Status_Swapping">Swapping…</string>
+    <string name="Transactions_Status_Pending">Pending…</string>
+    <string name="Transactions_Status_TransferFailed">Transfer failed</string>
+    <string name="Transactions_Status_ApprovalFailed">Approval failed</string>
+    <string name="Transactions_Status_SwapFailed">Swap failed</string>
+    <string name="Transactions_Status_TransactionFailed">Transaction failed</string>
+    <string name="Transactions_ToYourself">To yourself</string>
+    <string name="Transactions_Status_Shielding" translatable="false">Shielding…</string>
+    <string name="Transactions_Status_Unshielding" translatable="false">Unshielding…</string>
+    <string name="Transactions_Status_ShieldingFailed" translatable="false">Shielding failed</string>
+    <string name="Transactions_Status_UnshieldFailed" translatable="false">Unshield failed</string>
+    <string name="Transactions_Shielded" translatable="false">Shielded</string>
+    <string name="Transactions_Unshielded" translatable="false">Unshielded</string>
 </resources>

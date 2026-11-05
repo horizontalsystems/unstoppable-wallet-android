@@ -102,6 +102,9 @@ object TestTags {
     // The record uid is the transaction hash on most chains. Bitcoin-family
     // chains use a random uid, so their rows cannot be picked by hash.
     fun txItem(uid: String) = "tx_item_${uid.take(8)}"
+    fun txItemTitle(uid: String) = "tx_item_title_${uid.take(8)}"
+    fun txItemSubtitle(uid: String) = "tx_item_subtitle_${uid.take(8)}"
+    fun txItemValue(uid: String) = "tx_item_value_${uid.take(8)}"
 
     fun txInfoHash(hash: String) = "tx_info_hash_${hash.take(8)}"
     // state: completed, pending, processing, failed or not_processed

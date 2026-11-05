@@ -2014,4 +2014,14 @@
     <string name="SwapInfo_CopyRawData">Rohdaten kopieren</string>
     <string name="PublicKeys_ZcashViewingKey">Zcash-Viewing-Key</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Zeigt das Guthaben und alle Transaktionen der Zcash-Wallet an, kann aber keine Gelder ausgeben.</string>
+    <string name="Transactions_Status_Receiving">Empfangen…</string>
+    <string name="Transactions_Status_Sending">Senden…</string>
+    <string name="Transactions_Status_Approving">Genehmigen…</string>
+    <string name="Transactions_Status_Swapping">Tauschen…</string>
+    <string name="Transactions_Status_Pending">Ausstehend…</string>
+    <string name="Transactions_Status_TransferFailed">Überweisung fehlgeschlagen</string>
+    <string name="Transactions_Status_ApprovalFailed">Genehmigung fehlgeschlagen</string>
+    <string name="Transactions_Status_SwapFailed">Tausch fehlgeschlagen</string>
+    <string name="Transactions_Status_TransactionFailed">Transaktion fehlgeschlagen</string>
+    <string name="Transactions_ToYourself">An dich selbst</string>
 </resources>

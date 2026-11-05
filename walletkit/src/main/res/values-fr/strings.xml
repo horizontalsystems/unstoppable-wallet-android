@@ -2011,4 +2011,14 @@
     <string name="SwapInfo_CopyRawData">Copier les données brutes</string>
     <string name="PublicKeys_ZcashViewingKey">Clé de visualisation Zcash</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Affiche le solde et toutes les transactions du portefeuille Zcash, mais ne permet pas de dépenser.</string>
+    <string name="Transactions_Status_Receiving">Réception…</string>
+    <string name="Transactions_Status_Sending">Envoi…</string>
+    <string name="Transactions_Status_Approving">Approbation…</string>
+    <string name="Transactions_Status_Swapping">Permutation…</string>
+    <string name="Transactions_Status_Pending">En attente…</string>
+    <string name="Transactions_Status_TransferFailed">Échec du transfert</string>
+    <string name="Transactions_Status_ApprovalFailed">Échec de l\'approbation</string>
+    <string name="Transactions_Status_SwapFailed">Échec de la permutation</string>
+    <string name="Transactions_Status_TransactionFailed">Échec de la transaction</string>
+    <string name="Transactions_ToYourself">À vous-même</string>
 </resources>

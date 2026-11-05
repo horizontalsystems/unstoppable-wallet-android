@@ -2008,4 +2008,14 @@
     <string name="SwapInfo_CopyRawData">复制原始数据</string>
     <string name="PublicKeys_ZcashViewingKey">Zcash 查看密钥</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK)。可显示 Zcash 钱包的余额和所有交易，但无法花费资金。</string>
+    <string name="Transactions_Status_Receiving">接收中…</string>
+    <string name="Transactions_Status_Sending">发送中…</string>
+    <string name="Transactions_Status_Approving">批准中…</string>
+    <string name="Transactions_Status_Swapping">交换中…</string>
+    <string name="Transactions_Status_Pending">待处理…</string>
+    <string name="Transactions_Status_TransferFailed">转账失败</string>
+    <string name="Transactions_Status_ApprovalFailed">批准失败</string>
+    <string name="Transactions_Status_SwapFailed">交换失败</string>
+    <string name="Transactions_Status_TransactionFailed">交易失败</string>
+    <string name="Transactions_ToYourself">发给自己</string>
 </resources>

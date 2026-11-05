@@ -2010,4 +2010,14 @@
     <string name="SwapInfo_CopyRawData">Ham Verileri Kopyala</string>
     <string name="PublicKeys_ZcashViewingKey">Zcash Görüntüleme Anahtarı</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Zcash cüzdanının bakiyesini ve tüm işlemlerini gösterir, ancak harcama yapamaz.</string>
+    <string name="Transactions_Status_Receiving">Alınıyor…</string>
+    <string name="Transactions_Status_Sending">Gönderiliyor…</string>
+    <string name="Transactions_Status_Approving">Onaylanıyor…</string>
+    <string name="Transactions_Status_Swapping">Takas ediliyor…</string>
+    <string name="Transactions_Status_Pending">Beklemede…</string>
+    <string name="Transactions_Status_TransferFailed">Transfer başarısız</string>
+    <string name="Transactions_Status_ApprovalFailed">Onay başarısız</string>
+    <string name="Transactions_Status_SwapFailed">Takas başarısız</string>
+    <string name="Transactions_Status_TransactionFailed">İşlem başarısız</string>
+    <string name="Transactions_ToYourself">Kendinize</string>
 </resources>

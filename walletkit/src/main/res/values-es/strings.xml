@@ -2009,4 +2009,14 @@
     <string name="SwapInfo_CopyRawData">Copiar datos sin procesar</string>
     <string name="PublicKeys_ZcashViewingKey">Clave de visualización de Zcash</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Muestra el saldo y todas las transacciones de la billetera Zcash, pero no puede gastar fondos.</string>
+    <string name="Transactions_Status_Receiving">Recibiendo…</string>
+    <string name="Transactions_Status_Sending">Enviando…</string>
+    <string name="Transactions_Status_Approving">Aprobando…</string>
+    <string name="Transactions_Status_Swapping">Intercambiando…</string>
+    <string name="Transactions_Status_Pending">Pendiente…</string>
+    <string name="Transactions_Status_TransferFailed">Transferencia fallida</string>
+    <string name="Transactions_Status_ApprovalFailed">Aprobación fallida</string>
+    <string name="Transactions_Status_SwapFailed">Intercambio fallido</string>
+    <string name="Transactions_Status_TransactionFailed">Transacción fallida</string>
+    <string name="Transactions_ToYourself">A ti mismo</string>
 </resources>

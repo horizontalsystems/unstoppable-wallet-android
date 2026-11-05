@@ -1997,4 +1997,14 @@
     <string name="SwapInfo_CopyRawData">کپی داده‌های خام</string>
     <string name="PublicKeys_ZcashViewingKey">کلید مشاهده Zcash</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). موجودی و همه تراکنش‌های کیف پول Zcash را نشان می‌دهد، اما نمی‌تواند وجوه را خرج کند.</string>
+    <string name="Transactions_Status_Receiving">در حال دریافت…</string>
+    <string name="Transactions_Status_Sending">در حال ارسال…</string>
+    <string name="Transactions_Status_Approving">در حال تأیید…</string>
+    <string name="Transactions_Status_Swapping">در حال سواپ…</string>
+    <string name="Transactions_Status_Pending">در انتظار…</string>
+    <string name="Transactions_Status_TransferFailed">انتقال ناموفق بود</string>
+    <string name="Transactions_Status_ApprovalFailed">تأیید ناموفق بود</string>
+    <string name="Transactions_Status_SwapFailed">سواپ ناموفق بود</string>
+    <string name="Transactions_Status_TransactionFailed">تراکنش ناموفق بود</string>
+    <string name="Transactions_ToYourself">به خودتان</string>
 </resources>

@@ -2018,4 +2018,14 @@
     <string name="SwapInfo_CopyRawData">Копировать необработанные данные</string>
     <string name="PublicKeys_ZcashViewingKey">Ключ просмотра Zcash</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Показывает баланс и все транзакции кошелька Zcash, но не позволяет тратить средства.</string>
+    <string name="Transactions_Status_Receiving">Получение…</string>
+    <string name="Transactions_Status_Sending">Отправка…</string>
+    <string name="Transactions_Status_Approving">Разрешение…</string>
+    <string name="Transactions_Status_Swapping">Обмен…</string>
+    <string name="Transactions_Status_Pending">В ожидании…</string>
+    <string name="Transactions_Status_TransferFailed">Перевод не выполнен</string>
+    <string name="Transactions_Status_ApprovalFailed">Разрешение не выполнено</string>
+    <string name="Transactions_Status_SwapFailed">Обмен не выполнен</string>
+    <string name="Transactions_Status_TransactionFailed">Транзакция не выполнена</string>
+    <string name="Transactions_ToYourself">Себе</string>
 </resources>

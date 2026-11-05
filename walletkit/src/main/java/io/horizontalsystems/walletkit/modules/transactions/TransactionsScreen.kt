@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,10 +35,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -53,7 +54,6 @@ import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPag
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.HSCircularProgressIndicator
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderStick
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImage
@@ -61,10 +61,11 @@ import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
+import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.TransactionIcon
+import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTopType
@@ -255,6 +256,7 @@ fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionViewItem>>)
 
 @Composable
 fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
+    val failed = item.state == TransactionIconState.Failed
 
     Column {
         RowUniversal(
@@ -264,114 +266,32 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                 .background(ComposeAppTheme.colors.lawrence)
                 .clickable(onClick = onClick),
         ) {
-            Box(
+            TransactionIcon(
                 modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .size(42.dp)
+                    .padding(horizontal = 16.dp)
                     .alpha(if (item.spam) 0.5f else 1f),
-                contentAlignment = Alignment.Center
-            ) {
-                item.progress?.let { progress ->
-                    HSCircularProgressIndicator(progress)
-                }
-                val icon = item.icon
-                when (icon) {
-                    TransactionViewItem.Icon.Failed -> {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_attention_24),
-                            tint = ComposeAppTheme.colors.lucian,
-                            contentDescription = null
-                        )
-                    }
-
-                    is TransactionViewItem.Icon.Platform -> {
-                        Icon(
-                            modifier = Modifier.size(32.dp),
-                            painter = painterResource(
-                                icon.iconRes ?: R.drawable.coin_placeholder
-                            ),
-                            tint = ComposeAppTheme.colors.leah,
-                            contentDescription = null
-                        )
-                    }
-
-                    is TransactionViewItem.Icon.Regular -> {
-                        val shape =
-                            if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        HsImage(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clip(shape),
-                            url = icon.url,
-                            alternativeUrl = icon.alternativeUrl,
-                            placeholder = icon.placeholder
-                        )
-                    }
-
-                    is TransactionViewItem.Icon.Double -> {
-                        val backShape =
-                            if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        val frontShape =
-                            if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        HsImage(
-                            modifier = Modifier
-                                .align(Alignment.TopStart)
-                                .padding(top = 4.dp, start = 6.dp)
-                                .size(24.dp)
-                                .clip(backShape),
-                            url = icon.back.url,
-                            alternativeUrl = icon.back.alternativeUrl,
-                            placeholder = icon.back.placeholder,
-                        )
-
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 4.5.dp, end = 6.5.dp)
-                                .size(24.dp)
-                                .clip(frontShape)
-                                .background(ComposeAppTheme.colors.tyler)
-                        )
-
-                        HsImage(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 4.dp, end = 6.dp)
-                                .size(24.dp)
-                                .clip(frontShape),
-                            url = icon.front.url,
-                            alternativeUrl = icon.front.alternativeUrl,
-                            placeholder = icon.front.placeholder,
-                        )
-                    }
-
-                    is TransactionViewItem.Icon.ImageResource -> {
-                        Icon(
-                            modifier = Modifier.size(32.dp),
-                            painter = painterResource(icon.resourceId),
-                            tint = ComposeAppTheme.colors.leah,
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
+                icon = item.type.icon,
+                state = item.state,
+            )
             Column(
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .alpha(if (item.spam) 0.5f else 1f)
             ) {
-                Row {
-                    body_leah(
-                        modifier = Modifier.padding(end = 32.dp),
-                        text = item.title,
-                        maxLines = 1,
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TransactionTitle(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 16.dp)
+                            .testTag(TestTags.txItemTitle(item.uid)),
+                        title = item.title
                     )
-                    Spacer(Modifier.weight(1f))
                     item.primaryValue?.let { coloredValue ->
                         Text(
+                            modifier = Modifier.testTag(TestTags.txItemValue(item.uid)),
                             text = if (item.showAmount) coloredValue.value else "* * *",
-                            style = ComposeAppTheme.typography.body,
-                            color = coloredValue.color.compose(),
+                            style = ComposeAppTheme.typography.headline2,
+                            color = if (failed) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
                             overflow = TextOverflow.Ellipsis,
                             maxLines = 1,
                         )
@@ -391,28 +311,24 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                             contentDescription = null
                         )
                     }
-                    if (item.sentToSelf) {
-                        Image(
-                            modifier = Modifier.padding(start = 6.dp),
-                            painter = painterResource(R.drawable.ic_arrow_return_20),
-                            contentDescription = null
-                        )
-                    }
                 }
                 Spacer(Modifier.height(1.dp))
                 Row {
-                    subhead2_grey(
+                    val subtitleModifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                        .testTag(TestTags.txItemSubtitle(item.uid))
+                    Text(
                         text = item.subtitle,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp),
-                        maxLines = 2,
+                        modifier = subtitleModifier,
+                        style = ComposeAppTheme.typography.subhead.copy(fontWeight= FontWeight.SemiBold),
+                        color = if (failed) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.grey,
                     )
                     item.secondaryValue?.let { coloredValue ->
                         Text(
                             text = if (item.showAmount) coloredValue.value else "",
-                            style = ComposeAppTheme.typography.subheadR,
-                            color = coloredValue.color.compose(),
+                            style = ComposeAppTheme.typography.subheadSB,
+                            color = if (failed) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
                             maxLines = 1,
                         )
                     }
@@ -420,6 +336,61 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
             }
         }
         HsDivider()
+    }
+}
+
+@Composable
+private fun TransactionTitle(title: TransactionViewItem.Title, modifier: Modifier = Modifier) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        when (title) {
+            is TransactionViewItem.Title.Single -> TransactionTitlePart(title, Modifier.weight(1f, fill = false))
+            is TransactionViewItem.Title.Pair -> {
+                TransactionTitlePart(title.from, Modifier.weight(1f, fill = false))
+                Icon(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .size(16.dp),
+                    painter = painterResource(R.drawable.arrow_m_right_24),
+                    tint = ComposeAppTheme.colors.grey,
+                    contentDescription = null
+                )
+                TransactionTitlePart(title.to, Modifier.weight(1f, fill = false))
+            }
+        }
+    }
+}
+
+@Composable
+private fun TransactionTitlePart(part: TransactionViewItem.Title.Single, modifier: Modifier = Modifier) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        when (val icon = part.icon) {
+            is TransactionViewItem.Icon.Regular -> HsImage(
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .size(16.dp)
+                    .clip(if (icon.rectangle) RoundedCornerShape(CornerSize(2.dp)) else CircleShape),
+                url = icon.url,
+                alternativeUrl = icon.alternativeUrl,
+                placeholder = icon.placeholder
+            )
+
+            is TransactionViewItem.Icon.Platform -> HsImage(
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .size(16.dp)
+                    .clip(CircleShape),
+                url = icon.blockchainType.imageUrl,
+                placeholder = R.drawable.coin_placeholder
+            )
+
+            null -> Unit
+        }
+        headline2_leah(
+            modifier = Modifier.weight(1f, fill = false),
+            text = part.text,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 

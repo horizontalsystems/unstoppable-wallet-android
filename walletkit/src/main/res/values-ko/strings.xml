@@ -2004,4 +2004,14 @@
     <string name="SwapInfo_CopyRawData">원시 데이터 복사</string>
     <string name="PublicKeys_ZcashViewingKey">Zcash 조회 키</string>
     <string name="PublicKeys_ZcashViewingKey_Description">Unified Full Viewing Key (UFVK). Zcash 지갑의 잔액과 모든 거래를 보여주지만 자금을 사용할 수는 없습니다.</string>
+    <string name="Transactions_Status_Receiving">받는 중…</string>
+    <string name="Transactions_Status_Sending">보내는 중…</string>
+    <string name="Transactions_Status_Approving">승인 중…</string>
+    <string name="Transactions_Status_Swapping">스왑 중…</string>
+    <string name="Transactions_Status_Pending">대기 중…</string>
+    <string name="Transactions_Status_TransferFailed">전송 실패</string>
+    <string name="Transactions_Status_ApprovalFailed">승인 실패</string>
+    <string name="Transactions_Status_SwapFailed">스왑 실패</string>
+    <string name="Transactions_Status_TransactionFailed">트랜잭션 실패</string>
+    <string name="Transactions_ToYourself">나에게</string>
 </resources>
