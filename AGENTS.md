@@ -396,7 +396,6 @@ A bug:
 
 - What is wrong, and what was expected instead.
 - How to reproduce it: app version, device, chain, steps.
-- Why it matters: who is affected and how badly.
 
 A task:
 
