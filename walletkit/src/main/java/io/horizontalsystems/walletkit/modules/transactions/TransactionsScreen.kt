@@ -66,6 +66,7 @@ import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIcon
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIconState
+import io.horizontalsystems.walletkit.uiv3.components.pulsingTextColor
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
@@ -275,6 +276,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
         item.state == TransactionIconState.Muted ||
         item.state == TransactionIconState.Warning
     val subtitleColor = when (item.state) {
+        TransactionIconState.Pending -> pulsingTextColor()
         TransactionIconState.Failed -> ComposeAppTheme.colors.lucian
         TransactionIconState.Warning -> ComposeAppTheme.colors.jacob
         else -> ComposeAppTheme.colors.grey
