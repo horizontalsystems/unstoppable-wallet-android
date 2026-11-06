@@ -27,7 +27,7 @@ fun LoaderPending(
     size: Dp = 40.dp,
     strokeWidth: Dp = 2.dp,
 ) {
-    val trackColor = ComposeAppTheme.colors.blade
+    val trackColor = ComposeAppTheme.colors.andy
     val arcColor = ComposeAppTheme.colors.jacob
 
     val transition = rememberInfiniteTransition(label = "LoaderPending")
