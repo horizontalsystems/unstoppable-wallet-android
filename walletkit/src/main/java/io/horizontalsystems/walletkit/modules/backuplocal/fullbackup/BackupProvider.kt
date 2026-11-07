@@ -235,8 +235,8 @@ class BackupProvider(
 
     /**
      * Restores preference and custom-RPC settings from a full backup.
-     * When present, [Settings.uiStatsEnabled] is applied via [StatsManager];
-     * older backups without the field leave the current value unchanged.
+     * [Settings.uiStatsEnabled] is applied via [StatsManager], using `false`
+     * when the field is missing (legacy backups).
      */
     private suspend fun restoreSettings(
         settings: Settings,
@@ -289,7 +289,7 @@ class BackupProvider(
                 AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
             }
 
-            settings.uiStatsEnabled?.let { statsManager.toggleUiStats(it) }
+            statsManager.toggleUiStats(settings.uiStatsEnabled ?: false)
         }
 
         if (BackupSection.CustomRpc in sections) {
