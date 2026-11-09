@@ -2,6 +2,7 @@ package io.horizontalsystems.walletkit.core.ethereum
 
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ICaution
+import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.providers.Translator
 
 data class CautionViewItem(val title: String, val text: String, val type: Type) {
@@ -19,6 +20,12 @@ data class CautionViewItem(val title: String, val text: String, val type: Type) 
 
         fun fromThrowable(error: Throwable) = when (error) {
             is ICaution -> error.toCautionViewItem()
+
+            is LocalizedException -> CautionViewItem(
+                title = Translator.getString(R.string.Error),
+                text = Translator.getString(error.errorTextRes),
+                type = Type.Error
+            )
 
             else -> CautionViewItem(
                 title = Translator.getString(R.string.Error),

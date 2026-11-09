@@ -1,6 +1,7 @@
 package io.horizontalsystems.walletkit.core.adapters
 
 import android.content.Context
+import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AdapterState
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BackgroundManager
@@ -13,6 +14,7 @@ import io.horizontalsystems.walletkit.core.IMoneroAccountsAdapter
 import io.horizontalsystems.walletkit.core.IReceiveAdapter
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.ITransactionsAdapter
+import io.horizontalsystems.walletkit.core.LocalizedException
 import io.horizontalsystems.walletkit.core.MoneroAccountInfo
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
 import io.horizontalsystems.walletkit.core.managers.MoneroNodeManager.MoneroNode
@@ -160,6 +162,7 @@ class MoneroAdapter(
     }
 
     override fun stop() {
+        stopped = true
         kit.saveState()
         kit.stop()
         coroutineScope.cancel()
@@ -202,7 +205,7 @@ class MoneroAdapter(
         selectedOutputs: List<String>?
     ): String = withContext(Dispatchers.IO) {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount)
+        withOpenWallet { kit.send(amountInPiconero, address, memo, selectedOutputs, activeAccount) }
     }
 
     // JNI: blocks on daemon RPC
@@ -212,7 +215,44 @@ class MoneroAdapter(
         memo: String?
     ): BigDecimal = withContext(Dispatchers.IO) {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        kit.estimateFee(amountInPiconero, address, memo, activeAccount).scaledDown(DECIMALS)
+        withOpenWallet { kit.estimateFee(amountInPiconero, address, memo, activeAccount) }.scaledDown(DECIMALS)
+    }
+
+    // Set by stop(): the kit keeps its last sync state after it stops, so a replaced adapter
+    // would otherwise still look open to withOpenWallet.
+    @Volatile
+    private var stopped = false
+
+    // The kit holds no wallet object while it is still opening, or after the open or the start
+    // failed, and its fee and send calls then fail with a bare "Wallet is NULL" that the
+    // confirmation page shows as is. Refuse first, with the same words the send form uses for
+    // these states. A wallet that failed to open is started again on the way out, since the
+    // kit never retries by itself and the user is about to try again. Read from the kit, not
+    // from balanceState, which follows it asynchronously.
+    //
+    // The wallet can still close between the check and the call. The kit reports that with an
+    // IllegalStateException ending in WALLET_CLOSED, which is mapped to the same error; other
+    // IllegalStateExceptions carry node and transaction failures and pass through.
+    private inline fun <T> withOpenWallet(call: () -> T): T {
+        val messageRes = when {
+            stopped -> R.string.Swap_ErrorWalletNotSynced
+            else -> when (kit.syncStateFlow.value.toAdapterState()) {
+                is AdapterState.NotSynced -> {
+                    refresh()
+                    R.string.Swap_ErrorWalletNotSynced
+                }
+                AdapterState.Connecting -> R.string.Swap_ErrorWalletSyncing
+                else -> null
+            }
+        }
+        if (messageRes != null) throw LocalizedException(messageRes)
+
+        try {
+            return call()
+        } catch (e: IllegalStateException) {
+            if (e.message?.endsWith(WALLET_CLOSED) == true) throw LocalizedException(R.string.Swap_ErrorWalletNotSynced)
+            throw e
+        }
     }
 
     fun getSubaddresses(): List<Subaddress> {
@@ -224,6 +264,9 @@ class MoneroAdapter(
 
     companion object {
         const val DECIMALS = 12
+
+        // Tail of every closed-wallet failure message in the kit
+        private const val WALLET_CLOSED = "Wallet is NULL"
 
         fun create(
             context: Context,
