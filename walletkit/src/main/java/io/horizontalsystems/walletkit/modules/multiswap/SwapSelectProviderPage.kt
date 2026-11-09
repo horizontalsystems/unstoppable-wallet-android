@@ -146,7 +146,7 @@ private fun SwapSelectProviderScreenInner(
                         R.drawable.selector_unchecked_20
                     }
                     val iconTint = if (viewItem.quote == currentQuote) {
-                        ComposeAppTheme.colors.jacob
+                        ComposeAppTheme.colors.orange
                     } else {
                         ComposeAppTheme.colors.andy
                     }

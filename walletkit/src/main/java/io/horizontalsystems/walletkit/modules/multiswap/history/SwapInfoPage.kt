@@ -53,7 +53,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItemDropdown
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
@@ -399,7 +399,7 @@ private fun SplitSwapInfoContent(uiState: SwapInfoUiState, navigation: HSNavigat
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 subhead2_leah(text = uiState.tokenOutCode)
-                                subhead2_jacob(text = "${output.percent}%")
+                                subhead2_orange(text = "${output.percent}%")
                             }
                             subhead2_grey(text = uiState.tokenOutBadge ?: stringResource(id = R.string.CoinPlatforms_Native))
                         }

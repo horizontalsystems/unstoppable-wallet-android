@@ -63,8 +63,8 @@ import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 val yellowGradient = Brush.horizontalGradient(
     colors = listOf(
-        Color(0xFFFFD000),
-        Color(0xFFFFA800),
+        Color(0xFFFFAA00),
+        Color(0xFFFE4A11),
     )
 )
 
@@ -107,7 +107,7 @@ fun PremiumFeatureItem(
         Icon(
             painter = painterResource(icon),
             modifier = Modifier.size(24.dp),
-            tint = ComposeAppTheme.colors.jacob,
+            tint = ComposeAppTheme.colors.orange,
             contentDescription = null
         )
         HSpacer(16.dp)
@@ -245,8 +245,8 @@ fun InfoBottomSheet(
         BottomSheetHeader(
             iconPainter = painterResource(icon),
             title = title,
-            titleColor = ComposeAppTheme.colors.jacob,
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+            titleColor = ComposeAppTheme.colors.orange,
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
             onCloseClick = hideBottomSheet
         ) {
             Column(

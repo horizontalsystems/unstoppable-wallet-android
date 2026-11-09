@@ -83,8 +83,8 @@ import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey50
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
-import io.horizontalsystems.walletkit.ui.compose.components.captionSB_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
+import io.horizontalsystems.walletkit.ui.compose.components.captionSB_orange
 import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
@@ -136,7 +136,7 @@ fun ReceiveAddressScreen(
                             HsTextButton(
                                 onClick = onErrorClick,
                             ) {
-                                captionSB_jacob(
+                                captionSB_orange(
                                     text = stringResource(R.string.Button_Retry),
                                 )
                             }
@@ -561,13 +561,13 @@ fun AmountInputDialog(
                 HsTextButton(
                     onClick = onDismissRequest
                 ) {
-                    body_jacob(stringResource(R.string.Button_Cancel).uppercase())
+                    body_orange(stringResource(R.string.Button_Cancel).uppercase())
                 }
                 HSpacer(8.dp)
                 HsTextButton(
                     onClick = { onAmountConfirm.invoke(textState.value.text.toBigDecimalOrNull()) }
                 ) {
-                    body_jacob(stringResource(R.string.Button_Confirm).uppercase())
+                    body_orange(stringResource(R.string.Button_Confirm).uppercase())
                 }
             }
         }

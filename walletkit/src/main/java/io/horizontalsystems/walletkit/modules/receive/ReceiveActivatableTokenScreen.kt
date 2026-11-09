@@ -33,7 +33,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead1_orange
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
@@ -143,7 +143,7 @@ fun ReceiveActivatableTokenScreen(
                                     contentDescription = null
                                 )
                             }
-                            subhead1_jacob(
+                            subhead1_orange(
                                 text = stringResource(R.string.Hud_Text_Activate),
                                 textAlign = TextAlign.End,
                                 modifier = Modifier

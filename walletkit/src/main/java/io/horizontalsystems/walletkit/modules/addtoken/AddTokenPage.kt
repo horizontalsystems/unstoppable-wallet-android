@@ -93,7 +93,7 @@ private fun AddTokenScreen(
                 title = TranslatableString.ResString(R.string.Button_Add),
                 onClick = viewModel::onAddClick,
                 enabled = uiState.addButtonEnabled,
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.orange
             )
         )
     ) {

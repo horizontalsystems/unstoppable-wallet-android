@@ -26,8 +26,8 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     var trendUpColor = context.getColor(R.color.green_d)
     var trendDownColor = context.getColor(R.color.red_d)
-    var neutralColor = context.getColor(R.color.jacob)
-    var barColor = context.getColor(R.color.jacob)
+    var neutralColor = context.getColor(R.color.orange)
+    var barColor = context.getColor(R.color.orange)
     var barPressedColor = context.getColor(R.color.leah)
     var neutralGradientColor = GradientColor(Color.parseColor("#FFA800"), Color.parseColor("#FFA800"))
     var trendUpGradient = GradientColor(Color.parseColor("#416BFF"), Color.parseColor("#13D670"))
@@ -45,7 +45,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var curveFastColor = Color.parseColor("#801A60FF")
     var curveSlowColor = Color.parseColor("#80ffa800")
 
-    var curveDominanceLabelColor = context.getColor(R.color.jacob)
+    var curveDominanceLabelColor = context.getColor(R.color.orange)
 
     var cursorColor = context.getColor(R.color.leah)
 

@@ -94,7 +94,7 @@ fun Prev_CellRightSelectors() {
             description1 = "Text".hs,
             description2 = "Text".hs(color = ComposeAppTheme.colors.lucian),
             icon = painterResource(id = R.drawable.checkbox_selected_24),
-            iconTint = ComposeAppTheme.colors.jacob
+            iconTint = ComposeAppTheme.colors.orange
         )
     }
 }

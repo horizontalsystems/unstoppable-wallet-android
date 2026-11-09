@@ -225,7 +225,7 @@ fun TurnOnButton(
     val onClick = { onToggle.invoke(!turnedOn) }
     val buttonColors = if (turnedOn) {
         ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
+            backgroundColor = ComposeAppTheme.colors.orange,
             contentColor = ComposeAppTheme.colors.dark,
             disabledBackgroundColor = ComposeAppTheme.colors.blade,
             disabledContentColor = ComposeAppTheme.colors.andy,

@@ -28,7 +28,7 @@ import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
-import io.horizontalsystems.walletkit.ui.compose.components.caption_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.caption_orange
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
@@ -108,7 +108,7 @@ fun ReleaseNotesScreen(
 
                 Spacer(Modifier.weight(1f))
 
-                caption_jacob(
+                caption_orange(
                     modifier = Modifier.padding(end = 24.dp),
                     text = stringResource(R.string.ReleaseNotes_JoinUnstoppables)
                 )
@@ -124,7 +124,7 @@ private fun IconButton(icon: Int, url: String, description: String) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = description,
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.orange
         )
     }
 }

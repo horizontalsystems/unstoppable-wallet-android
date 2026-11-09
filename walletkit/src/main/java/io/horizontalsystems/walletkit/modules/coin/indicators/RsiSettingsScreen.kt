@@ -48,7 +48,7 @@ fun RsiSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicator
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
                 enabled = uiState.resetEnabled,
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.orange,
                 onClick = {
                     viewModel.reset()
                 }

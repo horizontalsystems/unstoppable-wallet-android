@@ -117,7 +117,7 @@ fun SearchBar(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         backgroundColor = Color.Transparent,
-                        cursorColor = ComposeAppTheme.colors.jacob,
+                        cursorColor = ComposeAppTheme.colors.orange,
                         textColor = ComposeAppTheme.colors.leah
                     ),
                     maxLines = 1,
@@ -179,7 +179,7 @@ fun SearchBar(
                                 ),
                             text = menuItem.title.getString(),
                             style = ComposeAppTheme.typography.headline2,
-                            color = if (menuItem.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.yellow50
+                            color = if (menuItem.enabled) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.orange50
                         )
                     }
                 }

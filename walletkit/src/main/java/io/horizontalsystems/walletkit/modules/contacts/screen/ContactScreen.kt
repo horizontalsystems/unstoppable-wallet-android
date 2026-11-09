@@ -51,7 +51,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
@@ -113,7 +113,7 @@ fun ContactScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Save),
                 enabled = uiState.saveEnabled,
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.orange,
                 onClick = viewModel::onSave
             )
         )
@@ -196,7 +196,7 @@ fun ContactScreen(
                             title = stringResource(R.string.Alert_TitleWarning),
                             text = stringResource(R.string.Contacts_DiscardChanges_Warning),
                             iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
                             confirmText = stringResource(R.string.Contacts_DiscardChanges),
                             cautionType = Caution.Type.Error,
                             cancelText = stringResource(R.string.Contacts_KeepEditing),
@@ -335,9 +335,9 @@ private fun AddAddressButton(onClick: () -> Unit) {
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(R.drawable.ic_plus),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.orange
         )
-        body_jacob(text = stringResource(R.string.Contacts_AddAddress))
+        body_orange(text = stringResource(R.string.Contacts_AddAddress))
     }
 }
 
@@ -384,7 +384,7 @@ private fun ContactAddress(
         Icon(
             painter = painterResource(id = R.drawable.ic_edit_20),
             contentDescription = null,
-            tint = if (addressViewItem.edited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
+            tint = if (addressViewItem.edited) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
         )
     }
 }

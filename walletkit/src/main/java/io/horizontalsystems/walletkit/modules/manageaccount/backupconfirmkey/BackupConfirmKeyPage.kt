@@ -90,7 +90,7 @@ fun RecoveryPhraseVerifyScreen(navigation: HSNavigation, account: Account) {
                 }
 
                 val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
-                    ComposeAppTheme.colors.yellow50
+                    ComposeAppTheme.colors.orange50
                 } else {
                     ComposeAppTheme.colors.blade
                 }

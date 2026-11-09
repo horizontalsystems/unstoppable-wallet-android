@@ -85,7 +85,7 @@ fun SelectBackupItemsScreen(
                                         right = {
                                             CellRightSelectors(
                                                 icon = painterResource(id = if (wallet.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
-                                                iconTint = if (wallet.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
+                                                iconTint = if (wallet.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
                                             )
                                         },
                                         onClick = { viewModel.toggle(wallet) }
@@ -114,7 +114,7 @@ fun SelectBackupItemsScreen(
                                     right = {
                                         CellRightSelectors(
                                             icon = painterResource(id = if (item.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
-                                            iconTint = if (item.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
+                                            iconTint = if (item.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
                                         )
                                     },
                                     onClick = if (item.section != null) {

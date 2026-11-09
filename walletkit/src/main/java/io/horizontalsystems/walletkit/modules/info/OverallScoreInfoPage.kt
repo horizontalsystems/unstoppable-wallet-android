@@ -27,7 +27,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.headline2_orange
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
@@ -65,7 +65,7 @@ private fun InfoScreen(
         ) {
             InfoHeader(R.string.Coin_Analytics_OverallScore)
             VSpacer(12.dp)
-            headline2_jacob(
+            headline2_orange(
                 modifier = Modifier.padding(horizontal = 32.dp),
                 text = stringResource(categoryTitle)
             )

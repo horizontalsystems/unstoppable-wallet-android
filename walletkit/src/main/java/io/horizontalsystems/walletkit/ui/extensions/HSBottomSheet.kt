@@ -157,7 +157,7 @@ private fun BottomSheetHeader_Preview() {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = iconPainter,
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
             title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
             onCloseClick = {  },
         ){

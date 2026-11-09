@@ -460,7 +460,7 @@ fun TransactionInfoSpeedUpCell(
         Icon(
             painter = painterResource(R.drawable.ic_arrow_medium2_up_24),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.jacob
+            tint = ComposeAppTheme.colors.orange
         )
         Spacer(Modifier.width(16.dp))
         body_leah(text = stringResource(R.string.TransactionInfo_SpeedUp))

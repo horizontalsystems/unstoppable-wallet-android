@@ -23,9 +23,11 @@ val lightPalette = Colors(
     lawrence = White,
     laguna = LagunaL,
     raina = White50,
-    andy = Steel,
+    andy = Dark.copy(alpha = 0.3f),
     blade = Light,
     ocean = BlueL,
+    abraham = Shine,
+    tone = White,
 )
 
 val darkPalette = Colors(
@@ -37,9 +39,11 @@ val darkPalette = Colors(
     lawrence = Dark,
     laguna = LagunaD,
     raina = Color(0x1a6E7899),
-    andy = Smoke,
+    andy = Bright.copy(alpha = 0.3f),
     blade = Carbon,
     ocean = BlueD,
+    abraham = Black,
+    tone = Black,
 )
 
 @Composable

@@ -166,7 +166,7 @@ private fun WarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         title = stringResource(R.string.SettingsCurrency_DisclaimerTitle),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(
@@ -236,7 +236,7 @@ private fun CurrencyCell(
             if (checked) {
                 Icon(
                     painter = painterResource(R.drawable.ic_checkmark_20),
-                    tint = ComposeAppTheme.colors.jacob,
+                    tint = ComposeAppTheme.colors.orange,
                     contentDescription = null,
                 )
             }

@@ -33,7 +33,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HsImage
 import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_remus
@@ -127,7 +127,7 @@ private fun CoinInvestmentsScreen(
 @Composable
 fun CoinInvestmentHeader(amount: String, info: String) {
     CellSingleLineClear(borderTop = true) {
-        body_jacob(
+        body_orange(
             modifier = Modifier.weight(1f),
             text = amount,
         )

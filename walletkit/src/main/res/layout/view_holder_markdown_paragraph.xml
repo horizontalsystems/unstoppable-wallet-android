@@ -49,7 +49,7 @@
     <TextView
         android:id="@+id/paragraph"
         style="@style/Body"
-        android:textColorLink="@color/stateful_button_yellow_color"
+        android:textColorLink="@color/stateful_button_orange_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

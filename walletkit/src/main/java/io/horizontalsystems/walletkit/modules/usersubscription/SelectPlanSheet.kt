@@ -239,7 +239,7 @@ fun SubscriptionOption(
                 title = title.hs,
                 badge = badgeText?.hs(color = ComposeAppTheme.colors.remus),
                 gradientBadge = gradientBadge,
-                subtitle = price.hs(color = ComposeAppTheme.colors.jacob),
+                subtitle = price.hs(color = ComposeAppTheme.colors.orange),
                 noteAmount = noteAmount,
                 noteText = noteText
             )

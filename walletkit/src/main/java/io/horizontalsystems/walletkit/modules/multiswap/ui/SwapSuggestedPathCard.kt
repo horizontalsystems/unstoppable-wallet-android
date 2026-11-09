@@ -106,7 +106,7 @@ private fun suggestedPathText(path: SwapPath, onSwapFirstHop: (Token) -> Unit): 
     )
     val linkStyle = TextLinkStyles(
         style = SpanStyle(
-            color = ComposeAppTheme.colors.jacob,
+            color = ComposeAppTheme.colors.orange,
             fontWeight = ComposeAppTheme.typography.captionSB.fontWeight,
             textDecoration = TextDecoration.Underline,
         )

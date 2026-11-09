@@ -18,15 +18,12 @@ import io.horizontalsystems.walletkit.ui.compose.GreenD
 import io.horizontalsystems.walletkit.ui.compose.GreenL
 import io.horizontalsystems.walletkit.ui.compose.Grey
 import io.horizontalsystems.walletkit.ui.compose.Light
+import io.horizontalsystems.walletkit.ui.compose.Orange
 import io.horizontalsystems.walletkit.ui.compose.LightGrey
 import io.horizontalsystems.walletkit.ui.compose.Red20
 import io.horizontalsystems.walletkit.ui.compose.Red50
 import io.horizontalsystems.walletkit.ui.compose.RedD
 import io.horizontalsystems.walletkit.ui.compose.RedL
-import io.horizontalsystems.walletkit.ui.compose.Yellow20
-import io.horizontalsystems.walletkit.ui.compose.Yellow50
-import io.horizontalsystems.walletkit.ui.compose.YellowD
-import io.horizontalsystems.walletkit.ui.compose.YellowL
 import io.horizontalsystems.walletkit.ui.compose.darkPalette
 import io.horizontalsystems.walletkit.ui.compose.lightPalette
 
@@ -43,7 +40,7 @@ class TextStyles {
     @Composable
     fun c3(textAlign: TextAlign = TextAlign.Start) =
         TextStyle(
-            color = AppWidgetTheme.colors.jacob,
+            color = AppWidgetTheme.colors.orange,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             textAlign = textAlign
@@ -61,7 +58,7 @@ class TextStyles {
     @Composable
     fun d3(textAlign: TextAlign = TextAlign.Start) =
         TextStyle(
-            color = AppWidgetTheme.colors.jacob,
+            color = AppWidgetTheme.colors.orange,
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
             textAlign = textAlign
@@ -94,6 +91,7 @@ internal val LocalColorProviders = staticCompositionLocalOf {
         lawrence = ColorProvider(lightPalette.lawrence, darkPalette.lawrence),
         laguna = ColorProvider(lightPalette.laguna, darkPalette.laguna),
         raina = ColorProvider(lightPalette.raina, darkPalette.raina),
+        orange = ColorProvider(Orange),
     )
 }
 
@@ -106,6 +104,7 @@ data class ColorProviders(
     val lawrence: ColorProvider,
     val laguna: ColorProvider,
     val raina: ColorProvider,
+    val orange: ColorProvider,
 
     //base colors
     val grey: ColorProvider = ColorProvider(Grey)
@@ -120,11 +119,7 @@ val black50 = Black50
 val issykBlue = Color(0xFF3372FF)
 val lightGrey = LightGrey
 val grey = Grey
-val yellow50 = Yellow50
-val yellow20 = Yellow20
 
-val yellowD = YellowD
-val yellowL = YellowL
 val greenD = GreenD
 val greenL = GreenL
 val green50 = Green50

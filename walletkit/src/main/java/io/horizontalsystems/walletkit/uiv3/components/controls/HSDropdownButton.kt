@@ -70,15 +70,15 @@ private fun getButtonProps(style: ButtonStyle, variant: ButtonVariant): Dropdown
         ButtonVariant.Primary -> {
             when (style) {
                 ButtonStyle.Solid -> {
-                    backgroundColor = ComposeAppTheme.colors.jacob
-                    contentColor = ComposeAppTheme.colors.lawrence
+                    backgroundColor = ComposeAppTheme.colors.orange
+                    contentColor = ComposeAppTheme.colors.white
                     disabledBackgroundColor = ComposeAppTheme.colors.blade
                     disabledContentColor = ComposeAppTheme.colors.andy
                 }
 
                 ButtonStyle.Transparent -> {
                     backgroundColor = ComposeAppTheme.colors.transparent
-                    contentColor = ComposeAppTheme.colors.jacob
+                    contentColor = ComposeAppTheme.colors.orange
                     disabledBackgroundColor = ComposeAppTheme.colors.transparent
                     disabledContentColor = ComposeAppTheme.colors.andy
                 }

@@ -83,7 +83,7 @@ fun FilterScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
                 enabled = filterResetEnabled,
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.orange,
                 onClick = {
                     viewModel.resetFilters()
                 }

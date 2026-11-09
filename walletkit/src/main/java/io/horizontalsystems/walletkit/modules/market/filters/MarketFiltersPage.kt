@@ -101,7 +101,7 @@ private fun AdvancedSearchScreen(
                 title = TranslatableString.ResString(R.string.Button_Reset),
                 onClick = { viewModel.reset() },
                 enabled = uiState.resetEnabled,
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.orange
             )
         ),
     ) {

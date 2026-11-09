@@ -76,7 +76,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.formatValueAsDiff
 import io.horizontalsystems.walletkit.ui.compose.components.micro_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.launch
@@ -168,7 +168,7 @@ fun HsChartLineHeader(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            subhead2_jacob(
+                            subhead2_orange(
                                 text = extraData.dominance
                             )
                             extraData.diff?.let { diff ->
@@ -223,7 +223,7 @@ fun HsChartLineHeader(
                         }
 
                         if (extraData.rsi != null) {
-                            subhead2_jacob(
+                            subhead2_orange(
                                 text = App.numberFormatter.formatFiatShort(
                                     extraData.rsi.toBigDecimal(),
                                     "",
@@ -252,7 +252,7 @@ fun HsChartLineHeader(
                                                 append(" ")
                                             }
                                         }
-                                        withStyle(style = SpanStyle(color = ComposeAppTheme.colors.jacob)) {
+                                        withStyle(style = SpanStyle(color = ComposeAppTheme.colors.orange)) {
                                             append(macd.macdValue.plainString())
                                         }
                                     },
@@ -511,7 +511,7 @@ fun PriceVolChart(
                             dominanceCurveState.endTimestamp,
                             dominanceCurveState.minValue,
                             dominanceCurveState.maxValue,
-                            ComposeAppTheme.colors.yellow50
+                            ComposeAppTheme.colors.orange50
                         )
                     }
 
@@ -588,7 +588,7 @@ fun PriceVolChart(
                                 maxKey = rsiCurveState.endTimestamp,
                                 minValue = 0f,
                                 maxValue = 100f,
-                                color = ComposeAppTheme.colors.yellow50
+                                color = ComposeAppTheme.colors.orange50
                             )
 
                             Box(
@@ -635,7 +635,7 @@ fun PriceVolChart(
                                 maxKey = macdLineCurveState.endTimestamp,
                                 minValue = macdLineCurveState.minValue,
                                 maxValue = macdLineCurveState.maxValue,
-                                color = ComposeAppTheme.colors.yellow50
+                                color = ComposeAppTheme.colors.orange50
                             )
                             GraphicLine(
                                 modifier = Modifier

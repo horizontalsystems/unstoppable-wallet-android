@@ -88,8 +88,8 @@ fun AnalyticsBlockHeader(
 private fun PremiumBadge() {
     val yellowGradient = Brush.linearGradient(
         colors = listOf(
-            Color(0xFFFFD000),
-            Color(0xFFFFA800),
+            Color(0xFFFFAA00),
+            Color(0xFFFE4A11),
         ),
     )
     Box(

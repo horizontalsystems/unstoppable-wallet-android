@@ -47,7 +47,7 @@ fun UtxoCell(
                 Icon(
                     painter = painterResource(R.drawable.ic_edit_20),
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.orange
                 )
             }
 

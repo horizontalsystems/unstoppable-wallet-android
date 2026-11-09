@@ -19,23 +19,27 @@ class Colors(
     andy: Color,
     blade: Color,
     ocean: Color,
+    abraham: Color,
+    tone: Color,
 ) {
 
     //base colors
     val transparent = Color.Transparent
     val dark = Dark
     val light = Light
+    val shine = Shine
     val white = Color.White
     val black50 = Black50
     val issykBlue = Color(0xFF3372FF)
     val lightGrey = LightGrey
     val grey = Grey
+    val orange = Orange
+    val orange50 = Orange50
+    val orange20 = Orange20
     val yellow50 = Yellow50
     val yellow20 = Yellow20
     val green20 = Green20
 
-    val yellowD = YellowD
-    val yellowL = YellowL
     val greenD = GreenD
     val greenL = GreenL
     val green50 = Green50
@@ -68,6 +72,10 @@ class Colors(
         private set
     var ocean by mutableStateOf(ocean)
         private set
+    var abraham by mutableStateOf(abraham)
+        private set
+    var tone by mutableStateOf(tone)
+        private set
 
     fun update(other: Colors) {
         jacob = other.jacob
@@ -81,6 +89,8 @@ class Colors(
         andy = other.andy
         blade = other.blade
         ocean = other.ocean
+        abraham = other.abraham
+        tone = other.tone
     }
 
     fun copy(): Colors = Colors(
@@ -95,5 +105,7 @@ class Colors(
         andy = andy,
         blade = blade,
         ocean = ocean,
+        abraham = abraham,
+        tone = tone,
     )
 }

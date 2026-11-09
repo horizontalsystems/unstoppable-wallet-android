@@ -103,14 +103,14 @@ fun HSStepSlider(
                             modifier = Modifier
                                 .matchParentSize()
                                 .clip(CircleShape)
-                                .background(ComposeAppTheme.colors.jacob.copy(alpha = 0.24f)),
+                                .background(ComposeAppTheme.colors.orange.copy(alpha = 0.24f)),
                         )
                     }
                     Box(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
-                            .background(ComposeAppTheme.colors.jacob),
+                            .background(ComposeAppTheme.colors.orange),
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(

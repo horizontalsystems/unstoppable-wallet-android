@@ -108,7 +108,7 @@ private fun CellContact(
             Icon(
                 painter = painterResource(id = R.drawable.icon_check_1_24),
                 contentDescription = "selected",
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.orange
             )
         }
     }

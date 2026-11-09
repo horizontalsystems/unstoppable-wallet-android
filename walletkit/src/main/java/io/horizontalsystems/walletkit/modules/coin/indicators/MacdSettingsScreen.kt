@@ -48,7 +48,7 @@ fun MacdSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicato
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
                 enabled = uiState.resetEnabled,
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.orange,
                 onClick = {
                     viewModel.reset()
                 }

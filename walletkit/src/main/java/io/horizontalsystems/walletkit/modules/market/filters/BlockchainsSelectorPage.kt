@@ -59,7 +59,7 @@ private fun FilterByBlockchainsScreen(
                         modifier = Modifier.padding(start = 24.dp),
                         painter = painterResource(id = R.drawable.ic_blocks_24),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.orange
                     )
                 },
                 menuItems = listOf(
@@ -145,7 +145,7 @@ private fun AnyCell(
         )
         Icon(
             painter = painterResource(R.drawable.ic_checkmark_20),
-            tint = ComposeAppTheme.colors.jacob,
+            tint = ComposeAppTheme.colors.orange,
             contentDescription = null,
             modifier = Modifier.alpha(if (checked) 1f else 0f)
         )

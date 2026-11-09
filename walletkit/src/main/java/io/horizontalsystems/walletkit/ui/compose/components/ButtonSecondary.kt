@@ -70,7 +70,7 @@ fun ButtonSecondaryYellow(
         modifier = modifier,
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
+            backgroundColor = ComposeAppTheme.colors.orange,
             contentColor = ComposeAppTheme.colors.dark,
             disabledBackgroundColor = ComposeAppTheme.colors.blade,
             disabledContentColor = ComposeAppTheme.colors.andy,
@@ -210,7 +210,7 @@ fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
                             modifier = Modifier
                                 .size(3.dp)
                                 .clip(CircleShape)
-                                .background(if (select.selected == it) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey)
+                                .background(if (select.selected == it) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey)
                         )
                     }
                 }

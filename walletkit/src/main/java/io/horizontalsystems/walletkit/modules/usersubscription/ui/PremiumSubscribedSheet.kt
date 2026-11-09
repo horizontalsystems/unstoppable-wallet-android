@@ -24,7 +24,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import kotlinx.serialization.Serializable
@@ -84,7 +84,7 @@ fun PremiumSubscribedScreen(
                             .padding(horizontal = 44.dp)
                     )
                     VSpacer(12.dp)
-                    body_jacob(
+                    body_orange(
                         text = stringResource(R.string.Premium_EnjoyFullPowerOfTheApp),
                         textAlign = TextAlign.Center,
                     )

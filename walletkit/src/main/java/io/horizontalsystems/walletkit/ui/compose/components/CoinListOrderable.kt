@@ -111,7 +111,7 @@ fun CoinListOrderable(
                             HSCellButton(
                                 icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
                                 iconTint = ComposeAppTheme.colors.blade,
-                                backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob
+                                backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.orange
                             ) {
                                 toggleFavorite()
                                 coroutineScope.launch {

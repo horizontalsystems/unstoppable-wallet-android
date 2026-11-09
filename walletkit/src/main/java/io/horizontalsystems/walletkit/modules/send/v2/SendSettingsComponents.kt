@@ -71,7 +71,7 @@ fun SendSettingsRow(
                         append(subtitle)
                         if (warning != null) {
                             append(" ")
-                            withStyle(SpanStyle(color = ComposeAppTheme.colors.jacob)) {
+                            withStyle(SpanStyle(color = ComposeAppTheme.colors.orange)) {
                                 append(warning)
                             }
                         }

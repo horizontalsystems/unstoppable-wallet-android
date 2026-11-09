@@ -373,7 +373,7 @@ private fun BackupFileItems(
                                 right = {
                                     CellRightSelectors(
                                         icon = painterResource(if (wallet.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
-                                        iconTint = if (wallet.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
+                                        iconTint = if (wallet.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
                                     )
                                 },
                                 onClick = { viewModel.toggleWallet(wallet) }
@@ -403,7 +403,7 @@ private fun BackupFileItems(
                                 right = {
                                     CellRightSelectors(
                                         icon = painterResource(if (item.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
-                                        iconTint = if (item.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
+                                        iconTint = if (item.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.grey
                                     )
                                 },
                                 onClick = if (item.section != null) {

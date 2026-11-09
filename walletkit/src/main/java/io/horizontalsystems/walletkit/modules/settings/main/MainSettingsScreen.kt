@@ -160,7 +160,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.UnstoppableLabs_Title,
                 R.drawable.flask_24,
-                iconTint = ComposeAppTheme.colors.jacob,
+                iconTint = ComposeAppTheme.colors.orange,
                 onClick = {
                     navigation.slideFromRight(UnstoppableLabsPage)
                 }
@@ -339,7 +339,7 @@ private fun SettingSections(
         HsSettingCell(
             title = if(isFDroidBuild) R.string.Settings_Support else R.string.Settings_VipSupport,
             icon = R.drawable.ic_support_yellow_24,
-            iconTint = ComposeAppTheme.colors.jacob,
+            iconTint = ComposeAppTheme.colors.orange,
             onClick = {
                 if (isFDroidBuild) {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)

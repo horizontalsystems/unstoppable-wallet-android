@@ -242,7 +242,7 @@ private fun YouWillPayRow(uiState: CrossPayTabUiState) {
                 is CrossPayQuoteState.Success -> Text(
                     text = CoinValue(uiState.tokenIn, quote.sellAmount).getFormattedFull(),
                     style = ComposeAppTheme.typography.subheadSB,
-                    color = ComposeAppTheme.colors.jacob,
+                    color = ComposeAppTheme.colors.orange,
                 )
 
                 is CrossPayQuoteState.Error -> Text(
@@ -254,7 +254,7 @@ private fun YouWillPayRow(uiState: CrossPayTabUiState) {
                 null -> Text(
                     text = CoinValue(uiState.tokenIn, BigDecimal.ZERO).getFormattedFull(),
                     style = ComposeAppTheme.typography.subheadSB,
-                    color = ComposeAppTheme.colors.jacob,
+                    color = ComposeAppTheme.colors.orange,
                 )
             }
         }

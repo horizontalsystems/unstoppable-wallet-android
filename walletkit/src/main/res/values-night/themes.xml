@@ -6,11 +6,11 @@
     <style name="Theme.AppTheme.DayNight" parent="Theme.AppTheme.DarkModeAppTheme"/>
 
     <style name="Theme.AppTheme.DarkModeAppTheme" parent="Theme.AppTheme">
-        <item name="colorAccent">@color/yellow_d</item>
+        <item name="colorAccent">@color/orange</item>
         <item name="android:windowBackground">@color/dark</item>
         <item name="actionMenuTextAppearance">@style/Headline2</item>
         <item name="colorControlNormal">@color/grey</item>
-        <item name="colorControlActivated">@color/yellow_d</item>
+        <item name="colorControlActivated">@color/orange</item>
         <item name="colorControlHighlight">#6E7899</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>

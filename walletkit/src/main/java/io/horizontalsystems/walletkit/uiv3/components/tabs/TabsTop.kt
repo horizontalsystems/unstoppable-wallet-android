@@ -84,7 +84,7 @@ fun TabsTop(
                     val color = if (selected) {
                         ComposeAppTheme.colors.leah
                     } else if (premium) {
-                        ComposeAppTheme.colors.jacob
+                        ComposeAppTheme.colors.orange
                     } else {
                         ComposeAppTheme.colors.grey
                     }
@@ -109,7 +109,7 @@ fun TabsTop(
                     TabRowDefaults.SecondaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(selectedIndex, matchContentSize = false),
                         height = 2.dp,
-                        color = ComposeAppTheme.colors.jacob
+                        color = ComposeAppTheme.colors.orange
                     )
                 },
                 divider = {
@@ -130,7 +130,7 @@ fun TabsTop(
                     TabRowDefaults.SecondaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(selectedIndex, matchContentSize = false),
                         height = 2.dp,
-                        color = ComposeAppTheme.colors.jacob
+                        color = ComposeAppTheme.colors.orange
                     )
                 },
                 divider = {

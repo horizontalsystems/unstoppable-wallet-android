@@ -68,7 +68,7 @@ fun SectorsSelectorScreen(
                         modifier = Modifier.padding(start = 24.dp),
                         painter = painterResource(id = R.drawable.prem_portfolio_24),
                         contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
+                        tint = ComposeAppTheme.colors.orange
                     )
                 },
                 menuItems = listOf(
@@ -136,7 +136,7 @@ fun SectorsSelectorScreen(
                             Image(
                                 modifier = Modifier.padding(start = 5.dp),
                                 painter = painterResource(id = R.drawable.ic_checkmark_20),
-                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                                 contentDescription = null
                             )
                         }

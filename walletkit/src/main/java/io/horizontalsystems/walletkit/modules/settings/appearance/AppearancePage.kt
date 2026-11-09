@@ -58,7 +58,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead1_orange
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
@@ -423,7 +423,7 @@ private fun AppCloseWarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(id = R.drawable.ic_attention_24),
         title = stringResource(id = R.string.Alert_TitleWarning),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(
@@ -524,7 +524,7 @@ private fun IconBox(
                 .background(ComposeAppTheme.colors.red50)
         )
         if (selected) {
-            subhead1_jacob(name)
+            subhead1_orange(name)
         } else {
             subhead1_leah(name)
         }

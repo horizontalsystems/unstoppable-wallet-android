@@ -150,10 +150,10 @@ private fun MainScreen(
                             } else null,
                             enabled = destination.enabled,
                             colors = HsNavigationBarItemDefaults.colors(
-                                selectedIconColor = ComposeAppTheme.colors.jacob,
+                                selectedIconColor = ComposeAppTheme.colors.orange,
                                 unselectedIconColor = ComposeAppTheme.colors.grey,
                                 indicatorColor = ComposeAppTheme.colors.transparent,
-                                selectedTextColor = ComposeAppTheme.colors.jacob,
+                                selectedTextColor = ComposeAppTheme.colors.orange,
                                 unselectedTextColor = ComposeAppTheme.colors.grey,
                             ),
                             icon = {

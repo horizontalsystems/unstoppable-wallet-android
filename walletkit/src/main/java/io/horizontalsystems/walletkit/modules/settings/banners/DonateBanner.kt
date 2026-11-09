@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.Bright
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.YellowD
 
 @Composable
 fun DonateBanner(onClick: () -> Unit) {
@@ -73,7 +72,7 @@ fun DonateBanner(onClick: () -> Unit) {
                     maxLines = 2,
                     text = stringResource(R.string.SettingsBanner_SupportTheProject),
                     style = ComposeAppTheme.typography.subhead,
-                    color = YellowD,
+                    color = ComposeAppTheme.colors.orange,
                 )
             }
 

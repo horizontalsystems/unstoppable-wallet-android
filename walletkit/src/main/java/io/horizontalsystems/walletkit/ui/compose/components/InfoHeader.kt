@@ -12,7 +12,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
 @Composable
 fun InfoH3(text: String) {
-    headline2_jacob(
+    headline2_orange(
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
         text = text
     )

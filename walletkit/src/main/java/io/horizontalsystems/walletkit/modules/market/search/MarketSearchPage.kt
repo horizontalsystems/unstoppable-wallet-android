@@ -295,7 +295,7 @@ private fun MarketCoin(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_heart_filled_20),
                     contentDescription = "heart icon button",
-                    tint = ComposeAppTheme.colors.jacob
+                    tint = ComposeAppTheme.colors.orange
                 )
             }
         } else {

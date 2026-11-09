@@ -64,7 +64,7 @@ fun SwapSlippageSettingsScreen(
                 onClick = {
                     viewModel.onReset()
                 },
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.orange
             )
         ),
         bottomBar = {

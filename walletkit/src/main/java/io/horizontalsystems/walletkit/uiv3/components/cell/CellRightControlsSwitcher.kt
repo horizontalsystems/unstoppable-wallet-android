@@ -68,7 +68,7 @@ fun CellRightControlsSwitcher(
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Bright,
                     uncheckedThumbColor = Bright,
-                    checkedTrackColor = ComposeAppTheme.colors.jacob,
+                    checkedTrackColor = ComposeAppTheme.colors.orange,
                     uncheckedTrackColor = ComposeAppTheme.colors.andy,
                     checkedTrackAlpha = 1f,
                     uncheckedTrackAlpha = 1f,

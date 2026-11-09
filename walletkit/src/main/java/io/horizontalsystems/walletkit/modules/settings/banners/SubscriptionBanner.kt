@@ -29,7 +29,6 @@ import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.ui.compose.Bright
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.GreenD
-import io.horizontalsystems.walletkit.ui.compose.YellowD
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
@@ -76,7 +75,7 @@ fun SubscriptionBannerView(
                 Text(
                     text = stringResource(R.string.SettingsBanner_Premium),
                     style = ComposeAppTheme.typography.headline1,
-                    color = YellowD,
+                    color = ComposeAppTheme.colors.orange,
                 )
                 Column {
                     Text(

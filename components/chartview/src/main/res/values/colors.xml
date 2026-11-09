@@ -25,6 +25,7 @@
     <color name="black_50">#80000000</color>
     <color name="white_50">#80ffffff</color>
     <color name="yellow_50">#80ffa800</color>
+    <color name="orange">#FE4A11</color>
 
     <color name="grey_50">#80808085</color>
     <color name="steel_10">#1a6E7899</color>

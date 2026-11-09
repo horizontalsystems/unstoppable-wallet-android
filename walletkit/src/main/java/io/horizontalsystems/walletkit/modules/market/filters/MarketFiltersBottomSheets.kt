@@ -38,7 +38,7 @@ fun <ItemClass> SingleSelectBottomSheetContent(
         iconPainter = painterResource(headerIcon),
         title = stringResource(title),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange)
     ) {
         Spacer(Modifier.height(12.dp))
         CellUniversalLawrenceSection(
@@ -73,7 +73,7 @@ fun <ItemClass> SingleSelectBottomSheetContent(
                     Image(
                         modifier = Modifier.padding(start = 5.dp),
                         painter = painterResource(id = R.drawable.ic_checkmark_20),
-                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                         contentDescription = null
                     )
                 }
@@ -94,7 +94,7 @@ fun PriceCloseToBottomSheetContent(
         iconPainter = painterResource(R.drawable.ic_usd_24),
         title = stringResource(R.string.Market_Filter_PriceCloseTo),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange)
     ) {
         VSpacer(12.dp)
         CellUniversalLawrenceSection(showFrame = true) {
@@ -116,7 +116,7 @@ fun PriceCloseToBottomSheetContent(
                         Image(
                             modifier = Modifier.padding(start = 5.dp),
                             painter = painterResource(id = R.drawable.ic_checkmark_20),
-                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                             contentDescription = null
                         )
                     }
@@ -140,7 +140,7 @@ fun PriceCloseToBottomSheetContent(
                             Image(
                                 modifier = Modifier.padding(start = 5.dp),
                                 painter = painterResource(id = R.drawable.ic_checkmark_20),
-                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                                 contentDescription = null
                             )
                         }
@@ -164,7 +164,7 @@ fun CoinSetBottomSheetContent(
         iconPainter = painterResource(R.drawable.ic_circle_coin_24),
         title = stringResource(R.string.Market_Filter_ChooseSet),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange)
     ) {
         VSpacer(12.dp)
         CellUniversalLawrenceSection(
@@ -189,7 +189,7 @@ fun CoinSetBottomSheetContent(
                     Image(
                         modifier = Modifier.padding(start = 5.dp),
                         painter = painterResource(id = R.drawable.ic_checkmark_20),
-                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange),
                         contentDescription = null
                     )
                 }

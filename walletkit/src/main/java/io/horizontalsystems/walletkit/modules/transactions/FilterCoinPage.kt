@@ -113,7 +113,7 @@ fun FilterCoinScreen(navigation: HSNavigation, viewModel: TransactionsViewModel)
                                     Icon(
                                         painter = painterResource(R.drawable.icon_20_check_1),
                                         contentDescription = null,
-                                        tint = ComposeAppTheme.colors.jacob
+                                        tint = ComposeAppTheme.colors.orange
                                     )
                                 }
                             }

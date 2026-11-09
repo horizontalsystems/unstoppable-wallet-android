@@ -68,7 +68,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cards.CardsErrorMessageDef
 import io.horizontalsystems.walletkit.modules.multiswap.history.DividerWithArrow
 import io.horizontalsystems.walletkit.modules.multiswap.history.shortenAddress
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
@@ -550,7 +550,7 @@ fun SplitOutputRowPure(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     subhead2_leah(text = code)
-                    subhead2_jacob(text = "$percent%")
+                    subhead2_orange(text = "$percent%")
                 }
                 subhead2_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
             }

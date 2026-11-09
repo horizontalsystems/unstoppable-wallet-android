@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.Bright
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.YellowD
 
 @Composable
 fun GameBanner(onClick: () -> Unit) {
@@ -58,7 +57,7 @@ fun GameBanner(onClick: () -> Unit) {
                 Text(
                     text = stringResource(R.string.SettingsBanner_Title),
                     style = ComposeAppTheme.typography.headline1,
-                    color = YellowD,
+                    color = ComposeAppTheme.colors.orange,
                 )
                 Text(
                     text = stringResource(R.string.SettingsBanner_GameDescription),

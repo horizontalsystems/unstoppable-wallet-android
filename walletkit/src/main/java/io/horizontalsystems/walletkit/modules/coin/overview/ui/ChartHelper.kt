@@ -34,7 +34,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
     var mainCurvePressedColor = colors.leah
     var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
-    var mainBarsColor = colors.jacob
+    var mainBarsColor = colors.orange
     var mainBarsPressedColor = colors.andy
 
     init {
@@ -93,12 +93,12 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         when {
             chartData.disabled -> {
                 mainCurveColor = colors.grey
-                mainCurveGradientColors = Pair(colors.andy.copy(alpha = 0f), colors.andy.copy(alpha = 0.5f))
+                mainCurveGradientColors = Pair(colors.grey.copy(alpha = 0f), colors.grey.copy(alpha = 0.5f))
             }
 
             !chartData.isMovementChart -> {
-                mainCurveColor = colors.jacob
-                mainCurveGradientColors = Pair(Color(0x00FFA800), Color(0x80FFA800))
+                mainCurveColor = colors.orange
+                mainCurveGradientColors = Pair(Color(0x00FE4A11), Color(0x80FE4A11))
             }
 
             chartData.diff() < BigDecimal.ZERO -> {

@@ -73,7 +73,7 @@ fun CoinContent(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
                             icon = R.drawable.ic_heart_filled_24,
-                            tint = ComposeAppTheme.colors.jacob,
+                            tint = ComposeAppTheme.colors.orange,
                             onClick = {
                                 viewModel.onUnfavoriteClick()
 

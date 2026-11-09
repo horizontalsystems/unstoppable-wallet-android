@@ -344,7 +344,7 @@ class CoinAnalyticsViewModel(
                     chartSlices.add(
                         StackBarSlice(
                             value = percent.toFloat(),
-                            color = blockchain.type.brandColor ?: Color(0xFFFFA800)
+                            color = blockchain.type.brandColor ?: Color(0xFFFE4A11)
                         )
                     )
                     footerItems.add(

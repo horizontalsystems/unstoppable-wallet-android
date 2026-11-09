@@ -10,7 +10,7 @@
     <color name="leah">@color/steel_light</color>
     <color name="lawrence">@color/steel_dark</color>
 
-    <color name="andy">@color/smoke</color>
+    <color name="andy">#4DEDEDED</color>
     <color name="raina">@color/steel_10</color>
 
 </resources>

@@ -96,7 +96,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                                     Image(
                                         painter = painterResource(id = R.drawable.ic_checkmark_20),
                                         contentDescription = null,
-                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.orange)
                                     )
                                 }
                             }

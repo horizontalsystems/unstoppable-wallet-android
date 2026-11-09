@@ -82,7 +82,7 @@ private fun <T> MenuItem(
         Text(
             text = item.title,
             style = ComposeAppTheme.typography.body,
-            color = if (item.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah
+            color = if (item.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.leah
         )
     }
 }

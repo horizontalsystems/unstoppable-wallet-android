@@ -54,7 +54,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -99,7 +99,7 @@ fun ManageAccountScreen(navigation: HSNavigation, accountId: String) {
                 title = TranslatableString.ResString(R.string.ManageAccount_Save),
                 onClick = { viewModel.onSave() },
                 enabled = viewState.canSave,
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.orange,
                 testTag = TestTags.ACCOUNT_SAVE
             )
         )
@@ -438,11 +438,11 @@ private fun YellowActionItem(
                     .size(24.dp),
                 painter = icon,
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.jacob
+                tint = ComposeAppTheme.colors.orange
             )
         }
 
-        body_jacob(
+        body_orange(
             modifier = Modifier.weight(1f),
             text = title,
         )

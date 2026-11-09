@@ -142,7 +142,7 @@ fun PremiumHeader(
             painter = painterResource(R.drawable.premium_filled_24_gradient),
             contentDescription = null,
         )
-        subhead1_jacob(
+        subhead1_orange(
             text = stringResource(title),
             maxLines = 1
         )

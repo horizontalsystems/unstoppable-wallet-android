@@ -29,7 +29,7 @@ data class ProChartSheet(val input: Input) : HSBottomSheet() {
 
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_chart_24),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
             title = input.title,
             onCloseClick = { navigation.removeLastOrNull() }
         ) {

@@ -19,7 +19,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
@@ -94,7 +94,7 @@ fun SubscriptionScreen(navigation: HSNavigation) {
                     CellUniversal(
                         onClick = viewModel::restorePurchase
                     ) {
-                        body_jacob(
+                        body_orange(
                             text = stringResource(R.string.SettingsSubscription_RestorePurchase),
                             maxLines = 1,
                             modifier = Modifier.weight(1f)

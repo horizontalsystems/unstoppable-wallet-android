@@ -30,7 +30,7 @@ import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadR_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -86,7 +86,7 @@ fun WhyDonateView(
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
                 VSpacer(12.dp)
-                body_jacob(
+                body_orange(
                     text = stringResource(R.string.SettingsBanner_DonateSubtitle),
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
@@ -112,7 +112,7 @@ fun WhyDonateView(
                     textAlign = TextAlign.Center
                 )
                 VSpacer(12.dp)
-                body_jacob(
+                body_orange(
                     text = stringResource(R.string.SettingsBanner_DonateUnstoppableWalletTeam),
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
@@ -150,7 +150,7 @@ fun WhyDonateView(
                     contentDescription = null,
                     modifier = Modifier.fillMaxWidth()
                 )
-                body_jacob(
+                body_orange(
                     text = stringResource(R.string.SettingsBanner_DonateExclusivelyOnFDroid),
                     modifier = Modifier.padding(horizontal = 24.dp),
                 )
@@ -208,7 +208,7 @@ fun WhyDonateView(
                     modifier = Modifier.fillMaxWidth()
                 )
                 VSpacer(12.dp)
-                body_jacob(
+                body_orange(
                     text = stringResource(R.string.SettingsBanner_DonateEveryBitOfSupportMatters),
                     modifier = Modifier
                         .padding(horizontal = 24.dp)

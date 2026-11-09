@@ -34,7 +34,7 @@ fun WalletSwitchBottomSheet(
 
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_24_lock),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
         title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
         onCloseClick = onCancelClick,
     ) {

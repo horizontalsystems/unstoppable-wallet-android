@@ -25,7 +25,7 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_jacob
+import io.horizontalsystems.walletkit.ui.compose.components.headline2_orange
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
@@ -68,7 +68,7 @@ fun BiometricDisabledDialog(onClick: () -> Unit) {
                     .clickable { onClick.invoke() },
                 contentAlignment = Alignment.Center
             ) {
-                headline2_jacob(
+                headline2_orange(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     text = stringResource(R.string.Unlock_Passcode)
                 )

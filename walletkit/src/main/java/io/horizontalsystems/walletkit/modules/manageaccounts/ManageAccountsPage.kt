@@ -93,7 +93,7 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
             MenuItemDropdown(
                 title = TranslatableString.ResString(R.string.Button_Add),
                 icon = R.drawable.wallet_add_sharp_24,
-                iconTint = ComposeAppTheme.colors.jacob,
+                iconTint = ComposeAppTheme.colors.orange,
                 items = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),

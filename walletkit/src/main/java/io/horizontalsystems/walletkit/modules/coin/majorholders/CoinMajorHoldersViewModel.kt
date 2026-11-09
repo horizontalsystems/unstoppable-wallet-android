@@ -88,7 +88,7 @@ class CoinMajorHoldersViewModel(
 
     private fun getChartData(top10ShareFloat: Float, blockchain: Blockchain): List<StackBarSlice> {
         val remaining = 100f - top10ShareFloat
-        val color = blockchain.type.brandColor ?: Color(0xFFFFA800)
+        val color = blockchain.type.brandColor ?: Color(0xFFFE4A11)
         return listOf(
             StackBarSlice(value = top10ShareFloat, color = color),
             StackBarSlice(value = remaining, color = color.copy(alpha = 0.5f)),

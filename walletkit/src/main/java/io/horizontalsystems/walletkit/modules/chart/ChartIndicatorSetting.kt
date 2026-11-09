@@ -126,7 +126,7 @@ interface ChartIndicatorSettingsDao {
                     defaultData = mapOf(
                         "period" to "9",
                         "maType" to "EMA",
-                        "color" to 0xFFFFA800.toString(),
+                        "color" to 0xFFFE4A11.toString(),
                     ),
                     enabled = true,
                 ),

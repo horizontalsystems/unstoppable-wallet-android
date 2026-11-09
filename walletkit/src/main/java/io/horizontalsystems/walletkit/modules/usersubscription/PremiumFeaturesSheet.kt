@@ -241,7 +241,7 @@ private fun ActionText() {
         text = stringResource(R.string.Premium_Banner_BlackFridayText),
         textColor = ComposeAppTheme.colors.leah,
         highlightPart = stringResource(R.string.Premium_Title),
-        highlightColor = ComposeAppTheme.colors.jacob
+        highlightColor = ComposeAppTheme.colors.orange
     )
     Text(
         text = text,

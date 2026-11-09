@@ -74,7 +74,7 @@ fun HSSwitcher(
             .height(buttonHeight)
             .alpha(if (enabled) 1f else 0.5f)
             .clip(CircleShape)
-            .background(if (switchChecked) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.andy)
+            .background(if (switchChecked) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.andy)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,

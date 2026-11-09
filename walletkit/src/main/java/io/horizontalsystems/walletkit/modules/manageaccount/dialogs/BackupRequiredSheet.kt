@@ -71,7 +71,7 @@ fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
                             modifier = Modifier.size(24.dp),
                             painter = painterResource(R.drawable.ic_edit_24px),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.jacob
+                            tint = ComposeAppTheme.colors.orange
                         )
                     },
                     middle = {
@@ -99,7 +99,7 @@ fun BackupRequiredScreen(navigation: HSNavigation, account: Account) {
                             modifier = Modifier.size(24.dp),
                             painter = painterResource(R.drawable.ic_file_24),
                             contentDescription = null,
-                            tint = ComposeAppTheme.colors.jacob
+                            tint = ComposeAppTheme.colors.orange
                         )
                     },
                     middle = {

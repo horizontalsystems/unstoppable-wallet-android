@@ -304,7 +304,7 @@ private fun RecipientCard(
             right = {
                 CellRightInfo(
                     eyebrow = (amount?.let { CoinValue(tokenOut, it).getFormattedFull() } ?: "---").hs(leah, dimmed = amountDimmed),
-                    subtitle = "$percent%".hs(ComposeAppTheme.colors.jacob),
+                    subtitle = "$percent%".hs(ComposeAppTheme.colors.orange),
                 )
             },
             onClick = onClick,

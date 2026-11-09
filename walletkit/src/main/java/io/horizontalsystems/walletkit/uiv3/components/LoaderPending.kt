@@ -28,7 +28,7 @@ fun LoaderPending(
     strokeWidth: Dp = 2.dp,
 ) {
     val trackColor = ComposeAppTheme.colors.andy
-    val arcColor = ComposeAppTheme.colors.jacob
+    val arcColor = ComposeAppTheme.colors.orange
 
     val transition = rememberInfiniteTransition(label = "LoaderPending")
     val rotation by transition.animateFloat(
