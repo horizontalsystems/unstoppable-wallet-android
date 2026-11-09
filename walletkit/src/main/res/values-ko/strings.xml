@@ -2007,4 +2007,5 @@
     <string name="Activity_Empty_Swaps">대기 중이거나 완료된 스왑이 없습니다.</string>
     <string name="Activity_Empty_PrivateSends">대기 중이거나 완료된 프라이빗 전송이 없습니다.</string>
     <string name="Activity_Empty_CrossPay">대기 중이거나 완료된 CrossPay 결제가 없습니다.</string>
+    <string name="Transactions_FromUnknown">알 수 없는 발신자</string>
 </resources>

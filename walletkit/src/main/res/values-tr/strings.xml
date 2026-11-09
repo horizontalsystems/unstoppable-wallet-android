@@ -2013,4 +2013,5 @@
     <string name="Activity_Empty_Swaps">Henüz bekleyen veya geçmiş bir swap işleminiz yok.</string>
     <string name="Activity_Empty_PrivateSends">Henüz bekleyen veya geçmiş bir gizli gönderiminiz yok.</string>
     <string name="Activity_Empty_CrossPay">Henüz bekleyen veya geçmiş bir CrossPay ödemeniz yok.</string>
+    <string name="Transactions_FromUnknown">bilinmeyen gönderenden</string>
 </resources>

@@ -2012,4 +2012,5 @@
     <string name="Activity_Empty_Swaps">Aún no tienes swaps pendientes o anteriores.</string>
     <string name="Activity_Empty_PrivateSends">Aún no tienes envíos privados pendientes o anteriores.</string>
     <string name="Activity_Empty_CrossPay">Aún no tienes pagos CrossPay pendientes o anteriores.</string>
+    <string name="Transactions_FromUnknown">de desconocido</string>
 </resources>

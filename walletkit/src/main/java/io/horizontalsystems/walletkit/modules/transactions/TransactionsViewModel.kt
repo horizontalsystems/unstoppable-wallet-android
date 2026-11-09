@@ -316,7 +316,8 @@ data class TransactionViewItem(
     }
 
     sealed class Title {
-        data class Single(val text: String, val icon: Icon?) : Title()
+        // Muted when the text stands in for an asset the wallet could not identify.
+        data class Single(val text: String, val icon: Icon?, val muted: Boolean = false) : Title()
         data class Pair(val from: Single, val to: Single) : Title()
     }
 

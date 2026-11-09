@@ -2369,4 +2369,5 @@
     <string name="Activity_Empty_Swaps">You don\'t have any pending or past swaps yet.</string>
     <string name="Activity_Empty_PrivateSends">You don\'t have any pending or past private sends yet.</string>
     <string name="Activity_Empty_CrossPay">You don\'t have any pending or past CrossPay payments yet.</string>
+    <string name="Transactions_FromUnknown">from unknown</string>
 </resources>

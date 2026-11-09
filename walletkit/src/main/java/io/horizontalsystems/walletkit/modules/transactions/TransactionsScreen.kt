@@ -61,7 +61,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsImage
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.TransactionIcon
@@ -352,7 +351,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                         Text(
                             text = if (item.showAmount) coloredValue.value else "",
                             style = ComposeAppTheme.typography.subheadSB.copy(lineHeight = 20.sp),
-                            color = if (ended) ComposeAppTheme.colors.grey else coloredValue.color.compose(),
+                            color = if (ended) ComposeAppTheme.colors.andy else coloredValue.color.compose(),
                             maxLines = 1,
                         )
                     }
@@ -398,20 +397,23 @@ private fun TransactionTitlePart(part: TransactionViewItem.Title.Single, modifie
                 placeholder = icon.placeholder
             )
 
+            // The network stands in for a coin here, so it keeps its square shape.
             is TransactionViewItem.Icon.Platform -> HsImage(
                 modifier = Modifier
                     .padding(end = 4.dp)
                     .size(16.dp)
-                    .clip(CircleShape),
+                    .clip(RoundedCornerShape(4.dp)),
                 url = icon.blockchainType.imageUrl,
                 placeholder = R.drawable.coin_placeholder
             )
 
             null -> Unit
         }
-        headline2_leah(
+        Text(
             modifier = Modifier.weight(1f, fill = false),
             text = part.text,
+            style = ComposeAppTheme.typography.headline2,
+            color = if (part.muted) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

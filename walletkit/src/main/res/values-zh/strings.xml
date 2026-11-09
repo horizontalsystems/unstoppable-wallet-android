@@ -2011,4 +2011,5 @@
     <string name="Activity_Empty_Swaps">您还没有任何待处理或已完成的兑换记录。</string>
     <string name="Activity_Empty_PrivateSends">您还没有任何待处理或已完成的隐私发送记录。</string>
     <string name="Activity_Empty_CrossPay">您还没有任何待处理或已完成的 CrossPay 付款记录。</string>
+    <string name="Transactions_FromUnknown">发送人未知</string>
 </resources>

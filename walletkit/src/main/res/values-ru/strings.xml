@@ -2021,4 +2021,5 @@
     <string name="Activity_Empty_Swaps">У вас пока нет ожидающих или завершённых свопов.</string>
     <string name="Activity_Empty_PrivateSends">У вас пока нет ожидающих или завершённых приватных отправок.</string>
     <string name="Activity_Empty_CrossPay">У вас пока нет ожидающих или завершённых платежей CrossPay.</string>
+    <string name="Transactions_FromUnknown">от неизвестного</string>
 </resources>

@@ -207,8 +207,22 @@ class TransactionViewItemFactory(
             null -> TransactionViewItem.Icon.Regular(null, null, R.drawable.coin_placeholder)
         }
 
-    private fun coinTitle(value: TransactionValue?) =
+    // A raw value is a token the wallet could not identify: no code, no icon, no decimals.
+    private fun unknownAsset(value: TransactionValue?) = value == null || value is TransactionValue.RawValue
+
+    private fun coinTitle(value: TransactionValue?) = if (unknownAsset(value)) {
+        TransactionViewItem.Title.Single(
+            text = UNKNOWN,
+            icon = TransactionViewItem.Icon.Regular(null, null, R.drawable.coin_placeholder),
+            muted = true
+        )
+    } else {
         TransactionViewItem.Title.Single(value?.coinCode ?: "", regularIconType(value))
+    }
+
+    // The amount of one side of a swap; an asset the wallet cannot identify has none to show.
+    private fun swapAmount(value: TransactionValue?, color: ColorName) =
+        value?.let { getColoredValue(it, color) } ?: ColoredValue(UNKNOWN, color)
 
     private fun tokenTitle(token: Token) =
         TransactionViewItem.Title.Single(token.coin.code, coinIconType(token))
@@ -272,8 +286,8 @@ class TransactionViewItemFactory(
         getColoredValue(value, ColorName.Leah)
     }
 
-    private fun receiveSubtitle(from: String?, blockchainType: BlockchainType, noAddress: String = "---") =
-        from?.let { Translator.getString(R.string.Transactions_From, mapped(it, blockchainType)) } ?: noAddress
+    private fun receiveSubtitle(from: String?, blockchainType: BlockchainType) =
+        from?.let { Translator.getString(R.string.Transactions_From, mapped(it, blockchainType)) } ?: Translator.getString(R.string.Transactions_FromUnknown)
 
     private fun locked(lockState: TransactionLockState?) = when {
         lockState == null -> null
@@ -303,9 +317,7 @@ class TransactionViewItemFactory(
                 type = TransactionViewItem.Type.Receive,
                 state = state,
                 title = coinTitle(record.value),
-                completedSubtitle = record.from?.let { receiveSubtitle(it, record.blockchainType) }
-                    ?: record.to?.let { Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType)) }
-                    ?: "---",
+                completedSubtitle = receiveSubtitle(record.from, record.blockchainType),
                 primaryValue = getColoredValue(record.value, ColorName.Remus),
                 secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) },
                 timestamp = record.timestamp,
@@ -400,9 +412,7 @@ class TransactionViewItemFactory(
                 state = state,
                 title = pairTitle(record.valueIn, record.valueOut),
                 completedSubtitle = Translator.getString(R.string.Transactions_Swap),
-                primaryValue = record.valueOut?.let {
-                    getColoredValue(it, if (record.recipient != null) ColorName.Grey else ColorName.Remus)
-                },
+                primaryValue = swapAmount(record.valueOut, if (record.recipient != null) ColorName.Grey else ColorName.Remus),
                 secondaryValue = getColoredValue(record.valueIn, ColorName.Leah),
                 timestamp = record.timestamp,
                 spam = record.spam
@@ -414,8 +424,8 @@ class TransactionViewItemFactory(
                 state = state,
                 title = pairTitle(record.valueIn, record.valueOut),
                 completedSubtitle = Translator.getString(R.string.Transactions_Swap),
-                primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) },
-                secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) },
+                primaryValue = swapAmount(record.valueOut, ColorName.Remus),
+                secondaryValue = swapAmount(record.valueIn, ColorName.Leah),
                 timestamp = record.timestamp,
                 spam = record.spam
             )
@@ -437,8 +447,7 @@ class TransactionViewItemFactory(
                 timestamp = record.timestamp,
                 currencyValue = currencyValue,
                 state = state,
-                spam = record.spam,
-                noAddress = ""
+                spam = record.spam
             )
 
             is SolanaOutgoingTransactionRecord -> createViewItemFromOutgoing(
@@ -465,8 +474,17 @@ class TransactionViewItemFactory(
                     to = record.tokenOut?.let { tokenTitle(it) } ?: coinTitle(record.valueOut)
                 ),
                 completedSubtitle = Translator.getString(R.string.Transactions_Swap),
-                primaryValue = record.valueOut?.let { getColoredValue(it, ColorName.Remus) },
-                secondaryValue = record.valueIn?.let { getColoredValue(it, ColorName.Leah) },
+                // A known token without a value is the side that lands in the counterpart transaction.
+                primaryValue = if (record.tokenOut != null) {
+                    record.valueOut?.let { getColoredValue(it, ColorName.Remus) }
+                } else {
+                    swapAmount(record.valueOut, ColorName.Remus)
+                },
+                secondaryValue = if (record.tokenIn != null) {
+                    record.valueIn?.let { getColoredValue(it, ColorName.Leah) }
+                } else {
+                    swapAmount(record.valueIn, ColorName.Leah)
+                },
                 timestamp = record.timestamp,
                 spam = record.spam
             )
@@ -618,9 +636,7 @@ class TransactionViewItemFactory(
                 type = TransactionViewItem.Type.Receive,
                 state = state,
                 title = coinTitle(record.value),
-                completedSubtitle = record.from?.let { receiveSubtitle(it, record.blockchainType) }
-                    ?: record.to?.let { Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType)) }
-                    ?: "---",
+                completedSubtitle = receiveSubtitle(record.from, record.blockchainType),
                 primaryValue = getColoredValue(record.value, ColorName.Remus),
                 secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) },
                 timestamp = record.timestamp,
@@ -707,13 +723,12 @@ class TransactionViewItemFactory(
         currencyValue: CurrencyValue?,
         state: TransactionIconState,
         spam: Boolean,
-        noAddress: String = "---"
     ) = viewItem(
         uid = uid,
         type = TransactionViewItem.Type.Receive,
         state = state,
         title = coinTitle(value),
-        completedSubtitle = receiveSubtitle(from, blockchainType, noAddress),
+        completedSubtitle = receiveSubtitle(from, blockchainType),
         primaryValue = getColoredValue(value, ColorName.Remus),
         secondaryValue = singleValueSecondaryValue(value, currencyValue),
         timestamp = timestamp,
@@ -793,24 +808,36 @@ class TransactionViewItemFactory(
         is NearTransactionRecord.Type.ContractCall -> {
             val incomingValues = recordType.incoming.map { it.value }
             val outgoingValues = recordType.outgoing.map { it.value }
-            val values = if (incomingValues.isEmpty() && outgoingValues.isEmpty()) {
-                Pair(null, null)
+            val name = Translator.getString(R.string.Transactions_ContractCall)
+            if (incomingValues.size + outgoingValues.size > 1) {
+                multiAssetCallViewItem(
+                    uid = record.uid,
+                    name = name,
+                    blockchainType = record.blockchainType,
+                    timestamp = record.timestamp,
+                    state = state,
+                    spam = record.spam
+                )
             } else {
-                getValues(incomingValues, outgoingValues, currencyValue)
+                (incomingValues + outgoingValues).singleOrNull().let { value ->
+                    val values = value?.let { getValues(incomingValues, outgoingValues, currencyValue) }
+                    viewItem(
+                        uid = record.uid,
+                        type = TransactionViewItem.Type.Contract,
+                        state = state,
+                        title = value?.let { coinTitle(it) } ?: namedTitle(name, record.blockchainType),
+                        completedSubtitle = if (value != null) {
+                            name
+                        } else {
+                            recordType.method?.let { "$it · ${recordType.contractId.shorten()}" } ?: recordType.contractId.shorten()
+                        },
+                        primaryValue = values?.first,
+                        secondaryValue = values?.second,
+                        timestamp = record.timestamp,
+                        spam = record.spam
+                    )
+                }
             }
-            val contract = recordType.method?.let { "$it · ${recordType.contractId.shorten()}" } ?: recordType.contractId.shorten()
-            val coinsTitle = coinsTitle(incomingValues, outgoingValues)
-            viewItem(
-                uid = record.uid,
-                type = TransactionViewItem.Type.Contract,
-                state = state,
-                title = coinsTitle ?: namedTitle(Translator.getString(R.string.Transactions_ContractCall), record.blockchainType),
-                completedSubtitle = if (coinsTitle != null) Translator.getString(R.string.Transactions_ContractCall) else contract,
-                primaryValue = values.first,
-                secondaryValue = values.second,
-                timestamp = record.timestamp,
-                spam = record.spam
-            )
         }
     }
 
@@ -932,7 +959,7 @@ class TransactionViewItemFactory(
                 type = TransactionViewItem.Type.Contract,
                 state = state,
                 title = namedTitle(Translator.getString(R.string.Transactions_StellarTransaction), record.blockchainType),
-                completedSubtitle = recordType.type,
+                completedSubtitle = stellarOperationName(recordType.type),
                 primaryValue = null,
                 secondaryValue = null,
                 timestamp = record.timestamp,
@@ -1037,6 +1064,26 @@ class TransactionViewItemFactory(
         }
     }
 
+    // A call that moves more than one asset is titled by name alone, without coins or amounts.
+    private fun multiAssetCallViewItem(
+        uid: String,
+        name: String,
+        blockchainType: BlockchainType,
+        timestamp: Long,
+        state: TransactionIconState,
+        spam: Boolean
+    ) = viewItem(
+        uid = uid,
+        type = TransactionViewItem.Type.Contract,
+        state = state,
+        title = namedTitle(name, blockchainType),
+        completedSubtitle = Translator.getString(R.string.Transactions_Completed),
+        primaryValue = null,
+        secondaryValue = null,
+        timestamp = timestamp,
+        spam = spam
+    )
+
     private fun getContact(address: String, blockchainType: BlockchainType): Contact? {
         return contactsRepository.getContactsFiltered(blockchainType, addressQuery = address).firstOrNull()
     }
@@ -1047,7 +1094,10 @@ class TransactionViewItemFactory(
 
     private fun getColoredValue(value: Any, color: ColorName, hideSign: Boolean = false): ColoredValue =
         when (value) {
-            is TransactionValue -> ColoredValue(getCoinString(value, hideSign), if (value.zeroValue) ColorName.Leah else color)
+            is TransactionValue -> ColoredValue(
+                getCoinString(value, hideSign).ifEmpty { UNKNOWN },
+                if (value.zeroValue) ColorName.Leah else color
+            )
             is CurrencyValue -> ColoredValue(getCurrencyString(value), if (value.value.compareTo(BigDecimal.ZERO) == 0) ColorName.Grey else color)
             else -> ColoredValue(value.toString(), color)
         }
@@ -1064,8 +1114,12 @@ class TransactionViewItemFactory(
         state: TransactionIconState,
         spam: Boolean
     ): TransactionViewItem {
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue)
         val name = method ?: Translator.getString(R.string.Transactions_ContractCall)
+        if (incomingValues.size + outgoingValues.size > 1) {
+            return multiAssetCallViewItem(uid, name, blockchainType, timestamp, state, spam)
+        }
+
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue)
         val coinsTitle = coinsTitle(incomingValues, outgoingValues)
 
         return viewItem(
@@ -1092,6 +1146,17 @@ class TransactionViewItemFactory(
         state: TransactionIconState,
         spam: Boolean
     ): TransactionViewItem {
+        if (outgoingValues.isNotEmpty() && incomingValues.size + outgoingValues.size > 1) {
+            return multiAssetCallViewItem(
+                uid = uid,
+                name = Translator.getString(R.string.Transactions_ExternalContractCall),
+                blockchainType = blockchainType,
+                timestamp = timestamp,
+                state = state,
+                spam = spam
+            )
+        }
+
         val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(
             incomingValues,
             outgoingValues,
@@ -1106,11 +1171,8 @@ class TransactionViewItemFactory(
             type = TransactionViewItem.Type.Receive
             title = coinsTitle ?: namedTitle(Translator.getString(R.string.Transactions_Receive), blockchainType)
             val addresses = incomingEvents.mapNotNull { it.address }.toSet().toList()
-            subtitle = if (addresses.size == 1) {
-                Translator.getString(R.string.Transactions_From, mapped(addresses.first(), blockchainType))
-            } else {
-                Translator.getString(R.string.Transactions_Multiple)
-            }
+            // Several senders name none of them.
+            subtitle = receiveSubtitle(addresses.singleOrNull(), blockchainType)
         } else {
             val name = Translator.getString(R.string.Transactions_ExternalContractCall)
             type = TransactionViewItem.Type.Contract
@@ -1270,6 +1332,12 @@ class TransactionViewItemFactory(
     }
 
 }
+
+private const val UNKNOWN = "---"
+
+// Horizon names operations in snake case: create_claimable_balance reads Create claimable balance.
+internal fun stellarOperationName(type: String) =
+    type.replace('_', ' ').replaceFirstChar { it.uppercase() }
 
 // Short ids keep the row's test tag, which takes the first 8 characters, unique.
 internal fun swapRecordUid(id: Int) = "sr$id"

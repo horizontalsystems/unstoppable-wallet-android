@@ -2000,4 +2000,5 @@
     <string name="Activity_Empty_Swaps">هنوز هیچ سواپ در انتظار یا گذشته‌ای ندارید.</string>
     <string name="Activity_Empty_PrivateSends">هنوز هیچ ارسال خصوصی در انتظار یا گذشته‌ای ندارید.</string>
     <string name="Activity_Empty_CrossPay">هنوز هیچ پرداخت CrossPay در انتظار یا گذشته‌ای ندارید.</string>
+    <string name="Transactions_FromUnknown">از ناشناس</string>
 </resources>

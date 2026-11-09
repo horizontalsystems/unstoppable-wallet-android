@@ -2017,4 +2017,5 @@
     <string name="Activity_Empty_Swaps">Sie haben noch keine ausstehenden oder vergangenen Swaps.</string>
     <string name="Activity_Empty_PrivateSends">Sie haben noch keine ausstehenden oder vergangenen privaten Sendungen.</string>
     <string name="Activity_Empty_CrossPay">Sie haben noch keine ausstehenden oder vergangenen CrossPay-Zahlungen.</string>
+    <string name="Transactions_FromUnknown">von unbekannt</string>
 </resources>

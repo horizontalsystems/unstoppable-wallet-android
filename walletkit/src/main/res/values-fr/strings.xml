@@ -2014,4 +2014,5 @@
     <string name="Activity_Empty_Swaps">Vous n\'avez encore aucun swap en cours ou passé.</string>
     <string name="Activity_Empty_PrivateSends">Vous n\'avez encore aucun envoi privé en cours ou passé.</string>
     <string name="Activity_Empty_CrossPay">Vous n\'avez encore aucun paiement CrossPay en cours ou passé.</string>
+    <string name="Transactions_FromUnknown">d\'un expéditeur inconnu</string>
 </resources>
