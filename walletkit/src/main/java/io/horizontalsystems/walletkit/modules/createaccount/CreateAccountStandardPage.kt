@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.modules.createaccount
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -132,14 +131,12 @@ private fun CreateAccountIntroScreen(
                     hint = viewModel.defaultAccountName,
                     onValueChange = viewModel::onChangeAccountName,
                     trailingContent = {
-                        Box(modifier = Modifier.padding(end = 16.dp)) {
-                            HSIconButton(
-                                variant = ButtonVariant.Secondary,
-                                size = ButtonSize.Small,
-                                icon = painterResource(R.drawable.ic_swap_circle_24),
-                                onClick = viewModel::generateRandomAccountName
-                            )
-                        }
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_swap_circle_24),
+                            onClick = viewModel::generateRandomAccountName
+                        )
                     }
                 )
 

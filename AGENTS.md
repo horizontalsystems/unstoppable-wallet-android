@@ -187,9 +187,9 @@ check (`AddressCheckType`) is enabled separately.
 - **Design kit**: The `designkit` module (`io.horizontalsystems.designkit`)
   holds what the Figma design system file defines: colours and typography
   in `theme`, and in `components` the shared components confirmed against
-  Figma (the button controls so far). Use those instead of adding a button
-  elsewhere. It depends on no app code, so nothing from `walletkit` or
-  `app` may be imported there.
+  Figma (the button controls and the text input so far). Use those instead
+  of adding a button or a text input elsewhere. It depends on no app code,
+  so nothing from `walletkit` or `app` may be imported there.
 
 ### Preventing Double Clicks in Compose
 

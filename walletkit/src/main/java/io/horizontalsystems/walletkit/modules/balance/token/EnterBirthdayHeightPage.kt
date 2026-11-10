@@ -1,7 +1,5 @@
 package io.horizontalsystems.walletkit.modules.balance.token
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
@@ -34,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.components.ButtonSize
@@ -42,26 +36,23 @@ import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.components.HSIconButton
-import io.horizontalsystems.designkit.theme.ColoredTextStyle
-import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.designkit.components.HSInput
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.balance.ui.WheelDatePickerBottomSheet
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.TextPreprocessor
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey50
 import io.horizontalsystems.walletkit.ui.compose.components.captionSB_grey
 import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.marketkit.models.BlockchainType
+import java.time.LocalDate
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
 
 @Serializable
 data class EnterBirthdayHeightPage(val input: Input) : HSPage() {
@@ -231,46 +222,19 @@ internal fun BirthdayHeightInputField(
     onCalendarClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .height(54.dp)
-            .padding(start = 16.dp, end = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    HSInput(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        value = textState,
+        onValueChange = { textFieldValue ->
+            val textFieldValueProcessed =
+                textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+            onValueChange.invoke(textFieldValueProcessed)
+        },
+        hint = hint,
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        textFieldModifier = Modifier.focusRequester(focusRequester),
     ) {
-        BasicTextField(
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .padding(vertical = 12.dp)
-                .weight(1f),
-            value = textState,
-            onValueChange = { textFieldValue ->
-                val textFieldValueProcessed =
-                    textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
-                onValueChange.invoke(textFieldValueProcessed)
-            },
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.leah,
-                textStyle = ComposeAppTheme.typography.body
-            ),
-            maxLines = 1,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            decorationBox = { innerTextField ->
-                if (textState.text.isEmpty()) {
-                    body_grey50(
-                        text = hint,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
-                }
-                innerTextField()
-            },
-        )
-
         if (textState.text.isNotEmpty()) {
             HSIconButton(
                 variant = ButtonVariant.Secondary,
@@ -288,7 +252,6 @@ internal fun BirthdayHeightInputField(
                 icon = painterResource(id = R.drawable.ic_date_20),
                 onClick = onCalendarClick
             )
-            HSpacer(12.dp)
             HSButton(
                 variant = ButtonVariant.Secondary,
                 style = ButtonStyle.Solid,

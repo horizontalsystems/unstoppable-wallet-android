@@ -4,39 +4,22 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,13 +28,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.components.HSIconButton
-import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.components.HSInput
+import io.horizontalsystems.designkit.components.InputState
+import io.horizontalsystems.designkit.components.InputType
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.utils.ModuleField
@@ -85,179 +69,123 @@ fun FormsInput(
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
 
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
+    var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(initial ?: "", TextRange(initial?.length ?: 0)))
+    }
+
+    HSInput(
+        modifier = modifier,
+        value = textState,
+        onValueChange = { textFieldValue ->
+            val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+
+            val text = textFieldValueProcessed.text
+            if (maxLength == null || text.length <= maxLength) {
+                textState = textFieldValueProcessed
+                onValueChange.invoke(text)
             } else {
-                ComposeAppTheme.colors.red50
+                // Need to set textState to new instance of TextFieldValue with the same values
+                // Otherwise it getting set to empty string
+                textState = TextFieldValue(text = textState.text, selection = textState.selection)
             }
-        }
-        else -> ComposeAppTheme.colors.blade
-    }
+        },
+        hint = hint,
+        state = state.toInputState(),
+        description = state?.errorOrNull?.localizedMessage,
+        enabled = enabled,
+        singleLine = singleLine,
+        textStyle = textStyle,
+        textColor = textColor,
+        hintStyle = hintStyle,
+        hintColor = hintColor,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        textFieldModifier = Modifier
+            .focusRequester(focusRequester)
+            .onFocusChanged {
+                onChangeFocus?.invoke(it.isFocused)
+            },
+        leading = prefix?.let { { body_grey(text = it) } },
+    ) {
+        InputStatusIcon(state)
 
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
-
-    Column(modifier) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 54.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(initial ?: "", TextRange(initial?.length ?: 0)))
-            }
-
-            prefix?.let{
-                body_grey(
-                    modifier = Modifier.padding(start = 12.dp),
-                    text = prefix
-                )
-            }
-
-            BasicTextField(
-                modifier = Modifier
-                    .focusRequester(focusRequester)
-                    .onFocusChanged {
-                        onChangeFocus?.invoke(it.isFocused)
-                    }
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .weight(1f),
-                enabled = enabled,
-                value = textState,
-                onValueChange = { textFieldValue ->
-                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
-
-                    val text = textFieldValueProcessed.text
-                    if (maxLength == null || text.length <= maxLength) {
-                        textState = textFieldValueProcessed
-                        onValueChange.invoke(text)
-                    } else {
-                        // Need to set textState to new instance of TextFieldValue with the same values
-                        // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
-                    }
-                },
-                textStyle = ColoredTextStyle(
-                    color = textColor,
-                    textStyle = textStyle
-                ),
-                singleLine = singleLine,
-                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
-                decorationBox = { innerTextField ->
-                    if (textState.text.isEmpty()) {
-                        Text(
-                            hint,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                            color = hintColor,
-                            style = hintStyle
-                        )
-                    }
-                    innerTextField()
-                },
-                visualTransformation = visualTransformation,
-                keyboardOptions = keyboardOptions,
+        if (trailingContent != null) {
+            trailingContent()
+        } else if (textState.text.isNotEmpty()) {
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.ic_delete_20),
+                onClick = {
+                    val text = textPreprocessor.process("")
+                    textState = textState.copy(text = text, selection = TextRange(0))
+                    onValueChange.invoke(text)
+                    focusRequester.requestFocus()
+                }
             )
+        } else {
+            if (qrScannerEnabled) {
+                val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-            when (state) {
-                is DataState.Loading -> {
-                    HSCircularProgressIndicator()
+                        val textProcessed = textPreprocessor.process(scannedText)
+                        textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                        onValueChange.invoke(textProcessed)
+                    }
                 }
-                is DataState.Error -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_20),
-                        contentDescription = null,
-                        tint = cautionColor
-                    )
-                }
-                is DataState.Success -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_check_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.remus
-                    )
-                }
-                else -> {
-                    Spacer(modifier = Modifier.width(28.dp))
-                }
-            }
 
-            if (textState.text.isNotEmpty() && trailingContent == null) {
                 HSIconButton(
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Small,
-                    modifier = Modifier.padding(end = 16.dp),
-                    icon = painterResource(R.drawable.ic_delete_20),
+                    icon = painterResource(R.drawable.ic_qr_scan_20),
                     onClick = {
-                        val text = textPreprocessor.process("")
-                        textState = textState.copy(text = text, selection = TextRange(0))
-                        onValueChange.invoke(text)
-                        focusRequester.requestFocus()
+                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
                     }
                 )
-            } else if (trailingContent == null) {
-                if (qrScannerEnabled) {
-                    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                        if (result.resultCode == Activity.RESULT_OK) {
-                            val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+            }
 
-                            val textProcessed = textPreprocessor.process(scannedText)
+            if (pasteEnabled) {
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
+                    title = stringResource(id = R.string.Send_Button_Paste),
+                    onClick = {
+                        TextHelper.getCopiedText()?.let { textInClipboard ->
+                            val textProcessed = textPreprocessor.process(textInClipboard)
                             textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
                             onValueChange.invoke(textProcessed)
                         }
-                    }
-
-                    HSIconButton(
-                        variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Small,
-                        modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
-                        icon = painterResource(R.drawable.ic_qr_scan_20),
-                        onClick = {
-                            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
-                        }
-                    )
-                }
-
-                if (pasteEnabled) {
-                    HSButton(
-                        variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Small,
-                        modifier = Modifier
-                            .padding(end = 16.dp),
-                        title = stringResource(id = R.string.Send_Button_Paste),
-                        onClick = {
-                            TextHelper.getCopiedText()?.let { textInClipboard ->
-                                val textProcessed = textPreprocessor.process(textInClipboard)
-                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                                onValueChange.invoke(textProcessed)
-                            }
-                        },
-                    )
-                }
+                    },
+                )
             }
+        }
+    }
+}
 
-            trailingContent?.invoke()
+internal fun DataState<*>?.toInputState() = when {
+    this !is DataState.Error -> InputState.Default
+    error is FormsInputStateWarning -> InputState.Warning
+    else -> InputState.Error
+}
+
+/** The progress and success marks an input shows before its buttons. */
+@Composable
+internal fun InputStatusIcon(state: DataState<*>?) {
+    when (state) {
+        is DataState.Loading -> {
+            HSCircularProgressIndicator()
         }
 
-        state?.errorOrNull?.localizedMessage?.let {
-            Text(
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp),
-                text = it,
-                color = cautionColor,
-                style = ComposeAppTheme.typography.caption
+        is DataState.Success -> {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_check_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.remus
             )
         }
+
+        else -> {}
     }
 }
 
@@ -278,98 +206,44 @@ fun FormsInputPassword(
     onValueChange: (String) -> Unit,
     onToggleHide: () -> Unit
 ) {
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
+    var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(""))
+    }
+
+    HSInput(
+        modifier = modifier,
+        value = textState,
+        onValueChange = { textFieldValue ->
+            val text = textFieldValue.text
+            if (maxLength == null || text.length <= maxLength) {
+                textState = textFieldValue
+                onValueChange.invoke(text)
             } else {
-                ComposeAppTheme.colors.red50
+                // Need to set textState to new instance of TextFieldValue with the same values
+                // Otherwise it getting set to empty string
+                textState = TextFieldValue(text = textState.text, selection = textState.selection)
             }
-        }
-        else -> ComposeAppTheme.colors.blade
-    }
-
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
-
-    Column(modifier) {
-        Row(
+        },
+        hint = hint,
+        state = state.toInputState(),
+        description = state?.errorOrNull?.localizedMessage,
+        enabled = enabled,
+        singleLine = singleLine,
+        textStyle = textStyle,
+        textColor = textColor,
+        hintStyle = hintStyle,
+        hintColor = hintColor,
+        visualTransformation = if (hide) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = keyboardOptions,
+    ) {
+        Icon(
             modifier = Modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 54.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(""))
-            }
-
-            BasicTextField(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .weight(1f),
-                value = textState,
-                onValueChange = { textFieldValue ->
-
-                    val text = textFieldValue.text
-                    if (maxLength == null || text.length <= maxLength) {
-                        textState = textFieldValue
-                        onValueChange.invoke(text)
-                    } else {
-                        // Need to set textState to new instance of TextFieldValue with the same values
-                        // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
-                    }
-                },
-                textStyle = ColoredTextStyle(
-                    color = textColor,
-                    textStyle = textStyle
-                ),
-                singleLine = singleLine,
-                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
-                decorationBox = { innerTextField ->
-                    if (textState.text.isEmpty()) {
-                        Text(
-                            hint,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                            color = hintColor,
-                            style = hintStyle
-                        )
-                    }
-                    innerTextField()
-                },
-                visualTransformation = if (hide) PasswordVisualTransformation() else VisualTransformation.None,
-                keyboardOptions = keyboardOptions,
-                enabled = enabled,
-            )
-
-            HSpacer(28.dp)
-
-            Icon(
-                modifier = Modifier
-                    .size(20.dp)
-                    .clickable(onClick = onToggleHide, interactionSource = MutableInteractionSource(), indication = null),
-                painter = painterResource(id = if (hide) R.drawable.ic_eye_off_20 else R.drawable.ic_eye_20),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-            Spacer(Modifier.width(16.dp))
-        }
-
-        state?.errorOrNull?.localizedMessage?.let {
-            Text(
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
-                text = it,
-                color = cautionColor,
-                style = ComposeAppTheme.typography.caption
-            )
-        }
+                .size(20.dp)
+                .clickable(onClick = onToggleHide, interactionSource = MutableInteractionSource(), indication = null),
+            painter = painterResource(id = if (hide) R.drawable.ic_eye_off_20 else R.drawable.ic_eye_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
     }
 }
 
@@ -398,182 +272,93 @@ fun FormsInputMultiline(
 ) {
     val context = LocalContext.current
 
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
+    var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(initial ?: "", selection = TextRange((initial ?: "").length)))
+    }
+
+    HSInput(
+        modifier = modifier,
+        type = InputType.Area,
+        value = textState,
+        onValueChange = { textFieldValue ->
+            val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
+
+            val text = textFieldValueProcessed.text
+            if (maxLength == null || text.length <= maxLength) {
+                textState = textFieldValueProcessed
+                onValueChange.invoke(text)
             } else {
-                ComposeAppTheme.colors.red50
+                // Need to set textState to new instance of TextFieldValue with the same values
+                // Otherwise it getting set to empty string
+                textState = TextFieldValue(text = textState.text, selection = textState.selection)
             }
-        }
-        else -> ComposeAppTheme.colors.blade
-    }
+        },
+        hint = hint,
+        state = state.toInputState(),
+        description = state?.errorOrNull?.localizedMessage,
+        enabled = enabled,
+        textStyle = textStyle,
+        textColor = textColor,
+        hintStyle = hintStyle,
+        hintColor = hintColor,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        textFieldModifier = Modifier.onFocusChanged {
+            onChangeFocus?.invoke(it.isFocused)
+        },
+    ) {
+        InputStatusIcon(state)
 
-    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
-    } else {
-        ComposeAppTheme.colors.lucian
-    }
-
-    Column(modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence),
-        ) {
-            var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
-                mutableStateOf(TextFieldValue(initial ?: "", selection = TextRange((initial ?: "").length)))
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            BasicTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 64.dp)
-                    .onFocusChanged {
-                        onChangeFocus?.invoke(it.isFocused)
-                    }
-                    .padding(horizontal = 16.dp),
-                enabled = enabled,
-                value = textState,
-                onValueChange = { textFieldValue ->
-                    val textFieldValueProcessed = textFieldValue.copy(text = textPreprocessor.process(textFieldValue.text))
-
-                    val text = textFieldValueProcessed.text
-                    if (maxLength == null || text.length <= maxLength) {
-                        textState = textFieldValueProcessed
-                        onValueChange.invoke(text)
-                    } else {
-                        // Need to set textState to new instance of TextFieldValue with the same values
-                        // Otherwise it getting set to empty string
-                        textState = TextFieldValue(text = textState.text, selection = textState.selection)
-                    }
-                },
-                textStyle = ColoredTextStyle(
-                    color = textColor,
-                    textStyle = textStyle
-                ),
-                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
-                decorationBox = { innerTextField ->
-                    if (textState.text.isEmpty()) {
-                        Text(
-                            hint,
-                            overflow = TextOverflow.Ellipsis,
-                            color = hintColor,
-                            style = hintStyle
-                        )
-                    }
-                    innerTextField()
-                },
-                visualTransformation = visualTransformation,
-                keyboardOptions = keyboardOptions,
+        if (textState.text.isNotEmpty()) {
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.ic_delete_20),
+                onClick = {
+                    val text = textPreprocessor.process("")
+                    textState = textState.copy(text = text, selection = TextRange(0))
+                    onValueChange.invoke(text)
+                    onClear?.invoke()
+                }
             )
+        } else {
+            if (qrScannerEnabled) {
+                val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(44.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                when (state) {
-                    is DataState.Loading -> {
-                        HSCircularProgressIndicator()
-                    }
-                    is DataState.Error -> {
-                        Icon(
-                            modifier = Modifier.padding(end = 8.dp),
-                            painter = painterResource(id = R.drawable.ic_attention_20),
-                            contentDescription = null,
-                            tint = cautionColor
-                        )
-                    }
-                    is DataState.Success -> {
-                        Icon(
-                            modifier = Modifier.padding(end = 8.dp),
-                            painter = painterResource(id = R.drawable.ic_check_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.remus
-                        )
-                    }
-                    else -> {
-
+                        val textProcessed = textPreprocessor.process(scannedText)
+                        textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                        onValueChange.invoke(textProcessed)
                     }
                 }
 
-                if (textState.text.isNotEmpty()) {
-                    HSIconButton(
-                        variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Small,
-                        modifier = Modifier.padding(end = 16.dp),
-                        icon = painterResource(R.drawable.ic_delete_20),
-                        onClick = {
-                            val text = textPreprocessor.process("")
-                            textState = textState.copy(text = text, selection = TextRange(0))
-                            onValueChange.invoke(text)
-
-                            onClear?.invoke()
-                        }
-                    )
-                } else {
-                    if (qrScannerEnabled) {
-                        val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                            if (result.resultCode == Activity.RESULT_OK) {
-                                val scannedText = result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
-
-                                val textProcessed = textPreprocessor.process(scannedText)
-                                textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                                onValueChange.invoke(textProcessed)
-                            }
-                        }
-
-                        HSIconButton(
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
-                            icon = painterResource(R.drawable.ic_qr_scan_20),
-                            onClick = {
-                                qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
-
-                                onScanQR?.invoke()
-                            }
-                        )
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
+                    icon = painterResource(R.drawable.ic_qr_scan_20),
+                    onClick = {
+                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
+                        onScanQR?.invoke()
                     }
-
-                    if (pasteEnabled) {
-                        HSButton(
-                            variant = ButtonVariant.Secondary,
-                            size = ButtonSize.Small,
-                            modifier = Modifier
-                                .padding(end = 16.dp),
-                            title = stringResource(id = R.string.Send_Button_Paste),
-                            onClick = {
-                                TextHelper.getCopiedText()?.let { textInClipboard ->
-                                    val textProcessed = textPreprocessor.process(textInClipboard)
-                                    textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
-                                    onValueChange.invoke(textProcessed)
-                                }
-
-                                onPaste?.invoke()
-                            },
-                        )
-                    }
-                }
+                )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
-        }
-
-        state?.errorOrNull?.localizedMessage?.let {
-            Text(
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
-                text = it,
-                color = cautionColor,
-                style = ComposeAppTheme.typography.caption
-            )
+            if (pasteEnabled) {
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
+                    title = stringResource(id = R.string.Send_Button_Paste),
+                    onClick = {
+                        TextHelper.getCopiedText()?.let { textInClipboard ->
+                            val textProcessed = textPreprocessor.process(textInClipboard)
+                            textState = textState.copy(text = textProcessed, selection = TextRange(textProcessed.length))
+                            onValueChange.invoke(textProcessed)
+                        }
+                        onPaste?.invoke()
+                    },
+                )
+            }
         }
     }
 }

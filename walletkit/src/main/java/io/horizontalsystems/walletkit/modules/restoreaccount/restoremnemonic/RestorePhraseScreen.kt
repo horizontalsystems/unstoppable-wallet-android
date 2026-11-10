@@ -6,19 +6,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -26,8 +20,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -40,9 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -56,7 +46,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,7 +53,9 @@ import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.components.HSIconButton
-import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.components.HSInput
+import io.horizontalsystems.designkit.components.InputState
+import io.horizontalsystems.designkit.components.InputType
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.displayNameStringRes
@@ -84,7 +75,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.CustomKeyboardWarnin
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_grey50
 import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -139,12 +129,6 @@ fun RestorePhrase(
             }
         }
 
-    val borderColor = if (uiState.error != null) {
-        ComposeAppTheme.colors.red50
-    } else {
-        ComposeAppTheme.colors.blade
-    }
-
     val coroutineScope = rememberCoroutineScope()
 
     if (showLanguageSelectorDialog) {
@@ -195,158 +179,117 @@ fun RestorePhrase(
                     hint = viewModel.defaultName,
                     onValueChange = viewModel::onEnterName,
                     trailingContent = {
-                        Box(modifier = Modifier.padding(end = 16.dp)) {
-                            HSIconButton(
-                                variant = ButtonVariant.Secondary,
-                                size = ButtonSize.Small,
-                                icon = painterResource(R.drawable.ic_swap_circle_24),
-                                onClick = viewModel::generateRandomAccountName
-                            )
-                        }
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_swap_circle_24),
+                            onClick = viewModel::generateRandomAccountName
+                        )
                     }
                 )
                 VSpacer(24.dp)
 
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
-                        .background(ComposeAppTheme.colors.lawrence),
-                ) {
+                val invalidWordStyle = SpanStyle(
+                    color = ComposeAppTheme.colors.lucian,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    letterSpacing = 0.sp
+                )
 
-                    val style = SpanStyle(
-                        color = ComposeAppTheme.colors.lucian,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.sp
-                    )
+                HSInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    type = InputType.Area,
+                    value = textState,
+                    onValueChange = {
+                        textState = it
 
-                    BasicTextField(
-                        modifier = Modifier
-                            .testTag(TestTags.RESTORE_PHRASE_INPUT)
-                            .fillMaxWidth()
-                            .onFocusChanged {
-                                isMnemonicPhraseInputFocused = it.isFocused
-                            }
-                            .defaultMinSize(minHeight = 68.dp)
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                        enabled = true,
-                        value = textState,
-                        onValueChange = {
-                            textState = it
+                        viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
 
-                            viewModel.onEnterMnemonicPhrase(it.text, it.selection.max)
-
-                            showCustomKeyboardDialog =
-                                !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(
-                                    context
-                                )
-                        },
-                        textStyle = ColoredTextStyle(
-                            color = ComposeAppTheme.colors.leah,
-                            textStyle = ComposeAppTheme.typography.body
-                        ),
-                        maxLines = 6,
-                        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
-                        visualTransformation = {
-                            try {
-                                val annotatedString = buildAnnotatedString {
-                                    append(it.text)
-
-                                    uiState.invalidWordRanges.forEach { range ->
-                                        addStyle(style = style, range.first, range.last + 1)
-                                    }
-                                }
-                                TransformedText(annotatedString, OffsetMapping.Identity)
-                            } catch (error: Throwable) {
-                                error.printStackTrace()
-                                TransformedText(it, OffsetMapping.Identity)
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        decorationBox = { innerTextField ->
-                            if (textState.text.isEmpty()) {
-                                body_grey50(
-                                    stringResource(R.string.Restore_PhraseHint),
-                                    overflow = TextOverflow.Ellipsis,
-                                )
-                            }
-                            innerTextField()
-                        },
-                    )
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        if (textState.text.isNotEmpty()) {
-                            HSIconButton(
-                                variant = ButtonVariant.Secondary,
-                                size = ButtonSize.Small,
-                                modifier = Modifier.padding(end = 16.dp),
-                                icon = painterResource(R.drawable.ic_delete_20),
-                                onClick = {
-                                    textState =
-                                        textState.copy(text = "", selection = TextRange(0))
-                                    viewModel.onEnterMnemonicPhrase("", "".length)
-
-                                    stat(
-                                        page = statPage,
-                                        event = StatEvent.Clear(StatEntity.RecoveryPhrase)
-                                    )
-                                }
+                        showCustomKeyboardDialog =
+                            !viewModel.isThirdPartyKeyboardAllowed && Utils.isUsingCustomKeyboard(
+                                context
                             )
-                        } else {
-                            HSIconButton(
-                                variant = ButtonVariant.Secondary,
-                                size = ButtonSize.Small,
-                                modifier = Modifier.padding(end = 8.dp),
-                                icon = painterResource(R.drawable.ic_qr_scan_20),
-                                onClick = {
-                                    qrScannerLauncher.launch(
-                                        QRScannerActivity.getScanQrIntent(context)
-                                    )
+                    },
+                    hint = stringResource(R.string.Restore_PhraseHint),
+                    state = if (uiState.error != null) InputState.Error else InputState.Default,
+                    maxLines = 6,
+                    visualTransformation = {
+                        try {
+                            val annotatedString = buildAnnotatedString {
+                                append(it.text)
 
-                                    stat(
-                                        page = statPage,
-                                        event = StatEvent.ScanQr(StatEntity.RecoveryPhrase)
-                                    )
+                                uiState.invalidWordRanges.forEach { range ->
+                                    addStyle(style = invalidWordStyle, range.first, range.last + 1)
                                 }
-                            )
-
-                            HSButton(
-                                variant = ButtonVariant.Secondary,
-                                size = ButtonSize.Small,
-                                modifier = Modifier.padding(end = 16.dp),
-                                title = stringResource(id = R.string.Send_Button_Paste),
-                                onClick = {
-                                    TextHelper.getCopiedText()?.let { textInClipboard ->
-                                        textState = textState.copy(
-                                            text = textInClipboard,
-                                            selection = TextRange(textInClipboard.length)
-                                        )
-                                        viewModel.onEnterMnemonicPhrase(
-                                            textInClipboard,
-                                            textInClipboard.length
-                                        )
-                                    }
-
-                                    stat(
-                                        page = statPage,
-                                        event = StatEvent.Paste(StatEntity.RecoveryPhrase)
-                                    )
-                                },
-                            )
+                            }
+                            TransformedText(annotatedString, OffsetMapping.Identity)
+                        } catch (_: Throwable) {
+                            TransformedText(it, OffsetMapping.Identity)
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    textFieldModifier = Modifier
+                        .testTag(TestTags.RESTORE_PHRASE_INPUT)
+                        .onFocusChanged {
+                            isMnemonicPhraseInputFocused = it.isFocused
+                        },
+                ) {
+                    if (textState.text.isNotEmpty()) {
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_delete_20),
+                            onClick = {
+                                textState =
+                                    textState.copy(text = "", selection = TextRange(0))
+                                viewModel.onEnterMnemonicPhrase("", "".length)
 
-                    VSpacer(4.dp)
+                                stat(
+                                    page = statPage,
+                                    event = StatEvent.Clear(StatEntity.RecoveryPhrase)
+                                )
+                            }
+                        )
+                    } else {
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_qr_scan_20),
+                            onClick = {
+                                qrScannerLauncher.launch(
+                                    QRScannerActivity.getScanQrIntent(context)
+                                )
+
+                                stat(
+                                    page = statPage,
+                                    event = StatEvent.ScanQr(StatEntity.RecoveryPhrase)
+                                )
+                            }
+                        )
+
+                        HSButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            title = stringResource(id = R.string.Send_Button_Paste),
+                            onClick = {
+                                TextHelper.getCopiedText()?.let { textInClipboard ->
+                                    textState = textState.copy(
+                                        text = textInClipboard,
+                                        selection = TextRange(textInClipboard.length)
+                                    )
+                                    viewModel.onEnterMnemonicPhrase(
+                                        textInClipboard,
+                                        textInClipboard.length
+                                    )
+                                }
+
+                                stat(
+                                    page = statPage,
+                                    event = StatEvent.Paste(StatEntity.RecoveryPhrase)
+                                )
+                            },
+                        )
+                    }
                 }
 
                 uiState.error?.let { errorText ->
