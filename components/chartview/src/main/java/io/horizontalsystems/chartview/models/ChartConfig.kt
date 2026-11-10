@@ -29,7 +29,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var neutralColor = context.getColor(R.color.orange)
     var barColor = context.getColor(R.color.orange)
     var barPressedColor = context.getColor(R.color.leah)
-    var neutralGradientColor = GradientColor(Color.parseColor("#FFA800"), Color.parseColor("#FFA800"))
+    var neutralGradientColor = GradientColor(context.getColor(R.color.orange), context.getColor(R.color.orange))
     var trendUpGradient = GradientColor(Color.parseColor("#416BFF"), Color.parseColor("#13D670"))
     var trendDownGradient = GradientColor(Color.parseColor("#7413D6"), Color.parseColor("#FF0303"))
     var pressedGradient = GradientColor(context.getColor(R.color.leah), context.getColor(R.color.leah))

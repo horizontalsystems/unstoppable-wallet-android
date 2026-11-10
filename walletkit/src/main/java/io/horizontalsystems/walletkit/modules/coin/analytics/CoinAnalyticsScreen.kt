@@ -44,7 +44,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_orange
+import io.horizontalsystems.walletkit.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_lucian
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_remus
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
@@ -237,7 +237,7 @@ private fun FooterCell(
                                 }
 
                                 CoinAnalyticsModule.IssueType.Medium -> {
-                                    subhead1_orange(text = snippet.count)
+                                    subhead1_jacob(text = snippet.count)
                                 }
 
                                 CoinAnalyticsModule.IssueType.Attention -> {

@@ -157,7 +157,7 @@ fun DetectorCell(
 
             "High" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = ComposeAppTheme.colors.orange
+                iconTint = ComposeAppTheme.colors.jacob
             }
 
             "Low" -> {

@@ -423,7 +423,7 @@ private fun AppCloseWarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(id = R.drawable.ic_attention_24),
         title = stringResource(id = R.string.Alert_TitleWarning),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(
