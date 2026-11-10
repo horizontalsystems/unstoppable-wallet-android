@@ -71,7 +71,7 @@ fun CellRightControlsSwitcher(
                     checkedTrackColor = ComposeAppTheme.colors.orange,
                     uncheckedTrackColor = ComposeAppTheme.colors.andy,
                     checkedTrackAlpha = 1f,
-                    uncheckedTrackAlpha = 1f,
+                    uncheckedTrackAlpha = ComposeAppTheme.colors.andy.alpha,
                 ),
                 enabled = enabled
             )
