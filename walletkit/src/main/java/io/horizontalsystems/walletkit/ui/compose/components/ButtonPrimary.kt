@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
@@ -65,17 +63,4 @@ object ButtonPrimaryDefaults {
      * Note that you can override it by applying Modifier.heightIn directly on [Button].
      */
     val MinHeight = 56.dp
-
-    @Composable
-    fun textButtonColors(
-        backgroundColor: Color,
-        contentColor: Color,
-        disabledBackgroundColor: Color,
-        disabledContentColor: Color,
-    ): ButtonColors = HsButtonColors(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        disabledBackgroundColor = disabledBackgroundColor,
-        disabledContentColor = disabledContentColor,
-    )
 }

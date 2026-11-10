@@ -27,7 +27,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -38,7 +41,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
@@ -222,8 +224,10 @@ private fun AccountCell(
             )
         }
         HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_edit_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_edit_20),
             onClick = onClickEdit
         )
     }

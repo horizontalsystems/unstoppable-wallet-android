@@ -22,12 +22,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.LinkType
@@ -61,8 +64,6 @@ import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.Account
 import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellFooter
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
@@ -186,8 +187,9 @@ fun CoinOverviewScreen(
 
                                             if (chartIndicatorsState.hasActiveSubscription) {
                                                 if (chartIndicatorsState.enabled) {
-                                                    ButtonSecondaryDefault(
-                                                        modifier = Modifier.height(28.dp),
+                                                    HSButton(
+                                                        variant = ButtonVariant.Secondary,
+                                                        size = ButtonSize.Small,
                                                         title = stringResource(id = R.string.Button_Hide),
                                                         onClick = {
                                                             viewModel.disableChartIndicators()
@@ -201,8 +203,9 @@ fun CoinOverviewScreen(
                                                         }
                                                     )
                                                 } else {
-                                                    ButtonSecondaryDefault(
-                                                        modifier = Modifier.height(28.dp),
+                                                    HSButton(
+                                                        variant = ButtonVariant.Secondary,
+                                                        size = ButtonSize.Small,
                                                         title = stringResource(id = R.string.Button_Show),
                                                         onClick = {
                                                             viewModel.enableChartIndicators()
@@ -217,9 +220,10 @@ fun CoinOverviewScreen(
                                                     )
                                                 }
                                                 HSpacer(width = 8.dp)
-                                                ButtonSecondaryCircle(
-                                                    modifier = Modifier.height(28.dp),
-                                                    icon = R.drawable.ic_setting_20
+                                                HSIconButton(
+                                                    variant = ButtonVariant.Secondary,
+                                                    size = ButtonSize.Small,
+                                                    icon = painterResource(R.drawable.ic_setting_20)
                                                 ) {
                                                     navigation.slideFromRight(IndicatorsPage)
 

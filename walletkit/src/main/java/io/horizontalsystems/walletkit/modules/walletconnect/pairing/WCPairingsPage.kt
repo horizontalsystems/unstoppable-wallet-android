@@ -23,11 +23,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
@@ -140,10 +142,12 @@ fun Pairing(pairing: PairingViewItem, onDelete: () -> Unit) {
                 overflow = TextOverflow.Ellipsis
             )
         }
-        ButtonSecondaryCircle(
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
             modifier = Modifier.padding(start = 16.dp),
-            icon = R.drawable.ic_delete_20,
-            tint = ComposeAppTheme.colors.lucian,
+            icon = painterResource(R.drawable.ic_delete_20),
+            iconTint = ComposeAppTheme.colors.lucian,
             onClick = onDelete
         )
     }

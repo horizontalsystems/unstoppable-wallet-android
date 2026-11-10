@@ -18,10 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stringResId
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
@@ -68,12 +69,11 @@ fun HSHodlerInput(
             text = stringResource(R.string.Send_DialogLockTime),
         )
         Spacer(modifier = Modifier.weight(1f))
-        ButtonSecondaryWithIcon(
-            modifier = Modifier.height(28.dp),
+        HSDropdownButton(
+            variant = ButtonVariant.Secondary,
             onClick = { showSelectorDialog = true },
             enabled = enabled,
             title = stringResource(lockTimeInterval.stringResId()),
-            iconRight = painterResource(R.drawable.ic_down_arrow_20),
         )
         Spacer(modifier = Modifier.width(16.dp))
     }

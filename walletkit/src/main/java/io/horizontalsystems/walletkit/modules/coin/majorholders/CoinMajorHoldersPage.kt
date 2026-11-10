@@ -21,6 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.shorten
@@ -31,7 +34,6 @@ import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
@@ -214,10 +216,11 @@ private fun TopWalletCell(item: MajorHolderItem) {
             subhead2_grey(text = item.balance)
         }
 
-        ButtonSecondaryDefault(
+        HSButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .height(28.dp),
+                .padding(start = 8.dp, end = 8.dp),
             title = item.address.shorten(),
             onClick = {
                 TextHelper.copyText(item.address)

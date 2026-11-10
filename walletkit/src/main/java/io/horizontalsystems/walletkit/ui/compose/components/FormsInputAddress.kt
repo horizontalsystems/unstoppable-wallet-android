@@ -33,6 +33,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ColoredTextStyle
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -150,9 +154,11 @@ fun FormsInputAddress(
             }
 
             if (value.isNotEmpty()) {
-                ButtonSecondaryCircle(
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
                     modifier = Modifier.padding(end = 16.dp),
-                    icon = R.drawable.ic_delete_20,
+                    icon = painterResource(R.drawable.ic_delete_20),
                     onClick = {
                         val text = textPreprocessor.process("")
                         onValueChange.invoke(text)
@@ -171,18 +177,21 @@ fun FormsInputAddress(
                         }
                     }
 
-                ButtonSecondaryCircle(
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
                     modifier = Modifier.padding(end = 8.dp),
-                    icon = R.drawable.ic_qr_scan_20,
+                    icon = painterResource(R.drawable.ic_qr_scan_20),
                     onClick = {
                         qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
                     }
                 )
 
-                ButtonSecondaryDefault(
+                HSButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
                     modifier = Modifier
-                        .padding(end = 16.dp)
-                        .height(28.dp),
+                        .padding(end = 16.dp),
                     title = stringResource(id = R.string.Send_Button_Paste),
                     onClick = {
                         TextHelper.getCopiedText()?.let { textInClipboard ->

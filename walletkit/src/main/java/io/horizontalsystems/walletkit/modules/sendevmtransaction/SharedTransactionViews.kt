@@ -18,6 +18,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
@@ -26,7 +29,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -222,8 +224,9 @@ fun TitleValueHex(
             text = title
         )
         Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            modifier = Modifier.height(28.dp),
+        HSButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
             title = valueTitle,
             onClick = {
                 TextHelper.copyText(value)

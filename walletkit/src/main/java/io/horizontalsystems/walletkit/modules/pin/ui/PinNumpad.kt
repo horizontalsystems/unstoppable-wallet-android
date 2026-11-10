@@ -26,12 +26,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.pin.unlock.PinUnlockModule.InputState
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryYellow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
 
@@ -93,7 +94,8 @@ fun PinNumpad(
             pinRandomized?.let { isRandomized ->
                 VSpacer(24.dp)
                 if (isRandomized) {
-                    ButtonSecondaryYellow(
+                    HSButton(
+                        size = ButtonSize.Small,
                         title = stringResource(R.string.Unlock_Random),
                         onClick = {
                             updatePinRandomized?.invoke(false)
@@ -101,7 +103,9 @@ fun PinNumpad(
                         enabled = enabled,
                     )
                 } else {
-                    ButtonSecondaryDefault(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
                         title = stringResource(R.string.Unlock_Random),
                         onClick = {
                             updatePinRandomized?.invoke(true)

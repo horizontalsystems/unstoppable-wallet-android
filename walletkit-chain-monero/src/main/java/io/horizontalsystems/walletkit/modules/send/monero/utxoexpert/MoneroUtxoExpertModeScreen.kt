@@ -17,10 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
 import io.horizontalsystems.walletkit.core.MoneroUnspentOutput
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -64,7 +67,10 @@ fun MoneroUtxoExpertModeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    ButtonSecondaryTransparent(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
+                        style = ButtonStyle.Transparent,
+                        size = ButtonSize.Small,
                         title = stringResource(id = R.string.Send_Utxo_UnselectAll),
                         enabled = uiState.unselectAllIsEnabled,
                         onClick = {
@@ -72,7 +78,10 @@ fun MoneroUtxoExpertModeScreen(
                             updateUnspentOutputs(viewModel.customOutputs)
                         }
                     )
-                    ButtonSecondaryTransparent(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
+                        style = ButtonStyle.Transparent,
+                        size = ButtonSize.Small,
                         title = stringResource(id = R.string.Send_Utxo_SelectAll),
                         onClick = {
                             viewModel.selectAll()

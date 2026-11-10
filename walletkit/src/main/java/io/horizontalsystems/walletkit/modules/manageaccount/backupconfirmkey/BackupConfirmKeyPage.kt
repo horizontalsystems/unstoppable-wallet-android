@@ -22,6 +22,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.Account
@@ -29,7 +32,6 @@ import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.manageaccount.backupkey.BackupKeyPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
@@ -125,7 +127,9 @@ fun RecoveryPhraseVerifyScreen(navigation: HSNavigation, account: Account) {
                             .padding(horizontal = 4.dp)
                             .testTag(TestTags.quizOption(wordOption.word))
                     ) {
-                        ButtonSecondaryDefault(
+                        HSButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
                             title = wordOption.word,
                             enabled = wordOption.enabled,
                             onClick = {

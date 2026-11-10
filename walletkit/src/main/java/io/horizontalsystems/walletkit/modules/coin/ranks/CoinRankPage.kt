@@ -31,6 +31,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -43,7 +46,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.walletkit.ui.compose.components.DescriptionCard
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
@@ -126,9 +128,11 @@ private fun CoinRankScreen(
 
                         stickyHeader {
                             HeaderSorting {
-                                ButtonSecondaryCircle(
+                                HSIconButton(
+                                    variant = ButtonVariant.Secondary,
+                                    size = ButtonSize.Small,
                                     modifier = Modifier.padding(start = 16.dp),
-                                    icon = if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
+                                    icon = painterResource(if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20),
                                     onClick = { viewModel.toggleSortType() }
                                 )
                                 Spacer(Modifier.weight(1f))

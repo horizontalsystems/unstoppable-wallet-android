@@ -16,11 +16,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
@@ -82,7 +84,9 @@ private fun ConfiguredTokenInfo(navigation: HSNavigation, token: Token) {
                             text = stringResource(R.string.Restore_BirthdayHeight),
                         )
                         val birthdayHeight = tokenInfoType.height?.toString() ?: "---"
-                        ButtonSecondaryDefault(
+                        HSButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
                             modifier = Modifier.padding(start = 16.dp),
                             title = birthdayHeight,
                             onClick = {
@@ -126,8 +130,10 @@ private fun ContractInfo(tokenInfoType: ConfiguredTokenInfoType.Contract) {
 
             tokenInfoType.explorerUrl?.let {
                 HSpacer(16.dp)
-                ButtonSecondaryCircle(
-                    icon = R.drawable.ic_globe_20,
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
+                    icon = painterResource(R.drawable.ic_globe_20),
                     contentDescription = stringResource(R.string.Button_Browser),
                     onClick = {
                         LinkHelper.openLinkInAppBrowser(context, it)

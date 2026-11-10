@@ -19,10 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.coin.overview.TokenVariants
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -96,17 +98,21 @@ fun TokenVariants(
                 }
                 if (tokenVariant.canAddToWallet) {
                     if (tokenVariant.inWallet) {
-                        ButtonSecondaryCircle(
-                            icon = R.drawable.ic_wallet_filled_20,
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_wallet_filled_20),
                             contentDescription = stringResource(R.string.CoinPage_InWallet),
-                            tint = ComposeAppTheme.colors.orange,
+                            iconTint = ComposeAppTheme.colors.orange,
                             onClick = {
                                 onClickRemoveWallet.invoke(tokenVariant.token)
                             }
                         )
                     } else {
-                        ButtonSecondaryCircle(
-                            icon = R.drawable.ic_add_to_wallet_20,
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_add_to_wallet_20),
                             contentDescription = stringResource(R.string.CoinPage_AddToWallet),
                             onClick = {
                                 onClickAddToWallet.invoke(tokenVariant.token)
@@ -116,9 +122,11 @@ fun TokenVariants(
 
                 }
                 tokenVariant.explorerUrl?.let { explorerUrl ->
-                    ButtonSecondaryCircle(
+                    HSIconButton(
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
                         modifier = Modifier.padding(start = 16.dp),
-                        icon = R.drawable.ic_globe_20,
+                        icon = painterResource(R.drawable.ic_globe_20),
                         contentDescription = stringResource(R.string.Button_Browser),
                         onClick = {
                             onClickExplorer.invoke(explorerUrl)

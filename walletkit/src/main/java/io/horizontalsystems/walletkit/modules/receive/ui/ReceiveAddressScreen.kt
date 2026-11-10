@@ -59,6 +59,7 @@ import io.github.alexzhirkevich.qrose.options.QrLogoShape
 import io.github.alexzhirkevich.qrose.options.QrPixelShape
 import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
+import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ColoredTextStyle
@@ -73,7 +74,6 @@ import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.receive.ReceiveModule
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ErrorScreenWithAction
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
@@ -453,11 +453,12 @@ private fun AdditionalDataSection(
                         text = item.value,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
-                    ButtonSecondaryCircle(
+                    HSIconButton(
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
                         modifier = Modifier
-                            .height(28.dp)
                             .padding(end = 16.dp),
-                        icon = R.drawable.ic_copy_20,
+                        icon = painterResource(R.drawable.ic_copy_20),
                         onClick = {
                             TextHelper.copyText(item.value)
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)

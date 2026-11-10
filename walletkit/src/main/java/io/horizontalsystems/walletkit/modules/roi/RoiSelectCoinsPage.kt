@@ -21,11 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -34,7 +35,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.walletkit.ui.compose.components.HFillSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsCheckbox
@@ -109,8 +109,8 @@ fun RoiSelectCoinsScreen(navigation: HSNavigation) {
                         body_leah(text = text)
                         HFillSpacer(16.dp)
                         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
-                            ButtonSecondaryWithIcon(
-                                iconRight = painterResource(R.drawable.ic_down_arrow_20),
+                            HSDropdownButton(
+                                variant = ButtonVariant.Secondary,
                                 title = period.title.getString(),
                                 onClick = {
                                     dialog = PeriodSelectorDialog(text, period, i)

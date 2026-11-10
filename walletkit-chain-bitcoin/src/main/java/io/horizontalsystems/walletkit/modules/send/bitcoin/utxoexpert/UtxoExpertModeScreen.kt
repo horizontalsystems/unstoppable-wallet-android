@@ -23,11 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ISendBitcoinAdapter
 import io.horizontalsystems.walletkit.core.shorten
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsCheckbox
@@ -77,7 +80,10 @@ fun UtxoExpertModeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    ButtonSecondaryTransparent(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
+                        style = ButtonStyle.Transparent,
+                        size = ButtonSize.Small,
                         title = stringResource(id = R.string.Send_Utxo_UnselectAll),
                         enabled = uiState.unselectAllIsEnabled,
                         onClick = {
@@ -85,7 +91,10 @@ fun UtxoExpertModeScreen(
                             updateUnspentOutputs(viewModel.customOutputs)
                         }
                     )
-                    ButtonSecondaryTransparent(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
+                        style = ButtonStyle.Transparent,
+                        size = ButtonSize.Small,
                         title = stringResource(id = R.string.Send_Utxo_SelectAll),
                         onClick = {
                             viewModel.selectAll()

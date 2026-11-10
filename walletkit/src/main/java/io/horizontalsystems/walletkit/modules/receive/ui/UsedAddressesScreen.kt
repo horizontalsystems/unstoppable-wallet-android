@@ -20,14 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.UsedAddress
 import io.horizontalsystems.walletkit.helpers.HudHelper
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
@@ -148,14 +151,18 @@ fun TransactionInfoAddressCell(
         )
 
         HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_language,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_language),
             onClick = { LinkHelper.openLinkInAppBrowser(context, explorerUrl) }
         )
 
         HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_copy_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_copy_20),
             onClick = {
                 TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)

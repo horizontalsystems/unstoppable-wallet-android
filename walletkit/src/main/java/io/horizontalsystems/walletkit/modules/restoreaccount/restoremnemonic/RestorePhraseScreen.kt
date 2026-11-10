@@ -80,15 +80,11 @@ import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.components.BoxTyler44
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondary
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CustomKeyboardWarningDialog
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey50
-import io.horizontalsystems.walletkit.ui.compose.components.captionSB_leah
 import io.horizontalsystems.walletkit.ui.compose.components.caption_lucian
 import io.horizontalsystems.walletkit.ui.compose.observeKeyboardState
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -290,9 +286,11 @@ fun RestorePhrase(
                     ) {
 
                         if (textState.text.isNotEmpty()) {
-                            ButtonSecondaryCircle(
+                            HSIconButton(
+                                variant = ButtonVariant.Secondary,
+                                size = ButtonSize.Small,
                                 modifier = Modifier.padding(end = 16.dp),
-                                icon = R.drawable.ic_delete_20,
+                                icon = painterResource(R.drawable.ic_delete_20),
                                 onClick = {
                                     textState =
                                         textState.copy(text = "", selection = TextRange(0))
@@ -305,9 +303,11 @@ fun RestorePhrase(
                                 }
                             )
                         } else {
-                            ButtonSecondaryCircle(
+                            HSIconButton(
+                                variant = ButtonVariant.Secondary,
+                                size = ButtonSize.Small,
                                 modifier = Modifier.padding(end = 8.dp),
-                                icon = R.drawable.ic_qr_scan_20,
+                                icon = painterResource(R.drawable.ic_qr_scan_20),
                                 onClick = {
                                     qrScannerLauncher.launch(
                                         QRScannerActivity.getScanQrIntent(context)
@@ -320,7 +320,9 @@ fun RestorePhrase(
                                 }
                             )
 
-                            ButtonSecondaryDefault(
+                            HSButton(
+                                variant = ButtonVariant.Secondary,
+                                size = ButtonSize.Small,
                                 modifier = Modifier.padding(end = 16.dp),
                                 title = stringResource(id = R.string.Send_Button_Paste),
                                 onClick = {
@@ -510,13 +512,14 @@ fun SuggestionsBar(
                 ) {
                     items(wordSuggestions.options) { suggestion ->
                         val wordItem = wordSuggestions.wordItem
-                        ButtonSecondary(
+                        HSButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            title = suggestion,
                             onClick = {
                                 onClick.invoke(wordItem, suggestion)
                             }
-                        ) {
-                            captionSB_leah(text = suggestion)
-                        }
+                        )
                         Spacer(modifier = Modifier.width(12.dp))
                     }
                 }

@@ -1,6 +1,5 @@
 package io.horizontalsystems.walletkit.ui.compose.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonColors
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -29,148 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.walletkit.ui.compose.components.SecondaryButtonDefaults.buttonColors
-
-@Composable
-fun ButtonSecondaryDefault(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-) {
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        content = {
-            if (enabled) {
-                captionSB_leah(text = title, maxLines = 1)
-            } else {
-                captionSB_grey50(text = title, maxLines = 1)
-            }
-        },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonSecondaryYellow(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-) {
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.orange,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            Text(
-                title,
-                maxLines = 1,
-                style = ComposeAppTheme.typography.captionSB,
-                overflow = TextOverflow.Ellipsis,
-            )
-        },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonSecondaryWithIcon(
-    modifier: Modifier = Modifier,
-    title: String,
-    iconRight: Painter,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        contentPadding = PaddingValues(
-            start = 16.dp,
-            end = 8.dp,
-        ),
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                captionSB_leah(
-                    text = title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Icon(
-                    modifier = Modifier.padding(start = 2.dp),
-                    painter = iconRight,
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.leah
-                )
-            }
-        },
-        enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonSecondaryTransparent(
-    modifier: Modifier = Modifier,
-    title: String,
-    @DrawableRes iconRight: Int? = null,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        buttonColors = buttonColors(
-            backgroundColor = ComposeAppTheme.colors.transparent,
-            contentColor = ComposeAppTheme.colors.leah,
-            disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        ),
-        content = {
-            if (iconRight != null) {
-                Row (
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(
-                        text = title,
-                        maxLines = 1,
-                        style = ComposeAppTheme.typography.captionSB,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Icon(
-                        modifier = Modifier.padding(start = 4.dp),
-                        painter = painterResource(id = iconRight),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
-            } else {
-                Text(
-                    text = title,
-                    maxLines = 1,
-                    style = ComposeAppTheme.typography.captionSB,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        },
-        enabled = enabled
-    )
-}
 
 @Composable
 fun <T : WithTranslatableTitle> ButtonSecondaryToggle(

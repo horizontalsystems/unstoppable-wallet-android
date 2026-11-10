@@ -2,8 +2,6 @@ package io.horizontalsystems.walletkit.modules.coin.coinmarkets
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -11,14 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -26,7 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
-import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.modules.coin.MarketTickerViewItem
@@ -36,13 +35,9 @@ import io.horizontalsystems.walletkit.modules.market.MarketDataValue
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondary
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
-import io.horizontalsystems.walletkit.ui.compose.components.SecondaryButtonDefaults
 import io.horizontalsystems.walletkit.ui.compose.components.marketDataValueComponent
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
@@ -123,9 +118,9 @@ fun CoinMarketsMenu(
 ) {
 
     HeaderSorting(borderTop = true, borderBottom = true) {
-        ButtonSecondaryWithIcon(
+        HSDropdownButton(
+            variant = ButtonVariant.Secondary,
             modifier = Modifier.padding(start = 16.dp),
-            iconRight = painterResource(R.drawable.ic_down_arrow_20),
             title = exchangeTypeMenu.selected.title.getString(),
             onClick = showExchangeTypeSelector
         )
@@ -222,35 +217,11 @@ fun TurnOnButton(
     turnedOn: Boolean,
     onToggle: (Boolean) -> Unit
 ) {
-    val onClick = { onToggle.invoke(!turnedOn) }
-    val buttonColors = if (turnedOn) {
-        ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.orange,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.blade,
-            disabledContentColor = ComposeAppTheme.colors.andy,
-        )
-    } else {
-        SecondaryButtonDefaults.buttonColors()
-    }
-    ButtonSecondary(
+    HSButton(
         modifier = modifier,
-        onClick = onClick,
-        contentPadding = PaddingValues(
-            start = 10.dp,
-            end = 16.dp,
-        ),
-        buttonColors = buttonColors,
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    style = ComposeAppTheme.typography.captionSB,
-                    color = if (turnedOn) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.leah,
-                )
-            }
-        },
+        variant = if (turnedOn) ButtonVariant.Primary else ButtonVariant.Secondary,
+        size = ButtonSize.Small,
+        title = title,
+        onClick = { onToggle.invoke(!turnedOn) },
     )
 }

@@ -15,6 +15,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.shorten
@@ -23,7 +26,6 @@ import io.horizontalsystems.walletkit.modules.info.ui.InfoHeader
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineLawrence
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -110,7 +112,9 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
                     .padding(start = 16.dp)
                     .weight(1f)
             )
-            ButtonSecondaryDefault(
+            HSButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = transactionHash.shorten(),
                 onClick = {

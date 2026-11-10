@@ -7,9 +7,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEntity
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -21,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.contacts.ContactsModule
 import io.horizontalsystems.walletkit.modules.contacts.ContactsRouterPage
 import io.horizontalsystems.walletkit.modules.contacts.Mode
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
@@ -56,15 +59,19 @@ fun AddressCell(
 
         if (showAddContactButton) {
             HSpacer(16.dp)
-            ButtonSecondaryCircle(
-                icon = R.drawable.icon_20_user_plus,
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.icon_20_user_plus),
                 onClick = { showSaveAddressDialog = true }
             )
         }
 
         HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_copy_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_copy_20),
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)

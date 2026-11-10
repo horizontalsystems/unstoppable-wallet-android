@@ -30,6 +30,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.shorten
@@ -223,8 +227,10 @@ fun TitleAndValueCell(
         )
         if (copyable) {
             HSpacer(16.dp)
-            ButtonSecondaryCircle(
-                icon = R.drawable.ic_copy_20,
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.ic_copy_20),
                 onClick = {
                     TextHelper.copyText(value)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -299,15 +305,19 @@ fun TransactionInfoAddressCell(
 
         if (showAdd) {
             HSpacer(16.dp)
-            ButtonSecondaryCircle(
-                icon = R.drawable.icon_20_user_plus,
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(R.drawable.icon_20_user_plus),
                 onClick = { showSaveAddressDialog = true }
             )
         }
 
         HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_copy_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_copy_20),
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -509,8 +519,9 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
             modifier = Modifier.padding(end = 16.dp)
         )
         Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            modifier = Modifier.height(28.dp),
+        HSButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
             title = transactionHash.shorten(),
             onClick = {
                 TextHelper.copyText(transactionHash)
@@ -523,8 +534,10 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_share_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_share_20),
             onClick = {
                 context.startActivity(Intent().apply {
                     action = Intent.ACTION_SEND
@@ -596,8 +609,10 @@ fun TransactionInfoSecretKeyCell(secretKey: String) {
         )
 
         HSpacer(16.dp)
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_copy_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_copy_20),
             onClick = {
                 TextHelper.copySecret(secretKey)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -622,8 +637,10 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
             modifier = Modifier.padding(end = 16.dp)
         )
         Spacer(Modifier.weight(1f))
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_copy_20,
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(R.drawable.ic_copy_20),
             onClick = {
                 rawTransaction()?.let {
                     TextHelper.copyText(it)

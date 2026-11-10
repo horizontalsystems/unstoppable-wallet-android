@@ -9,8 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,7 +28,6 @@ import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.market.SortingField
 import io.horizontalsystems.walletkit.modules.market.TopMarket
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.walletkit.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
@@ -208,10 +205,9 @@ fun OptionController(
     label: Int,
     onOptionClick: () -> Unit
 ) {
-    ButtonSecondaryWithIcon(
-        modifier = Modifier.height(28.dp),
+    HSDropdownButton(
+        variant = ButtonVariant.Secondary,
         onClick = onOptionClick,
         title = stringResource(label),
-        iconRight = painterResource(R.drawable.ic_down_arrow_20),
     )
 }

@@ -47,6 +47,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ColoredTextStyle
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -190,9 +194,11 @@ fun FormsInput(
             }
 
             if (textState.text.isNotEmpty() && trailingContent == null) {
-                ButtonSecondaryCircle(
+                HSIconButton(
+                    variant = ButtonVariant.Secondary,
+                    size = ButtonSize.Small,
                     modifier = Modifier.padding(end = 16.dp),
-                    icon = R.drawable.ic_delete_20,
+                    icon = painterResource(R.drawable.ic_delete_20),
                     onClick = {
                         val text = textPreprocessor.process("")
                         textState = textState.copy(text = text, selection = TextRange(0))
@@ -212,9 +218,11 @@ fun FormsInput(
                         }
                     }
 
-                    ButtonSecondaryCircle(
+                    HSIconButton(
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
                         modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
-                        icon = R.drawable.ic_qr_scan_20,
+                        icon = painterResource(R.drawable.ic_qr_scan_20),
                         onClick = {
                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
                         }
@@ -222,10 +230,11 @@ fun FormsInput(
                 }
 
                 if (pasteEnabled) {
-                    ButtonSecondaryDefault(
+                    HSButton(
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
                         modifier = Modifier
-                            .padding(end = 16.dp)
-                            .height(28.dp),
+                            .padding(end = 16.dp),
                         title = stringResource(id = R.string.Send_Button_Paste),
                         onClick = {
                             TextHelper.getCopiedText()?.let { textInClipboard ->
@@ -496,9 +505,11 @@ fun FormsInputMultiline(
                 }
 
                 if (textState.text.isNotEmpty()) {
-                    ButtonSecondaryCircle(
+                    HSIconButton(
+                        variant = ButtonVariant.Secondary,
+                        size = ButtonSize.Small,
                         modifier = Modifier.padding(end = 16.dp),
-                        icon = R.drawable.ic_delete_20,
+                        icon = painterResource(R.drawable.ic_delete_20),
                         onClick = {
                             val text = textPreprocessor.process("")
                             textState = textState.copy(text = text, selection = TextRange(0))
@@ -519,9 +530,11 @@ fun FormsInputMultiline(
                             }
                         }
 
-                        ButtonSecondaryCircle(
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
                             modifier = Modifier.padding(end = if(pasteEnabled) 8.dp else 16.dp),
-                            icon = R.drawable.ic_qr_scan_20,
+                            icon = painterResource(R.drawable.ic_qr_scan_20),
                             onClick = {
                                 qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
 
@@ -531,10 +544,11 @@ fun FormsInputMultiline(
                     }
 
                     if (pasteEnabled) {
-                        ButtonSecondaryDefault(
+                        HSButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
                             modifier = Modifier
-                                .padding(end = 16.dp)
-                                .height(28.dp),
+                                .padding(end = 16.dp),
                             title = stringResource(id = R.string.Send_Button_Paste),
                             onClick = {
                                 TextHelper.getCopiedText()?.let { textInClipboard ->
