@@ -73,6 +73,7 @@ fun BalanceCardSwipable(
         actions = {
             HSCellButton(
                 icon = painterResource(R.drawable.trash_24),
+                contentDescription = stringResource(R.string.Button_Disable),
                 onClick = onDisable
             )
         },

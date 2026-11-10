@@ -25,11 +25,17 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.R
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
-/** The action revealed behind a cell when it is swiped. */
+/**
+ * The action revealed behind a cell when it is swiped.
+ *
+ * @param contentDescription names the action for screen readers, since the
+ * button shows only an icon.
+ */
 @Composable
 fun HSCellButton(
     modifier: Modifier = Modifier,
     icon: Painter,
+    contentDescription: String? = null,
     iconTint: Color = ComposeAppTheme.colors.leah,
     backgroundColor: Color = ComposeAppTheme.colors.blade,
     enabled: Boolean = true,
@@ -55,7 +61,7 @@ fun HSCellButton(
     ) {
         Icon(
             painter = icon,
-            contentDescription = null,
+            contentDescription = contentDescription,
             tint = if (enabled) iconTint else ComposeAppTheme.colors.andy
         )
     }

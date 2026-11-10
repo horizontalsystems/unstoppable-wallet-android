@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.components.HSCellButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
@@ -110,6 +111,7 @@ fun CoinListOrderable(
                         actions = {
                             HSCellButton(
                                 icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                                contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                                 iconTint = ComposeAppTheme.colors.blade,
                                 backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.orange
                             ) {

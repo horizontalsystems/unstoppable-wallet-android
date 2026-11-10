@@ -121,6 +121,7 @@ fun CoinListSlidable(
                     actions = {
                         HSCellButton(
                             icon = painterResource(if (item.favorited) R.drawable.ic_heart_broke_24 else R.drawable.ic_heart_24),
+                            contentDescription = stringResource(if (item.favorited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                             iconTint = ComposeAppTheme.colors.blade,
                             backgroundColor = if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.orange
                         ) {
