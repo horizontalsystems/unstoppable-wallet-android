@@ -30,6 +30,10 @@ import androidx.credentials.exceptions.CreateCredentialCustomException
 import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -46,10 +50,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeaderColored
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

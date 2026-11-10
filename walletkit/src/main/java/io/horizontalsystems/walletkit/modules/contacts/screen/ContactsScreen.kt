@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
@@ -61,7 +62,6 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 enum class ContactsScreenBottomSheetType {
     ReplaceAddressConfirmation, RestoreContactsConfirmation

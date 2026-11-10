@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.modules.unlinkaccount
 
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
@@ -32,8 +34,6 @@ import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHea
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSSelector
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable

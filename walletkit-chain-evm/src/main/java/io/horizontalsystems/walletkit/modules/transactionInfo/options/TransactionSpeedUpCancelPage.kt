@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -22,7 +23,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class TransactionSpeedUpCancelPage(val input: Input) : HSPage() {

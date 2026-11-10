@@ -14,6 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSDropdownButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
@@ -34,10 +38,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSDropdownButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.serialization.Serializable
 

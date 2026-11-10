@@ -9,14 +9,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

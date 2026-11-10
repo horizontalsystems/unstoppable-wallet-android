@@ -1,5 +1,8 @@
 package io.horizontalsystems.walletkit.modules.settings.appearance
 
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
@@ -68,9 +71,6 @@ import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
 
 @Serializable
 data object AppearancePage : HSPage() {

@@ -30,4 +30,5 @@ android {
 dependencies {
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui.tooling)
 }

@@ -5,11 +5,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButtonTinted
 
 @Composable
 fun CellRightControlsIconButton(
@@ -19,7 +19,7 @@ fun CellRightControlsIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    HSIconButtonTinted(
+    HSIconButton(
         modifier = modifier,
         variant = ButtonVariant.Secondary,
         size = ButtonSize.Small,

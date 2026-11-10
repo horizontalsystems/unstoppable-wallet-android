@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
@@ -34,7 +35,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object MarketSignalsPage : HSPage(accessibleWhileLocked = true) {

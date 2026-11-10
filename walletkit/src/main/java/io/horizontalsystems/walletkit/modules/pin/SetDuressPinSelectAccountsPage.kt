@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
@@ -32,7 +33,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object SetDuressPinSelectAccountsPage : HSPage() {

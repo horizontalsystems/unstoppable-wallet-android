@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.chain.ton.TonChainPlugin
@@ -43,8 +45,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversa
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Composable
 fun TonConnectSendRequestScreen(navigation: HSNavigation) {

@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -16,7 +17,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object IndicatorsAlertSheet : HSBottomSheet() {

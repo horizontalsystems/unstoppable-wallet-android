@@ -33,6 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -43,9 +46,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
 

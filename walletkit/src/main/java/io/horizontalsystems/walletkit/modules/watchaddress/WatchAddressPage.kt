@@ -1,5 +1,9 @@
 package io.horizontalsystems.walletkit.modules.watchaddress
 
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.Box
@@ -34,10 +38,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable

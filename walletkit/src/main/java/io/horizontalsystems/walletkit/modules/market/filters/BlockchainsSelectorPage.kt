@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
@@ -28,7 +29,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.CellBlockchainC
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object BlockchainsSelectorPage : HSPage(accessibleWhileLocked = true) {

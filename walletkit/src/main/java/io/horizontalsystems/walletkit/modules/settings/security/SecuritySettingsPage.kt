@@ -24,6 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -51,11 +56,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.SecureSend
 import kotlinx.serialization.Serializable

@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.HSCellButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -48,7 +49,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSCellButton
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 

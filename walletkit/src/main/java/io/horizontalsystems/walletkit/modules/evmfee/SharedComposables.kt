@@ -33,6 +33,9 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ColoredTextStyle
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -43,9 +46,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 import java.math.BigDecimal
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet

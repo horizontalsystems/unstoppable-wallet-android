@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
@@ -49,7 +50,6 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.modules.send.bitcoin.advanced.FeeRateCaution
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class ResendBitcoinPage(val input: Input) : HSPage() {

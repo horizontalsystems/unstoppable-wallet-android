@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
@@ -84,8 +86,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.walletkit.uiv3.components.cell.HSString
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

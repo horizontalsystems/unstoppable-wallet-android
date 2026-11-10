@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
 import io.horizontalsystems.walletkit.ui.compose.components.SliderIndicator
@@ -30,7 +31,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import kotlinx.coroutines.launch
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun IntroScreen() {

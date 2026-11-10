@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.CoinValue
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
@@ -30,7 +31,6 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class Eip20ApprovePage(val input: Input) : HSPage() {

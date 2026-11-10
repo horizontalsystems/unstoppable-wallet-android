@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.chart.ChartViewModel
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Chart
@@ -40,8 +42,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_leah
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 
 @Serializable
 data class VaultPage(val input: Input) : HSPage(accessibleWhileLocked = true) {

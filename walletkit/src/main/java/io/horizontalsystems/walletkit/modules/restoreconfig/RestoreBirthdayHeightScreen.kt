@@ -28,6 +28,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.title
 import io.horizontalsystems.walletkit.modules.balance.token.BirthdayHeightInputField
@@ -40,8 +42,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.captionSB_grey
 import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 import java.time.LocalDate

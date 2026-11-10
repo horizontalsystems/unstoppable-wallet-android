@@ -186,8 +186,10 @@ check (`AddressCheckType`) is enabled separately.
 - **Compose**: New components go in `uiv3/components/`
 - **Design kit**: The `designkit` module (`io.horizontalsystems.designkit`)
   holds what the Figma design system file defines: colours and typography
-  today, shared components as they are confirmed against Figma. It depends
-  on no app code, so nothing from `walletkit` or `app` may be imported there.
+  in `theme`, and in `components` the shared components confirmed against
+  Figma (the button controls so far). Use those instead of adding a button
+  elsewhere. It depends on no app code, so nothing from `walletkit` or
+  `app` may be imported there.
 
 ### Preventing Double Clicks in Compose
 

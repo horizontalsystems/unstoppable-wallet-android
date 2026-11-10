@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
@@ -71,7 +72,6 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import kotlin.reflect.KClass
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun SendConfirmationScreen(

@@ -16,15 +16,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonConfig
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subheadR_grey
 import io.horizontalsystems.walletkit.uiv3.components.HSPreview
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonConfig
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonStyle
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun CardsErrorMessageDefault(

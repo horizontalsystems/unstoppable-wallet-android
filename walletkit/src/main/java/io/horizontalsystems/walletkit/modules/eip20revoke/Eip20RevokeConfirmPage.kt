@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -32,7 +33,6 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class Eip20RevokeConfirmPage(val input: Input) : HSPage() {

@@ -55,6 +55,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSCellButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
@@ -72,10 +74,8 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSCellButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun CoinListSlidable(

@@ -42,6 +42,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
@@ -59,7 +60,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 val yellowGradient = Brush.horizontalGradient(
     colors = listOf(

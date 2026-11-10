@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.adapters.NoTrustlineError
@@ -53,7 +54,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun EnterAddressScreen(

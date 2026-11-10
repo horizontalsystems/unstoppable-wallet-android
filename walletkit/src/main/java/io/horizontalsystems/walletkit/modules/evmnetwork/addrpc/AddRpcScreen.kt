@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.entities.DataState
@@ -24,7 +25,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Composable
 fun AddRpcScreen(

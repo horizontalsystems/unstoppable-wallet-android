@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -45,7 +46,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import kotlinx.serialization.Serializable
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data object RoiSelectCoinsPage : HSPage() {

@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.uiv3.components.bottom
 
+import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ColoredTextStyle
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
@@ -42,8 +44,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
-import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButton
 
 @Composable
 fun BoxScope.BottomSearchBar(

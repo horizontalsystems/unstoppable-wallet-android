@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.WatchAccountException
 import io.horizontalsystems.walletkit.core.providers.Translator
@@ -36,7 +37,6 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
 import kotlin.reflect.KClass
-import io.horizontalsystems.walletkit.uiv3.components.controls.HSButton
 
 @Serializable
 data class OpenCryptoPayConfirmationPage(val input: Input) : HSPage() {
