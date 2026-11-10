@@ -66,27 +66,27 @@ are built for 4 KB pages.
 ## The flows
 
 The flows are shared with the iOS app and live in the `flows/` folder of
-the `flows` branch of
-[horizontalsystems/appkb](https://github.com/horizontalsystems/appkb/tree/flows/flows).
+the `main` branch of
+[horizontalsystems/appkb](https://github.com/horizontalsystems/appkb/tree/main/flows).
 How to write one, the kinds of tests, tags, platform branches, secrets and
 the dust wallet are in its
-[README](https://github.com/horizontalsystems/appkb/blob/flows/flows/README.md).
+[README](https://github.com/horizontalsystems/appkb/blob/main/flows/README.md).
 This folder holds only what runs them on Android.
 
 New feature tests are written into appkb by a job on the test station as
 soon as the feature's pull request is merged, from its test tags and its
 description. The station
-runs the tip of the `flows` branch.
+runs the tip of the `main` branch.
 
 `fetch-flows.sh` checks the flows out into `maestro/appkb/` (gitignored),
 with your git credentials for appkb:
 
 ```bash
-maestro/scripts/fetch-flows.sh            # the tip of flows
+maestro/scripts/fetch-flows.sh            # the tip of main
 maestro/scripts/fetch-flows.sh my-branch  # another appkb branch
 ```
 
-To change a flow by hand, start a branch from `flows` in that clone, edit
+To change a flow by hand, start a branch from `main` in that clone, edit
 `maestro/appkb/flows/`, run it (below), and open a pull request in appkb.
 `fetch-flows.sh` refuses to overwrite uncommitted edits in the clone.
 
@@ -178,7 +178,7 @@ Checked on Maestro 2.11.0 with the API 35 image:
 ## Test tag check
 
 The Check Test Tags workflow fails a pull request when a flow on appkb's
-`flows` branch selects an `id:` that `TestTags` does not declare, outside
+`main` branch selects an `id:` that `TestTags` does not declare, outside
 steps that run only on iOS. It reads appkb with the `APPKB_TOKEN` repository
 secret, a read-only token for that repository. Pull requests from forks get
 no secrets and skip the check. To run it locally, after `fetch-flows.sh`:

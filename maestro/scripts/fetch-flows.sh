@@ -1,13 +1,13 @@
 #!/bin/bash
 # Fetches the shared Maestro flows from appkb into maestro/appkb/flows, at the
-# tip of its flows branch, or at the ref given (another appkb branch or a
+# tip of its main branch, or at the ref given (another appkb branch or a
 # commit). Uses your git credentials for appkb.
 #
 # Usage: fetch-flows.sh [ref]
 set -euo pipefail
 MAESTRO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$MAESTRO_DIR/appkb"
-REF="${1:-flows}"
+REF="${1:-main}"
 URL="${APPKB_URL:-https://github.com/horizontalsystems/appkb.git}"
 
 if [ ! -d "$DEST/.git" ]; then
