@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -70,7 +71,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.WCAccountTypeNotSupp
 import io.horizontalsystems.walletkit.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WCListPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.AppBar
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineLawrenceSection

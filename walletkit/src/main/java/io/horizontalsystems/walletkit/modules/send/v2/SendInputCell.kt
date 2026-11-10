@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 
 /**

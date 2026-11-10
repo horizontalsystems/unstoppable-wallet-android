@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabFolderItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsFolder
 import androidx.compose.foundation.layout.Arrangement
@@ -75,8 +77,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags

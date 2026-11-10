@@ -24,11 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.Bright
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.GreenD
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ViewModelUiState
-import io.horizontalsystems.walletkit.ui.compose.Bright
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.GreenD
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 

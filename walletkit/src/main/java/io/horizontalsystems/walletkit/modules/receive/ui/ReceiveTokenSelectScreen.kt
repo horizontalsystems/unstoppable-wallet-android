@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.iconPlaceholder
@@ -30,7 +31,6 @@ import io.horizontalsystems.walletkit.entities.Wallet
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.receive.viewmodels.CoinForReceiveType
 import io.horizontalsystems.walletkit.modules.receive.viewmodels.ReceiveTokenSelectViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.HsImageCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView

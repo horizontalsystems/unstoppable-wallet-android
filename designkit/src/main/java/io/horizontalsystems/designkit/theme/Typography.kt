@@ -1,4 +1,4 @@
-package io.horizontalsystems.walletkit.ui.compose
+package io.horizontalsystems.designkit.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.designkit.R
 
 @Immutable
 class Typography internal constructor(

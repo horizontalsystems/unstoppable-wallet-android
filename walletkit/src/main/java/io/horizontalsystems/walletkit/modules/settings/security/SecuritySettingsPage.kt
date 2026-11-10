@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
@@ -38,7 +39,6 @@ import io.horizontalsystems.walletkit.modules.settings.security.securesend.Secur
 import io.horizontalsystems.walletkit.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.titleStringRes
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

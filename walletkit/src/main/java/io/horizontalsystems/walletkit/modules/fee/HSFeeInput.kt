@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.CurrencyValue
 import io.horizontalsystems.walletkit.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable

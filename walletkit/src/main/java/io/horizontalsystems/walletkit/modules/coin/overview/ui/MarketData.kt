@@ -10,8 +10,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.modules.coin.CoinDataItem
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.Badge
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah

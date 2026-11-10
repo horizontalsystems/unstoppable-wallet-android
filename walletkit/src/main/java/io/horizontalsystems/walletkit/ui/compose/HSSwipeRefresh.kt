@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

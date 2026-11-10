@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialCustomException
 import androidx.credentials.exceptions.NoCredentialException
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Caution
@@ -51,7 +52,6 @@ import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreAccountPage
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreFromPasskeyPage
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreFromPrivateKeyPage
 import io.horizontalsystems.walletkit.modules.restorelocal.RestoreLocalPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold

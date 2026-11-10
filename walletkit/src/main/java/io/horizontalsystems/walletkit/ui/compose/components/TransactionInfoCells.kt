@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.core.stats.StatEntity
@@ -53,7 +54,6 @@ import io.horizontalsystems.walletkit.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.walletkit.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.TestTags

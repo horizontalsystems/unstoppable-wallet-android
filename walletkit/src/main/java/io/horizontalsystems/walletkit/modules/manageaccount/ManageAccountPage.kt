@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.FaqManager
 import io.horizontalsystems.walletkit.core.stats.StatEntity
@@ -42,7 +43,6 @@ import io.horizontalsystems.walletkit.modules.manageaccount.recoveryphrase.Recov
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.unlinkaccount.UnlinkAccountSheet
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection

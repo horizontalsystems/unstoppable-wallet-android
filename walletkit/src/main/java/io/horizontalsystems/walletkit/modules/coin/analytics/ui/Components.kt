@@ -29,12 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
 import io.horizontalsystems.chartview.ChartMinimal
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.walletkit.modules.coin.analytics.CoinAnalyticsModule.BoxItem
 import io.horizontalsystems.walletkit.modules.coin.analytics.CoinAnalyticsModule.OverallScore
 import io.horizontalsystems.walletkit.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ChartBars
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer

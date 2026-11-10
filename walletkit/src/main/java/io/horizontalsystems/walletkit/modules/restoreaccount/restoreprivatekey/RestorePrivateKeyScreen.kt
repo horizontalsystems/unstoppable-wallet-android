@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEntity
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -23,7 +24,6 @@ import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

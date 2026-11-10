@@ -1,4 +1,4 @@
-package io.horizontalsystems.walletkit.ui.compose
+package io.horizontalsystems.designkit.theme
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue

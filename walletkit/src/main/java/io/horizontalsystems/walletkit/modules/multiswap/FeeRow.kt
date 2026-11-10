@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo

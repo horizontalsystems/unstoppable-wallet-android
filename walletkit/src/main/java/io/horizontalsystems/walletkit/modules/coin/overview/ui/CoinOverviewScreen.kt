@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.LinkType
 import io.horizontalsystems.marketkit.models.Token
@@ -57,7 +58,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.enablecoin.restoresettings.AccountPickerResult
 import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryDefault

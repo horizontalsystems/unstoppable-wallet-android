@@ -4,7 +4,7 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
 @Composable
 fun HsDivider(modifier: Modifier = Modifier) {

@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.balance.BalanceContextMenuItem
@@ -43,7 +44,6 @@ import io.horizontalsystems.walletkit.modules.balance.BalanceViewModel
 import io.horizontalsystems.walletkit.modules.balance.contextMenuItems
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon

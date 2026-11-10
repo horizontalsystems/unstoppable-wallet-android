@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.managers.ZanoNodeManager.ZanoNode
@@ -45,7 +46,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.walletkit.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.walletkit.modules.zanonetwork.addnode.AddZanoNodeScreen
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString

@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.FaqManager
 import io.horizontalsystems.walletkit.core.shorten
@@ -66,7 +67,6 @@ import io.horizontalsystems.walletkit.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.walletkit.modules.receive.ReceiveChooseCoinPage
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.sendtokenselect.SendTokenSelectPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

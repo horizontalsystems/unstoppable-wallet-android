@@ -33,13 +33,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.utils.ModuleField
 import io.horizontalsystems.walletkit.entities.Address
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 
 @Composable

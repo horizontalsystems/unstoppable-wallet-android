@@ -14,6 +14,7 @@ import io.horizontalsystems.bitcoincore.models.SignedRawTransaction
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.HSCaution
@@ -37,7 +38,6 @@ import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinAmountServ
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinFeeRateService
 import io.horizontalsystems.walletkit.modules.send.bitcoin.SendBitcoinFeeService
 import io.horizontalsystems.walletkit.modules.send.bitcoin.settings.SendBtcSettingsViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem

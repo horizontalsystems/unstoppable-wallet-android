@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
 @IntDef(20, 24, 32, 48)
 annotation class ImageSize

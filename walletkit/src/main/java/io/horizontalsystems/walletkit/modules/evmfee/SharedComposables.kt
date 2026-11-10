@@ -33,11 +33,11 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Warning
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.animations.shake
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard

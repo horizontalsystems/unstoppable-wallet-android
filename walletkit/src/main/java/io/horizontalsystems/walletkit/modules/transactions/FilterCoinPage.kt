@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.iconPlaceholder
@@ -30,7 +31,6 @@ import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.nav3.EntryPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.B2
 import io.horizontalsystems.walletkit.ui.compose.components.Badge
 import io.horizontalsystems.walletkit.ui.compose.components.CellMultilineClear

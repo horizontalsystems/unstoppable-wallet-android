@@ -34,6 +34,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.HSCaution
 import io.horizontalsystems.walletkit.core.Warning
@@ -42,8 +44,6 @@ import io.horizontalsystems.walletkit.modules.evmfee.eip1559.Eip1559FeeSettingsV
 import io.horizontalsystems.walletkit.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.walletkit.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.animations.shake
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText

@@ -30,9 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.horizontalsystems.designkit.theme.Bright
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.Bright
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
 @Composable
 fun DonateBanner(onClick: () -> Unit) {

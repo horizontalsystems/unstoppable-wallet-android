@@ -60,6 +60,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.displayNameStringRes
 import io.horizontalsystems.walletkit.core.stats.StatEntity
@@ -72,8 +74,6 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Keyboard
 import io.horizontalsystems.walletkit.ui.compose.components.BoxTyler44
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondary

@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -53,7 +54,6 @@ import io.horizontalsystems.walletkit.modules.multiswap.history.SwapInfoPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderStick
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider

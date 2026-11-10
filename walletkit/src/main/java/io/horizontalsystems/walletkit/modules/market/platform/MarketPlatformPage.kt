@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -47,7 +48,6 @@ import io.horizontalsystems.walletkit.modules.market.topcoins.OptionController
 import io.horizontalsystems.walletkit.modules.market.topplatforms.Platform
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString

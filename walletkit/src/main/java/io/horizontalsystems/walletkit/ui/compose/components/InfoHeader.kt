@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
 @Composable
 fun InfoH3(text: String) {

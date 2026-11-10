@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.walletkit.uiv3.exposeTestTags

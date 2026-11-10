@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsTabRowDefaults.Divider
 import io.horizontalsystems.walletkit.ui.compose.components.HsTabRowDefaults.Indicator
 import kotlinx.coroutines.CoroutineScope

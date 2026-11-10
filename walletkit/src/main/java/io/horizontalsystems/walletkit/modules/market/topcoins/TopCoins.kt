@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -26,7 +27,6 @@ import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.market.SortingField
 import io.horizontalsystems.walletkit.modules.market.TopMarket
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.walletkit.ui.compose.components.CoinListSlidable

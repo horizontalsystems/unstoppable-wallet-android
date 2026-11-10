@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.ISendMoneroAdapter
@@ -21,7 +22,6 @@ import io.horizontalsystems.walletkit.modules.send.v2.SendSettingsCard
 import io.horizontalsystems.walletkit.modules.send.v2.SendSettingsRow
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold

@@ -8,10 +8,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.modules.send.SendButton
 import io.horizontalsystems.walletkit.modules.zcashmigration.MigrateButton
 import io.horizontalsystems.walletkit.modules.send.SendResult
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.core.HSCaution
 import org.junit.Assert.assertEquals

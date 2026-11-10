@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -30,7 +31,6 @@ import io.horizontalsystems.walletkit.modules.settings.privacy.tor.SecurityTorSe
 import io.horizontalsystems.walletkit.modules.settings.privacy.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.walletkit.modules.settings.security.SecurityCenterCell
 import io.horizontalsystems.walletkit.modules.settings.security.ui.TorBlock
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning

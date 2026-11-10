@@ -36,6 +36,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.managers.FaqManager
 import io.horizontalsystems.walletkit.core.utils.ModuleField
@@ -47,7 +48,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.list.WalletConnectLi
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
 import io.horizontalsystems.walletkit.modules.walletconnect.request.WCRequestSheet
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem

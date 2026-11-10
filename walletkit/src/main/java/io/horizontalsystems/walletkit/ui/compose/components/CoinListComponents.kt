@@ -55,6 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.iconPlaceholder
@@ -62,7 +63,6 @@ import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.market.ImageSource
 import io.horizontalsystems.walletkit.modules.market.MarketViewItem
 import io.horizontalsystems.walletkit.modules.market.search.MarketSearchModule.DiscoveryItem
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal

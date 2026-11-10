@@ -35,6 +35,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.RateAppManager
@@ -61,7 +62,6 @@ import io.horizontalsystems.walletkit.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.walletkit.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.walletkit.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager.SupportState
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.HsNavigationBarItem

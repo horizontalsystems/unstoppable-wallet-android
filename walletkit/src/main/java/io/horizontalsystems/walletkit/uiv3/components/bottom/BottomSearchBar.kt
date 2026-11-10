@@ -1,5 +1,7 @@
 package io.horizontalsystems.walletkit.uiv3.components.bottom
 
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
@@ -38,8 +40,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_grey
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize

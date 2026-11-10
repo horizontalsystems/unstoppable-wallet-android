@@ -3,9 +3,9 @@ package io.horizontalsystems.walletkit.modules.memo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.send.v2.SendInputCell
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 
 /**
  * Describes where a memo ends up once the transaction is sent, so the UI can

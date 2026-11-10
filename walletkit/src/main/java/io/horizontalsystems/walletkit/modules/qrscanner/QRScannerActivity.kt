@@ -64,13 +64,13 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.ScanOptions
+import io.horizontalsystems.designkit.theme.Bright
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.BaseActivity
 import io.horizontalsystems.walletkit.core.utils.ModuleField
 import io.horizontalsystems.walletkit.helpers.HudHelper
-import io.horizontalsystems.walletkit.ui.compose.Bright
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.AppBar
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton

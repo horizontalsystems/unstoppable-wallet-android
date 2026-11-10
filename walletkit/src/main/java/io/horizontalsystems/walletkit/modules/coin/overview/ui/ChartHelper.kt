@@ -9,7 +9,7 @@ import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.ChartVolume
-import io.horizontalsystems.walletkit.ui.compose.Colors
+import io.horizontalsystems.designkit.theme.Colors
 import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue

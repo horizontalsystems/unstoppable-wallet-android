@@ -200,6 +200,7 @@ dependencies {
     // Project modules
     api(project(":components:icons"))
     api(project(":components:chartview"))
+    api(project(":designkit"))
     api(project(":subscriptions-core"))
     api(project(":dapp-core"))
 

@@ -42,11 +42,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.iconRes
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.titleStringRes
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider

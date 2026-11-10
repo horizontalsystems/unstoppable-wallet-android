@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -23,7 +24,6 @@ import io.horizontalsystems.walletkit.modules.xtransaction.helpers.TransactionIn
 import io.horizontalsystems.walletkit.modules.xtransaction.helpers.coinAmountString
 import io.horizontalsystems.walletkit.modules.xtransaction.helpers.coinIconPainter
 import io.horizontalsystems.walletkit.modules.xtransaction.helpers.fiatAmountString
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HFillSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

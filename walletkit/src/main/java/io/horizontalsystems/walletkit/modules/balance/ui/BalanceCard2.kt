@@ -18,10 +18,10 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem2
 import io.horizontalsystems.walletkit.modules.balance.SyncingProgressType
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.captionSB_leah
 import io.horizontalsystems.walletkit.ui.compose.components.diffColor
 import io.horizontalsystems.walletkit.ui.compose.components.diffText

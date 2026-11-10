@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.managewallets
 
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -35,7 +36,6 @@ import io.horizontalsystems.walletkit.modules.nav3.observeResult
 import io.horizontalsystems.walletkit.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.walletkit.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.walletkit.modules.tokenselect.SelectChainTab
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView

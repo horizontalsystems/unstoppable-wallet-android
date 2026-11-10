@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.core.managers.EvmKitManagerRegistry
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -40,7 +41,6 @@ import io.horizontalsystems.walletkit.modules.send.evm.settings.SendEvmNonceView
 import io.horizontalsystems.walletkit.modules.send.evm.settings.SendEvmSettingsModule
 import io.horizontalsystems.walletkit.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.walletkit.modules.send.evm.settings.SendEvmSettingsViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

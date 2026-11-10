@@ -7,8 +7,8 @@ import androidx.compose.material.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import io.horizontalsystems.walletkit.ui.compose.Bright
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.Bright
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -18,7 +19,6 @@ import io.horizontalsystems.walletkit.modules.createaccount.CreateAccountPage
 import io.horizontalsystems.walletkit.modules.importwallet.ImportWalletPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.watchaddress.WatchAddressPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 
 @Composable

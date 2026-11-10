@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
@@ -29,7 +30,6 @@ import io.horizontalsystems.walletkit.core.launchSafe
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import kotlin.coroutines.cancellation.CancellationException
 import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

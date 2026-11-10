@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.walletkit.ui.compose.components.SecondaryButtonDefaults.buttonColors

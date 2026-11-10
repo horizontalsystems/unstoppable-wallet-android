@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -15,7 +16,6 @@ import io.horizontalsystems.walletkit.core.providers.Translator
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.walletkit.modules.tokenselect.TokenSelectViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation

@@ -184,6 +184,10 @@ check (`AddressCheckType`) is enabled separately.
 - **Services**: Suffix with `Service`
 - **Repositories**: Suffix with `Repository`
 - **Compose**: New components go in `uiv3/components/`
+- **Design kit**: The `designkit` module (`io.horizontalsystems.designkit`)
+  holds what the Figma design system file defines: colours and typography
+  today, shared components as they are confirmed against Figma. It depends
+  on no app code, so nothing from `walletkit` or `app` may be imported there.
 
 ### Preventing Double Clicks in Compose
 

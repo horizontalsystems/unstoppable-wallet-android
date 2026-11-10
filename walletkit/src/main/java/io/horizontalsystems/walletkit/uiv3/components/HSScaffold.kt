@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.IMenuItem
 import io.horizontalsystems.walletkit.uiv3.components.bars.HSTopAppBar
 

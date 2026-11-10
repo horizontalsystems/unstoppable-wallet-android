@@ -19,12 +19,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.balance.BalanceViewItem2
 import io.horizontalsystems.walletkit.modules.balance.ui.BalanceCardInner2
 import io.horizontalsystems.walletkit.modules.balance.ui.BalanceCardSubtitleType
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

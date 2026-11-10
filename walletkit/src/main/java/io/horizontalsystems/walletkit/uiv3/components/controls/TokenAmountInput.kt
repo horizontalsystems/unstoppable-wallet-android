@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -26,7 +27,6 @@ import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.entities.Currency
 import io.horizontalsystems.walletkit.modules.multiswap.AmountInput
 import io.horizontalsystems.walletkit.modules.multiswap.FiatAmountInput
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer

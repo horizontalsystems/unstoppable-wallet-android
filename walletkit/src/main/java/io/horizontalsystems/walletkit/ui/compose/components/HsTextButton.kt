@@ -5,7 +5,7 @@ import androidx.compose.material.LocalRippleConfiguration
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import io.horizontalsystems.walletkit.ui.compose.MyRippleConfiguration
+import io.horizontalsystems.designkit.theme.MyRippleConfiguration
 
 @Composable
 fun HsTextButton(

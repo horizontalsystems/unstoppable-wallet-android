@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.BaseActivity
 import io.horizontalsystems.walletkit.modules.main.MainModule
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.BottomSheetsElementsButtons
 import io.horizontalsystems.walletkit.ui.compose.components.BottomSheetsElementsHeader
 import io.horizontalsystems.walletkit.ui.compose.components.BottomSheetsElementsText

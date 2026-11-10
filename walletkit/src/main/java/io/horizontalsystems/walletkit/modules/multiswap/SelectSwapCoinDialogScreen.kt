@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.multiswap
 
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
@@ -34,7 +35,6 @@ import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.badge
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.core.isNative
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.CoinImage
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider

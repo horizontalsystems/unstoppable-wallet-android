@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -38,7 +39,6 @@ import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransact
 import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransaction.FeeCell
 import io.horizontalsystems.walletkit.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
 import io.horizontalsystems.walletkit.modules.walletconnect.session.TitleValueCell
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah

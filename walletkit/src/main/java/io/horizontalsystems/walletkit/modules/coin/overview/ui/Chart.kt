@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartVolumeType
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.entities.ViewState
@@ -62,7 +63,6 @@ import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.chart.ChartModule
 import io.horizontalsystems.walletkit.modules.chart.ChartViewModel
 import io.horizontalsystems.walletkit.modules.coin.ChartInfoData
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.GraphicBars
 import io.horizontalsystems.walletkit.ui.compose.components.GraphicBarsWithNegative
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer

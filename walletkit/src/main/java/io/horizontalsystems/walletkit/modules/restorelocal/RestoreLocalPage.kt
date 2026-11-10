@@ -32,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -46,7 +47,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.walletkit.modules.restoreaccount.restore_select_coins
 import io.horizontalsystems.walletkit.serializers.HSScreenKClassSerializer
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem

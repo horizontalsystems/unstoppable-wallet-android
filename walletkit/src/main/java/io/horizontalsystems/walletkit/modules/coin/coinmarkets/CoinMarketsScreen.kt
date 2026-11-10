@@ -26,13 +26,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.walletkit.modules.coin.coinmarkets.CoinMarketsModule.ExchangeType
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.market.MarketDataValue
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup

@@ -1,4 +1,4 @@
-package io.horizontalsystems.walletkit.ui.compose
+package io.horizontalsystems.designkit.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ExperimentalMaterialApi

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.badge
@@ -32,7 +33,6 @@ import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionMo
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.stringRepresentation
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.title
 import io.horizontalsystems.walletkit.modules.usersubscription.ui.PremiumSubscribedSheet
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeOrangeGradient
 import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider

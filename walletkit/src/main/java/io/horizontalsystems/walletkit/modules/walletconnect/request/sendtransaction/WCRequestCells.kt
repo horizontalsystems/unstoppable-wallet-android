@@ -7,13 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
 import io.horizontalsystems.walletkit.core.shorten
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.walletkit.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.walletkit.modules.walletconnect.session.TitleValueCell
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
 import io.horizontalsystems.walletkit.uiv3.components.AlertCard
 import io.horizontalsystems.walletkit.uiv3.components.AlertFormat

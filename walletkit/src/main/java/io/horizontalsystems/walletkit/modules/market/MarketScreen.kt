@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -49,7 +50,6 @@ import io.horizontalsystems.walletkit.modules.market.topsectors.TopSectorsScreen
 import io.horizontalsystems.walletkit.modules.market.tvl.TvlPage
 import io.horizontalsystems.walletkit.modules.metricchart.MetricsType
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer

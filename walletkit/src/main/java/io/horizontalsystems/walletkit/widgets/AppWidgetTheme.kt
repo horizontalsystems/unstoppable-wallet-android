@@ -11,21 +11,21 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import io.horizontalsystems.walletkit.ui.compose.Black50
-import io.horizontalsystems.walletkit.ui.compose.Dark
-import io.horizontalsystems.walletkit.ui.compose.Green50
-import io.horizontalsystems.walletkit.ui.compose.GreenD
-import io.horizontalsystems.walletkit.ui.compose.GreenL
-import io.horizontalsystems.walletkit.ui.compose.Grey
-import io.horizontalsystems.walletkit.ui.compose.Light
-import io.horizontalsystems.walletkit.ui.compose.Orange
-import io.horizontalsystems.walletkit.ui.compose.LightGrey
-import io.horizontalsystems.walletkit.ui.compose.Red20
-import io.horizontalsystems.walletkit.ui.compose.Red50
-import io.horizontalsystems.walletkit.ui.compose.RedD
-import io.horizontalsystems.walletkit.ui.compose.RedL
-import io.horizontalsystems.walletkit.ui.compose.darkPalette
-import io.horizontalsystems.walletkit.ui.compose.lightPalette
+import io.horizontalsystems.designkit.theme.Black50
+import io.horizontalsystems.designkit.theme.Dark
+import io.horizontalsystems.designkit.theme.Green50
+import io.horizontalsystems.designkit.theme.GreenD
+import io.horizontalsystems.designkit.theme.GreenL
+import io.horizontalsystems.designkit.theme.Grey
+import io.horizontalsystems.designkit.theme.Light
+import io.horizontalsystems.designkit.theme.LightGrey
+import io.horizontalsystems.designkit.theme.Orange
+import io.horizontalsystems.designkit.theme.Red20
+import io.horizontalsystems.designkit.theme.Red50
+import io.horizontalsystems.designkit.theme.RedD
+import io.horizontalsystems.designkit.theme.RedL
+import io.horizontalsystems.designkit.theme.darkPalette
+import io.horizontalsystems.designkit.theme.lightPalette
 
 object AppWidgetTheme {
     val colors: ColorProviders

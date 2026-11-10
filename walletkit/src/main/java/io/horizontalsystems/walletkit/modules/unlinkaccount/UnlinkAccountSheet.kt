@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.unlinkaccount
 
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.border
@@ -24,7 +25,6 @@ import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.entities.Account
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody

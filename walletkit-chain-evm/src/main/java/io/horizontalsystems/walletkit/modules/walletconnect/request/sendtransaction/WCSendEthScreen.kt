@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.AppLogger
 import io.horizontalsystems.walletkit.core.ethereum.CautionViewItem
@@ -35,7 +36,6 @@ import io.horizontalsystems.walletkit.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.walletkit.modules.walletconnect.WCDelegate
 import io.horizontalsystems.walletkit.modules.walletconnect.request.SessionRequestUI
 import io.horizontalsystems.walletkit.modules.walletconnect.session.TitleValueCell
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
 import io.horizontalsystems.walletkit.ui.compose.components.rememberAsyncAction

@@ -1,5 +1,6 @@
 package io.horizontalsystems.walletkit.modules.settings.appearance
 
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
 import androidx.annotation.StringRes
@@ -48,7 +49,6 @@ import io.horizontalsystems.walletkit.modules.basecurrency.BaseCurrencySettingsP
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.settings.language.LanguageSettingsPage
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText

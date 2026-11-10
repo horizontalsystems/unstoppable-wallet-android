@@ -1,10 +1,10 @@
 package io.horizontalsystems.walletkit.modules.transactionInfo
 
 import androidx.compose.runtime.Composable
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.core.stats.StatSection
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.transactions.TransactionStatus
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.util.Date
 

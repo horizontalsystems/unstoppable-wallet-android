@@ -16,12 +16,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
 import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.market.MarketViewItem
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.components.ConcealOnScroll
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal

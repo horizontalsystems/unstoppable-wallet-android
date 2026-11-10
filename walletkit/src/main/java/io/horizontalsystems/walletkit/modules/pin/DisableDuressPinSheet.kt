@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3

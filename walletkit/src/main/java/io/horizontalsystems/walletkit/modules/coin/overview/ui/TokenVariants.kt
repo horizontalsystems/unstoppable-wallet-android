@@ -19,9 +19,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.coin.overview.TokenVariants
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection

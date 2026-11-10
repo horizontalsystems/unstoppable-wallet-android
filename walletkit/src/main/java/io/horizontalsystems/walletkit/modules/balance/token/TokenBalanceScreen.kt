@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
@@ -61,7 +62,6 @@ import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPag
 import io.horizontalsystems.walletkit.modules.transactionInfo.TransactionInfoPayload
 import io.horizontalsystems.walletkit.modules.transactions.TransactionViewItem
 import io.horizontalsystems.walletkit.modules.transactions.transactionList
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.TextAttention

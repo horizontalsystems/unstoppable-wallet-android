@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.walletkit.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSIconButtonTinted

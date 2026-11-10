@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.Dark
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.Dark
 import java.math.BigDecimal
 
 @Composable

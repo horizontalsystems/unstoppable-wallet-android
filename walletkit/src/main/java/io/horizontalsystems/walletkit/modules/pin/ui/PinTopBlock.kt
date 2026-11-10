@@ -22,10 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.modules.pin.PinModule
 import io.horizontalsystems.walletkit.modules.pin.unlock.PinUnlockModule.InputState
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.animations.shake
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob

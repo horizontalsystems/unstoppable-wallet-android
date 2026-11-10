@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import coil.compose.rememberAsyncImagePainter
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.alternativeImageUrl
@@ -17,7 +18,6 @@ import io.horizontalsystems.walletkit.core.iconPlaceholder
 import io.horizontalsystems.walletkit.core.imagePlaceholder
 import io.horizontalsystems.walletkit.core.imageUrl
 import io.horizontalsystems.walletkit.modules.market.Value
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal

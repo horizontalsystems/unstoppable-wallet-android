@@ -17,9 +17,9 @@ import androidx.navigation3.scene.OverlayScene
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.nav3.BottomSheetSceneStrategy.Companion.bottomSheet
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext

@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey

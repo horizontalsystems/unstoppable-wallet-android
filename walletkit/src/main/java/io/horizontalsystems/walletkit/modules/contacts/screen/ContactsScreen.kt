@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.SnackbarDuration
 import io.horizontalsystems.walletkit.core.App
@@ -44,7 +45,6 @@ import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.contacts.ContactsModule
 import io.horizontalsystems.walletkit.modules.contacts.model.Contact
 import io.horizontalsystems.walletkit.modules.contacts.viewmodel.ContactsViewModel
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView

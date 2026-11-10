@@ -59,6 +59,8 @@ import io.github.alexzhirkevich.qrose.options.QrLogoShape
 import io.github.alexzhirkevich.qrose.options.QrPixelShape
 import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
+import io.horizontalsystems.designkit.theme.ColoredTextStyle
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEntity
 import io.horizontalsystems.walletkit.core.stats.StatEvent
@@ -68,8 +70,6 @@ import io.horizontalsystems.walletkit.entities.ViewState
 import io.horizontalsystems.walletkit.helpers.HudHelper
 import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.receive.ReceiveModule
-import io.horizontalsystems.walletkit.ui.compose.ColoredTextStyle
-import io.horizontalsystems.walletkit.ui.compose.ComposeAppTheme
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.walletkit.ui.compose.components.ErrorScreenWithAction
