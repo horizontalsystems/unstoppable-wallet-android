@@ -2,20 +2,20 @@ package io.horizontalsystems.designkit.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 import io.horizontalsystems.designkit.R
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 
@@ -37,19 +37,36 @@ fun HSDropdownButton(
         startPadding = 16.dp,
         endPadding = 10.dp,
     ) {
-        Text(
-            modifier = Modifier.weight(1f, fill = false),
-            text = title,
-            style = ComposeAppTheme.typography.captionSB,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(Modifier.width(2.dp))
-        Icon(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.arrow_s_down_24),
-            contentDescription = null,
-        )
+        // The arrow is measured first and the title gets what is left, so a
+        // long title is cut before the arrow is pushed out. A weight on the
+        // title would do the same, but collapses the title to nothing when
+        // the button is given unbounded width, as in a scrolling row.
+        Layout(
+            content = {
+                Text(
+                    text = title,
+                    style = ComposeAppTheme.typography.captionSB,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.arrow_s_down_24),
+                    contentDescription = null,
+                )
+            }
+        ) { measurables, constraints ->
+            val gap = 2.dp.roundToPx()
+            val loose = constraints.copy(minWidth = 0, minHeight = 0)
+            val arrow = measurables[1].measure(loose)
+            val text = measurables[0].measure(loose.offset(horizontal = -(arrow.width + gap)))
+            val height = maxOf(text.height, arrow.height)
+
+            layout(text.width + gap + arrow.width, height) {
+                text.placeRelative(0, (height - text.height) / 2)
+                arrow.placeRelative(text.width + gap, (height - arrow.height) / 2)
+            }
+        }
     }
 }
 
