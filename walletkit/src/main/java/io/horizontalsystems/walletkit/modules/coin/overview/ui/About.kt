@@ -20,7 +20,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.walletkit.ui.compose.components.DescriptionMarkdown
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_orange
+import io.horizontalsystems.walletkit.ui.compose.components.subhead2_jacob
 
 @Preview
 @Composable
@@ -51,7 +51,7 @@ fun About(text: String) {
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                subhead2_orange(
+                subhead2_jacob(
                     modifier = Modifier
                         .padding(horizontal = 16.dp),
                     text = stringResource(id = R.string.CoinPage_AiGeneratedText),
