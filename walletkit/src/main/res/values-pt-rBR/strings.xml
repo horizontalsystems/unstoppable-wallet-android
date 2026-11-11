@@ -2000,4 +2000,5 @@
     <string name="NetworkSettings_NotSynced">Não sincronizado</string>
     <string name="WalletName_Default">Carteira %d</string>
     <string name="WalletName_WatchDefault">Carteira de observação %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Mudar para outro provedor quando o selecionado falhar</string>
 </resources>

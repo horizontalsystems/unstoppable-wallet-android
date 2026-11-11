@@ -1995,4 +1995,5 @@
     <string name="NetworkSettings_NotSynced">No sincronizado</string>
     <string name="WalletName_Default">Cartera %d</string>
     <string name="WalletName_WatchDefault">Cartera de observación %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Cambiar a otro proveedor cuando el seleccionado falle</string>
 </resources>

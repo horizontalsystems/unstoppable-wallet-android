@@ -1996,4 +1996,5 @@
     <string name="NetworkSettings_NotSynced">Senkronize değil</string>
     <string name="WalletName_Default">Cüzdan %d</string>
     <string name="WalletName_WatchDefault">İzleme Cüzdanı %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Seçilen sağlayıcı çalışmadığında başka bir sağlayıcıya geç</string>
 </resources>

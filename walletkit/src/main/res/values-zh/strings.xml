@@ -1994,4 +1994,5 @@
     <string name="NetworkSettings_NotSynced">未同步</string>
     <string name="WalletName_Default">钱包 %d</string>
     <string name="WalletName_WatchDefault">观察钱包 %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">当所选提供商不可用时切换到其他提供商</string>
 </resources>

@@ -1997,4 +1997,5 @@
     <string name="NetworkSettings_NotSynced">Non synchronisé</string>
     <string name="WalletName_Default">Portefeuille %d</string>
     <string name="WalletName_WatchDefault">Portefeuille d\'observation %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Passer à un autre fournisseur si celui sélectionné ne répond plus</string>
 </resources>

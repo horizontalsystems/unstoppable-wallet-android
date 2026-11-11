@@ -10,7 +10,9 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.withTimeoutOrNull
 import java.net.URI
+import kotlin.time.Duration.Companion.seconds
 
 class EvmSyncSourceManager(
     private val appConfigProvider: IAppConfigProvider,
@@ -321,10 +323,105 @@ class EvmSyncSourceManager(
         return syncSources.firstOrNull { it.isHttp }
     }
 
+    /** A source the user picked: they chose where to sync from, so Auto-Select stops for this chain. */
     fun save(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
+        blockchainSettingsStorage.saveEvmAutoSelect(false, blockchainType)
+        persistSelection(syncSource, blockchainType)
+        _syncSourcesUpdatedFlow.tryEmit(blockchainType)
+    }
+
+    /** A source Auto-Select picked (startup probe); Auto-Select stays on. */
+    fun saveAutoSelected(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
+        persistSelection(syncSource, blockchainType)
+        _syncSourcesUpdatedFlow.tryEmit(blockchainType)
+    }
+
+    private fun persistSelection(syncSource: EvmSyncSource, blockchainType: BlockchainType) {
         blockchainSettingsStorage.save(syncSource.uri.toString(), blockchainType)
         _syncSourceFlow.tryEmit(blockchainType)
     }
+
+    /**
+     * Whether the kit may fall over to the other built-in sources when the selected one fails.
+     *
+     * Decided once per chain and then stored: on only for a user who never touched this chain's
+     * source (still on the default one and no custom RPC added). Anyone who picked another source
+     * made a choice that must not be overridden silently.
+     */
+    fun autoSelectEnabled(blockchainType: BlockchainType): Boolean {
+        // Not stored for an unsupported chain: the default must be derived once it is supported.
+        if (!autoSelectSupported(blockchainType)) return false
+        blockchainSettingsStorage.evmAutoSelect(blockchainType)?.let { return it }
+
+        val enabled = autoSelectDefault(blockchainType)
+        blockchainSettingsStorage.saveEvmAutoSelect(enabled, blockchainType)
+        return enabled
+    }
+
+    /**
+     * A chain needs at least two built-in sources, and a kit that can fall over between them;
+     * tron-kit uses only its first URL so far.
+     */
+    fun autoSelectSupported(blockchainType: BlockchainType): Boolean =
+        blockchainType != BlockchainType.Tron && defaultSyncSources(blockchainType).size >= 2
+
+    private fun autoSelectDefault(blockchainType: BlockchainType): Boolean =
+        isUntouched(
+            defaults = defaultSyncSources(blockchainType),
+            storedUrl = blockchainSettingsStorage.evmSyncSourceUrl(blockchainType),
+            hasCustomSources = evmSyncSourceStorage.evmSyncSources(blockchainType).isNotEmpty(),
+        )
+
+    fun setAutoSelect(enabled: Boolean, blockchainType: BlockchainType) {
+        if (!autoSelectSupported(blockchainType)) return
+        blockchainSettingsStorage.saveEvmAutoSelect(enabled, blockchainType)
+
+        val defaults = defaultSyncSources(blockchainType)
+        if (enabled && getSyncSource(blockchainType) !in defaults && defaults.isNotEmpty()) {
+            // Only built-in sources take part; a custom selection gives way to the default one.
+            blockchainSettingsStorage.save(defaults.first().uri.toString(), blockchainType)
+        }
+
+        // The kit is rebuilt with or without the fallback sources.
+        _syncSourceFlow.tryEmit(blockchainType)
+        _syncSourcesUpdatedFlow.tryEmit(blockchainType)
+    }
+
+    /**
+     * Startup probe for Auto-Select: moves the chain to a clearly better built-in source (see
+     * [SourceRepick]). The kit has already started on the stored source and is not waited on;
+     * a switch rebuilds it once through [syncSourceFlow].
+     */
+    suspend fun repickOnStartup(
+        blockchainType: BlockchainType,
+        lagThreshold: Long,
+        probe: suspend (List<EvmSyncSource>) -> List<SourceProbe<EvmSyncSource>>,
+    ) {
+        if (!autoSelectEnabled(blockchainType)) return
+
+        val current = getSyncSource(blockchainType)
+        val candidates = failoverSyncSources(blockchainType)
+        if (candidates.size < 2) return
+
+        val probes = withTimeoutOrNull(STARTUP_PROBE_TIMEOUT) { probe(candidates) } ?: return
+        val winner = SourceRepick.choose(current, probes, lagThreshold) ?: return
+
+        // The user may have changed the source or the setting while the probe ran.
+        if (autoSelectEnabled(blockchainType) && getSyncSource(blockchainType) == current) {
+            saveAutoSelected(winner, blockchainType)
+        }
+    }
+
+    /**
+     * The sources the kit tries, in order: the selected one first and, with Auto-Select on, the
+     * other built-in HTTP sources after it in their default order.
+     */
+    fun failoverSyncSources(blockchainType: BlockchainType): List<EvmSyncSource> =
+        failoverOrder(
+            selected = getSyncSource(blockchainType),
+            defaults = defaultSyncSources(blockchainType),
+            autoSelect = autoSelectEnabled(blockchainType),
+        )
 
     fun saveSyncSource(blockchainType: BlockchainType, url: String, auth: String?) {
         val record = EvmSyncSourceRecord(
@@ -354,4 +451,24 @@ class EvmSyncSourceManager(
         _syncSourcesUpdatedFlow.tryEmit(blockchainType)
     }
 
+    companion object {
+        private val STARTUP_PROBE_TIMEOUT = 8.seconds
+
+        /** A user who is still on the first built-in source and never added a custom one. */
+        internal fun isUntouched(defaults: List<EvmSyncSource>, storedUrl: String?, hasCustomSources: Boolean): Boolean {
+            val default = defaults.firstOrNull() ?: return false
+            val onDefaultSource = storedUrl == null || storedUrl == default.uri.toString()
+            return onDefaultSource && !hasCustomSources
+        }
+
+        internal fun failoverOrder(
+            selected: EvmSyncSource,
+            defaults: List<EvmSyncSource>,
+            autoSelect: Boolean,
+        ): List<EvmSyncSource> {
+            if (!autoSelect || selected.isWebSocket || selected !in defaults) return listOf(selected)
+
+            return listOf(selected) + defaults.filter { it != selected && it.isHttp && it.auth == null }
+        }
+    }
 }

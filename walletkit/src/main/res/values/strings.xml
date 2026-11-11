@@ -1414,6 +1414,7 @@
         \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
     <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
+    <string name="EvmNetwork_AutoSelectDescription">Switch to another provider when the selected one fails</string>
     <string name="MoneroNodeSettings_AutoSelectDescription">Automatically use the fastest node</string>
     <string name="ZanoNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
     <!--Zcash Endpoint Settings-->

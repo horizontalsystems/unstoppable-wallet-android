@@ -1983,4 +1983,5 @@
     <string name="NetworkSettings_NotSynced">همگام‌سازی نشده</string>
     <string name="WalletName_Default">کیف پول %d</string>
     <string name="WalletName_WatchDefault">کیف پول نظارتی %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">هنگام از کار افتادن ارائه‌دهنده انتخاب‌شده، به ارائه‌دهنده دیگری تغییر کن</string>
 </resources>

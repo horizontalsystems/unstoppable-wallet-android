@@ -18,7 +18,7 @@ class EvmNetworkViewModel(
 
     private var currentSyncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
 
-    var viewState by mutableStateOf(ViewState(emptyList(), emptyList()))
+    var viewState by mutableStateOf(ViewState(emptyList(), emptyList(), false, false))
         private set
 
     val title: String = blockchain.name
@@ -34,7 +34,9 @@ class EvmNetworkViewModel(
     private fun syncState() {
         viewState = ViewState(
             defaultItems = viewItems(evmSyncSourceManager.defaultSyncSources(blockchain.type)),
-            customItems = viewItems(evmSyncSourceManager.customSyncSources(blockchain.type))
+            customItems = viewItems(evmSyncSourceManager.customSyncSources(blockchain.type)),
+            autoSelect = evmSyncSourceManager.autoSelectEnabled(blockchain.type),
+            autoSelectSupported = evmSyncSourceManager.autoSelectSupported(blockchain.type),
         )
     }
 
@@ -53,11 +55,17 @@ class EvmNetworkViewModel(
         }
     }
 
+    // Picking a source, even the current one, pins it: Auto-Select turns off for this chain.
     fun onSelectSyncSource(syncSource: EvmSyncSource) {
-        if (currentSyncSource == syncSource) return
+        if (currentSyncSource == syncSource && !viewState.autoSelect) return
 
         evmSyncSourceManager.save(syncSource, blockchain.type)
 
+        syncState()
+    }
+
+    fun onToggleAutoSelect(enabled: Boolean) {
+        evmSyncSourceManager.setAutoSelect(enabled, blockchain.type)
         syncState()
     }
 
@@ -76,5 +84,7 @@ class EvmNetworkViewModel(
     data class ViewState(
         val defaultItems: List<ViewItem>,
         val customItems: List<ViewItem>,
+        val autoSelect: Boolean,
+        val autoSelectSupported: Boolean,
     )
 }

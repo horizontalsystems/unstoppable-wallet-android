@@ -2000,4 +2000,5 @@
     <string name="NetworkSettings_NotSynced">Nicht synchronisiert</string>
     <string name="WalletName_Default">Wallet %d</string>
     <string name="WalletName_WatchDefault">Watch-Wallet %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">Zu einem anderen Anbieter wechseln, wenn der ausgewählte ausfällt</string>
 </resources>

@@ -232,6 +232,8 @@ object TestTags {
     const val SECURITY_AUTOLOCK_VALUE = "security_autolock_value"
     fun autolockInterval(raw: String) = "autolock_$raw"
 
+    const val EVM_NETWORK_AUTO_SELECT = "evm_network_auto_select"
+
     fun pinKey(digit: Int) = "pin_key_$digit"
     const val PIN_KEY_DELETE = "pin_key_delete"
     const val PIN_TITLE = "pin_title"

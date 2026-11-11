@@ -11,6 +11,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyBtcRestore: String = "btc-restore"
         const val keyBtcTransactionSort: String = "btc-transaction-sort"
         const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
+        const val keyEvmAutoSelect: String = "evm-auto-select"
         const val keyMoneroNode: String = "monero-node"
         const val keyMoneroAutoSelect: String = "monero-auto-select"
         const val keyZanoNode: String = "zano-node"
@@ -65,6 +66,18 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 value = evmSyncSourceUrl
             )
         )
+    }
+
+    /** Null when never decided: the caller derives the default (see EvmSyncSourceManager). */
+    fun evmAutoSelect(blockchainType: BlockchainType): Boolean? =
+        storedBoolean(blockchainType, keyEvmAutoSelect)
+
+    fun saveEvmAutoSelect(enabled: Boolean, blockchainType: BlockchainType) {
+        saveBoolean(blockchainType, keyEvmAutoSelect, enabled)
+    }
+
+    fun deleteEvmAutoSelect(blockchainType: BlockchainType) {
+        dao.delete(blockchainType.uid, keyEvmAutoSelect)
     }
 
     fun moneroNodeHost(): String? {
@@ -135,6 +148,15 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
                 value = enabled.toString()
             )
         )
+    }
+
+    // Only an explicit "false" reads as off, as for Monero: a malformed value must not
+    // silently turn the feature off.
+    private fun storedBoolean(blockchainType: BlockchainType, key: String): Boolean? =
+        dao.getBlockchainSetting(blockchainType.uid, key)?.value?.let { !it.equals("false", ignoreCase = true) }
+
+    private fun saveBoolean(blockchainType: BlockchainType, key: String, value: Boolean) {
+        dao.insert(BlockchainSettingRecord(blockchainUid = blockchainType.uid, key = key, value = value.toString()))
     }
 
 }

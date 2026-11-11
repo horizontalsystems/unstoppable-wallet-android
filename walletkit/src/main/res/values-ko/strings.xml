@@ -1990,4 +1990,5 @@
     <string name="NetworkSettings_NotSynced">동기화되지 않음</string>
     <string name="WalletName_Default">지갑 %d</string>
     <string name="WalletName_WatchDefault">조회 전용 지갑 %d</string>
+    <string name="EvmNetwork_AutoSelectDescription">선택한 제공자에 문제가 생기면 다른 제공자로 전환</string>
 </resources>
