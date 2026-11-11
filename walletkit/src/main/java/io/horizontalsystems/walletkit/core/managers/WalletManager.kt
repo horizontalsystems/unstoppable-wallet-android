@@ -29,10 +29,15 @@ class WalletManager(
 
     // SharedFlow, not StateFlow: equal lists are re-emitted on purpose as a
     // "rebuild adapters" trigger (see refreshActiveWallets/reloadWallets);
-    // StateFlow's equality dedup would swallow them. DROP_OLDEST keeps tryEmit
-    // non-blocking on the main thread; collectors only need the latest list.
+    // StateFlow's equality dedup would swallow them. Every emission must reach
+    // the collectors: reloadWallets emits the list without a chain's wallets and
+    // then the full list back to back, and AdapterManager only rebuilds those
+    // adapters when it sees the first one. With room for a single value the
+    // first was dropped and the adapters stayed on the kit just stopped.
+    // DROP_OLDEST keeps tryEmit non-blocking on the main thread; 64 values
+    // never overflow in practice.
     private val _activeWalletsUpdatedFlow = MutableSharedFlow<List<Wallet>>(
-        extraBufferCapacity = 1,
+        extraBufferCapacity = 64,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
     val activeWalletsUpdatedFlow = _activeWalletsUpdatedFlow.asSharedFlow()
