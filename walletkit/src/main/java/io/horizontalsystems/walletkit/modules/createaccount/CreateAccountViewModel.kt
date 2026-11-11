@@ -17,9 +17,6 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.DataState
 import io.horizontalsystems.walletkit.entities.normalizeNFKD
 import io.horizontalsystems.walletkit.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 
 class CreateAccountViewModel(
     private val accountFactory: IAccountFactory,
@@ -133,11 +130,7 @@ class CreateAccountViewModel(
     }
 
     private fun activateDefaultWallets(account: Account) {
-        val tokenQueries = listOfNotNull(
-            TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
-            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-        )
-        walletActivator.activateWallets(account, tokenQueries)
+        walletActivator.activateWallets(account, CreateAccountModule.defaultTokenQueries)
     }
 
     private fun mnemonicAccountType(wordCount: Int): AccountType {

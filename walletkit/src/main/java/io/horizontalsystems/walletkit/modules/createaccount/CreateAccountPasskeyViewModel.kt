@@ -14,9 +14,6 @@ import io.horizontalsystems.walletkit.entities.AccountType
 import io.horizontalsystems.walletkit.entities.normalizeNFKD
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
@@ -87,11 +84,7 @@ class CreateAccountPasskeyViewModel(
     }
 
     private fun activateDefaultWallets(account: Account) {
-        val tokenQueries = listOf(
-            TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
-            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-        )
-        walletActivator.activateWallets(account, tokenQueries)
+        walletActivator.activateWallets(account, CreateAccountModule.defaultTokenQueries)
     }
 
     class Factory : ViewModelProvider.Factory {

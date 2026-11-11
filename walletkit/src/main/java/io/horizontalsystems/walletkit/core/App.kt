@@ -333,7 +333,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         encryptionManager = EncryptionManager(keyProvider)
 
-        walletActivator = WalletActivator(walletManager, marketKit)
+        walletActivator = WalletActivator(walletManager, restoreSettingsManager, marketKit::token)
         passkeyManager = PasskeyManager()
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao(), appConfig.autoEnableTokensOnReceive)
 

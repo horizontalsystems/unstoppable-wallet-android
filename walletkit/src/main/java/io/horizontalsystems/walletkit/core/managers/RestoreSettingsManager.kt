@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.entities.RestoreSettingRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.walletkit.core.chain.ChainRegistry
+import io.horizontalsystems.walletkit.core.restoreSettingTypes
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -54,6 +55,30 @@ class RestoreSettingsManager(
         // settings CHANGE on an already-running wallet needs the reload.
         if (reload) {
             _settingsUpdatedFlow.tryEmit(blockchainType)
+        }
+    }
+
+    // A wallet that starts empty now gets the "wallet is new" value for every setting the
+    // account has not saved yet: there is nothing older to scan for, and a missing birthday
+    // height would mean a scan from the first block after restoring from a backup.
+    fun saveNewWalletSettings(
+        account: Account,
+        blockchainType: BlockchainType,
+        newWalletSettingValue: (RestoreSettingType, BlockchainType) -> String? = ::getSettingValueForCreatedAccount,
+    ) {
+        val existing = settings(account, blockchainType)
+        val defaults = RestoreSettings()
+
+        blockchainType.restoreSettingTypes
+            .filter { existing[it] == null }
+            .forEach { settingType ->
+                newWalletSettingValue(settingType, blockchainType)?.let { defaults[settingType] = it }
+            }
+
+        if (defaults.isNotEmpty()) {
+            // reload = false: the caller saves the wallet right after, which creates the
+            // adapter with these settings; a reload here would rebuild that adapter twice.
+            save(defaults, account, blockchainType, reload = false)
         }
     }
 

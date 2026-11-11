@@ -6,8 +6,19 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.managers.PassphraseValidator
 import io.horizontalsystems.walletkit.core.providers.Translator
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 object CreateAccountModule {
+
+    // Wallets a newly created account starts with, in both the mnemonic and the passkey flow.
+    val defaultTokenQueries = listOf(
+        TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
+        TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+        TokenQuery(BlockchainType.Zcash, TokenType.Native),
+        TokenQuery(BlockchainType.Monero, TokenType.Native),
+    )
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
