@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="launcher_background">#FFFFFF</color>
+
+    <!-- The main, orange and mono icons follow the system's light or dark
+         mode: these are the light values, values-night holds the dark ones. -->
+    <color name="launcher_main_background">#EDEDED</color>
+    <color name="launcher_dark_background">#FE4A11</color>
+    <color name="launcher_dark_mark">#EDEDED</color>
+    <color name="launcher_mono_background">#EDEDED</color>
+    <color name="launcher_mono_mark">#151515</color>
 </resources>

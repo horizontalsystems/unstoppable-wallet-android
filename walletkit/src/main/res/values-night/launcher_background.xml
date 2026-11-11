@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="launcher_main_background">#000000</color>
+    <color name="launcher_dark_mark">#000000</color>
+    <color name="launcher_mono_background">#000000</color>
+    <color name="launcher_mono_mark">#EDEDED</color>
+</resources>

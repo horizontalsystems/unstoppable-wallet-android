@@ -31,9 +31,19 @@ object AppearanceModule {
 
 }
 
-enum class AppIcon(val icon: Int, val titleText: String, val isDeprecated: Boolean = false) : WithTranslatableTitle {
+/**
+ * @param titleText identifies the icon in backups and stats, so it must not
+ * change once released.
+ * @param displayName what the user sees, when it differs from [titleText].
+ */
+enum class AppIcon(
+    val icon: Int,
+    val titleText: String,
+    val isDeprecated: Boolean = false,
+    private val displayName: String = titleText,
+) : WithTranslatableTitle {
     Main(R.drawable.launcher_main_preview, "Main"),
-    Dark(R.drawable.launcher_dark_preview, "Dark"),
+    Dark(R.drawable.launcher_dark_preview, "Dark", displayName = "Orange"),
     Mono(R.drawable.launcher_mono_preview, "Mono"),
     Ball8(R.drawable.launcher_8ball_preview, "8ball"),
     Monero(R.drawable.launcher_monero_preview, "monero"),
@@ -53,7 +63,7 @@ enum class AppIcon(val icon: Int, val titleText: String, val isDeprecated: Boole
     Yak(R.drawable.launcher_yak_preview, "Yak", true);
 
     override val title: TranslatableString
-        get() = TranslatableString.PlainString(titleText)
+        get() = TranslatableString.PlainString(displayName)
 
     val launcherName: String
         get() = "${App.instance.packageName}.${this.name}LauncherAlias"
