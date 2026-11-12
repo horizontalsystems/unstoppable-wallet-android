@@ -24,6 +24,7 @@
     <color name="carbon">#232323</color>
     <color name="dark">#13151a</color>
     <color name="light">#dfdfdf</color>
+    <color name="bright">#ededed</color>
     <color name="white_20">#33FFFFFF</color>
     <color name="black_50">#80000000</color>
     <color name="white_50">#80ffffff</color>
@@ -39,7 +40,7 @@
     <color name="jacob">@color/yellow_l</color>
     <color name="remus">@color/green_l</color>
     <color name="lucian">@color/red_l</color>
-    <color name="tyler">@color/light</color>
+    <color name="tyler">@color/bright</color>
 
     <color name="blade">@color/light</color>
     <color name="leah">@color/steel_dark</color>
