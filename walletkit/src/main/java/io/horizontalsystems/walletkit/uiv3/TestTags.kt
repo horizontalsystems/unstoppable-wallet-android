@@ -39,6 +39,12 @@ object TestTags {
     const val CREATE_TYPE_STANDARD = "create_type_standard"
     const val CREATE_TYPE_PASSKEY = "create_type_passkey"
     const val CREATE_NAME_INPUT = "create_name_input"
+    const val CREATE_NAME_RANDOM = "create_name_random"
+    const val CREATE_MNEMONIC_KIND = "create_mnemonic_kind"
+    const val CREATE_PASSPHRASE_INPUT = "create_passphrase_input"
+    const val CREATE_PASSPHRASE_EYE = "create_passphrase_eye"
+    const val CREATE_PASSPHRASE_CONFIRM_INPUT = "create_passphrase_confirm_input"
+    const val CREATE_PASSPHRASE_CONFIRM_EYE = "create_passphrase_confirm_eye"
     const val CREATE_SUBMIT = "create_submit"
 
     const val IMPORT_RECOVERY_PHRASE = "import_recovery_phrase"
@@ -46,12 +52,15 @@ object TestTags {
     const val IMPORT_PASSKEY = "import_passkey"
     const val IMPORT_BACKUP_FILE = "import_backup_file"
 
+    const val RESTORE_NAME_RANDOM = "restore_name_random"
+    const val RESTORE_KEY_NAME_RANDOM = "restore_key_name_random"
     const val RESTORE_PHRASE_INPUT = "restore_phrase_input"
     const val RESTORE_NEXT = "restore_next"
     const val RESTORE_ERROR = "restore_error"
     fun restoreChain(blockchainUid: String) = "restore_chain_$blockchainUid"
     const val RESTORE_SUBMIT = "restore_submit"
 
+    const val WATCH_NAME_RANDOM = "watch_name_random"
     const val WATCH_INPUT = "watch_input"
     // Done for addresses that need no chain choice, Next for the rest
     const val WATCH_SUBMIT = "watch_submit"

@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,7 @@ import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInput
 import io.horizontalsystems.walletkit.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeaderColored
 
@@ -69,9 +71,10 @@ fun RestorePrivateKey(
                     onValueChange = viewModel::onEnterName,
                     trailingContent = {
                         HSIconButton(
+                            modifier = Modifier.testTag(TestTags.RESTORE_KEY_NAME_RANDOM),
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_swap_circle_24),
+                            icon = painterResource(R.drawable.magic_24),
                             onClick = viewModel::generateRandomAccountName
                         )
                     }

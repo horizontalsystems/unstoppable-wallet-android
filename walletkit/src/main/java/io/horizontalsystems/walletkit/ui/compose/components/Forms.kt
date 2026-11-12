@@ -4,9 +4,6 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -203,6 +200,7 @@ fun FormsInputPassword(
     hide: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     enabled: Boolean = true,
+    eyeModifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     onToggleHide: () -> Unit
 ) {
@@ -236,13 +234,12 @@ fun FormsInputPassword(
         visualTransformation = if (hide) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = keyboardOptions,
     ) {
-        Icon(
-            modifier = Modifier
-                .size(20.dp)
-                .clickable(onClick = onToggleHide, interactionSource = MutableInteractionSource(), indication = null),
-            painter = painterResource(id = if (hide) R.drawable.ic_eye_off_20 else R.drawable.ic_eye_20),
-            contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+        HSIconButton(
+            modifier = eyeModifier,
+            variant = ButtonVariant.Secondary,
+            size = ButtonSize.Small,
+            icon = painterResource(if (hide) R.drawable.eye_off_24 else R.drawable.eye_on_24),
+            onClick = onToggleHide,
         )
     }
 }

@@ -129,9 +129,10 @@ fun WatchAddressScreen(navigation: HSNavigation, popUpToInclusiveId: KClass<out 
                 onValueChange = viewModel::onEnterAccountName,
                 trailingContent = {
                     HSIconButton(
+                        modifier = Modifier.testTag(TestTags.WATCH_NAME_RANDOM),
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Small,
-                        icon = painterResource(R.drawable.ic_swap_circle_24),
+                        icon = painterResource(R.drawable.magic_24),
                         onClick = viewModel::generateRandomAccountName
                     )
                 }

@@ -25,8 +25,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -49,7 +51,6 @@ import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
@@ -132,15 +133,16 @@ private fun CreateAccountIntroScreen(
                     onValueChange = viewModel::onChangeAccountName,
                     trailingContent = {
                         HSIconButton(
+                            modifier = Modifier.testTag(TestTags.CREATE_NAME_RANDOM),
                             variant = ButtonVariant.Secondary,
                             size = ButtonSize.Small,
-                            icon = painterResource(R.drawable.ic_swap_circle_24),
+                            icon = painterResource(R.drawable.magic_24),
                             onClick = viewModel::generateRandomAccountName
                         )
                     }
                 )
 
-                VSpacer(24.dp)
+                VSpacer(16.dp)
 
                 Section {
                     CellPrimary(
@@ -162,7 +164,7 @@ private fun CreateAccountIntroScreen(
                 }
 
                 if (advancedOptionsEnabled) {
-                    VSpacer(24.dp)
+                    VSpacer(16.dp)
 
                     Section {
                         CellPrimary(
@@ -172,13 +174,14 @@ private fun CreateAccountIntroScreen(
                                 )
                             },
                             right = {
-                                CellRightSelectors(
-                                    subtitle = viewModel.selectedKind.title.hs,
-                                    icon = painterResource(id = R.drawable.arrow_s_down_24),
-                                    iconTint = ComposeAppTheme.colors.leah
+                                HSDropdownButton(
+                                    modifier = Modifier.testTag(TestTags.CREATE_MNEMONIC_KIND),
+                                    variant = ButtonVariant.Secondary,
+                                    style = ButtonStyle.Transparent,
+                                    title = viewModel.selectedKind.title,
+                                    onClick = { showMnemonicSizeSelectorDialog = true },
                                 )
                             },
-                            onClick = { showMnemonicSizeSelectorDialog = true }
                         )
                     }
 
@@ -189,7 +192,10 @@ private fun CreateAccountIntroScreen(
                     )
 
                     FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .testTag(TestTags.CREATE_PASSPHRASE_INPUT),
+                        eyeModifier = Modifier.testTag(TestTags.CREATE_PASSPHRASE_EYE),
                         hint = stringResource(R.string.CreateWallet_AddPassphrase),
                         state = viewModel.passphraseState,
                         onValueChange = viewModel::onChangePassphrase,
@@ -199,7 +205,10 @@ private fun CreateAccountIntroScreen(
                     )
                     VSpacer(16.dp)
                     FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .testTag(TestTags.CREATE_PASSPHRASE_CONFIRM_INPUT),
+                        eyeModifier = Modifier.testTag(TestTags.CREATE_PASSPHRASE_CONFIRM_EYE),
                         hint = stringResource(R.string.ConfirmPassphrase),
                         state = viewModel.passphraseConfirmState,
                         onValueChange = viewModel::onChangePassphraseConfirmation,
@@ -209,7 +218,7 @@ private fun CreateAccountIntroScreen(
                     )
                     VSpacer(12.dp)
                     D1(
-                        modifier = Modifier.padding(horizontal = 24.dp),
+                        modifier = Modifier.padding(horizontal = 32.dp),
                         text = stringResource(R.string.CreateWallet_PassphraseShortDescription)
                     )
                 }
