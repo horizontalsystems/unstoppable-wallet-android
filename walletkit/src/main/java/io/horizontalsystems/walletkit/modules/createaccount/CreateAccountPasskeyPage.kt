@@ -160,7 +160,11 @@ fun CreateAccountPasskeyScreen(
                                 viewModel.createAccount(entropy)
                             } catch (e: CreateCredentialCancellationException) {
                             } catch (e: CreateCredentialNoCreateOptionException) {
-                                navigation.slideFromBottom(CreatePasskeyNotSupportedSheet)
+                                navigation.slideFromBottom(
+                                    CreatePasskeyNotSupportedSheet(
+                                        ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
+                                    )
+                                )
                             } catch (e: CreateCredentialCustomException) {
                                 // the provider refused with its own internal state
                                 // (locked vault, pending verification) — instructions,

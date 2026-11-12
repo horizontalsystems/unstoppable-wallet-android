@@ -295,7 +295,11 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         AppLog.logsDao = appDatabase.logsDao()
 
         accountCleaner = AccountCleaner()
-        accountManager = AccountManager(accountsStorage, accountCleaner)
+        accountManager = AccountManager(
+            accountsStorage,
+            accountCleaner,
+            onWalletAdded = { if (!localStorage.mainShowedOnce) localStorage.mainShowedOnce = true },
+        )
         userManager = UserManager(accountManager)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)

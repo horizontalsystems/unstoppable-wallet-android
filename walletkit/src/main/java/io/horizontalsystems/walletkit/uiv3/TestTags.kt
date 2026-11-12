@@ -13,7 +13,17 @@ import io.horizontalsystems.walletkit.core.App
  * in snake_case; a suffix is added only where a test has to pick one item of a list.
  */
 object TestTags {
+    // The intro this named is gone. The shared flows still select it, so it
+    // stays declared until they start from the welcome screen instead.
     const val INTRO_NEXT = "intro_next"
+
+    const val INTRO_CREATE_WALLET = "intro_create_wallet"
+    const val INTRO_ADD_EXISTING_WALLET = "intro_add_existing_wallet"
+    // One text holding both links, Terms of Use and Privacy Policy
+    const val INTRO_AGREEMENT = "intro_agreement"
+
+    // The close button in a bottom sheet's header
+    const val SHEET_CLOSE = "sheet_close"
 
     fun tab(name: String) = "tab_${name.lowercase()}"
 

@@ -16,6 +16,8 @@ class AppConfigProvider(localStorage: ILocalStorage) : IAppConfigProvider {
     override val appBuild by lazy { BuildConfig.VERSION_CODE }
     override val companyWebPageLink = BuildConfig.COMPANY_WEB_PAGE_LINK
     override val appWebPageLink = BuildConfig.APP_WEB_PAGE_LINK
+    override val termsOfUseLink = "https://unstoppable.money/tos"
+    override val privacyPolicyLink = "https://unstoppable.money/privacy-policy"
     override val analyticsLink = BuildConfig.ANALYTICS_LINK
     override val appGithubLink = BuildConfig.APP_GITHUB_LINK
     override val appTwitterLink = BuildConfig.APP_TWITTER_LINK

@@ -51,6 +51,7 @@ import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreAccountPage
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreFromPasskeyPage
 import io.horizontalsystems.walletkit.modules.restoreaccount.RestoreFromPrivateKeyPage
 import io.horizontalsystems.walletkit.modules.restorelocal.RestoreLocalPage
+import io.horizontalsystems.walletkit.modules.watchaddress.WatchAddressPage
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -77,12 +78,31 @@ data class ImportWalletPage(val input: ManageAccountsModule.Input? = null) : HSP
 
 }
 
+/** What each row of the import list does, for the page and the sheet alike. */
+internal class ImportWalletActions(
+    val recoveryPhrase: () -> Unit,
+    val privateKey: () -> Unit,
+    val passkey: () -> Unit,
+    val backupFile: () -> Unit,
+    val viewOnly: () -> Unit,
+)
+
+/**
+ * Holds what the import list needs around its rows: the file picker, the
+ * passkey request and their error messages. [content] lays the rows out, as
+ * a page or as a sheet.
+ *
+ * @param beforeLeaving called right before anything else is opened. A sheet
+ * closes itself here; a page stays under what it opens.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ImportWalletScreen(
+internal fun ImportWalletHost(
     navigation: HSNavigation,
     popUpToInclusiveId: KClass<out HSPage>,
-    inclusive: Boolean
+    inclusive: Boolean,
+    beforeLeaving: () -> Unit = {},
+    content: @Composable (ImportWalletActions) -> Unit,
 ) {
     val context = LocalContext.current
     val view = LocalView.current
@@ -102,6 +122,7 @@ private fun ImportWalletScreen(
                         BackupFileValidator().validate(jsonString)
 
                         val fileName = context.getFileName(uriNonNull)
+                        beforeLeaving()
                         navigation.slideFromBottom(
                             RestoreLocalPage(
                                 RestoreLocalPage.Input(
@@ -135,120 +156,156 @@ private fun ImportWalletScreen(
         }
     }
 
-    HSScaffold(
-        title = stringResource(R.string.ManageAccounts_ImportWallet),
-        onBack = navigation::removeLastOrNull,
-    ) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
-            VSpacer(16.dp)
+    var passkeyEnabled by remember { mutableStateOf(true) }
 
-            Section {
-                WalletType(
-                    icon = painterResource(R.drawable.ic_edit_24),
-                    title = stringResource(R.string.ImportWallet_RecoveryPhrase).hs,
-                    subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
-                    borderTop = false,
-                    modifier = Modifier.testTag(TestTags.IMPORT_RECOVERY_PHRASE),
-                ) {
-                    navigation.slideFromRight(RestoreAccountPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
-                    stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
-                }
-                WalletType(
-                    icon = painterResource(R.drawable.key_24),
-                    title = stringResource(R.string.ImportWallet_PrivateKey).hs,
-                    subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
-                    borderTop = true,
-                    modifier = Modifier.testTag(TestTags.IMPORT_PRIVATE_KEY),
-                ) {
-                    navigation.slideFromRight(RestoreFromPrivateKeyPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
-                    stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromPrivateKey))
-                }
-                var passkeyEnabled by remember { mutableStateOf(true) }
-                WalletType(
-                    icon = painterResource(R.drawable.touchid_24),
-                    title = stringResource(R.string.ImportWallet_Passkey).hs,
-                    subtitle = stringResource(R.string.ImportWallet_Passkey_Description).hs,
-                    borderTop = true,
-                    modifier = Modifier.testTag(TestTags.IMPORT_PASSKEY),
-                ) {
-                    if (!passkeyEnabled) return@WalletType
-                    passkeyEnabled = false
-                    scope.launch {
-                        try {
-                            val (entropy, accountName) = App.passkeyManager.authenticate(context)
-                            navigation.slideFromRight(
-                                RestoreFromPasskeyPage(
-                                    RestoreFromPasskeyPage.Input(
-                                        popUpToInclusiveId,
-                                        inclusive,
-                                        entropy,
-                                        accountName,
-                                    )
-                                ),
+    val actions = ImportWalletActions(
+        recoveryPhrase = {
+            beforeLeaving()
+            navigation.slideFromRight(RestoreAccountPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
+            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
+        },
+        privateKey = {
+            beforeLeaving()
+            navigation.slideFromRight(RestoreFromPrivateKeyPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
+            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromPrivateKey))
+        },
+        passkey = passkey@{
+            if (!passkeyEnabled) return@passkey
+            passkeyEnabled = false
+            scope.launch {
+                try {
+                    val (entropy, accountName) = App.passkeyManager.authenticate(context)
+                    beforeLeaving()
+                    navigation.slideFromRight(
+                        RestoreFromPasskeyPage(
+                            RestoreFromPasskeyPage.Input(
+                                popUpToInclusiveId,
+                                inclusive,
+                                entropy,
+                                accountName,
                             )
-                            stat(
-                                page = StatPage.ImportWallet,
-                                event = StatEvent.Open(StatPage.ImportWalletFromPasskey)
-                            )
-                        } catch (e: GetCredentialCancellationException) {
-                        } catch (e: NoCredentialException) {
-                            navigation.slideFromBottom(RestorePasskeyNotSupportedSheet)
-                        } catch (e: GetCredentialCustomException) {
-                            // the provider refused with its own internal state
-                            // (locked vault, pending verification) — instructions,
-                            // not an error
-                            navigation.slideFromBottom(
-                                PasskeyProviderAttentionSheet(PasskeyProviderAttentionSheet.isGpmPassphrase(e))
-                            )
-                        } catch (e: Throwable) {
-                            error = e.message ?: e.javaClass.simpleName
-                        } finally {
-                            passkeyEnabled = true
-                        }
-                    }
-                }
-                WalletType(
-                    icon = painterResource(R.drawable.ic_download_24),
-                    title = stringResource(R.string.ImportWallet_BackupFile).hs,
-                    subtitle = stringResource(R.string.ImportWallet_BackupFile_Description).hs,
-                    borderTop = true,
-                    modifier = Modifier.testTag(TestTags.IMPORT_BACKUP_FILE),
-                ) {
-                    restoreLauncher.launchSafe(arrayOf("application/json"), view)
+                        ),
+                    )
+                    stat(
+                        page = StatPage.ImportWallet,
+                        event = StatEvent.Open(StatPage.ImportWalletFromPasskey)
+                    )
+                } catch (e: GetCredentialCancellationException) {
+                } catch (e: NoCredentialException) {
+                    beforeLeaving()
+                    navigation.slideFromBottom(RestorePasskeyNotSupportedSheet)
+                } catch (e: GetCredentialCustomException) {
+                    // the provider refused with its own internal state
+                    // (locked vault, pending verification) — instructions,
+                    // not an error
+                    beforeLeaving()
+                    navigation.slideFromBottom(
+                        PasskeyProviderAttentionSheet(PasskeyProviderAttentionSheet.isGpmPassphrase(e))
+                    )
+                } catch (e: Throwable) {
+                    error = e.message ?: e.javaClass.simpleName
+                } finally {
+                    passkeyEnabled = true
                 }
             }
-        }
-        if (showBottomSheet) {
-            BottomSheetContent(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState
-            ) {
-                ConfirmationBottomSheet(
-                    title = stringResource(R.string.ImportWallet_WarningInvalidJson),
-                    text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-                    confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
-                    cautionType = Caution.Type.Warning,
-                    cancelText = stringResource(R.string.Button_Cancel),
-                    onConfirm = {
-                        restoreLauncher.launchSafe(arrayOf("application/json"), view)
-                        scope.launch {
-                            sheetState.hide()
-                            showBottomSheet = false
-                        }
-                    },
-                    onClose = {
-                        scope.launch {
-                            sheetState.hide()
-                            showBottomSheet = false
-                        }
+        },
+        backupFile = {
+            restoreLauncher.launchSafe(arrayOf("application/json"), view)
+        },
+        viewOnly = {
+            beforeLeaving()
+            navigation.slideFromRight(
+                WatchAddressPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive))
+            )
+            stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.WatchWallet))
+        },
+    )
+
+    content(actions)
+
+    if (showBottomSheet) {
+        BottomSheetContent(
+            onDismissRequest = {
+                showBottomSheet = false
+            },
+            sheetState = sheetState
+        ) {
+            ConfirmationBottomSheet(
+                title = stringResource(R.string.ImportWallet_WarningInvalidJson),
+                text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
+                iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
+                cautionType = Caution.Type.Warning,
+                cancelText = stringResource(R.string.Button_Cancel),
+                onConfirm = {
+                    restoreLauncher.launchSafe(arrayOf("application/json"), view)
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
-                )
+                },
+                onClose = {
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ImportWalletScreen(
+    navigation: HSNavigation,
+    popUpToInclusiveId: KClass<out HSPage>,
+    inclusive: Boolean
+) {
+    ImportWalletHost(navigation, popUpToInclusiveId, inclusive) { actions ->
+        HSScaffold(
+            title = stringResource(R.string.ManageAccounts_ImportWallet),
+            onBack = navigation::removeLastOrNull,
+        ) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                VSpacer(16.dp)
+
+                Section {
+                    WalletType(
+                        icon = painterResource(R.drawable.ic_edit_24),
+                        title = stringResource(R.string.ImportWallet_RecoveryPhrase).hs,
+                        subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
+                        borderTop = false,
+                        modifier = Modifier.testTag(TestTags.IMPORT_RECOVERY_PHRASE),
+                        onClick = actions.recoveryPhrase,
+                    )
+                    WalletType(
+                        icon = painterResource(R.drawable.key_24),
+                        title = stringResource(R.string.ImportWallet_PrivateKey).hs,
+                        subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
+                        borderTop = true,
+                        modifier = Modifier.testTag(TestTags.IMPORT_PRIVATE_KEY),
+                        onClick = actions.privateKey,
+                    )
+                    WalletType(
+                        icon = painterResource(R.drawable.touchid_24),
+                        title = stringResource(R.string.ImportWallet_Passkey).hs,
+                        subtitle = stringResource(R.string.ImportWallet_Passkey_Description).hs,
+                        borderTop = true,
+                        modifier = Modifier.testTag(TestTags.IMPORT_PASSKEY),
+                        onClick = actions.passkey,
+                    )
+                    WalletType(
+                        icon = painterResource(R.drawable.ic_download_24),
+                        title = stringResource(R.string.ImportWallet_BackupFile).hs,
+                        subtitle = stringResource(R.string.ImportWallet_BackupFile_Description).hs,
+                        borderTop = true,
+                        modifier = Modifier.testTag(TestTags.IMPORT_BACKUP_FILE),
+                        onClick = actions.backupFile,
+                    )
+                }
             }
         }
     }

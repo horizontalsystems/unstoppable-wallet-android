@@ -43,13 +43,6 @@
     <string name="SyncError">خطای همگام سازی دوباره امتحان کنید</string>
     <string name="Keyboard">صفحه کلید</string>
     <string name="AccountRecovery_Note">یادداشت</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">آزاد کردن دارایی ها</string>
-    <string name="Intro_Wallet_Screen2Description">خود را قفل نکنید و اجازه نده دیگران این کار را با شما بکنند.</string>
-    <string name="Intro_Wallet_Screen3Title">بدون مرز شوید</string>
-    <string name="Intro_Wallet_Screen3Description">موانع مشروط را دور بزنید و به بازارهای جهانی دسترسی پیدا کنید.</string>
-    <string name="Intro_Wallet_Screen4Title">محرمانه باقی بمانید</string>
-    <string name="Intro_Wallet_Screen4Description">اطلاعات خصوصی و مالی خود را در اختیار جهان قرار ندهید.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">می فهمم</string>
     <!--Welcome-->
@@ -1991,4 +1984,12 @@
     <string name="Activity_Empty_PrivateSends">هنوز هیچ ارسال خصوصی در انتظار یا گذشته‌ای ندارید.</string>
     <string name="Activity_Empty_CrossPay">هنوز هیچ پرداخت CrossPay در انتظار یا گذشته‌ای ندارید.</string>
     <string name="Transactions_FromUnknown">از ناشناس</string>
+    <string name="Welcome_Description">خصوصی بر پایه اصول. مستقل بر پایه طراحی</string>
+    <string name="Welcome_CreateNewWallet">ایجاد کیف پول جدید</string>
+    <string name="Welcome_AddExistingWallet">افزودن کیف پول موجود</string>
+    <string name="Welcome_Consent">با ادامه، با %1$s موافقت می‌کنم و %2$s را می‌پذیرم</string>
+    <string name="Welcome_TermsOfUse">شرایط استفاده</string>
+    <string name="Welcome_PrivacyPolicy">سیاست حفظ حریم خصوصی</string>
+    <string name="ImportWallet_ViewOnly">کیف پول فقط مشاهده</string>
+    <string name="ImportWallet_ViewOnly_Description">کیف پولی برای پیگیری موجودی و فعالیت، بدون دسترسی به دارایی‌ها، اضافه کنید.</string>
 </resources>

@@ -18,6 +18,8 @@ interface IAppConfigProvider {
     val appBuild: Int
     val companyWebPageLink: String
     val appWebPageLink: String
+    val termsOfUseLink: String
+    val privacyPolicyLink: String
     val analyticsLink: String
     val appGithubLink: String
     val appTwitterLink: String

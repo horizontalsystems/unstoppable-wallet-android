@@ -73,13 +73,6 @@
     <string name="AccountRecovery_Note">Observação</string>
     <string name="AccountRecovery_MigrationRecommended">Esta carteira parece usar um caractere não padrão em sua frase de recuperação e/ou senha. Se você não vir um saldo ou transações, leia abaixo para obter detalhes.\n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
     <string name="AccountRecovery_MigrationRequired">Esta é uma carteira não padrão. \n\nCLIQUE PARA OBTER MAIS INFORMAÇÕES</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Libere Recursos</string>
-    <string name="Intro_Wallet_Screen2Description">Não se prenda, e não deixe que te prendam.</string>
-    <string name="Intro_Wallet_Screen3Title">Seja sem fronteiras</string>
-    <string name="Intro_Wallet_Screen3Description">Ultrapasse barreiras e acesse mercados globais.</string>
-    <string name="Intro_Wallet_Screen4Title">Mantenha sua Privacidade</string>
-    <string name="Intro_Wallet_Screen4Description">Não vaze seus dados privados e financeiros para o mundo.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Estou ciente</string>
     <!--Welcome-->
@@ -2008,4 +2001,12 @@
     <string name="Activity_Empty_PrivateSends">Você ainda não tem envios privados pendentes ou anteriores.</string>
     <string name="Activity_Empty_CrossPay">Você ainda não tem pagamentos CrossPay pendentes ou anteriores.</string>
     <string name="Transactions_FromUnknown">de desconhecido</string>
+    <string name="Welcome_Description">Privada por princípio. Independente por design</string>
+    <string name="Welcome_CreateNewWallet">Criar nova carteira</string>
+    <string name="Welcome_AddExistingWallet">Adicionar carteira existente</string>
+    <string name="Welcome_Consent">Ao continuar, concordo com os %1$s e aceito a %2$s</string>
+    <string name="Welcome_TermsOfUse">Termos de Uso</string>
+    <string name="Welcome_PrivacyPolicy">Política de Privacidade</string>
+    <string name="ImportWallet_ViewOnly">Carteira somente leitura</string>
+    <string name="ImportWallet_ViewOnly_Description">Adicione uma carteira para acompanhar saldos e atividade sem acesso aos fundos.</string>
 </resources>

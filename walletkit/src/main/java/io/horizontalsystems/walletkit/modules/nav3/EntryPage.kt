@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.horizontalsystems.walletkit.core.App
-import io.horizontalsystems.walletkit.modules.intro.IntroScreen
+import io.horizontalsystems.walletkit.modules.welcome.WelcomeScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +19,7 @@ data object EntryPage : HSPage(accessibleWhileLocked = true) {
             if (it) {
                 MainScreen(navigation, contentKey())
             } else {
-                IntroScreen()
+                WelcomeScreen(navigation)
             }
         }
     }

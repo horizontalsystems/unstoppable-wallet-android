@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.components.ButtonSize
@@ -24,6 +26,7 @@ import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
+import io.horizontalsystems.walletkit.uiv3.TestTags
 
 @Composable
 fun BottomSheetHeaderV3(
@@ -35,77 +38,99 @@ fun BottomSheetHeaderV3(
     title: String,
     onCloseClick: (() -> Unit)? = null
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (image400 == null) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 8.dp, bottom = 12.dp)
-                    .size(52.dp, 4.dp)
-                    .background(ComposeAppTheme.colors.blade, RoundedCornerShape(50))
-            ) { }
-        }
+    // With an image the close button sits on the image; without one it sits
+    // beside the title, which then keeps clear of it on both sides
+    val closeBesideTitle = image400 == null && onCloseClick != null
 
-        image72?.let {
-            Icon(
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .size(72.dp),
-                painter = it,
-                contentDescription = null,
-                tint = imageTint
-            )
-        }
+    Box {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (image400 == null) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 12.dp)
+                        .size(52.dp, 4.dp)
+                        .background(ComposeAppTheme.colors.blade, RoundedCornerShape(50))
+                ) { }
+            }
 
-        image120?.let {
-            Icon(
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .size(120.dp),
-                painter = it,
-                contentDescription = null,
-                tint = imageTint
-            )
-        }
+            image72?.let {
+                Icon(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .size(72.dp),
+                    painter = it,
+                    contentDescription = null,
+                    tint = imageTint
+                )
+            }
 
-        image400?.let { image ->
-            Box() {
-                image400Background?.let { background ->
+            image120?.let {
+                Icon(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .size(120.dp),
+                    painter = it,
+                    contentDescription = null,
+                    tint = imageTint
+                )
+            }
+
+            image400?.let { image ->
+                Box() {
+                    image400Background?.let { background ->
+                        Image(
+                            modifier = Modifier.fillMaxWidth(),
+                            painter = background,
+                            contentScale = ContentScale.FillWidth,
+                            contentDescription = null,
+                        )
+                    }
                     Image(
                         modifier = Modifier.fillMaxWidth(),
-                        painter = background,
+                        painter = image,
                         contentScale = ContentScale.FillWidth,
                         contentDescription = null,
                     )
-                }
-                Image(
-                    modifier = Modifier.fillMaxWidth(),
-                    painter = image,
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = null,
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.TopEnd)
-                ) {
-                    HSIconButton(
-                        icon = painterResource(id = R.drawable.ic_close),
-                        variant = ButtonVariant.Secondary,
-                        size = ButtonSize.Small,
-                        onClick = { onCloseClick?.invoke() }
-                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        HSIconButton(
+                            modifier = Modifier.testTag(TestTags.SHEET_CLOSE),
+                            icon = painterResource(id = R.drawable.ic_close),
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            onClick = { onCloseClick?.invoke() }
+                        )
+                    }
                 }
             }
+
+            headline1_leah(
+                modifier = Modifier
+                    .padding(horizontal = if (closeBesideTitle) 48.dp else 0.dp)
+                    .padding(top = 16.dp, bottom = 8.dp),
+                text = title,
+                textAlign = TextAlign.Center
+            )
         }
 
-        headline1_leah(
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 8.dp),
-            text = title
-        )
+        if (closeBesideTitle) {
+            HSIconButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 16.dp, end = 16.dp)
+                    .testTag(TestTags.SHEET_CLOSE),
+                icon = painterResource(id = R.drawable.ic_close),
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                onClick = { onCloseClick?.invoke() }
+            )
+        }
     }
 }
 

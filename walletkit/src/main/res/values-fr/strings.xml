@@ -73,13 +73,6 @@
     <string name="AccountRecovery_Note">Note</string>
     <string name="AccountRecovery_MigrationRecommended">Ce portefeuille semble utiliser un caractère non standard dans sa phrase de récupération et/ou une phrase secrète. Si vous ne voyez pas de solde ou de transactions, veuillez lire ci-dessous pour plus de détails.\n\nCLIQUEZ POUR OBTENIR PLUS D\'INFORMATIONS</string>
     <string name="AccountRecovery_MigrationRequired">Ceci est un portefeuille non standard. Veuillez migrer vers un portefeuille standard pour éviter le risque de perte de fonds. \n\nCLIQUEZ POUR OBTENIR PLUS D\'INFORMATIONS</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Débrancher les actifs</string>
-    <string name="Intro_Wallet_Screen2Description">Ne vous enfermez pas et ne laissez pas les autres vous le faire.</string>
-    <string name="Intro_Wallet_Screen3Title">Aller sans frontière</string>
-    <string name="Intro_Wallet_Screen3Description">contourner les barrières conditionnelles et l\'accès aux marchés à l\'échelle mondiale.</string>
-    <string name="Intro_Wallet_Screen4Title">Rester privé</string>
-    <string name="Intro_Wallet_Screen4Description">Ne divulguez pas vos données privées et financières au monde.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Je comprends</string>
     <!--Welcome-->
@@ -2005,4 +1998,12 @@
     <string name="Activity_Empty_PrivateSends">Vous n\'avez encore aucun envoi privé en cours ou passé.</string>
     <string name="Activity_Empty_CrossPay">Vous n\'avez encore aucun paiement CrossPay en cours ou passé.</string>
     <string name="Transactions_FromUnknown">d\'un expéditeur inconnu</string>
+    <string name="Welcome_Description">Privé par principe. Indépendant par conception</string>
+    <string name="Welcome_CreateNewWallet">Créer un nouveau wallet</string>
+    <string name="Welcome_AddExistingWallet">Ajouter un wallet existant</string>
+    <string name="Welcome_Consent">En continuant, j\'accepte les %1$s et je consens à la %2$s</string>
+    <string name="Welcome_TermsOfUse">Conditions d\'utilisation</string>
+    <string name="Welcome_PrivacyPolicy">Politique de confidentialité</string>
+    <string name="ImportWallet_ViewOnly">Wallet en lecture seule</string>
+    <string name="ImportWallet_ViewOnly_Description">Ajoutez un wallet pour suivre les soldes et l\'activité sans accès aux fonds.</string>
 </resources>

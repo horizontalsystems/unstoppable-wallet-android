@@ -73,13 +73,6 @@
     <string name="AccountRecovery_Note">Notiz</string>
     <string name="AccountRecovery_MigrationRecommended">Diese Brieftasche scheint ein nicht-Standard-Zeichen in ihrer Wiederherstellungsphrase und/oder einer Passphrase zu verwenden. Wenn Sie kein Guthaben oder keine Transaktionen sehen, lesen Sie bitte unten für Details.\n\nKLICKEN SIE ZUM ERHALTEN MEHR INFO</string>
     <string name="AccountRecovery_MigrationRequired">Dies ist eine nicht standardmäßige Wallet. \n\nKLICKEN SIE MEHR INFO</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Assets entfernen</string>
-    <string name="Intro_Wallet_Screen2Description">Schließen Sie sich nicht selbst ein und lassen Sie dies nicht von anderen tun.</string>
-    <string name="Intro_Wallet_Screen3Title">Gehe grenzlos</string>
-    <string name="Intro_Wallet_Screen3Description">Umgehen von bedingten Barrieren und Zugangsmärkten weltweit.</string>
-    <string name="Intro_Wallet_Screen4Title">Privat bleiben</string>
-    <string name="Intro_Wallet_Screen4Description">Legen Sie Ihre privaten und finanziellen Daten nicht an die Welt.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Ich verstehe</string>
     <!--Welcome-->
@@ -2008,4 +2001,12 @@
     <string name="Activity_Empty_PrivateSends">Sie haben noch keine ausstehenden oder vergangenen privaten Sendungen.</string>
     <string name="Activity_Empty_CrossPay">Sie haben noch keine ausstehenden oder vergangenen CrossPay-Zahlungen.</string>
     <string name="Transactions_FromUnknown">von unbekannt</string>
+    <string name="Welcome_Description">Privat aus Prinzip. Unabhängig durch Design</string>
+    <string name="Welcome_CreateNewWallet">Neue Wallet erstellen</string>
+    <string name="Welcome_AddExistingWallet">Vorhandene Wallet hinzufügen</string>
+    <string name="Welcome_Consent">Mit dem Fortfahren akzeptiere ich die %1$s und stimme der %2$s zu</string>
+    <string name="Welcome_TermsOfUse">Nutzungsbedingungen</string>
+    <string name="Welcome_PrivacyPolicy">Datenschutzerklärung</string>
+    <string name="ImportWallet_ViewOnly">Nur-Ansicht-Wallet</string>
+    <string name="ImportWallet_ViewOnly_Description">Füge eine Wallet hinzu, um Guthaben und Aktivitäten ohne Zugriff auf die Mittel zu verfolgen.</string>
 </resources>

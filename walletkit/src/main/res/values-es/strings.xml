@@ -73,13 +73,6 @@
     <string name="AccountRecovery_Note">Nota</string>
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
-    <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
-    <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
-    <string name="Intro_Wallet_Screen3Description">Supere las barreras condicionales y acceda a los mercados a nivel mundial.</string>
-    <string name="Intro_Wallet_Screen4Title">Permanezca en privado</string>
-    <string name="Intro_Wallet_Screen4Description">No filtre sus datos privados y financieros al resto del mundo.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Entiendo</string>
     <!--Welcome-->
@@ -2003,4 +1996,12 @@
     <string name="Activity_Empty_PrivateSends">Aún no tienes envíos privados pendientes o anteriores.</string>
     <string name="Activity_Empty_CrossPay">Aún no tienes pagos CrossPay pendientes o anteriores.</string>
     <string name="Transactions_FromUnknown">de desconocido</string>
+    <string name="Welcome_Description">Privada por principio. Independiente por diseño</string>
+    <string name="Welcome_CreateNewWallet">Crear nueva billetera</string>
+    <string name="Welcome_AddExistingWallet">Añadir billetera existente</string>
+    <string name="Welcome_Consent">Al continuar, acepto los %1$s y doy mi consentimiento a la %2$s</string>
+    <string name="Welcome_TermsOfUse">Términos de uso</string>
+    <string name="Welcome_PrivacyPolicy">Política de privacidad</string>
+    <string name="ImportWallet_ViewOnly">Billetera de solo lectura</string>
+    <string name="ImportWallet_ViewOnly_Description">Añade una billetera para seguir saldos y actividad sin acceso a los fondos.</string>
 </resources>

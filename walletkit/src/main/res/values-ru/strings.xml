@@ -74,13 +74,6 @@
     <string name="AccountRecovery_MigrationRecommended">Похоже, этот кошелек использует нестандартный символ в списке мнемонических слов и/или парольной фразе. Если вы не видите баланс или транзакции, пожалуйста, прочтите подробности ниже.
 \n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Полный контроль</string>
-    <string name="Intro_Wallet_Screen2Description">Контроль только у вас. Без ограничений со стороны третьих лиц.</string>
-    <string name="Intro_Wallet_Screen3Title">Без границ</string>
-    <string name="Intro_Wallet_Screen3Description">Свободный доступ к глобальным рынкам.</string>
-    <string name="Intro_Wallet_Screen4Title">Сохраняйте приватность</string>
-    <string name="Intro_Wallet_Screen4Description">Ваши данные остаются под вашим контролем.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я понимаю</string>
     <!--Welcome-->
@@ -2012,4 +2005,12 @@
     <string name="Activity_Empty_PrivateSends">У вас пока нет ожидающих или завершённых приватных отправок.</string>
     <string name="Activity_Empty_CrossPay">У вас пока нет ожидающих или завершённых платежей CrossPay.</string>
     <string name="Transactions_FromUnknown">от неизвестного</string>
+    <string name="Welcome_Description">Приватность как принцип. Независимость по замыслу</string>
+    <string name="Welcome_CreateNewWallet">Создать новый кошелёк</string>
+    <string name="Welcome_AddExistingWallet">Добавить существующий кошелёк</string>
+    <string name="Welcome_Consent">Продолжая, я принимаю %1$s и даю согласие на %2$s</string>
+    <string name="Welcome_TermsOfUse">Условия использования</string>
+    <string name="Welcome_PrivacyPolicy">Политику конфиденциальности</string>
+    <string name="ImportWallet_ViewOnly">Кошелёк только для просмотра</string>
+    <string name="ImportWallet_ViewOnly_Description">Добавьте кошелёк, чтобы следить за балансами и активностью без доступа к средствам.</string>
 </resources>

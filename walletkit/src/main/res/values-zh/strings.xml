@@ -73,13 +73,6 @@
     <string name="AccountRecovery_Note">备注</string>
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">资产解绑</string>
-    <string name="Intro_Wallet_Screen2Description">请勿绑定您自己，也不要让别人对您这样做.</string>
-    <string name="Intro_Wallet_Screen3Title">进入无国界</string>
-    <string name="Intro_Wallet_Screen3Description">避开有条件障碍，进入全球市场.</string>
-    <string name="Intro_Wallet_Screen4Title">保持私密状态</string>
-    <string name="Intro_Wallet_Screen4Description">不要向外界泄漏您的私密和财务数据.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">我理解</string>
     <!--Welcome-->
@@ -2002,4 +1995,12 @@
     <string name="Activity_Empty_PrivateSends">您还没有任何待处理或已完成的隐私发送记录。</string>
     <string name="Activity_Empty_CrossPay">您还没有任何待处理或已完成的 CrossPay 付款记录。</string>
     <string name="Transactions_FromUnknown">发送人未知</string>
+    <string name="Welcome_Description">以隐私为原则，以独立为设计</string>
+    <string name="Welcome_CreateNewWallet">创建新钱包</string>
+    <string name="Welcome_AddExistingWallet">添加已有钱包</string>
+    <string name="Welcome_Consent">继续即表示我同意%1$s并接受%2$s</string>
+    <string name="Welcome_TermsOfUse">使用条款</string>
+    <string name="Welcome_PrivacyPolicy">隐私政策</string>
+    <string name="ImportWallet_ViewOnly">仅查看钱包</string>
+    <string name="ImportWallet_ViewOnly_Description">添加一个钱包，用于跟踪余额和活动，但无法动用资金。</string>
 </resources>

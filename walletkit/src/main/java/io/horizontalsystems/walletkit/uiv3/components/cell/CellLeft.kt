@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +28,8 @@ fun CellLeftImage(
     contentDescription: String? = null,
     type: ImageType,
     @ImageSize
-    size: Int
+    size: Int,
+    colorFilter: ColorFilter? = null,
 ) {
     val clipShape = when (type) {
         ImageType.Ellipse -> CircleShape
@@ -49,6 +51,7 @@ fun CellLeftImage(
             .size(size.dp)
             .clip(clipShape),
         painter = painter,
+        colorFilter = colorFilter,
         contentDescription = contentDescription
     )
 }

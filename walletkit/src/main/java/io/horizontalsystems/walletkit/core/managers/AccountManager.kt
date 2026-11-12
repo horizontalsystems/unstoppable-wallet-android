@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 
 class AccountManager(
     private val storage: IAccountsStorage,
-    private val accountCleaner: IAccountCleaner
+    private val accountCleaner: IAccountCleaner,
+    // Called each time a wallet is created, imported or restored
+    private val onWalletAdded: () -> Unit,
 ) : IAccountManager {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var accountsCache = mutableMapOf<String, Account>()
@@ -71,12 +73,20 @@ class AccountManager(
         _accountsFlow.tryEmit(accounts)
 
         setActiveAccountId(account.id)
+        onWalletAdded()
     }
 
     override fun import(accounts: List<Account>) {
-        for (account in accounts) {
-            storage.save(account)
-            updateCache(account)
+        var savedAny = false
+        try {
+            for (account in accounts) {
+                storage.save(account)
+                savedAny = true
+                updateCache(account)
+            }
+        } finally {
+            // A save that fails part-way leaves the wallets before it stored
+            if (savedAny) onWalletAdded()
         }
 
         _accountsFlow.tryEmit(accounts)

@@ -62,13 +62,6 @@
     <string name="AccountRecovery_Note">Not</string>
     <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
-    <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
-    <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
-    <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
-    <string name="Intro_Wallet_Screen3Description">Şartların getirdiği engelleri atlatın ve dünyanın her piyasasına erişim sağlayın.</string>
-    <string name="Intro_Wallet_Screen4Title">Gizli Kalın</string>
-    <string name="Intro_Wallet_Screen4Description">Özel ve finansal bilgilerinizi dünyaya açmayın.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Anlıyorum</string>
     <!--Welcome-->
@@ -2004,4 +1997,12 @@
     <string name="Activity_Empty_PrivateSends">Henüz bekleyen veya geçmiş bir gizli gönderiminiz yok.</string>
     <string name="Activity_Empty_CrossPay">Henüz bekleyen veya geçmiş bir CrossPay ödemeniz yok.</string>
     <string name="Transactions_FromUnknown">bilinmeyen gönderenden</string>
+    <string name="Welcome_Description">İlke gereği gizli. Tasarım gereği bağımsız</string>
+    <string name="Welcome_CreateNewWallet">Yeni Cüzdan Oluştur</string>
+    <string name="Welcome_AddExistingWallet">Mevcut Cüzdanı Ekle</string>
+    <string name="Welcome_Consent">Devam ederek %1$s ve %2$s metinlerini kabul ediyorum</string>
+    <string name="Welcome_TermsOfUse">Kullanım Koşulları</string>
+    <string name="Welcome_PrivacyPolicy">Gizlilik Politikası</string>
+    <string name="ImportWallet_ViewOnly">Salt Görüntüleme Cüzdanı</string>
+    <string name="ImportWallet_ViewOnly_Description">Fonlara erişim olmadan bakiyeleri ve hareketleri izlemek için bir cüzdan ekleyin.</string>
 </resources>

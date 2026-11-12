@@ -94,14 +94,6 @@
     <string name="AccountRecovery_MigrationRecommended">This wallet seems to use a non-standard character in its recovery phrase and/or a passphrase. If you do not see a balance or transactions please read below for details.\n\nCLICK TO GET MORE INFO</string>
     <string name="AccountRecovery_MigrationRequired">This is a non-standard wallet. Please migrate to a standard wallet to avoid risk of fund loss. \n\nCLICK TO GET MORE INFO</string>
 
-    <!--Intro-->
-
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
-    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
-    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
 
     <!--Rooted Device-->
 
@@ -2358,4 +2350,14 @@
     <string name="Activity_Empty_PrivateSends">You don\'t have any pending or past private sends yet.</string>
     <string name="Activity_Empty_CrossPay">You don\'t have any pending or past CrossPay payments yet.</string>
     <string name="Transactions_FromUnknown">from unknown</string>
+    <string name="Welcome_Title" translatable="false">Unwatched\nUnrestricted\nUncompromised</string>
+    <string name="Welcome_Subtitle" translatable="false">Be Unstoppable!</string>
+    <string name="Welcome_Description">Private by principle. Independent by design</string>
+    <string name="Welcome_CreateNewWallet">Create New Wallet</string>
+    <string name="Welcome_AddExistingWallet">Add Existing Wallet</string>
+    <string name="Welcome_Consent">By continuing, I agree to the %1$s and consent to the %2$s</string>
+    <string name="Welcome_TermsOfUse">Terms of Use</string>
+    <string name="Welcome_PrivacyPolicy">Privacy Policy</string>
+    <string name="ImportWallet_ViewOnly">View Only Wallet</string>
+    <string name="ImportWallet_ViewOnly_Description">Add a wallet to track balances and activity without access to funds.</string>
 </resources>

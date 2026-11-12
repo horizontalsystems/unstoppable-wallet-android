@@ -10,6 +10,7 @@ import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
+import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.components.InfoTextBody
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
@@ -19,16 +20,16 @@ import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.ButtonsStack
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CreatePasskeyNotSupportedSheet : HSBottomSheet(expanded = true) {
+data class CreatePasskeyNotSupportedSheet(val input: ManageAccountsModule.Input?) : HSBottomSheet(expanded = true) {
 
     @Composable
     override fun GetContent(navigation: HSNavigation) {
-        CreatePasskeyNotSupportedScreen(navigation)
+        CreatePasskeyNotSupportedScreen(navigation, input)
     }
 }
 
 @Composable
-fun CreatePasskeyNotSupportedScreen(navigation: HSNavigation) {
+fun CreatePasskeyNotSupportedScreen(navigation: HSNavigation, input: ManageAccountsModule.Input?) {
     BottomSheetBody {
         BottomSheetHeaderV3(
             image72 = painterResource(R.drawable.warning_filled_24),
@@ -46,8 +47,9 @@ fun CreatePasskeyNotSupportedScreen(navigation: HSNavigation) {
                 variant = ButtonVariant.Secondary,
                 title = stringResource(R.string.CreateNewWallet_Button_CreateStandardWallet)
             ) {
-                navigation.removeLastUntil(CreateAccountPage::class, false)
-                navigation.slideFromRight(CreateAccountStandardPage(null))
+                // Back to the wallet type choice, whether it is the page or the sheet
+                navigation.removeLastUntil(CreateAccountPasskeyPage::class, true)
+                navigation.slideFromRight(CreateAccountStandardPage(input))
             }
         }
     }

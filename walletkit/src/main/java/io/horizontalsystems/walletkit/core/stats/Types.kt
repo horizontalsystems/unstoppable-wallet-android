@@ -150,6 +150,7 @@ enum class StatPage(val key: String) {
     WalletConnect("wallet_connect"),
     TonConnect("ton_connect"),
     WatchWallet("watch_wallet"),
+    Welcome("welcome"),
     WhatsNew("whats_news"),
     Widget("widget"),
 }
