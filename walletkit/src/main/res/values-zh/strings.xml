@@ -1686,7 +1686,6 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">已存在使用此 URL 的端点</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">输入的 URL 无效。有效的 URL 必须使用 https 协议</string>
     <string name="Restore_BlockchainsDescription">选择您想要恢复的区块链。</string>
-    <string name="ManageAccounts_ViewOnlyWallet">只读钱包</string>
     <string name="Button_UnderstandAndContinue">我已了解并继续</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey 钱包条款</string>
@@ -1701,12 +1700,8 @@
     <string name="ImportWallet_PrivateKey">通过私钥导入</string>
     <string name="ImportWallet_PrivateKey_Description">使用私钥导入钱包。</string>
     <string name="ManageAccount_WalletName">钱包名称</string>
-    <string name="ManageAccounts_AddWallet">添加钱包</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">创建一个新钱包以开始使用，或添加一个新钱包。</string>
     <string name="ManageAccounts_ExistingWallet">已有钱包</string>
-    <string name="ManageAccounts_ExistingWalletDescription">如果您已有钱包，请导入以继续使用。</string>
     <string name="ManageAccounts_NoActiveWallets">没有活跃钱包</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">通过地址查看钱包，无法访问资金。</string>
     <string name="PasskeyTerms_LimitedAccess">有限的跨平台访问</string>
     <string name="PasskeyTerms_Responsibility">责任</string>
     <string name="Passphrase_Placeholder">密码短语（可选）</string>
@@ -2003,4 +1998,5 @@
     <string name="Welcome_PrivacyPolicy">隐私政策</string>
     <string name="ImportWallet_ViewOnly">仅查看钱包</string>
     <string name="ImportWallet_ViewOnly_Description">添加一个钱包，用于跟踪余额和活动，但无法动用资金。</string>
+    <string name="Balance_NoWallets">暂无钱包。请在下方添加。</string>
 </resources>

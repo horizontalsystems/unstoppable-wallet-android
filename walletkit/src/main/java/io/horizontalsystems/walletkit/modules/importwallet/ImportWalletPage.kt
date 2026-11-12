@@ -7,6 +7,7 @@ import android.provider.OpenableColumns
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -57,6 +59,7 @@ import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.cell.ImageSize
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -272,41 +275,82 @@ private fun ImportWalletScreen(
             ) {
                 VSpacer(16.dp)
 
-                Section {
-                    WalletType(
-                        icon = painterResource(R.drawable.ic_edit_24),
-                        title = stringResource(R.string.ImportWallet_RecoveryPhrase).hs,
-                        subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
-                        borderTop = false,
-                        modifier = Modifier.testTag(TestTags.IMPORT_RECOVERY_PHRASE),
-                        onClick = actions.recoveryPhrase,
-                    )
-                    WalletType(
-                        icon = painterResource(R.drawable.key_24),
-                        title = stringResource(R.string.ImportWallet_PrivateKey).hs,
-                        subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
-                        borderTop = true,
-                        modifier = Modifier.testTag(TestTags.IMPORT_PRIVATE_KEY),
-                        onClick = actions.privateKey,
-                    )
-                    WalletType(
-                        icon = painterResource(R.drawable.touchid_24),
-                        title = stringResource(R.string.ImportWallet_Passkey).hs,
-                        subtitle = stringResource(R.string.ImportWallet_Passkey_Description).hs,
-                        borderTop = true,
-                        modifier = Modifier.testTag(TestTags.IMPORT_PASSKEY),
-                        onClick = actions.passkey,
-                    )
-                    WalletType(
-                        icon = painterResource(R.drawable.ic_download_24),
-                        title = stringResource(R.string.ImportWallet_BackupFile).hs,
-                        subtitle = stringResource(R.string.ImportWallet_BackupFile_Description).hs,
-                        borderTop = true,
-                        modifier = Modifier.testTag(TestTags.IMPORT_BACKUP_FILE),
-                        onClick = actions.backupFile,
-                    )
+                ImportWalletWays(actions) { rows ->
+                    Section { rows() }
                 }
+                VSpacer(32.dp)
             }
+        }
+    }
+}
+
+/**
+ * The ways to add a wallet that already exists, in the order the page and the
+ * sheet both list them. The two differ only in the icons and in the [group]
+ * that frames each set of rows.
+ */
+@Composable
+internal fun ImportWalletWays(
+    actions: ImportWalletActions,
+    @ImageSize iconSize: Int = 24,
+    iconTint: Color? = null,
+    group: @Composable (rows: @Composable () -> Unit) -> Unit,
+) {
+    @Composable
+    fun Way(icon: Int, title: Int, subtitle: Int, tag: String, first: Boolean = false, onClick: () -> Unit) {
+        WalletType(
+            icon = painterResource(icon),
+            title = stringResource(title).hs,
+            subtitle = stringResource(subtitle).hs,
+            borderTop = !first,
+            iconSize = iconSize,
+            iconTint = iconTint,
+            modifier = Modifier.testTag(tag),
+            onClick = onClick,
+        )
+    }
+
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        group {
+            Way(
+                icon = R.drawable.touchid_24,
+                title = R.string.ImportWallet_Passkey,
+                subtitle = R.string.ImportWallet_Passkey_Description,
+                tag = TestTags.IMPORT_PASSKEY,
+                first = true,
+                onClick = actions.passkey,
+            )
+            Way(
+                icon = R.drawable.ic_edit_24,
+                title = R.string.ImportWallet_RecoveryPhrase,
+                subtitle = R.string.ImportWallet_RecoveryPhrase_Description,
+                tag = TestTags.IMPORT_RECOVERY_PHRASE,
+                onClick = actions.recoveryPhrase,
+            )
+            Way(
+                icon = R.drawable.key_24,
+                title = R.string.ImportWallet_PrivateKey,
+                subtitle = R.string.ImportWallet_PrivateKey_Description,
+                tag = TestTags.IMPORT_PRIVATE_KEY,
+                onClick = actions.privateKey,
+            )
+            Way(
+                icon = R.drawable.ic_download_24,
+                title = R.string.ImportWallet_BackupFile,
+                subtitle = R.string.ImportWallet_BackupFile_Description,
+                tag = TestTags.IMPORT_BACKUP_FILE,
+                onClick = actions.backupFile,
+            )
+        }
+        group {
+            Way(
+                icon = R.drawable.eye_on_24,
+                title = R.string.ImportWallet_ViewOnly,
+                subtitle = R.string.ImportWallet_ViewOnly_Description,
+                tag = TestTags.ONBOARDING_WATCH_WALLET,
+                first = true,
+                onClick = actions.viewOnly,
+            )
         }
     }
 }

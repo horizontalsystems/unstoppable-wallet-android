@@ -1551,16 +1551,11 @@
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_ManageWallet">Manage Wallet</string>
-    <string name="ManageAccounts_AddWallet">Add Wallet</string>
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Create a new wallet to get started or add a new one.</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
     <string name="ManageAccounts_ExistingWallet">Existing Wallet</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Import your wallet if you already have one to continue using it.</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
-    <string name="ManageAccounts_ViewOnlyWallet">View-Only Wallet</string>
     <string name="ManageAccounts_NoActiveWallets">No Active Wallets</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">View a wallet by address without access to funds.</string>
 
     <string name="CreateNewWallet_Standard">Standard</string>
     <string name="CreateNewWallet_Standard_Description">A wallet with a recovery phrase that requires manual backup.</string>
@@ -2360,4 +2355,5 @@
     <string name="Welcome_PrivacyPolicy">Privacy Policy</string>
     <string name="ImportWallet_ViewOnly">View Only Wallet</string>
     <string name="ImportWallet_ViewOnly_Description">Add a wallet to track balances and activity without access to funds.</string>
+    <string name="Balance_NoWallets">No wallets. Add one below.</string>
 </resources>

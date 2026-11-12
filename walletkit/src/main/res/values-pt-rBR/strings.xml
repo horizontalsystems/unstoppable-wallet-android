@@ -1692,7 +1692,6 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Já existe um ponto de extremidade com esta URL</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">A URL inserida é inválida. Uma URL válida deve usar o esquema https</string>
     <string name="Restore_BlockchainsDescription">Selecione os blockchains que deseja restaurar.</string>
-    <string name="ManageAccounts_ViewOnlyWallet">Carteira Somente Leitura</string>
     <string name="Button_UnderstandAndContinue">Eu entendo e desejo continuar</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Termos da Wallet com Passkey</string>
@@ -1707,12 +1706,8 @@
     <string name="ImportWallet_PrivateKey">da Chave Privada</string>
     <string name="ImportWallet_PrivateKey_Description">Importar uma carteira usando uma chave privada.</string>
     <string name="ManageAccount_WalletName">Nome da Carteira</string>
-    <string name="ManageAccounts_AddWallet">Adicionar carteira</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Crie uma nova carteira para começar ou adicione uma nova.</string>
     <string name="ManageAccounts_ExistingWallet">Carteira existente</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Importe sua carteira se já tiver uma para continuar usando.</string>
     <string name="ManageAccounts_NoActiveWallets">Nenhuma Wallet Ativa</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">Visualize uma carteira pelo endereço sem acesso aos fundos.</string>
     <string name="PasskeyTerms_LimitedAccess">Acesso multiplataforma limitado</string>
     <string name="PasskeyTerms_Responsibility">Responsabilidade</string>
     <string name="Passphrase_Placeholder">Frase secreta (opcional)</string>
@@ -2009,4 +2004,5 @@
     <string name="Welcome_PrivacyPolicy">Política de Privacidade</string>
     <string name="ImportWallet_ViewOnly">Carteira somente leitura</string>
     <string name="ImportWallet_ViewOnly_Description">Adicione uma carteira para acompanhar saldos e atividade sem acesso aos fundos.</string>
+    <string name="Balance_NoWallets">Nenhuma carteira. Adicione uma abaixo.</string>
 </resources>

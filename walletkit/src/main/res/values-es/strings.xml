@@ -1687,7 +1687,6 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Ya existe un punto final con esta URL</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">La URL ingresada no es válida. Una URL válida debe usar el esquema https</string>
     <string name="Restore_BlockchainsDescription">Selecciona los blockchains que deseas restaurar.</string>
-    <string name="ManageAccounts_ViewOnlyWallet">Billetera de solo lectura</string>
     <string name="Button_UnderstandAndContinue">Entiendo y continuar</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Términos del Wallet con Passkey</string>
@@ -1702,12 +1701,8 @@
     <string name="ImportWallet_PrivateKey">desde Clave Privada</string>
     <string name="ImportWallet_PrivateKey_Description">Importar un wallet usando una clave privada.</string>
     <string name="ManageAccount_WalletName">Nombre del Wallet</string>
-    <string name="ManageAccounts_AddWallet">Añadir wallet</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Crea una nueva wallet para comenzar o añade una nueva.</string>
     <string name="ManageAccounts_ExistingWallet">Wallet existente</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Importa tu wallet si ya tienes una para seguir usándola.</string>
     <string name="ManageAccounts_NoActiveWallets">Sin wallets activos</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">Ver una wallet por dirección sin acceso a los fondos.</string>
     <string name="PasskeyTerms_LimitedAccess">Acceso multiplataforma limitado</string>
     <string name="PasskeyTerms_Responsibility">Responsabilidad</string>
     <string name="Passphrase_Placeholder">Frase de contraseña (opcional)</string>
@@ -2004,4 +1999,5 @@
     <string name="Welcome_PrivacyPolicy">Política de privacidad</string>
     <string name="ImportWallet_ViewOnly">Billetera de solo lectura</string>
     <string name="ImportWallet_ViewOnly_Description">Añade una billetera para seguir saldos y actividad sin acceso a los fondos.</string>
+    <string name="Balance_NoWallets">No hay monederos. Añade uno abajo.</string>
 </resources>

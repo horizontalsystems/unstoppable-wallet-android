@@ -1692,7 +1692,6 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Endpoint mit dieser URL existiert bereits</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">Eingegebene URL ist ungültig. Eine gültige URL muss das https-Schema verwenden</string>
     <string name="Restore_BlockchainsDescription">Wählen Sie die Blockchains aus, die Sie wiederherstellen möchten.</string>
-    <string name="ManageAccounts_ViewOnlyWallet">Ansicht-only Wallet</string>
     <string name="Button_UnderstandAndContinue">Ich verstehe und fortfahren</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey-Wallet-Bedingungen</string>
@@ -1707,12 +1706,8 @@
     <string name="ImportWallet_PrivateKey">aus Private Key</string>
     <string name="ImportWallet_PrivateKey_Description">Wallet mit einem Private Key importieren.</string>
     <string name="ManageAccount_WalletName">Wallet-Name</string>
-    <string name="ManageAccounts_AddWallet">Wallet hinzufügen</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Erstelle eine neue Wallet, um loszulegen oder eine weitere hinzuzufügen.</string>
     <string name="ManageAccounts_ExistingWallet">Vorhandene Wallet</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Importiere deine Wallet, wenn du bereits eine hast, um sie weiter zu nutzen.</string>
     <string name="ManageAccounts_NoActiveWallets">Keine aktiven Wallets</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">Eine Wallet per Adresse anzeigen, ohne Zugriff auf das Guthaben.</string>
     <string name="PasskeyTerms_LimitedAccess">Eingeschränkter plattformübergreifender Zugriff</string>
     <string name="PasskeyTerms_Responsibility">Verantwortung</string>
     <string name="Passphrase_Placeholder">Passphrase (optional)</string>
@@ -2009,4 +2004,5 @@
     <string name="Welcome_PrivacyPolicy">Datenschutzerklärung</string>
     <string name="ImportWallet_ViewOnly">Nur-Ansicht-Wallet</string>
     <string name="ImportWallet_ViewOnly_Description">Füge eine Wallet hinzu, um Guthaben und Aktivitäten ohne Zugriff auf die Mittel zu verfolgen.</string>
+    <string name="Balance_NoWallets">Keine Wallets. Füge unten eine hinzu.</string>
 </resources>

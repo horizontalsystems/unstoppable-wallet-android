@@ -672,7 +672,6 @@
     <string name="Swap_EstimatedTimeDescription">این زمان تخمینی مورد نیاز برای تکمیل تبدیل و دریافت وجوه شما است. زمان واقعی ممکن است بسته به شرایط شبکه، تأیید تراکنش‌ها و مسیر تبدیل انتخاب شده کوتاه‌تر یا طولانی‌تر باشد.</string>
     <string name="SwapInfo_Provider">مسیر</string>
     <string name="Balance_NoCoinsAlert">هیچ توکنی در اینجا نیست. یکی اضافه کنید تا شروع کنید.</string>
-    <string name="ManageAccounts_ViewOnlyWallet">کیف پول فقط مشاهده</string>
     <string name="CreateNewWallet_Button_CreateStandardWallet">ساخت کیف‌پول استاندارد</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">این دستگاه از کیف‌پول‌های Passkey پشتیبانی نمی‌کند. در عوض می‌توانید یک کیف‌پول استاندارد بسازید.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">ساخت Passkey ممکن نشد</string>
@@ -1532,12 +1531,8 @@
     <string name="ManageCoins_BipsDescription">کیف پول‌های %1$s می‌توانند از 4 قالب رایج آدرس برای دریافت پرداخت‌های ورودی استفاده کنند:\n\n\n\n- BIP-44 (قدیمی‌تر)\n\n- BIP-49\n\n- BIP-84 (توصیه‌شده)\n\n- BIP-86 (جدیدترین)\n\n\n\nکیف پول Unstoppable از هر 4 قالب پشتیبانی می‌کند، اما استفاده از کیف پول %2$s با قالب BIP-84 را توصیه می‌کند. کیف پول‌هایی که با این قالب کار می‌کنند هنگام ارسال تراکنش‌های %3$s کمترین کارمزد را می‌پردازند.</string>
     <string name="ManageCoins_BchTypeDescription">کیف پول‌های Bitcoin Cash می‌توانند از 2 قالب آدرس برای دریافت پرداخت‌های ورودی استفاده کنند:\n\n\n\n- TYPE0 (قدیمی‌تر)\n\n- TYPE145 (جدیدتر)\n\n\n\nکیف پول Unstoppable از هر دو پشتیبانی می‌کند، اما استفاده از کیف پول Bitcoin Cash با قالب TYPE145 را توصیه می‌کند.</string>
     <string name="ManageCoins_ContractAddress">آدرس قرارداد</string>
-    <string name="ManageAccounts_AddWallet">افزودن کیف پول</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">برای شروع یک کیف پول جدید بسازید یا یکی دیگر اضافه کنید.</string>
     <string name="ManageAccounts_ExistingWallet">کیف پول موجود</string>
-    <string name="ManageAccounts_ExistingWalletDescription">اگر از قبل کیف پول دارید، آن را وارد کنید تا به استفاده ادامه دهید.</string>
     <string name="ManageAccounts_NoActiveWallets">کیف پول فعالی وجود ندارد</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">مشاهده یک کیف پول با آدرس، بدون دسترسی به دارایی‌ها.</string>
     <string name="CreateNewWallet_Standard">استاندارد</string>
     <string name="CreateNewWallet_Standard_Description">کیف پولی با عبارت بازیابی که به پشتیبان‌گیری دستی نیاز دارد.</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
@@ -1992,4 +1987,5 @@
     <string name="Welcome_PrivacyPolicy">سیاست حفظ حریم خصوصی</string>
     <string name="ImportWallet_ViewOnly">کیف پول فقط مشاهده</string>
     <string name="ImportWallet_ViewOnly_Description">کیف پولی برای پیگیری موجودی و فعالیت، بدون دسترسی به دارایی‌ها، اضافه کنید.</string>
+    <string name="Balance_NoWallets">کیف پولی وجود ندارد. یکی را در پایین اضافه کنید.</string>
 </resources>

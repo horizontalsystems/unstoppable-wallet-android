@@ -55,33 +55,52 @@ fun CreateAccountScreen(navigation: HSNavigation, input: ManageAccountsModule.In
             VSpacer(16.dp)
 
             Section {
-                WalletType(
-                    icon = painterResource(R.drawable.list_24),
-                    title = stringResource(R.string.CreateNewWallet_Standard).hs,
-                    subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
-                    borderTop = false,
-                    modifier = Modifier.testTag(TestTags.CREATE_TYPE_STANDARD),
-                ) {
-                    navigation.slideFromRight(CreateAccountStandardPage(input))
-                }
-
-                WalletType(
-                    icon = painterResource(R.drawable.touchid_24),
-                    title = stringResource(R.string.CreateNewWallet_Passkey).hs,
-                    subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
-                    borderTop = true,
-                    modifier = Modifier.testTag(TestTags.CREATE_TYPE_PASSKEY),
-                ) {
-                    if (!App.localStorage.passkeyTermsAccepted) {
-                        navigation.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
-                    } else {
-                        navigation.slideFromRight(CreateAccountPasskeyPage(input))
-                    }
-                }
+                WalletTypes(
+                    onPasskey = { navigation.openPasskeyWallet(input) },
+                    onStandard = { navigation.slideFromRight(CreateAccountStandardPage(input)) },
+                )
             }
-
         }
     }
+}
+
+/**
+ * The wallet types a new wallet can be, in the order the page and the sheet
+ * both list them. The two differ only in the icons and in what frames the rows.
+ */
+@Composable
+internal fun WalletTypes(
+    @ImageSize iconSize: Int = 24,
+    iconTint: Color? = null,
+    onPasskey: () -> Unit,
+    onStandard: () -> Unit,
+) {
+    WalletType(
+        icon = painterResource(R.drawable.touchid_24),
+        title = stringResource(R.string.CreateNewWallet_Passkey).hs,
+        subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
+        borderTop = false,
+        iconSize = iconSize,
+        iconTint = iconTint,
+        modifier = Modifier.testTag(TestTags.CREATE_TYPE_PASSKEY),
+        onClick = onPasskey,
+    )
+    WalletType(
+        icon = painterResource(R.drawable.list_24),
+        title = stringResource(R.string.CreateNewWallet_Standard).hs,
+        subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
+        borderTop = true,
+        iconSize = iconSize,
+        iconTint = iconTint,
+        modifier = Modifier.testTag(TestTags.CREATE_TYPE_STANDARD),
+        onClick = onStandard,
+    )
+}
+
+/** Opens the passkey wallet page, behind its terms when they are not accepted yet. */
+internal fun HSNavigation.openPasskeyWallet(input: ManageAccountsModule.Input?) {
+    val page = CreateAccountPasskeyPage(input)
+    slideFromRight(if (App.localStorage.passkeyTermsAccepted) page else PassKeyTermsPage(page))
 }
 
 @Composable

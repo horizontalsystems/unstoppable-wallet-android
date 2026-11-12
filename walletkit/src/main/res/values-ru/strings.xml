@@ -1694,7 +1694,6 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Конечная точка с этим URL уже существует</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">Введенный URL недействителен. Допустимый URL должен использовать схему https</string>
     <string name="Restore_BlockchainsDescription">Выберите блокчейны, которые вы хотите восстановить.</string>
-    <string name="ManageAccounts_ViewOnlyWallet">Кошелек только для просмотра</string>
     <string name="Button_UnderstandAndContinue">Я понимаю и продолжаю</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Условия Passkey-кошелька</string>
@@ -1709,12 +1708,8 @@
     <string name="ImportWallet_PrivateKey">из Приватного Ключа</string>
     <string name="ImportWallet_PrivateKey_Description">Импортировать кошелёк с помощью приватного ключа.</string>
     <string name="ManageAccount_WalletName">Имя кошелька</string>
-    <string name="ManageAccounts_AddWallet">Добавить кошелёк</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Создайте новый кошелёк, чтобы начать, или добавьте ещё один.</string>
     <string name="ManageAccounts_ExistingWallet">Существующий кошелёк</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Импортируйте кошелёк, если он у вас уже есть, чтобы продолжить его использование.</string>
     <string name="ManageAccounts_NoActiveWallets">Нет активных кошельков</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">Просмотр кошелька по адресу без доступа к средствам.</string>
     <string name="PasskeyTerms_LimitedAccess">Ограниченный кросс-платформенный доступ</string>
     <string name="PasskeyTerms_Responsibility">Ответственность</string>
     <string name="Passphrase_Placeholder">Кодовая фраза (необязательно)</string>
@@ -2013,4 +2008,5 @@
     <string name="Welcome_PrivacyPolicy">Политику конфиденциальности</string>
     <string name="ImportWallet_ViewOnly">Кошелёк только для просмотра</string>
     <string name="ImportWallet_ViewOnly_Description">Добавьте кошелёк, чтобы следить за балансами и активностью без доступа к средствам.</string>
+    <string name="Balance_NoWallets">Нет кошельков. Добавьте кошелек ниже.</string>
 </resources>

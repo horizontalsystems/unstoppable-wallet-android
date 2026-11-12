@@ -1336,7 +1336,6 @@
     <string name="Swap_AmlRisk_Button">Başka Rota Seç</string>
     <string name="Swap_EstimatedTimeDescription">Bu, takası tamamlamak ve fonlarınızı almak için gereken tahmini süredir. Gerçek süre, ağ koşullarına, işlem onaylarına ve seçilen takas rotasına bağlı olarak daha kısa veya daha uzun olabilir.</string>
     <string name="SwapInfo_Provider">Rota</string>
-    <string name="ManageAccounts_ViewOnlyWallet">Yalnızca Görüntüleme Cüzdanı</string>
     <string name="ActivationRequired_DialogTitle">Token’i Aktive Et</string>
     <string name="AddEvmSyncSource_RpcUrl">RPC URL</string>
     <string name="AddMoneroNode_AddNode">Node Ekle</string>
@@ -1417,12 +1416,8 @@
     <string name="Info_Reserved_Title">Kilitli</string>
     <string name="Info_Reserved_WalletAction">Cüzdan aktivasyonu</string>
     <string name="ManageAccount_WalletName">Cüzdan Adı</string>
-    <string name="ManageAccounts_AddWallet">Cüzdan Ekle</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Başlamak için yeni bir cüzdan oluşturun veya yeni bir tane ekleyin.</string>
     <string name="ManageAccounts_ExistingWallet">Mevcut Cüzdan</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Zaten bir cüzdanınız varsa kullanmaya devam etmek için içe aktarın.</string>
     <string name="ManageAccounts_NoActiveWallets">Aktif Cüzdan Yok</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">Fonlara erişim olmadan bir cüzdanı adresle görüntüleyin.</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
     <string name="Market_Filter_Blockchains">Blockchain\'ler</string>
     <string name="Market_Filter_OutperformedGold">Altını geride bıraktı</string>
@@ -2005,4 +2000,5 @@
     <string name="Welcome_PrivacyPolicy">Gizlilik Politikası</string>
     <string name="ImportWallet_ViewOnly">Salt Görüntüleme Cüzdanı</string>
     <string name="ImportWallet_ViewOnly_Description">Fonlara erişim olmadan bakiyeleri ve hareketleri izlemek için bir cüzdan ekleyin.</string>
+    <string name="Balance_NoWallets">Cüzdan yok. Aşağıdan bir tane ekleyin.</string>
 </resources>

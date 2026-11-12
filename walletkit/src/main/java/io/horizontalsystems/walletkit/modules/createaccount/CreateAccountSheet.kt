@@ -11,21 +11,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.walletkit.modules.manageaccounts.PassKeyTermsPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
-import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import kotlinx.serialization.Serializable
 
 /**
@@ -53,35 +47,18 @@ data class CreateAccountSheet(val input: ManageAccountsModule.Input) : HSBottomS
                     .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 64.dp)
             ) {
                 WalletTypeGroup {
-                    WalletType(
-                        icon = painterResource(R.drawable.touchid_24),
-                        title = stringResource(R.string.CreateNewWallet_Passkey).hs,
-                        subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
-                        borderTop = false,
+                    WalletTypes(
                         iconSize = 32,
                         iconTint = ComposeAppTheme.colors.orange,
-                        modifier = Modifier.testTag(TestTags.CREATE_TYPE_PASSKEY),
-                    ) {
-                        navigation.removeLastOrNull()
-                        if (!App.localStorage.passkeyTermsAccepted) {
-                            navigation.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
-                        } else {
-                            navigation.slideFromRight(CreateAccountPasskeyPage(input))
-                        }
-                    }
-
-                    WalletType(
-                        icon = painterResource(R.drawable.list_24),
-                        title = stringResource(R.string.CreateNewWallet_Standard).hs,
-                        subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
-                        borderTop = true,
-                        iconSize = 32,
-                        iconTint = ComposeAppTheme.colors.orange,
-                        modifier = Modifier.testTag(TestTags.CREATE_TYPE_STANDARD),
-                    ) {
-                        navigation.removeLastOrNull()
-                        navigation.slideFromRight(CreateAccountStandardPage(input))
-                    }
+                        onPasskey = {
+                            navigation.removeLastOrNull()
+                            navigation.openPasskeyWallet(input)
+                        },
+                        onStandard = {
+                            navigation.removeLastOrNull()
+                            navigation.slideFromRight(CreateAccountStandardPage(input))
+                        },
+                    )
                 }
             }
         }

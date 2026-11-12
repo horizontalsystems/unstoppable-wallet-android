@@ -31,7 +31,6 @@ import io.horizontalsystems.walletkit.modules.manageaccount.ManageAccountPage
 import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
-import io.horizontalsystems.walletkit.modules.watchaddress.WatchAddressPage
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
@@ -106,13 +105,6 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
                         onClick = {
                             navigation.slideFromRight(ImportWalletPage(args))
                             stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
-                        }
-                    ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.ManageAccounts_ViewOnlyWallet),
-                        onClick = {
-                            navigation.slideFromRight(WatchAddressPage(args))
-                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
                         }
                     ),
                 )

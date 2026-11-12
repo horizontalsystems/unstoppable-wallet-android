@@ -1689,7 +1689,6 @@
     <string name="AddZcashEndpoint_Warning_UrlExists">Un point de terminaison avec cette URL existe déjà</string>
     <string name="AddZcashEndpoint_Error_InvalidUrl">L\'URL saisie est invalide. Une URL valide doit utiliser le schéma https</string>
     <string name="Restore_BlockchainsDescription">Sélectionnez les blockchains que vous souhaitez restaurer.</string>
-    <string name="ManageAccounts_ViewOnlyWallet">Portefeuille en lecture seule</string>
     <string name="Button_UnderstandAndContinue">Je comprends et je continue</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Conditions du Wallet Passkey</string>
@@ -1704,12 +1703,8 @@
     <string name="ImportWallet_PrivateKey">depuis une Clé Privée</string>
     <string name="ImportWallet_PrivateKey_Description">Importer un wallet à l\'aide d\'une clé privée.</string>
     <string name="ManageAccount_WalletName">Nom du Wallet</string>
-    <string name="ManageAccounts_AddWallet">Ajouter un wallet</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">Créez un nouveau wallet pour commencer ou en ajouter un nouveau.</string>
     <string name="ManageAccounts_ExistingWallet">Wallet existant</string>
-    <string name="ManageAccounts_ExistingWalletDescription">Importez votre wallet si vous en avez déjà un pour continuer à l\'utiliser.</string>
     <string name="ManageAccounts_NoActiveWallets">Aucun wallet actif</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">Consulter un wallet par adresse sans accès aux fonds.</string>
     <string name="PasskeyTerms_LimitedAccess">Accès multiplateforme limité</string>
     <string name="PasskeyTerms_Responsibility">Responsabilité</string>
     <string name="Passphrase_Placeholder">Phrase secrète (optionnel)</string>
@@ -2006,4 +2001,5 @@
     <string name="Welcome_PrivacyPolicy">Politique de confidentialité</string>
     <string name="ImportWallet_ViewOnly">Wallet en lecture seule</string>
     <string name="ImportWallet_ViewOnly_Description">Ajoutez un wallet pour suivre les soldes et l\'activité sans accès aux fonds.</string>
+    <string name="Balance_NoWallets">Aucun portefeuille. Ajoutez-en un ci-dessous.</string>
 </resources>

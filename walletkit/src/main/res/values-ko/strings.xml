@@ -1484,7 +1484,6 @@
     <string name="Swap_AmlRisk_Button">다른 경로 선택</string>
     <string name="Swap_EstimatedTimeDescription">이는 스왑을 완료하고 자금을 받기 위해 필요한 예상 시간입니다. 실제 시간은 네트워크 상태, 거래 확인 및 선택한 스왑 경로에 따라 더 짧거나 길 수 있습니다.</string>
     <string name="SwapInfo_Provider">경로</string>
-    <string name="ManageAccounts_ViewOnlyWallet">보기 전용 지갑</string>
     <string name="ActivationRequired_DialogTitle">토큰 활성화</string>
     <string name="AddEvmSyncSource_RpcUrl">RPC URL</string>
     <string name="AddMoneroNode_NodeUrl">노드 URL</string>
@@ -1533,12 +1532,8 @@
     <string name="Info_Reserved_Title">잠김</string>
     <string name="Info_Reserved_WalletAction">지갑 활성화</string>
     <string name="ManageAccount_WalletName">지갑 이름</string>
-    <string name="ManageAccounts_AddWallet">지갑 추가</string>
-    <string name="ManageAccounts_CreateNewWalletDescription">새 지갑을 생성하여 시작하거나 새 지갑을 추가하세요.</string>
     <string name="ManageAccounts_ExistingWallet">기존 지갑</string>
-    <string name="ManageAccounts_ExistingWalletDescription">이미 지갑이 있다면 가져와서 계속 사용하세요.</string>
     <string name="ManageAccounts_NoActiveWallets">활성 지갑 없음</string>
-    <string name="ManageAccounts_ViewOnlyWalletDescription">자금에 대한 접근 없이 주소로 지갑을 조회합니다.</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
     <string name="Market_TVL">TVL</string>
     <string name="Market_Vaults_ChartTvl">TVL</string>
@@ -1999,4 +1994,5 @@
     <string name="Welcome_PrivacyPolicy">개인정보 처리방침</string>
     <string name="ImportWallet_ViewOnly">조회 전용 지갑</string>
     <string name="ImportWallet_ViewOnly_Description">자금에 접근하지 않고 잔액과 활동을 확인할 지갑을 추가합니다.</string>
+    <string name="Balance_NoWallets">지갑이 없습니다. 아래에서 추가하세요.</string>
 </resources>
