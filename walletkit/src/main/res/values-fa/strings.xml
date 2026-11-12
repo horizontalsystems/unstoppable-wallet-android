@@ -349,7 +349,6 @@
     <string name="SettingsSecurity_SortingBip69">BIP69 قطعی</string>
     <string name="SettingsSecurity_SortingBip69Description">فهرست بندی فهرستشناختی</string>
     <string name="DuressPin_Notes_Biometrics_Title">احراز هویت بیومتریک</string>
-    <!--Setting_Terms-->
     <!--Setting_Tell Friends-->
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
@@ -1527,15 +1526,6 @@
     <string name="DuressPinSelectAccounts_Description">کیف پول‌هایی را که در حالت اضطرار نمایش داده می‌شوند انتخاب کنید.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">کیف پول‌ها</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">کیف پول‌های نظارتی</string>
-    <string name="SettingsTerms_Backup">از عبارت بازیابی هر کیف پول به‌صورت امن پشتیبان بگیرید. این تنها راه دسترسی دوباره به دارایی‌های شما در صورت حذف یا خرابی برنامه است. هیچ‌کس نمی‌تواند آن را برای شما بازیابی کند.</string>
-    <string name="SettingsTerms_DisablingPin">غیرفعال کردن PIN (یا رمز عبور) قفل گوشی، همه کیف پول‌ها را از برنامه پاک می‌کند. برای بازیابی دسترسی به عبارت‌های بازیابی خود نیاز خواهید داشت.</string>
-    <string name="SettingsTerms_PrivacyNotice">برنامه جاسوسی نمی‌کند و داده‌ای درباره موجودی یا تراکنش‌های شما جمع‌آوری نمی‌کند - ما حتی نمی‌دانیم چند نفر از آن استفاده می‌کنند. تنها الگوهای استفاده ناشناس (صفحه‌های بازشده، دکمه‌های لمس‌شده) برای بهبود کاربردپذیری ردیابی می‌شود. می‌توانید آن را در تنظیمات ← حریم خصوصی خاموش کنید</string>
-    <string name="SettingsTerms_WeNotHoldingYourAssets">ما دارایی‌های شما را نگه نمی‌داریم، به کلیدهای خصوصی شما دسترسی نداریم و از طرف شما تراکنشی انجام نمی‌دهیم. برنامه خدمات کارگزاری، صرافی، امانت‌داری، ضمانت یا انتقال پول ارائه نمی‌دهد. همه تراکنش‌ها مستقیماً توسط شما آغاز، امضا و به شبکه‌های عمومی بلاکچین ارسال می‌شوند.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">به عنوان بخشی از مدل درآمدزایی، برنامه از سواپ‌های DEX انجام‌شده در کیف پول کارمزد اندکی دریافت می‌کند. این به ما کمک می‌کند مستقل، متن‌باز و بدون سرمایه VC بمانیم.</string>
-    <string name="SettingsTerms_TransactionsIrreversible">تراکنش‌های بلاکچین برگشت‌ناپذیرند. همیشه پیش از تأیید، جزئیات تراکنش را بررسی کنید.</string>
-    <string name="SettingsTerms_OpenSource">برنامه به‌طور قابل راستی‌آزمایی متن‌باز است و تمام کد منبع آن به‌صورت آنلاین منتشر شده است. همه موارد بالا را هرکسی می‌تواند به‌طور عمومی راستی‌آزمایی کند.</string>
-    <string name="SettingsTerms_LegalObligations">شما به‌تنهایی مسئول امنیت دارایی‌های خود، رفتار خود و رعایت قوانین حاکم در حوزه قضایی خود و همچنین در سطح جهانی هستید.</string>
-    <string name="SettingsTerms_UserResponsibility">با ادامه دادن، می‌پذیرید که امنیت دارایی‌های شما و رعایت قوانین در نهایت مسئولیت خود شماست.</string>
     <string name="SettingsShare_Title">اشتراک‌گذاری</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <string name="SettingsLaunchScreen_Auto">خودکار</string>

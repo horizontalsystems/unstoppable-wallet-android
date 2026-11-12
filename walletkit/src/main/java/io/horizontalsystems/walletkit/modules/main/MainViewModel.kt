@@ -12,7 +12,6 @@ import io.horizontalsystems.walletkit.core.IBackupManager
 import io.horizontalsystems.walletkit.core.ILocalStorage
 import io.horizontalsystems.walletkit.core.INetworkManager
 import io.horizontalsystems.walletkit.core.IRateAppManager
-import io.horizontalsystems.walletkit.core.ITermsManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.walletkit.core.managers.ActiveAccountState
@@ -46,7 +45,6 @@ class MainViewModel(
     private val pinComponent: IPinComponent,
     rateAppManager: IRateAppManager,
     private val backupManager: IBackupManager,
-    private val termsManager: ITermsManager,
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val donationShowManager: DonationShowManager,
@@ -122,12 +120,6 @@ class MainViewModel(
             localStorage.marketsTabEnabledFlow.collect { enabled ->
                 marketsTabEnabled = enabled
                 syncNavigation()
-            }
-        }
-
-        viewModelScope.launch {
-            termsManager.termsAcceptedSharedFlow.collect {
-                updateSettingsBadge()
             }
         }
 
@@ -490,7 +482,7 @@ class MainViewModel(
 
     private fun updateSettingsBadge() {
         val showDotBadge =
-            !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
+            !(backupManager.allBackedUp && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
 
         settingsBadge = if (wcPendingRequestsCount > 0) {
             MainModule.BadgeType.BadgeNumber(wcPendingRequestsCount)

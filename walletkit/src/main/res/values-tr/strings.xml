@@ -722,9 +722,6 @@
     <string name="DuressPinSelectAccounts_Description">Duress Modunda gösterilecek cüzdanları seçin.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">CÜZDANLARI İZLE</string>
-    <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Her cüzdan için kurtarma ifadelerini güvenli bir şekilde yedekleyin. Uygulama arızalanırsa fonlara yeniden erişmenin tek yolu budur.</string>
-    <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <!--Setting_Contact-->
@@ -1523,13 +1520,6 @@
     <string name="SettingsSecurity_SortingBip69Short">Deterministik</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <string name="SettingsSubscription_GetPremium">Premium’a Geç</string>
-    <string name="SettingsTerms_LegalObligations">Fonlarınızın güvenliği, davranışlarınız ve bulunduğunuz yargı bölgesinde ve küresel olarak geçerli yasalara uyum tamamen sizin sorumluluğunuzdadır.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">Gelir modeli kapsamında, uygulama cüzdan içinde gerçekleştirilen DEX swap işlemlerinden küçük komisyonlar kazanır. Bu, bağımsız, open source ve VC fonlarından bağımsız kalmamıza yardımcı olur.</string>
-    <string name="SettingsTerms_OpenSource">Uygulama doğrulanabilir şekilde açık kaynaklıdır; tüm kaynak kodu çevrimiçi olarak yayımlanmıştır. Yukarıdaki tüm bilgiler herkes tarafından kamuya açık olarak doğrulanabilir.</string>
-    <string name="SettingsTerms_PrivacyNotice">Uygulama bakiye veya işlemlerinizle ilgili veri toplamaz veya sizi takip etmez — kaç kişinin uygulamayı kullandığını bile bilmiyoruz. Sadece anonim kullanım verilerini (açılan sayfalar, tıklanan butonlar) toplar ve bu da sadece kullanılabilirliği geliştirmek içindir. Ayarlar → Gizlilik bölümünden bunu kapatabilirsiniz</string>
-    <string name="SettingsTerms_TransactionsIrreversible">Blockchain işlemleri geri döndürülemez. Onaylamadan önce işlem detaylarını her zaman dikkatlice kontrol edin.</string>
-    <string name="SettingsTerms_UserResponsibility">Devam ederek, fonlarınızın güvenliği ve yasal mevzuata uyumun nihai olarak sizin sorumluluğunuzda olduğunu kabul edersiniz.</string>
-    <string name="SettingsTerms_WeNotHoldingYourAssets">Varlıklarınızı tutmayız, private key’lerinize erişmeyiz ve sizin adınıza işlem gerçekleştirmeyiz. Uygulama; aracılık, borsa, saklama (custody), emanet (escrow) veya para transferi hizmetleri sunmaz. Tüm işlemler, doğrudan sizin tarafınızdan başlatılır, imzalanır ve herkese açık blockchain ağlarına yayınlanır.</string>
     <string name="Settings_AutoLock_Description">Seçilen süre sonunda uygulamayı otomatik olarak kilitler.</string>
     <string name="Settings_LaunchScreen_Tip">Uygulamanın varsayılan olarak hangi ekranda açılacağını seçin.</string>
     <string name="Settings_VipSupport">Öncelikli destek</string>

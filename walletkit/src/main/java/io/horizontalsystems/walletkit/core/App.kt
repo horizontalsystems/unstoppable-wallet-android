@@ -54,7 +54,6 @@ import io.horizontalsystems.walletkit.core.managers.RestoreSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.walletkit.core.managers.SystemInfoManager
-import io.horizontalsystems.walletkit.core.managers.TermsManager
 import io.horizontalsystems.walletkit.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.walletkit.core.managers.TorManager
 import io.horizontalsystems.walletkit.core.managers.TransactionAdapterManager
@@ -179,7 +178,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var wcManager: WCManager
         lateinit var lockGate: LockGate
         var wcWalletRequestHandler: IWCWalletRequestHandler? = null
-        lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
         lateinit var priceManager: PriceManager
@@ -413,8 +411,6 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             plugin.wcHandlers().forEach(wcManager::addWcHandler)
         }
         wcWalletRequestHandler = ChainRegistry.all.firstNotNullOfOrNull { it.wcWalletRequestHandler() }
-
-        termsManager = TermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
         marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
@@ -703,7 +699,7 @@ abstract class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         coroutineScope.launch(Dispatchers.IO) {
             delay(3000)
-            val migrationManager = MigrationManager(localStorage, termsManager)
+            val migrationManager = MigrationManager(localStorage)
             migrationManager.runMigrations()
         }
     }

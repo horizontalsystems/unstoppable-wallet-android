@@ -9,13 +9,9 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.NavigationType
-import io.horizontalsystems.walletkit.core.stats.StatEvent
-import io.horizontalsystems.walletkit.core.stats.StatPage
-import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.pin.ConfirmPinPage
 import io.horizontalsystems.walletkit.modules.pin.SetPinPage
 import io.horizontalsystems.walletkit.modules.pin.core.LockGate
-import io.horizontalsystems.walletkit.modules.settings.terms.TermsPage
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -51,23 +47,6 @@ class HSNavigation(
         // during the pop animation) can otherwise drain the stack and crash.
         if (backStack.size > 1) {
             backStack.removeLastOrNull()
-        }
-    }
-
-    fun navigateWithTermsAccepted(
-        screen: HSPage,
-        navigationType: NavigationType,
-        statPageFrom: StatPage,
-        statPageTo: StatPage
-    ) {
-        if (!App.termsManager.allTermsAccepted) {
-            slideFromBottom(TermsPage(TermsPage.Input(screen, statPageFrom, statPageTo, navigationType)))
-        } else {
-            when (navigationType) {
-                NavigationType.SlideFromBottom -> slideFromBottom(screen)
-                NavigationType.SlideFromRight -> slideFromRight(screen)
-            }
-            stat(page = statPageFrom, event = StatEvent.Open(statPageTo))
         }
     }
 

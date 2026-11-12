@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.Caution
-import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.launchSafe
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -59,8 +58,8 @@ data object BackupManagerPage : HSPage() {
                 navigation.removeLastOrNull()
             },
             onRestoreBackup = { jsonString, fileName ->
-                navigation.navigateWithTermsAccepted(
-                    screen = RestoreLocalPage(
+                navigation.slideFromBottom(
+                    RestoreLocalPage(
                         RestoreLocalPage.Input(
                             BackupManagerPage::class,
                             false,
@@ -68,11 +67,9 @@ data object BackupManagerPage : HSPage() {
                             fileName,
                             StatPage.ImportFullFromFiles
                         )
-                    ),
-                    navigationType = NavigationType.SlideFromBottom,
-                    statPageFrom = StatPage.BackupManager,
-                    statPageTo = StatPage.ImportFullFromFiles
+                    )
                 )
+                stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ImportFullFromFiles))
             },
             onCreateBackup = navigation.authorizedAction {
                 navigation.slideFromRight(BackupLocalPage())

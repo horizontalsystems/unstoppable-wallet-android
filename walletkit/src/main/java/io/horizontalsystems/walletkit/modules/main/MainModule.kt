@@ -31,7 +31,6 @@ object MainModule {
                 App.pinComponent,
                 App.rateAppManager,
                 App.backupManager,
-                App.termsManager,
                 App.accountManager,
                 App.releaseNotesManager,
                 App.donationShowManager,

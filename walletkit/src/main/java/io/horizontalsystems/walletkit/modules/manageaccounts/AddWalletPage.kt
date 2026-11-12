@@ -3,7 +3,6 @@ package io.horizontalsystems.walletkit.modules.manageaccounts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -33,20 +32,12 @@ fun AddWalletScreen(navigation: HSNavigation, input: ManageAccountsModule.Input?
     ) {
         AddWalletView(
             onNewWalletClick = {
-                navigation.navigateWithTermsAccepted(
-                    screen = CreateAccountPage(input),
-                    navigationType = NavigationType.SlideFromRight,
-                    statPageFrom = StatPage.Balance,
-                    statPageTo = StatPage.NewWallet
-                )
+                navigation.slideFromRight(CreateAccountPage(input))
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
             },
             onWalletRestoreClick = {
-                navigation.navigateWithTermsAccepted(
-                    screen = ImportWalletPage(input),
-                    navigationType = NavigationType.SlideFromRight,
-                    statPageFrom = StatPage.Balance,
-                    statPageTo = StatPage.ImportWallet
-                )
+                navigation.slideFromRight(ImportWalletPage(input))
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
             },
             onWatchWalletClick = {
                 navigation.slideFromRight(WatchAddressPage(input))

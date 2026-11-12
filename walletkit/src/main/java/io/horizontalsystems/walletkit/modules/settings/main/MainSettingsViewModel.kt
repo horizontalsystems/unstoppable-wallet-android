@@ -5,7 +5,6 @@ import io.horizontalsystems.walletkit.IPinComponent
 import io.horizontalsystems.walletkit.ISystemInfoManager
 import io.horizontalsystems.walletkit.core.IAccountManager
 import io.horizontalsystems.walletkit.core.IBackupManager
-import io.horizontalsystems.walletkit.core.ITermsManager
 import io.horizontalsystems.walletkit.core.ViewModelUiState
 import io.horizontalsystems.walletkit.core.collectSafely
 import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
@@ -19,7 +18,6 @@ import kotlinx.coroutines.launch
 class MainSettingsViewModel(
     private val backupManager: IBackupManager,
     private val systemInfoManager: ISystemInfoManager,
-    private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
     private val wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
@@ -99,12 +97,6 @@ class MainSettingsViewModel(
         }
 
         viewModelScope.launch {
-            termsManager.termsAcceptedSharedFlow.collect {
-                emitState()
-            }
-        }
-
-        viewModelScope.launch {
             wcSessionManager.pendingRequestCountFlow.collect {
                 wcPendingRequestCount = it
                 syncCounter()
@@ -130,7 +122,6 @@ class MainSettingsViewModel(
             walletConnectSessionCount = wcSessionsCount,
             manageWalletShowAlert = !allBackedUp || hasNonStandardAccount,
             securityCenterShowAlert = !isPinSet,
-            aboutAppShowAlert = !termsManager.allTermsAccepted,
             wcCounterType = wcCounterType,
             showPremiumBanner = showPremiumBanner,
             hasSubscription = hasSubscription,
@@ -158,7 +149,6 @@ data class MainSettingUiState(
     val walletConnectSessionCount: Int,
     val manageWalletShowAlert: Boolean,
     val securityCenterShowAlert: Boolean,
-    val aboutAppShowAlert: Boolean,
     val wcCounterType: CounterType?,
     val showPremiumBanner: Boolean,
     val hasSubscription: Boolean,

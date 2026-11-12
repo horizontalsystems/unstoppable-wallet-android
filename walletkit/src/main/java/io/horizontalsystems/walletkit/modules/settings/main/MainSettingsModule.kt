@@ -12,7 +12,6 @@ object MainSettingsModule {
             val viewModel = MainSettingsViewModel(
                 App.backupManager,
                 App.systemInfoManager,
-                App.termsManager,
                 App.pinComponent,
                 App.wcSessionManager,
                 App.wcManager,

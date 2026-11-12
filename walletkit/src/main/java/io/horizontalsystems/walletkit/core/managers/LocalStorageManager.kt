@@ -65,9 +65,7 @@ class LocalStorageManager(
     private val APP_LAUNCH_COUNT = "app_launch_count"
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val BALANCE_HIDDEN = "balance_hidden"
-    private val TERMS_AGREED = "terms_agreed"
     private val PASSKEY_TERMS_ACCEPTED = "passkey_terms_accepted"
-    private val CHECKED_TERMS = "checked_terms"
     private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
@@ -441,12 +439,6 @@ class LocalStorageManager(
             preferences.edit().putString("balanceTotalCoinUid", value).apply()
         }
 
-    override var termsAccepted: Boolean
-        get() = preferences.getBoolean(TERMS_AGREED, false)
-        set(value) {
-            preferences.edit().putBoolean(TERMS_AGREED, value).commit()
-        }
-
     override var simulateFailSwap: SimulateFailSwapMode
         get() = SimulateFailSwapMode.fromString(preferences.getString("simulate-failed-swap", null))
         set(value) {
@@ -463,12 +455,6 @@ class LocalStorageManager(
         get() = preferences.getBoolean(PASSKEY_TERMS_ACCEPTED, false)
         set(value) {
             preferences.edit(commit = true) { putBoolean(PASSKEY_TERMS_ACCEPTED, value) }
-        }
-
-    override var checkedTerms: List<String>
-        get() = preferences.getString(CHECKED_TERMS, null)?.split(",") ?: listOf()
-        set(value) {
-            preferences.edit().putString(CHECKED_TERMS, value.joinToString(",")).apply()
         }
 
     override var currentMarketTab: MarketModule.Tab?

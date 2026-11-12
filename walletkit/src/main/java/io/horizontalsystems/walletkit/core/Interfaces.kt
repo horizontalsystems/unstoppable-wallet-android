@@ -34,7 +34,6 @@ import io.horizontalsystems.walletkit.modules.settings.appearance.AppIcon
 import io.horizontalsystems.walletkit.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.walletkit.modules.settings.privacy.tor.TorStatus
 import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLockInterval
-import io.horizontalsystems.walletkit.modules.settings.terms.TermsModule
 import io.horizontalsystems.walletkit.modules.theme.ThemeType
 import io.horizontalsystems.walletkit.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -93,11 +92,9 @@ interface ILocalStorage {
     var balanceHidden: Boolean
     var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
-    var termsAccepted: Boolean
     var simulateFailSwap: SimulateFailSwapMode
     var showSwapProviderName: Boolean
     var passkeyTermsAccepted: Boolean
-    var checkedTerms: List<String>
     val mainShowedOnceFlow: StateFlow<Boolean>
     var mainShowedOnce: Boolean
     var notificationId: String?
@@ -584,15 +581,6 @@ interface IRateAppManager {
 
 interface ICoinManager {
     fun getToken(query: TokenQuery): Token?
-}
-
-interface ITermsManager {
-    val termsAcceptedSharedFlow: SharedFlow<Boolean>
-    val terms: List<TermsModule.TermType>
-    val allTermsAccepted: Boolean
-    val checkedTermIds: List<String>
-    fun acceptTerms()
-    fun broadcastTermsAccepted(accepted: Boolean)
 }
 
 interface Clearable {

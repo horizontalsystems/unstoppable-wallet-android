@@ -35,7 +35,6 @@ import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
 import io.horizontalsystems.walletkit.core.Caution
 import io.horizontalsystems.walletkit.core.launchSafe
-import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -103,8 +102,8 @@ private fun ImportWalletScreen(
                         BackupFileValidator().validate(jsonString)
 
                         val fileName = context.getFileName(uriNonNull)
-                        navigation.navigateWithTermsAccepted(
-                            screen = RestoreLocalPage(
+                        navigation.slideFromBottom(
+                            RestoreLocalPage(
                                 RestoreLocalPage.Input(
                                     popUpToInclusiveId,
                                     inclusive,
@@ -112,11 +111,9 @@ private fun ImportWalletScreen(
                                     fileName,
                                     StatPage.ImportWalletFromFiles
                                 )
-                            ),
-                            navigationType = NavigationType.SlideFromBottom,
-                            statPageFrom = StatPage.ImportWallet,
-                            statPageTo = StatPage.ImportWalletFromFiles
+                            )
                         )
+                        stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromFiles))
                     }
                 }
             } catch (e: Throwable) {
@@ -155,12 +152,8 @@ private fun ImportWalletScreen(
                     borderTop = false,
                     modifier = Modifier.testTag(TestTags.IMPORT_RECOVERY_PHRASE),
                 ) {
-                    navigation.navigateWithTermsAccepted(
-                        screen = RestoreAccountPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
-                        navigationType = NavigationType.SlideFromRight,
-                        statPageFrom = StatPage.ImportWallet,
-                        statPageTo = StatPage.ImportWalletFromKey
-                    )
+                    navigation.slideFromRight(RestoreAccountPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
+                    stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromKey))
                 }
                 WalletType(
                     icon = painterResource(R.drawable.key_24),
@@ -169,12 +162,8 @@ private fun ImportWalletScreen(
                     borderTop = true,
                     modifier = Modifier.testTag(TestTags.IMPORT_PRIVATE_KEY),
                 ) {
-                    navigation.navigateWithTermsAccepted(
-                        screen = RestoreFromPrivateKeyPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
-                        navigationType = NavigationType.SlideFromRight,
-                        statPageFrom = StatPage.ImportWallet,
-                        statPageTo = StatPage.ImportWalletFromPrivateKey
-                    )
+                    navigation.slideFromRight(RestoreFromPrivateKeyPage(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
+                    stat(page = StatPage.ImportWallet, event = StatEvent.Open(StatPage.ImportWalletFromPrivateKey))
                 }
                 var passkeyEnabled by remember { mutableStateOf(true) }
                 WalletType(

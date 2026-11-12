@@ -11,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
 import io.horizontalsystems.walletkit.core.stats.stat
@@ -37,20 +36,12 @@ fun BalanceNoAccount(navigation: HSNavigation) {
                 icon = painterResource(R.drawable.wallet_add_24),
                 iconTint = ComposeAppTheme.colors.grey,
                 onNewWalletClick = {
-                    navigation.navigateWithTermsAccepted(
-                        screen = CreateAccountPage(),
-                        navigationType = NavigationType.SlideFromRight,
-                        statPageFrom = StatPage.Balance,
-                        statPageTo = StatPage.NewWallet
-                    )
+                    navigation.slideFromRight(CreateAccountPage())
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
                 },
                 onWalletRestoreClick = {
-                    navigation.navigateWithTermsAccepted(
-                        screen = ImportWalletPage(),
-                        navigationType = NavigationType.SlideFromRight,
-                        statPageFrom = StatPage.Balance,
-                        statPageTo = StatPage.ImportWallet
-                    )
+                    navigation.slideFromRight(ImportWalletPage())
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
                 },
                 onWatchWalletClick = {
                     navigation.slideFromRight(WatchAddressPage())

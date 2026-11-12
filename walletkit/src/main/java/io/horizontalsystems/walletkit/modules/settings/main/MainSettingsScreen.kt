@@ -366,7 +366,6 @@ private fun SettingSections(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_info_20,
                 testTag = TestTags.SETTINGS_ABOUT,
-                showAlert = uiState.aboutAppShowAlert,
                 onClick = {
                     navigation.slideFromRight(AboutPage)
 

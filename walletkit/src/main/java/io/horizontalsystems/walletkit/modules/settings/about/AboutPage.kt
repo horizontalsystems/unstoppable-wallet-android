@@ -20,7 +20,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.walletkit.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.walletkit.modules.settings.main.HsSettingCell
-import io.horizontalsystems.walletkit.modules.settings.terms.TermsPage
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
@@ -112,16 +111,12 @@ private fun SettingSections(
                 }
             )
         }, {
+            // The screen this row opened is gone and its replacement is not built yet
             HsSettingCell(
                 R.string.Settings_Terms,
                 R.drawable.ic_terms_20,
                 testTag = TestTags.ABOUT_TERMS,
-                showAlert = viewModel.termsShowAlert,
-                onClick = {
-                    navigation.add(TermsPage())
-
-                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
-                }
+                onClick = {}
             )
         })
     )

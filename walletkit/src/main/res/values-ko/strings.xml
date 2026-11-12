@@ -841,9 +841,6 @@
     <string name="DuressPinSelectAccounts_Description">긴급 상황 모드에서 표시할 지갑을 선택하세요.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">지갑</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">관찰 주소</string>
-    <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">지갑별 복구 문구를 안전하게 백업합니다. 앱이 오작동하는 경우 자금에 다시 액세스할 수 있는 유일한 방법입니다.</string>
-    <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
     <!--Setting_Contact-->
@@ -1592,13 +1589,6 @@
     <string name="SettingsSecurity_SortingBip69Short">결정론적</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <string name="SettingsSubscription_GetPremium">프리미엄 가입</string>
-    <string name="SettingsTerms_LegalObligations">자금의 보안, 사용자의 행위, 그리고 거주 관할 지역 및 전 세계적으로 적용되는 관련 법률 준수에 대한 책임은 전적으로 사용자에게 있습니다.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">수익화 모델의 일환으로, 이 앱은 지갑 내에서 실행되는 DEX 스왑으로부터 소액의 수수료를 받습니다. 이를 통해 벤처 캐피털 자금에 의존하지 않고 독립성과 오픈 소스를 유지할 수 있습니다.</string>
-    <string name="SettingsTerms_OpenSource">이 앱은 검증 가능한 오픈 소스로, 모든 소스 코드를 온라인에 공개하고 있습니다. 위의 모든 내용은 누구나 직접 확인할 수 있습니다.</string>
-    <string name="SettingsTerms_PrivacyNotice">이 앱은 잔액이나 트랜잭션 데이터를 수집하거나 추적하지 않습니다 — 사용자가 몇 명인지조차 알 수 없습니다. 오직 익명 사용 패턴(열린 페이지, 클릭된 버튼 등)만을 추적하여 사용성을 개선합니다. 이는 설정 → 개인정보 보호에서 끌 수 있습니다</string>
-    <string name="SettingsTerms_TransactionsIrreversible">블록체인 트랜잭션은 되돌릴 수 없습니다. 항상 확인 전에 트랜잭션 세부 정보를 검토하세요.</string>
-    <string name="SettingsTerms_UserResponsibility">계속 진행함으로써, 자금의 보안과 법적 준수에 대한 최종 책임이 사용자 본인에게 있음을 인정합니다.</string>
-    <string name="SettingsTerms_WeNotHoldingYourAssets">당사는 사용자의 자산을 보관하지 않으며, private key에 접근하거나 사용자를 대신해 트랜잭션을 실행하지 않습니다. 이 앱은 중개, 거래소, 수탁, 에스크로 또는 자금 이체 서비스를 제공하지 않습니다. 모든 트랜잭션은 사용자가 직접 퍼블릭 블록체인 네트워크로 생성, 서명 및 전송합니다.</string>
     <string name="Settings_AutoLock_Description">선택한 시간이 지나면 앱을 자동으로 잠급니다.</string>
     <string name="Settings_LaunchScreen_Tip">앱이 기본적으로 열릴 화면을 선택하세요.</string>
     <string name="Settings_VipSupport">우선 지원</string>

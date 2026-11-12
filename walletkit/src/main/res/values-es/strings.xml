@@ -1020,16 +1020,6 @@
     <string name="DuressPinSelectAccounts_Description">Seleccione las carteras que se mostrarán en Modo Duración.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">MONEDEROS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">VER MONEDEROS</string>
-    <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">Copia de seguridad frases de recuperación para cada cartera. Es la única manera de recuperar el acceso a los fondos si la aplicación no funciona correctamente.</string>
-    <string name="SettingsTerms_DisablingPin">Desactivar el PIN de desbloqueo (código) en el smartphone elimina todas las carteras de la aplicación. Se necesitarán frases de recuperación para restaurar el acceso a los fondos.</string>
-    <string name="SettingsTerms_PrivacyNotice">La aplicación no espía ni recopila datos sobre tus balances o transacciones - ni siquiera sabemos cuántas personas lo utilizan. Solo registra patrones de uso anónimos (páginas abiertas, botones pulsados) para mejorar la usabilidad. Puede desactivarlo en Ajustes → Privacidad.</string>
-    <string name="SettingsTerms_WeNotHoldingYourAssets">No tenemos sus activos, accedemos a sus claves privadas ni ejecutamos transacciones en su nombre. La aplicación no proporciona servicios de corretaje, intercambio, custodia, escrow o transmisión de dinero. Todas las transacciones son iniciadas, firmadas y transmitidas directamente por usted a redes públicas de blockchain.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">Como parte de su modelo de monetización, la aplicación gana pequeñas comisiones por los swaps DEX ejecutados dentro de la cartera. Esto nos ayuda a mantenernos independientes, de código abierto y libres de dinero VC.</string>
-    <string name="SettingsTerms_TransactionsIrreversible">Las transacciones en la cadena de bloques son irreversibles. Revise siempre los detalles de la transacción antes de confirmar.</string>
-    <string name="SettingsTerms_OpenSource">La aplicación es de código abierto verificable, con todo el código fuente publicado en línea. Todo lo indicado anteriormente puede ser verificado públicamente por cualquiera.</string>
-    <string name="SettingsTerms_LegalObligations">Usted es el único responsable de la seguridad de sus fondos, su conducta y el cumplimiento de las leyes aplicables en su jurisdicción, así como en todo el mundo.</string>
-    <string name="SettingsTerms_UserResponsibility">Al proceder, usted reconoce que la seguridad de sus fondos y el cumplimiento legal son en última instancia su responsabilidad.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
     <string name="SettingsShare_Text">Ser imparable</string>

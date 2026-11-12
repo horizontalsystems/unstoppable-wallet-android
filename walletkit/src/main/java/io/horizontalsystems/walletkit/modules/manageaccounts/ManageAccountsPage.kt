@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.NavigationType
 import io.horizontalsystems.walletkit.core.stats.StatEntity
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -98,23 +97,15 @@ fun ManageAccountsScreen(navigation: HSNavigation, mode: ManageAccountsModule.Mo
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
                         onClick = {
-                            navigation.navigateWithTermsAccepted(
-                                screen = CreateAccountPage(args),
-                                navigationType = NavigationType.SlideFromRight,
-                                statPageFrom = StatPage.ManageWallets,
-                                statPageTo = StatPage.NewWallet
-                            )
+                            navigation.slideFromRight(CreateAccountPage(args))
+                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
                         }
                     ),
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_ExistingWallet),
                         onClick = {
-                            navigation.navigateWithTermsAccepted(
-                                screen = ImportWalletPage(args),
-                                navigationType = NavigationType.SlideFromRight,
-                                statPageFrom = StatPage.ManageWallets,
-                                statPageTo = StatPage.ImportWallet
-                            )
+                            navigation.slideFromRight(ImportWalletPage(args))
+                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
                         }
                     ),
                     MenuItem(

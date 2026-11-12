@@ -1019,16 +1019,6 @@
     <string name="DuressPinSelectAccounts_Description">选择将显示在时尚模式中的钱包。</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">战利品</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">观看战利品</string>
-    <!--Setting_Terms-->
-    <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
-    <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
-    <string name="SettingsTerms_PrivacyNotice">应用没有间接或收集关于您的余额或交易的数据 — — 我们甚至不知道有多少人使用它。 它只跟踪匿名使用模式(打开的页面、点击的按钮)以提高可用性。您可以在设置 -&gt; 隐私中关闭此功能。</string>
-    <string name="SettingsTerms_WeNotHoldingYourAssets">我们不持有您的资产，访问您的私人密钥，或代表您执行交易。 该应用不提供经纪、交换、保管、托管或货币传输服务。 所有交易都是由您发起、签名和直接向公共区块链网络广播的。</string>
-    <string name="SettingsTerms_MonetizationDisclosure">作为其货币化模型的一部分，应用程序从钱包内执行的DEX交换器中赚取小佣金。 这有助于我们保持独立和公开的来源，并且没有VC资金。</string>
-    <string name="SettingsTerms_TransactionsIrreversible">区块链交易是不可逆的。确认前总是审查交易细节。</string>
-    <string name="SettingsTerms_OpenSource">应用程序是可验证的开源，所有源代码都在线发布。上面所述的一切都可以由任何人公开验证。</string>
-    <string name="SettingsTerms_LegalObligations">你完全负责贵国资金的安全、你的行为以及在贵国管辖范围内和全球范围内遵守适用法律的情况。</string>
-    <string name="SettingsTerms_UserResponsibility">通过继续工作，你承认你们的资金安全和法律上的遵守最终是你们的责任。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">不可阻止的</string>

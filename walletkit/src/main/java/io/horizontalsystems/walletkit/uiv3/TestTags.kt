@@ -21,6 +21,8 @@ object TestTags {
     const val ONBOARDING_EXISTING_WALLET = "onboarding_existing_wallet"
     const val ONBOARDING_WATCH_WALLET = "onboarding_watch_wallet"
 
+    // The terms screen these named is gone. The shared flows still select
+    // them, so they stay declared until the flows stop accepting terms.
     fun termsCheck(index: Int) = "terms_check_$index"
     const val TERMS_NEXT = "terms_next"
 
