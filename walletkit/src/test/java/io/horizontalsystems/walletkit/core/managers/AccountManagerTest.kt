@@ -71,6 +71,17 @@ class AccountManagerTest {
     }
 
     @Test
+    fun save_failing_reportsNothing() {
+        val fixture = Fixture(failOnSave = setOf("a"))
+
+        assertThrows(IllegalStateException::class.java) {
+            fixture.manager.save(account("a"))
+        }
+
+        assertEquals(0, fixture.walletsAdded)
+    }
+
+    @Test
     fun import_reportsWalletAdded() {
         val fixture = Fixture()
 

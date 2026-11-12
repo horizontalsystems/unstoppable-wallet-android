@@ -286,9 +286,10 @@ private fun WelcomeContent(
                     }
                 }
 
-                if (!tailShown) {
+                if (!consentShown) {
                     // Hiding the buttons leaves them tappable, so this takes the
-                    // taps until they appear
+                    // taps. It stays until the consent line appears, since a tap
+                    // on a button agrees to what that line says.
                     Box(
                         Modifier
                             .matchParentSize()

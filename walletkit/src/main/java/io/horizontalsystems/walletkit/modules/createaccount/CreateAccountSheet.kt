@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,37 +46,42 @@ data class CreateAccountSheet(val input: ManageAccountsModule.Input) : HSBottomS
                 onCloseClick = navigation::removeLastOrNull,
             )
 
-            WalletTypeGroup(
-                modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 64.dp)
+            // Large text or a short screen can leave the rows taller than the sheet
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 64.dp)
             ) {
-                WalletType(
-                    icon = painterResource(R.drawable.touchid_24),
-                    title = stringResource(R.string.CreateNewWallet_Passkey).hs,
-                    subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
-                    borderTop = false,
-                    iconSize = 32,
-                    iconTint = ComposeAppTheme.colors.orange,
-                    modifier = Modifier.testTag(TestTags.CREATE_TYPE_PASSKEY),
-                ) {
-                    navigation.removeLastOrNull()
-                    if (!App.localStorage.passkeyTermsAccepted) {
-                        navigation.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
-                    } else {
-                        navigation.slideFromRight(CreateAccountPasskeyPage(input))
+                WalletTypeGroup {
+                    WalletType(
+                        icon = painterResource(R.drawable.touchid_24),
+                        title = stringResource(R.string.CreateNewWallet_Passkey).hs,
+                        subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
+                        borderTop = false,
+                        iconSize = 32,
+                        iconTint = ComposeAppTheme.colors.orange,
+                        modifier = Modifier.testTag(TestTags.CREATE_TYPE_PASSKEY),
+                    ) {
+                        navigation.removeLastOrNull()
+                        if (!App.localStorage.passkeyTermsAccepted) {
+                            navigation.slideFromRight(PassKeyTermsPage(CreateAccountPasskeyPage(input)))
+                        } else {
+                            navigation.slideFromRight(CreateAccountPasskeyPage(input))
+                        }
                     }
-                }
 
-                WalletType(
-                    icon = painterResource(R.drawable.list_24),
-                    title = stringResource(R.string.CreateNewWallet_Standard).hs,
-                    subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
-                    borderTop = true,
-                    iconSize = 32,
-                    iconTint = ComposeAppTheme.colors.orange,
-                    modifier = Modifier.testTag(TestTags.CREATE_TYPE_STANDARD),
-                ) {
-                    navigation.removeLastOrNull()
-                    navigation.slideFromRight(CreateAccountStandardPage(input))
+                    WalletType(
+                        icon = painterResource(R.drawable.list_24),
+                        title = stringResource(R.string.CreateNewWallet_Standard).hs,
+                        subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
+                        borderTop = true,
+                        iconSize = 32,
+                        iconTint = ComposeAppTheme.colors.orange,
+                        modifier = Modifier.testTag(TestTags.CREATE_TYPE_STANDARD),
+                    ) {
+                        navigation.removeLastOrNull()
+                        navigation.slideFromRight(CreateAccountStandardPage(input))
+                    }
                 }
             }
         }
