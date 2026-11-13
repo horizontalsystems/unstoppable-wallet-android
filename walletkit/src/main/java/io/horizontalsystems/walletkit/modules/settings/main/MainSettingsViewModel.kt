@@ -11,7 +11,6 @@ import io.horizontalsystems.walletkit.core.providers.IAppConfigProvider
 import io.horizontalsystems.walletkit.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.WCSessionManager
-import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
@@ -42,8 +41,6 @@ class MainSettingsViewModel(
             return appVersion
         }
 
-    val companyWebPage = appConfigProvider.companyWebPageLink
-
     val walletConnectSupportState: WCManager.SupportState
         get() = wcManager.getWalletConnectSupportState()
 
@@ -69,7 +66,6 @@ class MainSettingsViewModel(
     private var wcCounterType: CounterType? = null
     private var wcSessionsCount = walletConnectSessionCount
     private var wcPendingRequestCount = 0
-    private var showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
     private var hasSubscription = false
 
     init {
@@ -105,7 +101,6 @@ class MainSettingsViewModel(
 
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
                 hasSubscription = it != null
                 emitState()
             }
@@ -123,7 +118,6 @@ class MainSettingsViewModel(
             manageWalletShowAlert = !allBackedUp || hasNonStandardAccount,
             securityCenterShowAlert = !isPinSet,
             wcCounterType = wcCounterType,
-            showPremiumBanner = showPremiumBanner,
             hasSubscription = hasSubscription,
             donateEnabled = donateEnabled,
         )
@@ -150,7 +144,6 @@ data class MainSettingUiState(
     val manageWalletShowAlert: Boolean,
     val securityCenterShowAlert: Boolean,
     val wcCounterType: CounterType?,
-    val showPremiumBanner: Boolean,
     val hasSubscription: Boolean,
     val donateEnabled: Boolean,
 )

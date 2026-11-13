@@ -1371,11 +1371,6 @@
     <string name="SettingsSecurity_AutoLock_After5Min">5 دقیقه</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 دقیقه</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 دقیقه</string>
-    <string name="SettingsBanner_Premium">Premium</string>
-    <string name="SettingsBanner_PremiumBannerDescription">تجربه خود را با امکانات Premium ارتقا دهید!</string>
-    <string name="SettingsBanner_PremiumTryFee">امتحان رایگان</string>
-    <string name="SettingsBanner_GameDescription">آزمون‌ها را بگذرانید، وظایف را انجام دهید و توکن کسب کنید!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">بخشی از آینده امور مالی خصوصی باشید</string>
     <string name="SettingsBanner_SupportTheProject">از پروژه حمایت کنید!</string>
     <string name="SettingsBanner_DonateTitle">از جنبش Unstoppable حمایت کنید</string>
     <string name="SettingsBanner_DonateSubtitle">بخشی از آینده‌ی مالی خصوصی باشید</string>
@@ -1399,7 +1394,6 @@
     <string name="SettingsSubscription_RestorePurchase">بازیابی خرید</string>
     <string name="SettingsSubscription_ManageSubscription">مدیریت اشتراک</string>
     <string name="Period_Days">%s روز</string>
-    <string name="Premium_TitleForDroid">Premium (رایگان برای F-Droid)</string>
     <string name="Premium_Title">Premium</string>
     <string name="Premium_EnjoyFreePeriod">%s اول را رایگان استفاده کنید.</string>
     <string name="Premium_CancelSubscriptionInfo">می‌توانید اشتراک Play Store خود را هر زمان لغو کنید.</string>

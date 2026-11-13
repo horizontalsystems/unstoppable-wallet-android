@@ -597,8 +597,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 saat</string>
     <!--Address Checker-->
     <!--Banners-->
-    <string name="SettingsBanner_PremiumBannerDescription">Premium özelliklerle deneyiminizi yükseltin!</string>
-    <string name="SettingsBanner_PremiumTryFee">ÜCRETSİZ Deneyin</string>
     <!--Why Donate Page-->
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Aktif</string>
@@ -1500,8 +1498,6 @@
     <string name="Send_Address_SanctionCheck">Yaptırım Kontrolü</string>
     <string name="Send_UnexpectedError">Beklenmeyen hata</string>
     <string name="Send_UnexpectedError_Description">İşleminiz gönderilirken bir hata oluştu. Lütfen tekrar deneyin veya hata kodunu kopyalayıp destek ekibiyle iletişime geçin.</string>
-    <string name="SettingsBanner_GameDescription">Testleri geçin, görevleri tamamlayın ve token kazanın!</string>
-    <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsLaunchScreen_Auto">Oto</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">Şüpheli İşlemleri Gizle</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">Kimlik avı saldırılarında sıkça kullanılan şüpheli küçük transferleri gizler.</string>
@@ -1643,7 +1639,6 @@
     <string name="MoneroNodeSettings_Trusted">Güvenilir</string>
     <string name="MoneroNodeSettings_TrustedDescription">Güvenilir düğüm — cüzdan seçili düğüme güvenir ve ek doğrulama yapmadan onun verilerini kullanır.\n\nAçık → işlemler yayınlandığında anında Beklemede olarak görünür (daha hızlı senkronizasyon, ancak daha düşük gizlilik ve düğüme bağımlılık).\n\nKapalı → işlemler yalnızca ağdan onay alındıktan sonra gösterilir (daha yavaş, ancak daha güvenli ve daha gizli).</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">%33 TASARRUF</string>
-    <string name="Premium_TitleForDroid">Premium (F-Droid için Ücretsiz)</string>
     <string name="Privacy_Information">Unstoppable, bakiyeleriniz veya cüzdan adresleriniz gibi kişisel verileri toplamaz. Uygulamayı geliştirmek için yalnızca anonim veriler kullanırız.</string>
     <string name="PrivateKeys_TronPrivateKeyDescription">Bu cüzdandaki TRON ağındaki varlıklar üzerinde tam kontrol sağlar.</string>
     <string name="PublicKeys_TronAddress_Description">TRON blok zincirinde varlık tutan cüzdanın salt okunur izlenmesine olanak tanır.</string>
@@ -1660,7 +1655,6 @@
     <string name="Send_Confirmation_Burn">Yakma</string>
     <string name="Send_Confirmation_Mint">Basım</string>
     <string name="Send_Fee_Info">Bu işlemin blok zincirinde işlenmesinin tahmini maliyeti.</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Özel finansın geleceğinin bir parçası olun</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable hareketine katılarak açık ve özel finansı savunmuş olursunuz:</string>
     <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet\'ı destekleyerek büyümemize, gelişmemize ve bağımsız kalmamıza yardımcı olursunuz.</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Her türlü destek önemlidir.</string>

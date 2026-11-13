@@ -4,17 +4,17 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -29,14 +29,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.walletkit.BuildConfig
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.App
@@ -56,37 +60,33 @@ import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.settings.about.AboutPage
 import io.horizontalsystems.walletkit.modules.settings.appearance.AppearancePage
-import io.horizontalsystems.walletkit.modules.settings.banners.DonateBanner
-import io.horizontalsystems.walletkit.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.walletkit.modules.settings.donate.DonateTokenSelectPage
-import io.horizontalsystems.walletkit.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.walletkit.modules.settings.faq.FaqListPage
 import io.horizontalsystems.walletkit.modules.settings.labs.UnstoppableLabsPage
-import io.horizontalsystems.walletkit.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.walletkit.modules.settings.privacy.PrivacySettingsPage
 import io.horizontalsystems.walletkit.modules.settings.security.SecuritySettingsPage
 import io.horizontalsystems.walletkit.modules.settings.subscription.SubscriptionPage
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.walletkit.modules.walletconnect.WCAccountTypeNotSupportedSheet
 import io.horizontalsystems.walletkit.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.walletkit.modules.walletconnect.WCManager
 import io.horizontalsystems.walletkit.modules.walletconnect.list.WCListPage
 import io.horizontalsystems.walletkit.ui.compose.components.AppBar
-import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
-import io.horizontalsystems.walletkit.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
-import io.horizontalsystems.walletkit.ui.compose.components.PremiumHeader
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
-import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
-import io.horizontalsystems.dapp.core.DAppManager
-import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.components.Section
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.walletkit.uiv3.components.cell.HSString
+import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
+import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 
 @Composable
 fun SettingsScreen(
@@ -106,18 +106,21 @@ fun SettingsScreen(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .windowInsetsPadding(WindowInsets.navigationBars)
+                    // The tab bar is drawn over the bottom of this screen
+                    .padding(top = 16.dp, bottom = TabBarHeight + 36.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
                 SettingSections(
                     viewModel = viewModel,
                     navigation = navigation,
-                    )
-                SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
-                VSpacer(70.dp)
+                )
+                SettingsFooter(viewModel.appVersion)
             }
         }
     }
 }
+
+private val TabBarHeight = 56.dp
 
 @Composable
 private fun SettingSections(
@@ -126,55 +129,13 @@ private fun SettingSections(
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
-    val isFDroidBuild = io.horizontalsystems.walletkit.core.App.appConfigProvider.fdroidBuild
+    val isFDroidBuild = App.appConfigProvider.fdroidBuild
 
-    val banners = buildList<@Composable () -> Unit> {
-        if (uiState.showPremiumBanner) {
-            add {
-                SubscriptionBanner(
-                    onClick = {
-                        navigation.slideFromBottom(BuySubscriptionHavHostPage)
-                        stat(
-                            page = StatPage.Settings,
-                            event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
-                        )
-                    }
-                )
-            }
-        }
-        if (isFDroidBuild) {
-            add {
-                DonateBanner(
-                    onClick = {
-                        navigation.slideFromBottom(WhyDonatePage)
-                    }
-                )
-            }
-        }
-    }
-
-    BannerCarousel(banners = banners)
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.UnstoppableLabs_Title,
-                R.drawable.flask_24,
-                iconTint = ComposeAppTheme.colors.orange,
-                onClick = {
-                    navigation.slideFromRight(UnstoppableLabsPage)
-                }
-            )
-        }
-    )
-
-    VSpacer(24.dp)
-
-    CellUniversalLawrenceSection(
-        listOfNotNull({
-            HsSettingCell(
-                R.string.SettingsSecurity_ManageKeys,
-                R.drawable.wallet_24,
+    SettingsSection {
+        cell {
+            SettingsCell(
+                title = R.string.SettingsSecurity_ManageKeys,
+                icon = R.drawable.wallet_24,
                 testTag = TestTags.SETTINGS_MANAGE_WALLETS,
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
@@ -185,10 +146,51 @@ private fun SettingSections(
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ManageWallets))
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.BlockchainSettings_Title,
-                R.drawable.box_24,
+        }
+    }
+
+    SettingsSection {
+        cell {
+            SettingsCell(
+                title = R.string.Settings_SecurityCenter,
+                icon = R.drawable.shield_24,
+                testTag = TestTags.SETTINGS_SECURITY,
+                showAlert = uiState.securityCenterShowAlert,
+                onClick = {
+                    navigation.slideFromRight(SecuritySettingsPage)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
+                }
+            )
+        }
+        cell {
+            SettingsCell(
+                title = R.string.Settings_Privacy,
+                icon = R.drawable.lock_24,
+                testTag = TestTags.SETTINGS_PRIVACY,
+                onClick = {
+                    navigation.slideFromRight(PrivacySettingsPage)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
+                }
+            )
+        }
+        cell {
+            SettingsCell(
+                title = R.string.Settings_AppSettings,
+                icon = R.drawable.uw_logo_24,
+                testTag = TestTags.SETTINGS_APP_SETTINGS,
+                onClick = {
+                    navigation.slideFromRight(AppearancePage)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
+                }
+            )
+        }
+        cell {
+            SettingsCell(
+                title = R.string.BlockchainSettings_Title,
+                icon = R.drawable.box_24,
                 testTag = TestTags.SETTINGS_BLOCKCHAIN,
                 onClick = {
                     navigation.slideFromRight(BlockchainSettingsPage)
@@ -199,36 +201,20 @@ private fun SettingSections(
                     )
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.Settings_SecurityCenter,
-                R.drawable.shield_24,
-                testTag = TestTags.SETTINGS_SECURITY,
-                showAlert = uiState.securityCenterShowAlert,
-                onClick = {
-                    navigation.slideFromRight(SecuritySettingsPage)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Privacy,
-                R.drawable.lock_24,
-                testTag = TestTags.SETTINGS_PRIVACY,
-                onClick = {
-                    navigation.slideFromRight(PrivacySettingsPage)
-
-                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
-                }
-            )
-        }, if (DAppManager.isAvailable) {
-            {
-                HsSettingCell(
-                    R.string.DAppConnection_Title,
-                    R.drawable.link_24,
-                    value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
-                    counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
+        }
+        if (DAppManager.isAvailable) {
+            cell {
+                SettingsCell(
+                    title = R.string.DAppConnection_Title,
+                    icon = R.drawable.link_24,
+                    testTag = TestTags.SETTINGS_DAPP_CONNECTION,
+                    value = when (val counter = uiState.wcCounterType) {
+                        is MainSettingsModule.CounterType.PendingRequestCounter -> {
+                            counter.number.toString().hs(color = ComposeAppTheme.colors.lucian)
+                        }
+                        is MainSettingsModule.CounterType.SessionCounter -> counter.number.toString().hs
+                        null -> null
+                    },
                     onClick = {
                         when (val state = viewModel.walletConnectSupportState) {
                             WCManager.SupportState.Supported -> {
@@ -253,93 +239,125 @@ private fun SettingSections(
                     }
                 )
             }
-        } else {
-            null
         }
-        )
-    )
+        cell {
+            SettingsCell(
+                title = R.string.BackupManager_Title,
+                icon = R.drawable.cloud_24,
+                testTag = TestTags.SETTINGS_BACKUP_MANAGER,
+                onClick = {
+                    navigation.slideFromRight(BackupManagerPage)
 
-    VSpacer(24.dp)
-
-    CellUniversalLawrenceSection(
-        buildList {
-            add {
-                HsSettingCell(
-                    R.string.Contacts,
-                    R.drawable.user_24,
-                    testTag = TestTags.SETTINGS_CONTACTS,
-                    onClick = {
-                        navigation.slideFromRight(
-                            ContactsRouterPage(ContactsRouterPage.Input(Mode.Full))
-                        )
-
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
-                    }
-                )
-            }
-        }
-    )
-
-    VSpacer(24.dp)
-
-    CellUniversalLawrenceSection(
-        buildList {
-            add {
-                HsSettingCell(
-                    R.string.Settings_AppSettings,
-                    R.drawable.uw_logo_24,
-                    testTag = TestTags.SETTINGS_APP_SETTINGS,
-                    onClick = {
-                        navigation.slideFromRight(AppearancePage)
-
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
-                    }
-                )
-            }
-            if (!io.horizontalsystems.walletkit.core.App.appConfigProvider.fdroidBuild) {
-                add {
-                    HsSettingCell(
-                        R.string.Settings_Subscription,
-                        R.drawable.premium_24,
-                        value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
-                        onClick = {
-                            navigation.slideFromRight(SubscriptionPage)
-                        }
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.Open(StatPage.BackupManager)
                     )
                 }
-            }
+            )
+        }
+    }
 
-            add {
-                HsSettingCell(
-                    R.string.BackupManager_Title,
-                    R.drawable.file_24,
-                    testTag = TestTags.SETTINGS_BACKUP_MANAGER,
+    SettingsSection {
+        cell {
+            SettingsCell(
+                title = R.string.Contacts,
+                icon = R.drawable.user_24,
+                testTag = TestTags.SETTINGS_CONTACTS,
+                onClick = {
+                    navigation.slideFromRight(
+                        ContactsRouterPage(ContactsRouterPage.Input(Mode.Full))
+                    )
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
+                }
+            )
+        }
+    }
+
+    if (!isFDroidBuild) {
+        SettingsSection {
+            cell {
+                SettingsCell(
+                    title = R.string.Settings_Subscription,
+                    icon = R.drawable.premium_24,
+                    testTag = TestTags.SETTINGS_SUBSCRIPTION,
+                    value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active).hs else null,
                     onClick = {
-                        navigation.slideFromRight(BackupManagerPage)
-
-                        stat(
-                            page = StatPage.Settings,
-                            event = StatEvent.Open(StatPage.BackupManager)
-                        )
+                        navigation.slideFromRight(SubscriptionPage)
                     }
                 )
             }
         }
-    )
+    }
 
-    VSpacer(4.dp)
+    SettingsSection {
+        cell {
+            SettingsCell(
+                title = R.string.SettingsAboutApp_Title,
+                icon = R.drawable.info_24,
+                testTag = TestTags.SETTINGS_ABOUT,
+                onClick = {
+                    navigation.slideFromRight(AboutPage)
 
-    if (isFDroidBuild) {
-        PremiumHeader(R.string.Premium_TitleForDroid)
-    } else {
-        PremiumHeader()
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
+                }
+            )
+        }
+        cell {
+            SettingsCell(
+                title = R.string.Settings_RateUs,
+                icon = R.drawable.star_24,
+                testTag = TestTags.SETTINGS_RATE_US,
+                onClick = {
+                    RateAppManager.openPlayMarket(context)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.RateUs))
+                }
+            )
+        }
+        cell {
+            SettingsCell(
+                title = R.string.Settings_ShareThisWallet,
+                icon = R.drawable.arrow_out_24,
+                testTag = TestTags.SETTINGS_TELL_FRIENDS,
+                onClick = {
+                    shareAppLink(uiState.appWebPageLink, context)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
+                }
+            )
+        }
+        cell {
+            SettingsCell(
+                title = R.string.Settings_Faq,
+                icon = R.drawable.message_24,
+                testTag = TestTags.SETTINGS_FAQ,
+                onClick = {
+                    navigation.slideFromRight(FaqListPage)
+                }
+            )
+        }
+    }
+
+    SettingsSection {
+        cell {
+            SettingsCell(
+                title = R.string.UnstoppableLabs_Title,
+                icon = R.drawable.flask_24,
+                testTag = TestTags.SETTINGS_LABS,
+                onClick = {
+                    navigation.slideFromRight(UnstoppableLabsPage)
+                }
+            )
+        }
     }
 
     SectionPremiumUniversalLawrence {
-        HsSettingCell(
-            title = if(isFDroidBuild) R.string.Settings_Support else R.string.Settings_VipSupport,
-            icon = R.drawable.ic_support_yellow_24,
+        SettingsCell(
+            title = if (isFDroidBuild) R.string.Settings_Support else R.string.Settings_VipSupport,
+            icon = R.drawable.support_24,
             iconTint = ComposeAppTheme.colors.orange,
+            testTag = TestTags.SETTINGS_SUPPORT,
             onClick = {
                 if (isFDroidBuild) {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
@@ -357,59 +375,12 @@ private fun SettingSections(
         )
     }
 
-
-    VSpacer(24.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.SettingsAboutApp_Title,
-                R.drawable.ic_info_20,
-                testTag = TestTags.SETTINGS_ABOUT,
-                onClick = {
-                    navigation.slideFromRight(AboutPage)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_RateUs,
-                R.drawable.star_24,
-                onClick = {
-                    RateAppManager.openPlayMarket(context)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.RateUs))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_ShareThisWallet,
-                R.drawable.ic_share_24,
-                onClick = {
-                    shareAppLink(uiState.appWebPageLink, context)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Faq,
-                R.drawable.message_24,
-                onClick = {
-                    navigation.slideFromRight(FaqListPage)
-                }
-            )
-        })
-    )
-
-    VSpacer(24.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.Settings_Telegram,
-                R.drawable.ic_telegram_24,
+    SettingsSection {
+        cell {
+            SettingsCell(
+                title = R.string.Settings_Telegram,
+                icon = R.drawable.telegram_logo_24,
+                testTag = TestTags.SETTINGS_TELEGRAM,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
 
@@ -419,27 +390,28 @@ private fun SettingSections(
                     )
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Twitter,
-                R.drawable.x_logo_24,
+        }
+        cell {
+            SettingsCell(
+                title = R.string.Settings_Twitter,
+                icon = R.drawable.x_logo_24,
+                testTag = TestTags.SETTINGS_TWITTER,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTwitter))
                 }
             )
-        })
-    )
+        }
+    }
 
     if (uiState.donateEnabled) {
-        VSpacer(24.dp)
-
-        CellUniversalLawrenceSection(
-            listOf {
-                HsSettingCell(
-                    R.string.Settings_Donate,
-                    R.drawable.ic_heart_24,
+        SettingsSection {
+            cell {
+                SettingsCell(
+                    title = R.string.Settings_Donate,
+                    icon = R.drawable.ic_heart_24,
+                    testTag = TestTags.SETTINGS_DONATE,
                     onClick = {
                         navigation.slideFromRight(DonateTokenSelectPage)
 
@@ -447,16 +419,12 @@ private fun SettingSections(
                     }
                 )
             }
-        )
+        }
     }
 
     if (BuildConfig.DEBUG) {
-        VSpacer(24.dp)
-
         DebugSettingsSection()
     }
-
-    VSpacer(32.dp)
 }
 
 @Composable
@@ -514,102 +482,103 @@ private fun DebugSettingsSection() {
     )
 }
 
-@Composable
-fun HsSettingCell(
-    @StringRes title: Int,
-    @DrawableRes icon: Int,
-    iconTint: Color? = null,
-    value: String? = null,
-    counterBadge: String? = null,
-    showAlert: Boolean = false,
-    testTag: String? = null,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
-        onClick = onClick
-    ) {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            painter = painterResource(id = icon),
-            contentDescription = null,
-            tint = iconTint ?: ComposeAppTheme.colors.grey
-        )
-        body_leah(
-            text = stringResource(title),
-            maxLines = 1,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-        Spacer(Modifier.weight(1f))
+private class SettingsSectionScope {
+    val cells = mutableListOf<@Composable () -> Unit>()
 
-        if (counterBadge != null) {
-            BadgeText(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                text = counterBadge
-            )
-        } else if (value != null) {
-            subhead1_grey(
-                text = value,
-                maxLines = 1,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-        }
-
-        if (showAlert) {
-            Image(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(id = R.drawable.ic_attention_red_20),
-                contentDescription = null,
-            )
-            Spacer(Modifier.width(12.dp))
-        }
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-        )
+    fun cell(content: @Composable () -> Unit) {
+        cells.add(content)
     }
 }
 
 @Composable
-private fun SettingsFooter(appVersion: String, companyWebPage: String) {
-    val context = LocalContext.current
+private fun SettingsSection(content: SettingsSectionScope.() -> Unit) {
+    val cells = SettingsSectionScope().apply(content).cells
+
+    Section {
+        cells.forEachIndexed { index, cell ->
+            BoxBordered(top = index != 0) {
+                cell()
+            }
+        }
+    }
+}
+
+@Composable
+private fun SettingsCell(
+    @StringRes title: Int,
+    @DrawableRes icon: Int,
+    testTag: String,
+    iconTint: Color = ComposeAppTheme.colors.grey,
+    value: HSString? = null,
+    showAlert: Boolean = false,
+    onClick: () -> Unit
+) {
+    CellPrimary(
+        modifier = Modifier
+            .heightIn(min = 64.dp)
+            .testTag(testTag),
+        left = {
+            CellLeftImage(
+                painter = painterResource(icon),
+                type = ImageType.Rectangle,
+                size = 24,
+                colorFilter = ColorFilter.tint(iconTint),
+            )
+        },
+        middle = {
+            CellMiddleInfo(title = stringResource(title).hs)
+        },
+        right = {
+            CellRightNavigation(
+                subtitle = value,
+                icon = if (showAlert) painterResource(R.drawable.warning_filled_24) else null,
+                iconTint = ComposeAppTheme.colors.lucian,
+            )
+        },
+        onClick = onClick,
+    )
+}
+
+@Composable
+private fun SettingsFooter(appVersion: String) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        caption_grey(
-            text = stringResource(
-                R.string.Settings_InfoTitleWithVersion,
-                appVersion
-            ).uppercase()
-        )
-        HsDivider(
-            modifier = Modifier
-                .width(100.dp)
-                .padding(top = 8.dp, bottom = 4.5.dp)
-            )
         Text(
-            text = stringResource(R.string.Settings_InfoSubtitle),
-            style = ComposeAppTheme.typography.micro,
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp),
+            text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion) +
+                    "\n" + stringResource(R.string.Premium_ApprovedBy),
+            style = ComposeAppTheme.typography.caption,
             color = ComposeAppTheme.colors.grey,
+            textAlign = TextAlign.Center,
         )
-        Image(
+        Row(
             modifier = Modifier
-                .padding(top = 32.dp)
-                .size(32.dp)
-                .clickable {
-                    LinkHelper.openLinkInAppBrowser(context, companyWebPage)
-                },
-            painter = painterResource(id = R.drawable.ic_company_logo),
-            contentDescription = null,
-        )
-        caption_grey(
-            modifier = Modifier.padding(top = 12.dp, bottom = 32.dp),
-            text = stringResource(R.string.Settings_CompanyName),
-        )
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .height(48.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            listOf(
+                R.drawable.bitcoin_logo,
+                R.drawable.wallet_scrutiny_logo,
+                R.drawable.certik_logo,
+            ).forEach { logo ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(logo),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey,
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -628,32 +597,30 @@ private fun shareAppLink(appLink: String, context: Context) {
 
 @Preview
 @Composable
-private fun previewSettingsScreen() {
+private fun Preview_SettingsSection() {
     ComposeAppTheme {
-        Column {
-            CellSingleLineLawrenceSection(
-                listOf {
-                    HsSettingCell(
-                        R.string.Settings_Faq,
-                        R.drawable.ic_faq_20,
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            SettingsSection {
+                cell {
+                    SettingsCell(
+                        title = R.string.Settings_SecurityCenter,
+                        icon = R.drawable.shield_24,
+                        testTag = TestTags.SETTINGS_SECURITY,
                         showAlert = true,
                         onClick = { }
                     )
                 }
-            )
-
-            Spacer(Modifier.height(32.dp))
-
-            CellSingleLineLawrenceSection(
-                listOf {
-                    HsSettingCell(
-                        R.string.Settings_WalletConnect,
-                        R.drawable.ic_wallet_connect_20,
-                        counterBadge = "13",
+                cell {
+                    SettingsCell(
+                        title = R.string.DAppConnection_Title,
+                        icon = R.drawable.link_24,
+                        testTag = TestTags.SETTINGS_DAPP_CONNECTION,
+                        value = "13".hs(color = ComposeAppTheme.colors.lucian),
                         onClick = { }
                     )
                 }
-            )
+            }
+            SettingsFooter("1.0")
         }
     }
 }

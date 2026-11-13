@@ -829,11 +829,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
     <!--Address Checker-->
     <!--Banners-->
-    <string name="SettingsBanner_Premium">高級版</string>
-    <string name="SettingsBanner_PremiumBannerDescription">使用高級版功能升級您的體驗！</string>
-    <string name="SettingsBanner_PremiumTryFee">免費試用</string>
-    <string name="SettingsBanner_GameDescription">通过测试，完成任务，赚取代币！</string>
-    <string name="SettingsBanner_BePartOfTheFuture">成为私人融资未来的一部分</string>
     <string name="SettingsBanner_SupportTheProject">支持项目！</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">支持不可阻挡的移动</string>
@@ -859,7 +854,6 @@
     <string name="SettingsSubscription_RestorePurchase">恢復購買</string>
     <string name="SettingsSubscription_ManageSubscription">管理訂閱</string>
     <string name="Period_Days">%s 天</string>
-    <string name="Premium_TitleForDroid">高级版 (F-Droid免费)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">高級版</string>
     <string name="Premium_EnjoyFreePeriod">享受前 %s 免費。</string>

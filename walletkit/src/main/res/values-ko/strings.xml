@@ -708,9 +708,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1시간</string>
     <!--Address Checker-->
     <!--Banners-->
-    <string name="SettingsBanner_Premium">프리미엄</string>
-    <string name="SettingsBanner_PremiumBannerDescription">프리미엄 기능으로 경험을 업그레이드하세요!</string>
-    <string name="SettingsBanner_PremiumTryFee">업그레이드</string>
     <!--Why Donate Page-->
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">활성</string>
@@ -1570,7 +1567,6 @@
     <string name="Send_Address_SanctionCheck">제재 목록 확인</string>
     <string name="Send_UnexpectedError">예기치 못한 오류</string>
     <string name="Send_UnexpectedError_Description">트랜잭션 전송 중 문제가 발생했습니다. 다시 시도하거나 오류 코드를 복사하여 지원팀에 문의하세요.</string>
-    <string name="SettingsBanner_GameDescription">테스트를 통과하고 과제를 완료하여 토큰을 획득하세요!</string>
     <string name="SettingsLaunchScreen_Auto">자동</string>
     <string name="SettingsSecurity_HideSuspiciousTxs">의심스러운 거래 숨기기</string>
     <string name="SettingsSecurity_HideSuspiciousTxs_Description">피싱 공격에 자주 사용되는 의심스러운 소액 전송을 숨깁니다.</string>
@@ -1649,7 +1645,6 @@
     <string name="MoneroNodeSettings_Trusted">신뢰됨</string>
     <string name="MoneroNodeSettings_TrustedDescription">신뢰할 수 있는 노드 — 지갑이 선택한 노드를 신뢰하고 추가 검증 없이 해당 노드의 데이터를 사용합니다.\n\n켜짐 → 거래가 브로드캐스트되면 즉시 대기 중으로 표시됩니다 (동기화는 빠르지만 개인정보 보호 수준이 낮고 노드에 의존).\n\n꺼짐 → 거래는 네트워크의 확인 후에만 표시됩니다 (느리지만 더 안전하고 사생활이 보호됨).</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">33% 절약</string>
-    <string name="Premium_TitleForDroid">프리미엄 (F-Droid 무료)</string>
     <string name="Privacy_Information">Unstoppable은 잔액이나 지갑 주소와 같은 개인 데이터를 수집하지 않습니다. 앱 개선을 위해 익명 데이터만 사용합니다.</string>
     <string name="PrivateKeys_TronPrivateKeyDescription">이 지갑 내에서 TRON 네트워크의 자산에 대한 전체 제어 권한을 부여합니다.</string>
     <string name="PublicKeys_TronAddress_Description">TRON 블록체인에서 자산을 보유한 지갑을 읽기 전용으로 모니터링할 수 있습니다.</string>
@@ -1662,7 +1657,6 @@
     <string name="ScanQr_Photos">사진</string>
     <string name="ScanQr_QrDetected">QR 코드가 감지됨</string>
     <string name="Send_Address_Error_InvalidAddress_Description">이 주소는 선택한 네트워크에 맞지 않는 것 같습니다. 다시 확인해 주세요.</string>
-    <string name="SettingsBanner_BePartOfTheFuture">프라이빗 금융의 미래에 동참하세요</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable 운동에 동참함으로써 여러분은 개방적이고 사적인 금융을 지지하게 됩니다:</string>
     <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet을 지원함으로써 저희가 성장하고, 개선하며, 독립성을 유지하는 데 도움을 주실 수 있습니다.</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">모든 지원이 소중합니다.</string>

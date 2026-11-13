@@ -832,11 +832,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <!--Address Checker-->
     <!--Banners-->
-    <string name="SettingsBanner_Premium">Премиум</string>
-    <string name="SettingsBanner_PremiumBannerDescription">Откройте новые возможности с Премиум-доступом!</string>
-    <string name="SettingsBanner_PremiumTryFee">Попробовать БЕСПЛАТНО</string>
-    <string name="SettingsBanner_GameDescription">Пройдите тесты, выполните задачи и заработайте токены!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Поддержите настоящую финансовую приватность</string>
     <string name="SettingsBanner_SupportTheProject">Помогите нам оставаться независимыми!</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Поддержите движение за конфиденциальность</string>
@@ -862,7 +857,6 @@
     <string name="SettingsSubscription_RestorePurchase">Восстановить покупку</string>
     <string name="SettingsSubscription_ManageSubscription">Управление подпиской</string>
     <string name="Period_Days">%s дня</string>
-    <string name="Premium_TitleForDroid">Премиум (бесплатно для F-Droid)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Премиум</string>
     <string name="Premium_EnjoyFreePeriod">Наслаждайтесь первым %s БЕСПЛАТНО.</string>

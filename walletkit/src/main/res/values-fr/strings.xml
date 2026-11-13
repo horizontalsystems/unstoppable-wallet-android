@@ -830,11 +830,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
     <!--Address Checker-->
     <!--Banners-->
-    <string name="SettingsBanner_Premium">Premium</string>
-    <string name="SettingsBanner_PremiumBannerDescription">Améliorez votre expérience avec les fonctionnalités Premium!</string>
-    <string name="SettingsBanner_PremiumTryFee">Essayez GRATUITEMENT</string>
-    <string name="SettingsBanner_GameDescription">Passez des tests, complétez des tâches et gagnez des jetons !</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Faire partie de l\'avenir de la finance privée</string>
     <string name="SettingsBanner_SupportTheProject">Soutenez le projet !</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Soutenir le mouvement imparable</string>
@@ -860,7 +855,6 @@
     <string name="SettingsSubscription_RestorePurchase">Restaurer l\'achat</string>
     <string name="SettingsSubscription_ManageSubscription">Gérer l\'abonnement</string>
     <string name="Period_Days">%s jours</string>
-    <string name="Premium_TitleForDroid">Premium (gratuit pour F-Droid)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
     <string name="Premium_EnjoyFreePeriod">Profitez des premiers %s GRATUITS.</string>

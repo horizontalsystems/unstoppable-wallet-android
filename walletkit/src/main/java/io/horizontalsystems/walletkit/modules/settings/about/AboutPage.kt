@@ -1,16 +1,25 @@
 package io.horizontalsystems.walletkit.modules.settings.about
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.core.stats.StatEvent
 import io.horizontalsystems.walletkit.core.stats.StatPage
@@ -19,9 +28,11 @@ import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.walletkit.modules.settings.appstatus.AppStatusScreen
-import io.horizontalsystems.walletkit.modules.settings.main.HsSettingCell
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.ui.compose.components.body_leah
+import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
@@ -148,4 +159,47 @@ private fun SettingSections(
     )
 
     VSpacer(32.dp)
+}
+
+@Composable
+private fun HsSettingCell(
+    @StringRes title: Int,
+    @DrawableRes icon: Int,
+    value: String? = null,
+    testTag: String? = null,
+    onClick: () -> Unit
+) {
+    RowUniversal(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .then(testTag?.let { Modifier.testTag(it) } ?: Modifier),
+        onClick = onClick
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = icon),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        body_leah(
+            text = stringResource(title),
+            maxLines = 1,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(Modifier.weight(1f))
+
+        if (value != null) {
+            subhead1_grey(
+                text = value,
+                maxLines = 1,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+
+        Image(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null,
+        )
+    }
 }

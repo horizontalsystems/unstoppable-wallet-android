@@ -1193,11 +1193,8 @@
     <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
-    <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
-    <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
-    <string name="Settings_WalletConnect" translatable="false">WalletConnect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_LaunchScreen_Tip">Choose which screen the app opens on by default.</string>
@@ -1206,7 +1203,7 @@
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_AutoLock_Description">Automatically locks the app after a selected time.</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
-    <string name="Settings_Twitter" translatable="false">Twitter</string>
+    <string name="Settings_Twitter" translatable="false">X.com</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_Support">Support</string>
     <string name="Settings_VipSupport">Priority Support</string>
@@ -1226,12 +1223,6 @@
     <!--Address Checker-->
 
     <!--Banners-->
-    <string name="SettingsBanner_Premium">Premium</string>
-    <string name="SettingsBanner_PremiumBannerDescription">Upgrade your experience with Premium features!</string>
-    <string name="SettingsBanner_PremiumTryFee">Try for FREE</string>
-    <string name="SettingsBanner_Title" translatable="false">MiniApp</string>
-    <string name="SettingsBanner_GameDescription">Pass tests, complete tasks, and earn tokens!</string>
-    <string name="SettingsBanner_BePartOfTheFuture">Be part of the future of private finance</string>
     <string name="SettingsBanner_SupportTheProject">Support the Project!</string>
 
     <!--Why Donate Page-->
@@ -1261,7 +1252,6 @@
 
     <string name="Period_Days">%s days</string>
 
-    <string name="Premium_TitleForDroid">Premium (Free for F-Droid)</string>
 
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
