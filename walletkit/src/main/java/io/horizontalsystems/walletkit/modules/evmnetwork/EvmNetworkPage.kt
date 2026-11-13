@@ -61,7 +61,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_orange
+import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -271,11 +271,11 @@ private fun AddButton(
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
                     modifier = Modifier.size(24.dp),
-                    tint = ComposeAppTheme.colors.orange,
+                    tint = ComposeAppTheme.colors.grey,
                     contentDescription = null
                 )
                 Spacer(Modifier.width(16.dp))
-                body_orange(
+                body_leah(
                     text = stringResource(R.string.EvmNetwork_AddNew)
                 )
             }

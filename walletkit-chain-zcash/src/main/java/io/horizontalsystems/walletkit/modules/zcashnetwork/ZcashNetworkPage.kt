@@ -52,7 +52,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.PingBadge
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_jacob
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
@@ -289,11 +288,11 @@ private fun AddButton(onClick: () -> Unit) {
             Icon(
                 painter = painterResource(R.drawable.ic_plus),
                 modifier = Modifier.size(24.dp),
-                tint = ComposeAppTheme.colors.jacob,
+                tint = ComposeAppTheme.colors.grey,
                 contentDescription = null
             )
             Spacer(Modifier.width(16.dp))
-            body_jacob(text = stringResource(R.string.EvmNetwork_AddNew))
+            body_leah(text = stringResource(R.string.EvmNetwork_AddNew))
         }
     })
 }

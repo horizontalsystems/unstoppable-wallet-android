@@ -56,7 +56,6 @@ import io.horizontalsystems.walletkit.ui.compose.components.InfoText
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_orange
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
@@ -216,7 +215,7 @@ private fun BackupActions(
         when (action) {
             is BackupItem.ManualBackup -> {
                 actionItems.add {
-                    YellowActionItem(
+                    BackupActionItem(
                         title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
                         modifier = Modifier.testTag(TestTags.ACCOUNT_MANUAL_BACKUP),
                         icon = painterResource(id = R.drawable.ic_edit_24),
@@ -238,7 +237,7 @@ private fun BackupActions(
 
             is BackupItem.LocalBackup -> {
                 actionItems.add {
-                    YellowActionItem(
+                    BackupActionItem(
                         title = stringResource(id = R.string.ManageAccount_LocalBackup),
                         modifier = Modifier.testTag(TestTags.ACCOUNT_LOCAL_BACKUP),
                         icon = painterResource(id = R.drawable.ic_file_24),
@@ -422,7 +421,7 @@ private fun AccountActionItem(
 }
 
 @Composable
-private fun YellowActionItem(
+private fun BackupActionItem(
     title: String,
     icon: Painter? = null,
     attention: Boolean = false,
@@ -442,11 +441,11 @@ private fun YellowActionItem(
                     .size(24.dp),
                 painter = icon,
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.orange
+                tint = ComposeAppTheme.colors.grey
             )
         }
 
-        body_orange(
+        body_leah(
             modifier = Modifier.weight(1f),
             text = title,
         )

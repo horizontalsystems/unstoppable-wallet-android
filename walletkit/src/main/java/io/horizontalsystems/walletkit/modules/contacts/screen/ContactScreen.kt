@@ -54,7 +54,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_orange
+import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.body_lucian
 import io.horizontalsystems.walletkit.ui.compose.components.headline2_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
@@ -335,9 +335,9 @@ private fun AddAddressButton(onClick: () -> Unit) {
             modifier = Modifier.padding(horizontal = 16.dp),
             painter = painterResource(R.drawable.ic_plus),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.orange
+            tint = ComposeAppTheme.colors.grey
         )
-        body_orange(text = stringResource(R.string.Contacts_AddAddress))
+        body_leah(text = stringResource(R.string.Contacts_AddAddress))
     }
 }
 
