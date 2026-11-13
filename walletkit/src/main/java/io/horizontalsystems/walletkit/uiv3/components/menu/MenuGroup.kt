@@ -1,33 +1,32 @@
 package io.horizontalsystems.walletkit.uiv3.components.menu
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.window.Dialog
+import io.horizontalsystems.designkit.components.HSMenuGroup
+import io.horizontalsystems.designkit.components.HSMenuGroupContent
+import io.horizontalsystems.designkit.components.HSMenuGroupDefaults
+import io.horizontalsystems.designkit.components.HSMenuItem
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
-import io.horizontalsystems.walletkit.ui.compose.components.subheadSB_grey
-import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
 import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 data class MenuItemX<T>(
     val title: String,
     val selected: Boolean,
-    val item: T
+    val item: T,
+    val enabled: Boolean = true,
+    val icon: Painter? = null,
 )
 
+/**
+ * Shows a designkit menu in a dialog. Choosing an item closes the dialog;
+ * choosing the one that is already selected closes it without reporting a
+ * selection.
+ */
 @Composable
 fun <T> MenuGroup(
     title: String?,
@@ -36,67 +35,53 @@ fun <T> MenuGroup(
     onSelectItem: (T) -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
-        Column(
-            Modifier
-                .exposeTestTags()
-                .clip(RoundedCornerShape(16.dp))
-                .background(ComposeAppTheme.colors.lawrence)
-                .width(240.dp)
-                .padding(vertical = 8.dp)
-        ) {
-            title?.let {
-                MenuHeader(title)
-            }
-
-            items.forEach { item ->
-                BoxBordered(top = true) {
-                    MenuItem(
-                        item = item,
-                        onSelectItem = {
-                            onSelectItem.invoke(it)
-                            onDismissRequest.invoke()
+        HSMenuGroup(
+            modifier = Modifier.exposeTestTags(),
+            title = title,
+            items = items.map { item ->
+                HSMenuItem(
+                    title = item.title,
+                    icon = item.icon,
+                    selected = item.selected,
+                    enabled = item.enabled,
+                    onClick = {
+                        if (!item.selected) {
+                            onSelectItem.invoke(item.item)
                         }
-                    )
-                }
+                        onDismissRequest.invoke()
+                    }
+                )
             }
-        }
+        )
     }
 }
 
+/**
+ * Shows a designkit menu as a popup anchored to the layout it is declared
+ * in, moved by [offset]: the context menu of a row or the menu behind a top
+ * bar icon. The items close it themselves, in their onClick.
+ */
 @Composable
-private fun <T> MenuItem(
-    item: MenuItemX<T>,
-    onSelectItem: (T) -> Unit,
+fun MenuGroupPopup(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    items: List<HSMenuItem>,
+    title: String? = null,
+    offset: DpOffset = DpOffset.Zero,
 ) {
-    Column(
+    // Material's menu supplies the popup window, its placement and the
+    // vertical padding, which equals HSMenuGroupDefaults.VerticalPadding.
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        offset = offset,
+        shape = HSMenuGroupDefaults.Shape,
+        containerColor = ComposeAppTheme.colors.lawrence,
+        // the popup has its own window, so tags must be exposed again inside it
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                enabled = !item.selected,
-                onClick = {
-                    onSelectItem.invoke(item.item)
-                }
-            )
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .width(HSMenuGroupDefaults.Width)
+            .exposeTestTags()
     ) {
-        Text(
-            text = item.title,
-            style = ComposeAppTheme.typography.body,
-            color = if (item.selected) ComposeAppTheme.colors.orange else ComposeAppTheme.colors.leah
-        )
-    }
-}
-
-@Composable
-private fun MenuHeader(title: String) {
-    Box(modifier = Modifier.height(40.dp)) {
-        subheadSB_grey(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            text = title,
-            textAlign = TextAlign.Start
-        )
+        HSMenuGroupContent(title = title, items = items)
     }
 }

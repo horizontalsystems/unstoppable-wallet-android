@@ -8,14 +8,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.components.HSCellButton
+import io.horizontalsystems.designkit.components.HSMenuGroupDefaults
+import io.horizontalsystems.designkit.components.HSMenuItem
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.helpers.HudHelper
@@ -45,11 +41,10 @@ import io.horizontalsystems.walletkit.modules.balance.BalanceViewModel
 import io.horizontalsystems.walletkit.modules.balance.contextMenuItems
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.syncerror.SyncErrorSheet
-import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
-import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftCoinIcon
 import io.horizontalsystems.walletkit.uiv3.components.HSSwipeToReveal
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroupPopup
 import kotlinx.coroutines.launch
 
 @Composable
@@ -172,14 +167,14 @@ fun BalanceCard(
             )
         }
     }
-    val menuMinWidth = 200.dp
+    val menuWidth = HSMenuGroupDefaults.Width
     val horizontalMargin = 16.dp
-    val xOffset = if (pressOffset.x + menuMinWidth > itemWidth - horizontalMargin) {
-        itemWidth - menuMinWidth - horizontalMargin
+    val xOffset = if (pressOffset.x + menuWidth > itemWidth - horizontalMargin) {
+        itemWidth - menuWidth - horizontalMargin
     } else {
         pressOffset.x
     }
-    DropdownMenu(
+    MenuGroupPopup(
         expanded = isContextMenuVisible,
         onDismissRequest = {
             isContextMenuVisible = false
@@ -188,35 +183,18 @@ fun BalanceCard(
             y = pressOffset.y - itemHeight,
             x = xOffset
         ),
-        shape = RoundedCornerShape(16.dp),
-        containerColor = ComposeAppTheme.colors.lawrence,
-        modifier = Modifier.defaultMinSize(minWidth = 200.dp)
-    ) {
-        viewItem.contextMenuItems.forEachIndexed { index, dropDownMenu ->
-            if (index > 0) {
-                HsDivider()
-            }
-            DropdownMenuItem(
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(dropDownMenu.item.icon),
-                        contentDescription = stringResource(dropDownMenu.item.title),
-                        tint = if (dropDownMenu.isEnabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy,
-                        modifier = Modifier.size(20.dp)
-                    )
-                },
+        items = viewItem.contextMenuItems.map { menuItem ->
+            HSMenuItem(
+                title = stringResource(menuItem.item.title),
+                icon = painterResource(menuItem.item.icon),
+                enabled = menuItem.isEnabled,
                 onClick = {
-                    if(dropDownMenu.isEnabled) {
-                        onContextMenuItemClick(dropDownMenu.item)
-                        isContextMenuVisible = false
-                    }
-                },
-                text = {
-                    body_leah(stringResource(dropDownMenu.item.title))
+                    onContextMenuItemClick(menuItem.item)
+                    isContextMenuVisible = false
                 }
             )
         }
-    }
+    )
 }
 
 enum class BalanceCardSubtitleType {

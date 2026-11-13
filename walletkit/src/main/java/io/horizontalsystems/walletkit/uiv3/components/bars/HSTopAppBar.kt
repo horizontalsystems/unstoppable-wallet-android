@@ -5,16 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.ripple
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,8 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import io.horizontalsystems.designkit.components.HSMenuItem
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
-import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,8 +41,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItemDropdown
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItemTimeoutIndicator
-import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroupPopup
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -237,31 +232,21 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
         )
     }
 
-    DropdownMenu(
+    MenuGroupPopup(
         expanded = expanded,
         onDismissRequest = { expanded = false },
-        shape = RoundedCornerShape(16.dp),
-        containerColor = ComposeAppTheme.colors.lawrence,
-        // the menu is a popup with its own window, so tags must be exposed again inside it
-        modifier = Modifier
-            .defaultMinSize(minWidth = 200.dp)
-            .exposeTestTags()
-    ) {
-        menuItemDropdown.items.forEachIndexed { i, menuItem ->
-            BoxBordered(top = i != 0) {
-                DropdownMenuItem(
-                    modifier = menuItem.testTag?.let { Modifier.testTag(it) } ?: Modifier,
-                    text = {
-                        body_leah(menuItem.title.getString())
-                    },
-                    onClick = {
-                        expanded = false
-                        menuItem.onClick.invoke()
-                    }
-                )
-            }
+        items = menuItemDropdown.items.map { menuItem ->
+            HSMenuItem(
+                title = menuItem.title.getString(),
+                modifier = menuItem.testTag?.let { Modifier.testTag(it) } ?: Modifier,
+                enabled = menuItem.enabled,
+                onClick = {
+                    expanded = false
+                    menuItem.onClick.invoke()
+                }
+            )
         }
-    }
+    )
 }
 
 @Preview
