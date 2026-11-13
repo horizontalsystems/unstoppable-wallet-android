@@ -168,6 +168,7 @@ object TestTags {
     const val SETTINGS_TELEGRAM = "settings_telegram"
     const val SETTINGS_TWITTER = "settings_twitter"
     const val SETTINGS_DONATE = "settings_donate"
+    const val SETTINGS_DONATE_BANNER = "settings_donate_banner"
     const val SETTINGS_DEBUG_SIMULATE_FAIL_SWAP = "settings_debug_simulate_fail_swap"
     const val SETTINGS_DEBUG_SWAP_PROVIDER_NAME = "settings_debug_swap_provider_name"
 

@@ -1655,6 +1655,7 @@
     <string name="Send_Confirmation_Burn">Yakma</string>
     <string name="Send_Confirmation_Mint">Basım</string>
     <string name="Send_Fee_Info">Bu işlemin blok zincirinde işlenmesinin tahmini maliyeti.</string>
+    <string name="SettingsBanner_BePartOfTheFuture">Özel finansın geleceğinin bir parçası olun</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable hareketine katılarak açık ve özel finansı savunmuş olursunuz:</string>
     <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet\'ı destekleyerek büyümemize, gelişmemize ve bağımsız kalmamıza yardımcı olursunuz.</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Her türlü destek önemlidir.</string>

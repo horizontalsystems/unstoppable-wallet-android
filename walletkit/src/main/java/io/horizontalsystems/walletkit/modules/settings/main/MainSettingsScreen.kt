@@ -60,7 +60,9 @@ import io.horizontalsystems.walletkit.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.settings.about.AboutPage
 import io.horizontalsystems.walletkit.modules.settings.appearance.AppearancePage
+import io.horizontalsystems.walletkit.modules.settings.banners.DonateBanner
 import io.horizontalsystems.walletkit.modules.settings.donate.DonateTokenSelectPage
+import io.horizontalsystems.walletkit.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.walletkit.modules.settings.faq.FaqListPage
 import io.horizontalsystems.walletkit.modules.settings.labs.UnstoppableLabsPage
 import io.horizontalsystems.walletkit.modules.settings.privacy.PrivacySettingsPage
@@ -130,6 +132,15 @@ private fun SettingSections(
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val isFDroidBuild = App.appConfigProvider.fdroidBuild
+
+    if (isFDroidBuild) {
+        DonateBanner(
+            modifier = Modifier.testTag(TestTags.SETTINGS_DONATE_BANNER),
+            onClick = {
+                navigation.slideFromBottom(WhyDonatePage)
+            }
+        )
+    }
 
     SettingsSection {
         cell {

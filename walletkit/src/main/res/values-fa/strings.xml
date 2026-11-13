@@ -1371,6 +1371,7 @@
     <string name="SettingsSecurity_AutoLock_After5Min">5 دقیقه</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 دقیقه</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 دقیقه</string>
+    <string name="SettingsBanner_BePartOfTheFuture">بخشی از آینده امور مالی خصوصی باشید</string>
     <string name="SettingsBanner_SupportTheProject">از پروژه حمایت کنید!</string>
     <string name="SettingsBanner_DonateTitle">از جنبش Unstoppable حمایت کنید</string>
     <string name="SettingsBanner_DonateSubtitle">بخشی از آینده‌ی مالی خصوصی باشید</string>

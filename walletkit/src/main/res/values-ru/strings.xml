@@ -832,6 +832,7 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <!--Address Checker-->
     <!--Banners-->
+    <string name="SettingsBanner_BePartOfTheFuture">Поддержите настоящую финансовую приватность</string>
     <string name="SettingsBanner_SupportTheProject">Помогите нам оставаться независимыми!</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Поддержите движение за конфиденциальность</string>

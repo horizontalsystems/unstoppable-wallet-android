@@ -1657,6 +1657,7 @@
     <string name="ScanQr_Photos">사진</string>
     <string name="ScanQr_QrDetected">QR 코드가 감지됨</string>
     <string name="Send_Address_Error_InvalidAddress_Description">이 주소는 선택한 네트워크에 맞지 않는 것 같습니다. 다시 확인해 주세요.</string>
+    <string name="SettingsBanner_BePartOfTheFuture">프라이빗 금융의 미래에 동참하세요</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Unstoppable 운동에 동참함으로써 여러분은 개방적이고 사적인 금융을 지지하게 됩니다:</string>
     <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Unstoppable Wallet을 지원함으로써 저희가 성장하고, 개선하며, 독립성을 유지하는 데 도움을 주실 수 있습니다.</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">모든 지원이 소중합니다.</string>

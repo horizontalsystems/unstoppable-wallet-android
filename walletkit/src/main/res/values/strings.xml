@@ -1226,6 +1226,7 @@
     <!--Address Checker-->
 
     <!--Banners-->
+    <string name="SettingsBanner_BePartOfTheFuture">Be part of the future of private finance</string>
     <string name="SettingsBanner_SupportTheProject">Support the Project!</string>
 
     <!--Why Donate Page-->

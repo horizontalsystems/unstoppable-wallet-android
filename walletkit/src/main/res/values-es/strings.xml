@@ -830,6 +830,7 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <!--Address Checker-->
     <!--Banners-->
+    <string name="SettingsBanner_BePartOfTheFuture">Defiende las finanzas realmente privadas</string>
     <string name="SettingsBanner_SupportTheProject">¡Apoya nuestra independencia!</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Apoya el movimiento por la privacidad</string>

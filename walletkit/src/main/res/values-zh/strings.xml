@@ -829,6 +829,7 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
     <!--Address Checker-->
     <!--Banners-->
+    <string name="SettingsBanner_BePartOfTheFuture">成为私人融资未来的一部分</string>
     <string name="SettingsBanner_SupportTheProject">支持项目！</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">支持不可阻挡的移动</string>

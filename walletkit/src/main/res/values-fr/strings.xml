@@ -830,6 +830,7 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
     <!--Address Checker-->
     <!--Banners-->
+    <string name="SettingsBanner_BePartOfTheFuture">Faire partie de l\'avenir de la finance privée</string>
     <string name="SettingsBanner_SupportTheProject">Soutenez le projet !</string>
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Soutenir le mouvement imparable</string>
