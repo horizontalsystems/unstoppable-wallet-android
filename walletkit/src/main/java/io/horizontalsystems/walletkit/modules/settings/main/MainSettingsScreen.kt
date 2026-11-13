@@ -561,10 +561,10 @@ private fun SettingsFooter(appVersion: String) {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             listOf(
-                R.drawable.bitcoin_logo,
-                R.drawable.wallet_scrutiny_logo,
-                R.drawable.certik_logo,
-            ).forEach { logo ->
+                R.drawable.bitcoin_logo to R.string.Settings_AuditLogo_Bitcoin,
+                R.drawable.wallet_scrutiny_logo to R.string.Settings_AuditLogo_WalletScrutiny,
+                R.drawable.certik_logo to R.string.Settings_AuditLogo_Certik,
+            ).forEach { (logo, name) ->
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -573,7 +573,7 @@ private fun SettingsFooter(appVersion: String) {
                 ) {
                     Icon(
                         painter = painterResource(logo),
-                        contentDescription = null,
+                        contentDescription = stringResource(name),
                         tint = ComposeAppTheme.colors.grey,
                     )
                 }

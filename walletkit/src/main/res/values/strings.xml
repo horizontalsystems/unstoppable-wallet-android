@@ -1193,6 +1193,9 @@
     <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
+    <string name="Settings_AuditLogo_Bitcoin" translatable="false">Bitcoin.org</string>
+    <string name="Settings_AuditLogo_WalletScrutiny" translatable="false">WalletScrutiny</string>
+    <string name="Settings_AuditLogo_Certik" translatable="false">CertiK</string>
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_RateUs">Rate Us</string>
