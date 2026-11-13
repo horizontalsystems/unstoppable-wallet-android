@@ -50,8 +50,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.components.ButtonSize
+import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.components.HSInput
 import io.horizontalsystems.designkit.components.InputState
@@ -84,7 +86,6 @@ import io.horizontalsystems.walletkit.uiv3.components.Section
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
@@ -332,10 +333,12 @@ fun RestorePhrase(
                                 )
                             },
                             right = {
-                                CellRightSelectors(
-                                    subtitle = uiState.language.name.hs,
-                                    icon = painterResource(id = R.drawable.arrow_s_down_24),
-                                    iconTint = ComposeAppTheme.colors.leah
+                                HSDropdownButton(
+                                    modifier = Modifier.testTag(TestTags.RESTORE_WORDLIST),
+                                    variant = ButtonVariant.Secondary,
+                                    style = ButtonStyle.Transparent,
+                                    title = uiState.language.name,
+                                    onClick = { showLanguageSelectorDialog = true },
                                 )
                             },
                             onClick = { showLanguageSelectorDialog = true }

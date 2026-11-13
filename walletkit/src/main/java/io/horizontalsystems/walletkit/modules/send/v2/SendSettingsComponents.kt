@@ -9,17 +9,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
-import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightSelectors
-import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 
 /**
  * A filled, rounded card of chain send settings rows on the page background, with a
@@ -45,8 +45,8 @@ fun SendSettingsCard(rows: List<@Composable () -> Unit>) {
 }
 
 /**
- * A settings row: a title over its description, with the current [value] and a drop-down
- * arrow on the right. A [warning] continues the description in its own colour.
+ * A settings row: a title over its description, with the current [value] in a dropdown
+ * button on the right. A [warning] continues the description in its own colour.
  */
 @Composable
 fun SendSettingsRow(
@@ -54,10 +54,10 @@ fun SendSettingsRow(
     subtitle: String,
     value: String,
     enabled: Boolean,
+    testTag: String,
     onClick: () -> Unit,
     warning: String? = null,
 ) {
-    val valueColor = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey
     CellPrimary(
         middle = {
             Column {
@@ -82,10 +82,13 @@ fun SendSettingsRow(
             }
         },
         right = {
-            CellRightSelectors(
-                subtitle = value.hs(color = valueColor),
-                icon = painterResource(R.drawable.arrow_s_down_24),
-                iconTint = valueColor,
+            HSDropdownButton(
+                modifier = Modifier.testTag(testTag),
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Transparent,
+                title = value,
+                enabled = enabled,
+                onClick = onClick,
             )
         },
         onClick = if (enabled) onClick else null,

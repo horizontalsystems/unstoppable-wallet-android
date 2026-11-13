@@ -29,6 +29,7 @@ import io.horizontalsystems.walletkit.modules.send.v2.SendSettingsRow
 import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
@@ -111,6 +112,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                             settings.unspentOutputs == null -> stringResource(R.string.Send_Utxos_Auto)
                             else -> "${settings.unspentOutputs.size}/$total"
                         },
+                        testTag = TestTags.SEND_SETTINGS_UTXOS,
                         enabled = adapter != null && total != null,
                         onClick = { navigation.slideFromRight(SendBtcUtxoExpertModePage(wallet)) },
                     )
@@ -121,6 +123,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                             title = stringResource(R.string.BtcBlockchainSettings_InputsOutputs),
                             subtitle = stringResource(R.string.Send_InputsOutputs_Description),
                             value = uiState.transactionSortTitle,
+                            testTag = TestTags.SEND_SETTINGS_INPUTS_OUTPUTS,
                             enabled = true,
                             onClick = { showSortMenu = true },
                         )
@@ -134,6 +137,7 @@ data class SendBtcSettingsPage(val wallet: Wallet, val address: String?) : HSPag
                             subtitle = stringResource(R.string.Send_Hodler_Description),
                             warning = if (privateSend) stringResource(R.string.Send_Hodler_PrivateSendUnavailable) else null,
                             value = stringResource(interval.stringResId()),
+                            testTag = TestTags.SEND_SETTINGS_TIME_LOCK,
                             enabled = timeLockAvailable,
                             onClick = { showLockTimeMenu = true },
                         )

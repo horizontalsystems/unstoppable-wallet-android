@@ -3,6 +3,7 @@ package io.horizontalsystems.walletkit.modules.settings.appearance
 import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.uiv3.TestTags
 import androidx.compose.ui.platform.testTag
@@ -54,6 +55,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.settings.language.LanguageSettingsPage
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderText
 import io.horizontalsystems.walletkit.ui.compose.components.HsSwitch
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
@@ -115,6 +117,7 @@ fun AppearanceScreen(navigation: HSNavigation) {
                     MenuItemWithDialog(
                         R.string.Settings_Theme,
                         value = uiState.selectedTheme.title.getString(),
+                        testTag = TestTags.APPEARANCE_THEME,
                         onClick = { openThemeSelector = true }
                     )
                 }
@@ -180,16 +183,12 @@ fun AppearanceScreen(navigation: HSNavigation) {
                             subtitle = R.string.Appearance_PriceChangeInterval_Tip,
                             onClick = { openPriceChangeIntervalSelector = true }
                         ) {
-                            subhead1_leah(
-                                text = uiState.priceChangeInterval.title.getString(),
-                                maxLines = 1,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-
-                            Image(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                                contentDescription = null,
+                            HSDropdownButton(
+                                modifier = Modifier.testTag(TestTags.APPEARANCE_PRICE_CHANGE),
+                                variant = ButtonVariant.Secondary,
+                                style = ButtonStyle.Transparent,
+                                title = uiState.priceChangeInterval.title.getString(),
+                                onClick = { openPriceChangeIntervalSelector = true },
                             )
                         }
                     }
@@ -206,16 +205,12 @@ fun AppearanceScreen(navigation: HSNavigation) {
                                 subtitle = R.string.Settings_LaunchScreen_Tip,
                                 onClick = { openLaunchPageSelector = true }
                             ) {
-                                subhead1_leah(
-                                    text = uiState.selectedLaunchScreen.title.getString(),
-                                    maxLines = 1,
-                                    modifier = Modifier.padding(horizontal = 8.dp)
-                                )
-
-                                Image(
-                                    modifier = Modifier.size(20.dp),
-                                    painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                                    contentDescription = null,
+                                HSDropdownButton(
+                                    modifier = Modifier.testTag(TestTags.APPEARANCE_LAUNCH_SCREEN),
+                                    variant = ButtonVariant.Secondary,
+                                    style = ButtonStyle.Transparent,
+                                    title = uiState.selectedLaunchScreen.title.getString(),
+                                    onClick = { openLaunchPageSelector = true },
                                 )
                             }
                         }
@@ -272,16 +267,12 @@ fun AppearanceScreen(navigation: HSNavigation) {
                             subtitle = R.string.Appearance_BalanceValue_Tip,
                             onClick = { openBalanceValueSelector = true }
                         ) {
-                            subhead1_leah(
-                                text = uiState.selectedBalanceViewType.title.getString(),
-                                maxLines = 1,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-
-                            Image(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                                contentDescription = null,
+                            HSDropdownButton(
+                                modifier = Modifier.testTag(TestTags.APPEARANCE_BALANCE_VALUE),
+                                variant = ButtonVariant.Secondary,
+                                style = ButtonStyle.Transparent,
+                                title = uiState.selectedBalanceViewType.title.getString(),
+                                onClick = { openBalanceValueSelector = true },
                             )
                         }
                     }
@@ -536,6 +527,7 @@ private fun IconBox(
 fun MenuItemWithDialog(
     @StringRes title: Int,
     value: String,
+    testTag: String,
     onClick: () -> Unit
 ) {
     RowUniversal(
@@ -548,16 +540,13 @@ fun MenuItemWithDialog(
             modifier = Modifier.weight(1f)
         )
 
-        subhead1_grey(
-            text = value,
-            maxLines = 1,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
-
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_down_arrow_20),
-            contentDescription = null,
+        HSpacer(16.dp)
+        HSDropdownButton(
+            modifier = Modifier.testTag(testTag),
+            variant = ButtonVariant.Secondary,
+            style = ButtonStyle.Transparent,
+            title = value,
+            onClick = onClick,
         )
     }
 }

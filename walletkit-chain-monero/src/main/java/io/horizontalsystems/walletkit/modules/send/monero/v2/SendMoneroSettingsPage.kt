@@ -24,6 +24,7 @@ import io.horizontalsystems.walletkit.modules.send.v2.SendV2Page
 import io.horizontalsystems.walletkit.modules.send.v2.SendViewModel
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import io.horizontalsystems.walletkit.modules.send.monero.utxoexpert.MoneroUtxoExpertModeScreen
@@ -86,6 +87,7 @@ data class SendMoneroSettingsPage(val wallet: Wallet) : HSPage() {
                                 settings.unspentOutputs == null -> stringResource(R.string.Send_Utxos_Auto)
                                 else -> "${settings.unspentOutputs.size}/$total"
                             },
+                            testTag = TestTags.SEND_SETTINGS_UTXOS,
                             enabled = adapter != null && total != null,
                             onClick = { navigation.slideFromRight(SendMoneroUtxoExpertModePage(wallet)) },
                         )

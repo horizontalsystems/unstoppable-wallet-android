@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,12 +13,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.entities.DataState
@@ -35,7 +37,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.RowUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
@@ -110,14 +112,12 @@ fun EmaSettingsScreen(navigation: HSNavigation, indicatorSetting: ChartIndicator
                                 text = stringResource(R.string.CoinPage_Type),
                                 modifier = Modifier.weight(1f)
                             )
-                            subhead1_grey(
-                                text = maType,
-                                modifier = Modifier.padding(horizontal = 8.dp)
-                            )
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.grey
+                            HSDropdownButton(
+                                modifier = Modifier.testTag(TestTags.INDICATOR_MA_TYPE),
+                                variant = ButtonVariant.Secondary,
+                                style = ButtonStyle.Transparent,
+                                title = maType,
+                                onClick = { showEmaSelectorDialog = true },
                             )
                         }
                     }

@@ -55,6 +55,7 @@ object TestTags {
     const val RESTORE_NAME_RANDOM = "restore_name_random"
     const val RESTORE_KEY_NAME_RANDOM = "restore_key_name_random"
     const val RESTORE_PHRASE_INPUT = "restore_phrase_input"
+    const val RESTORE_WORDLIST = "restore_wordlist"
     const val RESTORE_NEXT = "restore_next"
     const val RESTORE_ERROR = "restore_error"
     fun restoreChain(blockchainUid: String) = "restore_chain_$blockchainUid"
@@ -103,6 +104,9 @@ object TestTags {
     fun manageCoin(coinCode: String, blockchainUid: String) = "manage_coin_${coinCode}_$blockchainUid"
 
     const val SEND_AMOUNT_INPUT = "send_amount_input"
+    const val SEND_SETTINGS_UTXOS = "send_settings_utxos"
+    const val SEND_SETTINGS_INPUTS_OUTPUTS = "send_settings_inputs_outputs"
+    const val SEND_SETTINGS_TIME_LOCK = "send_settings_time_lock"
     const val SEND_RECIPIENT_ROW = "send_recipient_row"
     const val SEND_NEXT = "send_next"
     const val SEND_ACTION = "send_action"
@@ -173,7 +177,14 @@ object TestTags {
     const val SETTINGS_DEBUG_SWAP_PROVIDER_NAME = "settings_debug_swap_provider_name"
 
     const val APPEARANCE_BASE_CURRENCY = "appearance_base_currency"
+    // The dropdown buttons that show a setting's value and open its options
+    const val APPEARANCE_THEME = "appearance_theme"
+    const val APPEARANCE_PRICE_CHANGE = "appearance_price_change"
+    const val APPEARANCE_LAUNCH_SCREEN = "appearance_launch_screen"
+    const val APPEARANCE_BALANCE_VALUE = "appearance_balance_value"
     fun currency(code: String) = "currency_$code"
+
+    const val INDICATOR_MA_TYPE = "indicator_ma_type"
 
     const val ABOUT_APP_STATUS = "about_app_status"
     const val ABOUT_TERMS = "about_terms"
@@ -182,6 +193,8 @@ object TestTags {
     const val SECURITY_DISABLE_PASSCODE = "security_disable_passcode"
     const val SECURITY_BIOMETRICS = "security_biometrics"
     const val SECURITY_AUTOLOCK = "security_autolock"
+    // The dropdown button inside the row above; it opens the same list
+    const val SECURITY_AUTOLOCK_VALUE = "security_autolock_value"
     fun autolockInterval(raw: String) = "autolock_$raw"
 
     fun pinKey(digit: Int) = "pin_key_$digit"

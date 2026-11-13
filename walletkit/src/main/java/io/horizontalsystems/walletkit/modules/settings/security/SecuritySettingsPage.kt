@@ -28,6 +28,7 @@ import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
 import io.horizontalsystems.designkit.components.HSButton
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.components.HSIconButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -54,7 +55,6 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
-import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.SecureSend
@@ -114,7 +114,13 @@ private fun SecurityCenterScreen(
                             )
                         },
                         right = {
-                            CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
+                            HSDropdownButton(
+                                modifier = Modifier.testTag(TestTags.SECURITY_AUTOLOCK_VALUE),
+                                variant = ButtonVariant.Secondary,
+                                style = ButtonStyle.Transparent,
+                                title = stringResource(uiState.autoLockIntervalName),
+                                onClick = { navigation.slideFromRight(AutoLockIntervalsPage) },
+                            )
                         },
                         onClick = { navigation.slideFromRight(AutoLockIntervalsPage) }
                     )
