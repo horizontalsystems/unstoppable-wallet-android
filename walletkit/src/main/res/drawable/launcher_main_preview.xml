@@ -6,11 +6,10 @@
   <path
       android:pathData="M0,8C0,3.582 3.582,0 8,0H52C56.418,0 60,3.582 60,8V52C60,56.418 56.418,60 52,60H8C3.582,60 0,56.418 0,52V8Z"
       android:fillColor="@color/launcher_main_background"/>
+  <!-- The design's 132 unit square scaled onto this 60 dp one -->
   <group
-      android:scaleX="0.572917"
-      android:scaleY="0.572917"
-      android:translateX="-7.8125"
-      android:translateY="-7.8125">
+      android:scaleX="0.4545455"
+      android:scaleY="0.4545455">
     <path
         android:pathData="M55.333 87.333H44.668V34H34.001V87.333H34L44.667 98H87.333L98 87.333V34H55.333V87.333Z"
         android:fillColor="#FE4A11"/>
