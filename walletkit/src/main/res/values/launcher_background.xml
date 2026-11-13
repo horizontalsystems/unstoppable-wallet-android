@@ -9,4 +9,7 @@
     <color name="launcher_dark_mark">#EDEDED</color>
     <color name="launcher_mono_background">#EDEDED</color>
     <color name="launcher_mono_mark">#151515</color>
+
+    <!-- A debug build is told apart by its green mark -->
+    <color name="launcher_debug_mark">#0AA177</color>
 </resources>

@@ -4,4 +4,5 @@
     <color name="launcher_dark_mark">#000000</color>
     <color name="launcher_mono_background">#000000</color>
     <color name="launcher_mono_mark">#EDEDED</color>
+    <color name="launcher_debug_mark">#0AC18E</color>
 </resources>
