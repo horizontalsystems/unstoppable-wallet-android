@@ -54,7 +54,6 @@ fun PasscodeBlock(
             },
             right = {
                 CellRightNavigation(
-                    subtitle = "".hs,
                     icon = if (!uiState.pinEnabled) {
                         painterResource(id = R.drawable.ic_attention_red_20)
                     } else null,

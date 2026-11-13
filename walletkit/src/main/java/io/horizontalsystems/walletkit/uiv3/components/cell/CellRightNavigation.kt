@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
@@ -41,16 +42,17 @@ fun CellRightNavigation(
                     style = ComposeAppTheme.typography.subheadSB,
                     color = it.color ?: ComposeAppTheme.colors.grey,
                 )
-
-                icon?.let {
-                    Icon(
-                        painter = it,
-                        contentDescription = null,
-                        tint = iconTint
-                    )
-                }
+            }
+            icon?.let {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = it,
+                    contentDescription = null,
+                    tint = iconTint
+                )
             }
             Icon(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(R.drawable.arrow_b_right_24),
                 contentDescription = null,
                 tint = ComposeAppTheme.colors.grey
