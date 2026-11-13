@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSAmountText
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
@@ -75,7 +76,6 @@ import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
-import io.horizontalsystems.walletkit.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.walletkit.uiv3.components.cards.CardsErrorMessageDefault
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
@@ -84,7 +84,6 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfoTextIcon
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellSecondary
-import io.horizontalsystems.walletkit.uiv3.components.cell.HSString
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 import kotlinx.coroutines.delay
@@ -467,40 +466,35 @@ private fun TokenBalanceHeader(
             .fillMaxWidth()
             .background(ComposeAppTheme.colors.tyler)
     ) {
-        val title: HSString
-        val body: HSString
+        val title: String
+        val subtitle: String
+        var titleColor = ComposeAppTheme.colors.leah
+        var subtitleColor = ComposeAppTheme.colors.grey
 
         if (balanceViewItem.balanceHidden || balanceViewItem.primaryValue == null) {
-            title = "* * *".hs
-            body = "".hs
+            title = "* * *"
+            subtitle = ""
         } else {
-            val color = if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
-                ComposeAppTheme.colors.andy
-            } else {
-                null
+            if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
+                titleColor = ComposeAppTheme.colors.andy
+                subtitleColor = ComposeAppTheme.colors.jacob
             }
 
-            val bodyColor = if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
-                ComposeAppTheme.colors.jacob
-            } else {
-                null
-            }
-
-            title = balanceViewItem.primaryValue.value.hs(color = color)
-            val bodyText = when {
+            title = balanceViewItem.primaryValue.value
+            subtitle = when {
                 balanceViewItem.syncingTextValue != null -> balanceViewItem.syncingTextValue
                 balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive -> balanceViewItem.attentionIcon.caution.text
                 balanceViewItem.secondaryValue?.value != null -> balanceViewItem.secondaryValue.value
                 else -> ""
             }
-
-            body = bodyText.hs(color = bodyColor)
         }
 
-        CardsElementAmountText(
+        HSAmountText(
             modifier = Modifier.testTag(TestTags.TOKEN_BALANCE),
             title = title,
-            body = body,
+            subtitle = subtitle,
+            titleColor = titleColor,
+            subtitleColor = subtitleColor,
             onClickTitle = {
                 viewModel.toggleBalanceVisibility()
                 HudHelper.vibrate(context)

@@ -14,6 +14,7 @@ import io.horizontalsystems.designkit.R
 
 @Immutable
 class Typography internal constructor(
+    val title: TextStyle,
     val title1: TextStyle,
     val title2М: TextStyle,
     val title2R: TextStyle,
@@ -37,6 +38,11 @@ class Typography internal constructor(
 
     constructor(
         defaultFontFamily: FontFamily = manropeFont,
+        title: TextStyle = TextStyle(
+            fontWeight = FontWeight.Medium,
+            fontSize = 42.sp,
+            letterSpacing = 0.sp,
+        ),
         title1: TextStyle = TextStyle(
             fontWeight = FontWeight.SemiBold,
             fontSize = 38.sp,
@@ -129,6 +135,7 @@ class Typography internal constructor(
             letterSpacing = 0.sp,
         ),
     ) : this(
+        title = title.withFontFamily(defaultFontFamily),
         title1 = title1.withFontFamily(defaultFontFamily),
         title2М = title2М.withFontFamily(defaultFontFamily),
         title2R = title2R.withFontFamily(defaultFontFamily),

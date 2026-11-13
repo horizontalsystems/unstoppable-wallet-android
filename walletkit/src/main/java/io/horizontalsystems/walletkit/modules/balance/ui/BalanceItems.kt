@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.ButtonStyle
 import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSAmountText
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.components.HSIconButton
@@ -88,7 +89,6 @@ import io.horizontalsystems.walletkit.uiv3.components.AlertFormat
 import io.horizontalsystems.walletkit.uiv3.components.AlertType
 import io.horizontalsystems.walletkit.uiv3.components.BalanceButtonsGroup
 import io.horizontalsystems.walletkit.uiv3.components.BoxBordered
-import io.horizontalsystems.walletkit.uiv3.components.cards.CardsElementAmountText
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
@@ -685,18 +685,18 @@ fun TotalBalanceRow(
     balanceHidden: Boolean
 ) {
     if (balanceHidden) {
-        CardsElementAmountText(
+        HSAmountText(
             modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
-            title = "* * *".hs,
-            body = "".hs,
+            title = "* * *",
+            subtitle = "",
             onClickTitle = onClickTitle,
             onClickSubtitle = onClickSubtitle
         )
     } else {
-        CardsElementAmountText(
+        HSAmountText(
             modifier = Modifier.testTag(TestTags.BALANCE_TOTAL),
-            title = totalState.primaryAmountStr.hs,
-            body = totalState.secondaryAmountStr.hs,
+            title = totalState.primaryAmountStr,
+            subtitle = totalState.secondaryAmountStr,
             onClickTitle = onClickTitle,
             onClickSubtitle = onClickSubtitle,
         )
