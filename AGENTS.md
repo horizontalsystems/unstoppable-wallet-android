@@ -183,7 +183,8 @@ check (`AddressCheckType`) is enabled separately.
 - **ViewModels**: Suffix with `ViewModel`
 - **Services**: Suffix with `Service`
 - **Repositories**: Suffix with `Repository`
-- **Compose**: New components go in `uiv3/components/`
+- **Compose**: Where a new component goes depends on its layer, see
+  [UI work](#ui-work)
 - **Design kit**: The `designkit` module (`io.horizontalsystems.designkit`)
   holds what the Figma design system file defines: colours and typography
   in `theme`, and in `components` the shared components confirmed against
@@ -220,6 +221,48 @@ ButtonPrimaryYellow(
     onClick = { viewModel.doAction() }
 )
 ```
+
+## UI work
+
+### Layers
+
+- `designkit` is the bottom layer: tokens and generic components defined in
+  the Figma design system file. It imports nothing from `walletkit` or `app`.
+- Wallet-specific components (a coin icon, a token amount input) take plain
+  display data and do not depend on `walletkit`. Their module is created when
+  the first one is ready; until then they stay in `uiv3/components/`.
+- Screens live in `walletkit` and build on both.
+- New generic components go into `designkit`, never into `walletkit`'s `ui/`
+  or `uiv3/`. Screens migrate one pull request each with their logic
+  untouched; an old component is deleted with its last usage.
+
+### Moving a component into `designkit`
+
+- Name the component, its properties and its values as Figma does, so they
+  can be searched there. No renames for code style.
+- Its icons move with it.
+- Use theme text styles (`ComposeAppTheme.typography.*`), not the
+  `body_leah`-style helpers from `walletkit`'s `Text.kt`.
+
+### Reading a design
+
+- The linked Figma frame may be the iOS one. Use its Android twin on the same
+  page and report where the two differ.
+- List the page's other frames and ask whether they are in scope before
+  calling the issue done.
+- Compare the frame with the current screen first and report the differences.
+  Where the design is silent, ask.
+- Keep Figma's values even when they look wrong, such as low contrast. Raise
+  the question; do not deviate silently.
+
+### Verifying
+
+- Confirm the component you changed is the one the screens use.
+- Check a new component inside horizontally scrolling rows, not only in
+  bounded layouts.
+- Check light and dark on a device and compare before and after side by side.
+- Use a test device with the end-to-end build. Never clear or overwrite an
+  app that holds real wallets.
 
 ## Strings and Translations
 
