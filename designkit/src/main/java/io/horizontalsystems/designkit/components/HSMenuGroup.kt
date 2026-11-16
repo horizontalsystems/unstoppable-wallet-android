@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -75,6 +77,9 @@ fun HSMenuGroup(
             .clip(HSMenuGroupDefaults.Shape)
             .background(ComposeAppTheme.colors.lawrence)
             .padding(vertical = HSMenuGroupDefaults.VerticalPadding)
+            // A menu taller than the space it is given scrolls inside its
+            // surface, so the last items stay reachable.
+            .verticalScroll(rememberScrollState())
     ) {
         HSMenuGroupContent(title = title, items = items)
     }
