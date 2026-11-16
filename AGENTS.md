@@ -337,11 +337,10 @@ controls inside it do.
 **Undeclared names fail silently.** A flow step that selects an undeclared
 name fails the run, unless the step is conditional (`when: visible`,
 `optional: true`). Then Maestro skips it and the flow passes. When you add
-an `id:` to a flow, check that `TestTags` declares it. CI fails a pull
-request when a flow on appkb's `flows` branch selects a name `TestTags` does
-not declare, outside steps that run only on iOS
-(`.github/scripts/check_test_tags.py`). So a pull request that renames or
-removes a tag a flow selects fails until appkb is changed too.
+an `id:` to a flow, check that `TestTags` declares it. Pull request CI does
+not check this; the test station checks it when it writes flows. So a pull
+request that renames or removes a tag a flow selects is not stopped by CI:
+change appkb together with it.
 
 ### UI tests for features
 

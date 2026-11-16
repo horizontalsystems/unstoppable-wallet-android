@@ -175,18 +175,6 @@ Checked on Maestro 2.11.0 with the API 35 image:
 | `maestro.sh` | `maestro` with the settings from `.env.e2e` loaded, for local runs |
 | `load-config.sh` | Loads `.env.e2e`; sourced by the other scripts |
 
-## Test tag check
-
-The Check Test Tags workflow fails a pull request when a flow on appkb's
-`main` branch selects an `id:` that `TestTags` does not declare, outside
-steps that run only on iOS. It reads appkb with the `APPKB_TOKEN` repository
-secret, a read-only token for that repository. Pull requests from forks get
-no secrets and skip the check. To run it locally, after `fetch-flows.sh`:
-
-```bash
-python3 .github/scripts/check_test_tags.py
-```
-
 ## Secrets
 
 Local runs read their settings from `maestro/.env.e2e`. It is gitignored;
