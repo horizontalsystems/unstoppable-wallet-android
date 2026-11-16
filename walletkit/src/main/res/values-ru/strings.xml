@@ -1067,9 +1067,9 @@
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">из файла</string>
-    <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
+    <string name="ImportWallet_BackupFile_Description">Локальная резервная копия</string>
     <string name="ImportWallet_RecoveryPhrase">с фразой восстановления</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Восстановить по набору слов</string>
     <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является резервной копией кошелька, или файл был повреждён и не может быть восстановлен.</string>
     <string name="ImportWallet_SelectAnotherFile">Выберите другой файл</string>
@@ -1693,7 +1693,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Условия Passkey-кошелька</string>
     <string name="CreateNewWallet_Standard">Стандартный</string>
-    <string name="CreateNewWallet_Standard_Description">Кошелёк с фразой восстановления, требующей ручного резервного копирования.</string>
+    <string name="CreateNewWallet_Standard_Description">Резервная копия вручную</string>
     <string name="CreateWallet_AddPassphrase">Добавить пароль-фразу</string>
     <string name="CreateWallet_AdvancedOptions">Расширенные настройки</string>
     <string name="CreateWallet_PassphraseOptional">Кодовая фраза (необязательно)</string>
@@ -1701,7 +1701,7 @@
     <string name="ImportWallet_Button_Understood">Понятно</string>
     <string name="ImportWallet_Passkey">Через Passkey</string>
     <string name="ImportWallet_PrivateKey">из Приватного Ключа</string>
-    <string name="ImportWallet_PrivateKey_Description">Импортировать кошелёк с помощью приватного ключа.</string>
+    <string name="ImportWallet_PrivateKey_Description">Импорт с приватным ключом</string>
     <string name="ManageAccount_WalletName">Имя кошелька</string>
     <string name="ManageAccounts_ExistingWallet">Существующий кошелёк</string>
     <string name="ManageAccounts_NoActiveWallets">Нет активных кошельков</string>
@@ -1712,8 +1712,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">Создать стандартный кошелёк</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Это устройство не поддерживает кошельки с Passkey. Вместо этого вы можете создать стандартный кошелёк.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Не удалось создать Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">Кошелёк с фразой восстановления, надёжно сохранённой вашим устройством.</string>
-    <string name="ImportWallet_Passkey_Description">Восстановите кошелёк с помощью вашего устройства.</string>
+    <string name="CreateNewWallet_Passkey_Description">Фраза защищена устройством</string>
+    <string name="ImportWallet_Passkey_Description">Восстановить с устройства</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">Это устройство не поддерживает восстановление через Passkey. Используйте другой способ восстановления.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">Восстановление через Passkey не поддерживается</string>
     <string name="PasskeyTerms_DeviceDependency">Зависимость от устройства</string>
@@ -2002,6 +2002,6 @@
     <string name="Welcome_TermsOfUse">Условия использования</string>
     <string name="Welcome_PrivacyPolicy">Политику конфиденциальности</string>
     <string name="ImportWallet_ViewOnly">Кошелёк только для просмотра</string>
-    <string name="ImportWallet_ViewOnly_Description">Добавьте кошелёк, чтобы следить за балансами и активностью без доступа к средствам.</string>
+    <string name="ImportWallet_ViewOnly_Description">Только баланс и активность</string>
     <string name="Balance_NoWallets">Нет кошельков. Добавьте кошелек ниже.</string>
 </resources>

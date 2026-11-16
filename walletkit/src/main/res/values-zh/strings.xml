@@ -1059,9 +1059,9 @@
     <string name="ManageAccounts_WatchAddress">观察地址</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">从文件</string>
-    <string name="ImportWallet_BackupFile_Description">从备份文件导入.</string>
+    <string name="ImportWallet_BackupFile_Description">您设备上的备份文件</string>
     <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入钱包。</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">通过单词序列恢复</string>
     <string name="ImportWallet_WarningInvalidJson">无效的 Json 文件</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">此文件不是钱包的有效备份，或者文件已损坏，无法恢复。</string>
     <string name="ImportWallet_SelectAnotherFile">Please choose another file.</string>
@@ -1685,7 +1685,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey 钱包条款</string>
     <string name="CreateNewWallet_Standard">标准</string>
-    <string name="CreateNewWallet_Standard_Description">带有恢复短语的钱包，需要手动备份。</string>
+    <string name="CreateNewWallet_Standard_Description">手动备份恢复短语</string>
     <string name="CreateWallet_AddPassphrase">添加密码短语</string>
     <string name="CreateWallet_AdvancedOptions">高级选项</string>
     <string name="CreateWallet_PassphraseOptional">密码短语（可选）</string>
@@ -1693,7 +1693,7 @@
     <string name="ImportWallet_Button_Understood">明白</string>
     <string name="ImportWallet_Passkey">通过 Passkey</string>
     <string name="ImportWallet_PrivateKey">通过私钥导入</string>
-    <string name="ImportWallet_PrivateKey_Description">使用私钥导入钱包。</string>
+    <string name="ImportWallet_PrivateKey_Description">使用私钥导入</string>
     <string name="ManageAccount_WalletName">钱包名称</string>
     <string name="ManageAccounts_ExistingWallet">已有钱包</string>
     <string name="ManageAccounts_NoActiveWallets">没有活跃钱包</string>
@@ -1704,8 +1704,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">创建标准钱包</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">此设备不支持 Passkey 钱包。您可以改为创建标准钱包。</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">无法创建 Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">带有恢复短语的钱包，由您的设备安全保存。</string>
-    <string name="ImportWallet_Passkey_Description">使用您的设备恢复钱包。</string>
+    <string name="CreateNewWallet_Passkey_Description">短语由您的设备保护</string>
+    <string name="ImportWallet_Passkey_Description">通过您的设备恢复</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">此设备不支持 Passkey 恢复。请使用其他恢复方式。</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">不支持 Passkey 恢复</string>
     <string name="PasskeyTerms_DeviceDependency">设备依赖</string>
@@ -1992,6 +1992,6 @@
     <string name="Welcome_TermsOfUse">使用条款</string>
     <string name="Welcome_PrivacyPolicy">隐私政策</string>
     <string name="ImportWallet_ViewOnly">仅查看钱包</string>
-    <string name="ImportWallet_ViewOnly_Description">添加一个钱包，用于跟踪余额和活动，但无法动用资金。</string>
+    <string name="ImportWallet_ViewOnly_Description">仅查看余额和活动</string>
     <string name="Balance_NoWallets">暂无钱包。请在下方添加。</string>
 </resources>

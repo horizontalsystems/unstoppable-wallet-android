@@ -1062,9 +1062,9 @@
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">À partir du fichier</string>
-    <string name="ImportWallet_BackupFile_Description">Importer depuis un fichier de sauvegarde.</string>
+    <string name="ImportWallet_BackupFile_Description">Sauvegarde sur votre appareil</string>
     <string name="ImportWallet_RecoveryPhrase">Voir la phase de récupération</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Importer un portefeuille en utilisant une phrase de récupération ou une clé privée.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Récupération par suite de mots</string>
     <string name="ImportWallet_WarningInvalidJson">Fichier Json invalide</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Ce fichier n\'est pas une sauvegarde valide du portefeuille, ou bien il a été corrompu et ne peut pas être restauré.</string>
     <string name="ImportWallet_SelectAnotherFile">Sélectionnez un autre fichier</string>
@@ -1688,7 +1688,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Conditions du Wallet Passkey</string>
     <string name="CreateNewWallet_Standard">Standard</string>
-    <string name="CreateNewWallet_Standard_Description">Un portefeuille avec une phrase de récupération nécessitant une sauvegarde manuelle.</string>
+    <string name="CreateNewWallet_Standard_Description">Phrase à sauvegarder à la main</string>
     <string name="CreateWallet_AddPassphrase">Ajouter une phrase secrète</string>
     <string name="CreateWallet_AdvancedOptions">Options Avancées</string>
     <string name="CreateWallet_PassphraseOptional">Phrase secrète (optionnel)</string>
@@ -1696,7 +1696,7 @@
     <string name="ImportWallet_Button_Understood">Unified</string>
     <string name="ImportWallet_Passkey">Depuis Passkey</string>
     <string name="ImportWallet_PrivateKey">depuis une Clé Privée</string>
-    <string name="ImportWallet_PrivateKey_Description">Importer un wallet à l\'aide d\'une clé privée.</string>
+    <string name="ImportWallet_PrivateKey_Description">Importer avec une clé privée</string>
     <string name="ManageAccount_WalletName">Nom du Wallet</string>
     <string name="ManageAccounts_ExistingWallet">Wallet existant</string>
     <string name="ManageAccounts_NoActiveWallets">Aucun wallet actif</string>
@@ -1707,8 +1707,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">Créer un portefeuille standard</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Cet appareil ne prend pas en charge les portefeuilles Passkey. Vous pouvez créer un portefeuille standard à la place.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Impossible de créer le Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">Un portefeuille avec une phrase de récupération enregistrée en toute sécurité par votre appareil.</string>
-    <string name="ImportWallet_Passkey_Description">Restaurez votre portefeuille à l\'aide de votre appareil.</string>
+    <string name="CreateNewWallet_Passkey_Description">Phrase protégée par l\'appareil</string>
+    <string name="ImportWallet_Passkey_Description">Récupération via votre appareil</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">Cet appareil ne prend pas en charge la restauration par Passkey. Utilisez une autre méthode de restauration.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">La restauration par Passkey n\'est pas prise en charge</string>
     <string name="PasskeyTerms_DeviceDependency">Dépendance à l\'appareil</string>
@@ -1995,6 +1995,6 @@
     <string name="Welcome_TermsOfUse">Conditions d\'utilisation</string>
     <string name="Welcome_PrivacyPolicy">Politique de confidentialité</string>
     <string name="ImportWallet_ViewOnly">Wallet en lecture seule</string>
-    <string name="ImportWallet_ViewOnly_Description">Ajoutez un wallet pour suivre les soldes et l\'activité sans accès aux fonds.</string>
+    <string name="ImportWallet_ViewOnly_Description">Solde et activité uniquement</string>
     <string name="Balance_NoWallets">Aucun portefeuille. Ajoutez-en un ci-dessous.</string>
 </resources>

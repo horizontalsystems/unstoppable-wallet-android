@@ -1552,9 +1552,9 @@
     <string name="ManageAccounts_NoActiveWallets">No Active Wallets</string>
 
     <string name="CreateNewWallet_Standard">Standard</string>
-    <string name="CreateNewWallet_Standard_Description">A wallet with a recovery phrase that requires manual backup.</string>
+    <string name="CreateNewWallet_Standard_Description">Manual recovery phrase backup</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">A wallet with a recovery phrase securely saved by your device.</string>
+    <string name="CreateNewWallet_Passkey_Description">Phrase secured by your device</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey Wallet Terms</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Couldn\'t create passkey</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">This device does not support passkey wallets. You can create a Standard wallet instead.</string>
@@ -1565,13 +1565,13 @@
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
-    <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
+    <string name="ImportWallet_BackupFile_Description">Backup file on your device</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Recovery with a word sequence</string>
     <string name="ImportWallet_PrivateKey">from Private Key</string>
-    <string name="ImportWallet_PrivateKey_Description">Import a wallet using a private key.</string>
+    <string name="ImportWallet_PrivateKey_Description">Import with a private key</string>
     <string name="ImportWallet_Passkey">from Passkey</string>
-    <string name="ImportWallet_Passkey_Description">Restore your wallet using your device.</string>
+    <string name="ImportWallet_Passkey_Description">Recovery via your device</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
@@ -2348,6 +2348,6 @@
     <string name="Welcome_TermsOfUse">Terms of Use</string>
     <string name="Welcome_PrivacyPolicy">Privacy Policy</string>
     <string name="ImportWallet_ViewOnly">View Only Wallet</string>
-    <string name="ImportWallet_ViewOnly_Description">Add a wallet to track balances and activity without access to funds.</string>
+    <string name="ImportWallet_ViewOnly_Description">Balance and activity only</string>
     <string name="Balance_NoWallets">No wallets. Add one below.</string>
 </resources>

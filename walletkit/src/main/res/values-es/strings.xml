@@ -1060,9 +1060,9 @@
     <string name="ManageAccounts_WatchAddress">Ver Monedero</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Desde archivo</string>
-    <string name="ImportWallet_BackupFile_Description">Importar desde un archivo de copia de seguridad.</string>
+    <string name="ImportWallet_BackupFile_Description">Copia de seguridad local</string>
     <string name="ImportWallet_RecoveryPhrase">de Frase de Recuperación</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Importar una cartera usando una frase de recuperación o una clave privada.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Con una serie de palabras</string>
     <string name="ImportWallet_WarningInvalidJson">Archivo Json inválido</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Este archivo no es una copia de seguridad válida de la cartera, o bien ha sido dañado y no se puede restaurar.</string>
     <string name="ImportWallet_SelectAnotherFile">Seleccione otro archivo</string>
@@ -1686,7 +1686,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Términos del Wallet con Passkey</string>
     <string name="CreateNewWallet_Standard">Estándar</string>
-    <string name="CreateNewWallet_Standard_Description">Una wallet con una frase de recuperación que requiere una copia de seguridad manual.</string>
+    <string name="CreateNewWallet_Standard_Description">Copia manual de la frase</string>
     <string name="CreateWallet_AddPassphrase">Agregar frase de contraseña</string>
     <string name="CreateWallet_AdvancedOptions">Opciones Avanzadas</string>
     <string name="CreateWallet_PassphraseOptional">Frase de contraseña (opcional)</string>
@@ -1694,7 +1694,7 @@
     <string name="ImportWallet_Button_Understood">Entendido</string>
     <string name="ImportWallet_Passkey">Desde Passkey</string>
     <string name="ImportWallet_PrivateKey">desde Clave Privada</string>
-    <string name="ImportWallet_PrivateKey_Description">Importar un wallet usando una clave privada.</string>
+    <string name="ImportWallet_PrivateKey_Description">Importar con una clave privada</string>
     <string name="ManageAccount_WalletName">Nombre del Wallet</string>
     <string name="ManageAccounts_ExistingWallet">Wallet existente</string>
     <string name="ManageAccounts_NoActiveWallets">Sin wallets activos</string>
@@ -1705,8 +1705,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">Crear wallet estándar</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Este dispositivo no admite wallets con Passkey. En su lugar, puedes crear una wallet estándar.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">No se pudo crear el Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">Una wallet con una frase de recuperación guardada de forma segura por tu dispositivo.</string>
-    <string name="ImportWallet_Passkey_Description">Restaura tu wallet usando tu dispositivo.</string>
+    <string name="CreateNewWallet_Passkey_Description">Tu dispositivo protege la frase</string>
+    <string name="ImportWallet_Passkey_Description">Recuperar con tu dispositivo</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">Este dispositivo no admite la restauración con Passkey. Usa otro método de restauración.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">La restauración con Passkey no es compatible</string>
     <string name="PasskeyTerms_DeviceDependency">Dependencia del dispositivo</string>
@@ -1993,6 +1993,6 @@
     <string name="Welcome_TermsOfUse">Términos de uso</string>
     <string name="Welcome_PrivacyPolicy">Política de privacidad</string>
     <string name="ImportWallet_ViewOnly">Billetera de solo lectura</string>
-    <string name="ImportWallet_ViewOnly_Description">Añade una billetera para seguir saldos y actividad sin acceso a los fondos.</string>
+    <string name="ImportWallet_ViewOnly_Description">Solo saldo y actividad</string>
     <string name="Balance_NoWallets">No hay monederos. Añade uno abajo.</string>
 </resources>

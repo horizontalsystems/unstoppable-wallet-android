@@ -1065,9 +1065,9 @@
     <string name="ManageAccounts_WatchAddress">Beobachtungsadresse</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">aus Datei</string>
-    <string name="ImportWallet_BackupFile_Description">Importieren Sie eine Sicherungsdatei aus Ihrem lokalen Ordner.</string>
+    <string name="ImportWallet_BackupFile_Description">Sicherungsdatei auf dem Gerät</string>
     <string name="ImportWallet_RecoveryPhrase">von Wiederherstellungsphrase</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Importieren Sie eine Brieftasche mit einer Wiederherstellungsphrase oder einem privaten Schlüssel.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Wiederherstellen per Wortfolge</string>
     <string name="ImportWallet_WarningInvalidJson">Ungültige Json-Datei</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Diese Datei ist kein gültiges Backup der Brieftasche oder die Datei wurde beschädigt und kann nicht wiederhergestellt werden.</string>
     <string name="ImportWallet_SelectAnotherFile">Wähle eine andere Datei</string>
@@ -1691,7 +1691,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey-Wallet-Bedingungen</string>
     <string name="CreateNewWallet_Standard">Standard</string>
-    <string name="CreateNewWallet_Standard_Description">Ein Wallet mit einer Wiederherstellungsphrase, die manuell gesichert werden muss.</string>
+    <string name="CreateNewWallet_Standard_Description">Manuelle Sicherung der Phrase</string>
     <string name="CreateWallet_AddPassphrase">Passphrase hinzufügen</string>
     <string name="CreateWallet_AdvancedOptions">Erweiterte Optionen</string>
     <string name="CreateWallet_PassphraseOptional">Passphrase (optional)</string>
@@ -1699,7 +1699,7 @@
     <string name="ImportWallet_Button_Understood">Verstanden</string>
     <string name="ImportWallet_Passkey">Über Passkey</string>
     <string name="ImportWallet_PrivateKey">aus Private Key</string>
-    <string name="ImportWallet_PrivateKey_Description">Wallet mit einem Private Key importieren.</string>
+    <string name="ImportWallet_PrivateKey_Description">Import mit einem Private Key</string>
     <string name="ManageAccount_WalletName">Wallet-Name</string>
     <string name="ManageAccounts_ExistingWallet">Vorhandene Wallet</string>
     <string name="ManageAccounts_NoActiveWallets">Keine aktiven Wallets</string>
@@ -1710,8 +1710,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">Standard-Wallet erstellen</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Dieses Gerät unterstützt keine Passkey-Wallets. Sie können stattdessen ein Standard-Wallet erstellen.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Passkey konnte nicht erstellt werden</string>
-    <string name="CreateNewWallet_Passkey_Description">Ein Wallet mit einer Wiederherstellungsphrase, die sicher von Ihrem Gerät gespeichert wird.</string>
-    <string name="ImportWallet_Passkey_Description">Stellen Sie Ihr Wallet mit Ihrem Gerät wieder her.</string>
+    <string name="CreateNewWallet_Passkey_Description">Vom Gerät geschützte Phrase</string>
+    <string name="ImportWallet_Passkey_Description">Wiederherstellen per Gerät</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">Dieses Gerät unterstützt die Passkey-Wiederherstellung nicht. Verwenden Sie eine andere Wiederherstellungsmethode.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">Passkey-Wiederherstellung wird nicht unterstützt</string>
     <string name="PasskeyTerms_DeviceDependency">Geräteabhängigkeit</string>
@@ -1998,6 +1998,6 @@
     <string name="Welcome_TermsOfUse">Nutzungsbedingungen</string>
     <string name="Welcome_PrivacyPolicy">Datenschutzerklärung</string>
     <string name="ImportWallet_ViewOnly">Nur-Ansicht-Wallet</string>
-    <string name="ImportWallet_ViewOnly_Description">Füge eine Wallet hinzu, um Guthaben und Aktivitäten ohne Zugriff auf die Mittel zu verfolgen.</string>
+    <string name="ImportWallet_ViewOnly_Description">Nur Guthaben und Aktivitäten</string>
     <string name="Balance_NoWallets">Keine Wallets. Füge unten eine hinzu.</string>
 </resources>

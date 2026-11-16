@@ -881,7 +881,7 @@
     <string name="ManageAccounts_WatchAddress">주소 관찰</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">파일에서</string>
-    <string name="ImportWallet_BackupFile_Description">백업 파일에서 가져오기.</string>
+    <string name="ImportWallet_BackupFile_Description">기기에 저장된 백업 파일</string>
     <string name="ImportWallet_RecoveryPhrase">복구 문구에서</string>
     <string name="ImportWallet_WarningInvalidJson">잘못된 Json 파일입니다.</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">이 파일은 지갑의 유효한 백업이 아니거나 파일이 손상되어 복원할 수 없습니다.</string>
@@ -1515,7 +1515,7 @@
     <string name="CreateNewWallet_Passkey">패스키</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey 지갑 이용약관</string>
     <string name="CreateNewWallet_Standard">표준</string>
-    <string name="CreateNewWallet_Standard_Description">수동 백업이 필요한 복구 문구가 포함된 지갑입니다.</string>
+    <string name="CreateNewWallet_Standard_Description">복구 문구 수동 백업</string>
     <string name="CreateWallet_AddPassphrase">패스프레이즈 추가</string>
     <string name="CreateWallet_AdvancedOptions">고급 옵션</string>
     <string name="CreateWallet_PassphraseOptional">패스프레이즈 (선택 사항)</string>
@@ -1523,8 +1523,8 @@
     <string name="ImportWallet_Button_Understood">확인</string>
     <string name="ImportWallet_Passkey">패스키로 복원</string>
     <string name="ImportWallet_PrivateKey">프라이빗 키에서</string>
-    <string name="ImportWallet_PrivateKey_Description">프라이빗 키를 사용하여 지갑을 가져옵니다.</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">복구 문구를 사용하여 지갑을 가져옵니다.</string>
+    <string name="ImportWallet_PrivateKey_Description">프라이빗 키로 가져오기</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">일련의 단어로 복구</string>
     <string name="Info_Reserved_Description">Stellar 네트워크는 지갑을 활성화하기 위해 1 XLM을 잠그며, 지갑에서 활성화된 각 토큰마다 0.5 XLM을 예치금으로 잠급니다.</string>
     <string name="Info_Reserved_Title">잠김</string>
     <string name="Info_Reserved_WalletAction">지갑 활성화</string>
@@ -1610,8 +1610,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">표준 지갑 만들기</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">이 기기는 패스키 지갑을 지원하지 않습니다. 대신 표준 지갑을 만들 수 있습니다.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">패스키를 만들 수 없습니다</string>
-    <string name="CreateNewWallet_Passkey_Description">복구 문구가 기기에 안전하게 저장되는 지갑입니다.</string>
-    <string name="ImportWallet_Passkey_Description">기기를 사용하여 지갑을 복구하세요.</string>
+    <string name="CreateNewWallet_Passkey_Description">기기가 보호하는 복구 문구</string>
+    <string name="ImportWallet_Passkey_Description">기기를 통한 복구</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">이 기기는 패스키 복구를 지원하지 않습니다. 다른 복구 방법을 사용하세요.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">패스키 복구가 지원되지 않습니다</string>
     <string name="PasskeyTerms_DeviceDependency">기기 종속성</string>
@@ -1988,6 +1988,6 @@
     <string name="Welcome_TermsOfUse">이용약관</string>
     <string name="Welcome_PrivacyPolicy">개인정보 처리방침</string>
     <string name="ImportWallet_ViewOnly">조회 전용 지갑</string>
-    <string name="ImportWallet_ViewOnly_Description">자금에 접근하지 않고 잔액과 활동을 확인할 지갑을 추가합니다.</string>
+    <string name="ImportWallet_ViewOnly_Description">잔액과 활동만 확인</string>
     <string name="Balance_NoWallets">지갑이 없습니다. 아래에서 추가하세요.</string>
 </resources>

@@ -675,8 +675,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">ساخت کیف‌پول استاندارد</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">این دستگاه از کیف‌پول‌های Passkey پشتیبانی نمی‌کند. در عوض می‌توانید یک کیف‌پول استاندارد بسازید.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">ساخت Passkey ممکن نشد</string>
-    <string name="CreateNewWallet_Passkey_Description">کیف‌پولی با عبارت بازیابی که توسط دستگاه شما به‌صورت امن ذخیره می‌شود.</string>
-    <string name="ImportWallet_Passkey_Description">کیف‌پول خود را با استفاده از دستگاهتان بازیابی کنید.</string>
+    <string name="CreateNewWallet_Passkey_Description">عبارت محافظت‌شده با دستگاه شما</string>
+    <string name="ImportWallet_Passkey_Description">بازیابی از طریق دستگاه شما</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">این دستگاه از بازیابی با Passkey پشتیبانی نمی‌کند. از روش بازیابی دیگری استفاده کنید.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">بازیابی با Passkey پشتیبانی نمی‌شود</string>
     <string name="PasskeyTerms_DeviceDependency">وابستگی به دستگاه</string>
@@ -1529,15 +1529,15 @@
     <string name="ManageAccounts_ExistingWallet">کیف پول موجود</string>
     <string name="ManageAccounts_NoActiveWallets">کیف پول فعالی وجود ندارد</string>
     <string name="CreateNewWallet_Standard">استاندارد</string>
-    <string name="CreateNewWallet_Standard_Description">کیف پولی با عبارت بازیابی که به پشتیبان‌گیری دستی نیاز دارد.</string>
+    <string name="CreateNewWallet_Standard_Description">پشتیبان‌گیری دستی از عبارت بازیابی</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">شرایط کیف پول Passkey</string>
     <string name="ImportWallet_BackupFile">از فایل</string>
-    <string name="ImportWallet_BackupFile_Description">یک فایل پشتیبان را از پوشه محلی خود وارد کنید.</string>
+    <string name="ImportWallet_BackupFile_Description">فایل پشتیبان در دستگاه شما</string>
     <string name="ImportWallet_RecoveryPhrase">از عبارت بازیابی</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">وارد کردن کیف پول با استفاده از عبارت بازیابی.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">بازیابی با دنباله‌ای از کلمات</string>
     <string name="ImportWallet_PrivateKey">از کلید خصوصی</string>
-    <string name="ImportWallet_PrivateKey_Description">وارد کردن کیف پول با استفاده از کلید خصوصی.</string>
+    <string name="ImportWallet_PrivateKey_Description">وارد کردن با کلید خصوصی</string>
     <string name="ImportWallet_Passkey">از Passkey</string>
     <string name="ImportWallet_WarningInvalidJson">فایل Json نامعتبر</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">این فایل پشتیبان معتبری از کیف پول نیست، یا فایل خراب شده و قابل بازیابی نیست.</string>
@@ -1981,6 +1981,6 @@
     <string name="Welcome_TermsOfUse">شرایط استفاده</string>
     <string name="Welcome_PrivacyPolicy">سیاست حفظ حریم خصوصی</string>
     <string name="ImportWallet_ViewOnly">کیف پول فقط مشاهده</string>
-    <string name="ImportWallet_ViewOnly_Description">کیف پولی برای پیگیری موجودی و فعالیت، بدون دسترسی به دارایی‌ها، اضافه کنید.</string>
+    <string name="ImportWallet_ViewOnly_Description">فقط موجودی و فعالیت</string>
     <string name="Balance_NoWallets">کیف پولی وجود ندارد. یکی را در پایین اضافه کنید.</string>
 </resources>

@@ -1065,9 +1065,9 @@
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">do Arquivo</string>
-    <string name="ImportWallet_BackupFile_Description">Importar um arquivo de backup da sua pasta local.</string>
+    <string name="ImportWallet_BackupFile_Description">Arquivo de backup local</string>
     <string name="ImportWallet_RecoveryPhrase">da frase de recuperação</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Importar uma carteira usando uma frase de recuperação ou uma chave privada.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Com uma série de palavras</string>
     <string name="ImportWallet_WarningInvalidJson">Arquivo Json Inválido</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Este arquivo não é um backup válido da carteira, ou o arquivo foi corrompido e não pode ser restaurado.</string>
     <string name="ImportWallet_SelectAnotherFile">Selecione Outro Arquivo</string>
@@ -1691,7 +1691,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_PasskeyTerms">Termos da Wallet com Passkey</string>
     <string name="CreateNewWallet_Standard">Padrão</string>
-    <string name="CreateNewWallet_Standard_Description">Uma carteira com uma frase de recuperação que requer backup manual.</string>
+    <string name="CreateNewWallet_Standard_Description">Backup manual da frase</string>
     <string name="CreateWallet_AddPassphrase">Adicionar Frase Secreta</string>
     <string name="CreateWallet_AdvancedOptions">Opções Avançadas</string>
     <string name="CreateWallet_PassphraseOptional">Frase secreta (opcional)</string>
@@ -1699,7 +1699,7 @@
     <string name="ImportWallet_Button_Understood">Entendido</string>
     <string name="ImportWallet_Passkey">Via Passkey</string>
     <string name="ImportWallet_PrivateKey">da Chave Privada</string>
-    <string name="ImportWallet_PrivateKey_Description">Importar uma carteira usando uma chave privada.</string>
+    <string name="ImportWallet_PrivateKey_Description">Importar com chave privada</string>
     <string name="ManageAccount_WalletName">Nome da Carteira</string>
     <string name="ManageAccounts_ExistingWallet">Carteira existente</string>
     <string name="ManageAccounts_NoActiveWallets">Nenhuma Wallet Ativa</string>
@@ -1710,8 +1710,8 @@
     <string name="CreateNewWallet_Button_CreateStandardWallet">Criar carteira padrão</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">Este dispositivo não oferece suporte a carteiras com Passkey. Em vez disso, você pode criar uma carteira padrão.</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Não foi possível criar o Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">Uma carteira com uma frase de recuperação salva com segurança pelo seu dispositivo.</string>
-    <string name="ImportWallet_Passkey_Description">Restaure sua carteira usando seu dispositivo.</string>
+    <string name="CreateNewWallet_Passkey_Description">Frase protegida pelo dispositivo</string>
+    <string name="ImportWallet_Passkey_Description">Recuperar pelo dispositivo</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Description">Este dispositivo não oferece suporte à restauração com Passkey. Use outro método de restauração.</string>
     <string name="ImportWallet_RestorePasskeyNotSupported_Title">A restauração com Passkey não é compatível</string>
     <string name="PasskeyTerms_DeviceDependency">Dependência do dispositivo</string>
@@ -1998,6 +1998,6 @@
     <string name="Welcome_TermsOfUse">Termos de Uso</string>
     <string name="Welcome_PrivacyPolicy">Política de Privacidade</string>
     <string name="ImportWallet_ViewOnly">Carteira somente leitura</string>
-    <string name="ImportWallet_ViewOnly_Description">Adicione uma carteira para acompanhar saldos e atividade sem acesso aos fundos.</string>
+    <string name="ImportWallet_ViewOnly_Description">Apenas saldo e atividade</string>
     <string name="Balance_NoWallets">Nenhuma carteira. Adicione uma abaixo.</string>
 </resources>
