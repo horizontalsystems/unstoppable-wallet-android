@@ -9,6 +9,7 @@ import io.horizontalsystems.walletkit.core.address.AddressCheckType
 import io.horizontalsystems.walletkit.core.managers.BalanceHiddenManager
 import io.horizontalsystems.walletkit.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.walletkit.core.managers.SpamManager
+import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.SecureSend
 import kotlinx.coroutines.flow.drop
@@ -80,7 +81,7 @@ class SecuritySettingsViewModel(
         duressPinEnabled = duressPinEnabled,
         balanceAutoHideEnabled = balanceAutoHideEnabled,
         hideSuspiciousTxs = hideSuspiciousTxs,
-        autoLockIntervalName = localStorage.autoLockInterval.title,
+        autoLockInterval = localStorage.autoLockInterval,
         defenseSystemActions = defenseSystemActions,
     )
 
@@ -102,6 +103,11 @@ class SecuritySettingsViewModel(
 
     fun disableDuressPin() {
         pinComponent.disableDuressPin()
+        emitState()
+    }
+
+    fun setAutoLockInterval(interval: AutoLockInterval) {
+        localStorage.autoLockInterval = interval
         emitState()
     }
 
@@ -132,7 +138,7 @@ data class SecuritySettingsUiState(
     val duressPinEnabled: Boolean,
     val balanceAutoHideEnabled: Boolean,
     val hideSuspiciousTxs: Boolean,
-    val autoLockIntervalName: Int,
+    val autoLockInterval: AutoLockInterval,
     val defenseSystemActions: List<DefenseSystemAction>
 )
 

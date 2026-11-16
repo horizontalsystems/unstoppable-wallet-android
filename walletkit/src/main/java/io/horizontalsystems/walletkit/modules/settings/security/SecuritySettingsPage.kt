@@ -14,6 +14,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
@@ -38,7 +42,7 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.modules.pin.DisableDuressPinSheet
 import io.horizontalsystems.walletkit.modules.pin.EditDuressPinPage
 import io.horizontalsystems.walletkit.modules.pin.SetDuressPinIntroPage
-import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLockIntervalsPage
+import io.horizontalsystems.walletkit.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.walletkit.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.walletkit.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.walletkit.modules.settings.security.securesend.SecureSendConfigSheet
@@ -56,6 +60,8 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.walletkit.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.SecureSend
 import kotlinx.serialization.Serializable
@@ -84,6 +90,23 @@ private fun SecurityCenterScreen(
 
     val uiState = securitySettingsViewModel.uiState
     val view = LocalView.current
+    var showAutoLockMenu by rememberSaveable { mutableStateOf(false) }
+
+    if (showAutoLockMenu) {
+        MenuGroup(
+            title = stringResource(R.string.Settings_AutoLock),
+            items = AutoLockInterval.entries.map {
+                MenuItemX(
+                    title = stringResource(it.title),
+                    selected = it == uiState.autoLockInterval,
+                    item = it,
+                    testTag = TestTags.autolockInterval(it.raw),
+                )
+            },
+            onDismissRequest = { showAutoLockMenu = false },
+            onSelectItem = securitySettingsViewModel::setAutoLockInterval,
+        )
+    }
 
     HSScaffold(
         title = stringResource(R.string.Settings_SecurityCenter),
@@ -118,11 +141,11 @@ private fun SecurityCenterScreen(
                                 modifier = Modifier.testTag(TestTags.SECURITY_AUTOLOCK_VALUE),
                                 variant = ButtonVariant.Secondary,
                                 style = ButtonStyle.Transparent,
-                                title = stringResource(uiState.autoLockIntervalName),
-                                onClick = { navigation.slideFromRight(AutoLockIntervalsPage) },
+                                title = stringResource(uiState.autoLockInterval.title),
+                                onClick = { showAutoLockMenu = true },
                             )
                         },
-                        onClick = { navigation.slideFromRight(AutoLockIntervalsPage) }
+                        onClick = { showAutoLockMenu = true }
                     )
                     HsDivider()
                 }

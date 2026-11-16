@@ -1,20 +1,6 @@
 package io.horizontalsystems.walletkit.modules.settings.security.autolock
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.core.App
-
-object AutoLockModule {
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AutoLockIntervalsViewModel(App.localStorage) as T
-        }
-    }
-
-    data class AutoLockIntervalViewItem(val interval: AutoLockInterval, val selected: Boolean)
-}
 
 enum class AutoLockInterval(val raw: String, val title: Int) {
     IMMEDIATE("immediate", R.string.SettingsSecurity_AutoLock_Immediate),

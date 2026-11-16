@@ -5,6 +5,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.window.Dialog
 import io.horizontalsystems.designkit.components.HSMenuGroup
@@ -22,6 +23,7 @@ data class MenuItemX<T>(
     val item: T,
     val enabled: Boolean = true,
     val icon: Painter? = null,
+    val testTag: String? = null,
 )
 
 /**
@@ -43,6 +45,7 @@ fun <T> MenuGroup(
             items = items.map { item ->
                 HSMenuItem(
                     title = item.title,
+                    modifier = item.testTag?.let { Modifier.testTag(it) } ?: Modifier,
                     icon = item.icon,
                     selected = item.selected,
                     enabled = item.enabled,
