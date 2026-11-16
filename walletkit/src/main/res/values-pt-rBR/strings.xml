@@ -857,18 +857,16 @@
     <string name="SettingsSubscription_ManageSubscription">Gerenciar Assinatura</string>
     <string name="Period_Days">%s dias</string>
     <!--Premium Screens-->
-    <string name="Premium_Title">Prêmio</string>
-    <string name="Premium_EnjoyFreePeriod">Aproveite a primeira %s GRÁTIS.</string>
-    <string name="Premium_CancelSubscriptionInfo">Você pode cancelar sua assinatura a qualquer momento.</string>
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_EnjoyFreePeriod">Aproveite %s GRÁTIS.</string>
     <string name="Premium_GetFreePeriod">Ganhe %s GRÁTIS</string>
     <string name="Premium_Subscribe">Assinar</string>
-    <string name="Premium_TryForFree">Teste GRÁTIS</string>
+    <string name="Premium_TryForFree">Teste grátis</string>
     <string name="Premium_Upgrade">Atualizar</string>
     <string name="Premium_ThankYouForSubscription">Obrigado por sua \nassinatura!</string>
     <string name="Premium_GoToApp">Ir ao App</string>
-    <string name="Premium_Banner_BlackFridayText">Melhore a sua experiência com recursos Premium!</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">Aproveite o poder total do aplicativo.</string>
-    <string name="Premium_SelectSubscription">Selecionar Assinatura</string>
+    <string name="Premium_EnjoyPremiumFeatures">Aproveite seus recursos Premium.</string>
+    <string name="Premium_SelectSubscription">Selecionar assinatura</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Uma compra desbloqueia todos os recursos Premium.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Busca Avançada</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Sinais e Tendências</string>
@@ -877,8 +875,8 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Proteção de Scam</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Suporte VIP</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Proteção de troca</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtragem multinível em múltiplos parâmetros</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoramento automático de tendências de mercado para seus tokens</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtre tokens para refinar sua busca.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Receba alertas de sinais de negociação.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Segurança inteligente de fundos durante ameaças físicas</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Proteção automática eficaz contra fraudes e ataques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantia de legalidade para suas operações com criptomoedas</string>
@@ -887,10 +885,8 @@
     <string name="Premium_DefenseSystem">Sistema de defesa</string>
     <string name="Premium_MarketInsights">Insights de mercado</string>
     <string name="Premium_AdvancedControls">VIP</string>
-    <string name="Premium_HighlyRatedSecurity">Segurança altamente qualificada, privacidade excepcional e uma carteira verdadeiramente sem custódia.</string>
     <string name="Premium_ApprovedBy">Aprovado e Auditado Por:</string>
     <string name="Premium_SubscriptionPeriod_Month">mês</string>
-    <string name="Premium_SubscriptionPeriod_Year">ano</string>
     <string name="Premium_SubscriptionPeriod_Annually">Anualmente</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Mensalmente</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">ECONOMIZE 31%</string>
@@ -2000,4 +1996,9 @@
     <string name="ImportWallet_ViewOnly">Carteira somente leitura</string>
     <string name="ImportWallet_ViewOnly_Description">Apenas saldo e atividade</string>
     <string name="Balance_NoWallets">Nenhuma carteira. Adicione uma abaixo.</string>
+    <string name="Premium_Features">Recursos %s</string>
+    <string name="Premium_CancelAnytime">Cancele quando quiser.</string>
+    <string name="Premium_Agreement">Ao continuar, você concorda com os %1$s e a %2$s.</string>
+    <string name="Premium_Agreement_Terms">Termos</string>
+    <string name="Premium_Agreement_Privacy">Privacidade</string>
 </resources>

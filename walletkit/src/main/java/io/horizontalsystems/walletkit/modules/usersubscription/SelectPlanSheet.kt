@@ -2,9 +2,7 @@ package io.horizontalsystems.walletkit.modules.usersubscription
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,62 +14,45 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.designkit.components.ButtonSize
 import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.subscriptions.core.HSPurchase
+import io.horizontalsystems.subscriptions.core.numberOfDays
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
+import io.horizontalsystems.walletkit.core.App
+import io.horizontalsystems.walletkit.core.stats.StatEvent
+import io.horizontalsystems.walletkit.core.stats.StatPage
+import io.horizontalsystems.walletkit.core.stats.stat
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.badge
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.gradientBadge
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.noteAmount
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.noteText
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.stringRepresentation
+import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.note
+import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.price
 import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.title
-import io.horizontalsystems.walletkit.modules.usersubscription.ui.PremiumSubscribedSheet
-import io.horizontalsystems.walletkit.ui.compose.components.BadgeOrangeGradient
-import io.horizontalsystems.walletkit.ui.compose.components.BadgeText
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
-import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.subhead2_remus
-import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupHorizontal
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetBody
+import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.SnackbarActions
+import io.horizontalsystems.walletkit.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.walletkit.uiv3.components.cell.HSString
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.walletkit.uiv3.components.controls.HSSelector
-import io.horizontalsystems.subscriptions.core.HSPurchase
-import io.horizontalsystems.subscriptions.core.numberOfDays
-import kotlinx.serialization.Serializable
+import io.horizontalsystems.walletkit.uiv3.components.text.textWithLinks
 
-@Serializable
-data object SelectPlanSheet : HSBottomSheet(expanded = true) {
-    @Composable
-    override fun GetContent(navigation: HSNavigation) {
-        BottomSheetBody { snackbarActions ->
-            SelectPlanContent(
-                onDismiss = { navigation.removeLastOrNull() },
-                onPurchase = {
-                    navigation.removeLastOrNull()
-                    navigation.slideFromBottom(PremiumSubscribedSheet)
-                },
-                snackbarActions = snackbarActions,
-            )
-        }
-    }
-}
-
-/** [SelectPlanContent] as a modal sheet over a page. */
+/** The "Select subscription" sheet, shown over the Premium page. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectPlanBottomSheet(
@@ -82,13 +63,12 @@ fun SelectPlanBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     ) { snackbarActions ->
-        SelectPlanContent(onDismiss, onPurchase, snackbarActions)
+        SelectPlanContent(onPurchase, snackbarActions)
     }
 }
 
 @Composable
 private fun SelectPlanContent(
-    onDismiss: () -> Unit,
     onPurchase: () -> Unit,
     snackbarActions: SnackbarActions,
     viewModel: BuySubscriptionChoosePlanViewModel = viewModel(),
@@ -118,19 +98,14 @@ private fun SelectPlanContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         BottomSheetHeaderV3(
             title = stringResource(R.string.Premium_SelectSubscription),
-            onCloseClick = onDismiss
         )
 
-        VSpacer(12.dp)
-
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .border(0.5.dp, ComposeAppTheme.colors.blade, shape = RoundedCornerShape(16.dp))
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
                 .clip(RoundedCornerShape(16.dp))
         ) {
             uiState.basePlans.forEachIndexed { index, basePlan ->
@@ -138,13 +113,12 @@ private fun SelectPlanContent(
                     HsDivider()
                 }
                 SubscriptionOption(
+                    modifier = Modifier.testTag(TestTags.premiumPlan(basePlan.id)),
                     title = basePlan.title(),
-                    price = basePlan.stringRepresentation(),
+                    price = basePlan.price(),
+                    note = basePlan.note(),
+                    badge = basePlan.badge(),
                     isSelected = selectedItemIndex == index,
-                    badgeText = basePlan.badge(),
-                    gradientBadge = basePlan.gradientBadge,
-                    noteAmount = basePlan.noteAmount,
-                    noteText = basePlan.noteText,
                     onClick = {
                         viewModel.select(index)
                     }
@@ -152,52 +126,27 @@ private fun SelectPlanContent(
             }
         }
 
-        val bottomText = if (freeTrialPeriodDays != null) {
-            buildAnnotatedString {
-                withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
-                    append(
-                        text = stringResource(
-                            R.string.Premium_EnjoyFreePeriod,
-                            freeTrialPeriodDays
-                        )
-                    )
-                }
-                append(" ")
-                withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
-                    append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
-                }
-            }
-        } else {
-            buildAnnotatedString {
-                withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
-                    append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
-                }
-            }
-        }
-
-
-        VSpacer(12.dp)
         Text(
-            text = bottomText,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                .testTag(TestTags.PREMIUM_PLANS_AGREEMENT),
+            text = agreementText(freeTrialPeriodDays),
             color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subheadR,
+            style = ComposeAppTheme.typography.subhead,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
         )
-        VSpacer(12.dp)
 
-        val buttonTitle = if (freeTrialPeriodDays != null) {
-            stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
-        } else {
-            stringResource(R.string.Premium_Subscribe)
-        }
-
-        ButtonsGroupHorizontal {
+        ButtonsGroupVertical {
             HSButton(
-                title = buttonTitle,
-                size = ButtonSize.Medium,
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .testTag(TestTags.PREMIUM_PLANS_SUBSCRIBE),
+                title = if (freeTrialPeriodDays != null) {
+                    stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
+                } else {
+                    stringResource(R.string.Premium_Subscribe)
+                },
                 onClick = {
                     activity?.let { activity ->
                         uiState.subscriptionId?.let { subscriptionId ->
@@ -211,22 +160,58 @@ private fun SelectPlanContent(
                 }
             )
         }
-        VSpacer(8.dp)
+    }
+}
+
+/**
+ * The line above the button: the free period when the plan has one, that the
+ * subscription can be cancelled, and the agreement with its two links.
+ */
+@Composable
+private fun agreementText(freeTrialPeriodDays: String?): AnnotatedString {
+    val context = LocalContext.current
+    val terms = stringResource(R.string.Premium_Agreement_Terms)
+    val privacy = stringResource(R.string.Premium_Agreement_Privacy)
+    val agreement = textWithLinks(
+        sentence = stringResource(R.string.Premium_Agreement, terms, privacy),
+        links = listOf(
+            terms to {
+                LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.termsOfUseLink)
+                stat(page = StatPage.PurchaseSelector, event = StatEvent.Open(StatPage.Terms))
+            },
+            privacy to {
+                LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.privacyPolicyLink)
+                stat(page = StatPage.PurchaseSelector, event = StatEvent.Open(StatPage.Privacy))
+            },
+        ),
+        styles = TextLinkStyles(style = SpanStyle(textDecoration = TextDecoration.Underline)),
+    )
+
+    return buildAnnotatedString {
+        freeTrialPeriodDays?.let {
+            withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
+                append(stringResource(R.string.Premium_EnjoyFreePeriod, it))
+            }
+            append(" ")
+        }
+        append(stringResource(R.string.Premium_CancelAnytime))
+        append(" ")
+        append(agreement)
     }
 }
 
 @Composable
-fun SubscriptionOption(
+private fun SubscriptionOption(
+    modifier: Modifier,
     title: String,
     price: String,
+    note: String?,
+    badge: String?,
     isSelected: Boolean,
-    badgeText: String?,
-    gradientBadge: Boolean = false,
-    noteAmount: String? = null,
-    noteText: String? = null,
     onClick: () -> Unit
 ) {
     CellPrimary(
+        modifier = modifier,
         left = {
             HSSelector(
                 checked = isSelected
@@ -235,81 +220,13 @@ fun SubscriptionOption(
             }
         },
         middle = {
-            CustomCellMiddleInfo(
+            CellMiddleInfo(
                 title = title.hs,
-                badge = badgeText?.hs(color = ComposeAppTheme.colors.remus),
-                gradientBadge = gradientBadge,
-                subtitle = price.hs(color = ComposeAppTheme.colors.orange),
-                noteAmount = noteAmount,
-                noteText = noteText
+                badge = badge?.hs(color = ComposeAppTheme.colors.remus),
+                subtitle = price.hs,
+                subtitle2 = note?.hs(color = ComposeAppTheme.colors.remus),
             )
         },
         onClick = onClick
     )
-}
-
-@Composable
-private fun CustomCellMiddleInfo(
-    title: HSString?,
-    badge: HSString?,
-    gradientBadge: Boolean = false,
-    subtitle: HSString?,
-    noteAmount: String?,
-    noteText: String?,
-) {
-    Column {
-        Row(
-            horizontalArrangement = spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            title?.let {
-                Text(
-                    text = it.text,
-                    style = ComposeAppTheme.typography.headline2,
-                    color = it.color ?: ComposeAppTheme.colors.leah,
-                )
-            }
-
-            badge?.let {
-                if (gradientBadge) {
-                    BadgeOrangeGradient(
-                        text = it.text,
-                    )
-                } else {
-                    val textColor =
-                        if (it.color == ComposeAppTheme.colors.remus) ComposeAppTheme.colors.lawrence else ComposeAppTheme.colors.leah
-                    BadgeText(
-                        text = it.text,
-                        background = it.color ?: ComposeAppTheme.colors.blade,
-                        textColor = textColor,
-                    )
-                }
-            }
-        }
-
-        Row(
-            horizontalArrangement = spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                subtitle?.let {
-                    Text(
-                        text = it.text,
-                        style = ComposeAppTheme.typography.subhead,
-                        color = when {
-                            it.color != null -> it.color
-                            it.dimmed -> ComposeAppTheme.colors.andy
-                            else -> ComposeAppTheme.colors.grey
-                        },
-                    )
-                }
-                if (noteText != null && noteAmount != null) {
-                    subhead2_remus("($noteAmount / $noteText)")
-                }
-            }
-        }
-    }
 }

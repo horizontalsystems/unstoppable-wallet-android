@@ -858,16 +858,14 @@
     <string name="Period_Days">%s jours</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
-    <string name="Premium_EnjoyFreePeriod">Profitez des premiers %s GRATUITS.</string>
-    <string name="Premium_CancelSubscriptionInfo">Vous pouvez annuler votre abonnement à tout moment.</string>
+    <string name="Premium_EnjoyFreePeriod">Profitez de %s GRATUITS.</string>
     <string name="Premium_GetFreePeriod">Obtenez %s GRATUIT</string>
     <string name="Premium_Subscribe">S\'abonner</string>
-    <string name="Premium_TryForFree">Essayez GRATUITEMENT</string>
+    <string name="Premium_TryForFree">Essayez gratuitement</string>
     <string name="Premium_Upgrade">Mettre à niveau</string>
     <string name="Premium_ThankYouForSubscription">Merci pour votre \nabonnement !</string>
     <string name="Premium_GoToApp">Aller à l\'App</string>
-    <string name="Premium_Banner_BlackFridayText">Améliorez votre expérience avec les fonctionnalités Premium!</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">Profitez de toute la puissance de l\'application.</string>
+    <string name="Premium_EnjoyPremiumFeatures">Profitez de vos fonctionnalités Premium.</string>
     <string name="Premium_SelectSubscription">Sélectionner l\'abonnement</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Un seul achat débloque toutes les fonctionnalités Premium.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Recherche Avancée</string>
@@ -877,8 +875,8 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Protection contre les arnaques</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Support prioritaire</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Protection contre le swap</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrage multi-niveaux sur plusieurs paramètres</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Surveillance automatique des tendances du marché pour vos tokens</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrez les tokens pour affiner votre recherche.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Recevez des alertes sur les signaux de trading.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Sécurité intelligente des fonds lors de menaces physiques</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Protection automatique efficace contre les arnaques et attaques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie de légalité pour vos opérations crypto</string>
@@ -887,10 +885,8 @@
     <string name="Premium_DefenseSystem">Système de défense</string>
     <string name="Premium_MarketInsights">Aperçus du marché</string>
     <string name="Premium_AdvancedControls">Contrôles avancés</string>
-    <string name="Premium_HighlyRatedSecurity">Sécurité hautement évaluée, confidentialité exceptionnelle et un portefeuille véritablement non-custodial.</string>
     <string name="Premium_ApprovedBy">Approuvé et audité par :</string>
     <string name="Premium_SubscriptionPeriod_Month">mois</string>
-    <string name="Premium_SubscriptionPeriod_Year">année</string>
     <string name="Premium_SubscriptionPeriod_Annually">Annuellement</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Mensuellement</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">ÉCONOMISEZ 31%</string>
@@ -1997,4 +1993,9 @@
     <string name="ImportWallet_ViewOnly">Wallet en lecture seule</string>
     <string name="ImportWallet_ViewOnly_Description">Solde et activité uniquement</string>
     <string name="Balance_NoWallets">Aucun portefeuille. Ajoutez-en un ci-dessous.</string>
+    <string name="Premium_Features">Fonctionnalités %s</string>
+    <string name="Premium_CancelAnytime">Annulez à tout moment.</string>
+    <string name="Premium_Agreement">En continuant, vous acceptez les %1$s et la %2$s.</string>
+    <string name="Premium_Agreement_Terms">Conditions</string>
+    <string name="Premium_Agreement_Privacy">Confidentialité</string>
 </resources>

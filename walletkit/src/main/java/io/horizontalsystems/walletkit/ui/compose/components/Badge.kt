@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
-import io.horizontalsystems.designkit.theme.Dark
 import java.math.BigDecimal
 
 @Composable
@@ -80,27 +79,6 @@ fun BadgeText(
         )
     }
 }
-
-@Composable
-fun BadgeOrangeGradient(
-    modifier: Modifier = Modifier,
-    text: String,
-) {
-    val gradientColors = listOf(Color(0xFFFFAA00), Color(0xFFFE4A11))
-    BadgeBase(
-        modifier = modifier,
-        background = Brush.horizontalGradient(gradientColors),
-    ) {
-        Text(
-            text = text,
-            color = Dark,
-            style = ComposeAppTheme.typography.microSB,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
 
 @Composable
 fun BadgeBase(

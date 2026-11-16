@@ -1259,17 +1259,20 @@
 
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
-    <string name="Premium_EnjoyFreePeriod">Enjoy the first %s FREE.</string>
-    <string name="Premium_CancelSubscriptionInfo">You can cancel your Play Store subscription at any time.</string>
-    <string name="Premium_GetFreePeriod">Get %s FREE</string>
+    <string name="Premium_EnjoyFreePeriod">Enjoy %s FREE.</string>
+    <string name="Premium_GetFreePeriod">Get %s for FREE</string>
     <string name="Premium_Subscribe">Subscribe</string>
-    <string name="Premium_TryForFree">Try for FREE</string>
+    <string name="Premium_TryForFree">Try for Free</string>
     <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_ThankYouForSubscription">Thank you for your \nsubscription!</string>
     <string name="Premium_GoToApp">Go to App</string>
-    <string name="Premium_Banner_BlackFridayText">Upgrade your experience with Premium features!</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">Enjoy the full power of the app.</string>
-    <string name="Premium_SelectSubscription">Select Subscription</string>
+    <string name="Premium_EnjoyPremiumFeatures">Enjoy your Premium features.</string>
+    <string name="Premium_SelectSubscription">Select subscription</string>
+    <string name="Premium_Features">%s features</string>
+    <string name="Premium_CancelAnytime">Cancel anytime.</string>
+    <string name="Premium_Agreement">By continuing, you agree to the %1$s &amp; %2$s.</string>
+    <string name="Premium_Agreement_Terms">Terms</string>
+    <string name="Premium_Agreement_Privacy">Privacy</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">One purchase unlocks all Premium features.</string>
 
     <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
@@ -1280,8 +1283,8 @@
     <string name="Premium_UpgradeFeature_PrioritySupport">Priority Support</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Swap Protection</string>
 
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Powerful filters for smarter token discovery.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Actionable signals for more confident trading.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filter tokens to narrow your search.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Get alerts for trading signals.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Safeguards your funds if you’re forced to unlock the app.</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Prevents sending funds to risky or phishing addresses.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Warns you when connecting to fake or malicious dApps.</string>
@@ -1293,11 +1296,9 @@
     <string name="Premium_MarketInsights">Market Insights</string>
     <string name="Premium_AdvancedControls">Advanced Controls</string>
 
-    <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
     <string name="Premium_ApprovedBy">Approved and Audited By:</string>
 
     <string name="Premium_SubscriptionPeriod_Month">month</string>
-    <string name="Premium_SubscriptionPeriod_Year">year</string>
     <string name="Premium_SubscriptionPeriod_Annually">Annually</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Monthly</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">SAVE 33%</string>

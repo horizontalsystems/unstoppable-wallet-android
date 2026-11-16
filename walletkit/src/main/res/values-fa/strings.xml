@@ -1396,16 +1396,14 @@
     <string name="SettingsSubscription_ManageSubscription">مدیریت اشتراک</string>
     <string name="Period_Days">%s روز</string>
     <string name="Premium_Title">Premium</string>
-    <string name="Premium_EnjoyFreePeriod">%s اول را رایگان استفاده کنید.</string>
-    <string name="Premium_CancelSubscriptionInfo">می‌توانید اشتراک Play Store خود را هر زمان لغو کنید.</string>
+    <string name="Premium_EnjoyFreePeriod">%s رایگان استفاده کنید.</string>
     <string name="Premium_GetFreePeriod">%s رایگان دریافت کنید</string>
     <string name="Premium_Subscribe">اشتراک</string>
     <string name="Premium_TryForFree">امتحان رایگان</string>
     <string name="Premium_Upgrade">ارتقا</string>
     <string name="Premium_ThankYouForSubscription">از اشتراک شما \nسپاسگزاریم!</string>
     <string name="Premium_GoToApp">رفتن به برنامه</string>
-    <string name="Premium_Banner_BlackFridayText">تجربه خود را با قابلیت‌های Premium ارتقا دهید!</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">از قدرت کامل برنامه بهره ببرید.</string>
+    <string name="Premium_EnjoyPremiumFeatures">از قابلیت‌های Premium خود لذت ببرید.</string>
     <string name="Premium_SelectSubscription">انتخاب اشتراک</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">یک خرید، همه قابلیت‌های Premium را باز می‌کند.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">جستجوی پیشرفته</string>
@@ -1415,8 +1413,8 @@
     <string name="Premium_UpgradeFeature_ScamProtection">محافظت در برابر کلاهبرداری</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">پشتیبانی اولویت‌دار</string>
     <string name="Premium_UpgradeFeature_SwapProtection">محافظت سواپ</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">فیلترهای قدرتمند برای یافتن هوشمندانه‌تر توکن‌ها.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">سیگنال‌های کاربردی برای معامله با اطمینان بیشتر.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">توکن‌ها را فیلتر کنید تا جستجوی خود را محدود کنید.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">هشدارهای سیگنال‌های معاملاتی را دریافت کنید.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">اگر مجبور به باز کردن برنامه شوید، از دارایی‌های شما محافظت می‌کند.</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">از ارسال دارایی به آدرس‌های پرخطر یا فیشینگ جلوگیری می‌کند.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">هنگام اتصال به dAppهای جعلی یا مخرب به شما هشدار می‌دهد.</string>
@@ -1425,10 +1423,8 @@
     <string name="Premium_DefenseSystem">سیستم دفاعی</string>
     <string name="Premium_MarketInsights">بینش‌های بازار</string>
     <string name="Premium_AdvancedControls">کنترل‌های پیشرفته</string>
-    <string name="Premium_HighlyRatedSecurity">امنیت با رتبه بالا، حریم خصوصی استثنایی و کیف پولی واقعاً غیرحضانتی.</string>
     <string name="Premium_ApprovedBy">تأیید و ممیزی شده توسط:</string>
     <string name="Premium_SubscriptionPeriod_Month">ماه</string>
-    <string name="Premium_SubscriptionPeriod_Year">سال</string>
     <string name="Premium_SubscriptionPeriod_Annually">سالانه</string>
     <string name="Premium_SubscriptionPeriod_Monthly">ماهانه</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">33% صرفه‌جویی</string>
@@ -1983,4 +1979,9 @@
     <string name="ImportWallet_ViewOnly">کیف پول فقط مشاهده</string>
     <string name="ImportWallet_ViewOnly_Description">فقط موجودی و فعالیت</string>
     <string name="Balance_NoWallets">کیف پولی وجود ندارد. یکی را در پایین اضافه کنید.</string>
+    <string name="Premium_Features">قابلیت‌های %s</string>
+    <string name="Premium_CancelAnytime">هر زمان می‌توانید لغو کنید.</string>
+    <string name="Premium_Agreement">با ادامه، با %1$s و %2$s موافقت می‌کنید.</string>
+    <string name="Premium_Agreement_Terms">شرایط</string>
+    <string name="Premium_Agreement_Privacy">حریم خصوصی</string>
 </resources>

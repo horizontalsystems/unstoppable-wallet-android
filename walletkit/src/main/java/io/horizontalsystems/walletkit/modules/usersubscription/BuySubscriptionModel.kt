@@ -59,47 +59,29 @@ object BuySubscriptionModel {
         }
     }
 
-    fun BasePlan.stringRepresentation(): String {
-        val phase = pricingPhases.last()
-        return "${phase.formattedPrice} / ${phase.period()}"
+    /** The plan's price as the store formats it for the user's country. */
+    fun BasePlan.price(): String {
+        return pricingPhases.last().formattedPrice
     }
 
     fun BasePlan.badge(): String? {
         return when {
             pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_AnnuallySave)
-//            pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_MonthlySave)
             else -> null
         }
     }
 
-    //discounts
-    //Yearly 33%
-    val BasePlan.noteAmount: String?
-        get() {
-            val phase = pricingPhases.last()
-            return when {
-                phase.period.years > 0 -> getYearlySaveAmount(phase)
-//                phase.period.months > 0 -> getOriginalPrice(phase, 20.toDouble())
-                else -> null
+    /** What a yearly plan comes to per month, as in "($16.67 / month)". */
+    fun BasePlan.note(): String? {
+        val phase = pricingPhases.last()
+        return when {
+            phase.period.years > 0 -> {
+                val month = Translator.getString(R.string.Premium_SubscriptionPeriod_Month)
+                "(${getYearlySaveAmount(phase)} / $month)"
             }
+            else -> null
         }
-
-    val BasePlan.noteText: String?
-        get() {
-            return when {
-                pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_Month)
-//                pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerMonth)
-                else -> null
-            }
-        }
-
-    val BasePlan.gradientBadge: Boolean
-        get() {
-            return when {
-//                pricingPhases.last().period.years > 0 -> true
-                else -> false
-            }
-        }
+    }
 
     fun getYearlySaveAmount(phase: PricingPhase): String {
         val currencySymbol = phase.formattedPrice.takeWhile { !it.isDigit() }
@@ -110,33 +92,8 @@ object BuySubscriptionModel {
         // round up to 2 decimal places
         val rounded = ceil(pricePerMonth * 100) / 100.0
 
-        // format with one fraction digits
-        val priceStr = String.format(Locale.US, "%.1f", rounded)
-
-        return currencySymbol + priceStr
-    }
-
-    fun getOriginalPrice(phase: PricingPhase, discountPercent: Double): String {
-        val currencySymbol = phase.formattedPrice.takeWhile { !it.isDigit() }
-        val discountedPrice = phase.priceAmountMicros / 1_000_000.0
-
-        val originalPrice = discountedPrice / (1 - discountPercent / 100)
-
-        // round up to 2 decimal places
-        val rounded = ceil(originalPrice * 100) / 100.0
-
-        // format with two fraction digits
         val priceStr = String.format(Locale.US, "%.2f", rounded)
 
         return currencySymbol + priceStr
-    }
-
-    //billing periods: P1M, P3M, P6M, P1Y
-    private fun PricingPhase.period(): String {
-        return when (billingPeriod) {
-            "P1M" -> Translator.getString(R.string.Premium_SubscriptionPeriod_Month)
-            "P1Y" -> Translator.getString(R.string.Premium_SubscriptionPeriod_Year)
-            else -> billingPeriod
-        }
     }
 }

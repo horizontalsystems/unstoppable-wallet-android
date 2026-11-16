@@ -1,109 +1,53 @@
 package io.horizontalsystems.walletkit.modules.usersubscription.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
-import io.horizontalsystems.walletkit.ui.compose.components.RadialBackground
-import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_orange
-import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
-import io.horizontalsystems.walletkit.ui.extensions.HSBottomSheet
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object PremiumSubscribedSheet : HSBottomSheet() {
-    @Composable
-    override fun GetContent(navigation: HSNavigation) {
-        PremiumSubscribedScreen(
-            onCloseClick = navigation::removeLastOrNull,
-        )
-    }
-}
+import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.info.TextBlock
 
 @Composable
 fun PremiumSubscribedScreen(
     onCloseClick: () -> Unit
 ) {
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            TitleCenteredTopBar(
-                title = stringResource(R.string.Premium_Title),
-                onCloseClick = onCloseClick
+    PremiumPage(
+        onClose = onCloseClick,
+        closeTestTag = TestTags.PREMIUM_SUBSCRIBED_CLOSE,
+        button = {
+            HSButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.PREMIUM_SUBSCRIBED_GO_TO_APP),
+                variant = ButtonVariant.Secondary,
+                title = stringResource(R.string.Premium_GoToApp),
+                onClick = onCloseClick,
             )
         }
-    ) { paddingValues ->
-        Box(
+    ) {
+        Text(
             modifier = Modifier
-                .padding(paddingValues)
-                .navigationBarsPadding()
-                .fillMaxSize()
-        ) {
-            RadialBackground()
-            Column {
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    VSpacer(24.dp)
-                    Image(
-                        painter = painterResource(id = R.drawable.prem_star_launch),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .height(200.dp)
-                            .fillMaxWidth()
-                    )
-                    VSpacer(24.dp)
-                    headline1_leah(
-                        text = stringResource(R.string.Premium_ThankYouForSubscription),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 44.dp)
-                    )
-                    VSpacer(12.dp)
-                    body_orange(
-                        text = stringResource(R.string.Premium_EnjoyFullPowerOfTheApp),
-                        textAlign = TextAlign.Center,
-                    )
-                    VSpacer(24.dp)
-                }
-                Column(
-                    Modifier
-                        .padding(horizontal = 24.dp)
-                        .padding(bottom = 44.dp)
-                ) {
-                    ButtonPrimaryCustomColor(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Premium_GoToApp),
-                        brush = yellowGradient,
-                        onClick = onCloseClick,
-                    )
-                }
-            }
-        }
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            text = stringResource(R.string.Premium_ThankYouForSubscription),
+            color = ComposeAppTheme.colors.leah,
+            style = ComposeAppTheme.typography.title3,
+            textAlign = TextAlign.Center,
+        )
+        TextBlock(
+            text = stringResource(R.string.Premium_EnjoyPremiumFeatures),
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

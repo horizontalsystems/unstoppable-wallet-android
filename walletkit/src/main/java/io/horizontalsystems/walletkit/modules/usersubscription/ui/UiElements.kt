@@ -1,119 +1,117 @@
 package io.horizontalsystems.walletkit.modules.usersubscription.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.designkit.components.HSButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.iconRes
-import io.horizontalsystems.walletkit.modules.usersubscription.BuySubscriptionModel.titleStringRes
-import io.horizontalsystems.walletkit.ui.compose.components.ButtonPrimaryDefaults
-import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
-import io.horizontalsystems.walletkit.ui.compose.components.HsIconButton
+import io.horizontalsystems.walletkit.modules.welcome.GLOW_SETTLED
+import io.horizontalsystems.walletkit.modules.welcome.WelcomeGlow
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
-import io.horizontalsystems.walletkit.ui.compose.components.body_bran
-import io.horizontalsystems.walletkit.ui.compose.components.caption_grey
-import io.horizontalsystems.walletkit.ui.compose.components.headline1_leah
-import io.horizontalsystems.walletkit.ui.compose.components.subhead1_leah
-import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.walletkit.uiv3.components.bottombars.ButtonsGroupVertical
 
-val yellowGradient = Brush.horizontalGradient(
-    colors = listOf(
-        Color(0xFFFFAA00),
-        Color(0xFFFE4A11),
-    )
-)
-
+/**
+ * The frame the Premium pages share: the glow, a close button in place of a
+ * top bar, the star, then [content] under it and [button] at the bottom.
+ * The content scrolls above the button when the screen is too short for it.
+ */
 @Composable
-fun PlanItems(
-    items: List<IPaidAction>
+fun PremiumPage(
+    onClose: () -> Unit,
+    closeTestTag: String,
+    button: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
-    items.forEachIndexed { index, item ->
-        PremiumFeatureItem(
-            icon = item.iconRes,
-            title = item.titleStringRes,
-            subtitle = item.descriptionStringRes,
-            first = index == 0,
-            last = index == items.size - 1,
-        )
-        if (index < items.size - 1) {
-            HsDivider()
-        }
-    }
-}
-
-@Composable
-fun PremiumFeatureItem(
-    icon: Int,
-    title: Int,
-    subtitle: Int,
-    first: Boolean,
-    last: Boolean,
-) {
-    val topPadding = if (first) 16.dp else 12.dp
-    val bottomPadding = if (last) 16.dp else 12.dp
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
-            .padding(horizontal = 16.dp)
-            .padding(top = topPadding, bottom = bottomPadding)
+            .fillMaxSize()
+            .background(ComposeAppTheme.colors.tyler)
     ) {
-        Icon(
-            painter = painterResource(icon),
-            modifier = Modifier.size(24.dp),
-            tint = ComposeAppTheme.colors.orange,
-            contentDescription = null
-        )
-        HSpacer(16.dp)
-        Column {
-            subhead1_leah(stringResource(title))
-            caption_grey(stringResource(subtitle))
+        WelcomeGlow(animate = false, startAt = GLOW_SETTLED)
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .windowInsetsPadding(WindowInsets.navigationBars)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                Box(
+                    modifier = Modifier.size(40.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .testTag(closeTestTag)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
+                                onClick = onClose
+                            ),
+                        painter = painterResource(R.drawable.ic_close),
+                        contentDescription = stringResource(R.string.Button_Close),
+                        tint = ComposeAppTheme.colors.grey,
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Box(
+                    modifier = Modifier.size(96.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.polistar_54),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.orange,
+                    )
+                }
+                VSpacer(16.dp)
+                content()
+            }
+
+            ButtonsGroupVertical {
+                button()
+            }
         }
     }
 }
@@ -151,122 +149,6 @@ fun highlightText(
                 )
             } else {
                 append(text)
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun ButtonPrimaryCustomColor(
-    modifier: Modifier = Modifier,
-    title: String,
-    brush: Brush,
-    onClick: () -> Unit,
-    enabled: Boolean = true,
-    contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
-) {
-    Surface(
-        modifier = modifier
-            .clip(RoundedCornerShape(25.dp))
-            .background(brush),
-        shape = RoundedCornerShape(25.dp),
-        color = Color.Transparent,
-        contentColor = ComposeAppTheme.colors.dark,
-        onClick = onClick,
-        enabled = enabled,
-    ) {
-        ProvideTextStyle(
-            value = ComposeAppTheme.typography.headline2
-        ) {
-            Row(
-                Modifier
-                    .defaultMinSize(
-                        minWidth = ButtonPrimaryDefaults.MinWidth,
-                        minHeight = ButtonPrimaryDefaults.MinHeight
-                    )
-                    .padding(contentPadding),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TitleCenteredTopBar(
-    title: String,
-    modifier: Modifier = Modifier,
-    onCloseClick: () -> Unit
-) {
-    Box(
-        modifier = modifier
-            .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-            .height(64.dp)
-            .fillMaxWidth(),
-    ) {
-        headline1_leah(
-            text = title,
-            modifier = Modifier.align(Alignment.Center)
-        )
-        HsIconButton(
-            modifier = Modifier.align(Alignment.CenterEnd),
-            onClick = onCloseClick
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_close),
-                contentDescription = "close button",
-                tint = ComposeAppTheme.colors.grey,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun InfoBottomSheet(
-    icon: Int,
-    title: String,
-    description: String,
-    hideBottomSheet: () -> Unit,
-    bottomSheetState: SheetState
-) {
-    BottomSheetContent(
-        onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState
-    ) {
-        BottomSheetHeader(
-            iconPainter = painterResource(icon),
-            title = title,
-            titleColor = ComposeAppTheme.colors.orange,
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.orange),
-            onCloseClick = hideBottomSheet
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 24.dp)
-                    .fillMaxWidth()
-            ) {
-                body_bran(
-                    text = description,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                )
-                VSpacer(56.dp)
-                HSButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Close),
-                    onClick = hideBottomSheet
-                )
-                VSpacer(32.dp)
             }
         }
     }

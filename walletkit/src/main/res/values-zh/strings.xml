@@ -857,16 +857,14 @@
     <string name="Period_Days">%s 天</string>
     <!--Premium Screens-->
     <string name="Premium_Title">高級版</string>
-    <string name="Premium_EnjoyFreePeriod">享受前 %s 免費。</string>
-    <string name="Premium_CancelSubscriptionInfo">您可以隨時取消您的訂閱。</string>
+    <string name="Premium_EnjoyFreePeriod">免費享用 %s。</string>
     <string name="Premium_GetFreePeriod">免費獲取 %s</string>
     <string name="Premium_Subscribe">訂閱</string>
     <string name="Premium_TryForFree">免費試用</string>
     <string name="Premium_Upgrade">升級</string>
     <string name="Premium_ThankYouForSubscription">感謝您的\n訂閱！</string>
     <string name="Premium_GoToApp">前往應用程式</string>
-    <string name="Premium_Banner_BlackFridayText">使用高級版功能升級您的體驗！</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
+    <string name="Premium_EnjoyPremiumFeatures">盡享您的高級版功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">一次购买将解锁所有高级功能。</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">進階搜尋</string>
@@ -876,8 +874,8 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Scam 保护</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP 支持</string>
     <string name="Premium_UpgradeFeature_SwapProtection">交换保护</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">自動監控您代幣的市場趨勢</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">篩選代幣以縮小搜尋範圍。</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">接收交易訊號提醒。</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">面對實體威脅時的智能資金安全保障</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">有效自動防護詐騙和釣魚攻擊</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">確保您的加密貨幣操作合法性</string>
@@ -886,10 +884,8 @@
     <string name="Premium_DefenseSystem">防御系统</string>
     <string name="Premium_MarketInsights">市场洞察力</string>
     <string name="Premium_AdvancedControls">VIP</string>
-    <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
     <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
     <string name="Premium_SubscriptionPeriod_Month">月</string>
-    <string name="Premium_SubscriptionPeriod_Year">年</string>
     <string name="Premium_SubscriptionPeriod_Annually">年度</string>
     <string name="Premium_SubscriptionPeriod_Monthly">月度</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">SVE 31%</string>
@@ -1994,4 +1990,9 @@
     <string name="ImportWallet_ViewOnly">仅查看钱包</string>
     <string name="ImportWallet_ViewOnly_Description">仅查看余额和活动</string>
     <string name="Balance_NoWallets">暂无钱包。请在下方添加。</string>
+    <string name="Premium_Features">%s功能</string>
+    <string name="Premium_CancelAnytime">可隨時取消。</string>
+    <string name="Premium_Agreement">繼續即表示您同意%1$s和%2$s。</string>
+    <string name="Premium_Agreement_Terms">條款</string>
+    <string name="Premium_Agreement_Privacy">隱私政策</string>
 </resources>

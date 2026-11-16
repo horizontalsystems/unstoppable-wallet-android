@@ -857,17 +857,15 @@
     <string name="SettingsSubscription_ManageSubscription">Abonnement verwalten</string>
     <string name="Period_Days">%s Tage</string>
     <!--Premium Screens-->
-    <string name="Premium_Title">Prämie</string>
-    <string name="Premium_EnjoyFreePeriod">Genieße die erste %s KOSTENLOS.</string>
-    <string name="Premium_CancelSubscriptionInfo">Sie können Ihr Abonnement jederzeit kündigen.</string>
-    <string name="Premium_GetFreePeriod">Get %s FREE</string>
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_EnjoyFreePeriod">Genieße %s KOSTENLOS.</string>
+    <string name="Premium_GetFreePeriod">%s KOSTENLOS erhalten</string>
     <string name="Premium_Subscribe">Abonnieren</string>
     <string name="Premium_TryForFree">Kostenlos testen</string>
     <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_ThankYouForSubscription">Vielen Dank für Ihr \nAbonnement!</string>
     <string name="Premium_GoToApp">Gehe zu App</string>
-    <string name="Premium_Banner_BlackFridayText">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">Genießen Sie die volle Kraft der App.</string>
+    <string name="Premium_EnjoyPremiumFeatures">Genießen Sie Ihre Premium-Funktionen.</string>
     <string name="Premium_SelectSubscription">Abonnement auswählen</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Bei einem Kauf werden alle Premium-Funktionen freigeschaltet.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Erweiterte Suche</string>
@@ -877,8 +875,8 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Scam-Schutz</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP Support</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Swap-Schutz</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Mehrere Ebenen filtern über mehrere Parameter</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Automatische Überwachung der Markttrends für Ihre Tokens</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtern Sie Token, um Ihre Suche einzugrenzen.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Erhalten Sie Benachrichtigungen zu Handelssignalen.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Smart Fondssicherheit bei physischen Bedrohungen</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Effektiver Auto-Schutz gegen Betrug und Phishing-Angriffe</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie der Rechtmäßigkeit für Ihre Kryptooperationen</string>
@@ -887,10 +885,8 @@
     <string name="Premium_DefenseSystem">Abwehrsystem</string>
     <string name="Premium_MarketInsights">Markteinsichten</string>
     <string name="Premium_AdvancedControls">VIP</string>
-    <string name="Premium_HighlyRatedSecurity">Hervorragende Sicherheit, außergewöhnliche Privatsphäre und eine wahrhaft freigehaltene Brieftasche.</string>
     <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
     <string name="Premium_SubscriptionPeriod_Month">monat</string>
-    <string name="Premium_SubscriptionPeriod_Year">jahr</string>
     <string name="Premium_SubscriptionPeriod_Annually">Jährlich</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Monatlich</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">31% SPAREN</string>
@@ -2000,4 +1996,9 @@
     <string name="ImportWallet_ViewOnly">Nur-Ansicht-Wallet</string>
     <string name="ImportWallet_ViewOnly_Description">Nur Guthaben und Aktivitäten</string>
     <string name="Balance_NoWallets">Keine Wallets. Füge unten eine hinzu.</string>
+    <string name="Premium_Features">%s-Funktionen</string>
+    <string name="Premium_CancelAnytime">Jederzeit kündbar.</string>
+    <string name="Premium_Agreement">Mit dem Fortfahren stimmen Sie den %1$s und dem %2$s zu.</string>
+    <string name="Premium_Agreement_Terms">Bedingungen</string>
+    <string name="Premium_Agreement_Privacy">Datenschutz</string>
 </resources>

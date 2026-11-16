@@ -45,13 +45,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -71,6 +68,7 @@ import io.horizontalsystems.walletkit.modules.nav3.EntryPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.helpers.LinkHelper
 import io.horizontalsystems.walletkit.uiv3.TestTags
+import io.horizontalsystems.walletkit.uiv3.components.text.textWithLinks
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -356,24 +354,7 @@ private fun consentText(onTerms: () -> Unit, onPrivacy: () -> Unit): AnnotatedSt
         )
     )
 
-    // A translation is free to put the two names in either order
-    val links = listOf(terms to onTerms, privacy to onPrivacy)
-        .map { (name, onClick) -> Triple(sentence.indexOf(name), name, onClick) }
-        .filter { (start, _, _) -> start >= 0 }
-        .sortedBy { (start, _, _) -> start }
-
-    return buildAnnotatedString {
-        var position = 0
-        links.forEach { (start, name, onClick) ->
-            if (start < position) return@forEach
-            append(sentence.substring(position, start))
-            withLink(LinkAnnotation.Clickable(tag = name, styles = linkStyle) { onClick() }) {
-                append(name)
-            }
-            position = start + name.length
-        }
-        append(sentence.substring(position))
-    }
+    return textWithLinks(sentence, listOf(terms to onTerms, privacy to onPrivacy), linkStyle)
 }
 
 // A fast start with a long soft landing, for what comes in

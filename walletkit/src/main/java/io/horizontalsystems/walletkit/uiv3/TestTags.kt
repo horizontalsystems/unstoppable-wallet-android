@@ -176,6 +176,17 @@ object TestTags {
     const val SETTINGS_DEBUG_SIMULATE_FAIL_SWAP = "settings_debug_simulate_fail_swap"
     const val SETTINGS_DEBUG_SWAP_PROVIDER_NAME = "settings_debug_swap_provider_name"
 
+    const val PREMIUM_CLOSE = "premium_close"
+    // The button under the feature list; it opens the list of plans
+    const val PREMIUM_SUBSCRIBE = "premium_subscribe"
+    fun premiumPlan(id: String) = "premium_plan_$id"
+    // One text holding both links, Terms and Privacy
+    const val PREMIUM_PLANS_AGREEMENT = "premium_plans_agreement"
+    const val PREMIUM_PLANS_SUBSCRIBE = "premium_plans_subscribe"
+    // The page shown after a purchase
+    const val PREMIUM_SUBSCRIBED_CLOSE = "premium_subscribed_close"
+    const val PREMIUM_SUBSCRIBED_GO_TO_APP = "premium_subscribed_go_to_app"
+
     const val APPEARANCE_BASE_CURRENCY = "appearance_base_currency"
     // The dropdown buttons that show a setting's value and open its options
     const val APPEARANCE_THEME = "appearance_theme"

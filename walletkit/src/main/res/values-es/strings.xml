@@ -858,17 +858,15 @@
     <string name="Period_Days">%s días</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
-    <string name="Premium_EnjoyFreePeriod">Disfruta de los primeros %s GRATIS.</string>
-    <string name="Premium_CancelSubscriptionInfo">Puedes cancelar tu suscripción en cualquier momento.</string>
+    <string name="Premium_EnjoyFreePeriod">Disfruta de %s GRATIS.</string>
     <string name="Premium_GetFreePeriod">Obtén %s GRATIS</string>
     <string name="Premium_Subscribe">Suscribir</string>
-    <string name="Premium_TryForFree">Prueba GRATIS</string>
+    <string name="Premium_TryForFree">Prueba gratis</string>
     <string name="Premium_Upgrade">Mejorar</string>
     <string name="Premium_ThankYouForSubscription">¡Gracias por tu \nsuscripción!</string>
     <string name="Premium_GoToApp">Ir a la App</string>
-    <string name="Premium_Banner_BlackFridayText">¡Mejora tu experiencia con características Premium!</string>
-    <string name="Premium_EnjoyFullPowerOfTheApp">Disfruta de todo el poder de la aplicación.</string>
-    <string name="Premium_SelectSubscription">Seleccionar Suscripción</string>
+    <string name="Premium_EnjoyPremiumFeatures">Disfruta de tus funciones Premium.</string>
+    <string name="Premium_SelectSubscription">Seleccionar suscripción</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Una compra desbloquea todas las características Premium.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Búsqueda Avanzada</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Señales y Tendencias</string>
@@ -877,8 +875,8 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Protección de Escam</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Soporte prioritario</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Protección de intercambio</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrado multinivel con múltiples parámetros</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoreo automático de tendencias del mercado para tus tokens</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtra tokens para acotar tu búsqueda.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Recibe alertas de señales de trading.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Seguridad inteligente de fondos durante amenazas físicas</string>
     <string name="Premium_UpgradeFeature_SecureSend_Description">Protección automática eficaz contra fraudes y ataques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantía de legalidad para tus operaciones con criptomonedas</string>
@@ -887,10 +885,8 @@
     <string name="Premium_DefenseSystem">Sistema de Defensa</string>
     <string name="Premium_MarketInsights">Itinerarios del mercado</string>
     <string name="Premium_AdvancedControls">VIP</string>
-    <string name="Premium_HighlyRatedSecurity">Seguridad altamente valorada, privacidad excepcional y una cartera verdaderamente no custodial.</string>
     <string name="Premium_ApprovedBy">Aprobado y Auditado Por:</string>
     <string name="Premium_SubscriptionPeriod_Month">mes</string>
-    <string name="Premium_SubscriptionPeriod_Year">año</string>
     <string name="Premium_SubscriptionPeriod_Annually">Anual</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Mensual</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">AHORRA 31%</string>
@@ -1995,4 +1991,9 @@
     <string name="ImportWallet_ViewOnly">Billetera de solo lectura</string>
     <string name="ImportWallet_ViewOnly_Description">Solo saldo y actividad</string>
     <string name="Balance_NoWallets">No hay monederos. Añade uno abajo.</string>
+    <string name="Premium_Features">Funciones %s</string>
+    <string name="Premium_CancelAnytime">Cancela cuando quieras.</string>
+    <string name="Premium_Agreement">Al continuar, aceptas los %1$s y la %2$s.</string>
+    <string name="Premium_Agreement_Terms">Términos</string>
+    <string name="Premium_Agreement_Privacy">Privacidad</string>
 </resources>
