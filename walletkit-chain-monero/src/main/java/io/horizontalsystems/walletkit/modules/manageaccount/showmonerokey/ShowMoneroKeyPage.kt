@@ -31,6 +31,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.CellUniversalLawrenc
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
@@ -94,6 +95,7 @@ private fun ShowMoneroKeyScreen(
                     MenuItem(
                         title = stringResource(R.string.MoneroKeyType),
                         value = stringResource(keyType.title),
+                        testTag = TestTags.SHOW_MONERO_KEY_TYPE,
                         onClick = { showKeyTypeSelectorDialog = true }
                     )
                 }

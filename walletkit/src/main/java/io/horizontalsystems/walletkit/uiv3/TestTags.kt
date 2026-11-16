@@ -186,6 +186,12 @@ object TestTags {
 
     const val INDICATOR_MA_TYPE = "indicator_ma_type"
 
+    const val SHOW_EXTENDED_KEY_PURPOSE = "show_extended_key_purpose"
+    const val SHOW_EXTENDED_KEY_BLOCKCHAIN = "show_extended_key_blockchain"
+    const val SHOW_EXTENDED_KEY_ACCOUNT = "show_extended_key_account"
+    const val SHOW_MONERO_KEY_TYPE = "show_monero_key_type"
+    const val TON_CONNECT_NEW_WALLET = "ton_connect_new_wallet"
+
     const val ABOUT_APP_STATUS = "about_app_status"
     const val ABOUT_TERMS = "about_terms"
 

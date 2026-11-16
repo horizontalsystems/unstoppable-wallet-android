@@ -39,6 +39,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantError
 import io.horizontalsystems.walletkit.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
@@ -163,6 +164,7 @@ fun TonConnectNewScreen(
                             uiState.account?.name
                                 ?: stringResource(R.string.TonConnect_ChooseWallet),
                             enabled = true,
+                            testTag = TestTags.TON_CONNECT_NEW_WALLET,
                             onSelect = {
                                 showSortTypeSelectorDialog = true
                             }

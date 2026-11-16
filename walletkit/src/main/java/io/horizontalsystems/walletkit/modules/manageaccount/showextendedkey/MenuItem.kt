@@ -1,17 +1,18 @@
 package io.horizontalsystems.walletkit.modules.manageaccount.showextendedkey
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.designkit.components.ButtonStyle
+import io.horizontalsystems.designkit.components.ButtonVariant
+import io.horizontalsystems.designkit.components.HSDropdownButton
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
 import io.horizontalsystems.walletkit.R
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
@@ -25,6 +26,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 fun MenuItem(
     title: String,
     value: String,
+    testTag: String? = null,
     infoButtonClick: (() -> Unit)? = null,
     onClick: (() -> Unit)?
 ) {
@@ -53,24 +55,21 @@ fun MenuItem(
 
         Spacer(Modifier.weight(1f))
 
-        Row(
-            Modifier
-                .fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        if (onClick != null) {
+            // A value that can be changed opens its list of options
+            HSDropdownButton(
+                modifier = testTag?.let { Modifier.testTag(it) } ?: Modifier,
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Transparent,
+                title = value,
+                onClick = onClick,
+            )
+        } else {
             subhead1_grey(
                 text = value,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
-            if (onClick != null) {
-                Icon(
-                    modifier = Modifier.padding(start = 4.dp),
-                    painter = painterResource(id = R.drawable.ic_down_arrow_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
         }
     }
 }

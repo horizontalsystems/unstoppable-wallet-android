@@ -50,6 +50,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.VSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
 import io.horizontalsystems.walletkit.ui.helpers.TextHelper
+import io.horizontalsystems.walletkit.uiv3.TestTags
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.menu.MenuItemX
@@ -151,6 +152,7 @@ private fun ShowExtendedKeyScreen(
                         MenuItem(
                             title = stringResource(R.string.ExtendedKey_Purpose),
                             value = viewModel.purpose.name,
+                            testTag = TestTags.SHOW_EXTENDED_KEY_PURPOSE,
                             onClick = if (viewModel.displayKeyType == DisplayKeyType.Bip32RootKey || viewModel.displayKeyType.isDerivable) {
                                 { showPurposeSelectorDialog = true }
                             } else {
@@ -163,6 +165,7 @@ private fun ShowExtendedKeyScreen(
                             MenuItem(
                                 title = stringResource(R.string.ExtendedKey_Blockchain),
                                 value = viewModel.blockchain.name,
+                                testTag = TestTags.SHOW_EXTENDED_KEY_BLOCKCHAIN,
                                 onClick = { showBlockchainSelectorDialog = true }
                             )
                         }
@@ -170,6 +173,7 @@ private fun ShowExtendedKeyScreen(
                             MenuItem(
                                 title = stringResource(R.string.ExtendedKey_Account),
                                 value = viewModel.account.toString(),
+                                testTag = TestTags.SHOW_EXTENDED_KEY_ACCOUNT,
                                 infoButtonClick = {
                                     navigation.slideFromBottom(KeyAccountInfoPage)
                                 },
