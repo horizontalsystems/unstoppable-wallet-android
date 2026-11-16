@@ -52,7 +52,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
@@ -65,6 +64,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.walletkit.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -206,7 +206,7 @@ private fun PlatformScreen(
         }
     }
     if (openPeriodSelector) {
-        AlertGroup(
+        MenuGroup(
             stringResource(R.string.CoinPage_Period),
             Select(uiState.timePeriod, viewModel.periods),
             { selected ->
@@ -222,7 +222,7 @@ private fun PlatformScreen(
         )
     }
     if (openSortingSelector) {
-        AlertGroup(
+        MenuGroup(
             stringResource(R.string.Market_Sort_PopupTitle),
             Select(uiState.sortingField, viewModel.sortingFields),
             { selected ->

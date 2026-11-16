@@ -46,7 +46,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.DescriptionCard
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
@@ -62,6 +61,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -232,7 +232,7 @@ private fun TvlScreen(
                 // chain selector dialog
                 when (val option = chainSelectorDialogState) {
                     is SelectorDialogState.Opened -> {
-                        AlertGroup(
+                        MenuGroup(
                             title = stringResource(R.string.MarketGlobalMetrics_ChainSelectorTitle),
                             select = option.select,
                             onSelect = {

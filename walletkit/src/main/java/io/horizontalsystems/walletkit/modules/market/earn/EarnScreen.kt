@@ -31,7 +31,6 @@ import io.horizontalsystems.walletkit.modules.market.earn.vault.VaultPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
 import io.horizontalsystems.walletkit.ui.compose.components.HsDivider
@@ -45,6 +44,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -174,7 +174,7 @@ fun MarketEarnScreen(
     }
 
     if (openFilterSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.Market_Filter_PopupTitle),
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
@@ -188,7 +188,7 @@ fun MarketEarnScreen(
         )
     }
     if (openPeriodSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.CoinPage_Period),
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
@@ -202,7 +202,7 @@ fun MarketEarnScreen(
         )
     }
     if (openSortingSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->

@@ -61,7 +61,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.DescriptionCard
 import io.horizontalsystems.walletkit.ui.compose.components.GraphicBarsWithNegative
 import io.horizontalsystems.walletkit.ui.compose.components.HFillSpacer
@@ -82,6 +81,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.subhead2_grey
 import io.horizontalsystems.walletkit.ui.compose.components.title3_leah
 import io.horizontalsystems.walletkit.ui.compose.hsRememberLazyListState
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabItem
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.walletkit.uiv3.components.tabs.TabsTopType
@@ -258,7 +258,7 @@ fun EtfByChain(
         }
     }
     if (openPeriodSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.CoinPage_Period),
             select = Select(uiState.listTimePeriod, EtfListTimePeriod.entries),
             onSelect = { selected ->
@@ -276,7 +276,7 @@ fun EtfByChain(
         )
     }
     if (openSortingSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.Market_Sort_PopupTitle),
             select = Select(uiState.sortBy, viewModel.sortByOptions),
             onSelect = { selected ->

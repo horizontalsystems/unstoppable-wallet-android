@@ -34,7 +34,6 @@ import io.horizontalsystems.walletkit.modules.coin.overview.ui.Loading
 import io.horizontalsystems.walletkit.modules.market.MarketDataValue
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
 import io.horizontalsystems.walletkit.ui.compose.components.ListEmptyView
 import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
@@ -48,6 +47,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.coroutines.launch
 
 @Composable
@@ -97,7 +97,7 @@ fun CoinMarketsScreen(
         }
     }
     if (showExchangeTypeSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.CoinPage_MarketsVerifiedMenu_ExchangeType),
             select = uiState.exchangeTypeMenu,
             onSelect = {

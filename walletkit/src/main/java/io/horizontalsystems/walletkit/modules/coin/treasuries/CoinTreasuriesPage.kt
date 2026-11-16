@@ -25,7 +25,6 @@ import io.horizontalsystems.walletkit.modules.market.tvl.TvlModule
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.CellFooter
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
@@ -39,6 +38,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -140,7 +140,7 @@ private fun CoinTreasuriesScreen(
         )
         when (val option = chainSelectorDialogState) {
             is CoinTreasuriesModule.SelectorDialogState.Opened -> {
-                AlertGroup(
+                MenuGroup(
                     stringResource(R.string.CoinPage_Treasuries_FilterTitle),
                     option.select,
                     viewModel::onSelectTreasuryType,

@@ -39,7 +39,6 @@ import io.horizontalsystems.walletkit.modules.market.platform.MarketPlatformPage
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
 import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
@@ -53,6 +52,7 @@ import io.horizontalsystems.walletkit.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.walletkit.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.walletkit.uiv3.components.cell.ImageType
 import io.horizontalsystems.walletkit.uiv3.components.cell.hs
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -145,7 +145,7 @@ fun TopPlatforms(
     }
     //Dialogs
     if (openPeriodSelector) {
-        AlertGroup(
+        MenuGroup(
             stringResource(R.string.CoinPage_Period),
             Select(uiState.timePeriod, viewModel.periods),
             { selected ->
@@ -161,7 +161,7 @@ fun TopPlatforms(
         )
     }
     if (openSortingSelector) {
-        AlertGroup(
+        MenuGroup(
             stringResource(R.string.Market_Sort_PopupTitle),
             Select(uiState.sortingField, viewModel.sortingOptions),
             { selected ->

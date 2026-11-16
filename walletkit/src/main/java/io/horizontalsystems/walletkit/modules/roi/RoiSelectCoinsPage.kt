@@ -34,7 +34,6 @@ import io.horizontalsystems.walletkit.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.walletkit.modules.nav3.HSNavigation
 import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.Select
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.HFillSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HsCheckbox
@@ -45,6 +44,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.body_leah
 import io.horizontalsystems.walletkit.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.walletkit.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.walletkit.ui.compose.components.subhead1_grey
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -172,7 +172,7 @@ fun RoiSelectCoinsScreen(navigation: HSNavigation) {
         }
 
         dialog?.let {
-            AlertGroup(
+            MenuGroup(
                 title = it.title,
                 select = Select(it.period, uiState.periods),
                 onSelect = { selected ->

@@ -35,7 +35,6 @@ import io.horizontalsystems.walletkit.modules.nav3.HSPage
 import io.horizontalsystems.walletkit.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.walletkit.ui.compose.Select
 import io.horizontalsystems.walletkit.ui.compose.TranslatableString
-import io.horizontalsystems.walletkit.ui.compose.components.AlertGroup
 import io.horizontalsystems.walletkit.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.walletkit.ui.compose.components.HSpacer
 import io.horizontalsystems.walletkit.ui.compose.components.HeaderSorting
@@ -43,6 +42,7 @@ import io.horizontalsystems.walletkit.ui.compose.components.ListErrorView
 import io.horizontalsystems.walletkit.ui.compose.components.MenuItem
 import io.horizontalsystems.walletkit.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.CoinCategory
+import io.horizontalsystems.walletkit.uiv3.components.menu.MenuGroup
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
@@ -173,7 +173,7 @@ fun SectorScreen(
         }
         //Dialogs
         if (openPeriodSelector) {
-            AlertGroup(
+            MenuGroup(
                 stringResource(R.string.CoinPage_Period),
                 Select(uiState.timePeriod, viewModel.periods),
                 { selected ->
@@ -189,7 +189,7 @@ fun SectorScreen(
             )
         }
         if (openSortingSelector) {
-            AlertGroup(
+            MenuGroup(
                 stringResource(R.string.Market_Sort_PopupTitle),
                 Select(uiState.sortingField, viewModel.sortingOptions),
                 { selected ->

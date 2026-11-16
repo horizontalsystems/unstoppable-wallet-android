@@ -12,6 +12,8 @@ import io.horizontalsystems.designkit.components.HSMenuGroupContent
 import io.horizontalsystems.designkit.components.HSMenuGroupDefaults
 import io.horizontalsystems.designkit.components.HSMenuItem
 import io.horizontalsystems.designkit.theme.ComposeAppTheme
+import io.horizontalsystems.walletkit.ui.compose.Select
+import io.horizontalsystems.walletkit.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.walletkit.uiv3.exposeTestTags
 
 data class MenuItemX<T>(
@@ -54,6 +56,27 @@ fun <T> MenuGroup(
             }
         )
     }
+}
+
+/**
+ * The same dialog for a [Select]: one item per option, titled by the option,
+ * with the selected one accented.
+ */
+@Composable
+fun <T : WithTranslatableTitle> MenuGroup(
+    title: String,
+    select: Select<T>,
+    onSelect: (T) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    MenuGroup(
+        title = title,
+        items = select.options.map {
+            MenuItemX(it.title.getString(), it == select.selected, it)
+        },
+        onDismissRequest = onDismiss,
+        onSelectItem = onSelect,
+    )
 }
 
 /**
